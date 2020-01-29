@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYINTERSECTIONCRITERION_H
 #define HIGHWAYINTERSECTIONCRITERION_H
@@ -60,6 +60,9 @@ public:
   virtual void setOsmMap(const OsmMap* map);
 
   virtual QString getDescription() const { return "Identifies highway intersections"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 
 private:
 

@@ -1,10 +1,10 @@
 way_id,changeset_id,timestamp,version,visible,tags
 -23,0,,1,t,hoot:status=>1,highway=>road,note=>3
--22,1,,1,t,hoot:status=>3,amenity=>restaurant,name=>"Cheddar's Casual Cafe",hoot:building:match=>true,alt_name=>Cheddars,building=>yes,REF1=>Cheddar's
--21,1,,1,t,hoot:status=>3,hoot:building:match=>true,building=>yes,REF1=>Biondi
--20,1,,1,t,hoot:status=>1,name=>Freddy's,building=>yes,REF1=>Freddy's
--19,1,,1,t,hoot:status=>3,name=>Target,hoot:building:match=>true,alt_name=>"Target - Aurora South;Target Grocery;Target Pharmacy",building=>yes,REF1=>Target
--18,0,,1,t,hoot:status=>1,name=>"Convoluted Example",building=>yes,REF1=>"Convoluted No Match 1"
+-22,1,,1,t,hoot:status=>3,amenity=>restaurant,name=>"Cheddar's Casual Cafe",hoot:building:match=>true,alt_name=>Cheddars,building=>yes,REF1=>002e0d
+-21,1,,1,t,hoot:status=>3,hoot:building:match=>true,building=>yes,REF1=>002e00
+-20,1,,1,t,hoot:status=>1,name=>Freddy's,building=>yes,REF1=>002e0e
+-19,1,,1,t,hoot:status=>3,name=>Target,hoot:building:match=>true,alt_name=>"Target - Aurora South;Target Grocery;Target Pharmacy",building=>yes,REF1=>002da0
+-18,0,,1,t,hoot:status=>1,name=>"Convoluted Example",building=>yes,REF1=>002e0f
 -17,0,,1,t,hoot:status=>1,name=>"Bad Pair",building=>yes
 -16,1,,1,t,hoot:status=>1,name=>"Bad Pair",building=>yes
 -15,1,,1,t,hoot:status=>1,name=>"Bad Pair",building=>yes
@@ -21,4 +21,4 @@ way_id,changeset_id,timestamp,version,visible,tags
 -4,0,,1,t,hoot:status=>3,highway=>road,note=>2
 -3,0,,1,t,hoot:status=>3,highway=>road,note=>2
 -2,0,,1,t,hoot:status=>3,highway=>road,note=>1
--1,0,,1,t,hoot:status=>3,name=>"Maid-Rite",hoot:building:match=>true,alt_name=>"Maid-Rite Diner;Panera Bread",building=>yes,REF1=>Panera
+-1,0,,1,t,hoot:status=>3,name=>"Maid-Rite",hoot:building:match=>true,alt_name=>"Maid-Rite Diner;Panera Bread",building=>yes,REF1=>002c75

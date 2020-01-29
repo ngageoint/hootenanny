@@ -44,12 +44,14 @@ void ConflatableCriteriaVisitor::visit(const std::shared_ptr<Element>& e)
 {
   const QStringList conflatableCriteria =
     ConflatableElementCriterion::getConflatableCriteriaForElement(e);
+  LOG_VART(conflatableCriteria.size());
   QString conflatableCriteriaStr;
   for (int i = 0; i < conflatableCriteria.size(); i++)
   {
     conflatableCriteriaStr += conflatableCriteria.at(i) + ";";
   }
   conflatableCriteriaStr.chop(1);
+  LOG_VART(conflatableCriteriaStr);
   e->getTags()[MetadataTags::HootConflatableCriteria()] =  conflatableCriteriaStr;
 }
 

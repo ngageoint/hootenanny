@@ -22,21 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.PRIVATE_OVERPASS_CERT_PATH;
+import static hoot.services.HootProperties.PRIVATE_OVERPASS_CERT_PHRASE;
+import static hoot.services.HootProperties.PRIVATE_OVERPASS_URL;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.security.KeyStore;
 import java.time.LocalDateTime;
 
+import javax.net.ssl.SSLContext;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,6 +98,12 @@ class PullApiCommand implements InternalCommand {
         String url = "";
         try {
             BoundingBox boundingBox = new BoundingBox(params.getBounds());
+            //buffer the reference data bounding box
+            //to include neighboring data that may be snapped to
+// Disable this for now as pulling a buffered extent does not guarantee that
+// connected ways will be present in the output
+//            boundingBox.adjust(Double.parseDouble(CHANGESET_DERIVE_BUFFER));
+
             double bboxArea = boundingBox.getArea();
 
             double maxBboxArea = params.getMaxBBoxSize();
@@ -94,16 +113,54 @@ class PullApiCommand implements InternalCommand {
                         ") is too large. It must be less than " + maxBboxArea + " degrees");
             }
 
-            url = replaceSensitiveData(params.getPullUrl()) + "?bbox=" + boundingBox.toServicesString();
-            URL requestUrl = new URL(url);
+            InputStream responseStream = null;
+            // Checks to see the set pull url is for the private overpass url
+            if (params.getPullUrl().equals(PRIVATE_OVERPASS_URL)) {
+                url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), boundingBox.toServicesString(), "xml", params.getCustomQuery());
+
+                // if cert path and phrase are specified then we assume to use them for the request
+                if (!replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH).equals(PRIVATE_OVERPASS_CERT_PATH)) {
+                    try {
+                        responseStream = getHttpResponseWithSSL(url);
+                    } catch (Exception e) {
+                        String msg = "Failure to pull data from the private OSM API with the specified cert. [" + url + "]" + e.getMessage();
+                        throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+                    }
+                }
+            } else {
+                url = replaceSensitiveData(params.getPullUrl()) + "?bbox=" + boundingBox.toServicesString();
+            }
 
             File outputFile = new File(params.getOutput());
 
-            FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
+            if (responseStream == null) {
+                URL requestUrl = new URL(url);
+                FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
+            } else {
+                FileUtils.copyInputStreamToFile(responseStream, outputFile);
             }
-            catch (IOException ex) {
-                String msg = "Failure to pull data from the OSM API [" + url + "]" + ex.getMessage();
-                throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
-            }
+        }
+        catch (IOException ex) {
+            String msg = "Failure to pull data from the OSM API [" + url + "]" + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        }
+
+    }
+
+    public static InputStream getHttpResponseWithSSL(String url) throws Exception {
+        String certPath = replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH);
+        String keyPassphrase = replaceSensitiveData(PRIVATE_OVERPASS_CERT_PHRASE);
+
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+        keyStore.load(new FileInputStream(certPath), keyPassphrase.toCharArray());
+        SSLContext sslContext = SSLContexts.custom()
+                .loadKeyMaterial(keyStore, keyPassphrase.toCharArray())
+                .build();
+
+        HttpClient httpClient = HttpClients.custom().setSslcontext(sslContext).build();
+        HttpResponse response = httpClient.execute(new HttpGet(url));
+        HttpEntity entity = response.getEntity();
+
+        return entity.getContent();
     }
 }

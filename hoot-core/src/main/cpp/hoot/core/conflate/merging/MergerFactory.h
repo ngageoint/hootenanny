@@ -61,18 +61,13 @@ public:
   ~MergerFactory();
 
   /**
-   * Should be avoided on the global instance. Mostly useful for unit testing.
-   */
-  void clear();
-
-  /**
    * Searches through all the available creators in order to create the requested merge. If no
    * appropriate creator is found a NULL will be returned.
    *
    * The caller assumes ownership of the new Mergers in the result.
    */
   void createMergers(const hoot::OsmMapPtr &map, const MatchSet& matches,
-    std::vector<Merger *> &result) const;
+    std::vector<MergerPtr>& result) const;
 
   /**
    * @brief Returns a description of all available match creators.
@@ -84,21 +79,22 @@ public:
    */
   static MergerFactory& getInstance();
 
-  bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
+  bool isConflicting(const ConstOsmMapPtr& map,  const ConstMatchPtr& m1,
+                     const ConstMatchPtr& m2) const;
 
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
    */
-  void registerCreator(MergerCreator* creator) { _creators.push_back(creator); }
+  void registerCreator(MergerCreatorPtr creator) { _creators.push_back(creator); }
 
   void registerDefaultCreators();
 
-  void reset() { _creators.clear(); }
+  void reset();
 
 private:
 
   // Since this is a Singleton, we shouldn't be accessing its constructor, but there are a some
-  // spots where are.  This is here to limit any further constructor access.
+  // spots where we are.  This is here to limit any further constructor access.
   friend class UnifyingConflator;
   friend class MultiaryUtilities;
 
@@ -106,7 +102,7 @@ private:
 
   static std::shared_ptr<MergerFactory> _theInstance;
 
-  std::vector<MergerCreator*> _creators;
+  std::vector<MergerCreatorPtr> _creators;
 };
 
 }

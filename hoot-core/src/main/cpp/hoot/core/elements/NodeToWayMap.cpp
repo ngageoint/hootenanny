@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "NodeToWayMap.h"
@@ -52,6 +52,7 @@ NodeToWayMap::NodeToWayMap(const OsmMap& map)
 
 void NodeToWayMap::addWay(const std::shared_ptr<const Way>& w)
 {
+  LOG_TRACE("Adding way: " << w->getElementId() << " with nodes: "<<  w->getNodeIds() << "...");
   const std::vector<long>& nodes = w->getNodeIds();
   for (size_t i = 0; i < nodes.size(); i++)
   {
@@ -74,6 +75,7 @@ const set<long>& NodeToWayMap::getWaysByNode(long nid) const
 
 void NodeToWayMap::removeWay(const std::shared_ptr<const Way>& w)
 {
+  LOG_TRACE("Removing way from node to way map: " << w->getElementId() << "...");
   const std::vector<long>& nodes = w->getNodeIds();
   for (size_t i = 0; i < nodes.size(); i++)
   {

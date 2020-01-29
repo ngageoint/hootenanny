@@ -42,7 +42,7 @@ ElementToRelationMap::ElementToRelationMap()
 }
 
 void ElementToRelationMap::addRelation(const OsmMap& map,
-                                       const std::shared_ptr<const Relation> &r)
+                                       const std::shared_ptr<const Relation>& r)
 {
   class AddMemberVisitor : public ConstElementVisitor
   {
@@ -54,11 +54,13 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
     AddMemberVisitor(HashMap<ElementId, set<long>>& mapping, long rid) : _mapping(mapping)
     {
       _rid = rid;
+      LOG_VART(_rid);
     }
 
     virtual void visit(const ConstElementPtr& e)
     {
       ElementId eid = e->getElementId();
+      LOG_VART(eid);
       // no need to map it to itself.
       if (eid != ElementId::relation(_rid))
       {
@@ -75,6 +77,7 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
 
 const set<long>& ElementToRelationMap::getRelationByElement(ElementId eid) const
 {
+  LOG_TRACE("Checking relation map for member: " << eid << "...");
   HashMap<ElementId, set<long>>::const_iterator it = _mapping.find(eid);
   if (it == _mapping.end())
   {

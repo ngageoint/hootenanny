@@ -29,16 +29,11 @@ package hoot.services.controllers.ingest;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.SCRIPT_FOLDER;
-import static hoot.services.controllers.ingest.UploadClassification.FGDB;
-import static hoot.services.controllers.ingest.UploadClassification.GEONAMES;
-import static hoot.services.controllers.ingest.UploadClassification.OSM;
-import static hoot.services.controllers.ingest.UploadClassification.SHP;
 import static hoot.services.controllers.ingest.UploadClassification.ZIP;
-import static hoot.services.controllers.ingest.UploadClassification.GEOJSON;
-import static hoot.services.controllers.ingest.UploadClassification.GPKG;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,38 +54,44 @@ class ImportCommand extends ExternalCommand {
 
     private final File workDir;
 
-    ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation,
+    ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation, String advUploadOpts,
                   String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
                   Class<?> caller, Users user) {
         super(jobId);
         this.workDir = workDir;
 
-        // TODO: Reconcile this logic with the UI.  Passing of translation script's name appears to be inconsistent!
-        String translationPath;
-        if (translation.startsWith("translations/")) {
-            translationPath = new File(HOME_FOLDER, translation).getAbsolutePath();
-        }
-        else {
-            translationPath = new File(new File(SCRIPT_FOLDER), translation).getAbsolutePath();
-        }
-
         List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
         List<String> options = new LinkedList<>();
-        //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         //TODO: always set remap ids to false??
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("job.id=" + jobId);
         options.add("api.db.email=" + user.getEmail());
 
-        //if (((classification == OSM) && !isNoneTranslation) || (classification == GEONAMES)) {
-            //options.add("convert.ops=hoot::SchemaTranslationVisitor");
-            //options.add("schema.translation.script=" + translationPath);
-        //}
-
-        if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP)) 
-        {
+        //Built-in translations are passed with the translations/ path in the name
+        String translationPath;
+        if (translation.startsWith("translations/")) {
+            translationPath = new File(HOME_FOLDER, translation).getAbsolutePath();
+        } else { //user submitted translations are in the customscript path
+            translationPath = new File(new File(SCRIPT_FOLDER), translation).getAbsolutePath();
+        }
+        //A boolean gets passed if we don't mean to translate, but the UI has a dummy translation name of None
+        if (!isNoneTranslation) {
           options.add("schema.translation.script=" + translationPath);
+        }
+
+        if (advUploadOpts != null && !advUploadOpts.isEmpty()) {
+            List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
+            for (String option: getAdvOpts) {
+                String[] opt = option.split("=");
+                String key = opt[0];
+                String value = (opt.length == 2) ? "=" + opt[1] : "";
+
+                if (configOptions.containsKey(key)) { // if option key in possible values, add new option command
+                    Map<String, String> optionConfig = configOptions.get(key);
+                    options.add(optionConfig.get("key") + value);
+                }
+            }
         }
 
         List<String> hootOptions = toHootOptions(options);
@@ -103,20 +104,13 @@ class ImportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_NAME", inputName);
         substitutionMap.put("INPUTS", inputs);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        if ((classification == ZIP) && !zipsToImport.isEmpty()) {
+            //Reading a GDAL dataset in a .gz file or a .zip archive
+            inputs = zipsToImport.stream().map(zip -> "/vsizip/" + zip.getAbsolutePath()).collect(Collectors.toList());
+            substitutionMap.put("INPUTS", inputs);
+        }
 
-        String command = null;
-        if ((classification == SHP) || (classification == FGDB) || (classification == ZIP)) {
-            if ((classification == ZIP) && !zipsToImport.isEmpty()) {
-                //Reading a GDAL dataset in a .gz file or a .zip archive
-                inputs = zipsToImport.stream().map(zip -> "/vsizip/" + zip.getAbsolutePath()).collect(Collectors.toList());
-                substitutionMap.put("INPUTS", inputs);
-            }
-            command = hootConvertCommand;
-        }
-        else if ((classification == OSM) || (classification == GEOJSON) || (classification == GEONAMES) || (classification == GPKG)) {
-            command = hootConvertCommand;
-        }
+        String command = "hoot convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

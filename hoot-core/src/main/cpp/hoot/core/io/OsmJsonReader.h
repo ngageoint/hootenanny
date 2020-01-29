@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_JSON_READER_H
@@ -43,21 +43,27 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReader.h>
+#include <hoot/core/io/ParallelBoundedApiReader.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Boundable.h>
 
 namespace hoot
 {
 
 /**
- * This class is intended to create an OsmMap from a given json string. JSON
- * output from the overpass-api was used as the model for development
+ * This class is intended to create an OsmMap from a given json string. JSON output from the
+ * overpass-api was used as the model for development
  * (http://overpass-api.de/output_formats.html#json).
  *
- * The input string must be well-formed JSON, with the exception that it can
- * be coded using single quotes, rather than double quotes... which makes
- * things a lot cleaner if you are hand-jamming the JSON string into c++ code.
- * If you are using single quotes, you may escape apostrophes with a backslash.
+ * Element type ordering (element children before parents) is not guaranteed with JSON, as it is
+ * with XML.
+ *
+ * The input string must be well-formed JSON, with the exception that it can be coded using single
+ * quotes, rather than double quotes... which makes things a lot cleaner if you are hand-jamming the
+ * JSON string into c++ code. If you are using single quotes, you may escape apostrophes with a
+ * backslash.
+ *
  * Consider this example:
  *
  * QString testJsonStr =
@@ -99,13 +105,13 @@ namespace hoot
  *   "]                                      \n"
  *   "}                                      \n";
  *
- * It's all-or-nothing, though for the quotes - don't mix and match
- * singles and doubles! Also, be aware that this class doesn't do anything
- * clever to handle large datasets - it simply keeps everything in memory.
- * Be careful if you want to use it with large datasets.
+ * It's all-or-nothing, though for the quotes - don't mix and match singles and doubles!
+ *
+ * Also, be aware that this class doesn't do anything clever to handle large datasets - it simply
+ * keeps everything in memory. Be careful if you want to use it with large datasets.
  */
 
-class OsmJsonReader : public OsmMapReader, Configurable
+class OsmJsonReader : public OsmMapReader, public Boundable, private ParallelBoundedApiReader
 {
 public:
 
@@ -158,15 +164,15 @@ public:
    *        from the data being read, or self-generate unique IDs
    * @param useDataSourceIds true to use source IDs
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceIds = useDataSourceIds; }
+  virtual void setUseDataSourceIds(bool useDataSourceIds) override
+  { _useDataSourceIds = useDataSourceIds; }
 
   /**
    * @brief loadFromString - Builds a map from the JSON string. Throws a
    *        HootException with error and line number if JSON parsing fails
-   * @param jsonStr - input string
-   * @return Smart pointer to the OSM map
+   * @param jsonStr - input string, map - The OSM map to load it into
    */
-  virtual OsmMapPtr loadFromString(const QString& jsonStr);
+  virtual void loadFromString(const QString& jsonStr, const OsmMapPtr& map);
 
   /**
    * @brief loadFromPtree - Builds a map from the supplied boost property tree
@@ -229,6 +235,13 @@ public:
    */
   virtual void setConfiguration(const Settings& conf) override;
 
+  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
+
+  void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
+  { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
+
+  bool isValidJson(const QString& jsonStr);
+
 protected:
 
   // Items to conform to OsmMapReader ifc
@@ -245,7 +258,6 @@ protected:
   QString _timestamp_base;
   QString _copyright;
 
-  QUrl _url;
   bool _isFile;
   bool _isWeb;
   QFile _file;
@@ -257,20 +269,26 @@ protected:
 
   /** List of JSON strings, one for each HTTP response */
   QStringList _results;
-  /** Mutex guarding the results list */
-  std::mutex _resultsMutex;
-  /** Essentially the work queue of bounding boxes that the threads query from */
-  QList<geos::geom::Envelope> _bboxes;
-  /** Mutex guarding the bounding box list */
-  std::mutex _bboxMutex;
-  /** Flag indicating that the _bboxes list is still being loaded, set to false when completely loaded */
-  bool _bboxContinue;
-  /** Flag indicating whether or not the bounding box (if it exists) should be split and run in parallel */
-  bool _runParallel;
-  /** Grid division size (0.25 degrees lat/lon default) */
-  double _coordGridSize;
-  /** Number of threads to process the HTTP requests */
-  int _threadCount;
+
+  geos::geom::Envelope _bounds;
+  // only valid is _bounds is not null
+  bool _keepImmediatelyConnectedWaysOutsideBounds;
+
+  /// Maps from old node ids to new node ids.
+  QHash<long, long> _nodeIdMap;
+  QHash<long, long> _relationIdMap;
+  QHash<long, long> _wayIdMap;
+
+  // If we aren't using element source IDs and a child element hasn't been parsed yet, map the
+  // parent element to the missing child element's ID so that we may later update the child ID
+  // with the newer remapped ID.
+  QMultiHash<long, long> _wayIdsToWayNodeIdsNotPresent;
+  QMultiHash<long, long> _relationIdsToNodeMemberIdsNotPresent;
+  QMultiHash<long, long> _relationIdsToWayMemberIdsNotPresent;
+  QMultiHash<long, long> _relationIdsToRelationMemberIdsNotPresent;
+
+  int _missingNodeCount;
+  int _missingWayCount;
 
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
@@ -279,8 +297,8 @@ protected:
   void _loadJSON(const QString& jsonStr);
 
   /**
-   * @brief parseOverpassJson Traverses our property tree and adds
-   *        elements to the map
+   * @brief parseOverpassJson Traverses our property tree and adds elements to the map. Removes
+   * child elements ref'd by parents that don't actually exist
    */
   void _parseOverpassJson();
 
@@ -319,11 +337,21 @@ protected:
    *   spawns a thread pool to query bounding boxes
    */
   void _readFromHttp();
-  /**
-   * @brief _doHttpRequestFunc Thread processing function that loops processing a bounding box from the
-   *   list until the queue is empty.
+
+  void _readToMap();
+
+  long _getRelationId(long fileId);
+
+  /*
+   * This updates child ref ID's owned by ways/relations where the child element was parsed after
+   * the ref ID.
    */
-  void _doHttpRequestFunc();
+  void _updateChildRefs();
+  void _updateWayChildRefs();
+  void _updateRelationChildRefs(const ElementType& childElementType);
+
+  void _reset();
+  void _resetIds();
 };
 
 }

@@ -108,8 +108,8 @@ function initialize()
     // Standard one2one rules
     createLookup(tagList, ggdm30.rules.one2one, 'GGDM30');
     createLookup(tagList, ggdm30.rules.one2oneIn, 'GGDM30');
-    createLookup(tagList, tds.rules.one2one, 'TDS40');
-    createLookup(tagList, tds.rules.one2oneIn, 'TDS40');
+    createLookup(tagList, tds40.rules.one2one, 'TDS40');
+    createLookup(tagList, tds40.rules.one2oneIn, 'TDS40');
     createLookup(tagList, tds61.rules.one2one, 'TDS61');
     createLookup(tagList, tds61.rules.one2oneIn, 'TDS61');
     createLookup(tagList, mgcp.rules.one2one, 'MGCP');
@@ -124,8 +124,8 @@ function initialize()
     // Add in the Biased rules
     createBiasedLookup(tagList, ggdm30.rules.txtBiased, 'GGDM30');
     createBiasedLookup(tagList, ggdm30.rules.numBiased, 'GGDM30');
-    createBiasedLookup(tagList, tds.rules.txtBiased, 'TDS40');
-    createBiasedLookup(tagList, tds.rules.numBiased, 'TDS40');
+    createBiasedLookup(tagList, tds40.rules.txtBiased, 'TDS40');
+    createBiasedLookup(tagList, tds40.rules.numBiased, 'TDS40');
     createBiasedLookup(tagList, tds61.rules.txtBiased, 'TDS61');
     createBiasedLookup(tagList, tds61.rules.numBiased, 'TDS61');
     createBiasedLookup(tagList, mgcp.rules.txtBiased, 'MGCP');
@@ -141,7 +141,7 @@ function initialize()
     // F_CODE one2one rules
     createLookup(tagList, fcodeCommon.one2one, 'NFDD');
     createLookup(tagList, ggdm30.rules.fcodeOne2oneIn, 'GGDM30');
-    createLookup(tagList, tds.rules.fcodeOne2oneIn, 'TDS40');
+    createLookup(tagList, tds40.rules.fcodeOne2oneIn, 'TDS40');
     createLookup(tagList, tds61.rules.fcodeOne2oneIn, 'TDS61');
     createLookup(tagList, mgcp.rules.fcodeOne2oneIn, 'MGCP');
     // createLookup(tagList, ufd.rules.fcodeOne2oneIn, 'UFD');

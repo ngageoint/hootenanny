@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMatch.h"
 
@@ -31,12 +31,13 @@
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/core/util/Factory.h>
+
 #include <hoot/js/conflate/merging/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/io/StreamUtilsJs.h>
-#include <hoot/core/util/Factory.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 // Qt
 #include <qnumeric.h>
@@ -60,9 +61,9 @@ Match()
 {
 }
 
-ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script, const Persistent<Object>& plugin,
-  const ConstOsmMapPtr& map, const v8::Handle<Object>& mapObj, const ElementId& eid1,
-  const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
+ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script,
+  const Persistent<Object>& plugin, const ConstOsmMapPtr& map, const v8::Handle<Object>& mapObj,
+  const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
   Match(mt),
   _eid1(eid1),
   _eid2(eid2),
@@ -156,7 +157,7 @@ double ScriptMatch::getProbability() const
   return _p.getMatchP();
 }
 
-bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) const
+bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const
 {
   if (_neverCausesConflict)
   {
@@ -165,7 +166,7 @@ bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) c
 
   bool conflicting = true;
 
-  const ScriptMatch* hm = dynamic_cast<const ScriptMatch*>(&other);
+  const ScriptMatch* hm = dynamic_cast<const ScriptMatch*>(other.get());
   if (hm == 0)
   {
     return true;
@@ -176,7 +177,7 @@ bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) c
   }
 
   // See ticket #5272
-  if (getClassification().getReviewP() == 1.0 || other.getClassification().getReviewP() == 1.0)
+  if (getClassification().getReviewP() == 1.0 || other->getClassification().getReviewP() == 1.0)
   {
     return true;
   }
@@ -286,8 +287,8 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
   std::shared_ptr<ScriptMatch> m1(
     new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12, _threshold));
   MatchSet ms;
-  ms.insert(m1.get());
-  vector<Merger*> mergers;
+  ms.insert(m1);
+  vector<MergerPtr> mergers;
   ScriptMergerCreator creator;
   creator.createMergers(ms, mergers);
   m1.reset();
@@ -377,7 +378,8 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map
 
   if (func.IsEmpty() || func->IsFunction() == false)
   {
-    throw IllegalArgumentException("getMatchFeatureDetails must be a valid function.");
+    throw IllegalArgumentException(
+      "getMatchFeatureDetails must be a valid function for match from: " + _matchName);
   }
 
   Handle<Object> mapObj = OsmMapJs::create(map);
@@ -450,7 +452,7 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
 QString ScriptMatch::toString() const
 {
   stringstream ss;
-  ss << "ScriptMatch: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
+  ss << _matchName << "Match: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
   return QString::fromStdString(ss.str());
 }
 

@@ -15,6 +15,7 @@
 #    9 = Unrecognized updateMode.
 #   10 = Python error(s) found.
 #   11 = Log file not found.
+#   12 = Search directory not found
 
 GetExitCodeText(){
     if [ $1 > 0 ]; then
@@ -55,6 +56,9 @@ GetExitCodeText(){
         "11")
             echo "    Error: Log file not found"
             ;;
+        "12")
+            echo "    Error: Search directory not found"
+            ;;
         *)
             echo "    Error: Unknown"
             ;;
@@ -62,46 +66,75 @@ GetExitCodeText(){
     fi
 }
 
+
+ExitScript() {
+    echo "Exit code: $1"
+    GetExitCodeText $1
+    exit $1
+}
+
 updateMode=false
 exitCode=0
 
 # Determine the log file name.
 NOW=$(date +"%Y-%m-%d_%H:%M:%S")
-logFile="$HOOT_HOME/updateCopyrightHeader_$NOW.log"
+logBase="$HOOT_HOME/updateCopyrightHeader_$NOW"
+logFile="$logBase.log"
+logJobs="$logBase.jobs.log"
 echo "logFile: " $logFile
-#exit 0
 
-# Updates all the copyright headers in all source directories.
-for i in $HOOT_HOME/hoot-cmd $HOOT_HOME/hoot-core $HOOT_HOME/hoot-core-test $HOOT_HOME/hoot-js $HOOT_HOME/hoot-rnd $HOOT_HOME/hoot-services $HOOT_HOME/hoot-test $HOOT_HOME/tbs $HOOT_HOME/tgs
-do
-    #echo $i
-    cd $i
-    if [ $# -eq 0 ]; then
-        # No arguments/parameters which means we are only CHECKING copyright headers.
-        updateMode=false
-        $HOOT_HOME/scripts/copyright/UpdateDirCopyrightHeaders.sh $logFile
-        exitCode=$?
+# Check the argument count and content
+if [ $# -eq 0 ]; then
+    updateMode=false
+    updateParam=""
+    debugParam=""
+elif [ $# -eq 1 ]; then
+    if [ $1 == '--update' ] || [ $1 == '-u' ]; then
+        updateMode=true
+        updateParam='-u'
+    elif [ $1 == '--debug' ] || [ $1 == '-d' ]; then
+        debugParam='-d'
     else
-        if [ $? -eq 1 ]; then
-            if [ $1 == '--update' ] || [ $1 == '-u' ]; then
-                updateMode=true
-                $HOOT_HOME/scripts/copyright/UpdateDirCopyrightHeaders.sh $logFile $1
-                exitCode=$?
-            else
-                # Unrecognized parameter.
-                exitCode=6
-            fi
-        else
-            # Too many arguments.
-            exitCode=7
-        fi
+        ExitScript 6  # Unrecognized parameter
     fi
-    echo $i  "exitCode:" $exitCode
-    # Output the exit code message if non-zero.
-    if [[ $exitCode -ne 0 ]]; then
-        GetExitCodeText $exitCode
+elif [ $# -eq 2 ]; then
+    if [ $1 == '--update' ] || [ $2 == '--update' ] || [ $1 == '-u' ] || [ $2 == '-u' ]; then
+        updateMode=true
+        updateParam='-u'
+    else
+        ExitScript 6  # Unrecognized parameter
     fi
-done
+    if [ $1 == '--debug' ] || [ $2 == '--debug' ] || [ $1 == '-d' ] || [ $2 == '-d' ]; then
+        debugParam='-d'
+    else
+        ExitScript 6  # Unrecognized parameter
+    fi
+else
+    ExitScript 7 # Too many arguments
+fi
+
+# Check for the existance of the license template
+if [ ! -f $HOOT_HOME/scripts/copyright/LicenseTemplate.txt ]; then
+    ExitScript 1 # LicenseTemplate.txt not found
+fi
+
+# Run the checks in parallel
+parallel --joblog $logJobs $HOOT_HOME/scripts/copyright/UpdateDirCopyrightHeaders.sh {} $logFile $updateParam $debugParam ::: \
+  $HOOT_HOME/hoot-core \
+  $HOOT_HOME/hoot-core-test \
+  $HOOT_HOME/hoot-services \
+  $HOOT_HOME/tgs \
+  $HOOT_HOME/hoot-js \
+  $HOOT_HOME/hoot-rnd \
+  $HOOT_HOME/tbs \
+  $HOOT_HOME/hoot-test \
+  $HOOT_HOME/hoot-cmd
+
+# Get the first non-zero exit status from the parallel command
+codes=`tail -n +2 $logJobs | awk '{print $7}' | grep "[1-9]" | head -n 1`
+if [ -z "$codes" ]; then
+    exitCode=$codes
+fi
 
 # Now examine the log file contents only if exitCode is 0.
 if [[ $exitCode -eq 0 ]]; then
@@ -174,7 +207,4 @@ if [[ $exitCode -eq 0 ]]; then
     fi
 fi
 
-echo "exitCode:" $exitCode
-GetExitCodeText $exitCode
-exit $exitCode
-
+ExitScript $exitCode

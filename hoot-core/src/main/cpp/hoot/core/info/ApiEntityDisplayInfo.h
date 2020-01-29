@@ -39,6 +39,10 @@ namespace hoot
  *
  * This class can probably be simplified (too much if/else logic).  See notes in InfoCmd about how
  * registration of associated classes could be made simpler for this.
+ *
+ * TODO: I think we can simplify some of the calls to factory code to instantiate elements to
+ * create them by class name instead of type. Should get the big if/else statement in getDisplayInfo
+ * down to something more reasonable.
  */
 class ApiEntityDisplayInfo
 {
@@ -61,6 +65,14 @@ public:
 private:
 
   static QString _apiEntityTypeForBaseClass(const QString& baseClassName);
+
+  template<typename ApiEntity, typename ApiEntityChild>
+  static QString _getApiEntities(
+    const std::string& apiEntityBaseClassName, const QString& apiEntityType, const bool displayType,
+    const int maxNameSize);
+
+  template<typename ApiEntity>
+  static QString _getApiEntitiesForMatchMergerCreators(const std::string& apiEntityClassName);
 };
 
 }

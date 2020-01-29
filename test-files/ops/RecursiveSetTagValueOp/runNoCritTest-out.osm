@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.8532424272" minlon="-104.90243160997" maxlat="38.8549614374" maxlon="-104.89618230526"/>
+    <node visible="true" id="-5144954" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541670018899978" lon="-104.8997069874800019">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144952" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540851073599995" lon="-104.9014476647300000">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144950" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542471187699974" lon="-104.9010788636999933">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144948" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542599687700019" lon="-104.9005795104800001">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144946" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549614374000001" lon="-104.8997124086299948">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144944" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545785045900018" lon="-104.8997171368399961">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144942" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542618470600019" lon="-104.8997171368399961">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144940" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8539525523000009" lon="-104.8996840393199932">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144938" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8536248456699980" lon="-104.8996934957500002">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144936" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532583477799989" lon="-104.8997542928899946">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144934" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532424272000014" lon="-104.8996868264000000">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144932" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533001491000007" lon="-104.8994528828200004">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144930" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533470481100025" lon="-104.8993671807200059">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144928" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535166058000030" lon="-104.8992698972499937">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144926" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535689160700031" lon="-104.8990568001299977">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144924" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535508780500010" lon="-104.8988321216399981">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144922" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8536194225000031" lon="-104.8987070428899955">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144920" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8537204352600014" lon="-104.8987232568100012">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144918" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8539585361800022" lon="-104.8989155074699937">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144916" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541335037799982" lon="-104.8988900284700065">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144914" timestamp="1970-01-01T00:00:00Z" version="2" lat="38.8541767946700034" lon="-104.8987070428899955">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144912" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542327120200000" lon="-104.8983109602000070">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144910" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8544293243099972" lon="-104.8980654352599942">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144908" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546042907499967" lon="-104.8977759011300037">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144906" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8547197322800031" lon="-104.8973219116100069">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144904" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548604264099993" lon="-104.8968586569900054">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144902" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549019130799991" lon="-104.8964394115700003">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144900" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549073243800009" lon="-104.8961823052599982">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144898" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548514075599982" lon="-104.9005693264300021">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144896" timestamp="1970-01-01T00:00:00Z" version="2" lat="38.8549289696000031" lon="-104.9005253172399961">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144894" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548207434799977" lon="-104.9008079025600040">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144892" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543319201200035" lon="-104.9017876860600040">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144890" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541298962099972" lon="-104.9023065312200060">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144888" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540541370900030" lon="-104.9024316099699945">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144886" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549524185700008" lon="-104.8987388916499981">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5144884" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549321261900005" lon="-104.8979050333499998">
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <way visible="true" id="-5144958" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5144952"/>
+        <nd ref="-5144950"/>
+        <nd ref="-5144948"/>
+        <nd ref="-5144942"/>
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="note" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5144957" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5144888"/>
+        <nd ref="-5144890"/>
+        <nd ref="-5144892"/>
+        <nd ref="-5144894"/>
+        <nd ref="-5144896"/>
+        <nd ref="-5144946"/>
+        <nd ref="-5144944"/>
+        <nd ref="-5144942"/>
+        <nd ref="-5144954"/>
+        <nd ref="-5144940"/>
+        <nd ref="-5144938"/>
+        <nd ref="-5144936"/>
+        <nd ref="-5144934"/>
+        <nd ref="-5144932"/>
+        <nd ref="-5144930"/>
+        <nd ref="-5144928"/>
+        <nd ref="-5144926"/>
+        <nd ref="-5144924"/>
+        <nd ref="-5144922"/>
+        <nd ref="-5144920"/>
+        <nd ref="-5144918"/>
+        <nd ref="-5144916"/>
+        <nd ref="-5144914"/>
+        <nd ref="-5144912"/>
+        <nd ref="-5144910"/>
+        <nd ref="-5144908"/>
+        <nd ref="-5144906"/>
+        <nd ref="-5144904"/>
+        <nd ref="-5144902"/>
+        <nd ref="-5144900"/>
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="note" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5144956" timestamp="1970-01-01T00:00:00Z" version="2">
+        <nd ref="-5144948"/>
+        <nd ref="-5144898"/>
+        <nd ref="-5144896"/>
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="note" v="3"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5144955" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5144946"/>
+        <nd ref="-5144886"/>
+        <nd ref="-5144884"/>
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="note" v="1"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="-5144965" timestamp="1970-01-01T00:00:00Z" version="2">
+        <member type="way" ref="-5144956" role=""/>
+        <member type="node" ref="-5144918" role=""/>
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="test2"/>
+    </relation>
+    <relation visible="true" id="-5144964" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5144957" role=""/>
+        <member type="way" ref="-5144955" role=""/>
+        <member type="node" ref="-5144924" role=""/>
+        <member type="node" ref="-5144922" role=""/>
+        <tag k="test_key" v="test_val"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="test1"/>
+    </relation>
+</osm>

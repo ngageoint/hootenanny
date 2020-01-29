@@ -38,10 +38,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
+import hoot.services.command.ExternalCommandRunnerImpl;
 
 public class ConflateCommandTest {
 
@@ -89,8 +92,7 @@ public class ConflateCommandTest {
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("HOOT_OPTIONS"));
         String command = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
-        assertTrue(command.startsWith("[-D, convert.ops=hoot::DecomposeBuildingRelationsVisitor, "));
-        assertTrue(command.contains("-D, writer.include.conflate.score.tags=false, "));
+        assertTrue(command.startsWith("[-D, writer.include.conflate.score.tags=false, "));
         assertTrue(command.contains("-D, hootapi.db.writer.overwrite.map=true, "));
         assertTrue(command.contains("-D, writer.text.status=true, "));
         assertTrue(command.contains("-D, api.db.email=test@test.com, "));
@@ -109,10 +111,10 @@ public class ConflateCommandTest {
 
     @Test
     @Category(UnitTest.class)
-    public void testCreateConflateCommandHoot2() {
-        String jobId = UUID.randomUUID().toString();
+    public void testAttribute() {
+        String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
 
-        // captures expectation for attribute, reference, horizontal...
+        // captures expectation for attribute
 
         ConflateParams conflateParams = new ConflateParams();
         conflateParams.setConflationCommand("conflate");
@@ -136,15 +138,19 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
-        assertEquals(expectedCommand, conflateCommand.getCommand());
+        String expectedCommand = "hoot conflate --error -C AttributeConflation.conf -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d";
+        CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
+        assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
 
-        assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATION_TYPE"));
-        assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATION_TYPE").toString().equals("AttributeConflation.conf"));
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testNetworkAlgorithm() {
+        String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
 
         // handles case for network...
-        jobId = UUID.randomUUID().toString();
-        conflateParams = new ConflateParams();
+        ConflateParams conflateParams = new ConflateParams();
         conflateParams.setConflationCommand("conflate");
         conflateParams.setInputType1("DB");
         conflateParams.setInput1("DcGisRoads");
@@ -155,17 +161,74 @@ public class ConflateCommandTest {
         conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
         conflateParams.setConflateAlgorithm("Network");
-        debugLevel = "error";
-        conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+        String debugLevel = "error";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
-        expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
-        assertEquals(expectedCommand, conflateCommand.getCommand());
+        String expectedCommand = "hoot conflate --error -C NetworkAlgorithm.conf -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d";
+        CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
+        assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
 
-        assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATION_ALGORITHM"));
-        assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATION_ALGORITHM").toString().equals("NetworkAlgorithm.conf"));
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHorizontal() {
+        String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
+
+        // handles case for network...
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setConflationType("Horizontal");
+        String debugLevel = "trace";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        String expectedCommand = "hoot conflate --trace -C HorizontalConflation.conf -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d";
+        CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
+        assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
+
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testNetwork() {
+        String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
+
+        // handles case for network...
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setConflationType("Network");
+        String debugLevel = "error";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        String expectedCommand = "hoot conflate --error -C NetworkAlgorithm.conf -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d";
+        CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
+        assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
+
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testDisabledFeaturesAndCleaningOptions() {
+        String jobId = UUID.randomUUID().toString();
 
         // handles disabled features...
-        conflateParams = new ConflateParams();
+        ConflateParams conflateParams = new ConflateParams();
         conflateParams.setConflationCommand("conflate");
         conflateParams.setInputType1("DB");
         conflateParams.setInput1("DcGisRoads");
@@ -177,7 +240,8 @@ public class ConflateCommandTest {
         conflateParams.setHoot2(true);
         conflateParams.setConflateAlgorithm("Network");
         conflateParams.setDisabledFeatures(Arrays.asList("Roads", "Pois"));
-        conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+        String debugLevel = "error";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
         String options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
         assertTrue(options.contains("match"));
@@ -203,9 +267,165 @@ public class ConflateCommandTest {
 
     }
 
+    @Test
+    @Category(UnitTest.class)
+    public void testDifferential() {
+        String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
+
+        // handles case for network...
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("differential");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(true);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setConflationType("Differential");
+        String debugLevel = "error";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        String expectedCommand = "hoot conflate --error -C DifferentialConflation.conf -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d --differential --stats";
+        CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
+        assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
+
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testDifferentialWithTags() {
+        String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
+
+        // handles case for Differential with tags...
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("differential-tags");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setConflationType("Differential w/Tags");
+        String debugLevel = "error";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        String expectedCommand = "hoot conflate --error -C DifferentialConflation.conf -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d --differential --include-tags";
+        CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
+        assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
+
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testReference() {
+        String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
+
+        // handles case for reference conflation type
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(true);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setConflationType("Reference");
+        String debugLevel = "error";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        String expectedCommand = "hoot conflate --error -C ReferenceConflation.conf -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d --stats";
+        CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
+        assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
+
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testDefault() {
+        String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
+
+        // handles case for no Conflation Type which should be reference...
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(true);
+        conflateParams.setHoot2(true);
+        String debugLevel = "error";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        String expectedCommand = "hoot conflate --error -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d --stats";
+        CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
+        assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
+
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testReferenceLayer2() {
+        String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
+
+        // handles case for setting reference layer to 2
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(true);
+        conflateParams.setReferenceLayer("2");
+        conflateParams.setHoot2(true);
+        String debugLevel = "info";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        String expectedCommand = "hoot conflate --info -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com -D tag.merger.default=hoot::OverwriteTag1Merger hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d --stats";
+        CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
+        assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
+
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHoot2AdvOpts() {
+        String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
+
+        // handles case for setting reference layer to 2
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(false);
+        conflateParams.setHoot2(true);
+        Map<String,String> advOpts = new HashMap<>();
+        advOpts.put("BuildingKeepMoreComplexGeometryWhenAutoMerging", "false");
+        conflateParams.setHoot2AdvOptions(advOpts);
+        String debugLevel = "info";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        String expectedCommand = "hoot conflate --info -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com -D building.keep.more.complex.geometry.when.auto.merging=false hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d";
+        CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
+        assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
+
+    }
+
+    //{BuildingKeepMoreComplexGeometryWhenAutoMerging: false}
+
     @Test(expected = IllegalArgumentException.class)
     @Category(UnitTest.class)
-    public void testHoot2Exceptions() {
+    public void testInvalidType() {
         // illustrates command will not be executed if alg or conflate type are not valid...
 
         String jobId = UUID.randomUUID().toString();
@@ -220,16 +440,35 @@ public class ConflateCommandTest {
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
-        conflateParams.setConflationType("Network");
+        conflateParams.setConflationType("Foo");
 
         String debugLevel = "error";
 
         new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
-        conflateParams.setConflationCommand(null);
-        conflateParams.setConflationType("Attribute");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    @Category(UnitTest.class)
+    public void testInvalidAlgorithm() {
+        // illustrates command will not be executed if alg or conflate type are not valid...
+
+        String jobId = UUID.randomUUID().toString();
+
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setConflateAlgorithm("Attribute");
+
+        String debugLevel = "error";
 
         new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
-    }
-}
+    }}

@@ -86,10 +86,11 @@ public:
   /**
    * @brief loadFromString - Builds a map from the JSON string. Throws a
    *        HootException with error and line number if JSON parsing fails
-   * @param jsonStr - input string
-   * @return Smart pointer to the OSM map
+   *        This is the GeoJson version of OsmXmlReader::readFromString(QString, Map)
+   * @param jsonStr - input string, map - the map to load the JSON into
+   * @return
    */
-  virtual OsmMapPtr loadFromString(const QString& jsonStr);
+  virtual void loadFromString(const QString& jsonStr, const OsmMapPtr& map);
 
   /**
    * @brief loadFromFile - Reads the whole file as a string, passes it
@@ -160,9 +161,12 @@ private:
    * @param geometry Tree of multi-geometry in JSON format
    * @param relation OSM relation to represent the multi-geometry that all elements are added to
    */
-  void _parseMultiPointGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation);
-  void _parseMultiLineGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation);
-  void _parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation);
+  void _parseMultiPointGeometry(const boost::property_tree::ptree& geometry,
+                                const RelationPtr& relation);
+  void _parseMultiLineGeometry(const boost::property_tree::ptree& geometry,
+                               const RelationPtr& relation);
+  void _parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry,
+                                  const RelationPtr& relation);
 
   /**
    * @brief _parseMultiGeometry Parse "Multi" geometry object into a vector of vectors of coordiantes

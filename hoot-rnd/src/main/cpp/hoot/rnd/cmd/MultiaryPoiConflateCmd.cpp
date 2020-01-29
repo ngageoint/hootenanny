@@ -40,7 +40,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -66,14 +66,14 @@ public:
 
   MultiaryConflatePoiCmd() {}
 
-  virtual QString getName() const { return "multiary-poi-conflate"; }
+  virtual QString getName() const override { return "multiary-poi-conflate"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Conflates two or more POI maps into a single map (experimental) "; }
 
-  virtual QString getType() const { return "rnd"; }
+  virtual QString getType() const override { return "rnd"; }
 
-  int runSimple(QStringList args) override
+  virtual int runSimple(QStringList& args) override
   {
     Timer totalTime;
 

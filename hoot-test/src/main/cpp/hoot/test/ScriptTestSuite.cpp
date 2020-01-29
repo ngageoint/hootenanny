@@ -38,7 +38,7 @@ namespace hoot
 {
 
 ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec,
-                                 bool hideDisableTests) :
+                                 bool hideDisableTests, bool suppressFailureDetail) :
 TestSuite(dir.toStdString())
 {
   QDir d(dir);
@@ -81,7 +81,7 @@ TestSuite(dir.toStdString())
       if (!ignore)
       {
         QString path = d.absoluteFilePath(files[i]);
-        addTest(new ScriptTest(path, printDiff, waitTimeSec * 1000));
+        addTest(new ScriptTest(path, printDiff, suppressFailureDetail, waitTimeSec * 1000));
       }
     }
   }

@@ -33,7 +33,7 @@
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Validate.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -76,14 +76,6 @@ bool OsmMapReaderFactory::hasPartialReader(const QString& url)
 std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& url)
 {
   QString readerOverride = ConfigOptions().getOsmMapReaderFactoryReader();
-
-  // hack - the OsmApiDbAwareHootApiDbReader should always be reading from hoot api
-  // databases, but by using the factory override during conflation it won't - see #781 for
-  // potential fix task
-  if (readerOverride == "hoot::OsmApiDbAwareHootApiDbReader" && url.startsWith("osmapidb"))
-  {
-    readerOverride = "";
-  }
 
   std::shared_ptr<OsmMapReader> reader;
   if (readerOverride != "")
@@ -156,6 +148,8 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
     const std::string name = names[i];
     LOG_VART(name);
     writer.reset(Factory::getInstance().constructObject<OsmMapReader>(name));
+    LOG_VART(url);
+    LOG_VART(writer->isSupported(url));
     if (writer->isSupported(url))
     {
       return QString::fromStdString(name);
@@ -204,7 +198,7 @@ void OsmMapReaderFactory::_read(const OsmMapPtr& map,
   VALIDATE(map->validate(true));
   LOG_INFO(
     "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements from input in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+    " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 }

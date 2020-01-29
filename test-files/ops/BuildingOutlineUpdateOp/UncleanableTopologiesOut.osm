@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="-13.52587648770018" minlon="-172.3076125432203" maxlat="-13.52322358770161" maxlon="-172.3043568"/>
-    <node visible="true" id="-486" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247853912196252" lon="-172.3057303469734904"/>
     <node visible="true" id="-453" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5232235877016116" lon="-172.3057521726027232"/>
     <node visible="true" id="-452" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5232235877016134" lon="-172.3056548908227796"/>
     <node visible="true" id="-451" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5258764877001791" lon="-172.3075333203389619"/>
@@ -455,27 +454,6 @@
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247489877008107" lon="-172.3057976000000053"/>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5248151877007672" lon="-172.3056752999999901"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5250101877006710" lon="-172.3052723000000128"/>
-    <way visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2"/>
-        <nd ref="-486"/>
-        <nd ref="-18"/>
-        <nd ref="-4"/>
-        <nd ref="-5"/>
-        <nd ref="-6"/>
-        <nd ref="-7"/>
-        <nd ref="-17"/>
-        <nd ref="-9"/>
-        <nd ref="-10"/>
-        <nd ref="-11"/>
-        <nd ref="-16"/>
-        <nd ref="-15"/>
-        <nd ref="-14"/>
-        <nd ref="-13"/>
-        <nd ref="-12"/>
-        <nd ref="-2"/>
-        <tag k="area" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>

@@ -45,7 +45,7 @@ class Way;
 
 /**
  * Locates intersections that are likely mistakes and separates them. This is typically a problem
- * with data ingested into OSM (e.g. goverment data such as TIGER).
+ * with data ingested into OSM (e.g. government data such as TIGER).
  *
  * For example, a motorway overpass intersecting a residential street at a 90° is considered
  * unlikely and "unsnapped". The geometry location is not modified.

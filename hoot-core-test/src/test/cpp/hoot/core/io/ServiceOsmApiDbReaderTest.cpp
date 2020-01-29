@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -59,6 +59,7 @@ class ServiceOsmApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST(runReadOsmApiTest);
   CPPUNIT_TEST(runReadByBoundsTest);
   CPPUNIT_TEST(runPartialReadTest);
+  CPPUNIT_TEST(readByBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -93,7 +94,9 @@ public:
   void insertDataForBoundTest()
   {
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "postgresql_forbounding_test.sql");
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(),
+      _scriptDir + "postgresql_forbounding_test.sql");
   }
 
   void populatePartialMap()
@@ -200,7 +203,6 @@ public:
     WayPtr pWay = map->getWays().begin()->second;
     CPPUNIT_ASSERT(0 != pWay->getTimestamp());
 
-
     //Need to remove timestamps, otherwise they cause issues with the compare
     QList<ElementAttributeType> types;
     types.append(ElementAttributeType(ElementAttributeType::Timestamp));
@@ -210,7 +212,7 @@ public:
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, _outputPath + "runReadByBoundsTest.osm");
     HOOT_FILE_EQUALS(_inputPath + "runReadByBoundsTest.osm",
-                    _outputPath + "runReadByBoundsTest.osm");
+                     _outputPath + "runReadByBoundsTest.osm");
 
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds
@@ -366,9 +368,74 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(4, ctr);
   }
+
+  void readByBoundsLeaveConnectedOobWaysTest()
+  {
+    // This will leave any ways in the output which are outside of the bounds but are directly
+    // connected to ways which cross the bounds.
+
+    insertDataForBoundTest();
+
+    OsmApiDb database;
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    OsmApiDbReader reader;
+    reader.setKeepImmediatelyConnectedWaysOutsideBounds(true);
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    OsmMapPtr map(new OsmMap());
+
+    // The default behavior is return both features entirely within the bounds and those that
+    // cross the bounds. This uses MapCropper internally, so other variations on the cropping are
+    // tested in MapCropperTest.
+
+    reader.setBoundingBox("-88.1,28.89,-88.0,28.91");
+    reader.read(map);
+
+    //quick check to see if the element counts are off...consult the test output for more detail
+
+    //All but two of the seven nodes should be returned.  There are five nodes outside of the
+    //requested bounds, one of them is referenced by a way within the bounds and the other three by a
+    //relation within the bounds.  The nodes not returned is outside of the requested bounds and not
+    //reference by any other element.
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
+    //Two of the five ways should be returned.  The ways not returned contain nodes
+    //that are out of bounds.
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    //Two of the six relations should be returned.  The relations not returned contain all
+    //members that are out of bounds.
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelations().size());
+
+    // Verify timestamps look OK
+    WayPtr pWay = map->getWays().begin()->second;
+    CPPUNIT_ASSERT(0 != pWay->getTimestamp());
+
+    //Need to remove timestamps, otherwise they cause issues with the compare
+    QList<ElementAttributeType> types;
+    types.append(ElementAttributeType(ElementAttributeType::Timestamp));
+    RemoveAttributesVisitor attrVis(types);
+    map->visitRw(attrVis);
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "readByBoundsLeaveConnectedOobWaysTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "readByBoundsLeaveConnectedOobWaysTest.osm",
+                     _outputPath + "readByBoundsLeaveConnectedOobWaysTest.osm");
+
+    //just want to make sure I can read against the same data twice in a row w/o crashing and also
+    //make sure I don't get the same result again for a different bounds
+    reader.setBoundingBox("-1,-1,1,1");
+    map.reset(new OsmMap());
+    reader.read(map);
+
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+
+    reader.close();
+  }
 };
 
+#ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbReaderTest, "slow");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbReaderTest, "serial");
+#endif  // HOOT_HAVE_SERVICES
 
 }

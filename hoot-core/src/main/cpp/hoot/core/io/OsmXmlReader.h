@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMXMLREADER_H
 #define OSMXMLREADER_H
@@ -30,9 +30,8 @@
 // Hoot
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/ops/Boundable.h>
-#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QHash>
@@ -52,8 +51,7 @@ class Element;
 /**
  * Reads in a .osm file into an OsmMap data structure.
  */
-class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader, public Boundable,
-  public Configurable
+class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader, public Boundable
 {
 public:
 
@@ -83,11 +81,24 @@ public:
 
   virtual bool isSupported(const QString& url) override;
 
-  virtual void open(const QString& url) override;
-
   virtual void read(const OsmMapPtr& map) override;
 
   void readFromString(const QString& xml, const OsmMapPtr& map);
+
+  /**
+   * Converts OSM XML to a map
+   *
+   * @param xml the XML string to convert
+   * @param useDataSourceId use IDs from the source data
+   * @param useDataSourceStatus use statues from the source data
+   * @param keepStatusTag retain the status tag in the output
+   * @param addChildRefsWhenMissing add referenced children when they are missing from the input
+   * @return a map
+   */
+  static OsmMapPtr fromXml(const QString& xml, const bool useDataSourceId = false,
+                           const bool useDataSourceStatus = false,
+                           const bool keepStatusTag = false,
+                           const bool addChildRefsWhenMissing = false);
 
   void read(const QString& path, const OsmMapPtr& map);
 
@@ -121,7 +132,12 @@ public:
 
   virtual void setConfiguration(const Settings& conf) override;
 
-private:
+  // Its possible we may want to move this method and the ones for all other classes using it up
+  // to OsmMapReader;
+  void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
+  { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
+
+protected:
 
   bool _osmFound;
 
@@ -140,7 +156,6 @@ private:
   int _missingNodeCount;
   int _missingWayCount;
   int _badAccuracyCount;
-  QString _path;
 
   bool _keepStatusTag;
   bool _useFileStatus;
@@ -170,6 +185,8 @@ private:
   long _statusUpdateInterval;
 
   geos::geom::Envelope _bounds;
+  // only valid is _bounds is not null
+  bool _keepImmediatelyConnectedWaysOutsideBounds;
 
   void _createNode(const QXmlAttributes& attributes);
   void _createWay(const QXmlAttributes& attributes);
@@ -196,6 +213,8 @@ private:
   QXmlAttributes _streamAttributesToAttributes(const QXmlStreamAttributes& streamAttributes);
 
   void _uncompressInput();
+
+  void _cropToBounds();
 };
 
 }

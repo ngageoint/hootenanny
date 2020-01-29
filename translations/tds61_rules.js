@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -82,6 +82,7 @@ tds61.rules = {
     ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
     ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
     ['F_CODE','AP050','highway','footway'], // Trail
+    ['F_CODE','AQ125','amenity','bus_station'],
     ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
     ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
     ['F_CODE','AQ125','public_transport','stop_position'],
@@ -249,10 +250,10 @@ tds61.rules = {
     'HGT':'height', // Height Above Surface Level
     'HVA':'source:accuracy:height', // Height Vertical Accuracy (90%)
     'KVA':'voltage', // Power Line Maximum Voltage
-    'LC1':'bridge:load_class1', // Load Class Type 1
-    'LC2':'bridge:load_class2', // Load Class Type 2
-    'LC3':'bridge:load_class3', // Load Class Type 3
-    'LC4':'bridge:load_class4', // Load Class Type 4
+    'LC1':'mlc:wheeled_oneway', // Load Class Type 1
+    'LC2':'mlc:wheeled', // Load Class Type 2
+    'LC3':'mlc:tracked_oneway', // Load Class Type 3
+    'LC4':'mlc:tracked', // Load Class Type 4
     'LCA':'crane:lifting_capacity', // Lifting Capacity
     'LDC':'length:crest', // Dam Crest Length
     'LEA':'depth:minimum_below_surface', // Least Depth Below Surface Level
@@ -325,7 +326,7 @@ tds61.rules = {
     'ZVH_AVA':'source:accuracy:highest_elevation', // Highest Elevation <absolute vertical accuracy>
     'ZVH':'ele:max' // Highest Elevation
     }, // End numBiased
-    
+
 
     // Common one2one rules. Used for both import and export
     // taken from TDSv60 with the NGA TDSv61 additions
@@ -1104,12 +1105,12 @@ tds61.rules = {
 
     // EET - Engineered Earthwork Type
     // ['EET','-999999',undefined,undefined], // No Information
-    ['EET','1','earthwork:type','battery'], // Battery
-    ['EET','2','earthwork:type','military_parapet'], // Military Parapet
-    ['EET','3','earthwork:type','military_trench'], // Military Trench
-    ['EET','4','earthwork:type','rampart'], // Rampart
-    ['EET','5','earthwork:type','redoubt'], // Redoubt
-    ['EET','999','earthwork:type','other'], // Other
+    ['EET','1','trench','battery'], // Battery
+    ['EET','2','trench','parapet'], // Military Parapet
+    ['EET','3',undefined,undefined], // Military Trench
+    ['EET','4','trench','rampart'], // Rampart
+    ['EET','5','trench','redoubt'], // Redoubt
+    ['EET','999','trench','other'], // Other
 
     // EQC - Equivalent Scale Category
     // ['EQC','noInformation',undefined,undefined], // No Information
@@ -1628,13 +1629,13 @@ tds61.rules = {
 
     // FZR - Fortified Building Type
     // ['FZR','-999999',undefined,undefined], // No Information
-    ['FZR','1','fortified:type','blockhouse'], // Blockhouse
-    ['FZR','2','fortified:type','casement'], // Casement
-    ['FZR','3','fortified:type','keep'], // Keep
-    ['FZR','4','fortified:type','martello_tower'], // Martello Tower
-    ['FZR','5','fortified:type','non-specific_fortified'], // Non-specific Fortified
-    ['FZR','6','fortified:type','pillbox'], // Pillbox
-    ['FZR','999','fortified:type','other'], // Other
+    ['FZR','1','bunker_type','blockhouse'], // Blockhouse
+    ['FZR','2','bunker_type','casement'], // Casement
+    ['FZR','3','bunker_type','keep'], // Keep
+    ['FZR','4','bunker_type','martello_tower'], // Martello Tower
+    ['FZR','5','bunker_type','non-specific_fortified'], // Non-specific Fortified
+    ['FZR','6','bunker_type','pillbox'], // Pillbox
+    ['FZR','999','bunker_type','other'], // Other
 
     // GFT - Geologic Fault Trace Visible
     // ['GFT','-999999',undefined,undefined], // No Information
@@ -3919,13 +3920,13 @@ tds61.rules = {
 
     // OTH Filler.  These are to build OTH values
     ['RTY','999','highway','other'],
-    ['FFN','999','amenity','other'], 
-    ['FFN','999','building','other'], 
-    ['FFN','999','camp:type','other'], 
-    ['FFN','999','craft','other'], 
-    ['FFN','999','landuse','other'], 
-    ['FFN','999','leisure','other'], 
-    ['FFN','999','military','other'], 
+    ['FFN','999','amenity','other'],
+    ['FFN','999','building','other'],
+    ['FFN','999','camp:type','other'],
+    ['FFN','999','craft','other'],
+    ['FFN','999','landuse','other'],
+    ['FFN','999','leisure','other'],
+    ['FFN','999','military','other'],
     ['FFN','999','office','other'],
     ['FFN','999','repair','other'],
     ['FFN','999','shop','other'],
@@ -3973,8 +3974,6 @@ tds61.rules = {
     ['ZI014_PPO','2','product','aluminum'], // Aluminum
     ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
 
-    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
-
     // Extra road stuff - see similarTable
     // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
     // ['ZI016_ROC','3','surface','unpaved'], // Stabilized earth
@@ -4004,6 +4003,8 @@ tds61.rules = {
     [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
     ['IWT','4','water','reservoir'], // Reservoir
+
+    ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
 
     // From UFD
     ['CAA','-999999','controlling_authority','unknown'],
@@ -4050,7 +4051,7 @@ tds61.rules = {
     ['FFN','558','building','dependents_housing'], // Dependents Housing
     ['FFN','610','office','telecommunication'], // telecommunication
     ['FFN','640','shop','bureau_de_change'], // Financial Services
-    ['FFN','760','amenity','office'], // Business and Personal Support Services 
+    ['FFN','760','amenity','office'], // Business and Personal Support Services
     ['FFN','815','building','palace'], // Palace
 
     // Added to give something for the OTH value to use
@@ -4060,7 +4061,7 @@ tds61.rules = {
 
     // ##### End of One2One Rules #####
 
-   
+
     // ##### Start of fuzzyTable #####
     // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
     fuzzyTable : [
@@ -4220,7 +4221,6 @@ tds61.rules = {
     ],
     // ##### End of fCodeMap #####
 
-
     // ##### Start of closureList #####
     closureList : {
     'AQTC':['AQTL','AQTU'],
@@ -4314,7 +4314,6 @@ tds61.rules = {
     'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'},
     'ZI026':{'ZI026_SUR':'SUR'}
     },
-
     // ##### End of swapListOut #####
 
     // ##### Start of txtLength #####

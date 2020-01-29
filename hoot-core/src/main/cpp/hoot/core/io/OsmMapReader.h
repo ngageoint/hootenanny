@@ -22,25 +22,26 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPREADER_H
 #define OSMMAPREADER_H
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class OsmMapReader
+class OsmMapReader : public Configurable
 {
 
 public:
 
   static std::string className() { return "hoot::OsmMapReader"; }
 
-  OsmMapReader() {}
+  OsmMapReader() : _ignoreDuplicates(false), _warnOnVersionZeroElement(false) {}
 
   virtual ~OsmMapReader() {}
 
@@ -54,7 +55,7 @@ public:
   /**
    * Opens the specified URL for reading.
    */
-  virtual void open(const QString& url) = 0;
+  virtual void open(const QString& url) { _url = url; }
 
   /**
    * Reads the specified map. When this method is complete the input will likely be closed.
@@ -84,6 +85,39 @@ public:
    * @return a formats string
    */
   virtual QString supportedFormats() = 0;
+
+  /**
+   * Gets the ignore duplicates flag
+   */
+  bool getIgnoreDuplicates() { return _ignoreDuplicates; }
+
+  /**
+   * Set the ignore duplicates flag, when set to true, derived classes will ignore any element
+   * who's ID is already being used.  This is useful when elements cross bounding box boundaries
+   * and multiple bounding boxes are being merged together.
+   */
+  void setIgnoreDuplicates(bool ignore) { _ignoreDuplicates = ignore; }
+
+  void setWarnOnVersionZeroElement(bool warn) { _warnOnVersionZeroElement = warn; }
+
+  /** Configurable interface */
+  virtual void setConfiguration(const Settings& conf) override
+  {
+    _ignoreDuplicates =  ConfigOptions(conf).getMapMergeIgnoreDuplicateIds();
+  }
+
+protected:
+
+  /**
+   * Ignore the duplicate IDs when merging maps or throw an error
+   */
+  bool _ignoreDuplicates;
+  /** Url of the map to open and read */
+  QString _url;
+  // Its useful to be able to track zero version elements in ref datasets during changeset
+  // derivation debugging. So far have only implemented this on some of the file format readers,
+  // as data read out of an API DB will always have a positive version due to imposed constraints.
+  bool _warnOnVersionZeroElement;
 };
 
 }

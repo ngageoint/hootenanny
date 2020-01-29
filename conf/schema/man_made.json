@@ -243,14 +243,8 @@
         "name": "man_made=tower",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "man_made=gantry",
-                "weight": 0.8
-            },
-            {
-                "name": "man_made=mast",
-                "weight": 0.8
-            }
+            {"name": "man_made=gantry", "weight": 0.8 },
+            {"name": "man_made=mast", "weight": 0.8 }
         ]
     },
     {
@@ -271,14 +265,8 @@
         "name": "man_made=water_works",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "man_made=reservoir_covered",
-                "weight": 0.8
-            },
-            {
-                "name": "waterway=dam",
-                "weight": 0.7
-            }
+            {"name": "man_made=reservoir_covered", "weight": 0.8 },
+            {"name": "waterway=dam", "weight": 0.7 }
         ]
     },
     {
@@ -304,15 +292,20 @@
         "name": "man_made=water_tower",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "man_made=storage_tank",
-                "weight": 0.8
-            }
+            {"name": "man_made=storage_tank", "weight": 0.8 }
         ]
     },
     {
         "isA": "man_made",
         "name": "man_made=surveillance",
         "objectType": "tag"
+    },
+    {
+        "isA": "man_made",
+        "name": "man_made=bunker",
+        "objectType": "tag",
+        "similarTo": [
+            {"name": "military=bunker", "weight": 0.8 }
+        ]
     }
 ]

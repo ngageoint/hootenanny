@@ -1,0 +1,13 @@
+{"version": 0.6,"generator": "Hootenanny","elements": [
+{"type":"node","id":-861083,"lat":37.801263,"lon":-122.41673,"tags":{"amenity":"restaurant","REF1":"C","error:circular":"15"}},
+{"type":"node","id":-861082,"lat":37.801247,"lon":-122.41672,"tags":{"amenity":"restaurant","REF2":"none","error:circular":"15"}},
+{"type":"node","id":-861077,"lat":37.80112,"lon":-122.41676,"tags":{"REF2":"none","poi":"yes","error:circular":"15"}},
+{"type":"node","id":-861055,"lat":37.801128,"lon":-122.41674,"tags":{"REF2":"none","poi":"yes","error:circular":"15"}},
+{"type":"node","id":-861054,"lat":37.801136,"lon":-122.41677,"tags":{"REF1":"A","poi":"yes","error:circular":"15"}},
+{"type":"node","id":-861038,"lat":37.801294,"lon":-122.41694},
+{"type":"node","id":-861035,"lat":37.801179,"lon":-122.41703},
+{"type":"node","id":-861032,"lat":37.80132,"lon":-122.41689},
+{"type":"node","id":-861027,"lat":37.801158,"lon":-122.41708},
+{"type":"way","id":-861037,"nodes":[-861035,-861038],"tags":{"highway":"road","REF2":"B","error:circular":"15"}},
+{"type":"way","id":-861029,"nodes":[-861027,-861032],"tags":{"highway":"road","REF1":"B","error:circular":"15"}}]
+}

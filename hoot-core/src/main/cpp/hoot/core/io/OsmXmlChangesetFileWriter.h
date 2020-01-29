@@ -31,10 +31,9 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/ScoreMatrix.h>
-#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QMap>
@@ -50,50 +49,48 @@ namespace hoot
  * would have to be created using the API.  Optionally, after writing this the changeset
  * can be closed via the API.
  */
-class OsmXmlChangesetFileWriter : public Configurable
+class OsmXmlChangesetFileWriter : public OsmChangesetFileWriter
 {
 
 public:
 
+  static std::string className() { return "hoot::OsmXmlChangesetFileWriter"; }
+
   OsmXmlChangesetFileWriter();
 
   /**
-   * Write the changeset out to the specified file and any changes over changeset.max.size
-   * will be written to another file with a path like this:
-   *  <filepath>/<filename>.<ext>
-   *  <filepath>/<filename>-001.<ext>
-   *  <filepath>/<filename>-002.<ext>
-   *  ...
-   *  <filepath>/<filename>-00n.<ext>
-   *
-   * @param path Pathname for the output file(s)
-   * @param cs Changeset provider to stream the changes from
+   * @see ChangesetFileWriter
    */
-  void write(const QString& path, const ChangesetProviderPtr& cs);
+  virtual void write(const QString& path, const ChangesetProviderPtr& changesetProvider);
 
   /**
-   * Set the configuration settings
-   *
-   * @param conf Settings object containing updated value for changeset.max.size setting
+   * @see ChangesetFileWriter
    */
+  virtual void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders);
+
+  /**
+   * @see ChangesetFileWriter
+   */
+  virtual QString getStatsTable() const { return _stats.toTableString(); }
+
+  /**
+   * @see ChangesetFileWriter
+   */
+  virtual bool isSupported(const QString& output) const { return output.endsWith(".osc"); }
+
   virtual void setConfiguration(const Settings &conf);
-
-  bool getMultipleChangesetsWritten() const { return _multipleChangesetsWritten; }
-
-  QString getStatsTable() { return _stats.toTableString(); }
 
 private:
 
   /** Settings from the config file */
   int _precision;
-  long _changesetMaxSize;
 
   Change _change;
-
-  bool _multipleChangesetsWritten;
+  QList<Change> _parsedChanges;
 
   bool _addTimestamp;
   bool _includeDebugTags;
+  bool _includeCircularErrorTags;
 
   OsmXmlWriter _invalidCharacterHandler;
 

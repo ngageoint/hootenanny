@@ -29,7 +29,7 @@
 #define ONEWAYCRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Identifies one-way streets
  */
-class OneWayCriterion : public ElementCriterion
+class OneWayCriterion : public GeometryTypeCriterion
 {
 public:
 
@@ -50,6 +50,13 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
 
   virtual QString getDescription() const { return "Identifies one way streets"; }
+
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Line; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 
 private:
 

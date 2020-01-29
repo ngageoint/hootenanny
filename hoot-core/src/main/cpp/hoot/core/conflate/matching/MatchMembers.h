@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHMEMBERS_H
 #define MATCHMEMBERS_H
@@ -39,6 +39,7 @@ namespace hoot
 class MatchMembers
 {
 public:
+
   enum Type
   {
     None = 0,
@@ -72,6 +73,7 @@ public:
   }
 
 private:
+
   Type _type;
 };
 

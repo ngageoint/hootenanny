@@ -1,0 +1,7 @@
+[out:json];
+(
+  node({{bbox}});
+  <;
+);
+(._;>;);
+out meta;

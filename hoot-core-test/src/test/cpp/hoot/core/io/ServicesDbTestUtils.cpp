@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ServicesDbTestUtils.h"
@@ -45,6 +45,8 @@
 
 // Tgs
 #include <tgs/StreamUtils.h>
+
+#ifdef HOOT_HAVE_SERVICES
 
 using namespace std;
 using namespace Tgs;
@@ -131,7 +133,7 @@ QUrl ServicesDbTestUtils::getOsmApiDbUrl()
   // read the DB values from the DB config file.
   Settings s = ApiDb::readDbConfig();
   QUrl result;
-  result.setScheme("osmapidb");
+  result.setScheme(MetadataTags::OsmApiDbScheme());
   result.setHost(s.get("DB_HOST_OSMAPI").toString());
   result.setPort(s.get("DB_PORT_OSMAPI").toInt());
   result.setUserName(s.get("DB_USER_OSMAPI").toString());
@@ -364,3 +366,4 @@ std::shared_ptr<HootNetworkCookieJar> ServicesDbTestUtils::getTestSessionCookie(
 
 }
 
+#endif  // HOOT_HAVE_SERVICES

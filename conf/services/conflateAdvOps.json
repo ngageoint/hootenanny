@@ -388,14 +388,14 @@
                 "hoot_key":"levenshtein.distance.alpha"
             },
             {
-            	"id":"merge_nearby_nodes_distance",
+            	"id":"duplicate_node_remover_distance_threshold",
                 "minvalue":"0.01",
                 "elem_type":"double",
                 "description":"When merging nodes during convert, determines what tolerance should be used for deciding two nodes are identical. Units in meters and defaults to 1.0m.",
                 "maxvalue":"",
                 "name":"Merge Nearby Nodes Distance",
                 "defaultvalue":"1.0",
-                "hoot_key":"merge.nearby.nodes.distance"
+                "hoot_key":"duplicate.node.remover.distance.threshold"
             },
             {
             	"id":"token_min_size",
@@ -450,20 +450,20 @@
                 "hoot_key":"language.translation.string.distance.tokenize"
             },
             {
-                "id":"reader_conflate_use_data_source_ids_1",
+                "id":"conflate_use_data_source_ids_1",
                 "elem_type":"bool",
                 "defaultvalue":"false",
                 "description":"Determines whether the reader used by the conflate command to read the first input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
                 "name":"Preserve element ids from the Reference layer during conflation",
-                "hoot_key":"reader.conflate.use.data.source.ids.1"
+                "hoot_key":"conflate.use.data.source.ids.1"
             },
             {
-                "id":"reader_conflate_use_data_source_ids_2",
+                "id":"conflate_use_data_source_ids_2",
                 "elem_type":"bool",
                 "defaultvalue":"false",
                 "description":"Determines whether the reader used by the conflate command to read the second input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
                 "name":"Preserve element ids from the Secondary layer during conflation",
-                "hoot_key":"reader.conflate.use.data.source.ids.2"
+                "hoot_key":"conflate.use.data.source.ids.2"
             },
 	    {
             	"id":"weighted_metric_distance_extractor_search_radius",
@@ -486,7 +486,7 @@
                 "hoot_key":"unify.optimizer.time.limit"
             }
         ]
-    }, 
+    },
     {
         "id":"hoot_road_options",
         "elem_type":"group",
@@ -843,22 +843,6 @@
                 "hoot_key":"building.merge.many.to.many.matches"
             },
             {
-            	"id":"building_outline_update_op_remove_building_relations",
-                "elem_type":"bool",
-                "defaultvalue":"false",
-                "description":"If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
-                "name":"Remove Building Relations",
-                "hoot_key":"building.outline.update.op.remove.building.relations"
-            },
-            {
-              "id": "building_remove_building_relations",
-              "elem_type": "bool",
-              "description": "If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
-              "name": "Remove Building Relations",
-              "defaultvalue": "false",
-              "hoot_key": "building.outline.update.op.remove.building.relations"
-            },
-            {
             	"id":"building_review_if_secondary_newer",
                 "elem_type":"bool",
                 "defaultvalue":"false",
@@ -904,9 +888,9 @@
                 "description":"",
                 "name":"Match Creator",
                 "required":"true",
-                "defaultvalue":"hoot::ScriptMatchCreator,PoiGeneric.js",
+                "defaultvalue":"hoot::ScriptMatchCreator,Poi.js",
                 "override":{
-                	"defaultvalue":"hoot::ScriptMatchCreator,PoiGeneric.js"
+                	"defaultvalue":"hoot::ScriptMatchCreator,Poi.js"
                 },
             	"hoot_key":"match.creators"
             },
@@ -977,7 +961,7 @@
         	"defaultvalue":"true",
         	"description":"If true, POI/Polygon conflation will allow house number subletter mismatches for the addresses with the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street",
         	"name":"Allow Lenient House Number Matching",
-        	"hoot_key":"poi.polygon.address.allow.lenient.house.number.matching"
+        	"hoot_key":"address.allow.lenient.house.number.matching"
     	    },
             {
         	"id":"poipolygon_address_match_enabled",
@@ -1100,14 +1084,14 @@
         	"hoot_key":"poi.polygon.promote.points.with.addresses.to.pois"
     	    },
             {
-        	"id":"poipolygon_review_distance_threshold",
+        	"id":"poipolygon_additional_search_distance",
         	"elem_type":"int",
         	"description":"The maximum distance, in meters, combined with the circular error of the features being compared, the total of which allows the features to still be considered a match based on distance criteria only.",
         	"name":"Review Distance Threshold",
         	"defaultvalue":"125",
         	"minvalue":"0",
         	"maxvalue":"",
-        	"hoot_key":"poi.polygon.review.distance.threshold"
+        	"hoot_key":"poi.polygon.additional.search.distance"
     	    },
             {
         	"id":"poipolygon_review_evidence_threshold",
@@ -1334,9 +1318,9 @@
                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Match Creator",
                 "required":"true",
-                "defaultvalue":"hoot::ScriptMatchCreator,LinearWaterway.js",
+                "defaultvalue":"hoot::ScriptMatchCreator,River.js",
                 "override":{
-                    "defaultvalue":"hoot::ScriptMatchCreator,LinearWaterway.js"
+                    "defaultvalue":"hoot::ScriptMatchCreator,River.js"
                 },
                 "hoot_key":"match.creators"
             },

@@ -147,13 +147,10 @@ void OsmXmlWriter::close()
   }
 }
 
-void OsmXmlWriter::setIncludeCompatibilityTags(bool includeCompatibility)
-{
-  _includeCompatibilityTags = includeCompatibility;
-}
-
 QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
 {
+  LOG_DEBUG("Writing map to xml string...");
+
   OsmXmlWriter writer;
   writer.setFormatXml(formatXml);
   // this will be deleted by the _fp std::shared_ptr
@@ -220,6 +217,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
   }
 
   //  Debug maps get a bunch of debug settings setup here
+  LOG_VARD(getIsDebugMap());
   if (getIsDebugMap())
     _overrideDebugSettings();
 
@@ -244,7 +242,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
     _writer->writeAttribute("schema", _osmSchema);
   }
 
-  //  Osmosis chokes on the bounds being written at the end of the file, do it first
+  //  Osmosis chokes on the bounds being written at the end of the file, so write it first
   const geos::geom::Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
   _writeBounds(bounds);
 
@@ -255,7 +253,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
   close();
 }
 
-void OsmXmlWriter::_writeMetadata(const Element *e)
+void OsmXmlWriter::_writeMetadata(const Element* e)
 {
   if (_includeCompatibilityTags)
   {

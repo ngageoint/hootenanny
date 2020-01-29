@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_UTILS_H
@@ -36,6 +36,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 
 // GEOS
+#include <geos/geom/Geometry.h>
 #include <geos/geom/Coordinate.h>
 
 // Qt
@@ -65,22 +66,80 @@ public:
                          const QList<std::shared_ptr<const Node>>& nodes);
 
   /**
-    Retrieves a collection of node ID's for a collection of nodes
+    Retrieves a collection of node IDs for a collection of nodes
 
     @param nodes a collection of nodes
-    @return a collection of node ID's
+    @return a collection of node IDs
     */
-  static const QList<long> nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes);
+  static QList<long> nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes);
 
   /**
-    Retrieves a collection of nodes given a collection of node ID's
+   * Retrieves a collection of node IDs for a collection of nodes
+   *
+   * @param nodes a collection of nodes
+   * @return a collection of node IDs
+   */
+  static std::vector<long> nodesToNodeIds(const std::vector<std::shared_ptr<const Node>>& nodes);
 
-    @param nodeIds a collection of node ID's
-    @param map the map owning the nodes with the given ID's
+  /**
+   * Retrieves a collection of element IDs for a collection of elements
+   *
+   * @param elements a collection of elements
+   * @return a collection of element IDs
+   * @todo may be able to replace nodesToNodeIds with this more generic version
+   */
+  static QSet<ElementId> elementsToElementIds(const std::vector<ElementPtr>& elements);
+
+  /**
+    Retrieves a collection of nodes given a collection of node IDs
+
+    @param nodeIds a collection of node IDs
+    @param map the map owning the nodes with the given IDs
     @return a collection of nodes
     */
-  static QList<std::shared_ptr<const Node>> nodeIdsToNodes(const QList<long>& nodeIds,
-                                                           const std::shared_ptr<const OsmMap>& map);
+  static QList<std::shared_ptr<const Node>> nodeIdsToNodes(
+    const QList<long>& nodeIds, const std::shared_ptr<const OsmMap>& map);
+
+  /**
+   * Retrieves a collection of nodes given a collection of node IDs
+   *
+   * @param nodeIds a collection of node IDs
+   * @param map the map owning the nodes with the given IDs
+   * @return a collection of nodes
+   */
+  static std::vector<std::shared_ptr<const Node>> nodeIdsToNodes(
+    const std::vector<long>& nodeIds, const std::shared_ptr<const OsmMap>& map);
+
+  /**
+   * Determines if the coordinates from two collection of nodes match, given a configurable
+   * tolerance
+   *
+   * @param nodes1 the first collection of nodes to compare
+   * @param nodes2 the second collection of nodes to compare
+   * @return true if the coordinates match; false otherwise
+   */
+  static bool nodeCoordsMatch(std::vector<std::shared_ptr<const Node>> nodes1,
+                              std::vector<std::shared_ptr<const Node>> nodes2);
+
+  /**
+   * Determines if the way node coordinates from two ways match, given a configurable
+   * tolerance
+   *
+   * @param way1 the first way with nodes to compare
+   * @param way2 the second way with nodes to compare
+   * @param map the map owning the ways
+   * @return true if the way node coordinates match; false otherwise
+   */
+  static bool nodeCoordsMatch(const ConstWayPtr& way1, const ConstWayPtr& way2,
+                              const ConstOsmMapPtr& map);
+
+  /**
+   * Returns a printable string for a collection of nodes
+   *
+   * @param nodes the nodes for which to create a string
+   * @return a string
+   */
+  static QString nodeCoordsToString(const std::vector<ConstNodePtr>& nodes);
 
   /**
     Converts a OSM node to a coordinate
@@ -129,7 +188,8 @@ public:
   /**
     Converts a utc zulu timestamp to time since the epoch in seconds.
 
-    @param timestamp in utc zulu string to be convered to seconds from the epoch (1970-01-01 00:00:00)
+    @param timestamp in utc zulu string to be convered to seconds from the epoch
+           (1970-01-01 00:00:00)
     */
   static quint64 fromTimeString(QString timestamp);
 
@@ -201,7 +261,8 @@ public:
    * @param map map owning the relation
    * @return a detailed relation string
    */
-  static QString getRelationDetailedString(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+  static QString getRelationDetailedString(const ConstRelationPtr& relation,
+                                           const ConstOsmMapPtr& map);
 
   /**
    * Get a detailed string representing a relation's members
@@ -214,6 +275,15 @@ public:
                                                   const ConstOsmMapPtr& map);
 
   /**
+   * Get a detailed string respresenting a way's nodes
+   *
+   * @param way way to get info from
+   * @param map map owning the way
+   * @return a detailed way nodes string
+   */
+  static QString getWayNodesDetailedString(const ConstWayPtr& way, const ConstOsmMapPtr& map);
+
+  /**
    * Returns the first way ID from a set of relation members
    *
    * @param relation relation to check way ID for
@@ -223,16 +293,23 @@ public:
   static long getFirstWayIdFromRelation(const ConstRelationPtr& relation, const OsmMapPtr& map);
 
   /**
-   * Logs a detailed printout for an element
+   * Constructs a detailed string for an element suitable for trace logging
    *
-   * @param element the element to log
+   * @param element the element to create a string for
    * @param map map owning the element
-   * @param logLevel granularity at which to log the element
-   * @param message optional message
+   * @return a string describing the element
    */
-  static void logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map,
-                               const Log::WarningLevel& logLevel = Log::Trace,
-                               const QString& message = "");
+  static QString getElementDetailString(const ConstElementPtr& element, const ConstOsmMapPtr& map);
+
+  /**
+   *  Constructs a detailed string for collection of elements suitable for trace logging
+   *
+   * @param elements the elements to create a string for
+   * @param map map owning the elements
+   * @return a string describing the elements
+   */
+  static QString getElementsDetailString(const std::vector<ElementPtr>& elements,
+                                         const ConstOsmMapPtr& map);
 
   /**
    * Determines if two elements have conflicting one way street tags
@@ -269,7 +346,8 @@ public:
    * @return true if both have specific highway tags (other than highway=road) and they disagree;
    * false otherwise
    */
-  static bool nonGenericHighwayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
+  static bool nonGenericHighwayConflictExists(const ConstElementPtr& element1,
+                                              const ConstElementPtr& element2);
 
   /**
    * Returns the IDs of all ways containing an input node
@@ -330,8 +408,293 @@ public:
    * @param map the map containing the nodes
    * @return true if there is at least one way that contains both nodes; false otherwise
    */
-  static bool nodesAreContainedByTheSameWay(const long nodeId1, const long nodeId2,
+  static bool nodesAreContainedInTheSameWay(const long nodeId1, const long nodeId2,
                                             const ConstOsmMapPtr& map);
+
+  /**
+   * Returns a subset of elements from a map filtered by a criterion
+   *
+   * @param map map to copy elements from
+   * @param filter filter to apply to the map
+   * @return a copied subset map
+   */
+  static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter);
+
+  /**
+   * Determines if a specified node is contained by a way, given a list of way IDs
+   *
+   * @param nodeId the ID of the node to search for
+   * @param wayIds the IDs for the ways to search in
+   * @param map the map containing the nodes/ways
+   * @return true if any way in the ID list contains the node; false otherwise
+   */
+  static bool nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
+                                    const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if a node is contained by any way in a map
+   *
+   * @param nodeId the ID of the node to search for
+   * @param map the map containing the nodes/ways
+   * @return true if any way in the map contains the node; false otherwise
+   */
+  static bool nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if a node is contained by more than one way in a map
+   *
+   * @param nodeId the ID of the node to search for
+   * @param map the map containing the nodes/ways
+   * @return true if more than one way contains the node; false otherwise
+   */
+  static bool nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if an element is contained by any relation in a map
+   *
+   * @param elementId the ID of the element to search for
+   * @param map the map containing the element
+   * @return true if any relation in the map contains the element; false otherwise
+   */
+  static bool elementContainedByAnyRelation(const ElementId& elementId, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if an element is contained by any way or relation in a map
+   *
+   * @param elementId the ID of the element to search for
+   * @param map the map containing the element
+   * @return true if any way or relation in the map contains the element; false otherwise
+   */
+  static bool isChild(const ElementId& elementId, const ConstOsmMapPtr& map);
+
+  /**
+   * Returns the number of elements with a changeset version less than one
+   *
+   * @param map the map to examine
+   * @return the number of elements meeting the criteria
+   */
+  static int versionLessThanOneCount(const OsmMapPtr& map);
+
+  /**
+   * Logs a warning if any element in the map has a changeset version less than one
+   *
+   * @param map the map to examine
+   * @return true if a warning was logged; false otherwise
+   */
+  static bool checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map);
+
+  /**
+   * Returns the element IDs of all elements with a changeset version less than one
+   *
+   * @param map the map to examine
+   * @return a set of element IDs
+   */
+  static std::set<ElementId> getIdsOfElementsWithVersionLessThanOne(const OsmMapPtr& map);
+
+  /**
+   * Determines if a map contains only nodes that are not way nodes
+   *
+   * @param map the map to examine
+   * @return true if the map is made up of non-way node points only; false otherwise
+   */
+  static bool mapIsPointsOnly(const OsmMapPtr& map);
+
+  // This group of allElements* methods really should probably be passing const elements and maps.
+
+  /**
+   * Determines if all elements in a specified collection have any tag key from a specified set of
+   * keys
+   *
+   * @param tagKeys the tag keys to search for
+   * @param elements the elements to examine
+   * @return true if all elements from the input collection of elements contain at least one of the
+   * tag keys specified in tagKeys; false otherwise
+   */
+  static bool allElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::vector<ElementPtr>& elements);
+
+  /**
+   * Determines if all elements in a specified collection have any tag key/value pair from a
+   * specified set of kvps
+   *
+   * @param kvp the tag key/value pairs to search for
+   * @param elements the elements to examine
+   * @return true if all elements from the input collection of elements contain at least one of the
+   * key/value pairs specified in kvps; false otherwise
+   */
+  static bool allElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::vector<ElementPtr>& elements);
+
+  /**
+   * Determines if any elements in a specified collection have any tag key from a specified set of
+   * keys
+   *
+   * @param tagKeys the tag keys to search for
+   * @param elements the elements to examine
+   * @return true if any elements from the input collection of elements contain at least one of the
+   * tag keys specified in tagKeys; false otherwise
+   */
+  static bool anyElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::vector<ElementPtr>& elements);
+
+  /**
+   * Determines if any elements in a specified collection have any tag key/value pair from a
+   * specified set of kvps
+   *
+   * @param kvps the tag key/value pairs to search for
+   * @param elements the elements to examine
+   * @return true if any elements from the input collection of elements contain at least one of the
+   * key/value pairs specified in kvps; false otherwise
+   */
+  static bool anyElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::vector<ElementPtr>& elements);
+
+  /**
+   * Determines if all elements in a specified collection have any tag key from a specified set of
+   * keys
+   *
+   * @param tagKeys the tag keys to search for
+   * @param elementIds IDs of the elements to examine
+   * @param map the map containing the elements
+   * @return true if all elements from the input collection of elements contain at least one of the
+   * tag keys specified in tagKeys; false otherwise
+   */
+  static bool allElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * Determines if all elements in a specified collection have any tag key/value pair from a
+   * specified set of kvps
+   *
+   * @param kvp the tag key/value pairs to search for
+   * @param elementIds IDs of the elements to examine
+   * @param map the map containing the elements
+   * @return true if all elements from the input collection of elements contain at least one of the
+   * key/value pairs specified in kvps; false otherwise
+   */
+  static bool allElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * Determines if any elements in a specified collection have any tag key from a specified set of
+   * keys
+   *
+   * @param tagKeys the tag keys to search for
+   * @param elementIds IDs of the elements to examine
+   * @param map the map containing the elements
+   * @return true if any elements from the input collection of elements contain at least one of the
+   * tag keys specified in tagKeys; false otherwise
+   */
+  static bool anyElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * Determines if any elements in a specified collection have any tag key/value pair from a
+   * specified set of kvps
+   *
+   * @param kvps the tag key/value pairs to search for
+   * @param elementIds IDs of the elements to examine
+   * @param map the map containing the elements
+   * @return true if any elements from the input collection of elements contain at least one of the
+   * key/value pairs specified in kvps; false otherwise
+   */
+  static bool anyElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * Determines if all element IDs in a map are positive
+   *
+   * @param map the map to examine
+   * @return true if all elements in the input map have a positive ID; false otherwise
+   */
+  static bool allElementIdsPositive(const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if all element IDs in a map are negative
+   *
+   * @param map the map to examine
+   * @return true if all elements in the input map have a negative ID; false otherwise
+   */
+  static bool allElementIdsNegative(const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if all hoot:id element tags in a map match their element IDs
+   *
+   * @param map the map to examine
+   * @return true if all the hoot:id tag values match the owning element's ID; false otherwise
+   */
+  static bool allIdTagsMatchIds(const ConstOsmMapPtr& map);
+
+  /**
+   * Returns the distance between two elements
+   *
+   * @param element1 the first element to measure distance from
+   * @param element2 the second element to measure distance from
+   * @param map map owning the input elements
+   * @return the distance between the two elements or -1.0 if the distance could not be calculated
+   */
+  static double getDistance(const ConstElementPtr& element1, const ConstElementPtr& element2,
+                            ConstOsmMapPtr map);
+
+  /**
+   * Calculates the area of an element
+   *
+   * @param element the feature to calculate the area of
+   * @param map map owning the input element
+   * @return the area of the feature or -1.0 if the area could not be calculated
+   */
+  static double getArea(const ConstElementPtr& element, ConstOsmMapPtr map);
+
+  /**
+   * Determines if an element contains another element geographically
+   *
+   * @param containingElement the element to check for containing containedElement
+   * @param containedElement the element to check if contained by containingElement
+   * @param map map owning the input elements
+   * @return true if containingElement contains the containedElement geographicaly; false otherwise
+   * or if the containment could not be calculated
+   */
+  static bool elementContains(const ConstElementPtr& containingElement,
+                              const ConstElementPtr& containedElement, ConstOsmMapPtr map);
+
+  /**
+   * Determines if an element intersects another element; backed by a cache
+   *
+   * @param element1 the first element to examine
+   * @param element2 the second element to examine
+   * @param map map owning the input elements
+   * @return true if the two elements intersect; false otherwise or if the intersection could not
+   * be calculated
+   */
+  static bool elementsIntersect(const ConstElementPtr& element1, const ConstElementPtr& element2,
+                                ConstOsmMapPtr map);
+
+  /**
+   * Determines if an element has a given criterion; backed by a cache
+   *
+   * @param element the element to examine
+   * @param criterionClassName class name of the ElementCriterion to determine membership of
+   * @return true if the element has the criterion; false otherwise
+   * @throws if the criterion class name is invalid
+   */
+  static bool hasCriterion(const ConstElementPtr& element, const QString& criterionClassName);
+
+  /**
+   * Determines if one element a child of another; e.g. way node or relation memeber
+   *
+   * @param parent the parent element
+   * @param memberId the element ID of the child
+   * @return true if parent has the element with memberId as a child; false otherwise
+   */
+  static bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
+
+private:
+
+  static int _badGeomCount;
+
+  static std::shared_ptr<geos::geom::Geometry> _getGeometry(
+    const ConstElementPtr& element, ConstOsmMapPtr map);
+  static ElementCriterionPtr _getCrit(const QString& criterionClassName);
 };
 
 }

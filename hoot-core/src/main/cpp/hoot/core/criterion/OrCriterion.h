@@ -41,22 +41,17 @@ public:
 
   static std::string className() { return "hoot::OrCriterion"; }
 
-  OrCriterion() {}
-  OrCriterion(ElementCriterion* child1, ElementCriterion* child2) :
-    ChainCriterion(child1, child2)
-  {
-  }
-  OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2) :
-    ChainCriterion(child1, child2)
-  {
-  }
+  OrCriterion();
+  OrCriterion(ElementCriterion* child1, ElementCriterion* child2);
+  OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new OrCriterion(_criteria[0]->clone(), _criteria[1]->clone())); }
+  virtual ElementCriterionPtr clone();
 
-  virtual QString getDescription() const { return "Allows for combining criteria (logical OR )"; }
+  virtual QString getDescription() const { return "Allows for combining criteria (logical OR)"; }
+
+  virtual QString toString() const override;
 };
 
 }

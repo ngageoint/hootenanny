@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYSNAPMERGER_H
 #define HIGHWAYSNAPMERGER_H
@@ -56,6 +56,10 @@ public:
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
+  void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
+
+  virtual QString getDescription() const { return "Merges both road geometries and tags"; }
+
 protected:
 
   // When roads are split and the pieces stored in multilinestring relations, this decides if the
@@ -69,13 +73,14 @@ protected:
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);
 
-  virtual QString getDescription() const { return "Merges both road geometries and tags"; }
-
 private:
 
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   ReviewMarker _reviewMarker;
+
+  // indicates which matcher matched the elements being processed by this merger
+  QString _matchedBy;
 
   /**
    * Returns true if the way directly connects the left and right ways. There is some tolerance
@@ -103,6 +108,8 @@ private:
                      const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
+
+  void _updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap);
 
   // for white box testing.
   friend class HighwaySnapMergerTest;

@@ -1,0 +1,2 @@
+Error running stat:
+Visitors passed to the stat command with a statistic type other than "total" must support the NumericStatistic interface.

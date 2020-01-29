@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef COOKIECUTTER_H
@@ -43,20 +43,27 @@ public:
 
   static std::string className() { return "hoot::CookieCutter"; }
 
-  CookieCutter(bool crop, double outputBuffer = 0.0);
+  CookieCutter(bool crop, double outputBuffer = 0.0, bool keepEntireFeaturesCrossingBounds = false,
+               bool keepOnlyFeaturesInsideBounds = false);
 
   /**
    * Uses an input map geometry to cut the shape out of another map
    *
-   * @param cutterShapeMap the input geometry use for cutting
+   * @param cutterShapeOutlineMap the input geometry use for cutting
    * @param doughMap the map to be cut from
    */
-  void cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap);
+  void cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap);
 
 private:
 
+  // If crop is true, then the cookie cutter portion is kept and the dough is dropped instead.
   bool _crop;
+  // how far out to buffer the cropping from the cutter shape bounds
   double _outputBuffer;
+  // see MapCropper
+  bool _keepEntireFeaturesCrossingBounds;
+  // see MapCropper
+  bool _keepOnlyFeaturesInsideBounds;
 };
 
 }

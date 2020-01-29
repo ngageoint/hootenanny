@@ -72,10 +72,11 @@ size_t MemChangesetProvider::getNumChanges()
   return _changes.size();
 }
 
-// "premature optimization is the root of all evil" - Donald Knuth
-// Possibly use a hash or something here, if this is taking too much time
 bool MemChangesetProvider::containsChange(ElementId eID)
 {
+  // "premature optimization is the root of all evil" - Donald Knuth
+  // Possibly use a hash or something here, if this is taking too much time
+
   for (std::list<Change>::iterator it = _changes.begin(); it != _changes.end(); ++it)
   {
     if (eID == it->getElement()->getElementId())
@@ -83,8 +84,6 @@ bool MemChangesetProvider::containsChange(ElementId eID)
       return true;
     }
   }
-
-  // Return false if not found
   return false;
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -56,12 +56,16 @@ public final class HootProperties {
     public static final String DIFFERENTIAL_CONFLATION_PATH;
     public static final String HORIZONTAL_CONFLATION_PATH;
     public static final String NETWORK_CONFLATION_PATH;
+    public static final String IMPORT_OPTIONS;
+    public static final String CHANGESET_OPTIONS;
+    public static final String CHANGESET_OPTION_KEYS;
     public static final String CONFIG_OPTIONS;
     public static final String DOC_NAME;
     public static final String RPT_STORE_PATH;
     public static final String BASEMAPS_TILES_FOLDER;
     public static final String BASEMAPS_FOLDER;
     public static final String JS_HEADER_SCRIPT_PATH;
+    public static final String CHANGESETS_FOLDER;
     public static final String SCRIPT_FOLDER;
     public static final String DEFAULT_TRANSLATIONS_CONFIG;
     public static final String DEFAULT_FOUO_TRANSLATIONS_CONFIG;
@@ -86,6 +90,7 @@ public final class HootProperties {
     public static final String EXPORT_SIZE_THRESHOLD;
     public static final String HTTP_TIMEOUT;
     public static final String GRAIL_OVERPASS_QUERY;
+    public static final String GRAIL_OVERPASS_STATS_QUERY;
     public static final String OSMAPI_DB_NAME;
     public static final String MAP_QUERY_DIMENSIONS;
     public static final String MAP_QUERY_AREA_DEGREES;
@@ -131,6 +136,13 @@ public final class HootProperties {
     public static final String PUBLIC_OSMAPI_CAPABILITIES_URL;
 
     public static final String PUBLIC_OVERPASS_URL;
+    public static final String PRIVATE_OVERPASS_URL;
+    public static final String PRIVATE_OVERPASS_CERT_PATH;
+    public static final String PRIVATE_OVERPASS_CERT_PHRASE;
+    public static final String MAX_OVERPASS_FEATURE_COUNT;
+
+    public static final String GRAIL_RAILS_LABEL;
+    public static final String GRAIL_OVERPASS_LABEL;
 
     public static final String RAILSPORT_PUSH_URL;
     public static final String RAILSPORT_PULL_URL;
@@ -202,6 +214,9 @@ public final class HootProperties {
         DIFFERENTIAL_CONFLATION_PATH = getProperty("differentialConf");
         HORIZONTAL_CONFLATION_PATH = getProperty("horizontalConf");
         NETWORK_CONFLATION_PATH = getProperty("networkConf");
+        IMPORT_OPTIONS = getProperty("importOptions");
+        CHANGESET_OPTION_KEYS = getProperty("changesetOptionKeys");
+        CHANGESET_OPTIONS = getProperty("changesetOptions");
         CONFIG_OPTIONS = getProperty("configJsonPath");
         DOC_NAME = getProperty("documentName");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");
@@ -221,7 +236,11 @@ public final class HootProperties {
         INGEST_SIZE_THRESHOLD = getProperty("ingestSizeThreshold");
         EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
         HTTP_TIMEOUT = getProperty("httpTimeout");
+        MAX_OVERPASS_FEATURE_COUNT = getProperty("grailMaxFeatureCount");
+        GRAIL_RAILS_LABEL =  getProperty("grailRailsLabel");
+        GRAIL_OVERPASS_LABEL = getProperty("grailOverpassLabel");
         GRAIL_OVERPASS_QUERY = getProperty("grailOverpassQueryPath");
+        GRAIL_OVERPASS_STATS_QUERY = getProperty("grailOverpassStatsQueryPath");
         MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");
         MAP_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");
         MAX_QUERY_NODES = getProperty("maxQueryNodes");
@@ -258,6 +277,9 @@ public final class HootProperties {
 
         // Root folder of tomcat writable locations
         USERFILES_FOLDER = HOME_FOLDER + File.separator + "userfiles";
+
+        // User generated changesets location
+        CHANGESETS_FOLDER = USERFILES_FOLDER + File.separator + "changesets";
 
         // User uploaded translation scripts go here
         SCRIPT_FOLDER = USERFILES_FOLDER + File.separator + "customscript";
@@ -301,6 +323,11 @@ public final class HootProperties {
 
         // The URL for the main Overpass server
         PUBLIC_OVERPASS_URL = "${PUBLIC_OVERPASS_URL}";
+
+        // The URL for the private Overpass server
+        PRIVATE_OVERPASS_URL = "${PRIVATE_OVERPASS_URL}";
+        PRIVATE_OVERPASS_CERT_PATH = "${PRIVATE_OVERPASS_CERT_PATH}";
+        PRIVATE_OVERPASS_CERT_PHRASE = "${PRIVATE_OVERPASS_CERT_PHRASE}";
 
         // The OSM Rails Port that we are going to pull and push data to.
         RAILSPORT_PROTOCOL = "${RAILSPORT_PROTOCOL}" + "://";

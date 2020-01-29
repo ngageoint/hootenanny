@@ -36,8 +36,10 @@ translate = {
         var lookup = {};
 
         one2one.forEach( function(item) {
-            if (item[2]) // Make sure it isn't 'undefined'
-        {
+            // Taking this out to keep the 'undefined' values so that they get found then dropped during the transtion
+            // Trying to figure out why they were being dropped.
+            // if (item[2]) // Make sure it isn't 'undefined'
+            // {
                 if (!(item[0] in lookup)) lookup[item[0]] = {};
 
                 if (!(lookup[item[0]][item[1]]))
@@ -54,7 +56,7 @@ translate = {
                             }
                         }
                 }
-            }
+            // }
         } );
 
         return lookup;
@@ -270,6 +272,12 @@ translate = {
                         // print('Fuzzy: ' + key);
                         delete inList[key];
                     }
+                    else
+                    {
+                        // Debug
+                        // print('UsedUndef:' + key + ' = ' + inList[key]);
+                        delete inList[key];
+                    }
                 }
             }
         } // End for key in inList
@@ -305,25 +313,27 @@ translate = {
                     if (row[0])
                     {
                         // Make sure that we don't stomp on already assigned values
+                        // unless the first n-1 characters are identical then we replace with the higher value
+                        // (used for cases of where the more specific ffn code is a higher value)
                         // NOTE: we could add a verify step to this to make sure that the XXX2, XXX3 values
                         // are valid
-                        if (! outList[row[0]])
+                        if (! outList[row[0]] || outList[row[0]].slice(0, -1) === row[1].slice(0, -1))
                         {
-                            outList[row[0]] = row[1];
+                            outList[row[0]] = this.getMaxAsString(outList[row[0]], row[1]);
                             // Debug
                             // print('Used:' + key + ' = ' + inList[key]);
                             delete inList[key];
                         }
-                        else if (! outList[row[0] + '2'])
+                        else if (! outList[row[0] + '2'] || outList[row[0] + '2'].slice(0, -1) === row[1].slice(0, -1))
                         {
-                            outList[row[0] + '2'] = row[1];
+                            outList[row[0] + '2'] = this.getMaxAsString(outList[row[0] + '2'], row[1]);
                             // Debug
                             // print('Used:' + key + ' = ' + inList[key] + ' as 2nd');
                             delete inList[key];
                         }
-                        else if (! outList[row[0] + '3'])
+                        else if (! outList[row[0] + '3'] || outList[row[0] + '3'].slice(0, -1) === row[1].slice(0, -1))
                         {
-                            outList[row[0] + '3'] = row[1];
+                            outList[row[0] + '3'] = this.getMaxAsString(outList[row[0] + '3'], row[1]);
                             // Debug
                             // print('Used:' + key + ' = ' + inList[key] + ' as 3rd');
                             delete inList[key];
@@ -797,6 +807,18 @@ translate = {
     },
 
 
+    swapName : function(tags)
+    {
+        // If we have an English name, make it the main "name"
+        // This is run after a check for the existance of "name"
+        if (tags['name:en'])
+        {
+            tags.name = tags['name:en'];
+            delete tags['name:en'];
+        }
+    },
+
+
     fixConstruction : function(tags, key)
     {
         if ('condition' in tags && key in tags && tags.condition == 'construction' && tags[key] != '')
@@ -1129,7 +1151,7 @@ translate = {
     }, // End applyComplexRules
 
 
-    // makeAttrLookup - build a lookup table for FCODEs and Attrs
+    // makeAttrLookup - build a lookup table for layers and Attrs
     makeTdsAttrLookup : function(schema)
     {
         var lookup = {};
@@ -1150,8 +1172,8 @@ translate = {
     {
         var lookup = {};
 
-            // Add the attrArray to the list as <geom><FCODE>:[array]
-            // Eg[L,A,P]AP030:[array]
+        // Add the attrArray to the list as <geom><FCODE>:[array]
+        // Eg[L,A,P]AP030:[array]
         schema.forEach( function (item) {
             var iName = item.geom.charAt(0) + item.fcode;
             lookup[iName] = [];
@@ -1290,6 +1312,18 @@ translate = {
     }, // End addFdName
 
 
+    // debugOutput - Dump out tags or attributes to figure out what is going on
+    debugOutput : function(values,layerName,geometryType,elementType,text)
+    {
+        var kList = Object.keys(values).sort()
+        if (kList.length > 0)
+        {
+            print('LayerName: ' + layerName + '  Geometry: ' + geometryType + '  Element Type: ' + elementType);
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print(text + kList[i] + ': :' + values[kList[i]] + ':');
+        }
+    }, // End debugOutput
+
+
     // dumpLookup - Dump a Lookup table so we can check it
     dumpLookup : function(lookupTable)
     {
@@ -1361,5 +1395,21 @@ translate = {
         }
 
         return values;
-    } // End overrideValues
-} // End of translate
+    }, // End overrideValues
+
+    getMaxAsString: function(value1, value2) {
+        var maxVal;
+        var val1 = parseInt(value1);
+        var val2 = parseInt(value2);
+
+        if (!val1) {
+            maxVal = value2;
+        } else if (!val2) {
+            maxVal = value1;
+        } else {
+            maxVal = Math.max(val1, val2)
+        }
+
+        return maxVal + '';
+    }
+}; // End of translate

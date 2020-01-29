@@ -37,6 +37,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/criterion/RoundaboutCriterion.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Qt
 #include <QDebug>
@@ -52,8 +53,10 @@ RemoveRoundabouts::RemoveRoundabouts()
 {
 }
 
-void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
+void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
 {
+  LOG_TRACE("Removing roundabouts...");
+
   // Get a list of roundabouts in the map
   RoundaboutCriterion roundaboutCrit;
   for (WayMap::const_iterator it = _pMap->getWays().begin(); it != _pMap->getWays().end(); ++it)
@@ -63,6 +66,7 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
       _todoWays.push_back(it->first);
     }
   }
+  LOG_VART(_todoWays.size());
 
   // Make roundabout objects
   for (size_t i = 0; i < _todoWays.size(); i++)
@@ -71,6 +75,7 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
     RoundaboutPtr rnd = Roundabout::makeRoundabout(_pMap, pWay);
     removed.push_back(rnd);
   }
+  LOG_VART(removed.size());
 
   //  Exit if there are no roundabouts removed
   if (removed.size() == 0)
@@ -101,6 +106,10 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
         removed[i]->overrideRoundabout();
       }
     }
+
+    // This could be very expensive...enable for debugging only.
+    //OsmMapWriterFactory::writeDebugMap(
+      //_pMap, "after-handline-crossing-ways-" + QString::number(i + 1));
   }
 
   //  Mangle the last way if it doesn't have a sibling
@@ -110,19 +119,26 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
     removed[removed.size() - 1]->overrideRoundabout();
   }
 
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-handline-crossing-ways");
+
   // Now remove roundabouts
   for (size_t i = 0; i < removed.size(); i++)
   {
     removed[i]->removeRoundabout(_pMap);
     _numAffected++;
+
+    // This could be very expensive...enable for debugging only.
+    //OsmMapWriterFactory::writeDebugMap(
+      //_pMap, "after-removing-roundabout-" + QString::number(i + 1));
   }
 }
 
-void RemoveRoundabouts::apply(OsmMapPtr &pMap)
+void RemoveRoundabouts::apply(OsmMapPtr& pMap)
 {
   _numAffected = 0;
   _pMap = pMap;
 
+  LOG_VART(MapProjector::toWkt(pMap->getProjection()));
   MapProjector::projectToPlanar(_pMap);
 
   std::vector<RoundaboutPtr> removed;

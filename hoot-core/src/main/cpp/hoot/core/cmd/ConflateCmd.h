@@ -54,20 +54,21 @@ public:
 
   ConflateCmd();
 
-  virtual QString getName() const { return "conflate"; }
+  virtual QString getName() const override { return "conflate"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Conflates two maps into a single map"; }
 
   void printStats(const QList<SingleStat>& stats);
 
-  virtual int runSimple(QStringList args) override;
+  virtual int runSimple(QStringList& args) override;
 
 private:
 
   int _numTotalTasks;
 
-  void _updatePostConfigOptionsForAttributeConflation();
+  void _updateConfigOptionsForAttributeConflation();
+  void _updateConfigOptionsForDifferentialConflation();
   void _checkForTagValueTruncationOverride();
 
   float _getJobPercentComplete(const int currentTaskNum) const;

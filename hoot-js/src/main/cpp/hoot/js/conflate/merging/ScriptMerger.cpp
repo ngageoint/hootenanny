@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/TagComparator.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
@@ -250,7 +249,8 @@ bool ScriptMerger::hasFunction(QString name) const
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   Handle<Object> plugin =
-    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(
+      String::NewFromUtf8(current, "plugin")));
   Handle<Value> value = plugin->Get(String::NewFromUtf8(current, name.toUtf8().data()));
 
   bool result = true;

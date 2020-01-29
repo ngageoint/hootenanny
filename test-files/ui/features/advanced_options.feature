@@ -62,7 +62,7 @@ Feature: Advanced Conflation Options
         And I should see element "#element_cache_size_way" with no value and placeholder "2000000"
 	And I should see element "#edge_distance_extractor_spacing" with no value and placeholder "5.0"
 	And I should see element "#levenshtein_distance_alpha" with no value and placeholder "1.15"
-	And I should see element "#merge_nearby_nodes_distance" with no value and placeholder "1.0"
+	#And I should see element "#duplicate_node_remover_distance_threshold" with no value and placeholder "0.01"
 	And I should see element "#node_matcher_strictness" with no value and placeholder "2"
 	And I should see checkbox "Keep Non Word Tokens" unchecked
 	And I should see element "#token_min_size" with no value and placeholder "3"
@@ -103,7 +103,7 @@ Feature: Advanced Conflation Options
         And I should see element "#poipolygon_name_score_threshold" with no value and placeholder "0.8"
         And I should see element "#poipolygon_type_score_threshold" with no value and placeholder "0.7"
         And I should see element "#poipolygon_match_distance_threshold" with no value and placeholder "5.0"
-        And I should see element "#poipolygon_review_distance_threshold" with no value and placeholder "125.0"
+        And I should see element "#poipolygon_additional_search_distance" with no value and placeholder "125.0"
         And I should see element "#poipolygon_review_if_matched_types" with no value and placeholder ""
         And I should see checkbox "Disable Same Source Conflation" unchecked
         And I should see checkbox "Disable Same Source Conflation Match Tag Key Prefix Only" checked

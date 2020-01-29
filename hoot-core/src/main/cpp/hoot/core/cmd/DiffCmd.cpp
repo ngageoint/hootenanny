@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -33,7 +33,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 using namespace std;
 
@@ -48,14 +48,13 @@ public:
 
   DiffCmd() { }
 
-  virtual QString getName() const { return "diff"; }
+  virtual QString getName() const override { return "diff"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Calculates the difference between two maps"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
-
     MapComparator mapCompare;
 
     if (args.contains("--ignore-uuid"))
@@ -70,6 +69,20 @@ public:
       mapCompare.setUseDateTime();
     }
 
+    if (args.contains("--error-limit"))
+    {
+      const int errorLimitIndex = args.indexOf("--error-limit");
+      bool ok = false;
+      const int errorLimit = args.at(errorLimitIndex + 1).trimmed().toInt(&ok);
+      if (!ok)
+      {
+        throw IllegalArgumentException("Invalid error limit: " + args.at(errorLimitIndex + 1));
+      }
+      args.removeAt(errorLimitIndex + 1);
+      args.removeAt(errorLimitIndex);
+      mapCompare.setErrorLimit(errorLimit);
+    }
+
     if (args.size() != 2)
     {
       cout << getHelp() << endl << endl;
@@ -78,6 +91,8 @@ public:
 
     OsmMapPtr map1(new OsmMap());
     IoUtils::loadMap(map1, args[0], true, Status::Unknown1);
+    //  Some maps that don't have IDs cooked in will fail comparison if the IDs aren't reset
+    OsmMap::resetCounters();
     OsmMapPtr map2(new OsmMap());
     IoUtils::loadMap(map2, args[1], true, Status::Unknown1);
 

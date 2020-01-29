@@ -22,36 +22,39 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatchCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/conflate/network/NetworkMatch.h>
+#include <hoot/core/conflate/network/NetworkMatcher.h>
+#include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/network/NetworkMatch.h>
-#include <hoot/core/conflate/network/OsmNetworkExtractor.h>
-#include <hoot/core/conflate/network/NetworkMatcher.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/NotImplementedException.h>
 
 // Standard
 #include <fstream>
 
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 using namespace Tgs;
@@ -69,27 +72,29 @@ _matchScoringFunctionCurveSteepness(ConfigOptions().getNetworkMatchScoringFuncti
   _userCriterion.reset(new HighwayCriterion());
 }
 
-Match* NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId /*eid1*/,
+MatchPtr NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId /*eid1*/,
   ElementId /*eid2*/)
 {
-  Match* result = 0;
-  return result;
+  return MatchPtr();
 }
 
-const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, NetworkEdgeScorePtr e,
+ConstMatchPtr NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, NetworkEdgeScorePtr e,
   ConstMatchThresholdPtr mt)
 {
-  return
+  return ConstMatchPtr(
     new NetworkMatch(
       map, e->getEdgeMatch(), e->getScore(), mt, _matchScoringFunctionMax,
-      _matchScoringFunctionCurveMidpointX, _matchScoringFunctionCurveSteepness);
+      _matchScoringFunctionCurveMidpointX, _matchScoringFunctionCurveSteepness));
 }
 
-void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
-  ConstMatchThresholdPtr threshold)
+void NetworkMatchCreator::createMatches(
+  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
 {
-  LOG_DEBUG("Creating matches with: " << className() << "...");
+  QElapsedTimer timer;
+  timer.start();
+  LOG_STATUS("Looking for matches with: " << className() << "...");
   LOG_VART(threshold);
+  const int matchesSizeBefore = matches.size();
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
@@ -158,12 +163,18 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
       LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
-      matches.push_back(_createMatch(details, edgeMatch[i], threshold));
+      ConstMatchPtr match = _createMatch(details, edgeMatch[i], threshold);
+      LOG_VART(match);
+      matches.push_back(match);
     }
   }
+  const int matchesSizeAfter = matches.size();
 
-  LOG_INFO(
-    "Found " << StringUtils::formatLargeNumber(matches.size()) << " highway match candidates.");
+  LOG_STATUS(
+    "Found " << StringUtils::formatLargeNumber(matches.size()) <<
+    " highway match candidates and " <<
+    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
+    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const

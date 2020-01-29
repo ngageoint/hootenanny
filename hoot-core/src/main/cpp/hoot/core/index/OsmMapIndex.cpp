@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmMapIndex.h"
@@ -67,9 +67,10 @@ OsmMapIndex::OsmMapIndex(const OsmMap& map) : _map(map)
 }
 
 void OsmMapIndex::addWay(ConstWayPtr w)
-{
+{ 
   if (_nodeToWayMap != 0)
   {
+    LOG_TRACE("Adding way to index: " << w->getElementId());
     _nodeToWayMap->addWay(w);
     VALIDATE(_nodeToWayMap->validate(_map));
   }
@@ -83,6 +84,7 @@ void OsmMapIndex::addRelation(const ConstRelationPtr& r)
 {
   if (_elementToRelationMap != 0)
   {
+    LOG_TRACE("Adding relation to index: " << r->getElementId());
     _elementToRelationMap->addRelation(_map, r);
     VALIDATE(validate());
   }
@@ -129,11 +131,15 @@ void OsmMapIndex::_buildNodeTree() const
   _pendingNodeInsert.clear();
   _pendingNodeRemoval.clear();
 
-  LOG_INFO("  Bulk inserting Node R-Tree...");
+  LOG_INFO("\tBulk inserting Node R-Tree...");
+
+  // If this takes a very long time, you can uncomment out the cout statements in HilbertRTree to
+  // get a better idea of how longs its going to take.
 
   _nodeTree->bulkInsert(boxes, ids);
 
-  LOG_INFO("  Node R-Tree index built. Time elapsed: " << StringUtils::secondsToDhms(t.elapsed()));
+  LOG_INFO(
+    "\tNode R-Tree index built. Time elapsed: " << StringUtils::millisecondsToDhms(t.elapsed()));
 }
 
 void OsmMapIndex::_buildWayTree() const
@@ -186,7 +192,7 @@ void OsmMapIndex::_buildWayTree() const
 
   _wayTree->bulkInsert(boxes, ids);
 
-  LOG_DEBUG("Way R-Tree index built in: " << StringUtils::secondsToDhms(t.elapsed()));
+  LOG_DEBUG("Way R-Tree index built in: " << StringUtils::millisecondsToDhms(t.elapsed()));
 }
 
 int OsmMapIndex::_createTreeNid(long nid) const
@@ -428,6 +434,7 @@ std::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
 {
   if (_nodeToWayMap == 0)
   {
+    LOG_TRACE("Initializing node to way map with map of size: " << _map.size() << "...");
     _nodeToWayMap.reset(new NodeToWayMap(_map));
   }
   return _nodeToWayMap;
@@ -461,7 +468,6 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
   if (eid.getType() == ElementType::Node)
   {
     const set<long>& ways = getNodeToWayMap()->getWaysByNode(eid.getId());
-
     for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       result.insert(ElementId::way(*it));
@@ -469,7 +475,6 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
   }
 
   const set<long>& ancestors = getElementToRelationMap()->getRelationByElement(eid);
-
   for (set<long>::const_iterator it = ancestors.begin(); it != ancestors.end(); ++it)
   {
     if (!_map.containsRelation(*it))
@@ -477,11 +482,11 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
       LOG_INFO("Child element: " << eid);
       LOG_INFO("Missing relation: " << *it);
       LOG_INFO("Child element: " << _map.getElement(eid)->toString());
+      // TODO: throw exception here or continue to next iteration?
     }
     // the map should contain all the relations returned by the index.
     assert(_map.containsRelation(*it));
     const ConstRelationPtr& r = _map.getRelation(*it);
-
     if (r->contains(eid))
     {
       result.insert(r->getElementId());
@@ -588,7 +593,7 @@ void OsmMapIndex::postGeometryChange(Element* e)
   {
     // add all the relations that were impacted back into the index.
     for (set<long>::iterator it = _pendingRelationChange.begin();
-      it != _pendingRelationChange.end(); ++it)
+         it != _pendingRelationChange.end(); ++it)
     {
       _elementToRelationMap->addRelation(_map, _map.getRelation(*it));
     }

@@ -18,8 +18,7 @@ export OSM_API_URL=https://api.openstreetmap.org
 export OSM_API_VERSION=0.6
 
 # The main internet Overpas URL
-export OVERPASS_API_URL=https://overpass-api.de
-
+export OVERPASS_API_URL=https://overpass-api.de/api/interpreter
 
 # Setup access to an OSM API Rails Port.
 # Override this in the Local config

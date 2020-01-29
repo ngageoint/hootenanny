@@ -22,32 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.models.db.QFolders.folders;
+import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.utils.DbUtils.createQuery;
+
+import java.net.SocketException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.querydsl.core.types.dsl.Expressions;
+
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
 import hoot.services.models.db.Maps;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import java.net.SocketException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
-import static hoot.services.models.db.QFolders.folders;
-import static hoot.services.models.db.QMaps.maps;
-import static hoot.services.utils.DbUtils.createQuery;
+import hoot.services.utils.DbUtils;
 
 
 /**
@@ -103,7 +106,7 @@ class UpdateDbCommand implements InternalCommand {
             createQuery().insert(folders)
                     .columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId,
                             folders.parentId)
-                    .values(folderId, now, params.getFolder(), false, userId, parentId)
+                    .values(folderId, now, params.getParentId(), false, userId, parentId)
                     .execute();
         }
         catch (Exception e) {
@@ -149,18 +152,7 @@ class UpdateDbCommand implements InternalCommand {
 
     private void updateFolder(Long mapId, Long folderId) {
         try {
-            // Delete any existing to avoid duplicate entries
-            createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(mapId)).execute();
-
-            Long newId = createQuery()
-                    .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
-                    .from()
-                    .fetchOne();
-
-            createQuery().insert(folderMapMappings)
-                    .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
-                    .values(newId, mapId, folderId)
-                    .execute();
+            DbUtils.updateFolderMapping(mapId, folderId);
         }
         catch (Exception e) {
             handleError(e, mapId, null);

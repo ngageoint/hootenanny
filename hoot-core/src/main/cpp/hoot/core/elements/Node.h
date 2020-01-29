@@ -103,14 +103,16 @@ public:
    */
   std::shared_ptr<Node> cloneSp() const;
 
-  virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const;
+  virtual geos::geom::Envelope* getEnvelope(
+      const std::shared_ptr<const ElementProvider>& ep) const override;
+
+  virtual const geos::geom::Envelope& getEnvelopeInternal(
+    const std::shared_ptr<const ElementProvider>& ep) const override;
 
   double getX() const { return _nodeData.getX(); }
-
   double getY() const { return _nodeData.getY(); }
 
   void setX(double y);
-
   void setY(double x);
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Node); }
@@ -123,8 +125,16 @@ public:
   QString toString() const;
 
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor) const;
-
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor);
+
+  /**
+   * Determines if the coordinates from this node match with that of another given a configurable
+   * tolerance
+   *
+   * @param other the node to compare coordinates with
+   * @return true if the coordinates match; false otherwise
+   */
+  bool coordsMatch(const Node& other) const;
 
 protected:
 

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="10.0456062" minlon="-69.3575596" maxlat="10.0477074" maxlon="-69.35318460000001"/>
+    <node visible="true" id="2909442054" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0460910000000005" lon="-69.3572644999999994"/>
+    <node visible="true" id="2909442055" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0464237999999995" lon="-69.3561648000000019"/>
+    <node visible="true" id="2909442056" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0461860999999999" lon="-69.3560844000000003"/>
+    <node visible="true" id="2909442057" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0458005000000004" lon="-69.3571787000000057"/>
+    <node visible="true" id="2909442058" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0467037000000001" lon="-69.3574899000000045"/>
+    <node visible="true" id="2909442059" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0472742000000004" lon="-69.3557356999999968"/>
+    <node visible="true" id="2909442060" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0475435999999991" lon="-69.3545179999999988"/>
+    <node visible="true" id="2909442061" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0477074000000002" lon="-69.3545661999999936"/>
+    <node visible="true" id="2909442062" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0474590999999993" lon="-69.3561004999999966"/>
+    <node visible="true" id="2909442063" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0473482000000001" lon="-69.3560736000000020"/>
+    <node visible="true" id="2909442064" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0469837000000002" lon="-69.3570607000000052"/>
+    <node visible="true" id="2909442065" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0472266999999995" lon="-69.3571143000000063"/>
+    <node visible="true" id="2909442066" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0471526999999998" lon="-69.3574148000000008"/>
+    <node visible="true" id="2909442067" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0469995000000001" lon="-69.3573664999999977"/>
+    <node visible="true" id="2909442068" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0469413999999997" lon="-69.3575596000000019"/>
+    <node visible="true" id="2909442069" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0464871999999996" lon="-69.3574497000000036"/>
+    <node visible="true" id="2909442070" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0469396000000000" lon="-69.3560674999999947"/>
+    <node visible="true" id="2909442071" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0467274000000000" lon="-69.3560023999999942"/>
+    <node visible="true" id="2909442072" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0462670999999997" lon="-69.3573887000000013"/>
+    <node visible="true" id="2909442073" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0474040000000002" lon="-69.3545062999999971"/>
+    <node visible="true" id="2909442074" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0472477999999992" lon="-69.3544535000000053"/>
+    <node visible="true" id="2909442075" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0471438000000006" lon="-69.3547298999999953"/>
+    <node visible="true" id="2909442076" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0468515000000007" lon="-69.3557950999999946"/>
+    <node visible="true" id="2909442077" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0469916000000001" lon="-69.3558316999999960"/>
+    <node visible="true" id="2909442080" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0457877000000000" lon="-69.3557648000000029"/>
+    <node visible="true" id="2909442081" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0460998999999997" lon="-69.3549028999999990"/>
+    <node visible="true" id="2909442082" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0461480000000005" lon="-69.3549191999999977"/>
+    <node visible="true" id="2909442083" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0462541999999999" lon="-69.3546264999999948"/>
+    <node visible="true" id="2909442084" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0462208000000004" lon="-69.3546048999999982"/>
+    <node visible="true" id="2909442085" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0462662999999992" lon="-69.3544816999999938"/>
+    <node visible="true" id="2909442086" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0463056999999996" lon="-69.3544971000000032"/>
+    <node visible="true" id="2909442087" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0464696000000000" lon="-69.3540749999999946"/>
+    <node visible="true" id="2909442088" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0464482999999998" lon="-69.3540627000000001"/>
+    <node visible="true" id="2909442089" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0467759999999995" lon="-69.3532399999999996"/>
+    <node visible="true" id="2909442090" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0466546000000001" lon="-69.3531846000000058"/>
+    <node visible="true" id="2909442091" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0456444000000005" lon="-69.3556925000000035"/>
+    <node visible="true" id="2909442092" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0457336000000002" lon="-69.3549358000000069"/>
+    <node visible="true" id="2909442093" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0462918000000005" lon="-69.3535339000000022"/>
+    <node visible="true" id="2909442094" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0461735000000001" lon="-69.3534846000000016"/>
+    <node visible="true" id="2909442095" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0456061999999999" lon="-69.3548865000000063"/>
+    <node visible="true" id="2910190899" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0459295999999991" lon="-69.3568123000000014"/>
+    <node visible="true" id="2910191005" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0473190999999993" lon="-69.3547855000000055"/>
+    <node visible="true" id="2910191006" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015" lat="10.0472918999999994" lon="-69.3547786999999971"/>
+    <way visible="true" id="287315710" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015">
+        <nd ref="2909442054"/>
+        <nd ref="2909442055"/>
+        <nd ref="2909442056"/>
+        <nd ref="2910190899"/>
+        <nd ref="2909442057"/>
+        <nd ref="2909442054"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z"/>
+        <tag k="width" v="33.7"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="angle" v="72.9"/>
+        <tag k="feature_area" v="3885.8"/>
+        <tag k="length" v="127.3"/>
+        <tag k="name" v="Test"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="source:imagery" v="Unknown"/>
+    </way>
+    <way visible="true" id="287315712" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015">
+        <nd ref="2909442058"/>
+        <nd ref="2909442059"/>
+        <nd ref="2909442060"/>
+        <nd ref="2909442061"/>
+        <nd ref="2909442062"/>
+        <nd ref="2909442063"/>
+        <nd ref="2909442064"/>
+        <nd ref="2909442065"/>
+        <nd ref="2909442066"/>
+        <nd ref="2909442067"/>
+        <nd ref="2909442068"/>
+        <nd ref="2909442058"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z"/>
+        <tag k="width" v="46.3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="angle" v="163.9"/>
+        <tag k="feature_area" v="8086.9"/>
+        <tag k="length" v="338.9"/>
+        <tag k="name" v="Test"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="source:imagery" v="Unknown"/>
+    </way>
+    <way visible="true" id="287315714" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015">
+        <nd ref="2909442069"/>
+        <nd ref="2909442070"/>
+        <nd ref="2909442071"/>
+        <nd ref="2909442072"/>
+        <nd ref="2909442069"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z"/>
+        <tag k="width" v="25.4"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="angle" v="71.6"/>
+        <tag k="feature_area" v="3988.0"/>
+        <tag k="length" v="161.0"/>
+        <tag k="name" v="Test"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="source:imagery" v="Unknown"/>
+    </way>
+    <way visible="true" id="287315716" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015">
+        <nd ref="2909442073"/>
+        <nd ref="2909442074"/>
+        <nd ref="2909442075"/>
+        <nd ref="2909442076"/>
+        <nd ref="2909442077"/>
+        <nd ref="2910191006"/>
+        <nd ref="2910191005"/>
+        <nd ref="2909442073"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:datetime" v="2014-06-11T01:45:41Z"/>
+        <tag k="width" v="20.4"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="angle" v="72.8"/>
+        <tag k="feature_area" v="2633.6"/>
+        <tag k="length" v="153.5"/>
+        <tag k="name" v="Test"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="source:imagery" v="Unknown"/>
+    </way>
+    <way visible="true" id="287315718" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015">
+        <nd ref="2909442080"/>
+        <nd ref="2909442081"/>
+        <nd ref="2909442082"/>
+        <nd ref="2909442083"/>
+        <nd ref="2909442084"/>
+        <nd ref="2909442085"/>
+        <nd ref="2909442086"/>
+        <nd ref="2909442087"/>
+        <nd ref="2909442088"/>
+        <nd ref="2909442089"/>
+        <nd ref="2909442090"/>
+        <nd ref="2909442091"/>
+        <nd ref="2909442080"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z"/>
+        <tag k="width" v="19.8"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="angle" v="247.8"/>
+        <tag k="feature_area" v="4830.3"/>
+        <tag k="length" v="298.3"/>
+        <tag k="name" v="Test"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="source:imagery" v="Unknown"/>
+    </way>
+    <way visible="true" id="287315720" timestamp="2019-08-16T11:05:37Z" version="1" changeset="16015">
+        <nd ref="2909442092"/>
+        <nd ref="2909442093"/>
+        <nd ref="2909442094"/>
+        <nd ref="2909442095"/>
+        <nd ref="2909442092"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:datetime" v="2014-06-10T17:30:04Z"/>
+        <tag k="width" v="15.2"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="angle" v="247.7"/>
+        <tag k="feature_area" v="2431.5"/>
+        <tag k="length" v="166.1"/>
+        <tag k="name" v="Test"/>
+        <tag k="aeroway" v="hangar"/>
+        <tag k="source:imagery" v="Unknown"/>
+    </way>
+</osm>

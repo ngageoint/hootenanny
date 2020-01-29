@@ -61,13 +61,13 @@ void OgrUtilities::loadDriverInfo()
   _drivers.push_back(OgrDriverInfo(".csv",      "CSV",            true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".gml",      "GML",            true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".gpx",      "GPX",            true,     true,   GDAL_OF_VECTOR));
-  _drivers.push_back(OgrDriverInfo(".kml",      "KML/LIBKML",     true,     true,   GDAL_OF_ALL));
-  _drivers.push_back(OgrDriverInfo(".kmz",      "LIBKML",         true,     true,   GDAL_OF_ALL));
+  _drivers.push_back(OgrDriverInfo(".kml",      "LIBKML",         true,     true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".kmz",      "LIBKML",         true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".dxf",      "DXF",            true,     true,   GDAL_OF_VECTOR));
   //  Order is important here for the two FileGDB drivers, grab the first for read ops and the second for write
   _drivers.push_back(OgrDriverInfo(".gdb",      "OpenFileGDB",    true,     false,  GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".gdb",      "FileGDB",        true,     true,   GDAL_OF_VECTOR));
-  _drivers.push_back(OgrDriverInfo(".gpkg",      "GPKG",          true,     true,   GDAL_OF_ALL));
+  _drivers.push_back(OgrDriverInfo(".gpkg",     "GPKG",           true,     true,   GDAL_OF_ALL));
   _drivers.push_back(OgrDriverInfo(".pix",      "PCIDSK",         true,     true,   GDAL_OF_ALL));
   _drivers.push_back(OgrDriverInfo(".sql",      "PGDump",         true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".gtm",      "GPSTrackMaker",  true,     true,   GDAL_OF_VECTOR));
@@ -131,7 +131,7 @@ OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
     if (((it->_is_ext && url.endsWith(it->_indicator)) || (!it->_is_ext && url.startsWith(it->_indicator))) &&
         (readonly || it->_is_rw))
     {
-        return *it;
+      return *it;
     }
   }
   return OgrDriverInfo();
@@ -203,13 +203,17 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
 //    options["Z_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvZfield();
     options["KEEP_GEOM_COLUMNS"] = ConfigOptions().getOgrReaderCsvKeepGeomFields();
   }
-  if (QString(driverInfo._driverName) == "OGR_OGDI")
+  else if (QString(driverInfo._driverName) == "OGR_OGDI")
   {
     // From the GDAL docs:
     // From GDAL/OGR 1.8.0, setting the OGR_OGDI_LAUNDER_LAYER_NAMES configuration option
     // (or environment variable) to YES causes the layer names to be simplified.
     // For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'
     options["OGR_OGDI_LAUNDER_LAYER_NAMES"] = ConfigOptions().getOgrReaderOgdiLaunderLayerNames();
+  }
+  else if (QString(driverInfo._driverName) == "LIBKML")
+  {
+    options["OSM_USE_CUSTOM_INDEXING"] = "NO";
   }
 
   std::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+    <create>
+        <node id="-1" version="0" lat="38.8549524185660573" lon="104.8987388916486054" timestamp="">
+            <tag k="test_key" v="test_val"/>
+        </node>
+        <node id="-2" version="0" lat="38.8549321261880536" lon="104.8979050333482093" timestamp="">
+            <tag k="test_key" v="test_val"/>
+        </node>
+        <way id="-1" version="0" timestamp="">
+            <nd ref="1669731"/>
+            <nd ref="-1"/>
+            <nd ref="-2"/>
+            <tag k="test_key" v="test_val"/>
+            <tag k="highway" v="primary"/>
+            <tag k="note" v="1"/>
+        </way>
+    </create>
+</osmChange>

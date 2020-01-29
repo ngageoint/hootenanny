@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryUtils.h"
@@ -179,6 +179,16 @@ QString GeometryUtils::toString(const Envelope& e)
       arg(e.getMaxY(), 0, 'f', precision);
 }
 
+QString GeometryUtils::toConfigString(const Envelope& e)
+{
+  const int precision = ConfigOptions().getWriterPrecision();
+  return QString("%1,%2,%3,%4").
+      arg(e.getMinX(), 0, 'f', precision).
+      arg(e.getMinY(), 0, 'f', precision).
+      arg(e.getMaxX(), 0, 'f', precision).
+      arg(e.getMaxY(), 0, 'f', precision);
+}
+
 Geometry* GeometryUtils::validateGeometry(const Geometry* g)
 {
   switch (g->getGeometryTypeId())
@@ -216,7 +226,8 @@ Geometry* GeometryUtils::validateGeometryCollection(
 
   for (size_t i = 0; i < gc->getNumGeometries(); i++)
   {
-    Geometry* tmp = result->Union(validateGeometry(gc->getGeometryN(i)));
+    std::shared_ptr<Geometry> geometry(validateGeometry(gc->getGeometryN(i)));
+    Geometry* tmp = result->Union(geometry.get());
     delete result;
     result = tmp;
   }
@@ -258,7 +269,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   {
     const LineString* oldShell = p->getExteriorRing();
     std::shared_ptr<LinearRing> oldLinearRing(
-      GeometryFactory::getDefaultInstance()->createLinearRing(*oldShell->getCoordinates()));
+      GeometryFactory::getDefaultInstance()->createLinearRing(oldShell->getCoordinates()));
     LinearRing* shell = validateLinearRing(oldLinearRing.get());
     std::vector<Geometry*>* holes = new vector<Geometry*>();
     holes->reserve(p->getNumInteriorRing());
@@ -322,6 +333,76 @@ QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
     QString::number(bounds.getMinY()) + "," +
     QString::number(bounds.getMaxX()) + "," +
     QString::number(bounds.getMaxY());
+}
+
+OsmMapPtr GeometryUtils::createMapFromBounds(const geos::geom::Envelope& bounds)
+{
+  OsmMapPtr boundaryMap(new OsmMap());
+  createBoundsInMap(boundaryMap, bounds);
+  return boundaryMap;
+}
+
+ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geom::Envelope& bounds)
+{
+  NodePtr lowerLeft(
+    new Node(
+      Status::Unknown1,
+      map->createNextNodeId(),
+      geos::geom::Coordinate(bounds.getMinX(), bounds.getMinY())));
+  map->addNode(lowerLeft);
+  NodePtr upperRight(
+    new Node(
+      Status::Unknown1,
+      map->createNextNodeId(),
+      geos::geom::Coordinate(bounds.getMaxX(), bounds.getMaxY())));
+  map->addNode(upperRight);
+  NodePtr upperLeft(
+    new Node(
+      Status::Unknown1,
+      map->createNextNodeId(),
+      geos::geom::Coordinate(bounds.getMinX(), bounds.getMaxY())));
+  map->addNode(upperLeft);
+  NodePtr lowerRight(
+    new Node(
+      Status::Unknown1,
+      map->createNextNodeId(),
+      geos::geom::Coordinate(bounds.getMaxX(), bounds.getMinY())));
+  map->addNode(lowerRight);
+
+  WayPtr bbox(new Way(Status::Unknown1, map->createNextWayId()));
+  bbox->addNode(lowerLeft->getId());
+  bbox->addNode(upperLeft->getId());
+  bbox->addNode(upperRight->getId());
+  bbox->addNode(lowerRight->getId());
+  bbox->addNode(lowerLeft->getId());
+  map->addWay(bbox);
+
+  return bbox->getElementId();
+}
+
+QString GeometryUtils::geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId)
+{
+  switch (geometryTypeId)
+  {
+    case GEOS_POINT:
+      return "point";
+    case GEOS_MULTIPOINT:
+      return "multipoint";
+    case GEOS_LINESTRING:
+      return "linestring";
+    case GEOS_LINEARRING:
+      return "linearring";
+    case GEOS_MULTILINESTRING:
+      return "multilinestring";
+    case GEOS_POLYGON:
+      return "polygon";
+    case GEOS_MULTIPOLYGON:
+      return "multipolygon";
+    case GEOS_GEOMETRYCOLLECTION:
+      return "geometrycollection";
+    default:
+      return "unknown";
+  }
 }
 
 }

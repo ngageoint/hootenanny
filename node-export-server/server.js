@@ -15,6 +15,60 @@ var jobs = {};
 var runningStatus = 'running',
     completeStatus = 'complete';
 
+// pipes request data to temp file with name that matches posted data format.
+function writeExportFile(req, done) {
+    //Build a hash for the input params used in file name
+    var params = (new Date()).getTime()
+        + req.params.datasource
+        + req.params.schema
+        + req.params.format;
+    var fileNameHash = crypto.createHash('sha1').update(params, 'utf-8').digest('hex');
+
+    //Write payload to file
+    var input = 'export_' + fileNameHash;
+    // we know overpass can give us json or osm, otherwise we expect osm format.
+    var fileExtension = req.params.datasource.toLowerCase() === 'overpass' ? '' : '.osm';
+
+    req.on('data', function(chunk) {
+        if (fileExtension === '') { // if overpass, figure out file type to guide reader in hoot command
+            var firstChar = chunk.toString().trim()[0];
+            if (firstChar === '{') {
+                fileExtension = 'json';
+            } else if (firstChar === '<') {
+                fileExtension = 'osm';
+            }
+        }
+    });
+
+    var writeStream = fs.createWriteStream(input, { flags : 'w' });
+    req.pipe(writeStream);
+    writeStream.on('error', function(err) {
+        if(err) {
+            return console.log(err);
+        }
+    }).on('close', function () {
+        var inputWithExtension = input + '.' + fileExtension;
+        // give file extension for reader.
+        fs.rename(input, inputWithExtension, function() {
+            //Calc sha1 for input file contents
+            var read = fs.createReadStream(inputWithExtension);
+            var hash = crypto.createHash('sha1');
+            hash.setEncoding('hex');
+            read.pipe(hash);
+            read.on('end', function () {
+                hash.end();
+                var fileHash = hash.read();
+                var jobParams = fileHash
+                    + req.params.schema
+                    + req.params.format;
+                //Create job hash from input file content and export params
+                var jobHash = crypto.createHash('sha1').update(jobParams, 'utf-8').digest('hex');
+                done(jobHash, __dirname + '/' + inputWithExtension);
+            });
+        })
+    });
+}
+
 /* Configure CORS. */
 
 app.use(function(req, res, next) {
@@ -54,42 +108,9 @@ app.get('/job/:hash', function(req, res) {
 /* Post export */
 // export/Overpass/OSM/Shapefile
 app.post('/export/:datasource/:schema/:format', function(req, res) {
-
-    //Build a hash for the input params used in file name
-    var params = (new Date()).getTime()
-        + req.params.datasource
-        + req.params.schema
-        + req.params.format;
-    var fileNameHash = crypto.createHash('sha1').update(params, 'utf-8').digest('hex');
-
-    //Write payload to file
-    var input = 'export_' + fileNameHash + '.osm';
-
-    var writeStream = fs.createWriteStream(input, { flags : 'w' });
-    req.pipe(writeStream);
-    writeStream.on('error', function(err) {
-        if(err) {
-            return console.log(err);
-        }
-    }).on('close', function () {
-        //Calc sha1 for input file contents
-        var read = fs.createReadStream(input);
-        var hash = crypto.createHash('sha1');
-        hash.setEncoding('hex');
-        read.pipe(hash);
-        read.on('end', function () {
-            hash.end();
-            var fileHash = hash.read();
-            var jobParams = fileHash
-                + req.params.schema
-                + req.params.format;
-            //Create job hash from input file content and export params
-            var jobHash = crypto.createHash('sha1').update(jobParams, 'utf-8').digest('hex');
-            //Make sure input is absolute path
-            doExport(req, res, jobHash, __dirname + '/' + input);
-        });
-    });
-
+    writeExportFile(req, function(jobHash, input) {
+        doExport(req, res, jobHash, input);
+    })
 });
 
 /* Get export */
@@ -107,6 +128,7 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
 
 });
 
+exports.writeExportFile = writeExportFile
 exports.validateBbox = function(bbox) {
     //38.4902,35.7982,38.6193,35.8536
     var regex = /(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*$)/;
@@ -267,11 +289,10 @@ function doExport(req, res, hash, input) {
         }
 
         //create command and run
-        command += 'hoot';
+        command += 'hoot convert -C NodeExport.conf';
         if (isFile) {
-            command += ' convert';
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
-	    if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
+            if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
             if (overrideTags) {
                 if (req.params.schema === 'OSM') {
                     command += ' -D convert.ops=hoot::SchemaTranslationOp';
@@ -287,7 +308,6 @@ function doExport(req, res, hash, input) {
                 if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];
             }
         } else {
-            command += ' convert';
             if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
             command += ' -D convert.ops=hoot::SchemaTranslationOp';
             command += ' -D schema.translation.script=' + config.schemas[req.params.schema];

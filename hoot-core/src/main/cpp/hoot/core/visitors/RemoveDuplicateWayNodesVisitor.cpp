@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QVector>
@@ -41,6 +42,12 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateWayNodesVisitor)
 
 RemoveDuplicateWayNodesVisitor::RemoveDuplicateWayNodesVisitor()
 {
+}
+
+void RemoveDuplicateWayNodesVisitor::removeDuplicates(const WayPtr& way)
+{
+  RemoveDuplicateWayNodesVisitor vis;
+  vis.visit(way);
 }
 
 void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
@@ -63,21 +70,20 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
       LOG_VART(nodeId);
       if (!parsedNodeIds.contains(nodeId))
       {
-        //we haven't seen this node ID yet
+        // we haven't seen this node ID yet
         LOG_TRACE("Valid way node: " << nodeId);
         parsedNodeIds.append(nodeId);
       }
       else if (i == wayNodeIds.size() -1 && nodeId == parsedNodeIds.at(0))
       {
-        //this node ID is duplicated, but its the end node duplicating the start node, which is ok
-        //(closed way)
+        // this node ID is duplicated, but its the end node duplicating the start node, which is ok
+        // (closed way)
         LOG_TRACE("End node matches start node: " << nodeId);
         parsedNodeIds.append(nodeId);
       }
       else
       {
-        //we've found a duplicate where both nodes aren't start and end nodes...shouldn't ever
-        //happen
+        // we've found a duplicate where both nodes aren't start and end nodes...not allowed
         LOG_TRACE("Found duplicate way node: " << nodeId);
         duplicateWayNodeIds.append(nodeId);
         foundDuplicateWayNode = true;

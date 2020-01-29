@@ -298,17 +298,18 @@ public class Way extends Element {
                 multiLayerUniqueElementIds, addChildren);
         Document doc = parentXml.getOwnerDocument();
 
-        if (addChildren) {
-            List<Long> nodeIds = getNodeIds();
-            Set<Long> elementIds = new HashSet<>();
+        List<Long> nodeIds = getNodeIds();
+        Set<Long> elementIds = new HashSet<>();
 
-            // way nodes are output in sequence order; list should already be sorted by the query
-            for (long nodeId : nodeIds) {
-                org.w3c.dom.Element nodeElement = doc.createElement("nd");
-                nodeElement.setAttribute("ref", String.valueOf(nodeId));
-                element.appendChild(nodeElement);
-                elementIds.add(nodeId);
-            }
+        // way nodes are output in sequence order; list should already be sorted by the query
+        for (long nodeId : nodeIds) {
+            org.w3c.dom.Element nodeElement = doc.createElement("nd");
+            nodeElement.setAttribute("ref", String.valueOf(nodeId));
+            element.appendChild(nodeElement);
+            elementIds.add(nodeId);
+        }
+
+        if (addChildren) {
 
             List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(),
                     ElementType.Node, elementIds);

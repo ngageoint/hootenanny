@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GEOS
@@ -34,7 +34,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 namespace hoot
 {
@@ -48,11 +48,11 @@ public:
 
   CookieCutCmd() {}
 
-  virtual QString getName() const { return "cookie-cut"; }
+  virtual QString getName() const override { return "cookie-cut"; }
 
-  virtual QString getDescription() const { return "Cuts out a portion from a map"; }
+  virtual QString getDescription() const override { return "Cuts out a portion from a map"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 3 || args.size() > 5)
     {
@@ -82,24 +82,25 @@ public:
       }
       else
       {
-        throw HootException(QString("Expected --crop as the last argument, but got %1.").
-          arg(args[i - 1]));
+        throw HootException(
+          QString("Expected --crop as the last argument, but got %1.").
+            arg(args[i - 1]));
       }
     }
 
+    // load up the shape being cut out
     OsmMapPtr cutterShapeMap(new OsmMap());
     IoUtils::loadMap(cutterShapeMap, cutterShapePath, true, Status::Unknown1);
 
-    // load up the "dough"
+    // load up the dough
     OsmMapPtr doughMap(new OsmMap());
     IoUtils::loadMap(doughMap, doughPath, true, Status::Unknown1);
+
+    // cut the cutter shape out of the dough
     CookieCutter(crop, buffer).cut(cutterShapeMap, doughMap);
     OsmMapPtr result = doughMap;
 
-    // reproject back into lat/lng
     MapProjector::projectToWgs84(result);
-
-    // save out the result.
     IoUtils::saveMap(result, outputPath);
 
     return 0;

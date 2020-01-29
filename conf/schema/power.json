@@ -68,5 +68,14 @@
         "isA": "power",
         "name": "power=substation",
         "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "area",
+            "node"
+        ],
+        "isA": "power",
+        "name": "power=plant",
+        "objectType": "tag"
     }
 ]

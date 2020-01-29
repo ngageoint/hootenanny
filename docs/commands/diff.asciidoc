@@ -6,14 +6,19 @@
 The +diff+ command checks to see if maps are essentially the same. It returns 0 if they are the same or 1 if they differ
 significantly. If they differ significantly, warnings will be printed with more information.
 
+* +input1+          - Input 1; may be any supported input format (e.g. OSM file).
+* +intpu2+          - Input 2; may be any supported input format (e.g. OSM file).
 * +--ignore-uuid+   - Ignore UUID's in the map comparison
 * +--use-datetime+  - Do not ignore source:datetime & source:ingest:datetime
-* +input1+          - Input 1 (e.g. .osm file).
-* +intpu2+          - Input 2 (e.g. .osm file).
+* +--error-limit+   - Increase the compare error limit from the defaule value of 10
 
 === Usage
 
 --------------------------------------
-diff [--ignore-uuid] [--use-datetime] (input1) (input2)
+diff [--ignore-uuid] [--use-datetime] [--error-limit limit] (input1) (input2)
 --------------------------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

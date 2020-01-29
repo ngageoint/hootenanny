@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchFactory.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/util/Log.h>
@@ -54,15 +54,14 @@ MatchFactory::MatchFactory()
   setConfiguration(conf());
 }
 
-Match* MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const
+MatchPtr MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const
 {
   LOG_VART(eid1);
   LOG_VART(eid2);
 
   for (size_t i = 0; i < _creators.size(); ++i)
   {
-    Match* m = _creators[i]->createMatch(map, eid1, eid2);
-
+    MatchPtr m = _creators[i]->createMatch(map, eid1, eid2);
     if (m)
     {
       return m;
@@ -72,12 +71,12 @@ Match* MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, Elem
   return 0;
 }
 
-void MatchFactory::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
   const Envelope& bounds, std::shared_ptr<const MatchThreshold> threshold) const
 {
   for (size_t i = 0; i < _creators.size(); ++i)
   {
-    LOG_DEBUG("Launching match creator " << i +1 << " / " << _creators.size() << "...");
+    LOG_DEBUG("Launching match creator " << i + 1 << " / " << _creators.size() << "...");
     std::shared_ptr<MatchCreator> matchCreator = _creators[i];
     _checkMatchCreatorBoundable(matchCreator, bounds);
     if (threshold.get())
@@ -169,8 +168,8 @@ void MatchFactory::_tempFixDefaults()
 {
   QStringList matchCreators = ConfigOptions().getMatchCreators();
   QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VARD(matchCreators);
-  LOG_VARD(mergerCreators);
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
 
   if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
   {
@@ -208,42 +207,42 @@ void MatchFactory::_tempFixDefaults()
         fixedMergerCreators.append("hoot::PoiPolygonMergerCreator");
       }
     }
-    LOG_DEBUG("Temp fixing merger.creators...");
+    LOG_TRACE("Temp fixing merger.creators...");
     conf().set("merger.creators", fixedMergerCreators.join(";"));
   }
-  LOG_VARD(mergerCreators);
+  LOG_VART(mergerCreators);
 
   //fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
       ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
       ConfigOptions().getWaySublineMatcher() != "hoot::MaximalSublineMatcher")
   {
-    LOG_DEBUG("Temp fixing way.subline.matcher...");
+    LOG_TRACE("Temp fixing way.subline.matcher...");
     conf().set("way.subline.matcher", "hoot::MaximalSublineMatcher");
   }
   else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
            ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
            ConfigOptions().getWaySublineMatcher() != "hoot::MaximalNearestSublineMatcher")
   {
-    LOG_DEBUG("Temp fixing way.subline.matcher...");
+    LOG_TRACE("Temp fixing way.subline.matcher...");
     conf().set("way.subline.matcher", "hoot::MaximalNearestSublineMatcher");
   }
-  LOG_VARD(ConfigOptions().getWaySublineMatcher());
+  LOG_VART(ConfigOptions().getWaySublineMatcher());
 
   //fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
       ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayExpertClassifier")
   {
-    LOG_DEBUG("Temp fixing conflate.match.highway.classifier...");
+    LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
     conf().set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
   }
   else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
            ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayRfClassifier")
   {
-    LOG_DEBUG("Temp fixing conflate.match.highway.classifier...");
+    LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
     conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
   }
-  LOG_VARD(ConfigOptions().getConflateMatchHighwayClassifier());
+  LOG_VART(ConfigOptions().getConflateMatchHighwayClassifier());
 }
 
 void MatchFactory::setConfiguration(const Settings& s)
@@ -253,12 +252,15 @@ void MatchFactory::setConfiguration(const Settings& s)
 
 MatchFactory& MatchFactory::getInstance()
 {
-  /* remove this hack after the following UI issues are fixed:
+  /* TODO: remove this hack after the following UI issues are fixed:
    *
    * https://github.com/ngageoint/hootenanny-ui/issues/969
    * https://github.com/ngageoint/hootenanny-ui/issues/970
    * https://github.com/ngageoint/hootenanny-ui/issues/971
    * https://github.com/ngageoint/hootenanny-ui/issues/972
+   *
+   * UPDATE: 8/21/19 - Believe the above issues should all have been fixed in v2 version of the UI.
+   * So, maybe replace these fixes with error checking and throw exceptions when bad inputs come in.
    * */
   if (ConfigOptions().getAutocorrectOptions())
   {
@@ -267,8 +269,8 @@ MatchFactory& MatchFactory::getInstance()
 
   const QStringList matchCreators = ConfigOptions().getMatchCreators();
   const QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VARD(matchCreators);
-  LOG_VARD(mergerCreators);
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
 
   if (matchCreators.size() != mergerCreators.size())
   {

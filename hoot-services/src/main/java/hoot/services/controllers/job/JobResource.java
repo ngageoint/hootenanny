@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -50,6 +50,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.job.JobStatus;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.db.CommandStatus;
@@ -91,11 +92,11 @@ public class JobResource {
 
         JobStatusResponse response = new JobStatusResponse();
 
-        hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
+        hoot.services.models.db.JobStatus jobStatus = jobStatusManager.getJobStatusObj(jobId);
 
         if (jobStatus != null) {
-            if (!jobStatus.getUserId().equals(user.getId())) {
-                throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+            if (!jobStatus.getUserId().equals(user.getId()) && !UserResource.adminUserCheck(user)) {
+                throw new ForbiddenException("HTTP"); /* This Parameter required, but will be cleared by ExceptionFilter */
             }
             response.setJobId(jobId);
             response.setStatus(JobStatus.fromInteger(jobStatus.getStatus()).toString());
@@ -104,7 +105,7 @@ public class JobResource {
             response.setLastText(jobStatus.getStatusDetail());
 
             if (includeCommandDetail) {
-                List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId, user.getId());
+                List<CommandStatus> commandDetail = jobStatusManager.getCommandDetail(jobId, user.getId());
                 response.setCommandDetail(commandDetail);
             }
         }
@@ -134,7 +135,7 @@ public class JobResource {
     public Response deleteJob(@Context HttpServletRequest request, @PathParam("jobId") String jobId) {
         Users user = Users.fromRequest(request);
         try {
-            this.jobStatusManager.deleteJob(jobId, user.getId());
+            jobStatusManager.deleteJob(jobId, user.getId());
         }
         catch (Exception e) {
             logger.error("job delete", e);
@@ -166,7 +167,7 @@ public class JobResource {
         Users user = Users.fromRequest(request);
         List<String> errors;
         try {
-            errors = this.jobStatusManager.getJobErrors(jobId, user.getId());
+            errors = jobStatusManager.getJobErrors(jobId, user.getId());
         }
         catch (Exception e) {
             logger.error("job error", e);

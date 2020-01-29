@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-# THIS SCRIPT WAS USED BY THE OLD STYLE HOLY GRAIL TESTS THAT ARE NO LONGER IN USE. ITS KEPT HERE AS REFERENCE FOR OTHER TESTS ONLY
+# THIS SCRIPT WAS USED BY THE OLD STYLE HOLY GRAIL TESTS THAT ARE NO LONGER IN USE. ITS KEPT HERE AS REFERENCE ONLY
 #
 # This is a base test script for conflating datasets where one dataset comes from an osm api database and the other 
 # from a hoot api database.  It simulates end to end at the command line level what one possible conflation workflow 
-# with MapEdit data looks like (aka Holy Grail).  See ServiceOsmApiDbHootApiDbAllDataTypesConflateTest.sh for an 
+# with OSM API database data looks like (aka Holy Grail).  See ServiceOsmApiDbHootApiDbAllDataTypesConflateTest.sh for an 
 # example of how to call this script.
 # 
 # This script:
@@ -144,12 +144,12 @@ if [ "$CONFLATE_DATA" == "true" ]; then
   echo ""
   echo "STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow..."
   echo ""
-  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=$HOOT_EMAIL -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids.2=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
+  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=$HOOT_EMAIL -D convert.bounding.box=$AOI -D conflate.use.data.source.ids.2=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
 
   echo ""
   echo "STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow..."
   echo ""
-  # How is this working w/o reader.conflate.use.data.source.ids.2=true? How can changeset derivation work if not all IDs are preserved?
+  # How is this working w/o conflate.use.data.source.ids.2=true? How can changeset derivation work if not all IDs are preserved?
   hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=$HOOT_EMAIL -D convert.bounding.box=$AOI -D id.generator=hoot::PositiveIdGenerator -D osm.map.writer.factory.writer=hoot::NonIdRemappingHootApiDbWriter $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
 fi
 
@@ -228,10 +228,10 @@ echo ""
 echo "STEP 15: Cleaning up database..."
 echo ""
 if [ "$LOAD_SEC_DATA" == "true" ]; then
-  hoot delete-db-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
+  hoot db-delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
 fi
 
 if [ "$CONFLATE_DATA" == "true" ]; then
-  hoot delete-db-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
-  hoot delete-db-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
+  hoot db-delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
+  hoot db-delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
 fi

@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.IMPORT_OPTIONS;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB_ZIP;
@@ -44,6 +46,7 @@ import static hoot.services.controllers.ingest.UploadClassification.TXT;
 import static hoot.services.controllers.ingest.UploadClassification.ZIP;
 
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -55,6 +58,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -67,6 +71,8 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,6 +111,8 @@ public class ImportResource {
      *
      * @param translation
      *            Translation script used during OGR ETL process.
+     * @param advUploadOpts
+                  advanced options for importing shapefiles
      * @param inputType
      *            [OSM | OGR ] OSM for osm file and OGR for shapefile.
      * @param inputName
@@ -127,6 +135,7 @@ public class ImportResource {
                                       @QueryParam("INPUT_NAME") String inputName,
                                       @QueryParam("USER_EMAIL") String userEmail,
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
+                                      @QueryParam("ADV_UPLOAD_OPTS") String advUploadOpts,
                                       @QueryParam("FOLDER_ID") String folderId,
                                       @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
                                       FormDataMultiPart multiPart) {
@@ -189,7 +198,7 @@ public class ImportResource {
                 geojsonZipCnt += counts.get(GEOJSON_ZIP);
                 geonamesZipCnt += counts.get(GEONAMES_ZIP);
                 gpkgZipCnt += counts.get(GPKG_ZIP);
-                
+
 
                 if ((geonamesCnt == 1) && (initialUploadClassification == TXT)) {
                     ImportResourceUtils.handleGEONAMESWithTxtExtension(workDir, uploadedFile, fileNames, filesToImport);
@@ -218,7 +227,7 @@ public class ImportResource {
 
             List<Command> workflow = new LinkedList<>();
 
-            ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation,
+            ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation, advUploadOpts,
                     etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);
             workflow.add(importCommand);
 
@@ -248,5 +257,21 @@ public class ImportResource {
         }
 
         return Response.ok(results).build();
+    }
+
+    @GET
+    @Path("/getoptions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOptions() {
+        JSONObject template;
+        JSONParser parser = new JSONParser();
+        try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, IMPORT_OPTIONS))) {
+            template = (JSONObject) parser.parse(fileReader);
+        }
+        catch (Exception e) {
+            String msg = "Error getting import options!  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+        return Response.ok(template).build();
     }
 }

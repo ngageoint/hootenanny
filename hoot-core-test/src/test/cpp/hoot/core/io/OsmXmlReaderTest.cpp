@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -44,15 +44,16 @@ class OsmXmlReaderTest : public HootTestFixture
   CPPUNIT_TEST(runUncompressTest);
   CPPUNIT_TEST(runDecodeCharsTest);
   CPPUNIT_TEST(runBoundsTest);
+  CPPUNIT_TEST(runBoundsLeaveConnectedOobWaysTest);
+  CPPUNIT_TEST(runIgnoreDuplicateMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  OsmXmlReaderTest()
-    : HootTestFixture("test-files/io/OsmXmlReaderTest/",
-                      "test-output/io/OsmXmlReaderTest/")
+  OsmXmlReaderTest() :
+  HootTestFixture("test-files/io/OsmXmlReaderTest/", "test-output/io/OsmXmlReaderTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runTest()
@@ -156,10 +157,11 @@ public:
     CPPUNIT_ASSERT(f.remove());
   }
 
-  //This test ensures that characters not allowed in well-formed XML get decoded as read in.
-  //Qt's XML reading does this for us automatically.
   void runDecodeCharsTest()
   {
+    //This test ensures that characters not allowed in well-formed XML get decoded as read in.
+    //Qt's XML reading does this for us automatically.
+
     OsmXmlReader uut;
 
     OsmMapPtr map(new OsmMap());
@@ -201,9 +203,60 @@ public:
     uut.setBounds(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552));
     OsmMapPtr map(new OsmMap());
     uut.read("test-files/ToyTestA.osm", map);
+    uut.close();
 
     CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+  }
+
+  void runBoundsLeaveConnectedOobWaysTest()
+  {
+    // This will leave any ways in the output which are outside of the bounds but are directly
+    // connected to ways which cross the bounds.
+
+    const QString testFileName = "runBoundsLeaveConnectedOobWaysTest.osm";
+
+    OsmXmlReader uut;
+    uut.setBounds(geos::geom::Envelope(38.91362, 38.915478, 15.37365, 15.37506));
+    uut.setKeepImmediatelyConnectedWaysOutsideBounds(true);
+
+    // set cropping up for strict bounds handling
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+
+    OsmMapPtr map(new OsmMap());
+    uut.read("test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + testFileName, false, true);
+
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
+  }
+
+  void runIgnoreDuplicateMergeTest()
+  {
+    //  This test opens two versions of ToyTestA (with positive IDs) that contain duplicate nodes
+    //  and ways that should result in merging them both into ToyTestA
+    const QString testFileName = "IgnoreDuplicateMergeTest.osm";
+
+    //  Set the merge ignore duplicate IDs flag
+    conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
+
+    OsmXmlReader uut;
+    uut.setIgnoreDuplicates(true);
+    uut.setUseDataSourceIds(true);
+    OsmMapPtr map(new OsmMap());
+    uut.read(_inputPath + "IgnoreDuplicateMergeTest-1.osm", map);
+    uut.read(_inputPath + "IgnoreDuplicateMergeTest-2.osm", map);
+    uut.close();
+
+    conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
+
+    OsmMapWriterFactory::write(map, _outputPath + testFileName, false, false);
+
+    //  Since HOOT_FILE_EQUALS uses a reader factory, turn off the flag because it breaks it
+    conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), false);
+
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 };
 

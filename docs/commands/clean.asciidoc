@@ -6,8 +6,13 @@
 The +clean+ command corrects common erroneous data scenarios from input and writes to output by applying the operations specified
 in the `map.cleaner.transforms` configuration option.
 
-* +input+  - Input (e.g. .osm file).
-* +output+ - Output file (e.g. .osm file).
+* +input+  - Input; may be any supported input format (e.g. .osm file).
+* +output+ - Output file; may be any supported output format (e.g. .osm file).
+
+To see a list of available cleaning operations:
+-----
+hoot info --cleaning-operations
+-----
 
 === Usage
 
@@ -24,6 +29,5 @@ hoot clean JustHighways.osm Cleaned.osm
 ==== See Also
 
 * `map.cleaner.transforms` configuration option
-* `convert` command
 * <<hootalgo, IngestAndClean>>
-
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

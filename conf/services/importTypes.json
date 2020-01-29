@@ -1,0 +1,9 @@
+{
+  "Import": {
+    "members": {
+      "ogr2osm.simplify.complex.buildings": "Simplify Complex Buildings",
+      "ogr2osm.merge.nearby.nodes": "Remove Duplicate Nodes",
+      "duplicate.node.remover.distance.threshold": "Remove Duplicate Nodes Distance Threshold (meters)"
+    }
+  }
+}

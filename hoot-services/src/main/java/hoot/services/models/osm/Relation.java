@@ -34,6 +34,7 @@ import static hoot.services.utils.DbUtils.createQuery;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanPath;
 import com.querydsl.core.types.dsl.NumberPath;
@@ -175,23 +177,48 @@ public class Relation extends Element {
                 multiLayerUniqueElementIds, addChildren);
         Document doc = parentXml.getOwnerDocument();
 
-        if (addChildren) {
-            List<CurrentRelationMembers> members = getMembers();
-            // output in sequence order; query returns list in the proper order
-            for (CurrentRelationMembers member : members) {
-                org.w3c.dom.Element memberElement = doc.createElement("member");
-                memberElement.setAttribute("type", member.getMemberType().toString().toLowerCase());
+        List<CurrentRelationMembers> members = getMembers();
 
-                String role = member.getMemberRole();
-                if (StringUtils.isEmpty(member.getMemberRole())) {
-                    memberElement.setAttribute("role", member.getMemberRole());
-                    role = "";
-                }
+        Map<ElementType, Set<Long>> elementIds = new HashMap<>();
 
-                memberElement.setAttribute("role", role);
-                memberElement.setAttribute("ref", String.valueOf(member.getMemberId()));
-                element.appendChild(memberElement);
+        // output in sequence order; query returns list in the proper order
+        for (CurrentRelationMembers member : members) {
+            org.w3c.dom.Element memberElement = doc.createElement("member");
+            memberElement.setAttribute("type", member.getMemberType().toString().toLowerCase());
+
+            String role = member.getMemberRole();
+            if (StringUtils.isEmpty(member.getMemberRole())) {
+                memberElement.setAttribute("role", member.getMemberRole());
+                role = "";
             }
+
+            memberElement.setAttribute("role", role);
+            memberElement.setAttribute("ref", String.valueOf(member.getMemberId()));
+            element.appendChild(memberElement);
+
+            ElementType type = Element.elementTypeForElementEnum(member.getMemberType());
+            //populate map of element types and ids
+            if (elementIds.get(type) == null) {
+                elementIds.put(type, new HashSet<Long>());
+            }
+            elementIds.get(type).add(member.getMemberId());
+        }
+
+        if (addChildren) {
+
+            for (ElementType type : Element.elementTypesOrdered(elementIds.keySet())) {
+
+                List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(),
+                        type, elementIds.get(type));
+
+                for (Tuple elementRecord : elementRecords) {
+                    Element nodeFullElement = ElementFactory.create(type, elementRecord, getMapId());
+                    org.w3c.dom.Element nodeXml = nodeFullElement.toXml(parentXml, modifyingUserId,
+                            modifyingUserDisplayName, false, true);
+                    parentXml.appendChild(nodeXml);
+                }
+            }
+
         }
 
         org.w3c.dom.Element elementWithTags = addTagsXml(element);

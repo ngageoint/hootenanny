@@ -72,7 +72,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
-    reader.read("test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+    reader.read(
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -82,7 +83,7 @@ public:
     OsmXmlWriter writer;
     writer.write(cookieCutMap, _outputPath + "CookieCutterTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterTest.osm",
                      _outputPath + "CookieCutterTest.osm");
   }
 
@@ -93,7 +94,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
-    reader.read("test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+    reader.read(
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(true).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -103,7 +105,7 @@ public:
     OsmXmlWriter writer;
     writer.write(cookieCutMap, _outputPath + "CookieCutterCropTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterCropTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterCropTest.osm",
                      _outputPath + "CookieCutterCropTest.osm");
   }
 
@@ -114,7 +116,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
-    reader.read("test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+    reader.read(
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -124,7 +127,7 @@ public:
     OsmXmlWriter writer;
     writer.write(cookieCutMap, _outputPath + "CookieCutterBufferTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterBufferTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterBufferTest.osm",
                      _outputPath + "CookieCutterBufferTest.osm");
   }
 
@@ -135,7 +138,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
-    reader.read("test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+    reader.read(
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false, -100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -145,7 +149,7 @@ public:
     OsmXmlWriter writer;
     writer.write(cookieCutMap, _outputPath + "CookieCutterNegativeBufferTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterNegativeBufferTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterNegativeBufferTest.osm",
                      _outputPath + "CookieCutterNegativeBufferTest.osm");
   }
 
@@ -156,7 +160,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
-    reader.read("test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+    reader.read(
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(true, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -166,7 +171,7 @@ public:
     OsmXmlWriter writer;
     writer.write(cookieCutMap, _outputPath + "CookieCutterCropAndBufferTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterCropAndBufferTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterCropAndBufferTest.osm",
                      _outputPath + "CookieCutterCropAndBufferTest.osm");
   }
 };

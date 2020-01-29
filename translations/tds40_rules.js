@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -58,7 +58,6 @@ tds40.rules = {
     ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
     ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
-    ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
     ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
     ['F_CODE','AL200','ruins','yes'], // Ruins
     ['F_CODE','AL241','man_made','mast'], // OSM
@@ -84,6 +83,7 @@ tds40.rules = {
     ['F_CODE','AP030','highway','yes'], // Just in case...
     ['F_CODE','AP040','barrier','lift_gate'], // Gate
     ['F_CODE','AP050','highway','footway'], // Trail
+    ['F_CODE','AQ125','amenity','bus_station'],
     ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
     ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
     ['F_CODE','AQ125','public_transport','stop_position'],
@@ -203,10 +203,10 @@ tds40.rules = {
     'HGT':'height', // Height Above Surface Level
     'HVA':'source:accuracy:height', // Height Vertical Accuracy (90%)
     'KVA':'voltage', // Power Line Maximum Voltage
-    'LC1':'bridge:load_class1', // Load Class Type 1
-    'LC2':'bridge:load_class2', // Load Class Type 2
-    'LC3':'bridge:load_class3', // Load Class Type 3
-    'LC4':'bridge:load_class4', // Load Class Type 4
+    'LC1':'mlc:wheeled_oneway', // Load Class Type 1
+    'LC2':'mlc:wheeled', // Load Class Type 2
+    'LC3':'mlc:tracked_oneway', // Load Class Type 3
+    'LC4':'mlc:tracked', // Load Class Type 4
     'LCA':'crane:max_load', // Lifting Capacity
     'LEA':'depth:minimum_below_surface', // Least Depth Below Surface Level
     'LNU':'length:interior_useable', // Usable Length
@@ -257,7 +257,7 @@ tds40.rules = {
     'ZVA':'ele', // Aerodrome Elevation
     'ZVH':'ele:max' // Highest Elevation
     }, // End numBiased
-    
+
 
     // Common one2one rules. Used for both import and export
     // taken from TDS v40 and semi-auto generated
@@ -600,10 +600,10 @@ tds40.rules = {
     ['BOT','999','bridge:movable','other'],
 
     // BPWHAC - Waterbody Bank 1 height interval closure
-    ['BPWHAC','2','waterway:bank1:height:closure','open_interval'], 
+    ['BPWHAC','2','waterway:bank1:height:closure','open_interval'],
     ['BPWHAC','3','waterway:bank1:height:closure','greater-than_or_equal_to_less-than_interval'],
     ['BPWHAC','4','waterway:bank1:height:closure','greater-than_to_less-than_or_equal_interval'],
-    ['BPWHAC','5','waterway:bank1:height:closure','closed_interval'], 
+    ['BPWHAC','5','waterway:bank1:height:closure','closed_interval'],
     ['BPWHAC','6','waterway:bank1:height:closure','greater-than_semi-interval'],
     ['BPWHAC','7','waterway:bank1:height:closure','greater-than_or_equal_semi-interval'],
     ['BPWHAC','8','waterway:bank1:height:closure','less-than_semi-interval'],
@@ -659,7 +659,7 @@ tds40.rules = {
     ['BSC','31','bridge:structure','arch'], // Arch
     ['BSC','32','bridge:structure','trestle'], // Trestle
     ['BSC','999','bridge:structure','other'], // Other
-    
+
     // BSU - Building Superstructure Type
     // ['BSU','-999999',undefined,undefined], // No Information
     ['BSU','1','building:superstructure:type','chimney'], // Chimney
@@ -978,12 +978,12 @@ tds40.rules = {
 
     // EET - Engineered Earthwork Type
     // ['EET','-999999',undefined,undefined], // No Information
-    ['EET','1','earthwork:type','battery'], // Battery
-    ['EET','2','earthwork:type','military_parapet'], // Military Parapet
-    ['EET','3','earthwork:type','military_trench'], // Military Trench
-    ['EET','4','earthwork:type','rampart'], // Rampart
-    ['EET','5','earthwork:type','redoubt'], // Redoubt
-    ['EET','999','earthwork:type','other'], // Other
+    ['EET','1','trench','battery'], // Battery
+    ['EET','2','trench','parapet'], // Military Parapet
+    ['EET','3',undefined,undefined], // Military Trench
+    ['EET','4','trench','rampart'], // Rampart
+    ['EET','5','trench','redoubt'], // Redoubt
+    ['EET','999','trench','other'], // Other
 
     // EQC - Equivalent Scale Category
     // ['EQC','-999999',undefined,undefined], // No Information
@@ -1434,7 +1434,7 @@ tds40.rules = {
     ['FFN','970','use','meeting_place'], // Meeting Place
     ['FFN','980','amenity','death_care_services'], // Death Care Services
     ['FFN','999','use','other'], // Other
-    
+
     // FHC - Harbour Facility Function
     // ['FHC','-999999',undefined,undefined], // No Information
     ['FHC','1','harbour:use','ro-ro_terminal'], // Ro-Ro Terminal
@@ -1500,13 +1500,13 @@ tds40.rules = {
 
     // FZR - Fortified Building Type
     // ['FZR','-999999',undefined,undefined], // No Information
-    ['FZR','1','fortified:type','blockhouse'], // Blockhouse
-    ['FZR','2','fortified:type','casement'], // Casement
-    ['FZR','3','fortified:type','keep'], // Keep
-    ['FZR','4','fortified:type','martello_tower'], // Martello Tower
-    ['FZR','5','fortified:type','non-specific_fortified'], // Non-specific Fortified
-    ['FZR','6','fortified:type','pillbox'], // Pillbox
-    ['FZR','999','fortified:type','other'], // Other
+    ['FZR','1','bunker_type','blockhouse'], // Blockhouse
+    ['FZR','2','bunker_type','casement'], // Casement
+    ['FZR','3','bunker_type','keep'], // Keep
+    ['FZR','4','bunker_type','martello_tower'], // Martello Tower
+    ['FZR','5','bunker_type','non-specific'], // Non-specific Fortified
+    ['FZR','6','bunker_type','pillbox'], // Pillbox
+    ['FZR','999','bunker_type','other'], // Other
 
     // GFT - Geologic Fault Trace Visible
     // ['GFT','-999999',undefined,undefined], // No Information
@@ -2686,8 +2686,8 @@ tds40.rules = {
 
     // SBB - Supported by Bridge Span
     // ['SBB','-999999',undefined,undefined], // No Information
-    ['SBB','1000','on_bridge','no'], // Do we need this?? 
-    ['SBB','1001','on_bridge','yes'], 
+    ['SBB','1000','on_bridge','no'], // Do we need this??
+    ['SBB','1001','on_bridge','yes'],
 
     // SBC - Shelter Belt
     // ['SBC','-999999',undefined,undefined], // No Information
@@ -3133,7 +3133,7 @@ tds40.rules = {
     ['TYP','47','ref:road:type','limited_access_motorway'], // Limited Access Motorway
     ['TYP','48','junction','roundabout'], // Roundabout from AP020 Road Interchange
     ['TYP','50','link_road','yes'], // Ramp, from AP020 Road Interchange
-    ['TYP','999','ref:road:type','other'], 
+    ['TYP','999','ref:road:type','other'],
 
     // TXP - Taxiway Type
     // ['TXP','-999999',undefined,undefined], // No Information
@@ -3193,7 +3193,7 @@ tds40.rules = {
     ['VCA','16','void_collection:reason','no_available_survey'], // No Available Survey
     ['VCA','999','void_collection:reason','other'], // Other
 
-    // VCM - Vertical Construction Material 
+    // VCM - Vertical Construction Material
     // ['VCM','-999999',undefined,undefined], // No Information
     ['VCM','1','material:vertical','adobe_brick'], // Adobe Brick
     ['VCM','2','material:vertical','aluminium'], // Aluminum
@@ -3712,15 +3712,15 @@ tds40.rules = {
     // ZI016_ROC - Route Pavement Information : Route Surface Composition
     // ['ZI016_ROC','-999999','surface','unknown'], // Trying this instead of undefined
     ['ZI016_ROC','-999999',undefined,undefined], // No Information
-    ['ZI016_ROC','1','surface','ground'], // Unimproved 
+    ['ZI016_ROC','1','surface','ground'], // Unimproved
     ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
     ['ZI016_ROC','3','surface','flexible_pavement'], // Flexible Pavement
-    ['ZI016_ROC','4','surface','gravel'], // Aggregate 
+    ['ZI016_ROC','4','surface','gravel'], // Aggregate
     ['ZI016_ROC','5','surface','macadam'], // Macadam
     ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
     ['ZI016_ROC','7','surface','ridgid_pavement'], // Rigid Pavement
     ['ZI016_ROC','8','surface','concrete'], // Concrete
-    ['ZI016_ROC','9','surface','asphalt'], // Asphalt 
+    ['ZI016_ROC','9','surface','asphalt'], // Asphalt
     ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
     ['ZI016_ROC','11','surface','cobblestone'], // Cebble-stone
     ['ZI016_ROC','12','surface','brick'], // Brick
@@ -3737,7 +3737,7 @@ tds40.rules = {
     ['ZI016_WTC','1','seasonal','no'], // All-weather
     ['ZI016_WTC','2','seasonal','fair'], // possibly seasonal // Fair-weather
     ['ZI016_WTC','3','seasonal','winter'], // Winter Only
-    ['ZI016_WTC','4','seasonal','limited'], // Limited all-weather 
+    ['ZI016_WTC','4','seasonal','limited'], // Limited all-weather
     ['ZI016_WTC','5','seasonal','not_winter'], // Closed in Winter
     ['ZI016_WTC','999','seasonal','other'], // Other
 
@@ -3776,7 +3776,7 @@ tds40.rules = {
     // ['ZI017_TRT','12','railway','monorail'], // We used this in MGCP // Monorail
     ['ZI017_TRT','13','railway:track','maglev'], // Maglev
     ['ZI017_TRT','999','railway:track','other'], // Other
-    
+
     // ZI018_WIT - Wireless Telecommunication Information : Wireless Telecommunication Type
     // ['ZI018_WIT','-999999',undefined,undefined], // No Information
     ['ZI018_WIT','1','communication:cellular_phone','yes'], // Cellular Phone
@@ -3990,7 +3990,7 @@ tds40.rules = {
     ['ZI071_UAO','5','direction','vertical_up'], // Vertical Up
 
 //   #######################
-    // Text Enumerations - We swapped them for strings in the Schema. 
+    // Text Enumerations - We swapped them for strings in the Schema.
     // Some of these are ugly and will probably cause problems with dirty-word checkers
 
     // ZSAX_RS0 - Restriction Information : Security Attributes Group (resource classification)
@@ -4318,6 +4318,8 @@ tds40.rules = {
 
     ['IWT','4','water','reservoir'], // Reservoir
 
+    ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
+
     // From UFD
     ['CAA','-999999','controlling_authority','unknown'],
     ['FFN','190','use','oil_gas_facility'],
@@ -4358,28 +4360,16 @@ tds40.rules = {
 
     // ### From OSM - This list could never end.....
     ['FFN','464','shop','books'], // Specialized Store
-    ['FFN','465','shop','supermarket'], // Non-specialized
     ['FFN','563','building','house'], // Residence
     ['FFN','558','building','dependents_housing'], // Dependents Housing
     ['FFN','610','office','telecommunication'], // telecommunication
     ['FFN','640','shop','bureau_de_change'], // Financial Services
-    ['FFN','760','amenity','office'], // Business and Personal Support Services 
+    ['FFN','760','amenity','office'], // Business and Personal Support Services
     ['FFN','815','building','palace'], // Palace
 
    ], // End one2oneOut
 
     // ##### End of One2One Rules #####
-
-   // ##### Start of txtLength #####
-    // This list is for validateing the lengths of text attributes prior to export
-    txtLength : {
-    'BA000_VDR':80, 'BRN':24, 'CID':20, 'CPS':30, 'EQC':30, 'ETS':30, 'ETZ':24, 'GB052_RIDH':14, 'GB052_RIDL':14,
-    'HZD':30, 'IC2':14, 'IKO':14, 'MDE':20, 'NA8':80, 'RCG':30, 'RTN2':24, 'RTN':24, 'RTN3':24, 'SSE':14, 'UFI':254,
-    'URI':254, 'VDT':30, 'VOI':14, 'WPI':14, 'ZI001_NSD':20, 'ZI001_NSP':30, 'ZI001_SSD':20, 'ZI001_SSY':30, 'ZI001_VSC':30,
-    'ZI001_VSD':20, 'ZI004_RCG':30, 'ZI005_FNA1':200, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_NFN1':18, 'ZI005_NFN':18,
-    'ZI005_NFN2':18, 'ZSAX_RS0':2, 'ZSAX_RX3':254, 'ZSAX_RX4':254
-    },
-    // ##### End of txtLength #####
 
     // ##### Start of ignoreList #####
     // This is taken from OSM pre processing and a few things added.
@@ -4450,60 +4440,6 @@ tds40.rules = {
     ],
     // ##### End of ignoreList #####
 
-    // ##### Start of swapList #####
-    // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
-    // but renamed in different features. Some of these were done during the move from TDSv30 to
-    // TDSv40.  We swap these so that there is only one set of rules needed in the One2One section.
-    // These get converted back on output - if we need to.
-    swapList : {
-    'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
-    'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
-    'DEP':'DZP',
-    'HYP':'ZI024_HYP',
-    'LEN_':'LZN',
-    'MEM':'ZI006_MEM',
-    'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
-    'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
-    'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
-    'RCG':'ZI004_RCG',
-    'WD1':'ZI016_WD1',
-    'YWQ':'ZI024_YWQ',
-    'ZI005_FNAA':'ZI005_FNA',
-    'ZI005_FNAB':'ZI005_FNA2',
-    'ZI005_NFNA':'ZI005_NFN',
-    'ZI005_NFNB':'ZI005_NFN2',
-    'ZI020_IC2':'IC2',
-    'ZI025_WLE':'WLE',
-    'ZI032_GUG':'GUG',
-    'ZI032_TOS':'TOS',
-    'ZI032_PYC':'PYC',
-    'ZI032_PYM':'PYM',
-    'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3'
-    },
-    // ##### End of swapList #####
-
-    // ##### Start of closureList #####
-    closureList : {
-    'AQTC':['AQTL','AQTU'],
-    'AYRC':['AYRL','AYRU'],
-    'BPWHAC':['BPWHAL','BPWHAU'],
-    'BPWHBC':['BPWHBL','BPWHBU'],
-    'BPWSAC':['BPWSAL','BPWSAU'],
-    'BPWSBC':['BPWSBL','BPWSBU'],
-    'BWVCAC':['BWVCAL','BWVCAU'],
-    'BWVCBC':['BWVCBL','BWVCBU'],
-    'DMBC':['DMBL','DMBU'],
-    'DPAC':['DPAL','DPAU'],
-    'GSGCHC':['GSGCHL','GSGCHU'],
-    'GSGCLC':['GSGCLL','GSGCLU'],
-    'RMWC':['RMWL','RMWU'],
-    'SDCC':['SDCL','SDCU'],
-    'SDSC':['SDSL','SDSU'],
-    'SGCC':['SGCL','SGCU'],
-    'TSCC':['TSCL','TSCU']
-    },
-    // ##### End of closureList #####
-
     // ##### Start of fCodeMap #####
     // This is a map of FCODE's and filenames
     fCodeMap : [
@@ -4564,6 +4500,104 @@ tds40.rules = {
     ['ZD045', ['zd045','annotated_location_s','annotated_location_c','annotated_location_p']], // Named Location
     ],
     // ##### End of fCodeMap#####
+
+    // ##### Start of closureList #####
+    closureList : {
+    'AQTC':['AQTL','AQTU'],
+    'AYRC':['AYRL','AYRU'],
+    'BPWHAC':['BPWHAL','BPWHAU'],
+    'BPWHBC':['BPWHBL','BPWHBU'],
+    'BPWSAC':['BPWSAL','BPWSAU'],
+    'BPWSBC':['BPWSBL','BPWSBU'],
+    'BWVCAC':['BWVCAL','BWVCAU'],
+    'BWVCBC':['BWVCBL','BWVCBU'],
+    'DMBC':['DMBL','DMBU'],
+    'DPAC':['DPAL','DPAU'],
+    'GSGCHC':['GSGCHL','GSGCHU'],
+    'GSGCLC':['GSGCLL','GSGCLU'],
+    'RMWC':['RMWL','RMWU'],
+    'SDCC':['SDCL','SDCU'],
+    'SDSC':['SDSL','SDSU'],
+    'SGCC':['SGCL','SGCU'],
+    'TSCC':['TSCL','TSCU']
+    },
+    // ##### End of closureList #####
+
+    // ##### Start of swapList #####
+    // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
+    // but renamed in different features. Some of these were done during the move from TDSv30 to
+    // TDSv40.  We swap these so that there is only one set of rules needed in the One2One section.
+    // These get converted back on output - if we need to.
+    swapListIn : {
+    'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
+    'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
+    'DEP':'DZP',
+    'HYP':'ZI024_HYP',
+    'LEN_':'LZN',
+    'MEM':'ZI006_MEM',
+    'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
+    'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
+    'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
+    'RCG':'ZI004_RCG',
+    'WD1':'ZI016_WD1',
+    'YWQ':'ZI024_YWQ',
+    'ZI005_FNAA':'ZI005_FNA',
+    'ZI005_FNAB':'ZI005_FNA2',
+    'ZI005_NFNA':'ZI005_NFN',
+    'ZI005_NFNB':'ZI005_NFN2',
+    'ZI020_IC2':'IC2',
+    'ZI025_WLE':'WLE',
+    'ZI032_GUG':'GUG',
+    'ZI032_TOS':'TOS',
+    'ZI032_PYC':'PYC',
+    'ZI032_PYM':'PYM',
+    'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3'
+    },
+    // ##### End of swapListIn #####
+
+    // ##### Start of swapListOut #####
+    // Format is: <FCODE>:{<from>:<to>}
+    swapListOut : {
+    'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA052':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA054':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AB000':{'ZI014_PBY':'PBY', 'ZI014_PBY2':'PBY2', 'ZI014_PBY3':'PBY3'},
+    'AC060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AD020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AD025':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AJ050':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AL020':{'ZI005_NFN':'ZI005_NFN1'},
+    'AM010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM040':{'ZI014_PRW':'PRW', 'ZI014_PRW2':'PRW2', 'ZI014_PRW3':'PRW3'},
+    'AM060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM080':{'ZI014_YWQ':'YWQ', 'ZI016_WD1':'WD1'},
+    'AQ113':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AQ116':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AT005':{'WLE':'ZI025_WLE'},
+    'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB', 'CAB2':'AT005_CAB2', 'CAB3':'AT005_CAB3'},
+    'BD100':{'WLE':'ZI025_WLE'},
+    'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
+    'ED010':{'ZI024_HYP':'HYP'},
+    'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
+    'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'}
+    },
+    // ##### End of swapListOut #####
+
+   // ##### Start of txtLength #####
+    // This list is for validateing the lengths of text attributes prior to export
+    txtLength : {
+    'BA000_VDR':80, 'BRN':24, 'CID':20, 'CPS':30, 'EQC':30, 'ETS':30, 'ETZ':24, 'GB052_RIDH':14, 'GB052_RIDL':14,
+    'HZD':30, 'IC2':14, 'IKO':14, 'MDE':20, 'NA8':80, 'RCG':30, 'RTN2':24, 'RTN':24, 'RTN3':24, 'SSE':14, 'UFI':254,
+    'URI':254, 'VDT':30, 'VOI':14, 'WPI':14, 'ZI001_NSD':20, 'ZI001_NSP':30, 'ZI001_SSD':20, 'ZI001_SSY':30, 'ZI001_VSC':30,
+    'ZI001_VSD':20, 'ZI004_RCG':30, 'ZI005_FNA1':200, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_NFN1':18, 'ZI005_NFN':18,
+    'ZI005_NFN2':18, 'ZSAX_RS0':2, 'ZSAX_RX3':254, 'ZSAX_RX4':254
+    },
+    // ##### End of txtLength #####
 
     // ##### Start of intList #####
     // This list is for validateing the integer attributes prior to export

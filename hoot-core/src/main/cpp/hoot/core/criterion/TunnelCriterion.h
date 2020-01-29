@@ -29,7 +29,7 @@
 #define TUNNEL_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Identifies tunnels
  */
-class TunnelCriterion : public ElementCriterion
+class TunnelCriterion : public GeometryTypeCriterion
 {
 public:
 
@@ -50,6 +50,12 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TunnelCriterion()); }
 
   virtual QString getDescription() const { return "Identifies tunnels"; }
+
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Line; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
 }

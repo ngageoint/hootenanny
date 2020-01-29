@@ -40,7 +40,7 @@ class OsmXmlChangesetFileWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmXmlChangesetFileWriterTest);
   CPPUNIT_TEST(runSimpleTest);
-  CPPUNIT_TEST(runSplitTest);
+  // TODO: add a test for multiple changeset provider inputs
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -56,24 +56,7 @@ public:
     std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     OsmXmlChangesetFileWriter().write(_outputPath + "changeset.osc", changesetProvider);
 
-    HOOT_FILE_EQUALS( _inputPath + "changeset.osc",
-                     _outputPath + "changeset.osc");
-  }
-
-  void runSplitTest()
-  {
-    std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
-    OsmXmlChangesetFileWriter writer;
-    Settings testSettings = conf();
-    testSettings.set("changeset.max.size", "5");
-    writer.setConfiguration(testSettings);
-    writer.write(
-      _outputPath + "changeset.split.osc", changesetProvider);
-
-    HOOT_FILE_EQUALS( _inputPath + "changeset.split.osc",
-                     _outputPath + "changeset.split.osc");
-    HOOT_FILE_EQUALS( _inputPath + "changeset-001.split.osc",
-                     _outputPath + "changeset-001.split.osc");
+    HOOT_FILE_EQUALS(_inputPath + "changeset.osc", _outputPath + "changeset.osc");
   }
 };
 

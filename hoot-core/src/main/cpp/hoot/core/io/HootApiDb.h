@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDB_H
 #define HOOTAPIDB_H
@@ -187,8 +187,7 @@ public:
    *
    * @sa createPendingMapIndexes();
    *
-   * @param mapName Name of the map to create.
-   * @param userId User id of the map owner.
+   * @param mapName name of the map to create
    * @return
    */
   long insertMap(QString mapName);
@@ -233,12 +232,33 @@ public:
   long selectMapIdForCurrentUser(QString name);
 
   /**
-   * Returns all public map IDs for a map with the give name
+   * Returns all public map IDs for a map with the given name
    *
    * @param name map name
    * @return a collection of map IDs
    */
   std::set<long> selectPublicMapIds(QString name);
+
+  /**
+   * Returns names for all public maps
+   *
+   * @return a collection of map names
+   */
+  QStringList selectPublicMapNames();
+
+  /**
+   * Returns IDs and names for all maps owned by the current user
+   *
+   * @return a collection of map names
+   */
+  QStringList selectMapNamesOwnedByCurrentUser();
+
+  /**
+   * Returns unique names for all maps owned by the current user, as well as all public maps
+   *
+   * @return a collection of map names
+   */
+  QStringList selectMapNamesAvailableToCurrentUser();
 
   /**
    * Returns the IDs of all maps with the given name
@@ -578,6 +598,8 @@ private:
   std::shared_ptr<QSqlQuery> _selectReserveNodeIds;
   std::shared_ptr<QSqlQuery> _selectMapIdsForCurrentUser;
   std::shared_ptr<QSqlQuery> _selectPublicMapIds;
+  std::shared_ptr<QSqlQuery> _selectPublicMapNames;
+  std::shared_ptr<QSqlQuery> _selectMapNamesOwnedByCurrentUser;
   std::shared_ptr<QSqlQuery> _selectMembersForRelation;
   std::shared_ptr<QSqlQuery> _updateNode;
   std::shared_ptr<QSqlQuery> _updateRelation;
@@ -606,6 +628,9 @@ private:
   std::shared_ptr<QSqlQuery> _deleteJobById;
   std::shared_ptr<QSqlQuery> _getJobStatusResourceId;
   std::shared_ptr<QSqlQuery> _updateIdSequence;
+
+  /** Ignore any insertion conflicts and continue with the rest */
+  bool _ignoreInsertConflicts;
 
   std::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

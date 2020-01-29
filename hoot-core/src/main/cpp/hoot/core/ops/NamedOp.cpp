@@ -36,6 +36,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -98,41 +100,51 @@ void NamedOp::apply(OsmMapPtr& map)
     LOG_DEBUG(
       "\tElement count before operation " << s << ": " <<
       StringUtils::formatLargeNumber(map->getElementCount()));
+    LOG_DEBUG("Projection before " << s << ": " << MapProjector::toWkt(map->getProjection()));
 
     // We could benefit from passing progress into some of the ops to get more granular feedback.
 
     std::shared_ptr<OperationStatusInfo> statusInfo;
     if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
-      std::shared_ptr<OsmMapOperation> t(
+      std::shared_ptr<OsmMapOperation> op(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
-      statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(t);
+      statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(op);
 
       _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
 
-      Configurable* c = dynamic_cast<Configurable*>(t.get());
+      Configurable* c = dynamic_cast<Configurable*>(op.get());
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
       }
 
-      t->apply(map);
+      op->apply(map);
     }
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
-      std::shared_ptr<ElementVisitor> t(
+      std::shared_ptr<ElementVisitor> vis(
         Factory::getInstance().constructObject<ElementVisitor>(s));
-      statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(t);
+      statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(vis);
 
       _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
 
-      Configurable* c = dynamic_cast<Configurable*>(t.get());
+      // The ordering of setting the config before the map here seems to make sense, but all
+      // ElementVisitors implementing OsmMapConsumer will need to be aware of it.
+
+      Configurable* c = dynamic_cast<Configurable*>(vis.get());
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
       }
 
-      map->visitRw(*t);
+      OsmMapConsumer* mapConsumer = dynamic_cast<OsmMapConsumer*>(vis.get());
+      if (mapConsumer)
+      {
+        mapConsumer->setOsmMap(map.get());
+      }
+
+      map->visitRw(*vis);
     }
     else
     {
@@ -146,11 +158,13 @@ void NamedOp::apply(OsmMapPtr& map)
     {
       LOG_DEBUG(
         "\t" << statusInfo->getCompletedStatusMessage() + " in " +
-        StringUtils::secondsToDhms(timer.elapsed()));
+        StringUtils::millisecondsToDhms(timer.elapsed()));
     }
 
     opCount++;
     OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));
+
+    LOG_DEBUG("Projection after " << s << ": " << MapProjector::toWkt(map->getProjection()));
   }
 }
 

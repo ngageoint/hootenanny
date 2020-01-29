@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_API_WRITER_H
@@ -130,6 +130,16 @@ public:
    * @see ProgressReporter
    */
   virtual unsigned int getNumSteps() const { return 1; }
+  /**
+   * @brief setErrorPathname Record the pathname of the error changeset
+   * @param path Pathname
+   */
+  void setErrorPathname(const QString& path) { _changeset.setErrorPathname(path); }
+  /**
+   * @brief writeErrorFile Writes our the error changeset
+   * @return true if the file was written successfully
+   */
+  bool writeErrorFile() { return _changeset.writeErrorFile(); }
 
 private:
   /**
@@ -148,9 +158,12 @@ private:
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
    * @param request - Network request object initialized with OSM API URL
    * @param description - Text description of the changeset to create
+   * @param source - Text specifying the source for the edits for this changeset
+   * @param hashtags - Semicolon delimited list of hashtags for changeset
    * @return ID of the changeset that was created on the server
    */
-  long _createChangeset(HootNetworkRequestPtr request, const QString& description);
+  long _createChangeset(HootNetworkRequestPtr request, const QString& description,
+                        const QString& source, const QString& hashtags);
   /**
    * @brief _closeChangeset End the changeset
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
@@ -191,9 +204,23 @@ private:
    * @brief _resolveIssues Query the OSM API for the element in the changeset and try to fix resolvable errors
    * @param request Network request object initialized with OSM API URL
    * @param changeset Pointer to a changeset with one single failed change
-   * @return success Whether or not the function was able to find a resolvable issue
+   * @return Whether or not the function was able to find a resolvable issue
    */
   bool _resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset);
+  /**
+   * @brief _fixConflict Try to fix the "Changeset conflict: Version mismatch" errors from the OSM API
+   * @param request Network request object initialized with OSM API URL
+   * @param changeset Pointer to the failed changeset
+   * @param conflictExplanation Error message from OSM API
+   * @return Whether or not the function was able to resolve the issue
+   */
+  bool _fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr changeset, const QString& conflictExplanation);
+  /**
+   * @brief _changesetClosed Check the error string for the "Changeset conflict: The changeset <id> was closed" error from the OSM API
+   * @param conflictExplanation Error message from OSM API
+   * @return Whether or not the function found the error in question
+   */
+  bool _changesetClosed(const QString& conflictExplanation);
   /**
    * @brief _getNode/Way/Relation Perform HTTP GET request to OSM API to get current node/way/relation by ID
    * @param request Network request object initialized with OSM API URL
@@ -214,8 +241,9 @@ private:
    * @brief _changesetThreadFunc Thread function that does the actual work of creating a changeset ID
    *  via the API, pushing the changeset data, closing the changeset, and splitting a failing changeset
    *  if necessary
+   * @param index Index into the thread status vector to report the status
    */
-  void _changesetThreadFunc();
+  void _changesetThreadFunc(int index);
   /**
    * @brief createNetworkRequest Create a network request object
    * @param requiresAuthentication Authentication flag set to true will cause OAuth credentials,
@@ -223,6 +251,19 @@ private:
    * @return smart pointer to network request object
    */
   HootNetworkRequestPtr createNetworkRequest(bool requiresAuthentication = false);
+  /**
+   * @brief _threadsAreIdle Checks each thread in the thread pool if it is working or idle
+   * @return True if all threads are idle
+   */
+  bool _threadsAreIdle();
+  /**
+   * @brief _splitChangeset Split a changeset either in half or split out the element reported
+   *  back from the API into a new changeset, then both changesets are pushed back on the queue
+   * @param workInfo Pointer to the work element to split
+   * @param response String response from the server to help in the splitting process
+   * @return True if the changeset was split
+   */
+  bool _splitChangeset(const ChangesetInfoPtr& workInfo, const QString& response);
   /** Changeset processing thread pool */
   std::vector<std::thread> _threadPool;
   /** Queue for producer/consumer work model */
@@ -233,16 +274,35 @@ private:
   XmlChangeset _changeset;
   /** Mutex protecting large changeset */
   std::mutex _changesetMutex;
+  /** Status of each working thread, working or idle */
+  enum ThreadStatus
+  {
+    Idle,
+    Working
+  };
+  /** Vector of statuses for each running thread */
+  std::vector<ThreadStatus> _threadStatus;
+  /** Mutex protecting status vector */
+  std::mutex _threadStatusMutex;
   /** Base URL for the target OSM API, including authentication information */
   QUrl _url;
   /** List of pathnames for changeset divided across files */
   QList<QString> _changesets;
   /** Changeset description for all changesets loaded, loaded with 'changeset.description' option */
   QString _description;
+  /** Changeset source for all changesets loaded, loaded with 'changeset.source' config option */
+  QString _source;
+  /** Changeset hashtags for all changesets loaded, loaded with 'changeset.hashtags' config option */
+  QString _hashtags;
   /** Maximum number of writer threads processing changesets, loaded with 'changeset.apidb.max.writers' option */
   int _maxWriters;
   /** Soft maximum number of elements per changeset, size could be larger than the soft max in order to include
-   *  the entirety of a way or relation, loaded with 'changeset.apidb.max.size' option
+   *  the entirety of a way or relation, loaded with 'changeset.apidb.size.max' option
+   */
+  long _maxPushSize;
+  /** Maximum size of a changeset read from the API itself.  This allows for the potential of multiple
+   *  pushes per changeset to increase the speed of the upload.  That way less requests for new changeset
+   *  opens/closes are required but the pushes can be an optimal size still.
    */
   long _maxChangesetSize;
   /** Flag to turn on OSM API writer throttling */
@@ -264,10 +324,16 @@ private:
   QString _accessToken;
   /** OAuth 1.0 secret token granted through OAuth authorization */
   QString _secretToken;
-  /** Default constructor for testing purposes only */
-  OsmApiWriter() {}
+  /** Full pathname of the error file changeset, if any errors occur */
+  QString _errorPathname;
+  /** Number of changesets written to API */
+  int _changesetCount;
+  /** Mutex for changeset count */
+  std::mutex _changesetCountMutex;
   /** For white box testing */
   friend class OsmApiWriterTest;
+  /** Default constructor for testing purposes only */
+  OsmApiWriter() {}
 };
 
 }

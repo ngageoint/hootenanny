@@ -24,7 +24,7 @@ PoiPolygonDistance::getReviewDistanceForType.
 * **Match the two features:**  If the POI is within a user definable match distance AND either:
 ** the names of the two features are similar according to a configurable threshold OR
 ** the types of the two features are similar according to a configurable threshold OR
-** the address of the two features are an exact match (standard OSM address tags are used; see PoiPolygonAddressScoreExtractor)
+** the address of the two features are an exact match (standard OSM address tags are used; see AddressScoreExtractor)
 ** the phone number of the two features are a match (standard OSM and configurable phone number tags are used; see
 PoiPolygonPhoneNumberScoreExtractor)
 ** If the Euclidean match distance requirement is not met, Hootenanny will also calculate the distance from the POI to a convex

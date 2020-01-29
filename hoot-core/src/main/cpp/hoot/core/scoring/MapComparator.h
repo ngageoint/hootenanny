@@ -33,6 +33,7 @@ namespace hoot
 {
 
 class OsmMap;
+class ElementType;
 
 /**
  * Compares two maps.
@@ -50,13 +51,18 @@ public:
   bool isMatch(const std::shared_ptr<OsmMap>& ref, const std::shared_ptr<OsmMap>& test);
 
   void setIgnoreUUID() { _ignoreUUID = true; }
-
   void setUseDateTime() { _useDateTime = true; }
+  void setErrorLimit(int limit) { _errorLimit = limit; }
 
 private:
 
   bool _ignoreUUID;
   bool _useDateTime;
+  int _errorLimit;
+
+  void _printIdDiff(
+    const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,
+    const ElementType& elementType, const int limit = 5);
 };
 
 }

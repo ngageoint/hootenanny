@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGMATCH_H
 #define BUILDINGMATCH_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -41,7 +41,7 @@ class BuildingRfClassifier;
 
 /**
  * Matches two building elements. If there is a many to many match it will be resolved by the
- * conflation routines and then merged properly with the BuildingMerge.
+ * conflation routines and then merged properly with the BuildingMerger.
  */
 class BuildingMatch : public Match, public MatchDetails
 {
@@ -49,63 +49,58 @@ public:
 
   static std::string className() { return "hoot::BuildingMatch"; }
 
+  static const QString MATCH_NAME;
+
   BuildingMatch();
-  // this constructor added primarily for testing purposes
   BuildingMatch(const ConstMatchThresholdPtr& mt);
   BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
                 const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
 
-  virtual const MatchClassification& getClassification() const { return _p; }
+  virtual const MatchClassification& getClassification() const override { return _p; }
 
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
-  virtual MatchMembers getMatchMembers() const { return MatchMembers::Polygon; }
+  virtual MatchMembers getMatchMembers() const override { return MatchMembers::Polygon; }
 
-  virtual QString getMatchName() const { return _matchName; }
+  virtual QString getMatchName() const override { return MATCH_NAME; }
 
-  virtual double getProbability() const;
+  virtual double getProbability() const override;
 
   /**
    * Building matches never conflict other building matches, but conflict with everything else.
    */
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
+  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const override;
 
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
-  virtual QString explain() const { return _explainText; }
+  virtual QString explain() const override { return _explainText; }
   virtual void setExplain(const QString& explainText) override { _explainText = explainText; }
 
-  virtual QString getDescription() const { return "Matches buildings"; }
+  virtual QString getDescription() const override { return "Matches buildings"; }
 
 private:
 
   friend class PoiPolygonMergerCreatorTest;
 
   ElementId _eid1, _eid2;
-  static QString _matchName;
   MatchClassification _p;
   std::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;
 
-  // forces a review if features in the secondary layer have a newer timestamp than the feature
-  // being compared to in the ref layer
-  bool _reviewIfSecondaryFeatureNewer;
   // tag key to determine a feature's timestamp
   QString _dateTagKey;
   // format of a feature's timestamp
   QString _dateFormat;
-  // determines whether feature pairs flagged for review should be converted to matches when one
-  // feature in the pair is completely contained by the other
-  bool _matchReviewsWithContainment;
 
   void _calculateClassification(const ConstOsmMapPtr& map);
-  QStringList _getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
-                                   const ConstElementPtr& element1, const ConstElementPtr& element2);
+  QStringList _getNonMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
+                                      const ConstElementPtr& element1,
+                                      const ConstElementPtr& element2);
   QStringList _createReviewIfSecondaryFeatureNewer(const ConstElementPtr& element1,
                                                    const ConstElementPtr& element2);
 };

@@ -44,6 +44,8 @@ class OsmMap;
 /**
  * Removes all ways that are not being used by relations that contain zero nodes, or all the nodes
  * are identical.
+ *
+ * @todo what about one node ways?
  */
 class SuperfluousWayRemover : public OsmMapOperation, public OperationStatusInfo
 {
@@ -58,9 +60,14 @@ public:
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
+   *
+   * @return the number of ways removed
    */
-  static void removeWays(const std::shared_ptr<OsmMap>& map);
+  static long removeWays(const std::shared_ptr<OsmMap>& map);
 
+  /**
+   * TODO
+   */
   void removeWays();
 
   virtual QString getInitStatusMessage() const { return "Removing superfluous ways..."; }

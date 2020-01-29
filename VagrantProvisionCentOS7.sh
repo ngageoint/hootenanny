@@ -77,6 +77,8 @@ else
 
 fi
 
+# TODO: Remove version locks of qt5-qtwebkit packages when CentOS 7.7 is released and
+#       qt5-qtbase-5.9.7 is available
 echo "### Installing libraries with locked versions"
 sudo yum install -y \
      armadillo-$ARMADILLO_VERSION \
@@ -159,6 +161,7 @@ sudo yum -y install \
     perl-XML-LibXML \
     libpostal-data \
     libpostal-devel \
+    parallel \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \

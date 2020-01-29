@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMatchCreator.h"
 
@@ -36,6 +36,9 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 
+// Std
+#include <float.h>
+
 namespace hoot
 {
 
@@ -45,10 +48,16 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 {
 }
 
-Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
+MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
                                            ElementId eid2)
 {
-  PoiPolygonMatch* result = 0;
+  if (!_infoCache)
+  {
+    LOG_TRACE("Initializing info cache...");
+    _infoCache.reset(new PoiPolygonInfoCache(map));
+  }
+
+  std::shared_ptr<PoiPolygonMatch> result;
 
   if (eid1.getType() != eid2.getType())
   {
@@ -59,7 +68,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     const bool foundPoly = _polyCrit.isSatisfied(e1) || _polyCrit.isSatisfied(e2);
     if (foundPoi && foundPoly)
     {
-      result = new PoiPolygonMatch(map, getMatchThreshold(), _getRf());
+      result.reset(new PoiPolygonMatch(map, getMatchThreshold(), _getRf(), _infoCache));
       result->setConfiguration(conf());
       result->calculateMatch(eid1, eid2);
     }
@@ -69,19 +78,47 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
 }
 
 void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
-                                           std::vector<const Match*>& matches,
+                                           std::vector<ConstMatchPtr>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
-  LOG_DEBUG("Creating matches with: " << className() << "...");
+  LOG_STATUS("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
+  const int matchesSizeBefore = matches.size();
+
+  if (!_infoCache)
+  {
+    LOG_TRACE("Initializing info cache...");
+    _infoCache.reset(new PoiPolygonInfoCache(map));
+    _infoCache->setConfiguration(conf());
+  }
 
   PoiPolygonMatch::resetMatchDistanceInfo();
 
-  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf(), _filter);
-  map->visitRo(v);
-  LOG_INFO(
-    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " POI to Polygon match candidates.");
+  QElapsedTimer timer;
+  timer.start();
+  PoiPolygonMatchVisitor matchVis(map, matches, threshold, _getRf(), _infoCache, _filter);
+  map->visitNodesRo(matchVis);
+  const int matchesSizeAfter = matches.size();
+
+  LOG_STATUS(
+    "Found " << StringUtils::formatLargeNumber(matchVis.getNumMatchCandidatesFound()) <<
+    " POI to Polygon match candidate features and " <<
+    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) << " total matches in: " <<
+    StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+
+  // If we're only keeping matches/reviews with the closest distances between features, then let's
+  // weed out the ones that aren't as close to each other.
+  int numMatchesRemoved = 0;
+  if (ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
+  {
+    timer.restart();
+    const int startingMatchCount = matches.size();
+    numMatchesRemoved = _retainClosestDistanceMatchesOnly(matches, map);
+    LOG_INFO(
+      "Discarded " << StringUtils::formatLargeNumber(numMatchesRemoved) <<
+      " non-closest  " << StringUtils::formatLargeNumber(startingMatchCount) <<
+      " / total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+  }
 
   if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))
   {
@@ -120,6 +157,362 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   LOG_DEBUG(
     "POI/Polygon convex polygon distance matches: " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::convexPolyDistanceMatches));
+  LOG_DEBUG(
+    "POI/Polygon review reductions: " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::numReviewReductions));
+  if (ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
+  {
+    LOG_DEBUG(
+      "Number of matches removed due to option enabled to only keeping closest matches: " <<
+      StringUtils::formatLargeNumber(numMatchesRemoved));
+  }
+  _infoCache->printCacheInfo();
+  _infoCache->clear();
+}
+
+int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnly(
+  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map)
+{
+  LOG_INFO("Discarding non-closest matches...");
+
+  const bool debug = false; // leave this false by default
+  const ElementId testElementId1 = ElementId(ElementType::Node, -1893344);
+  const ElementId testElementId2 = ElementId(ElementType::Way, -276936);
+
+  int numRemoved = 0;
+  // look for overlapping matches separately for POI and poly matches
+  numRemoved += _retainClosestDistanceMatchesOnlyByType(matches, map, true);
+  LOG_DEBUG("Removed " << StringUtils::formatLargeNumber(numRemoved) << " POI matches.");
+
+  if (debug)
+  {
+    const bool containsMatch = _containsMatch(testElementId1, testElementId2, matches);
+    QString containstStr = containsMatch ? "contains" : "does not contain";
+    LOG_DEBUG(
+      "Matches after POI match removal " << containstStr << " elements: " << testElementId1 <<
+      ", " << testElementId2);
+    int numMatchesContaining = _numMatchesContainingElement(testElementId1, matches);
+    LOG_DEBUG(numMatchesContaining << " contain " << testElementId1);
+    numMatchesContaining = _numMatchesContainingElement(testElementId2, matches);
+    LOG_DEBUG(numMatchesContaining << " contain " << testElementId2);
+  }
+
+  numRemoved += _retainClosestDistanceMatchesOnlyByType(matches, map, false);
+  LOG_DEBUG("Removed " << StringUtils::formatLargeNumber(numRemoved) << " poly matches.");
+
+  if (debug)
+  {
+    const bool containsMatch = _containsMatch(testElementId1, testElementId2, matches);
+    QString containstStr = containsMatch ? "contains" : "does not contain";
+    LOG_DEBUG(
+      "Matches after poly match removal " << containstStr << " elements: " << testElementId1 <<
+      ", " << testElementId2);
+    int numMatchesContaining = _numMatchesContainingElement(testElementId1, matches);
+    LOG_DEBUG(numMatchesContaining << " matches contain " << testElementId1);
+    numMatchesContaining = _numMatchesContainingElement(testElementId2, matches);
+    LOG_DEBUG(numMatchesContaining << " matches contain " << testElementId2);
+  }
+
+  return numRemoved;
+}
+
+bool PoiPolygonMatchCreator::_containsMatch(
+  const ElementId& elementId1, const ElementId& elementId2,
+  const std::vector<ConstMatchPtr>& matches) const
+{
+  // for debugging only
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
+       matchItr != matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    if (match->getType() != MatchType::Miss)
+    {
+      if (match->getMatchPairs().size() != 1)
+      {
+        LOG_VART(match->getMatchPairs().size());
+      }
+      assert(match->getMatchPairs().size() == 1);
+      std::pair<ElementId, ElementId> matchElementIds = *(match->getMatchPairs()).begin();
+      if ((matchElementIds.first == elementId1 && matchElementIds.second == elementId2) ||
+          (matchElementIds.first == elementId2 && matchElementIds.second == elementId1))
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+int PoiPolygonMatchCreator::_numMatchesContainingElement(
+  const ElementId& elementId, const std::vector<ConstMatchPtr>& matches) const
+{
+  // for debugging only
+  int numMatchesContainingId = 0;
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
+       matchItr != matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    if (match->getType() != MatchType::Miss)
+    {
+      if (match->getMatchPairs().size() != 1)
+      {
+        LOG_VART(match->getMatchPairs().size());
+      }
+      assert(match->getMatchPairs().size() == 1);
+      std::pair<ElementId, ElementId> matchElementIds = *(match->getMatchPairs()).begin();
+      if (matchElementIds.first == elementId || matchElementIds.second == elementId)
+      {
+        numMatchesContainingId++;
+      }    }
+  }
+  return numMatchesContainingId;
+}
+
+QMultiMap<ElementId, ConstMatchPtr> PoiPolygonMatchCreator::_indexMatchesById(
+  const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr)
+{
+  LOG_DEBUG(
+    "Indexing " << StringUtils::formatLargeNumber(matches.size()) << " " << matchTypeStr <<
+    " matches...");
+  const bool processPois = matchTypeStr == "POI";
+  QMultiMap<ElementId, ConstMatchPtr> matchesById;
+
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
+       matchItr != matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    //LOG_VART(match);
+    if (match->getType() != MatchType::Miss)
+    {
+      if (match->getMatchPairs().size() != 1)
+      {
+        LOG_VART(match->getMatchPairs().size());
+      }
+      assert(match->getMatchPairs().size() == 1);
+      std::pair<ElementId, ElementId> matchElementIds = *(match->getMatchPairs()).begin();
+      if (processPois)
+      {
+        if (matchElementIds.first.getType() == ElementType::Node)
+        {
+          matchesById.insertMulti(matchElementIds.first, match);
+        }
+        else
+        {
+          matchesById.insertMulti(matchElementIds.second, match);
+        }
+      }
+      else
+      {
+        if (matchElementIds.first.getType() == ElementType::Way ||
+            matchElementIds.first.getType() == ElementType::Relation)
+        {
+          matchesById.insertMulti(matchElementIds.first, match);
+        }
+        else
+        {
+          matchesById.insertMulti(matchElementIds.second, match);
+        }
+      }
+    }
+  }
+
+  return matchesById;
+}
+
+QMap<ElementId, QList<ConstMatchPtr>> PoiPolygonMatchCreator::_getOverlappingMatches(
+  const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr)
+{
+  LOG_DEBUG(
+    "Finding overlapping " << matchTypeStr << " matches out of " <<
+    StringUtils::formatLargeNumber(matchesById.size()) << " indexed matches...");
+  QMap<ElementId, QList<ConstMatchPtr>> overlappingMatches;
+
+  const QList<ElementId> ids = matchesById.keys();
+  for (QList<ElementId>::const_iterator idItr = ids.begin(); idItr != ids.end(); ++idItr)
+  {
+    //LOG_VART(*idItr);
+    const QList<ConstMatchPtr> matches = matchesById.values(*idItr);
+    //LOG_VART(matches.size());
+    if (matches.size() > 1)
+    {
+      //LOG_TRACE("Found overlapping matches: " << matches);
+      LOG_TRACE("Found overlapping matches of size: " << matches.size());
+      overlappingMatches[*idItr] = matches;
+    }
+  }
+
+  return overlappingMatches;
+}
+
+std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
+  const QMap<ElementId, QList<ConstMatchPtr>>& overlappingMatches,
+  const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
+  const QString& matchTypeStr)
+{
+  LOG_DEBUG(
+    "Filtering out non-closest " << matchTypeStr << " matches out of " <<
+     StringUtils::formatLargeNumber(overlappingMatches.size()) << " overlapping matches...");
+  QList<ConstMatchPtr> matchesToRemove;
+  for (QMap<ElementId, QList<ConstMatchPtr>>::const_iterator matchesItr = overlappingMatches.begin();
+       matchesItr != overlappingMatches.end(); ++matchesItr)
+  {
+    LOG_TRACE("****************************************");
+    ElementId sharedElementId = matchesItr.key();
+    LOG_VART(sharedElementId);
+    ConstElementPtr sharedElement = map->getElement(sharedElementId);
+
+    ConstMatchPtr closestMatch;
+    double smallestDistance = DBL_MAX;
+    QList<ConstMatchPtr> matchesWithSharedId = matchesItr.value();
+    for (QList<ConstMatchPtr>::const_iterator matchesItr2 = matchesWithSharedId.begin();
+         matchesItr2 != matchesWithSharedId.end(); ++matchesItr2)
+    {
+      ConstMatchPtr overlappingMatch = *matchesItr2;
+      LOG_VART(overlappingMatch->getMatchName());
+      LOG_VART(overlappingMatch);
+
+      if (overlappingMatch->getMatchName() == PoiPolygonMatch::getPoiPolygonMatchName())
+      {
+        std::pair<ElementId, ElementId> matchElementIds =
+          *(overlappingMatch->getMatchPairs()).begin();
+        ElementId comparisonElementId;
+        if (matchElementIds.first == sharedElementId)
+        {
+          comparisonElementId = matchElementIds.second;
+        }
+        else
+        {
+          comparisonElementId = matchElementIds.first;
+        }
+        LOG_VART(comparisonElementId);
+
+        int pointCount = 0;
+        if (sharedElementId.getType() == ElementType::Node)
+        {
+          pointCount++;
+        }
+        if (comparisonElementId.getType() == ElementType::Node)
+        {
+          pointCount++;
+        }
+        if (pointCount != 1)
+        {
+          throw IllegalArgumentException(
+            "POI/Polygon match does not contain exactly one POI: " + overlappingMatch->toString());
+        }
+
+        int polyCount = 0;
+        if (sharedElementId.getType() == ElementType::Way ||
+            sharedElementId.getType() == ElementType::Relation)
+        {
+          polyCount++;
+        }
+        if (comparisonElementId.getType() == ElementType::Way ||
+            comparisonElementId.getType() == ElementType::Relation)
+        {
+          polyCount++;
+        }
+        if (polyCount != 1)
+        {
+          throw IllegalArgumentException(
+            "POI/Polygon match does not contain exactly one Polygon: " +
+            overlappingMatch->toString());
+        }
+
+        ConstElementPtr comparisonElement = map->getElement(comparisonElementId);
+
+        ConstNodePtr point;
+        bool sharedWasPoint = false;
+        if (sharedElementId.getType() == ElementType::Node)
+        {
+          point = std::dynamic_pointer_cast<const Node>(sharedElement);
+          sharedWasPoint = true;
+        }
+        else
+        {
+          point = std::dynamic_pointer_cast<const Node>(comparisonElement);
+        }
+
+        double distance = DBL_MAX;
+        if (sharedWasPoint)
+        {
+          distance = _infoCache->getDistance(comparisonElement, point);
+        }
+        else
+        {
+          distance = _infoCache->getDistance(sharedElement, point);
+        }
+        LOG_VART(distance);
+        if (distance != -1.0 && distance < smallestDistance)
+        {
+          smallestDistance = distance;
+          LOG_TRACE(
+            "smallest distance: " << smallestDistance << ", " << sharedElementId << ";" <<
+            comparisonElementId);
+          closestMatch = overlappingMatch;
+        }
+      }
+    }
+
+    if (closestMatch)
+    {
+      LOG_TRACE("Keeping closest match: " << closestMatch << "...");
+      for (QList<ConstMatchPtr>::const_iterator matchItr = matchesWithSharedId.begin();
+           matchItr != matchesWithSharedId.end(); ++matchItr)
+      {
+        ConstMatchPtr match = *matchItr;
+        if (match != closestMatch)
+        {
+          matchesToRemove.append(match);
+        }
+      }
+    }
+
+    LOG_VART(matchesToRemove.size());
+  }
+  LOG_DEBUG("Removing " <<  StringUtils::formatLargeNumber(matchesToRemove.size()) << " matches.");
+
+  std::vector<ConstMatchPtr> matchesToKeep;
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = allMatches.begin();
+       matchItr != allMatches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    if (!matchesToRemove.contains(match))
+    {
+      matchesToKeep.push_back(match);
+    }
+  }
+  LOG_VART(matchesToKeep.size());
+  return matchesToKeep;
+}
+
+int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(
+  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois)
+{
+  QString matchTypeStr = "Polygon";
+  if (processPois)
+  {
+    matchTypeStr = "POI";
+  }
+  const int startingMatchesSize = matches.size();
+  LOG_DEBUG(
+    "Discarding non-closest " << matchTypeStr << " matches (out of " <<
+    StringUtils::formatLargeNumber(matches.size()) << " remaining)...");
+
+  // index matches by involved element ID
+  const QMultiMap<ElementId, ConstMatchPtr> matchesById = _indexMatchesById(matches, matchTypeStr);
+
+  // find matches sharing the same element ID
+  const QMap<ElementId, QList<ConstMatchPtr>> overlappingMatches =
+    _getOverlappingMatches(matchesById, matchTypeStr);
+
+  // for each overlapping match, find the match in the group with the closest distance between
+  // features and throw out the rest
+  matches = _filterOutNonClosestMatches(overlappingMatches, matches, map, matchTypeStr);
+
+  const int diff = startingMatchesSize - matches.size();
+  LOG_VARD(diff);
+  return diff;
 }
 
 std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
@@ -146,13 +539,9 @@ bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
 
 std::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
 {
+  //  Since the POI to Poly matcher is an additive model, all thresholds are 1.0
   if (!_matchThreshold.get())
-  {
-    ConfigOptions config;
-    _matchThreshold.reset(
-      new MatchThreshold(config.getPoiPolygonMatchThreshold(), config.getPoiPolygonMissThreshold(),
-                         config.getPoiPolygonReviewThreshold()));
-  }
+    _matchThreshold.reset(new MatchThreshold(1.0, 1.0, 1.0));
   return _matchThreshold;
 }
 

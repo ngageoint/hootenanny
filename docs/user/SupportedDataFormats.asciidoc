@@ -2,37 +2,35 @@
 [[SupportedDataFormats]]
 == Supported Data Formats
 
-**Hootenanny can import from:**
+**Hootenanny supports the following formats as input:**
 
-* ESRI File Geodatabase (.gdb)
-* GeoJSON (.geojson file or GeoJSON URL) (M1)
+* File Geodatabase (.gdb)
+* GeoJSON (.geojson file or Overpass query URL) (M1)
 * geonames.org (.geonames)
 * Hootenanny API Database (hootapidb://)
-* Overpass JSON (.json or JSON URL) (M1)
-* OpenStreetMap XML (.osm)
-* OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
+* OpenStreetMap API Web Service (http://)
+* OpenStreetMap Protocol Buffers (.osm.pbf)
+* OpenStreetMap XML (.osm)
+* Overpass JSON (.json file or Overpass query URL) (M1)
 * Shapefile (.shp)
 * Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
-* Additional OGR supported formats
+* Additional OGR supported formats not listed here
 
-**Hootenanny can export to:**
+**Hootenanny supports the following formats as output:**
 
-* ESRI File Geodatabase (.gdb)
+* File Geodatabase (.gdb)
 * GeoJSON (.geojson) (M1)
 * Hootenanny API Database (hootapidb://)
-* Overpass JSON file (.json) (M1)
-* OpenStreetMap XML file (.osm) (M2)
-* OpenStreetMap Protocol Buffers file (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
-* Shapefile (.shp) (M1)
-* Additional OGR supported formats
-
-**Hootenanny can export changesets to:**
-
-* OpenStreetMap API Web Service
+* OpenStreetMap API Web Service (http://; via changeset only)
+* OpenStreetMap Protocol Buffers file (.osm.pbf)
 * OpenStreetMap SQL changeset file (.osc.sql)
+* OpenStreetMap XML file (.osm) (M2)
 * OpenStreetMap XML changeset file (.osc)
+* Overpass JSON file (.json) (M1)
+* Shapefile (.shp) (M1)
+* Additional OGR supported formats not listed here
 
 **Notes:**
 
@@ -40,6 +38,6 @@
 * (M2) = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
 * All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
 
-Additional data types can be be made importable/exportable using Hootenanny's pluggable I/O architecture.  See the Hootenanny Developer
-Guide for details.
+All Hootenanny commands can be passed any supported input/output format unless otherwise stated in the command's documentation. See the Hootenanny User Guide for details.
 
+Additional data types can be be made importable/exportable using Hootenanny's pluggable I/O architecture.  See the Hootenanny Developer Guide for details.

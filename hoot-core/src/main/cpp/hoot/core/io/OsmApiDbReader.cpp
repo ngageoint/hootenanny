@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbReader.h"
 
@@ -60,7 +60,7 @@ OsmApiDbReader::~OsmApiDbReader()
 
 void OsmApiDbReader::open(const QString& urlStr)
 {
-  _url = urlStr;
+  OsmMapReader::open(urlStr);
   if (!isSupported(_url))
   {
     throw HootException("An unsupported URL was passed into OsmApiDbReader: " + _url);
@@ -150,8 +150,8 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   {
     node->setStatus(_status);
   }
-  LOG_VART(node->getStatus());
 
+  LOG_VART(node->getStatus());
   LOG_VART(node->getVersion());
 
   return node;
@@ -192,7 +192,9 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
   {
     way->setStatus(_status);
   }
+
   LOG_VART(way->getStatus());
+  LOG_VART(way->getVersion());
 
   return way;
 }
@@ -233,13 +235,16 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
   {
     relation->setStatus(_status);
   }
+
   LOG_VART(relation->getStatus());
+  LOG_VART(relation->getVersion());
 
   return relation;
 }
 
 void OsmApiDbReader::setConfiguration(const Settings& conf)
 {
+  ApiDbReader::setConfiguration(conf);
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getApiDbEmail());

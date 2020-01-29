@@ -1,0 +1,1248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="14.745" minlon="-17.5257" maxlat="14.7473" maxlon="-17.5228"/>
+    <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5244473241102803"/>
+    <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5251597705444908"/>
+    <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5236757617539602"/>
+    <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5233064542168648"/>
+    <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5231167704819271"/>
+    <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5252447854643343"/>
+    <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5256272396366093"/>
+    <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7454773409404094" lon="-17.5257000000000005"/>
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5255416896620275"/>
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7456244034000434" lon="-17.5257000000000005"/>
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7457266233722883" lon="-17.5257000000000005"/>
+    <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5244986358547656"/>
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5242796230055013"/>
+    <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5250652916374072"/>
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5249057321736323"/>
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7465423350785336" lon="-17.5257000000000005"/>
+    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7464325102459011" lon="-17.5257000000000005"/>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7450399129770986" lon="-17.5228000000000002"/>
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7452955336239793" lon="-17.5228000000000002"/>
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7454025733766230" lon="-17.5228000000000002"/>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7453675582887680" lon="-17.5228000000000002"/>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7457524714743595" lon="-17.5228000000000002"/>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7457055013888887" lon="-17.5228000000000002"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5249176239747619"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5246438097268467"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5246438097268467"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5245345251302105"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5242388361571741"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7459520850000008" lon="-17.5228000000000002"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7466550557103062" lon="-17.5228000000000002"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5240250899837697"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5253028106944804"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7466475233552643" lon="-17.5257000000000005"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5233309875336296"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7459616969838798" lon="-17.5257000000000005"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472092286585372" lon="-17.5228000000000002"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5236601404866157"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5234185209011635"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5257000000000005"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5251903997817529"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7456244034000434" lon="-17.5257000000000005"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5250652916374072"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7472999999999992" lon="-17.5252435737312489"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7458147982948855" lon="-17.5257000000000005"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449999999999992" lon="-17.5239787818665356"/>
+    <node visible="true" id="305391249" timestamp="2019-04-25T16:52:35Z" version="34" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454777999999997" lon="-17.5249649000000005"/>
+    <node visible="true" id="339281258" timestamp="2019-04-25T16:52:36Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7472560999999995" lon="-17.5240210999999988"/>
+    <node visible="true" id="339281259" timestamp="2019-04-25T16:52:36Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7472893000000003" lon="-17.5234081000000010"/>
+    <node visible="true" id="339281260" timestamp="2019-04-25T16:52:36Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7467406000000008" lon="-17.5233197999999994"/>
+    <node visible="true" id="339281261" timestamp="2019-04-25T16:52:36Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7467910000000000" lon="-17.5229616999999998"/>
+    <node visible="true" id="339281267" timestamp="2019-04-25T16:52:36Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458945999999997" lon="-17.5228587000000005"/>
+    <node visible="true" id="339281268" timestamp="2019-04-25T16:52:36Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458749000000005" lon="-17.5230616999999995"/>
+    <node visible="true" id="339281269" timestamp="2019-04-25T16:52:36Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7461406000000004" lon="-17.5233978000000015"/>
+    <node visible="true" id="339281270" timestamp="2019-04-25T16:52:36Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463843000000008" lon="-17.5234166000000009"/>
+    <node visible="true" id="339281271" timestamp="2019-04-25T16:52:36Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7464276000000005" lon="-17.5235327000000005"/>
+    <node visible="true" id="339281272" timestamp="2019-04-25T16:52:36Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7464902000000002" lon="-17.5240368000000011"/>
+    <node visible="true" id="339281273" timestamp="2019-04-25T16:52:36Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7469436999999992" lon="-17.5240757000000009"/>
+    <node visible="true" id="339281274" timestamp="2019-04-25T16:52:36Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7469170999999992" lon="-17.5246093000000016"/>
+    <node visible="true" id="339281275" timestamp="2019-04-25T16:52:36Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7470789999999994" lon="-17.5245962000000013"/>
+    <node visible="true" id="339281276" timestamp="2019-04-25T16:52:36Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7471075000000003" lon="-17.5242235000000015"/>
+    <node visible="true" id="352570623" timestamp="2019-04-25T16:52:36Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7472580000000004" lon="-17.5250619000000007"/>
+    <node visible="true" id="352570630" timestamp="2019-04-25T16:52:36Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7472446000000001" lon="-17.5252391000000003"/>
+    <node visible="true" id="361073761" timestamp="2019-04-25T16:52:38Z" version="19" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451884999999994" lon="-17.5243737999999993"/>
+    <node visible="true" id="1067675021" timestamp="2019-04-25T16:52:38Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455692000000003" lon="-17.5245612000000008"/>
+    <node visible="true" id="1067675023" timestamp="2019-04-25T16:52:38Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463004000000009" lon="-17.5237572999999998"/>
+    <node visible="true" id="1067675024" timestamp="2019-04-25T16:52:38Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463627000000006" lon="-17.5237054999999984"/>
+    <node visible="true" id="1067675041" timestamp="2019-04-25T16:52:38Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7467950999999999" lon="-17.5249625000000009"/>
+    <node visible="true" id="1067675042" timestamp="2019-04-25T16:52:38Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460816000000001" lon="-17.5245113000000003"/>
+    <node visible="true" id="1067675043" timestamp="2019-04-25T16:52:38Z" version="7" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456578999999994" lon="-17.5237091999999990"/>
+    <node visible="true" id="1067675045" timestamp="2019-04-25T16:52:38Z" version="7" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457244999999997" lon="-17.5234836999999999"/>
+    <node visible="true" id="1067675064" timestamp="2019-04-25T16:52:38Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7465060999999995" lon="-17.5252748999999994"/>
+    <node visible="true" id="1067675067" timestamp="2019-04-25T16:52:38Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460082000000003" lon="-17.5244813000000015"/>
+    <node visible="true" id="1067675070" timestamp="2019-04-25T16:52:38Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7461065999999992" lon="-17.5245615999999984"/>
+    <node visible="true" id="1067675092" timestamp="2019-04-25T16:52:38Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7466226999999996" lon="-17.5244256999999983"/>
+    <node visible="true" id="1067675094" timestamp="2019-04-25T16:52:38Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462853000000003" lon="-17.5243916999999989"/>
+    <node visible="true" id="1067675096" timestamp="2019-04-25T16:52:38Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460509000000002" lon="-17.5253006000000013"/>
+    <node visible="true" id="1067675098" timestamp="2019-04-25T16:52:38Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7471934000000005" lon="-17.5231053999999986"/>
+    <node visible="true" id="1067675099" timestamp="2019-04-25T16:52:38Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459637000000008" lon="-17.5252796999999987"/>
+    <node visible="true" id="1067675101" timestamp="2019-04-25T16:52:38Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458519999999993" lon="-17.5244637999999995"/>
+    <node visible="true" id="1067675105" timestamp="2019-04-25T16:52:38Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450454999999998" lon="-17.5240712999999992"/>
+    <node visible="true" id="1067675127" timestamp="2019-04-25T16:52:39Z" version="7" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455192000000004" lon="-17.5241521999999996"/>
+    <node visible="true" id="1067675139" timestamp="2019-04-25T16:52:39Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462870000000006" lon="-17.5253027000000010"/>
+    <node visible="true" id="1067675159" timestamp="2019-04-25T16:52:39Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7468610000000009" lon="-17.5242332000000012"/>
+    <node visible="true" id="1067675162" timestamp="2019-04-25T16:52:39Z" version="7" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455871999999992" lon="-17.5243491999999996"/>
+    <node visible="true" id="1067675163" timestamp="2019-04-25T16:52:39Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463733000000001" lon="-17.5236070999999995"/>
+    <node visible="true" id="1067675165" timestamp="2019-04-25T16:52:39Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7465685000000004" lon="-17.5250896000000012"/>
+    <node visible="true" id="1067675168" timestamp="2019-04-25T16:52:39Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463140999999993" lon="-17.5235386999999996"/>
+    <node visible="true" id="1067675169" timestamp="2019-04-25T16:52:39Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458144000000004" lon="-17.5251550000000016"/>
+    <node visible="true" id="1067675189" timestamp="2019-04-25T16:52:39Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455738000000007" lon="-17.5244554999999984"/>
+    <node visible="true" id="1883502716" timestamp="2019-04-25T16:52:42Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463993000000002" lon="-17.5253024000000011"/>
+    <node visible="true" id="1883502717" timestamp="2019-04-25T16:52:42Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7464648000000000" lon="-17.5244104999999983"/>
+    <node visible="true" id="2531038589" timestamp="2019-04-25T16:52:43Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453655000000001" lon="-17.5250523999999999"/>
+    <node visible="true" id="2531038624" timestamp="2019-04-25T16:52:44Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455499000000003" lon="-17.5254799000000006"/>
+    <node visible="true" id="2564885873" timestamp="2019-04-25T16:52:51Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450390000000002" lon="-17.5228007999999988"/>
+    <node visible="true" id="2564885881" timestamp="2019-04-25T16:52:51Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453400999999999" lon="-17.5231682999999983"/>
+    <node visible="true" id="2564885886" timestamp="2019-04-25T16:52:51Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453831999999991" lon="-17.5228180000000009"/>
+    <node visible="true" id="2564885890" timestamp="2019-04-25T16:52:51Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454902000000008" lon="-17.5230367999999999"/>
+    <node visible="true" id="2564885946" timestamp="2019-04-25T16:52:51Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7464280999999993" lon="-17.5256578000000012"/>
+    <node visible="true" id="2564885951" timestamp="2019-04-25T16:52:51Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7464578999999993" lon="-17.5256195999999989"/>
+    <node visible="true" id="2564885956" timestamp="2019-04-25T16:52:51Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7465051000000003" lon="-17.5256143999999985"/>
+    <node visible="true" id="2564885960" timestamp="2019-04-25T16:52:51Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7465419999999998" lon="-17.5256451999999996"/>
+    <node visible="true" id="2564885963" timestamp="2019-04-25T16:52:51Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7465469999999996" lon="-17.5256940000000014"/>
+    <node visible="true" id="3304378057" timestamp="2019-04-25T16:53:01Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450442000000006" lon="-17.5236626999999991">
+        <tag k="barrier" v="gate"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="3304378058" timestamp="2019-04-25T16:53:01Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450610999999991" lon="-17.5234243999999997">
+        <tag k="barrier" v="gate"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="3304378059" timestamp="2019-04-25T16:53:01Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455279000000008" lon="-17.5241954000000000"/>
+    <node visible="true" id="3304378060" timestamp="2019-04-25T16:53:01Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455274000000003" lon="-17.5241089000000017"/>
+    <node visible="true" id="3304381861" timestamp="2019-04-25T16:53:01Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455450999999993" lon="-17.5242238999999991"/>
+    <node visible="true" id="3304381862" timestamp="2019-04-25T16:53:01Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455441999999994" lon="-17.5240802000000002"/>
+    <node visible="true" id="3304381863" timestamp="2019-04-25T16:53:01Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455695999999996" lon="-17.5242459000000004"/>
+    <node visible="true" id="3304381864" timestamp="2019-04-25T16:53:01Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455684999999992" lon="-17.5240578000000014"/>
+    <node visible="true" id="3304381868" timestamp="2019-04-25T16:53:01Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455981999999999" lon="-17.5240440000000000"/>
+    <node visible="true" id="3304381869" timestamp="2019-04-25T16:53:01Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455993999999997" lon="-17.5242593000000006"/>
+    <node visible="true" id="3304381872" timestamp="2019-04-25T16:53:01Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456303999999996" lon="-17.5240399999999994"/>
+    <node visible="true" id="3304381873" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456355000000006" lon="-17.5242627999999989"/>
+    <node visible="true" id="3304381876" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456603000000008" lon="-17.5240453000000009"/>
+    <node visible="true" id="3304381877" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456706000000004" lon="-17.5242536000000015"/>
+    <node visible="true" id="3304381878" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456875000000007" lon="-17.5240590000000012"/>
+    <node visible="true" id="3304381881" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457007999999998" lon="-17.5242329999999988"/>
+    <node visible="true" id="3304381882" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457100000000008" lon="-17.5240800000000014"/>
+    <node visible="true" id="3304381883" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457227000000000" lon="-17.5242031999999988"/>
+    <node visible="true" id="3304381884" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457259000000001" lon="-17.5241065999999996"/>
+    <node visible="true" id="3304381885" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457341000000000" lon="-17.5241368000000008"/>
+    <node visible="true" id="3304381886" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457334000000007" lon="-17.5241709000000014"/>
+    <node visible="true" id="3304381900" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462447000000001" lon="-17.5250750999999987"/>
+    <node visible="true" id="3304381901" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462602999999994" lon="-17.5251669999999997"/>
+    <node visible="true" id="3304381902" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7465954999999997" lon="-17.5252437000000008"/>
+    <node visible="true" id="3304381903" timestamp="2019-04-25T16:53:02Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7466825999999998" lon="-17.5251814000000010"/>
+    <node visible="true" id="3304381904" timestamp="2019-04-25T16:53:02Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7467421000000005" lon="-17.5251231999999995"/>
+    <node visible="true" id="3304381905" timestamp="2019-04-25T16:53:02Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7467796000000000" lon="-17.5250439000000000"/>
+    <node visible="true" id="3304381906" timestamp="2019-04-25T16:53:02Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7469163999999999" lon="-17.5252124999999985"/>
+    <node visible="true" id="3304381907" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7469257999999996" lon="-17.5244797000000005"/>
+    <node visible="true" id="3304381908" timestamp="2019-04-25T16:53:02Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7469298000000002" lon="-17.5250352999999990"/>
+    <node visible="true" id="3304381909" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7469318000000005" lon="-17.5242390999999991"/>
+    <node visible="true" id="3304381910" timestamp="2019-04-25T16:53:02Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7469418000000001" lon="-17.5248768000000013"/>
+    <node visible="true" id="3304381911" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7470993000000004" lon="-17.5244968999999990"/>
+    <node visible="true" id="3304381912" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7471072999999997" lon="-17.5242614000000003"/>
+    <node visible="true" id="3304381913" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7472004000000005" lon="-17.5244950999999993"/>
+    <node visible="true" id="3304381914" timestamp="2019-04-25T16:53:02Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7472624000000003" lon="-17.5244971000000014"/>
+    <node visible="true" id="3304381915" timestamp="2019-04-25T16:53:02Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7472700000000003" lon="-17.5249032999999983"/>
+    <node visible="true" id="3504112638" timestamp="2019-04-25T16:53:06Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453713999999998" lon="-17.5238422999999983">
+        <tag k="name" v="Cap-Vert"/>
+        <tag k="name:lt" v="Žaliasis kyšulys"/>
+        <tag k="wikidata" v="Q216889"/>
+        <tag k="name:da" v="Cap Vert"/>
+        <tag k="name:uk" v="Зелений Мис"/>
+        <tag k="name:fi" v="Kap Verde"/>
+        <tag k="name:de" v="Cap Vert"/>
+        <tag k="name:sk" v="Zelený mys"/>
+        <tag k="name:hr" v="Zeleni rt"/>
+        <tag k="name:be" v="Паўвостраў Зялёны мыс"/>
+        <tag k="name:hu" v="Zöld-fok"/>
+        <tag k="name:fr" v="Cap Vert"/>
+        <tag k="name:hy" v="Կանաչ հրվանդան"/>
+        <tag k="name:sv" v="Kap Verdehalvön"/>
+        <tag k="name:zh" v="佛得角半島"/>
+        <tag k="name:ia" v="Cap Vert"/>
+        <tag k="name:br" v="Gourenez ar C'hab Glas"/>
+        <tag k="name:mn" v="Ногоон хошуу"/>
+        <tag k="name:kk" v="Жасыл мүйіс"/>
+        <tag k="name:ko" v="베르데 곶"/>
+        <tag k="wikipedia" v="en:Cap-Vert"/>
+        <tag k="natural" v="cape"/>
+        <tag k="name:gl" v="Península de Cabo Verde"/>
+        <tag k="name:is" v="Grænhöfði"/>
+        <tag k="name:it" v="Capo Verde"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name:tr" v="Cap-Vert"/>
+        <tag k="name:eo" v="Verda Kabo"/>
+        <tag k="name:af" v="Cap-Vert"/>
+        <tag k="name:la" v="Promunturium Viride"/>
+        <tag k="name:pl" v="Przylądek Zielony"/>
+        <tag k="name:es" v="Cabo Verde"/>
+        <tag k="name:et" v="Roheneem"/>
+        <tag k="name:eu" v="Cap-Vert"/>
+        <tag k="name:ja" v="ヴェルデ岬"/>
+        <tag k="name:ru" v="Кап-Вер"/>
+        <tag k="name:nl" v="Kaap Verde"/>
+        <tag k="name:cs" v="Zelený mys"/>
+        <tag k="name:pt" v="Cabo Verde"/>
+        <tag k="name:ar" v="شبه جزيرة الرأس الأخضر"/>
+        <tag k="name:cy" v="Cap-Vert"/>
+        <tag k="name:he" v="קאפ-ור"/>
+    </node>
+    <node visible="true" id="3558483991" timestamp="2019-04-25T16:53:07Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457046999999992" lon="-17.5254007999999999"/>
+    <node visible="true" id="3558483992" timestamp="2019-04-25T16:53:07Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458098000000000" lon="-17.5256810999999999"/>
+    <node visible="true" id="3662775407" timestamp="2019-04-25T16:53:27Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450621000000002" lon="-17.5246193999999988"/>
+    <node visible="true" id="3662775410" timestamp="2019-04-25T16:53:27Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450287000000007" lon="-17.5245238000000008"/>
+    <node visible="true" id="3662775413" timestamp="2019-04-25T16:53:27Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451129000000005" lon="-17.5242007999999991">
+        <tag k="public_transport" v="stop_position"/>
+        <tag k="amenity" v="taxi"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="taxi" v="yes"/>
+    </node>
+    <node visible="true" id="3662775872" timestamp="2019-04-25T16:53:27Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452988999999999" lon="-17.5249208000000003"/>
+    <node visible="true" id="3662775873" timestamp="2019-04-25T16:53:27Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450387999999997" lon="-17.5250230999999985"/>
+    <node visible="true" id="3662775874" timestamp="2019-04-25T16:53:27Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451722000000007" lon="-17.5245761000000009"/>
+    <node visible="true" id="3662815983" timestamp="2019-04-25T16:53:29Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450521999999999" lon="-17.5237559000000012"/>
+    <node visible="true" id="3662817232" timestamp="2019-04-25T16:53:30Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453945999999991" lon="-17.5244585999999991"/>
+    <node visible="true" id="3662817272" timestamp="2019-04-25T16:53:31Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458877000000008" lon="-17.5252282000000008"/>
+    <node visible="true" id="3662817281" timestamp="2019-04-25T16:53:31Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450706000000000" lon="-17.5233275999999982"/>
+    <node visible="true" id="3662817290" timestamp="2019-04-25T16:53:31Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451691999999994" lon="-17.5240034999999992"/>
+    <node visible="true" id="3662817294" timestamp="2019-04-25T16:53:31Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454078000000006" lon="-17.5240249000000006"/>
+    <node visible="true" id="3662817337" timestamp="2019-04-25T16:53:32Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454102000000002" lon="-17.5241332999999990">
+        <tag k="barrier" v="gate"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="3662817355" timestamp="2019-04-25T16:53:32Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459266000000007" lon="-17.5256611000000007"/>
+    <node visible="true" id="3662824086" timestamp="2019-04-25T16:53:33Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456910000000008" lon="-17.5228393999999987"/>
+    <node visible="true" id="3662824087" timestamp="2019-04-25T16:53:33Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456299000000008" lon="-17.5234729000000016"/>
+    <node visible="true" id="3662824097" timestamp="2019-04-25T16:53:33Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456733999999994" lon="-17.5229214999999989"/>
+    <node visible="true" id="3662824101" timestamp="2019-04-25T16:53:33Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457647999999999" lon="-17.5228490000000008"/>
+    <node visible="true" id="3662824107" timestamp="2019-04-25T16:53:33Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457775000000009" lon="-17.5229365000000001"/>
+    <node visible="true" id="3662831871" timestamp="2019-04-25T16:53:33Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7461982000000003" lon="-17.5243022999999987"/>
+    <node visible="true" id="3662831872" timestamp="2019-04-25T16:53:33Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7465145999999994" lon="-17.5252027000000012"/>
+    <node visible="true" id="3662831873" timestamp="2019-04-25T16:53:33Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7466787999999998" lon="-17.5251032000000002"/>
+    <node visible="true" id="3662831874" timestamp="2019-04-25T16:53:33Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7467410999999995" lon="-17.5243736000000006"/>
+    <node visible="true" id="3662831875" timestamp="2019-04-25T16:53:33Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7461196000000001" lon="-17.5251617000000017"/>
+    <node visible="true" id="3662840982" timestamp="2019-04-25T16:53:34Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7468292999999999" lon="-17.5252695000000003"/>
+    <node visible="true" id="3662840985" timestamp="2019-04-25T16:53:34Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7466787999999998" lon="-17.5256718000000014"/>
+    <node visible="true" id="3662902502" timestamp="2019-04-25T16:53:38Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7465250000000001" lon="-17.5235288000000011"/>
+    <node visible="true" id="3662902504" timestamp="2019-04-25T16:53:38Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7468252999999994" lon="-17.5233318999999987"/>
+    <node visible="true" id="3662902505" timestamp="2019-04-25T16:53:38Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7465057999999996" lon="-17.5234880000000004"/>
+    <node visible="true" id="3662902507" timestamp="2019-04-25T16:53:38Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7470275999999991" lon="-17.5245899999999999"/>
+    <node visible="true" id="3662902514" timestamp="2019-04-25T16:53:38Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7468296999999993" lon="-17.5233692000000012"/>
+    <node visible="true" id="3662902515" timestamp="2019-04-25T16:53:38Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7470067000000000" lon="-17.5246113000000001"/>
+    <node visible="true" id="3662912868" timestamp="2019-04-25T16:53:40Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7472344000000000" lon="-17.5233026999999986"/>
+    <node visible="true" id="3662912877" timestamp="2019-04-25T16:53:40Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7472749000000007" lon="-17.5236745999999997"/>
+    <node visible="true" id="3662912885" timestamp="2019-04-25T16:53:40Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7472446000000001" lon="-17.5231135999999985"/>
+    <node visible="true" id="3662965428" timestamp="2019-04-25T16:53:45Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459524000000002" lon="-17.5228003000000001"/>
+    <node visible="true" id="3962630123" timestamp="2019-04-25T16:53:52Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452378000000000" lon="-17.5235583000000013"/>
+    <node visible="true" id="3962630124" timestamp="2019-04-25T16:53:52Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452792000000006" lon="-17.5235014999999983"/>
+    <node visible="true" id="3962630125" timestamp="2019-04-25T16:53:52Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455300999999999" lon="-17.5236437000000009"/>
+    <node visible="true" id="3962630126" timestamp="2019-04-25T16:53:52Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455897000000000" lon="-17.5241098000000015"/>
+    <node visible="true" id="3962630127" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456198000000001" lon="-17.5242079000000004"/>
+    <node visible="true" id="3962630128" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456406999999992" lon="-17.5242055000000008"/>
+    <node visible="true" id="3962630129" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456492000000008" lon="-17.5241030000000002"/>
+    <node visible="true" id="3962630131" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460438000000007" lon="-17.5245487000000004"/>
+    <node visible="true" id="3962630132" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462532999999993" lon="-17.5236762000000006"/>
+    <node visible="true" id="3962630133" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462929999999997" lon="-17.5236723000000012"/>
+    <node visible="true" id="3962630134" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462982000000000" lon="-17.5236200999999987"/>
+    <node visible="true" id="3962630250" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452412000000006" lon="-17.5235829999999986"/>
+    <node visible="true" id="3962630251" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452439000000002" lon="-17.5235340999999991"/>
+    <node visible="true" id="3962630252" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452535000000005" lon="-17.5236045000000011"/>
+    <node visible="true" id="3962630253" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452584000000009" lon="-17.5235142000000010"/>
+    <node visible="true" id="3962630254" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452728000000004" lon="-17.5236194999999988"/>
+    <node visible="true" id="3962630255" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455604000000005" lon="-17.5235221999999986"/>
+    <node visible="true" id="3962630256" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455707000000000" lon="-17.5241475999999992"/>
+    <node visible="true" id="3962630293" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456656000000006" lon="-17.5241165999999993"/>
+    <node visible="true" id="3962630295" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456756999999996" lon="-17.5241356000000010"/>
+    <node visible="true" id="3962630296" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456780999999992" lon="-17.5241572000000012"/>
+    <node visible="true" id="3962630297" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457702000000008" lon="-17.5236470000000004"/>
+    <node visible="true" id="3962630298" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458714999999998" lon="-17.5251647000000013"/>
+    <node visible="true" id="3962630299" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460468000000002" lon="-17.5236863000000014"/>
+    <node visible="true" id="3962630300" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460608000000004" lon="-17.5245804000000014"/>
+    <node visible="true" id="3962630301" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460707000000006" lon="-17.5236827999999996"/>
+    <node visible="true" id="3962630302" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462359000000003" lon="-17.5236541000000017"/>
+    <node visible="true" id="3962630303" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462739999999997" lon="-17.5236066000000008"/>
+    <node visible="true" id="3962630304" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462806000000004" lon="-17.5236790999999990"/>
+    <node visible="true" id="3962630305" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463061000000000" lon="-17.5236473000000004"/>
+    <node visible="true" id="3962630372" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455540000000003" lon="-17.5236401999999991"/>
+    <node visible="true" id="3962630374" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460915000000004" lon="-17.5236701000000004"/>
+    <node visible="true" id="3962630375" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460965000000002" lon="-17.5235798000000003"/>
+    <node visible="true" id="3962630376" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7461061000000004" lon="-17.5236501000000011"/>
+    <node visible="true" id="3962630377" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7461087000000006" lon="-17.5236012999999993"/>
+    <node visible="true" id="3962630378" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7461120999999995" lon="-17.5236260000000001"/>
+    <node visible="true" id="3962630379" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462666999999996" lon="-17.5236803999999999"/>
+    <node visible="true" id="3962630465" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455370000000006" lon="-17.5235158999999996"/>
+    <node visible="true" id="3962630468" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457545999999997" lon="-17.5236008000000005"/>
+    <node visible="true" id="3962631378" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455748000000000" lon="-17.5236274999999999"/>
+    <node visible="true" id="3962631379" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455765999999997" lon="-17.5241268000000012"/>
+    <node visible="true" id="3962631380" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455797000000004" lon="-17.5235371999999998"/>
+    <node visible="true" id="3962631381" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455832000000004" lon="-17.5241882999999987"/>
+    <node visible="true" id="3962631382" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455893000000007" lon="-17.5236075999999983"/>
+    <node visible="true" id="3962631383" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455920000000003" lon="-17.5235586999999988"/>
+    <node visible="true" id="3962631384" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455952999999997" lon="-17.5235833999999997"/>
+    <node visible="true" id="3962631385" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455996000000003" lon="-17.5242018000000002"/>
+    <node visible="true" id="3962631386" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456081000000001" lon="-17.5240992999999996"/>
+    <node visible="true" id="3962631387" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456289999999992" lon="-17.5240969000000000"/>
+    <node visible="true" id="3962631389" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457750999999995" lon="-17.5235567000000003"/>
+    <node visible="true" id="3962631390" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457895000000008" lon="-17.5236620999999992"/>
+    <node visible="true" id="3962631391" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457958999999992" lon="-17.5235440000000011"/>
+    <node visible="true" id="3962631395" timestamp="2019-04-25T16:53:53Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459325000000003" lon="-17.5251973999999997"/>
+    <node visible="true" id="3962631396" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459479000000009" lon="-17.5245199999999990"/>
+    <node visible="true" id="3962631397" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459828000000002" lon="-17.5245159999999984"/>
+    <node visible="true" id="3962631398" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459980999999996" lon="-17.5251759000000007"/>
+    <node visible="true" id="3962631399" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460199999999997" lon="-17.5251476000000004"/>
+    <node visible="true" id="3962631400" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460538000000003" lon="-17.5235585000000000"/>
+    <node visible="true" id="3962631402" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462388000000004" lon="-17.5236258999999990"/>
+    <node visible="true" id="3962631403" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462424999999993" lon="-17.5236668999999985"/>
+    <node visible="true" id="3962631404" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462476999999996" lon="-17.5236146999999995"/>
+    <node visible="true" id="3962631405" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462601000000006" lon="-17.5236078999999982"/>
+    <node visible="true" id="3962631857" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455730000000003" lon="-17.5241691999999993"/>
+    <node visible="true" id="3962631858" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456590999999992" lon="-17.5241949999999989"/>
+    <node visible="true" id="3962631859" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456721999999996" lon="-17.5241781000000003"/>
+    <node visible="true" id="3962631862" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457580000000004" lon="-17.5236255000000014"/>
+    <node visible="true" id="3962631863" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457606000000006" lon="-17.5235766999999996"/>
+    <node visible="true" id="3962631866" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458545000000001" lon="-17.5251330000000003"/>
+    <node visible="true" id="3962631869" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458953000000008" lon="-17.5245658000000013"/>
+    <node visible="true" id="3962631870" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458989000000003" lon="-17.5251872999999989"/>
+    <node visible="true" id="3962631872" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459171999999992" lon="-17.5245375000000010"/>
+    <node visible="true" id="3962631874" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459673999999996" lon="-17.5251933999999991"/>
+    <node visible="true" id="3962631876" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460164999999996" lon="-17.5245260000000016"/>
+    <node visible="true" id="3962631877" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7460772000000002" lon="-17.5235647000000014"/>
+    <node visible="true" id="3962631878" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462345999999993" lon="-17.5236397000000004"/>
+    <node visible="true" id="3962631879" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7462873999999999" lon="-17.5236108000000002"/>
+    <node visible="true" id="3962631880" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463019000000006" lon="-17.5236611000000018"/>
+    <node visible="true" id="3962631881" timestamp="2019-04-25T16:53:54Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463046999999996" lon="-17.5236328999999991"/>
+    <node visible="true" id="4741882132" timestamp="2019-04-25T16:54:01Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450270999999997" lon="-17.5241334000000002">
+        <tag k="name" v="47"/>
+        <tag k="highway" v="bus_stop"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="shelter" v="no"/>
+        <tag k="bench" v="no"/>
+        <tag k="name:fr" v="47"/>
+    </node>
+    <node visible="true" id="5040889942" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454128999999998" lon="-17.5250655000000002"/>
+    <node visible="true" id="5040889943" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454829000000007" lon="-17.5251272000000000"/>
+    <node visible="true" id="5040889944" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457138000000008" lon="-17.5256556000000003"/>
+    <node visible="true" id="5040889960" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452202000000003" lon="-17.5252687000000016"/>
+    <node visible="true" id="5040889961" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452764999999992" lon="-17.5254499999999993"/>
+    <node visible="true" id="5040889962" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450580999999996" lon="-17.5255223999999998"/>
+    <node visible="true" id="5040889963" timestamp="2019-04-25T16:54:19Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450103000000006" lon="-17.5253423999999995"/>
+    <node visible="true" id="5040889965" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454239999999999" lon="-17.5254009999999987"/>
+    <node visible="true" id="5040889966" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454982000000001" lon="-17.5255964000000013"/>
+    <node visible="true" id="5040889967" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454715000000007" lon="-17.5255091999999983"/>
+    <node visible="true" id="5040889968" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453430999999995" lon="-17.5255548999999995"/>
+    <node visible="true" id="5040889969" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453608000000003" lon="-17.5256080999999995"/>
+    <node visible="true" id="5040889970" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454570000000000" lon="-17.5255738000000001"/>
+    <node visible="true" id="5040889971" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454678000000001" lon="-17.5256070999999984"/>
+    <node visible="true" id="5040889972" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454392999999992" lon="-17.5255206000000001"/>
+    <node visible="true" id="5040889973" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455412999999993" lon="-17.5254845999999986"/>
+    <node visible="true" id="5040889974" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455698000000002" lon="-17.5255711000000005"/>
+    <node visible="true" id="5040889985" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455063000000006" lon="-17.5256891999999986"/>
+    <node visible="true" id="5040889986" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455166999999996" lon="-17.5256770999999993"/>
+    <node visible="true" id="5040889987" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455166999999996" lon="-17.5256569999999989"/>
+    <node visible="true" id="5040889988" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454064000000002" lon="-17.5253592000000005"/>
+    <node visible="true" id="5040889989" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453610000000008" lon="-17.5252867999999999"/>
+    <node visible="true" id="5040889990" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452184000000006" lon="-17.5251978999999984"/>
+    <node visible="true" id="5040889991" timestamp="2019-04-25T16:54:19Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451834000000002" lon="-17.5250887000000013"/>
+    <node visible="true" id="5040889992" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452752999999994" lon="-17.5255322000000007"/>
+    <node visible="true" id="5040889993" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451641999999996" lon="-17.5251881000000012"/>
+    <node visible="true" id="6041114444" timestamp="2019-04-25T16:54:22Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453395999999994" lon="-17.5250239999999984"/>
+    <node visible="true" id="6045447850" timestamp="2019-04-25T16:54:23Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450232000000003" lon="-17.5253270999999984"/>
+    <node visible="true" id="6045447851" timestamp="2019-04-25T16:54:23Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450057000000001" lon="-17.5253645999999996"/>
+    <node visible="true" id="6045447863" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452199999999998" lon="-17.5236759999999983"/>
+    <node visible="true" id="6045447868" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7468661000000001" lon="-17.5244748000000001"/>
+    <node visible="true" id="6045447869" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7468368999999999" lon="-17.5244813000000015"/>
+    <node visible="true" id="6045447870" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7465911999999992" lon="-17.5244123999999992"/>
+    <node visible="true" id="6045447871" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7466287999999999" lon="-17.5244552999999996"/>
+    <node visible="true" id="6045447872" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7468140000000005" lon="-17.5242286000000007"/>
+    <node visible="true" id="6045447873" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7468123000000002" lon="-17.5242688999999991"/>
+    <node visible="true" id="6045447874" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7467986999999994" lon="-17.5242937000000012"/>
+    <node visible="true" id="6045447875" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7467714000000001" lon="-17.5243017999999999"/>
+    <node visible="true" id="6045447876" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450977000000005" lon="-17.5241694000000017"/>
+    <node visible="true" id="6045447877" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452450000000006" lon="-17.5241724000000012"/>
+    <node visible="true" id="6045447878" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451936999999997" lon="-17.5240770999999995"/>
+    <node visible="true" id="6045447879" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454102000000002" lon="-17.5241064999999985"/>
+    <node visible="true" id="6045447880" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452365000000007" lon="-17.5234482000000007"/>
+    <node visible="true" id="6045447883" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7468070999999998" lon="-17.5245251000000017"/>
+    <node visible="true" id="6045447884" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7461994999999995" lon="-17.5242508000000008"/>
+    <node visible="true" id="6045450885" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7468070999999998" lon="-17.5246543000000017"/>
+    <node visible="true" id="6045450886" timestamp="2019-04-25T16:54:24Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463285000000006" lon="-17.5241818000000009"/>
+    <node visible="true" id="6045450911" timestamp="2019-04-25T16:54:25Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455809000000002" lon="-17.5246491000000013"/>
+    <node visible="true" id="6045450912" timestamp="2019-04-25T16:54:25Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7465568000000005" lon="-17.5251541000000017"/>
+    <node visible="true" id="6045450913" timestamp="2019-04-25T16:54:25Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463356999999995" lon="-17.5237425000000009"/>
+    <node visible="true" id="6045450914" timestamp="2019-04-25T16:54:25Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7463525000000004" lon="-17.5235641999999991"/>
+    <node visible="true" id="6045450915" timestamp="2019-04-25T16:54:25Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456282000000005" lon="-17.5237538999999991"/>
+    <node visible="true" id="6045450916" timestamp="2019-04-25T16:54:25Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457030000000007" lon="-17.5237125999999996"/>
+    <node visible="true" id="6045450917" timestamp="2019-04-25T16:54:25Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456095999999999" lon="-17.5237054999999984"/>
+    <node visible="true" id="6045450918" timestamp="2019-04-25T16:54:25Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456527000000008" lon="-17.5238070999999991"/>
+    <node visible="true" id="6087612932" timestamp="2019-04-25T16:54:29Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7467580999999992" lon="-17.5231953999999988"/>
+    <way visible="true" id="-350044" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-45"/>
+        <nd ref="361073761"/>
+        <tag k="surface" v="paved"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source:datetime" v="2018-11-06T08:34:24Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350043" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-44"/>
+        <nd ref="5040889991"/>
+        <nd ref="6041114444"/>
+        <nd ref="305391249"/>
+        <tag k="surface" v="paved"/>
+        <tag k="name" v="Corniche des Almadies"/>
+        <tag k="oneway" v="no"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:datetime" v="2018-11-12T07:54:40Z"/>
+        <tag k="lit" v="yes"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350042" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-43"/>
+        <nd ref="3662912877"/>
+        <tag k="source:datetime" v="2015-07-23T11:34:40Z"/>
+        <tag k="highway" v="footway"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350041" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-41"/>
+        <nd ref="3662912885"/>
+        <nd ref="3662912868"/>
+        <nd ref="-42"/>
+        <nd ref="-41"/>
+        <tag k="source:datetime" v="2015-07-23T11:34:39Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-350040" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-39"/>
+        <nd ref="5040889992"/>
+        <nd ref="5040889993"/>
+        <nd ref="-40"/>
+        <nd ref="-39"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:17Z"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="parking" v="surface"/>
+    </way>
+    <way visible="true" id="-350039" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="5040889966"/>
+        <nd ref="5040889987"/>
+        <nd ref="5040889986"/>
+        <nd ref="5040889985"/>
+        <nd ref="-38"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2018-11-07T19:02:32Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="private"/>
+    </way>
+    <way visible="true" id="-350038" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="5040889965"/>
+        <nd ref="5040889961"/>
+        <nd ref="5040889962"/>
+        <nd ref="-37"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:16Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350037" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-35"/>
+        <nd ref="5040889944"/>
+        <nd ref="5040889943"/>
+        <nd ref="5040889942"/>
+        <nd ref="2531038589"/>
+        <nd ref="2531038624"/>
+        <nd ref="-36"/>
+        <nd ref="-35"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:16Z"/>
+        <tag k="landuse" v="grass"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350036" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-34"/>
+        <nd ref="3304381914"/>
+        <nd ref="3304381913"/>
+        <nd ref="3304381911"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350035" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="3304381912"/>
+        <nd ref="-33"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350034" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-31"/>
+        <nd ref="3304381915"/>
+        <nd ref="352570623"/>
+        <nd ref="-32"/>
+        <nd ref="-31"/>
+        <tag k="leisure" v="pitch"/>
+        <tag k="sport" v="tennis"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="source:datetime" v="2015-07-23T10:33:13Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350033" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="2564885956"/>
+        <nd ref="2564885951"/>
+        <nd ref="2564885946"/>
+        <nd ref="-29"/>
+        <nd ref="-30"/>
+        <nd ref="2564885963"/>
+        <nd ref="2564885960"/>
+        <nd ref="2564885956"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="source:datetime" v="2016-01-22T23:53:50Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="aeroway" v="helipad"/>
+    </way>
+    <way visible="true" id="-350032" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="2564885890"/>
+        <nd ref="-27"/>
+        <nd ref="-28"/>
+        <nd ref="2564885873"/>
+        <nd ref="2564885881"/>
+        <nd ref="2564885890"/>
+        <tag k="building:use" v="hotel"/>
+        <tag k="source:datetime" v="2015-07-23T12:08:35Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-350031" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-25"/>
+        <nd ref="2564885886"/>
+        <nd ref="-26"/>
+        <nd ref="-25"/>
+        <tag k="building:use" v="hotel"/>
+        <tag k="source:datetime" v="2015-07-23T12:08:35Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-350030" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-24"/>
+        <nd ref="3662824101"/>
+        <nd ref="3662824107"/>
+        <nd ref="1067675045"/>
+        <nd ref="6045450916"/>
+        <nd ref="6045450918"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:58Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="-350029" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="6045450918"/>
+        <nd ref="6045450915"/>
+        <nd ref="6045450917"/>
+        <nd ref="3662824087"/>
+        <nd ref="3662824097"/>
+        <nd ref="3662824086"/>
+        <nd ref="-23"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:57Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="-350028" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="3662775872"/>
+        <nd ref="3662775874"/>
+        <nd ref="3662775407"/>
+        <nd ref="-21"/>
+        <nd ref="-22"/>
+        <nd ref="3662775873"/>
+        <nd ref="3662775872"/>
+        <tag k="surface" v="paved"/>
+        <tag k="source:datetime" v="2017-06-17T09:11:41Z"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="parking" v="surface"/>
+        <tag k="access" v="customers"/>
+    </way>
+    <way visible="true" id="-350027" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="3662775407"/>
+        <nd ref="3662775410"/>
+        <nd ref="-19"/>
+        <nd ref="-20"/>
+        <nd ref="3662775407"/>
+        <tag k="source:datetime" v="2015-07-23T09:37:45Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-350026" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-15"/>
+        <nd ref="339281258"/>
+        <nd ref="3662912877"/>
+        <nd ref="339281259"/>
+        <nd ref="3662902514"/>
+        <nd ref="3662902504"/>
+        <nd ref="339281260"/>
+        <nd ref="6087612932"/>
+        <nd ref="339281261"/>
+        <nd ref="-16"/>
+        <nd ref="-17"/>
+        <nd ref="3662965428"/>
+        <nd ref="339281267"/>
+        <nd ref="339281268"/>
+        <nd ref="339281269"/>
+        <nd ref="339281270"/>
+        <nd ref="339281271"/>
+        <nd ref="3662902505"/>
+        <nd ref="3662902502"/>
+        <nd ref="339281272"/>
+        <nd ref="339281273"/>
+        <nd ref="3304381909"/>
+        <nd ref="3304381907"/>
+        <nd ref="339281274"/>
+        <nd ref="3662902515"/>
+        <nd ref="3662902507"/>
+        <nd ref="339281275"/>
+        <nd ref="3304381911"/>
+        <nd ref="3304381912"/>
+        <nd ref="339281276"/>
+        <nd ref="-18"/>
+        <nd ref="-15"/>
+        <tag k="building:use" v="hotel"/>
+        <tag k="source:datetime" v="2018-11-24T11:37:37Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-350025" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13"/>
+        <nd ref="3662840985"/>
+        <nd ref="3662840982"/>
+        <nd ref="-14"/>
+        <tag k="source:datetime" v="2015-07-23T10:43:07Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350024" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-11"/>
+        <nd ref="3662817355"/>
+        <nd ref="3662817232"/>
+        <nd ref="3662817337"/>
+        <nd ref="3662817294"/>
+        <nd ref="3662817290"/>
+        <nd ref="3662815983"/>
+        <nd ref="3304378057"/>
+        <nd ref="3304378058"/>
+        <nd ref="3662817281"/>
+        <nd ref="-12"/>
+        <tag k="source:datetime" v="2015-07-23T10:43:07Z"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350023" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10"/>
+        <nd ref="1067675098"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2018-11-08T04:46:22Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="-350022" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-8"/>
+        <nd ref="3304378058"/>
+        <nd ref="6045447880"/>
+        <nd ref="3662824087"/>
+        <nd ref="1067675045"/>
+        <nd ref="1067675168"/>
+        <nd ref="6045450914"/>
+        <nd ref="1067675163"/>
+        <nd ref="1067675024"/>
+        <nd ref="6045450913"/>
+        <nd ref="1067675023"/>
+        <nd ref="6045450916"/>
+        <nd ref="1067675043"/>
+        <nd ref="6045450917"/>
+        <nd ref="6045447863"/>
+        <nd ref="3304378057"/>
+        <nd ref="-9"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:54Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="-350021" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="2531038624"/>
+        <nd ref="2531038589"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-5"/>
+        <tag k="country" v="US"/>
+        <tag k="name" v="Ambassade des États Unis d'Amérique"/>
+        <tag k="source:datetime" v="2017-08-17T11:14:27Z"/>
+        <tag k="diplomatic" v="embassy"/>
+        <tag k="amenity" v="embassy"/>
+        <tag k="target" v="SN"/>
+        <tag k="barrier" v="fence"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="alt_name" v="US Embassy"/>
+        <tag k="name:en" v="Embassy of the United States of America"/>
+    </way>
+    <way visible="true" id="-350020" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="352570623"/>
+        <nd ref="352570630"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="352570623"/>
+        <tag k="leisure" v="pitch"/>
+        <tag k="sport" v="tennis"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="source:datetime" v="2015-07-23T10:33:13Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350019" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="1067675105"/>
+        <nd ref="6045447876"/>
+        <nd ref="3662775413"/>
+        <nd ref="361073761"/>
+        <nd ref="305391249"/>
+        <nd ref="3558483991"/>
+        <nd ref="3558483992"/>
+        <nd ref="-2"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="Route de King Fahd"/>
+        <tag k="oneway" v="no"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:datetime" v="2018-11-12T06:38:20Z"/>
+        <tag k="lit" v="yes"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="91878498" timestamp="2018-11-08T04:31:54Z" version="4" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="1067675064"/>
+        <nd ref="3304381902"/>
+        <nd ref="3304381903"/>
+        <nd ref="3304381904"/>
+        <nd ref="3304381905"/>
+        <nd ref="1067675041"/>
+        <nd ref="6045450885"/>
+        <nd ref="6045447883"/>
+        <nd ref="6045447869"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:54Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="91878513" timestamp="2016-01-23T00:00:43Z" version="4" changeset="36750529" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="1067675189"/>
+        <nd ref="1067675101"/>
+        <nd ref="1067675067"/>
+        <nd ref="1067675042"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2016-01-23T00:00:43Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="91878515" timestamp="2016-01-22T23:59:52Z" version="4" changeset="36750529" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="1067675094"/>
+        <nd ref="3304381900"/>
+        <nd ref="3304381901"/>
+        <nd ref="1067675139"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2016-01-22T23:59:52Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="91878516" timestamp="2018-11-08T04:31:55Z" version="5" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="1067675162"/>
+        <nd ref="1067675094"/>
+        <nd ref="1883502717"/>
+        <nd ref="6045447870"/>
+        <nd ref="1067675092"/>
+        <nd ref="6045447871"/>
+        <nd ref="1067675165"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:55Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="177950646" timestamp="2016-01-22T23:57:50Z" version="3" changeset="36750529" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="1883502716"/>
+        <nd ref="1883502717"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2016-01-22T23:57:50Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="177950651" timestamp="2016-01-22T23:58:58Z" version="3" changeset="36750529" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="1067675042"/>
+        <nd ref="1067675070"/>
+        <nd ref="1067675096"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2016-01-22T23:58:58Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="177950653" timestamp="2016-01-23T00:00:39Z" version="3" changeset="36750529" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="1067675021"/>
+        <nd ref="1067675189"/>
+        <nd ref="1067675162"/>
+        <nd ref="3304381869"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2016-01-23T00:00:39Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="177950656" timestamp="2018-11-08T04:31:55Z" version="5" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="1067675165"/>
+        <nd ref="6045450912"/>
+        <nd ref="1067675064"/>
+        <nd ref="1883502716"/>
+        <nd ref="1067675139"/>
+        <nd ref="1067675096"/>
+        <nd ref="1067675099"/>
+        <nd ref="3662817272"/>
+        <nd ref="1067675169"/>
+        <nd ref="6045450911"/>
+        <nd ref="1067675021"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:55Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="323663210" timestamp="2015-07-23T10:33:13Z" version="2" changeset="32818604" user="ulilu" uid="16881">
+        <nd ref="352570630"/>
+        <nd ref="3304381906"/>
+        <nd ref="3304381908"/>
+        <nd ref="352570623"/>
+        <nd ref="352570630"/>
+        <tag k="leisure" v="pitch"/>
+        <tag k="sport" v="tennis"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="source:datetime" v="2015-07-23T10:33:13Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="323663211" timestamp="2015-07-23T10:33:13Z" version="2" changeset="32818604" user="ulilu" uid="16881">
+        <nd ref="3304381908"/>
+        <nd ref="3304381910"/>
+        <nd ref="3304381915"/>
+        <nd ref="352570623"/>
+        <nd ref="3304381908"/>
+        <tag k="leisure" v="pitch"/>
+        <tag k="sport" v="tennis"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="source:datetime" v="2015-07-23T10:33:13Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="323663223" timestamp="2015-07-23T10:27:52Z" version="2" changeset="32818604" user="ulilu" uid="16881">
+        <nd ref="3304381909"/>
+        <nd ref="3304381912"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="covered" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2015-07-23T10:27:52Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+        <tag k="layer" v="-1"/>
+    </way>
+    <way visible="true" id="323663228" timestamp="2018-11-08T04:31:55Z" version="3" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="3304381885"/>
+        <nd ref="6045450886"/>
+        <nd ref="6045447872"/>
+        <nd ref="1067675159"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:55Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="323663237" timestamp="2018-11-08T04:31:55Z" version="5" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="1067675105"/>
+        <nd ref="6045447878"/>
+        <nd ref="6045447879"/>
+        <nd ref="3304378060"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:55Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="323663243" timestamp="2016-01-22T23:57:14Z" version="2" changeset="36750529" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="1067675101"/>
+        <nd ref="1067675169"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2016-01-22T23:57:14Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="323663246" timestamp="2015-07-23T10:27:52Z" version="2" changeset="32818604" user="ulilu" uid="16881">
+        <nd ref="3304381911"/>
+        <nd ref="3304381907"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="covered" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2015-07-23T10:27:52Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+        <tag k="layer" v="-1"/>
+    </way>
+    <way visible="true" id="323663249" timestamp="2018-11-08T04:31:55Z" version="4" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="3304381881"/>
+        <nd ref="3304381877"/>
+        <nd ref="3304381873"/>
+        <nd ref="3304381869"/>
+        <nd ref="3304381863"/>
+        <nd ref="3304381861"/>
+        <nd ref="3304378059"/>
+        <nd ref="1067675127"/>
+        <nd ref="3304378060"/>
+        <nd ref="3304381862"/>
+        <nd ref="3304381864"/>
+        <nd ref="3304381868"/>
+        <nd ref="3304381872"/>
+        <nd ref="3304381876"/>
+        <nd ref="3304381878"/>
+        <nd ref="3304381882"/>
+        <nd ref="3304381884"/>
+        <nd ref="3304381885"/>
+        <nd ref="3304381886"/>
+        <nd ref="3304381883"/>
+        <nd ref="3304381881"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="junction" v="roundabout"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:55Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="323663256" timestamp="2018-11-08T04:31:56Z" version="3" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="3304381907"/>
+        <nd ref="6045447868"/>
+        <nd ref="6045447869"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:56Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="323663260" timestamp="2018-11-08T04:31:56Z" version="3" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="3304381872"/>
+        <nd ref="6045450918"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:56Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="361867249" timestamp="2015-07-23T10:27:50Z" version="1" changeset="32818604" user="ulilu" uid="16881">
+        <nd ref="1067675159"/>
+        <nd ref="3304381909"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2015-07-23T10:27:50Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+    </way>
+    <way visible="true" id="361868111" timestamp="2017-06-17T09:11:41Z" version="2" changeset="49610029" user="rowers2" uid="2445224">
+        <nd ref="3662831873"/>
+        <nd ref="3662831874"/>
+        <nd ref="3662831871"/>
+        <nd ref="3662831875"/>
+        <nd ref="3662831872"/>
+        <nd ref="3662831873"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2017-06-17T09:11:41Z"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="parking" v="surface"/>
+        <tag k="access" v="customers"/>
+    </way>
+    <way visible="true" id="393063344" timestamp="2016-01-24T00:20:51Z" version="1" changeset="36768175" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="3962631399"/>
+        <nd ref="3962631398"/>
+        <nd ref="3962631874"/>
+        <nd ref="3962631395"/>
+        <nd ref="3962631870"/>
+        <nd ref="3962630298"/>
+        <nd ref="3962631866"/>
+        <nd ref="3962631869"/>
+        <nd ref="3962631872"/>
+        <nd ref="3962631396"/>
+        <nd ref="3962631397"/>
+        <nd ref="3962631876"/>
+        <nd ref="3962630131"/>
+        <nd ref="3962630300"/>
+        <nd ref="3962631399"/>
+        <tag k="source:datetime" v="2016-01-24T00:20:51Z"/>
+        <tag k="landuse" v="grass"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="393063357" timestamp="2016-01-24T00:20:56Z" version="1" changeset="36768175" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="3962630256"/>
+        <nd ref="3962631379"/>
+        <nd ref="3962630126"/>
+        <nd ref="3962631386"/>
+        <nd ref="3962631387"/>
+        <nd ref="3962630129"/>
+        <nd ref="3962630293"/>
+        <nd ref="3962630295"/>
+        <nd ref="3962630296"/>
+        <nd ref="3962631859"/>
+        <nd ref="3962631858"/>
+        <nd ref="3962630128"/>
+        <nd ref="3962630127"/>
+        <nd ref="3962631385"/>
+        <nd ref="3962631381"/>
+        <nd ref="3962631857"/>
+        <nd ref="3962630256"/>
+        <tag k="source:datetime" v="2016-01-24T00:20:56Z"/>
+        <tag k="landuse" v="grass"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="393063360" timestamp="2016-01-24T00:20:57Z" version="1" changeset="36768175" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="3962631878"/>
+        <nd ref="3962631402"/>
+        <nd ref="3962631404"/>
+        <nd ref="3962631405"/>
+        <nd ref="3962630303"/>
+        <nd ref="3962631879"/>
+        <nd ref="3962630134"/>
+        <nd ref="3962631881"/>
+        <nd ref="3962630305"/>
+        <nd ref="3962631880"/>
+        <nd ref="3962630133"/>
+        <nd ref="3962630304"/>
+        <nd ref="3962630379"/>
+        <nd ref="3962630132"/>
+        <nd ref="3962631403"/>
+        <nd ref="3962630302"/>
+        <nd ref="3962631878"/>
+        <tag k="source:datetime" v="2016-01-24T00:20:57Z"/>
+        <tag k="landuse" v="traffic_island"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="393063365" timestamp="2016-01-24T00:20:59Z" version="1" changeset="36768175" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="3962631400"/>
+        <nd ref="3962631877"/>
+        <nd ref="3962630375"/>
+        <nd ref="3962630377"/>
+        <nd ref="3962630378"/>
+        <nd ref="3962630376"/>
+        <nd ref="3962630374"/>
+        <nd ref="3962630301"/>
+        <nd ref="3962630299"/>
+        <nd ref="3962631390"/>
+        <nd ref="3962630297"/>
+        <nd ref="3962631862"/>
+        <nd ref="3962630468"/>
+        <nd ref="3962631863"/>
+        <nd ref="3962631389"/>
+        <nd ref="3962631391"/>
+        <nd ref="3962631400"/>
+        <tag k="source:datetime" v="2016-01-24T00:20:59Z"/>
+        <tag k="landuse" v="grass"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="393063367" timestamp="2016-01-24T00:21:00Z" version="1" changeset="36768175" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="3962630465"/>
+        <nd ref="3962630255"/>
+        <nd ref="3962631380"/>
+        <nd ref="3962631383"/>
+        <nd ref="3962631384"/>
+        <nd ref="3962631382"/>
+        <nd ref="3962631378"/>
+        <nd ref="3962630372"/>
+        <nd ref="3962630125"/>
+        <nd ref="3962630254"/>
+        <nd ref="3962630252"/>
+        <nd ref="3962630250"/>
+        <nd ref="3962630123"/>
+        <nd ref="3962630251"/>
+        <nd ref="3962630253"/>
+        <nd ref="3962630124"/>
+        <nd ref="3962630465"/>
+        <tag k="source:datetime" v="2016-01-24T00:21:00Z"/>
+        <tag k="landuse" v="grass"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="516365933" timestamp="2017-08-17T11:09:16Z" version="1" changeset="51201629" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="5040889961"/>
+        <nd ref="5040889960"/>
+        <nd ref="5040889990"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:16Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="516365934" timestamp="2018-11-08T04:31:58Z" version="2" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="5040889962"/>
+        <nd ref="6045447851"/>
+        <nd ref="5040889963"/>
+        <nd ref="6045447850"/>
+        <nd ref="5040889960"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:58Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="516365936" timestamp="2017-08-17T11:09:16Z" version="1" changeset="51201629" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="5040889967"/>
+        <nd ref="5040889966"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="covered" v="yes"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:16Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="private"/>
+    </way>
+    <way visible="true" id="516365937" timestamp="2017-08-17T11:09:16Z" version="1" changeset="51201629" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="5040889991"/>
+        <nd ref="5040889990"/>
+        <nd ref="5040889989"/>
+        <nd ref="5040889988"/>
+        <nd ref="5040889965"/>
+        <nd ref="5040889967"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:16Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="516365938" timestamp="2017-08-17T11:09:16Z" version="1" changeset="51201629" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="5040889972"/>
+        <nd ref="5040889968"/>
+        <nd ref="5040889969"/>
+        <nd ref="5040889970"/>
+        <nd ref="5040889972"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:16Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="516365940" timestamp="2017-08-17T11:09:16Z" version="1" changeset="51201629" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="5040889974"/>
+        <nd ref="5040889973"/>
+        <nd ref="5040889967"/>
+        <nd ref="5040889972"/>
+        <nd ref="5040889970"/>
+        <nd ref="5040889971"/>
+        <nd ref="5040889966"/>
+        <nd ref="5040889974"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:16Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="642059340" timestamp="2018-11-08T04:31:51Z" version="1" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="6045447880"/>
+        <nd ref="6045447863"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:51Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="642059346" timestamp="2018-11-08T04:31:51Z" version="1" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="3304378059"/>
+        <nd ref="6045447877"/>
+        <nd ref="6045447876"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:51Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="642059348" timestamp="2018-11-08T04:31:51Z" version="1" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="6045447872"/>
+        <nd ref="6045447873"/>
+        <nd ref="6045447874"/>
+        <nd ref="6045447875"/>
+        <nd ref="6045447884"/>
+        <nd ref="3304381883"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:51Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-350035" role=""/>
+        <member type="way" ref="-350036" role=""/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2015-07-23T10:27:51Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+        <tag k="type" v="multilinestring"/>
+    </relation>
+    <relation visible="true" id="4297669" timestamp="2014-12-22T10:35:56Z" version="1" changeset="27627037" user="Eckhart Wörner" uid="2675">
+        <member type="node" ref="1809418644" role="via"/>
+        <tag k="source:datetime" v="2014-12-22T10:35:56Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="restriction" v="no_u_turn"/>
+        <tag k="type" v="restriction"/>
+    </relation>
+    <relation visible="true" id="4297670" timestamp="2016-05-23T17:16:10Z" version="3" changeset="39514563" user="Ido Marom" uid="2778924">
+        <member type="node" ref="323146921" role="via"/>
+        <tag k="source:datetime" v="2016-05-23T17:16:10Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="restriction" v="only_straight_on"/>
+        <tag k="type" v="restriction"/>
+    </relation>
+    <relation visible="true" id="5386177" timestamp="2016-02-15T15:56:12Z" version="5" changeset="37227641" user="Jean-Marc Liotier" uid="160042">
+        <member type="way" ref="-350024" role="outer"/>
+        <tag k="contact:facebook" v="https://www.facebook.com/KingFahdPalace"/>
+        <tag k="contact:fax" v="+221 33 8696924"/>
+        <tag k="addr:postcode" v="8181"/>
+        <tag k="name" v="King Fahd Palace Hôtel"/>
+        <tag k="addr:city" v="Dakar"/>
+        <tag k="stars" v="5"/>
+        <tag k="source:datetime" v="2016-02-15T15:56:12Z"/>
+        <tag k="contact:phone" v="+221 33 8696969"/>
+        <tag k="landuse" v="commercial"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tourism" v="hotel"/>
+        <tag k="contact:website" v="http://www.kingfahdpalacehotels.com/"/>
+        <tag k="addr:street" v="Route des Almadies"/>
+        <tag k="type" v="multipolygon"/>
+    </relation>
+    <relation visible="true" id="5386208" timestamp="2015-07-23T10:44:37Z" version="2" changeset="32818604" user="ulilu" uid="16881">
+        <member type="way" ref="-350025" role="outer"/>
+        <tag k="leisure" v="golf_course"/>
+        <tag k="source:datetime" v="2015-07-23T10:44:37Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="private"/>
+        <tag k="area" v="yes"/>
+        <tag k="type" v="multipolygon"/>
+    </relation>
+</osm>

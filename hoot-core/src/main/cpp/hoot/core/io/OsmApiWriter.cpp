@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmApiWriter.h"
@@ -48,20 +48,28 @@ using namespace Tgs;
 namespace hoot
 {
 
-const char* OsmApiWriter::API_PATH_CAPABILITIES = "/api/capabilities/";
-const char* OsmApiWriter::API_PATH_PERMISSIONS = "/api/0.6/permissions/";
-const char* OsmApiWriter::API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create/";
-const char* OsmApiWriter::API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close/";
-const char* OsmApiWriter::API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload/";
-const char* OsmApiWriter::API_PATH_GET_ELEMENT = "/api/0.6/%1/%2/";
+const char* OsmApiWriter::API_PATH_CAPABILITIES = "/api/capabilities";
+const char* OsmApiWriter::API_PATH_PERMISSIONS = "/api/0.6/permissions";
+const char* OsmApiWriter::API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create";
+const char* OsmApiWriter::API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close";
+const char* OsmApiWriter::API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload";
+const char* OsmApiWriter::API_PATH_GET_ELEMENT = "/api/0.6/%1/%2";
 
 OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
   : _description(ConfigOptions().getChangesetDescription()),
+    _source(ConfigOptions().getChangesetSource()),
+    _hashtags(ConfigOptions().getChangesetHashtags()),
     _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
     _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
     _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
-    _showProgress(false)
+    _showProgress(false),
+    _consumerKey(ConfigOptions().getHootOsmAuthConsumerKey()),
+    _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
+    _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
+    _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
+    _changesetCount(0)
 {
   _changesets.push_back(changeset);
   if (isSupported(url))
@@ -71,15 +79,19 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
 OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
   : _changesets(changesets),
     _description(ConfigOptions().getChangesetDescription()),
+    _source(ConfigOptions().getChangesetSource()),
+    _hashtags(ConfigOptions().getChangesetHashtags()),
     _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
     _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
     _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
     _showProgress(false),
     _consumerKey(ConfigOptions().getHootOsmAuthConsumerKey()),
     _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
-    _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret())
+    _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
+    _changesetCount(0)
 {
   if (isSupported(url))
     _url = url;
@@ -97,6 +109,12 @@ bool OsmApiWriter::apply()
     return false;
   }
   _stats.append(SingleStat("API Capabilites Query Time (sec)", timer.getElapsedAndRestart()));
+  //  Limit the max changeset size to the max from the API, testing found that smaller (1k to 2k elements)
+  //  pushed across multiple processing threads out performed larger (50k element) datasets
+  if (_maxChangesetSize > _capabilities.getChangesets())
+    _maxChangesetSize = _capabilities.getChangesets();
+  if (_maxPushSize > _maxChangesetSize)
+    _maxPushSize = _maxChangesetSize / 5;
   //  Setup the network request object with OAuth or with username/password authentication
   request = createNetworkRequest(true);
   //  Validate API permissions
@@ -108,7 +126,7 @@ bool OsmApiWriter::apply()
   _stats.append(SingleStat("API Permissions Query Time (sec)", timer.getElapsedAndRestart()));
   bool success = true;
   //  Load all of the changesets into memory
-  _changeset.setMaxSize(_maxChangesetSize);
+  _changeset.setMaxPushSize(_maxPushSize);
   for (int i = 0; i < _changesets.size(); ++i)
   {
     LOG_INFO("Loading changeset: " << _changesets[i]);
@@ -122,15 +140,18 @@ bool OsmApiWriter::apply()
   //  Start the writer threads
   LOG_INFO("Starting " << _maxWriters << " processing threads.");
   for (int i = 0; i < _maxWriters; ++i)
-    _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this));
+  {
+    _threadStatus.push_back(ThreadStatus::Working);
+    _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this, i));
+  }
   //  Setup the progress indicators
   long total = _changeset.getTotalElementCount();
   float progress = 0.0f;
   float increment = 0.01f;
   //  Setup the increment
-  if (total < 100000)
+  if (total < 10000)
     increment = 0.1f;
-  else if (total < 1000000)
+  else if (total < 100000)
     increment = 0.05f;
   //  Iterate all changes until there are no more elements to send
   while (_changeset.hasElementsToSend())
@@ -154,6 +175,22 @@ bool OsmApiWriter::apply()
       //  Add the new work to the queue if there is any
       if (newChangeset)
       {
+        _workQueueMutex.lock();
+        _workQueue.push(changeset_info);
+        _workQueueMutex.unlock();
+      }
+      else if (queueSize == 0 && !newChangeset && _changeset.hasElementsToSend() && _threadsAreIdle())
+      {
+        //  This is an error case, the queue is empty, there are still elements to send but
+        //  all of the threads are idle and not waiting for something to come back
+        //  There are two things that can be done here, first is to put everything that is
+        //  "ready to send" in a changeset and send it OR move everything to the error state
+
+        //  Option #1: Get all of the remaining elements as a single changeset
+        _changesetMutex.lock();
+        _changeset.calculateRemainingChangeset(changeset_info);
+        _changesetMutex.unlock();
+        //  Push that changeset
         _workQueueMutex.lock();
         _workQueue.push(changeset_info);
         _workQueueMutex.unlock();
@@ -187,6 +224,7 @@ bool OsmApiWriter::apply()
   LOG_INFO("Upload progress: 100%");
   //  Keep some stats
   _stats.append(SingleStat("API Upload Time (sec)", timer.getElapsedAndRestart()));
+  _stats.append(SingleStat("Total OSM Changesets Uploaded", _changesetCount));
   _stats.append(SingleStat("Total Nodes in Changeset", _changeset.getTotalNodeCount()));
   _stats.append(SingleStat("Total Ways in Changeset", _changeset.getTotalWayCount()));
   _stats.append(SingleStat("Total Relations in Changeset", _changeset.getTotalRelationCount()));
@@ -198,17 +236,24 @@ bool OsmApiWriter::apply()
   return success;
 }
 
-void OsmApiWriter::_changesetThreadFunc()
+void OsmApiWriter::_changesetThreadFunc(int index)
 {
+  //  Set the status to working
+  _threadStatusMutex.lock();
+  _threadStatus[index] = ThreadStatus::Working;
+  _threadStatusMutex.unlock();
   //  Setup the network request object with OAuth or with username/password authentication
   HootNetworkRequestPtr request = createNetworkRequest(true);
   long id = -1;
+  long changesetSize = 0;
+  bool stop_thread = false;
   //  Iterate until all elements are sent and updated
-  while (!_changeset.isDone())
+  while (!_changeset.isDone() && !stop_thread)
   {
     ChangesetInfoPtr workInfo;
     //  Try to get something off of the work queue
     _workQueueMutex.lock();
+    int queueSize = _workQueue.size();
     if (!_workQueue.empty())
     {
       workInfo = _workQueue.front();
@@ -218,9 +263,16 @@ void OsmApiWriter::_changesetThreadFunc()
 
     if (workInfo)
     {
+      //  Set the status to working
+      _threadStatusMutex.lock();
+      _threadStatus[index] = ThreadStatus::Working;
+      _threadStatusMutex.unlock();
       //  Create the changeset ID if required
       if (id < 1)
-        id = _createChangeset(request, _description);
+      {
+        id = _createChangeset(request, _description, _source, _hashtags);
+        changesetSize = 0;
+      }
       //  An ID of less than 1 isn't valid, try to fix it
       if (id < 1)
       {
@@ -246,56 +298,97 @@ void OsmApiWriter::_changesetThreadFunc()
         _changesetMutex.lock();
         _changeset.updateChangeset(QString(request->getResponseContent()));
         _changesetMutex.unlock();
-        //  Close the changeset
-        _closeChangeset(request, id);
-        //  Signal for a new changeset id
-        id = -1;
+        //  Update the size of the current changeset that is open
+        changesetSize += workInfo->size();
+        //  When the current changeset is nearing the 50k max (or the specified max), close the changeset
+        //  otherwise keep it open and go again
+        if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
+        {
+          //  Close the changeset
+          _closeChangeset(request, id);
+          //  Signal for a new changeset id
+          id = -1;
+        }
         //  Throttle the input rate if desired
         if (_throttleWriters && !_changeset.isDone())
           this_thread::sleep_for(chrono::seconds(_throttleTime));
       }
       else
       {
-        //  Log the error
-        LOG_ERROR("Error uploading changeset: " << id << "\t" << request->getErrorString());
+        //  Log the error as a status message
+        LOG_STATUS("Error uploading changeset: " << id << " - " << request->getErrorString() << " (" << request->getHttpStatus() << ")");
+        //  If this is the last changeset, error it all out and finish working
+        if (workInfo->getLast())
+        {
+          //  Fail the entire changeset
+          _changeset.updateFailedChangeset(workInfo, true);
+          //  Looping should end the thread because all of the remaining elements have now been set to the failed state
+          continue;
+        }
         //  Split the changeset on conflict errors
         switch (info->status)
         {
-        case 400:   //  Placeholder ID is missing or not unique
-        case 404:   //  Diff contains elements where the given ID could not be found
-        case 409:   //  Conflict, Split the changeset, push both back on the queue
-        case 412:   //  Precondition Failed, Relation with id cannot be saved due to other member
+        case 409:   //  Conflict, check for version conflicts and fix, or split and continue
           {
-            _changesetMutex.lock();
-            ChangesetInfoPtr split = _changeset.splitChangeset(workInfo, info->response);
-            _changesetMutex.unlock();
-            if (split->size() > 0)
+            if (_changesetClosed(info->response))
             {
+              //  The changeset was closed already so set the ID to -1 and reprocess
+              id = -1;
+              //  Push the changeset back on the queue
               _workQueueMutex.lock();
-              _workQueue.push(split);
               _workQueue.push(workInfo);
               _workQueueMutex.unlock();
+              //  Loop back around to work on the next changeset
+              continue;
             }
-            else
+            else if (_fixConflict(request, workInfo, info->response))
             {
-              if (!workInfo->getAttemptedResolveChangesetIssues())
+              _workQueueMutex.lock();
+              _workQueue.push(workInfo);
+              _workQueueMutex.unlock();
+              //  Loop back around to work on the next changeset
+              continue;
+            }
+            //  Fall through here to split the changeset and retry
+            //  This includes when the changeset is too big, i.e.:
+            //    The changeset <id> was closed at <dtg> UTC
+          }
+        case 400:   //  Placeholder ID is missing or not unique
+        case 404:   //  Diff contains elements where the given ID could not be found
+        case 412:   //  Precondition Failed, Relation with id cannot be saved due to other member
+          if (!_splitChangeset(workInfo, info->response))
+          {
+            if (!workInfo->getAttemptedResolveChangesetIssues())
+            {
+              //  Set the attempt issues resolved flag
+              workInfo->setAttemptedResolveChangesetIssues(true);
+              //  Try to automatically resolve certain issues, like out of date version
+              if (_resolveIssues(request, workInfo))
               {
-                //  Set the attempt issues resolved flag
-                workInfo->setAttemptedResolveChangesetIssues(true);
-                //  Try to automatically resolve certain issues, like out of date version
-                if (_resolveIssues(request, workInfo))
-                {
-                  _workQueueMutex.lock();
-                  _workQueue.push(workInfo);
-                  _workQueueMutex.unlock();
-                }
-                else
-                {
-                  //  Set the element in the changeset to failed because the issues couldn't be resolved
-                  _changeset.updateFailedChangeset(workInfo);
-                }
+                _workQueueMutex.lock();
+                _workQueue.push(workInfo);
+                _workQueueMutex.unlock();
+              }
+              else
+              {
+                //  Set the element in the changeset to failed because the issues couldn't be resolved
+                _changeset.updateFailedChangeset(workInfo);
               }
             }
+          }
+          break;
+        case 500:   //  Internal Server Error, could be caused by the database being saturated
+        case 502:   //  Bad Gateway, there are issues with the gateway, split and retry
+        case 504:   //  Gateway Timeout, server is taking too long, split and retry
+          if (!_splitChangeset(workInfo, info->response))
+          {
+            //  Splitting failed which means that the changeset only has one element in it,
+            //  push it back on the queue and give the API a break
+            _workQueueMutex.lock();
+            _workQueue.push(workInfo);
+            _workQueueMutex.unlock();
+            //  Sleep the thread
+            this_thread::sleep_for(chrono::milliseconds(10));
           }
           break;
         default:
@@ -317,7 +410,23 @@ void OsmApiWriter::_changesetThreadFunc()
       }
     }
     else
-      this_thread::sleep_for(chrono::milliseconds(10));
+    {
+      if (!_changeset.hasElementsToSend() && queueSize == 0 && _threadsAreIdle())
+      {
+        //  In this case there are elements that have been sent and not reported back
+        //  BUT there are no threads that are waiting for them either
+        stop_thread = true;
+      }
+      else
+      {
+        //  Set the status to idle
+        _threadStatusMutex.lock();
+        _threadStatus[index] = ThreadStatus::Idle;
+        _threadStatusMutex.unlock();
+        //  Sleep the thread
+        this_thread::sleep_for(chrono::milliseconds(10));
+      }
+    }
   }
   //  Close the changeset if one is still open
   if (id != -1)
@@ -328,7 +437,10 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions options(conf);
   _description = options.getChangesetDescription();
-  _maxChangesetSize = options.getChangesetApidbSizeMax();
+  _source = options.getChangesetSource();
+  _hashtags = options.getChangesetHashtags();
+  _maxPushSize = options.getChangesetApidbSizeMax();
+  _maxChangesetSize = options.getChangesetMaxSize();
   _maxWriters = options.getChangesetApidbWritersMax();
   _throttleWriters = options.getChangesetApidbWritersThrottle();
   _throttleTime = options.getChangesetApidbWritersThrottleTime();
@@ -363,8 +475,10 @@ bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
     capabilities.setPath(API_PATH_CAPABILITIES);
     request->networkRequest(capabilities);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
-    LOG_DEBUG("Capabilities: " << capabilities.toString(QUrl::RemoveUserInfo));
-    LOG_DEBUG("Response: " << responseXml);
+    QString printableUrl = capabilities.toString(QUrl::RemoveUserInfo);
+    HootNetworkRequest::removeIpFromUrlString(printableUrl, capabilities);
+    LOG_TRACE("Capabilities: " << printableUrl);
+    LOG_TRACE("Response: " << responseXml);
     _capabilities = _parseCapabilities(responseXml);
   }
   catch (const HootException& ex)
@@ -446,7 +560,7 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions)
 {
   QXmlStreamReader reader(permissions);
 
-  LOG_DEBUG("Permissions: " << permissions);
+  LOG_TRACE("Permissions: " << permissions);
 
   while (!reader.atEnd() && !reader.hasError())
   {
@@ -468,7 +582,10 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
-long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request, const QString& description)
+long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
+                                    const QString& description,
+                                    const QString& source,
+                                    const QString& hashtags)
 {
   try
   {
@@ -479,8 +596,11 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request, const QString
       "  <changeset>"
       "    <tag k='created_by' v='%1'/>"
       "    <tag k='comment' v='%2'/>"
+      "    <tag k='source' v='%3'/>"
+      "    <tag k='hashtags' v='%4'/>"
+      "    <tag k='bot' v='yes'/>"
       "  </changeset>"
-      "</osm>").arg(HOOT_NAME).arg(description);
+      "</osm>").arg(HOOT_NAME).arg(description).arg(source).arg(hashtags);
 
     request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, xml.toUtf8());
 
@@ -514,6 +634,9 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
       break;
     case 200:
       //  Changeset closed successfully
+      _changesetCountMutex.lock();
+      _changesetCount++;
+      _changesetCountMutex.unlock();
       break;
     default:
       LOG_WARN("Uknown HTTP response code: " << request->getHttpStatus());
@@ -573,7 +696,7 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
       info->success = true;
       break;
     case 400:
-      LOG_WARN("Changeset Upload Error: Error parsing XML changeset\n" << info->response);
+      LOG_WARN("Changeset Upload Error: Error parsing XML changeset - " << info->response);
       break;
     case 404:
       LOG_WARN("Unknown changeset or elements don't exist");
@@ -594,6 +717,41 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
     LOG_WARN(ex.what());
   }
   return info;
+}
+
+bool OsmApiWriter::_fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr changeset, const QString& conflictExplanation)
+{
+  bool success = false;
+  long element_id = 0;
+  ElementType::Type element_type = ElementType::Unknown;
+  long version_old = 0;
+  long version_new = 0;
+  if (_changeset.matchesChangesetConflictVersionMismatchFailure(conflictExplanation, element_id, element_type, version_old, version_new))
+  {
+    for (int changesetType = XmlChangeset::TypeModify; changesetType < XmlChangeset::TypeMax; ++changesetType)
+    {
+      ChangesetInfo::iterator element = changeset->begin((ElementType::Type)element_type, (XmlChangeset::ChangesetType)changesetType);
+      if (element != changeset->end((ElementType::Type)element_type, (XmlChangeset::ChangesetType)changesetType))
+      {
+        QString update = "";
+        //  Get the element from the OSM API
+        if (element_type == ElementType::Node)
+          update = _getNode(request, element_id);
+        else if (element_type == ElementType::Way)
+          update = _getWay(request, element_id);
+        else if (element_type == ElementType::Relation)
+          update = _getRelation(request, element_id);
+        //  Fix the changeset with the node/way/relation from the OSM API
+        success |= _changeset.fixChangeset(update);
+      }
+    }
+  }
+  return success;
+}
+
+bool OsmApiWriter::_changesetClosed(const QString &conflictExplanation)
+{
+  return _changeset.matchesChangesetClosedFailure(conflictExplanation);
 }
 
 bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset)
@@ -699,5 +857,44 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
   }
   return request;
 }
+
+bool OsmApiWriter::_threadsAreIdle()
+{
+  bool response = true;
+  //  Lock the thread status mutex only once
+  _threadStatusMutex.lock();
+  for (vector<ThreadStatus>::iterator it = _threadStatus.begin(); it != _threadStatus.end(); ++it)
+  {
+    //  It only takes one thread working to return false
+    if (*it == ThreadStatus::Working)
+    {
+      response = false;
+      break;
+    }
+  }
+  //  Unlock the thread status mutex
+  _threadStatusMutex.unlock();
+  return response;
+}
+
+bool OsmApiWriter::_splitChangeset(const ChangesetInfoPtr& workInfo, const QString& response)
+{
+  //  Try to split the changeset in half
+  _changesetMutex.lock();
+  ChangesetInfoPtr split = _changeset.splitChangeset(workInfo, response);
+  _changesetMutex.unlock();
+  if (split->size() > 0)
+  {
+    //  Push both of the changesets onto the queue
+    _workQueueMutex.lock();
+    _workQueue.push(split);
+    _workQueue.push(workInfo);
+    _workQueueMutex.unlock();
+    return true;
+  }
+  //  Nothing was split out, return false
+  return false;
+}
+
 
 }

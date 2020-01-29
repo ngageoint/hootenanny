@@ -80,6 +80,13 @@ public:
     Change change;
     Change::ChangeType changeType = _getRandomType();
 
+    long version = 0;
+    // Changeset writers verify that modified/deleted features don't have a starting (zero) version.
+    if (changeType != Change::ChangeType::Create)
+    {
+      version = 1;
+    }
+
     switch ((ElementType::Type)(Tgs::Random::instance()->generateInt() % 3))
     {
     default:
@@ -87,14 +94,24 @@ public:
       {
         change =
           Change(
-            changeType, NodePtr(new Node(Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0)));
+            changeType,
+            NodePtr(
+              new Node(
+                Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
+                version)));
       }
       break;
     case ElementType::Way:
       {
-        NodePtr node1(new Node(Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0));
-        NodePtr node2(new Node(Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0));
-        WayPtr way(new Way(Status::Unknown1, ++_way, 15.0));
+        NodePtr node1(
+          new Node(
+            Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
+            version));
+        NodePtr node2(
+          new Node(
+            Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
+            version));
+        WayPtr way(new Way(Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version));
         way->addNode(node1->getId());
         way->addNode(node2->getId());
         way->setTag("key1", "value1");
@@ -103,13 +120,20 @@ public:
       break;
     case ElementType::Relation:
       {
-        NodePtr node1(new Node(Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0));
-        NodePtr node2(new Node(Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0));
-        WayPtr way(new Way(Status::Unknown1, ++_way, 15.0));
+        NodePtr node1(
+          new Node(
+            Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
+            version));
+        NodePtr node2(
+          new Node(
+            Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
+            version));
+        WayPtr way(new Way(Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version));
         way->addNode(node1->getId());
         way->addNode(node2->getId());
         way->setTag("key1", "value1");
-        RelationPtr relation(new Relation(Status::Unknown1, ++_rel, 15.0));
+        RelationPtr relation(
+          new Relation(Status::Unknown1, ++_rel, 15.0, "", ElementData::CHANGESET_EMPTY, version));
         relation->addElement("role1", node1->getElementId());
         relation->addElement("role2", way->getElementId());
         relation->setTag("key2", "value2");

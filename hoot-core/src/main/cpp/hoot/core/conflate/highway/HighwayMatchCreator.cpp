@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayMatchCreator.h"
 
@@ -41,7 +41,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -60,6 +60,9 @@
 #include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace geos::geom;
 using namespace std;
 using namespace Tgs;
@@ -76,7 +79,7 @@ class HighwayMatchVisitor : public ConstElementVisitor
 {
 public:
 
-  HighwayMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
+  HighwayMatchVisitor(const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
                       ElementCriterionPtr filter = ElementCriterionPtr()) :
   _map(map),
   _result(result),
@@ -90,7 +93,7 @@ public:
    * This constructor has gotten a little out of hand.
    */
   HighwayMatchVisitor(const ConstOsmMapPtr& map,
-    vector<const Match*>& result, std::shared_ptr<HighwayClassifier> c,
+    vector<ConstMatchPtr>& result, std::shared_ptr<HighwayClassifier> c,
     std::shared_ptr<SublineStringMatcher> sublineMatcher, Status matchStatus,
     ConstMatchThresholdPtr threshold,
     std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
@@ -132,7 +135,7 @@ public:
 
     // find other nearby candidates
     set<ElementId> neighbors =
-      IndexElementsVisitor::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
 
     ElementId from(e->getElementType(), e->getId());
 
@@ -145,7 +148,7 @@ public:
       {
         const std::shared_ptr<const Element>& n = _map->getElement(*it);
         // score each candidate and push it on the result vector
-        HighwayMatch* match =
+        std::shared_ptr<HighwayMatch> match =
           createMatch(_map, _c, _sublineMatcher, _threshold, _tagAncestorDiff, e, n);
         if (match)
         {
@@ -159,14 +162,14 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  static HighwayMatch* createMatch(const ConstOsmMapPtr& map,
+  static std::shared_ptr<HighwayMatch> createMatch(const ConstOsmMapPtr& map,
     std::shared_ptr<HighwayClassifier> classifier,
     std::shared_ptr<SublineStringMatcher> sublineMatcher,
     ConstMatchThresholdPtr threshold,
     std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
     ConstElementPtr e1, ConstElementPtr e2)
   {
-    HighwayMatch* result = 0;
+    std::shared_ptr<HighwayMatch> result;
 
     HighwayCriterion highwayCrit(map);
     if (e1 && e2 &&
@@ -175,14 +178,13 @@ public:
         tagAncestorDiff->diff(map, e1, e2) <= ConfigOptions().getHighwayMaxEnumDiff())
     {
       // score each candidate and push it on the result vector
-      result =
+      result.reset(
         new HighwayMatch(
-          classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold);
+          classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold));
       // if we're confident this is a miss
       if (result->getType() == MatchType::Miss)
       {
-        delete result;
-        result = 0;
+        result.reset();
       }
     }
 
@@ -211,7 +213,7 @@ public:
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
-      if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 100) == 0)
+      if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
       {
         PROGRESS_DEBUG(
           "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
@@ -220,7 +222,7 @@ public:
     }
 
     _numElementsVisited++;
-    if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
+    if (_numElementsVisited % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
@@ -241,6 +243,8 @@ public:
   {
     if (!_index)
     {
+      LOG_INFO("Creating highway feature index...");
+
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
       std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
@@ -252,11 +256,9 @@ public:
       std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
-      IndexElementsVisitor v(_index,
-                             _indexToEid,
-                             pCrit,
-                             std::bind(&HighwayMatchVisitor::getSearchRadius, this, placeholders::_1),
-                             getMap());
+      SpatialIndexer v(
+        _index, _indexToEid, pCrit,
+        std::bind(&HighwayMatchVisitor::getSearchRadius, this, placeholders::_1), getMap());
 
       getMap()->visitRo(v);
       v.finalizeIndex();
@@ -272,7 +274,7 @@ public:
 private:
 
   const ConstOsmMapPtr& _map;
-  vector<const Match*>& _result;
+  vector<ConstMatchPtr>& _result;
   set<ElementId> _empty;
   std::shared_ptr<HighwayClassifier> _c;
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
@@ -314,24 +316,33 @@ HighwayMatchCreator::HighwayMatchCreator()
   _sublineMatcher->setConfiguration(settings);
 }
 
-Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
+MatchPtr HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   return HighwayMatchVisitor::createMatch(map, _classifier, _sublineMatcher, getMatchThreshold(),
     _tagAncestorDiff, map->getElement(eid1), map->getElement(eid2));
 }
 
-void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
-  ConstMatchThresholdPtr threshold)
+void HighwayMatchCreator::createMatches(
+  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
 {
-  LOG_DEBUG("Creating matches with: " << className() << "...");
+  QElapsedTimer timer;
+  timer.start();
+  LOG_STATUS("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
+  const int matchesSizeBefore = matches.size();
+
   HighwayMatchVisitor v(
     map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff,
     _filter);
-  map->visitRo(v);
-  LOG_INFO(
+  map->visitWaysRo(v);
+  map->visitRelationsRo(v);
+  const int matchesSizeAfter = matches.size();
+
+  LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " highway match candidates.");
+    " highway match candidates and " <<
+    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
+    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
@@ -347,7 +358,7 @@ vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
 
 bool HighwayMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map)
 {
-  vector<const Match*> matches;
+  vector<ConstMatchPtr> matches;
   return HighwayMatchVisitor(map, matches, _filter).isMatchCandidate(element);
 }
 

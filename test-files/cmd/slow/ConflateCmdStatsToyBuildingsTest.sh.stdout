@@ -1,22 +1,28 @@
+21:08:22.398 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
+21:08:22.400 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:22.401 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:22.404 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
+21:08:22.404 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 103 elements from input in: 00:00.
+21:08:22.404 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
+21:08:22.405 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:22.405 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:22.408 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
+21:08:22.408 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 103 elements from input in: 00:00.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	70	41	90	
-Ways	10	8	13	
+Ways	10	8	12	
 Relations	0	0	1	
 Least Nodes in a Way	5	5	5	
 Most Nodes in a Way	33	10	33	
-Average Nodes Per Way	8	7	9	
-Total Way Nodes	81	58	122	
-Least Members in a Relation	0	0	3	
-Most Members in a Relation	0	0	3	
-Average Members Per Relation	0	0	3	
-Total Relation Members	0	0	3	
+Average Nodes Per Way	8	7	8	
+Total Way Nodes	81	58	105	
+Least Members in a Relation	0	0	2	
+Most Members in a Relation	0	0	2	
+Average Members Per Relation	0	0	2	
+Total Relation Members	0	0	2	
 Least Tags on a Feature	2	2	1	
 Most Tags on a Feature	4	4	6	
 Average Tags Per Feature	3	2	3	
 Least Information Tags on a Feature	2	2	1	
 Most Information Tags on a Feature	4	4	6	
-Average Information Tags Per Feature	3.1	2.875	3.142857142857143	
-Features with Names	9	7	11	
+Average Information Tags Per Feature	3.1	2.875	3.153846153846154	
+Features with Names	9	7	10	
 Bridges	0	0	0	
 Tunnels	0	0	0	
 One-Way Streets	0	0	0	
@@ -30,12 +36,12 @@ Buildings With Level Info	0	0	0
 Least Levels in a Building	0	0	0	
 Most Levels in a Building	0	0	0	
 Average Levels Per Building	0	0	0	
-Non-Building Areas	0	0	2	
+Non-Building Areas	0	0	0	
 Features with Addresses	0	0	0	
 Total Addresses	0	0	0	
 Features with Phone Numbers	0	0	0	
 Total Phone Numbers	0	0	0	
-Total Features	10	8	14	
+Total Features	10	8	13	
 Total Conflatable Features	10	8	0	
 Percentage of Total Features Conflatable	100	100	0	
 Untagged Features	0	0	0	
@@ -43,13 +49,13 @@ Total Unconflatable Features	0	0	0
 Percentage of Total Features Unconflatable	0	0	0	
 Match Creators	1	1	1	
 Features Conflatable by: hoot::BuildingMatchCreator	10	8	0	
-Total Conflated Features	0	0	5	
-Percentage of Total Features Conflated	0	0	35.71428571428572	
+Total Conflated Features	0	0	4	
+Percentage of Total Features Conflated	0	0	30.76923076923077	
 Total Features Marked for Review	0	0	0	
 Percentage of Total Features Marked for Review	0	0	0	
 Total Reviews to be Made	0	0	0	
 Total Unmatched Features	10	8	9	
-Percentage of Total Features Unmatched	100	100	64.28571428571429	
+Percentage of Total Features Unmatched	100	100	69.23076923076923	
 POIs	0	0	0	
 Conflatable POIs	0	0	0	
 Conflated POIs	0	0	0	
@@ -96,25 +102,25 @@ Unmatched Polygon Conflatable POIs	0	0	0
 Percentage of Polygon Conflatable POIs Conflated	0	0	0	
 Percentage of Polygon Conflatable POIs Marked for Review	0	0	0	
 Percentage of Unmatched Polygon Conflatable POIs	0	0	0	
-Polygons	10	8	9	
+Polygons	10	8	13	
 Conflatable Polygons	0	0	0	
-Conflated Polygons	0	0	5	
+Conflated Polygons	0	0	4	
 Polygons Marked for Review	0	0	0	
 Polygon Reviews to be Made	0	0	0	
-Unmatched Polygons	10	8	4	
-Percentage of Polygons Conflated	0	0	55.55555555555556	
+Unmatched Polygons	10	8	9	
+Percentage of Polygons Conflated	0	0	30.76923076923077	
 Percentage of Polygons Marked for Review	0	0	0	
-Percentage of Unmatched Polygons	100	100	44.44444444444444	
-Areas	0	0	2	
+Percentage of Unmatched Polygons	100	100	69.23076923076923	
+Areas	0	0	0	
 Conflatable Areas	0	0	0	
 Conflated Areas	0	0	0	
 Areas Marked for Review	0	0	0	
 Area Reviews to be Made	0	0	0	
-Unmatched Areas	0	0	2	
+Unmatched Areas	0	0	0	
 Meters Squared of Areas Processed by Conflation	0	0	0	
 Percentage of Areas Conflated	0	0	0	
 Percentage of Areas Marked for Review	0	0	0	
-Percentage of Unmatched Areas	0	0	100	
+Percentage of Unmatched Areas	0	0	0	
 Railways	0	0	0	
 Conflatable Railways	0	0	0	
 Conflated Railways	0	0	0	
@@ -135,13 +141,32 @@ Meters of Power Line Processed by Conflation	0	0	0
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
-Translated Populated Tags	70	56	82	
-Difference Between Total Features in Output and Total Features in Inputs			-4	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			-22.22222222222222	
-Calculate Stats for Input 1 Time (sec)				4.639615058898926
-Calculate Stats for Input 2 Time (sec)				0.4895510673522949
-Apply Pre-Conflate Ops Time (sec)				0.007011890411376953
-Apply Post-Conflate Ops Time (sec)				0.002753019332885742
-Calculate Stats for Output Time (sec)				0.4984030723571777
+Points	0	0	0	
+Conflatable Points	0	0	0	
+Conflated Points	0	0	0	
+Points Marked for Review	0	0	0	
+Point Reviews to be Made	0	0	0	
+Unmatched Points	0	0	0	
+Percentage of Points Conflated	0	0	0	
+Percentage of Points Marked for Review	0	0	0	
+Percentage of Unmatched Points	0	0	0	
+Lines	0	0	0	
+Conflatable Lines	0	0	0	
+Conflated Lines	0	0	0	
+Lines Marked for Review	0	0	0	
+Line Reviews to be Made	0	0	0	
+Unmatched Lines	0	0	0	
+Meters of Line Processed by Conflation	0	0	0	
+Percentage of Lines Conflated	0	0	0	
+Percentage of Lines Marked for Review	0	0	0	
+Percentage of Unmatched Lines	0	0	0	
+Translated Populated Tags	70	55	86	
+Difference Between Total Features in Output and Total Features in Inputs			-5	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			-27.77777777777778	
+Calculate Stats for Input 1 Time (sec)				7.815744876861572
+Calculate Stats for Input 2 Time (sec)				0.6244120597839355
+Apply Pre-Conflate Ops Time (sec)				0.007441997528076172
+Apply Post-Conflate Ops Time (sec)				0.002859830856323242
+Calculate Stats for Output Time (sec)				0.5815749168395996
 
-20:01:02.285 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed for reference: ...st-files/ToyBuildingsTestA.osm and secondary: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm
+21:08:21.990 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:09 for reference map: ...st-files/ToyBuildingsTestA.osm and secondary map: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm

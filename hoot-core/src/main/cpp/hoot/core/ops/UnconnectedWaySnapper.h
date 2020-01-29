@@ -55,11 +55,19 @@ namespace hoot
  *
  * *Possible* future enhancements:
  *
- * - If the ways are very parallel, snapping them may not make sense.  I've only seen bad snapped
- * roads like this in cropped data so far so may not end up being relevant.
+ * - If a way is snapped to another way and the ways end up being parallel and overlap, snapping
+ * them may not make sense.  I've seen bad snaps like that in a couple of datasets so far. This may
+ * not be an easy change to make, since the snapped node in question may belong to multiple ways.
+ * One way to go about it could be to use CopyMapSubsetOp to make a temp copy of the snap and snap
+ * to ways, perform the snap, do the parallel/overlap checks, and back out of the actual snap if
+ * needed.
  * - If there ends up being a way node fairly close to the selected snap point on the way and that
  * way node was skipped over due to being outside of the way snap threshold, it still might make
  * sense to snap to it instead.  Have only seen one instance of this so far...
+ *
+ * TODO: This class doesn't pay attention to the direction of the ways being snapped. Not sure
+ * yet if/whether that can be addressed or not. Technically, the way joiner (I think) run later on
+ * could fix the problem.
  */
 class UnconnectedWaySnapper : public OsmMapOperation, public OperationStatusInfo,
   public Configurable
@@ -110,8 +118,9 @@ public:
   void setWayToSnapToCriterionClassName(const QString& name);
   void setWayToSnapCriterionClassName(const QString& name);
   void setWayNodeToSnapToCriterionClassName(const QString& name);
-  void setSnapWayStatus(const Status& status) { _snapWayStatus = status; }
-  void setSnapToWayStatus(const Status& status) { _snapToWayStatus = status; }
+  void setSnapWayStatuses(const QStringList& statuses);
+  void setSnapToWayStatuses(const QStringList& statuses);
+  void setMarkSnappedWays(bool mark) { _markSnappedWays = mark; }
 
   /**
    * @brief snapClosestEndpointToWay Finds the closest endpont on 'disconnected' and snaps it to
@@ -121,15 +130,19 @@ public:
    * @param connectTo Way to connect the disconnected way to
    * @returns True if the ways were successfully snapped together
    */
-  static bool snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected, const WayPtr& connectTo);
+  static bool snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected,
+                                       const WayPtr& connectTo);
+
+protected:
+
+  // if true, will attempt to snap nodes to existing way nodes instead of adding them to the way as
+  // a new way node
+  bool _snapToExistingWayNodes;
 
 private:
 
   friend class UnconnectedWaySnapperTest;
 
-  // if true, will attempt to snap nodes to existing way nodes instead of adding them to the way as
-  // a new way node
-  bool _snapToExistingWayNodes;
   // furthest away a way node can be from a unconnected node for us to consider snapping to it
   double _maxNodeReuseDistance;
   // furthest away a way can be from a unconnected node for us to consider snapping to it
@@ -139,8 +152,10 @@ private:
   // adds the CE of each individual way node snap candidate to the nearby feature search radius
   bool _addCeToSearchDistance;
 
-  // allow for optionally tagging the snapped node; useful for debugging
+  // allow for optionally tagging snapped nodes; useful for debugging
   bool _markSnappedNodes;
+  // allow for optionally tagging snapped ways; useful for debugging
+  bool _markSnappedWays;
 
   // the feature criterion to be used for way snap target candidates
   QString _wayToSnapToCriterionClassName;
@@ -148,10 +163,10 @@ private:
   QString _wayToSnapCriterionClassName;
   // the feature criterion to be used for way snap target candidates
   QString _wayNodeToSnapToCriterionClassName;
-  // the status criterion to be used for the snap source way
-  Status _snapWayStatus;
-  // the status criterion to be used for the snap target way or way node
-  Status _snapToWayStatus;
+  // the status criteria to be used for the snap source way
+  QStringList _snapWayStatuses;
+  // the status criteria to be used for the snap target way or way node
+  QStringList _snapToWayStatuses;
 
   // feature indexes used for way nodes being snapped to
   std::shared_ptr<Tgs::HilbertRTree> _snapToWayNodeIndex;
@@ -165,6 +180,7 @@ private:
   QList<long> _snappedWayNodeIds;
   long _numSnappedToWays;
   long _numSnappedToWayNodes;
+  WayPtr _snappedToWay;
 
   int _taskStatusUpdateInterval;
   OsmMapPtr _map;
@@ -184,11 +200,11 @@ private:
    * Creates the criterion used to determine via filtering which features we want to snap or snap to
    *
    * @param criterionClassName the name of a hoot ElementCriterion class
-   * @param status a hoot status; either Unknown1 or Unknown2
+   * @param statuses one or more hoot status strings
    * @return an element criterion
    */
   ElementCriterionPtr _createFeatureCriterion(const QString& criterionClassName,
-                                              const Status& status);
+                                              const QStringList& statuses);
   /*
    * Creates an index needed when searching for features to snap to
    *
@@ -219,8 +235,8 @@ private:
    * @param elementType the element type of the feature being snapped to; either Way or Node
    * @return a collection of element IDs
    */
-  std::set<ElementId> _getNearbyFeaturesToSnapTo(const ConstNodePtr& node,
-                                                 const ElementType& elementType) const;
+  QList<ElementId> _getNearbyFeaturesToSnapTo(const ConstNodePtr& node,
+                                              const ElementType& elementType) const;
   /*
    * Determines where in a way to snap an unconnected end node
    *
@@ -247,7 +263,8 @@ private:
   bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap);
 
   /**
-   * @brief _snapUnconnectedNodeToWay Snap a particular node into a way at its closest intersecting point
+   * @brief _snapUnconnectedNodeToWay Snap a particular node into a way at its closest intersecting
+   * point
    * @param nodeToSnap Node to snap/add into the way
    * @param wayToSnapTo Way to connect/add the node into
    * @return True if successful
@@ -262,6 +279,11 @@ private:
    * @return True if successful
    */
   bool _snapClosestEndpointToWay(const WayPtr& disconnected, const WayPtr& connectTo);
+
+  /*
+   * @see WayJoinerAdvanced
+   */
+  long _getPid(const ConstWayPtr& way) const;
 };
 
 }

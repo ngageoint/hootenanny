@@ -45,6 +45,7 @@ void WayJoinerOp::setConfiguration(const Settings& conf)
 {
   ConfigOptions options(conf);
   _wayJoiner.reset(Factory::getInstance().constructObject<WayJoiner>(options.getWayJoiner()));
+  _wayJoiner->setLeavePid(options.getWayJoinerLeaveParentId());
 }
 
 void WayJoinerOp::apply(OsmMapPtr& map)

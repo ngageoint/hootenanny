@@ -91,8 +91,10 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   // extract all the sublines into ways.
   for (size_t i = 0; i < string.getSublines().size(); i++)
   {
-    LOG_VART(string.getSublines()[i]);
-    WayPtr w = string.getSublines()[i].toWay(map, nf);
+    const WaySubline& subline = string.getSublines()[i];
+    LOG_VART(subline);
+    WayPtr w = subline.toWay(map, nf);
+    w->setPid(subline.getElementId().getId());
     LOG_VART(w->getElementId());
     if (reverse[i])
     {

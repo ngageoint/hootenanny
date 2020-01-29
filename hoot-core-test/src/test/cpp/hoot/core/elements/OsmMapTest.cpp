@@ -46,6 +46,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
+#include <hoot/core/io/OsmJsonReader.h>
 
 // Qt
 #include <QTime>
@@ -72,6 +73,12 @@ class OsmMapTest : public HootTestFixture
   CPPUNIT_TEST(runAppendDuplicateNodeTest);
   CPPUNIT_TEST(runAppendDuplicateWayTest);
   CPPUNIT_TEST(runAppendDuplicateRelationTest);
+  CPPUNIT_TEST(runAppendDifferentNodeSameIdTest);
+  CPPUNIT_TEST(runAppendDifferentWaySameIdTest);
+  CPPUNIT_TEST(runAppendDifferentRelationSameIdTest);
+  CPPUNIT_TEST(runAppendDifferentNodeSameIdSkipDupesTest);
+  CPPUNIT_TEST(runAppendDifferentWaySameIdSkipDupesTest);
+  CPPUNIT_TEST(runAppendDifferentRelationSameIdSkipDupesTest);
   CPPUNIT_TEST(runAppendSameMapTest);
   CPPUNIT_TEST(runAppendDifferentCoordinateSystemsTest);
   CPPUNIT_TEST(runRemoveTest);
@@ -83,9 +90,8 @@ class OsmMapTest : public HootTestFixture
 
 public:
 
-  OsmMapTest()
-    : HootTestFixture("test-files/elements/",
-                      "test-output/elements/")
+  OsmMapTest() :
+  HootTestFixture("test-files/elements/OsmMapTest/", "test-output/elements/OsmMapTest/")
   {
     setResetType(ResetBasic);
   }
@@ -191,8 +197,7 @@ public:
 
     OsmXmlWriter writer;
     writer.write(mapA, _outputPath + "OsmMapAppendTest.osm");
-    HOOT_FILE_EQUALS( _inputPath + "OsmMapAppendTest.osm",
-                     _outputPath + "OsmMapAppendTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "OsmMapAppendTest.osm", _outputPath + "OsmMapAppendTest.osm");
   }
 
   void runAppendDuplicateNodeTest()
@@ -208,19 +213,15 @@ public:
     OsmMapPtr mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
 
-    NodePtr duplicateNode(
-      new Node(Status::Unknown1, -1669765, 38.85423271202119, -104.89831096020139, 15.0));
-    mapB->addNode(duplicateNode);
-    QString exceptionMsg;
-    try
-    {
-      mapA->append(mapB);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Map already contains this node"));
+    const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
+
+    // Since the element is an exact duplicate with the same ID, the map will skip appending it.
+    ElementPtr duplicateNode(mapA->getNode(-1669765)->clone());
+    mapB->addElement(duplicateNode);
+
+    mapA->append(mapB);
+    CPPUNIT_ASSERT_EQUAL(1, mapA->numNodesSkippedForAppending());
+    CPPUNIT_ASSERT_EQUAL(sizeMapAPlusMapBBefore, mapA->getElementCount());
   }
 
   void runAppendDuplicateWayTest()
@@ -236,30 +237,15 @@ public:
     OsmMapPtr mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
 
-    //the duplicated way only needs to have the same ID...the rest doesn't matter
-    vector<long> nodeIds;
-    NodePtr node1(
-      new Node(Status::Unknown1, -1, 38.85423271202119, -104.89831096020139, 15.0));
-    nodeIds.push_back(node1->getId());
-    mapB->addNode(node1);
-    NodePtr node2(
-      new Node(Status::Unknown1, -2, 38.85423271202119, -104.89831096020139, 15.0));
-    nodeIds.push_back(node2->getId());
-    mapB->addNode(node2);
-    WayPtr duplicateWay(new Way(Status::Unknown1, -1669801, 15.0));
-    duplicateWay->addNodes(nodeIds);
-    mapB->addWay(duplicateWay);
+    const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
 
-    QString exceptionMsg;
-    try
-    {
-      mapA->append(mapB);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Map already contains this way"));
+    // Since the element is an exact duplicate with the same ID, the map will skip appending it.
+    ElementPtr duplicateWay(mapA->getWay(-1669801)->clone());
+    mapB->addElement(duplicateWay);
+
+    mapA->append(mapB);
+    CPPUNIT_ASSERT_EQUAL(1, mapA->numWaysSkippedForAppending());
+    CPPUNIT_ASSERT_EQUAL(sizeMapAPlusMapBBefore, mapA->getElementCount());
   }
 
   void runAppendDuplicateRelationTest()
@@ -279,12 +265,37 @@ public:
     relation->addElement(
       "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapA->addRelation(relation);
-    RelationPtr duplicatedRelation(new Relation(Status::Unknown1, -1, 15.0));
-    duplicatedRelation->addElement(
-      "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
-    mapB->addRelation(duplicatedRelation);
 
-    QString exceptionMsg;
+    const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
+
+    ElementPtr duplicatedRelation(mapA->getRelation(relation->getId())->clone());
+    mapB->addElement(duplicatedRelation);
+
+    mapA->append(mapB);
+    CPPUNIT_ASSERT_EQUAL(1, mapA->numRelationsSkippedForAppending());
+    CPPUNIT_ASSERT_EQUAL(sizeMapAPlusMapBBefore, mapA->getElementCount());
+  }
+
+  void runAppendDifferentNodeSameIdTest()
+  {
+    OsmXmlReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    OsmMapPtr mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    reader.setDefaultStatus(Status::Unknown2);
+    OsmMapPtr mapB(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", mapB);
+
+    // Since the element is not an exact duplicate and has the same ID, no appending will occur
+    // and an error will be thrown.
+    ElementPtr nearDuplicateNode(mapA->getNode(-1669765)->clone());
+    nearDuplicateNode->getTags().set("runAppendDifferentNodeSameIdTest", true);
+    mapB->addElement(nearDuplicateNode);
+
+    QString exceptionMsg("");
     try
     {
       mapA->append(mapB);
@@ -293,7 +304,157 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Map already contains this relation"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Map already contains"));
+  }
+
+  void runAppendDifferentWaySameIdTest()
+  {
+    OsmXmlReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    OsmMapPtr mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    reader.setDefaultStatus(Status::Unknown2);
+    OsmMapPtr mapB(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", mapB);
+
+    // Since the element is not an exact duplicate and has the same ID, no appending will occur
+    // and an error will be thrown.
+    ElementPtr nearDuplicateWay(mapA->getWay(-1669801)->clone());
+    nearDuplicateWay->getTags().set("runAppendDifferentWaySameIdTest", true);
+    mapB->addElement(nearDuplicateWay);
+
+    QString exceptionMsg("");
+    try
+    {
+      mapA->append(mapB);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Map already contains"));
+  }
+
+  void runAppendDifferentRelationSameIdTest()
+  {
+    OsmXmlReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    OsmMapPtr mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    reader.setDefaultStatus(Status::Unknown2);
+    OsmMapPtr mapB(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", mapB);
+
+    RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
+    relation->addElement(
+      "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
+    mapA->addRelation(relation);
+
+    // Since the element is not an exact duplicate and has the same ID, no appending will occur
+    // and an error will be thrown.
+    ElementPtr nearDuplicateRelation(mapA->getRelation(relation->getId())->clone());
+    nearDuplicateRelation->getTags().set("runAppendDifferentRelationSameIdTest", true);
+    mapB->addElement(nearDuplicateRelation);
+
+    QString exceptionMsg("");
+    try
+    {
+      mapA->append(mapB);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Map already contains"));
+  }
+
+  void runAppendDifferentNodeSameIdSkipDupesTest()
+  {
+    OsmXmlReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    OsmMapPtr mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    reader.setDefaultStatus(Status::Unknown2);
+    OsmMapPtr mapB(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", mapB);
+
+    const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
+
+    // Since the element is not an exact duplicate, has the same ID, and the throwOutDupes option is
+    // enabled, the element will be skipped for appending and no error will be thrown.
+    ElementPtr nearDuplicateNode(mapA->getNode(-1669765)->clone());
+    nearDuplicateNode->getTags().set("runAppendDifferentWaySameIdTest", true);
+    mapB->addElement(nearDuplicateNode);
+
+    mapA->append(mapB, true);
+    CPPUNIT_ASSERT_EQUAL(1, mapA->numNodesSkippedForAppending());
+    CPPUNIT_ASSERT_EQUAL(sizeMapAPlusMapBBefore, mapA->getElementCount());
+  }
+
+  void runAppendDifferentWaySameIdSkipDupesTest()
+  {
+    OsmXmlReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    OsmMapPtr mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    reader.setDefaultStatus(Status::Unknown2);
+    OsmMapPtr mapB(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", mapB);
+
+    const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
+
+    // Since the element is not an exact duplicate, has the same ID, and the throwOutDupes option is
+    // enabled, the element will be skipped for appending and no error will be thrown.
+    ElementPtr nearDuplicateWay(mapA->getWay(-1669801)->clone());
+    nearDuplicateWay->getTags().set("runAppendDifferentWaySameIdTest", true);
+    mapB->addElement(nearDuplicateWay);
+
+    mapA->append(mapB, true);
+    CPPUNIT_ASSERT_EQUAL(1, mapA->numWaysSkippedForAppending());
+    CPPUNIT_ASSERT_EQUAL(sizeMapAPlusMapBBefore, mapA->getElementCount());
+  }
+
+  void runAppendDifferentRelationSameIdSkipDupesTest()
+  {
+    OsmXmlReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    OsmMapPtr mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    reader.setDefaultStatus(Status::Unknown2);
+    OsmMapPtr mapB(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", mapB);
+
+    RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
+    relation->addElement(
+      "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
+    mapA->addRelation(relation);
+
+    const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
+
+    // Since the element is not an exact duplicate, has the same ID, and the throwOutDupes option is
+    // enabled, the element will be skipped for appending and no error will be thrown.
+    ElementPtr nearDuplicateRelation(mapA->getRelation(relation->getId())->clone());
+    nearDuplicateRelation->getTags().set("runAppendDifferentRelationSameIdTest", true);
+    mapB->addElement(nearDuplicateRelation);
+
+    mapA->append(mapB, true);
+    CPPUNIT_ASSERT_EQUAL(1, mapA->numRelationsSkippedForAppending());
+    CPPUNIT_ASSERT_EQUAL(sizeMapAPlusMapBBefore, mapA->getElementCount());
   }
 
   void runAppendSameMapTest()
@@ -305,7 +466,7 @@ public:
     OsmMapPtr mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
 
-    const char* exceptionMsg = "<wrong>";
+    QString exceptionMsg = "<wrong>";
     try
     {
       mapA->append(mapA);
@@ -486,17 +647,14 @@ public:
 
     map->replace(w1, newWays);
 
-    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
-      "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
-      "{\"type\":\"way\",\"ref\":2,\"role\":\"bar\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"bar\"},\n"
-      "{\"type\":\"way\",\"ref\":2,\"role\":\"lucky\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
-      "}\n",
-      OsmJsonWriter().toString(map));
+    const QString testFileName = "runReplaceListTest1.json";
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
   /**
@@ -520,12 +678,14 @@ public:
 
     map->replace(w1, newNodes);
 
-    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"node\",\"id\":3,\"lat\":0,\"lon\":0},\n"
-      "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0},\n"
-      "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0}]\n"
-      "}\n",
-      OsmJsonWriter().toString(map));
+    const QString testFileName = "runReplaceListTest2.json";
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
   /**
@@ -563,10 +723,14 @@ public:
 
     map->replace(n1, newNode);
 
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":1,\"nodes\":[2],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[2],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
       "}\n",
-      OsmJsonWriter().toString(map));
+      actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 
   void runReplaceNodeTest()
@@ -577,42 +741,38 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    /*
-    const OsmMap::NodeMap displayNodes = map->getNodes();
-    for ( OsmMap::NodeMap::const_iterator nodeIter = displayNodes.constBegin();
-          nodeIter != displayNodes.constEnd(); ++nodeIter )
-    {
-      const ConstNodePtr n = nodeIter.value();
-      //LOG_DEBUG(n->toString());
-      //LOG_WARN("Test map has node " << n->getId());
-    }
-    */
-
     // Sample data does not have any relations, have to add some with nodes in them
     RelationPtr relations[5] =
     {
-      RelationPtr( new Relation(Status::Unknown1, 100, 3.0, "relationtype0") ),
-      RelationPtr( new Relation(Status::Unknown1, 101, 4.1, "relationtype1") ),
-      RelationPtr( new Relation(Status::Unknown1, 102, 5.2, "relationtype2") ),
-      RelationPtr( new Relation(Status::Unknown1, 103, 6.3, "relationtype3") ),
-      RelationPtr( new Relation(Status::Unknown1, 104, 7.4, "relationtype4") ),
+      RelationPtr(new Relation(Status::Unknown1, 100, 3.0, "relationtype0")),
+      RelationPtr(new Relation(Status::Unknown1, 101, 4.1, "relationtype1")),
+      RelationPtr(new Relation(Status::Unknown1, 102, 5.2, "relationtype2")),
+      RelationPtr(new Relation(Status::Unknown1, 103, 6.3, "relationtype3")),
+      RelationPtr(new Relation(Status::Unknown1, 104, 7.4, "relationtype4")),
     };
 
     // Add relations to the map
-    for ( int i = 0; i < 5; i++ )
+    for (int i = 0; i < 5; i++)
     {
       relations[i]->addElement("correlated_streetlight", ElementId::node(-10 - i));
       relations[i]->addElement("correlated_streetlight", ElementId::node(-11 - i));
-
-      // LOG_DEBUG(relations[i]->toString());
-
+      LOG_TRACE(relations[i]->toString());
       map->addRelation(relations[i]);
     }
 
-    // Replace selected nodes
-    for ( int i = -2; i > -22; i -= 2 )
+    WayMap waysBeforeReplacement = map->getWays();
+    LOG_TRACE("Ways before replacement:");
+    for (WayMap::const_iterator iterator = waysBeforeReplacement.begin();
+         iterator != waysBeforeReplacement.end(); ++iterator)
     {
-      map->replaceNode( i, -10 + i);
+      LOG_VART(iterator->second->getNodeIds());
+    }
+
+    // Replace selected nodes
+    for (int i = -2; i > -22; i -= 2)
+    {
+      LOG_TRACE("Replacing node: " << i << " with: " << (-10 + i) << "...");
+      map->replaceNode(i, -10 + i);
     }
 
     // Original data had nodes -1 through -36.  Make sure that even-numbered nodes -2 through
@@ -620,33 +780,32 @@ public:
 
     const NodeMap nodes = map->getNodes();
     CPPUNIT_ASSERT_EQUAL(26, (int)nodes.size());
-    for ( NodeMap::const_iterator nodeIter = nodes.begin();
-          nodeIter != nodes.end(); ++nodeIter )
+    for (NodeMap::const_iterator nodeIter = nodes.begin(); nodeIter != nodes.end(); ++nodeIter)
     {
       const ConstNodePtr n = nodeIter->second;
-      //LOG_DEBUG("Node: " << n->getId());
-      CPPUNIT_ASSERT( (n->getId() >= -36) && (n->getId() <= -1) );
+      LOG_TRACE("Node: " << n->getId());
+      CPPUNIT_ASSERT((n->getId() >= -36) && (n->getId() <= -1));
 
       // If it's in the range where nodes were replaced, make sure only ones left are odd IDs
-      if ( n->getId() >= -21 )
+      if (n->getId() >= -21)
       {
-        //LOG_DEBUG("Even test on negative number: " << (n->getId() % 2) );
-        CPPUNIT_ASSERT( (n->getId() % 2) == -1 );
+        LOG_TRACE("Even test on negative number: " << (n->getId() % 2) );
+        CPPUNIT_ASSERT((n->getId() % 2) == -1);
       }
     }
 
     // Make sure replacement did correct thing with ways
     WayMap ways = map->getWays();
-    CPPUNIT_ASSERT( 4 == ways.size() );
+    CPPUNIT_ASSERT(4 == ways.size());
 
     int i = 1;
-    for ( WayMap::const_iterator iterator = ways.begin(); iterator != ways.end(); ++iterator )
+    for (WayMap::const_iterator iterator = ways.begin(); iterator != ways.end(); ++iterator)
     {
       WayPtr way = iterator->second;
-      //LOG_DEBUG(way->toString());
+      LOG_TRACE(way->toString());
       std::vector<long> nodeIds = way->getNodeIds();
-      CPPUNIT_ASSERT( (-5 + i) == way->getId() );
-      if ( i == 1 )
+      CPPUNIT_ASSERT((-5 + i) == way->getId());
+      if (i == 1)
       {
         const size_t correctSize = 4;
         CPPUNIT_ASSERT(nodeIds.size() == correctSize);
@@ -654,28 +813,30 @@ public:
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
         CPPUNIT_ASSERT(correctIdVector == nodeIds);
       }
-      else if ( i == 2 )
+      else if (i == 2)
       {
         const size_t correctSize = 30;
         CPPUNIT_ASSERT( nodeIds.size() == correctSize );
+        // really there shouldn't be duplicated way nodes in the way; see comments in
+        // Way::replaceNode
         long correctIds[correctSize] = { -3, -24, -5, -26, -7, -32, -31, -30, -36, -29, -28, -27, -26,
-                                -25, -24, -23, -22, -21, -30, -19, -28, -17, -26, -15, -24,
-                                -13, -22, -11, -30, -9 };
+                                         -25, -24, -23, -22, -21, -30, -19, -28, -17, -26, -15, -24,
+                                         -13, -22, -11, -30, -9 };
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
         CPPUNIT_ASSERT(correctIdVector == nodeIds);
       }
-      else if ( i == 3 )
+      else if (i == 3)
       {
         const size_t correctSize = 3;
-        CPPUNIT_ASSERT( nodeIds.size() == correctSize );
+        CPPUNIT_ASSERT(nodeIds.size() == correctSize);
         long correctIds[correctSize] = { -33, -28, -7 };
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
         CPPUNIT_ASSERT(correctIdVector == nodeIds);
       }
-      else if (i == 4 )
+      else if (i == 4)
       {
         const size_t correctSize = 3;
-        CPPUNIT_ASSERT( nodeIds.size() == correctSize );
+        CPPUNIT_ASSERT(nodeIds.size() == correctSize);
         long correctIds[correctSize] = { -32, -22, -1 };
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
         CPPUNIT_ASSERT(correctIdVector == nodeIds);
@@ -728,7 +889,6 @@ public:
         CPPUNIT_ASSERT(entries[0].getElementId() == ElementId::node(-24));
         CPPUNIT_ASSERT(entries[1].getElementId() == ElementId::node(-15));
         break;
-
       }
 
       i++;
@@ -737,6 +897,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmMapTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmMapTest, "current");
 
 }

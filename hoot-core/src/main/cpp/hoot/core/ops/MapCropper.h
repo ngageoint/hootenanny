@@ -36,9 +36,11 @@
 // Hoot
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/io/Serializable.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -63,11 +65,13 @@ class MapCropper : public OsmMapOperation, public Serializable, public Boundable
 {
 public:
 
+  static int logWarnCount;
+
   static std::string className() { return "hoot::MapCropper"; }
 
   MapCropper();
   MapCropper(const geos::geom::Envelope& envelope);
-  MapCropper(const std::shared_ptr<const geos::geom::Geometry>& g, bool invert);
+  MapCropper(const std::shared_ptr<const geos::geom::Geometry>& g);
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
@@ -78,10 +82,10 @@ public:
   virtual void readObject(QDataStream& is) override;
 
   /**
-   * Sets the bounds on the nodes that will be removed. This is only useful in fourpass.
-   * This value will not be serialized.
+   * Sets the bounds on the nodes that will be removed.
    */
-  virtual void setBounds(const geos::geom::Envelope& bounds) override { _nodeBounds = bounds; }
+  virtual void setBounds(const geos::geom::Envelope& bounds) override;
+  virtual void setBounds(const std::shared_ptr<const geos::geom::Geometry>& g);
 
   virtual void writeObject(QDataStream& os) const override;
 
@@ -91,13 +95,20 @@ public:
   { return "Cropping map..."; }
 
   virtual QString getCompletedStatusMessage() const override
-  { return "Cropped " + QString::number(_numAffected) + " elements"; }
+  {
+    return
+      "Cropped " + StringUtils::formatLargeNumber(_numAffected) + " / " +
+      StringUtils::formatLargeNumber(_numProcessed) + " elements"; }
 
   void setInvert(bool invert);
   void setKeepEntireFeaturesCrossingBounds(bool keep);
   void setKeepOnlyFeaturesInsideBounds(bool keep);
+  void setInclusionCriterion(const ElementCriterionPtr& crit) { _inclusionCrit = crit; }
+  void setRemoveSuperflousFeatures(bool remove) { _removeSuperfluousFeatures = remove; }
 
 private:
+
+  friend class MapCropperTest;
 
   geos::geom::Envelope _envelope;
   std::shared_ptr<const geos::geom::Geometry> _envelopeG;
@@ -108,6 +119,12 @@ private:
   // If true, will only keep features falling completely inside the specified bounds. This overrides
   // _keepEntireFeaturesCrossingBounds and sets it to false;
   bool _keepOnlyFeaturesInsideBounds;
+  // Any way meeting this criterion and all of its way nodes will not be cropped out of the map
+  ElementCriterionPtr _inclusionCrit;
+  // tracks all ways satisfying _inclusionCrit
+  std::set<long> _explicitlyIncludedWayIds;
+  // removes useful features created after cropping
+  bool _removeSuperfluousFeatures;
 
   int _statusUpdateInterval;
 
@@ -116,35 +133,21 @@ private:
   int _numWaysCrossingThreshold;
   int _numCrossingWaysKept;
   int _numCrossingWaysRemoved;
+  int _numNodesRemoved;
 
   void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);
 
   /**
-   * Finds the node with coordinate c. Throws an exception if multiple nodes are found with the
-   * same coordinate. If no node is found then numeric_limits<long>::max() is returned.
-   */
-  long _findNodeId(const std::shared_ptr<const OsmMap>& map, const std::shared_ptr<const Way>& w, const geos::geom::Coordinate& c);
-
-  /**
-   * Returns true if the specified envelope is wholly inside the region that will be kept. If
-   * it is not known exactly then false will be returned.
-   *
-   * The operation is very quick.
+   * Returns true if the specified envelope is wholly inside the region that will be kept.
    */
   bool _isWhollyInside(const geos::geom::Envelope& e);
+  bool _isWhollyInside(const geos::geom::Geometry& e);
 
   /**
-   * Returns true if the specified envelope is wholly outside the region that will be kept. If
-   * it is not known exactly then false will be returned.
-   *
-   * The operation is very quick.
+   * Returns true if the specified envelope is wholly outside the region that will be kept.
    */
   bool _isWhollyOutside(const geos::geom::Envelope& e);
-
-  std::shared_ptr<Way> _reintroduceWay(std::shared_ptr<OsmMap> map, std::shared_ptr<const Way> w,
-    const geos::geom::LineString* ls);
-
-  friend class MapCropperTest;
+  bool _isWhollyOutside(const geos::geom::Geometry& e);
 };
 
 }

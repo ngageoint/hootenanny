@@ -29,7 +29,7 @@ matches.
 
 [[conflation-flow]]
 .Conflation Flow
-[graphviz]
+[graphviz, images/__ConflationFlow.png]
 ---------------------------------------------------------------------
 digraph G
 {
@@ -214,14 +214,14 @@ interfaces that may be exposed.
 * Average line strings - Average two line strings together.
 
 Example uses of these methods can be found in the hoot source code under
-`rules/LineStringGeneric.js`.
+`rules/Line.js`.
 
 === Generic Line Conflation Test
 
 The various test configuration are described in the sections below. All of these
 tests compare a generic line conflation technique against the tuned Random
 Forest Model. The generic technique is in the hoot distributable as
-`rules/LineStringGeneric.js`.
+`rules/Line.js`.
 
 NOTE: A compromise was struck on these tests between time spent and
 thoroughness. These tests give a general impression of the performance
@@ -235,7 +235,7 @@ performance. The `perty-test` command is used with the following configuration:
 
 -----
 {
-  "match.creators" : "hoot::ScriptMatchCreator,LineStringGeneric.js",
+  "match.creators" : "hoot::ScriptMatchCreator,Line.js",
   "merger.creators" : "hoot::ScriptMergerCreator",
   "uuid.helper.repeatable": "true",
   "perty.seed" : 0,

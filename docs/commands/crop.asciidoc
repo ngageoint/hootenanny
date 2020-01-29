@@ -3,24 +3,28 @@
 
 === Description
 
-The +crop+ command crops a map to the given bounds. Individual features on the border are modified to make sure nothing
-is outside the given bounds.
+The +crop+ command crops a map to the given bounds. 
 
-* +input+  - The input OSM data path.
-* +output+ - The output OSM data path.
-* +bounds+ - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
+The default cropping behavior is that individual features on the border are modified to make sure nothing is outside the given bounds. This
+behavior may be customized with the `crop.*` configuration options.
+
+* +input+          - The input data path; may be any supported input format (e.g. OSM file).
+* +output+         - The output data path; may be any supported output format (e.g. OSM file).
+* +bounds+         - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
+* +--write-bounds+ - Optionally outputs a file containing the input bounds. The location of the file is controlled via the 
+                     `bounds.output.file` configuration option.
 
 === Usage
 
 --------------------------------------
-crop (input.osm) (output.osm) (bounds)
+crop (input.osm) (output.osm) (bounds) [--write-bounds]
 --------------------------------------
 
 === Configuration Options
 
-The configuration options `crop.*` control the behavior of map cropping. See their descriptions for more detail.
+The configuration options `crop.*` control the behavior of map cropping. See their descriptions in the Hootenanny User Guide for more detail.
 
-==== Examples
+=== Examples
 
 --------------------------------------
 # regular crop
@@ -35,3 +39,7 @@ hoot crop -D crop.keep.only.features.inside.bounds=true data/dc-roads/dcgis-crop
 # reverse the crop; keep only features outside of the bounds
 hoot crop -D crop.invert=true data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031"
 --------------------------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

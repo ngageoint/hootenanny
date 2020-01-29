@@ -158,7 +158,7 @@ bool OsmApiDb::isSupported(const QUrl& url)
   bool valid = ApiDb::isSupported(url);
 
   //postgresql is deprecated but still supported
-  if (url.scheme() != "osmapidb" && url.scheme() != "postgresql")
+  if (url.scheme() != MetadataTags::OsmApiDbScheme() && url.scheme() != "postgresql")
   {
     valid = false;
   }

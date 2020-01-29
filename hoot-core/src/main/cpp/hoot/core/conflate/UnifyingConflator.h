@@ -22,21 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIFYINGCONFLATOR_H
 #define UNIFYINGCONFLATOR_H
 
 // hoot
+#include <hoot/core/conflate/matching/MatchGraph.h>
+#include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/conflate/matching/MatchGraph.h>
-#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/util/ProgressReporter.h>
+#include <hoot/core/util/Settings.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -51,14 +52,13 @@ class Match;
 class MatchClassification;
 class MatchFactory;
 class MatchThreshold;
-class Merger;
 class MergerFactory;
 class ElementId;
 
 /**
- * A different form of conflation from the standard greedy conflation.
- *
- * This is named Unifying because it unifies the building conflation and road conflation approaches.
+ * A different conflation algorithm compared to the original greedy conflation alg. This is named
+ * Unifying because it unifies different feature type conflation approaches (building, road, etc.)
+ * that were originally separated from each other.
  *
  * Re-entrant but not thread safe.
  *
@@ -67,7 +67,7 @@ class ElementId;
  * works fine for now.
  */
 class UnifyingConflator : public OsmMapOperation, public Serializable, public Boundable,
-    public Configurable, public ProgressReporter
+  public Configurable, public ProgressReporter
 {
 public:
 
@@ -82,30 +82,30 @@ public:
    * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
    * map is not reprojected back to the original projection when conflation is complete.
    */
-  virtual void apply(OsmMapPtr& map);
+  virtual void apply(OsmMapPtr& map) override;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual std::string getClassName() const override { return className(); }
 
   QList<SingleStat> getStats() const { return _stats; }
 
-  virtual void readObject(QDataStream& /*is*/) {}
+  virtual void readObject(QDataStream& /*is*/) override {}
 
-  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
+  virtual void setBounds(const geos::geom::Envelope& bounds) override { _bounds = bounds; }
 
-  virtual void setConfiguration(const Settings &conf);
+  virtual void setConfiguration(const Settings &conf) override;
 
   /**
    * Set the factory to use when creating mergers. This method is likely only useful when testing.
    */
   void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
 
-  virtual void writeObject(QDataStream& /*os*/) const {}
+  virtual void writeObject(QDataStream& /*os*/) const override {}
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
-  virtual void setProgress(Progress progress) { _progress = progress; }
-  virtual unsigned int getNumSteps() const { return 3; }
+  virtual void setProgress(Progress progress) override { _progress = progress; }
+  virtual unsigned int getNumSteps() const override { return 3; }
 
 private:
 
@@ -113,26 +113,16 @@ private:
   const MatchFactory& _matchFactory;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   std::shared_ptr<MergerFactory> _mergerFactory;
-  Settings _settings;
-  HashMap<ElementId, std::vector<Merger*>> _e2m;
-  std::vector<const Match*> _matches;
-  std::vector<Merger*> _mergers;
+  Settings _settings;   // Why is this needed?
+  HashMap<ElementId, std::vector<MergerPtr>> _e2m;
+  std::vector<ConstMatchPtr> _matches;
+  std::vector<MergerPtr> _mergers;
   QList<SingleStat> _stats;
   int _taskStatusUpdateInterval;
   Progress _progress;
 
-  void _addReviewTags(const OsmMapPtr &map, const std::vector<const Match *> &matches);
+  void _addReviewTags(const OsmMapPtr &map, const std::vector<ConstMatchPtr> &matches);
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
-
-  template <typename InputCollection>
-  void _deleteAll(InputCollection& ic)
-  {
-    for (typename InputCollection::const_iterator it = ic.begin(); it != ic.end(); ++it)
-    {
-      delete *it;
-    }
-    ic.clear();
-  }
 
   /**
    * Populates the _e2m map with a mapping of ElementIds to their respective Merger objects. This
@@ -144,7 +134,7 @@ private:
    */
   void _mapElementIdsToMergers();
 
-  void _removeWholeGroups(std::vector<const Match *> &matches, MatchSetVector &matchSets,
+  void _removeWholeGroups(std::vector<ConstMatchPtr> &matches, MatchSetVector &matchSets,
     const OsmMapPtr &map);
 
   void _replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced);
@@ -155,10 +145,10 @@ private:
    */
   void _reset();
 
-  void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<const Match *> matches);
+  void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr> matches);
 
-  void _printMatches(std::vector<const Match*> matches);
-  void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
+  void _printMatches(std::vector<ConstMatchPtr> matches);
+  void _printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter);
   QString _matchSetToString(const MatchSet& matchSet) const;
 
   void _updateProgress(const int currentStep, const QString message);

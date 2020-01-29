@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveEmptyAreasVisitor.h"
 
@@ -63,11 +63,16 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
     _ec.reset(new ElementConverter(_map->shared_from_this()));
   }
 
+  LOG_VART(AreaCriterion().isSatisfied(e));
   if (AreaCriterion().isSatisfied(e))
   {
     std::shared_ptr<Geometry> g = _ec->convertToGeometry(e);
-
-    if (g->getArea() == 0.0)
+    LOG_VART(g.get());
+    if (g.get())
+    {
+      LOG_VART(g->getArea());
+    }
+    if (g.get() && g->getArea() == 0.0)
     {
       RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
       _numAffected++;
@@ -79,7 +84,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
   {
     PROGRESS_INFO(
       "\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) <<
-      " elements for empty area removal.");
+      " / " << StringUtils::formatLargeNumber(_map->size()) << " elements for empty area removal.");
   }
 }
 

@@ -37,6 +37,8 @@
 #include <hoot/core/visitors/AddAttributesVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
 
 namespace hoot
 {
@@ -51,6 +53,10 @@ class AddAttributesVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runAddMissingAttributeValueTest);
   CPPUNIT_TEST(runAddEmptyAttributeValueTest);
   CPPUNIT_TEST(runAddInvalidValueTest);
+  CPPUNIT_TEST(runNegatedFilterTest);
+  CPPUNIT_TEST(runMultipleCriteriaTest);
+  // TODO (will need to modify the input file):
+  //CPPUNIT_TEST(runChainCriteriaTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -266,6 +272,51 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid attribute value"));
     attributesToAdd.clear();
     exceptionMsg = "";
+  }
+
+  void runNegatedFilterTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/visitors/RemoveElementsVisitorTest/RemoveElementsVisitorInput.osm");
+
+    QStringList attributesToAdd;
+    attributesToAdd.append("version=1");
+    attributesToAdd.append("timestamp=2016-05-04T22:07:19Z");
+    attributesToAdd.append("changeset=39108451");
+    attributesToAdd.append("uid=550560");
+    attributesToAdd.append("user=Seandebasti");
+    AddAttributesVisitor visitor(attributesToAdd, true);
+    visitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
+    map->visitRw(visitor);
+
+    OsmMapWriterFactory::write(map, _outputPath + "runNegatedFilterTest.osm");
+
+    HOOT_FILE_EQUALS(_inputPath + "runNegatedFilterTest.osm",
+                     _outputPath + "runNegatedFilterTest.osm");
+  }
+
+  void runMultipleCriteriaTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/visitors/RemoveElementsVisitorTest/RemoveElementsVisitorInput.osm");
+
+    QStringList attributesToAdd;
+    attributesToAdd.append("version=1");
+    attributesToAdd.append("timestamp=2016-05-04T22:07:19Z");
+    attributesToAdd.append("changeset=39108451");
+    attributesToAdd.append("uid=550560");
+    attributesToAdd.append("user=Seandebasti");
+    AddAttributesVisitor visitor(attributesToAdd);
+    visitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
+    visitor.addCriterion(ElementCriterionPtr(new HighwayCriterion(map)));
+    map->visitRw(visitor);
+
+    OsmMapWriterFactory::write(map, _outputPath + "runMultipleCriteriaTest.osm");
+
+    HOOT_FILE_EQUALS(_inputPath + "runMultipleCriteriaTest.osm",
+                     _outputPath + "runMultipleCriteriaTest.osm");
   }
 };
 

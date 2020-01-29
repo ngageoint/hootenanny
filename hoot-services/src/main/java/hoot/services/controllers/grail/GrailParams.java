@@ -27,6 +27,7 @@
 package hoot.services.controllers.grail;
 
 import java.io.File;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -61,8 +62,8 @@ public class GrailParams {
     @JsonProperty("output")
     private String output;
 
-    @JsonProperty("folder")
-    private String folder;
+    @JsonProperty("parentId")
+    private String parentId;
 
     @JsonProperty("pullUrl")
     private String pullUrl;
@@ -73,6 +74,12 @@ public class GrailParams {
     @JsonProperty("maxBBoxSize")
     private Double maxSize;
 
+    @JsonProperty("customQuery")
+    private String customQuery;
+
+    @JsonProperty("ADV_OPTIONS")
+    private Map<String, String> advancedOptions;
+
     private String consumerKey;
 
     private String consumerSecret;
@@ -80,6 +87,60 @@ public class GrailParams {
     private File workDir;
 
     private String conflationType;
+
+    private String comment;
+
+    private String hashtags;
+
+    private String source;
+
+    public GrailParams() {}
+
+    public GrailParams(GrailParams params) {
+        this.bounds = params.getBounds();
+        this.applyTags = params.getApplyTags();
+        this.user = params.getUser();
+        this.input1 = params.getInput1();
+        this.input2 = params.getInput2();
+        this.output = params.getOutput();
+        this.parentId = params.getParentId();
+        this.pullUrl = params.getPullUrl();
+        this.pushUrl = params.getPushUrl();
+        this.maxSize = params.getMaxBBoxSize();
+        this.customQuery = params.getCustomQuery();
+        this.consumerKey = params.getConsumerKey();
+        this.consumerSecret = params.getConsumerSecret();
+        this.workDir = params.getWorkDir();
+        this.conflationType = params.getConflationType();
+        this.comment = params.getComment();
+        this.hashtags = params.getHashtags();
+        this.source = params.getSource();
+        this.advancedOptions = params.getAdvancedOptions();
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getHashtags() {
+        return hashtags;
+    }
+
+    public void setHashtags(String hashtags) {
+        this.hashtags = hashtags;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 
     public String getConflationType() {
         return conflationType;
@@ -145,12 +206,12 @@ public class GrailParams {
         this.output = output;
     }
 
-    public String getFolder() {
-        return folder;
+    public String getParentId() {
+        return parentId;
     }
 
-    public void setFolder(String folder) {
-        this.folder = folder;
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
     public String getPushUrl() {
@@ -193,6 +254,22 @@ public class GrailParams {
         return consumerSecret;
     }
 
+    public void setCustomQuery(String customQuery) {
+        this.customQuery = customQuery;
+    }
+
+    public String getCustomQuery() {
+        return customQuery;
+    }
+
+    public Map<String, String> getAdvancedOptions() {
+        return advancedOptions;
+    }
+
+    public void setAdvancedOptions(Map<String, String> advancedOptions) {
+        this.advancedOptions = advancedOptions;
+    }
+
     @Override
     public String toString() {
         return "GrailParams{" +
@@ -201,7 +278,7 @@ public class GrailParams {
                 ", input1='" + input1 + '\'' +
                 ", input2='" + input2 + '\'' +
                 ", output='" + output + '\'' +
-                ", folder='" + folder + '\'' +
+                ", parentId='" + parentId + '\'' +
                 ", pushUrl='" + pushUrl + '\'' +
                 ", pullUrl='" + pullUrl + '\'' +
                 ", maxBBoxSize='" + maxSize + '\'' +

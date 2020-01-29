@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -75,7 +75,10 @@ public:
       "]                                      \n"
       "}                                      \n";
 
-    OsmMapPtr map = OsmJsonReader().loadFromString(testJsonStr);
+    OsmMapPtr map(new OsmMap());
+    OsmJsonReader().loadFromString(testJsonStr, map);
+
+
     map->setProjection(MapProjector::createOrthographic(0, 0));
 
     map->getNode(-1)->setStatus(Status::fromInput(0));
@@ -89,14 +92,14 @@ public:
     // have to do this or getInstance will re-register the default match creators.
     MatchFactory& matchFactory = MatchFactory::getInstance();
     matchFactory.reset();
-    matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
+    matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
 
-    std::shared_ptr<MergerCreator> mergerCreator(
+    MergerCreatorPtr mergerCreator(
       Factory::getInstance().constructObject<MergerCreator>(
         QString("hoot::ScriptMergerCreator")));
     MergerFactory& mergerFactory = MergerFactory::getInstance();
     mergerFactory.reset();
-    mergerFactory.registerCreator(mergerCreator.get());
+    mergerFactory.registerCreator(mergerCreator);
 
     std::shared_ptr<MatchCreator> matchCreator = matchFactory.getCreators()[0];
 

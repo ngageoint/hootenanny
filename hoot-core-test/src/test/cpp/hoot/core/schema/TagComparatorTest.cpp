@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -66,7 +66,6 @@ public:
 
   void averageTest()
   {
-    //Log::getInstance().setLevel(Log::Info);
     TagComparator& uut = TagComparator::getInstance();
     uut.setCaseSensitive(true);
 
@@ -195,8 +194,6 @@ public:
         //LOG_WARN("average: \n" << avg.toString());
         compareTags(expected, avg);
     }
-
-    //Log::getInstance().setLevel(Log::Debug);
   }
 
   void averageCaseSensitiveTest()
@@ -291,7 +288,6 @@ public:
 
   void buildingTest()
   {
-    //Log::getInstance().setLevel(Log::Info);
     TagComparator& uut = TagComparator::getInstance();
     uut.setCaseSensitive(true);
 
@@ -359,7 +355,6 @@ public:
    */
   void compareTest()
   {
-    //Log::getInstance().setLevel(Log::Debug);
     TagComparator& uut = TagComparator::getInstance();
     uut.setCaseSensitive(true);
 
@@ -434,10 +429,6 @@ public:
       //cout << uut.compareTags(t1, t2) << endl;
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.048, uut.compareTags(t1, t2), 0.001);
     }
-
-
-//    Log::getInstance().setLevel(Log::Warn);
-
   }
 
   /**
@@ -497,8 +488,6 @@ public:
    */
   void compareNamesTest()
   {
-    //Log::getInstance().setLevel(Log::Debug);
-
     TagComparator& uut = TagComparator::getInstance();
     uut.setCaseSensitive(true);
 
@@ -536,7 +525,6 @@ public:
 
   void generalizeTest()
   {
-    //Log::getInstance().setLevel(Log::Info);
     TagComparator& uut = TagComparator::getInstance();
     uut.setCaseSensitive(true);
 

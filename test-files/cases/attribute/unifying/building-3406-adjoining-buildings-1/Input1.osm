@@ -1,0 +1,1029 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="10.04559800113" minlon="-69.35742456075" maxlat="10.04770566215" maxlon="-69.3531507097"/>
+    <node visible="true" id="-5839041" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469632214200004" lon="-69.3573138903200004"/>
+    <node visible="true" id="-5839040" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0467859549699998" lon="-69.3572633220699970"/>
+    <node visible="true" id="-5839039" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468012836800007" lon="-69.3572086179800067"/>
+    <node visible="true" id="-5839038" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469785501400004" lon="-69.3572591861999967"/>
+    <node visible="true" id="-5839035" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468541519199999" lon="-69.3571374453999994"/>
+    <node visible="true" id="-5839034" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468174109700001" lon="-69.3571254647499984"/>
+    <node visible="true" id="-5839033" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468700959599992" lon="-69.3570876678000019"/>
+    <node visible="true" id="-5839030" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457006631599999" lon="-69.3548980204799932"/>
+    <node visible="true" id="-5839029" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0455980011299992" lon="-69.3548525170999994"/>
+    <node visible="true" id="-5839026" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459158553600005" lon="-69.3544663993399979"/>
+    <node visible="true" id="-5839023" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457306902500001" lon="-69.3545477527199949"/>
+    <node visible="true" id="-5839022" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458562127499995" lon="-69.3546033885599940"/>
+    <node visible="true" id="-5839021" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457943312900007" lon="-69.3547455198699936"/>
+    <node visible="true" id="-5839020" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457714708600001" lon="-69.3547353873399999"/>
+    <node visible="true" id="-5839019" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0456688088099995" lon="-69.3546898839999955"/>
+    <node visible="true" id="-5839014" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458526232200001" lon="-69.3542676926000041"/>
+    <node visible="true" id="-5839013" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459552853399998" lon="-69.3543131958400068"/>
+    <node visible="true" id="-5839012" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458929949200009" lon="-69.3544562668299989"/>
+    <node visible="true" id="-5839011" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457903328300002" lon="-69.3544107635500069"/>
+    <node visible="true" id="-5839008" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460126628299999" lon="-69.3541814088600006"/>
+    <node visible="true" id="-5839007" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459100006999993" lon="-69.3541359056499971"/>
+    <node visible="true" id="-5839004" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460668342300004" lon="-69.3540569856299953"/>
+    <node visible="true" id="-5839003" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459641720799997" lon="-69.3540114824500051"/>
+    <node visible="true" id="-5839000" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461254267399998" lon="-69.3539224076299945"/>
+    <node visible="true" id="-5838999" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460227645700009" lon="-69.3538769044800034"/>
+    <node visible="true" id="-5838996" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461884766300003" lon="-69.3537775915200001"/>
+    <node visible="true" id="-5838995" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460858144399996" lon="-69.3537320883999939"/>
+    <node visible="true" id="-5838990" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465724838299995" lon="-69.3532993565799956"/>
+    <node visible="true" id="-5838989" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466362233699993" lon="-69.3531507097000031"/>
+    <node visible="true" id="-5838988" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0467954652400007" lon="-69.3532202241499931"/>
+    <node visible="true" id="-5838987" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0467317256699999" lon="-69.3533688710799936"/>
+    <node visible="true" id="-5838986" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466150788699995" lon="-69.3533179507600011"/>
+    <node visible="true" id="-5838983" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465583336800002" lon="-69.3534502859599939"/>
+    <node visible="true" id="-5838982" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466749804499997" lon="-69.3535012063299945"/>
+    <node visible="true" id="-5838979" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464993603899995" lon="-69.3535878171200011"/>
+    <node visible="true" id="-5838978" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466160071400008" lon="-69.3536387375200007"/>
+    <node visible="true" id="-5838975" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464432161200001" lon="-69.3537187505800006"/>
+    <node visible="true" id="-5838974" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465598628499997" lon="-69.3537696710200038"/>
+    <node visible="true" id="-5838971" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463871567900007" lon="-69.3538494857800032"/>
+    <node visible="true" id="-5838970" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465038035000003" lon="-69.3539004062599957"/>
+    <node visible="true" id="-5838967" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464863734299996" lon="-69.3540495565199961"/>
+    <node visible="true" id="-5838966" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463305368500002" lon="-69.3539815281999950"/>
+    <node visible="true" id="-5838965" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464471835399998" lon="-69.3540324487100008"/>
+    <node visible="true" id="-5838962" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462682748999992" lon="-69.3541267280699998"/>
+    <node visible="true" id="-5838961" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464241114499995" lon="-69.3541947564600036"/>
+    <node visible="true" id="-5838958" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462685345900002" lon="-69.3544490718399942"/>
+    <node visible="true" id="-5838955" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462561588299994" lon="-69.3545950330299945"/>
+    <node visible="true" id="-5838954" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460972166100007" lon="-69.3545256487199993"/>
+    <node visible="true" id="-5838953" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462138632099993" lon="-69.3545765693800007"/>
+    <node visible="true" id="-5838950" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463077244600001" lon="-69.3544661796999975"/>
+    <node visible="true" id="-5838949" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461518879699998" lon="-69.3543981512199963"/>
+    <node visible="true" id="-5838948" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462109769300003" lon="-69.3542603513700016"/>
+    <node visible="true" id="-5838947" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463668134499997" lon="-69.3543283797999948"/>
+    <node visible="true" id="-5838944" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461360823600003" lon="-69.3548750593199941"/>
+    <node visible="true" id="-5838943" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460396290999991" lon="-69.3546599467299956"/>
+    <node visible="true" id="-5838942" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461985712900006" lon="-69.3547293310899988"/>
+    <node visible="true" id="-5838939" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459771402100007" lon="-69.3548056749000068"/>
+    <node visible="true" id="-5838938" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460937867600002" lon="-69.3548565956400012"/>
+    <node visible="true" id="-5838935" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459126963800003" lon="-69.3549559618899991"/>
+    <node visible="true" id="-5838934" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460293429200007" lon="-69.3550068826699970"/>
+    <node visible="true" id="-5838931" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458545967199999" lon="-69.3550914537299974"/>
+    <node visible="true" id="-5838930" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459712432299995" lon="-69.3551423745499989"/>
+    <node visible="true" id="-5838925" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461157153999991" lon="-69.3535873319499956"/>
+    <node visible="true" id="-5838924" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461877018100001" lon="-69.3534219895200010"/>
+    <node visible="true" id="-5838923" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463181290199994" lon="-69.3534797988399987"/>
+    <node visible="true" id="-5838922" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462461425799994" lon="-69.3536451413200012"/>
+    <node visible="true" id="-5838921" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461434803700005" lon="-69.3535996382399986"/>
+    <node visible="true" id="-5838918" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457299916600000" lon="-69.3557049854500036"/>
+    <node visible="true" id="-5838917" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0456133452399996" lon="-69.3556540644700021"/>
+    <node visible="true" id="-5838916" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0456807709200007" lon="-69.3554968246399994"/>
+    <node visible="true" id="-5838915" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457974173700002" lon="-69.3555477455699929"/>
+    <node visible="true" id="-5838910" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461546129299997" lon="-69.3560635209900056"/>
+    <node visible="true" id="-5838909" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463889822199999" lon="-69.3561356960599937"/>
+    <node visible="true" id="-5838908" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463201816000005" lon="-69.3563631372000060"/>
+    <node visible="true" id="-5838907" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460858123700003" lon="-69.3562909619899983"/>
+    <node visible="true" id="-5838904" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462419504699998" lon="-69.3566217530199935"/>
+    <node visible="true" id="-5838903" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460075812900005" lon="-69.3565495776399956"/>
+    <node visible="true" id="-5838902" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460463320700004" lon="-69.3564214757499968"/>
+    <node visible="true" id="-5838901" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462807012699997" lon="-69.3564936510399974"/>
+    <node visible="true" id="-5838898" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460218233099994" lon="-69.3566163691500037"/>
+    <node visible="true" id="-5838897" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462312904599997" lon="-69.3566858579700067"/>
+    <node visible="true" id="-5838894" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460598721099998" lon="-69.3572315102999966"/>
+    <node visible="true" id="-5838893" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460428333199996" lon="-69.3572809281599945"/>
+    <node visible="true" id="-5838892" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458137995700003" lon="-69.3572005353500032"/>
+    <node visible="true" id="-5838891" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458655077000003" lon="-69.3570505653499936"/>
+    <node visible="true" id="-5838890" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461301829699998" lon="-69.3571434685299977"/>
+    <node visible="true" id="-5838889" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0460955135799992" lon="-69.3572440207699970"/>
+    <node visible="true" id="-5838886" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461321788400006" lon="-69.3571039976999941"/>
+    <node visible="true" id="-5838885" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458727894699997" lon="-69.3570200054199972"/>
+    <node visible="true" id="-5838884" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459027105099992" lon="-69.3569259350600049"/>
+    <node visible="true" id="-5838883" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461620999000001" lon="-69.3570099272699991"/>
+    <node visible="true" id="-5838880" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462467711199999" lon="-69.3568427718199985"/>
+    <node visible="true" id="-5838879" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462241063200004" lon="-69.3569123247600032"/>
+    <node visible="true" id="-5838878" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458459995100000" lon="-69.3567868910500067"/>
+    <node visible="true" id="-5838877" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458704167599997" lon="-69.3567119602400055"/>
+    <node visible="true" id="-5838876" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459789418399996" lon="-69.3567479624500010"/>
+    <node visible="true" id="-5838875" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0461866564799998" lon="-69.3568228293000004"/>
+    <node visible="true" id="-5838872" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475618199499994" lon="-69.3545205909200035"/>
+    <node visible="true" id="-5838871" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0477056621499994" lon="-69.3545382661099978"/>
+    <node visible="true" id="-5838868" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475579776200004" lon="-69.3547618292400045"/>
+    <node visible="true" id="-5838865" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474739561300002" lon="-69.3549201431700055"/>
+    <node visible="true" id="-5838864" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475379201300008" lon="-69.3549280030800048"/>
+    <node visible="true" id="-5838863" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476568562700006" lon="-69.3549426179900053"/>
+    <node visible="true" id="-5838860" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476769137699993" lon="-69.3547764440900067"/>
+    <node visible="true" id="-5838859" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475330715899993" lon="-69.3547587687999965"/>
+    <node visible="true" id="-5838858" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475499836500006" lon="-69.3546186538900002"/>
+    <node visible="true" id="-5838857" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476938258399997" lon="-69.3546363291199981"/>
+    <node visible="true" id="-5838854" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474571674199993" lon="-69.3550592350100032"/>
+    <node visible="true" id="-5838853" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476400675500006" lon="-69.3550817099099959"/>
+    <node visible="true" id="-5838850" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474512966200002" lon="-69.3559205284900031"/>
+    <node visible="true" id="-5838847" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472854691099993" lon="-69.3557298499000012"/>
+    <node visible="true" id="-5838846" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475199036900005" lon="-69.3558062943900069"/>
+    <node visible="true" id="-5838843" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475426922200004" lon="-69.3556546949899939"/>
+    <node visible="true" id="-5838842" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473315895299997" lon="-69.3555858586699969"/>
+    <node visible="true" id="-5838841" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473874725600005" lon="-69.3554113875700011"/>
+    <node visible="true" id="-5838840" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475748966099996" lon="-69.3554725026699970"/>
+    <node visible="true" id="-5838837" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473525699399993" lon="-69.3560305022599977"/>
+    <node visible="true" id="-5838836" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472458520500005" lon="-69.3558535369899971"/>
+    <node visible="true" id="-5838835" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0475057731199993" lon="-69.3559382922299932"/>
+    <node visible="true" id="-5838834" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474905559100005" lon="-69.3560754968900000"/>
+    <node visible="true" id="-5838831" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471973825400003" lon="-69.3560048617700033"/>
+    <node visible="true" id="-5838830" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473453303299998" lon="-69.3560531047399991"/>
+    <node visible="true" id="-5838827" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471570438000004" lon="-69.3561308015899982"/>
+    <node visible="true" id="-5838826" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473049915699999" lon="-69.3561790446100019"/>
+    <node visible="true" id="-5838823" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471143644600005" lon="-69.3562640486999982"/>
+    <node visible="true" id="-5838822" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472623122100000" lon="-69.3563122917699957"/>
+    <node visible="true" id="-5838819" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471697757600005" lon="-69.3566011946499970"/>
+    <node visible="true" id="-5838818" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470640828200004" lon="-69.3564210303299973"/>
+    <node visible="true" id="-5838817" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472120305499999" lon="-69.3564692734599930"/>
+    <node visible="true" id="-5838814" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470218280600001" lon="-69.3565529514699932"/>
+    <node visible="true" id="-5838813" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471533299200004" lon="-69.3565958319399982"/>
+    <node visible="true" id="-5838810" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469831156799998" lon="-69.3566738129400022"/>
+    <node visible="true" id="-5838809" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471146175299992" lon="-69.3567166934499966"/>
+    <node visible="true" id="-5838806" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468833086499991" lon="-69.3569854134699995"/>
+    <node visible="true" id="-5838805" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469328523900003" lon="-69.3568307365499948"/>
+    <node visible="true" id="-5838804" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470643542199998" lon="-69.3568736171300060"/>
+    <node visible="true" id="-5838799" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0467409149400009" lon="-69.3566043562800019"/>
+    <node visible="true" id="-5838798" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465356441600004" lon="-69.3565443064100009"/>
+    <node visible="true" id="-5838795" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0467780393999995" lon="-69.3564751628599936"/>
+    <node visible="true" id="-5838794" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465727686000008" lon="-69.3564151130599953"/>
+    <node visible="true" id="-5838791" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468195083699996" lon="-69.3563308503100018"/>
+    <node visible="true" id="-5838790" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466142375299992" lon="-69.3562708006000008"/>
+    <node visible="true" id="-5838787" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466961136700004" lon="-69.3559858697600049"/>
+    <node visible="true" id="-5838786" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469013845599999" lon="-69.3560459193199961"/>
+    <node visible="true" id="-5838785" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468537248000001" lon="-69.3562117765000039"/>
+    <node visible="true" id="-5838784" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466484539399996" lon="-69.3561517268500012"/>
+    <node visible="true" id="-5838781" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0466232625200007" lon="-69.3570137861999996"/>
+    <node visible="true" id="-5838780" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464179918299994" lon="-69.3569537360999959"/>
+    <node visible="true" id="-5838779" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0464955239799991" lon="-69.3566839247099978"/>
+    <node visible="true" id="-5838778" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0467007947300004" lon="-69.3567439746600058"/>
+    <node visible="true" id="-5838775" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465558428200001" lon="-69.3570785564500056"/>
+    <node visible="true" id="-5838774" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465427202700006" lon="-69.3571217715000046"/>
+    <node visible="true" id="-5838773" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465877987100001" lon="-69.3571357068200030"/>
+    <node visible="true" id="-5838772" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0465000859900009" lon="-69.3574245607500046"/>
+    <node visible="true" id="-5838771" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0462863315100002" lon="-69.3573584816100066"/>
+    <node visible="true" id="-5838770" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0463871667200006" lon="-69.3570264128200051"/>
+    <node visible="true" id="-5838767" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471751854499995" lon="-69.3573652603400035"/>
+    <node visible="true" id="-5838766" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469867246500009" lon="-69.3573091968400064"/>
+    <node visible="true" id="-5838764" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470644199100008" lon="-69.3570433067900041"/>
+    <node visible="true" id="-5838763" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472528807600003" lon="-69.3570993701499958"/>
+    <node visible="true" id="-5838759" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469839057100003" lon="-69.3571247793699968"/>
+    <node visible="true" id="-5838758" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468333550000004" lon="-69.3570756871600054"/>
+    <node visible="true" id="-5838757" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468642597199995" lon="-69.3569792019199980"/>
+    <node visible="true" id="-5838756" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470148104499994" lon="-69.3570282940900000"/>
+    <node visible="true" id="-5838753" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476050486199995" lon="-69.3553718347099988"/>
+    <node visible="true" id="-5838752" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474221485099999" lon="-69.3553493596500061"/>
+    <node visible="true" id="-5838751" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0474387265300003" lon="-69.3552120143800011"/>
+    <node visible="true" id="-5838750" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0476216266500007" lon="-69.3552344893600008"/>
+    <node visible="true" id="-5838747" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469675051399996" lon="-69.3557947288999941"/>
+    <node visible="true" id="-5838746" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468479915500009" lon="-69.3557552128699939"/>
+    <node visible="true" id="-5838743" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470134777299993" lon="-69.3556531792499982"/>
+    <node visible="true" id="-5838742" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0468939641299997" lon="-69.3556136632700060"/>
+    <node visible="true" id="-5838739" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470577908299994" lon="-69.3555167389500014"/>
+    <node visible="true" id="-5838738" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469382772099998" lon="-69.3554772230099985"/>
+    <node visible="true" id="-5838735" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471025153699998" lon="-69.3553790316500027"/>
+    <node visible="true" id="-5838734" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0469830017300001" lon="-69.3553395157500034"/>
+    <node visible="true" id="-5838731" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471474267899996" lon="-69.3552407486800035"/>
+    <node visible="true" id="-5838730" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470279131300000" lon="-69.3552012328299980"/>
+    <node visible="true" id="-5838727" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471896948400001" lon="-69.3551106045100028"/>
+    <node visible="true" id="-5838726" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0470701811699996" lon="-69.3550710887000008"/>
+    <node visible="true" id="-5838723" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472301425000001" lon="-69.3549860652099994"/>
+    <node visible="true" id="-5838722" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471106288000005" lon="-69.3549465494400010"/>
+    <node visible="true" id="-5838719" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472734203599998" lon="-69.3548528114099980"/>
+    <node visible="true" id="-5838718" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471539066499993" lon="-69.3548132956800032"/>
+    <node visible="true" id="-5838715" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471609703499993" lon="-69.3547082430300037"/>
+    <node visible="true" id="-5838714" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0472522004900000" lon="-69.3544273418300037"/>
+    <node visible="true" id="-5838713" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473961457400005" lon="-69.3544749353799972"/>
+    <node visible="true" id="-5838712" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0473049155500007" lon="-69.3547558366900034"/>
+    <node visible="true" id="-5838711" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0471854018299993" lon="-69.3547163209899935"/>
+    <node visible="true" id="-5838708" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0458542665900001" lon="-69.3554151703799988"/>
+    <node visible="true" id="-5838707" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457376201200006" lon="-69.3553642494899947"/>
+    <node visible="true" id="-5838706" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0457952706399993" lon="-69.3552298054299996"/>
+    <node visible="true" id="-5838705" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0459119171300006" lon="-69.3552807262900046"/>
+    <way visible="true" id="-5839042" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5839038"/>
+        <nd ref="-5839039"/>
+        <nd ref="-5839040"/>
+        <nd ref="-5839041"/>
+        <nd ref="-5839038"/>
+        <tag k="width" v="6.2"/>
+        <tag k="angle" v="164.3"/>
+        <tag k="feature_area" v="127.3"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="20.5"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5839036" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5839033"/>
+        <nd ref="-5838758"/>
+        <nd ref="-5839034"/>
+        <nd ref="-5839035"/>
+        <nd ref="-5839033"/>
+        <tag k="width" v="4.3"/>
+        <tag k="angle" v="252.0"/>
+        <tag k="feature_area" v="24.6"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="5.8"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5839031" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5839020"/>
+        <nd ref="-5839019"/>
+        <nd ref="-5839029"/>
+        <nd ref="-5839030"/>
+        <nd ref="-5839020"/>
+        <tag k="width" v="12.5"/>
+        <tag k="angle" v="246.1"/>
+        <tag k="feature_area" v="242.2"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="19.6"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5839027" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5839023"/>
+        <nd ref="-5839022"/>
+        <nd ref="-5839026"/>
+        <nd ref="-5839011"/>
+        <nd ref="-5839023"/>
+        <tag k="width" v="15.2"/>
+        <tag k="angle" v="246.1"/>
+        <tag k="feature_area" v="249.4"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="16.5"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5839024" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5839019"/>
+        <nd ref="-5839020"/>
+        <nd ref="-5839021"/>
+        <nd ref="-5839022"/>
+        <nd ref="-5839023"/>
+        <nd ref="-5839019"/>
+        <tag k="width" v="15.2"/>
+        <tag k="angle" v="246.1"/>
+        <tag k="feature_area" v="258.8"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="17.1"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5839017" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5839014"/>
+        <nd ref="-5839013"/>
+        <nd ref="-5839008"/>
+        <nd ref="-5839007"/>
+        <nd ref="-5839014"/>
+        <tag k="width" v="12.5"/>
+        <tag k="angle" v="246.1"/>
+        <tag k="feature_area" v="196.3"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="15.9"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5839015" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5839011"/>
+        <nd ref="-5839012"/>
+        <nd ref="-5839013"/>
+        <nd ref="-5839014"/>
+        <nd ref="-5839011"/>
+        <tag k="width" v="12.5"/>
+        <tag k="angle" v="246.1"/>
+        <tag k="feature_area" v="213.1"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="17.2"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5839009" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5839007"/>
+        <nd ref="-5839008"/>
+        <nd ref="-5839004"/>
+        <nd ref="-5839003"/>
+        <nd ref="-5839007"/>
+        <tag k="width" v="12.5"/>
+        <tag k="angle" v="246.1"/>
+        <tag k="feature_area" v="185.3"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="15.0"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5839005" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5839003"/>
+        <nd ref="-5839004"/>
+        <nd ref="-5839000"/>
+        <nd ref="-5838999"/>
+        <nd ref="-5839003"/>
+        <tag k="width" v="12.5"/>
+        <tag k="angle" v="246.1"/>
+        <tag k="feature_area" v="200.4"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="16.2"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5839001" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838999"/>
+        <nd ref="-5839000"/>
+        <nd ref="-5838996"/>
+        <nd ref="-5838995"/>
+        <nd ref="-5838999"/>
+        <tag k="width" v="12.5"/>
+        <tag k="angle" v="246.1"/>
+        <tag k="feature_area" v="215.7"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="17.4"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838997" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838995"/>
+        <nd ref="-5838996"/>
+        <nd ref="-5838922"/>
+        <nd ref="-5838921"/>
+        <nd ref="-5838995"/>
+        <tag k="width" v="12.5"/>
+        <tag k="angle" v="246.1"/>
+        <tag k="feature_area" v="197.2"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="15.9"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838993" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838987"/>
+        <nd ref="-5838986"/>
+        <nd ref="-5838983"/>
+        <nd ref="-5838982"/>
+        <nd ref="-5838987"/>
+        <tag k="width" v="14.1"/>
+        <tag k="angle" v="246.5"/>
+        <tag k="feature_area" v="222.8"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="15.9"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838991" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838986"/>
+        <nd ref="-5838987"/>
+        <nd ref="-5838988"/>
+        <nd ref="-5838989"/>
+        <nd ref="-5838990"/>
+        <nd ref="-5838986"/>
+        <tag k="width" v="17.8"/>
+        <tag k="angle" v="156.7"/>
+        <tag k="feature_area" v="341.7"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="19.4"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838984" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838982"/>
+        <nd ref="-5838983"/>
+        <nd ref="-5838979"/>
+        <nd ref="-5838978"/>
+        <nd ref="-5838982"/>
+        <tag k="width" v="14.1"/>
+        <tag k="angle" v="246.5"/>
+        <tag k="feature_area" v="231.6"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="16.5"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838980" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838978"/>
+        <nd ref="-5838979"/>
+        <nd ref="-5838975"/>
+        <nd ref="-5838974"/>
+        <nd ref="-5838978"/>
+        <tag k="width" v="14.1"/>
+        <tag k="angle" v="246.5"/>
+        <tag k="feature_area" v="220.5"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="15.7"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838976" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838974"/>
+        <nd ref="-5838975"/>
+        <nd ref="-5838971"/>
+        <nd ref="-5838970"/>
+        <nd ref="-5838974"/>
+        <tag k="width" v="14.1"/>
+        <tag k="angle" v="246.5"/>
+        <tag k="feature_area" v="220.1"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="15.7"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838972" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838970"/>
+        <nd ref="-5838971"/>
+        <nd ref="-5838966"/>
+        <nd ref="-5838965"/>
+        <nd ref="-5838970"/>
+        <tag k="width" v="14.1"/>
+        <tag k="angle" v="246.5"/>
+        <tag k="feature_area" v="222.3"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="15.9"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838968" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838965"/>
+        <nd ref="-5838966"/>
+        <nd ref="-5838962"/>
+        <nd ref="-5838961"/>
+        <nd ref="-5838967"/>
+        <nd ref="-5838965"/>
+        <tag k="width" v="17.4"/>
+        <tag k="angle" v="336.7"/>
+        <tag k="feature_area" v="326.6"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="19.0"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838963" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838961"/>
+        <nd ref="-5838962"/>
+        <nd ref="-5838948"/>
+        <nd ref="-5838947"/>
+        <nd ref="-5838961"/>
+        <tag k="width" v="16.0"/>
+        <tag k="angle" v="156.7"/>
+        <tag k="feature_area" v="300.6"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="19.0"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838959" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838958"/>
+        <nd ref="-5838949"/>
+        <nd ref="-5838954"/>
+        <nd ref="-5838953"/>
+        <nd ref="-5838958"/>
+        <tag k="width" v="14.1"/>
+        <tag k="angle" v="246.5"/>
+        <tag k="feature_area" v="214.7"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="15.3"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838956" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838953"/>
+        <nd ref="-5838954"/>
+        <nd ref="-5838943"/>
+        <nd ref="-5838942"/>
+        <nd ref="-5838955"/>
+        <nd ref="-5838953"/>
+        <tag k="width" v="16.1"/>
+        <tag k="angle" v="336.7"/>
+        <tag k="feature_area" v="308.1"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="19.3"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838951" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838947"/>
+        <nd ref="-5838948"/>
+        <nd ref="-5838949"/>
+        <nd ref="-5838950"/>
+        <nd ref="-5838947"/>
+        <tag k="width" v="16.5"/>
+        <tag k="angle" v="156.7"/>
+        <tag k="feature_area" v="310.0"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="19.0"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838945" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838942"/>
+        <nd ref="-5838943"/>
+        <nd ref="-5838939"/>
+        <nd ref="-5838944"/>
+        <nd ref="-5838942"/>
+        <tag k="width" v="17.4"/>
+        <tag k="angle" v="156.7"/>
+        <tag k="feature_area" v="334.4"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="19.3"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838940" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838938"/>
+        <nd ref="-5838939"/>
+        <nd ref="-5838935"/>
+        <nd ref="-5838934"/>
+        <nd ref="-5838938"/>
+        <tag k="width" v="14.1"/>
+        <tag k="angle" v="246.5"/>
+        <tag k="feature_area" v="253.1"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="18.0"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838936" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838934"/>
+        <nd ref="-5838935"/>
+        <nd ref="-5838931"/>
+        <nd ref="-5838930"/>
+        <nd ref="-5838934"/>
+        <tag k="width" v="14.1"/>
+        <tag k="angle" v="246.5"/>
+        <tag k="feature_area" v="228.1"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="16.3"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838932" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838930"/>
+        <nd ref="-5838931"/>
+        <nd ref="-5838706"/>
+        <nd ref="-5838705"/>
+        <nd ref="-5838930"/>
+        <tag k="width" v="14.1"/>
+        <tag k="angle" v="246.5"/>
+        <tag k="feature_area" v="233.0"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="16.6"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838928" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838708"/>
+        <nd ref="-5838707"/>
+        <nd ref="-5838916"/>
+        <nd ref="-5838915"/>
+        <nd ref="-5838708"/>
+        <tag k="width" v="14.1"/>
+        <tag k="angle" v="246.5"/>
+        <tag k="feature_area" v="223.2"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="15.9"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838926" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838921"/>
+        <nd ref="-5838922"/>
+        <nd ref="-5838923"/>
+        <nd ref="-5838924"/>
+        <nd ref="-5838925"/>
+        <nd ref="-5838921"/>
+        <tag k="width" v="15.8"/>
+        <tag k="angle" v="246.1"/>
+        <tag k="feature_area" v="312.8"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="19.9"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838919" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838915"/>
+        <nd ref="-5838916"/>
+        <nd ref="-5838917"/>
+        <nd ref="-5838918"/>
+        <nd ref="-5838915"/>
+        <tag k="width" v="14.1"/>
+        <tag k="angle" v="246.5"/>
+        <tag k="feature_area" v="264.8"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="18.9"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838913" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838902"/>
+        <nd ref="-5838901"/>
+        <nd ref="-5838908"/>
+        <nd ref="-5838907"/>
+        <nd ref="-5838902"/>
+        <tag k="width" v="15.0"/>
+        <tag k="angle" v="163.1"/>
+        <tag k="feature_area" v="406.6"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="27.3"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838911" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838907"/>
+        <nd ref="-5838908"/>
+        <nd ref="-5838909"/>
+        <nd ref="-5838910"/>
+        <nd ref="-5838907"/>
+        <tag k="width" v="26.1"/>
+        <tag k="angle" v="163.1"/>
+        <tag k="feature_area" v="708.5"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="27.4"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838905" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838901"/>
+        <nd ref="-5838902"/>
+        <nd ref="-5838903"/>
+        <nd ref="-5838904"/>
+        <nd ref="-5838901"/>
+        <tag k="width" v="14.7"/>
+        <tag k="angle" v="163.1"/>
+        <tag k="feature_area" v="399.1"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="27.3"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838899" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838876"/>
+        <nd ref="-5838875"/>
+        <nd ref="-5838897"/>
+        <nd ref="-5838898"/>
+        <nd ref="-5838876"/>
+        <tag k="width" v="15.8"/>
+        <tag k="angle" v="71.7"/>
+        <tag k="feature_area" v="379.0"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="24.5"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838895" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838889"/>
+        <nd ref="-5838890"/>
+        <nd ref="-5838891"/>
+        <nd ref="-5838892"/>
+        <nd ref="-5838893"/>
+        <nd ref="-5838894"/>
+        <nd ref="-5838889"/>
+        <tag k="width" v="17.4"/>
+        <tag k="angle" v="160.9"/>
+        <tag k="feature_area" v="517.1"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="31.2"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838887" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838883"/>
+        <nd ref="-5838884"/>
+        <nd ref="-5838885"/>
+        <nd ref="-5838886"/>
+        <nd ref="-5838883"/>
+        <tag k="width" v="10.8"/>
+        <tag k="angle" v="162.3"/>
+        <tag k="feature_area" v="327.3"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="30.3"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838881" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838875"/>
+        <nd ref="-5838876"/>
+        <nd ref="-5838877"/>
+        <nd ref="-5838878"/>
+        <nd ref="-5838879"/>
+        <nd ref="-5838880"/>
+        <nd ref="-5838875"/>
+        <tag k="width" v="8.7"/>
+        <tag k="angle" v="341.9"/>
+        <tag k="feature_area" v="369.8"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="44.3"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838873" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838858"/>
+        <nd ref="-5838857"/>
+        <nd ref="-5838871"/>
+        <nd ref="-5838872"/>
+        <nd ref="-5838858"/>
+        <tag k="width" v="10.8"/>
+        <tag k="angle" v="173.1"/>
+        <tag k="feature_area" v="174.1"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="16.1"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838869" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838860"/>
+        <nd ref="-5838868"/>
+        <nd ref="-5838864"/>
+        <nd ref="-5838863"/>
+        <nd ref="-5838860"/>
+        <tag k="width" v="13.3"/>
+        <tag k="angle" v="263.0"/>
+        <tag k="feature_area" v="243.9"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="18.4"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838866" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838863"/>
+        <nd ref="-5838864"/>
+        <nd ref="-5838865"/>
+        <nd ref="-5838854"/>
+        <nd ref="-5838853"/>
+        <nd ref="-5838863"/>
+        <tag k="width" v="15.4"/>
+        <tag k="angle" v="353.1"/>
+        <tag k="feature_area" v="313.9"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="20.5"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838861" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838857"/>
+        <nd ref="-5838858"/>
+        <nd ref="-5838859"/>
+        <nd ref="-5838860"/>
+        <nd ref="-5838857"/>
+        <tag k="width" v="15.5"/>
+        <tag k="angle" v="173.1"/>
+        <tag k="feature_area" v="248.7"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="16.2"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838855" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838853"/>
+        <nd ref="-5838854"/>
+        <nd ref="-5838751"/>
+        <nd ref="-5838750"/>
+        <nd ref="-5838853"/>
+        <tag k="width" v="16.9"/>
+        <tag k="angle" v="173.1"/>
+        <tag k="feature_area" v="344.8"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="20.5"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838851" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838835"/>
+        <nd ref="-5838846"/>
+        <nd ref="-5838847"/>
+        <nd ref="-5838836"/>
+        <nd ref="-5838850"/>
+        <nd ref="-5838835"/>
+        <tag k="width" v="14.3"/>
+        <tag k="angle" v="162.2"/>
+        <tag k="feature_area" v="410.6"/>
+        <tag k="building" v="yes"/>        
+        <tag k="length" v="30.4"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838848" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838846"/>
+        <nd ref="-5838843"/>
+        <nd ref="-5838842"/>
+        <nd ref="-5838847"/>
+        <nd ref="-5838846"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838844" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838840"/>
+        <nd ref="-5838841"/>
+        <nd ref="-5838842"/>
+        <nd ref="-5838843"/>
+        <nd ref="-5838840"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838838" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838834"/>
+        <nd ref="-5838835"/>
+        <nd ref="-5838836"/>
+        <nd ref="-5838831"/>
+        <nd ref="-5838830"/>
+        <nd ref="-5838837"/>
+        <nd ref="-5838834"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838832" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838827"/>
+        <nd ref="-5838826"/>
+        <nd ref="-5838830"/>
+        <nd ref="-5838831"/>
+        <nd ref="-5838827"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838828" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838826"/>
+        <nd ref="-5838827"/>
+        <nd ref="-5838823"/>
+        <nd ref="-5838822"/>
+        <nd ref="-5838826"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838824" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838822"/>
+        <nd ref="-5838823"/>
+        <nd ref="-5838818"/>
+        <nd ref="-5838817"/>
+        <nd ref="-5838822"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838820" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838817"/>
+        <nd ref="-5838818"/>
+        <nd ref="-5838814"/>
+        <nd ref="-5838819"/>
+        <nd ref="-5838817"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838815" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838813"/>
+        <nd ref="-5838814"/>
+        <nd ref="-5838810"/>
+        <nd ref="-5838809"/>
+        <nd ref="-5838813"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838811" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838809"/>
+        <nd ref="-5838810"/>
+        <nd ref="-5838805"/>
+        <nd ref="-5838804"/>
+        <nd ref="-5838809"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838807" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838804"/>
+        <nd ref="-5838805"/>
+        <nd ref="-5838806"/>
+        <nd ref="-5838756"/>
+        <nd ref="-5838804"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838802" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838779"/>
+        <nd ref="-5838778"/>
+        <nd ref="-5838799"/>
+        <nd ref="-5838798"/>
+        <nd ref="-5838779"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838800" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838798"/>
+        <nd ref="-5838799"/>
+        <nd ref="-5838795"/>
+        <nd ref="-5838794"/>
+        <nd ref="-5838798"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838796" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838794"/>
+        <nd ref="-5838795"/>
+        <nd ref="-5838791"/>
+        <nd ref="-5838790"/>
+        <nd ref="-5838794"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838792" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838790"/>
+        <nd ref="-5838791"/>
+        <nd ref="-5838785"/>
+        <nd ref="-5838784"/>
+        <nd ref="-5838790"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838788" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838784"/>
+        <nd ref="-5838785"/>
+        <nd ref="-5838786"/>
+        <nd ref="-5838787"/>
+        <nd ref="-5838784"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838782" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838778"/>
+        <nd ref="-5838779"/>
+        <nd ref="-5838780"/>
+        <nd ref="-5838781"/>
+        <nd ref="-5838778"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838776" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838770"/>
+        <nd ref="-5838771"/>
+        <nd ref="-5838772"/>
+        <nd ref="-5838773"/>
+        <nd ref="-5838774"/>
+        <nd ref="-5838775"/>
+        <nd ref="-5838770"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838768" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838763"/>
+        <nd ref="-5838764"/>
+        <nd ref="-5838766"/>
+        <nd ref="-5838767"/>
+        <nd ref="-5838763"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838760" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838756"/>
+        <nd ref="-5838757"/>
+        <nd ref="-5838758"/>
+        <nd ref="-5838759"/>
+        <nd ref="-5838756"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838754" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838750"/>
+        <nd ref="-5838751"/>
+        <nd ref="-5838752"/>
+        <nd ref="-5838753"/>
+        <nd ref="-5838750"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838748" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838743"/>
+        <nd ref="-5838742"/>
+        <nd ref="-5838746"/>
+        <nd ref="-5838747"/>
+        <nd ref="-5838743"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838744" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838742"/>
+        <nd ref="-5838743"/>
+        <nd ref="-5838739"/>
+        <nd ref="-5838738"/>
+        <nd ref="-5838742"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838740" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838738"/>
+        <nd ref="-5838739"/>
+        <nd ref="-5838735"/>
+        <nd ref="-5838734"/>
+        <nd ref="-5838738"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838736" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838734"/>
+        <nd ref="-5838735"/>
+        <nd ref="-5838731"/>
+        <nd ref="-5838730"/>
+        <nd ref="-5838734"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838732" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838730"/>
+        <nd ref="-5838731"/>
+        <nd ref="-5838727"/>
+        <nd ref="-5838726"/>
+        <nd ref="-5838730"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838728" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838726"/>
+        <nd ref="-5838727"/>
+        <nd ref="-5838723"/>
+        <nd ref="-5838722"/>
+        <nd ref="-5838726"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838724" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838722"/>
+        <nd ref="-5838723"/>
+        <nd ref="-5838719"/>
+        <nd ref="-5838718"/>
+        <nd ref="-5838722"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838720" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838718"/>
+        <nd ref="-5838719"/>
+        <nd ref="-5838712"/>
+        <nd ref="-5838711"/>
+        <nd ref="-5838718"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838716" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838711"/>
+        <nd ref="-5838712"/>
+        <nd ref="-5838713"/>
+        <nd ref="-5838714"/>
+        <nd ref="-5838715"/>
+        <nd ref="-5838711"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5838709" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5838705"/>
+        <nd ref="-5838706"/>
+        <nd ref="-5838707"/>
+        <nd ref="-5838708"/>
+        <nd ref="-5838705"/>
+        <tag k="building" v="yes"/>        
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+</osm>

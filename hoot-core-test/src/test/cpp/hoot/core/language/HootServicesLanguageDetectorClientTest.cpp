@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -38,7 +38,6 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
-#include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/language/LanguageDetectionConfidenceLevel.h>
 
 namespace hoot
@@ -119,7 +118,9 @@ private:
   }
 };
 
+#ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootServicesLanguageDetectorClientTest, "quick");
+#endif  // HOOT_HAVE_SERVICES
 
 }
 

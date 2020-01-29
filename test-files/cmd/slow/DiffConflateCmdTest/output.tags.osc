@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osmChange version="0.6" generator="hootenanny">
     <modify>
-        <way id="-39773" version="0" timestamp="">
+        <way id="-39773" version="1" timestamp="">
             <nd ref="-39771"/>
             <nd ref="-39772"/>
             <nd ref="-39774"/>
@@ -12,7 +12,6 @@
             <tag k="source:imagery" v="Unknown"/>
             <tag k="alt_name" v="Old Name"/>
             <tag k="building" v="yes"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="3" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="24"/>
@@ -52,7 +51,6 @@
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
             <tag k="surface" v="cobblestone"/>
             <tag k="attribution" v="osm"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="2" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="9"/>
@@ -116,7 +114,6 @@
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
             <tag k="surface" v="cobblestone"/>
             <tag k="attribution" v="osm"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="1" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="1"/>
@@ -153,7 +150,6 @@
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
             <tag k="surface" v="paved"/>
             <tag k="attribution" v="osm"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="5" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="108"/>
@@ -169,7 +165,6 @@
             <tag k="building" v="garage"/>
             <tag k="source:datetime" v="2018-06-11T16:49:01Z"/>
             <tag k="attribution" v="osm"/>
-            <tag k="error:circular" v="15"/>
         </way>
     </modify>
 </osmChange>

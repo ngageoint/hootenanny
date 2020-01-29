@@ -28,65 +28,96 @@
 #ifndef OSM_API_WRITER_TEST_SERVER_H
 #define OSM_API_WRITER_TEST_SERVER_H
 
-//  Hootenanny
-#include <hoot/core/io/OsmApiWriter.h>
-#include <hoot/core/util/Log.h>
-
-//  Standard
-#include <memory>
-
-//  Boost
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
+#include <hoot/core/util/HttpTestServer.h>
 
 namespace hoot
 {
 
-class OsmApiSampleResponses
+class CapabilitiesTestServer : public HttpTestServer
 {
 public:
-  static const char* SAMPLE_CAPABILITIES;
-  static const char* SAMPLE_PERMISSIONS;
+  /** Constructor */
+  CapabilitiesTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that responds once to the OSM API Capabilities request */
+  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
 };
 
-
-class HttpConnection : public std::enable_shared_from_this<HttpConnection>
+class PermissionsTestServer : public HttpTestServer
 {
 public:
-  typedef std::shared_ptr<HttpConnection> HttpConnectionPtr;
+  /** Constructor */
+  PermissionsTestServer(int port) : HttpTestServer(port) { }
 
-  boost::asio::ip::tcp::socket& socket();
-
-  static HttpConnectionPtr create(boost::asio::io_service& io_service);
-
-  bool start();
-
-private:
-  HttpConnection(boost::asio::io_service& io_service);
-  void handle_write(const boost::system::error_code& error, size_t bytes_transferred);
-
-  boost::asio::ip::tcp::socket _socket;
+protected:
+  /** respond() function that responds once to the OSM API Permissions request */
+  virtual bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 };
 
-class HttpTestServer
+class RetryConflictsTestServer : public HttpTestServer
 {
 public:
+  /** Constructor */
+  RetryConflictsTestServer(int port) : HttpTestServer(port) { }
 
-  static const int TEST_SERVER_PORT;
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate a 405 Method Not Allowed error to test error resolution
+   *  Requests, in order:
+   *   - Capabilities
+   *   - Permissions
+   *   - Changeset Create
+   *   - Changeset Upload - responding with an HTTP 405 error for the test
+   *   - Changeset Close
+   */
+  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+};
 
-  static std::shared_ptr<std::thread> start();
+class RetryVersionTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  RetryVersionTestServer(int port) : HttpTestServer(port), _has_error(false) { }
 
-  HttpTestServer(boost::asio::io_service& io_service);
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate a mismatched element version
+   *  Requests, in order:
+   *  - Capabilities
+   *  - Permissions
+   *  - Changeset Create
+   *  - Changeset 1 Upload - respond with an HTTP 404 error for the test
+   *  - Element get
+   *  - Changeset 1 Upload - respond with updated version
+   *  - Changeset Close
+   */
+  virtual bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 
 private:
+  /** Flag set to false until the first changeset has failed once */
+  bool _has_error;
+};
 
-  static void run_server();
-
-  void start_accept();
-
-  void handle_accept(HttpConnection::HttpConnectionPtr new_connection, const boost::system::error_code& error);
-
-  boost::asio::ip::tcp::acceptor _acceptor;
+class OsmApiSampleRequestResponse
+{
+public:
+  /** Sample Capabilities response body from '/api/0.6/capabilities'
+   *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
+   */
+  static const char* SAMPLE_CAPABILITIES_RESPONSE;
+  /** Sample Permissions response body from '/api/0.6/permissions'
+   *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
+   */
+  static const char* SAMPLE_PERMISSIONS_RESPONSE;
+  /** Sample Changeset upload request body from '/api/0.6/changeset/#id/upload'
+   *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Diff_upload:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fupload
+   */
+  static const char* SAMPLE_CHANGESET_REQUEST;
+  /** Sample Changeset upload response body from '/api/0.6/changeset/1/upload' */
+  static const char* SAMPLE_CHANGESET_1_RESPONSE;
+  /** Sample element GET response from '/api/0.6/way/1' */
+  static const char* SAMPLE_ELEMENT_1_GET_RESPONSE;
 };
 
 }

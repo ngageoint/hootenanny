@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_API_CHANGESET_H
@@ -38,6 +38,7 @@
 //  Standard
 #include <array>
 #include <map>
+#include <mutex>
 #include <set>
 #include <vector>
 
@@ -52,8 +53,8 @@ namespace hoot
 class ChangesetInfo;
 /** Helpful typedefs for pointers and vectors of maps */
 typedef std::shared_ptr<ChangesetInfo> ChangesetInfoPtr;
-typedef std::map<long, XmlElementPtr, osm_id_sort> XmlElementMap;
-typedef QVector<XmlElementMap> ChangesetTypeMap;
+typedef std::map<long, ChangesetElementPtr, osm_id_sort> ChangesetElementMap;
+typedef std::vector<ChangesetElementMap> ChangesetTypeMap;
 typedef std::map<long, std::set<long>> NodeIdToWayIdMap;
 typedef std::map<long, std::set<long>> NodeIdToRelationIdMap;
 typedef std::map<long, std::set<long>> WayIdToRelationIdMap;
@@ -69,10 +70,10 @@ public:
   /**  Allow test class to access protected members for white box testing */
   friend class OsmApiChangesetTest;
   /**
-   * @brief loadChangeset Load changeset file, can be called multiple times on changeset that are split across files
-   * @param changesetPath
+   * @brief loadChangeset Load changeset file or string, can be called multiple times on changeset that are split across files
+   * @param changeset Path to changeset file or changeset as a string
    */
-  void loadChangeset(const QString& changesetPath);
+  void loadChangeset(const QString& changeset);
   /**
    * @brief splitLongWays The API defaults to only allowing a maximum of 2000 nodes per way, split the way if necessary
    * @param maxWayNodes Maximum number of nodes per way from the API capabilities query
@@ -146,11 +147,11 @@ public:
    */
   QString getFailedChangesetString();
   /**
-   * @brief setMaxSize Set the soft maximum size of the changeset.  Max is soft because if while creating a way there are still
+   * @brief setMaxPushSize Set the maximum size of the push changeset.  Max is soft because if while creating a way there are still
    *  more required nodes to add and the max is hit, those nodes are added to the changeset to make it atomic
    * @param size - Number of elements in the soft max size
    */
-  void setMaxSize(long size) { _maxChangesetSize = size; }
+  void setMaxPushSize(long size) { _maxPushSize = size; }
   /**
    * @brief hasFailedElements
    * @return true if any elements failed upload
@@ -201,8 +202,114 @@ public:
    * @return Number of elements processed so far
    */
   long getProcessedCount()      { return _processedCount; }
+  /**
+   * @brief matchesPlaceholderFailure Checks the return from the API to see if it is similar to the following error message:
+   *        "Placeholder node not found for reference -145213 in way -5687"
+   * @param hint Error message from OSM API
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @param element_id ID of the element that failed
+   * @param element_type Type of the element that failed
+   * @return True if the message matches and was parsed
+   */
+  static bool matchesPlaceholderFailure(const QString& hint,
+                                        long& member_id, ElementType::Type& member_type,
+                                        long& element_id, ElementType::Type& element_type);
+  /**
+   * @brief matchesRelationFailure Checks the return from the API to see if it is similar to the following error message:
+   *        "Relation with id  cannot be saved due to Relation with id 1707699"
+   * @param hint Error message from OSM API
+   * @param element_id ID of the element that failed
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @return True if the message matches and was parsed
+   */
+  static bool matchesRelationFailure(const QString& hint, long& element_id,
+                                     long& member_id, ElementType::Type& member_type);
+  /**
+   * @brief matchesMultiRelationFailure Checks the return from the API to see if it is similar to the following error message:
+   *        "Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible."
+   * @param hint Error message from OSM API
+   * @param element_id ID of the element that failed
+   * @param member_ids IDs of the member elements that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @return True if the message matches and was parsed
+   */
+  static bool matchesMultiRelationFailure(const QString& hint, long& element_id,
+                                          std::vector<long>& member_ids, ElementType::Type& member_type);
+  /**
+   * @brief matchesChangesetPreconditionFailure Checks the return from the API to see if it is similar to the following error message:
+   *        "Precondition failed: Node 55 is still used by ways 123"
+   * @param hint Error message from OSM API
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @param element_id ID of the element that failed
+   * @param element_type Type of the element that failed
+   * @return True if the message matches and was parsed
+   */
+  static bool matchesChangesetPreconditionFailure(const QString& hint,
+                                                  long& member_id, ElementType::Type& member_type,
+                                                  long& element_id, ElementType::Type& element_type);
+  /**
+   * @brief matchesChangesetConflictVersionMismatchFailure Checks the return from the API to see if it is similar to the following error message:
+   *        "Changeset conflict: Version mismatch: Provided 2, server had: 1 of Node 4869875616"
+   * @param hint Error message from OSM API
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @param element_id ID of the element that failed
+   * @param element_type Type of the element that failed
+   * @return True if the message matches and was parsed
+   */
+  static bool matchesChangesetConflictVersionMismatchFailure(const QString& hint,
+                                                             long& element_id, ElementType::Type& element_type,
+                                                             long& version_old, long& version_new);
+  /**
+   * @brief matchesChangesetClosed FailureChecks the return from the API to see if it is similar to the following error message:
+   *        "Changeset conflict: The changeset 49514098 was closed at 2020-01-08 16:28:56 UTC"
+   * @param hint Error message from OSM API
+   * @return True if the message matches
+   */
+  static bool matchesChangesetClosedFailure(const QString& hint);
+  /**
+   * @brief setErrorPathname Record the pathname of the error changeset
+   * @param path Pathname
+   */
+  void setErrorPathname(const QString& path) { _errorPathname = path; }
+  /**
+   * @brief writeErrorFile Writes our the error changeset
+   * @return true if the file was written successfully
+   */
+  bool writeErrorFile();
+
+  /**
+   * @brief calculateRemainingChangeset This function is an error correction case for when a changeset cannot finish
+   *  and the upload stalls indefinitely.  Move all remaining elements into a changeset so the job can finish or error out.
+   * @param changeset Reference to the changeset info for changeset creation
+   * @return true if there is anything in the changeset
+   */
+  bool calculateRemainingChangeset(ChangesetInfoPtr &changeset);
 
 private:
+  /**
+   * @brief loadChangesetFile Load changeset file, can be called multiple times on changeset that are split across files
+   * @param changesetPath
+   */
+  void loadChangesetFile(const QString& changesetPath);
+  /**
+   * @brief loadChangesetXml Load changeset XML text, can be called multiple times on changesets that are split
+   * @param changesetXml
+   */
+  void loadChangesetXml(const QString& changesetXml);
+  /**
+   * @brief loadChangeset Load a .osc changeset file
+   * @param reader
+   */
+  void loadChangeset(QXmlStreamReader& reader);
+  /**
+   * @brief loadOsmAsChangeset Load an OSM file as a changeset of <create> elements
+   * @param reader
+   */
+  void loadOsmAsChangeset(QXmlStreamReader& reader);
   /**
    * @brief updateElement Update the element ID map with the new ID and update the version of the element
    * @param map Map of elements (nodes/ways/relations)
@@ -252,9 +359,9 @@ private:
    * @param node/way/relation Pointer to the element that is being added
    * @return success
    */
-  bool addNode(ChangesetInfoPtr& changeset, ChangesetType type, XmlNode* node);
-  bool addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWay* way);
-  bool addRelation(ChangesetInfoPtr& changeset, ChangesetType type, XmlRelation* relation);
+  bool addNode(ChangesetInfoPtr& changeset, ChangesetType type, ChangesetNode* node);
+  bool addWay(ChangesetInfoPtr& changeset, ChangesetType type, ChangesetWay* way);
+  bool addRelation(ChangesetInfoPtr& changeset, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief addParentWays/Relations Add any parents (ways, relations) to the changeset if needed
    *  by a modify or delete operation.  For example, to delete a node, any way or relation parent
@@ -274,9 +381,20 @@ private:
    * @param node/way/relation Pointer to the element to be moved
    * @return
    */
-  bool moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlNode* node);
-  bool moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way);
-  bool moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation);
+  bool moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
+  bool moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
+  bool moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
+  /**
+   * @brief moveOrRemoveNode/Way/Relation Move an element from one subset to another, or if all related elements aren't
+   *   able to be moved, the element is removed from the subset and returned to the `available` state
+   * @param source Subset containing the element
+   * @param destination Subset to move to
+   * @param type Type of operation (create/modify/delete)
+   * @param node/way/relation Pointer to the element to be moved
+   */
+  void moveOrRemoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
+  void moveOrRemoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
+  void moveOrRemoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief canMoveNode/Way/Relation Query if a node/way/relation can be moved.  This checks downstream relations, ways,
    *  and nodes to see if they can also be moved.
@@ -286,37 +404,37 @@ private:
    * @param node/way/relation Pointer to the element to be checked
    * @return
    */
-  bool canMoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlNode* node);
-  bool canMoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way);
-  bool canMoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation);
+  bool canMoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
+  bool canMoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
+  bool canMoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief getObjectCount Get the number of elements affected by this node/way/relation
    * @param changeset Subset containing the element
    * @param node/way/relation Pointer to the element to count
    * @return total number of elements within this element
    */
-  size_t getObjectCount(ChangesetInfoPtr& changeset, XmlNode* node);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, XmlWay* way);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, XmlRelation* relation);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetNode* node);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* way);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelation* relation);
   /**
    * @brief isSent Check if this element's status is buffering, sent, or finalized
    * @param element Pointer to the element to check
    * @return true if the element has been sent to the API
    */
-  bool isSent(XmlElement* element);
+  bool isSent(ChangesetElement* element);
   /**
    * @brief canSend Check if the node/way/relation can be sent (if it is available) along with all of its downstream elements
    * @param node/way/relation Pointer to the element to check
    * @return true if element and all downstream elements are available to send
    */
-  bool canSend(XmlNode* node);
-  bool canSend(XmlWay* way);
-  bool canSend(XmlRelation* relation);
+  bool canSend(ChangesetNode* node);
+  bool canSend(ChangesetWay* way);
+  bool canSend(ChangesetRelation* relation);
   /**
    * @brief markBuffered Mark the element as buffered
    * @param element Pointer to the element to mark
    */
-  void markBuffered(XmlElement* element);
+  void markBuffered(ChangesetElement* element);
   /**
    * @brief getNextNode/Way/RelationId searches the Create section of the changeset to find the next available ID
    *  for the desired element type
@@ -342,55 +460,24 @@ private:
   void failWay(long id, bool beforeSend = false);
   void failRelation(long id, bool beforeSend = false);
   /**
-   * @brief matchesPlaceholderFailure Checks the return from the API to see if it is similar to the following error message:
-   *        "Placeholder node not found for reference -145213 in way -5687"
-   * @param hint Error message from OSM API
-   * @param member_id ID of the member element that caused the element to fail
-   * @param member_type Type of the member element that caused the element to fail
-   * @param element_id ID of the element that failed
-   * @param element_type Type of the element that failed
-   * @return True if the message matches and was parsed
-   */
-  bool matchesPlaceholderFailure(const QString& hint,
-                                 long& member_id, ElementType::Type& member_type,
-                                 long& element_id, ElementType::Type& element_type);
-  /**
-   * @brief matchesRelationFailure Checks the return from the API to see if it is similar to the following error message:
-   * @param hint Error message from OSM API
-   * @param element_id ID of the element that failed
-   * @param member_id ID of the member element that caused the element to fail
-   * @param member_type Type of the member element that caused the element to fail
-   * @return True if the message matches and was parsed
-   */
-  bool matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type);
-  /**
-   * @brief matchesChangesetPreconditionFailure
-   * @param hint Error message from OSM API
-   * @param member_id ID of the member element that caused the element to fail
-   * @param member_type Type of the member element that caused the element to fail
-   * @param element_id ID of the element that failed
-   * @param element_type Type of the element that failed
-   * @return True if the message matches and was parsed
-   */
-  bool matchesChangesetPreconditionFailure(const QString& hint,
-                                           long& member_id, ElementType::Type& member_type,
-                                           long& element_id, ElementType::Type& element_type);
-  /**
-   * @brief getNodes/Ways/Relations Output node/way/relation text to the text stream
+   * @brief writeNodes/Ways/Relations Output node/way/relation text to the text stream
    * @param changeset Pointer to the changeset to output
    * @param ts TextStream to output the element to
    * @param type Changeset type (create, modify, delete)
    * @param changeset_id ID of the changeset to write to the element attribute
    */
-  void getNodes(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
-  void getWays(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
-  void getRelations(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
+  void writeNodes(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
+  void writeWays(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
+  void writeRelations(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
+  void writeElements(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id,
+                     ElementType::Type elementType, const ChangesetElementMap& elements);
+
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
-  XmlElementMap _allNodes;
+  ChangesetElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */
-  XmlElementMap _allWays;
+  ChangesetElementMap _allWays;
   /** Sorted map of all relations, original node ID and a pointer to the element object */
-  XmlElementMap _allRelations;
+  ChangesetElementMap _allRelations;
   /** Three element (create/modify/delete) vector of node IDs */
   ChangesetTypeMap _nodes;
   /** Three element (create/modify/delete) vector of way IDs */
@@ -399,8 +486,8 @@ private:
   ChangesetTypeMap _relations;
   /** Element ID to ID data structure for checking old ID to new ID and new ID to old ID lookups */
   ElementIdToIdMap _idMap;
-  /** Soft maximum changeset size */
-  long _maxChangesetSize;
+  /** Maximum changeset push size */
+  long _maxPushSize;
   /** Count of elements that have been sent */
   long _sentCount;
   /** Count of elements that have been processed */
@@ -408,7 +495,7 @@ private:
   /** Count of elements that failed to upload */
   long _failedCount;
   /** Buffer of elements that are about to be pushed into a subset */
-  std::vector<XmlElement*> _sendBuffer;
+  std::vector<ChangesetElement*> _sendBuffer;
   /** Negative ID generator */
   DefaultIdGenerator _idGen;
   /** Reverse ID to ID maps for deleting elements validation */
@@ -416,6 +503,9 @@ private:
   NodeIdToRelationIdMap _nodeIdsToRelations;
   WayIdToRelationIdMap _wayIdsToRelations;
   RelationIdToRelationIdMap _relationIdsToRelations;
+  /** Full pathname of the error file changeset, if any errors occur */
+  QString _errorPathname;
+  std::mutex _errorMutex;
 };
 
 /** Atomic subset of IDs that are sent to the OSM API, header only class */
@@ -494,6 +584,9 @@ public:
   /** Set/get _numRetries member */
   bool canRetry();
   void retry();
+  /** Set/get _last member for final error checking */
+  void setLast() { _last = true; }
+  bool getLast() { return _last; }
 private:
   /** 3x3 array of containers for elements in this subset */
   std::array<std::array<container, XmlChangeset::TypeMax>, ElementType::Unknown> _changeset;
@@ -502,6 +595,8 @@ private:
   /** Number of times this exact changeset has been retried unsuccessfully */
   int _numRetries;
   const int MAX_RETRIES = 5;
+  /** Flag set when this is the last changeset because of error */
+  bool _last;
 };
 
 }

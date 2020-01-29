@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef APIDBREADER_H
 #define APIDBREADER_H
@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
 
 // Qt
@@ -49,7 +49,7 @@ class ApiDb;
 /**
  * Abstract parent class for reading from an API style OSM database
  */
-class ApiDbReader : public PartialOsmMapReader, public Boundable, public Configurable
+class ApiDbReader : public PartialOsmMapReader, public Boundable
 {
 public:
 
@@ -114,13 +114,15 @@ public:
    */
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
+  void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
+  { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
+
 protected:
 
   bool _useDataSourceIds;
   Status _status;
   bool _open;
   QString _email;
-  QString _url;
   double _defaultCircularError;
 
   Tgs::BigMap<long, long> _nodeIdMap;
@@ -179,6 +181,9 @@ private:
   long _numNodesRead;
   long _numWaysRead;
   long _numRelationsRead;
+
+  // only valid is _bounds is not null
+  bool _keepImmediatelyConnectedWaysOutsideBounds;
 
   void _read(OsmMapPtr map, const ElementType& elementType);
 

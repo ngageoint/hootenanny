@@ -38,7 +38,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ReportMissingElementsVisitor)
 
-ReportMissingElementsVisitor::ReportMissingElementsVisitor(bool removeMissing, int maxReport) :
+ReportMissingElementsVisitor::ReportMissingElementsVisitor(const bool removeMissing,
+                                                           const Log::WarningLevel& logLevel,
+                                                           const int maxReport) :
+_logLevel(logLevel),
 _maxReport(maxReport),
 _missingCount(0),
 _removeMissing(removeMissing)
@@ -52,21 +55,29 @@ void ReportMissingElementsVisitor::setConfiguration(const Settings& conf)
 
 void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId missing)
 {
+  QString msg;
+  if (_removeMissing)
+  {
+    msg = "Removing missing " + missing.toString() + " in " + referer.toString() + ".";
+  }
+  else
+  {
+    msg = "Missing " + missing.toString() + " in " + referer.toString() + ".";
+  }
+
   if (_missingCount < _maxReport)
   {
-    if (_removeMissing)
-    {
-      LOG_DEBUG("Removing missing " << missing.toString() << " in " << referer.toString() << ".");
-    }
-    else
-    {
-      LOG_DEBUG("Missing " << missing.toString() << " in " << referer.toString() << ".");
-    }
+    LOG_LEVEL(_logLevel, msg);
+  }
+  else
+  {
+    LOG_TRACE(msg);
   }
   _missingCount++;
   if (_missingCount == _maxReport)
   {
-    LOG_INFO(
+    LOG_LEVEL(
+      _logLevel,
       "Reached maximum number of missing element reports (" << _maxReport <<
       "). No longer reporting.");
   }
@@ -131,8 +142,10 @@ void ReportMissingElementsVisitor::_visitRw(ElementType type, long id)
     }
     if (newNids.size() != w->getNodeCount())
     {
+      LOG_TRACE("Way nodes size before: " << w->getNodeCount());
       w->setNodes(newNids);
-    }
+      LOG_TRACE("Way nodes size after: " << w->getNodeCount());
+    } 
   }
   else if (type == ElementType::Relation)
   {
@@ -153,7 +166,9 @@ void ReportMissingElementsVisitor::_visitRw(ElementType type, long id)
     }
     if (newEntries.size() != r->getMembers().size())
     {
+      LOG_TRACE("Relation members size before: " << r->getMembers().size());
       r->setMembers(newEntries);
+      LOG_TRACE("Relation members size after: " << r->getMembers().size());
     }
   }
 }

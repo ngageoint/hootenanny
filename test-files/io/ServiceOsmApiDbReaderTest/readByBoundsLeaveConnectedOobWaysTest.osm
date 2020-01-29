@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="28.9008975" minlon="-88.0226543" maxlat="39.9008568" maxlon="-77.0224564"/>
+    <node visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1" lat="38.9008974999999992" lon="-78.0226542999999992">
+        <tag k="node1" v="node1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1" lat="39.9008567999999997" lon="-77.0224563999999958">
+        <tag k="node2" v="node2"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1" lat="38.9008974999999992" lon="-78.0226542999999992">
+        <tag k="node3" v="node3"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1" lat="38.9008974999999992" lon="-78.0226542999999992">
+        <tag k="node5" v="node5"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1" lat="33.9008974999999992" lon="-83.0226542999999992">
+        <tag k="node6" v="node6"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1" lat="28.9008974999999992" lon="-88.0226542999999992">
+        <tag k="node7" v="node7"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <way visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1">
+        <nd ref="1"/>
+        <nd ref="2"/>
+        <nd ref="5"/>
+        <tag k="way1" v="way1"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1">
+        <nd ref="3"/>
+        <nd ref="2"/>
+        <tag k="way2" v="way2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1">
+        <nd ref="6"/>
+        <nd ref="7"/>
+        <tag k="way4" v="way4"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1">
+        <nd ref="1"/>
+        <nd ref="6"/>
+        <tag k="way5" v="way5"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1">
+        <member type="node" ref="1" role="role1"/>
+        <member type="way" ref="2" role="role3"/>
+        <member type="way" ref="1" role="role2"/>
+        <member type="node" ref="3" role="empty"/>
+        <tag k="relation1" v="relation1"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
+    <relation visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1">
+        <member type="node" ref="7" role="role1"/>
+        <member type="way" ref="4" role="role1"/>
+        <tag k="relation5" v="relation5"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
+    <relation visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="1">
+        <member type="node" ref="7" role="role1"/>
+        <member type="way" ref="1" role="role1"/>
+        <member type="way" ref="4" role="role1"/>
+        <tag k="relation6" v="relation6"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
+</osm>

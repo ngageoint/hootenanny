@@ -22,16 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
 
+import static hoot.services.HootProperties.CHANGESETS_FOLDER;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
+import static hoot.services.models.db.QUsers.users;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,8 +45,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Provider;
 import javax.sql.DataSource;
@@ -58,6 +64,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
@@ -74,7 +82,13 @@ import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
+import hoot.services.controllers.osm.user.UserResource;
+import hoot.services.models.db.Folders;
+import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.Maps;
+import hoot.services.models.db.QFolders;
 import hoot.services.models.db.QUsers;
+import hoot.services.models.db.Users;
 
 
 /**
@@ -191,6 +205,28 @@ public class DbUtils {
     }
 
     /**
+     * Gets the job type for the specified jobId
+     * @param jobId
+     * @return
+     */
+    public static Integer getJobTypeByJobId(String jobId) {
+        return createQuery()
+                .select(jobStatus.jobType)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId)).fetchOne();
+    }
+
+    /**
+     * Deletes the specified mapId
+     * @param mapId
+     */
+    public static void deleteMap(Long mapId) {
+        createQuery().delete(maps)
+                .where(maps.id.eq(mapId))
+                .execute();
+    }
+
+    /**
      * Creates a new folder under the parent directory
      * if not already present and returns it's id
      *
@@ -225,18 +261,119 @@ public class DbUtils {
         return sql.fetchFirst();
     }
 
-    public static void setFolderMapping(Long mapId, Long folderId) {
-        Long newId = createQuery()
-            .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
-            .from()
-            .fetchOne();
-
-        createQuery()
-            .insert(folderMapMappings)
-            .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
-            .values(newId, mapId, folderId).execute();
+    public static Set<Long> getFolderIdsForUser(Users user) {
+        Long userId = null;
+        if (user != null) userId = user.getId();
+        return getFolderIdsForUser(userId);
     }
 
+    public static Set<Long> getFolderIdsForUser(Long userId) {
+        List<Folders> folders = getFoldersForUser(userId);
+        Set<Long> out = new HashSet<Long>(folders.size());
+        for (Folders f : folders) {
+            out.add(f.getId());
+        }
+        return out;
+    }
+
+    public static List<Folders> getFoldersForUser(Users user) {
+        Long userId = null;
+        if (user != null) userId = user.getId();
+        return getFoldersForUser(userId);
+    }
+
+    public static List<Folders> getFoldersForUser(Long userId) {
+        SQLQuery<Folders> sql = createQuery()
+            .select(folders)
+            .from(folders)
+            .where(folders.id.ne(0L));
+        if (userId != null && !UserResource.adminUserCheck(getUser(userId))) {
+            sql.where(
+                    folders.userId.eq(userId).or(folders.publicCol.isTrue())
+            );
+        }
+        List<Folders> folderRecordSet = sql.orderBy(folders.displayName.asc()).fetch();
+
+        return folderRecordSet;
+    }
+
+    public static List<Long> getChildrenFolders(Long folderId) {
+        List<Long> childrenFolders = createQuery()
+                .select(folders.id)
+                .from(folders)
+                .where(folders.parentId.eq(folderId))
+                .fetch();
+
+        return childrenFolders;
+    }
+
+
+
+    public static List<Tuple> getMapsForUser(Users user) {
+
+        // return empty list if user is null
+        if(user == null) {
+            return Collections.emptyList();
+        }
+
+        SQLQuery<Tuple> q = createQuery()
+                .select(maps, folders.id, folders.publicCol)
+                .from(maps)
+                .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
+                .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
+                .orderBy(maps.displayName.asc());
+        // if user is not admin enforce visiblity rules
+        // admins can see everything
+        if (!UserResource.adminUserCheck(user)) {
+            BooleanExpression isVisible = maps.userId.eq(user.getId()) // Owned by the current user
+                    // or not in a folder
+                    .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L))
+                    // or in a public folder
+                    .or(folders.publicCol.isTrue()));
+                q.where(isVisible);
+        }
+        List<Tuple> mapLayerRecords = q.fetch();
+
+        return mapLayerRecords;
+    }
+
+/*
+ * --Deletes folders that are empty (no child datasets or folders)
+DELETE
+FROM folders f
+WHERE
+NOT EXISTS
+    (
+    SELECT  NULL
+    FROM    folder_map_mappings fmm
+    WHERE   f.id = fmm.folder_id
+    )
+AND
+NOT EXISTS
+    (
+    SELECT  NULL
+    FROM    folders f2
+    WHERE   f.id = f2.parent_id
+    );
+ */
+    public static void deleteEmptyFolders() {
+        QFolders folders2 = new QFolders("folders2");
+        BooleanExpression isEmpty = new SQLQuery<>().from(folderMapMappings).where(folderMapMappings.folderId.eq(folders.id)).notExists()
+                .and(new SQLQuery<>().from(folders2).where(folders.id.eq(folders2.parentId)).notExists());
+
+        SQLQuery<Folders> hasEmpty = createQuery()
+            .select(folders)
+            .from(folders)
+            .where(isEmpty);
+
+        //keep trying to delete newly empty folders until no more are detected
+        while (hasEmpty.fetchCount() > 0) {
+            createQuery()
+                .delete(folders)
+                .where(isEmpty)
+                .execute();
+        }
+    }
 
     /**
      * Sets the parent directory for the specified folder
@@ -322,9 +459,9 @@ public class DbUtils {
 
     public static boolean grailEligible(long inputId) {
         Map<String, String> tags = getMapsTableTags(inputId);
-        String sourceInfo = tags.get("source");
+        String grailReference = tags.get("grailReference");
 
-        return sourceInfo != null && sourceInfo.equals("rails");
+        return grailReference != null && grailReference.equals("true");
     }
 
     public static String getConflationType(long inputId) {
@@ -357,9 +494,21 @@ public class DbUtils {
      */
     public static String getMapBbox(long mapId) {
         Map<String, String> tags = getMapsTableTags(mapId);
-        String sourceInfo = tags.get("bbox");
+        String bbox = tags.get("bbox");
 
-        return sourceInfo;
+        return bbox;
+    }
+
+    /**
+     * Retrieves the maps reference layer id
+     * @param mapId
+     * @return reference layer id
+     */
+    public static Long getMergedReference(long mapId) {
+        Map<String, String> tags = getMapsTableTags(mapId);
+        String referenceId = tags.get("input1");
+
+        return Long.parseLong(referenceId);
     }
 
     /**
@@ -391,15 +540,16 @@ public class DbUtils {
     }
 
     /**
-     * Deletes the folder mapping matching the specified map id
+     * Gets the parent folder id for the specified map
      *
-     * @param mapId map id which we are deleting
+     * @param mapId map id which we are retrieving the parent for
      */
-    public static void deleteFolderMapping(Long mapId) {
-        createQuery()
-            .delete(folderMapMappings)
+    public static Long getParentFolder(Long mapId) {
+        return createQuery()
+            .select(folderMapMappings.folderId)
+            .from(folderMapMappings)
             .where(folderMapMappings.mapId.eq(mapId))
-            .execute();
+            .fetchFirst();
     }
 
     public static Map<String, String> getMapsTableTags(long mapId) {
@@ -505,6 +655,43 @@ public class DbUtils {
         return count;
     }
 
+/*
+    SELECT id
+    FROM maps
+    WHERE (tags -> 'lastAccessed' IS NULL AND created_at < ts)
+    OR TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') < ts
+
+ */
+
+    private static BooleanExpression getStale(Timestamp ts) {
+        return (Expressions.stringTemplate("tags->'lastAccessed'").isNull().and(maps.createdAt.lt(ts)))
+                .or(Expressions.dateTimeTemplate(Timestamp.class, "TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"')").lt(ts));
+    }
+
+    public static List<Maps> getStaleMaps(Timestamp ts) {
+        return createQuery()
+                .select(maps)
+                .from(maps)
+                .where(getStale(ts))
+                .fetch();
+    }
+
+    public static Map<String, Long> getStaleMapsSummary(Timestamp ts) {
+        List<Tuple> result =  createQuery()
+                .select(users.displayName, maps.countDistinct())
+                .from(users, maps)
+                .where(users.id.eq(maps.userId).and(getStale(ts)))
+                .groupBy(users.displayName)
+                .fetch();
+
+        Map<String, Long> response = new HashMap<>();
+
+        result.stream().forEach(tuple -> {
+            response.put(tuple.get(users.displayName), tuple.get(maps.countDistinct()));
+        });
+
+        return response;
+    }
 
     /**
      * Returns table size in bytes
@@ -530,6 +717,24 @@ public class DbUtils {
             id = -1;
         }
         return (id > -1);
+    }
+
+    /**
+     * Checks for the existence of user
+     *
+     * @param userId
+     * @return returns true when exists else false
+     */
+    public static boolean userExists(Long userId) {
+        return createQuery()
+                .select(users)
+                .from(users)
+                .where(users.id.eq(userId))
+                .fetchCount() == 1;
+    }
+
+    public static Users getUser(Long id) {
+        return createQuery().select(users).from(users).where(users.id.eq(id)).fetchFirst();
     }
 
     /**
@@ -605,6 +810,78 @@ public class DbUtils {
         }
 
         return -1;
+    }
+
+    // Gets tags column from job status table for specified job id row
+    public static Map<String, String> getJobTags(String jobId) {
+        Map<String, String> tags = new HashMap<>();
+
+        List<Object> results = createQuery()
+                .select(jobStatus.tags)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .fetch();
+
+        if (!results.isEmpty()) {
+            Object oTag = results.get(0);
+            tags = PostgresUtils.postgresObjToHStore(oTag);
+        }
+
+        return tags;
+    }
+
+    // Returns the parentId for the specified jobId job
+    public static String getParentId(String jobId) {
+        Map<String, String> tags = getJobTags(jobId);
+
+        return tags.get("parentId");
+    }
+
+    // Sets the specified job to a status detail of stale and recurses up to the parent jobs to do the same
+    public static void setStale(String jobId) {
+        // Find the job
+        JobStatus job = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .fetchFirst();
+
+        if(job != null) {
+            createQuery()
+                .update(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .set(jobStatus.statusDetail, "STALE")
+                .execute();
+
+            String parentId = getParentId(jobId);
+            // If it has a parent, make the parent stale too
+            if(parentId != null) {
+                setStale(parentId);
+            }
+        }
+    }
+
+    // Sets the specified job to a status detail of conflicts
+    // if a diff-error.osc file is present in the job workspace
+    public static void checkConflicted(String jobId) {
+        File workDir = new File(CHANGESETS_FOLDER, jobId);
+        File diffError = new File(workDir, "diff-error.osc");
+        if (diffError.exists()) {
+            // Find the job
+            JobStatus job = createQuery()
+                    .select(jobStatus)
+                    .from(jobStatus)
+                    .where(jobStatus.jobId.eq(jobId))
+                    .fetchFirst();
+
+            if(job != null) {
+                createQuery()
+                    .update(jobStatus)
+                    .where(jobStatus.jobId.eq(jobId))
+                    .set(jobStatus.statusDetail, "CONFLICTS")
+                    .execute();
+            }
+        }
     }
 
     /**
@@ -758,5 +1035,14 @@ public class DbUtils {
         }
 
         return progress;
+    }
+
+    public static void deleteOSMRecordById(Long mapId) {
+        deleteMapRelatedTablesByMapId(mapId);
+        DbUtils.deleteMap(mapId);
+    }
+
+    public static void deleteBookmarksByMapId(Long mapId) {
+        createQuery().delete(reviewBookmarks).where(reviewBookmarks.mapId.eq(mapId)).execute();
     }
 }

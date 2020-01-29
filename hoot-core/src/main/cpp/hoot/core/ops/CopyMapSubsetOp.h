@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COPYMAPSUBSETOP_H
 #define COPYMAPSUBSETOP_H
 
 // hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
@@ -36,6 +37,8 @@ namespace hoot
 
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
+ *
+ * TODO: implement OperationStatusInfo
  */
 class CopyMapSubsetOp : public OsmMapOperation
 {
@@ -45,11 +48,13 @@ public:
 
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& wayIds);
+  CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
+  CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit);
 
   /**
    * A new map is created and the eids specified in the constructor and their depedencies will be
-   * copied into the new map. The @a map will be set to point to the new map.
+   * copied into the new map. The map will be set to point to the new map.
    */
   virtual void apply(OsmMapPtr& map);
 
@@ -58,10 +63,14 @@ public:
 
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
 
+  std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
+
 private:
 
   std::set<ElementId> _eids;
   ConstOsmMapPtr _from;
+  ElementCriterionPtr _crit;
+  std::set<ElementId> _eidsCopied;
 };
 
 }

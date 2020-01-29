@@ -234,7 +234,8 @@ In some cases there are more than two files that must be conflated. If this is t
 
 .Pairwise Conflation Example
 
--------
+[graphviz, images/__PairwiseConflation.png]
+---------------------------------------------------------------------
 digraph G
 {
   rankdir = LR;
@@ -248,7 +249,7 @@ digraph G
   C -> conflate2;
   conflate2 -> ABC;
 }
--------
+---------------------------------------------------------------------
 
 ==== Export
 

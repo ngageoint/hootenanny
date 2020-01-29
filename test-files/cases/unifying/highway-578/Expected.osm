@@ -24,35 +24,10 @@
         <tag k="highway" v="footway"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-81188" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-81154"/>
-        <nd ref="-81181"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-81187" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-81181"/>
-        <nd ref="-81155"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-81185" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-80970"/>
         <nd ref="-81158"/>
         <tag k="highway" v="footway"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-81183" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-81178"/>
-        <nd ref="-80971"/>
-        <tag k="highway" v="track"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-81182" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-80970"/>
-        <nd ref="-80973"/>
-        <nd ref="-81178"/>
-        <tag k="highway" v="track"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-81180" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -61,27 +36,37 @@
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-81178" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-77529"/>
-        <nd ref="-81175"/>
-        <tag k="highway" v="primary"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-81177" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-81175"/>
-        <nd ref="-77527"/>
-        <tag k="highway" v="primary"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-81159" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-81160"/>
         <nd ref="-81161"/>
         <tag k="highway" v="footway"/>
         <tag k="error:circular" v="15"/>
     </way>
+    <way visible="true" id="-81156" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-81154"/>
+        <nd ref="-81181"/>
+        <nd ref="-81155"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-80972" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-80970"/>
+        <nd ref="-80973"/>
+        <nd ref="-81178"/>
+        <nd ref="-80971"/>
+        <tag k="highway" v="track"/>
+        <tag k="error:circular" v="15"/>
+    </way>
     <way visible="true" id="-77537" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77531"/>
         <nd ref="-77533"/>
+        <tag k="highway" v="primary"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-77535" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-77529"/>
+        <nd ref="-81175"/>
+        <nd ref="-77527"/>
         <tag k="highway" v="primary"/>
         <tag k="error:circular" v="15"/>
     </way>

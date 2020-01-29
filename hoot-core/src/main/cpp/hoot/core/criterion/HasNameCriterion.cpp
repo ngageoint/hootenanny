@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HasNameCriterion.h"
 
@@ -37,15 +37,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HasNameCriterion)
 
 bool HasNameCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  const QStringList names = e->getTags().getNames();
-  for (int i = 0; i < names.size(); i++)
-  {
-    if (!e->getTags().get("name").trimmed().isEmpty())
-    {
-      return true;
-    }
-  }
-  return false;
+  return e->getTags().getNames().size() > 0;
 }
 
 }

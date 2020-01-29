@@ -96,21 +96,23 @@ public:
    * useful in conjunction with Four Pass operations, but should generally be avoided unless there
    * are some other external guarantees.
    */
-  const geos::geom::Envelope& getApproximateEnvelope(const std::shared_ptr<const ElementProvider>& ep) const;
+  const geos::geom::Envelope& getApproximateEnvelope(
+    const std::shared_ptr<const ElementProvider>& ep) const;
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Way); }
 
   /**
    * Returns the same result as getEnvelopeInternal, but copied so the caller gets ownership.
    */
-  virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
+  virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const override
   { return new geos::geom::Envelope(getEnvelopeInternal(ep)); }
 
   /**
    * Returns the envelope for this way. This is guaranteed to be exact. If any of the nodes for
    * this way are not loaded into RAM then the behavior is undefined (probably an assert).
    */
-  const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const;
+  virtual const geos::geom::Envelope& getEnvelopeInternal(
+    const std::shared_ptr<const ElementProvider>& ep) const override;
 
   /**
    * Returns the index of the first time this node occurs in the way. It is possible that the node
@@ -133,6 +135,14 @@ public:
   bool hasNode(long nodeId) const;
 
   bool isOneWay() const;
+
+  /**
+   * Determines if a node ID represents the start and end node
+   *
+   * @param nodeId ID of the node to search for
+   * @return true if the node ID maps to the start and end node; false otherwise
+   */
+  bool isFirstAndLastNode(const long nodeId) const;
 
   /**
    * @brief isSimpleLoop - checks to see if the way starts and ends at the same
@@ -167,7 +177,7 @@ public:
 
   /**
    * Replaces any node instance with oldId with newId. If oldId isn't referenced by this way then
-   * no action is taken.
+   * no action is taken. If newId already exists in the way, it is first removed before replacement.
    */
   void replaceNode(long oldId, long newId);
 
@@ -175,6 +185,15 @@ public:
    * Reverse the order of the nodes.
    */
   void reverseOrder();
+
+  /**
+   * Determines if two ways have the same node IDs
+   *
+   * @param other way to compare node IDs with
+   * @return true if the other way has the same node IDs in the same order as this way; false
+   * otherwise
+   */
+  bool hasSameNodeIds(const Way& other) const;
 
   /**
    * This is rarely used. Primarily it is useful when loading the way from a file that does
@@ -211,10 +230,9 @@ private:
 
   std::shared_ptr<WayData> _wayData;
 
-  /**
-   * This envelope may be cached, but it also may not be exact.
-   */
-  mutable geos::geom::Envelope _cachedEnvelope;
+  // for debugging only; SLOW - We don't check for duplicated nodes (outside of start/end) at
+  // runtime due to the performance hit. So, use this to debug when that occurs.
+  bool _nodeIdsAreDuplicated(const std::vector<long>& ids) const;
 };
 
 typedef std::shared_ptr<Way> WayPtr;

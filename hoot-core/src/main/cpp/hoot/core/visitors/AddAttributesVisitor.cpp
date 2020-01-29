@@ -43,23 +43,52 @@ AddAttributesVisitor::AddAttributesVisitor()
   setConfiguration(conf());
 }
 
-AddAttributesVisitor::AddAttributesVisitor(const QStringList attributes) :
+AddAttributesVisitor::AddAttributesVisitor(const QStringList attributes, const bool negateCriteria) :
 _attributes(attributes),
 _addOnlyIfEmpty(ConfigOptions().getAddAttributesVisitorAddOnlyIfEmpty())
 {
+  _negateCriteria = negateCriteria;
+  _chainCriteria = false;
 }
 
 void AddAttributesVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
+
   _attributes = configOptions.getAddAttributesVisitorKvps();
   LOG_VARD(_attributes);
   _addOnlyIfEmpty = configOptions.getAddAttributesVisitorAddOnlyIfEmpty();
   LOG_VARD(_addOnlyIfEmpty);
+
+  _negateCriteria = configOptions.getElementCriterionNegate();
+  _chainCriteria = configOptions.getAddAttributesVisitorChainElementCriteria();
+  const QStringList critNames = configOptions.getAddAttributesVisitorElementCriteria();
+  LOG_VART(critNames);
+  _addCriteria(critNames);
+  if (_configureChildren)
+  {
+    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
+         it != _criteria.end(); ++it)
+    {
+      ElementCriterionPtr crit = *it;
+      Configurable* c = dynamic_cast<Configurable*>(crit.get());
+      if (c != 0)
+      {
+        c->setConfiguration(conf);
+      }
+    }
+  }
 }
 
 void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
 {
+  if (_criteria.size() > 0 && !_criteriaSatisfied(e))
+  {
+    LOG_TRACE("Element did not satisfy criteria: " << e->getElementId() << ". Skipping...");
+    return;
+  }
+
+  LOG_TRACE("Modifying attributes for: " << e->getElementId() << "...");
   for (int i = 0; i < _attributes.length(); i++)
   {
     QString attributeValue;

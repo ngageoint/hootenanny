@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmApiWriterTestServer.h"
@@ -31,140 +31,216 @@
 #include <hoot/core/io/OsmApiWriter.h>
 #include <hoot/core/util/Log.h>
 
-//  Standard
-#include <memory>
-
-//  Boost
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
-
 namespace hoot
 {
 
-const char* OsmApiSampleResponses::SAMPLE_CAPABILITIES =
-    "<?xml version='1.0' encoding='UTF-8'?>"
-    "<osm version='0.6' generator='OpenStreetMap server' copyright='OpenStreetMap and contributors' attribution='https://www.openstreetmap.org/copyright' license='http://opendatacommons.org/licenses/odbl/1-0/'>"
-    "  <api>"
-    "    <version minimum='0.6' maximum='0.6'/>"
-    "    <area maximum='0.25'/>"
-    "    <note_area maximum='25'/>"
-    "    <tracepoints per_page='5000'/>"
-    "    <waynodes maximum='2000'/>"
-    "    <changesets maximum_elements='10000'/>"
-    "    <timeout seconds='300'/>"
-    "    <status database='online' api='online' gpx='online'/>"
-    "  </api>"
-    "  <policy>"
-    "    <imagery>"
-    "      <blacklist regex='http://xdworld\\.vworld\\.kr:8080/.*'/>"
-    "      <blacklist regex='.*\\.here\\.com[/:].*'/>"
-    "    </imagery>"
-    "  </policy>"
-    "</osm>";
-const char* OsmApiSampleResponses::SAMPLE_PERMISSIONS =
-    "<?xml version='1.0' encoding='UTF-8'?>"
-    "<osm version='0.6' generator='OpenStreetMap server'>"
-    "  <permissions>"
-    "    <permission name='allow_read_prefs'/>"
-    "    <permission name='allow_read_gpx'/>"
-    "    <permission name='allow_write_api'/>"
-    "    <permission name='allow_write_gpx'/>"
-    "  </permissions>"
-    "</osm>";
-
-HttpConnection::HttpConnection(boost::asio::io_service& io_service)
-  : _socket(io_service)
+bool CapabilitiesTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
 {
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
+  //  Make sure that the capabilities were requested
+  HttpResponsePtr response;
+  if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
+  else
+    response.reset(new HttpResponse(404));
+  //  Write out the response
+  write_response(connection, response->to_string());
+  //  Only respond once to the client
+  return false;
 }
 
-void HttpConnection::handle_write(const boost::system::error_code& /*error*/, size_t /*bytes_transferred*/)
+bool PermissionsTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
 {
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
+  //  Make sure that the permissions were requested
+  HttpResponsePtr response;
+  if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
+  else
+    response.reset(new HttpResponse(404));
+  //  Write out the response
+  write_response(connection, response->to_string());
+  //  Only respond once to the client
+  return false;
 }
 
-HttpConnection::HttpConnectionPtr HttpConnection::create(boost::asio::io_service& io_service)
-{
-  //  Create the connection object
-  return HttpConnectionPtr(new HttpConnection(io_service));
-}
-
-boost::asio::ip::tcp::socket& HttpConnection::socket()
-{
-  return _socket;
-}
-
-bool HttpConnection::start()
+bool RetryConflictsTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
-  //  Read the HTTP request
-  boost::asio::streambuf buf;
-  boost::asio::read_until(_socket, buf, "\r\n\r\n");
-  std::string input = boost::asio::buffer_cast<const char*>(buf.data());
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
   //  Determine the response message's HTTP header
-  std::string message;
-  if (input.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
-    message = std::string("HTTP/1.1 200 OK\r\n\r\n") + OsmApiSampleResponses::SAMPLE_CAPABILITIES + "\r\n";
-  else if (input.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
-    message = std::string("HTTP/1.1 200 OK\r\n\r\n") + OsmApiSampleResponses::SAMPLE_PERMISSIONS + "\r\n";
-  else if (input.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
-    message = std::string("HTTP/1.1 200 OK\r\n\r\n1\r\n");
-  else if (input.find("POST") != std::string::npos)
-    message = std::string("HTTP/1.1 405 Method Not Allowed\r\nAllow: GET\r\n\r\n");
-  else if (input.find("/close/"))
+  HttpResponsePtr response;
+  if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
+  else if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
+  else if (headers.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
+    response.reset(new HttpResponse(200, "1"));
+  else if (headers.find("POST") != std::string::npos)
   {
-    message = std::string("HTTP/1.1 200 OK\r\n\r\n");
+    response.reset(new HttpResponse(405));
+    response->add_header("Allow", "GET");
+  }
+  else if (headers.find(QString(OsmApiWriter::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
+  {
+    response.reset(new HttpResponse(200));
     continue_processing = false;
   }
-  //  Write out the response async
-  boost::asio::async_write(_socket, boost::asio::buffer(message),
-                           boost::bind(&HttpConnection::handle_write, shared_from_this(),
-                                       boost::asio::placeholders::error,
-                                       boost::asio::placeholders::bytes_transferred));
-  return continue_processing;
-}
-
-const int HttpTestServer::TEST_SERVER_PORT = 8910;
-
-std::shared_ptr<std::thread> HttpTestServer::start()
-{
-  return std::shared_ptr<std::thread>(new std::thread(&HttpTestServer::run_server));
-}
-
-HttpTestServer::HttpTestServer(boost::asio::io_service& io_service)
-  : _acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), TEST_SERVER_PORT))
-{
-  start_accept();
-}
-
-void HttpTestServer::run_server()
-{
-  try
+  else
   {
-    boost::asio::io_service io_service;
-    HttpTestServer server(io_service);
-    io_service.run();
+    //  Error out here
+    response.reset(new HttpResponse(404));
+    continue_processing = false;
   }
-  catch (std::exception& e)
-  {
-    LOG_ERROR(e.what());
-  }
+  //  Write out the response
+  write_response(connection, response->to_string());
+  //  Return true if we should continue listening and processing requests
+  return continue_processing && !get_interupt();
 }
 
-void HttpTestServer::start_accept()
+bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
 {
-  HttpConnection::HttpConnectionPtr new_connection = HttpConnection::create(_acceptor.get_io_service());
-  _acceptor.async_accept(new_connection->socket(),
-                         boost::bind(&HttpTestServer::handle_accept, this, new_connection, boost::asio::placeholders::error));
-}
-
-void HttpTestServer::handle_accept(HttpConnection::HttpConnectionPtr new_connection, const boost::system::error_code& error)
-{
+  /*
+  *  - Capabilities
+  *  - Permissions
+  *  - Changeset Create
+  *  - Changeset 1 Upload - respond with an HTTP 404 error for the test
+  *  - Element get
+  *  - Changeset 1 Upload - respond with updated version
+  *  - Changeset Close
+  */
+  //  Stop processing by setting this to false
   bool continue_processing = true;
-  if (!error)
-    continue_processing = new_connection->start();
-
-  if (continue_processing)
-    start_accept();
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
+  //  Determine the response message's HTTP response
+  HttpResponsePtr response;
+  //  Capabilities
+  if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
+  //  Permissions
+  else if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
+  //  Create changeset
+  else if (headers.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
+    response.reset(new HttpResponse(200, "1"));
+  //  Upload changeset 1
+  else if (headers.find(QString(OsmApiWriter::API_PATH_UPLOAD_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  {
+    //  The first time through, the 'version' of element 1 should fail.
+    if (!_has_error)
+    {
+      response.reset(new HttpResponse(409, "Changeset conflict: Version mismatch: Provided 2, server had: 1 of Way 1"));
+      _has_error = true;
+    }
+    else
+      response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_1_RESPONSE));
+  }
+  //  Get way 1's updated version
+  else if (headers.find(QString(OsmApiWriter::API_PATH_GET_ELEMENT).arg("way").arg(1).toStdString()) != std::string::npos)
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_ELEMENT_1_GET_RESPONSE));
+  //  Close changeset
+  else if (headers.find(QString(OsmApiWriter::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
+  {
+    response.reset(new HttpResponse(200));
+    continue_processing = false;
+  }
+  else
+  {
+    //  Error out here
+    response.reset(new HttpResponse(404));
+    continue_processing = false;
+  }
+  //  Write out the response
+  write_response(connection, response->to_string());
+  //  Return true if we should continue listening and processing requests
+  return continue_processing && !get_interupt();
 }
 
+const char* OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE =
+    "<?xml version='1.0' encoding='UTF-8'?>\n"
+    "<osm version='0.6' generator='OpenStreetMap server'>\n"
+    "  <api>\n"
+    "    <version minimum='0.6' maximum='0.6'/>\n"
+    "    <area maximum='0.25'/>\n"
+    "    <note_area maximum='25'/>\n"
+    "    <tracepoints per_page='5000'/>\n"
+    "    <waynodes maximum='2000'/>\n"
+    "    <changesets maximum_elements='10000'/>\n"
+    "    <timeout seconds='300'/>\n"
+    "    <status database='online' api='online' gpx='online'/>\n"
+    "  </api>\n"
+    "  <policy>\n"
+    "    <imagery>\n"
+    "      <blacklist regex='http://xdworld\\.vworld\\.kr:8080/.*'/>\n"
+    "      <blacklist regex='.*\\.here\\.com[/:].*'/>\n"
+    "    </imagery>\n"
+    "  </policy>\n"
+    "</osm>";
+const char* OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE =
+    "<?xml version='1.0' encoding='UTF-8'?>\n"
+    "<osm version='0.6' generator='OpenStreetMap server'>\n"
+    "  <permissions>\n"
+    "    <permission name='allow_read_prefs'/>\n"
+    "    <permission name='allow_read_gpx'/>\n"
+    "    <permission name='allow_write_api'/>\n"
+    "    <permission name='allow_write_gpx'/>\n"
+    "  </permissions>\n"
+    "</osm>";
+const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_REQUEST =
+    "<?xml version='1.0' encoding='UTF-8'?>\n"
+    "<osmChange version='0.6' generator='hootenanny'>\n"
+    "  <modify>\n"
+    "    <way id='1' version='2'>\n"
+    "      <nd ref='1'/>\n"
+    "      <nd ref='2'/>\n"
+    "      <nd ref='3'/>\n"
+    "      <tag k='name' v='Way 1'/>\n"
+    "      <tag k='hoot:status' v='3'/>\n"
+    "    </way>\n"
+    "    <way id='2' version='1'>\n"
+    "      <nd ref='4'/>\n"
+    "      <nd ref='5'/>\n"
+    "      <nd ref='6'/>\n"
+    "      <tag k='name' v='Way 2'/>\n"
+    "      <tag k='hoot:status' v='1'/>\n"
+    "    </way>\n"
+    "    <way id='3' version='1'>\n"
+    "      <nd ref='7'/>\n"
+    "      <nd ref='8'/>\n"
+    "      <nd ref='9'/>\n"
+    "      <tag k='name' v='Way 3'/>\n"
+    "      <tag k='hoot:status' v='2'/>\n"
+    "    </way>\n"
+    "    <way id='4' version='1'>\n"
+    "      <nd ref='3'/>\n"
+    "      <nd ref='8'/>\n"
+    "      <nd ref='7'/>\n"
+    "      <tag k='name' v='Way 4'/>\n"
+    "      <tag k='hoot:status' v='1'/>\n"
+    "    </way>\n"
+    "  </modify>\n"
+    "</osmChange>";
+const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_1_RESPONSE =
+    "<diffResult generator='OpenStreetMap Server' version='0.6'>\n"
+    "  <way old_id='1' new_id='1' new_version='2'/>\n"
+    "  <way old_id='2' new_id='2' new_version='2'/>\n"
+    "  <way old_id='3' new_id='3' new_version='2'/>\n"
+    "  <way old_id='4' new_id='4' new_version='2'/>\n"
+    "</diffResult>";
+const char* OsmApiSampleRequestResponse::SAMPLE_ELEMENT_1_GET_RESPONSE =
+    "<?xml version='1.0' encoding='UTF-8'?>\n"
+    "<osm version='0.6' generator='OpenStreetMap server'>\n"
+    "  <way id='1' version='1'>\n"
+    "    <nd ref='1'/>\n"
+    "    <nd ref='2'/>\n"
+    "    <nd ref='3'/>\n"
+    "    <tag k='name' v='Way 1'/>\n"
+    "    <tag k='highway' v='road'/>\n"
+    "  </way>\n"
+    "</osm>";
 }

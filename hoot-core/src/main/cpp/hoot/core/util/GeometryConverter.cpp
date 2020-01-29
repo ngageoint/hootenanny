@@ -234,7 +234,6 @@ RelationPtr GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
     MetadataTags::RelationMultiPolygon()));
   convertPolygonToRelation(polygon, map, r, s, circularError);
   map->addRelation(r);
-
   return r;
 }
 

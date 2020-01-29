@@ -53,7 +53,7 @@ class PushToDbCommand extends GrailCommand {
         logger.info("Params: " + params);
 
         List<String> options = new LinkedList<>();
-//        options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.remap.ids=false");
         options.add("job.id=" + jobId);
         options.add("api.db.email=" + params.getUser().getEmail());

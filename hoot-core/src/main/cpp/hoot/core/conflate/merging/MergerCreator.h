@@ -28,8 +28,10 @@
 #define MERGECREATOR_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
+#include <hoot/core/conflate/merging/Merger.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/CreatorDescription.h>
 
 // Standard
@@ -39,9 +41,6 @@
 
 namespace hoot
 {
-
-class Match;
-class Merger;
 
 /**
  * Abstract base class for creating conflation feature mergers
@@ -64,7 +63,7 @@ public:
    * @return Returns true if one or more mergers were created and added to the provided mergers
    *  vector.
    */
-  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const = 0;
+  virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const = 0;
 
   /**
    * Generally this just returns the class name of this creator. However, creators that take
@@ -76,7 +75,7 @@ public:
    * Returns true if m1 and m2 are conflicting. If the MergerCreator has no information on the two
    * input matches then false is returned.
    */
-  virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const = 0;
+  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const = 0;
 
   virtual void setArguments(QStringList /*args*/) { throw IllegalArgumentException(); }
 };

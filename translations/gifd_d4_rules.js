@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,7 +49,7 @@ gifd.rules = {
         ['F_CODE','AL005','raw:F_CODE','AL005'], // Animal Sanctuary
         ['F_CODE','AL015','raw:F_CODE','AL015'], // Building
         ['F_CODE','AL016','raw:F_CODE','AL016'], // Overhang (Storefront)
-        ['F_CODE','AL045','raw:F_CODE','AL045'], // Complex Outline
+        ['F_CODE','AL045',undefined,undefined], // Complex Outline. Converted to landuse
         ['F_CODE','AL050','raw:F_CODE','AL050'], // Display Sign
         ['F_CODE','AL075','raw:F_CODE','AL075'], // Gallery
         ['F_CODE','AL095','raw:F_CODE','AL095'], // Homogeneous Radar Significant Area
@@ -464,10 +464,10 @@ gifd.rules = {
        'HTH':'raw:HTH', // Maximum height of obstacles in a Hull Integrity Test Site
        'IDN':'identification_number', // Identification Number
        'KVA':'voltage', // Kilovolt Capacity Attribute
-       'LC1':'bridge:load_class4', // Load Class Type 1
-       'LC2':'bridge:load_class4', // Load Class Type 2
-       'LC3':'bridge:load_class4', // Load Class Type 3
-       'LC4':'bridge:load_class4', // Load Class Type 4
+       'LC1':'mlc:wheeled_oneway', // Load Class Type 1
+       'LC2':'mlc:wheeled', // Load Class Type 2
+       'LC3':'mlc:tracked_oneway', // Load Class Type 3
+       'LC4':'mlc:tracked', // Load Class Type 4
        'LEG':'length', // Length/Diameter in Meters With Greater Precision
        'LEN_':'length', // Length/Diameter
        'LNU':'length:interior_useable', // Useable Length
@@ -574,7 +574,7 @@ gifd.rules = {
        'ZV2':'ele', // Highest Z-Value
        'ZV3':'ele', // Airfield/Aerodrome elevation
        }, // End numBiased
-    
+
 
     // Common one2one rules. Used for both import and export
     one2one : [
@@ -652,8 +652,8 @@ gifd.rules = {
        ['AGD','3','raw:AGD','bi-directional'], // Bi-directional
        ['AGD','997',undefined,undefined], // Unpopulated
 
-       // AHC - Associated Hydrographic Category 
-       // NOTE: Deconflict with HYC 
+       // AHC - Associated Hydrographic Category
+       // NOTE: Deconflict with HYC
        ['AHC','0','hydrographic_category:2','unknown'], // Unknown
        ['AHC','1','hydrographic_category:2','perennial'], // Perennial
        ['AHC','2','hydrographic_category:2','intermittent'], // Intermittent
@@ -1356,25 +1356,25 @@ gifd.rules = {
        ['COE','999','existance','other'], // Other
 
        // COF - Complex Outline Function
-       ['COF','0','facility:type','unknown'], // Unknown
-       ['COF','1','facility:type','agricultural'], // Agricultural
-       ['COF','2','facility:type','commercial'], // Commercial
-       ['COF','3','facility:type','communications'], // Communications
-       ['COF','4','facility:type','diplomatic'], // Diplomatic
-       ['COF','5','facility:type','educational'], // Educational
-       ['COF','6','facility:type','governmental'], // Governmental
-       ['COF','7','facility:type','industrial'], // Industrial
-       ['COF','8','facility:type','medical'], // Medical
-       ['COF','9','facility:type','military'], // Military
-       ['COF','10','facility:type','mixed_urban'], // Mixed Urban
-       ['COF','11','facility:type','recreational'], // Recreational
-       ['COF','12','facility:type','religious'], // Religious
-       ['COF','13','facility:type','reserve'], // Reserve
-       ['COF','14','facility:type','residential'], // Residential
-       ['COF','15','facility:type','transportation'], // Transportation
-       ['COF','16','facility:type','utilities'], // Utilities
-       ['COF','17','facility:type','maritime'], // Maritime
-       ['COF','999','facility:type','other'], // Other
+       ['COF','0','landuse','unknown'], // Unknown
+       ['COF','1','landuse','farm_land'], // Agricultural
+       ['COF','2','landuse','commercial'], // Commercial
+       ['COF','3','landuse','communications'], // Communications
+       ['COF','4','landuse','diplomatic'], // Diplomatic
+       ['COF','5','landuse','education'], // Educational
+       ['COF','6','landuse','government'], // Governmental
+       ['COF','7','landuse','industrial'], // Industrial
+       ['COF','8','landuse','medical'], // Medical
+       ['COF','9','landuse','military'], // Military
+       ['COF','10','landuse','mixed_urban'], // Mixed Urban
+       ['COF','11','landuse','recreation'], // Recreational
+       ['COF','12','landuse','religious'], // Religious
+       ['COF','13','landuse','reserve'], // Reserve
+       ['COF','14','landuse','residential'], // Residential
+       ['COF','15','landuse','transportation'], // Transportation
+       ['COF','16','landuse','utilities'], // Utilities
+       ['COF','17','landuse','maritime'], // Maritime
+       ['COF','999','landuse','other'], // Other
 
        // COMPLETENESS_CODE - Completeness Code
        ['COMPLETENESS_CODE','0','gifd:completeness_code','not_complete'], // Not Complete

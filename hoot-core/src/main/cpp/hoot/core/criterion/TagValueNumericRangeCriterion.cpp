@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagValueNumericRangeCriterion.h"
 
@@ -60,6 +60,7 @@ void TagValueNumericRangeCriterion::setConfiguration(const Settings& conf)
 
 bool TagValueNumericRangeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e);
   //The element must have tags for all keys passed in, and all the values for those keys must be
   //within the specified range.
   for (int i = 0; i < _tagKeys.size(); i++)

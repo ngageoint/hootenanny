@@ -48,6 +48,25 @@ the same key as one specified in add.attributes.visitor.kvps, then the AddAttrib
 add the attribute.  If false, then AddAttributesVisitor will add the attribute to the element
 regardless.
 
+=== add.attributes.visitor.chain.element.criteria
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true and multiple criterion are specified in add.attributes.visitor.element.criteria,
+the attributes of elements will be modified only if they satisfy all of the criteria.  If set to
+false, then only one of the specified criteria must be met in order to modify the attributes of an
+element.
+
+=== add.attributes.visitor.element.criteria
+
+* Data Type: list
+* Default Value: ``
+
+One or more element criteria used for selecting elements whose attributes to modify. Delimit names
+with '='. From the command line, names with ';' and surround the entire list in double quotes.
+E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
+
 === add.attributes.visitor.kvps
 
 * Data Type: list
@@ -88,7 +107,7 @@ the review will receive them as well.
 === add.uuid.visitor.key
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `uuid`
 
 Tag key used by AddUuidVisitor for adding custom unique ID's to data.
 
@@ -102,12 +121,51 @@ By default,conflation examines standard OSM tags for address comparisons (see th
 file).  You can expand the tag keys searched by populating this list. From the command line,
 separate list items with a semicolon and surround the entire list in double quotes.
 
+=== address.allow.lenient.house.number.matching
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, conflation that uses address matching will allow house number subletter mismatches for the
+addresses with the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street
+
+=== address.scorer.enable.caching
+
+* Data Type: bool
+* Default Value: `true`
+
+Allows address comparison to score addresses parsed from elements. This is generally only to be
+turned off when running certain unit tests which are incompatible with it being enabled.
+
 === address.tag.keys.file
 
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/addressTagKeys`
 
 Flat file containing tag keys that make up feature address components.
+
+=== address.translate.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
+address before normalizing it during conflation address matching (note that address normalization
+may involve some form of language translation even when this setting is).  This can have significant
+impact on the runtime performance of conflation when enabled and should only be enabled if the
+source data is known to have non-English addresses.  The configuration option,
+'language.translation.translator', controls which translator is used.
+
+=== address.use.default.language.translation.only
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, conflation using address matching will use only libpostal for translating languages in
+addresses, which occurs during address normalization.  If false, and  address.translate.to.english
+is enabled, POI/Polygon conflation will use additional to English language translation before
+address normalization.  Disable this only if libpostal's language translation is not adequate for
+your language translation needs.
 
 === angle.histogram.extractor.bins
 
@@ -244,12 +302,44 @@ reference dataset will be lost.
 If true, all reviews outside of the score range established by the configuration options
 review.score.criterion.max/min.threshold will be removed.
 
+=== attribute.conflation.suppress.building.tag.on.multipoly.relation.constituents
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, any buildings that are part of a multipolygon relation will have their building=yes tags
+removed during Attribute Conflation.
+
 === attribute.score.extractor.use.weight
 
 * Data Type: bool
 * Default Value: `false`
 
 Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
+
+=== attribute.value.criterion.comparison.type
+
+* Data Type: string
+* Default Value: ``
+
+The value comparison type used by AttributeValueCriterion. Valid values are: NumericEqualTo,
+NumericLessThan, NumericLessThanOrEqualTo, NumericGreaterThan, NumericGreaterThanOrEqualTo,
+TextEqualTo, TextContains, TextStartsWith, or TextEndsWith.
+
+=== attribute.value.criterion.comparison.value
+
+* Data Type: string
+* Default Value: ``
+
+The value to compare with AttributeValueCriterion.
+
+=== attribute.value.criterion.type
+
+* Data Type: string
+* Default Value: ``
+
+The type of attribute to compare with AttributeValueCriterion. Valid key values are: changeset,
+timestamp, user, uid, or version.
 
 === autocorrect.options
 
@@ -259,12 +349,52 @@ Determines whether the AttributeScoreExtractor uses weighting when extracting sc
 Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
 MatchFactory::_tempFixDefaults() for more info.
 
+=== bounds.output.file
+
+* Data Type: string
+* Default Value: `tmp/bounds.osm`
+
+Output location for a bounds file when the `--write-bounds` option is selected for either the
+`changeset-derive`, `convert`, or `crop` commands.
+
 === buffered.overlap.extractor.portion
 
 * Data Type: double
 * Default Value: `0.1`
 
 The portion of the sqrt max of the area that the BufferedOverlapExtractor buffers object by.
+
+=== building.address.match.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, Building Conflation will use building addresses to resolve match conflicts.
+
+=== building.adjoining.tag.score.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+The minimum similarity score required for an adjoining building (building=terrace) to be recognized
+during conflation.
+
+=== building.changed.review
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, during building merging conflation will look for a "changed" building defined as a
+matched building pair where their Intersection over Union value is greater than zero but falls below
+the value specified in building.changed.review.iou.threshold. If the pair is classified as "changed"
+they will be marked for review.
+
+=== building.changed.review.iou.threshold
+
+* Data Type: double
+* Default Value: `0.2`
+
+See building.changed.review.
 
 === building.date.format
 
@@ -328,15 +458,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== building.outline.update.op.remove.building.relations
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, when building outlines are updated the updater will remove the source building relations
-used to create the outline multipolygon relation.  If false, both source building relations and
-outline multipolygon relations will remain.
-
 === building.part.merger.thread.count
 
 * Data Type: int
@@ -389,8 +510,8 @@ for the reference dataset will be ignored and not added to changeset output.
 * Data Type: long
 * Default Value: `1000`
 
-This is the maximum number of elements to write to an OSM API database in a changeset. This value
-is used when splitting a changeset into smaller pieces.
+This is the maximum number of elements to write to an OSM API database in a changeset push.
+This value is used when splitting a changeset into smaller pieces.
 
 NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the
 database can handle in a single changeset.
@@ -418,15 +539,6 @@ another changeset to the OSM API.
 
 The number of seconds after a successful write before submitting another changeset to the OSM API.
 
-=== changeset.buffer
-
-* Data Type: double
-* Default Value: `0.0`
-
-Value in degrees by which the specified AOI (convert.bounding.box) will be expanded when calculating
-changesets.  Setting this too large with some datasets may greatly increase the changeset
-derivation time.
-
 === changeset.description
 
 * Data Type: string
@@ -434,37 +546,12 @@ derivation time.
 
 The text description that is written to the OSM API database with a changeset.
 
-=== changeset.reference.keep.entire.features.crossing.bounds
+=== changeset.hashtags
 
-* Data Type: bool
-* Default Value: `false`
+* Data Type: string
+* Default Value: `#hootbot`
 
-Overrides crop.keep.entire.features.crossing.bounds for the reference input when deriving
-changesets with a bounds.
-
-=== changeset.secondary.keep.entire.features.crossing.bounds
-
-* Data Type: bool
-* Default Value: `false`
-
-Overrides crop.keep.entire.features.crossing.bounds for the secondary input when deriving
-changesets with a bounds.
-
-=== changeset.reference.keep.only.features.inside.bounds
-
-* Data Type: bool
-* Default Value: `false`
-
-Overrides crop.keep.only.features.inside.bounds for the reference input when deriving
-changesets with a bounds.
-
-=== changeset.secondary.keep.only.features.inside.bounds
-
-* Data Type: bool
-* Default Value: `false`
-
-Overrides crop.keep.only.features.inside.bounds for the secondary input when deriving
-changesets with a bounds.
+Set of semicolon separated hashtags associated with a changeset, used for querying changesets and for conflation campaigns
 
 === changeset.max.size
 
@@ -473,6 +560,21 @@ changesets with a bounds.
 
 The maximum allowed element size of an OSM changeset that can be written to an OSM API database
 in a single changeset.
+
+=== changeset.replacement.allow.deleting.reference.features.outside.bounds
+
+* Data Type: bool
+* Default Value: `true`
+
+If disabled, replacement changesets generated by `changeset-derive-replacement` will never add
+delete statements for reference features falling outside of `convert.bounding.box`.
+
+=== changeset.source
+
+* Data Type: string
+* Default Value: `Hootenanny`
+
+Specifies the source for the edits that have been made in the changeset
 
 === changeset.user.id
 
@@ -542,7 +644,7 @@ local path and then `$HOOT_HOME/conf/`.
 * Data Type: double
 * Default Value: `0.6`
 
-The default threshold at which a match is called a match.
+The default threshold at which a match is called a match. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -553,7 +655,7 @@ See also:
 * Data Type: double
 * Default Value: `0.6`
 
-The default threshold at which a miss is called a miss.
+The default threshold at which a miss is called a miss. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -602,7 +704,7 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 * Default Value: `0.6`
 
 The default threshold at which a review is called a review. Reviews are also declared in some
-other situations when the relationship is not clear.
+other situations when the relationship is not clear. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -614,7 +716,7 @@ See also:
 * Default Value: ``
 
 The string that lists the types of conflation used in the user interface.  The possible values
-are: reference, cookieCutter, average, and advancedConflation.
+are: reference, cookieCutter, average, and advancedConflation. TODO: Is this used anywhere?
 
 === conflate.tag.disable.value.truncation
 
@@ -633,6 +735,24 @@ testing purposes only.
 
 A JSON tag filter that is applied to filter features before conflation.  See the Hootenanny
 User Guide "Feature Filtering" section for filter usage examples.
+
+=== conflate.use.data.source.ids.1
+
+* Data Type: bool
+* Default Value: `true`
+
+Determines whether the reader used by the conflate command to read the first input dataset will
+use the element ID's specified by the input datasets (true) or use internal ID management for the
+inputs (false).
+
+=== conflate.use.data.source.ids.2
+
+* Data Type: bool
+* Default Value: `false`
+
+Determines whether the reader used by the conflate command to read the second input dataset will
+use the element ID's specified by the input datasets (true) or use internal ID management for the
+inputs (false).
 
 === conflator.min.valid.score
 
@@ -656,9 +776,9 @@ ID of the node that ContainsNodeCriterion should search for.
 * Default Value: ``
 
 If specified, supporting readers will limit data read from the data source to only features that
-intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified in the projection
-of the input data source.  This setting can be used with both the convert and conflate commands.
-See the documentation for more details.
+intersect the given bounding box. The format is "minx,miny,maxx,maxy" or "min_lon,min_lat,max_lon,max_lat"
+specified in the projection of the input data source.  This setting can be used with both the convert and
+conflate commands. See the documentation for more details.
 
 Example Usage:
 
@@ -684,6 +804,15 @@ If true, will not break apart features crossing the convert bounds. This is anal
 crop.keep.entire.features.crossing.bounds used with the crop command, but used with the convert
 command only and kept as a separate option with a different default value.
 
+=== convert.bounding.box.keep.immediately.connected.ways.outside.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, bounded queries will also return ways that are outside of `convert.bounding.box` but
+immediately connected to ways crossing or within the bounds. Can be used in conjunction with
+`convert.bounding.box.tag.immediately.connected.out.of.bounds.ways`. Not supported by all readers.
+
 === convert.bounding.box.keep.only.features.inside.bounds
 
 * Data Type: bool
@@ -701,6 +830,24 @@ the convert command only and kept as a separate option.
 Same as convert.bounding.box but the resultant bounds filtering is only applied to OSM API database
 data sources when used with the convert and conflate commands.  This setting takes precendence over
 the convert.bounding.box setting for OSM API database data sources only.
+
+=== convert.bounding.box.tag.immediately.connected.out.of.bounds.ways
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, all ways that are outside of the bounds specified by convert.bounding.box when
+performing a bounded API database query but are immediately connected to a way that falls within or
+crosses the bounds are tagged with a custom tag. Must be used in conjunction with
+`convert.bounding.box.keep.immediately.connected.ways.outside.bounds`. Not supported by all readers.
+
+=== convert.require.area.for.polygon
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, an element must be classifiable as an area geometry in the Hootenanny schema in order to
+be converted to a GEOS polygon.
 
 === convert.ops
 
@@ -750,7 +897,8 @@ are required.  The lower the number, the less accurate it will be.
 * Data Type: bool
 * Default Value: `false`
 
-Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not conflate
+Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not
+conflate.
 
 === corner.splitter.rounded.threshold
 
@@ -803,6 +951,21 @@ If true, will not break apart features crossing the crop bounds. Ignored if crop
 If true, will throw out any features that do not fall completely within the crop bounds. Ignored if
 crop.invert is enabled.
 
+=== crop.random.max.node.count
+
+* Data Type: int
+* Default Value: `-1`
+
+The maximum number of nodes to be cropped out when running either the `crop-random` command or
+`RandomMapCropper`.
+
+=== crop.random.pixel.size
+
+* Data Type: double
+* Default Value: `0.001`
+
+The pixel size used when running either the `crop-random` command or `RandomMapCropper`.
+
 === debug.maps.filename
 
 * Data Type: string
@@ -825,7 +988,15 @@ significantly.
 * Default Value: `true`
 
 If false, when running Differential Conflation the reference elements will not be dropped from the
-output.
+output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
+
+=== differential.remove.unconflatable.data
+
+* Data Type: bool
+* Default Value: `true`
+
+If true Differential Conflation will remove all elements from output which Hootenanny is unable to
+match. If false, the unconflatable data will pass through to the output.
 
 === differential.snap.unconnected.roads
 
@@ -845,6 +1016,15 @@ secondary road endpoint nodes to the nearest reference road.
 ** `source:imagery`
 
 List of tags to ignore when performing differential conflation with tags.
+
+=== differential.treat.reviews.as.matches
+
+* Data Type: bool
+* Default Value: `true`
+
+If true reviews are treated as matches by Differential Conflation and removed from the output if
+differential.remove.reference.data is enabled. If set to false, reviews are not treated as matches
+and will pass through to the differential output.
 
 === direction.finder.angle.threshold
 
@@ -909,6 +1089,15 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 If true, the Duplicate Name Remover will always preserve the original name tag.  Otherwise, it
 will treat name and alternate name tags equally.
 
+=== duplicate.node.remover.distance.threshold
+
+* Data Type: double
+* Default Value: `0.01`
+
+When merging nodes with DuplicateNodeRemover, determines what tolerance should be used for deciding
+if two nodes are identical. Larger values are more likely to merge nodes which are not true
+duplicates of each other. The units are in meters, and the value must be greater than zero.
+
 === duplicate.way.remover.strict.tag.matching
 
 * Data Type: bool
@@ -951,10 +1140,10 @@ Size of the in memory way cache used when streaming I/O is used with ways.
 * Data Type: bool
 * Default Value: `false`
 
-If true, element criterions passed to an ElementCriterionConsumer will be negated.  May not be
-honored by all ElementCriterionConsumers.  Example setting which pass element criterions to
-ElementCriterionConsumers: remove.elements.visitor.element.criterion,
-set.tag.value.visitor.element.criterion, etc.
+If true, element criterion passed to an ElementCriterionConsumer will be negated. Not honored by
+all ElementCriterionConsumers. Since this configuration option is shared across all
+ElementCriterionConsumers, there may be undesirable effects in invocations involving multiple
+ElementCriterionConsumers.
 
 === element.sorter.element.buffer.size
 
@@ -1027,6 +1216,98 @@ See also:
 
 The way subline matcher to use when determining matching sublines with generic line conflation.
 
+=== generic.line.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an linear element not conflatable by
+specific Hootenanny conflation routines is considered to have similar tags.
+
+=== generic.point.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match for generic points.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.point.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss for generic points.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.point.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for generic points. See
+`conflate.review.threshold.default`.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.point.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an point element not conflatable by
+specific Hootenanny conflation routines is considered to have similar tags.
+
+=== generic.point.polygon.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match for generic points conflated with polygons.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.point.polygon.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss for generic points conflated with polygons.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.point.polygon.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for generic points conflated with polygons. See
+`conflate.review.threshold.default`.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.point.polygon.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which a pair of point and polygon elements not
+conflatable by specific Hootenanny conflation routines is considered to have similar tags.
+
 === generic.polygon.match.threshold
 
 * Data Type: double
@@ -1060,6 +1341,14 @@ The threshold at which a review is called a review for generic polygons. See
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.polygon.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an polygon element not conflatable by
+specific Hootenanny conflation routines is considered to have similar tags.
 
 === geometry.modifier.rules.file
 
@@ -1118,6 +1407,13 @@ hoot::GeometryModifierOp.
 The maximum number of parsed tag string values stored in an in-memory cache when reading
 GeoNames data.
 
+=== graph.comparator.max.threads
+
+* Data Type: int
+* Default Value: `10`
+
+The maximum number of graph comparator threads that can be launched by the Compare command.
+
 === hash.seed.zero
 
 * Data Type: bool
@@ -1131,7 +1427,7 @@ is required for unit tests, but shouldn't be used in normal operation.
 * Data Type: double
 * Default Value: `0.161`
 
-The threshold at which a match is called a match for roads.
+The threshold at which a match is called a match for roads. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -1534,6 +1830,22 @@ corresponding implicit tag rules database.
 
 A list of paths to include in the javascript translator search path.
 
+=== in.bounds.criterion.bounds
+
+* Data Type: string
+* Default Value: ``
+
+The bounding box used by InBoundsCriterion, of the form: minx,miny,maxx,maxy.
+
+=== in.bounds.criterion.strict
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, InBoundsCriterion requires features exist completely within `in.bounds.criterion.bounds`
+in order for the criterion to be satisfied. If false, features that cross the bounds may also
+satisfy the criterion.
+
 === job.id
 
 * Data Type: string
@@ -1546,7 +1858,7 @@ for job output storage, the ID will be stored in the job status table of the ass
 === json.format.hootenanny
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 Output JSON in a more Hootenanny specific way that includes Hootenanny-specific tags
 including `hoot:*`, `error:circluar`, `type=node/way/relation`, tags in the `tags`
@@ -1619,6 +1931,14 @@ vs
 ...
 -----
 
+=== json.output.tasking.manager.aoi
+
+* Data Type: bool
+* Default Value: `false`
+
+Output the GeoJSON in a format readable in Tasking Manager.  This includes
+per file or per feature `source` tags and compatible geometries.
+
 === json.perserve.empty.tags
 
 * Data Type: bool
@@ -1632,29 +1952,6 @@ Write out empty OSM tags to JSON such as `"text":""`
 * Default Value: `false`
 
 Write out JSON in a more legible manner
-
-=== json.reader.http.bbox.max.size
-
-* Data Type: double
-* Default Value: `0.25`
-
-Maximum size of an HTTP request's bounding box in degrees before it is split up into smaller bounding
-boxes and run in parallel
-
-=== json.reader.http.bbox.parallel
-
-* Data Type: bool
-* Default Value: `false`
-
-Split the bounding box of an HTTP read request into smaller bounding boxes that can be run in parallel
-
-=== json.reader.http.bbox.thread.count
-
-* Data Type: int
-* Default Value: `8`
-
-Number of threads in the thread pool to process HTTP requests that contain bounding boxes that are too
-large to query at once (see `json.reader.http.bbox.max.size`).
 
 === language.detection.detector
 
@@ -1887,6 +2184,7 @@ A setting of -1 is useful for tests where you do not have granular enough loggin
 * Data Type: list
 * Default Value:
 ** `hoot::ReprojectToPlanarOp`
+** `hoot::DuplicateNodeRemover`
 ** `hoot::OneWayRoadStandardizer`
 ** `hoot::DuplicateWayRemover`
 ** `hoot::SuperfluousWayRemover`
@@ -1906,19 +2204,42 @@ A setting of -1 is useful for tests where you do not have granular enough loggin
 A list of map operations to be applied to a map for cleaning purposes, in order.
 'hoot info --operators' displays information about the available transforms.
 
+=== map.comparator.print.full.mismatch.elements.on.map.size.diff
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, when comparing maps with the Compare command it will print out the details for all elements
+identified as different between the two maps when there is a size difference (up to a default
+limit). This is useful in debugging remote test errors. TODO: set this back to false
+
+=== map.merge.ignore.duplicate.ids
+
+* Data Type: bool
+* Default Value: `false`
+
+Option to allow for multiple datasets to be merged into one dataset, while ignoring
+duplicate element IDs.  This allows for two neighboring cells to contain the same way
+that spans both cells and is included in both datasets to not be duplicated when read
+into Hootenanny.
+
 [[match.creators]]
 === match.creators
 
 * Data Type: list
 * Default Value:
 ** `hoot::BuildingMatchCreator`
-** `hoot::ScriptMatchCreator,PoiGeneric.js`
+** `hoot::ScriptMatchCreator,Poi.js`
 ** `hoot::HighwayMatchCreator`
-** `hoot::ScriptMatchCreator,LinearWaterway.js`
+** `hoot::ScriptMatchCreator,River.js`
 ** `hoot::PoiPolygonMatchCreator`
 ** `hoot::ScriptMatchCreator,Area.js`
 ** `hoot::ScriptMatchCreator,Railway.js`
 ** `hoot::ScriptMatchCreator,PowerLine.js`
+** `hoot::ScriptMatchCreator,Point.js`
+** `hoot::ScriptMatchCreator,Line.js`
+** `hoot::ScriptMatchCreator,Polygon.js`
+** `hoot::ScriptMatchCreator,PointPolygon.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
@@ -2000,14 +2321,6 @@ RAM usage of applications in a shared server environment.
 Spacing in meters used by the MaximalSublineMatcher during point discretization performed between
 matching ways.  Larger values may increase runtime performance but decrease conflation quality.
 
-=== merge.nearby.nodes.distance
-
-* Data Type: double
-* Default Value: `1.0`
-
-When merging nodes during convert, determines what tolerance should be used for deciding two nodes
-are identical. Units in meters and defaults to 1.0m.
-
 [[merger.creators]]
 === merger.creators
 
@@ -2021,10 +2334,46 @@ are identical. Units in meters and defaults to 1.0m.
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
+** `hoot::ScriptMergerCreator`
+** `hoot::ScriptMergerCreator`
+** `hoot::ScriptMergerCreator`
+** `hoot::ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
 'hoot info --mergers' displays information about the available mergers.
+
+=== name.contains.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, NameContainsCriterion will only identify partial names whose case matches exactly with the
+name values in name.contains.criterion.names. If false, the cases of the names do not have to match.
+
+=== name.contains.criterion.names
+
+* Data Type: list
+* Default Value: ``
+
+A list of names to use with NameContainsCriterion. From the command line, delimit multiple entries
+with ';' and surround the entire list in double quotes. E.g. "Subway;Jimmys"
+
+=== name.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, NameCriterion will only identify names whose case matches exactly with the name values in
+name.criterion.names. If false, the cases of the names do not have to match.
+
+=== name.criterion.names
+
+* Data Type: list
+* Default Value: ``
+
+A list of names to use with NameCriterion. From the command line, delimit multiple entries with ';'
+and surround the entire list in double quotes. E.g. "Subway;Jimmys"
 
 === network.conflicts.aggression
 
@@ -2245,6 +2594,14 @@ aforementioned situation.
 Determines how strictly the angle should be considered when calculating intersection tie points for
 rubber sheeting. A value of 0 will ignore angle entirely. Large will make the angle comparison more
 strict.
+
+=== nodes.per.way.visitor.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+An element criterion to be used for filtering ways whose nodes are counted. The elements must be
+ways for their nodes to be counted, otherwise the criterion will be ignored.
 
 === tags.visitor.keys
 
@@ -2529,7 +2886,7 @@ Merges nearby nodes together when converting from an OGR format to OSM.
 === ogr2osm.simplify.complex.buildings
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 Implicitly merges certain individual building parts into a single part when converting from an OGR
 format to OSM.
@@ -2660,31 +3017,6 @@ If true, the data is rubbersheeted before conflation, moving perturbed data clos
 The PERTY D value. D is used in e ^ (-perty.grid.spacing / D). Defaults to 1000. Larger values
 result in a more correlated permutation grid.
 
-=== perty.duplicate.poi.duplicate.sigma
-
-* Data Type: double
-* Default Value: `1.0`
-
-The number of duplicate POIs is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
-guarantee that there will always be exactly one duplicate.
-
-=== perty.duplicate.poi.move.multiplier
-
-* Data Type: double
-* Default Value: `1.0`
-
-The distance that a feature is moved is based on the circular error of the source point. The
-new point will be put within N(0, sigma^2) * moveMultiplier meters of the source point where
-sigma is the standard deviation associated with the source point.
-
-=== perty.duplicate.poi.probability
-
-* Data Type: double
-* Default Value: `0.10`
-
-The probability of at least one duplicate being created. See setDuplicateSigma to determine
-how many duplicates will be created.
-
 === perty.grid.spacing
 
 * Data Type: double
@@ -2692,79 +3024,19 @@ how many duplicates will be created.
 
 The size of the PERTY grid spacing in meters.
 
-=== perty.name.change.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-The probability of a change to each character in the name. The expected number of changes is
-`perty.name.change.probability` * str.size().
-
-=== perty.name.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-The probability that a name will be modified.
-
 === perty.ops
 
 * Data Type: list
 * Default Value:
-** `hoot::PertyWaySplitVisitor`
-** `hoot::PertyWayGeneralizeVisitor`
-** `hoot::PertyRemoveRandomElementVisitor`
-** `hoot::PertyDuplicatePoiOp`
-** `hoot::PertyRemoveTagVisitor`
-** `hoot::PertyNameVisitor`
+** `hoot::RandomWaySplitter`
+** `hoot::RandomWayGeneralizer`
+** `hoot::RandomElementRemover`
+** `hoot::RandomNodeDuplicator`
+** `hoot::RandomTagModifier`
+** `hoot::RandomElementRenamer`
 
 A list of operations that should be applied after the geometries have been shifted by PERTY.
-'hoot info --operators | grep Perty' displays information about the available operations.
-
-=== perty.remove.random.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-The probability that a feature will be removed.
-
-=== perty.remove.tag.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-Set the probability that a tag will be removed.
-
-=== perty.remove.tag.visitor.exempt.tag.keys
-
-* Data Type: list
-* Default Value:
-** `REF1`
-** `REF2`
-** `hoot:status`
-** `uuid`
-
-A list of tag keys which are exempt from the tag removal done by PertyRemoveTagsVisitor.  This is
-useful for preventing the removal of tags Hootenanny relies on during conflation.
-
-=== perty.remove.tag.visitor.substitution.keys
-
-* Data Type: list
-* Default Value:
-** `highway`
-
-A list of tag keys which, rather than being removed by the PertyRemoveTagVisitor, will have their
-values replaced instead.  The tag keys in the list match one to one with the replacement values in
-perty.remove.tag.visitor.subsitution.values.
-
-=== perty.remove.tag.visitor.substitution.values
-
-* Data Type: list
-* Default Value:
-** `road`
-
-A list of tag values which, should be substituted by PertyRemoveTagVisitor.  The tag values in the
-list match one to one with the replacement values in perty.remove.tag.visitor.subsitution.keys.
+'hoot info --operators | grep Random' displays information about the available operations.
 
 === perty.search.distance
 
@@ -2775,16 +3047,6 @@ Distance parameter (in meters) that determines how far out to search when trying
 during conflation of reference and perturbed datasets.  This is equivalent in nature to the
 'error:circular' tag used in Hootenanny conflation, however this setting is used instead for
 PERTY scoring only.
-
-=== perty.seed
-
-* Data Type: int
-* Default Value: `-1`
-
-A random seed integer passed to the random number generator accessed by PERTY to give consistent
-results over multiple runs. A value of -1 will generate a seed based on the time to provide
-pseudo-random results in the output.  Other seed values will yield repeatable results when the
-same seed is used in consecutive calls to the PERTY related commands.
 
 === perty.systematic.error.x
 
@@ -2889,35 +3151,6 @@ The number of simulations per test run executed by `perty-test`.  A test run is 
 multiple simulations.  Scores all simulation executed by the test run are averaged to give the
 final PERTY score for the test run.
 
-=== perty.way.generalize.epsilon
-
-* Data Type: double
-* Default Value: `1`
-
-Distance parameter, in meters, that determines to what degree a way is generalized by PERTY.
-Higher values result in more generalization (more nodes removed).
-
-=== perty.way.generalize.probability
-
-* Data Type: double
-* Default Value: `0.1`
-
-The probability between 0.0 and 1.0 that a way will be generalized by PERTY.
-
-=== perty.way.split.min.node.spacing
-
-* Data Type: double
-* Default Value: `1`
-
-The minimum spacing, in meters, that may occur between nodes created by PERTY way splits.
-
-=== perty.way.split.probability
-
-* Data Type: double
-* Default Value: `0.1`
-
-The probability between 0.0 and 1.0 that a way will be split into multiple features by PERTY.
-
 === phone.number.additional.tag.keys
 
 * Data Type: list
@@ -2996,13 +3229,16 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== poi.polygon.address.allow.lenient.house.number.matching
+=== poi.polygon.additional.search.distance
 
-* Data Type: bool
-* Default Value: `true`
+* Data Type: double
+* Default Value: `125.0`
 
-If true, POI/Polygon conflation will allow house number subletter mismatches for the addresses with
-the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street
+The maximum distance, in meters, added to the circular error of the features being compared, the
+total of which allows the features to be considered for match or review based on distance criteria
+only. If a value of zero is specified, then only the feature circular error will factor into the
+search distance. Higher values for this option can cause large increases in conflation runtime for
+dense datasets.
 
 === poi.polygon.address.match.enabled
 
@@ -3014,29 +3250,6 @@ If the data being conflated is known to have poor address data, disabling this o
 conflation runtime performance.  This option is left turned off by default due to the small startup
 time required to use libpostal (~5s), which would be wasteful for small datasets known to have no
 addresses in them.  The startup time is incurred only once per Hootenanny command invocation.
-
-=== poi.polygon.address.translate.to.english
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
-address before normalizing it (note that address normalization may involve some form of language
-translation even when this setting is ).  This can have significant impact on the runtime
-performance of conflation when enabled and should only be enabled if the source data is known to
-have non-English addresses.  The configuration option, 'language.translation.translator', controls
-which translator is used.
-
-=== poi.polygon.address.use.default.language.translation.only
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, POI/Polygon conflation will use only libpostal for translating languages in addresses,
-which occurs during address normalization.  If false, and poi.polygon.translate.addresses.to.english
-is enabled, POI/Polygon conflation will use additional to English language translation before
-address normalization.  Disable this only if libpostal's language translation is not adequate for
-your language translation needs.
 
 === poi.polygon.allow.cross.conflation.merging
 
@@ -3080,23 +3293,13 @@ set to true, then the tag matcher is less strict and will attempt to match the p
 tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will match
 'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.
 
-=== poi.polygon.enable.advanced.matching
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, POI to Polygon conflation will perform additional checks against surrounding features
-for match evidence.  This setting allows for detailed conflation customization but can be runtime
-expensive when enabled.
-
 === poi.polygon.enable.review.reduction
 
 * Data Type: bool
 * Default Value: `true`
 
 If true, POI to Polygon conflation will attempt to reduce unnecessary reviews without increasing
-incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
-enabled.
+incorrect matches.  This setting may be runtime expensive when enabled for large datasets.
 
 === poi.polygon.keep.closest.matches.only
 
@@ -3104,10 +3307,11 @@ enabled.
 * Default Value: `false`
 
 If this setting is true, POI to Polygon conflation will attempt to match the closest feature pairs
-only.  The conflation will not match additional features at greater distances, even if they are
-within the match distance threshold.  Multiple features matches are still possible in the case of
-exact distance ties.  If this setting is false, then multiple POIs found within the match distance
-threshold of a polygon are treated as reviews.
+only. This is useful, for example, when you know the POIs on top of buildings are the only correct
+match in your data. With this setting enabled, the conflation will not match additional features at
+greater distances, even if they are within the match distance threshold. Multiple features matches
+are still possible in the case of exact distance ties. If this setting is false, then multiple POIs
+found within the match distance threshold of a polygon are treated as reviews.
 
 === poi.polygon.match.distance.threshold
 
@@ -3127,28 +3331,6 @@ If an evidence score for a feature pair falls below this value, the relationship
 features will be classified as a review or miss, depending on the value of
 'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except
 when working with specific POI/Polygon conflation use cases that require it.
-
-=== poi.polygon.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match when comparing POIs to polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== poi.polygon.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss when comparing POIs to polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === poi.polygon.name.score.threshold
 
@@ -3210,15 +3392,6 @@ if running 'hoot score-matches' with POI to Polygon conflation.
 If true, POI to polygon conflation will classify all points with OSM address tags as POIs even if
 they do not have specific type tags.
 
-=== poi.polygon.review.distance.threshold
-
-* Data Type: double
-* Default Value: `125.0`
-
-The maximum distance, in meters, combined with the circular error of the features being compared,
-the total of which allows the features to still be considered a match based on distance criteria
-only.
-
 === poi.polygon.review.evidence.threshold
 
 * Data Type: int
@@ -3253,14 +3426,6 @@ If true, POI to polygon conflation always marks matches between POIs and polygon
 building polygons are present as needing review.  The definition of multi-use buildings is
 controlled by the Hootenanny schema.
 
-=== poi.polygon.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for PoiPolygon. See
-`conflate.review.threshold.default`.
-
 === poi.polygon.source.tag.key
 
 * Data Type: string
@@ -3275,7 +3440,7 @@ The source tag key to be used in conjunction with poi.polygon.disable.same.sourc
 
 The tag merger used by POI/Polygon conflation. See 'tag.merger.default' for more information. If
 'poi.polygon.auto.merge.many.poi.to.one.poly.matches' is set to true then 'PreserveTypesTagMerger'
-is always used.
+is always used and changes to this option value are ignore.
 
 === poi.polygon.type.score.threshold
 
@@ -3424,12 +3589,137 @@ See also:
 
 The way subline matcher to use when determining matching sublines.
 
+=== random.element.remover.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability that a feature will be removed.
+
+=== random.element.renamer.change.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability of a change to each character in the name. The expected number of changes is
+`perty.name.change.probability` * str.size().
+
+=== random.element.renamer.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability that a name will be modified.
+
 === random.forest.model.trees
 
 * Data Type: int
 * Default Value: `40`
 
 The number of trees used to train a random forest conflation model.
+
+=== random.node.duplicator.move.multiplier
+
+* Data Type: double
+* Default Value: `1.0`
+
+The distance that a feature is moved is based on the circular error of the source point. The
+new point will be put within N(0, sigma^2) * moveMultiplier meters of the source point where
+sigma is the standard deviation associated with the source point.
+
+=== random.node.duplicator.probability
+
+* Data Type: double
+* Default Value: `0.10`
+
+The probability of at least one duplicate node being created. See `random.node.duplicator.sigma` to
+determine how many duplicates will be created.
+
+=== random.node.duplicator.sigma
+
+* Data Type: double
+* Default Value: `1.0`
+
+The number of duplicate nodes is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
+guarantee that there will always be exactly one duplicate.
+
+=== random.seed
+
+* Data Type: int
+* Default Value: `-1`
+
+A random seed integer passed to the random number generator accessed by map operations and 
+visitors that modify elements randomly (used by PERTY, RandomMapCropper, etc.). to give consistent
+results over multiple runs. A value of -1 will generate a seed based on the time to provide
+pseudo-random results in the output.
+
+=== random.tag.modifier.exempt.tag.keys
+
+* Data Type: list
+* Default Value:
+** `REF1`
+** `REF2`
+** `hoot:status`
+** `uuid`
+
+A list of tag keys which are exempt from the tag removal done by RandomTagModifier.  This is
+useful for preventing the removal of tags Hootenanny relies on during conflation.
+
+=== random.tag.modifier.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+Set the probability that a tag will be removed.
+
+=== random.tag.modifier.substitution.keys
+
+* Data Type: list
+* Default Value:
+** `highway`
+
+A list of tag keys which, rather than being removed by the PertyRemoveTagVisitor, will have their
+values replaced instead.  The tag keys in the list match one to one with the replacement values in
+random.tag.modifier.subsitution.values.
+
+=== random.tag.modifier.substitution.values
+
+* Data Type: list
+* Default Value:
+** `road`
+
+A list of tag values which, should be substituted by PertyRemoveTagVisitor.  The tag values in the
+list match one to one with the replacement values in random.tag.modifier.subsitution.keys.
+
+=== random.way.generalizer.epsilon
+
+* Data Type: double
+* Default Value: `1.0`
+
+Distance parameter, in meters, that determines to what degree a way is generalized by
+RandomWayGeneralizer, which isa part of PERTY. Higher values result in more generalization (more
+nodes removed).
+
+=== random.way.generalizer.probability
+
+* Data Type: double
+* Default Value: `0.1`
+
+The probability between 0.0 and 1.0 that a way will be generalized by PERTY.
+
+=== random.way.splitter.min.node.spacing
+
+* Data Type: double
+* Default Value: `1`
+
+The minimum spacing, in meters, that may occur between nodes created by PERTY way splits.
+
+=== random.way.splitter.probability
+
+* Data Type: double
+* Default Value: `0.1`
+
+The probability between 0.0 and 1.0 that a way will be split into multiple features by PERTY.
 
 === reader.add.source.datetime
 
@@ -3439,23 +3729,29 @@ The number of trees used to train a random forest conflation model.
 By default add the `source:datetime` or `source:ingest:datetime` stamp when reading files.  Not
 honored by all readers.
 
-=== reader.conflate.use.data.source.ids.1
+=== reader.http.bbox.max.download.size
 
-* Data Type: bool
-* Default Value: `true`
+* Data Type: double
+* Default Value: `1.0`
 
-Determines whether the reader used by the conflate command to read the first input dataset will
-use the element ID's specified by the input datasets (true) or use internal ID management for the
-inputs (false).
+Maximum size of an overall bounding box in degrees before Hootenanny rejects the request,
+reject anything larger than 1 square degree.
 
-=== reader.conflate.use.data.source.ids.2
+=== reader.http.bbox.max.size
 
-* Data Type: bool
-* Default Value: `false`
+* Data Type: double
+* Default Value: `0.25`
 
-Determines whether the reader used by the conflate command to read the second input dataset will
-use the element ID's specified by the input datasets (true) or use internal ID management for the
-inputs (false).
+Maximum size of an HTTP request's bounding box in degrees before it is split up into smaller bounding
+boxes and run in parallel
+
+=== reader.http.bbox.thread.count
+
+* Data Type: int
+* Default Value: `4`
+
+Number of threads in the thread pool to process HTTP requests that contain bounding boxes that are too
+large to query at once (see `reader.http.bbox.max.size`).
 
 === reader.keep.status.tag
 
@@ -3497,6 +3793,15 @@ have negative IDs.  Not honored by all readers.
 * Default Value: `false`
 
 By default should a reader use the file status from the file. Not honored by all readers.
+
+=== reader.warn.on.zero.version.element
+
+* Data Type: bool
+* Default Value: `false`
+
+If true supporting map readers will log a warning when an element is encountered with a version of
+zero. This is useful to track when deriving changesets where the reference data is expected to be
+pre-existing.
 
 === relation.with.most.members.op.member.criterion
 
@@ -3709,12 +4014,38 @@ the "Translation" section of the Hootenanny User Guide.
 Export some of the images used when evaluating the graph connections between two maps (`score`
 command).
 
+=== score.matches.allow.uuids.as.ids
+
+* Data Type: bool
+* Default Value: `false`
+
+The current manual match ID format is a 6 character hex string created by the AddRef*Visitor
+classes. This option allows backward compatibilty support for UUID ID formats that exist in some
+older manually matched input files.
+
+=== score.matches.full.debug.output
+
+* Data Type: bool
+* Default Value: `false`
+
+Adds more detail to manual match validation warning/error messages.
+
 === score.matches.remove.nodes
 
 * Data Type: bool
 * Default Value: `false`
 
 Remove REF tags from nodes before match scoring when using the score-matches command.
+
+=== score.matches.require.ref1
+
+* Data Type: bool
+* Default Value: `true`
+
+In some situations manually matched input data may need to be cropped to allow for smaller test
+runtimes. When this is done, sometimes REF1 features will be removed from the input. Disabling this
+option allows for score-matches to run when there are missing REF1 features. Warnings will be logged
+for any that are found.
 
 === script.test.max.exec.time
 
@@ -3725,6 +4056,13 @@ For script test debugging only.  Sets a maximum allowed time, in seconds, for a 
 If the script runs longer than the specified time, then it is forcefully stopped by the system.  If
 the value is set to -1, then there is no time limit for script tests.  This is useful when
 debugging tests which may hang on a remote build server.
+
+=== search.radius.area
+
+* Data Type: double
+* Default Value: `${search.radius.generic.polygon}`
+
+The search radius to use when conflating areas.  See `search.radius.default`
 
 === search.radius.calculator.element.criterion
 
@@ -3751,6 +4089,21 @@ the default value.
 * Default Value: `${search.radius.default}`
 
 The search radius to use when conflating generic lines.  See `search.radius.default`.
+
+=== search.radius.generic.point
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius to use when conflating generic points.  See `search.radius.default`.
+
+=== search.radius.generic.point.polygon
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius to use when conflating generic points with generic polygons.  See
+`search.radius.default`.
 
 === search.radius.generic.polygon
 
@@ -3786,25 +4139,35 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 * Data Type: bool
 * Default Value: `false`
 
-If true, any element with a value populated for the key defined by the set.tag.value.visitor.key
+If true, any element with a value populated for the key defined by the set.tag.value.visitor.keys
 option will have the value specified in the set.tag.value.visitor.value option appended to it.
 
-=== set.tag.value.visitor.element.criterion
+=== set.tag.value.visitor.chain.element.criteria
 
-* Data Type: string
-* Default Value: ``
+* Data Type: bool
+* Default Value: `false`
 
-The plugin name of an element criterion used to select elements to add or modify tags on.  To pass
-in complex nested criteria, use the Hootenanny Javascript interface instead.
+If set to true and multiple criterion are specified in set.tag.value.visitor.element.criteria,
+the tags of elements will be modified only if they satisfy all of the criteria.  If set to
+false, then only one of the specified criteria must be met in order to modify the tags of an
+element.
 
-=== set.tag.value.visitor.key
+=== set.tag.value.visitor.element.criteria
 
 * Data Type: list
 * Default Value: ``
 
-Set the key member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
-adding/modifying one or more tags on all elements in a map. The number of keys in
-`set.tag.value.visitor.key` should match the number of keys in `set.tag.value.visitor.value`.
+The element criteria used to select elements to add or modify tags on used by the SetTagValueVisitor
+and RecursiveSetTagValueOp classes.  To pass in complex nested criteria, use the Hootenanny
+Javascript interface instead.
+
+=== set.tag.value.visitor.keys
+
+* Data Type: list
+* Default Value: ``
+
+Sets the key member in the SetTagValueVisitor and RecursiveSetTagValueOp classes. The number of keys
+in `set.tag.value.visitor.keys` should match the number of keys in `set.tag.value.visitor.values`.
 Separate list items with a semicolon.
 
 === set.tag.value.visitor.overwrite
@@ -3812,16 +4175,17 @@ Separate list items with a semicolon.
 * Data Type: bool
 * Default Value: `true`
 
-If true, the SetTagValueVisitor class will overwrite any existing tag it finds with
-key=set.tag.value.visitor.key, otherwise it will skip updating the tag.
+If true, the SetTagValueVisitor and RecursiveSetTagValueOp classes will overwrite any existing tag
+it finds with key=set.tag.value.visitor.keys, otherwise it will skip updating the tag.
 
-=== set.tag.value.visitor.value
+=== set.tag.value.visitor.values
 
 * Data Type: list
 * Default Value: ``
 
-Set the value member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
-adding/modifying one or more tags on all elements in a map.  Separate list items with a semicolon.
+Set the value member in the SetTagValueVisitor and RecursiveSetTagValueOp classes. The number of
+keys in `set.tag.value.visitor.values` should match the number of keys in
+`set.tag.value.visitor.keys`. Separate list items with a semicolon.
 
 === shape.file.writer.cols
 
@@ -3882,7 +4246,15 @@ the existing way node instead of adding the way endpoint node as a new way node 
 * Default Value: `false`
 
 If true, all way nodes snapped by the Unconnected Way Snapper to another way or way node will be
-marked with a 'hoot:snapped' tag.  Useful for debugging purposes.
+marked with a custom tag.  Useful for debugging purposes.
+
+=== snap.unconnected.ways.mark.snapped.ways
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, all ways snapped by the Unconnected Way Snapper to another way or way node will be
+marked with a custom tag.  Useful for debugging purposes.
 
 === snap.unconnected.ways.snap.to.way.criterion
 
@@ -3902,14 +4274,16 @@ Optional criterion class to filter the types of way nodes being snapped to.  An 
 hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
 for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is enabled.
 
-=== snap.unconnected.ways.snap.to.way.status
+=== snap.unconnected.ways.snap.to.way.statuses
 
-* Data Type: string
-* Default Value: ``
+* Data Type: list
+* Default Value:
+** `Input1`
 
-Status of ways or way nodes being snapped to.  Valid values are 'Input1' or 'Input2'.  Specify
-'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference ways to secondary
-ways.
+Statuses of ways or way nodes being snapped to.  Valid values are 'Input1', 'Input2', or 'Conflated'.
+Specify 'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference ways to
+secondary ways. You may add multiple statuses and separate them with a semicolon. For example, to
+snap to both reference and conflated ways use: 'Input1;Conflated'.
 
 === snap.unconnected.ways.snap.tolerance
 
@@ -3929,13 +4303,16 @@ Optional criterion class to filter the types of ways being snapped.  An example 
 hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as sources for
 way snapping.
 
-=== snap.unconnected.ways.snap.way.status
+=== snap.unconnected.ways.snap.way.statuses
 
-* Data Type: string
-* Default Value: ``
+* Data Type: list
+* Default Value:
+** `Input2`
 
-Status of ways being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1' to
-snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference ways.
+Statuses of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'.  Specify
+'Input1' to snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference
+ways. You may add multiple statuses and separate them with a semicolon. For example, to snap both
+reference and conflated ways use: 'Input1;Conflated'.
 
 === snap.unconnected.ways.use.existing.way.nodes
 
@@ -4023,6 +4400,32 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
+=== tag.contains.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, TagContainsCriterion will only identify partial tag values whose case matches exactly with
+the tag key values in tag.contains.criterion.kvps. If false, the cases of the tag values do not have
+to match.
+
+=== tag.contains.criterion.kvps
+
+* Data Type: list
+* Default Value: ``
+
+Key/value pairs to use with TagContainsCriterion. Delimit keys and values with '='.  From the
+command line, delimit multiple key/value pairs with ';' and surround the entire list in double
+quotes. E.g. "name=Java;name=Shop"
+
+=== tag.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, TagCriterion will only identify tag strings whose cases match exactly with the values in
+tag.criterion.kvps. If false, the cases of the tag strings do not have to match.
+
 === tag.criterion.kvps
 
 * Data Type: list
@@ -4064,6 +4467,15 @@ key/value pairs with ';' and surround the entire list in double quotes.
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
 depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the 
 available mergers.
+
+=== tag.merger.overwrite.exclude
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of tags not to be overwritten on target features during tag merging when using
+OverwriteTagMerger only. Please keep alphabetized.
 
 === tag.printing.format
 
@@ -4128,13 +4540,29 @@ Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to b
 For commands supporting it, the iteration count at which a status message should be logged. This
 setting may have a negative impact on performance if set to a very low value.
 
-=== test.case.cmd
+=== test.case.conflate.cmd
 
 * Data Type: string
 * Default Value: `hoot::ConflateCmd`
 
 Set the conflate command that should be used in a test case. This is only useful when writing
 test cases (`test-files/cases/`) and was originally added to support the MultiaryPoiConflateCmd.
+
+=== test.case.conflate.differential
+
+* Data Type: bool
+* Default Value: `false`
+
+When activated, this runs the conflate case test conflate command with the --differential option.
+
+=== test.case.conflate.differential.include.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+When activated, this runs the conflate case test conflate command with both the --differential
+and --include-tags options (setting this to true automatically sets test.case.conflate.differential
+to true).
 
 === test.force.orthographic.projection
 
@@ -4346,6 +4774,30 @@ The way subline matcher to use when determining matching sublines.
 Distance, in meters, used for sampling way data during angle histogram extraction with the
 SampledAngleHistogramExtractor
 
+=== way.generalizer.criterion
+
+* Data Type: string
+* Default Value: ``
+
+Criterion class used for filtering by WayGeneralizeVisitor. All filtered elements must be ways, so
+any filters contradicting that will be ignored.
+
+=== way.generalizer.epsilon
+
+* Data Type: double
+* Default Value: `0.1`
+
+Distance parameter, in meters, that determines to what degree a way is generalized by
+WayGeneralizeVisitor. Higher values result in more generalization (more nodes removed).
+
+=== way.generalizer.remove.nodes.shared.by.ways
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, WayGeneralizeVisitor disregards nodes shared by ways when removing them. If false, it won't
+remove them.
+
 === way.joiner
 
 * Data Type: string
@@ -4353,9 +4805,24 @@ SampledAngleHistogramExtractor
 
 The way joiner implementation used by the `WayJoinerOp` to repair way splits after a conflation job.
 
-This operation can take on the following two options:
-* `hoot::WayJoinerBasic`
+This operation can take on the following options:
+* `hoot::ReplacementSnappedWayJoiner`
 * `hoot::WayJoinerAdvanced`
+* `hoot::WayJoinerBasic`
+
+=== way.joiner.advanced.strict.name.match
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, WayJoinerAdvanced will not consider the "alt_name" tag when performing name comparisons.
+
+=== way.joiner.leave.parent.id
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, WayJoinerOp will leave a way's parent ID populated after joining.
 
 === way.matcher.heading.delta
 
@@ -4446,7 +4913,7 @@ Location of the word frequency dictionary. If the absolute file path isn't found
 the local `conf` and `$HOOT_HOME/conf` directories will be searched.
 
 This file is typically downloaded from:
-https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2
+https://hoot-support.s3.amazonaws.com/words1.sqlite.bz2
 
 === weighted.word.distance.probability
 
@@ -4499,6 +4966,14 @@ useful for debugging.
 
 When true, writers will include debug information (hoot:* tags; e.g. status). Not honored by all
 writers.
+
+=== writer.include.matched.by.tag
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the 'hoot:matchedBy' tag will be added to element output when
+writer.include.debug.tags=true.
 
 === writer.precision
 

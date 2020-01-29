@@ -150,8 +150,9 @@ void RelationWithMostMembersOp::apply(std::shared_ptr<OsmMap>& map)
     getIdOfRelationWithMaxCritSatisfactions(map, outRelation);
   if (idOfRelationWithMaxCritSatisfactions != 0)
   {
-    OsmUtils::logElementDetail(
-      outRelation, map, Log::Trace, "RelationWithMostMembersOp: output relation");
+    LOG_TRACE(
+      "RelationWithMostMembersOp: output relation\n" <<
+      OsmUtils::getElementDetailString(outRelation, map));
     // output a map with just the relation found and its members
     _setOutput(idOfRelationWithMaxCritSatisfactions, map);
   }

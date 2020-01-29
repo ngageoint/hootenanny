@@ -14,6 +14,6 @@ export TEST_OUTPUT=$OUTPUT_DIR/SplitLongWaysTest.osm.pbf
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
-hoot convert $HOOT_OPTS -D schema.translation.script=$HOOT_HOME/translations/$TRANSLATION -D convert.ops+=$ADDITIONAL_VISITORS $INPUTS $TEST_OUTPUT
+hoot convert $HOOT_OPTS -D duplicate.node.remover.distance.threshold=1.0 -D schema.translation.script=$HOOT_HOME/translations/$TRANSLATION -D convert.ops+=$ADDITIONAL_VISITORS $INPUTS $TEST_OUTPUT
 
 hoot diff $HOOT_OPTS $KNOWN_GOOD_OUTPUT $TEST_OUTPUT && echo "Test Complete"

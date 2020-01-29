@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-QString StringUtils::secondsToDhms(const qint64 durationInMilliseconds)
+QString StringUtils::millisecondsToDhms(const qint64 durationInMilliseconds)
 {
   QString res;
   int duration = (int)(durationInMilliseconds / 1000);
@@ -87,6 +87,19 @@ bool StringUtils::hasDigit(const QString& input)
   return false;
 }
 
+bool StringUtils::isAlphaNumeric(const QString& input)
+{
+  for (int i = 0; i < input.length(); i++)
+  {
+    const QChar character = input.at(i);
+    if (!character.isLetterOrNumber())
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
 bool StringUtils::isNumber(const QString& input)
 {
   bool isNumber = false;
@@ -94,7 +107,8 @@ bool StringUtils::isNumber(const QString& input)
   return isNumber;
 }
 
-std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(const QString& jsonStr)
+std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(
+  const QString& jsonStr)
 {
   LOG_VART(jsonStr);
   std::stringstream strStrm(jsonStr.toUtf8().constData(), std::ios::in);
@@ -116,7 +130,8 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(c
   return jsonObj;
 }
 
-std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(const QStringList& stringList)
+std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(
+  const QStringList& stringList)
 {
   std::shared_ptr<boost::property_tree::ptree> strArr(new boost::property_tree::ptree());
   for (int i = 0; i < stringList.size(); i++)
@@ -131,6 +146,51 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonString
 QString StringUtils::getNumberStringPaddedWithZeroes(const int number, const int padSize)
 {
   return QString("%1").arg(number, padSize, 10, QChar('0'));
+}
+
+void StringUtils::removeEmptyStrings(QStringList& strings)
+{
+  QStringList output;
+  for (int i = 0; i < strings.size(); i++)
+  {
+    if (!strings.at(i).trimmed().isEmpty())
+    {
+      output.append(strings.at(i));
+    }
+  }
+  strings = output;
+}
+
+QSet<QString> StringUtils::getDuplicates(const QStringList& input)
+{
+  QSet<QString> duplicateStrings;
+  QSet<QString> uniqueStrings;
+  for (int i = 0; i < input.size(); i++)
+  {
+    const QString str = input.at(i);
+    if (uniqueStrings.contains(str))
+    {
+      duplicateStrings.insert(str);
+    }
+    else
+    {
+      uniqueStrings.insert(str);
+    }
+  }
+  return duplicateStrings;
+}
+
+bool StringUtils::containsSubstring(const QStringList& input, const QString& substring)
+{
+  return input.filter(substring, Qt::CaseInsensitive).size() > 0;
+}
+
+void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
+{
+  for (int i = 0; i < toRemove.size(); i++)
+  {
+    input.removeAll(toRemove.at(i));
+  }
 }
 
 }

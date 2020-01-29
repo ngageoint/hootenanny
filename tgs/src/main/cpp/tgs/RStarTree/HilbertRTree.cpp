@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HilbertRTree.h"
@@ -56,6 +56,9 @@ HilbertRTree::~HilbertRTree()
 
 void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<int>& fids)
 {
+  //std::cout << "Child count: " << getRoot()->getChildCount() << std::endl;
+  //std::cout << "boxes size: " << boxes.size() << std::endl;
+  //std::cout << "fids size: " << fids.size() << std::endl;
   assert(getRoot()->getChildCount() == 0);
   assert(boxes.size() == fids.size());
   std::vector<UserBoxHolder> sortedBoxes;
@@ -64,7 +67,9 @@ void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<i
   std::vector<int> childNodes;
   _createLeafNodes(sortedBoxes, childNodes);
   _setHeight(0);
+  //std::cout << "Child nodes count: " << childNodes.size() << std::endl;
 
+  //std::cout << "Creating parent nodes..." << std::endl;
   while (childNodes.size() != 1)
   {
     std::vector<int> parentNodes;
@@ -78,6 +83,8 @@ void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<i
 void HilbertRTree::_calculateHilbertValues(const std::vector<Box>& boxes,
   const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes)
 {
+  //std::cout << "Calculating Hilbert values..." << std::endl;
+
   assert(hilbertBoxes.size() == 0);
   HilbertCurve hilbertCurve(_dimensions, 16);
 
@@ -205,18 +212,36 @@ int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights)
 void HilbertRTree::_createLeafNodes(const std::vector<UserBoxHolder>& hilbertBoxes,
   std::vector<int>& result)
 {
+  //std::cout << "                                                            Creating leaf nodes..." << std::endl;
+
   int maxChildCount = getRoot()->getMaxChildCount();
+  //std::cout << "maxChildCount: " << maxChildCount << std::endl;
   result.reserve((int)ceil((float)hilbertBoxes.size() / (float)maxChildCount));
   RTreeNode* node = _getRoot();
+  //std::cout << "node == 0: " << (node == 0) << std::endl;
+  //std::cout << "node id: " << node->getId() << std::endl;
+  //std::cout << "node child count: " << node->getChildCount() << std::endl;
   result.push_back(node->getId());
+
+  //int numProcessed = 0;
+
   for (unsigned int i = 0; i < hilbertBoxes.size(); i++)
   {
     if (node->getChildCount() == maxChildCount)
     {
       node = _store.createNode();
+      //std::cout << "node == 0: " << (node == 0) << std::endl;
+      //std::cout << "node id: " << node->getId() << std::endl;
       result.push_back(node->getId());
     }
     node->addUserChild(*hilbertBoxes[i].box, hilbertBoxes[i].fid);
+
+//    numProcessed++;
+//    if (numProcessed % 100000 == 0)
+//    {
+//      std::cout << "                              Created " << numProcessed << " / " <<
+//        hilbertBoxes.size() << " leaf nodes." << std::endl;
+//    }
   }
 }
 
@@ -224,17 +249,33 @@ void HilbertRTree::_createParentNodes(const std::vector<int>& childNodes,
   std::vector<int>& result)
 {
   int maxChildCount = getRoot()->getMaxChildCount();
+  //std::cout << "maxChildCount: " << maxChildCount << std::endl;
   result.reserve((int)ceil((float)childNodes.size() / (float)maxChildCount));
   RTreeNode* node = _store.createNode();
+  //std::cout << "node == 0: " << (node == 0) << std::endl;
+  //std::cout << "node id: " << node->getId() << std::endl;
+  //std::cout << "node child count: " << node->getChildCount() << std::endl;
   result.push_back(node->getId());
+
+  //int numProcessed = 0;
+
   for (unsigned int i = 0; i < childNodes.size(); i++)
   {
     if (node->getChildCount() == maxChildCount)
     {
       node = _store.createNode();
+//      std::cout << "node == 0: " << (node == 0) << std::endl;
+//      std::cout << "node id: " << node->getId() << std::endl;
       result.push_back(node->getId());
     }
     node->addNodeChild(_getNode(childNodes[i]));
+
+//    numProcessed++;
+//    if (numProcessed % 1000 == 0)
+//    {
+//      std::cout << "                                                            Created " <<
+//        numProcessed << " / " << childNodes.size() << " parent nodes." << std::endl;
+//    }
   }
 }
 
@@ -287,6 +328,7 @@ void HilbertRTree::_greedyShuffle(int parentId)
 class BoxHolder
 {
 public:
+
   HilbertRTree::BoxPair boxPair;
   int hilbertValue;
 

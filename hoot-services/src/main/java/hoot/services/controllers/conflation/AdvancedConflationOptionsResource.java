@@ -86,6 +86,7 @@ public class AdvancedConflationOptionsResource {
     private JSONArray horizontalTemplate;
     private JSONArray attributeTemplate;
     private JSONArray hoot2Template;
+    private JSONArray diffTemplate;
     private JSONObject conflationOptionsTemplate;
     private JSONObject referenceOverride;
     private JSONObject horizontalOverride;
@@ -131,6 +132,18 @@ public class AdvancedConflationOptionsResource {
         return conflationOptions;
     }
 
+    public static List<String> getConflationTypes() {
+        List<String> conflationTypes = new ArrayList<String>(){{ add("Differential w/Tags"); }};
+        conflationTypes.addAll(confMap.keySet().stream().map(type -> {
+                return WordUtils.capitalizeFully(type);
+            }).collect(Collectors.toList())
+        );
+
+        conflationTypes.sort((p1, p2) -> p1.compareTo(p2));
+        conflationTypes.add(0, "Reference");
+        return conflationTypes;
+    }
+
     public AdvancedConflationOptionsResource() {
         if (confOptionsMap == null) {
             confOptionsMap = buildConfOptionsMap();
@@ -141,17 +154,8 @@ public class AdvancedConflationOptionsResource {
     @Path("/conflationtypes")
     @Produces(MediaType.APPLICATION_JSON)
     public Response conflationTypes() {
-        List<String> conflationTypes = new ArrayList<String>(){{ add("Differential w/Tags"); }};
-        conflationTypes.addAll(confMap.keySet().stream().map(type -> {
-                return WordUtils.capitalizeFully(type);
-            }).collect(Collectors.toList())
-        );
-
-        conflationTypes.sort((p1, p2) -> p1.compareTo(p2));
-        conflationTypes.add(0, "Reference");
-
         JSONArray responseJSON = new JSONArray();
-        responseJSON.addAll(conflationTypes);
+        responseJSON.addAll(getConflationTypes());
         return Response.ok(responseJSON.toJSONString()).build();
     }
 
@@ -173,12 +177,17 @@ public class AdvancedConflationOptionsResource {
 
             JSONParser parser = new JSONParser();
 
+            //This first conditional gives the non-default values inferred by
+            //a specific conflation type so the UI can update the discrete values
+            //exposed in the advanced options pane
             if (confType.equalsIgnoreCase("conflationOptions")) {
                 if((conflationOptionsTemplate == null) || doForce) {
                     conflationOptionsTemplate = new JSONObject(confOptionsMap);
                 }
                 return Response.ok(conflationOptionsTemplate.toJSONString()).build();
             }
+            //This one gets the different options exposed in the advanced options pane
+            //grouped by category
             else if (confType.equalsIgnoreCase("hoot2")) {
                 if ((hoot2Template == null) || doForce) {
                     hoot2Template = new JSONArray();
@@ -186,6 +195,18 @@ public class AdvancedConflationOptionsResource {
                 }
                 template = hoot2Template;
             }
+            //This one gets the differential options from the hoot2 config
+            else if (confType.equalsIgnoreCase("differential")) {
+                if ((diffTemplate == null) || doForce) {
+                    JSONArray hoot2Opts = (JSONArray) hoot2Override.get("hoot2");
+                    JSONObject diffOpts = (JSONObject)hoot2Opts.stream().filter(config -> {
+                                return ((JSONObject)config).get("name").equals("Differential");
+                            }).findFirst().orElse(null);
+                    diffTemplate = (JSONArray) diffOpts.get("members");
+                }
+                template = diffTemplate;
+            }
+            //The rest are used in Hoot1 UI
             else if (confType.equalsIgnoreCase("reference")) {
                 if ((referenceTemplate == null) || doForce) {
                     referenceTemplate = new JSONArray();
@@ -228,19 +249,25 @@ public class AdvancedConflationOptionsResource {
     private void getOverrides(Boolean doForce) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
 
-        if ((horizontalOverride == null) || (referenceOverride == null) || doForce) {
-            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HOOT2_OVERRIDE_PATH))){
+        if ((hoot2Override == null) || doForce) {
+            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HOOT2_OVERRIDE_PATH))) {
                 hoot2Override = (JSONObject) parser.parse(fileReader);
             }
+        }
 
-            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, REF_OVERRIDE_PATH))){
+        if ((referenceOverride == null) || doForce) {
+            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, REF_OVERRIDE_PATH))) {
                 referenceOverride = (JSONObject) parser.parse(fileReader);
             }
+        }
 
-            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HORZ_OVERRIDE_PATH))){
+        if ((horizontalOverride == null) || doForce) {
+            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HORZ_OVERRIDE_PATH))) {
                 horizontalOverride = (JSONObject) parser.parse(fileReader);
             }
+        }
 
+        if ((attributeOverride == null) || doForce) {
             try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, ATT_OVERRIDE_PATH))) {
                 attributeOverride = (JSONObject) parser.parse(fileReader);
             }

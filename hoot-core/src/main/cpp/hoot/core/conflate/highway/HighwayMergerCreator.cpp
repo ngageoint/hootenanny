@@ -30,9 +30,9 @@
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/conflate/highway/HighwayTagOnlyMerger.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 using namespace std;
 
@@ -46,7 +46,7 @@ HighwayMergerCreator::HighwayMergerCreator()
   setConfiguration(conf());
 }
 
-bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
+bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
 
@@ -59,9 +59,9 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<Merger*
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const Match* m = *it;
+    ConstMatchPtr m = *it;
     LOG_VART(m->toString());
-    const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(m);
+    const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(m.get());
     // check to make sure all the input matches are building matches.
     if (hm == 0)
     {
@@ -86,11 +86,11 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<Merger*
   {
     if (!ConfigOptions().getHighwayMergeTagsOnly())
     {
-      mergers.push_back(new HighwaySnapMerger(eids, sublineMatcher));
+      mergers.push_back(MergerPtr(new HighwaySnapMerger(eids, sublineMatcher)));
     }
     else
     {
-      mergers.push_back(new HighwayTagOnlyMerger(eids, sublineMatcher));
+      mergers.push_back(MergerPtr(new HighwayTagOnlyMerger(eids, sublineMatcher)));
     }
     result = true;
   }
@@ -107,15 +107,15 @@ vector<CreatorDescription> HighwayMergerCreator::getAllCreators() const
   return result;
 }
 
-bool HighwayMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
-  const Match* m2) const
+bool HighwayMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
+  ConstMatchPtr m2) const
 {
-  const HighwayMatch* hm1 = dynamic_cast<const HighwayMatch*>(m1);
-  const HighwayMatch* hm2 = dynamic_cast<const HighwayMatch*>(m2);
+  const HighwayMatch* hm1 = dynamic_cast<const HighwayMatch*>(m1.get());
+  const HighwayMatch* hm2 = dynamic_cast<const HighwayMatch*>(m2.get());
 
   if (hm1 && hm2)
   {
-    const bool conflicting = hm1->isConflicting(*hm2, map);
+    const bool conflicting = m1->isConflicting(m2, map);
     if (conflicting)
     {
       LOG_TRACE("Conflicting matches: " << m1 << ", " << m2);

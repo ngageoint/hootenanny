@@ -36,15 +36,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveMissingElementsVisitor)
 
-RemoveMissingElementsVisitor::RemoveMissingElementsVisitor()
+RemoveMissingElementsVisitor::RemoveMissingElementsVisitor(
+  const Log::WarningLevel& logLevel, const int maxReport)
 {
-  _v = std::shared_ptr<ReportMissingElementsVisitor>(new ReportMissingElementsVisitor(true));
+  _v =
+    std::shared_ptr<ReportMissingElementsVisitor>(
+      new ReportMissingElementsVisitor(true, logLevel, maxReport));
 }
 
 void RemoveMissingElementsVisitor::visit(const ConstElementPtr& e)
 {
   _v->visit(e);
-  _numAffected = _v->getMissingCount();
+  _numAffected += _v->getMissingCount();
 }
 
 }

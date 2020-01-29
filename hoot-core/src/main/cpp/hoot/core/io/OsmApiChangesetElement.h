@@ -50,9 +50,12 @@ class ElementIdToIdMap;
 
 /** Object that matches an XML tag to its XML attributes */
 typedef QPair<QString, QXmlStreamAttributes> XmlObject;
+typedef std::vector<std::pair<QString, QString>> ElementAttributes;
+typedef std::pair<QString, QString> ElementTag;
+typedef std::vector<ElementTag> ElementTags;
 
 /** Changeset element abstraction for simplified nodes, ways, and relations */
-class XmlElement
+class ChangesetElement
 {
 public:
   /**
@@ -60,12 +63,12 @@ public:
    * @param object XML tag name and attributes
    * @param idMap ID to ID Map for updated IDs
    */
-  XmlElement(const XmlObject& object, ElementIdToIdMap* idMap);
+  ChangesetElement(const XmlObject& object, ElementIdToIdMap* idMap);
   /**
    * @brief XmlElement copy constructor
    * @param element XmlElement object to copy
    */
-  XmlElement(const XmlElement& element);
+  ChangesetElement(const ChangesetElement& element);
   /**
    * @brief addTag  Add a tag to the element
    * @param tag XML tag with key and value attributes
@@ -131,13 +134,13 @@ protected:
    * @param changesetId ID of the changeset to insert into the attributes
    * @return XML string
    */
-  QString toString(const QXmlStreamAttributes& attributes, long changesetId) const;
+  QString toString(const ElementAttributes& attributes, long changesetId) const;
   /**
    * @brief toTagString Get the XML string of a single tag with key/value pair
-   * @param attributes Key/value attributes
+   * @param tag Key/value pair from tag
    * @return XML string
    */
-  QString toTagString(const QXmlStreamAttributes& attributes) const;
+  QString toTagString(const ElementTag& tag) const;
   /**
    * @brief escapeString XML encode certain characters in value
    * @param value String value
@@ -151,34 +154,34 @@ protected:
   /** Element version */
   long _version;
   /** Element attributes */
-  XmlObject _object;
+  ElementAttributes _object;
   /** Element tag list */
-  QVector<XmlObject> _tags;
+  ElementTags _tags;
   /** Pointer to the ID to ID map */
   ElementIdToIdMap* _idMap;
   /** Element status */
   ElementStatus _status;
 };
 /** Handy typedef for element shared pointer */
-typedef std::shared_ptr<XmlElement> XmlElementPtr;
+typedef std::shared_ptr<ChangesetElement> ChangesetElementPtr;
 
 /** Simplified changeset node abstraction */
-class XmlNode : public XmlElement
+class ChangesetNode : public ChangesetElement
 {
 public:
   /**
-   * @brief XmlNode constructor
+   * @brief ChangesetNode constructor
    * @param node XML node tag and attributes
    * @param idMap ID to ID Map for updated IDs
    */
-  XmlNode(const XmlObject& node, ElementIdToIdMap* idMap);
+  ChangesetNode(const XmlObject& node, ElementIdToIdMap* idMap);
   /**
-   * @brief XmlNode copy constructor
-   * @param node XmlNode object to copy
+   * @brief ChangesetNode copy constructor
+   * @param node ChangesetNode object to copy
    */
-  XmlNode(const XmlNode& node);
+  ChangesetNode(const ChangesetNode& node);
   /** Virtual destructor */
-  virtual ~XmlNode() { }
+  virtual ~ChangesetNode() { }
   /**
    * @brief toString Get the XML string equivalent for the node
    * @param changesetId ID of the changeset to insert into the node
@@ -187,25 +190,25 @@ public:
   virtual QString toString(long changesetId) const;
 };
 /** Handy typedef for node shared pointer */
-typedef std::shared_ptr<XmlNode> XmlNodePtr;
+typedef std::shared_ptr<ChangesetNode> ChangesetNodePtr;
 
 /** Simplified changeset way abstraction */
-class XmlWay : public XmlElement
+class ChangesetWay : public ChangesetElement
 {
 public:
   /**
-   * @brief XmlWay constructor
+   * @brief ChangesetWay constructor
    * @param way XML way tag and attributes
    * @param idMap ID to ID Map for updated IDs
    */
-  XmlWay(const XmlObject& way, ElementIdToIdMap* idMap);
+  ChangesetWay(const XmlObject& way, ElementIdToIdMap* idMap);
   /**
-   * @brief XmlWay copy constructor
-   * @param way XmlWay object to copy
+   * @brief ChangesetWay copy constructor
+   * @param way ChangesetWay object to copy
    */
-  XmlWay(const XmlWay& way);
+  ChangesetWay(const ChangesetWay& way);
   /** Virtual destructor */
-  virtual ~XmlWay() { }
+  virtual ~ChangesetWay() { }
   /**
    * @brief addNode Add a node ID to the node (in order)
    * @param id Node ID
@@ -240,30 +243,30 @@ private:
   QVector<long> _nodes;
 };
 /** Handy typedef for way shared pointer */
-typedef std::shared_ptr<XmlWay> XmlWayPtr;
+typedef std::shared_ptr<ChangesetWay> ChangesetWayPtr;
 
 /** Simplified changeset relation member abstraction */
-class XmlMember
+class ChangesetRelationMember
 {
 public:
   /**
-   * @brief XmlMember constructor
+   * @brief ChangesetRelationMember constructor
    * @param member Member attributes
    * @param idMap ID to ID Map for updated IDs
    */
-  XmlMember(const QXmlStreamAttributes& member, ElementIdToIdMap* idMap);
+  ChangesetRelationMember(const QXmlStreamAttributes& member, ElementIdToIdMap* idMap);
   /**
    * @brief isNode/Way/Relation
    * @return true if relation member is node/way/relation
    */
-  bool isNode()     { return _type == "node"; }
-  bool isWay()      { return _type == "way"; }
-  bool isRelation() { return _type == "relation"; }
+  bool isNode()     { return _type == ElementType::Node; }
+  bool isWay()      { return _type == ElementType::Way; }
+  bool isRelation() { return _type == ElementType::Relation; }
   /**
    * @brief getType Get the relation member type
-   * @return relation type as a string
+   * @return relation type as an enumeration
    */
-  QString getType() { return _type; }
+  ElementType::Type getType() { return _type; }
   /**
    * @brief getRef ID of the member referenced
    * @return Element ID
@@ -282,7 +285,7 @@ public:
 
 private:
   /** Member type (node/way/relation) */
-  QString _type;
+  ElementType::Type _type;
   /** Member element ID */
   long _ref;
   /** Member role */
@@ -292,33 +295,33 @@ private:
 };
 
 /** Simplified changeset relation abstraction */
-class XmlRelation : public XmlElement
+class ChangesetRelation : public ChangesetElement
 {
 public:
   /**
-   * @brief XmlRelation constructor
+   * @brief ChangesetRelation constructor
    * @param relation XML relation tag and attributes
    * @param idMap ID to ID Map for updated IDs
    */
-  XmlRelation(const XmlObject& relation, ElementIdToIdMap* idMap);
+  ChangesetRelation(const XmlObject& relation, ElementIdToIdMap* idMap);
   /**
-   * @brief XmlRelation copy constructor
-   * @param relation XmlRelation object to copy
+   * @brief ChangesetRelation copy constructor
+   * @param relation ChangesetRelation object to copy
    */
-  XmlRelation(const XmlRelation& relation);
+  ChangesetRelation(const ChangesetRelation& relation);
   /** Virtual destructor */
-  virtual ~XmlRelation() { }
+  virtual ~ChangesetRelation() { }
   /**
    * @brief addMember Add relation member
    * @param member XML attributes of the relation member
    */
-  void addMember(const QXmlStreamAttributes& member) {  _members.append(XmlMember(member, _idMap)); }
+  void addMember(const QXmlStreamAttributes& member) {  _members.append(ChangesetRelationMember(member, _idMap)); }
   /**
    * @brief getMember Get the member at index
    * @param index Index in the member vector
    * @return relation member
    */
-  XmlMember& getMember(int index) { return _members[index]; }
+  ChangesetRelationMember& getMember(int index) { return _members[index]; }
   /**
    * @brief getMemberCount Get the number of relation members
    * @return relation member count
@@ -340,26 +343,26 @@ public:
 
 private:
   /** List of relation members */
-  QList<XmlMember> _members;
+  QList<ChangesetRelationMember> _members;
 };
 /** Handy typedef for relation shared pointer */
-typedef std::shared_ptr<XmlRelation> XmlRelationPtr;
+typedef std::shared_ptr<ChangesetRelation> ChangesetRelationPtr;
 
 /** Custom sorting function to sort IDs from -1 to -n followed by 1 to m */
+bool id_sort_order(long lhs, long rhs);
 class osm_id_sort
 {
 public:
   bool operator() (long lhs, long rhs) const
   {
-    if (lhs > 0 && rhs > 0)       return lhs < rhs; //  Positive numbers count up
-    else if (lhs < 0 && rhs < 0)  return lhs > rhs; //  Negative numbers count down
-    else                          return lhs < rhs; //  Negative numbers come before positive
+    return id_sort_order(lhs, rhs);
   }
 };
 /** Handy typedef for a vector of sorted ID maps */
-typedef QVector<std::map<long, long, osm_id_sort>> XmlElementIdMap;
+typedef std::vector<std::map<long, long, osm_id_sort>> ChangesetElementIdMap;
 
-/** Class for storing ID to ID associations, this is required because elements that are created in
+/**
+ *  Class for storing ID to ID associations, this is required because elements that are created in
  *  a changeset have negative IDs until they are processed by the OSM API.  If a node is used in a
  *  way that is in the same changeset then the negative ID is used.  If they are split across two
  *  different changesets then the node ID must be the updated ID from the API.  The object keeps
@@ -373,8 +376,7 @@ public:
   typedef typename std::map<long, long, osm_id_sort>::const_iterator const_iterator;
   /** Constructor */
   ElementIdToIdMap()
-    : _oldIdToNew(ElementType::Unknown),
-      _newIdToOld(ElementType::Unknown)
+    : _idToId(ElementType::Unknown)
   {}
   /**
    * @brief addId Add ID to the map
@@ -383,8 +385,7 @@ public:
    */
   void addId(ElementType::Type type, long id)
   {
-    _oldIdToNew[type][id] = id;
-    _newIdToOld[type][id] = id;
+    _idToId[type][id] = id;
   }
   /**
    * @brief updateId Set the new ID
@@ -394,54 +395,48 @@ public:
    */
   void updateId(ElementType::Type type, long old_id, long new_id)
   {
-    _oldIdToNew[type][old_id] = new_id;
-    _newIdToOld[type][new_id] = _newIdToOld[type][old_id];
-    _newIdToOld[type].erase(old_id);
+    _idToId[type][old_id] = new_id;
+    _idToId[type][new_id] = old_id;
   }
   /**
-   * @brief getOldId Get the old ID from the new ID
+   * @brief getId Get the new or old ID from the ID passed in
    * @param type Element type (node/way/relation)
-   * @param new_id Updated (new) ID
-   * @return old ID
+   * @param id ID
+   * @return new or old ID
    */
-  long getOldId(ElementType::Type type, long new_id)
+  long getId(ElementType::Type type, long id)
   {
-    if (_newIdToOld[type].find(new_id) == _newIdToOld[type].end())
-      return new_id;
+    if (_idToId[type].find(id) == _idToId[type].end())
+      return id;
     else
-      return _newIdToOld[type][new_id];
+      return _idToId[type][id];
   }
   /**
-   * @brief getNewId Get the new ID from the old ID
-   * @param type Element type (node/way/relation)
-   * @param old_id Original (old) ID
-   * @return new ID
+   * @brief containsId
+   * @param type
+   * @param id
+   * @return
    */
-  long getNewId(ElementType::Type type, long old_id)
+  bool containsId(ElementType::Type type, long id)
   {
-    if (_oldIdToNew[type].find(old_id) == _oldIdToNew[type].end())
-      return old_id;
-    else
-      return _oldIdToNew[type][old_id];
+    return _idToId[type].find(id) != _idToId[type].end();
   }
   /**
    * @brief begin Get beginning iterator
    * @param type Element type (node/way/relation)
    * @return begin iterator
    */
-  iterator begin(ElementType::Type type)  { return _newIdToOld[type].begin(); }
+  iterator begin(ElementType::Type type)  { return _idToId[type].begin(); }
   /**
    * @brief end Get ending iterator
    * @param type Element type (node/way/relation)
    * @return end iterator
    */
-  iterator end(ElementType::Type type)    { return _newIdToOld[type].end(); }
+  iterator end(ElementType::Type type)    { return _idToId[type].end(); }
 
 private:
   /** Old ID to new ID mapping */
-  XmlElementIdMap _oldIdToNew;
-  /** New ID to old ID mapping */
-  XmlElementIdMap _newIdToOld;
+  ChangesetElementIdMap _idToId;
 };
 
 }

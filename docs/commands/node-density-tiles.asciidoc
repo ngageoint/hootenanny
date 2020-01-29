@@ -6,26 +6,30 @@
 The +node-density-tiles+ command calculates a collection of bounding boxes that contain roughly equal distributions of node data from
 the specified input(s) and writes the output to a file.
 
-* +input+               - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon
-* +output+              - output file to write the tile boundaries to; valid formats are GeoJSON (*.geojson)
+* +input(s)+            - One or more inputs; may be any supported input format (e.g. OSM file). Specify multiple inputs by separating them 
+                          with a semicolon.
+* +output+              - Output file to write the tile boundaries to; must be GeoJSON (*.geojson) or OSM (*.osm).
 * +maxNodeCountPerTile+ - The maximum number of nodes in any tile.  The default is 1000; optional only if pixelSize is not specified
 * +pixelSize+           - The size of the pixel used in the calculation in degrees.  The default is 0.001; optional only if
                           maxNodeCountPerTile is not specified
-* +random-seed+         - seeds the random number generator for consistent tile boundary selection; valid only if --random is specified;
-                          use -1 for no seeding; defaults to -1
-* +--random+            - selects a single random tile from those calculated
+* +random-seed+         - Seeds the random number generator for consistent tile boundary selection; valid only if --random is specified;
+                          use -1 for pseudo-random seeding; defaults to -1
+* +--random+            - Selects a single random tile from those calculated
 
 If too low a value is specified for maxNodeCountPerTile or too high a value is specified for pixelSize, the algorithm used may not be able
 to find a solution.
 
-This command makes use of the optional 'convert.bounding.box' configuration option to determine a subset of the input data to calculate
-tiles for.  However, 'convert.bounding.box' is only currently supported for OSM API database or Hootenanny API database data sources.
-If any other data source is used with the option, this command will return an error.
+This command makes use of the optional 'convert.bounding.box' configuration option to allow for calculating tiles against a subset of the 
+input data. To make use of the option the reader for the specified input data must support bounded reading. To list the Hootenanny input 
+formats that support bounded reading:
+-----
+hoot info --formats --input-bounded
+-----
 
 === Usage
 
 --------------------------------------
-hoot node-density-tiles (input(s)) (output) [maxNodeCountPerTile] [pixelSize] [random-seed] [--random]
+hoot node-density-tiles (input1.osm)[;input2.osm...] (output) [maxNodeCountPerTile] [pixelSize] [random-seed] [--random]
 --------------------------------------
 
 === Examples
@@ -59,3 +63,7 @@ Select a random tile based on node density specifying a particular seed for the 
 --------------------------------------
 hoot node-density-tiles test-files/MyInputFile.osm MyOutputFile.geojson 1000 0.001 2 --random
 --------------------------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

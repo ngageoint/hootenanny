@@ -28,7 +28,7 @@
 #define CONFLATABLE_ELEMENT_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -38,7 +38,7 @@ namespace hoot
  * feature type; e.g. BuildingCriterion.  All ElementCriterion used for identifying conflatable
  * features should inherit from this class
  */
-class ConflatableElementCriterion : public ElementCriterion
+class ConflatableElementCriterion : public GeometryTypeCriterion
 {
 public:
 
@@ -55,7 +55,20 @@ public:
    */
   static QStringList getConflatableCriteriaForElement(const ConstElementPtr& e);
 
+  /**
+   * Returns instantiations of conflatable criteria index by class name
+   *
+   * @return a conflatable criteria map
+   */
   static QMap<QString, ElementCriterionPtr> getConflatableCriteria();
+
+  /**
+   * Returns all ConflatableElementCriterion class names for a given geometry type
+   *
+   * @param type geometry type
+   * @return a list of class names inheriting from ConflatableElementCriterion
+   */
+  static QStringList getCriterionClassNamesByType(const GeometryType& type);
 
 private:
 

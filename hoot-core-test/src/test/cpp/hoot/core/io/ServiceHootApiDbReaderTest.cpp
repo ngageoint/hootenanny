@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -58,7 +58,6 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceHootApiDbReaderTest);
   CPPUNIT_TEST(runCalculateBoundsTest);
   CPPUNIT_TEST(runElementIdTest);
-  CPPUNIT_TEST(runUrlMissingMapIdTest);
   CPPUNIT_TEST(runUrlInvalidMapIdTest);
   CPPUNIT_TEST(runReadTest);
   CPPUNIT_TEST(runPartialReadTest);
@@ -72,6 +71,7 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST(runMultipleMapsSameNameDifferentUsersPublicTest);
   // TODO: fix
   //CPPUNIT_TEST(runMultipleMapsSameNameNoUserPublicTest);
+  CPPUNIT_TEST(readByBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -207,31 +207,6 @@ public:
     HOOT_STR_EQUALS("[1]{Entry: role: n2, eid: Node(-2)}", map->getRelation(-2)->getMembers());
     HOOT_STR_EQUALS("[2]{Entry: role: n1, eid: Node(-1), Entry: role: w1, eid: Way(-1)}",
       map->getRelation(-1)->getMembers());
-  }
-
-  void runUrlMissingMapIdTest()
-  {
-    setUpTest("runUrlMissingMapIdTest");
-    // temporarily disable logging to avoid isValid warning
-    DisableLog dl;
-
-    HootApiDbReader reader;
-    reader.setUserEmail(userEmail());
-    QString exceptionMsg("");
-    try
-    {
-      reader.open(
-        ServicesDbTestUtils::getDbReadUrl(_mapId).toString()
-          .replace("/" + QString::number(_mapId), ""));
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-
-    //I would rather this return: "URL does not contain valid map ID." from
-    //HootApiDbReader::open
-    CPPUNIT_ASSERT(exceptionMsg.contains("An unsupported URL was passed in"));
   }
 
   void runUrlInvalidMapIdTest()
@@ -652,7 +627,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
 
-    //We need to drop to set all the element changeset tags here to empty, which will cause them
+    //We need to set all the element changeset tags here to empty, which will cause them
     //to be dropped from the file output.  If they aren't dropped, they will increment with each
     //test and cause the output comparison to fail.
     QList<ElementAttributeType> types;
@@ -936,7 +911,7 @@ public:
     }
     catch (const HootException& e)
     {
-      exceptionMsg = e.what();\
+      exceptionMsg = e.what();
 
       reader.close();
 
@@ -950,12 +925,74 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("already has map with name"));
   }
 
+  void readByBoundsLeaveConnectedOobWaysTest()
+  {
+    // This will leave any ways in the output which are outside of the bounds but are directly
+    // connected to ways which cross the bounds.
+
+    setUpTest("readByBoundsLeaveConnectedOobWaysTest");
+    _mapId = insertDataForBoundTest();
+
+    HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
+    reader.setKeepImmediatelyConnectedWaysOutsideBounds(true);
+    OsmMapPtr map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
+
+    // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
+
+    reader.setBoundingBox("-88.1,28.89,-88.0,28.91");
+    reader.read(map);
+
+    //quick check to see if the element counts are off...consult the test output for more detail
+
+    //See explanations for these assertions in ServiceOsmApiDbReaderTest::runReadByBoundsTest
+    //(exact same input data)
+    //OsmMapWriterFactory::write(
+      //map, _outputPath + "/readByBoundsLeaveConnectedOobWaysTest.osm", false, true);
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelations().size());
+
+    //We need to set all the element changeset tags here to empty, which will cause them
+    //to be dropped from the file output.  If they aren't dropped, they will increment with each
+    //test and cause the output comparison to fail.
+    QList<ElementAttributeType> types;
+    types.append(ElementAttributeType(ElementAttributeType::Changeset));
+    types.append(ElementAttributeType(ElementAttributeType::Timestamp));
+    RemoveAttributesVisitor attrVis(types);
+    map->visitRw(attrVis);
+
+    MapProjector::projectToWgs84(map);
+
+    OsmXmlWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.write(map, _outputPath + "readByBoundsLeaveConnectedOobWaysTestOutput.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "readByBoundsLeaveConnectedOobWaysTestOutput.osm",
+      _outputPath + "readByBoundsLeaveConnectedOobWaysTestOutput.osm");
+
+    //just want to make sure I can read against the same data twice in a row w/o crashing and also
+    //make sure I don't get the same result again for a different bounds
+    reader.setBoundingBox("-1,-1,1,1");
+    map.reset(new OsmMap());
+    reader.read(map);
+
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+
+    reader.close();
+  }
+
 private:
 
   long _mapId;
   QString _testName;
 };
 
+#ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbReaderTest, "slow");
+#endif  // HOOT_HAVE_SERVICES
 
 }

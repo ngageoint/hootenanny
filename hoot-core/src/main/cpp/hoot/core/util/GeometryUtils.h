@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GEOMETRYUTILS_H
@@ -72,7 +72,8 @@ public:
    *
    * Taken from http://www.movable-type.co.uk/scripts/latlong.html
    */
-  static geos::geom::Coordinate calculateDestination(const geos::geom::Coordinate& start, Degrees bearing, Meters distance);
+  static geos::geom::Coordinate calculateDestination(
+    const geos::geom::Coordinate& start, Degrees bearing, Meters distance);
 
   /**
    * Returns the distance between two coordinates using the haversine formula and a mean earth
@@ -93,7 +94,15 @@ public:
 
   static OGREnvelope* toOGREnvelope(const geos::geom::Envelope& e);
 
+  /** Creates a bounds string in the format (minx,maxx,miny,maxy)
+   *  from an envelope using the `writer.precision` value
+   */
   static QString toString(const geos::geom::Envelope& e);
+
+  /** Creates a bounds string in the format (minx,maxx,miny,maxy)
+   *  from an envelope using the `writer.precision` value
+   */
+  static QString toConfigString(const geos::geom::Envelope& e);
 
   static geos::geom::Geometry* validateGeometry(const geos::geom::Geometry *g);
 
@@ -128,6 +137,29 @@ public:
    */
   static QString envelopeToConfigString(const geos::geom::Envelope& bounds);
 
+  /**
+   * Creates a rectangular map representing a bounding box; useful for debugging
+   *
+   * @param bounds bounding box
+   * @return a bounding box map
+   */
+  static OsmMapPtr createMapFromBounds(const geos::geom::Envelope& bounds);
+
+  /**
+   * Creates a bounding rectangle within the specified map
+   * @param map the map to insert the bounding rectangle in
+   * @param bounds bounding box
+   * @return ElementId of the way created
+   */
+  static ElementId createBoundsInMap(const OsmMapPtr& map, const geos::geom::Envelope& bounds);
+
+  /**
+   * Returns a string representation for a GEOS geometry type
+   *
+   * @param geometryTypeId the geometry type to convert
+   * @return a string
+   */
+  static QString geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId);
 };
 
 }

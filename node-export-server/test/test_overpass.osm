@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="UTF-8"?><osm version="0.6" generator="Overpass API 0.7.55.7 8b86ff77">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2019-12-06T20:55:02Z"/>
+
+  <node id="248743324" lat="41.8935446" lon="12.4877253">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="255331456" lat="41.8907465" lon="12.4976886">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="266310817" lat="41.8926848" lon="12.4931113">
+    <tag k="amenity" v="drinking_water"/>
+    <tag k="disused" v="yes"/>
+  </node>
+  <node id="266310881" lat="41.8923773" lon="12.4934985">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="266317282" lat="41.8932611" lon="12.4901658">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="266317940" lat="41.8913980" lon="12.4911918">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="388983995" lat="41.8869371" lon="12.4949446">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="388984003" lat="41.8877413" lon="12.4945190">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="410781415" lat="41.8911751" lon="12.4847414">
+    <tag k="amenity" v="drinking_water"/>
+    <tag k="disused" v="yes"/>
+  </node>
+  <node id="495113034" lat="41.8913309" lon="12.4934283">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="685457655" lat="41.8902623" lon="12.4867108">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="685461877" lat="41.8891234" lon="12.4875779">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="953890053" lat="41.8887986" lon="12.4879526">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="953890062" lat="41.8909850" lon="12.4883755">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="953909059" lat="41.8889852" lon="12.4968765">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="1157932638" lat="41.8867552" lon="12.4954695">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="1170494282" lat="41.8900409" lon="12.4941977">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="1656861982" lat="41.8907193" lon="12.4883593">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="1709280191" lat="41.8913190" lon="12.4911794">
+    <tag k="amenity" v="drinking_water"/>
+    <tag k="name:ru" v="вода с газом и без. бесплатная"/>
+  </node>
+  <node id="2537299968" lat="41.8911676" lon="12.4987211">
+    <tag k="amenity" v="drinking_water"/>
+    <tag k="indoor" v="no"/>
+  </node>
+  <node id="3785014818" lat="41.8873381" lon="12.4934389">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="3786621294" lat="41.8867114" lon="12.4927208">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="5314059440" lat="41.8863528" lon="12.4901240">
+    <tag k="amenity" v="drinking_water"/>
+    <tag k="fountain" v="nasone"/>
+  </node>
+  <node id="5340247517" lat="41.8912427" lon="12.4978518">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="5340252322" lat="41.8913872" lon="12.4973968">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="5535092255" lat="41.8918027" lon="12.4915049">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="5732659653" lat="41.8936702" lon="12.4923174">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="5767727022" lat="41.8921044" lon="12.4858406">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="5801329944" lat="41.8881076" lon="12.4885132">
+    <tag k="amenity" v="drinking_water"/>
+    <tag k="description:de" v="Wasserbrunnen"/>
+  </node>
+  <node id="6280605307" lat="41.8939824" lon="12.4936946">
+    <tag k="amenity" v="drinking_water"/>
+    <tag k="level" v="1"/>
+  </node>
+  <node id="6547164641" lat="41.8923303" lon="12.4870090">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="6616168986" lat="41.8922741" lon="12.4967144">
+    <tag k="amenity" v="drinking_water"/>
+  </node>
+  <node id="6841124063" lat="41.8906387" lon="12.4926345">
+    <tag k="amenity" v="drinking_water"/>
+    <tag k="name" v="Fuente dentro del Coliseo Romano"/>
+  </node>
+
+</osm>

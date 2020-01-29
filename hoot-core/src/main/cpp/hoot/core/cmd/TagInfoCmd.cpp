@@ -47,11 +47,11 @@ public:
 
   TagInfoCmd() { }
 
-  virtual QString getName() const { return "tag-info"; }
+  virtual QString getName() const override { return "tag-info"; }
 
-  virtual QString getDescription() const { return "Displays tag information for a map"; }
+  virtual QString getDescription() const override { return "Displays tag information for a map"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 1)
     {

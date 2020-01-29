@@ -1,0 +1,106 @@
+Input files: hesDiffCmdTest/input1.osm and hesDiffCmdTest/input2.osm
+
+Match Scoring Differential Summary:
+
+37 manual matches.
+61 elements from the first file were removed in the second file.
+2 new elements were added to the second file.
+6 new elements are involved in wrong matches.
+0 new elements are involved in correct matches.
+4 new wrong matches switched from MatchToMiss.
+1 new wrong matches switched from MatchToReview.
+1 new wrong matches switched from MissToReview.
+59 reviews were lost.
+
+Match Type Changes
+
+New Wrong Matches:
+
+
+MatchToMiss
+
+Node(-1915)
+Node(-1882)
+Way(-215)
+Way(-71)
+
+MatchToReview
+
+Way(-126)
+
+MissToReview
+
+Node(-1927)
+
+New Correct Matches:
+
+none
+
+Added Elements:
+
+Relation(-108)
+Relation(-82)
+
+Removed Elements:
+
+Relation(-195)
+Relation(-194)
+Relation(-193)
+Relation(-192)
+Relation(-191)
+Relation(-190)
+Relation(-189)
+Relation(-188)
+Relation(-187)
+Relation(-186)
+Relation(-185)
+Relation(-184)
+Relation(-183)
+Relation(-182)
+Relation(-181)
+Relation(-180)
+Relation(-179)
+Relation(-178)
+Relation(-177)
+Relation(-176)
+Relation(-175)
+Relation(-174)
+Relation(-173)
+Relation(-171)
+Relation(-170)
+Relation(-169)
+Relation(-168)
+Relation(-167)
+Relation(-166)
+Relation(-165)
+Relation(-164)
+Relation(-163)
+Relation(-162)
+Relation(-161)
+Relation(-160)
+Relation(-159)
+Relation(-158)
+Relation(-157)
+Relation(-156)
+Relation(-155)
+Relation(-154)
+Relation(-153)
+Relation(-152)
+Relation(-151)
+Relation(-150)
+Relation(-149)
+Relation(-148)
+Relation(-147)
+Relation(-146)
+Relation(-145)
+Relation(-144)
+Relation(-143)
+Relation(-142)
+Relation(-141)
+Relation(-140)
+Relation(-139)
+Relation(-138)
+Relation(-137)
+Relation(-136)
+Relation(-113)
+Relation(-48)

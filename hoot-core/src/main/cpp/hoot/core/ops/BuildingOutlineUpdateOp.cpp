@@ -48,6 +48,7 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -124,22 +125,14 @@ private:
   OsmMap& _map;
 };
 
-BuildingOutlineUpdateOp::BuildingOutlineUpdateOp() :
-_removeBuildingRelations(false)
+BuildingOutlineUpdateOp::BuildingOutlineUpdateOp()
 {
-}
-
-void BuildingOutlineUpdateOp::setConfiguration(const Settings& conf)
-{
-  _removeBuildingRelations =
-    ConfigOptions(conf).getBuildingOutlineUpdateOpRemoveBuildingRelations();
 }
 
 void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   _map = map;
-  _buildingRelationIds.clear();
 
   // go through all the relations
   const RelationMap& relations = map->getRelations();
@@ -152,23 +145,8 @@ void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap>& map)
       _createOutline(r);
     }
   }
-
-  LOG_VART(_removeBuildingRelations);
-  if (_removeBuildingRelations)
-  {
-    _deleteBuildingRelations();
-  }
 }
 
-void BuildingOutlineUpdateOp::_deleteBuildingRelations()
-{
-  for (std::set<ElementId>::const_iterator it = _buildingRelationIds.begin(); it !=
-       _buildingRelationIds.end(); ++it)
-  {
-    LOG_TRACE("Removing building relation: " << *it << "...");
-    RecursiveElementRemover(*it).apply(_map);
-  }
-}
 
 void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
                                             const ElementPtr& pElement,
@@ -178,29 +156,35 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
   std::shared_ptr<Geometry> pGeometry;
   try
   {
+    LOG_VART(pElement->getElementType());
     if (pElement->getElementType() == ElementType::Way)
     {
       const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
+      LOG_VART(pWay->isClosedArea());
       if (pWay->isClosedArea())
       {
         pGeometry = elementConverter.convertToPolygon(pWay);
+        LOG_VART(pGeometry->getGeometryTypeId());
       }
     }
 
     if (!pGeometry)
     {
       pGeometry = elementConverter.convertToGeometry(pElement);
+      LOG_VART(pGeometry->getGeometryTypeId());
     }
 
     pOutline.reset(pOutline->Union(pGeometry.get()));
+    LOG_VART(pOutline->getGeometryTypeId());
   }
   catch (const geos::util::TopologyException& e)
   {
     LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
-    Geometry* cleanedGeom = GeometryUtils::validateGeometry(pGeometry.get());
+    std::shared_ptr<Geometry> cleanedGeom(GeometryUtils::validateGeometry(pGeometry.get()));
     try
     {
-      pOutline.reset(pOutline->Union(cleanedGeom));
+      pOutline.reset(pOutline->Union(cleanedGeom.get()));
+      LOG_VART(pOutline->getGeometryTypeId());
     }
     catch (const geos::util::TopologyException& e)
     {
@@ -229,9 +213,6 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
 
   std::shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   const vector<RelationData::Entry> entries = pBuilding->getMembers();
-  QHash<RelationData::Entry,WayPtr> buildingWayLookup;
-
-  bool considerOuterRoleAsPart = !_removeBuildingRelations;
 
   for (size_t i = 0; i < entries.size(); i++)
   {
@@ -241,8 +222,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
       LOG_TRACE("Removing outline role from: " << entries[i] << "...");
       pBuilding->removeElement(entries[i].role, entries[i].getElementId());
     }
-    else if (entries[i].role == MetadataTags::RolePart() ||
-             (considerOuterRoleAsPart && entries[i].role == MetadataTags::RoleOuter()))
+    else if (entries[i].role == MetadataTags::RolePart())
     {
       if (entries[i].getElementId().getType() == ElementType::Way)
       {
@@ -252,7 +232,6 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
         {
           LOG_TRACE("Unioning building part: " << way << "...");
           _unionOutline(pBuilding, way, outline);
-          buildingWayLookup[entries[i]] = way;
         }
       }
       else if (entries[i].getElementId().getType() == ElementType::Relation)
@@ -282,27 +261,29 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
     }
   }
 
+  LOG_VART(outline->isEmpty());
   if (!outline->isEmpty())
   {
-    LOG_TRACE("Creating building outline element...");
+    LOG_TRACE(
+      "Creating building outline element for geometry: " << outline->getGeometryTypeId() << "...");
 
     const std::shared_ptr<Element> pOutlineElement =
       GeometryConverter(_map).convertGeometryToElement(
         outline.get(), pBuilding->getStatus(), pBuilding->getCircularError());
+    LOG_VART(pOutlineElement->getElementType());
+    // This is a bit of a hack. The GeometryConverter is returning us an area here, when we want
+    // a building. There needs to be some investigation into why an area is being returned and if
+    // we can get GeometryConverter to return a building instead.
+    if (pOutlineElement->getTags()["area"] == "yes")
+    {
+      pOutlineElement->getTags().remove("area");
+      pOutlineElement->getTags()["building"] = "yes";
+    }
+    LOG_VART(pOutlineElement);
     _mergeNodes(pOutlineElement, pBuilding);
 
-    if (_removeBuildingRelations)
-    {      
-      // Only copy tags to the outline element if we are removing the building relations.
-      pOutlineElement->setTags(pBuilding->getTags());
-      // We don't need the relation "type" tag.
-      pOutlineElement->getTags().remove("type");
-
-      LOG_TRACE("Marking building: " << pBuilding->getElementId() << " for deletion...");
-      _buildingRelationIds.insert(pBuilding->getElementId());
-    }
     // Never add outlines to multipoly relations, as it triggers JOSM errors.
-    else if (pBuilding->getType() != MetadataTags::RelationMultiPolygon())
+    if (pBuilding->getType() != MetadataTags::RelationMultiPolygon())
     {
       Tags buildingTags = pBuilding->getTags();
       // To preserve naming of relation buildings in JOSM we copy the building's "building" and
@@ -315,32 +296,6 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
       LOG_TRACE("Adding building outline element " << pOutlineElement->getElementId());
       pBuilding->addElement(MetadataTags::RoleOutline(), pOutlineElement);
     }
-
-    // If we are removing the building relations and only keeping the multipoly relations, find
-    // multipoly ways that are the same as the original building ways and copy the tags from the
-    // building ways over to them. Don't do this if we are keeping the both the building and
-    // multipoly relations, as we'll end up with duplicated way errors in JOSM.
-    if (_removeBuildingRelations)
-    {
-      if (pOutlineElement->getElementType() == ElementType::Way)
-      {
-        WayPtr pOutlineWay = std::dynamic_pointer_cast<Way>(pOutlineElement);
-        _updateMultipolyWayMembers(pOutlineWay, buildingWayLookup);
-      }
-      else if (pOutlineElement->getElementType() == ElementType::Relation)
-      {
-        const RelationPtr pOutlineRelation = std::dynamic_pointer_cast<Relation>(pOutlineElement);
-        foreach (RelationData::Entry outlineEntry, pOutlineRelation->getMembers())
-        {
-          ElementPtr pOutlineMember = _map->getElement(outlineEntry.getElementId());
-          if (pOutlineMember->getElementType() == ElementType::Way)
-          {
-            WayPtr pOutlineWay = std::dynamic_pointer_cast<Way>(pOutlineMember);
-            _updateMultipolyWayMembers(pOutlineWay, buildingWayLookup);
-          }
-        }
-      }
-    }
   }
   else
   {
@@ -348,29 +303,6 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
   }
 
   LOG_TRACE("Output building: " << pBuilding);
-}
-
-void BuildingOutlineUpdateOp::_updateMultipolyWayMembers(
-  WayPtr& pOutlineWay, QHash<RelationData::Entry, WayPtr>& buildingWayLookup)
-{
-  // see if it's a duplicate of any building
-  foreach (WayPtr pBuildingWay, buildingWayLookup)
-  {
-    if (pBuildingWay->getNodeCount() == pOutlineWay->getNodeCount())
-    {
-      vector<long> sourceNodes = pBuildingWay->getNodeIds();
-      vector<long> wayNodes = pOutlineWay->getNodeIds();
-      if (sourceNodes == wayNodes)
-      {
-        // Copy all the tags from the building part ways we already updated to the multipoly way
-        // members.
-        pOutlineWay->setTags(pBuildingWay->getTags());
-        // Not certain whether the building part tag should get copied here or not...copying it
-        // for now.
-        //pOutlineWay->getTags().remove(MetadataTags::BuildingPart());
-      }
-    }
-  }
 }
 
 void BuildingOutlineUpdateOp::_mergeNodes(const std::shared_ptr<Element>& changed,

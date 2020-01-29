@@ -57,6 +57,8 @@ public:
 
   virtual void open(const QString& urlStr) override;
 
+  virtual void read(const OsmMapPtr &map) override;
+
 protected:
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) override;
@@ -65,7 +67,7 @@ protected:
 
   virtual std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
-  virtual QString supportedFormats() { return "hootapidb://"; }
+  virtual QString supportedFormats() { return MetadataTags::HootApiDbScheme() + "://"; }
 
 private:
 

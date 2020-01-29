@@ -63,30 +63,21 @@ public:
   virtual void setConfiguration(const Settings &conf) override;
 
   void setCreateUser(bool createIfNotFound) { _createUserIfNotFound = createIfNotFound; }
-
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
-
   void setIncludeDebug(bool includeDebug) { _includeDebug = includeDebug; }
-
   void setTextStatus(bool textStatus) { _textStatus = textStatus; }
-
   void setIncludeCircularError(bool includeCircularError)
   { _includeCircularError = includeCircularError; }
-
   /**
    * If set to true (the default) then all IDs are remapped into new IDs. This is appropriate if
    * any of the input IDs are non-positive.
    */
   void setRemap(bool remap) { _remapIds = remap; }
-
   void setUserEmail(const QString& email) { _userEmail = email; }
-
   void setJobId(const QString& id) { _jobId = id; }
 
   virtual void writePartial(const ConstNodePtr& n) override;
-
   virtual void writePartial(const ConstWayPtr& w) override;
-
   virtual void writePartial(const ConstRelationPtr& r) override;
 
   /**
@@ -97,7 +88,7 @@ public:
 
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
-  virtual QString supportedFormats() override { return "hootapidb://"; }
+  virtual QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
 
 protected:
 

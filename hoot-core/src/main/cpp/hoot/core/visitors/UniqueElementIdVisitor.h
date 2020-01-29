@@ -35,6 +35,8 @@ namespace hoot
 
 /**
  * Returns a set of the element ids visited.
+ *
+ * @todo It may be possible to combine this with ElementIdsVisitor.
  */
 class UniqueElementIdVisitor : public ConstElementVisitor
 {
@@ -42,7 +44,7 @@ public:
 
   static std::string className() { return "hoot::UniqueElementIdVisitor"; }
 
-  UniqueElementIdVisitor() {}
+  UniqueElementIdVisitor();
 
   /**
    * Returns a set containing all the ElementIds visited.

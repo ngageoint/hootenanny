@@ -50,7 +50,10 @@ class MultiaryPoiMergerTest : public HootTestFixture
 
 public:
 
-  MultiaryPoiMergerTest()
+  MultiaryPoiMergerTest() :
+  HootTestFixture(
+    "test-files/rnd/conflate/multiary/MultiaryPoiMergerTest/",
+    "test-output/rnd/conflate/multiary/MultiaryPoiMergerTest/")
   {
     setResetType(ResetAll);
   }
@@ -75,7 +78,9 @@ public:
       "]                                      \n"
       "}                                      \n";
 
-    OsmMapPtr map = OsmJsonReader().loadFromString(testJsonStr);
+    OsmMapPtr map(new OsmMap());
+    OsmJsonReader().loadFromString(testJsonStr, map);
+
     map->setProjection(MapProjector::createOrthographic(0, 0));
 
     map->getNode(-1)->setStatus(Status::fromInput(0));
@@ -85,18 +90,15 @@ public:
 
     MultiaryUtilities::conflate(map);
 
+    const QString testFileName = "basicTest.json";
     OsmJsonWriter writer;
     writer.setIncludeCircularError(false);
-    QString result = writer.toString(map);
-
-    //LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
-    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-                    "{\"type\":\"node\",\"id\":-1,\"lat\":2,\"lon\":-3,\"tags\":{\"amenity\":\"pub\",\"hoot:hash\":\"\",\"name\":\"My Restaurant\",\"alt_name\":\"my Restaurant\",\"source:hash\":\"AAA;BBB\"}},\n"
-                    "{\"type\":\"node\",\"id\":-3,\"lat\":14,\"lon\":-3,\"tags\":{\"amenity\":\"pub\",\"hoot:hash\":\"\",\"name\":\"Not the same\",\"source:hash\":\"CCC;DDD\",\"place\":\"locality\"}},\n"
-                    "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
-                    "{\"type\":\"node\",\"ref\":-3,\"role\":\"reviewee\"},\n"
-                    "{\"type\":\"node\",\"ref\":-1,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:type\":\"POI\",\"hoot:review:note\":\"Somewhat similar (12m) - very close together, similar POI type\",\"hoot:review:members\":\"2\",\"hoot:review:needs\":\"yes\",\"hoot:review:score\":\"-1\"}]\n"
-                    "}\n", result);
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
 };

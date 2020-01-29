@@ -31,11 +31,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import hoot.services.controllers.job.JobStatusResponse;
+import hoot.services.controllers.jobs.JobHistory;
 import hoot.services.models.db.Users;
 
 @Service
 public interface JobsStatusesManager {
-    List<JobStatusResponse> getRecentJobs(Users user, int limit);
     List<JobStatusResponse> getRunningJobs();
-    List<JobStatusResponse> getJobsHistory(Users user);
+    JobHistory getJobsHistory(Users user, String sort, long offset, long limit, String type, String status);
 }

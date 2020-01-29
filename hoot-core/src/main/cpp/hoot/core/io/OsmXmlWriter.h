@@ -71,9 +71,11 @@ public:
    * These tags can be included to allow Osmosis to read the files. There is no useful
    * information in the tags.
    */
-  void setIncludeCompatibilityTags(bool includeCompatibility);
+  void setIncludeCompatibilityTags(bool includeCompatibility)
+  { _includeCompatibilityTags = includeCompatibility; }
   void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds( includeIds ); }
-  void setIncludeHootInfo(bool includeInfo) { _addExportTagsVisitor.setIncludeHootInfo( includeInfo ); }
+  void setIncludeHootInfo(bool includeInfo)
+  { _addExportTagsVisitor.setIncludeHootInfo( includeInfo ); }
   void setIncludePid(bool includePid) { _includePid = includePid; }
 
   /**

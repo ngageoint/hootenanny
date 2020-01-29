@@ -22,21 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryUtilities.h"
 
 // hoot
+#include <hoot/core/conflate/SearchBoundsCalculator.h>
+#include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateHashVisitor.h>
+
 #include <hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h>
-#include <hoot/rnd/conflate/multiary/SearchBoundsCalculator.h>
 
 namespace hoot
 {
@@ -47,11 +48,12 @@ void MultiaryUtilities::conflate(OsmMapPtr map)
 {
   MatchFactory& matchFactory = MatchFactory::getInstance();
   matchFactory.reset();
-  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
+  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
 
   MergerFactory::getInstance().reset();
   std::shared_ptr<MergerFactory> mergerFactory(new MergerFactory());
-  mergerFactory->registerCreator(new MultiaryPoiMergerCreator());
+  mergerFactory->registerCreator(
+        MergerCreatorPtr(new MultiaryPoiMergerCreator()));
 
   MatchThresholdPtr mt(new MatchThreshold(0.39, 0.61, 1.1));
 
@@ -162,11 +164,11 @@ QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(QByteArray check
 
   MatchFactory& matchFactory = MatchFactory::getInstance();
   matchFactory.reset();
-  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
+  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
 
   for (int i = 0; i < ids.size(); i++)
   {
-    Match* m = matchFactory.createMatch(map, check->getElementId(), ElementId::node(ids[i]));
+    MatchPtr m = matchFactory.createMatch(map, check->getElementId(), ElementId::node(ids[i]));
     if (m && m->getProbability() > 0)
     {
       result.append(MultiarySimpleMatch(i, m->getProbability()));

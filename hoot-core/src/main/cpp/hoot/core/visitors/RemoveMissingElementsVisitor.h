@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::RemoveMissingElementsVisitor"; }
 
-  RemoveMissingElementsVisitor();
+  RemoveMissingElementsVisitor(const Log::WarningLevel& logLevel = Log::Trace,
+                               const int maxReport = Log::getWarnMessageLimit());
 
   virtual void setOsmMap(OsmMap* map) { _v->setOsmMap(map);}
 
@@ -57,7 +58,7 @@ public:
   { return "Removing references to elements that do not exist..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Removed " + QString::number(_numAffected) + " missing elements"; }
+  { return "Removed " + QString::number(_numAffected) + " missing element child references"; }
 
   virtual QString getDescription() const
   { return "Removes references to any elements that do not exist"; }

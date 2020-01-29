@@ -28,17 +28,18 @@
 #define DIFFCONFLATOR_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchGraph.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/ops/Boundable.h>
-#include <hoot/core/info/SingleStat.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ProgressReporter.h>
+#include <hoot/core/util/Settings.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -49,7 +50,6 @@
 namespace hoot
 {
 
-class Match;
 class MatchFactory;
 class MatchThreshold;
 
@@ -75,16 +75,17 @@ class MatchThreshold;
  * a change is recorded, in which no element geometry is changed, but the tags from the input2
  * element replace the tags from the input1 element. The output from the tag-differencing
  * will always be an osm changeset (*.osc).
- *
  */
 class DiffConflator : public OsmMapOperation, public Serializable, public Boundable,
     public Configurable, public ProgressReporter
 {
 public:
 
+  static int logWarnCount;
+
   /**
    * @brief className - Get a string that represents this class name
-   * @return - class name
+   * @return class name
    */
   static std::string className() { return "hoot::DiffConflator"; }
 
@@ -102,11 +103,6 @@ public:
   ~DiffConflator();
 
   /**
-   * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
-   * map is not reprojected back to the original projection when conflation is complete.
-   */
-
-  /**
    * @brief apply - Applies the differential conflation operation to the supplied
    * map. If the map is not in a planar projection it is reprojected. The map
    * is not reprojected back to the original projection when conflation is complete.
@@ -116,7 +112,7 @@ public:
 
   /**
    * @brief getClassName - Gets the class name
-   * @return - The class name string
+   * @return The class name string
    */
   virtual std::string getClassName() const { return className(); }
 
@@ -141,9 +137,9 @@ public:
   virtual QString getDescription() const
   { return "Conflates two maps into a single map based on the difference between the inputs"; }
 
-  // Gets the tag differential between the maps. To do this, we look through all
-  // of the matches, and compare tags. A set of newer tags is returned as a
-  // changeset (because updating the tags requires a modify operation)
+  // Gets the tag differential between the maps. To do this, we look through all of the matches,
+  // and compare tags. A set of newer tags is returned as a changeset (because updating the tags
+  // requires a modify operation)
 
   /**
    * @brief getTagDiff - Gets the tag differential that was calculated during the
@@ -162,8 +158,7 @@ public:
   void storeOriginalMap(OsmMapPtr& pMap);
 
   /**
-   * @brief storeOriginalMap - Mark input1 elements (Use Ref1 visitor, because
-   * it's already coded up)
+   * @brief storeOriginalMap - Mark input1 elements
    * @param pMap - Map to add the changes to
    */
   void markInputElements(OsmMapPtr pMap);
@@ -177,7 +172,16 @@ public:
    */
   void addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges);
 
-  void writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput);
+  /**
+   * Writes a changeset with just the data from the input map
+   *
+   * @param pResultMap the input map
+   * @param output the output changeset path
+   * @param separateOutput if true, separates geometry and tag changeset output
+   * @param osmApiDbUrl specifies the target OSM API database, if SQL changeset output is specified
+   */
+  void writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput,
+                      const QString& osmApiDbUrl = "");
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 
@@ -194,7 +198,7 @@ private:
   bool _conflateTags = false;
 
   // Stores the matches we found
-  std::vector<const Match*> _matches;
+  std::vector<ConstMatchPtr> _matches;
 
   // Stores stats calcuated during conflation
   QList<SingleStat> _stats;
@@ -202,24 +206,18 @@ private:
   // Stores the changes we calculate when doing the tag differential
   MemChangesetProviderPtr _pTagChanges;
 
-  // A copy of the "Input1" map. This is used when calculating the tag
-  // differential. It's important, because elements get modified by map
-  // cleaning operations prior to conflation - and we need this as a reference
-  // for original IDs and original geometry, so that we can generate a clean
+  // A copy of the "Input1" map. This is used when calculating the tag differential. It's important,
+  // because elements get modified by map cleaning operations prior to conflation - and we need this
+  // as a reference for original IDs and original geometry, so that we can generate a clean
   // changeset output for the tag diff.
   OsmMapPtr _pOriginalMap;
+  // keep a copy of the original map with only ref1 data to calc the diff when any roads are snapped
+  OsmMapPtr _pOriginalRef1Map;
 
   Progress _progress;
+  int _taskStatusUpdateInterval;
 
-  template <typename InputCollection>
-  void _deleteAll(InputCollection& ic)
-  {
-    for (typename InputCollection::const_iterator it = ic.begin(); it != ic.end(); ++it)
-    {
-      delete *it;
-    }
-    ic.clear();
-  }
+  long _numSnappedWays;
 
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
@@ -227,19 +225,19 @@ private:
    */
   void _reset();
 
-  void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<const Match *> matches);
+  void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr> matches);
 
-  void _printMatches(std::vector<const Match*> matches);
-  void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
+  void _printMatches(std::vector<ConstMatchPtr> matches);
+  void _printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter);
 
   ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr pMap);
 
   // Calculates and stores the tag differential as a set of change objects
   void _calcAndStoreTagChanges();
 
-  // Decides if the newTags should replace the oldTags. Among other things,
-  // it checks the differential.tag.ignore.list
-  bool _compareTags (const Tags &oldTags, const Tags &newTags);
+  // Decides if the newTags should replace the oldTags. Among other things, it checks the
+  // differential.tag.ignore.list
+  bool _tagsAreDifferent(const Tags& oldTags, const Tags& newTags);
 
   // Creates a change object using the original element and new tags
   Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement);
@@ -248,7 +246,7 @@ private:
 
   void _removeMatches(const Status& status);
 
-  void _snapSecondaryRoadsBackToRef();
+  long _snapSecondaryRoadsBackToRef();
 
   void _updateProgress(const int currentStep, const QString message);
 };

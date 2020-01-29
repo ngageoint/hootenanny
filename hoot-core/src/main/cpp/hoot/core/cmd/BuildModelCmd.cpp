@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -43,12 +43,12 @@ public:
 
   BuildModelCmd() { }
 
-  virtual QString getName() const { return "build-model"; }
+  virtual QString getName() const override { return "build-model"; }
 
-  virtual QString getDescription() const
-  { return "Creates a random forest model for conflation"; }
+  virtual QString getDescription() const override
+  { return "Builds a random forest model to be used in conflation"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     // This argument is only valid when converting to .rf from training data.
     bool exportArffOnly = false;

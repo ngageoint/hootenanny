@@ -49,6 +49,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmJsonReader.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -73,7 +74,10 @@ class HighwaySnapMergerTest : public HootTestFixture
 
 public:
 
-  HighwaySnapMergerTest()
+  HighwaySnapMergerTest() :
+  HootTestFixture(
+    "test-files/conflate/highway/HighwaySnapMergerTest/",
+    "test-output/conflate/highway/HighwaySnapMergerTest/")
   {
     setResetType(ResetBasic);
   }
@@ -127,26 +131,27 @@ public:
     ElementConverter ec(map);
     HOOT_STR_EQUALS("[2]{(Way(-1), Way(-5)), (Way(-2), Way(-7))}", replaced);
     HOOT_STR_EQUALS("LINESTRING (50.0000000000000000 0.0000000000000000, 100.0000000000000000 0.0000000000000000)",
-      ec.convertToLineString(map->getWay(-4))->toString());
+      ec.convertToLineString(map->getWay(-1))->toString());
     HOOT_STR_EQUALS("LINESTRING (100.0000000000000000 0.0000000000000000, 150.0000000000000000 0.0000000000000000)",
       ec.convertToLineString(map->getWay(-5))->toString());
     HOOT_STR_EQUALS("LINESTRING (50.0000000000000000 0.0000000000000000, 0.0000000000000000 0.0000000000000000)",
       ec.convertToLineString(map->getWay(-7))->toString());
-    HOOT_STR_EQUALS("way(-4)\n"
+    HOOT_STR_EQUALS("way(-1)\n"
                     "nodes: [2]{-1, -6}\n"
                     "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: conflated\n"
                     "version: 0\n"
                     "visible: 1\n"
                     "circular error: 15\n",
-                    map->getWay(-4)->toString());
+                    map->getWay(-1)->toString());
     HOOT_STR_EQUALS("way(-5)\n"
                     "nodes: [2]{-6, -2}\n"
                     "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 15\n",
+                    "circular error: 15\n"
+                    "parent id: (-1)\n",
                     map->getWay(-5)->toString());
     HOOT_STR_EQUALS("way(-7)\n"
                     "nodes: [2]{-1, -4}\n"
@@ -300,35 +305,14 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
-    QString json = OsmJsonWriter().toString(map);
-
-    TestUtils::mkpath("tmp");
+    const QString testFileName = "runTagsTest.json";
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
     MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::write(map, "tmp/HighwaySnapMergerTest.osm");
-
-    QString expected = QString("{'version': 0.6,'generator': 'Hootenanny','elements': [\n"
-        "{'type':'node','id':-1,'lat':5,'lon':20},\n"
-        "{'type':'node','id':-2,'lat':5,'lon':60},\n"
-        "{'type':'node','id':-3,'lat':5,'lon':60},\n"
-        "{'type':'node','id':-4,'lat':5,'lon':150},\n"
-        "{'type':'node','id':-5,'lat':0,'lon':-30},\n"
-        "{'type':'node','id':-6,'lat':0,'lon':100},\n"
-        "{'type':'node','id':-11,'lat':5,'lon':100},\n"
-        "{'type':'node','id':-12,'lat':0,'lon':20},\n"
-        "{'type':'node','id':-13,'lat':0,'lon':60},\n"
-        "{'type':'way','id':-17,'nodes':[-5,-1],'tags':{'highway':'path','uuid':'w3','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-        "{'type':'way','id':-14,'nodes':[-11,-4],'tags':{'barrier':'wall','uuid':'wall','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-        "{'type':'way','id':-13,'nodes':[-3,-11],'tags':{'barrier':'wall','uuid':'wall','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-        "{'type':'way','id':-12,'nodes':[-1,-2],'tags':{'uuid':'w1','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-        "{'type':'relation','id':-2,'members':[\n"
-        "{'type':'way','ref':-14,'role':''}],'tags':{'highway':'footway','uuid':'r','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-        "{'type':'relation','id':-1,'members':[\n"
-        "{'type':'way','ref':-12,'role':''},\n"
-        "{'type':'way','ref':-13,'role':''}],'tags':{'highway':'footway','uuid':'r;w3','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
-        "}\n"
-        "").replace("'", "\"");
-    HOOT_STR_EQUALS(expected, json);
-
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
   /**
@@ -370,26 +354,14 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
-    QString json = OsmJsonWriter().toString(map);
-
-    QString expected = QString(
-      "{'version': 0.6,'generator': 'Hootenanny','elements': [\n"
-      "{'type':'node','id':-1,'lat':5,'lon':0},\n"
-      "{'type':'node','id':-2,'lat':5,'lon':100},\n"
-      "{'type':'node','id':-3,'lat':0,'lon':40},\n"
-      "{'type':'node','id':-4,'lat':0,'lon':60},\n"
-      "{'type':'node','id':-7,'lat':5,'lon':40},\n"
-      "{'type':'node','id':-8,'lat':5,'lon':60},\n"
-      "{'type':'way','id':-6,'nodes':[-8,-2],'tags':{'" + MetadataTags::ErrorCircular() + "':'15'},\n"
-      "{'type':'way','id':-5,'nodes':[-1,-7],'tags':{'" + MetadataTags::ErrorCircular() + "':'15'},\n"
-      "{'type':'way','id':-4,'nodes':[-7,-8],'tags':{'highway':'road','uuid':'w1;w2','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-      "{'type':'relation','id':-1,'members':[\n"
-      "{'type':'way','ref':-5,'role':''},\n"
-      "{'type':'way','ref':-6,'role':''}],'tags':{'highway':'road','uuid':'w1','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
-      "}\n"
-      "").replace("'", "\"");
-    HOOT_STR_EQUALS(expected, json);
-
+    const QString testFileName = "runTagsSplitTest.json";
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
   /**
@@ -436,21 +408,14 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
-    QString json = OsmJsonWriter().toString(map);
-    LOG_VART(TestUtils::toQuotedString(json.replace("\"", "'")));
-
-    QString expected = QString(
-      "{'version': 0.6,'generator': 'Hootenanny','elements': [\n"
-      "{'type':'node','id':-1,'lat':5,'lon':0},\n"
-      "{'type':'node','id':-2,'lat':5,'lon':50},\n"
-      "{'type':'node','id':-3,'lat':0,'lon':0},\n"
-      "{'type':'node','id':-4,'lat':0,'lon':100},\n"
-      "{'type':'node','id':-5,'lat':0,'lon':50},\n"
-      "{'type':'way','id':-6,'nodes':[-2,-4],'tags':{'highway':'footway','uuid':'r','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-      "{'type':'way','id':-4,'nodes':[-1,-2],'tags':{'highway':'road','uuid':'w1;r','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
-      "}\n"
-      "").replace("'", "\"");
-    HOOT_STR_EQUALS(expected, json);
+    const QString testFileName = "runTagsNoRelationTest.json";
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
   //simple test to make sure review note/type strings don't get interchanged

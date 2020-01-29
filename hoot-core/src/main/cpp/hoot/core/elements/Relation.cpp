@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Relation.h"
 
@@ -58,6 +58,7 @@ int Relation::logWarnCount = 0;
 class AddToVisitedRelationsList
 {
 public:
+
   AddToVisitedRelationsList(QList<long>& relationIds, long thisId) :
     _relationIds(relationIds),
     _thisId(thisId)
@@ -73,6 +74,7 @@ public:
   }
 
 private:
+
   QList<long>& _relationIds;
   long _thisId;
 };
@@ -146,17 +148,31 @@ int Relation::numElementsByRole(const QString& role) const
   return roleCtr;
 }
 
+std::set<ElementId> Relation::getWayMemberIds() const
+{
+  std::set<ElementId> wayMemberIds;
+  const vector<RelationData::Entry>& members = getMembers();
+  for (size_t i = 0; i < members.size(); i++)
+  {
+    RelationData::Entry member = members[i];
+    if (member.getElementId().getType() == ElementType::Way)
+    {
+      wayMemberIds.insert(member.getElementId());
+    }
+  }
+  return wayMemberIds;
+}
+
 Envelope* Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
 {
   return new Envelope(getEnvelopeInternal(ep));
 }
 
-Envelope Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const
+const Envelope& Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const
 {
   LOG_VART(ep.get());
 
-  Envelope result;
-  result.init();
+  _cachedEnvelope.init();
 
   const vector<RelationData::Entry>& members = getMembers();
 
@@ -169,8 +185,8 @@ Envelope Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvid
     if (ep->containsElement(m.getElementId()) == false)
     {
       LOG_TRACE(m.getElementId() << " missing.  Returning empty envelope...");
-      result.setToNull();
-      return result;
+      _cachedEnvelope.setToNull();
+      return _cachedEnvelope;
     }
 
     const std::shared_ptr<const Element> e = ep->getElement(m.getElementId());
@@ -180,15 +196,15 @@ Envelope Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvid
     if (childEnvelope->isNull())
     {
       LOG_TRACE("Child envelope for " << m.getElementId() << " null.  Returning empty envelope...");
-      result.setToNull();
-      return result;
+      _cachedEnvelope.setToNull();
+      return _cachedEnvelope;
     }
 
-    result.expandToInclude(childEnvelope.get());
+    _cachedEnvelope.expandToInclude(childEnvelope.get());
   }
 
-  LOG_VART(result);
-  return result;
+  LOG_VART(_cachedEnvelope);
+  return _cachedEnvelope;
 }
 
 void Relation::_makeWritable()
@@ -222,11 +238,19 @@ void Relation::removeElement(ElementId eid)
 }
 
 void Relation::replaceElement(const std::shared_ptr<const Element>& from,
-  const std::shared_ptr<const Element> &to)
+  const std::shared_ptr<const Element>& to)
 {
   _preGeometryChange();
   _makeWritable();
   _relationData->replaceElement(from->getElementId(), to->getElementId());
+  _postGeometryChange();
+}
+
+void Relation::replaceElement(const ElementId& from, const ElementId& to)
+{
+  _preGeometryChange();
+  _makeWritable();
+  _relationData->replaceElement(from, to);
   _postGeometryChange();
 }
 
@@ -312,6 +336,8 @@ void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
   for (size_t i = 0; i < members.size(); i++)
   {
     const RelationData::Entry& m = members[i];
+    LOG_VART(m.getElementId());
+    LOG_VART(map.containsElement(m.getElementId()));
     if (map.containsElement(m.getElementId()))
     {
       if (m.getElementId().getType() == ElementType::Node)

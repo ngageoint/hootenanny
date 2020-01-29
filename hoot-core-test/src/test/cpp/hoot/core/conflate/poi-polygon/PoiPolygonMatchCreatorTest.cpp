@@ -94,7 +94,7 @@ public:
 
     {
       PoiPolygonMatchCreator uut;
-      vector<const Match*> matches;
+      vector<ConstMatchPtr> matches;
       std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
       uut.createMatches(map, matches, threshold);
       HOOT_STR_EQUALS(2, matches.size());

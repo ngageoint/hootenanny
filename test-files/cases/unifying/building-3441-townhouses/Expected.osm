@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.8778573" minlon="-77.124633" maxlat="38.878061" maxlon="-77.1242621"/>
+    <node visible="true" id="-756772" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8778799999999904" lon="-77.1245203000000004"/>
+    <node visible="true" id="-756770" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779647999999938" lon="-77.1245758999999964"/>
+    <node visible="true" id="-756767" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779421999999926" lon="-77.1246330000000029"/>
+    <node visible="true" id="-756757" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8778573000000023" lon="-77.1245772999999986"/>
+    <node visible="true" id="-756637" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8780400999999927" lon="-77.1243697000000026"/>
+    <node visible="true" id="-756636" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8780610000000024" lon="-77.1243170000000049"/>
+    <node visible="true" id="-756635" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779564000000022" lon="-77.1243146999999993"/>
+    <node visible="true" id="-756631" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8780014000000023" lon="-77.1244719000000032"/>
+    <node visible="true" id="-756630" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779594999999887" lon="-77.1243168000000026"/>
+    <node visible="true" id="-756629" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8780215000000027" lon="-77.1244214000000028"/>
+    <node visible="true" id="-756628" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779171999999988" lon="-77.1244166000000035"/>
+    <node visible="true" id="-756627" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8780252000000033" lon="-77.1244238000000024"/>
+    <node visible="true" id="-756626" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779772999999906" lon="-77.1242620999999957"/>
+    <node visible="true" id="-756625" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8780453999999978" lon="-77.1243730999999855"/>
+    <node visible="true" id="-756624" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779394000000025" lon="-77.1243674999999911"/>
+    <node visible="true" id="-756617" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8778763999999910" lon="-77.1245179000000007"/>
+    <node visible="true" id="-756616" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779204999999948" lon="-77.1244187000000068"/>
+    <node visible="true" id="-756615" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779805999999937" lon="-77.1245237999999915"/>
+    <node visible="true" id="-756614" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779608999999979" lon="-77.1245732999999944"/>
+    <node visible="true" id="-756613" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779839000000038" lon="-77.1245258999999947"/>
+    <node visible="true" id="-756612" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8779372999999921" lon="-77.1243661000000031"/>
+    <node visible="true" id="-756611" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8780045999999970" lon="-77.1244738999999981"/>
+    <node visible="true" id="-756610" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8778997999999945" lon="-77.1244707999999974"/>
+    <node visible="true" id="-756609" timestamp="2019-09-04T13:12:06Z" version="1" lat="38.8778960999999939" lon="-77.1244683000000038"/>
+    <way visible="true" id="-756820" timestamp="2019-09-04T13:12:06Z" version="1">
+        <nd ref="-756637"/>
+        <nd ref="-756636"/>
+        <nd ref="-756626"/>
+        <nd ref="-756635"/>
+        <nd ref="-756630"/>
+        <nd ref="-756637"/>
+        <tag k="addr:source:date" v="2019/02/20"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="source:ingest:datetime" v="2019-08-30T17:28:59.109Z"/>
+        <tag k="addr:street" v="N FREDERICK ST"/>
+        <tag k="addr:postcode" v="22205"/>
+        <tag k="building" v="terrace"/>
+        <tag k="source:datetime" v="2019-09-04T13:12:06Z"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="848"/>
+        <tag k="addr:full" v="848 N FREDERICK ST"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-756819" timestamp="2019-09-04T13:12:06Z" version="1">
+        <nd ref="-756629"/>
+        <nd ref="-756627"/>
+        <nd ref="-756625"/>
+        <nd ref="-756637"/>
+        <nd ref="-756630"/>
+        <nd ref="-756624"/>
+        <nd ref="-756629"/>
+        <tag k="addr:source:date" v="2019/02/20"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="source:ingest:datetime" v="2019-08-30T17:28:59.108Z"/>
+        <tag k="addr:street" v="N FREDERICK ST"/>
+        <tag k="addr:postcode" v="22205"/>
+        <tag k="building" v="terrace"/>
+        <tag k="source:datetime" v="2019-09-04T13:12:06Z"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="846"/>
+        <tag k="addr:full" v="846 N FREDERICK ST"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-756818" timestamp="2019-09-04T13:12:06Z" version="1">
+        <nd ref="-756631"/>
+        <nd ref="-756629"/>
+        <nd ref="-756624"/>
+        <nd ref="-756612"/>
+        <nd ref="-756628"/>
+        <nd ref="-756616"/>
+        <nd ref="-756631"/>
+        <tag k="addr:source:date" v="2019/02/20"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="source:ingest:datetime" v="2019-08-30T17:28:59.106Z"/>
+        <tag k="addr:street" v="N FREDERICK ST"/>
+        <tag k="addr:postcode" v="22205"/>
+        <tag k="building" v="terrace"/>
+        <tag k="source:datetime" v="2019-09-04T13:12:06Z"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="844"/>
+        <tag k="addr:full" v="844 N FREDERICK ST"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-756817" timestamp="2019-09-04T13:12:06Z" version="1">
+        <nd ref="-756615"/>
+        <nd ref="-756613"/>
+        <nd ref="-756611"/>
+        <nd ref="-756631"/>
+        <nd ref="-756616"/>
+        <nd ref="-756610"/>
+        <nd ref="-756615"/>
+        <tag k="addr:source:date" v="2019/02/20"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="source:ingest:datetime" v="2019-08-30T17:28:59.105Z"/>
+        <tag k="addr:street" v="N FREDERICK ST"/>
+        <tag k="addr:postcode" v="22205"/>
+        <tag k="building" v="terrace"/>
+        <tag k="source:datetime" v="2019-09-04T13:12:06Z"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="842"/>
+        <tag k="addr:full" v="842 N FREDERICK ST"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-756816" timestamp="2019-09-04T13:12:06Z" version="1">
+        <nd ref="-756614"/>
+        <nd ref="-756615"/>
+        <nd ref="-756610"/>
+        <nd ref="-756609"/>
+        <nd ref="-756617"/>
+        <nd ref="-756772"/>
+        <nd ref="-756614"/>
+        <tag k="addr:source:date" v="2019/02/20"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="source:ingest:datetime" v="2019-08-30T17:28:59.104Z"/>
+        <tag k="addr:street" v="N FREDERICK ST"/>
+        <tag k="addr:postcode" v="22205"/>
+        <tag k="building" v="terrace"/>
+        <tag k="source:datetime" v="2019-09-04T13:12:06Z"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="840"/>
+        <tag k="addr:full" v="840 N FREDERICK ST"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-756579" timestamp="2019-09-04T13:12:06Z" version="1">
+        <nd ref="-756767"/>
+        <nd ref="-756770"/>
+        <nd ref="-756614"/>
+        <nd ref="-756772"/>
+        <nd ref="-756757"/>
+        <nd ref="-756767"/>
+        <tag k="addr:source:date" v="2019/02/20"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="source:ingest:datetime" v="2019-08-30T17:28:59.103Z"/>
+        <tag k="addr:street" v="N FREDERICK ST"/>
+        <tag k="addr:postcode" v="22205"/>
+        <tag k="building" v="terrace"/>
+        <tag k="comment" v="sigma_project"/>
+        <tag k="source:datetime" v="2019-09-04T13:12:06Z"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="838"/>
+        <tag k="addr:full" v="838 N FREDERICK ST"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

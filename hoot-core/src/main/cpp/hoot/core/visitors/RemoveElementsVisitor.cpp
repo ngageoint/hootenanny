@@ -33,7 +33,6 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -44,50 +43,49 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RemoveElementsVisitor)
 RemoveElementsVisitor::RemoveElementsVisitor(bool negateCriteria) :
 _recursive(false),
 _count(0),
-_negateCriteria(negateCriteria),
-_chainCriteria(false)
+_startElementCount(0)
 {
+  _negateCriteria = negateCriteria;
+  _chainCriteria = false;
 }
 
 void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
 
+  // TODO: need to separate element.criterion.negate out in to separate options for each consumer
+  // of it; otherwise we may end up with conflicts with certain combinations of config option inputs
+  // to certain command invocations
   _negateCriteria = configOptions.getElementCriterionNegate();
-
-
+  _chainCriteria = configOptions.getRemoveElementsVisitorChainElementCriteria();
+  LOG_VARD(_chainCriteria);
   const QStringList critNames = configOptions.getRemoveElementsVisitorElementCriteria();
   LOG_VART(critNames);
-  if (critNames.size() > 0)
+  _addCriteria(critNames);
+  // TODO: Maybe we should just make MultipleCriterionConsumerVisitor configurable and move this up?
+  LOG_VARD(_criteria.size());
+  LOG_VARD(_configureChildren);
+  if (_configureChildren)
   {
-    _criteria.clear();
-    for (int i = 0; i < critNames.size(); i++)
+    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
+         it != _criteria.end(); ++it)
     {
-      const QString critName = critNames.at(i);
-      if (!critName.trimmed().isEmpty())
+      ElementCriterionPtr crit = *it;
+      Configurable* c = dynamic_cast<Configurable*>(crit.get());
+      if (c != 0)
       {
-        LOG_VARD(critName);
-        ElementCriterionPtr crit =
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
-        addCriterion(crit);
-        Configurable* c = dynamic_cast<Configurable*>(crit.get());
-        if (c != 0)
-        {
-          c->setConfiguration(conf);
-        }
+        c->setConfiguration(conf);
       }
     }
   }
 
   _recursive = configOptions.getRemoveElementsVisitorRecursive();
-  _chainCriteria = configOptions.getRemoveElementsVisitorChainElementCriteria();
-  LOG_VARD(_chainCriteria);
 }
 
 void RemoveElementsVisitor::setOsmMap(OsmMap* map)
 {
   _map = map;
+  _startElementCount = _map->getElementCount();
 
   for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
        it != _criteria.end(); ++it)
@@ -99,57 +97,8 @@ void RemoveElementsVisitor::setOsmMap(OsmMap* map)
   }
 }
 
-void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& crit)
-{
-  LOG_VART(_negateCriteria);
-  LOG_VART(crit.get());
-  if (_negateCriteria)
-  {
-    _criteria.push_back(ElementCriterionPtr(new NotCriterion(crit)));
-  }
-  else
-  {
-    _criteria.push_back(ElementCriterionPtr(crit));
-  }
-}
-
-bool RemoveElementsVisitor::_criteriaSatisfied(const ConstElementPtr& e) const
-{
-  bool criteriaSatisfied;
-  if (!_chainCriteria)
-  {
-    criteriaSatisfied = false;
-    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-         it != _criteria.end(); ++it)
-    {
-      ElementCriterionPtr crit = *it;
-      if (crit->isSatisfied(e))
-      {
-        criteriaSatisfied = true;
-        break;
-      }
-    }
-  }
-  else
-  {
-    criteriaSatisfied = true;
-    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-         it != _criteria.end(); ++it)
-    {
-      ElementCriterionPtr crit = *it;
-      if (!crit->isSatisfied(e))
-      {
-        criteriaSatisfied = false;
-        break;
-      }
-    }
-  }
-  return criteriaSatisfied;
-}
-
 void RemoveElementsVisitor::visit(const ElementPtr& e)
 {
-  LOG_VART(_criteria.size());
   if (_criteria.size() == 0)
   {
     throw IllegalArgumentException("No criteria specified for RemoveElementsVisitor.");
@@ -167,6 +116,10 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     {
       RemoveElementByEid::removeElement(_map->shared_from_this(), e->getElementId());
     }
+  }
+  else
+  {
+    LOG_TRACE("Not removing element: " << e);
   }
 }
 

@@ -26,10 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/DataConverter.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -40,7 +44,7 @@ using namespace std;
 namespace hoot
 {
 
-class ConvertCmd : public BaseCommand
+class ConvertCmd : public BoundedCommand
 {
 public:
 
@@ -48,12 +52,17 @@ public:
 
   ConvertCmd() {}
 
-  virtual QString getName() const { return "convert"; }
+  virtual QString getName() const override { return "convert"; }
 
-  virtual QString getDescription() const { return "Converts between map formats"; }
+  virtual QString getDescription() const override { return "Converts between map formats"; }
 
-  virtual int runSimple(QStringList args) override
+  virtual int runSimple(QStringList& args) override
   {
+    LOG_VART(args.size());
+    LOG_VART(args);
+
+    BoundedCommand::runSimple(args);
+
     if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
@@ -63,8 +72,6 @@ public:
     QElapsedTimer timer;
     timer.start();
 
-    LOG_VART(args.size());
-    LOG_VART(args);
     QStringList inputs;
     QString output;
     int argIndex = 0;
@@ -74,10 +81,9 @@ public:
       LOG_VART(arg);
       // Formerly, "--" options existed and were required to all be at the end of the command, so
       // you could break here once you reached them, and you knew you were done parsing
-      // inputs/outputs. Now, the command doesn't take any command line options (uses all
-      // configuration options), so let's throw if we see a command line option. If we add any
-      // command line options back in at some point, then we can switch this logic back to how
-      // it originally was.
+      // inputs/outputs. Now, the command doesn't take any command line options except
+      // --write-bounds, which is parsed out beforehand. After that, it uses all configuration
+      // options. So, let's throw if we see a command line option at this point.
       if (arg.startsWith("--"))
       {
         //break;
@@ -100,17 +106,8 @@ public:
     converter.setConfiguration(conf());
     converter.convert(inputs, output);
 
-    QString msg = "Convert operation completed in ";
-    const qint64 timeElapsed = timer.elapsed();
-    if (timeElapsed > 60000)
-    {
-      msg += QString::number(timeElapsed / 1000 / 60) + " minutes";
-    }
-    else
-    {
-      msg += QString::number(timeElapsed / 1000) + " seconds";
-    }
-    LOG_DEBUG(msg);
+    LOG_INFO(
+      "Convert operation completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
     return 0;
   }

@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.auth;
 
-import static hoot.services.models.db.QUsers.users;
 import static hoot.services.models.db.QSpringSession.springsessions;
+import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.io.IOException;
@@ -35,6 +35,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -59,8 +60,11 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Component
 @Transactional(propagation = Propagation.REQUIRES_NEW) // Run inside of a new transaction.  This is intentional.
 public class UserManagerImpl implements UserManager {
+
     private static final Logger logger = LoggerFactory.getLogger(UserManagerImpl.class);
+
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
     public static final ConcurrentHashMap<String, Users> userCache = new ConcurrentHashMap<String, Users>();
 
     @Override
@@ -88,18 +92,19 @@ public class UserManagerImpl implements UserManager {
 
         return null;
     }
+
     private void update(Users user) {
         createQuery().update(users).populate(user).where(users.id.eq(user.getId())).execute();
     }
+
     private void insert(Users user) {
         createQuery().insert(users).populate(user).execute();
     }
-    public Users getUser(String id) {
-        return getUser(Long.parseLong(id));
-    }
+
     public Users getUser(Long id) {
         return createQuery().select(users).from(users).where(users.id.eq(id)).fetchFirst();
     }
+
     @Override
     public Timestamp parseTimestamp(String timestamp) {
 
@@ -112,6 +117,7 @@ public class UserManagerImpl implements UserManager {
             return null;
         }
     }
+
     @Override
     public Users parseUser(String xml) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
         Users user = new Users();
@@ -136,6 +142,7 @@ public class UserManagerImpl implements UserManager {
         }
         return user;
     }
+
     private void attributeSessionWithUser(String sessionId, Users u) {
         long affectedRows = createQuery()
         .update(springsessions)
@@ -147,18 +154,37 @@ public class UserManagerImpl implements UserManager {
             logger.warn("attributeSessionWithUser(): failed to attribute spring session with user.");
         }
     }
+
+    private List<String> getUserSessionId(Long userId) {
+        List<String> sess = createQuery()
+                .select(springsessions.session_id)
+                .from(springsessions)
+                .where(springsessions.user_id.eq(userId))
+                .fetch();
+        return sess;
+    }
+
     @Override
     public Users upsert(String xml, OAuthConsumerToken accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
         Users user = this.parseUser(xml);
         user.setProviderAccessToken(accessToken);
         user.setEmail(String.format("%d@hootenanny", user.getId()));
-        if (this.getUser(user.getId()) == null) {
+
+        Users existingUser = this.getUser(user.getId());
+        if (existingUser == null) {
             this.insert(user);
         } else {
+            // look in database for possible existing privileges set
+            user.setPrivileges(existingUser.getPrivileges());
             this.update(user);
         }
+
         attributeSessionWithUser(sessionId, user);
         userCache.put(sessionId, user);
         return user;
+    }
+
+    public void clearCachedUser(Long userId) {
+        getUserSessionId(userId).forEach(id -> userCache.remove(id));
     }
 }

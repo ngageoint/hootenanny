@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -31,7 +31,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 using namespace std;
 
@@ -47,12 +47,11 @@ public:
 
   ExtentCmd() {}
 
-  virtual QString getName() const { return "extent"; }
+  virtual QString getName() const override { return "extent"; }
 
-  virtual QString getDescription() const
-  { return "Calculates the geospatial bounds of a map"; }
+  virtual QString getDescription() const override { return "Calculates the bounds of a map"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 1 || args.size() > 2)
     {

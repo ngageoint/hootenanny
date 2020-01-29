@@ -57,9 +57,10 @@ class NodeDensityPlotCmd : public BaseCommand
 
     NodeDensityPlotCmd() { }
 
-    virtual QString getName() const { return "node-density-plot"; }
+    virtual QString getName() const override { return "node-density-plot"; }
 
-    virtual QString getDescription() const { return "Creates a node density plot for a map"; }
+    virtual QString getDescription() const override
+    { return "Creates a node density plot for a map"; }
 
     Envelope getEnvelope(const std::shared_ptr<OsmMapReader>& reader)
     {
@@ -166,7 +167,7 @@ class NodeDensityPlotCmd : public BaseCommand
       return result;
     }
 
-    virtual int runSimple(QStringList args)
+    virtual int runSimple(QStringList& args) override
     {
       if (args.size() < 3 || args.size() > 5)
       {

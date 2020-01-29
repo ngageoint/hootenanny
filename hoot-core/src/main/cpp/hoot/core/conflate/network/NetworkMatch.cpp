@@ -27,9 +27,9 @@
 #include "NetworkMatch.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <math.h>
@@ -96,43 +96,61 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   Meters length2 = string2->calculateLength(map);
 
   // TODO: These loops assume that equal portions of a line equal the same point on the line.
-  // Said another way if you're 10% down line 1, then that is equivalent to 10% down line 2.
+  // Said another way, if you're 10% down line 1, then that is equivalent to 10% down line 2.
   // Unfortunately, this can be a very coarse estimate. Something like Frechet distance may
   // improve this matching. - see #3158
+
+  // Its not why we would allow node/way match pairs here, but forcing way/way match pairs does
+  // lead to worse snapping at some road intersections as was found while working on #3386.
+  // NetworkMatchCreator does have a candidate check for highways, so its also not completely
+  // clear when nodes would be getting into the mix here.
+
   Meters d1 = 0.0;
   for (int i = 0; i < string1->getMembers().size(); ++i)
-  {
-    _pairs.insert(pair<ElementId, ElementId>(
-      _toElement(string1->getEdge(i))->getElementId(),
-      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()));
+  {     
+    ElementId element1Id = _toElement(string1->getEdge(i))->getElementId();
+    LOG_VART(element1Id);
+    ElementId element2Id =
+      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
+    LOG_VART(element2Id);
+    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
 
     d1 += string1->getEdge(i)->calculateLength(map);
 
-    _pairs.insert(pair<ElementId, ElementId>(
-      _toElement(string1->getEdge(i))->getElementId(),
-      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()));
+    element1Id = _toElement(string1->getEdge(i))->getElementId();
+    LOG_VART(element1Id);
+    element2Id =
+      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
+    LOG_VART(element2Id);
+    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
   }
 
   Meters d2 = 0.0;
   for (int i = 0; i < string2->getMembers().size(); ++i)
   {
-    _pairs.insert(pair<ElementId, ElementId>(
-      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
-      _toElement(string2->getEdge(i))->getElementId()));
+    ElementId element1Id =
+      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId();
+    LOG_VART(element1Id);
+    ElementId element2Id = _toElement(string2->getEdge(i))->getElementId();
+    LOG_VART(element2Id);
+    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
 
     d2 += string2->getEdge(i)->calculateLength(map);
 
-    _pairs.insert(pair<ElementId, ElementId>(
-      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
-      _toElement(string2->getEdge(i))->getElementId()));
+    element1Id =
+      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId();
+    LOG_VART(element1Id);
+    element2Id = _toElement(string2->getEdge(i))->getElementId();
+    LOG_VART(element2Id);
+    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
   }
 
   LOG_VART(_pairs);
 }
 
-bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map*/) const
+bool NetworkMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/) const
 {
-  set<pair<ElementId, ElementId>> s = other.getMatchPairs();
+  set<pair<ElementId, ElementId>> s = other->getMatchPairs();
 
   // if any element ids overlap then they're conflicting.
   for (set<pair<ElementId, ElementId>>::const_iterator it = s.begin(); it != s.end(); ++it)
@@ -176,12 +194,10 @@ bool NetworkMatch::contains(const NetworkMatch* other) const
 ConstElementPtr NetworkMatch::_toElement(ConstNetworkEdgePtr edge) const
 {
   QList<ConstElementPtr> members = edge->getMembers();
-
   if (members.size() != 1)
   {
     throw NotImplementedException("Only one member is support in the network edge at this time.");
   }
-
   return members[0];
 }
 

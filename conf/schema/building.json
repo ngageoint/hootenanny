@@ -414,5 +414,10 @@
         "isA": "building",
         "name": "building=arboretum",
         "objectType": "tag"
+    },
+    {
+        "isA": "building",
+        "name": "building=terrace",
+        "objectType": "tag"
     }
 ]

@@ -37,6 +37,7 @@ class WayString;
 class NaiveWayMatchStringMapping : public WayMatchStringMapping
 {
 public:
+
   NaiveWayMatchStringMapping(WayStringPtr str1, WayStringPtr str2);
 
   virtual WayStringPtr getWayString1() { return _ws1; }
@@ -52,6 +53,7 @@ public:
   virtual void setWayString2(const WayStringPtr& ws2) { _ws2 = ws2; }
 
 private:
+
   WayStringPtr _ws1, _ws2;
   Meters _length1, _length2;
 };

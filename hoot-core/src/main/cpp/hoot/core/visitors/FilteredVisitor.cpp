@@ -108,10 +108,15 @@ void FilteredVisitor::visit(const ConstElementPtr& e)
 {
   if (_criterion->isSatisfied(e))
   {
+    LOG_TRACE("crit satisfied for: " << e->getElementId());
     // This is bad. Making this change was the result of a cascading set of const correctness
     // changes necessary in order to be able to call ElementVisitor from js files and not just
-    // ConstElementVisitor (#2831). We may need some redesign.
+    // ConstElementVisitor (#2831). We may need some re-design.
     _visitor->visit(std::const_pointer_cast<Element>(e));
+  }
+  else
+  {
+    LOG_TRACE("crit not satisfied for: " << e->getElementId());
   }
 }
 

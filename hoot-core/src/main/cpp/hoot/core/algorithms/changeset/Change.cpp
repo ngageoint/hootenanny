@@ -22,16 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Change.h"
 
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 namespace hoot
 {
 
-Change::Change()
+Change::Change() :
+_type(Unknown)
 {
 }
 
@@ -63,6 +65,11 @@ QString Change::changeTypeToString(const ChangeType changeType)
     default:
       throw HootException("Invalid change type.");
   }
+}
+
+bool Change::operator==(const Change& other) const
+{
+  return _type == other.getType() && other.getElement()->getElementId() == _element->getElementId();
 }
 
 QString Change::toString() const

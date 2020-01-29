@@ -85,10 +85,8 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
     foreach (EdgeSublineMatchPtr s, sublines)
     {
       EdgeMatchPtr em(new EdgeMatch());
-
       em->getString1()->addFirstEdge(s->getSubline1());
       em->getString2()->addFirstEdge(s->getSubline2());
-
       _steps = 0;
       _addEdgeMatches(em);
     }
@@ -126,7 +124,6 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   {
     foundSolution = _recordMatch(em);
   }
-  //
   else
   {
     // if the end of the match isn't terminated.
@@ -426,7 +423,7 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
       {
         LOG_TRACE(
           "Removing similar edge match: " << existingSimilarMatch.match << " with lower score: " <<
-          score << " than found edge match: " << em << "...");;
+          score << " than found edge match: " << em << "...");
         _matchSet->removeEdgeMatch(existingSimilarMatch.match);
       }
     }

@@ -11,12 +11,16 @@ Only one of the following options can be passed to the command:
 
 * +--cleaning-operations+      - Displays operations configured for cleaning map data
 * +--config-options+           - Displays available configuration options
+* +--conflatable-criteria+     - Displays criteria that identify conflatable elements
 * +--conflate-post-operations+ - Displays operations configured by default to run after a conflation job (can be customized via the
                                  `conflate.post.ops` configuration option)
 * +--conflate-pre-operations+  - Displays operations configured by default to run before a conflation job (can be customized via the
                                  `conflate.pre.ops` configuration option)
+* +--criterion-consumers+      - Displays operations capable of taking in an ElementCriterion as input
 * +--feature-extractors+       - Displays available feature extractors used in conflation model building
+* +--filters+                  - Displays a list of all criteria that can be used for element filtering
 * +--formats+                  - Displays supported data input/output formats
+* +--geometry-type-criteria+   - Displays criteria that identify a feature geometry type
 * +--languages+                - Displays information about translatable/detectable spoken languages
 * +--matchers+                 - Displays available feature matchers used during conflation
 * +--match-creators+           - Displays available feature match creators used during conflation
@@ -28,6 +32,7 @@ Only one of the following options can be passed to the command:
 * +--subline-string-matchers+  - Displays available subline string matchers
 * +--tag-mergers+              - Displays available feature tag mergers used during conflation
 * +--value-aggregators+        - Displays available feature tag value aggregators used in conflation model building
+* +--way-joiners+              - Displays available way joiners
 
 Each of the following sections describes an option that may be used with this command and its input parameters.
 
@@ -90,6 +95,22 @@ hoot info --config-options poi.polygon --option-names
 hoot info --config-options poi.polygon --option-details
 --------------------------------------
 
+=== Conflatable Criteria
+
+The +--conflatable-crieria++ option prints out all element criteria classes that can be used to identify conflatable elements.
+
+==== Usage
+
+--------------------------------------
+info --conflatable-criteria
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --conflatable-criteria
+--------------------------------------
+
 === Conflate Post Operations
 
 The +--conflate-post-operations+ option prints out the currently configured operations to run immediately after a conflation job with the
@@ -124,6 +145,23 @@ info --conflate-pre-operations
 hoot info --conflate-pre-operations
 --------------------------------------
 
+=== Element Criterion Consumers
+
+The +--criterion-consumers++ option prints out all operations that are capable of taking an `ElementCriterion` as input. Passing in an
+`ElementCriterion` to an operation can be useful when filtering elements before performing data transformations on them.
+
+==== Usage
+
+--------------------------------------
+info --criterion-consumers
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --criterion-consumers
+--------------------------------------
+
 === Feature Extractors
 
 The +--feature-extractors+ option prints out available feature extractors that can be used when building a conflation model with
@@ -141,25 +179,77 @@ info --feature-extractors
 hoot info --feature-extractors
 --------------------------------------
 
-=== Formats
+=== Filters
 
-The +--formats+ option prints out supported data formats.
+The +--filters++ option prints out all the element criteria classes, which are a subset of what is displayed with the +--operators+ option. 
+Element criteria can be used to filter elements during a conversion or conflation job.
 
 ==== Usage
 
 --------------------------------------
-info --formats [--input] [--output]
+info --filters
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-# prints all
+hoot info --filters
+--------------------------------------
+
+=== Formats
+
+The +--formats+ option prints out supported data formats. 
+
+The --input-bounded sub-option prints out input formats that support bounded reads with the `convert.bounding.box` configuration option.
+
+==== Usage
+
+--------------------------------------
+info --formats [--input] [--output] [--input-bounded] [--input-streamable] [--output-streamable] [--ogr]
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+# prints all supported input and output formats
 hoot info --formats
 
-hoot info --format --input
+# prints supported input formats
+hoot info --formats --input
 
-hoot info --format --output
+# prints streamable supported input formats
+hoot info --formats --input-streamable
+
+# prints supported input formats that support bounded reading
+hoot info --formats --input-bounded
+
+# prints supported output formats
+hoot info --formats --output
+
+# prints streamable supported input formats
+hoot info --formats --output-streamable
+
+# prints input formats for which Hootenanny uses OGR to read
+hoot info --formats --input --ogr
+
+# prints input formats for which Hootenanny uses OGR to write
+hoot info --formats --output --ogr
+--------------------------------------
+
+=== Geometry Type Criteria
+
+The +--geometry-type-crieria++ option prints out all element criteria classes that can be used to identify an element's geometry.
+
+==== Usage
+
+--------------------------------------
+info --geometry-type-crieria
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --geometry-type-crieria
 --------------------------------------
 
 === Languages
@@ -424,5 +514,22 @@ info --value-aggregators
 
 --------------------------------------
 hoot info --value-aggregators
+--------------------------------------
+
+=== Way Joiners
+
+The +--way-joiners+ option prints out all way joiner class implementations that may either be used independently or in conjunction with
+the OsmMapOperation, `hoot::WayJoinerOp`.
+
+==== Usage
+
+--------------------------------------
+info --way-joiners
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --way-joiners
 --------------------------------------
 

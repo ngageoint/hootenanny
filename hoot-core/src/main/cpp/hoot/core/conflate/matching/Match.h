@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCH_H
 #define MATCH_H
@@ -79,6 +79,8 @@ public:
    * Since this is likely the same name returned over and over it is suggested you use a static
    * QString to return the name. This avoid constructing multiple duplicate QStrings (possibly
    * lots of duplicates).
+   *
+   * @todo Should this be static?
    */
   virtual QString getMatchName() const = 0;
 
@@ -101,7 +103,8 @@ public:
    * Two matches can only be conflicting if they contain the same ElementIds in getMatchPairs().
    *
    */
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const = 0;
+  virtual bool isConflicting(const std::shared_ptr<const Match>& other,
+                             const ConstOsmMapPtr& map) const = 0;
 
   /**
    * If the match should _not_ be optimized into a group of non-conflicting matches, then this
@@ -140,6 +143,14 @@ public:
 
   virtual QString getDescription() const = 0;
 
+  /**
+   * Determines if this matches equals another match
+   *
+   * @param other the match being compared with
+   * @return true if this matches matches the comparision match; false otherwise
+   */
+  bool operator==(const Match& other) const;
+
 protected:
 
   /*
@@ -157,7 +168,10 @@ protected:
   const std::shared_ptr<const MatchThreshold> _threshold;
 };
 
-inline std::ostream& operator<<(std::ostream & o, const Match* m)
+typedef std::shared_ptr<Match> MatchPtr;
+typedef std::shared_ptr<const Match> ConstMatchPtr;
+
+inline std::ostream& operator<<(std::ostream & o, ConstMatchPtr m)
 {
   o << m->toString().toStdString();
   return o;
@@ -168,7 +182,7 @@ inline std::ostream& operator<<(std::ostream & o, const Match* m)
  */
 struct MatchPtrComparator
 {
-  bool operator() (const Match* m1, const Match* m2) const
+  bool operator() (ConstMatchPtr m1, ConstMatchPtr m2) const
   {
     return m1->_order < m2->_order;
   }

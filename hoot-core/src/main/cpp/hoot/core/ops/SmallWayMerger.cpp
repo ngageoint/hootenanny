@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SmallWayMerger.h"
@@ -39,13 +39,13 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/ExactTagDifferencer.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/schema/TagDifferencer.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -132,6 +132,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
 
   HighwayCriterion highwayCrit(_map);
   // if either way is not a highway
+  // TODO: could we gain anything by opening this up to other linear feature types?
   if (highwayCrit.isSatisfied(w1) == false || highwayCrit.isSatisfied(w2) == false)
   {
     return;
@@ -184,10 +185,15 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
     }
     else
     {
-      LOG_TRACE("w1: " << w1->toString());
-      LOG_TRACE("w2: " << w2->toString());
-      throw HootException("The ends of the ways don't touch. "
-                          "Did you run the intersection splitter first?");
+      //throw HootException("The ends of the ways don't touch. "
+                          //"Did you run the intersection splitter first?");
+      // So far, have only seen this happen due to the UnconnectedWaySplitter connecting two roads
+      // pointing toward each other. That may need to be addressed, but regardless, don't think an
+      // exception is needed here.
+      LOG_TRACE(
+        "The ends of the ways don't touch. Skipping merge of: " << w1->getElementId() << " and " <<
+        w2->getElementId());
+      return;
     }
 
     // if the ways share both ends (circle) then this causes bad weird things to happen so

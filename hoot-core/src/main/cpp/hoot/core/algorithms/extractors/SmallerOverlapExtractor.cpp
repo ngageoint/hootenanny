@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SmallerOverlapExtractor.h"
 
@@ -45,14 +45,24 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, SmallerOverlapExtractor)
 
-SmallerOverlapExtractor::SmallerOverlapExtractor()
+SmallerOverlapExtractor::SmallerOverlapExtractor() :
+_requireAreaForPolygonConversion(true)
 {
+}
+
+void SmallerOverlapExtractor::setConfiguration(const Settings& conf)
+{
+  _requireAreaForPolygonConversion = ConfigOptions(conf).getConvertRequireAreaForPolygon();
 }
 
 double SmallerOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
   const ConstElementPtr& candidate) const
 {
+  LOG_VART(target->getElementId());
+  LOG_VART(candidate->getElementId());
+
   ElementConverter ec(map.shared_from_this());
+  ec.setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
   std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
@@ -76,6 +86,10 @@ double SmallerOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr
   double a1 = g1->getArea();
   double a2 = g2->getArea();
   double overlapArea = overlap->getArea();
+
+  LOG_VART(a1);
+  LOG_VART(a2);
+  LOG_VART(overlapArea);
 
   if (a1 == 0.0 || a2 == 0.0)
   {

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.85425996877473" minlon="-104.9005795104799" maxlat="38.85492896959543" maxlon="-104.9005253172436"/>
+    <node visible="true" id="-1669781" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549289695954272" lon="-104.9005253172435630"/>
+    <node visible="true" id="-1669779" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548514075605240" lon="-104.9005693264316363"/>
+    <node visible="true" id="-1669729" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542599687747341" lon="-104.9005795104799432"/>
+    <way visible="true" id="-1669799" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1669729"/>
+        <nd ref="-1669779"/>
+        <nd ref="-1669781"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="3"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

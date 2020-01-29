@@ -84,7 +84,8 @@ public:
 
   static std::shared_ptr<OGRSpatialReference> createWgs84Projection();
 
-  static void project(const std::shared_ptr<OsmMap>& map, const std::shared_ptr<OGRSpatialReference>& ref);
+  static void project(const std::shared_ptr<OsmMap>& map,
+                      const std::shared_ptr<OGRSpatialReference>& ref);
 
   /**
    * Returns a vector of all candidate planar projections for a given envelope.
@@ -178,7 +179,8 @@ private:
 
   static bool _angleLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
-  Radians _calculateAngle(geos::geom::Coordinate p1, geos::geom::Coordinate p2, geos::geom::Coordinate p3);
+  Radians _calculateAngle(geos::geom::Coordinate p1, geos::geom::Coordinate p2,
+                          geos::geom::Coordinate p3);
 
   static bool _distanceLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
@@ -203,6 +205,7 @@ public:
   void project(geos::geom::Coordinate* c) const;
 
 private:
+
   OGRCoordinateTransformation* _transform;
 };
 

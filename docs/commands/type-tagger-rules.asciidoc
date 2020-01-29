@@ -3,18 +3,17 @@
 
 === Description
 
-The +type-tagger-rules+ command allows for creating an implicit tag rules database that can be used to implicitly add type
-tags to features based on their names.  See the "Implicit Element Type Tagging Based On Name" section in the Hootenanny User Guide for
-more information.
+The +type-tagger-rules+ command allows for creating an implicit tag rules database that can be used to implicitly add type tags to features 
+based on their names.  See the "Implicit Element Type Tagging Based On Name" section in the Hootenanny User Guide for more information.
 
 === Creating the Raw Implicit Type Tagging Rules File
 
 A raw rules file must be created before generating a rules database.  Use the --create-raw option to generate it:
 
-* +inputs+       - semicolon delimited list of input paths to supported Hootenanny input data formats
-* +translations+ - semicolon delimited list of translation scripts used to translate each input dataset; specify 'none' to skip
-                   translation for an input (e.g. OSM data)
-* +output+       - an *.implicitTagRules tab delimited implicit tag rules file
+* +inputs+       - Semicolon delimited list of input paths; may be any supported input format (e.g. OSM file).
+* +translations+ - Semicolon delimited list of translation scripts used to translate each input dataset; must be *.js or *.py files. Specify 
+                   'none' as an individual entry to skip translation for an input.
+* +output+       - An *.implicitTagRules tab delimited implicit tag rules file.
 
 Relevant configuration options are those beginning with implicit.tagging.raw.rules.deriver.*, and in some cases those beginning with implicit.tagging.*, in conf/core/ConfigOptions.asciidoc.
 
@@ -76,3 +75,4 @@ hoot type-tagger-rules --db-stats implicitTagRules.sqlite
 * <<hootuser, ImplicitTypeTaggingUser>>
 * <<hootalgo, ImplicitTypeTaggingAlg>>
 * <<hootDevGuide, ImplicitTagRulesDatabaseGeneration>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

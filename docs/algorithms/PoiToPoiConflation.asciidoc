@@ -35,7 +35,7 @@ The POI to POI conflation code uses the Hootenanny JavaScript
 interface (See _JavaScript Overview_ in <<hootuser>> for details). The script is
 only a few hundred lines of code and primarily contains the business logic for
 conflating POIs. The code can be found and modified in the Hootenanny source
-tree under `rules/PoiGeneric.js`.
+tree under `rules/Poi.js`.
 
 The conflation flow is similar to the other conflation operations and happens in
 a single pass of the data with other Unifying routines. The high level steps
@@ -88,7 +88,7 @@ they come from two different inputs.
 
 The search radius is determined by the elements circular error (`error:circular`
 tag) and customizable search radii that are defined on a per tag basis. The
-search radii are defined in the `PoiGeneric.js` source file and can be modified
+search radii are defined in the `Poi.js` source file and can be modified
 there for custom use cases. Some example search radii are below:
 
 * `historic` - 200m
@@ -172,7 +172,7 @@ relationships.
 | place=village, name:en=Al Maks | name=Al Maks, amenity=pub | 0.5 Miss | very similar names, very close together, no place match
 | barrier=toll_booth | building=guardhouse | 1.5 Review | very close together, similar POI type
 | name=Georg-Brauchle-Ring, railway=subway_entrance | station=light_rail, name=U-BAHN-GEORG-BRAUCHLE-RING | 2 Match | very similar names, similar POI type
-| name=Izbat Hawd an Nada, place=village | name=Izbat as Sab`in, place=populated | 0 Miss | None given by routine (Izbat is a common word so it is given a low weight when comparing names)
+| name=Izbat Hawd an Nada, place=village | name=Izbat as Sab'in, place=populated | 0 Miss | None given by routine (Izbat is a common word so it is given a low weight when comparing names)
 |======
 
 ==== Merging POIs
@@ -235,7 +235,7 @@ improved.
 
 [[PoiTestFlow]]
 .POI Test Flow
-[graphviz]
+[graphviz, images/__PoiTestFlow.png]
 ---------------------------------------------------------------------
 digraph G
 {

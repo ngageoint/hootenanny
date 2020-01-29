@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //  Hoot
@@ -129,7 +129,7 @@ public:
 
     //  Four elements max will divide the changeset into four changesets
     //  one for each way, with its corresponding nodes
-    changeset.setMaxSize(4);
+    changeset.setMaxPushSize(4);
 
     QStringList expectedFiles;
     expectedFiles.append(_inputPath + "ToyTestASplit1.osc");
@@ -214,6 +214,7 @@ public:
     bool found = false;
     long id = 0;
     long id2 = 0;
+    std::vector<long> ids;
     ElementType::Type type = ElementType::Unknown;
     ElementType::Type type2 = ElementType::Unknown;
     QString hint;
@@ -236,7 +237,7 @@ public:
     id2 = 0;
     type = ElementType::Unknown;
     type2 = ElementType::Unknown;
-    hint = "Placeholder Way not found for reference -12257 in relation -51";
+    hint = "Placeholder Way not found for reference -12257 in Relation -51";
     found = changeset.matchesPlaceholderFailure(hint, id, type, id2, type2);
     CPPUNIT_ASSERT_EQUAL(true, found);
     CPPUNIT_ASSERT_EQUAL(-12257L, id);
@@ -279,6 +280,20 @@ public:
     CPPUNIT_ASSERT_EQUAL(7699L, id2);
     CPPUNIT_ASSERT_EQUAL(ElementType::Way, type);
 
+    //  Test multi relation failure with relation ID
+    id = 0;
+    ids.clear();
+    type = ElementType::Unknown;
+    hint = "Relation -2 requires the relations with id in 1707148,1707249,1707264,1707653,1707654,1707655,1707656,1707657,1707658,1707699,1707700, which either do not exist, or are not visible.";
+    found = changeset.matchesMultiRelationFailure(hint, id, ids, type);
+    std::vector<long> expected_ids { 1707148,1707249,1707264,1707653,1707654,1707655,1707656,1707657,1707658,1707699,1707700 };
+    CPPUNIT_ASSERT_EQUAL(true, found);
+    CPPUNIT_ASSERT_EQUAL(-2L, id);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Relation, type);
+    CPPUNIT_ASSERT_EQUAL(11, (int)ids.size());
+    for (int i = 0; i < (int)ids.size(); ++i)
+      CPPUNIT_ASSERT_EQUAL(expected_ids[i], ids[i]);
+
     //  Test relation failure with empty string
     id = 0;
     id2 = 0;
@@ -289,6 +304,11 @@ public:
     CPPUNIT_ASSERT_EQUAL(0L, id);
     CPPUNIT_ASSERT_EQUAL(0L, id2);
     CPPUNIT_ASSERT_EQUAL(ElementType::Unknown, type);
+
+    //  Test changeset closed
+    hint = "Changeset conflict: The changeset 49514404 was closed at 2020-01-23 20:11:10 UTC";
+    found = changeset.matchesChangesetClosedFailure(hint);
+    CPPUNIT_ASSERT_EQUAL(true, found);
   }
 
   void runXmlChangesetSplitDeleteTest()
@@ -297,7 +317,7 @@ public:
     changeset.loadChangeset(_inputPath + "DeleteSplit.osc");
 
     //  8 elements max will divide the changeset into 4 changesets
-    changeset.setMaxSize(8);
+    changeset.setMaxPushSize(8);
 
     QStringList expectedFiles;
     expectedFiles.append(_inputPath + "DeleteSplit1.osc");

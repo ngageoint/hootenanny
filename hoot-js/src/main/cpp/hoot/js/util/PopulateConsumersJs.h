@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POPULATECONSUMERSJS_H
 #define POPULATECONSUMERSJS_H
@@ -46,6 +46,7 @@
 #include <hoot/js/util/JsFunctionConsumer.h>
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
+#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
@@ -144,6 +145,16 @@ public:
     if (c == 0)
     {
       throw IllegalArgumentException("Object does not accept custom settings as an argument.");
+    }
+
+    // Configuration from Javascript for criterion consumers is handled a little differently where
+    // we expect the child crits to be configured separately outside of the parent visitor.
+    MultipleCriterionConsumerVisitor* multipleCritVis =
+      dynamic_cast<MultipleCriterionConsumerVisitor*>(consumer);
+    LOG_VART(multipleCritVis == 0);
+    if (multipleCritVis != 0)
+    {
+      multipleCritVis->setConfigureChildren(false);
     }
 
     c->setConfiguration(settings);

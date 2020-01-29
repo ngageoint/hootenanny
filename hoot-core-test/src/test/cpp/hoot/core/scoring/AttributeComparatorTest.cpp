@@ -80,9 +80,6 @@ public:
     AttributeComparator uut(map, map2);
     uut.setIterations(10);
     uut.compareMaps();
-//    LOG_INFO("mean: " << uut.getMeanScore());
-//    LOG_INFO("ci: " << uut.getConfidenceInterval());
-//    Log::getInstance().setLevel(Log::Warn);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.57142, uut.getMeanScore(), 0.001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1175, uut.getConfidenceInterval(), 0.001);

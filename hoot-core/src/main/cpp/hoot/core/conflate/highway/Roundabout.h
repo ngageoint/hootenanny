@@ -39,14 +39,11 @@ namespace hoot
 {
 
 /**
- * This is a class for storing & maniuplating representations of roundabouts.
- * It holds nodes/ways that are part of the roundabout, and nodes/ways
- * used to replace the roundabout.
+ * This is a class for storing & manipulating representations of roundabouts. It holds nodes/ways
+ * that are part of the roundabout, and nodes/ways used to replace the roundabout.
  *
- * This is a work in progress, but for now the class contains methods to extract
- * roundabout info from a map, replace a roundabout with a bunch of ways
- * connected to a center point, and put the roundabout back to the way it was
- *
+ * The class contains methods to extract roundabout info from a map, replace a roundabout with a
+ * bunch of ways connected to a center point, and put the roundabout back to the way it was
  */
 class Roundabout
 {
@@ -61,33 +58,33 @@ public:
    * @brief setRoundaboutWay - Set the roundabout way that this object represents
    * @param pWay - Pointer to the roundabout way
    */
-  void setRoundaboutWay (WayPtr pWay);
+  void setRoundaboutWay(WayPtr pWay);
 
   /**
    * @brief setRoundaboutCenter - Set the center node for this roundabout. You
    *                              can create one if needed by calling getNewCenter
    * @param pNode - Center node
    */
-  void setRoundaboutCenter (NodePtr pNode);
+  void setRoundaboutCenter(NodePtr pNode);
 
   /**
    * @brief addRoundaboutNode - Add the node to our internal list of nodes that
    *                            make up the roundabout (perimeter)
    * @param pNode - Pointer to the node
    */
-  void addRoundaboutNode (ConstNodePtr pNode) { _roundaboutNodes.push_back(pNode); }
+  void addRoundaboutNode(ConstNodePtr pNode) { _roundaboutNodes.push_back(pNode); }
 
   /**
    * @brief getRoundaboutWay - Get the roundabout way
    * @return - Pointer to the way
    */
-  WayPtr getRoundaboutWay()   { return _roundaboutWay; }
+  WayPtr getRoundaboutWay() const { return _roundaboutWay; }
 
   /**
    * @brief getRoundaboutNodes - Get the nodes that make up the roundabout
    * @return - Vector of node pointers
    */
-  std::vector<ConstNodePtr> getRoundaboutNodes() { return _roundaboutNodes; }
+  std::vector<ConstNodePtr> getRoundaboutNodes() const { return _roundaboutNodes; }
 
   /**
    * @brief getNewCenter - Averages all of the locations of the nodes in the
@@ -103,7 +100,7 @@ public:
    * @brief getCenter - Gets the node set as the roundabout's center
    * @return - Node
    */
-  NodePtr getCenter(){ return _pCenterNode; }
+  NodePtr getCenter() const { return _pCenterNode; }
 
   /**
    * @brief makeRoundabout - Creates & populates a roundabout object using the
@@ -112,8 +109,7 @@ public:
    * @param pWay - The roundabout way
    * @return - A newly constructed roundabout object
    */
-  static std::shared_ptr<Roundabout> makeRoundabout (const OsmMapPtr &pMap,
-                                                       WayPtr pWay);
+  static std::shared_ptr<Roundabout> makeRoundabout(const OsmMapPtr& pMap, WayPtr pWay);
 
   /**
    * @brief removeRoundabout - Removes this roundabout from the map, and
@@ -145,6 +141,11 @@ public:
    */
   void overrideRoundabout() { _overrideStatus = true; }
 
+  QString toString() const;
+  QString toDetailedString(OsmMapPtr map) const;
+  QString getOriginalNodesString() const;
+  QString getCurrentNodesString(OsmMapPtr map) const;
+
 private:
 
   // The original roundabout way
@@ -170,7 +171,6 @@ private:
 
   // For secondary roundabouts with no sibling, override the replacement
   bool _overrideStatus;
-
 };
 
 // For convenience

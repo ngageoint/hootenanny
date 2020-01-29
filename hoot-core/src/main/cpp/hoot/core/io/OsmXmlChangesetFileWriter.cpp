@@ -32,6 +32,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QFile>
@@ -43,16 +44,17 @@ using namespace std;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmXmlChangesetFileWriter)
+
 OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
 _precision(ConfigOptions().getWriterPrecision()),
-_changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
-_multipleChangesetsWritten(false),
 _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
   _stats.resize(Change::Unknown, ElementType::Unknown);
-  vector<QString> rows( {"Create", "Modify", "Delete"} );
-  vector<QString> columns( {"Node", "Way", "Relation"} );
+  vector<QString> rows({"Create", "Modify", "Delete"});
+  vector<QString> columns({"Node", "Way", "Relation"});
   _stats.setLabels(rows, columns);
 }
 
@@ -69,73 +71,89 @@ void OsmXmlChangesetFileWriter::_initIdCounters()
   _newElementIdMappings[ElementType::Relation] = QMap<long, long>();
 }
 
-void OsmXmlChangesetFileWriter::write(const QString& path, const ChangesetProviderPtr& cs)
-{  
-  LOG_VARD(path);
-  LOG_VARD(cs->hasMoreChanges());
+void OsmXmlChangesetFileWriter::write(const QString& path,
+                                      const ChangesetProviderPtr& changesetProvider)
+{
+  QList<ChangesetProviderPtr> changesetProviders;
+  changesetProviders.append(changesetProvider);
+  write(path, changesetProviders);
+}
 
-  QFileInfo info(path);
-  info.setCaching(false);
-  QString file = info.baseName();
-  QString dir = info.path();
-  QString ext = info.completeSuffix();
-  int fileCount = 0;
+void OsmXmlChangesetFileWriter::write(const QString& path,
+                                      const QList<ChangesetProviderPtr>& changesetProviders)
+{  
+  LOG_DEBUG("Writing changeset to: " << path << "...");
+
   QString filepath = path;
 
   _initIdCounters();
+  _parsedChanges.clear();
 
-  while (cs->hasMoreChanges())
+  long changesetProgress = 1;
+
+  QFile f;
+  f.setFileName(filepath);
+  if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
   {
-    long changesetProgress = 1;
-    //  Create a new filepath if the file is split in multiple files because of the
-    //  changeset.max.size setting
-    //   i.e. <filepath>/<filename>-001.<ext>
-    if (fileCount > 0)
+    throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
+  }
+
+  QXmlStreamWriter writer(&f);
+  writer.setCodec("UTF-8");
+  writer.setAutoFormatting(true);
+  writer.writeStartDocument();
+
+  writer.writeStartElement("osmChange");
+  writer.writeAttribute("version", "0.6");
+  writer.writeAttribute("generator", HOOT_PACKAGE_NAME);
+
+  Change::ChangeType last = Change::Unknown;
+
+  for (int i = 0; i < changesetProviders.size(); i++)
+  {
+    LOG_DEBUG(
+      "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
+      "...");
+
+    ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
+    LOG_VARD(changesetProvider->hasMoreChanges());
+    while (changesetProvider->hasMoreChanges())
     {
-      filepath =
-        QString("%1/%2-%3.%4").arg(dir).arg(file).arg(fileCount, 3, 10, QChar('0')).arg(ext);
-      _multipleChangesetsWritten = true;
-    }
-    LOG_INFO("Writing changeset to " << filepath);
-
-    QFile f;
-    f.setFileName(filepath);
-    if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-      throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
-    }
-
-    QXmlStreamWriter writer(&f);
-    writer.setCodec("UTF-8");
-    writer.setAutoFormatting(true);
-    writer.writeStartDocument();
-
-    writer.writeStartElement("osmChange");
-    writer.writeAttribute("version", "0.6");
-    writer.writeAttribute("generator", HOOT_PACKAGE_NAME);
-
-    Change::ChangeType last = Change::Unknown;
-
-    while (cs->hasMoreChanges() && changesetProgress <= _changesetMaxSize)
-    {
+      LOG_VART(changesetProvider->hasMoreChanges());
       LOG_TRACE("Reading next XML change...");
-      _change = cs->readNextChange();
+      _change = changesetProvider->readNextChange();
       LOG_VART(_change.toString());
+
+      // When multiple changeset providers are passed in sometimes a duplicated change might exist
+      // between them, so we're skipping those dupes here. You could make the argument to prevent
+      // dupes from occurring before outputting this changeset file, but not quite sure how to do
+      // that yet, due to the fact that the changeset providers have a streaming interface.
+      if (_parsedChanges.contains(_change))
+      {
+        LOG_TRACE("Skipping adding duplicated change: " << _change << "...");
+        continue;
+      }
+
+      LOG_VART(Change::changeTypeToString(last));
       if (_change.getType() != last)
       {
         if (last != Change::Unknown)
         {
           writer.writeEndElement();
+          _parsedChanges.append(_change);
         }
         switch (_change.getType())
         {
           case Change::Create:
+            LOG_TRACE("Writing create start element...");
             writer.writeStartElement("create");
             break;
           case Change::Delete:
+            LOG_TRACE("Writing delete start element...");
             writer.writeStartElement("delete");
             break;
           case Change::Modify:
+            LOG_TRACE("Writing modify start element...");
             writer.writeStartElement("modify");
             break;
           case Change::Unknown:
@@ -173,17 +191,23 @@ void OsmXmlChangesetFileWriter::write(const QString& path, const ChangesetProvid
       }
     }
 
+    LOG_VART(Change::changeTypeToString(last));
     if (last != Change::Unknown)
     {
+      LOG_TRACE("Writing change end element...");
       writer.writeEndElement();
+      last = Change::Unknown;
+      _parsedChanges.append(_change);
     }
-    writer.writeEndElement();
-    writer.writeEndDocument();
-
-    f.close();
-    //  Increment the file number if needed for split files
-    fileCount++;
   }
+
+  LOG_TRACE("Writing root end element...");
+  writer.writeEndElement();
+  writer.writeEndDocument();
+
+  f.close();
+
+  LOG_DEBUG("Changeset written to: " << path << "...");
 }
 
 void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
@@ -208,8 +232,15 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
+  else if (n->getVersion() < 1)
+  {
+    throw HootException(
+      QString("Elements being modified or deleted in an .osc changeset must always have a ") +
+      QString("version greater than zero: ") + n->getElementId().toString());
+  }
   else
     version = n->getVersion();
+  LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
 
   writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
@@ -250,8 +281,15 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   // for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
+  else if (w->getVersion() < 1)
+  {
+    throw HootException(
+      QString("Elements being modified or deleted in an .osc changeset must always have a ") +
+      QString("version greater than zero: ")  + w->getElementId().toString());
+  }
   else
     version = w->getVersion();
+  LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
   if (_addTimestamp)
   {
@@ -304,8 +342,15 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
+  else if (r->getVersion() < 1)
+  {
+    throw HootException(
+      QString("Elements being modified or deleted in an .osc changeset must always have a ") +
+      QString("version greater than zero: ") + r->getElementId().toString());
+  }
   else
     version = r->getVersion();
+  LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
   if (_addTimestamp)
   {
@@ -358,15 +403,25 @@ void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions co(conf);
   _precision = co.getWriterPrecision();
-  _changesetMaxSize = co.getChangesetMaxSize();
+  _addTimestamp = co.getChangesetXmlWriterAddTimestamp();
+  _includeDebugTags = co.getWriterIncludeDebugTags();
+  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
 }
 
-void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element)
+void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
+                                           const Element* element)
 {
+  LOG_TRACE("Writing " << tags.size() << " tags for: " << element->getElementId() << "...");
+
   if (_includeDebugTags)
   {
     tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
+    tags.set(MetadataTags::HootId(), QString::number(element->getId()));
+    // This just makes sifting through the xml elements a little bit easier during debugging vs
+    // having to scroll around looking for the change type for each element.
+    tags.set(MetadataTags::HootChangeType(), Change::changeTypeToString(_change.getType()));
   }
+
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     if (it.key().isEmpty() == false && it.value().isEmpty() == false)
@@ -376,19 +431,20 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
         continue;
       writer.writeStartElement("tag");
       writer.writeAttribute(
-        "k",
-        _invalidCharacterHandler.removeInvalidCharacters(it.key()));
+        "k", _invalidCharacterHandler.removeInvalidCharacters(it.key()));
       writer.writeAttribute(
-        "v",
-        _invalidCharacterHandler.removeInvalidCharacters(it.value()));
+        "v", _invalidCharacterHandler.removeInvalidCharacters(it.value()));
       writer.writeEndElement();
     }
   }
-  //  Non-nodes always report circular error when requested but nodes only report circular error
-  //  when there are other tags that aren't debug tags
-  if (ConfigOptions().getWriterIncludeCircularErrorTags() && element->hasCircularError() &&
+
+  // Only report the circular error for changesets when debug tags are turned on, circular error
+  // tags are turned on, and (for nodes) there are other tags that aren't debug tags.  This is
+  // because changesets are meant for non-hoot related databases and circular error is a hoot tag.
+  if (_includeCircularErrorTags && element->hasCircularError() &&
       (element->getElementType() != ElementType::Node ||
-      (element->getElementType() == ElementType::Node && tags.getNonDebugCount() > 0)))
+      (element->getElementType() == ElementType::Node && tags.getNonDebugCount() > 0)) &&
+      _includeDebugTags)
   {
     writer.writeStartElement("tag");
     writer.writeAttribute("k", MetadataTags::ErrorCircular());

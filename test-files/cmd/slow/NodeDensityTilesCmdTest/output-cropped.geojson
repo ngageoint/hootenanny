@@ -1,0 +1,6 @@
+{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-77.049, 38.886, -77.028, 38.901],"source":"hootapidb:268;osmapidb:osmapi_test","features": [
+{"type":"Feature","properties":{"task":"1","node_count":"659"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0485478, 38.885505],[-77.0485478, 38.895505],[-77.0395478, 38.895505],[-77.0395478, 38.885505],[-77.0485478, 38.885505]]]]}},
+{"type":"Feature","properties":{"task":"2","node_count":"410"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0485478, 38.895505],[-77.0485478, 38.900505],[-77.0395478, 38.900505],[-77.0395478, 38.895505],[-77.0485478, 38.895505]]]]}},
+{"type":"Feature","properties":{"task":"3","node_count":"611"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0395478, 38.885505],[-77.0395478, 38.891505],[-77.0275478, 38.891505],[-77.0275478, 38.885505],[-77.0395478, 38.885505]]]]}},
+{"type":"Feature","properties":{"task":"4","node_count":"730"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0395478, 38.891505],[-77.0395478, 38.900505],[-77.0275478, 38.900505],[-77.0275478, 38.891505],[-77.0395478, 38.891505]]]]}}]
+}

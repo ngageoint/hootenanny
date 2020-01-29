@@ -139,7 +139,6 @@ protected:
   Radians getHeadingWay1(int index);
   Radians getHeadingWay2(int index);
 
-protected:
   /**
    * @brief getHeadingAvg - get the heading of the way averaged over three way segments (if possible)
    *  using the average allows for better fitting of two different curves

@@ -3,11 +3,11 @@
 
 === Description
 
-The +sort+ command sorts a file first by element type, then by increasing element ID.  The element type sorting order
-is: 1) nodes, 2) ways, and then 3) relations.
+The +sort+ command sorts a file first by element type, then by increasing element ID.  The element type sorting order is: 1) nodes, 2) ways, 
+and then 3) relations.
 
-* +input+  - Input (e.g. .osm file).
-* +output+ - Output file (e.g. .osm file).
+* +input+  - Input; may be any supported input format (e.g. OSM file).
+* +output+ - Output; may be any supported output format (e.g. OSM file).
 
 === Usage
 
@@ -23,6 +23,10 @@ hoot sort unsorted.osm sorted.osm
 
 === Notes
 
-* Element sorting is performed in memory by default.  To perform sorting in a non-memory bound fashion, set
-the configuration option element.sorter.element.buffer.size to a value greater than zero
+* Element sorting is performed in memory by default.  To perform sorting in a non-memory bound fashion, set the configuration option 
+element.sorter.element.buffer.size to a value greater than zero
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

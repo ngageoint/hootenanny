@@ -84,6 +84,12 @@ Envelope* Node::getEnvelope(const std::shared_ptr<const ElementProvider>& /*ep*/
   return new Envelope(getX(), getX(), getY(), getY());
 }
 
+const Envelope& Node::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& /*ep*/) const
+{
+  _cachedEnvelope = Envelope(getX(), getX(), getY(), getY());
+  return _cachedEnvelope;
+}
+
 void Node::setX(double x)
 {
   _nodeData.setX(x);
@@ -125,6 +131,24 @@ void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter) cons
 void Node::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {
   filter.visit(std::dynamic_pointer_cast<const Node>(map.getNode(getId())));
+}
+
+bool Node::coordsMatch(const Node& other) const
+{
+  const int comparisonSensitivity = ConfigOptions().getNodeComparisonCoordinateSensitivity();
+  const double x =
+    std::round(getX() * std::pow(10.0, comparisonSensitivity)) /
+    std::pow(10.0, comparisonSensitivity);
+  const double otherX =
+    std::round(other.getX() * std::pow(10.0, comparisonSensitivity)) /
+    std::pow(10.0, comparisonSensitivity);
+  const double y =
+    std::round(getY() * std::pow(10.0, comparisonSensitivity)) /
+    std::pow(10.0, comparisonSensitivity);
+  const double otherY =
+    std::round(other.getY() * std::pow(10.0, comparisonSensitivity)) /
+    std::pow(10.0, comparisonSensitivity);
+  return ((x - otherX) == 0.0) && ((y - otherY) == 0.0);
 }
 
 }

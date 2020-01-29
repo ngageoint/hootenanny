@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SQLBULKINSERT_H
 #define SQLBULKINSERT_H
@@ -44,7 +44,7 @@ namespace hoot
 class SqlBulkInsert : public BulkInsert
 {
 public:
-  SqlBulkInsert(QSqlDatabase& db, const QString& tableName, const QStringList& columns);
+  SqlBulkInsert(QSqlDatabase& db, const QString& tableName, const QStringList& columns, bool ignoreConflict = false);
 
   virtual ~SqlBulkInsert();
 
@@ -62,6 +62,7 @@ private:
   QSqlDatabase _db;
   QString _tableName;
   QStringList _columns;
+  bool _ignoreConflict;
   double _time;
   QString _true, _false;
 

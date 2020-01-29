@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -38,7 +39,6 @@
 namespace hoot
 {
 
-class Match;
 class MatchThreshold;
 
 /**
@@ -62,13 +62,13 @@ public:
    * a match by any MatchCreator a null is returned. Not all MatchCreators are guaranteed to support
    * this mechanism (e.g. a road that matches two one way streets).
    */
-  Match* createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
+  MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
 
   /**
    * Goes through all registered MatchCreators and calls createMatches in the order the creators
    * were registered.
    */
-  void createMatches(const ConstOsmMapPtr& map, std::vector<const Match *> &matches,
+  void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr> &matches,
     const geos::geom::Envelope &bounds,
     std::shared_ptr<const MatchThreshold> threshold = std::shared_ptr<MatchThreshold>()) const;
 

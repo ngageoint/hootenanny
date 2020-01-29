@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMATCHCREATOR_H
 #define POIPOLYGONMATCHCREATOR_H
@@ -34,6 +34,7 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
 namespace hoot
 {
@@ -47,15 +48,15 @@ public:
 
   PoiPolygonMatchCreator();
 
-  virtual Match* createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2);
+  virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 
   /**
    * Search the provided map for POI/Polygon matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
-                             ConstMatchThresholdPtr threshold);
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+                             ConstMatchThresholdPtr threshold) override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const;
+  virtual std::vector<CreatorDescription> getAllCreators() const override;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator
@@ -64,9 +65,9 @@ public:
    * @param map the map the element whose candidacy is being determined belongs to
    * @return true if the element is a match candidate; false otherwise
    */
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
+  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
-  virtual std::shared_ptr<MatchThreshold> getMatchThreshold();
+  virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
 private:
 
@@ -77,6 +78,51 @@ private:
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
+
+  PoiPolygonInfoCachePtr _infoCache;
+
+  /*
+   * For any 2:1 matches/reviews, will only keep the match with the smallest distance between
+   * matched features
+   */
+  int _retainClosestDistanceMatchesOnly(
+    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map);
+  /*
+   * Called by _retainClosestDistanceMatchesOnly; 2:1 POI to poly and 2:1 polyl to POI matches are
+   * processed separately
+   */
+  int _retainClosestDistanceMatchesOnlyByType(
+    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois);
+
+  /*
+   * Organizes matches with key=element's ID and value=match its associated with; one
+   * element may be involved in more than one match
+   */
+  QMultiMap<ElementId, ConstMatchPtr> _indexMatchesById(
+    const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr);
+
+  /*
+   * Finds all instances where an element is involved in more than one match; returns a collection
+   * with the element's ID and all the matches its involved with
+   */
+  QMap<ElementId, QList<ConstMatchPtr>> _getOverlappingMatches(
+    const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr);
+
+  /*
+   * Cycles through each overlapping match and keeps only the single match associated with each
+   * element that has the shortest distance between POI and polygon
+   */
+  std::vector<ConstMatchPtr> _filterOutNonClosestMatches(
+    const QMap<ElementId, QList<ConstMatchPtr>>& overlappingMatches,
+    const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
+    const QString& matchTypeStr);
+
+  //debugging only methods
+  bool _containsMatch(
+    const ElementId& elementId1, const ElementId& elementId2,
+    const std::vector<ConstMatchPtr>& matches) const;
+  int _numMatchesContainingElement(const ElementId& elementId,
+                                   const std::vector<ConstMatchPtr>& matches) const;
 };
 
 }

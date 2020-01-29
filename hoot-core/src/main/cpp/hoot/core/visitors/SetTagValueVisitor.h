@@ -28,10 +28,9 @@
 #define SETTAGVALUEVISITOR_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 
 namespace hoot
 {
@@ -40,28 +39,28 @@ namespace hoot
  * Sets tags on any elements with the specified key to the specified value or adds a new tag, if
  * the tag doesn't exist on the element.
  */
-class SetTagValueVisitor : public ElementVisitor, public Configurable,
-  public ElementCriterionConsumer, public OperationStatusInfo
+class SetTagValueVisitor : public MultipleCriterionConsumerVisitor, public Configurable,
+  public OperationStatusInfo
 {
 public:
 
   static std::string className() { return "hoot::SetTagValueVisitor"; }
 
   SetTagValueVisitor();
-  SetTagValueVisitor(const QString& key, const QString& value, bool appendToExistingValue = false,
-                     const QString& criterionName = "", bool overwriteExistingTag = true,
-                     bool negateCriterion = false);
-
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  SetTagValueVisitor(
+    const QStringList& keys, const QStringList& values, bool appendToExistingValue = false,
+    const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
+    const bool negateCriteria = false);
+  SetTagValueVisitor(
+    const QString& key, const QString& value, bool appendToExistingValue = false,
+    const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
+    const bool negateCriteria = false);
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual void visit(const std::shared_ptr<Element>& e);
 
-  virtual QString getDescription() const
-  { return "Adds or updates one or more tags with a specified key/value combination"; }
-
-  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
+  virtual QString getDescription() const { return "Adds or updates specific tags on elements"; }
 
   virtual QString getInitStatusMessage() const { return "Updating tags..."; }
 
@@ -70,18 +69,13 @@ public:
 
 private:
 
-  QStringList _k, _v;
+  QStringList _keys, _vals;
   //if true; will not overwrite existing keys and will append values to them
   bool _appendToExistingValue;
-  //a customizable filter
-  std::shared_ptr<ElementCriterion> _criterion;
   //overwrites any tag with a matching key
   bool _overwriteExistingTag;
-  //This allows for negating the criterion as an option sent in from the command line.
-  bool _negateCriterion;
 
   void _setTag(const ElementPtr& e, const QString& k, const QString& v);
-  void _setCriterion(const QString& criterionName);
 };
 
 }

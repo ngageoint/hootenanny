@@ -29,11 +29,10 @@
 
 // Hoot
 #include <hoot/core/io/OsmApiDb.h>
-#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Configurable.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
 
 // Qt
 #include <QUrl>
@@ -48,29 +47,49 @@ namespace hoot
 /**
  * Writes out a set of SQL commands, that when executed, will update the contents of
  * an OSM API database with an OSM changeset.
+ *
+ * TODO: add a method that tells you whether sql output from this is equivalent to that in an xml
+ * changeset - see #3372
  */
-class OsmApiDbSqlChangesetFileWriter : public Configurable
+class OsmApiDbSqlChangesetFileWriter : public OsmChangesetFileWriter
 {
 
 public:
 
+  static std::string className() { return "hoot::OsmApiDbSqlChangesetFileWriter"; }
+
+  OsmApiDbSqlChangesetFileWriter();
   OsmApiDbSqlChangesetFileWriter(const QUrl& url);
-  ~OsmApiDbSqlChangesetFileWriter();
+  virtual ~OsmApiDbSqlChangesetFileWriter();
 
   /**
-   * Write a SQL changeset to the specified output path
-   *
-   * @param path SQL file output path
-   * @param changesetProvider changeset data
+   * @see ChangesetFileWriter
    */
-  void write(const QString& path, ChangesetProviderPtr changesetProvider);
+  virtual void write(const QString& path, const ChangesetProviderPtr& changesetProvider);
 
   /**
-   * Set the configuration settings
+   * @see ChangesetFileWriter
+   */
+  virtual void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders);
+
+  /**
+   * @see ChangesetFileWriter
    *
-   * @param conf Settings object containing updated value for changeset.max.size setting
+   * not currently implemented
+   */
+  virtual QString getStatsTable() const { return ""; }
+
+  /**
+   * @see ChangesetFileWriter
+   */
+  virtual bool isSupported(const QString& output) const { return output.endsWith(".osc.sql"); }
+
+  /**
+   * @see Configurable
    */
   virtual void setConfiguration(const Settings &conf);
+
+  void setOsmApiDbUrl(const QString& url) { _db.open(url); }
 
 private:
 
@@ -81,6 +100,10 @@ private:
 
   //clones the input so local element version tracking can be done
   ElementPtr _getChangeElement(ConstElementPtr element);
+
+  // All of the create methods here assume you've already set the ID correctly in terms of
+  // preventing conflicts with the OSM API target db for the element to be created.  The one
+  // exception is for new elements with negative ids.
 
   void _createNewElement(ConstElementPtr newElement);
   QString _getInsertValuesStr(ConstElementPtr element) const;
@@ -112,10 +135,15 @@ private:
   geos::geom::Envelope _changesetBounds;
 
   /** Settings from the config file */
-  long _changesetMaxSize;
   double _changesetUserId;
 
   bool _includeDebugTags;
+  bool _includeCircularErrorTags;
+
+  // id mappings for created elements
+  QMap<ElementId, ElementId> _remappedIds;
+
+  QList<Change> _parsedChanges;
 
   friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 };

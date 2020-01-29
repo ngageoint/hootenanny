@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGE_H
 #define CHANGE_H
@@ -64,12 +64,13 @@ public:
   void clearElement() { _element.reset(); }
   ConstElementPtr getPreviousElement() const { return _previousElement; }
 
+  bool operator==(const Change& other) const;
+
 private:
 
   ChangeType _type;
   ConstElementPtr _element;
   ConstElementPtr _previousElement;
-
 };
 
 }

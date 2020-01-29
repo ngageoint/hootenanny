@@ -28,10 +28,10 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmJsonReader.h>
-#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Qt
 #include <QDir>
@@ -49,9 +49,20 @@ class OsmJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(scrubQuoteTest);
   CPPUNIT_TEST(scrubBigIntsTest);
   CPPUNIT_TEST(isSupportedTest);
+  CPPUNIT_TEST(runBoundsTest);
+  CPPUNIT_TEST(runBoundsLeaveConnectedOobWaysTest);
+  CPPUNIT_TEST(elementTypeUnorderedTest);
+  CPPUNIT_TEST(elementTypeUnorderedMissingTest);
+  // TODO: add duplicates test
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  OsmJsonReaderTest() :
+  HootTestFixture("test-files/io/OsmJsonReaderTest/", "test-output/io/OsmJsonReaderTest/")
+  {
+    setResetType(ResetBasic);
+  }
 
   void nodeTest()
   {
@@ -95,7 +106,8 @@ public:
      "}                                      \n";
 
     OsmJsonReader uut;
-    OsmMapPtr pMap = uut.loadFromString(testJsonStr);
+    OsmMapPtr pMap(new OsmMap());
+    uut.loadFromString(testJsonStr, pMap);
 
     // Need to test read from file, too
     OsmMapPtr pMap2 = uut.loadFromFile("test-files/nodes.json");
@@ -133,7 +145,8 @@ public:
                           "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"alt_name\":\"bar\",\"name\":\"foo\",\"area\":\"yes\",\"amenity\":\"bar\",\"" + MetadataTags::ErrorCircular() + "\":\"5\"}}]\n"
                           "}\n";
     OsmJsonReader uut;
-    OsmMapPtr pMap = uut.loadFromString(testJsonStr);
+    OsmMapPtr pMap(new OsmMap());
+    uut.loadFromString(testJsonStr, pMap);
 
     // Test against osm xml
     QString testOsmStr =
@@ -266,7 +279,8 @@ public:
       "}                                       \n";
 
     OsmJsonReader uut;
-    OsmMapPtr pMap = uut.loadFromString(testJsonStr);
+    OsmMapPtr pMap(new OsmMap());
+    uut.loadFromString(testJsonStr, pMap);
 
     // Useful for debug
     //OsmXmlWriter writer;
@@ -325,9 +339,13 @@ public:
     CPPUNIT_ASSERT(TestUtils::compareMaps(pMap, pTestMap));
   }
 
-  // Try hitting the network to get some data...
   void urlTest()
   {
+    // Try hitting the network to get some data...
+
+    // needed to suppress map crop missing element warnings
+    DisableLog dl;
+
     OsmMapPtr pMap;
     const QString overpassHost = ConfigOptions().getOverpassApiHost();
     QString urlNodes = "http://" + overpassHost + "/api/interpreter?data=[out:json];node(35.20,-120.59,35.21,-120.58);out;";
@@ -562,10 +580,8 @@ public:
     OsmJsonReader uut;
     const QString overpassHost = ConfigOptions().getOverpassApiHost();
 
-    // The files passed in must actually exist in order for a postive match.
     CPPUNIT_ASSERT(uut.isSupported("test-files/nodes.json"));
     CPPUNIT_ASSERT(!uut.isSupported("test-files/io/GeoJson/AllDataTypes.geojson"));
-    CPPUNIT_ASSERT(!uut.isSupported("blah.json"));
     // If the url is of the correct scheme and matches the host, we use it.
     CPPUNIT_ASSERT(uut.isSupported("http://" + overpassHost));
     CPPUNIT_ASSERT(uut.isSupported("https://" + overpassHost));
@@ -575,9 +591,118 @@ public:
     CPPUNIT_ASSERT(!uut.isSupported("http://blah"));
     CPPUNIT_ASSERT(!uut.isSupported("https://blah"));
   }
+
+  void runBoundsTest()
+  {
+    // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
+
+    OsmJsonReader uut;
+    uut.setBounds(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552));
+    OsmMapPtr map(new OsmMap());
+    uut.open(_inputPath + "runBoundsTest-in.json");
+    uut.read(map);
+    uut.close();
+
+    CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+  }
+
+  void runBoundsLeaveConnectedOobWaysTest()
+  {
+    // This will leave any ways in the output which are outside of the bounds but are directly
+    // connected to ways which cross the bounds.
+
+    const QString testFileName = "runBoundsLeaveConnectedOobWaysTest.osm";
+
+    OsmJsonReader uut;
+    uut.setBounds(geos::geom::Envelope(38.91362, 38.915478, 15.37365, 15.37506));
+    uut.setKeepImmediatelyConnectedWaysOutsideBounds(true);
+
+    // set cropping up for strict bounds handling
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+
+    OsmMapPtr map(new OsmMap());
+    uut.open(_inputPath + "runBoundsLeaveConnectedOobWaysTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
+
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+  }
+
+  void elementTypeUnorderedTest()
+  {
+    // This should load the elements even though child elements come after their parents.
+
+    // TODO: we need some relations in the test input
+
+    QString testFileName;
+    OsmJsonReader uut;
+    OsmMapPtr map;
+
+    TestUtils::resetBasic();
+    testFileName = "elementTypeUnorderedTest1.osm";
+    uut.setUseDataSourceIds(true);
+    map.reset(new OsmMap());
+    uut.open(_inputPath + "elementTypeUnorderedTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+
+    // same as above except we create our own element ids this time
+
+    TestUtils::resetBasic();
+    testFileName = "elementTypeUnorderedTest2.osm";
+    uut.setUseDataSourceIds(false);
+    map.reset(new OsmMap());
+    uut.open(_inputPath + "elementTypeUnorderedTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+  }
+
+  void elementTypeUnorderedMissingTest()
+  {
+    // There is one node referenced by a way that doesn't exist in the file (id=2442180398). That
+    // node should not be present in the output way.
+
+    // TODO: we need some relations and way refs in the test input
+
+    // The default behavior is to log missing elements as warnings, and we don't want to see that in
+    // this test;
+    DisableLog dl;
+
+    QString outputFile;
+    OsmJsonReader uut;
+    OsmMapPtr map;
+
+    TestUtils::resetBasic();
+    outputFile = "elementTypeUnorderedMissingTest1.osm";
+    uut.setUseDataSourceIds(true);
+    map.reset(new OsmMap());
+    uut.open(_inputPath + "elementTypeUnorderedMissingTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outputFile, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outputFile, _outputPath + "/" + outputFile);
+
+    // same as above except we create our own element ids this time
+
+    TestUtils::resetBasic();
+    outputFile = "elementTypeUnorderedMissingTest2.osm";
+    uut.setUseDataSourceIds(false);
+    map.reset(new OsmMap());
+    uut.open(_inputPath + "elementTypeUnorderedMissingTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outputFile, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outputFile, _outputPath + "/" + outputFile);
+  }
 };
 }
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "slow");
 

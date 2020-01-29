@@ -22,12 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMatchCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
@@ -37,16 +36,21 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/NonConflatableCriterion.h>
+
+#include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/conflate/matching/ScriptMatch.h>
-#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
 #include <qnumeric.h>
+#include <QElapsedTimer>
 
 // Standard
 #include <deque>
@@ -67,6 +71,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MatchCreator, ScriptMatchCreator)
 
+const QString ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME = "PointPolygon.js";
+
 /**
  * Searches the specified map for any match potentials.
  */
@@ -75,13 +81,14 @@ class ScriptMatchVisitor : public ConstElementVisitor
 
 public:
 
-  ScriptMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
+  ScriptMatchVisitor(const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
     ConstMatchThresholdPtr mt, std::shared_ptr<PluginContext> script,
-                     ElementCriterionPtr filter = ElementCriterionPtr()) :
+    const CreatorDescription& scriptInfo, ElementCriterionPtr filter = ElementCriterionPtr()) :
     _map(map),
     _result(result),
     _mt(mt),
     _script(script),
+    _scriptInfo(scriptInfo),
     _filter(filter),
     _customSearchRadius(-1.0)
   {
@@ -117,6 +124,12 @@ public:
     {
       _getSearchRadius.Reset(current, Handle<Function>::Cast(value));
     }
+
+    // Point/Polygon is not meant to conflate any polygons that are conflatable by other conflation
+    // routines, hence the use of NonConflatableCriterion.
+    std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
+    std::shared_ptr<NonConflatableCriterion> notConflatableCrit(new NonConflatableCriterion());
+    _pointPolyCrit.reset(new ChainCriterion(polyCrit, notConflatableCrit));
   }
 
   ~ScriptMatchVisitor()
@@ -133,36 +146,61 @@ public:
     Persistent<Object> plugin(current, getPlugin(_script));
     Local<Object> mapJs(ToLocal(&_mapJs));
 
+    LOG_VART(e->getElementId());
+
     ConstOsmMapPtr map = getMap();
 
-    // create an envlope around the e plus the search radius.
+    // create an envelope around the e plus the search radius.
     std::shared_ptr<Envelope> env(e->getEnvelope(map));
-    LOG_VART(env);
     Meters searchRadius = getSearchRadius(e);
+    LOG_VART(searchRadius);
     env->expandBy(searchRadius);
+    LOG_VART(env);
 
     // find other nearby candidates
+    LOG_TRACE(
+      "Finding neighbors for: " << e->getElementId() << " during conflation: " << _scriptPath <<
+      "...");
     set<ElementId> neighbors =
-      IndexElementsVisitor::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+    LOG_VART(neighbors);
     ElementId from = e->getElementId();
 
     _elementsEvaluated++;
 
+    const bool isPointPolyConflation =
+      _scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME);
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       ConstElementPtr e2 = map->getElement(*it);
-      LOG_VART(e2.get());
-      if (isCorrectOrder(e, e2) && isMatchCandidate(e2))
+      LOG_VART(e2->getElementId());
+
+      // isCorrectOrder and isMatchCandidate don't apply to Point/Polygon, so we add a different
+      // workflow for it here. All other generic scripts use isMatchCandidate to identify both
+      // what to index and what to match and that doesn't work for Point/Polygon matching two
+      // different geometries. See related note in getIndex about Point/Polygon.
+
+      bool attemptToMatch = false;
+      if (!isPointPolyConflation)
+      {
+        LOG_VART(isCorrectOrder(e, e2));
+        LOG_VART(isMatchCandidate(e2));
+        attemptToMatch = isCorrectOrder(e, e2) && isMatchCandidate(e2);
+      }
+      else
+      {
+        attemptToMatch = _pointPolyCrit->isSatisfied(e2);
+      }
+      LOG_VART(attemptToMatch);
+
+      if (attemptToMatch)
       {
         // score each candidate and push it on the result vector
-        ScriptMatch* m = new ScriptMatch(_script, plugin, map, mapJs, from, *it, _mt);
+        std::shared_ptr<ScriptMatch> m(
+          new ScriptMatch(_script, plugin, map, mapJs, from, *it, _mt));
         // if we're confident this is a miss
-        if (m->getType() == MatchType::Miss)
+        if (m->getType() != MatchType::Miss)
         {
-          delete m;
-        }
-        else
-        {;
           _result.push_back(m);
         }
       }
@@ -225,9 +263,10 @@ public:
     return handleScope.Escape(plugin);
   }
 
-  // See the "Calculating Search Radius" section in the user docs for more information.
   Meters getSearchRadius(const ConstElementPtr& e)
   {
+    // See the "Calculating Search Radius" section in the user docs for more information.
+
     Meters result;
     if (_getSearchRadius.IsEmpty())
     {
@@ -259,7 +298,6 @@ public:
         int argc = 0;
         jsArgs[argc++] = ElementJs::New(e);
 
-        LOG_TRACE("Calling getSearchRadius...");
         Handle<Value> f = ToLocal(&_getSearchRadius)->Call(getPlugin(), argc, jsArgs);
 
         result = toCpp<Meters>(f) * _candidateDistanceSigma;
@@ -268,14 +306,16 @@ public:
       }
     }
 
+    //LOG_VART(result);
     return result;
   }
 
-  /*
-   * This is meant to run one time when the match creator is initialized.
-   */
   void calculateSearchRadius()
   {
+    /*
+     * This is meant to run one time when the match creator is initialized.
+     */
+
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
@@ -327,33 +367,67 @@ public:
   {
     if (!_index)
     {
+      LOG_INFO("Creating script feature index for: " << _scriptPath << "...");
+
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
       std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
-      // Only index elements that satisfy the isMatchCandidate
-      // previously we only indexed Unknown2, but that causes issues when wanting to conflate
-      // from n datasets and support intradataset conflation. This approach over-indexes a bit and
-      // will likely slow things down, but should give the same results.
-      // An option in the future would be to support an "isIndexedFeature" or similar function
-      // to speed the operation back up again.
-      std::function<bool (ConstElementPtr)> f =
-        std::bind(&ScriptMatchVisitor::isMatchCandidate, this, placeholders::_1);
-      std::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
+      // Only index elements that satisfy the isMatchCandidate. Previously we only indexed Unknown2,
+      // but that causes issues when wanting to conflate from n datasets and support intra-dataset
+      // conflation. This approach over-indexes a bit and will likely slow things down, but should
+      // give the same results. An option in the future would be to support an "isIndexedFeature" or
+      // similar function to speed the operation back up again.
 
-      // Instantiate our visitor
-      IndexElementsVisitor v(_index,
-                             _indexToEid,
-                             pC,
-                             std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
-                             getMap());
+      // Point/Polygon conflation behaves diferently than all other generic scripts in that it
+      // conflates geometries of different types. This class wasn't really originally designed to
+      // handle that, so we add a logic path here to accommodate Point/Polygon.
+      if (!_scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME))
+      {
+        std::function<bool (ConstElementPtr)> f =
+          std::bind(&ScriptMatchVisitor::isMatchCandidate, this, placeholders::_1);
+        std::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
 
-      // Do the visiting
-      getMap()->visitRo(v);
-      v.finalizeIndex();
+        SpatialIndexer v(_index,
+                         _indexToEid,
+                         pC,
+                         std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
+                         getMap());
+        switch (_scriptInfo.geometryType)
+        {
+          case GeometryTypeCriterion::GeometryType::Point:
+            getMap()->visitNodesRo(v);
+            break;
+          case GeometryTypeCriterion::GeometryType::Line:
+            getMap()->visitWaysRo(v);
+            getMap()->visitRelationsRo(v);
+            break;
+          case GeometryTypeCriterion::GeometryType::Polygon:
+            getMap()->visitWaysRo(v);
+            getMap()->visitRelationsRo(v);
+            break;
+          default:
+            // visit all geometry types if the script didn't identify its geometry
+            getMap()->visitRo(v);
+            break;
+        }
+        v.finalizeIndex();
+      }
+      else
+      {
+        // Point/Polygon identifies points as match candidates, so we just index all polygons here.
+        SpatialIndexer v(_index,
+                         _indexToEid,
+                         _pointPolyCrit,
+                         std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
+                         getMap());
+        getMap()->visitWaysRo(v);
+        getMap()->visitRelationsRo(v);
+        v.finalizeIndex();
+      }
+      LOG_VART(_indexToEid.size());
     }
-
     return _index;
   }
 
@@ -377,6 +451,11 @@ public:
    */
   bool isCorrectOrder(const ConstElementPtr& e1, const ConstElementPtr& e2)
   {
+    LOG_VART(e1->getStatus().getEnum());
+    LOG_VART(e2->getStatus().getEnum());
+    LOG_VART(e1->getElementId());
+    LOG_VART(e2->getElementId());
+
     if (e1->getStatus().getEnum() == e2->getStatus().getEnum())
     {
       return e1->getElementId() < e2->getElementId();
@@ -391,6 +470,7 @@ public:
   {
     if (_matchCandidateCache.contains(e->getElementId()))
     {
+      //LOG_TRACE("Found cached match candidate bool: " << e->getElementId());
       return _matchCandidateCache[e->getElementId()];
     }
 
@@ -459,7 +539,6 @@ public:
       Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
 
       result = f->BooleanValue();
-      LOG_VART(result);
     //}
 
     _matchCandidateCache[e->getElementId()] = result;
@@ -468,8 +547,11 @@ public:
 
   virtual void visit(const ConstElementPtr& e)
   {
+    //LOG_VART(e->getElementId());
     if (isMatchCandidate(e))
     {
+      //LOG_TRACE("isMatchCandidate: " << e->getElementId());
+
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
@@ -503,7 +585,7 @@ private:
   // don't hold on to the map.
   std::weak_ptr<const OsmMap> _map;
   Persistent<Object> _mapJs;
-  vector<const Match*>& _result;
+  vector<ConstMatchPtr>& _result;
   set<ElementId> _empty;
   int _neighborCountMax;
   int _neighborCountSum;
@@ -512,6 +594,7 @@ private:
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _mt;
   std::shared_ptr<PluginContext> _script;
+  CreatorDescription _scriptInfo;
   ElementCriterionPtr _filter;
   Persistent<Function> _getSearchRadius;
 
@@ -532,7 +615,11 @@ private:
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
+
+  std::shared_ptr<ChainCriterion> _pointPolyCrit;
 };
+
+
 
 ScriptMatchCreator::ScriptMatchCreator()
 {
@@ -570,7 +657,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   LOG_DEBUG("Set arguments for: " << className() << " - rules: " << scriptFileInfo.fileName());
 }
 
-Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
+MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   if (isMatchCandidate(map->getElement(eid1), map) && isMatchCandidate(map->getElement(eid2), map))
   {
@@ -581,38 +668,69 @@ Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1
     Handle<Object> mapJs = OsmMapJs::create(map);
     Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(_script));
 
-    return new ScriptMatch(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold());
+    return MatchPtr(new ScriptMatch(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold()));
   }
-  return 0;
+  return MatchPtr();
 }
 
-void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*> &matches,
-                                       ConstMatchThresholdPtr threshold)
+void ScriptMatchCreator::createMatches(
+  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
 {
   if (!_script)
   {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
 
+  QElapsedTimer timer;
+  timer.start();
+  LOG_VART(_scriptPath);
+  QFileInfo scriptFileInfo(_scriptPath);
+  LOG_STATUS(
+    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
+  LOG_VARD(*threshold);
+  const int matchesSizeBefore = matches.size();
+
   const CreatorDescription scriptInfo = _getScriptDescription(_scriptPath);
 
-  ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
+  ScriptMatchVisitor v(map, matches, threshold, _script, scriptInfo, _filter);
   v.setScriptPath(_scriptPath);
   v.calculateSearchRadius();
-
   _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
-  LOG_VART(_scriptPath);
   LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
-  QFileInfo scriptFileInfo(_scriptPath);
 
-  LOG_DEBUG(
-    "Creating matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
-  LOG_VARD(*threshold);
-  map->visitRo(v);
-  LOG_INFO(
+  LOG_VARD(GeometryTypeCriterion::typeToString(scriptInfo.geometryType));
+  switch (scriptInfo.geometryType)
+  {
+    case GeometryTypeCriterion::GeometryType::Point:
+      map->visitNodesRo(v);
+      break;
+    case GeometryTypeCriterion::GeometryType::Line:
+      map->visitWaysRo(v);
+      map->visitRelationsRo(v);
+      break;
+    case GeometryTypeCriterion::GeometryType::Polygon:
+      map->visitWaysRo(v);
+      map->visitRelationsRo(v);
+      break;
+    default:
+      // visit all geometry types if the script didn't identify its geometry
+      map->visitRo(v);
+      break;
+  }
+  const int matchesSizeAfter = matches.size();
+
+  QString matchType = CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType);
+  // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
+  // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
+  if (_scriptPath.contains(POINT_POLYGON_SCRIPT_NAME))
+  {
+    matchType = "PointPolygon";
+  }
+  LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
-    CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
-    " match candidates.");
+    matchType << " match candidates and " <<
+    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
+    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
@@ -663,11 +781,13 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     LOG_VART(scriptPath);
 
     QFileInfo scriptFileInfo(_scriptPath);
-    LOG_TRACE("Resetting the match candidate checker " << scriptFileInfo.fileName() << "...");
+    LOG_TRACE("Resetting the match candidate checker: " << scriptFileInfo.fileName() << "...");
 
-    vector<const Match*> emptyMatches;
+    vector<ConstMatchPtr> emptyMatches;
     _cachedScriptVisitor.reset(
-      new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter));
+      new ScriptMatchVisitor(
+        map, emptyMatches, ConstMatchThresholdPtr(), _script, _getScriptDescription(_scriptPath),
+        _filter));
     _cachedScriptVisitor->setScriptPath(scriptPath);
     //If the search radius has already been calculated for this matcher once, we don't want to do
     //it again due to the expense.
@@ -715,6 +835,12 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   {
     Handle<Value> value = ToLocal(&plugin)->Get(featureTypeStr);
     result.baseFeatureType = CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value));
+  }
+  Handle<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType");
+  if (ToLocal(&plugin)->Has(geometryTypeStr))
+  {
+    Handle<Value> value = ToLocal(&plugin)->Get(geometryTypeStr);
+    result.geometryType = GeometryTypeCriterion::typeFromString(toCpp<QString>(value));
   }
 
   QFileInfo fi(path);

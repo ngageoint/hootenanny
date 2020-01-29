@@ -207,8 +207,8 @@ void JavaScriptSchemaTranslator::_finalize()
     if (tObj->Has(String::NewFromUtf8(current, "finalize")))
     {
       TryCatch trycatch;
-      Handle<Value> final = _gContext->call(tObj,"finalize");
-      HootExceptionJs::checkV8Exception(final, trycatch);
+      Handle<Value> finalize = _gContext->call(tObj,"finalize");
+      HootExceptionJs::checkV8Exception(finalize, trycatch);
     }
   }
 

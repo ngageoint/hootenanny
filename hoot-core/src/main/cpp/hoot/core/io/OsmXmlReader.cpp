@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmXmlReader.h"
@@ -34,17 +34,17 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
 // Qt
 #include <QBuffer>
@@ -63,10 +63,22 @@ int OsmXmlReader::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
+_osmFound(false),
 _status(Status::Invalid),
+_missingNodeCount(0),
+_missingWayCount(0),
+_badAccuracyCount(0),
+_keepStatusTag(false),
+_useFileStatus(false),
 _useDataSourceId(false),
+_addSourceDateTime(true),
+_wayId(0),
+_relationId(0),
 _inputCompressed(false),
-_numRead(0)
+_addChildRefsWhenMissing(false),
+_numRead(0),
+_statusUpdateInterval(1000),
+_keepImmediatelyConnectedWaysOutsideBounds(false)
 {
   setConfiguration(conf());
 }
@@ -78,6 +90,7 @@ OsmXmlReader::~OsmXmlReader()
 
 void OsmXmlReader::setConfiguration(const Settings& conf)
 {
+  PartialOsmMapReader::setConfiguration(conf);
   ConfigOptions configOptions(conf);
   setDefaultAccuracy(configOptions.getCircularErrorDefaultValue());
   setKeepStatusTag(configOptions.getReaderKeepStatusTag());
@@ -87,6 +100,9 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
   setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
+  setKeepImmediatelyConnectedWaysOutsideBounds(
+    configOptions.getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
+  setWarnOnVersionZeroElement(configOptions.getReaderWarnOnZeroVersionElement());
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
@@ -99,10 +115,25 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
   }
 }
 
-void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
+void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
 {
+  _element.reset();
+
   long id = _parseLong(attributes.value("id"));
   //LOG_VART(id);
+
+  if (_nodeIdMap.contains(id))
+  {
+    if (_ignoreDuplicates)
+    {
+      LOG_TRACE("Ignoring node id " << id << " already exists");
+      return;
+    }
+    else
+      throw HootException(
+        QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_url));
+  }
+
   long newId;
   if (_useDataSourceId)
   {
@@ -118,7 +149,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
   double x = _parseDouble(attributes.value("lon"));
   double y = _parseDouble(attributes.value("lat"));
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these
+  // check the next 3 attributes to see if a value exists, if not, assign a default since these
   // are not officially required by the DTD
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
@@ -145,6 +176,19 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
   {
     uid = _parseDouble(attributes.value("uid"));
   }
+  //LOG_VART(version);
+  if (_warnOnVersionZeroElement && version == 0)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Node, newId));
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
 
   _element =
     Node::newSp(
@@ -156,54 +200,25 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
   }
 }
 
-void OsmXmlReader::_createRelation(const QXmlAttributes &attributes)
+void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
 {
-  _relationId = _parseLong(attributes.value("id"));
-  long newId = _getRelationId(_relationId);
+  _element.reset();
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are
-  // not officially required by the DTD
-  long version = ElementData::VERSION_EMPTY;
-  if (attributes.value("version") != "")
+  long id = _parseLong(attributes.value("id"));
+
+  if (_wayIdMap.contains(id))
   {
-    version = _parseDouble(attributes.value("version"));
-  }
-  long changeset = ElementData::CHANGESET_EMPTY;
-  if (attributes.value("changeset") != "")
-  {
-    changeset = _parseDouble(attributes.value("changeset"));
-  }
-  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
-  if (attributes.value("timestamp") != "")
-  {
-    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
-  }
-  QString user = ElementData::USER_EMPTY;
-  if (attributes.value("user") != "")
-  {
-    user = attributes.value("user");
-  }
-  long uid = ElementData::UID_EMPTY;
-  if (attributes.value("uid") != "")
-  {
-    uid = _parseDouble(attributes.value("uid"));
+    if (_ignoreDuplicates)
+    {
+      LOG_TRACE("Ignoring way id " << id << " already exists");
+      return;
+    }
+    else
+      throw HootException(
+        QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_url));
   }
 
-  _element.reset(
-    new Relation(
-      _status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid));
-
-  _parseTimeStamp(attributes);
-}
-
-void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
-{
-  _wayId = _parseLong(attributes.value("id"));
-
-  if (_wayIdMap.contains(_wayId))
-  {
-    throw HootException(QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_path));
-  }
+  _wayId = id;
 
   long newId;
   if (_useDataSourceId)
@@ -216,7 +231,7 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
   }
   _wayIdMap.insert(_wayId, newId);
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since
+  // check the next 3 attributes to see if a value exists, if not, assign a default since
   // these are not officially required by the DTD
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
@@ -243,9 +258,92 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
   {
     uid = _parseDouble(attributes.value("uid"));
   }
+  LOG_VART(version);
+  if (_warnOnVersionZeroElement && version == 0)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Way, newId));
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
 
   _element.reset(
     new Way(_status, newId, _defaultCircularError, changeset, version, timestamp, user, uid));
+
+  _parseTimeStamp(attributes);
+}
+
+void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
+{
+  _element.reset();
+
+  long id = _parseLong(attributes.value("id"));
+
+  if (_relationIdMap.contains(id) && _ignoreDuplicates)
+  {
+    LOG_TRACE("Ignoring relation id " << id << " already exists");
+    return;
+  }
+// Adding this in causes issues with the tests...worth looking into at some point.
+//  if (_relationIdMap.contains(_relationId))
+//  {
+//    throw HootException(
+//      QString("Duplicate relation id %1 in map %2 encountered.").arg(_relationId).arg(_url));
+//  }
+
+  _relationId = id;
+
+  long newId = _getRelationId(_relationId);
+
+  // check the next 3 attributes to see if a value exists, if not, assign a default since these are
+  // not officially required by the DTD
+  long version = ElementData::VERSION_EMPTY;
+  if (attributes.value("version") != "")
+  {
+    version = _parseDouble(attributes.value("version"));
+  }
+  long changeset = ElementData::CHANGESET_EMPTY;
+  if (attributes.value("changeset") != "")
+  {
+    changeset = _parseDouble(attributes.value("changeset"));
+  }
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  if (attributes.value("timestamp") != "")
+  {
+    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
+  LOG_VART(version);
+  if (_warnOnVersionZeroElement && version == 0)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Relation, newId));
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
+
+  _element.reset(
+    new Relation(
+      _status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid));
 
   _parseTimeStamp(attributes);
 }
@@ -262,19 +360,14 @@ bool OsmXmlReader::fatalError(const QXmlParseException &exception)
 
 bool OsmXmlReader::isSupported(const QString& url)
 {
-  const int numExtensions = 3;
-  const QString validExtensions[numExtensions] = { ".osm", ".osm.bz2", ".osm.gz" };
+  QStringList validExtensions = supportedFormats().split(";");
   const QString checkString(url.toLower());
-
   // support compressed osm files
-  for (int i = 0; i < numExtensions; ++i)
+  for (int i = 0; i < validExtensions.size(); ++i)
   {
-    if (checkString.endsWith(validExtensions[i]) == true)
-    {
+    if (checkString.endsWith(validExtensions[i]))
       return true;
-    }
   }
-
   // If we fall out of loop, no dice
   return false;
 }
@@ -305,11 +398,6 @@ long OsmXmlReader::_parseLong(const QString& s)
   return result;
 }
 
-void OsmXmlReader::open(const QString& url)
-{
-  _path = url;
-}
-
 void OsmXmlReader::read(const OsmMapPtr& map)
 {
   LOG_VART(_status);
@@ -318,16 +406,23 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
-  // clear node id maps in case the reader is used for mulitple files
-  _nodeIdMap.clear();
-  _relationIdMap.clear();
-  _wayIdMap.clear();
+  //  Reusing the reader for multiple files has two options, the first is the
+  //  default where the reader is reset and duplicates error out.  The second
+  //  is where duplicates are ignored in the same file and across files so the
+  //  ID maps aren't reset
+  if (!_ignoreDuplicates)
+  {
+    _nodeIdMap.clear();
+    _relationIdMap.clear();
+    _wayIdMap.clear();
 
-  _numRead = 0;
-  finalizePartial();
+    _numRead = 0;
+    finalizePartial();
+  }
   _map = map;
+  _map->appendSource(_url);
 
-  if (_path.endsWith(".osm.bz2") || _path.endsWith(".osm.gz"))
+  if (_url.endsWith(".osm.bz2") || _url.endsWith(".osm.gz"))
   {
     _inputCompressed = true;
     _uncompressInput();
@@ -338,12 +433,12 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   reader.setContentHandler(this);
   reader.setErrorHandler(this);
 
-  QFile file(_path);
+  QFile file(_url);
   if (!file.open(QFile::ReadOnly | QFile::Text))
   {
-    throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_path));
+    throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
   }
-  LOG_DEBUG("File " << _path << " opened for read");
+  LOG_DEBUG("File " << _url << " opened for read");
 
   QXmlInputSource xmlInputSource(&file);
   if (reader.parse(xmlInputSource) == false)
@@ -351,26 +446,20 @@ void OsmXmlReader::read(const OsmMapPtr& map)
     throw HootException(_errorString);
   }
   file.close();
+  LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
 
-  // We don't support cropping during streaming, and there is a check in
-  // ElementStreamer::isStreamableIo to make sure nothing tries to stream with this reader when
-  // a bounds has been set.
+  // This is meant for taking a larger input down to a smaller size. Clearly, if the input data's
+  // bounds is already smaller than _bounds, this will have no effect. Also, We don't support
+  // cropping during streaming, and there is a check in ElementStreamer::isStreamableIo to make
+  // sure nothing tries to stream with this reader when a bounds has been set.
   LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())
   {
-    LOG_INFO("Applying bounds filtering to ingested data: " << _bounds << "...");
-    MapCropper cropper(_bounds);
-    LOG_INFO(cropper.getInitStatusMessage());
-    // We don't reuse MapCropper's version of these options, since we want the freedom to have
-    // different default values than what MapCropper uses.
-    cropper.setKeepEntireFeaturesCrossingBounds(
-      ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
-    cropper.setKeepOnlyFeaturesInsideBounds(
-      ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
-    cropper.apply(_map);
-    LOG_DEBUG(cropper.getCompletedStatusMessage());
+    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 
+  // Should we be using RemoveMissingElementsVisitor here instead?
   ReportMissingElementsVisitor visitor;
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
@@ -379,11 +468,34 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   _map.reset();
 }
 
+OsmMapPtr OsmXmlReader::fromXml(const QString& xml, const bool useDataSourceId,
+                                const bool useDataSourceStatus, const bool keepStatusTag,
+                                const bool addChildRefsWhenMissing)
+{
+  if (xml.isEmpty())
+  {
+    return OsmMapPtr();
+  }
+
+  LOG_DEBUG("Reading map from xml...");
+  //LOG_VART(xml);
+  OsmMapPtr map(new OsmMap());
+  OsmXmlReader reader;
+  reader.setUseDataSourceIds(useDataSourceId);
+  reader.setUseFileStatus(useDataSourceStatus);
+  reader.setKeepStatusTag(keepStatusTag);
+  reader.setAddChildRefsWhenMissing(addChildRefsWhenMissing);
+  reader.readFromString(xml, map);
+  return map;
+}
+
 void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
 {
   _numRead = 0;
   finalizePartial();
   _map = map;
+
+  LOG_DEBUG("Parsing map from xml...");
 
   // do xml parsing
   QXmlSimpleReader reader;
@@ -397,6 +509,15 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
   if (reader.parse(xmlInputSource) == false)
   {
     throw Exception(_errorString);
+  }
+
+  LOG_DEBUG("Parsed map from xml.");
+
+  LOG_VARD(_bounds.isNull());
+  if (!_bounds.isNull())
+  {
+    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 
   ReportMissingElementsVisitor visitor;
@@ -496,7 +617,9 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           _missingNodeCount++;
           if (logWarnCount < Log::getWarnMessageLimit())
           {
-            LOG_WARN("Missing node (" << ref << ") in way (" << _wayId << ").");
+            LOG_WARN(
+              "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
+              ElementId(ElementType::Way, _wayId) << "...");
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
@@ -536,7 +659,9 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
             _missingNodeCount++;
             if (logWarnCount < Log::getWarnMessageLimit())
             {
-              LOG_WARN("Missing node (" << ref << ") in relation (" << _relationId << ").");
+              LOG_WARN(
+                "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
+                ElementId(ElementType::Relation, _relationId) << "...");
             }
             else if (logWarnCount == Log::getWarnMessageLimit())
             {
@@ -567,7 +692,9 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
             _missingWayCount++;
             if (logWarnCount < Log::getWarnMessageLimit())
             {
-              LOG_WARN("Missing way (" << ref << ") in relation (" << _relationId << ").");
+              LOG_WARN(
+                "Skipping missing " << ElementId(ElementType::Way, ref) << " in " <<
+                ElementId(ElementType::Relation, _relationId) << "...");
             }
             else if (logWarnCount == Log::getWarnMessageLimit())
             {
@@ -708,21 +835,24 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
     {
       NodePtr n = std::dynamic_pointer_cast<Node, Element>(_element);
       _map->addNode(n);
-      LOG_VART(n);
+      LOG_TRACE("Added: " << n->getElementId());
+      //LOG_TRACE("Added: " << n);
       _numRead++;
     }
     else if (qName == QLatin1String("way"))
     {
       WayPtr w = std::dynamic_pointer_cast<Way, Element>(_element);
       _map->addWay(w);
-      LOG_VART(w);
+      LOG_TRACE("Added: " << w->getElementId());
+      //LOG_TRACE("Added: " << w);
       _numRead++;
     }
     else if (qName == QLatin1String("relation"))
     {
       RelationPtr r = std::dynamic_pointer_cast<Relation, Element>(_element);
       _map->addRelation(r);
-      LOG_VART(r);
+      LOG_TRACE("Added: " << r->getElementId());
+      //LOG_TRACE("Added: " << r);
       _numRead++;
     }
 
@@ -772,10 +902,10 @@ void OsmXmlReader::_uncompressInput()
   // uncompress .osm.bz2 or .osm.gz files before processing
 
   QString originalFile;
-  if (_path.endsWith(".osm.bz2") == true)
+  if (_url.endsWith(".osm.bz2") == true)
   {
-    originalFile = _path;
-    _path.chop(std::strlen(".bz2"));
+    originalFile = _url;
+    _url.chop(std::strlen(".bz2"));
 
     // "man bunzip2" confirms success return code is zero
     // -f option decompresses file even if decompressed file is already there
@@ -793,17 +923,17 @@ void OsmXmlReader::_uncompressInput()
 
     LOG_DEBUG("Uncompress succeeded!");
   }
-  else if (_path.endsWith(".osm.gz") == true)
+  else if (_url.endsWith(".osm.gz") == true)
   {
-    originalFile = _path;
-    _path.chop(std::strlen(".gz"));
+    originalFile = _url;
+    _url.chop(std::strlen(".gz"));
 
     // "man gzip" confirms success return code is zero
     //  -d option is "decompress"
     //  -c option is "write on standard output, keep original files unchanged" meaning won't delete input .osm.gz
     const std::string cmd(std::string("gzip -dc ")
                           + originalFile.toStdString()
-                          + " > " + _path.toStdString());
+                          + " > " + _url.toStdString());
     LOG_DEBUG("Running uncompress command: " << cmd);
 
     int retVal;
@@ -841,16 +971,16 @@ bool OsmXmlReader::hasMoreElements()
     //are read into this map, since this is the partial reading logic)
     _map.reset(new OsmMap());
 
-    if (_path.endsWith(".osm.bz2") || _path.endsWith(".osm.gz"))
+    if (_url.endsWith(".osm.bz2") || _url.endsWith(".osm.gz"))
     {
       _inputCompressed = true;
       _uncompressInput();
     }
 
-    _inputFile.setFileName(_path);
+    _inputFile.setFileName(_url);
     if (!_inputFile.open(QFile::ReadOnly | QFile::Text))
     {
-      throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_path));
+      throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
     }
     _streamReader.setDevice(&_inputFile);
 
@@ -861,7 +991,7 @@ bool OsmXmlReader::hasMoreElements()
     }
     if (!_osmFound)
     {
-      throw HootException(_path + " is not an OSM file.");
+      throw HootException(_url + " is not an OSM file.");
     }
   }
 
@@ -968,8 +1098,8 @@ void OsmXmlReader::close()
   if (_inputCompressed)
   {
     // Delete the temp file
-    std::remove(_path.toStdString().c_str());
-    LOG_DEBUG("Removed decompressed file " << _path);
+    std::remove(_url.toStdString().c_str());
+    LOG_DEBUG("Removed decompressed file " << _url);
   }
 
   _map.reset();

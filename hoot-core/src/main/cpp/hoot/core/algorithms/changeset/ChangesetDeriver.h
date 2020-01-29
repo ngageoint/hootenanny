@@ -29,7 +29,7 @@
 
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/algorithms/changeset/ElementComparer.h>
+#include <hoot/core/elements/ElementComparer.h>
 
 namespace hoot
 {
@@ -69,6 +69,7 @@ public:
 
   long getNumFromElementsParsed() const { return _numFromElementsParsed; }
   long getNumToElementsParsed() const { return _numToElementsParsed; }
+
   int getNumCreateChanges() const { return _changesByType[Change::ChangeType::Create]; }
   int getNumModifyChanges() const { return _changesByType[Change::ChangeType::Modify]; }
   int getNumDeleteChanges() const { return _changesByType[Change::ChangeType::Delete]; }
@@ -78,6 +79,8 @@ public:
   void setAllowDeletingReferenceFeatures(bool allow) { _allowDeletingReferenceFeatures = allow; }
 
 private:
+
+  friend class ChangesetReplacementCreatorTest;
 
   Change _nextChange();
 
@@ -93,7 +96,6 @@ private:
   // and can be used as a safety feature for other conflation workflows.
   bool _allowDeletingReferenceFeatures;
   QMap<Change::ChangeType, int> _changesByType;
-
 };
 
 typedef std::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;

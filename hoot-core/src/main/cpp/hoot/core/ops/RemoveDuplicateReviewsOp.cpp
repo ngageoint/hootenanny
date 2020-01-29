@@ -22,18 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveDuplicateReviewsOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace std;
 
@@ -42,7 +43,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveDuplicateReviewsOp)
 
-RemoveDuplicateReviewsOp::RemoveDuplicateReviewsOp()
+RemoveDuplicateReviewsOp::RemoveDuplicateReviewsOp() :
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -52,6 +54,9 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   _map = map;
 
   // go through all the relations to get duplicate reviews
+
+  LOG_DEBUG("Retrieving duplicate reviews...");
+  int totalMembersToReview = 0;
   const RelationMap& relations = map->getRelations();
   QMap<set<ElementId>, QList<ReviewMarker::ReviewUid>> membersToReview;
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
@@ -60,24 +65,30 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
     if (ReviewMarker::isReviewUid(map, eid))
     {
       membersToReview[ReviewMarker::getReviewElements(map, eid)].append(eid);
+      totalMembersToReview++;
     }
   }
+  LOG_VARD(membersToReview.size());
+  LOG_VARD(totalMembersToReview);
   LOG_VART(membersToReview);
 
-  //loop through duplicate reviews
+  // loop through duplicate reviews
+
+  LOG_DEBUG("Removing duplicate reviews...");
   ReviewMarker reviewMarker;
   QMap<set<ElementId>, QList<ReviewMarker::ReviewUid>>::iterator it = membersToReview.begin();
   while (it != membersToReview.end())
   {
     set<ElementId> eids = it.key();
 
-    //remove duplicate reviews
+    // remove duplicate reviews
+
     QList<ReviewMarker::ReviewUid> duplicateReviews = it.value();
 
     LOG_VART(eids.size());
     LOG_VART(duplicateReviews.size());
 
-    //Only remove reviews and process if there is more than one review
+    // Only remove reviews and process if there is more than one review
     // See discussion here: https://github.com/ngageoint/hootenanny/issues/81#issuecomment-162980656
     if (eids.size() == 2 && duplicateReviews.size() > 1)
     {
@@ -94,8 +105,13 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
       CopyMapSubsetOp(map, beid, eeid).apply(copy);
       copy->getElement(beid)->setStatus(Status::Unknown1);
       copy->getElement(eeid)->setStatus(Status::Unknown2);
+      LOG_VART(copy->size());
 
-      Match* match = MatchFactory::getInstance().createMatch(copy, beid, eeid);
+      MatchPtr match = MatchFactory::getInstance().createMatch(copy, beid, eeid);
+      if (match)
+      {
+        LOG_VART(match);
+      }
       if (match && match->getType() != MatchType::Miss)
       {
         QString explain = match->explain();
@@ -110,11 +126,21 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
             explain = "Multiple overlapping high confidence reviews: " + explain;
           }
         }
-        reviewMarker.mark(map, map->getElement(beid), map->getElement(eeid),
+        reviewMarker.mark(
+          map, map->getElement(beid), map->getElement(eeid),
           explain, match->getMatchName(), match->getClassification().getReviewP());
       }
     }
     ++it;
+    _numProcessed += duplicateReviews.size();
+
+    if (_numProcessed % (_taskStatusUpdateInterval /  10) == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " members with reviews / " << StringUtils::formatLargeNumber(totalMembersToReview) <<
+        " total members.");
+    }
   }
 }
 

@@ -38,6 +38,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import hoot.services.HootUserRequestFilter;
+
 
 /**
  * Users is a Querydsl bean type
@@ -50,20 +52,28 @@ public class Users {
 
     public Users() {
         //The db column default should handle this
-//        this.hootservices_created_at = new Timestamp(System.currentTimeMillis());
+        //this.hootservices_created_at = new Timestamp(System.currentTimeMillis());
     }
 
     private String displayName;
-    // @JsonIgnore
+
     private String email;
+
     private Long id;
+
     @JsonIgnore
     private String provider_access_key;
+
     @JsonIgnore
     private String provider_access_token;
+
     private Timestamp hootservices_last_authorize;
+
     private Timestamp hootservices_created_at;
+
     private Timestamp provider_created_at;
+
+    private Object privileges;
 
     @JsonProperty(value = "display_name")
     public String getDisplayName() {
@@ -123,10 +133,12 @@ public class Users {
         return provider_created_at;
     }
 
+    @JsonIgnore
     public void setProviderCreatedAt(Timestamp provider_created_at) {
         this.provider_created_at = provider_created_at;
     }
 
+    @JsonIgnore
     public void setProviderCreatedAt(String provider_created_at) {
         Timestamp t = Timestamp.valueOf(provider_created_at);
         setProviderCreatedAt(t);
@@ -146,6 +158,15 @@ public class Users {
         this.setProviderAccessToken(token.getSecret());
     }
 
+    @JsonProperty(value = "privileges")
+    public Object getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(Object privileges) {
+        this.privileges = privileges;
+    }
+
     @Override
     public String toString() {
         return this.displayName + "//" + this.id;
@@ -155,7 +176,7 @@ public class Users {
         if(request == null) {
             return TEST_USER;  //Not sure this shouldn't be null
         }
-        Users user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        Users user = (Users) request.getAttribute(HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
         if (user == null) {
             return TEST_USER;
         }

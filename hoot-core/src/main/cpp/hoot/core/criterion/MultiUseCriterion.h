@@ -49,6 +49,10 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new MultiUseCriterion()); }
 
   virtual QString getDescription() const { return "Identifies features with multiple purposes"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 };
 
 }

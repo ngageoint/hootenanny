@@ -30,10 +30,10 @@
 // hoot
 #include <hoot/core/Hoot.h>
 #include <hoot/core/io/HootNetworkRequest.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Boost
@@ -80,8 +80,8 @@ bool OsmGeoJsonReader::isSupported(const QString& url)
   //  Is it a file?
   if (isRelativeUrl || isLocalFile)
   {
-    const QString filename = isRelativeUrl ? myUrl.toString() : myUrl.toLocalFile();
-    if (QFile::exists(filename) && url.endsWith(".geojson", Qt::CaseInsensitive))
+    if (url.endsWith(".geojson", Qt::CaseInsensitive) &&
+        !url.startsWith("http", Qt::CaseInsensitive))
     {
       return true;
     }
@@ -101,6 +101,7 @@ bool OsmGeoJsonReader::isSupported(const QString& url)
 void OsmGeoJsonReader::read(const OsmMapPtr& map)
 {
   _map = map;
+  _map->appendSource(_url);
   if (_isFile)
   {
     QTextStream instream(&_file);
@@ -117,12 +118,12 @@ void OsmGeoJsonReader::read(const OsmMapPtr& map)
   }
 }
 
-OsmMapPtr OsmGeoJsonReader::loadFromString(const QString& jsonStr)
+void OsmGeoJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& map)
 {
   _loadJSON(jsonStr);
-  _map.reset(new OsmMap());
+  _map = map;
   _parseGeoJson();
-  return _map;
+  _map.reset();
 }
 
 OsmMapPtr OsmGeoJsonReader::loadFromFile(const QString& path)
@@ -148,6 +149,10 @@ void OsmGeoJsonReader::_parseGeoJson()
   if (_propTree.not_found() != _propTree.find("bbox"))
   {
     /*Envelope env = */_parseBbox(_propTree.get_child("bbox"));
+  }
+  if (_propTree.not_found() != _propTree.find(MetadataTags::Source().toStdString()))
+  {
+    _map->replaceSource(QString(_propTree.get_child(MetadataTags::Source().toStdString()).data().c_str()));
   }
 
   // If we don't have a "features" child then we should just have a single feature
@@ -278,10 +283,26 @@ void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& prop
 
   double lat = coords[0].y;
   double lon = coords[0].x;
+
+  long version = ElementData::VERSION_EMPTY;
+  version = properties.get("@version", version);
+  long changeset = ElementData::CHANGESET_EMPTY;
+  changeset = properties.get("@changeset", changeset);
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  timestamp = properties.get("@timestamp", timestamp);
+  std::string user = ElementData::USER_EMPTY.toStdString();
+  user = properties.get("@user", user);
+  long uid = ElementData::UID_EMPTY;
+  uid = properties.get("@uid", uid);
+
   //  Construct node
-  NodePtr pNode(new Node(_defaultStatus, node_id, lon, lat, _defaultCircErr));
+  NodePtr pNode(
+    new Node(
+      _defaultStatus, node_id, lon, lat, _defaultCircErr, changeset, version, timestamp,
+      QString::fromStdString(user), uid));
   //  Add tags
   _addTags(properties, pNode);
+  LOG_VART(pNode);
   //  Add node to map
   _map->addNode(pNode);
 
@@ -320,8 +341,23 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   }
   else
     way_id = _map->createNextWayId();
+
+  long version = ElementData::VERSION_EMPTY;
+  version = properties.get("@version", version);
+  long changeset = ElementData::CHANGESET_EMPTY;
+  changeset = properties.get("@changeset", changeset);
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  timestamp = properties.get("@timestamp", timestamp);
+  std::string user = ElementData::USER_EMPTY.toStdString();
+  user = properties.get("@user", user);
+  long uid = ElementData::UID_EMPTY;
+  uid = properties.get("@uid", uid);
+
   //  Construct Way
-  WayPtr way(new Way(_defaultStatus, way_id, _defaultCircErr));
+  WayPtr way(
+    new Way(
+      _defaultStatus, way_id, _defaultCircErr, changeset, version, timestamp,
+      QString::fromStdString(user), uid));
   bool isPoly = (geometry.get("type", "").compare("Polygon") == 0);
 
   //  Add nodes
@@ -342,6 +378,7 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   }
   //  Add tags
   _addTags(properties, way);
+  LOG_VART(way);
   //  Add way to map
   _map->addWay(way);
 
@@ -371,10 +408,25 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   }
   else
     relation_id = _map->createNextRelationId();
+
+  long version = ElementData::VERSION_EMPTY;
+  version = properties.get("@version", version);
+  long changeset = ElementData::CHANGESET_EMPTY;
+  changeset = properties.get("@changeset", changeset);
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  timestamp = properties.get("@timestamp", timestamp);
+  std::string user = ElementData::USER_EMPTY.toStdString();
+  user = properties.get("@user", user);
+  long uid = ElementData::UID_EMPTY;
+  uid = properties.get("@uid", uid);
+
   //  Create an empty set of properties
   pt::ptree empty;
   //  Construct Relation
-  RelationPtr relation(new Relation(_defaultStatus, relation_id, _defaultCircErr));
+  RelationPtr relation(
+    new Relation(
+      _defaultStatus, relation_id, _defaultCircErr, "", changeset, version, timestamp,
+      QString::fromStdString(user), uid));
 
   //  Add the relation type and parse the roles
   // NOTE: This may be empty which will cause errors later. If it is empty, we add a type
@@ -512,6 +564,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   }
   //  Add tags
   _addTags(properties, relation);
+  LOG_VART(relation);
   //  Add relation to map
   _map->addRelation(relation);
 
@@ -694,7 +747,7 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
   return results;
 }
 
-void OsmGeoJsonReader::_addTags(const pt::ptree &item, const ElementPtr& element)
+void OsmGeoJsonReader::_addTags(const pt::ptree& item, const ElementPtr& element)
 {
   //  Starts with the "properties" tree, use the "tags" subtree if it exists
   //  otherwise just use the "properties" tree as tags
@@ -705,17 +758,23 @@ void OsmGeoJsonReader::_addTags(const pt::ptree &item, const ElementPtr& element
     for (pt::ptree::const_iterator tagIt = item.begin(); tagIt != item.end(); ++tagIt)
     {
       QString key = QString::fromStdString(tagIt->first).trimmed();
-      QString value;
-      if (tagIt->second.begin() != tagIt->second.end())
-        value = QString::fromStdString(_parseSubTags(tagIt->second)).trimmed();
-      else
-        value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
-      element->setTag(key, value);
+      //LOG_VART(key);
+      // We've already parsed properties that have keys starting with '@' as metadata for the
+      // feature.
+      if (!key.startsWith("@"))
+      {
+        QString value;
+        if (tagIt->second.begin() != tagIt->second.end())
+          value = QString::fromStdString(_parseSubTags(tagIt->second)).trimmed();
+        else
+          value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
+        element->setTag(key, value);
+      }
     }
   }
 }
 
-string OsmGeoJsonReader::_parseSubTags(const pt::ptree &item)
+string OsmGeoJsonReader::_parseSubTags(const pt::ptree& item)
 {
   stringstream ss;
   bool isObject = false;

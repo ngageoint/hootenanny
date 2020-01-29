@@ -28,6 +28,7 @@
 #define MATCHGRAPH_H
 
 // Hoot
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
 
 // Standard
@@ -38,7 +39,6 @@
 namespace hoot
 {
 
-class Match;
 class MatchGraphInternal;
 
 typedef std::vector<MatchSet> MatchSetVector;
@@ -46,7 +46,7 @@ typedef std::vector<MatchSet> MatchSetVector;
 /**
  * Represents a graph of matches. At some point I'd like to extend this to include additional
  * relationships (such as two roads are linked by an intersection). This will enable higher fidelity
- * matching. See #2376 for some musings and references.
+ * matching. See Redmine #2376 for some musings and references.
  *
  * At this point this is useful for identifying many to many matches and one to many matches.
  */
@@ -84,7 +84,7 @@ public:
 
 private:
 
-  std::vector<const Match*> _matches;
+  std::vector<ConstMatchPtr> _matches;
   bool _checkForConflicts;
   /**
    * An internal data structure to prevent users of the class from recompiling the boost graph

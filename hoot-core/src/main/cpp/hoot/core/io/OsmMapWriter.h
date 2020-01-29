@@ -70,11 +70,14 @@ public:
    */
   virtual QString supportedFormats() = 0;
 
+  // TODO: These methods should be implemented across writers other than OsmXmlWriter.
+
   /**
    * Sets flag indicating the writer is writing a debug map so that extra debugging metadata is
    * included in the output
    */
   void setIsDebugMap(const bool is_debug = false) { _debug = is_debug; }
+
   /**
    * Gets flag indicating the writer is writing a debug map so that extra debugging metadata can
    * be included in each implementation of the output formats
@@ -82,6 +85,7 @@ public:
   bool getIsDebugMap() { return _debug; }
 
 private:
+
   bool _debug;
 };
 

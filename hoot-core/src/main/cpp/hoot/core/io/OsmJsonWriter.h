@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Qt
@@ -57,7 +58,7 @@ namespace hoot
  * This is being used for unit testing only as of 3/24/2014 and has not been tested for
  * interoperability with any other tools.
  */
-class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter
+class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter, public Configurable
 {
 public:
 
@@ -97,14 +98,21 @@ public:
    */
   void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
 
-  void setIncludeCircularError(bool includeCircularError) { _addExportTagsVisitor.setIncludeCircularError( includeCircularError); }
+  void setIncludeCompatibilityTags(bool includeCompatibility)
+  { _includeCompatibilityTags = includeCompatibility; }
+  void setIncludeCircularError(bool includeCircularError)
+  { _addExportTagsVisitor.setIncludeCircularError( includeCircularError); }
 
   virtual QString supportedFormats() override { return ".json"; }
+
+  virtual void setConfiguration(const Settings& conf) override;
 
 protected:
 
   ConstOsmMapPtr _map;
   bool _includeDebug;
+  // This setting is here to stay in sync with how OsmXmlWriter writes attribute metadata.
+  bool _includeCompatibilityTags;
   int _precision;
   QFile _fp;
   QIODevice* _out;
@@ -129,13 +137,13 @@ protected:
   bool _hasTags(const ConstElementPtr& e);
   void _writeTag(const QString& key, const QString& value, bool& firstTag);
   void _writeTags(const ConstElementPtr& e);
+  void _writeMetadata(const Element& element);
 
 private:
 
   AddExportTagsVisitor _addExportTagsVisitor;
-
 };
 
-} // hoot
+}
 
 #endif // OSMJSONWRITER_H

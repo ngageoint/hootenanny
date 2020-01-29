@@ -16,6 +16,7 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
     var ffns = [272, 343, 459, 460, 464, 465, 466, 474, 475, 476, 478, 640, 691, 701, 706, 711, 714, 717, 752, 760, 770, 775, 801, 810, 811, 812, 813, 814, 818, 819, 961, 962]
 
     var schemas = [
+        'TDSv70',
         'TDSv61',
         'TDSv40',
         // 'MGCP',
@@ -51,13 +52,6 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
 
                 // console.log(osm_xml);
 
-                // var xml = parser.parseFromString(osm_xml);
-
-                // assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
-                // assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "aeroway");
-                // assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "stopway");
-
-
                 var tds_xml = server.handleInputs({
                     osm: osm_xml,
                     method: 'POST',
@@ -69,11 +63,17 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
 
                 xml = parser.parseFromString(tds_xml);
 
+                for (var i=0; i < xml.getElementsByTagName("tag").length; i++) {
+                    var tag = xml.getElementsByTagName("tag")[i];
+                    if (tag.getAttribute("k") === fcode_key) {
+                        assert.equal(tag.getAttribute("v"), fcode);
+                        continue;
+                    }
+                    if (tag.getAttribute("k") === "FFN") {
+                        assert.equal(tag.getAttribute("v"), ffn);
+                    }
+                }
                 assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), schema);
-                assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), fcode_key);
-                assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), fcode);
-                assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("k"), "FFN");
-                assert.equal(xml.getElementsByTagName("tag")[0].getAttribute("v"), ffn);
 
             });
         });

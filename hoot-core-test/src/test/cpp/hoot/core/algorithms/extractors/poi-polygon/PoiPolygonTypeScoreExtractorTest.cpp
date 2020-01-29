@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -30,6 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -53,9 +54,11 @@ public:
 
   void runTest()
   {
-    PoiPolygonTypeScoreExtractor uut;
-    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
+    PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
+    infoCache->setConfiguration(conf());
+    PoiPolygonTypeScoreExtractor uut(infoCache);
+    uut.setConfiguration(conf());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set("amenity", "school");
@@ -78,12 +81,14 @@ public:
 
   void translateTagValueTest()
   {
-    PoiPolygonTypeScoreExtractor uut;
     Settings settings = conf();
     OsmMapPtr map(new OsmMap());
 
     settings.set("poi.polygon.type.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
+    PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
+    infoCache->setConfiguration(settings);
+    PoiPolygonTypeScoreExtractor uut(infoCache);
     uut.setConfiguration(settings);
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));

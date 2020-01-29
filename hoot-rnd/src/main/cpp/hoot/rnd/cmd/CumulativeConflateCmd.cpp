@@ -44,14 +44,14 @@ public:
 
   ConflateCumulativeCmd() { }
 
-  virtual QString getName() const { return "conflate-cumulative"; }
+  virtual QString getName() const override { return "conflate-cumulative"; }
 
-  virtual QString getDescription() const
-  { return "Conflates three or more maps into a single map, retaining feature provenance (experimental)"; }
+  virtual QString getDescription() const override
+  { return "Conflates three or more maps into a single map while retaining feature provenance (experimental)"; }
 
   virtual QString getType() const { return "rnd"; }
 
-  virtual int runSimple(QStringList args) override
+  virtual int runSimple(QStringList& args) override
   {
     // doesn't work with stats yet
     if (args.contains("--stats"))

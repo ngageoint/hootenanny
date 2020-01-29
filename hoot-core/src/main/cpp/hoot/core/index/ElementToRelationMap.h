@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTTORELATIONMAP_H
 #define ELEMENTTORELATIONMAP_H
@@ -61,7 +61,7 @@ public:
 
   /**
    * Returns a set of relation ids that have the specified element as a member, explicity or
-   * implicitly through the ancestry. E.g. If there is a bulding relation that contains a
+   * implicitly through the ancestry. E.g. If there is a building relation that contains a
    * multipolygon and the multipolygon contains a way w/ id 3, when this is called with
    * (ElementType::Way, 3) you will get both the multipolygon and the building relation.
    */

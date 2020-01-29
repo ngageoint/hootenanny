@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTMATCHCREATOR_H
 #define SCRIPTMATCHCREATOR_H
 
-#include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/SearchRadiusProvider.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/util/NotImplementedException.h>
 
 #include <hoot/js/PluginContext.h>
@@ -39,6 +39,8 @@ namespace hoot
 class ScriptMatchVisitor;
 
 /**
+ * Match creator for all generic conflation scripts
+ *
  * @sa ScriptMatch
  */
 class ScriptMatchCreator : public MatchCreator, public SearchRadiusProvider
@@ -47,6 +49,8 @@ public:
 
   static std::string className() { return "hoot::ScriptMatchCreator"; }
 
+  static const QString POINT_POLYGON_SCRIPT_NAME;
+
   ScriptMatchCreator();
 
   virtual ~ScriptMatchCreator();
@@ -54,17 +58,17 @@ public:
   /**
    * @see SearchRadiusProvider
    */
-  virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e);
+  virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e) override;
 
   /**
    * Not implemented.
    */
-  virtual Match* createMatch(const ConstOsmMapPtr&, ElementId, ElementId);
+  virtual MatchPtr createMatch(const ConstOsmMapPtr&, ElementId, ElementId) override;
 
   /**
    * Search the provided map for POI matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;

@@ -108,8 +108,6 @@ namespace Tgs
       unsigned int numFactors, std::string posClass, std::string negClass,
       unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
 
-  private:
-
   };
 }  //End namespace
 #endif

@@ -32,6 +32,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -47,17 +48,20 @@ _buffer(buffer)
 
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 {
+  OsmMapWriterFactory::writeDebugMap(inputMap, "alpha-shape-input-map");
+
   std::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
   if (cutterShape->getArea() == 0.0)
   {
-    //would rather this be thrown than a warning logged, as the warning may go unoticed by web
-    //clients who are expecting the alpha shape to be generated
+    // would rather this be thrown than a warning logged, as the warning may go unoticed by web
+    // clients who are expecting the alpha shape to be generated
     throw HootException("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
   }
 
   OsmMapPtr result;
 
   result.reset(new OsmMap(inputMap->getProjection()));
+  result->appendSource(inputMap->getSource());
   // add the resulting alpha shape for debugging.
   GeometryConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
 
@@ -68,12 +72,16 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
     r->setTag("area", "yes");
   }
 
+  LOG_VARD(MapProjector::toWkt(result->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(result, "alpha-shape-result-map");
+
   return result;
 }
 
 std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
 {
   MapProjector::projectToPlanar(inputMap);
+  LOG_VARD(MapProjector::toWkt(inputMap->getProjection()));
 
   // put all the nodes into a vector of points.
   std::vector<std::pair<double, double>> points;

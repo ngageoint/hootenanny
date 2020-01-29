@@ -46,7 +46,7 @@ class OsmMap;
 class Way;
 
 /**
- * Given an OsmMap, ways are split at sharp (or rounded if desired) corners. This can help
+ * Given an OsmMap, ways are split at sharp (or rounded, if desired) corners. This can help
  * when conflating data that is mostly major roads with data that contains a lot of
  * neighborhood-level data.
  */

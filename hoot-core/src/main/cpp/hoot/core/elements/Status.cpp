@@ -135,44 +135,47 @@ QString Status::toTextStatus() const
   }
 }
 
-Status::Type Status::fromString(QString typeString)
+Status::Type Status::fromString(QString statusString)
 {
-  typeString = typeString.toLower();
+  statusString = statusString.toLower();
 
   bool rawOk;
-  int rawNum = typeString.toInt(&rawOk);
+  int rawNum = statusString.toInt(&rawOk);
 
   if (rawOk)
   {
     return rawNum;
   }
-  else if (typeString == "invalid" || typeString == QString::number(Status::Invalid))
+  else if (statusString == "invalid" || statusString == QString::number(Status::Invalid))
   {
     return Invalid;
   }
-  else if (typeString == "unknown1" || typeString == "input1" || typeString == QString::number(Status::Unknown1))
+  else if (statusString == "unknown1" || statusString == "input1" ||
+           statusString == QString::number(Status::Unknown1))
   {
     return Unknown1;
   }
-  else if (typeString == "unknown2" || typeString == "input2" || typeString == QString::number(Status::Unknown2))
+  else if (statusString == "unknown2" || statusString == "input2" ||
+           statusString == QString::number(Status::Unknown2))
   {
     return Unknown2;
   }
-  else if (typeString == "conflated" || typeString == QString::number(Status::Conflated))
+  else if (statusString == "conflated" || statusString == QString::number(Status::Conflated))
   {
     return Conflated;
   }
-  else if (typeString == "TagChange" || typeString == QString::number(Status::TagChange))
+  // This is used by the DiffConflator.
+  else if (statusString == "TagChange" || statusString == QString::number(Status::TagChange))
   {
     return TagChange;
   }
-  else if (typeString.startsWith("input"))
+  else if (statusString.startsWith("input"))
   {
       bool ok;
-      int num = typeString.replace("input", "").toInt(&ok);
+      int num = statusString.replace("input", "").toInt(&ok);
       if (!ok)
       {
-        throw HootException("Invalid element type string: " + typeString);
+        throw HootException("Invalid element type string: " + statusString);
       }
       else
       {
@@ -182,13 +185,12 @@ Status::Type Status::fromString(QString typeString)
         {
           num = (num - 2) + EnumEnd;
         }
-
         return num;
       }
   }
   else
   {
-    throw IllegalArgumentException("Invalid element type string: " + typeString);
+    throw IllegalArgumentException("Invalid element status string: " + statusString);
   }
 }
 

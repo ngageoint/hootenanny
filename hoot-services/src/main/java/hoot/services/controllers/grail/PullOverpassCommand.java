@@ -26,10 +26,15 @@
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
+import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
 
 import javax.ws.rs.WebApplicationException;
@@ -82,38 +87,79 @@ class PullOverpassCommand implements InternalCommand {
     private void getOverpass() {
         String url = "";
         try {
-                BoundingBox boundingBox = new BoundingBox(params.getBounds());
-
-    // Compact QL
-    // https://overpass-api.de/api/interpreter?data=(node(-34.0044,150.9982,-33.9728,151.0656);<;>;);out meta qt;
-
-    // XML
-    // <osm-script>
-    //   <union into="_">
-    //     <bbox-query s="-34.0044" w="150.9982" n="-33.9728" e="151.0656"/>
-    //     <recurse from="_" into="_" type="up"/>
-    //     <recurse from="_" into="_" type="down"/>
-    //   </union>
-    //   <print e="" from="_" geometry="skeleton" ids="yes" limit="" mode="meta" n="" order="quadtile" s="" w=""/>
-    // </osm-script>
-
-                // This is Ugly! It is the encoded version of the compact QL script above
-                url = replaceSensitiveData(params.getPullUrl()) +
-                    "/api/interpreter?data=(node(" +
-                    boundingBox.getMinLat() + "%2C" +
-                    boundingBox.getMinLon() + "%2C" +
-                    boundingBox.getMaxLat() + "%2C" +
-                    boundingBox.getMaxLon() + ")%3B%3C%3B%3E%3B)%3Bout%20meta%20qt%3B";
-
-                URL requestUrl = new URL(url);
-                File outputFile = new File(params.getOutput());
-
-                FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
+            String customQuery = params.getCustomQuery();
+            if (customQuery == null || customQuery.equals("")) {
+                url = replaceSensitiveData(getOverpassUrl(replaceSensitiveData(params.getPullUrl()), params.getBounds(), "xml", null));
+            } else {
+                url = replaceSensitiveData(getOverpassUrl(replaceSensitiveData(params.getPullUrl()), params.getBounds(), "xml", customQuery));
             }
-            catch (Exception ex) {
-                String msg = "Failure to pull data from Overpass [" + url + "]" + ex.getMessage();
-                // throw new RuntimeException(msg, ex);
-                throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
-            }
+
+            URL requestUrl = new URL(url);
+            File outputFile = new File(params.getOutput());
+
+            FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
+        }
+        catch (Exception ex) {
+            String msg = "Failure to pull data from Overpass [" + url + "]" + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        }
+    }
+
+    /**
+     * Returns the overpass query, with the expected output format set to json
+     * @param bbox
+     * @return
+     */
+    static String getOverpassUrl(String bbox) {
+        return getOverpassUrl(bbox, "json");
+    }
+
+    /**
+     * Returns the overpass query, with the expected output format set to json
+     * @param bbox
+     * @param outputFormat if set to 'xml' then the output of the returned query, when run, will be xml. json is the default if non xml is specified
+     * @return
+     */
+    static String getOverpassUrl(String bbox, String outputFormat) {
+        return getOverpassUrl(PUBLIC_OVERPASS_URL, bbox, outputFormat, null);
+    }
+
+    /**
+     * Returns the overpass query, with the expected output format set to json
+     * @param bbox
+     * @param outputFormat if set to 'xml' then the output of the returned query, when run, will be xml. json is the default if non xml is specified
+     * @param query optional custom overpass query
+     *
+     * @return overpass query url
+     */
+    static String getOverpassUrl(String overpassUrl, String bbox, String outputFormat, String query) {
+        // Get grail overpass query from the file and store it in a string
+        String overpassQuery;
+
+        if (query == null || query.equals("")) {
+            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+            try {
+                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+            } catch(Exception exc) {
+                throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
+        }
+        } else {
+            overpassQuery = query;
+        }
+
+        //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
+        overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
+
+        if (outputFormat.equals("xml") && overpassQuery.contains("out:json")) {
+            overpassQuery = overpassQuery.replace("out:json", "out:xml"); // Need this because the rails pull data is also xml
+        } else if (outputFormat.equals("json") && overpassQuery.contains("out:xml")) {
+            overpassQuery = overpassQuery.replace("out:xml", "out:json");
+        }
+
+        try {
+            overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
+
+        return overpassUrl + "?data=" + overpassQuery;
     }
 }

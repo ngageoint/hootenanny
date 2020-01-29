@@ -131,15 +131,14 @@ void HootApiDbWriter::open(const QString& urlStr)
 
   if (mapId != -1)
   {
+    _hootdb.verifyCurrentUserMapUse(mapId, true);
     if (_overwriteMap) // delete map and overwrite it
     {
-      _hootdb.verifyCurrentUserMapUse(mapId, true);
       _hootdb.deleteMap(mapId);
       _hootdb.setMapId(_hootdb.insertMap(mapName));
     }
     else
     {
-      _hootdb.verifyCurrentUserMapUse(mapId, true);
       _hootdb.setMapId(mapId);
       LOG_DEBUG("Updating map with ID: " << _hootdb.getMapId() << "...");
     }

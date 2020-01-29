@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ElementConverter.h"
@@ -52,6 +52,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QString>
@@ -66,17 +67,22 @@ using namespace std;
 namespace hoot
 {
 
+int ElementConverter::logWarnCount = 0;
+
 ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
-  _constProvider(provider),
-  _spatialReference(provider->getProjection())
+_constProvider(provider),
+_spatialReference(provider->getProjection()),
+_requireAreaForPolygonConversion(true)
 {
 }
 
 Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 {
   // Doing length/distance calcs only make sense if we've projected down onto a flat surface
-  // TODO: turn this into an exception
-  assert(MapProjector::isPlanar(_constProvider));
+  if (!MapProjector::isPlanar(_constProvider))
+  {
+    throw IllegalArgumentException("Map must be in planar coordinate system.");
+  }
 
   // if the element is not a point and is not an area.
   // NOTE: Originally I was using isLinear. This was a bit too strict in that it wants evidence of
@@ -97,7 +103,8 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
   const std::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
 {
-  switch(e->getElementType().getEnum())
+  LOG_VART(e->getElementType().toString());
+  switch (e->getElementType().getEnum())
   {
   case ElementType::Node:
     return convertToGeometry(std::dynamic_pointer_cast<const Node>(e));
@@ -124,10 +131,11 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) c
 }
 
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr& e,
-                                                         bool throwError,
-                                                         const bool statsFlag) const
+                                                              bool throwError,
+                                                              const bool statsFlag) const
 {
-  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
+  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
+  LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_POLYGON)
   {
     return convertToPolygon(e);
@@ -139,17 +147,18 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr&
   else
   {
     // we don't recognize this geometry type.
+    LOG_TRACE("Returning empty geometry...");
     std::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     return g;
   }
 }
 
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelationPtr& e,
-                                                                bool throwError,
-                                                                const bool statsFlag) const
+                                                              bool throwError,
+                                                              const bool statsFlag) const
 {
-  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
-
+  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
+  LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_MULTIPOLYGON)
   {
     return MultiPolygonCreator(_constProvider, e).createMultipolygon();
@@ -189,6 +198,19 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
   for (size_t i = 0; i < ids.size(); i++)
   {
     ConstNodePtr n = _constProvider->getNode(ids[i]);
+    if (!n.get())
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Missing node: " << ids[i] << ". Not creating line string...");
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+      return std::shared_ptr<LineString>();
+    }
     cs->setAt(n->toCoordinate(), i);
   }
 
@@ -196,17 +218,30 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
   if (ids.size() == 1)
   {
     ConstNodePtr n = _constProvider->getNode(ids[0]);
+    if (!n.get())
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Missing node: " << ids[0] << ". Not creating line string...");
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+      return std::shared_ptr<LineString>();
+    }
     cs->setAt(n->toCoordinate(), 1);
   }
 
   std::shared_ptr<LineString> result(GeometryFactory::getDefaultInstance()->createLineString(cs));
-
   return result;
 }
 
 std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w) const
 {
   const std::vector<long>& ids = w->getNodeIds();
+  LOG_VART(ids);
   size_t size = ids.size();
   if (size == 1)
   {
@@ -230,7 +265,24 @@ std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w
   size_t i;
   for (i = 0; i < ids.size(); i++)
   {
+    LOG_VART(ids[i]);
     ConstNodePtr n = _constProvider->getNode(ids[i]);
+    //LOG_VART(n.get());
+    if (!n.get())
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN(
+          "Node " << QString::number(ids[i]) << " does not exist. Skipping conversion of " <<
+          w->getElementId() << " to polygon...");
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+      return std::shared_ptr<Polygon>();
+    }
     cs->setAt(n->toCoordinate(), i);
   }
 
@@ -254,8 +306,9 @@ std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w
   return result;
 }
 
-geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementPtr& e,
-  bool throwError, const bool statsFlag)
+geos::geom::GeometryTypeId ElementConverter::getGeometryType(
+  const ConstElementPtr& e, bool throwError, const bool statsFlag,
+  const bool requireAreaForPolygonConversion)
 {
   // This is used to pass the relation type back to the exception handler
   QString relationType = "";
@@ -272,24 +325,33 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
       ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
       assert(w);
 
+      LOG_VART(statsFlag);
+      LOG_VART(w->isValidPolygon());
+      LOG_VART(w->isClosedArea());
+      LOG_VART(AreaCriterion().isSatisfied(w));
+      LOG_VART(OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area));
+
+      ElementCriterionPtr areaCrit;
       if (statsFlag)
       {
-        if (w->isValidPolygon() && StatsAreaCriterion().isSatisfied(w))
-          return GEOS_POLYGON;
-        else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
-          return GEOS_POLYGON;
-        else
-          return GEOS_LINESTRING;
+        areaCrit.reset(new StatsAreaCriterion());
       }
       else
       {
-        if (w->isValidPolygon() && AreaCriterion().isSatisfied(w))
-          return GEOS_POLYGON;
-        else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
-          return GEOS_POLYGON;
-        else
-          return GEOS_LINESTRING;
+        areaCrit.reset(new AreaCriterion());
       }
+
+      // Hootenanny by default requires that an polygon element be an area in the schema in order
+      // to be converted to a polygon, it is created as a linestring. There are situations, however,
+      // where we want to relax this requirement (generic geometry matching).
+      if (!requireAreaForPolygonConversion && w->isValidPolygon() && w->isClosedArea())
+        return GEOS_POLYGON;
+      else if (w->isValidPolygon() && areaCrit->isSatisfied(w))
+        return GEOS_POLYGON;
+      else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
+        return GEOS_POLYGON;
+      else
+        return GEOS_LINESTRING;
 
       break;
     }

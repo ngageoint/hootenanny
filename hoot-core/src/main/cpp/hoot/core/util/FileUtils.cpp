@@ -140,6 +140,22 @@ void FileUtils::writeFully(const QString& path, const QString& text)
   outFile.close();
 }
 
+void FileUtils::replaceFully(const QString& path, const QStringList& textsToReplace,
+                             const QStringList& replacementTexts)
+{
+  if (textsToReplace.size() != replacementTexts.size())
+  {
+    throw IllegalArgumentException("Texts to replace not the same size as the replacements texts.");
+  }
+
+  QString input = readFully(path);
+  for (int i = 0; i < textsToReplace.size(); i++)
+  {
+    input = input.replace(textsToReplace.at(i), replacementTexts.at(i));
+  }
+  writeFully(path, input);
+}
+
 long FileUtils::getNumberOfLinesInFile(const QString& file)
 {
   std::ifstream inFile(file.toStdString().c_str());

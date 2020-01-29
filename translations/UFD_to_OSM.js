@@ -44,7 +44,7 @@ ufd = {
         ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
         ['F_CODE','AK190','man_made','recreational_pier'], // Fishing Pier/Promenade Pier - NFDD BB081
         ['F_CODE','AL015',undefined,undefined], // Building - NFDD AL013 - To Stop Warnings
-        ['F_CODE','AL045','facility','yes'], // Complex Outline - No FCODE, moving to AL010 Facility
+        ['F_CODE','AL045',undefined,undefined], // Complex Outline - No FCODE. Converted to landuse
         ['F_CODE','AL100','building','hut'], // Hut - NFDD AL099
         ['F_CODE','AL135','populated_place:type','native_settlement'], // Native Settlement
         ['F_CODE','AL209','populated_place:type','tent_dwellings'], // Tent Dwellings
@@ -142,10 +142,10 @@ ufd = {
         'GAW':'gauge', // Gauge Width
         'HGT':'height', // Height Above Surface Level
         'KVA':'voltage', // Kilovolt Capacity Attribute
-        'LC1':'bridge:load_class1', // Load Class Type 1
-        'LC2':'bridge:load_class2', // Load Class Type 2
-        'LC3':'bridge:load_class3', // Load Class Type 3
-        'LC4':'bridge:load_class4', // Load Class Type 4
+        'LC1':'mlc:wheeled_oneway', // Load Class Type 1
+        'LC2':'mlc:wheeled', // Load Class Type 2
+        'LC3':'mlc:tracked_oneway', // Load Class Type 3
+        'LC4':'mlc:tracked', // Load Class Type 4
         'LEG':'length', // Length/Diameter in Meters With Greater Precision
         'LEN':'length', // Length
         'LEN_':'length2', // Length/Diameter2 ?????
@@ -708,42 +708,42 @@ ufd = {
         // COF - Complex Outline Function
         // ['COF','0','raw:COF','unknown'], // Unknown
         ['COF','0',undefined,undefined], // Unknown
-        ['COF','1','facility:type','agricultural'], // Agricultural
-        ['COF','Agricultural','facility:type','agricultural'], // Agricultural
-        ['COF','10','facility:type','mixed_urban'], // Mixed Urban
-        ['COF','Mixed Urban','facility:type','mixed_urban'], // Mixed Urban
-        ['COF','11','facility:type','recreational'], // Recreational
-        ['COF','Recreational','facility:type','recreational'], // Recreational
-        ['COF','12','facility:type','religious'], // Religious
-        ['COF','Religious','facility:type','religious'], // Religious
-        ['COF','13','facility:type','reserve'], // Reserve
-        ['COF','Reserve','facility:type','reserve'], // Reserve
-        ['COF','14','facility:type','residential'], // Residential
-        ['COF','Residential','facility:type','residential'], // Residential
-        ['COF','15','facility:type','transportation'], // Transportation
-        ['COF','Transportation','facility:type','transportation'], // Transportation
-        ['COF','16','facility:type','utilities'], // Utilities
-        ['COF','Utilities','facility:type','utilities'], // Utilities
-        ['COF','17','facility:type','maritime'], // Maritime
-        ['COF','Maritime','facility:type','maritime'], // Maritime
-        ['COF','2','facility:type','commercial'], // Commercial
-        ['COF','Commercial','facility:type','commercial'], // Commercial
-        ['COF','3','facility:type','communications'], // Communications
-        ['COF','Communications','facility:type','communications'], // Communications
-        ['COF','4','facility:type','diplomatic'], // Diplomatic
-        ['COF','Diplomatic','facility:type','diplomatic'], // Diplomatic
-        ['COF','5','facility:type','educational'], // Educational
-        ['COF','Educational','facility:type','educational'], // Educational
-        ['COF','6','facility:type','governmental'], // Governmental
-        ['COF','Governmental','facility:type','governmental'], // Governmental
-        ['COF','7','facility:type','industrial'], // Industrial
-        ['COF','Industrial','facility:type','industrial'], // Industrial
-        ['COF','8','facility:type','medical'], // Medical
-        ['COF','Medical','facility:type','medical'], // Medical
-        ['COF','9','facility:type','military'], // Military
-        ['COF','Military','facility:type','military'], // Military
-        ['COF','999','facility:type','other'], // Other
-        ['COF','Other','facility:type','other'], // Other         ['COF','1','facility:type','agricultural'], // Agricultural
+        ['COF','1','landuse','farm_land'], // Agricultural
+        ['COF','Agricultural','landuse','farm_land'], // Agricultural
+        ['COF','2','landuse','commercial'], // Commercial
+        ['COF','Commercial','landuse','commercial'], // Commercial
+        ['COF','3','landuse','communications'], // Communications
+        ['COF','Communications','landuse','communications'], // Communications
+        ['COF','4','landuse','diplomatic'], // Diplomatic
+        ['COF','Diplomatic','landuse','diplomatic'], // Diplomatic
+        ['COF','5','landuse','education'], // Educational
+        ['COF','Educational','landuse','education'], // Educational
+        ['COF','6','landuse','government'], // Governmental
+        ['COF','Governmental','landuse','government'], // Governmental
+        ['COF','7','landuse','industrial'], // Industrial
+        ['COF','Industrial','landuse','industrial'], // Industrial
+        ['COF','8','landuse','medical'], // Medical
+        ['COF','Medical','landuse','medical'], // Medical
+        ['COF','9','landuse','military'], // Military
+        ['COF','Military','landuse','military'], // Military
+        ['COF','10','landuse','mixed_urban'], // Mixed Urban
+        ['COF','Mixed Urban','landuse','mixed_urban'], // Mixed Urban
+        ['COF','11','landuse','recreation'], // Recreational
+        ['COF','Recreational','landuse','recreation'], // Recreational
+        ['COF','12','landuse','religious'], // Religious
+        ['COF','Religious','landuse','religious'], // Religious
+        ['COF','13','landuse','reserve'], // Reserve
+        ['COF','Reserve','landuse','reserve'], // Reserve
+        ['COF','14','landuse','residential'], // Residential
+        ['COF','Residential','landuse','residential'], // Residential
+        ['COF','15','landuse','transportation'], // Transportation
+        ['COF','Transportation','landuse','transportation'], // Transportation
+        ['COF','16','landuse','utilities'], // Utilities
+        ['COF','Utilities','landuse','utilities'], // Utilities
+        ['COF','17','landuse','maritime'], // Maritime
+        ['COF','Maritime','landuse','maritime'], // Maritime
+        ['COF','999','landuse','other'], // Other
+        ['COF','Other','landuse','other'], // Other
 
         // COMPLETENESS_CODE - Completeness Code
         // The best guess is that this is "COP" which is "Creation Process Complete"
@@ -3221,7 +3221,7 @@ ufd = {
     // 997 = Unpopulated
     // 998 = Not Applicable
     // 0 = Unknown BUT this can also be a valid value for some fields so we don't have it here
-    ignoreList : { 'unknown':1,'unk':1,'n/a':1,'n_a':1,'-32768':1,'notapplicable':1,'not-applicable':1,'997':1, 
+    ignoreList : { 'unknown':1,'unk':1,'n/a':1,'n_a':1,'-32768':1,'notapplicable':1,'not-applicable':1,'997':1,
                    '998':1,'unpopulated':1,'<Null>':1  },
 
     // Unit conversion. Some attributes are in centimetres, others in decimetres
@@ -3371,6 +3371,9 @@ ufd = {
             }
         }
 
+        // HWT=22 appears in some data and means "Not Applicable"
+        if (attrs.HWT == '22') delete attrs.HWT;
+
     }, // End of applyToOsmPreProcessing
 
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
@@ -3505,18 +3508,18 @@ ufd = {
         if (attrs.F_CODE == 'AL015' && tags.surface == 'unknown') delete tags.surface;
 
         // Add 'building = yes' to amenities if we don't already have one
-        if (tags.amenity && !(tags.building))
-        {
-            // print('Added building'); // debug
-            // Don't add building=yes to built up areas!
-            if (!(tags.place)) tags.building = 'yes';
-        }
+        // if (tags.amenity && !(tags.building))
+        // {
+        //     // print('Added building'); // debug
+        //     // Don't add building=yes to built up areas!
+        //     if (!(tags.place)) tags.building = 'yes';
+        // }
 
         // Add 'building = yes' to military if it isn't a range
         if (tags.military && !(tags.building))
         {
             // print('Added building to military'); // debug
-            if (tags.military !== 'range') tags.building = 'yes';
+            if (tags.military !== 'range' && tags.military !== 'installation' ) tags.building = 'yes';
         }
 
         // Add tags if we have Null attributes
@@ -3529,7 +3532,7 @@ ufd = {
         if (tags['tower:type']) tags.man_made = 'tower';
 
         // Lakes and other water features
-        if (tags.water && !(tags.natural)) tags.natural = 'water' 
+        if (tags.water && !(tags.natural)) tags.natural = 'water'
 
         // Amusement Park Attractions
         // Artificial Mountain can be in multiple F_CODES
@@ -3618,6 +3621,11 @@ ufd = {
             }
 
             break;
+
+        case 'AL045': // Complex Outline. Going with landuse for this
+            if (tags.building = 'residential') delete tags.building; // Goes with landuse == residential
+
+            break;
         } // End case F_CODE
 
         // Handle update sources that are not in the spec list
@@ -3665,7 +3673,6 @@ function initialize()
         // Debug:
        // translate.dumpOne2OneLookup(ufd.lookup);
     }
-
 }
 
 
@@ -3675,12 +3682,7 @@ function translateToOsm(attrs, layerName, geometryType)
     tags = {};
 
     // Debug:
-    if (ufd.configIn.OgrDebugDumptags == 'true')
-    {
-        print('In Layername: ' + layerName + '  In Geometry: ' + geometryType);
-        var kList = Object.keys(attrs).sort()
-        for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-    }
+    if (ufd.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     // pre processing
     ufd.applyToOsmPreProcessing(attrs, layerName, geometryType);
@@ -3733,11 +3735,8 @@ function translateToOsm(attrs, layerName, geometryType)
     // Debug:
     if (ufd.configIn.OgrDebugDumptags == 'true')
     {
-        var kList = Object.keys(notUsedAttrs).sort()
-        for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
-
-        var kList = Object.keys(tags).sort()
-        for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+        translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+        translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
         print('');
     }
 

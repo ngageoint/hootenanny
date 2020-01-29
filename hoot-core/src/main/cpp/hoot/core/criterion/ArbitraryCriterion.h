@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ARBITRARYCRITERION_H
 #define ARBITRARYCRITERION_H
@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QString>
@@ -46,9 +47,6 @@ public:
 
   static std::string className() { return "hoot::ArbitraryCriterion"; }
 
-  // Do something like:
-  // std::function<bool (ConstElementPtr e)> f =
-  //  std::bind(&ScriptMatchVisitor::isMatchCandidate, this, std::placeholders::_1);
   explicit ArbitraryCriterion(std::function<bool (ConstElementPtr e)> f)
   {
     _f = f;
@@ -59,18 +57,23 @@ public:
     _f = f;
   }
 
-  virtual bool isSatisfied(const std::shared_ptr<const Element> &e) const
+  virtual bool isSatisfied(const std::shared_ptr<const Element>& e) const
   {
-    return _f(e);
+    const bool result = _f(e);
+    LOG_VART(result);
+    return result;
   }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ArbitraryCriterion(_f)); }
 
   virtual QString getDescription() const { return ""; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
-  std::function<bool (const std::shared_ptr<const Element> &e)> _f;
+  std::function<bool (const std::shared_ptr<const Element>& e)> _f;
 };
 
 }

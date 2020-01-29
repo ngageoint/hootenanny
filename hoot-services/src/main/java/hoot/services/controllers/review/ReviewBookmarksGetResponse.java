@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.review;
 
@@ -35,10 +35,6 @@ public class ReviewBookmarksGetResponse {
     private List<ReviewBookmarks> reviewBookmarks;
 
     public ReviewBookmarksGetResponse() {}
-
-    public ReviewBookmarksGetResponse(List<ReviewBookmarks> reviewBookmarks) {
-        this.reviewBookmarks = reviewBookmarks;
-    }
 
     public List<ReviewBookmarks> getReviewBookmarks() {
         return this.reviewBookmarks;

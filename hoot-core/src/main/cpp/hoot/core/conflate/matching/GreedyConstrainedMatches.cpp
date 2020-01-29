@@ -46,7 +46,7 @@ class MatchComparator
 {
 public:
 
-  MatchComparator(const vector<const Match*>& matches) : _matches(matches) {}
+  MatchComparator(const vector<ConstMatchPtr>& matches) : _matches(matches) {}
 
   bool operator()(size_t i, size_t j)
   {
@@ -55,13 +55,13 @@ public:
 
 private:
 
-  const vector<const Match*>& _matches;
+  const vector<ConstMatchPtr>& _matches;
 };
 
-vector<const Match*> GreedyConstrainedMatches::calculateSubset()
+vector<ConstMatchPtr> GreedyConstrainedMatches::calculateSubset()
 {
   _score = -1;
-  vector<const Match*> result;
+  vector<ConstMatchPtr> result;
 
   if (_matches.size() == 0)
   {

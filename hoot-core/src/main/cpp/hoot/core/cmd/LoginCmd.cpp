@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -42,12 +42,12 @@ public:
 
   LoginCmd() { }
 
-  virtual QString getName() const { return "login"; }
+  virtual QString getName() const override { return "login"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Logs a user into the Hootenanny Web Services"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() > 0)
     {
@@ -62,7 +62,7 @@ public:
     const QString requestToken = loginManager.getRequestToken(authUrl);
     std::cout << std::endl << "Authorization URL: " << authUrl << std::endl << std::endl;
 
-    // prompt user to auth through the 3rd party (OpenStreetMap, MapEdit, etc.)
+    // prompt user to auth through the 3rd party (OpenStreetMap, etc.)
     const QString verifier = loginManager.promptForAuthorizationVerifier();
 
     // verify the user's login, create the user, and get their id and user name

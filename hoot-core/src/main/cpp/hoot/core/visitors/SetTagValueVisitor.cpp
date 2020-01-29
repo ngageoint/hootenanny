@@ -32,82 +32,104 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/criterion/NotCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SetTagValueVisitor)
 
-SetTagValueVisitor::SetTagValueVisitor()
+SetTagValueVisitor::SetTagValueVisitor() :
+_appendToExistingValue(false),
+_overwriteExistingTag(false)
 {
   setConfiguration(conf());
 }
 
-SetTagValueVisitor::SetTagValueVisitor(const QString& key, const QString& value, bool appendToExistingValue,
-                                       const QString& criterionName, bool overwriteExistingTag,
-                                       bool negateCriterion) :
+SetTagValueVisitor::SetTagValueVisitor(
+  const QStringList& keys, const QStringList& values, bool appendToExistingValue,
+  const QStringList& criteriaClassNames, const bool overwriteExistingTag,
+  const bool negateCriteria) :
+_keys(keys),
+_vals(values),
 _appendToExistingValue(appendToExistingValue),
-_overwriteExistingTag(overwriteExistingTag),
-_negateCriterion(negateCriterion)
+_overwriteExistingTag(overwriteExistingTag)
 {
-  _k.append(key);
-  _v.append(value);
-  _setCriterion(criterionName);
+  if (_keys.size() != _vals.size())
+  {
+    throw IllegalArgumentException(
+      "set.tag.value.visitor keys and values must be the same length. Keys size: " +
+      QString::number(_keys.size()) + ", values size: " + QString::number(_vals.size()));
+  }
+
+  _negateCriteria = negateCriteria;
+  _chainCriteria = false;
+  _addCriteria(criteriaClassNames);
+}
+
+SetTagValueVisitor::SetTagValueVisitor(
+  const QString& key, const QString& value, bool appendToExistingValue,
+  const QStringList& criteriaClassNames, const bool overwriteExistingTag,
+  const bool negateCriteria) :
+_appendToExistingValue(appendToExistingValue),
+_overwriteExistingTag(overwriteExistingTag)
+{
+  _keys.append(key);
+  _vals.append(value);
+
+  _negateCriteria = negateCriteria;
+  _chainCriteria = false;
+  _addCriteria(criteriaClassNames);
 }
 
 void SetTagValueVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  _k = configOptions.getSetTagValueVisitorKey();
-  _v = configOptions.getSetTagValueVisitorValue();
-  if (_k.size() != _v.size())
+
+  _keys = configOptions.getSetTagValueVisitorKeys();
+  _vals = configOptions.getSetTagValueVisitorValues();
+  if (_keys.size() != _vals.size())
   {
-    throw IllegalArgumentException("set.tag.value.visitor key and value must be the same length.");
+    throw IllegalArgumentException(
+      "set.tag.value.visitor keys and values must be the same length. Keys size: " +
+      QString::number(_keys.size()) + ", values size: " + QString::number(_vals.size()));
   }
   _appendToExistingValue = configOptions.getSetTagValueVisitorAppendToExistingValue();
   _overwriteExistingTag = configOptions.getSetTagValueVisitorOverwrite();
-  _negateCriterion = configOptions.getElementCriterionNegate();
-  _setCriterion(configOptions.getSetTagValueVisitorElementCriterion());
-}
 
-void SetTagValueVisitor::addCriterion(const ElementCriterionPtr& e)
-{
-  if (!_negateCriterion)
+  _negateCriteria = configOptions.getElementCriterionNegate();
+  _chainCriteria = configOptions.getSetTagValueVisitorChainElementCriteria();
+  const QStringList critNames = configOptions.getSetTagValueVisitorElementCriteria();
+  LOG_VART(critNames);
+  _addCriteria(critNames);
+  if (_configureChildren)
   {
-    _criterion = e;
-  }
-  else
-  {
-    _criterion.reset(new NotCriterion(e));
-  }
-}
-
-void SetTagValueVisitor::_setCriterion(const QString& criterionName)
-{
-  if (!criterionName.trimmed().isEmpty())
-  {
-    LOG_VART(criterionName);
-    addCriterion(
-      std::shared_ptr<ElementCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
+    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
+         it != _criteria.end(); ++it)
+    {
+      ElementCriterionPtr crit = *it;
+      Configurable* c = dynamic_cast<Configurable*>(crit.get());
+      if (c != 0)
+      {
+        c->setConfiguration(conf);
+      }
+    }
   }
 }
 
 void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QString& v)
 {
-  if (k.isEmpty())
+  if (_keys.isEmpty())
   {
     throw IllegalArgumentException("You must set the key in the SetTagValueVisitor class.");
   }
-  if (v.isEmpty())
+  if (_vals.isEmpty())
   {
     throw IllegalArgumentException("You must set the value in the SetTagValueVisitor class.");
   }
 
   LOG_VART(e->getElementId());
 
-  if (_criterion.get() && !_criterion->isSatisfied(e))
+  if (_criteria.size() > 0 && !_criteriaSatisfied(e))
   {
     return;
   }
@@ -147,9 +169,9 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QS
 
 void SetTagValueVisitor::visit(const std::shared_ptr<Element>& e)
 {
-  for (int i = 0; i < _k.size(); i++)
+  for (int i = 0; i < _keys.size(); i++)
   {
-    _setTag(e, _k[i], _v[i]);
+    _setTag(e, _keys[i], _vals[i]);
   }
 }
 

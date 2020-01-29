@@ -45,9 +45,16 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Line; }
+
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PowerLineCriterion()); }
 
   virtual QString getDescription() const { return "Identifies power line utilities"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 };
 
 }

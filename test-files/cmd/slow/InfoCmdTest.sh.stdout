@@ -3601,14 +3601,61 @@ Listing a format that is both input and output...
 
 hootapidb://
 hootapidb://
+hootapidb://
+hootapidb://
+hootapidb://
 
 Listing an input format...
 
 .osm.bz2
 
+Listing an input format supporting streamable reads...
+
+.osm
+.osm.bz2
+.osm.gz
+
+Listing an input format supporting bounded reads...
+
+hootapidb://
+
 Listing an output format...
 
 .shp
+
+Listing an output format supporting streamable reads...
+
+.osm
+.osm.pbf
+
+Listing a format used with OGR...
+
+.shp
+.shp
+.shp
+
+Listing an input format read by OGR...
+
+.shp
+
+Listing an output format written by OGR...
+
+.shp
+
+Listing a streamable input format read by OGR...
+
+.shp
+
+Listing a streamable output format written by OGR...
+
+.sql
+.sqlite
+
+Listing input formats supported bounded reads that are read by OGR...
+
+Input formats supporting bounded reading:
+
+
 
 Listing detectable languages...
 
@@ -3676,7 +3723,7 @@ Listing a match creator...
 
 Listing a script match creator...
 
-  ScriptMatchCreator,PoiGeneric.js                Matches POIs
+  ScriptMatchCreator,Poi.js                       Matches POIs
 
 Listing a merger creator...
 
@@ -3737,4 +3784,16 @@ Listing pre-conflation operations...
 Listing post-conflation operations...
 
   SuperfluousNodeRemover                       operation         Removes all nodes not part of a way
+
+Listing way joiners...
+
+  WayJoinerAdvanced                  Extends WayJoinerBasic with additional join pre-conditions.
+
+Listing conflatable criteria...
+
+  BuildingCriterion                  Identifies buildings
+
+Listing filters...
+
+  NonBuildingAreaCriterion                     criterion         Identifies features that are areas but not buildings
 

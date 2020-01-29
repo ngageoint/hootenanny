@@ -22,12 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CopyMapSubsetOp.h"
 
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 using namespace std;
 
@@ -63,22 +65,29 @@ public:
       // if this is not a node then we need to worry about dependencies.
       else
       {
-        // add all of this element's children to the map (we're expempting eid).
+        // add all of this element's children to the map (we're exempting eid).
         AddAllVisitor v(_from, _to, eid);
         _from->getElement(eid)->visitRo(*_from, v);
         // finally, add this element to the map.
         _to->addElement(ee);
+        //  Add all of the elements affected
+        _elementsAdded.insert(v._elementsAdded.begin(), v._elementsAdded.end());
       }
+      //  Add this element to the list
+      _elementsAdded.insert(eid);
     }
   }
 
   virtual QString getDescription() const { return ""; }
+
+  std::set<ElementId>& getElementsAdded() { return _elementsAdded; }
 
 private:
 
   ConstOsmMapPtr _from;
   OsmMapPtr _to;
   ElementId _exempt;
+  std::set<ElementId> _elementsAdded;
 };
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids) :
@@ -100,6 +109,12 @@ CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>&
   }
 }
 
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid)
+  : _from(from)
+{
+  _eids.insert(eid);
+}
+
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2) :
   _from(from)
 {
@@ -107,7 +122,19 @@ CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, Ele
   _eids.insert(eid2);
 }
 
-void CopyMapSubsetOp::apply(OsmMapPtr &map)
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit) :
+_from(from),
+_crit(crit)
+{
+  std::shared_ptr<UniqueElementIdVisitor> getIdVis(new UniqueElementIdVisitor());
+  FilteredVisitor idVis(crit, getIdVis);
+  _from->visitRo(idVis);
+  _eids = getIdVis->getElementSet();
+  LOG_VARD(_eids.size());
+  LOG_VART(_eids);
+}
+
+void CopyMapSubsetOp::apply(OsmMapPtr& map)
 {
   map->setProjection(_from->getProjection());
   AddAllVisitor v(_from, map);
@@ -120,6 +147,8 @@ void CopyMapSubsetOp::apply(OsmMapPtr &map)
     }
     _from->getElement(*it)->visitRo(*_from, v);
   }
+  std::set<ElementId> eids = v.getElementsAdded();
+  _eidsCopied.insert(eids.begin(), eids.end());
 }
 
 }

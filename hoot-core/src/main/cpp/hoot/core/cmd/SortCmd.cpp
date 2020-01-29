@@ -35,7 +35,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 namespace hoot
 {
@@ -48,11 +48,11 @@ public:
 
   SortCmd() { }
 
-  virtual QString getName() const { return "sort"; }
+  virtual QString getName() const override { return "sort"; }
 
-  virtual QString getDescription() const { return "Sorts a map to the OSM standard"; }
+  virtual QString getDescription() const override { return "Sorts a map to the OSM standard"; }
 
-  virtual int runSimple(QStringList args) override
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 2)
     {

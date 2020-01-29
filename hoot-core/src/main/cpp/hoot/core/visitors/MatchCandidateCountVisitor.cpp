@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchCandidateCountVisitor.h"
 
@@ -116,10 +116,10 @@ void MatchCandidateCountVisitor::visit(const std::shared_ptr<const Element>& e)
     {
       _totalCandidateCount += _matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"];
     }
-    if (_matchCandidateCountsByMatchCreator.contains("hoot::ScriptMatchCreator,PoiGeneric.js"))
+    if (_matchCandidateCountsByMatchCreator.contains("hoot::ScriptMatchCreator,Poi.js"))
     {
       _totalCandidateCount +=
-        _matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"];
+        _matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,Poi.js"];
     }
   }
   //otherwise, use the poi/poly count only to avoid overlap.  it will always be >= the sum of

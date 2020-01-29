@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMatchCreator.h"
 
@@ -39,9 +39,11 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // Standard
 #include <fstream>
@@ -55,6 +57,7 @@ using namespace std;
 
 //Qt
 #include <QFile>
+#include <QElapsedTimer>
 
 using namespace geos::geom;
 
@@ -72,7 +75,7 @@ class BuildingMatchVisitor : public ConstElementVisitor
 {
 public:
 
-  BuildingMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
+  BuildingMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
                        ElementCriterionPtr filter = ElementCriterionPtr()) :
   _map(map),
   _result(result),
@@ -84,7 +87,7 @@ public:
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
   BuildingMatchVisitor(const ConstOsmMapPtr& map,
-    std::vector<const Match*>& result, std::shared_ptr<BuildingRfClassifier> rf,
+    std::vector<ConstMatchPtr>& result, std::shared_ptr<BuildingRfClassifier> rf,
     ConstMatchThresholdPtr threshold, ElementCriterionPtr filter = ElementCriterionPtr(),
     Status matchStatus = Status::Invalid) :
     _map(map),
@@ -121,15 +124,14 @@ public:
 
     // find other nearby candidates
     std::set<ElementId> neighbors =
-      IndexElementsVisitor::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
 
     ElementId from(e->getElementType(), e->getId());
 
     _elementsEvaluated++;
     int neighborCount = 0;
 
-    std::vector<Match*> tempMatches;
-
+    std::vector<MatchPtr> tempMatches;
     for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       const ElementId neighborId = *it;
@@ -139,13 +141,9 @@ public:
         if (isRelated(neighbor, e))
         {
           // score each candidate and push it on the result vector
-          BuildingMatch* match = createMatch(from, neighborId);
+          std::shared_ptr<BuildingMatch> match = createMatch(from, neighborId);
           // if we're confident this is a miss
-          if (match->getType() == MatchType::Miss)
-          {
-            delete match;
-          }
-          else
+          if (match->getType() != MatchType::Miss)
           {
             tempMatches.push_back(match);
             neighborCount++;
@@ -153,13 +151,16 @@ public:
         }
       }
     }
+    LOG_VART(neighborCount);
 
-    if (ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne() && neighborCount > 1)
+    if (neighborCount > 1 && ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne())
     {
       _markNonOneToOneMatchesAsReview(tempMatches);
     }
+    _adjustForOverlappingAdjoiningBuildingMatches(tempMatches);
 
-    for (std::vector<Match*>::const_iterator it = tempMatches.begin(); it != tempMatches.end(); ++it)
+    for (std::vector<MatchPtr>::const_iterator it = tempMatches.begin(); it != tempMatches.end();
+         ++it)
     {
       _result.push_back(*it);
     }
@@ -168,9 +169,9 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  BuildingMatch* createMatch(ElementId eid1, ElementId eid2)
+  std::shared_ptr<BuildingMatch> createMatch(ElementId eid1, ElementId eid2)
   {
-    return new BuildingMatch(_map, _rf, eid1, eid2, _mt);
+    return std::shared_ptr<BuildingMatch>(new BuildingMatch(_map, _rf, eid1, eid2, _mt));
   }
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
@@ -231,6 +232,8 @@ public:
   {
     if (!_index)
     {
+      LOG_INFO("Creating building feature index...");
+
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
       std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
@@ -242,7 +245,7 @@ public:
       std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
-      IndexElementsVisitor v(_index,
+      SpatialIndexer v(_index,
                              _indexToEid,
                              pCrit,
                              std::bind(
@@ -263,7 +266,7 @@ public:
 private:
 
   const ConstOsmMapPtr& _map;
-  std::vector<const Match*>& _result;
+  std::vector<ConstMatchPtr>& _result;
   std::set<ElementId> _empty;
   std::shared_ptr<BuildingRfClassifier> _rf;
   ConstMatchThresholdPtr _mt;
@@ -284,11 +287,11 @@ private:
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
 
-  void _markNonOneToOneMatchesAsReview(std::vector<Match*>& matches)
-  {
-    for (std::vector<Match*>::iterator it = matches.begin(); it != matches.end(); ++it)
+  void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches)
+  {      
+    for (std::vector<MatchPtr>::iterator it = matches.begin(); it != matches.end(); ++it)
     {
-      Match* match = *it;
+      MatchPtr match = *it;
       //Not proud of this, but not sure what else to do at this point w/o having to change the
       //Match interface.
       MatchClassification& matchClass =
@@ -297,6 +300,88 @@ private:
       match->setExplain("Match involved in multiple building relationships.");
     }
   }
+
+  void _adjustForOverlappingAdjoiningBuildingMatches(std::vector<MatchPtr>& matches)
+  {
+    // If we have matches or reviews between adjoining houses (building=terrace; townhouses and
+    // the like), check for many to one relationships. From the many to one, keep only the match
+    // with the highest overlap. Convert all others to misses by removing the matches completely.
+    //
+    // The argument could be made that this overlap check could be done for all buildings, not just
+    // adjoining buildings, to reduce bad matches/reviews. Not sure how much havoc that might wreak,
+    // but maybe worth trying.
+
+    LOG_VART(matches);
+
+    QMap<ElementId, double> highestOverlapScores;
+    QMap<ElementId, MatchPtr> highestOverlapMatches;
+    const double tagScoreThreshold = ConfigOptions().getBuildingAdjoiningTagScoreThreshold();
+    bool adjoiningBuildingEncountered = false;
+
+    for (std::vector<MatchPtr>::const_iterator matchItr = matches.begin();
+         matchItr != matches.end(); ++matchItr)
+    {
+      MatchPtr match = *matchItr;
+      LOG_VART(match->getType());
+      assert(match->getType() != MatchType::Miss);
+
+      std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+      LOG_VART(matchPairs.size());
+      assert(matchPairs.size() == 1);
+      std::pair<ElementId, ElementId> matchPair = *matchPairs.begin();
+
+      ConstElementPtr element1 = _map->getElement(matchPair.first);
+      ConstElementPtr element2 = _map->getElement(matchPair.second);
+
+      const QString adjoiningBuildingKvp = "building=terrace";
+      if (element1->getElementType() == ElementType::Way &&
+          element2->getElementType() == ElementType::Way &&
+          (OsmSchema::getInstance().score(adjoiningBuildingKvp, element1->getTags()) >=
+             tagScoreThreshold ||
+           OsmSchema::getInstance().score(adjoiningBuildingKvp, element2->getTags()) >=
+             tagScoreThreshold))
+      {
+        LOG_TRACE(
+          "one or both is adjoining building: " << element1->getElementId() << ", " <<
+          element2->getElementId());
+        adjoiningBuildingEncountered = true;
+
+        const double overlap = OverlapExtractor().extract(*_map, element1, element2);
+        if (!highestOverlapScores.contains(element1->getElementId()) ||
+            overlap > highestOverlapScores[element1->getElementId()])
+        {
+          highestOverlapScores[element1->getElementId()] = overlap;
+          highestOverlapMatches[element1->getElementId()] = match;
+          LOG_TRACE(
+            "Updating highest overlap score: " << overlap << " for ref: " <<
+            element1->getElementId() << ", sec: " << element2->getElementId());
+        }
+        else
+        {
+          LOG_TRACE(
+            "Dropping match with lower overlap score: " << overlap <<
+            " compared to highest overlap score: " <<
+            highestOverlapScores[element1->getElementId()] << " for ref: " <<
+            element1->getElementId() << ", sec: " << element2->getElementId());
+        }
+      }
+    }
+    highestOverlapScores.clear();
+    LOG_VART(adjoiningBuildingEncountered);
+
+    if (adjoiningBuildingEncountered)
+    {
+      std::vector<MatchPtr> modifiedMatches;
+      for (QMap<ElementId, MatchPtr>::const_iterator modifiedMatchItr = highestOverlapMatches.begin();
+           modifiedMatchItr != highestOverlapMatches.end(); ++modifiedMatchItr)
+      {
+        modifiedMatches.push_back(modifiedMatchItr.value());
+      }
+      matches = modifiedMatches;
+    }
+    highestOverlapMatches.clear();
+    LOG_VART(matches);
+  }
 };
 
 BuildingMatchCreator::BuildingMatchCreator() :
@@ -304,10 +389,10 @@ _conflateMatchBuildingModel(ConfigOptions().getConflateMatchBuildingModel())
 {
 }
 
-Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
+MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
+                                           ElementId eid2)
 {
-  BuildingMatch* result = 0;
-
+  std::shared_ptr<BuildingMatch> result;
   if (eid1.getType() != ElementType::Node && eid2.getType() != ElementType::Node)
   {
     ConstElementPtr e1 = map->getElement(eid1);
@@ -316,24 +401,32 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
     if (BuildingMatchVisitor::isRelated(e1, e2))
     {
       // score each candidate and push it on the result vector
-      result = new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold());
+      result.reset(new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold()));
     }
   }
-
   return result;
 }
 
 void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
-                                         std::vector<const Match*>& matches,
+                                         std::vector<ConstMatchPtr>& matches,
                                          ConstMatchThresholdPtr threshold)
 {
-  LOG_DEBUG("Creating matches with: " << className() << "...");
+  QElapsedTimer timer;
+  timer.start();
+  LOG_STATUS("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
+  const int matchesSizeBefore = matches.size();
+
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, _filter, Status::Unknown1);
-  map->visitRo(v);
-  LOG_INFO(
+  map->visitWaysRo(v);
+  map->visitRelationsRo(v);
+  const int matchesSizeAfter = matches.size();
+
+  LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " building match candidates.");
+    " building match candidates and " <<
+    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
+    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
@@ -376,7 +469,7 @@ std::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
 
 bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map)
 {
-  std::vector<const Match*> matches;
+  std::vector<ConstMatchPtr> matches;
   return BuildingMatchVisitor(map, matches, _filter).isMatchCandidate(element);
 }
 

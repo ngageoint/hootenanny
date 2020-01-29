@@ -22,20 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QStringList>
+#include <QElapsedTimer>
 
 using namespace geos::geom;
 using namespace std;
@@ -43,7 +45,7 @@ using namespace std;
 namespace hoot
 {
 
-class CropCmd : public BaseCommand
+class CropCmd : public BoundedCommand
 {
 public:
 
@@ -51,53 +53,48 @@ public:
 
   CropCmd() {}
 
-  virtual QString getName() const { return "crop"; }
+  virtual QString getName() const override { return "crop"; }
 
-  virtual QString getDescription() const { return "Crops a map to a geospatial bounds"; }
+  virtual QString getDescription() const override { return "Crops a map to a bounds"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
-    if (args.size() != 3)
+    if (args.size() < 3 || args.size() > 4)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
+    QElapsedTimer timer;
+    timer.start();
     QString in = args[0];
     QString out = args[1];
-    QString bounds = args[2];
+    _env.reset(new Envelope(GeometryUtils::envelopeFromConfigString(args[2])));
 
-    bool allOk = true;
-    bool ok;
-    QStringList boundsArr = bounds.split(",");
-    double left = boundsArr[0].toDouble(&ok);
-    allOk &= ok;
-    double bottom = boundsArr[1].toDouble(&ok);
-    allOk &= ok;
-    double right = boundsArr[2].toDouble(&ok);
-    allOk &= ok;
-    double top = boundsArr[3].toDouble(&ok);
-    allOk &= ok;
-
-    if (allOk == false)
-    {
-      throw HootException("Invalid bounds format.");
-    }
-
-    Envelope env(left, right, bottom, top);
+    BoundedCommand::runSimple(args);
 
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, in, true);
 
-    MapCropper cropper(env);
+    MapCropper cropper(*_env);
     cropper.setConfiguration(Settings::getInstance());
     cropper.apply(map);
-    SuperfluousWayRemover::removeWays(map);
-    SuperfluousNodeRemover().apply(map);
 
     IoUtils::saveMap(map, out);
 
+    LOG_INFO("Cropping completed in: " + StringUtils::millisecondsToDhms(timer.elapsed()) + ".");
+
     return 0;
+  }
+
+protected:
+
+  std::shared_ptr<Envelope> _env;
+
+  virtual void _writeBoundsFile() override
+  {
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(*_env), ConfigOptions().getBoundsOutputFile());
   }
 };
 

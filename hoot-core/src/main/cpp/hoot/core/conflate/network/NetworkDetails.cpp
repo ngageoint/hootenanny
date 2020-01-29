@@ -115,12 +115,16 @@ Radians NetworkDetails::calculateHeading(ConstEdgeLocationPtr el) const
   return WayHeading::calculateHeading(wl);
 }
 
-Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNetworkVertexPtr v)
-  const
-{
+Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e,
+                                                 ConstNetworkVertexPtr v) const
+{  
+  // Is it possible if e is a relation and has one way member, then we should use that for the way
+  // here? Haven't seen evidence of that yet, so not implementing it.
+
   if (e->getMembers().size() != 1 || e->getMembers()[0]->getElementType() != ElementType::Way)
   {
     LOG_VART(e);
+    LOG_VART(e->getMembers()[0]);
     throw IllegalArgumentException("The input edge must have exactly 1 way as its member.");
   }
 
@@ -188,9 +192,7 @@ QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(ConstNetwor
     {
       subline2->reverse();
     }
-    EdgeSublineMatchPtr m(new EdgeSublineMatch(
-      _toEdgeSubline(wsm.getSubline1(), e1),
-      subline2));
+    EdgeSublineMatchPtr m(new EdgeSublineMatch(_toEdgeSubline(wsm.getSubline1(), e1), subline2));
     result.append(m);
   }
 
@@ -391,6 +393,10 @@ double NetworkDetails::_getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetwork
 {
   double score = 1.0;
 
+  LOG_VART(e1->getMembers().size());
+  LOG_VART(e1->getMembers()[0]->getElementId());
+  LOG_VART(e2->getMembers().size());
+  LOG_VART(e2->getMembers()[0]->getElementId());
   // if this edge is a simple way type.
   if (e1->getMembers().size() == 1 && e1->getMembers()[0]->getElementType() == ElementType::Way &&
       e2->getMembers().size() == 1 && e2->getMembers()[0]->getElementType() == ElementType::Way)
@@ -998,39 +1004,51 @@ bool NetworkDetails::isStringCandidate(ConstNetworkEdgePtr e1, ConstNetworkEdgeP
 
   if (e1->isStub() || e2->isStub())
   {
-    result = false;
+    return result;
   }
-  else if (e2->contains(e1->getFrom()))
+
+  LOG_VART(e1->getMembers().size());
+  LOG_VART(e1->getMembers()[0]->getElementId());
+  LOG_VART(e2->getMembers().size());
+  LOG_VART(e2->getMembers()[0]->getElementId());
+
+  if (e1->getMembers().size() == 1 &&
+      e2->getMembers().size() == 1 &&
+      e1->getMembers()[0]->getElementType() == ElementType::Way &&
+      e2->getMembers()[0]->getElementType() == ElementType::Way)
   {
-    Radians r1, r2;
-    if (e1->getFrom() == e2->getFrom())
+    if (e2->contains(e1->getFrom()))
     {
-      r1 = calculateHeadingAtVertex(e1, e1->getFrom());
-      r2 = calculateHeadingAtVertex(e2, e2->getFrom());
+      Radians r1, r2;
+      if (e1->getFrom() == e2->getFrom())
+      {
+        r1 = calculateHeadingAtVertex(e1, e1->getFrom());
+        r2 = calculateHeadingAtVertex(e2, e2->getFrom());
+      }
+      else
+      {
+        r1 = calculateHeadingAtVertex(e1, e1->getFrom());
+        r2 = calculateHeadingAtVertex(e2, e2->getTo());
+      }
+      result = WayHeading::deltaMagnitude(r1, r2) > toRadians(45);
+      LOG_VART(toDegrees(WayHeading::deltaMagnitude(r1, r2)));
     }
-    else
+    else if (e2->contains(e1->getTo()))
     {
-      r1 = calculateHeadingAtVertex(e1, e1->getFrom());
-      r2 = calculateHeadingAtVertex(e2, e2->getTo());
+      Radians r1, r2;
+      if (e1->getTo() == e2->getTo())
+      {
+        r1 = calculateHeadingAtVertex(e1, e1->getTo());
+        r2 = calculateHeadingAtVertex(e2, e2->getTo());
+      }
+      else
+      {
+        r1 = calculateHeadingAtVertex(e1, e1->getTo());
+        r2 = calculateHeadingAtVertex(e2, e2->getFrom());
+      }
+      result = WayHeading::deltaMagnitude(r1, r2) > toRadians(45);
+      LOG_VART(toDegrees(WayHeading::deltaMagnitude(r1, r2)));
     }
-    result = WayHeading::deltaMagnitude(r1, r2) > toRadians(45);
-    LOG_VART(toDegrees(WayHeading::deltaMagnitude(r1, r2)));
-  }
-  else if (e2->contains(e1->getTo()))
-  {
-    Radians r1, r2;
-    if (e1->getTo() == e2->getTo())
-    {
-      r1 = calculateHeadingAtVertex(e1, e1->getTo());
-      r2 = calculateHeadingAtVertex(e2, e2->getTo());
-    }
-    else
-    {
-      r1 = calculateHeadingAtVertex(e1, e1->getTo());
-      r2 = calculateHeadingAtVertex(e2, e2->getFrom());
-    }
-    result = WayHeading::deltaMagnitude(r1, r2) > toRadians(45);
-    LOG_VART(toDegrees(WayHeading::deltaMagnitude(r1, r2)));
   }
 
   return result;
@@ -1103,7 +1121,13 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
         throw IllegalArgumentException("Expected a network edge with exactly 1 way.");
       }
       ElementId eid = mapper.mapEid(e->getMembers()[0]->getElementId());
+
       ConstWayPtr w = std::dynamic_pointer_cast<const Way>(_map->getWay(eid));
+      if (!w)
+      {
+        LOG_VART(eid);
+        throw IllegalArgumentException("Way: " + eid.toString() + " does not exist in the map.");
+      }
 
       Meters l = calculateLength(e);
       double startP = subline->getStart()->getPortion();
@@ -1115,6 +1139,7 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
     }
   }
 
+  LOG_VART(ws);
   return ws;
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard
@@ -107,6 +107,7 @@ namespace Tgs
     }
 
   private:
+
     int _dimensions;
     int _order;
     bitmask_t* _point;

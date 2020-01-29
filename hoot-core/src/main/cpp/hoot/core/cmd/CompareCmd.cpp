@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -35,7 +35,7 @@
 #include <hoot/core/scoring/RasterComparator.h>
 #include <hoot/core/visitors/KeepHighwaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
@@ -53,10 +53,10 @@ public:
 
   CompareCmd() { }
 
-  virtual QString getName() const { return "compare"; }
+  virtual QString getName() const override { return "compare"; }
 
-  virtual QString getDescription() const
-  { return "Compares maps using score metrics"; }
+  virtual QString getDescription() const override
+  { return "Compares maps using metrics"; }
 
   void attributeCompare(OsmMapPtr map1, OsmMapPtr map2, OsmMapPtr outMap,
                         int& mean, int& confidence)
@@ -105,6 +105,7 @@ public:
     graph.setDebugImages(ConfigOptions().getScoreGraphDebugImages());
     graph.setIterations(1000);
     graph.setPixelSize(10);
+    graph.setMaxThreads(ConfigOptions().getGraphComparatorMaxThreads());
     graph.compareMaps();
     double thisConfidence = graph.getConfidenceInterval();
     double thisMean = graph.getMeanScore();
@@ -197,7 +198,7 @@ public:
     return result;
   }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 2 || args.size() > 3)
     {

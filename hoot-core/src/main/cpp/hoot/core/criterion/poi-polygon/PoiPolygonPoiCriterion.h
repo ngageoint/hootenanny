@@ -50,9 +50,15 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Point; }
+
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
 
   virtual QString getDescription() const { return ""; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 
 private:
 

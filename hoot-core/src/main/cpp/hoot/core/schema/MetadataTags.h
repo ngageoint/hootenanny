@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef METADATA_TAGS_H
@@ -61,8 +61,6 @@ public:
 
   inline static const QString HootBuildingMatch()       { return "hoot:building:match"; }
 
-  /// These tags are used when evaluating multiary conflation results.
-  /// See MultiaryMatchComparator
   inline static const QString HootActual()              { return "hoot:actual"; }
   inline static const QString HootExpected()            { return "hoot:expected"; }
   inline static const QString HootMismatch()            { return "hoot:mismatch"; }
@@ -83,12 +81,15 @@ public:
   static const QString HOOT_ID;
   inline static const QString& HootId()                 { return HOOT_ID; }
   inline static const QString HootHash()                { return "hoot:hash"; }
+  inline static const QString HootChangeType()          { return "hoot:change:type"; }
+  inline static const QString HootChangeExcludeDelete() { return "hoot:change:exclude:delete"; }
 
   inline static const QString HootLayername()           { return "hoot:layername"; }
 
   inline static const QString HootMatchOrder()          { return "hoot:match:order"; }
   inline static const QString HootMatchP()              { return "hoot:match:p"; }
   inline static const QString HootMatchScore()          { return "hoot:match:score"; }
+  inline static const QString HootMatchedBy()           { return "hoot:matchedBy"; }
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
 
@@ -125,11 +126,15 @@ public:
 
   inline static const QString Ref1()                    { return "REF1"; }
   inline static const QString Ref2()                    { return "REF2"; }
+  inline static const QString Review()                  { return "REVIEW"; }
+  inline static const QString Uuid()                    { return "uuid"; }
 
   inline static const QString Unknown1()                { return "Unknown1"; }
   inline static const QString Unknown2()                { return "Unknown2"; }
 
   inline static const QString BuildingPart()            { return "building:part"; }
+  inline static const QString BuildingHeight()          { return "height"; }
+  inline static const QString BuildingLevels()          { return "building:levels"; }
 
   inline static const QString RelationBoundary()        { return "boundary"; }
   inline static const QString RelationBuilding()        { return "building"; }
@@ -153,18 +158,32 @@ public:
   inline static const QString RoleOutline()             { return "outline"; }
   inline static const QString RolePart()                { return "part"; }
   inline static const QString RoleReviewee()            { return "reviewee"; }
+  // temp tag used by BuildingMerger
+  inline static const QString HootMultiPolyRole()       { return "hoot:multi_poly:role"; }
 
   inline static const QString Length()                  { return "length"; }
 
-  inline static const QString HootSnappedWayNode()      { return "hoot:snapped"; }
+  inline static const QString Source()                  { return "source"; }
+  inline static const QString OsmApiDbScheme()          { return "osmapidb"; }
+  inline static const QString HootApiDbScheme()         { return "hootapidb"; }
+  /**
+   * Identifies features snapped with UnconnectedWaySnapper
+   */
+  inline static const QString HootSnapped()             { return "hoot:snapped"; }
 
   /**
-   * identifies multilinestring relations hoot adds during conflation
+   * Identifies ways outside of convert.bounding.box that are immediately connected to other ways
+   * within the bounds
+   */
+  inline static const QString HootConnectedWayOutsideBounds() { return "hoot:connected_way"; }
+
+  /**
+   * Identifies multilinestring relations hoot adds during conflation
    */
   inline static const QString HootMultilineString()     { return "hoot:multilinestring"; }
 
   /**
-   * identifies ElementConflatableCriteria that consider an element conflatable
+   * Identifies ElementConflatableCriteria that consider an element conflatable
    */
   inline static const QString HootConflatableCriteria() { return "hoot:conflatable:criteria"; }
 

@@ -49,9 +49,9 @@ public:
 
   BuildingMatchCreator();
 
-  virtual Match* createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2);
+  virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;

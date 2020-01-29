@@ -35,7 +35,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
 using namespace std;
@@ -51,11 +51,12 @@ public:
 
   StatsCmd() {}
 
-  virtual QString getName() const { return "stats"; }
+  virtual QString getName() const override { return "stats"; }
 
-  virtual QString getDescription() const { return "Displays a set of statistics for a map"; }
+  virtual QString getDescription() const override
+  { return "Displays a default set of statistics for a map"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 1)
     {

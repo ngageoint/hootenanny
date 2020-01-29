@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagDifferencerJs.h"
 
@@ -75,6 +75,9 @@ void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
     {
       throw IllegalArgumentException("You must specify a valid map, element 1 and element 2");
     }
+
+    LOG_VART(e1->getElementId());
+    LOG_VART(e2->getElementId());
 
     double d = op->getDifferencer()->diff(map, e1, e2);
 

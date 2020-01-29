@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbReader.h"
 
@@ -66,7 +66,7 @@ Envelope HootApiDbReader::calculateEnvelope() const
 
 void HootApiDbReader::open(const QString& urlStr)
 {
-  _url = urlStr;
+  OsmMapReader::open(urlStr);
   if (!isSupported(_url))
   {
     throw HootException("An unsupported URL was passed in to HootApiDbReader: " + _url);
@@ -93,6 +93,14 @@ void HootApiDbReader::open(const QString& urlStr)
   //be invalid as a whole
   _database->transaction();
   _open = true;
+}
+
+void HootApiDbReader::read(const OsmMapPtr &map)
+{
+  //  Update the URL added to the map
+  _url = MetadataTags::HootApiDbScheme() + ":" + QString::number(_database->getMapId());
+  //  Continue with the base class read operation
+  ApiDbReader::read(map);
 }
 
 NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
@@ -125,6 +133,7 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
     node->setStatus(_status);
   }
 
+  LOG_VART(node->getStatus());
   LOG_VART(node->getVersion());
 
   return node;
@@ -157,7 +166,9 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
   {
     way->setStatus(_status);
   }
+
   LOG_VART(way->getStatus());
+  LOG_VART(way->getVersion());
 
   // these maybe could be read out in batch at the same time the element results are read...
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
@@ -198,6 +209,9 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
     relation->setStatus(_status);
   }
 
+  LOG_VART(relation->getStatus());
+  LOG_VART(relation->getVersion());
+
   // these maybe could be read out in batch at the same time the element results are read...
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
@@ -211,6 +225,7 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
 
 void HootApiDbReader::setConfiguration(const Settings& conf)
 {
+  ApiDbReader::setConfiguration(conf);
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getApiDbEmail());

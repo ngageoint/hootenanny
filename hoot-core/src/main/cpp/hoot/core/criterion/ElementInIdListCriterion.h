@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
  
 #ifndef ELEMENTINIDLISTCRITERION_H
@@ -38,6 +38,9 @@ namespace hoot
 
 /**
  * Identifies elements in a list of IDs
+ *
+ * @todo We could probably replace this with ElementIdCriterion. If not, rename it to
+ * ElementInIdCollectionCriterion.
  */
 class ElementInIdListCriterion : public ElementCriterion
 {
@@ -46,7 +49,8 @@ public:
   static std::string className() { return "hoot::ElementInIdListCriterion"; }
 
   ElementInIdListCriterion() {}
-  explicit ElementInIdListCriterion(const std::vector<long>& ids);
+  explicit ElementInIdListCriterion(const ElementType& elementType, const std::vector<long>& ids);
+  ElementInIdListCriterion(const std::vector<ElementId>& ids);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -55,9 +59,12 @@ public:
 
   virtual QString getDescription() const { return "Filters elements with a list of IDs"; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
-  std::set<long> _ids;
+  std::set<ElementId> _ids;
 };
 
 }

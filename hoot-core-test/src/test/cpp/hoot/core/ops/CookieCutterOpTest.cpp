@@ -52,15 +52,17 @@ class CookieCutterOpTest : public HootTestFixture
 
 public:
 
-  CookieCutterOpTest()
-    : HootTestFixture("test-files/ops/CookieCutterOp/",
-                      "test-output/ops/CookieCutterOp/")
+  CookieCutterOpTest() :
+  HootTestFixture("test-files/ops/CookieCutterOp/", "test-output/ops/CookieCutterOp/")
   {
     setResetType(ResetAll);
   }
 
   void runTest()
   {
+    // needed to suppress map crop missing element warnings
+    DisableLog dl;
+
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
@@ -81,13 +83,12 @@ public:
 
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "CookieCutterOpTest.osm");
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterOpTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterOpTest.osm",
                      _outputPath + "CookieCutterOpTest.osm");
   }
 
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterOpTest, "current");
 
 }

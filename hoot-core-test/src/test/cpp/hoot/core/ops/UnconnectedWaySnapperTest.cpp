@@ -27,7 +27,6 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -35,7 +34,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // CPP Unit
 #include <cppunit/TestAssert.h>
@@ -79,25 +77,21 @@ public:
     uut.setMaxNodeReuseDistance(0.5);
     uut.setMaxSnapDistance(5.0);
     uut.setMarkSnappedNodes(true);
+    uut.setMarkSnappedWays(true);
     uut.setSnapToExistingWayNodes(true);
     uut.setWayDiscretizationSpacing(1.0);
-    uut.setSnapToWayStatus(Status::Unknown1);
-    uut.setSnapWayStatus(Status::Unknown2);
+    uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
+    uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
     uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayNodeCriterion");
     uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
     uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");
     uut.apply(map);
 
-    // Remove the ref data, so its easier to compare the snapped output to the pre-snapped
-    // secondary input data.
-    ElementCriterionPtr statusCrit(new StatusCriterion(Status::Unknown1));
-    RemoveElementsVisitor removeRefVisitor;
-    removeRefVisitor.setRecursive(true);
-    removeRefVisitor.addCriterion(statusCrit);
-    map->visitRw(removeRefVisitor);
-
     MapProjector::projectToWgs84(map);
-    OsmXmlWriter().write(map, _outputPath + testName +  + "Out.osm");
+
+    OsmXmlWriter writer;
+    writer.setIsDebugMap(true);
+    writer.write(map, _outputPath + testName +  + "Out.osm");
 
     CPPUNIT_ASSERT_EQUAL(43L, uut.getNumAffected());
     CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWayNodes());

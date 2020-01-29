@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/schema/AttributeCoOccurrence.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 using namespace std;
 
@@ -44,12 +44,12 @@ public:
 
   TagCompareCmd() { }
 
-  virtual QString getName() const { return "tag-compare"; }
+  virtual QString getName() const override { return "tag-compare"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Compares tags between two maps"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     bool tableFormat = true;
     AttributeCoOccurrence cooccurrence;

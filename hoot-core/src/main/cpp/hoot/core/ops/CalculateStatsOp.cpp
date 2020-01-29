@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateStatsOp.h"
 
@@ -116,7 +116,9 @@ void CalculateStatsOp::_readGenericStatsData()
     else if (listType.first == "slow") pCurr = &_slowStatData;
     else
     {
-      throw HootException("Invalid stats data list name '" + listType.first + "' in " + statsFileName.toStdString() + ". Allowed: 'quick' or 'slow'.");
+      throw HootException(
+        "Invalid stats data list name '" + listType.first + "' in " + statsFileName.toStdString() +
+        ". Allowed: 'quick' or 'slow'.");
     }
 
     foreach (bpt::ptree::value_type entry, listType.second)
@@ -140,12 +142,16 @@ void CalculateStatsOp::_readGenericStatsData()
           }
           else
           {
-            throw HootException("Invalid stats data field '" + val.toStdString() + "' in " + statsFileName.toStdString());
+            throw HootException(
+              "Invalid stats data field '" + val.toStdString() + "' in " +
+              statsFileName.toStdString());
           }
         }
         else
         {
-          throw HootException("Invalid stats data field '" + val.toStdString() + "' in " + statsFileName.toStdString());
+          throw HootException(
+            "Invalid stats data field '" + val.toStdString() + "' in " +
+            statsFileName.toStdString());
         }
       }
 
@@ -351,12 +357,15 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _addStat("Percentage of Total Features Unmatched",
              ((double)unconflatedFeatureCount / (double)featureCount) * 100.0);
 
+    QStringList featureTypesToSkip;
+    // Unknown does not get us a usable element criterion, so skip it
+    featureTypesToSkip.append("unknown");
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            conflatableFeatureCounts.begin();
          it != conflatableFeatureCounts.end(); ++it)
     {
-      // Unknown does not get us a usable element criterion, so skip it
-      if (hoot::CreatorDescription::Unknown != it.key())
+      const QString featureType = CreatorDescription::baseFeatureTypeToString(it.key());
+      if (!featureTypesToSkip.contains(featureType, Qt::CaseInsensitive))
       {
         _generateFeatureStats(it.key(), it.value(),
                               CreatorDescription::getFeatureCalcType(it.key()),
@@ -437,7 +446,8 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       try
       {
         // create criterion
-        pCrit = shared_ptr<ElementCriterion>(
+        pCrit =
+          shared_ptr<ElementCriterion>(
             static_cast<ElementCriterion *>(
               Factory::getInstance().constructObject<ElementCriterion>(d.criterion)));
 
@@ -447,7 +457,9 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       }
       catch (...)
       {
-        throw HootException(QString("Unable to construct criterion '%1' in stats data entry '%2'").arg(d.criterion, d.name) );
+        throw HootException(
+          QString("Unable to construct criterion '%1' in stats data entry '%2'")
+            .arg(d.criterion, d.name) );
       }
 
       _criterionCache[d.criterion] = pCrit;
@@ -467,16 +479,20 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       try
       {
         // create visitor to set in FilteredVisitor
-        pCriterionVisitor = shared_ptr<ConstElementVisitor>(
-              static_cast<ConstElementVisitor *>(
-                Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
+        pCriterionVisitor =
+          shared_ptr<ConstElementVisitor>(
+            static_cast<ConstElementVisitor *>(
+              Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
       }
       catch (...)
       {
-        throw HootException(QString("Unable to construct visitor '%1' in stats data entry '%2'").arg(d.visitor, d.name) );
+        throw HootException(
+          QString("Unable to construct visitor '%1' in stats data entry '%2'")
+            .arg(d.visitor, d.name) );
       }
 
-      FilteredVisitor filteredVisitor = FilteredVisitor(pCrit, ConstElementVisitorPtr(pCriterionVisitor));
+      FilteredVisitor filteredVisitor =
+        FilteredVisitor(pCrit, ConstElementVisitorPtr(pCriterionVisitor));
       val = _applyVisitor(filteredVisitor, d.statCall);
     }
     else
@@ -491,13 +507,16 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       {
         try
         {
-          pVisitor = shared_ptr<ConstElementVisitor>(
-                static_cast<ConstElementVisitor *>(
-                  Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
+          pVisitor =
+            shared_ptr<ConstElementVisitor>(
+              static_cast<ConstElementVisitor *>(
+                Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
         }
         catch (...)
         {
-          throw HootException(QString("Unable to construct visitor '%1' in stats data entry '%2'").arg(d.visitor, d.name) );
+          throw HootException(
+            QString("Unable to construct visitor '%1' in stats data entry '%2'")
+              .arg(d.visitor, d.name) );
         }
 
         // without criterion, apply the visitor directly and interpret as NumericStatistic
@@ -545,7 +564,8 @@ bool CalculateStatsOp::_matchDescriptorCompare(const CreatorDescription& m1,
   return m1.className > m2.className;
 }
 
-double CalculateStatsOp::_applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis, StatCall call)
+double CalculateStatsOp::_applyVisitor(ElementCriterion* pCrit,
+                                       ConstElementVisitor* pVis, StatCall call)
 {
   return _applyVisitor(FilteredVisitor(pCrit, pVis), call);
 }
@@ -556,7 +576,8 @@ double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, StatCall call)
   return _applyVisitor(v, emptyVisitorData, call);
 }
 
-double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& visitorData, StatCall call)
+double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& visitorData,
+                                       StatCall call)
 {
   // this is a hack to let C++ pass v as a temporary. Bad Jason.
   FilteredVisitor* fv = const_cast<FilteredVisitor*>(&v);
@@ -662,8 +683,16 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   const QString description = CreatorDescription::baseFeatureTypeToString(featureType);
   LOG_VARD(description);
 
+  ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(criterion.get());
+  if (mapConsumer != 0)
+  {
+    mapConsumer->setOsmMap(_constMap.get());
+  }
+
   double totalFeatures = 0.0;
-  totalFeatures = _applyVisitor(FilteredVisitor(criterion->clone(), _getElementVisitorForFeatureType(featureType)));
+  totalFeatures =
+    _applyVisitor(
+      FilteredVisitor(criterion->clone(), _getElementVisitorForFeatureType(featureType)));
   LOG_VARD(totalFeatures);
   _addStat(QString("%1s").arg(description), totalFeatures);
   _addStat(QString("Conflatable %1s").arg(description), conflatableCount);
@@ -726,8 +755,10 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   else if (type == CreatorDescription::CalcTypeArea)
   {
     _addStat(QString("Meters Squared of %1s Processed by Conflation").arg(description),
-      _applyVisitor(FilteredVisitor(ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
-        criterion->clone()), ConstElementVisitorPtr(new CalculateAreaVisitor()))));
+      _applyVisitor(
+        FilteredVisitor(
+          ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
+          criterion->clone()), ConstElementVisitorPtr(new CalculateAreaVisitor()))));
   }
 
   double percentageOfTotalFeaturesConflated = 0.0;
@@ -737,7 +768,8 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
       ((double)conflatedFeatureCount / (double)totalFeatures) * 100.0;
   }
   LOG_VARD(percentageOfTotalFeaturesConflated);
-  _addStat(QString("Percentage of %1s Conflated").arg(description), percentageOfTotalFeaturesConflated);
+  _addStat(
+    QString("Percentage of %1s Conflated").arg(description), percentageOfTotalFeaturesConflated);
   double percentageOfTotalFeaturesMarkedForReview = 0.0;
   if (totalFeatures > 0.0)
   {
@@ -753,7 +785,8 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
       ((double)unconflatedFeatureCount / (double)totalFeatures) * 100.0;
   }
   LOG_VARD(percentageOfTotalFeaturesUnconflated);
-  _addStat(QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated);
+  _addStat(
+    QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated);
 }
 
 }

@@ -58,6 +58,7 @@ std::shared_ptr<MapProjector> MapProjector::_theInstance;
 class DisableCplErrors
 {
 public:
+
   CPLErrorHandler oldHandler;
 
   DisableCplErrors()
@@ -110,7 +111,6 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
   }
 }
 
-
 MapProjector& MapProjector::getInstance()
 {
   if (!_theInstance.get())
@@ -130,7 +130,6 @@ Radians MapProjector::_calculateAngle(Coordinate p1, Coordinate p2, Coordinate p
 {
   Radians theta1 = atan2(p2.y - p1.y, p2.x - p1.x);
   Radians theta2 = atan2(p3.y - p1.y, p3.x - p1.x);
-
   return theta1 - theta2;
 }
 
@@ -337,11 +336,11 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
   }
 
   //  |<---                       80 cols                                         -->|
-  QString errorMessage =
-      "A projection within the specified error bounds could not be found. This is "
-      "likely due to a very large bounds on the data. Please read "
-      "'Hootenanny - Distance and Angle Errors Due to Reprojection' for more "
-      "information. You may experience poor conflation performance as a result.";
+  const QString errorMessage =
+    "A projection within the specified error bounds could not be found. This is "
+    "likely due to a very large bounds on the data. Please read "
+    "'Hootenanny - Distance and Angle Errors Due to Reprojection' for more "
+    "information. You may experience poor conflation performance as a result.";
   int bestIndex = -1;
   Log::WarningLevel level = Log::Debug;
   if (passingResults.size() > 0)
@@ -379,32 +378,26 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
   return projs[bestIndex];
 }
 
-
 std::shared_ptr<OGRSpatialReference> MapProjector::createSinusoidalProjection(const OGREnvelope& env)
 {
   double centerLon = (env.MaxX + env.MinX) / 2.0;
-
   std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
-
   if (srs->SetSinusoidal(centerLon, 0.0, 0.0) != OGRERR_NONE)
   {
     throw HootException("Error creating sinusoidal projection.");
   }
-
   return srs;
 }
 
 std::shared_ptr<OGRSpatialReference> MapProjector::createWgs84Projection()
 {
   std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
-
   // EPSG 4326 = WGS84
   // if (srs->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   if (srs->importFromEPSG(4326) != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");
   }
-
   return srs;
 }
 
@@ -417,8 +410,8 @@ bool MapProjector::_evaluateProjection(const OGREnvelope& env,
   DisableCplErrors disableErrors;
   std::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
 
-  std::shared_ptr<OGRCoordinateTransformation> t(OGRCreateCoordinateTransformation(wgs84.get(),
-                                                                            srs.get()));
+  std::shared_ptr<OGRCoordinateTransformation> t(
+    OGRCreateCoordinateTransformation(wgs84.get(), srs.get()));
   if (t.get() == 0)
   {
     return false;
@@ -491,26 +484,6 @@ bool MapProjector::_distanceLessThan(const MapProjector::PlanarTestResult& p1,
   return p1.distanceError < p2.distanceError;
 }
 
-size_t MapProjector::_findBestResult(vector<PlanarTestResult>& results)
-{
-  vector<PlanarTestResult> orderByAngle = results;
-  vector<PlanarTestResult> orderByDistance = results;
-  sort(orderByDistance.begin(), orderByDistance.end(), _distanceLessThan);
-  sort(orderByAngle.begin(), orderByAngle.end(), _angleLessThan);
-
-  set<size_t> foundInDistance;
-  for (size_t i = 0; i < orderByDistance.size(); ++i)
-  {
-    foundInDistance.insert(orderByDistance[i].i);
-    if (foundInDistance.find(orderByAngle[i].i) != foundInDistance.end())
-    {
-      return orderByAngle[i].i;
-    }
-  }
-
-  throw InternalErrorException("Unable to find a best result. Bug?");
-}
-
 size_t MapProjector::_findBestScore(vector<PlanarTestResult>& results)
 {
   vector<PlanarTestResult> orderByScore = results;
@@ -546,7 +519,8 @@ Coordinate MapProjector::project(const Coordinate& c,
   return result;
 }
 
-void MapProjector::project(const std::shared_ptr<OsmMap>& map, const std::shared_ptr<OGRSpatialReference>& ref)
+void MapProjector::project(const std::shared_ptr<OsmMap>& map,
+                           const std::shared_ptr<OGRSpatialReference>& ref)
 {
   std::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
@@ -648,6 +622,7 @@ void MapProjector::projectToPlanar(const std::shared_ptr<OsmMap>& map)
   {
     LOG_DEBUG("Projecting to planar...");
     OGREnvelope env = CalculateMapBoundsVisitor::getBounds(map);
+    LOG_VARD(GeometryUtils::toEnvelope(env));
     projectToPlanar(map, env);
   }
 }
@@ -656,8 +631,7 @@ void MapProjector::projectToPlanar(const std::shared_ptr<OsmMap>& map, const OGR
 {
   if (map->getProjection()->IsProjected() == false)
   {
-    std::shared_ptr<OGRSpatialReference> srs = getInstance().createPlanarProjection(env);
-    project(map, srs);
+    project(map, getInstance().createPlanarProjection(env));
   }
 }
 
@@ -667,7 +641,6 @@ void MapProjector::projectToWgs84(const std::shared_ptr<OsmMap>& map)
   {
     MapProjector proj;
     std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
-    //srs->importFromEPSG(4326);
     srs->SetWellKnownGeogCS("WGS84");
     proj.project(map, srs);
   }
@@ -678,7 +651,6 @@ Coordinate MapProjector::projectFromWgs84(const Coordinate& c,
 {
   std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   wgs84->importFromEPSG(4326);
-
   return project(c, wgs84, srs);
 }
 

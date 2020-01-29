@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -39,7 +39,6 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -70,6 +69,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.models.db.FolderMapMappings;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.Users;
@@ -83,6 +83,10 @@ public class FolderResource {
     private static final Logger logger = LoggerFactory.getLogger(FolderResource.class);
 
     public static boolean folderIsPublic(List<Folders> folders, Folders f, Users user) {
+        // If the user is an admin
+        if(UserResource.adminUserCheck(user)) {
+            return true;
+        }
         // If its public & attached to root (0)
         if(f.isPublic() && f.getParentId().equals(0L)) {
             return true;
@@ -110,26 +114,9 @@ public class FolderResource {
         // was not visible to us -so- neither should this folder be:
         return false;
     }
-    static public Set<Long> getFolderIdsForUser(Users user) {
-        List<Folders> folders = getFoldersForUser(user);
-        Set<Long> out = new HashSet<Long>(folders.size());
-        for(Folders f : folders) {
-            out.add(f.getId());
-        }
-        return out;
-    }
-    static public List<Folders> getFoldersForUser(Users user) {
-        SQLQuery<Folders> sql = createQuery()
-                .select(folders)
-                .from(folders)
-                .where(folders.id.ne(0L));
-        if(user != null) {
-            sql.where(
-                    folders.userId.eq(user.getId()).or(folders.publicCol.isTrue())
-            );
-        }
-        List<Folders> folderRecordSet = sql.orderBy(folders.displayName.asc()).fetch();
 
+    static public List<Folders> getFoldersForUser(Users user) {
+        List<Folders> folderRecordSet = DbUtils.getFoldersForUser(user);
         List<Folders> out = new ArrayList<Folders>();
         for(Folders f : folderRecordSet) {
             if(folderIsPublic(folderRecordSet, f, user)) {
@@ -187,8 +174,8 @@ public class FolderResource {
                 .from(folderMapMappings)
                 .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
                 .where(folders.id.ne(0L));
-        if(user != null) {
-            // public or folder owned by current user
+        if (user != null && !UserResource.adminUserCheck(user)) {
+            // public or folder owned by current user or user is admin
             sql.where(folders.publicCol.isTrue().or(folders.userId.eq(user.getId())));
         }
         List<FolderMapMappings> links = sql.orderBy(folderMapMappings.folderId.asc()).fetch();
@@ -196,7 +183,7 @@ public class FolderResource {
 
         // The above query is only a rough filter, we need to filter
         // recursively:
-        Set<Long> foldersUserCanSee = FolderResource.getFolderIdsForUser(user);
+        Set<Long> foldersUserCanSee = DbUtils.getFolderIdsForUser(user);
         for(FolderMapMappings link : links) {
             if(foldersUserCanSee.contains(link.getFolderId())) {
                 linksOut.add(link);
@@ -334,9 +321,13 @@ public class FolderResource {
     @Path("/{folderId : \\d+}/move/{newParentFolderId : \\d+}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateParentId(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("newParentFolderId") Long newParentFolderId) {
+    public Response updateParentId(@Context HttpServletRequest request,
+            @PathParam("folderId") Long folderId,
+            @PathParam("newParentFolderId") Long newParentFolderId) {
         if(folderId.equals(0L)) {
             throw new BadRequestException();
+        } else if(folderId.equals(newParentFolderId)) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("The new parent folder cannot be the current folder").build();
         }
         Users user = Users.fromRequest(request);
         // handle some ACL logic:
@@ -364,12 +355,10 @@ public class FolderResource {
      * PUT hoot-services/osm/api/0.6/map/folders/modify/123456/New Dataset
      *
      *
-     * @param mapId
+     * @param folderId
      *            ID of map record or folder to be modified
      * @param modName
      *            The new name for the dataset
-     * @param inputType
-     *            Flag for either dataset or folder
      * @return jobId Success = True/False
      */
     @PUT
@@ -494,6 +483,7 @@ public class FolderResource {
             folder.setUserId(folderRecord.getUserId());
             folder.setParentId(folderRecord.getParentId());
             folder.setPublic(folderRecord.getPublicCol());
+            folder.setCreatedAt(folderRecord.getCreatedAt());
             folderRecordList.add(folder);
         }
 
@@ -573,7 +563,8 @@ public class FolderResource {
         if(folder == null) {
             throw new NotFoundException();
         }
-        if(user == null || user.getId().equals(folder.getUserId()) || folder.isPublic()) {
+
+        if(user == null || UserResource.adminUserCheck(user) || user.getId().equals(folder.getUserId()) || folder.isPublic()) {
             return folder;
         }
         throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this folder").build());

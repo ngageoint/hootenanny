@@ -1,0 +1,21 @@
+{"version": 0.6,"generator": "Hootenanny","elements": [
+{"type":"node","id":-95,"lat":-0.0004645,"lon":-0.002666},
+{"type":"node","id":-94,"lat":-0.0004645,"lon":-0.003494},
+{"type":"node","id":-93,"lat":-8.829e-5,"lon":-0.003494},
+{"type":"node","id":-92,"lat":-8.829e-5,"lon":-0.002666},
+{"type":"node","id":-91,"lat":-0.0006401,"lon":-0.002465},
+{"type":"node","id":-90,"lat":-0.0006401,"lon":-0.001989},
+{"type":"node","id":-89,"lat":-0.001418,"lon":-0.002001},
+{"type":"node","id":-88,"lat":-0.001393,"lon":-0.002478},
+{"type":"node","id":-87,"lat":-0.001556,"lon":-0.003406},
+{"type":"node","id":-86,"lat":-0.001556,"lon":-0.002628},
+{"type":"node","id":-85,"lat":-0.001944,"lon":-0.002616},
+{"type":"node","id":-84,"lat":-0.001932,"lon":-0.003431},
+{"type":"way","id":-10,"nodes":[-95,-94,-93,-92,-95],"tags":{"building":"yes","error:circular":"15"}},
+{"type":"way","id":-9,"nodes":[-91,-90,-89,-88,-91],"tags":{"building":"yes","error:circular":"15"}},
+{"type":"way","id":-8,"nodes":[-87,-86,-85,-84,-87],"tags":{"building":"yes","error:circular":"15"}},
+{"type":"relation","id":-1,"members":[
+{"type":"way","ref":-10,"role":"outer"},
+{"type":"way","ref":-9,"role":"outer"},
+{"type":"way","ref":-8,"role":"outer"}],"tags":{"hoot:poipolygon:poismerged":"2","name":"G","alt_name":"A;B;C;E;F;bar;foo","note":"Toy Scenario 4","building":"yes","poi":"yes","error:circular":"15"}}]
+}

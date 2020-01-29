@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -80,6 +80,7 @@ tds70.rules = {
     ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
     ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
     ['F_CODE','AP050','highway','footway'], // Trail
+    ['F_CODE','AQ125','amenity','bus_station'],
     ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
     ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
     ['F_CODE','AQ125','public_transport','stop_position'],
@@ -126,7 +127,7 @@ tds70.rules = {
     'RIN_RTN2':'ref:2', // Route Identification [2] <route designation>
     'RIN_RTN3':'ref:3', // Route Identification [3] <route designation>
     'UFI':'uuid', // Unique Feature Identifier. This gets cleaned up in post processing
-    'GLOBALID':'uuid:global', // Not sure where this comes from. It is in the sample data 
+    'GLOBALID':'uuid:global', // Not sure where this comes from. It is in the sample data
     'URI':'source:ref', // Unique Resource Identifier
     'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
     'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
@@ -178,10 +179,10 @@ tds70.rules = {
     'HGT':'height', // Height Above Surface Level
     'HVA':'source:accuracy:height', // Height Vertical Accuracy (90%)
     'KVA':'voltage', // Power Line Maximum Voltage
-    'LC1':'bridge:load_class1', // Load Class Type 1
-    'LC2':'bridge:load_class2', // Load Class Type 2
-    'LC3':'bridge:load_class3', // Load Class Type 3
-    'LC4':'bridge:load_class4', // Load Class Type 4
+    'LC1':'mlc:wheeled_oneway', // Load Class Type 1
+    'LC2':'mlc:wheeled', // Load Class Type 2
+    'LC3':'mlc:tracked_oneway', // Load Class Type 3
+    'LC4':'mlc:tracked', // Load Class Type 4
     'LDC':'length:crest', // Dam Crest Length
     'LTN':'lanes', // Track or Lane Count
     'LZN':'length', // Length
@@ -219,7 +220,7 @@ tds70.rules = {
     'ZVA':'ele', // Aerodrome Elevation
     'ZVH':'ele:max' // Highest Elevation
     }, // End numBiased
-    
+
 
     // Common one2one rules. Used for both import and export
     one2one : [
@@ -873,12 +874,12 @@ tds70.rules = {
 
     // EET - Engineered Earthwork Type
     // ['EET','-999999',undefined,undefined], // No Information
-    ['EET','1','earthwork:type','battery'], // Battery
-    ['EET','2','earthwork:type','military_parapet'], // Military Parapet
-    ['EET','3','earthwork:type','military_trench'], // Military Trench
-    ['EET','4','earthwork:type','rampart'], // Rampart
-    ['EET','5','earthwork:type','redoubt'], // Redoubt
-    ['EET','999','earthwork:type','other'], // Other
+    ['EET','1','trench','battery'], // Battery
+    ['EET','2','trench','parapet'], // Military Parapet
+    ['EET','3','military','trench'], // Military Trench
+    ['EET','4','trench','rampart'], // Rampart
+    ['EET','5','trench','redoubt'], // Redoubt
+    ['EET','999','trench','other'], // Other
 
     // ESC - Elevation Surface Category
     // ['ESC','-999999',undefined,undefined], // No Information
@@ -3653,13 +3654,13 @@ tds70.rules = {
 
     // OTH Filler.  These are to build OTH values
     ['RTY','999','highway','other'],
-    ['FFN','999','amenity','other'], 
-    ['FFN','999','building','other'], 
-    ['FFN','999','camp:type','other'], 
-    ['FFN','999','craft','other'], 
-    ['FFN','999','landuse','other'], 
-    ['FFN','999','leisure','other'], 
-    ['FFN','999','military','other'], 
+    ['FFN','999','amenity','other'],
+    ['FFN','999','building','other'],
+    ['FFN','999','camp:type','other'],
+    ['FFN','999','craft','other'],
+    ['FFN','999','landuse','other'],
+    ['FFN','999','leisure','other'],
+    ['FFN','999','military','other'],
     ['FFN','999','office','other'],
     ['FFN','999','repair','other'],
     ['FFN','999','shop','other'],
@@ -3711,7 +3712,7 @@ tds70.rules = {
     ['ZI004_RCG','36','attribution','joint_geography_bureau_(france)'], // Joint Geography Bureau (France)
     ['ZI004_RCG','39','attribution','mapping_service_(hungary)'], // Mapping Service (Hungary)
     ['ZI004_RCG','45','attribution','geospatial_intelligence_organisation_(new_zealand)'], // Geospatial Intelligence Organisation (New Zealand)
-    
+
     // Extra road stuff - see similarTable
     // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
     // ['ZI016_ROC','3','surface','unpaved'], // Stabilized earth
@@ -3741,6 +3742,8 @@ tds70.rules = {
     [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
     ['IWT','4','water','reservoir'], // Reservoir
+
+    ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
 
     // From UFD
     ['CAA','-999999','controlling_authority','unknown'],
@@ -3796,7 +3799,7 @@ tds70.rules = {
 
     // ##### End of One2One Rules #####
 
-   
+
     // ##### Start of fuzzyTable #####
     // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
     fuzzyTable : [
@@ -4846,7 +4849,7 @@ tds70.rules = {
 'GB055':'100448','GB065':'100452','GB070':'100453','GB075':'100454','GB230':'100456',
 'GB250':'100457','SU001':'100462','ZB030':'100465','ZB050':'177997','ZC050':'800597',
 'ZD015':'100578','ZD020':'100473','ZD040':'100475','ZD045':'100476','ZI031':'121591',
-'ZI039':'132721' 
+'ZI039':'132721'
     }, // End of subtypeList
     // ##### End of ESRI FCSubtype Rules #####
 

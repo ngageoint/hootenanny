@@ -5,6 +5,7 @@
             "id": "RoadEngines",
             "input": "combobox",
             "data": [ "Unify", "Network" ],
+            "description": "Algorithms for matching roads across two datasets during conflation. Unify: A non-greedy road conflation algorithm which uses a random-forest model for classification.  Network: A road conflation algorithm based on graph operations treating the data as a network",
             "default": "Unify"
         }
     ]

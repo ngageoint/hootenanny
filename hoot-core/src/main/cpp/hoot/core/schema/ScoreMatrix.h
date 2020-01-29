@@ -56,6 +56,7 @@ template<typename _type>
 class ScoreMatrix
 {
 public:
+
   ScoreMatrix() { }
   ScoreMatrix(int width, int height) { resize(width, height); }
 
@@ -138,6 +139,7 @@ public:
   QString toTableString() const;
 
 private:
+
   struct Entry
   {
     size_t i, j;

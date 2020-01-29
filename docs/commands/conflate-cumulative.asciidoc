@@ -11,10 +11,10 @@ This command must be run with the following configuration options:
 
 This command does not work with the --stats option.
 
-* +input1+ - First input.
-* +input2+ - Second input.
-* +input3+ - Third input.
-* +inputN+ - Final input.
+* +input1+ - First input; may be any supported input format.
+* +input2+ - Second input; may be any supported input format.
+* +input3+ - Third input; may be any supported input format.
+* +inputN+ - Final input; may be any supported output format.
 * +output+ - The output path.
 
 === Usage
@@ -29,7 +29,8 @@ conflate-cumulative (input1) (input2) (input3) [inputN] (output)
 hoot conflate-cumulative -D review.tags.treat.as.metadata=false -D tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger input1.osm input2.osm input3.osm input4.osm output.osm
 --------------------------------------
 
-==== See Also
+=== See Also
 
 * _Unifying Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

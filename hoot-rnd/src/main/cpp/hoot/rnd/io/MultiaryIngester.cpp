@@ -82,8 +82,8 @@ void MultiaryIngester::_doInputErrorChecking(const QString& newInput,
   if (!HootApiDbReader().isSupported(referenceOutput))
   {
     throw IllegalArgumentException(
-      QString("Multiary ingest only supports a Hootenanny API database data source ") +
-      QString("(hootapidb://) as the reference output.  Specified reference layer: ") +
+      "Multiary ingest only supports a Hootenanny API database data source (" +
+      MetadataTags::HootApiDbScheme() + "://) as the reference output.  Specified reference layer: " +
       referenceOutput);
   }
 
@@ -190,7 +190,7 @@ void MultiaryIngester::_sortInputFile(const QString& input)
   OsmFileSorter::sort(input, _sortTempFile->fileName());
 
   LOG_INFO(input << " sorted by POI ID to output: " << _sortTempFile->fileName() << ".");
-  LOG_INFO("Time elapsed: " << StringUtils::secondsToDhms(_timer.elapsed()));
+  LOG_INFO("Time elapsed: " << StringUtils::millisecondsToDhms(_timer.elapsed()));
 }
 
 std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream(
@@ -291,7 +291,7 @@ void MultiaryIngester::_writeNewReferenceData(const std::shared_ptr<ElementInput
   LOG_INFO("POIs written to reference layer: " << StringUtils::formatLargeNumber(changesParsed));
   LOG_INFO("Non-POIs skipped: " << StringUtils::formatLargeNumber(featuresSkipped));
   LOG_INFO("Changes written to changeset file: " << StringUtils::formatLargeNumber(changesParsed));
-  LOG_INFO("Time elapsed: " << StringUtils::secondsToDhms(_timer.elapsed()));
+  LOG_INFO("Time elapsed: " << StringUtils::millisecondsToDhms(_timer.elapsed()));
 }
 
 std::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChangeset(
@@ -407,7 +407,7 @@ std::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChange
   LOG_INFO("  Create statements: " << StringUtils::formatLargeNumber(changesByType[Change::Create]));
   LOG_INFO("  Modify statements: " << StringUtils::formatLargeNumber(changesByType[Change::Modify]));
   LOG_INFO("  Delete statements: " << StringUtils::formatLargeNumber(changesByType[Change::Delete]));
-  LOG_INFO("Time elapsed: " << StringUtils::secondsToDhms(_timer.elapsed()));
+  LOG_INFO("Time elapsed: " << StringUtils::millisecondsToDhms(_timer.elapsed()));
 
   return tmpChangeset;
 }
@@ -466,7 +466,7 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString& changesetOut
   LOG_INFO(
     StringUtils::formatLargeNumber(changesWritten) <<
     " changes written to reference layer: " << referenceOutput << ".");
-  LOG_INFO("Time elapsed: " << StringUtils::secondsToDhms(_timer.elapsed()));
+  LOG_INFO("Time elapsed: " << StringUtils::millisecondsToDhms(_timer.elapsed()));
 }
 
 }

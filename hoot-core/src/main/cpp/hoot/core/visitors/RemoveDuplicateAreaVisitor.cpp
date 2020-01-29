@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveDuplicateAreaVisitor.h"
 
@@ -185,10 +185,9 @@ void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e)
       {
         std::shared_ptr<Element> e2 = _map->getElement(*it);
 
-        // check to see if e2 is null, it is possible that we removed it w/ a previous call to remove
-        // a parent.
-        // run _equals() first as it is much faster than isSatisfied() (which ends up doing lots of
-        // regex matching)
+        // check to see if e2 is null, it is possible that we removed it w/ a previous call to
+        // remove a parent. run _equals() first as it is much faster than isSatisfied() (which
+        // ends up doing lots of regex matching)
         if (e2 != 0 && _equals(e, e2) && areaCrit.isSatisfied(e2) )
         {
           LOG_TRACE("e2 is area and e1/e2 equal.");

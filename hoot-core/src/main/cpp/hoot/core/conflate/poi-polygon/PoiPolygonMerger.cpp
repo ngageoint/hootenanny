@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMerger.h"
 
@@ -41,6 +41,7 @@
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 
 using namespace std;
 
@@ -69,6 +70,7 @@ _tagMergerClass("")
 std::shared_ptr<const TagMerger> PoiPolygonMerger::_getTagMerger()
 {
   std::shared_ptr<const TagMerger> tagMerger;
+
   std::string tagMergerClass;
   // Always preserve types when merging many POIs in. This can go away if we stay with defaulting
   // poi/poly merging to use PreserveTypesTagMerger.
@@ -96,6 +98,7 @@ std::shared_ptr<const TagMerger> PoiPolygonMerger::_getTagMerger()
     throw IllegalArgumentException("No tag merger specified for POI/Polygon conflation.");
   }
   LOG_VART(tagMergerClass);
+
   tagMerger.reset(Factory::getInstance().constructObject<TagMerger>(tagMergerClass));
   return tagMerger;
 }
@@ -203,6 +206,11 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     LOG_VART(poisMerged);
     finalBuildingTags.set(MetadataTags::HootPoiPolygonPoisMerged(), QString::number(poisMerged));
     finalBuilding->setStatus(Status::Conflated);
+    ConfigOptions conf;
+    if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
+    {
+      finalBuilding->setTag(MetadataTags::HootMatchedBy(), PoiPolygonMatch::MATCH_NAME);
+    }
   }
 
   finalBuilding->setTags(finalBuildingTags);
@@ -235,14 +243,14 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
     ElementPtr e2 = map->getElement(p.second);
     if (e1->getStatus() == s && e1->getElementType() == ElementType::Node)
     {
-      //LOG_VART(e1->getElementId());
-      LOG_VART(e1);
+      LOG_VART(e1->getElementId());
+      //LOG_VART(e1);
       result = tagMerger->mergeTags(result, e1->getTags(), e1->getElementType());
     }
     if (e2->getStatus() == s && e2->getElementType() == ElementType::Node)
     {
-      //LOG_VART(e2->getElementId());
-      LOG_VART(e2);
+      LOG_VART(e2->getElementId());
+      //LOG_VART(e2);
       result = tagMerger->mergeTags(result, e2->getTags(), e2->getElementType());
     }
   }
@@ -350,13 +358,15 @@ void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const
   // failing when seeing a conflated status...we could rework to update that status as well.
 
   // If the poly has an invalid status, we'll give it an Unknown1 status instead.
+  PoiPolygonPoiCriterion poiPolyPoi;
   StatusUpdateVisitor status1Vis(Status::Unknown1, true);
-  FilteredVisitor filteredVis1(PoiPolygonPoiCriterion(), status1Vis);
+  FilteredVisitor filteredVis1(poiPolyPoi, status1Vis);
   map->visitRw(filteredVis1);
 
   // If the POI has an invalid status, we'll give it an Unknown2 status instead.
+  PoiPolygonPolyCriterion poiPolyPoly;
   StatusUpdateVisitor status2Vis(Status::Unknown2, true);
-  FilteredVisitor filteredVis2(PoiPolygonPolyCriterion(), status2Vis);
+  FilteredVisitor filteredVis2(poiPolyPoly, status2Vis);
   map->visitRw(filteredVis2);
 
   // The BuildingMerger (used by both poi/poly and building merging) assumes that all input elements

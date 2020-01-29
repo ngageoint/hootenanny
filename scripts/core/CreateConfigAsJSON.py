@@ -179,11 +179,11 @@ def toComment(s):
         else:
             l.append(i)
 
-    return "\\n".join(l)
+    return " ".join(l)
 
 def createJSON(c):
     result = "{"
-    
+
     keys = list(c.keys())
     keys.sort()
     remaining = len(keys)
@@ -202,7 +202,7 @@ def createJSON(c):
 
         result += """ "%s":{"key":"%s","type":"%s","default":"%s" """ % (cc,k,v['type'],escapeString(valueString))
 
-        # If there's are both max/min values for this value, expose those 
+        # If there's are both max/min values for this value, expose those
         if ( ('minimum' in v) and ('maximum') in v ):
             result += ""","min":"%s","max":"%s" """ % (str(v['minimum']),str(v['maximum']))
 
@@ -218,7 +218,7 @@ def createJSON(c):
 
     return result
 
-finalJSON = createJSON(c) 
+finalJSON = createJSON(c)
 #open(headerFn, 'w').write(createJSON(c))
 
 open(headerFn, 'w').write(finalJSON)

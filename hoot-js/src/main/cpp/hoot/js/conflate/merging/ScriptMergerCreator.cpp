@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMergerCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/conflate/merging/ScriptMerger.h>
 
@@ -44,7 +44,7 @@ ScriptMergerCreator::ScriptMergerCreator()
 {
 }
 
-bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
+bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
 
@@ -60,9 +60,9 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const Match* m = *it;
+    ConstMatchPtr m = *it;
     LOG_VART(m->toString());
-    const ScriptMatch* sm = dynamic_cast<const ScriptMatch*>(m);
+    std::shared_ptr<const ScriptMatch> sm = dynamic_pointer_cast<const ScriptMatch>(m);
     // check to make sure all the input matches are script matches.
     if (sm == 0)
     {
@@ -89,7 +89,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
     }
   }
 
-  ScriptMerger* sm = new ScriptMerger(script, plugin, eids);
+  std::shared_ptr<ScriptMerger> sm(new ScriptMerger(script, plugin, eids));
   // only add the merge if there are elements to merge.
   if (sm->hasFunction("mergeSets"))
   {
@@ -97,10 +97,6 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
     {
       mergers.push_back(sm);
       result = true;
-    }
-    else
-    {
-      delete sm;
     }
   }
   else
@@ -112,17 +108,14 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
     }
     else if (eids.size() > 1)
     {
-      delete sm;
       mergers.push_back(
-        new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0));
+        MergerPtr(
+          new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0)));
       result = true;
-    }
-    else
-    {
-      delete sm;
     }
   }
 
+  LOG_VART(result);
   return result;
 }
 
@@ -138,16 +131,16 @@ vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
   return result;
 }
 
-bool ScriptMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
-  const Match* m2) const
+bool ScriptMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
+  ConstMatchPtr m2) const
 {
-  const ScriptMatch* sm1 = dynamic_cast<const ScriptMatch*>(m1);
-  const ScriptMatch* sm2 = dynamic_cast<const ScriptMatch*>(m2);
+  const ScriptMatch* sm1 = dynamic_cast<const ScriptMatch*>(m1.get());
+  const ScriptMatch* sm2 = dynamic_cast<const ScriptMatch*>(m2.get());
 
   bool result = false;
   if (sm1 && sm2)
   {
-    result = sm1->isConflicting(*sm2, map);
+    result = m1->isConflicting(m2, map);
   }
 
   return result;

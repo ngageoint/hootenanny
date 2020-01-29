@@ -22,18 +22,38 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OrCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OrCriterion)
+
+OrCriterion::OrCriterion()
+{
+}
+
+OrCriterion::OrCriterion(ElementCriterion* child1, ElementCriterion* child2) :
+ChainCriterion(child1, child2)
+{
+}
+
+OrCriterion::OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2) :
+ChainCriterion(child1, child2)
+{
+}
+
+ElementCriterionPtr OrCriterion::clone()
+{
+  return ElementCriterionPtr(new OrCriterion(_criteria[0]->clone(), _criteria[1]->clone()));
+}
 
 bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
 {
@@ -41,11 +61,22 @@ bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     if (_criteria[i]->isSatisfied(e))
     {
+      LOG_TRACE(
+        "One OR'd criterion satisfied in: " << toString() << ". Filter satisfied for: " << e);
       return true;
     }
   }
-
+  LOG_TRACE(
+    "No OR'd criterion satisfied in: " << toString() << ". Filter not satisfied for: " << e);
   return false;
+}
+
+QString OrCriterion::toString() const
+{
+  return
+    ChainCriterion::toString().replace(
+      QString::fromStdString(ChainCriterion::className()).replace("hoot::", ""),
+      QString::fromStdString(className()).replace("hoot::", ""));
 }
 
 }

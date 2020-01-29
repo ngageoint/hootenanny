@@ -32,58 +32,82 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
-#include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/ops/MapCropper.h>
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-CookieCutter::CookieCutter(bool crop, double outputBuffer) :
+CookieCutter::CookieCutter(bool crop, double outputBuffer, bool keepEntireFeaturesCrossingBounds,
+                           bool keepOnlyFeaturesInsideBounds) :
 _crop(crop),
-_outputBuffer(outputBuffer)
+_outputBuffer(outputBuffer),
+_keepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds),
+_keepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds)
 {
 }
 
-void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
+void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
 {
-  OGREnvelope env = CalculateMapBoundsVisitor::getBounds(cutterShapeMap);
+  LOG_VARD(cutterShapeOutlineMap->getNodes().size());
+  LOG_VARD(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(
+    cutterShapeOutlineMap, "cookie-cutter-cutter-shape-outline-map");
+  LOG_VARD(doughMap->getNodes().size());
+  LOG_VARD(MapProjector::toWkt(doughMap->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-dough-map");
+
+  OGREnvelope env = CalculateMapBoundsVisitor::getBounds(cutterShapeOutlineMap);
+  LOG_VARD(GeometryUtils::toEnvelope(env)->toString());
   env.Merge(CalculateMapBoundsVisitor::getBounds(doughMap));
 
   // reproject the dough and cutter into the same planar projection.
   MapProjector::projectToPlanar(doughMap, env);
-  MapProjector::projectToPlanar(cutterShapeMap, env);
+  MapProjector::projectToPlanar(cutterShapeOutlineMap, env);
 
   // create a complex geometry representing the alpha shape
   UnionPolygonsVisitor v;
-  cutterShapeMap->visitRo(v);
+  cutterShapeOutlineMap->visitRo(v);
   std::shared_ptr<Geometry> cutterShape = v.getUnion();
-
   if (_outputBuffer != 0.0)
   {
     cutterShape.reset(cutterShape->buffer(_outputBuffer));
   }
-
   if (cutterShape->getArea() == 0.0)
   {
-    //would rather this be thrown than a warning logged, as the warning may go unoticed by web
-    //clients who are expecting the cookie cutting to occur
+    // would rather this be thrown than a warning logged, as the warning may go unoticed by web
+    // clients who are expecting the cookie cutting to occur
     throw HootException("Cutter area is zero. Try increasing the buffer size or check the input.");
   }
+  LOG_VARD(cutterShape->toString());
 
   // free up a little RAM
-  cutterShapeMap.reset();
-  // remove the cookie cutter portion from the "dough"
-  // if crop is true, then the cookie cutter portion is kept and the "dough" is dropped.
-  MapCropper cropper(cutterShape, !_crop);
+  cutterShapeOutlineMap.reset();
+
+  // remove the cookie cutter portion from the dough
+  MapCropper cropper(cutterShape);
+  cropper.setConfiguration(conf());
+  cropper.setKeepEntireFeaturesCrossingBounds(_keepEntireFeaturesCrossingBounds);
+  cropper.setKeepOnlyFeaturesInsideBounds(_keepOnlyFeaturesInsideBounds);
+  cropper.setInvert(!_crop);
   cropper.apply(doughMap);
+
+  OsmMapPtr cookieCutMap = doughMap;
+
   // clean up any ugly bits left over
-  SuperfluousWayRemover::removeWays(doughMap);
-  SuperfluousNodeRemover::removeNodes(doughMap);
+  // TODO: This can be removed now, since its already happening in MapCropper, right?
+  SuperfluousWayRemover::removeWays(cookieCutMap);
+  SuperfluousNodeRemover::removeNodes(cookieCutMap);
+
+  LOG_VARD(cookieCutMap->getNodes().size());
+  LOG_VARD(MapProjector::toWkt(cookieCutMap->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cutter-cookie-cut-map");
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MapProjector.h>
+
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/conflate/matching/ScriptMatchCreator.h>
@@ -50,8 +51,8 @@ namespace hoot
 class ScriptMatchTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ScriptMatchTest);
-  CPPUNIT_TEST(cacheTest);
   CPPUNIT_TEST(conflictTest);
+  CPPUNIT_TEST(cacheTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -68,8 +69,7 @@ public:
     conf().set(co.getUuidHelperRepeatableKey(), true);
     conf().set(co.getReaderUseFileStatusKey(), true);
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, _inputPath + "ScriptMatchTest.osm",
-      true);
+    OsmMapReaderFactory::read(map, _inputPath + "ScriptMatchTest.osm", true);
     MapProjector::projectToPlanar(map);
 
     // create the test scenario in ScriptMatchTest
@@ -78,11 +78,11 @@ public:
     std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0.6, 0.6, 0.6));
 
     ScriptMatchCreator smc;
-    smc.setArguments(QStringList() << "LineStringGenericTest.js");
-    vector<const Match*> matches;
+    smc.setArguments(QStringList() << "LineTest.js");
+    vector<ConstMatchPtr> matches;
     smc.createMatches(map, matches, mt);
     HOOT_STR_EQUALS(2, matches.size());
-    HOOT_STR_EQUALS(false, matches[0]->isConflicting(*matches[1], map));
+    HOOT_STR_EQUALS(false, matches[0]->isConflicting(matches[1], map));
   }
 
   void cacheTest()

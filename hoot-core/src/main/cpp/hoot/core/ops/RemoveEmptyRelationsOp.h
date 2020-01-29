@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -57,7 +58,7 @@ public:
   { return "Removing empty relations..."; }
 
   virtual QString getCompletedStatusMessage() const override
-  { return "Removed " + QString::number(_numAffected) + " empty relations"; }
+  { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " empty relations"; }
 
   virtual QString getDescription() const override
   { return "Removes relations with no members"; }

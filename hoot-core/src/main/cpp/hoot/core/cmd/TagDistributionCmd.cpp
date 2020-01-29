@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -41,12 +41,12 @@ public:
 
   TagDistributionCmd() {}
 
-  virtual QString getName() const { return "tag-distribution"; }
+  virtual QString getName() const override { return "tag-distribution"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Calculates the distribution of values for specified tags in a map"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     bool nameKeysOnly = false;
     if (args.contains("--names"))
@@ -128,6 +128,8 @@ public:
     tagDist.setTagKeys(tagKeys);
     tagDist.setTokenize(tokenize);
 
+    // We may want to eventually consider refactoring this to write to a file support very large
+    // amounts of output.
     std::cout << tagDist.getTagCountsString(tagDist.getTagCounts(inputs));
 
     return 0;

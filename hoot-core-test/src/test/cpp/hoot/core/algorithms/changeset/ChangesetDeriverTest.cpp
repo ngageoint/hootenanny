@@ -31,7 +31,6 @@
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/CalculateHashVisitor2.h>
 
 namespace hoot
 {
@@ -53,17 +52,12 @@ public:
   QMap<Change::ChangeType, QList<long>> _getChangeset(
     const QString& input1, const QString& input2, const bool allowRefDelete = true)
   {
-    CalculateHashVisitor2 hashVis;
-
     OsmMapPtr map1(new OsmMap());
     // each dataset needs to have a different input status
     OsmMapReaderFactory::read(map1, input1, true, Status::Unknown1);
-    // nodes have to have hash values for sorting
-    map1->visitRw(hashVis);
 
     OsmMapPtr map2(new OsmMap());
     OsmMapReaderFactory::read(map2, input2, true, Status::Unknown2);
-    map2->visitRw(hashVis);
 
     // input has to be sorted
     InMemoryElementSorterPtr map1SortedElements(new InMemoryElementSorter(map1));

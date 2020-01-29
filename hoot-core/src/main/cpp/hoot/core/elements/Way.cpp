@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Way.h"
@@ -32,6 +32,7 @@
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/CollectionUtils.h>
 
 // Geos
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -72,6 +73,13 @@ void Way::addNode(long id)
   _makeWritable();
   _wayData->addNode(id);
   _postGeometryChange();
+
+//  // for debugging only; SLOW
+//  if (_nodeIdsAreDuplicated(getNodeIds()))
+//  {
+//    LOG_VARE(getNodeIds());
+//    throw IllegalArgumentException("Duplicate way node IDs: addNode");
+//  }
 }
 
 void Way::insertNode(long index, long id)
@@ -80,11 +88,57 @@ void Way::insertNode(long index, long id)
   _makeWritable();
   _wayData->insertNode(index, id);
   _postGeometryChange();
+
+//  // for debugging only; SLOW
+//  if (_nodeIdsAreDuplicated(getNodeIds()))
+//  {
+//    LOG_VARE(getNodeIds());
+//    throw IllegalArgumentException("Duplicate way node IDs: insertNode");
+//  }
 }
 
 void Way::addNodes(const vector<long>& ids)
 {
   addNodes(ids.begin(), ids.end());
+
+  //  // for debugging only; SLOW
+  //  if (_nodeIdsAreDuplicated(getNodeIds()))
+  //  {
+  //    LOG_VARE(getNodeIds());
+  //    throw IllegalArgumentException("Duplicate way node IDs: addNodes");
+  //  }
+}
+
+bool Way::_nodeIdsAreDuplicated(const vector<long>& ids) const
+{
+  if (ids.size() == 1)
+  {
+    return false;
+  }
+
+  LOG_VART(ids);
+
+  QList<long> idsCopy;
+  for (size_t i = 0; i < ids.size(); i++)
+  {
+    const long id = ids[i];
+    LOG_VART(id);
+    LOG_VART(i);
+    LOG_VART(idsCopy.lastIndexOf(id));
+    if (!idsCopy.contains(id))
+    {
+      idsCopy.append(id);
+    }
+    else if (i == ids.size() - 1 && idsCopy.lastIndexOf(id) != 0)
+    {
+      return true;
+    }
+    else if (i != ids.size() - 1)
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 void Way::clear()
@@ -187,6 +241,13 @@ void Way::setNodes(const vector<long>& newNodes)
   _wayData->getNodeIds() = newNodes;
 
   _postGeometryChange();
+
+  //  // for debugging only; SLOW
+  //  if (_nodeIdsAreDuplicated(getNodeIds()))
+  //  {
+  //    LOG_VARE(getNodeIds());
+  //    throw IllegalArgumentException("Duplicate way node IDs: setNodes");
+  //  }
 }
 
 int Way::getNodeIndex(long nodeId) const
@@ -267,6 +328,8 @@ void Way::_makeWritable()
 
 void Way::removeNode(long id)
 {
+  LOG_TRACE("Removing node: " << id << " in way: " << getId() << "...");
+
   std::vector<long>& nodes = _wayData->getNodeIds();
   size_t newCount = 0;
 
@@ -283,14 +346,37 @@ void Way::removeNode(long id)
   nodes.resize(newCount);
 }
 
+bool Way::isFirstAndLastNode(const long nodeId) const
+{
+  return nodeId == getFirstNodeId() && nodeId == getLastNodeId();
+}
+
 void Way::replaceNode(long oldId, long newId)
 {
+  // Note: Noticed that duplicate way nodes were being introduced here when called by
+  // MergeNearbyNodes. Initially made some attempts in here to clean that up, but it introduced
+  // unwanted logic and runtime complexity. Ultimately since the problem was only seen with
+  // MergeNearbyNodes, it was updated to remove the duplicated way nodes at the end of its run and
+  // this logic was left alone. To validate this behavior, the argument can be made that this method
+  // allows you to replace whatever is desired, but its the caller's responsbility to make sure the
+  // result of the replacement is valid. If we ever decide we want to make this more foolproof for
+  // the caller, then a different approach should be taken similar to the changes attempted before.
+
+  if (oldId == newId)
+  {
+    return;
+  }
+
+  LOG_TRACE(
+    "Replacing node: " << oldId << " with: " << newId << " in way: " << getId() << "...");
+
   const vector<long>& ids = getNodeIds();
 
   bool change = false;
   for (size_t i = 0; i < ids.size(); i++)
   {
-    if (ids[i] == oldId)
+    const long id = ids[i];
+    if (id == oldId)
     {
       change = true;
     }
@@ -298,8 +384,14 @@ void Way::replaceNode(long oldId, long newId)
 
   if (change)
   {
+    LOG_TRACE("IDs before replacement: " << getNodeIds());
+
+    // for debugging only; see _nodeIdsAreDuplicated call below
+    //const vector<long> oldIdsCopy = ids;
+
     _preGeometryChange();
     _makeWritable();
+
     vector<long>& newIds = _wayData->getNodeIds();
     for (size_t i = 0; i < newIds.size(); i++)
     {
@@ -308,7 +400,21 @@ void Way::replaceNode(long oldId, long newId)
         newIds[i] = newId;
       }
     }
+
     _postGeometryChange();
+
+    LOG_TRACE("IDs after replacement: " << getNodeIds());
+
+//    // for debugging only; SLOW
+//    if (_nodeIdsAreDuplicated(getNodeIds()))
+//    {
+//      LOG_ERROR(
+//        "Attempting to replace node: " << oldId << " with: " << newId << " in way: " << getId() <<
+//        "...");
+//      LOG_ERROR("Original IDs: " << oldIdsCopy);
+//      LOG_ERROR("New IDs: " << getNodeIds());
+//      throw IllegalArgumentException("Duplicate way node IDs: replaceNode");
+//    }
   }
 }
 
@@ -348,12 +454,12 @@ QString Way::toString() const
 
 bool Way::isFirstLastNodeIdentical() const
 {
-  if ( getNodeCount() < 2 )
+  if (getNodeCount() < 2)
   {
     return false;
   }
 
-  return ( getFirstNodeId() == getLastNodeId() );
+  return (getFirstNodeId() == getLastNodeId());
 }
 
 bool Way::isClosedArea() const
@@ -372,6 +478,11 @@ long Way::getPid(long p, long c)
   if (p != WayData::PID_EMPTY)          return p;
   else if (c != WayData::PID_EMPTY)     return c;
   else                                  return WayData::PID_EMPTY;
+}
+
+bool Way::hasSameNodeIds(const Way& other) const
+{
+  return getNodeIds() == other.getNodeIds();
 }
 
 }

@@ -91,11 +91,12 @@ public:
   bool isUnknown() { return _type == Unknown1 || _type == Unknown2; }
 
   /**
-   * @brief fromString Parses type from either a human readable string or the numeric string.
-   * @param typeString The string to parse.
-   * @return The type parsed, or throws an exception if it is an invalid string.
+   * @brief fromString Parses type from either a human readable status string or the numeric status
+   * string.
+   * @param statusString The status string to parse.
+   * @return The status parsed or throws an exception if it is an invalid status string.
    */
-  static Type fromString(QString typeString);
+  static Type fromString(QString statusString);
 
 private:
 

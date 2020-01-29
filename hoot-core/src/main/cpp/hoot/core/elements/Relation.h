@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATION_H
 #define RELATION_H
@@ -93,11 +93,18 @@ public:
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
 
-  virtual geos::geom::Envelope* getEnvelope(
-    const std::shared_ptr<const ElementProvider>& ep) const;
+  /**
+   * Returns the IDs of all way members
+   *
+   * @return a collection of element IDs
+   */
+  std::set<ElementId> getWayMemberIds() const;
 
-  geos::geom::Envelope getEnvelopeInternal(
-    const std::shared_ptr<const ElementProvider>& ep) const;
+  virtual geos::geom::Envelope* getEnvelope(
+    const std::shared_ptr<const ElementProvider>& ep) const override;
+
+  virtual const geos::geom::Envelope& getEnvelopeInternal(
+    const std::shared_ptr<const ElementProvider>& ep) const override;
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Relation); }
 
@@ -133,6 +140,7 @@ public:
   void replaceElement(const std::shared_ptr<const Element>& from,
                       const std::shared_ptr<const Element>& to);
   void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
+  void replaceElement(const ElementId& from, const ElementId& to);
 
   /**
    * Replaces all instances of old with the values in the collection defined by start/end. Order is

@@ -30,8 +30,8 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/ElementAttributeType.h>
-#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 
 namespace hoot
 {
@@ -40,7 +40,8 @@ namespace hoot
  * Adds one or more attributes to elements.  Only common OSM attributes may be added
  * (see ElementAttributeType).
  */
-class AddAttributesVisitor : public ElementVisitor, public Configurable, public OperationStatusInfo
+class AddAttributesVisitor : public MultipleCriterionConsumerVisitor, public Configurable,
+  public OperationStatusInfo
 {
 
 public:
@@ -48,7 +49,7 @@ public:
   static std::string className() { return "hoot::AddAttributesVisitor"; }
 
   AddAttributesVisitor();
-  explicit AddAttributesVisitor(const QStringList attributes);
+  explicit AddAttributesVisitor(const QStringList attributes, const bool negateCriteria = false);
 
   virtual void visit(const std::shared_ptr<Element>& e);
 

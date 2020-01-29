@@ -1,0 +1,176 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.55.7 8b86ff77",
+  "osm3s": {
+    "timestamp_osm_base": "2019-11-06T19:49:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "way",
+  "id": 236155436,
+  "nodes": [
+    2442180393,
+    2442180394,
+    2442180395,
+    2442180396,
+    2442180393
+  ],
+  "tags": {
+    "building": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 236155437,
+  "nodes": [
+    2442180397,
+    2442180398,
+    2442180399,
+    2442180400,
+    2442180401,
+    2442180402,
+    2442180403,
+    2442180404,
+    2442180397
+  ],
+  "tags": {
+    "building": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2442180393,
+  "lat": 39.0359918,
+  "lon": -77.1171137,
+  "timestamp": "2013-09-02T04:24:46Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+},
+{
+  "type": "node",
+  "id": 2442180394,
+  "lat": 39.0359796,
+  "lon": -77.1170996,
+  "timestamp": "2013-09-02T04:24:46Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+},
+{
+  "type": "node",
+  "id": 2442180395,
+  "lat": 39.0359583,
+  "lon": -77.1171301,
+  "timestamp": "2013-09-02T04:24:46Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+},
+{
+  "type": "node",
+  "id": 2442180396,
+  "lat": 39.0359705,
+  "lon": -77.1171442,
+  "timestamp": "2013-09-02T04:24:46Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+},
+{
+  "type": "node",
+  "id": 2442180397,
+  "lat": 39.0356300,
+  "lon": -77.1166456,
+  "timestamp": "2013-09-02T04:24:46Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+},
+{
+  "type": "node",
+  "id": 2442180398,
+  "lat": 39.0355948,
+  "lon": -77.1165775,
+  "timestamp": "2013-09-02T04:24:46Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+},
+{
+  "type": "node",
+  "id": 2442180399,
+  "lat": 39.0355663,
+  "lon": -77.1166019,
+  "timestamp": "2013-09-02T04:24:46Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+},
+{
+  "type": "node",
+  "id": 2442180400,
+  "lat": 39.0355288,
+  "lon": -77.1165293,
+  "timestamp": "2013-09-02T04:24:46Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+},
+{
+  "type": "node",
+  "id": 2442180401,
+  "lat": 39.0354544,
+  "lon": -77.1165932,
+  "timestamp": "2013-09-02T04:24:46Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+},
+{
+  "type": "node",
+  "id": 2442180402,
+  "lat": 39.0355160,
+  "lon": -77.1167123,
+  "timestamp": "2013-09-02T04:24:47Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+},
+{
+  "type": "node",
+  "id": 2442180403,
+  "lat": 39.0355870,
+  "lon": -77.1166513,
+  "timestamp": "2013-09-02T04:24:47Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+},
+{
+  "type": "node",
+  "id": 2442180404,
+  "lat": 39.0355982,
+  "lon": -77.1166729,
+  "timestamp": "2013-09-02T04:24:47Z",
+  "version": 1,
+  "changeset": 17629418,
+  "user": "ElliottPlack",
+  "uid": 105946
+}
+
+  ]
+}

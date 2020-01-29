@@ -43,7 +43,7 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
@@ -54,6 +54,9 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/ops/RemoveRoundabouts.h>
+#include <hoot/core/ops/ReplaceRoundabouts.h>
 
 // Standard
 #include <fstream>
@@ -88,7 +91,7 @@ void ConflateCmd::printStats(const QList<SingleStat>& stats)
   }
 }
 
-int ConflateCmd::runSimple(QStringList args)
+int ConflateCmd::runSimple(QStringList& args)
 {
   Timer totalTime;
   Timer t;
@@ -106,7 +109,7 @@ int ConflateCmd::runSimple(QStringList args)
       //remove "--stats" from args list
       args.pop_back();
     }
-    else if (args[args.size() - 1] == "--stats")
+    else if (args[args.size() - 2] == "--stats")
     {
       displayStats = true;
       outputStatsFile = args[args.size() - 1];
@@ -145,31 +148,67 @@ int ConflateCmd::runSimple(QStringList args)
     args.removeAt(args.indexOf("--separate-output"));
   }
 
-  if (args.size() != 3)
+  if (args.size() < 3 || args.size() > 4)
   {
     cout << getHelp() << endl << endl;
-    throw HootException(QString("%1 takes three parameters.").arg(getName()));
+    throw IllegalArgumentException(
+      QString("%1 takes three or four parameters. You provided %2: %3")
+        .arg(getName())
+        .arg(args.size())
+        .arg(args.join(",")));
   }
 
   const QString input1 = args[0];
   const QString input2 = args[1];
   QString output = args[2];
 
+  QString osmApiDbUrl;
+  if (output.endsWith(".osc.sql"))
+  {
+    if (args.size() != 4)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 with SQL changeset output takes four parameters.").arg(getName()));
+    }
+    osmApiDbUrl = args[3];
+  }
+  else if (args.size() > 3)
+  {
+    std::cout << getHelp() << std::endl << std::endl;
+    throw IllegalArgumentException(
+      QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
+  }
+
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString msg =
-    "Conflating ..." + input1.right(maxFilePrintLength) + " with ..." +
-    input2.right(maxFilePrintLength) + " and writing the output to ..." +
+    "Conflating " + input1.right(maxFilePrintLength) + " with " +
+    input2.right(maxFilePrintLength) + " and writing the output to " +
     output.right(maxFilePrintLength);
   if (isDiffConflate)
   {
-    msg = msg.prepend("Differentially ");
+    if (diffConflator.conflatingTags())
+    {
+      msg = msg.replace("Conflating", "Differentially conflating (tags only) ");
+    }
+    else
+    {
+      msg = msg.replace("Conflating", "Differentially conflating ");
+    }
   }
+
   progress.set(0.0, msg);
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
+
+  _updateConfigOptionsForAttributeConflation();
+  if (isDiffConflate)
+  {
+    _updateConfigOptionsForDifferentialConflation();
+  }
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
   _numTotalTasks = 5;
@@ -197,8 +236,8 @@ int ConflateCmd::runSimple(QStringList args)
   ChangesetProviderPtr pTagChanges;
 
   //  Loading order is important if datasource IDs 2 is true but 1 is not
-  if (!ConfigOptions().getReaderConflateUseDataSourceIds1() &&
-       ConfigOptions().getReaderConflateUseDataSourceIds2() &&
+  if (!ConfigOptions().getConflateUseDataSourceIds1() &&
+       ConfigOptions().getConflateUseDataSourceIds2() &&
       !isDiffConflate)
   {
     //  For Attribute conflation, the secondary IDs are the ones that we want
@@ -209,14 +248,14 @@ int ConflateCmd::runSimple(QStringList args)
       _getJobPercentComplete(currentTask - 1),
       "Loading secondary map: ..." + input2.right(maxFilePrintLength) + "...");
     IoUtils::loadMap(
-      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+      map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
 
     // read input 1
     progress.set(
       _getJobPercentComplete(currentTask - 1),
       "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
-    IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
+    IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(),
                      Status::Unknown1);
     currentTask++;
   }
@@ -226,12 +265,16 @@ int ConflateCmd::runSimple(QStringList args)
     progress.set(
       _getJobPercentComplete(currentTask - 1),
       "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
-    IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
-                     Status::Unknown1);
+    IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(), Status::Unknown1);
     currentTask++;
 
     if (isDiffConflate)
     {
+      if (output.endsWith(".osc") || output.endsWith(".osc.sql"))
+      {
+        OsmUtils::checkVersionLessThanOneCountAndLogWarning(map);
+      }
+
       // Store original IDs for tag diff
       progress.set(
         _getJobPercentComplete(currentTask - 1), "Storing original features for tag differential...");
@@ -244,9 +287,10 @@ int ConflateCmd::runSimple(QStringList args)
       _getJobPercentComplete(currentTask - 1),
       "Loading secondary map: ..." + input2.right(maxFilePrintLength) + "...");
     IoUtils::loadMap(
-      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+      map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
   }
+  LOG_INFO("Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
@@ -324,7 +368,6 @@ int ConflateCmd::runSimple(QStringList args)
   stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
   currentTask++;
 
-  _updatePostConfigOptionsForAttributeConflation();
   if (ConfigOptions().getConflatePostOps().size() > 0)
   {
     // apply any user specified post-conflate operations
@@ -343,7 +386,9 @@ int ConflateCmd::runSimple(QStringList args)
   progress.set(_getJobPercentComplete(currentTask - 1), "Counting feature reviews...");
   CountUniqueReviewsVisitor countReviewsVis;
   result->visitRo(countReviewsVis);
-  LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");
+  LOG_INFO(
+    "Generated " << StringUtils::formatLargeNumber(countReviewsVis.getStat()) <<
+    " feature reviews.");
   currentTask++;
 
   MapProjector::projectToWgs84(result);
@@ -354,9 +399,9 @@ int ConflateCmd::runSimple(QStringList args)
   progress.set(
     _getJobPercentComplete(currentTask - 1),
     "Writing conflated output: ..." + output.right(maxFilePrintLength) + "...");
-  if (isDiffConflate && output.endsWith(".osc"))
+  if (isDiffConflate && (output.endsWith(".osc") || output.endsWith(".osc.sql")))
   {
-    diffConflator.writeChangeset(result, output, separateOutput);
+    diffConflator.writeChangeset(result, output, separateOutput, osmApiDbUrl);
   }
   else
   {
@@ -445,8 +490,10 @@ int ConflateCmd::runSimple(QStringList args)
 
   progress.set(
     1.0, Progress::JobState::Successful,
-    "Conflation job completed for reference: ..." + input1.right(maxFilePrintLength) +
-    " and secondary: ..." + input2.right(maxFilePrintLength) + " and written to output: ..." +
+    "Conflation job completed in " +
+    StringUtils::millisecondsToDhms((qint64)(totalElapsed * 1000)) + " for reference map: ..." +
+    input1.right(maxFilePrintLength) + " and secondary map: ..." +
+    input2.right(maxFilePrintLength) + " and written to output: ..." +
     output.right(maxFilePrintLength));
 
   return 0;
@@ -462,7 +509,32 @@ float ConflateCmd::_getJobPercentComplete(const int currentTaskNum) const
   return (float)currentTaskNum / (float)_numTotalTasks;
 }
 
-void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
+void ConflateCmd::_updateConfigOptionsForDifferentialConflation()
+{
+  // Since Differential throws out all matches, there's no way we can have a bad merge between
+  // ref/secondary roundabouts. Therefore, no need to replace/remove them. If there's a match, we'll
+  // end with no secondary roundabout in the diff output and only the ref roundabout when the diff
+  // is applied back to the ref.
+
+  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
+  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
+  if (preConflateOps.contains(removeRoundaboutsClassName))
+  {
+    preConflateOps.removeAll(removeRoundaboutsClassName);
+    conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
+  }
+
+  QStringList postConflateOps = ConfigOptions().getConflatePostOps();
+  const QString replaceRoundaboutsClassName =
+    QString::fromStdString(ReplaceRoundabouts::className());
+  if (postConflateOps.contains(replaceRoundaboutsClassName))
+  {
+    postConflateOps.removeAll(replaceRoundaboutsClassName);
+    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
+  }
+}
+
+void ConflateCmd::_updateConfigOptionsForAttributeConflation()
 {
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
   // There may be a way to eliminate these by adding more custom behavior to the UI.
@@ -472,36 +544,8 @@ void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
   // we have a better solution for changing these opts in place.
   if (ConfigOptions().getHighwayMergeTagsOnly())
   {
-    // If we're running Attribute Conflation and removing building relations, we need to remove them
-    // after the review relations have been removed or some building relations may still remain that
-    // are involved in reviews.
-
-    const QString buildingOutlineUpdateOpName =
-      QString::fromStdString(BuildingOutlineUpdateOp::className());
-    const QString removeElementsVisitorName =
-      QString::fromStdString(RemoveElementsVisitor::className());
     const QString reviewRelationCritName =
       QString::fromStdString(ReviewRelationCriterion::className());
-
-    QStringList postConflateOps = ConfigOptions().getConflatePostOps();
-    LOG_DEBUG("Post conflate ops before Attribute Conflation adjustment: " << postConflateOps);
-    // Currently, all these things will be true if we're running Attribute Conflation, but I'm
-    // specifying them anyway to harden this a bit.
-    if (ConfigOptions().getBuildingOutlineUpdateOpRemoveBuildingRelations() &&
-        postConflateOps.contains(removeElementsVisitorName) &&
-        ConfigOptions().getRemoveElementsVisitorElementCriteria().contains(
-          reviewRelationCritName) &&
-        postConflateOps.contains(buildingOutlineUpdateOpName))
-    {
-      const int removeElementsVisIndex = postConflateOps.indexOf(removeElementsVisitorName);
-      const int buildingOutlineOpIndex = postConflateOps.indexOf(buildingOutlineUpdateOpName);
-      if (removeElementsVisIndex > buildingOutlineOpIndex)
-      {
-        postConflateOps.removeAll(buildingOutlineUpdateOpName);
-        postConflateOps.append(buildingOutlineUpdateOpName);
-        conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
-      }
-    }
 
     // This swaps the logic that removes all reviews with the logic that removes them based on score
     // thresholding.
@@ -514,10 +558,6 @@ void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
       conf().set(
         ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
     }
-
-    LOG_DEBUG(
-      "Post conflate ops after Attribute Conflation adjustment: " <<
-      conf().get("conflate.post.ops").toStringList());
   }
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DATACONVERTER_H
 #define DATACONVERTER_H
@@ -95,9 +95,23 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  /**
+   * Converts multiple datasets from format to a single output format
+   *
+   * @param inputs the inputs to convert
+   * @param output the converted output path
+   */
   void convert(const QStringList& inputs, const QString& output);
 
-  void setTranslation(const QString& translation) { _translation = translation; }
+  /**
+   * Converts a dataset from format to another output format
+   *
+   * @param input the input to convert
+   * @param output the converted output path
+   */
+  void convert(const QString& input, const QString& output);
+
+  void setTranslation(const QString& translation);
   void setShapeFileColumns(const QStringList& columns) { _shapeFileColumns = columns; }
   void setOgrFeatureReadLimit(const int limit) { _ogrFeatureReadLimit = limit; }
   void setConvertOps(const QStringList& ops) { _convertOps = ops; }
@@ -127,8 +141,7 @@ private:
   // If specific columns were specified for export to a shape file, then this is called.
   void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map);
 
-  void _fillElementCache(const QString& inputUrl,
-                         ElementCachePtr cachePtr,
+  void _fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
                          QQueue<ElementPtr>& workQ);
   // _convertToOgr will call this to run the translator in a separate thread for a performance
   // increase if certain pre-conditions are met.
@@ -144,6 +157,8 @@ private:
   QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input);
 
   bool _shapeFileColumnsSpecified() { return !_shapeFileColumns.isEmpty(); }
+
+  void _setFromOgrOptions();
 };
 
 }

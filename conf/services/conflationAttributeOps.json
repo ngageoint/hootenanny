@@ -71,14 +71,6 @@
         "hoot_key": "building.merge.many.to.many.matches"
       },
       {
-        "id": "building_remove_building_relations",
-        "elem_type": "bool",
-        "description": "If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
-        "name": "Remove Building Relations",
-        "defaultvalue": "true",
-        "hoot_key": "building.outline.update.op.remove.building.relations"
-      },
-      {
         "id":"attribute_override_conflate_post_ops",
         "elem_type":"string",
         "description":"Remove review relations and unmatched features in secondary dataset.",
@@ -127,12 +119,12 @@
         "hoot_key": "poi.polygon.auto.merge.many.poi.to.one.poly.matches"
       },
       {
-        "id": "reader_conflate_use_data_source_ids_1",
+        "id": "conflate_use_data_source_ids_1",
         "elem_type": "bool",
         "description": "Determines whether the reader used by the conflate command to read the first input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
         "name": "Use Ref IDs During Conflation",
         "defaultvalue": "false",
-        "hoot_key": "reader.conflate.use.data.source.ids.1"
+        "hoot_key": "conflate.use.data.source.ids.1"
       },
       {
         "id": "remove_elements_visitor_chain.element_criteria",

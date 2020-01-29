@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
@@ -96,5 +96,6 @@ public class JobStatusManagerImplTest {
 
         assertEquals(1, errors.size());
         assertEquals(expectedError, errors.get(0));
+        MapUtils.deleteUser(userId);
     }
 }

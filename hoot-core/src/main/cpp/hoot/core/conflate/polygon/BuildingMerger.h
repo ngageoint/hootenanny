@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Merges two buildings
+ * Merges two or more buildings
  */
 class BuildingMerger : public MergerBase
 {
@@ -54,7 +54,8 @@ public:
    */
   explicit BuildingMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  virtual void apply(const OsmMapPtr& map,
+                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Creates a single building out of a group of buildings
@@ -81,11 +82,27 @@ public:
    */
   static void mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
 
+  /**
+   * Adds multiple buildings to the same relation
+   *
+   * @param map the map to add the relation containing the buildings to
+   * @param constituentBuildings the buildings to add to the relation
+   * @param preserveTypes if true, preserves type tags; see PreserveTypesTagMerger
+   * @return a building relation if the constituent buildings all have 3D tags; otherwise a
+   * multipolygon relation with a building tag
+   */
+  static RelationPtr combineConstituentBuildingsIntoRelation(
+    const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings,
+    const bool preserveTypes = false);
+
   virtual QString getDescription() const { return "Merges buildings"; }
 
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)
   { _keepMoreComplexGeometryWhenAutoMerging = keepMoreComplex; }
   void setMergeManyToManyMatches(bool merge) { _mergeManyToManyMatches = merge; }
+  void setUseChangedReview(bool use) { _useChangedReview = use; }
+  void setChangedReviewIouThreshold(double threshold) { _changedReviewIouThreshold = threshold; }
+  QString getMarkedReviewText() const { return _markedReviewText; }
 
 protected:
 
@@ -93,6 +110,8 @@ protected:
   virtual const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
+
+  friend class BuildingMergerTest;
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
 
@@ -104,6 +123,13 @@ private:
   bool _mergeManyToManyMatches;
   // set to true if the current building merge involves two buildings, each part of multiple matches
   bool _manyToManyMatch;
+  // This allows for trigger a "changed" review, where if two buildings match but their IoU score
+  // falls below a certain threshold then we'll flag them to be reviewed.
+  bool _useChangedReview;
+  // threshold used with _useChangedReview
+  double _changedReviewIouThreshold;
+  // records if this merger marked the input pair for review instead of merging them
+  QString _markedReviewText;
 
   /*
    * Creates a building out of the current set of building element IDs
@@ -114,6 +140,15 @@ private:
    * @return a building element
    */
   std::shared_ptr<Element> _buildBuilding(const OsmMapPtr& map, const bool unknown1) const;
+
+  /*
+   * Determine which of two buildings is more complex, using node count as a surrogate for
+   * complexity
+   */
+  ElementId _getIdOfMoreComplexBuilding(
+    const ElementPtr& building1, const ElementPtr& building2, const OsmMapPtr& map) const;
+
+  Tags _getMergedTags(const ElementPtr& e1, const ElementPtr& e2);
 
   QSet<ElementId> _getMultiPolyMemberIds(const ConstElementPtr& element) const;
   void _removeRedundantAltTypeTags(Tags& tags);

@@ -31,14 +31,13 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/TagComparator.h>
-#include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/schema/BuildingPartTagMerger.h>
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
+#include <hoot/core/conflate/polygon/BuildingMerger.h>
+#include <hoot/core/schema/BuildingRelationMemberTagMerger.h>
 
 // Qt
 #include <QThreadPool>
@@ -58,18 +57,6 @@ _numBuildingGroupsMerged(0),
 _threadCount(1),
 _preserveTypes(preserveTypes)
 {
-  _initBuildingPartTagNames();
-}
-
-void BuildingPartMergeOp::_initBuildingPartTagNames()
-{
-  const std::vector<SchemaVertex>& buildingPartTags =
-    OsmSchema::getInstance().getAssociatedTagsAsVertices(MetadataTags::BuildingPart() + "=yes");
-  for (size_t i = 0; i < buildingPartTags.size(); i++)
-  {
-    _buildingPartTagNames.insert(buildingPartTags[i].name.split("=")[0]);
-  }
-  _buildingPartTagNames.insert(MetadataTags::BuildingPart());
 }
 
 void BuildingPartMergeOp::setConfiguration(const Settings& conf)
@@ -312,8 +299,7 @@ void BuildingPartMergeOp::_mergeBuildingParts()
     std::vector<ElementPtr> parts = it->second;
     if (parts.size() > 1)
     {
-      combineBuildingParts(_map, parts);
-
+      BuildingMerger::combineConstituentBuildingsIntoRelation(_map, parts, _preserveTypes);
       _numBuildingGroupsMerged++;
       _numAffected += parts.size();
     }
@@ -371,8 +357,10 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, 
 bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2)
 {
   // remove all the building tags that are building:part=yes specific.
-  for (std::set<QString>::const_iterator it = _buildingPartTagNames.begin();
-       it != _buildingPartTagNames.end(); ++it)
+  const std::set<QString> buildingPartTagNames =
+    BuildingRelationMemberTagMerger::getBuildingPartTagNames();
+  for (std::set<QString>::const_iterator it = buildingPartTagNames.begin();
+       it != buildingPartTagNames.end(); ++it)
   {
     t1.remove(*it);
     t2.remove(*it);
@@ -420,83 +408,4 @@ std::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
   }
   return std::shared_ptr<geos::geom::Geometry>();
 }
-
-RelationPtr BuildingPartMergeOp::combineBuildingParts(const OsmMapPtr& map,
-                                                      std::vector<ElementPtr>& parts)
-{
-  if (parts.size() == 0)
-  {
-    throw IllegalArgumentException(
-      "No building parts passed to BuildingPartMergeOp::combineParts.");
-  }
-
-  // This is primarily in place to support testable output.
-  InMemoryElementSorter::sort(parts);
-
-  // put the building parts into a building relation
-  RelationPtr building(
-    new Relation(
-      parts[0]->getStatus(), map->createNextRelationId(),
-      WorstCircularErrorVisitor::getWorstCircularError(parts), MetadataTags::RelationBuilding()));
-
-  TagMergerPtr tagMerger;
-  LOG_VARD(_preserveTypes);
-  // exclude building part type tags from the type tag preservation by passing them in to be skipped
-  if (!_preserveTypes)
-  {
-    tagMerger.reset(new BuildingPartTagMerger(_buildingPartTagNames));
-  }
-  else
-  {
-    tagMerger.reset(new PreserveTypesTagMerger(_buildingPartTagNames));
-  }
-
-  Tags& buildingTags = building->getTags();
-  LOG_TRACE("Building relation starting tags:" << buildingTags);
-  for (size_t i = 0; i < parts.size(); i++)
-  {
-   ElementPtr buildingPart = parts[i];
-    building->addElement(MetadataTags::RolePart(), buildingPart);
-    buildingTags =
-      tagMerger->mergeTags(building->getTags(), buildingPart->getTags(), ElementType::Relation);
-    building->setTags(buildingTags);
-  }
-  if (!building->getTags().contains("building"))
-  {
-   building->getTags()["building"] = "yes";
-  }
-  buildingTags = building->getTags();
-  LOG_VART(buildingTags);
-
-  for (Tags::const_iterator it = buildingTags.begin(); it != buildingTags.end(); ++it)
-  {
-    // Remove any tags in the building from each of the parts.
-    for (size_t i = 0; i < parts.size(); i++)
-    {
-      ElementPtr buildingPart = parts[i];
-      if (buildingPart->getTags().contains(it.key()))
-      {
-        buildingPart->getTags().remove(it.key());
-      }
-    }
-  }
-
-  // Replace the building tag with building:part tags.
-  for (size_t i = 0; i < parts.size(); i++)
-  {
-    parts[i]->getTags().remove("building");
-    parts[i]->getTags()[MetadataTags::BuildingPart()] = "yes";
-  }
-
-  LOG_VART(building);
-  for (size_t i = 0; i < parts.size(); i++)
-  {
-    LOG_VART(parts[i]);
-  }
-
-  map->addRelation(building);
-
-  return building;
-}
-
 }

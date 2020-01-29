@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DataConverter.h"
 
@@ -38,7 +38,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
@@ -47,7 +47,10 @@
 #include <hoot/core/ops/SchemaTranslationOp.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/visitors/WayGeneralizeVisitor.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 
 // std
 #include <vector>
@@ -175,15 +178,40 @@ _printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
 {
 }
 
+void DataConverter::setTranslation(const QString& translation)
+{
+  QFileInfo fileInfo(translation);
+  if (!fileInfo.exists())
+  {
+    throw IllegalArgumentException("Translation file does not exist: " + translation);
+  }
+  else if (!translation.endsWith(".js") && !translation.endsWith(".py"))
+  {
+    throw IllegalArgumentException("Invalid translation file format: " + translation);
+  }
+
+  _translation = translation;
+}
+
 void DataConverter::setConfiguration(const Settings& conf)
 {
+  // The ordering of these setters matter to DataConvertTest.
   ConfigOptions config = ConfigOptions(conf);
   setConvertOps(config.getConvertOps());
   setOgrFeatureReadLimit(config.getOgrReaderLimit());
   setShapeFileColumns(config.getShapeFileWriterCols());
-  setTranslation(config.getSchemaTranslationScript());
+  const QString translation = config.getSchemaTranslationScript();
+  if (!translation.isEmpty())
+  {
+    setTranslation(config.getSchemaTranslationScript());
+  }
   _translationDirection = config.getSchemaTranslationDirection().trimmed().toLower();
   LOG_VARD(_convertOps);
+}
+
+void DataConverter::convert(const QString& input, const QString& output)
+{
+  convert(QStringList(input), output);
 }
 
 void DataConverter::convert(const QStringList& inputs, const QString& output)
@@ -200,10 +228,10 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     output.right(_printLengthMax) + "...");
 
   // Due to the custom multithreading available for OGR reading, the fact that both OGR reading and
-  // writing do their translations inline (don't use SchemaTranslationOp or SchemaTranslationVisitor),
-  // and OGR reading support for layer names, conversions involving OGR data must follow a separate
-  // logic path from non-OGR data. It would be nice at some point to be able to do everything
-  // generically from within the _convert method.
+  // writing do their translations inline (don't use SchemaTranslationOp or
+  // SchemaTranslationVisitor), and OGR reading support for layer names, conversions involving OGR
+  // data must follow a separate logic path from non-OGR data. It would be nice at some point to be
+  // able to do everything generically from within the _convert method.
 
   // We require that a translation be present when converting to OGR, the translation direction be
   // to OGR or unspecified, and that only one input is specified.
@@ -225,6 +253,11 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   // direction different than what was expected for the input/output formats was specified, just
   // call the generic convert routine. If no translation direction was specified, we'll try to guess
   // it and let the user know that we did.
+  //
+  // Note that it still is possible an OGR format can go in here, if you didn't specify a
+  // translation. That seems a little odd and maybe worth rethinking. Most the time you are going to
+  // be specifying a translation when dealing with OGR formats, but if you're doing an additional
+  // conversion on a data file after an initial one you might not specify a translation.
   else
   {
     _convert(inputs, output);
@@ -339,7 +372,8 @@ void DataConverter::_transToOgrMT(const QString& input, const QString& output)
          std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>> transFeaturesQ;
   bool finishedTranslating = false;
 
-  // Read all elements; TODO: We should figure out a way to make this not-memory bound in the future
+  // Read all elements
+  // TODO: We should figure out a way to make this not-memory bound in the future
   _fillElementCache(input, pElementCache, elementQ);
   LOG_DEBUG("Element Cache Filled");
 
@@ -396,6 +430,9 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
   LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
   if (OsmMapReaderFactory::hasElementInputStream(input) &&
       // multithreaded code doesn't support conversion ops. could it?
+      // TODO: if we have a single convert op that is a SchemaTranslationOp or
+      // SchemaTranslationVisitor should we pop it off and then run multithreaded with that
+      // translation?...seems like we should
       _convertOps.size() == 0 &&
       // multithreaded code doesn't support a bounds...not sure if it could be made to at some point
       !ConfigUtils::boundsOptionEnabled())
@@ -443,7 +480,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
 
     LOG_INFO(
       "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-      " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+      " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   }
 }
 
@@ -536,6 +573,40 @@ QStringList DataConverter::_getOgrLayersFromPath(OgrReader& reader, QString& inp
   return layers;
 }
 
+void DataConverter::_setFromOgrOptions()
+{
+  // The ordering for these added ops matters. Let's run them after any user specified convert ops
+  // to avoid unnecessary processing time. Also, if any of these ops gets added here, then we never
+  // have a streaming OGR read, since they all require a full map...don't love that...but not sure
+  // what can be done about it.
+
+  // Nodes that are very close together but with different IDs present a problem from OGR sources,
+  // so let's merge them together.
+  if (ConfigOptions().getOgr2osmMergeNearbyNodes())
+  {
+    if (!_convertOps.contains(QString::fromStdString(DuplicateNodeRemover::className())))
+    {
+      _convertOps.append(QString::fromStdString(DuplicateNodeRemover::className()));
+    }
+  }
+
+  // Complex building simplification is primarily meant for UFD buildings, commonly read from OGR
+  // sources.
+  if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
+  {
+    // Building outline updating needs to happen after building part merging, or we can end up with
+    // role verification warnings in JOSM.
+    if (!_convertOps.contains(QString::fromStdString(BuildingPartMergeOp::className())))
+    {
+      _convertOps.append(QString::fromStdString(BuildingPartMergeOp::className()));
+    }
+    if (!_convertOps.contains(QString::fromStdString(BuildingOutlineUpdateOp::className())))
+    {
+      _convertOps.append(QString::fromStdString(BuildingOutlineUpdateOp::className()));
+    }
+  }
+}
+
 void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& output)
 {
   LOG_DEBUG("_convertFromOgr (formerly known as ogr2osm)");
@@ -567,15 +638,10 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   _convertOps.removeAll(QString::fromStdString(SchemaTranslationVisitor::className()));
   LOG_VARD(_convertOps);
 
-  // The ordering for these added ops matters.
-  if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
-  {
-    _convertOps.prepend(QString::fromStdString(BuildingPartMergeOp::className()));
-  }
-  if (ConfigOptions().getOgr2osmMergeNearbyNodes())
-  {
-    _convertOps.prepend(QString::fromStdString(MergeNearbyNodes::className()));
-  }
+  _setFromOgrOptions();
+  // Inclined to do this: _convertOps.removeDuplicates();, but there could be some workflows where
+  // the same op needs to be called more than once.
+  //
   LOG_VARD(_convertOps);
 
   // The number of task steps here must be updated as you add/remove job steps in the logic.
@@ -623,10 +689,11 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   LOG_INFO(
     "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements from input in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+    " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+  // turn this on for debugging only
+  //OsmMapWriterFactory::writeDebugMap(map, "after-convert-from-ogr");
   currentTask++;
 
-  MapProjector::projectToPlanar(map);
   if (_convertOps.size() > 0)
   {
     NamedOp convertOps(_convertOps);
@@ -710,6 +777,12 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
 
+  // see note in convert; an OGR format could still be processed here
+  if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
+  {
+    _setFromOgrOptions();
+  }
+
   _handleGeneralConvertTranslationOpts(output);
 
   //check to see if all of the i/o can be streamed
@@ -736,7 +809,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
 
   if (isStreamable)
   {
-    //Shape file output currently isn't streamable, so we know we won't see export cols here.  If
+    //Shape file output currently isn't streamable, so we know we won't see export cols here. If
     //it is ever made streamable, then we'd have to refactor this.
     assert(!_shapeFileColumnsSpecified());
 
@@ -814,7 +887,7 @@ void DataConverter::_exportToShapeWithCols(const QString& output, const QStringL
 
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+    " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 }

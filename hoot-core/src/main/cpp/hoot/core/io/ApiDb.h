@@ -96,7 +96,7 @@ public:
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedHootDbVersion() { return "26:bobby.simic"; }
+  static QString expectedHootDbVersion() { return "29:bobby.simic"; }
   static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
@@ -436,6 +436,14 @@ public:
    * @return true if the user exists; false otherwise
    */
   bool userExists(const QString& userName);
+
+  /**
+   * Returns IDs for all ways connected to ways with the input IDs
+   *
+   * @param wayIds IDs of ways to search
+   * @return a collection of connected way IDs
+   */
+  QSet<QString> selectConnectedWayIds(const QSet<QString>& wayIds);
 
 protected:
 
