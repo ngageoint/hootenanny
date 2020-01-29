@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PreserveTypesTagMerger.h"
 
@@ -30,6 +30,7 @@
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QStringBuilder>
@@ -119,32 +120,29 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
       skippingTagPreservation = true;
     }
 
-    if (!skippingTagPreservation && !tagsToBeOverwritten[it.key()].trimmed().isEmpty())
+    const QString tagsToBeOverwrittenOfKey = tagsToBeOverwritten[it.key()].trimmed();
+    if (!skippingTagPreservation && !tagsToBeOverwrittenOfKey.isEmpty())
     {
-      LOG_VART(tagsToBeOverwritten[it.key()]);
+      LOG_VART(tagsToBeOverwrittenOfKey);
       // If one is more specific than the other, add it, but then remove both tags so we don't
-      // try to add them again.
-      //if (schema.isAncestor(
-            //it.key() % "=" % tagsToBeOverwritten[it.key()], it.key() % "=" % it.value()))
-      if (_isAncestor(it.key(), tagsToBeOverwritten[it.key()], it.key(), it.value()))
+      // try to add them again.)
+      if (_isAncestor(it.key(), tagsToBeOverwrittenOfKey, it.key(), it.value()))
       {
         LOG_TRACE(
-          it.key() % "=" % tagsToBeOverwritten[it.key()] << " is more specific than " <<
+          it.key() % "=" % tagsToBeOverwrittenOfKey << " is more specific than " <<
           it.key() % "=" % it.value() << ".  Using more specific tag.");
-        result[it.key()] = tagsToBeOverwritten[it.key()];
+        result[it.key()] = tagsToBeOverwrittenOfKey;
       }
-      //else if (schema.isAncestor(
-                 //it.key() % "=" % it.value(), it.key() % "=" % tagsToBeOverwritten[it.key()]))
-      else if (_isAncestor(it.key(), it.value(), it.key(), tagsToBeOverwritten[it.key()]))
+      else if (_isAncestor(it.key(), it.value(), it.key(), tagsToBeOverwrittenOfKey))
       {
         LOG_TRACE(
           it.key() % "=" % it.value() << " is more specific than " <<
-          it.key() % "=" % tagsToBeOverwritten[it.key()] << ".  Using more specific tag.");
+          it.key() % "=" % tagsToBeOverwrittenOfKey << ".  Using more specific tag.");
         result[it.key()] = it.value();
       }
       else if (it.key() != ALT_TYPES_TAG_KEY)
       {
-        if (tagsToBeOverwritten[it.key()] == tagsToOverwriteWith[it.key()])
+        if (tagsToBeOverwrittenOfKey == tagsToOverwriteWith[it.key()])
         {
           LOG_TRACE("Merging duplicate tag: " << it.key() << "=" << it.value() << "...");
         }
@@ -156,19 +154,20 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
             " but neither is more specific.  Keeping both...");
         }
         result[it.key()] = it.value();
-        LOG_VART(result[ALT_TYPES_TAG_KEY]);
-        if (!result[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
+        const QString resultAltType = result[ALT_TYPES_TAG_KEY].trimmed();
+        LOG_VART(resultAltType);
+        if (!resultAltType.isEmpty())
         {
-          const QString altType = it.key() % "=" % tagsToBeOverwritten[it.key()];
-          if (!result[ALT_TYPES_TAG_KEY].contains(altType))
+          const QString altType = it.key() % "=" % tagsToBeOverwrittenOfKey;
+          if (!resultAltType.contains(altType))
           {
             result[ALT_TYPES_TAG_KEY] =
-              result[ALT_TYPES_TAG_KEY] % ";" + it.key() % "=" % tagsToBeOverwritten[it.key()];
+              resultAltType % ";" + it.key() % "=" % tagsToBeOverwrittenOfKey;
           }
         }
         else
         {
-          result[ALT_TYPES_TAG_KEY] = it.key() % "=" % tagsToBeOverwritten[it.key()];
+          result[ALT_TYPES_TAG_KEY] = it.key() % "=" % tagsToBeOverwrittenOfKey;
         }
         LOG_VART(result[ALT_TYPES_TAG_KEY]);
       }
@@ -227,23 +226,29 @@ bool PreserveTypesTagMerger::_isAncestor(const QString& childKey, const QString&
 void PreserveTypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const
 {
   LOG_VART(tags.contains(ALT_TYPES_TAG_KEY));
-  if (tags.contains(ALT_TYPES_TAG_KEY))
+  Tags::ConstIterator itr = tags.find(ALT_TYPES_TAG_KEY);
+  if (itr != tags.end())
   {
     // remove anything in alt_types that's also in the tags being merged
-    const QStringList altTypes = tags.get(ALT_TYPES_TAG_KEY).split(";");
+    const QStringList altTypes = itr.value().split(";");
     LOG_VART(altTypes);
     QStringList altTypesCopy = altTypes;
     for (int i = 0; i < altTypes.size(); i++)
     {
       LOG_VART(altTypes[i]);
-      assert(altTypes[i].contains("="));
-      const QStringList tagParts = altTypes[i].split("=");
-      assert(tagParts.size() == 2);
-      LOG_VART(tagParts);
-      LOG_VART(tags.get(tagParts[0]) == tagParts[1]);
-      if (tags.get(tagParts[0]) == tagParts[1])
+      const QString altType = altTypes[i];
+      if (altType.contains("="))
       {
-        altTypesCopy.removeAll(tagParts[0] + "=" + tagParts[1]);
+        const QStringList tagParts = altTypes[i].split("=");
+        if (tagParts.size() == 2)
+        {
+          LOG_VART(tagParts);
+          LOG_VART(tags.get(tagParts[0]) == tagParts[1]);
+          if (tags.get(tagParts[0]) == tagParts[1])
+          {
+            altTypesCopy.removeAll(tagParts[0] + "=" + tagParts[1]);
+          }
+        }
       }
     }
     LOG_VART(altTypesCopy);
@@ -267,15 +272,16 @@ Tags PreserveTypesTagMerger::_preserveAltTypes(const Tags& source, const Tags& t
   for (int i = 0; i < altTypes.size(); i++)
   {
     const QString altType = altTypes.at(i);
-    if (updatedTags[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
+    const QString updatedAlType = updatedTags[ALT_TYPES_TAG_KEY].trimmed();
+    if (updatedAlType.isEmpty())
     {
       updatedTags[ALT_TYPES_TAG_KEY] = altType;
     }
     else
     {
-      if (!updatedTags[ALT_TYPES_TAG_KEY].contains(altType))
+      if (!updatedAlType.contains(altType))
       {
-        updatedTags[ALT_TYPES_TAG_KEY] = updatedTags[ALT_TYPES_TAG_KEY] + ";" + altType;
+        updatedTags[ALT_TYPES_TAG_KEY] = updatedAlType + ";" + altType;
       }
     }
   }

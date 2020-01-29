@@ -87,13 +87,14 @@ ConstMatchPtr NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, Ne
       _matchScoringFunctionCurveMidpointX, _matchScoringFunctionCurveSteepness));
 }
 
-void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-  ConstMatchThresholdPtr threshold)
+void NetworkMatchCreator::createMatches(
+  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
 {
   QElapsedTimer timer;
   timer.start();
-  LOG_INFO("Looking for matches with: " << className() << "...");
+  LOG_STATUS("Looking for matches with: " << className() << "...");
   LOG_VART(threshold);
+  const int matchesSizeBefore = matches.size();
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
@@ -167,10 +168,12 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<C
       matches.push_back(match);
     }
   }
+  const int matchesSizeAfter = matches.size();
 
-  LOG_INFO(
+  LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(matches.size()) <<
-    " highway match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
+    " highway match candidates and " <<
+    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
     " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 

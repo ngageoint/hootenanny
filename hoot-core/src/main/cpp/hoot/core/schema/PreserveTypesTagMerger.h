@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PRESERVETYPESTAGMERGER_H
 #define PRESERVETYPESTAGMERGER_H
@@ -35,7 +35,7 @@ namespace hoot
 
 /**
  * This is used to preserve types when merging multiple elements into one. e.g. merging multiple
- * POIs into a multi-use building It keeps the most specific type when multiple types with the same
+ * POIs into a multi-use building. It keeps the most specific type when multiple types with the same
  * key are encountered. In the case where duplicated types have the same level of specificity, the
  * duplicated types are arbitrarily placed in an "alt_types" tag.
  */

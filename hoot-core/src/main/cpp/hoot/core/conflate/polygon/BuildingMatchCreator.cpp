@@ -413,19 +413,20 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
 {
   QElapsedTimer timer;
   timer.start();
-  LOG_INFO("Looking for matches with: " << className() << "...");
+  LOG_STATUS("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
+  const int matchesSizeBefore = matches.size();
+
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, _filter, Status::Unknown1);
   map->visitWaysRo(v);
   map->visitRelationsRo(v);
-  // total match count inaccurate here
-//  LOG_INFO(
-//    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-//    " building match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
-//    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
-  LOG_INFO(
+  const int matchesSizeAfter = matches.size();
+
+  LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " building match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    " building match candidates and " <<
+    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
+    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const

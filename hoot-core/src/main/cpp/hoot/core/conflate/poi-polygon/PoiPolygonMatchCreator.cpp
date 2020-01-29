@@ -81,8 +81,9 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
                                            std::vector<ConstMatchPtr>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Looking for matches with: " << className() << "...");
+  LOG_STATUS("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
+  const int matchesSizeBefore = matches.size();
 
   if (!_infoCache)
   {
@@ -97,10 +98,12 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   timer.start();
   PoiPolygonMatchVisitor matchVis(map, matches, threshold, _getRf(), _infoCache, _filter);
   map->visitNodesRo(matchVis);
-  LOG_INFO(
+  const int matchesSizeAfter = matches.size();
+
+  LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(matchVis.getNumMatchCandidatesFound()) <<
     " POI to Polygon match candidate features and " <<
-    StringUtils::formatLargeNumber(matches.size()) << " total matches in: " <<
+    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) << " total matches in: " <<
     StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
   // If we're only keeping matches/reviews with the closest distances between features, then let's
