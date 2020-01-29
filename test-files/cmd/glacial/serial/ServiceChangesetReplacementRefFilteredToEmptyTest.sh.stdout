@@ -18,6 +18,7 @@ retainment filter options:
 source formats:  xml
 way snap tolerance:  5.0
 existing way node tolerance:  5.0
+disable conflation: 
 
 Writing the reference dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementRefFilteredToEmptyTest/input1.osm to an osm api db (contains features to be replaced)...
 

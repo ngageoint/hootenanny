@@ -1,0 +1,2252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="20.9898897" minlon="-89.64051240000001" maxlat="21.0258741" maxlon="-89.60023150000001"/>
+    <node visible="true" id="287026840" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9932331000000012" lon="-89.6165490000000062"/>
+    <node visible="true" id="287026841" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9905597999999998" lon="-89.6167090999999942"/>
+    <node visible="true" id="287140295" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9982213999999985" lon="-89.6214829999999978"/>
+    <node visible="true" id="287671782" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9941895000000009" lon="-89.6238807999999949"/>
+    <node visible="true" id="287671823" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9918103999999985" lon="-89.6271926999999948"/>
+    <node visible="true" id="287671824" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9951582999999999" lon="-89.6244451999999967"/>
+    <node visible="true" id="287674290" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9920667999999999" lon="-89.6228193999999974"/>
+    <node visible="true" id="287674300" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9943366000000005" lon="-89.6259967000000017"/>
+    <node visible="true" id="287674601" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971676000000009" lon="-89.6283442000000008"/>
+    <node visible="true" id="287675036" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9961394000000006" lon="-89.6250155999999976"/>
+    <node visible="true" id="287675157" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971533000000008" lon="-89.6233617999999979"/>
+    <node visible="true" id="287694716" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9919867999999994" lon="-89.6142231000000038"/>
+    <node visible="true" id="287696254" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9945984999999986" lon="-89.6165022999999934"/>
+    <node visible="true" id="289685298" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971661000000012" lon="-89.6235877999999957"/>
+    <node visible="true" id="289685299" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971339999999991" lon="-89.6230213000000049"/>
+    <node visible="true" id="289685300" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970779999999984" lon="-89.6226264999999955"/>
+    <node visible="true" id="289685301" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9968755999999992" lon="-89.6222360999999950"/>
+    <node visible="true" id="289685302" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965429999999991" lon="-89.6216126000000060"/>
+    <node visible="true" id="289685303" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9964550000000010" lon="-89.6214733000000052"/>
+    <node visible="true" id="289685304" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9962504000000010" lon="-89.6213874999999973"/>
+    <node visible="true" id="289685359" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0012207000000011" lon="-89.6222144999999983"/>
+    <node visible="true" id="289685360" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9984706999999986" lon="-89.6217457999999993"/>
+    <node visible="true" id="289685361" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9980955999999992" lon="-89.6217939999999942"/>
+    <node visible="true" id="289685363" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9976993000000007" lon="-89.6219645000000043"/>
+    <node visible="true" id="289685664" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9978070999999993" lon="-89.6219226999999989"/>
+    <node visible="true" id="289685665" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9974920000000012" lon="-89.6220473000000055"/>
+    <node visible="true" id="289685960" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9972586999999997" lon="-89.6225795000000005"/>
+    <node visible="true" id="292284059" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9898896999999991" lon="-89.6167592000000042"/>
+    <node visible="true" id="292284204" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985500000000016" lon="-89.6158918000000000"/>
+    <node visible="true" id="292284205" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986381999999985" lon="-89.6157366000000053"/>
+    <node visible="true" id="292284206" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9987947000000013" lon="-89.6156928999999991"/>
+    <node visible="true" id="292284207" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9988999000000014" lon="-89.6157376999999968"/>
+    <node visible="true" id="292284208" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989555000000010" lon="-89.6158020000000022"/>
+    <node visible="true" id="292284214" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986333000000016" lon="-89.6161151999999959"/>
+    <node visible="true" id="292284219" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9942646000000011" lon="-89.6164016000000032"/>
+    <node visible="true" id="292284225" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9917030999999987" lon="-89.6164622999999949"/>
+    <node visible="true" id="292284271" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989139999999992" lon="-89.6161058999999938"/>
+    <node visible="true" id="292284273" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985767000000010" lon="-89.6160457000000008"/>
+    <node visible="true" id="292284427" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989878999999995" lon="-89.6159545000000008"/>
+    <node visible="true" id="292284428" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989725000000007" lon="-89.6160186000000039"/>
+    <node visible="true" id="292284429" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9987524000000008" lon="-89.6161639999999977"/>
+    <node visible="true" id="292284471" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0030548000000010" lon="-89.6151686000000041"/>
+    <node visible="true" id="292284487" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989807000000006" lon="-89.6158625000000058"/>
+    <node visible="true" id="292284748" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0258740999999993" lon="-89.6262104000000051"/>
+    <node visible="true" id="292285531" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9917645999999998" lon="-89.6165624000000065"/>
+    <node visible="true" id="292286886" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9967900999999983" lon="-89.6123137000000014"/>
+    <node visible="true" id="292287368" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9931513000000010" lon="-89.6164392000000021"/>
+    <node visible="true" id="292287371" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9946292999999997" lon="-89.6163837999999942"/>
+    <node visible="true" id="292287375" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9940721000000003" lon="-89.6107741000000004"/>
+    <node visible="true" id="292287377" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9956096999999993" lon="-89.6162637999999987"/>
+    <node visible="true" id="292287431" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9953195999999984" lon="-89.6131828999999982"/>
+    <node visible="true" id="292287491" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9933830000000015" lon="-89.6138640000000066"/>
+    <node visible="true" id="292288539" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9943698000000012" lon="-89.6136338999999964"/>
+    <node visible="true" id="292288629" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9928297999999991" lon="-89.6159583999999967"/>
+    <node visible="true" id="292288668" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9945474999999995" lon="-89.6154439000000025"/>
+    <node visible="true" id="292288669" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985731000000015" lon="-89.6149963000000014"/>
+    <node visible="true" id="292288671" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9944373000000013" lon="-89.6143612999999988"/>
+    <node visible="true" id="292288774" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9976701000000006" lon="-89.6139670000000024"/>
+    <node visible="true" id="292288778" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9943291999999992" lon="-89.6132992999999942"/>
+    <node visible="true" id="292288793" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9969007999999988" lon="-89.6129971000000012"/>
+    <node visible="true" id="292288806" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9983739999999983" lon="-89.6138025999999996"/>
+    <node visible="true" id="292288895" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965454999999999" lon="-89.6141041000000058"/>
+    <node visible="true" id="292288896" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9967000000000006" lon="-89.6161357999999950"/>
+    <node visible="true" id="292288897" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9967089000000016" lon="-89.6162450000000064"/>
+    <node visible="true" id="292288898" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9967645999999988" lon="-89.6170998000000054"/>
+    <node visible="true" id="292288899" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963225000000016" lon="-89.6206353000000036"/>
+    <node visible="true" id="292289025" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9919392000000009" lon="-89.6225697999999937"/>
+    <node visible="true" id="292289079" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9921852999999992" lon="-89.6227132000000069"/>
+    <node visible="true" id="292289100" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9931234999999994" lon="-89.6232597999999996"/>
+    <node visible="true" id="317734576" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965657999999991" lon="-89.6212780000000038"/>
+    <node visible="true" id="317734577" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965316000000009" lon="-89.6213403999999940"/>
+    <node visible="true" id="317734578" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965066000000000" lon="-89.6213678999999956">
+        <tag k="railway" v="level_crossing"/>
+    </node>
+    <node visible="true" id="317734579" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9961820999999986" lon="-89.6213118000000009"/>
+    <node visible="true" id="317734580" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9961535999999995" lon="-89.6212220999999971"/>
+    <node visible="true" id="317734581" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9961863999999991" lon="-89.6210700000000031"/>
+    <node visible="true" id="317734582" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9962887000000009" lon="-89.6209807000000040"/>
+    <node visible="true" id="317734583" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9964851999999986" lon="-89.6210037999999969"/>
+    <node visible="true" id="317734584" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965404000000007" lon="-89.6210609999999974"/>
+    <node visible="true" id="317734605" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9959717999999995" lon="-89.6211093999999946"/>
+    <node visible="true" id="317734606" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9957805999999998" lon="-89.6211090000000041"/>
+    <node visible="true" id="317734615" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9966380000000008" lon="-89.6211124999999953"/>
+    <node visible="true" id="317734616" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970146000000000" lon="-89.6211897000000022"/>
+    <node visible="true" id="317734683" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970788000000006" lon="-89.6224256999999938"/>
+    <node visible="true" id="317734684" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971509000000012" lon="-89.6222283000000033"/>
+    <node visible="true" id="317734685" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9972862999999990" lon="-89.6220555999999959"/>
+    <node visible="true" id="317734686" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9975434999999990" lon="-89.6219107000000008"/>
+    <node visible="true" id="317734687" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9977519000000008" lon="-89.6217991000000040"/>
+    <node visible="true" id="317734688" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9978160000000003" lon="-89.6216790000000003"/>
+    <node visible="true" id="317734689" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9978940999999999" lon="-89.6214006999999953"/>
+    <node visible="true" id="317734690" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9979602000000014" lon="-89.6209836999999965"/>
+    <node visible="true" id="317734691" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9987534999999994" lon="-89.6163659999999993"/>
+    <node visible="true" id="317734719" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9988656999999996" lon="-89.6164947999999981"/>
+    <node visible="true" id="317734720" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9979736999999993" lon="-89.6214207000000016"/>
+    <node visible="true" id="317734721" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9979554999999998" lon="-89.6215689999999938"/>
+    <node visible="true" id="317734722" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9978714000000011" lon="-89.6217809999999986"/>
+    <node visible="true" id="317750375" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9982070000000007" lon="-89.6216787999999980"/>
+    <node visible="true" id="317750376" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9980532000000011" lon="-89.6216172000000029"/>
+    <node visible="true" id="317750377" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9978575999999997" lon="-89.6215406999999971"/>
+    <node visible="true" id="317750378" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9974634000000009" lon="-89.6213785000000058"/>
+    <node visible="true" id="317750379" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9972230000000017" lon="-89.6213269999999937"/>
+    <node visible="true" id="325089543" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0034883000000008" lon="-89.6180358999999953"/>
+    <node visible="true" id="325089550" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0035774000000011" lon="-89.6180235000000067"/>
+    <node visible="true" id="325089658" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986567999999991" lon="-89.6154975999999976"/>
+    <node visible="true" id="325089708" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9987452999999995" lon="-89.6154807000000062"/>
+    <node visible="true" id="325184017" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9948987000000002" lon="-89.6260666999999955"/>
+    <node visible="true" id="325184188" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9932254000000000" lon="-89.6260161000000011"/>
+    <node visible="true" id="325184191" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9946757999999996" lon="-89.6248534000000063"/>
+    <node visible="true" id="325184197" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9939484999999983" lon="-89.6254394000000048"/>
+    <node visible="true" id="325184200" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9925102999999993" lon="-89.6265948000000066"/>
+    <node visible="true" id="325184206" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9940251999999994" lon="-89.6239965999999981"/>
+    <node visible="true" id="325184221" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9933440000000004" lon="-89.6245966000000038"/>
+    <node visible="true" id="325184224" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9926108000000013" lon="-89.6251558000000017"/>
+    <node visible="true" id="325184232" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9927042999999998" lon="-89.6236817000000059"/>
+    <node visible="true" id="325184284" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9958269000000008" lon="-89.6231872999999979"/>
+    <node visible="true" id="325184285" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9960188000000016" lon="-89.6251404000000065"/>
+    <node visible="true" id="325184316" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9959313999999999" lon="-89.6266289000000000"/>
+    <node visible="true" id="325184317" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9966700999999993" lon="-89.6260553999999985"/>
+    <node visible="true" id="325186422" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9927670000000006" lon="-89.6230520999999953"/>
+    <node visible="true" id="325186589" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9941980000000008" lon="-89.6208337000000057"/>
+    <node visible="true" id="325186619" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9945100999999994" lon="-89.6184073999999953"/>
+    <node visible="true" id="325186679" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9935510000000001" lon="-89.6188321999999999"/>
+    <node visible="true" id="325186681" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9932841000000003" lon="-89.6183043999999995"/>
+    <node visible="true" id="325187131" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0159102000000004" lon="-89.6244769000000048"/>
+    <node visible="true" id="327267879" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965752999999999" lon="-89.6275085999999988"/>
+    <node visible="true" id="327268039" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9972233000000017" lon="-89.6284098000000000"/>
+    <node visible="true" id="327268699" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0029460000000014" lon="-89.6318943999999931"/>
+    <node visible="true" id="327270461" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0038905000000007" lon="-89.6405124000000058"/>
+    <node visible="true" id="327270464" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0038982999999995" lon="-89.6396103999999951"/>
+    <node visible="true" id="327270467" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0039133999999983" lon="-89.6389613000000054"/>
+    <node visible="true" id="327270470" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0037953000000002" lon="-89.6388294999999999"/>
+    <node visible="true" id="327270473" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0037072000000009" lon="-89.6386578999999983"/>
+    <node visible="true" id="327270476" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0036591000000001" lon="-89.6384862000000027"/>
+    <node visible="true" id="327270479" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0036351000000003" lon="-89.6381858000000022"/>
+    <node visible="true" id="327270484" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0026085999999985" lon="-89.6287204000000060">
+        <tag k="highway" v="traffic_signals"/>
+    </node>
+    <node visible="true" id="327270487" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0018725999999987" lon="-89.6223219000000029"/>
+    <node visible="true" id="327270491" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0018555000000013" lon="-89.6220974000000012"/>
+    <node visible="true" id="327271088" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0031554000000007" lon="-89.6223171999999977"/>
+    <node visible="true" id="327271216" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0030433999999993" lon="-89.6222982999999971"/>
+    <node visible="true" id="327271319" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0030181999999996" lon="-89.6151751999999959"/>
+    <node visible="true" id="327271322" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0029950999999997" lon="-89.6150489000000050"/>
+    <node visible="true" id="327271387" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0030870000000007" lon="-89.6150317000000030"/>
+    <node visible="true" id="327271467" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0031050000000015" lon="-89.6151588999999973"/>
+    <node visible="true" id="327284304" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970986999999987" lon="-89.6061279000000042"/>
+    <node visible="true" id="327284717" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971730000000001" lon="-89.6059915999999959"/>
+    <node visible="true" id="327285803" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9980812999999991" lon="-89.6115012000000064"/>
+    <node visible="true" id="327285900" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9980617999999986" lon="-89.6113847999999962"/>
+    <node visible="true" id="327285998" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9988728000000009" lon="-89.6157192999999950"/>
+    <node visible="true" id="327286236" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970722999999992" lon="-89.6140398999999945"/>
+    <node visible="true" id="327286721" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9964912999999989" lon="-89.6110072999999971"/>
+    <node visible="true" id="327286723" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963461000000002" lon="-89.6108516999999978"/>
+    <node visible="true" id="327286727" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9962276000000010" lon="-89.6104061999999999"/>
+    <node visible="true" id="327286925" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9979763000000013" lon="-89.6150772999999958"/>
+    <node visible="true" id="327286929" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9982106000000002" lon="-89.6158891000000040"/>
+    <node visible="true" id="327286995" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9966284999999999" lon="-89.6152177999999964"/>
+    <node visible="true" id="327287020" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9955250000000007" lon="-89.6153314999999964"/>
+    <node visible="true" id="327287033" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9954199999999993" lon="-89.6142403000000058"/>
+    <node visible="true" id="327287162" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9962368999999995" lon="-89.6141413999999941"/>
+    <node visible="true" id="327287175" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9942439999999984" lon="-89.6124623000000042"/>
+    <node visible="true" id="327287249" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9961172000000005" lon="-89.6130892000000046"/>
+    <node visible="true" id="327287448" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9977499999999999" lon="-89.6100500999999952"/>
+    <node visible="true" id="327287554" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9961987999999984" lon="-89.6103195999999969"/>
+    <node visible="true" id="327289212" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9973823000000017" lon="-89.6078789000000029"/>
+    <node visible="true" id="327289216" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9974713000000008" lon="-89.6078636999999958"/>
+    <node visible="true" id="327289930" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9976179999999992" lon="-89.6087387000000035"/>
+    <node visible="true" id="327289966" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9975278000000003" lon="-89.6087588000000039"/>
+    <node visible="true" id="327290099" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9979204000000017" lon="-89.6105416000000048"/>
+    <node visible="true" id="327291657" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9977650000000011" lon="-89.6096151999999933"/>
+    <node visible="true" id="327292703" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9972342000000012" lon="-89.6069945999999931"/>
+    <node visible="true" id="327292706" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9973211999999982" lon="-89.6069691000000006"/>
+    <node visible="true" id="327293635" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9969423000000006" lon="-89.6052605000000000"/>
+    <node visible="true" id="327293696" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970284999999990" lon="-89.6051946999999984"/>
+    <node visible="true" id="327294689" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9967785000000013" lon="-89.6043094999999994"/>
+    <node visible="true" id="327294827" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9968614000000002" lon="-89.6042606000000035"/>
+    <node visible="true" id="327296303" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9988928000000001" lon="-89.6112260000000020"/>
+    <node visible="true" id="327296324" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989111999999984" lon="-89.6113497999999993"/>
+    <node visible="true" id="327296486" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9996338999999992" lon="-89.6156591999999961"/>
+    <node visible="true" id="327296571" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9996842000000008" lon="-89.6158716000000055"/>
+    <node visible="true" id="327296997" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0001174000000006" lon="-89.6186593000000045"/>
+    <node visible="true" id="327296999" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9995869999999982" lon="-89.6217443000000031"/>
+    <node visible="true" id="327297044" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0015691000000011" lon="-89.6220490000000041"/>
+    <node visible="true" id="327297796" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0005419000000018" lon="-89.6156479999999931"/>
+    <node visible="true" id="327297800" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0005144000000001" lon="-89.6155334000000039"/>
+    <node visible="true" id="327297803" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9997475999999992" lon="-89.6111961999999949"/>
+    <node visible="true" id="327297806" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9997253999999991" lon="-89.6110670000000056"/>
+    <node visible="true" id="327297809" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9988445000000006" lon="-89.6057918999999998"/>
+    <node visible="true" id="327297812" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9988287000000007" lon="-89.6056805999999995"/>
+    <node visible="true" id="327297814" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9982413000000001" lon="-89.6021729999999934"/>
+    <node visible="true" id="327298252" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9979562000000008" lon="-89.6017489000000040"/>
+    <node visible="true" id="327299464" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9996447000000011" lon="-89.6002315000000067"/>
+    <node visible="true" id="327299475" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0013454000000017" lon="-89.6206930999999969"/>
+    <node visible="true" id="327299908" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0011110000000016" lon="-89.6207622000000015"/>
+    <node visible="true" id="327299911" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0004139000000016" lon="-89.6206592000000057"/>
+    <node visible="true" id="327299914" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0003737999999984" lon="-89.6209424000000041"/>
+    <node visible="true" id="327299917" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9997453000000007" lon="-89.6208371999999969"/>
+    <node visible="true" id="327299919" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9981292999999987" lon="-89.6205388000000056"/>
+    <node visible="true" id="327299922" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9980395999999985" lon="-89.6205214000000012"/>
+    <node visible="true" id="327299925" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963583999999983" lon="-89.6202899999999971"/>
+    <node visible="true" id="327299956" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963990000000003" lon="-89.6199713000000031"/>
+    <node visible="true" id="327300473" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9949569999999994" lon="-89.6183245999999940"/>
+    <node visible="true" id="327300476" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9951253000000015" lon="-89.6172516999999971"/>
+    <node visible="true" id="327300480" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9956540999999994" lon="-89.6170628999999934"/>
+    <node visible="true" id="327300574" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9962711000000013" lon="-89.6199296000000061"/>
+    <node visible="true" id="327300578" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9961269000000001" lon="-89.6198009000000013"/>
+    <node visible="true" id="327300581" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9958215000000017" lon="-89.6194155000000023"/>
+    <node visible="true" id="327300602" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9961589999999987" lon="-89.6170797000000050"/>
+    <node visible="true" id="327300677" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9953725999999996" lon="-89.6188491000000056"/>
+    <node visible="true" id="327300980" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9954691000000011" lon="-89.6182371999999958"/>
+    <node visible="true" id="327300985" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9956130999999999" lon="-89.6163848999999999"/>
+    <node visible="true" id="327301035" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9959840000000000" lon="-89.6182905000000005"/>
+    <node visible="true" id="327301058" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9966010999999995" lon="-89.6183836999999954"/>
+    <node visible="true" id="327301103" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9983493999999986" lon="-89.6187184000000059"/>
+    <node visible="true" id="327301365" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9940251999999994" lon="-89.6177713000000011"/>
+    <node visible="true" id="327301522" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9944121000000017" lon="-89.6182988000000051"/>
+    <node visible="true" id="327301895" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9946741999999986" lon="-89.6171204999999986"/>
+    <node visible="true" id="327302113" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965015999999984" lon="-89.6191654000000000"/>
+    <node visible="true" id="327303744" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9981991999999984" lon="-89.6195926999999983"/>
+    <node visible="true" id="327303747" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9982998000000016" lon="-89.6196127000000047"/>
+    <node visible="true" id="327303751" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9999040000000008" lon="-89.6199083000000059"/>
+    <node visible="true" id="327303754" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0012343000000001" lon="-89.6200194000000039"/>
+    <node visible="true" id="327303757" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0033263000000012" lon="-89.6204438999999979"/>
+    <node visible="true" id="327304336" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9984560000000009" lon="-89.6187445999999994"/>
+    <node visible="true" id="327304344" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0009824000000016" lon="-89.6184922999999998"/>
+    <node visible="true" id="327304351" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9967115000000000" lon="-89.6175166000000019"/>
+    <node visible="true" id="327304546" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9999764999999989" lon="-89.6177775999999966"/>
+    <node visible="true" id="327304586" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9984971999999992" lon="-89.6178575999999936"/>
+    <node visible="true" id="327304602" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0033506999999986" lon="-89.6171353999999951"/>
+    <node visible="true" id="327304622" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986128000000001" lon="-89.6178838999999954"/>
+    <node visible="true" id="327304641" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9998396000000014" lon="-89.6169007999999963"/>
+    <node visible="true" id="327304671" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0008416999999987" lon="-89.6176238999999981"/>
+    <node visible="true" id="327304748" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986294999999998" lon="-89.6170874999999967"/>
+    <node visible="true" id="327304775" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9987580999999999" lon="-89.6170859000000064"/>
+    <node visible="true" id="327304843" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0007002000000007" lon="-89.6167540000000002"/>
+    <node visible="true" id="327304868" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9967593999999984" lon="-89.6170206000000036"/>
+    <node visible="true" id="327304890" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0018990999999993" lon="-89.6201542999999958"/>
+    <node visible="true" id="327304894" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0032089000000006" lon="-89.6162992999999943"/>
+    <node visible="true" id="327304903" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0021768999999985" lon="-89.6221517999999975"/>
+    <node visible="true" id="327304924" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0032944000000015" lon="-89.6162702000000024"/>
+    <node visible="true" id="327304971" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0058867000000014" lon="-89.6157324999999929"/>
+    <node visible="true" id="327304996" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0024982999999992" lon="-89.6202758999999958"/>
+    <node visible="true" id="327305559" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0026575000000015" lon="-89.6195605000000057"/>
+    <node visible="true" id="327305561" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0027256000000015" lon="-89.6187081000000063"/>
+    <node visible="true" id="327305563" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0026718000000017" lon="-89.6181846000000064"/>
+    <node visible="true" id="327305567" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0023583999999985" lon="-89.6164442999999977"/>
+    <node visible="true" id="327305568" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0021647000000016" lon="-89.6153292999999991"/>
+    <node visible="true" id="327305570" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0021479000000006" lon="-89.6152019000000024"/>
+    <node visible="true" id="327305572" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0014214000000017" lon="-89.6108870000000053"/>
+    <node visible="true" id="327305574" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0014009000000001" lon="-89.6107468000000011"/>
+    <node visible="true" id="327305576" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0005303999999988" lon="-89.6054739000000069"/>
+    <node visible="true" id="327305579" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0021538999999997" lon="-89.6202059999999960"/>
+    <node visible="true" id="327305580" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0005080000000000" lon="-89.6053603999999950"/>
+    <node visible="true" id="327305835" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9988996000000014" lon="-89.6009011000000015"/>
+    <node visible="true" id="327305905" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9990910000000000" lon="-89.6020120000000020"/>
+    <node visible="true" id="327305964" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9993851999999990" lon="-89.6037917000000022"/>
+    <node visible="true" id="327306004" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9992428000000011" lon="-89.6029103999999990"/>
+    <node visible="true" id="327306065" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9995371999999989" lon="-89.6046750000000003"/>
+    <node visible="true" id="327306069" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9996830999999986" lon="-89.6055176999999929"/>
+    <node visible="true" id="327306097" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9998497999999998" lon="-89.6064865999999967"/>
+    <node visible="true" id="327306115" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9997040999999989" lon="-89.6056348000000042"/>
+    <node visible="true" id="327306159" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0000025000000008" lon="-89.6073736000000025"/>
+    <node visible="true" id="327306249" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985377000000000" lon="-89.6039492000000024"/>
+    <node visible="true" id="327306254" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0002354000000011" lon="-89.6036337000000032"/>
+    <node visible="true" id="327306275" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0000837999999987" lon="-89.6027621000000067"/>
+    <node visible="true" id="327306282" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9984006000000001" lon="-89.6030588999999935"/>
+    <node visible="true" id="327306319" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0003621000000003" lon="-89.6045179000000047"/>
+    <node visible="true" id="327306350" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989847000000012" lon="-89.6066517000000005"/>
+    <node visible="true" id="327306387" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989315000000012" lon="-89.6011155000000059"/>
+    <node visible="true" id="327306501" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9999262000000009" lon="-89.6018538000000007"/>
+    <node visible="true" id="327306502" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9997711000000002" lon="-89.6009597999999983"/>
+    <node visible="true" id="327306554" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9991342000000003" lon="-89.6075416999999987"/>
+    <node visible="true" id="327306569" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986883999999989" lon="-89.6048368000000011"/>
+    <node visible="true" id="327306690" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9994264999999984" lon="-89.6093015000000008"/>
+    <node visible="true" id="327306729" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9992812999999998" lon="-89.6084201000000036"/>
+    <node visible="true" id="327306762" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9995873999999993" lon="-89.6102154000000013"/>
+    <node visible="true" id="327306793" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0005981999999989" lon="-89.6109002000000032"/>
+    <node visible="true" id="327306820" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0006216999999999" lon="-89.6110340999999977"/>
+    <node visible="true" id="327306831" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0006759999999986" lon="-89.6063288999999941"/>
+    <node visible="true" id="327306861" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0002996999999993" lon="-89.6091366999999934"/>
+    <node visible="true" id="327306897" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0008142999999983" lon="-89.6072163999999987"/>
+    <node visible="true" id="327306937" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0001475999999982" lon="-89.6082540999999964"/>
+    <node visible="true" id="327307041" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0004609000000002" lon="-89.6100444000000067"/>
+    <node visible="true" id="327307155" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0012590000000010" lon="-89.6098882000000003"/>
+    <node visible="true" id="327307210" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0011106000000005" lon="-89.6089836000000020"/>
+    <node visible="true" id="327307250" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0009723999999984" lon="-89.6080960999999974"/>
+    <node visible="true" id="327309251" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970527000000011" lon="-89.6058632000000017"/>
+    <node visible="true" id="327312058" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0039170999999989" lon="-89.6148802000000018"/>
+    <node visible="true" id="327312060" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0039371000000017" lon="-89.6149984000000046"/>
+    <node visible="true" id="327312063" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0041232999999998" lon="-89.6160981999999962"/>
+    <node visible="true" id="327312408" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963948999999985" lon="-89.6109045000000037"/>
+    <node visible="true" id="327312577" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9982359000000010" lon="-89.6124276999999978"/>
+    <node visible="true" id="327312732" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9983807999999996" lon="-89.6132960000000054"/>
+    <node visible="true" id="327312949" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0034765000000014" lon="-89.6122778999999952"/>
+    <node visible="true" id="327312954" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0067400000000006" lon="-89.6117457000000002"/>
+    <node visible="true" id="327313240" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985323000000008" lon="-89.6142044000000055"/>
+    <node visible="true" id="327313264" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0067200000000014" lon="-89.6126083000000051"/>
+    <node visible="true" id="327313374" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986758000000009" lon="-89.6150643999999943"/>
+    <node visible="true" id="327313504" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0068081000000006" lon="-89.6135266000000001"/>
+    <node visible="true" id="327313675" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0036346999999992" lon="-89.6132123000000007"/>
+    <node visible="true" id="327313782" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0028079000000005" lon="-89.6133724999999970"/>
+    <node visible="true" id="327313801" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0026484000000018" lon="-89.6124367999999976"/>
+    <node visible="true" id="327313847" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0029588999999994" lon="-89.6142583999999971"/>
+    <node visible="true" id="327313971" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0028730000000010" lon="-89.6142751000000004"/>
+    <node visible="true" id="327314145" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0027244999999994" lon="-89.6134074999999939"/>
+    <node visible="true" id="327314166" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0025642999999995" lon="-89.6124719000000027"/>
+    <node visible="true" id="327318500" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0066811999999992" lon="-89.6117243999999999"/>
+    <node visible="true" id="329662693" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0049530000000004" lon="-89.6159260999999958"/>
+    <node visible="true" id="329663021" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0056015999999985" lon="-89.6146770999999944"/>
+    <node visible="true" id="329663024" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0055939999999985" lon="-89.6145446999999962"/>
+    <node visible="true" id="329663275" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0068483999999991" lon="-89.6117267999999996"/>
+    <node visible="true" id="349298162" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9993638000000011" lon="-89.6268625999999955"/>
+    <node visible="true" id="349298702" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0026459999999986" lon="-89.6290721000000019"/>
+    <node visible="true" id="349298736" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0027141999999998" lon="-89.6297134000000000"/>
+    <node visible="true" id="349298808" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0028264000000000" lon="-89.6307690999999949"/>
+    <node visible="true" id="349300580" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0035923999999987" lon="-89.6377521000000002"/>
+    <node visible="true" id="349300606" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0030539999999988" lon="-89.6328800999999942"/>
+    <node visible="true" id="349301003" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0033971999999984" lon="-89.6360140999999970"/>
+    <node visible="true" id="349301655" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0034403000000012" lon="-89.6364075000000042"/>
+    <node visible="true" id="349303382" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9995814000000003" lon="-89.6256467999999984"/>
+    <node visible="true" id="349303385" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9999395000000000" lon="-89.6236463999999984"/>
+    <node visible="true" id="349303389" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0001077000000009" lon="-89.6236722000000015"/>
+    <node visible="true" id="349303394" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0003400999999990" lon="-89.6222645999999941"/>
+    <node visible="true" id="349303399" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0005060999999991" lon="-89.6220978000000059"/>
+    <node visible="true" id="349303463" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9991842999999996" lon="-89.6254272000000043"/>
+    <node visible="true" id="349303465" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9984010000000012" lon="-89.6249940000000009"/>
+    <node visible="true" id="349303466" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986172999999994" lon="-89.6236121000000026"/>
+    <node visible="true" id="349303467" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9999083999999989" lon="-89.6238199000000009"/>
+    <node visible="true" id="349303473" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9994577999999983" lon="-89.6237473999999992"/>
+    <node visible="true" id="349303528" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9994638999999985" lon="-89.6263029999999929"/>
+    <node visible="true" id="349303543" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9997255000000003" lon="-89.6248415999999963"/>
+    <node visible="true" id="349303566" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0006206999999989" lon="-89.6264352000000031"/>
+    <node visible="true" id="349303569" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0008057999999984" lon="-89.6250064999999978"/>
+    <node visible="true" id="349303590" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0001163999999996" lon="-89.6263775999999979"/>
+    <node visible="true" id="349303594" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0011274000000014" lon="-89.6264981000000063"/>
+    <node visible="true" id="349303598" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0012857000000004" lon="-89.6250797999999946"/>
+    <node visible="true" id="349303602" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0003163999999991" lon="-89.6249317999999988"/>
+    <node visible="true" id="349303641" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0020403000000009" lon="-89.6238713999999987"/>
+    <node visible="true" id="349303657" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0013657999999985" lon="-89.6235862999999995">
+        <tag k="highway" v="turning_circle"/>
+    </node>
+    <node visible="true" id="349303660" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0015259999999984" lon="-89.6223674999999957"/>
+    <node visible="true" id="349303663" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0015901000000014" lon="-89.6238953000000009"/>
+    <node visible="true" id="349303669" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0009090000000000" lon="-89.6235606000000047">
+        <tag k="highway" v="turning_circle"/>
+    </node>
+    <node visible="true" id="349303672" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0010772999999986" lon="-89.6222989000000041"/>
+    <node visible="true" id="349303699" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0004282999999994" lon="-89.6234919000000048">
+        <tag k="highway" v="turning_circle"/>
+    </node>
+    <node visible="true" id="349303701" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0006126000000002" lon="-89.6222474000000062"/>
+    <node visible="true" id="349303748" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0016704999999995" lon="-89.6222886000000045"/>
+    <node visible="true" id="349303756" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9987862999999990" lon="-89.6252070999999972"/>
+    <node visible="true" id="349303757" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9990330000000007" lon="-89.6236789999999957"/>
+    <node visible="true" id="349303853" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0004710999999986" lon="-89.6221543999999994"/>
+    <node visible="true" id="349303859" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0023781000000014" lon="-89.6267167000000029"/>
+    <node visible="true" id="349303889" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0023200000000010" lon="-89.6262116000000049"/>
+    <node visible="true" id="349303909" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970134000000002" lon="-89.6233301999999981"/>
+    <node visible="true" id="349303910" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0022619000000006" lon="-89.6257065000000068"/>
+    <node visible="true" id="349303923" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0022084000000007" lon="-89.6252415999999954"/>
+    <node visible="true" id="349303935" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0015259999999984" lon="-89.6256462999999997"/>
+    <node visible="true" id="349303937" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0015581000000005" lon="-89.6251914000000056"/>
+    <node visible="true" id="349303976" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0021413000000017" lon="-89.6247555000000062"/>
+    <node visible="true" id="349304092" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0016221999999999" lon="-89.6247020999999933"/>
+    <node visible="true" id="349304093" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0016703000000007" lon="-89.6241871999999944"/>
+    <node visible="true" id="349304095" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0020789000000008" lon="-89.6242471999999992"/>
+    <node visible="true" id="356398126" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0064591999999983" lon="-89.6228830000000016"/>
+    <node visible="true" id="356398242" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0056885000000015" lon="-89.6227530999999971"/>
+    <node visible="true" id="356398736" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0078867000000002" lon="-89.6231379999999973"/>
+    <node visible="true" id="356398871" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0069185999999988" lon="-89.6229694999999964"/>
+    <node visible="true" id="356399043" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0073809999999987" lon="-89.6230539000000022"/>
+    <node visible="true" id="356399663" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0103921999999983" lon="-89.6235530000000011"/>
+    <node visible="true" id="356399810" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0100929000000001" lon="-89.6235024000000067"/>
+    <node visible="true" id="356401012" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0083236000000007" lon="-89.6232071999999960"/>
+    <node visible="true" id="356404944" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0176677000000005" lon="-89.6247457999999995">
+        <tag k="highway" v="traffic_signals"/>
+    </node>
+    <node visible="true" id="356405160" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0177681000000014" lon="-89.6247721999999953"/>
+    <node visible="true" id="356405600" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0138910000000010" lon="-89.6241526999999962"/>
+    <node visible="true" id="356405667" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0147344999999994" lon="-89.6242945000000049"/>
+    <node visible="true" id="356405739" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0155947000000012" lon="-89.6244211000000064"/>
+    <node visible="true" id="356406214" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0165438000000009" lon="-89.6245724000000052"/>
+    <node visible="true" id="356406330" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0171869999999998" lon="-89.6246716999999933"/>
+    <node visible="true" id="356406774" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0184981999999998" lon="-89.6249152000000038"/>
+    <node visible="true" id="356406847" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0191403000000001" lon="-89.6250217000000049"/>
+    <node visible="true" id="356406909" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0197298000000004" lon="-89.6251132999999953"/>
+    <node visible="true" id="356407487" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0202916000000002" lon="-89.6251991000000032"/>
+    <node visible="true" id="356408342" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0221115999999988" lon="-89.6255273999999957"/>
+    <node visible="true" id="356408730" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0227371000000005" lon="-89.6256414000000063"/>
+    <node visible="true" id="356408789" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0240597999999999" lon="-89.6258768000000003"/>
+    <node visible="true" id="356408946" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0241469000000016" lon="-89.6258923000000038"/>
+    <node visible="true" id="356411409" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0041082999999986" lon="-89.6226903000000021"/>
+    <node visible="true" id="356411545" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0028733000000010" lon="-89.6312103000000064"/>
+    <node visible="true" id="416337754" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0064424999999986" lon="-89.6230750000000000"/>
+    <node visible="true" id="416337762" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0052942999999992" lon="-89.6228858000000059"/>
+    <node visible="true" id="416338142" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0024338999999998" lon="-89.6270264999999995"/>
+    <node visible="true" id="416338294" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0036112999999993" lon="-89.6226077999999973"/>
+    <node visible="true" id="444883888" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963630999999999" lon="-89.6214240000000046"/>
+    <node visible="true" id="444883896" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9962900999999995" lon="-89.6214089999999999"/>
+    <node visible="true" id="444883904" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9961567000000002" lon="-89.6211468999999994"/>
+    <node visible="true" id="444883909" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9962723000000011" lon="-89.6209884000000017">
+        <tag k="railway" v="level_crossing"/>
+    </node>
+    <node visible="true" id="444883911" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963602000000016" lon="-89.6209652000000006"/>
+    <node visible="true" id="444883913" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9964337000000008" lon="-89.6209767999999940"/>
+    <node visible="true" id="444883921" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965788000000018" lon="-89.6212230999999946"/>
+    <node visible="true" id="444883957" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9958616000000013" lon="-89.6214338000000055"/>
+    <node visible="true" id="444883958" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9955816999999989" lon="-89.6210791999999969"/>
+    <node visible="true" id="539183620" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0257198999999986" lon="-89.6261819000000060"/>
+    <node visible="true" id="780179726" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0060068000000015" lon="-89.6118493999999970"/>
+    <node visible="true" id="780180165" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0052915999999996" lon="-89.6128843000000046"/>
+    <node visible="true" id="780180169" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0061551999999985" lon="-89.6127208000000053"/>
+    <node visible="true" id="780180585" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0044834000000016" lon="-89.6130461000000054"/>
+    <node visible="true" id="780181419" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0037872999999990" lon="-89.6141133999999937"/>
+    <node visible="true" id="780181423" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0046305999999987" lon="-89.6139356999999990"/>
+    <node visible="true" id="780181426" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0054504999999985" lon="-89.6137855999999999"/>
+    <node visible="true" id="780181432" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0063104000000003" lon="-89.6136317999999932"/>
+    <node visible="true" id="811396229" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9992033000000013" lon="-89.6131268000000034"/>
+    <node visible="true" id="811396230" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0000573999999993" lon="-89.6129994000000067"/>
+    <node visible="true" id="811396231" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0009219000000016" lon="-89.6128310999999940"/>
+    <node visible="true" id="811396232" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0017156000000007" lon="-89.6126608000000004"/>
+    <node visible="true" id="811396233" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0043323000000015" lon="-89.6121330999999941"/>
+    <node visible="true" id="811396234" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0051388999999986" lon="-89.6120178000000038"/>
+    <node visible="true" id="811396238" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9993657999999996" lon="-89.6140704000000028"/>
+    <node visible="true" id="811396239" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0002087999999993" lon="-89.6138775999999950"/>
+    <node visible="true" id="811396240" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0010748000000014" lon="-89.6136968999999937"/>
+    <node visible="true" id="811396241" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0018844000000016" lon="-89.6135562999999991"/>
+    <node visible="true" id="811396244" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9995104999999995" lon="-89.6149103999999994"/>
+    <node visible="true" id="811396245" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0003673999999982" lon="-89.6147610999999955"/>
+    <node visible="true" id="811396246" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0012033000000002" lon="-89.6145795999999990"/>
+    <node visible="true" id="811396247" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0020294000000014" lon="-89.6144448999999952"/>
+    <node visible="true" id="811396252" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9990556999999995" lon="-89.6122699000000011"/>
+    <node visible="true" id="811396253" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0025304999999989" lon="-89.6172887999999972"/>
+    <node visible="true" id="811396254" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0015691999999987" lon="-89.6117784000000057"/>
+    <node visible="true" id="811396255" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0018518999999984" lon="-89.6183338999999961"/>
+    <node visible="true" id="811396256" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0016816000000013" lon="-89.6174773000000044"/>
+    <node visible="true" id="811396258" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0015377000000001" lon="-89.6166094999999956"/>
+    <node visible="true" id="811396260" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0013426000000010" lon="-89.6154906999999952"/>
+    <node visible="true" id="811396262" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0007711000000015" lon="-89.6119383999999997"/>
+    <node visible="true" id="811396264" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9999023999999999" lon="-89.6121186000000023"/>
+    <node visible="true" id="811397429" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0047691999999984" lon="-89.6148445999999979"/>
+    <node visible="true" id="811397430" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0047591000000011" lon="-89.6147121000000055"/>
+    <node visible="true" id="813019625" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985746999999989" lon="-89.6158140000000003"/>
+    <node visible="true" id="813019634" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9987071999999984" lon="-89.6157005000000026"/>
+    <node visible="true" id="813019656" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9988482999999988" lon="-89.6161484999999942"/>
+    <node visible="true" id="813019660" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986780000000017" lon="-89.6161438999999973"/>
+    <node visible="true" id="813019670" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985506999999991" lon="-89.6159683999999999"/>
+    <node visible="true" id="813035918" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9930689000000008" lon="-89.6164344999999969">
+        <tag k="railway" v="level_crossing"/>
+    </node>
+    <node visible="true" id="813035922" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9931498999999988" lon="-89.6165469999999971">
+        <tag k="railway" v="level_crossing"/>
+    </node>
+    <node visible="true" id="813067153" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0025116999999995" lon="-89.6278776000000050"/>
+    <node visible="true" id="830476236" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0034165000000002" lon="-89.6361902000000015"/>
+    <node visible="true" id="830476318" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0034059000000006" lon="-89.6360932000000048"/>
+    <node visible="true" id="831351592" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9908977000000014" lon="-89.6166539999999969"/>
+    <node visible="true" id="831351593" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9994858999999998" lon="-89.6234936999999974"/>
+    <node visible="true" id="831351598" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9930966999999988" lon="-89.6165471999999994"/>
+    <node visible="true" id="831351599" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9952939000000001" lon="-89.6194732999999957"/>
+    <node visible="true" id="831351608" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9995818000000014" lon="-89.6228550000000013"/>
+    <node visible="true" id="831351609" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0042335999999992" lon="-89.6224995000000035"/>
+    <node visible="true" id="831351610" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965997000000009" lon="-89.6214367000000038"/>
+    <node visible="true" id="831351612" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9999937000000010" lon="-89.6235769000000033"/>
+    <node visible="true" id="831351615" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9936505999999987" lon="-89.6171054999999939"/>
+    <node visible="true" id="831351619" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9934088999999986" lon="-89.6197722999999939"/>
+    <node visible="true" id="831351620" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965900000000012" lon="-89.6241468000000054"/>
+    <node visible="true" id="831351624" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9984718000000008" lon="-89.6226527999999973"/>
+    <node visible="true" id="831351626" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9973549000000013" lon="-89.6257257000000038"/>
+    <node visible="true" id="831351627" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9945422000000015" lon="-89.6183027000000010"/>
+    <node visible="true" id="831351630" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9956581000000000" lon="-89.6200756000000069"/>
+    <node visible="true" id="831351631" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0050452000000014" lon="-89.6226367000000010"/>
+    <node visible="true" id="831351636" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9955730000000003" lon="-89.6231420999999955"/>
+    <node visible="true" id="831351637" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0002038000000013" lon="-89.6223442999999946"/>
+    <node visible="true" id="831351641" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9991458000000009" lon="-89.6221431999999965"/>
+    <node visible="true" id="831351643" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9958174000000000" lon="-89.6199435000000051"/>
+    <node visible="true" id="831351647" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965729000000003" lon="-89.6211342999999943"/>
+    <node visible="true" id="831351648" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9983755999999993" lon="-89.6233153000000016"/>
+    <node visible="true" id="831351652" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9941783999999991" lon="-89.6229139999999944"/>
+    <node visible="true" id="831351654" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963359999999994" lon="-89.6271816999999942"/>
+    <node visible="true" id="831351656" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9996726000000002" lon="-89.6222527000000042"/>
+    <node visible="true" id="831351657" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971780000000017" lon="-89.6243979999999993"/>
+    <node visible="true" id="831351659" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9995748999999989" lon="-89.6219444999999979"/>
+    <node visible="true" id="831351661" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9973962000000007" lon="-89.6213640999999939"/>
+    <node visible="true" id="831351662" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9945771000000008" lon="-89.6229801000000066"/>
+    <node visible="true" id="831351665" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971898999999986" lon="-89.6256778000000054"/>
+    <node visible="true" id="831351666" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0031509000000014" lon="-89.6225325000000055"/>
+    <node visible="true" id="831351668" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9990632999999995" lon="-89.6227585000000033"/>
+    <node visible="true" id="831351670" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970457000000010" lon="-89.6221946999999943"/>
+    <node visible="true" id="831351673" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9903350999999994" lon="-89.6166690000000017"/>
+    <node visible="true" id="831351675" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9955292000000000" lon="-89.6201228999999984"/>
+    <node visible="true" id="831351681" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9940053000000013" lon="-89.6237734999999986"/>
+    <node visible="true" id="831351693" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971165000000006" lon="-89.6223224999999957"/>
+    <node visible="true" id="831351694" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9933094000000011" lon="-89.6206702000000064"/>
+    <node visible="true" id="831351695" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0000974999999990" lon="-89.6229509000000064"/>
+    <node visible="true" id="831351696" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9928205000000005" lon="-89.6226946000000027"/>
+    <node visible="true" id="831351697" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9943358000000018" lon="-89.6199404999999985"/>
+    <node visible="true" id="831351701" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963383000000015" lon="-89.6204476999999997"/>
+    <node visible="true" id="831351702" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9961042999999989" lon="-89.6208732999999995"/>
+    <node visible="true" id="831351707" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985637999999994" lon="-89.6220352999999932"/>
+    <node visible="true" id="831351713" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9956166999999994" lon="-89.6235827000000000"/>
+    <node visible="true" id="831351716" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989701000000011" lon="-89.6234091999999976"/>
+    <node visible="true" id="831351719" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9954475000000009" lon="-89.6194837999999976"/>
+    <node visible="true" id="831351720" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9952976000000007" lon="-89.6257326000000063"/>
+    <node visible="true" id="831351724" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9934830999999988" lon="-89.6168806000000018"/>
+    <node visible="true" id="836740372" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971914999999996" lon="-89.6061076999999955"/>
+    <node visible="true" id="837978298" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0064601999999994" lon="-89.6145113000000038"/>
+    <node visible="true" id="837978454" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0064430000000009" lon="-89.6144100000000066"/>
+    <node visible="true" id="2028601892" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0247330999999988" lon="-89.6260084999999975"/>
+    <node visible="true" id="2028601895" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0246163999999993" lon="-89.6259897000000052"/>
+    <node visible="true" id="2028724230" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0110503999999985" lon="-89.6236700999999982">
+        <tag k="highway" v="traffic_signals"/>
+    </node>
+    <node visible="true" id="2061054342" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0130058999999996" lon="-89.6240051000000051"/>
+    <node visible="true" id="2063416052" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9984123999999994" lon="-89.6158542999999952"/>
+    <node visible="true" id="2063416121" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9982480000000002" lon="-89.6160978999999998"/>
+    <node visible="true" id="2129440885" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0148387999999997" lon="-89.6243149000000017"/>
+    <node visible="true" id="2177536310" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0034126000000008" lon="-89.6204577000000029"/>
+    <node visible="true" id="2303170283" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9952213999999984" lon="-89.6200697000000019"/>
+    <node visible="true" id="2303170286" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9958600000000004" lon="-89.6211081000000007"/>
+    <node visible="true" id="2303170289" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9940561999999993" lon="-89.6177413000000058">
+        <tag k="railway" v="level_crossing"/>
+    </node>
+    <node visible="true" id="2303170294" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9941692000000018" lon="-89.6175640000000016"/>
+    <node visible="true" id="2303170295" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9980805000000004" lon="-89.6120434999999986"/>
+    <node visible="true" id="2303170301" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9967645000000012" lon="-89.6121842000000015"/>
+    <node visible="true" id="2303170305" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9939442000000014" lon="-89.6165615999999972"/>
+    <node visible="true" id="2303170309" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9940883999999990" lon="-89.6176932999999991"/>
+    <node visible="true" id="2303170311" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9959364000000015" lon="-89.6205712000000005"/>
+    <node visible="true" id="3146200925" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9991379999999985" lon="-89.6222001999999947"/>
+    <node visible="true" id="3146200926" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9983803999999985" lon="-89.6232817000000068"/>
+    <node visible="true" id="3146201337" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9973303000000016" lon="-89.6249205000000018"/>
+    <node visible="true" id="3146201338" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0000920999999998" lon="-89.6229833000000013"/>
+    <node visible="true" id="3146201355" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9973032000000011" lon="-89.6240578999999968"/>
+    <node visible="true" id="3146201376" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985551000000008" lon="-89.6220924999999937"/>
+    <node visible="true" id="3146201415" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989744999999992" lon="-89.6233775000000037"/>
+    <node visible="true" id="3146201418" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9990574999999993" lon="-89.6227990000000005"/>
+    <node visible="true" id="3146201428" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9994906000000015" lon="-89.6234615999999988"/>
+    <node visible="true" id="3146201655" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0001931999999982" lon="-89.6224040999999971"/>
+    <node visible="true" id="3146201658" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9996280000000013" lon="-89.6221338999999944"/>
+    <node visible="true" id="3146201661" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9996657999999989" lon="-89.6222965999999985"/>
+    <node visible="true" id="3146201664" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9999977000000015" lon="-89.6235525000000024"/>
+    <node visible="true" id="3146201672" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9984646999999995" lon="-89.6227013999999969"/>
+    <node visible="true" id="3183105058" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0035059000000004" lon="-89.6370064999999983"/>
+    <node visible="true" id="3183105261" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0032141000000010" lon="-89.6343420000000037"/>
+    <node visible="true" id="3183105264" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0031540999999997" lon="-89.6337939000000006"/>
+    <node visible="true" id="3731172919" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963242000000001" lon="-89.6205582000000049"/>
+    <node visible="true" id="3731172920" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970785999999983" lon="-89.6224753999999990">
+        <tag k="railway" v="level_crossing"/>
+    </node>
+    <node visible="true" id="3731172923" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9972923000000016" lon="-89.6212409999999977"/>
+    <node visible="true" id="3731172924" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9978765000000003" lon="-89.6214683000000036"/>
+    <node visible="true" id="3731173525" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9979647000000007" lon="-89.6214942000000008"/>
+    <node visible="true" id="3731173526" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9995763000000011" lon="-89.6228914000000003"/>
+    <node visible="true" id="3731173527" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0018613999999992" lon="-89.6221749000000045"/>
+    <node visible="true" id="3797644320" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9930033000000016" lon="-89.6164366000000001"/>
+    <node visible="true" id="3797644321" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9957531000000017" lon="-89.6211662999999987"/>
+    <node visible="true" id="3797644322" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9958188999999997" lon="-89.6212471999999991"/>
+    <node visible="true" id="3797644324" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9958382000000015" lon="-89.6212828999999971"/>
+    <node visible="true" id="3797644325" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9959252999999997" lon="-89.6213264999999950"/>
+    <node visible="true" id="3797644326" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9959984999999989" lon="-89.6212893999999949"/>
+    <node visible="true" id="3797644327" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9960787999999994" lon="-89.6212859000000037"/>
+    <node visible="true" id="3797644328" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963468000000013" lon="-89.6207715000000036"/>
+    <node visible="true" id="3797644329" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9964002000000001" lon="-89.6208912000000026"/>
+    <node visible="true" id="3797644330" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9973092000000001" lon="-89.6223281000000043"/>
+    <node visible="true" id="4935340355" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0033171000000003" lon="-89.6352823999999941"/>
+    <node visible="true" id="5051745733" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9964939999999984" lon="-89.6205070999999975"/>
+    <node visible="true" id="5051745734" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9962231000000017" lon="-89.6213651999999996"/>
+    <node visible="true" id="5051745735" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0038851999999991" lon="-89.6224406000000045"/>
+    <node visible="true" id="5051745738" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9973929999999989" lon="-89.6221587000000000"/>
+    <node visible="true" id="5051745740" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970979000000000" lon="-89.6210326000000066"/>
+    <node visible="true" id="5051745741" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971813999999988" lon="-89.6211129999999940"/>
+    <node visible="true" id="5051745742" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9962355999999986" lon="-89.6210126999999943"/>
+    <node visible="true" id="5051745746" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9968962999999995" lon="-89.6204520000000002"/>
+    <node visible="true" id="5051745747" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0037966000000011" lon="-89.6224255999999997"/>
+    <node visible="true" id="5051745751" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0030247999999986" lon="-89.6225117000000040"/>
+    <node visible="true" id="5051745753" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9974564999999984" lon="-89.6212823999999983"/>
+    <node visible="true" id="5051745755" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9978042000000009" lon="-89.6218717999999939"/>
+    <node visible="true" id="5051745756" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9964429000000017" lon="-89.6214087999999975"/>
+    <node visible="true" id="5051745757" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9969132000000016" lon="-89.6203663999999947"/>
+    <node visible="true" id="5051745759" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970354000000015" lon="-89.6208984000000015"/>
+    <node visible="true" id="5051786118" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0168022000000008" lon="-89.6246122999999955"/>
+    <node visible="true" id="5051786134" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0089180999999989" lon="-89.6233062999999959"/>
+    <node visible="true" id="5051786142" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0098620999999994" lon="-89.6234637999999961"/>
+    <node visible="true" id="5053656703" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9990571000000017" lon="-89.6160067999999939"/>
+    <node visible="true" id="5053656704" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0013274000000010" lon="-89.6153592999999944"/>
+    <node visible="true" id="5053656706" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9938755000000015" lon="-89.6164468000000056"/>
+    <node visible="true" id="5053656707" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989905999999991" lon="-89.6157457000000051"/>
+    <node visible="true" id="5053656708" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9935985000000009" lon="-89.6157280999999983"/>
+    <node visible="true" id="5053656709" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9908836000000001" lon="-89.6165555999999981"/>
+    <node visible="true" id="5053656710" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9974948999999995" lon="-89.6161220999999983"/>
+    <node visible="true" id="5053656711" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9990217000000001" lon="-89.6159255999999971"/>
+    <node visible="true" id="5053656712" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985315999999997" lon="-89.6160943999999944"/>
+    <node visible="true" id="5053656713" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985347000000004" lon="-89.6159952000000004"/>
+    <node visible="true" id="5053656715" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985509999999991" lon="-89.6157933000000071"/>
+    <node visible="true" id="5053656717" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9990127999999991" lon="-89.6158683999999965"/>
+    <node visible="true" id="5053656718" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986561999999992" lon="-89.6156055000000009"/>
+    <node visible="true" id="5053658621" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9974786999999985" lon="-89.6160277999999977"/>
+    <node visible="true" id="5053658622" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9985305999999987" lon="-89.6159377000000035"/>
+    <node visible="true" id="5142172353" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9984162000000012" lon="-89.6160881999999930"/>
+    <node visible="true" id="5142172354" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9983906000000005" lon="-89.6158580999999970"/>
+    <node visible="true" id="5142172356" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9991608999999997" lon="-89.6159796000000028"/>
+    <node visible="true" id="5142172357" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9991218999999987" lon="-89.6157570999999962"/>
+    <node visible="true" id="5142172358" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9972180000000002" lon="-89.6160626000000065"/>
+    <node visible="true" id="5142172359" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971400999999993" lon="-89.6151645000000059"/>
+    <node visible="true" id="5627789870" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9967642000000012" lon="-89.6211384000000066"/>
+    <node visible="true" id="5627789871" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0011004999999997" lon="-89.6219770000000011"/>
+    <node visible="true" id="5627789872" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0142880000000005" lon="-89.6242194000000012"/>
+    <node visible="true" id="6226532870" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9973066999999993" lon="-89.6242783999999943"/>
+    <node visible="true" id="6226602009" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0087927999999984" lon="-89.6232854000000003"/>
+    <node visible="true" id="6226602011" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0089058000000009" lon="-89.6233042000000069"/>
+    <node visible="true" id="6226702942" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9979733999999993" lon="-89.6114021000000065"/>
+    <node visible="true" id="6226702943" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9979925999999999" lon="-89.6115171000000004"/>
+    <node visible="true" id="6226730733" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9977322000000015" lon="-89.6099456000000032"/>
+    <node visible="true" id="6226778833" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0002491999999990" lon="-89.6218460999999991"/>
+    <node visible="true" id="6226778834" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0002203999999999" lon="-89.6220507999999967"/>
+    <node visible="true" id="6226778835" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0005172000000009" lon="-89.6218872999999974"/>
+    <node visible="true" id="6228696467" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0125580999999997" lon="-89.6239283999999969"/>
+    <node visible="true" id="6228757542" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9982922999999992" lon="-89.6133128000000028"/>
+    <node visible="true" id="6228792881" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0034886000000007" lon="-89.6204651000000041"/>
+    <node visible="true" id="6339324900" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971433999999988" lon="-89.6184875000000005"/>
+    <node visible="true" id="6339324901" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9969983999999990" lon="-89.6192903999999970"/>
+    <node visible="true" id="6339324902" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9976526999999997" lon="-89.6185849999999959"/>
+    <node visible="true" id="6339324903" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9974860999999997" lon="-89.6194131999999968"/>
+    <node visible="true" id="6355110315" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0038857999999991" lon="-89.6398678000000046"/>
+    <node visible="true" id="6355110316" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0039327000000000" lon="-89.6390413999999964"/>
+    <node visible="true" id="6355273809" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0011039000000004" lon="-89.6267222999999973"/>
+    <node visible="true" id="6361351495" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0027113999999990" lon="-89.6191290000000009"/>
+    <node visible="true" id="6365001741" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9965538999999985" lon="-89.6213000999999991"/>
+    <node visible="true" id="6365001742" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9962060999999984" lon="-89.6210458999999986"/>
+    <node visible="true" id="6365001743" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9989297000000015" lon="-89.6160823999999963"/>
+    <node visible="true" id="6365001744" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9988409000000011" lon="-89.6157091999999977"/>
+    <node visible="true" id="6365001745" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986187999999991" lon="-89.6157594000000017"/>
+    <node visible="true" id="6365125103" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970819999999989" lon="-89.6060111000000035"/>
+    <node visible="true" id="6381678924" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971874999999990" lon="-89.6220835000000022"/>
+    <node visible="true" id="6381678925" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970986000000011" lon="-89.6221009000000066"/>
+    <node visible="true" id="6381678926" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9969813999999992" lon="-89.6220852999999948"/>
+    <node visible="true" id="6381678927" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9958303000000015" lon="-89.6248504999999938"/>
+    <node visible="true" id="6381723371" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9960540999999985" lon="-89.6207830000000030"/>
+    <node visible="true" id="6381723372" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9960267999999992" lon="-89.6209529000000060"/>
+    <node visible="true" id="6381723373" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9924041000000017" lon="-89.6226355999999953"/>
+    <node visible="true" id="6381723374" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9923524999999991" lon="-89.6228105999999940"/>
+    <node visible="true" id="6381723375" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9921855000000015" lon="-89.6229799999999983"/>
+    <node visible="true" id="6384121388" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9924748000000001" lon="-89.6140975999999938"/>
+    <node visible="true" id="6384121390" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9929200999999992" lon="-89.6139830999999987"/>
+    <node visible="true" id="6384121392" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9978337000000010" lon="-89.6105567999999977"/>
+    <node visible="true" id="6384121395" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9984430000000017" lon="-89.6142160999999930"/>
+    <node visible="true" id="6400043633" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0039021000000012" lon="-89.6395469999999932"/>
+    <node visible="true" id="6400416867" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0032792000000015" lon="-89.6239065999999980"/>
+    <node visible="true" id="6400416868" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0020536000000000" lon="-89.6240010000000069"/>
+    <node visible="true" id="6400476246" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9983308999999991" lon="-89.6161594999999949"/>
+    <node visible="true" id="6400476247" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9984107000000009" lon="-89.6165768999999983"/>
+    <node visible="true" id="6400476248" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9987281000000010" lon="-89.6165139000000011"/>
+    <node visible="true" id="6400476249" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9986686999999996" lon="-89.6164911000000046"/>
+    <node visible="true" id="6400501771" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9956211999999987" lon="-89.6203816000000018"/>
+    <node visible="true" id="6400501772" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9959239999999987" lon="-89.6206612999999948"/>
+    <node visible="true" id="6400501773" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9958817000000018" lon="-89.6209556999999961"/>
+    <node visible="true" id="6400501774" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9955573999999991" lon="-89.6209147000000002"/>
+    <node visible="true" id="6400501775" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9957163000000016" lon="-89.6209300999999954"/>
+    <node visible="true" id="6400501776" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9958026999999987" lon="-89.6204754999999977"/>
+    <node visible="true" id="6400501777" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9956794000000002" lon="-89.6203000000000003"/>
+    <node visible="true" id="6400501778" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9957616000000016" lon="-89.6202822000000054"/>
+    <node visible="true" id="6400501779" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9956412000000014" lon="-89.6203466999999989"/>
+    <node visible="true" id="6400501780" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9955333999999993" lon="-89.6210705999999959"/>
+    <node visible="true" id="6405299044" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9970268000000004" lon="-89.6243984999999981"/>
+    <node visible="true" id="6405299045" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9971122000000001" lon="-89.6244145999999944"/>
+    <node visible="true" id="6446542150" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9935365000000012" lon="-89.6171789999999930"/>
+    <node visible="true" id="6453145541" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9978203999999984" lon="-89.6099298999999974"/>
+    <node visible="true" id="6453145542" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9978353999999996" lon="-89.6100344999999976"/>
+    <node visible="true" id="6453145543" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9963085000000014" lon="-89.6107846999999964"/>
+    <node visible="true" id="6453145544" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9964587999999992" lon="-89.6109509000000060"/>
+    <node visible="true" id="6453145545" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9976732999999989" lon="-89.6159399000000008"/>
+    <node visible="true" id="6453145546" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="20.9977184000000001" lon="-89.6161570999999952"/>
+    <node visible="true" id="6453145547" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0002248999999992" lon="-89.6155509000000023"/>
+    <node visible="true" id="6453145548" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0002899999999997" lon="-89.6157386999999943"/>
+    <node visible="true" id="6590126519" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137" lat="21.0005829999999989" lon="-89.6200249000000042"/>
+    <way visible="true" id="26211755" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="317734584"/>
+        <nd ref="317734615"/>
+        <nd ref="5627789870"/>
+        <nd ref="317734616"/>
+        <nd ref="3731172923"/>
+        <nd ref="5051745753"/>
+        <nd ref="317734689"/>
+        <nd ref="317734720"/>
+        <nd ref="287140295"/>
+        <nd ref="327296999"/>
+        <nd ref="6226778833"/>
+        <nd ref="6226778835"/>
+        <nd ref="5627789871"/>
+        <nd ref="327297044"/>
+        <nd ref="327270491"/>
+        <nd ref="327304903"/>
+        <nd ref="327271216"/>
+        <nd ref="327271088"/>
+        <nd ref="5051745747"/>
+        <nd ref="5051745735"/>
+        <nd ref="831351609"/>
+        <nd ref="831351631"/>
+        <nd ref="356398242"/>
+        <nd ref="356398126"/>
+        <nd ref="356398871"/>
+        <nd ref="356399043"/>
+        <nd ref="356398736"/>
+        <nd ref="356401012"/>
+        <nd ref="6226602009"/>
+        <nd ref="6226602011"/>
+        <nd ref="5051786134"/>
+        <nd ref="5051786142"/>
+        <nd ref="356399810"/>
+        <nd ref="356399663"/>
+        <nd ref="2028724230"/>
+        <nd ref="6228696467"/>
+        <nd ref="2061054342"/>
+        <nd ref="356405600"/>
+        <nd ref="5627789872"/>
+        <nd ref="356405667"/>
+        <nd ref="2129440885"/>
+        <nd ref="356405739"/>
+        <nd ref="325187131"/>
+        <nd ref="356406214"/>
+        <nd ref="5051786118"/>
+        <nd ref="356406330"/>
+        <nd ref="356404944"/>
+        <nd ref="356405160"/>
+        <nd ref="356406774"/>
+        <nd ref="356406847"/>
+        <nd ref="356406909"/>
+        <nd ref="356407487"/>
+        <nd ref="356408342"/>
+        <nd ref="356408730"/>
+        <nd ref="356408789"/>
+        <nd ref="356408946"/>
+        <nd ref="2028601895"/>
+        <nd ref="2028601892"/>
+        <nd ref="539183620"/>
+        <nd ref="292284748"/>
+        <tag k="name" v="Avenida Tecnológico"/>
+        <tag k="highway" v="primary"/>
+        <tag k="ref" v="MEX 261"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 60"/>
+    </way>
+    <way visible="true" id="26264817" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292289025"/>
+        <nd ref="287674290"/>
+        <nd ref="6381723375"/>
+        <nd ref="325184232"/>
+        <nd ref="325184221"/>
+        <nd ref="325184197"/>
+        <nd ref="287674300"/>
+        <tag k="name" v="Calle 21"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="26264840" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351681"/>
+        <nd ref="325184206"/>
+        <nd ref="325184191"/>
+        <nd ref="831351720"/>
+        <nd ref="325184316"/>
+        <nd ref="831351654"/>
+        <nd ref="327267879"/>
+        <nd ref="287674601"/>
+        <nd ref="327268039"/>
+        <tag k="name" v="Calle 19"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="26264866" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="325184017"/>
+        <nd ref="831351720"/>
+        <nd ref="325184285"/>
+        <nd ref="287675036"/>
+        <nd ref="831351620"/>
+        <nd ref="349303909"/>
+        <tag k="name" v="Calle 20"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="26264888" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351636"/>
+        <nd ref="325184284"/>
+        <nd ref="349303909"/>
+        <nd ref="287675157"/>
+        <tag k="name" v="Calle 11"/>
+        <tag k="highway" v="residential"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="26436687" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="444883958"/>
+        <nd ref="317734606"/>
+        <nd ref="2303170286"/>
+        <nd ref="317734605"/>
+        <nd ref="317734581"/>
+        <tag k="name" v="Calle 60"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="26647374" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292284204"/>
+        <nd ref="813019625"/>
+        <nd ref="6365001745"/>
+        <nd ref="292284205"/>
+        <nd ref="813019634"/>
+        <nd ref="292284206"/>
+        <nd ref="6365001744"/>
+        <nd ref="327285998"/>
+        <nd ref="292284207"/>
+        <nd ref="292284208"/>
+        <nd ref="292284487"/>
+        <nd ref="292284427"/>
+        <nd ref="292284428"/>
+        <nd ref="6365001743"/>
+        <nd ref="292284271"/>
+        <nd ref="813019656"/>
+        <nd ref="292284429"/>
+        <nd ref="813019660"/>
+        <nd ref="292284214"/>
+        <nd ref="292284273"/>
+        <nd ref="813019670"/>
+        <nd ref="292284204"/>
+        <tag k="junction" v="roundabout"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="layer" v="1"/>
+    </way>
+    <way visible="true" id="26647375" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292284059"/>
+        <nd ref="831351673"/>
+        <nd ref="5053656709"/>
+        <nd ref="292284225"/>
+        <nd ref="3797644320"/>
+        <nd ref="813035918"/>
+        <nd ref="292287368"/>
+        <nd ref="5053656706"/>
+        <nd ref="292284219"/>
+        <nd ref="292287371"/>
+        <nd ref="292287377"/>
+        <nd ref="292288896"/>
+        <nd ref="5142172358"/>
+        <nd ref="5053658621"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="3"/>
+        <tag k="highway" v="primary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 30"/>
+    </way>
+    <way visible="true" id="26647734" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292287371"/>
+        <nd ref="292288668"/>
+        <nd ref="292288671"/>
+        <nd ref="292288539"/>
+        <nd ref="292288778"/>
+        <nd ref="327287175"/>
+        <nd ref="292287375"/>
+        <tag k="name" v="Calle 17"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="26647737" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292287377"/>
+        <nd ref="327287020"/>
+        <nd ref="327287033"/>
+        <nd ref="292287431"/>
+        <tag k="name" v="Calle 15"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="26647883" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292288539"/>
+        <nd ref="292287491"/>
+        <nd ref="6384121390"/>
+        <nd ref="6384121388"/>
+        <nd ref="287694716"/>
+        <tag k="name" v="Calle 24"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="26647886" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292288629"/>
+        <nd ref="5053656708"/>
+        <nd ref="292288668"/>
+        <nd ref="327287020"/>
+        <nd ref="327286995"/>
+        <nd ref="5142172359"/>
+        <nd ref="327286925"/>
+        <nd ref="292288669"/>
+        <tag k="name" v="Calle 28"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="26647888" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292288671"/>
+        <nd ref="327287033"/>
+        <nd ref="327287162"/>
+        <nd ref="292288895"/>
+        <nd ref="327286236"/>
+        <nd ref="292288774"/>
+        <nd ref="292288806"/>
+        <tag k="name" v="Calle 26"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="26647891" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292287431"/>
+        <nd ref="327287249"/>
+        <nd ref="292288793"/>
+        <tag k="name" v="Calle 24"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="26647896" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292288895"/>
+        <nd ref="327286995"/>
+        <nd ref="292288896"/>
+        <tag k="name" v="Calle 13"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="28906043" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="317734576"/>
+        <nd ref="6365001741"/>
+        <nd ref="317734577"/>
+        <nd ref="317734578"/>
+        <nd ref="5051745756"/>
+        <nd ref="444883888"/>
+        <nd ref="444883896"/>
+        <nd ref="289685304"/>
+        <nd ref="5051745734"/>
+        <nd ref="317734579"/>
+        <nd ref="317734580"/>
+        <nd ref="444883904"/>
+        <nd ref="317734581"/>
+        <nd ref="6365001742"/>
+        <nd ref="5051745742"/>
+        <nd ref="444883909"/>
+        <nd ref="317734582"/>
+        <nd ref="444883911"/>
+        <nd ref="444883913"/>
+        <nd ref="317734583"/>
+        <nd ref="317734584"/>
+        <nd ref="831351647"/>
+        <nd ref="444883921"/>
+        <nd ref="317734576"/>
+        <tag k="junction" v="roundabout"/>
+        <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="28906058" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="444883909"/>
+        <nd ref="292288899"/>
+        <nd ref="3731172919"/>
+        <nd ref="831351701"/>
+        <tag k="name" v="Calle 13"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="28906064" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="289685300"/>
+        <nd ref="3731172920"/>
+        <nd ref="317734683"/>
+        <nd ref="831351693"/>
+        <nd ref="317734684"/>
+        <nd ref="317734685"/>
+        <nd ref="317734686"/>
+        <nd ref="317734687"/>
+        <nd ref="317734688"/>
+        <nd ref="317750377"/>
+        <nd ref="3731172924"/>
+        <nd ref="317734689"/>
+        <nd ref="317734690"/>
+        <nd ref="327299922"/>
+        <nd ref="327303744"/>
+        <nd ref="327301103"/>
+        <nd ref="327304586"/>
+        <nd ref="327304748"/>
+        <nd ref="6400476248"/>
+        <nd ref="317734691"/>
+        <nd ref="292284429"/>
+        <tag k="name" v="Circuito Colonias"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 31"/>
+    </way>
+    <way visible="true" id="28906072" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292284271"/>
+        <nd ref="317734719"/>
+        <nd ref="327304775"/>
+        <nd ref="327304622"/>
+        <nd ref="327304336"/>
+        <nd ref="327303747"/>
+        <nd ref="327299919"/>
+        <nd ref="317734720"/>
+        <nd ref="3731173525"/>
+        <nd ref="317734721"/>
+        <nd ref="317734722"/>
+        <nd ref="5051745755"/>
+        <nd ref="289685363"/>
+        <tag k="name" v="Circuito Colonias"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 31"/>
+    </way>
+    <way visible="true" id="29490745" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292284205"/>
+        <nd ref="5053656718"/>
+        <nd ref="325089658"/>
+        <nd ref="292288669"/>
+        <nd ref="6384121395"/>
+        <nd ref="292288806"/>
+        <nd ref="6228757542"/>
+        <nd ref="2303170295"/>
+        <nd ref="6226702943"/>
+        <nd ref="6226702942"/>
+        <nd ref="6384121392"/>
+        <nd ref="327287448"/>
+        <nd ref="6226730733"/>
+        <nd ref="327289966"/>
+        <nd ref="327289212"/>
+        <nd ref="327292703"/>
+        <nd ref="327284304"/>
+        <nd ref="6365125103"/>
+        <nd ref="327309251"/>
+        <nd ref="327293635"/>
+        <nd ref="327294689"/>
+        <tag k="name" v="Circuito Colonias"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 31"/>
+    </way>
+    <way visible="true" id="29500475" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="325184224"/>
+        <nd ref="325184221"/>
+        <nd ref="325184206"/>
+        <tag k="name" v="Calle 16"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29500488" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="287671823"/>
+        <nd ref="325184200"/>
+        <nd ref="325184188"/>
+        <nd ref="325184197"/>
+        <nd ref="325184191"/>
+        <nd ref="287671824"/>
+        <nd ref="831351713"/>
+        <nd ref="325184284"/>
+        <tag k="name" v="Calle 18"/>
+        <tag k="highway" v="residential"/>
+        <tag k="alt_name" v="Calle 10"/>
+    </way>
+    <way visible="true" id="29500870" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="325186589"/>
+        <nd ref="831351697"/>
+        <nd ref="325186619"/>
+        <tag k="name" v="Calle 21"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709193" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327270461"/>
+        <nd ref="6355110315"/>
+        <nd ref="327270464"/>
+        <nd ref="6400043633"/>
+        <nd ref="6355110316"/>
+        <nd ref="327270467"/>
+        <nd ref="327270470"/>
+        <nd ref="327270473"/>
+        <nd ref="327270476"/>
+        <nd ref="327270479"/>
+        <nd ref="349300580"/>
+        <nd ref="3183105058"/>
+        <nd ref="349301655"/>
+        <nd ref="830476236"/>
+        <nd ref="830476318"/>
+        <nd ref="349301003"/>
+        <nd ref="4935340355"/>
+        <nd ref="3183105261"/>
+        <nd ref="3183105264"/>
+        <nd ref="349300606"/>
+        <nd ref="327268699"/>
+        <nd ref="356411545"/>
+        <nd ref="349298808"/>
+        <nd ref="349298736"/>
+        <nd ref="349298702"/>
+        <nd ref="327270484"/>
+        <nd ref="813067153"/>
+        <nd ref="416338142"/>
+        <nd ref="349303859"/>
+        <nd ref="349303889"/>
+        <nd ref="349303910"/>
+        <nd ref="349303923"/>
+        <nd ref="349303976"/>
+        <nd ref="349304095"/>
+        <nd ref="6400416868"/>
+        <nd ref="349303641"/>
+        <nd ref="327270487"/>
+        <nd ref="3731173527"/>
+        <nd ref="327270491"/>
+        <tag k="name" v="Calle 35"/>
+        <tag k="highway" v="tertiary"/>
+    </way>
+    <way visible="true" id="29709514" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327286236"/>
+        <nd ref="292288793"/>
+        <nd ref="292286886"/>
+        <nd ref="2303170301"/>
+        <nd ref="327286721"/>
+        <nd ref="6453145544"/>
+        <nd ref="327312408"/>
+        <nd ref="327286723"/>
+        <nd ref="6453145543"/>
+        <nd ref="327286727"/>
+        <nd ref="327287554"/>
+        <tag k="name" v="Calle 13-A"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709518" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292288774"/>
+        <nd ref="327286925"/>
+        <nd ref="327286929"/>
+        <tag k="name" v="Calle 11"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709524" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327287162"/>
+        <nd ref="327287249"/>
+        <tag k="name" v="Calle 13"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709794" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327296303"/>
+        <nd ref="327296324"/>
+        <nd ref="811396252"/>
+        <nd ref="811396229"/>
+        <nd ref="811396238"/>
+        <nd ref="811396244"/>
+        <nd ref="327296486"/>
+        <tag k="name" v="Calle 29"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709799" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327296571"/>
+        <nd ref="327304641"/>
+        <nd ref="327304546"/>
+        <nd ref="327296997"/>
+        <nd ref="327303751"/>
+        <nd ref="327299917"/>
+        <nd ref="327296999"/>
+        <tag k="name" v="Calle 29"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709807" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327297044"/>
+        <nd ref="327299475"/>
+        <nd ref="327303754"/>
+        <nd ref="327304344"/>
+        <nd ref="327304671"/>
+        <nd ref="327304843"/>
+        <nd ref="327297796"/>
+        <tag k="name" v="Calle 27"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709837" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327299914"/>
+        <nd ref="327299917"/>
+        <nd ref="327299919"/>
+        <nd ref="327299922"/>
+        <nd ref="5051745757"/>
+        <nd ref="327299925"/>
+        <tag k="name" v="Calle 40"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709839" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327300473"/>
+        <nd ref="327300476"/>
+        <tag k="name" v="Calle 19"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709842" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327299956"/>
+        <nd ref="327300574"/>
+        <nd ref="327300578"/>
+        <nd ref="327300581"/>
+        <nd ref="327300677"/>
+        <nd ref="327300473"/>
+        <tag k="name" v="Calle 58-C"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709844" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327300581"/>
+        <nd ref="327301035"/>
+        <nd ref="327300602"/>
+        <tag k="name" v="Calle 15"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709850" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327300677"/>
+        <nd ref="327300980"/>
+        <nd ref="327300480"/>
+        <nd ref="327300985"/>
+        <tag k="name" v="Calle 17"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709855" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327300980"/>
+        <nd ref="327301035"/>
+        <nd ref="327301058"/>
+        <tag k="name" v="Calle 58-B"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709859" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327301365"/>
+        <nd ref="2303170289"/>
+        <nd ref="2303170309"/>
+        <nd ref="2303170294"/>
+        <nd ref="2303170305"/>
+        <tag k="name" v="Calle 19"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709860" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="325186679"/>
+        <nd ref="327301522"/>
+        <tag k="name" v="Calle 56"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709861" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="287696254"/>
+        <nd ref="327301895"/>
+        <tag k="name" v="Privada 17-A"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29709947" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327302113"/>
+        <nd ref="6339324901"/>
+        <nd ref="6339324903"/>
+        <nd ref="327303744"/>
+        <nd ref="327303747"/>
+        <nd ref="327303751"/>
+        <nd ref="6590126519"/>
+        <nd ref="327303754"/>
+        <nd ref="327304890"/>
+        <nd ref="327305579"/>
+        <nd ref="327304996"/>
+        <nd ref="327303757"/>
+        <nd ref="2177536310"/>
+        <nd ref="6228792881"/>
+        <tag k="name" v="Calle 38"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29710017" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327304351"/>
+        <nd ref="327304586"/>
+        <nd ref="327304622"/>
+        <nd ref="327304546"/>
+        <nd ref="327304671"/>
+        <nd ref="811396256"/>
+        <nd ref="811396253"/>
+        <nd ref="327304602"/>
+        <tag k="name" v="Calle 34"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29710031" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327304890"/>
+        <nd ref="327304903"/>
+        <tag k="name" v="Calle 25"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29710032" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327304775"/>
+        <nd ref="327304641"/>
+        <nd ref="327304843"/>
+        <nd ref="811396258"/>
+        <nd ref="327305567"/>
+        <nd ref="327304894"/>
+        <nd ref="327304924"/>
+        <nd ref="327312063"/>
+        <nd ref="329662693"/>
+        <nd ref="327304971"/>
+        <tag k="name" v="Calle 32"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29710077" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327304996"/>
+        <nd ref="327305559"/>
+        <nd ref="6361351495"/>
+        <nd ref="327305561"/>
+        <nd ref="327305563"/>
+        <nd ref="811396253"/>
+        <nd ref="327305567"/>
+        <nd ref="327305568"/>
+        <tag k="name" v="Calle 23"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29710124" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327305579"/>
+        <nd ref="811396255"/>
+        <nd ref="811396256"/>
+        <nd ref="811396258"/>
+        <nd ref="811396260"/>
+        <tag k="name" v="Calle 25"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29710627" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6228757542"/>
+        <nd ref="327312732"/>
+        <nd ref="811396229"/>
+        <nd ref="811396230"/>
+        <nd ref="811396231"/>
+        <nd ref="811396232"/>
+        <nd ref="327314166"/>
+        <nd ref="327313801"/>
+        <nd ref="327312949"/>
+        <nd ref="811396233"/>
+        <nd ref="811396234"/>
+        <nd ref="780179726"/>
+        <nd ref="327318500"/>
+        <nd ref="327312954"/>
+        <nd ref="329663275"/>
+        <tag k="name" v="Calle 24"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29710653" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6384121395"/>
+        <nd ref="327313240"/>
+        <nd ref="811396238"/>
+        <nd ref="811396239"/>
+        <nd ref="811396240"/>
+        <nd ref="811396241"/>
+        <nd ref="327314145"/>
+        <nd ref="327313782"/>
+        <nd ref="327313675"/>
+        <nd ref="780180585"/>
+        <nd ref="780180165"/>
+        <nd ref="780180169"/>
+        <nd ref="327313264"/>
+        <tag k="name" v="Calle 26"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="29710685" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327313374"/>
+        <nd ref="811396244"/>
+        <nd ref="811396245"/>
+        <nd ref="811396246"/>
+        <nd ref="811396247"/>
+        <nd ref="327313971"/>
+        <nd ref="327313847"/>
+        <nd ref="780181419"/>
+        <nd ref="780181423"/>
+        <nd ref="780181426"/>
+        <nd ref="780181432"/>
+        <nd ref="327313504"/>
+        <tag k="name" v="Calle 28"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="31361635" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349298162"/>
+        <nd ref="349303528"/>
+        <nd ref="349303382"/>
+        <nd ref="349303543"/>
+        <nd ref="349303467"/>
+        <nd ref="349303385"/>
+        <tag k="name" v="Calle 37-D"/>
+        <tag k="highway" v="residential"/>
+        <tag k="alt_name" v="Calle 8A"/>
+    </way>
+    <way visible="true" id="31361651" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303382"/>
+        <nd ref="349303463"/>
+        <nd ref="349303756"/>
+        <nd ref="349303465"/>
+        <tag k="name" v="Calle 16"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="31361655" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303463"/>
+        <nd ref="349303473"/>
+        <tag k="name" v="Calle 37E"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="31361670" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303566"/>
+        <nd ref="349303569"/>
+        <tag k="name" v="Calle 37-B"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="31361675" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303590"/>
+        <nd ref="349303602"/>
+        <tag k="name" v="Calle 37-C"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="31361680" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303657"/>
+        <nd ref="349303660"/>
+        <tag k="name" v="Calle 35-B"/>
+        <tag k="highway" v="residential"/>
+        <tag k="alt_name" v="Privada 35-B"/>
+    </way>
+    <way visible="true" id="31361682" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303389"/>
+        <nd ref="349303663"/>
+        <nd ref="349303641"/>
+        <tag k="name" v="Calle 12"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="31361684" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303669"/>
+        <nd ref="349303672"/>
+        <tag k="name" v="Calle 35-C"/>
+        <tag k="highway" v="residential"/>
+        <tag k="alt_name" v="Privada 35-C"/>
+    </way>
+    <way visible="true" id="31361685" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303699"/>
+        <nd ref="349303701"/>
+        <tag k="name" v="Calle 35-D"/>
+        <tag k="highway" v="residential"/>
+        <tag k="alt_name" v="Privada 35-D"/>
+    </way>
+    <way visible="true" id="31361693" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303756"/>
+        <nd ref="349303757"/>
+        <tag k="name" v="Calle 37F"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="31361710" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303748"/>
+        <nd ref="349303660"/>
+        <nd ref="349303672"/>
+        <nd ref="349303701"/>
+        <nd ref="349303853"/>
+        <tag k="highway" v="residential"/>
+        <tag k="created_by" v="Potlatch 0.10f"/>
+    </way>
+    <way visible="true" id="31361726" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303976"/>
+        <nd ref="349304092"/>
+        <tag k="name" v="Calle 14"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="37906514" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="317734579"/>
+        <nd ref="3797644327"/>
+        <nd ref="3797644326"/>
+        <nd ref="3797644325"/>
+        <nd ref="444883957"/>
+        <nd ref="831351636"/>
+        <tag k="name" v="Calle 16A"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="37906517" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351694"/>
+        <nd ref="325186589"/>
+        <nd ref="6400501780"/>
+        <nd ref="444883958"/>
+        <tag k="name" v="Calle 60"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="67306746" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327300476"/>
+        <nd ref="327300480"/>
+        <nd ref="327300602"/>
+        <nd ref="292288898"/>
+        <tag k="name" v="Calle 58"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="67306747" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327301058"/>
+        <nd ref="6339324900"/>
+        <nd ref="6339324902"/>
+        <nd ref="327301103"/>
+        <nd ref="327304336"/>
+        <nd ref="327296997"/>
+        <nd ref="327304344"/>
+        <nd ref="811396255"/>
+        <nd ref="327305563"/>
+        <nd ref="325089543"/>
+        <nd ref="325089550"/>
+        <tag k="name" v="Calle 36"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="67308273" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349304093"/>
+        <nd ref="349304095"/>
+        <tag k="name" v="Calle 12"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="67308284" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349304092"/>
+        <nd ref="349304093"/>
+        <tag k="name" v="Calle 35-A"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="67308286" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303935"/>
+        <nd ref="349303937"/>
+        <tag k="name" v="Calle 35-A"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="67308287" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303937"/>
+        <nd ref="349303923"/>
+        <tag k="name" v="Calle 14-A"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="67308291" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303598"/>
+        <nd ref="349303569"/>
+        <nd ref="349303602"/>
+        <nd ref="349303543"/>
+        <tag k="name" v="Calle 14"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="67308292" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6355273809"/>
+        <nd ref="349303594"/>
+        <nd ref="349303598"/>
+        <tag k="name" v="Calle 37-A"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="69412804" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303394"/>
+        <nd ref="831351637"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="69412807" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351652"/>
+        <nd ref="831351681"/>
+        <tag k="name" v="Calle 16"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="69412810" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351593"/>
+        <nd ref="3146201428"/>
+        <nd ref="3731173526"/>
+        <nd ref="831351608"/>
+        <nd ref="3146201661"/>
+        <nd ref="831351656"/>
+        <nd ref="3146201658"/>
+        <nd ref="831351659"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="69412815" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6365001742"/>
+        <nd ref="831351702"/>
+        <nd ref="6381723371"/>
+        <nd ref="2303170311"/>
+        <nd ref="6400501778"/>
+        <nd ref="831351630"/>
+        <nd ref="831351599"/>
+        <nd ref="325186619"/>
+        <nd ref="327301522"/>
+        <nd ref="327301365"/>
+        <nd ref="6446542150"/>
+        <nd ref="831351598"/>
+        <tag k="name" v="Calle 25"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="69412823" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292288899"/>
+        <nd ref="3797644328"/>
+        <nd ref="3797644329"/>
+        <nd ref="317734583"/>
+        <tag k="name" v="Calle 13"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="69412825" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="317734685"/>
+        <nd ref="831351661"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="69412827" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6365001741"/>
+        <nd ref="831351610"/>
+        <nd ref="6381678926"/>
+        <nd ref="831351670"/>
+        <nd ref="831351693"/>
+        <nd ref="289685960"/>
+        <tag k="name" v="Circuito Colonias"/>
+        <tag k="highway" v="primary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 22"/>
+    </way>
+    <way visible="true" id="69412835" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6226532870"/>
+        <nd ref="831351657"/>
+        <nd ref="6405299045"/>
+        <nd ref="6405299044"/>
+        <nd ref="831351620"/>
+        <nd ref="831351713"/>
+        <nd ref="831351662"/>
+        <tag k="name" v="Calle 13"/>
+        <tag k="highway" v="residential"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="69412837" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351619"/>
+        <nd ref="831351697"/>
+        <nd ref="2303170283"/>
+        <nd ref="831351675"/>
+        <nd ref="831351630"/>
+        <tag k="name" v="Calle 58A"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="69412847" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351612"/>
+        <nd ref="831351593"/>
+        <nd ref="831351716"/>
+        <nd ref="831351648"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="69412848" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="287026840"/>
+        <nd ref="831351724"/>
+        <nd ref="831351615"/>
+        <nd ref="2303170309"/>
+        <nd ref="831351627"/>
+        <nd ref="831351719"/>
+        <nd ref="831351643"/>
+        <nd ref="831351701"/>
+        <tag k="name" v="Calle 25"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="69412850" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351695"/>
+        <nd ref="831351608"/>
+        <nd ref="831351668"/>
+        <nd ref="831351624"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="69412852" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351716"/>
+        <nd ref="3146201415"/>
+        <nd ref="3146201418"/>
+        <nd ref="831351668"/>
+        <nd ref="3146200925"/>
+        <nd ref="831351641"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="74957555" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="289685360"/>
+        <nd ref="289685361"/>
+        <nd ref="289685664"/>
+        <nd ref="289685363"/>
+        <tag k="highway" v="primary"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="192309037" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351665"/>
+        <nd ref="287675036"/>
+        <nd ref="6381678927"/>
+        <nd ref="287671824"/>
+        <nd ref="287671782"/>
+        <nd ref="831351681"/>
+        <nd ref="292289100"/>
+        <nd ref="325186422"/>
+        <nd ref="6381723374"/>
+        <nd ref="292289079"/>
+        <nd ref="292289025"/>
+        <tag k="name" v="Calle 33"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 15"/>
+    </way>
+    <way visible="true" id="192311203" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="325184317"/>
+        <nd ref="325184285"/>
+        <tag k="name" v="Calle 17"/>
+        <tag k="highway" v="residential"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="195967810" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327297796"/>
+        <nd ref="5053656711"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="2"/>
+        <tag k="highway" v="primary"/>
+        <tag k="cutting" v="yes"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="195967814" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5053658621"/>
+        <nd ref="5053658622"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="2"/>
+        <tag k="highway" v="primary"/>
+        <tag k="cutting" v="yes"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="195977895" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="289685300"/>
+        <nd ref="289685301"/>
+        <nd ref="289685302"/>
+        <nd ref="289685303"/>
+        <nd ref="444883888"/>
+        <tag k="name" v="Circuito Colonias"/>
+        <tag k="highway" v="primary"/>
+        <tag k="ref" v="MEX 261"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 22"/>
+    </way>
+    <way visible="true" id="195977897" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="289685363"/>
+        <nd ref="289685665"/>
+        <nd ref="5051745738"/>
+        <nd ref="3797644330"/>
+        <nd ref="289685960"/>
+        <nd ref="3146201355"/>
+        <nd ref="6226532870"/>
+        <nd ref="3146201337"/>
+        <nd ref="831351626"/>
+        <tag k="name" v="Circuito Colonias"/>
+        <tag k="highway" v="primary"/>
+        <tag k="ref" v="MEX 261"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 22"/>
+    </way>
+    <way visible="true" id="202833304" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5053656710"/>
+        <nd ref="292288897"/>
+        <nd ref="327300985"/>
+        <nd ref="287696254"/>
+        <nd ref="2303170305"/>
+        <nd ref="287026840"/>
+        <nd ref="813035922"/>
+        <nd ref="831351598"/>
+        <nd ref="292285531"/>
+        <nd ref="831351592"/>
+        <nd ref="287026841"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="3"/>
+        <tag k="highway" v="primary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 30"/>
+    </way>
+    <way visible="true" id="221270223" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="2303170283"/>
+        <nd ref="831351599"/>
+        <tag k="name" v="Calle 19"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="221270224" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6400501773"/>
+        <nd ref="6400501772"/>
+        <nd ref="2303170311"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="309280728" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351707"/>
+        <nd ref="831351641"/>
+        <nd ref="831351656"/>
+        <nd ref="831351637"/>
+        <nd ref="3146201655"/>
+        <nd ref="831351695"/>
+        <nd ref="3146201338"/>
+        <nd ref="3146201664"/>
+        <nd ref="831351612"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="309280779" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351648"/>
+        <nd ref="3146200926"/>
+        <nd ref="3146201672"/>
+        <nd ref="831351624"/>
+        <nd ref="3146201376"/>
+        <nd ref="831351707"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="376320768" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351636"/>
+        <nd ref="831351662"/>
+        <nd ref="831351652"/>
+        <nd ref="831351696"/>
+        <nd ref="6381723373"/>
+        <nd ref="292289025"/>
+        <tag k="name" v="Calle 11"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="376320769" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="444883958"/>
+        <nd ref="3797644321"/>
+        <nd ref="3797644322"/>
+        <nd ref="3797644324"/>
+        <nd ref="444883957"/>
+        <tag k="name" v="Calle 60"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="446118357" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327294827"/>
+        <nd ref="327293696"/>
+        <nd ref="327284717"/>
+        <nd ref="836740372"/>
+        <nd ref="327292706"/>
+        <nd ref="327289216"/>
+        <nd ref="327289930"/>
+        <nd ref="327291657"/>
+        <nd ref="6453145541"/>
+        <nd ref="6453145542"/>
+        <nd ref="327290099"/>
+        <nd ref="327285900"/>
+        <nd ref="327285803"/>
+        <nd ref="327312577"/>
+        <nd ref="327312732"/>
+        <nd ref="327313240"/>
+        <nd ref="327313374"/>
+        <nd ref="325089708"/>
+        <nd ref="6365001744"/>
+        <tag k="name" v="Circuito Colonias"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 31"/>
+    </way>
+    <way visible="true" id="517727067" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5051745733"/>
+        <nd ref="831351701"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="517727068" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5051745759"/>
+        <nd ref="5051745740"/>
+        <nd ref="5051745741"/>
+        <nd ref="5051745753"/>
+        <tag k="highway" v="service"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="517727071" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5051745746"/>
+        <nd ref="5051745757"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="517972709" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5053656717"/>
+        <nd ref="327297800"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="2"/>
+        <tag k="highway" v="primary"/>
+        <tag k="cutting" v="yes"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="517972710" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5053656713"/>
+        <nd ref="5053656710"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="2"/>
+        <tag k="highway" v="primary"/>
+        <tag k="cutting" v="yes"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="517972712" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292288897"/>
+        <nd ref="327304868"/>
+        <nd ref="292288898"/>
+        <nd ref="327304351"/>
+        <nd ref="327301058"/>
+        <nd ref="327302113"/>
+        <nd ref="327299956"/>
+        <nd ref="327299925"/>
+        <nd ref="831351701"/>
+        <tag k="name" v="Calle 13"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="517972713" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327297800"/>
+        <nd ref="811396245"/>
+        <nd ref="811396239"/>
+        <nd ref="811396230"/>
+        <nd ref="811396264"/>
+        <nd ref="327297803"/>
+        <nd ref="327297806"/>
+        <nd ref="327306762"/>
+        <nd ref="327306690"/>
+        <nd ref="327306729"/>
+        <nd ref="327306554"/>
+        <nd ref="327306350"/>
+        <nd ref="327297809"/>
+        <nd ref="327297812"/>
+        <nd ref="327306569"/>
+        <nd ref="327306249"/>
+        <nd ref="327306282"/>
+        <nd ref="327297814"/>
+        <nd ref="327298252"/>
+        <tag k="name" v="Calle 27"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="517972714" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5053656711"/>
+        <nd ref="5053656713"/>
+        <tag k="tunnel" v="yes"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="2"/>
+        <tag k="highway" v="primary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="layer" v="-1"/>
+    </way>
+    <way visible="true" id="517972716" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5053656704"/>
+        <nd ref="811396246"/>
+        <nd ref="811396240"/>
+        <nd ref="811396231"/>
+        <nd ref="811396262"/>
+        <nd ref="327306820"/>
+        <nd ref="327306793"/>
+        <nd ref="327307041"/>
+        <nd ref="327306861"/>
+        <nd ref="327306937"/>
+        <nd ref="327306159"/>
+        <nd ref="327306097"/>
+        <nd ref="327306115"/>
+        <nd ref="327306069"/>
+        <nd ref="327306065"/>
+        <nd ref="327305964"/>
+        <nd ref="327306004"/>
+        <nd ref="327305905"/>
+        <nd ref="327306387"/>
+        <nd ref="327305835"/>
+        <tag k="name" v="Calle 25"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="517972718" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327305570"/>
+        <nd ref="811396247"/>
+        <nd ref="811396241"/>
+        <nd ref="811396232"/>
+        <nd ref="811396254"/>
+        <nd ref="327305572"/>
+        <nd ref="327305574"/>
+        <nd ref="327307155"/>
+        <nd ref="327307210"/>
+        <nd ref="327307250"/>
+        <nd ref="327306897"/>
+        <nd ref="327306831"/>
+        <nd ref="327305576"/>
+        <nd ref="327305580"/>
+        <nd ref="327306319"/>
+        <nd ref="327306254"/>
+        <nd ref="327306275"/>
+        <nd ref="327306501"/>
+        <nd ref="327306502"/>
+        <nd ref="327299464"/>
+        <tag k="name" v="Calle 23"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="517972719" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5053658622"/>
+        <nd ref="5053656717"/>
+        <tag k="tunnel" v="yes"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="2"/>
+        <tag k="highway" v="primary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="layer" v="-1"/>
+    </way>
+    <way visible="true" id="529317018" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5142172353"/>
+        <nd ref="5142172354"/>
+        <tag k="highway" v="footway"/>
+        <tag k="layer" v="1"/>
+        <tag k="bridge" v="yes"/>
+    </way>
+    <way visible="true" id="529317019" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5142172356"/>
+        <nd ref="5142172357"/>
+        <tag k="highway" v="footway"/>
+        <tag k="layer" v="1"/>
+        <tag k="bridge" v="yes"/>
+    </way>
+    <way visible="true" id="529317020" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5142172358"/>
+        <nd ref="5142172359"/>
+        <tag k="highway" v="footway"/>
+    </way>
+    <way visible="true" id="665265754" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6226778834"/>
+        <nd ref="6226778833"/>
+        <tag k="highway" v="primary_link"/>
+    </way>
+    <way visible="true" id="676987101" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6339324901"/>
+        <nd ref="6339324900"/>
+        <tag k="name" v="Calle 31B"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="676987102" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6339324903"/>
+        <nd ref="6339324902"/>
+        <tag k="name" v="Calle 31 A"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="679342768" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="416337754"/>
+        <nd ref="416337762"/>
+        <nd ref="356411409"/>
+        <nd ref="416338294"/>
+        <nd ref="831351666"/>
+        <nd ref="5051745751"/>
+        <nd ref="327270487"/>
+        <nd ref="349303748"/>
+        <nd ref="289685359"/>
+        <nd ref="349303399"/>
+        <nd ref="6226778834"/>
+        <nd ref="831351659"/>
+        <nd ref="289685360"/>
+        <nd ref="317750375"/>
+        <nd ref="317750376"/>
+        <nd ref="317734721"/>
+        <nd ref="317750377"/>
+        <nd ref="317750378"/>
+        <nd ref="831351661"/>
+        <nd ref="317750379"/>
+        <nd ref="317734576"/>
+        <tag k="name" v="Avenida Tecnológico"/>
+        <tag k="highway" v="primary"/>
+        <tag k="ref" v="MEX 261"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 60"/>
+    </way>
+    <way visible="true" id="679776582" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303465"/>
+        <nd ref="349303466"/>
+        <tag k="name" v="Calle 37G"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="679776583" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303466"/>
+        <nd ref="349303757"/>
+        <nd ref="349303473"/>
+        <nd ref="349303467"/>
+        <tag k="name" v="Calle 12"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="679776584" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303385"/>
+        <nd ref="349303389"/>
+        <tag k="name" v="Calle 37-D"/>
+        <tag k="highway" v="residential"/>
+        <tag k="alt_name" v="Calle 8A"/>
+    </way>
+    <way visible="true" id="679776585" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="349303389"/>
+        <nd ref="349303394"/>
+        <nd ref="349303853"/>
+        <nd ref="349303399"/>
+        <nd ref="6226778835"/>
+        <tag k="name" v="Calle 37-D"/>
+        <tag k="highway" v="residential"/>
+        <tag k="alt_name" v="Calle 8A"/>
+    </way>
+    <way visible="true" id="679776586" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327299911"/>
+        <nd ref="327299914"/>
+        <tag k="name" v="Calle 38A"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="679776587" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327299475"/>
+        <nd ref="327299908"/>
+        <nd ref="327299911"/>
+        <tag k="name" v="Calle 38A"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="679789226" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="831351665"/>
+        <nd ref="831351657"/>
+        <nd ref="289685298"/>
+        <nd ref="287675157"/>
+        <nd ref="289685299"/>
+        <nd ref="289685300"/>
+        <tag k="name" v="Circuito Colonias"/>
+        <tag k="highway" v="primary"/>
+        <tag k="ref" v="MEX 261"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 22"/>
+    </way>
+    <way visible="true" id="679789227" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="325186681"/>
+        <nd ref="327301365"/>
+        <tag k="name" v="Calle 23 A"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="681405437" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327297800"/>
+        <nd ref="5053656704"/>
+        <nd ref="327305570"/>
+        <nd ref="327271322"/>
+        <nd ref="327271387"/>
+        <nd ref="327312058"/>
+        <nd ref="811397430"/>
+        <nd ref="329663024"/>
+        <nd ref="837978454"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="3"/>
+        <tag k="highway" v="primary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 30"/>
+    </way>
+    <way visible="true" id="681405438" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="837978298"/>
+        <nd ref="329663021"/>
+        <nd ref="811397429"/>
+        <nd ref="327312060"/>
+        <nd ref="327271467"/>
+        <nd ref="292284471"/>
+        <nd ref="327271319"/>
+        <nd ref="327305568"/>
+        <nd ref="811396260"/>
+        <nd ref="327297796"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="3"/>
+        <tag k="highway" v="primary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 30"/>
+    </way>
+    <way visible="true" id="681460495" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6381678926"/>
+        <nd ref="6381678925"/>
+        <nd ref="6381678924"/>
+        <nd ref="317734685"/>
+        <tag k="highway" v="primary_link"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="681460496" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327304868"/>
+        <nd ref="327304748"/>
+        <tag k="name" v="Calle 32"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="681460497" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6381678927"/>
+        <nd ref="325184285"/>
+        <tag k="name" v="Calle 17"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="681464666" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="317734605"/>
+        <nd ref="6381723372"/>
+        <nd ref="6381723371"/>
+        <tag k="highway" v="secondary_link"/>
+    </way>
+    <way visible="true" id="681702555" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="292288778"/>
+        <nd ref="292287431"/>
+        <tag k="name" v="Calle 24"/>
+        <tag k="highway" v="residential"/>
+        <tag k="alt_name" v="Calle 22 A"/>
+    </way>
+    <way visible="true" id="683335425" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6400416868"/>
+        <nd ref="6400416867"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="683341959" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6400476249"/>
+        <nd ref="6400476248"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="683341960" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6400476246"/>
+        <nd ref="6400476249"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="683341961" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6400476249"/>
+        <nd ref="6400476247"/>
+        <nd ref="6400476246"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="683341962" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="2063416121"/>
+        <nd ref="6400476246"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="683345231" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6400501776"/>
+        <nd ref="6400501772"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="683345232" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6400501775"/>
+        <nd ref="6400501773"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="683345233" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6400501777"/>
+        <nd ref="6400501776"/>
+        <nd ref="6400501775"/>
+        <nd ref="6400501774"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="683345234" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="6400501780"/>
+        <nd ref="6400501774"/>
+        <nd ref="6400501771"/>
+        <nd ref="6400501779"/>
+        <nd ref="6400501777"/>
+        <nd ref="6400501778"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="688244215" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327285998"/>
+        <nd ref="5053656707"/>
+        <nd ref="5142172357"/>
+        <nd ref="327296486"/>
+        <nd ref="6453145547"/>
+        <nd ref="327297800"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 30"/>
+    </way>
+    <way visible="true" id="688244216" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="813019660"/>
+        <nd ref="5053656712"/>
+        <nd ref="5142172353"/>
+        <nd ref="2063416121"/>
+        <nd ref="6453145546"/>
+        <nd ref="5053656710"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 30"/>
+    </way>
+    <way visible="true" id="688244217" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="5053658621"/>
+        <nd ref="6453145545"/>
+        <nd ref="327286929"/>
+        <nd ref="5142172354"/>
+        <nd ref="2063416052"/>
+        <nd ref="5053656715"/>
+        <nd ref="6365001745"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 30"/>
+    </way>
+    <way visible="true" id="688244218" timestamp="2020-01-29T13:48:52Z" version="1" changeset="7137">
+        <nd ref="327297796"/>
+        <nd ref="6453145548"/>
+        <nd ref="327296571"/>
+        <nd ref="5142172356"/>
+        <nd ref="5053656703"/>
+        <nd ref="6365001743"/>
+        <tag k="name" v="Avenida Paseo de Montejo"/>
+        <tag k="lanes" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="alt_name" v="Calle 30"/>
+    </way>
+</osm>

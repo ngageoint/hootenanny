@@ -147,7 +147,7 @@ export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 REF_DB_INPUT=$OSM_API_DB_URL
 
-GENERAL_OPTS="--debug -C UnifyingAlgorithm.conf -C Testing.conf -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
+GENERAL_OPTS="--warn -C UnifyingAlgorithm.conf -C Testing.conf -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D random.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE "
@@ -172,6 +172,8 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   fi
   echo ""
   scripts/database/CleanAndInitializeOsmApiDb.sh
+  # Note that we're only throwing out source ids for this ref b/c they happen to be negative and we want them to be positive to better resemble
+  # OSM API data. Generally, you'd want reader.use.data.source.ids=true here. Same applies to the other workflows below.
   hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-db.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT 
   # needed for debugging only:
   #hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=true $REF_DB_INPUT $OUT_DIR/ref-original-tmp.osm
@@ -182,6 +184,8 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
     echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to a hoot api db (contains features to replace with)..."
   fi
   echo ""
+  # Note that we're throwing out source ids here and treating the secondary data as new data in order to avoid possible id conflicts with the
+  # reference.
   hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-db.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_DB_INPUT
   # needed for debugging only:
   #hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=true $SEC_DB_INPUT $OUT_DIR/sec-original-tmp.osm
