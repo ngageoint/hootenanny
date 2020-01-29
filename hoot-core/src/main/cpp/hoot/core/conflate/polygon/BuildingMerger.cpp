@@ -568,6 +568,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   {
     throw IllegalArgumentException("No constituent buildings passed to building merger.");
   }
+  LOG_TRACE("Combining constituent buildings into a relation...");
 
   // This is primarily put here to support testable output.
   InMemoryElementSorter::sort(constituentBuildings);
@@ -581,14 +582,27 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   threeDBuildingKeys.append(MetadataTags::BuildingHeight());
   const bool allAreBuildingParts =
     OsmUtils::allElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings);
-  // skipping a building relation and doing a multipoly if only some of the buildings have height
-  // tags; this behavior is debatable
+  LOG_VART(allAreBuildingParts);
+  // Here, we're skipping a building relation and doing a multipoly if only some of the buildings
+  // have height tags. This behavior is debatable...
   if (!allAreBuildingParts &&
       OsmUtils::anyElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings))
   {
-    LOG_WARN(
-      "Merging building group where some buildings have 3D tags and others do not. A " <<
-      "multipolygon relation will be created instead of a building relation.")
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      // used to actually log a warning for this but seem excessive...still going to limit it like
+      // a warning, though.
+      LOG_DEBUG(
+        "Merging building group where some buildings have 3D tags and others do not. A " <<
+        "multipolygon relation will be created instead of a building relation. Buildings: " <<
+        OsmUtils::elementsToElementIds(constituentBuildings));
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+    LOG_VART(OsmUtils::getElementsDetailString(constituentBuildings, map));
   }
 
   // put the building parts into a relation
@@ -601,6 +615,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
     new Relation(
       constituentBuildings[0]->getStatus(), map->createNextRelationId(),
       WorstCircularErrorVisitor::getWorstCircularError(constituentBuildings), relationType));
+  LOG_VART(parentRelation->getElementId());
 
   TagMergerPtr tagMerger;
   LOG_VART(preserveTypes);
@@ -611,6 +626,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
     // skipped
     overwriteExcludeTags = BuildingRelationMemberTagMerger::getBuildingPartTagNames();
   }
+  LOG_VART(overwriteExcludeTags);
   if (!preserveTypes)
   {
     tagMerger.reset(new BuildingRelationMemberTagMerger(overwriteExcludeTags));
@@ -665,6 +681,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
     // allAreBuildingParts = building relation
     !allAreBuildingParts &&
     ConfigOptions().getAttributeConflationSuppressBuildingTagOnMultipolyRelationConstituents();
+  LOG_VART(suppressBuildingTagOnConstituents);
   for (Tags::const_iterator it = relationTags.begin(); it != relationTags.end(); ++it)
   {
     // Remove any tags in the parent relation from each of the constituent buildings.

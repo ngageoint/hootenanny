@@ -681,22 +681,23 @@ void ScriptMatchCreator::createMatches(
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
 
+  QElapsedTimer timer;
+  timer.start();
+  LOG_VART(_scriptPath);
+  QFileInfo scriptFileInfo(_scriptPath);
+  LOG_STATUS(
+    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
+  LOG_VARD(*threshold);
+  const int matchesSizeBefore = matches.size();
+
   const CreatorDescription scriptInfo = _getScriptDescription(_scriptPath);
 
   ScriptMatchVisitor v(map, matches, threshold, _script, scriptInfo, _filter);
   v.setScriptPath(_scriptPath);
   v.calculateSearchRadius();
-
   _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
-  LOG_VART(_scriptPath);
   LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
-  QFileInfo scriptFileInfo(_scriptPath);
 
-  QElapsedTimer timer;
-  timer.start();
-  LOG_INFO(
-    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
-  LOG_VARD(*threshold);
   LOG_VARD(GeometryTypeCriterion::typeToString(scriptInfo.geometryType));
   switch (scriptInfo.geometryType)
   {
@@ -716,6 +717,7 @@ void ScriptMatchCreator::createMatches(
       map->visitRo(v);
       break;
   }
+  const int matchesSizeAfter = matches.size();
 
   QString matchType = CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType);
   // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
@@ -724,9 +726,10 @@ void ScriptMatchCreator::createMatches(
   {
     matchType = "PointPolygon";
   }
-  LOG_INFO(
+  LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
-    matchType << " match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
+    matchType << " match candidates and " <<
+    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
     " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 

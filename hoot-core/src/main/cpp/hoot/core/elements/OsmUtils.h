@@ -82,6 +82,15 @@ public:
   static std::vector<long> nodesToNodeIds(const std::vector<std::shared_ptr<const Node>>& nodes);
 
   /**
+   * Retrieves a collection of element IDs for a collection of elements
+   *
+   * @param elements a collection of elements
+   * @return a collection of element IDs
+   * @todo may be able to replace nodesToNodeIds with this more generic version
+   */
+  static QSet<ElementId> elementsToElementIds(const std::vector<ElementPtr>& elements);
+
+  /**
     Retrieves a collection of nodes given a collection of node IDs
 
     @param nodeIds a collection of node IDs
@@ -288,8 +297,19 @@ public:
    *
    * @param element the element to create a string for
    * @param map map owning the element
+   * @return a string describing the element
    */
   static QString getElementDetailString(const ConstElementPtr& element, const ConstOsmMapPtr& map);
+
+  /**
+   *  Constructs a detailed string for collection of elements suitable for trace logging
+   *
+   * @param elements the elements to create a string for
+   * @param map map owning the elements
+   * @return a string describing the elements
+   */
+  static QString getElementsDetailString(const std::vector<ElementPtr>& elements,
+                                         const ConstOsmMapPtr& map);
 
   /**
    * Determines if two elements have conflicting one way street tags
