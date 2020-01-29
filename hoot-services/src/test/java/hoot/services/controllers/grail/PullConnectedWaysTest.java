@@ -27,12 +27,15 @@
 package hoot.services.controllers.grail;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -63,6 +66,10 @@ public class PullConnectedWaysTest {
         wayIds = PullConnectedWaysCommand.getOsmXpath(is, "/osm/way/@id");
         assertEquals(6, wayIds.size());
         is.close();
+
+        File[] osmFiles = new File[0];
+        List<String> filePaths = Arrays.asList(osmFiles).stream().map(File::getAbsolutePath).collect(Collectors.toList());
+        assertTrue(filePaths.isEmpty());
     }
 
 }
