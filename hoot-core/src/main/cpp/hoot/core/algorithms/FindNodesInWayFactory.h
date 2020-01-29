@@ -41,6 +41,10 @@ class FindNodesInWayFactory : public GeometryConverter::NodeFactory
 {
 public:
 
+  static std::string className() { return "hoot::FindNodesInWayFactory"; }
+
+  static int logWarnCount;
+
   FindNodesInWayFactory() {}
 
   FindNodesInWayFactory(const ConstWayPtr& w);

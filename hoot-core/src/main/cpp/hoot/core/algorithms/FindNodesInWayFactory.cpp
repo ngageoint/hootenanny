@@ -35,6 +35,8 @@ using namespace std;
 namespace hoot
 {
 
+int FindNodesInWayFactory::logWarnCount = 0;
+
 FindNodesInWayFactory::FindNodesInWayFactory(const ConstWayPtr& w)
 {
   addWay(w);
@@ -63,7 +65,17 @@ NodePtr FindNodesInWayFactory::createNode(const OsmMapPtr& map,
       {
         // Logging this as a warning, since it happens every once in awhile and life seems to go
         // on...
-        LOG_WARN("" << "Internal Problem: Two nodes were found with the same coordinate.");
+        const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+        if (logWarnCount < logWarnMessageLimit)
+        {
+          LOG_WARN("" << "Internal Problem: Two nodes were found with the same coordinate.");
+        }
+        else if (logWarnCount == logWarnMessageLimit)
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+
         LOG_VART(n);
       }
       result = nid;

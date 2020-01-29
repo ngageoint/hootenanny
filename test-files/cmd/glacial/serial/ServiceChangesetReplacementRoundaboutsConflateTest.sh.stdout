@@ -1,0 +1,59 @@
+test name:  ServiceChangesetReplacementRoundaboutsConflateTest
+source file 1:  test-files/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/Input1.osm
+crop aoi:  -180,-90,180,90
+source file 2:  test-files/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/Input2.osm
+REF_CONVERT_OPS:  hoot::SetTagValueVisitor
+SEC_CONVERT_OPS:  hoot::SetTagValueVisitor
+replacement aoi:  -89.625447,20.99394,-89.612892,21.002564
+full replacement:  --full-replacement
+strict bounds:  --strict-bounds
+geometry filters: 
+tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion
+replacement filters: 
+chain replacement filters: 
+replacement filter options: 
+retainment filters: 
+chain retainment filters: 
+retainment filter options: 
+source formats:  xml
+way snap tolerance:  5.0
+existing way node tolerance:  0.5
+disable conflation: 
+
+Writing the reference dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/Input1.osm to an osm api db (contains features to be replaced)...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ref-original.osm (contains features to be replaced)...
+
+
+Writing the secondary dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/Input2.osm to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/sec-original.osm (contains features to replace with)...
+
+
+Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ref-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/sec-original.osm over: -89.625447,20.99394,-89.612892,21.002564, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ServiceChangesetReplacementRoundaboutsConflateTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
+
+16:00:54.752 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+16:00:54.756 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+16:00:54.758 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+16:00:54.759 WARN   ...thms/FindNodesInWayFactory.cpp(  75) hoot::FindNodesInWayFactory: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+
+Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ServiceChangesetReplacementRoundaboutsConflateTest-changeset-xml.osc.sql to the reference data in the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=20.5214724, max_lat=21.1611171, min_lon=-90.0160752, max_lon=-89.6002314, num_changes=3020
+Node(s) Created: 439
+Node(s) Modified: 0
+Node(s) Deleted: 2052
+Way(s) Created: 140
+Way(s) Modified: 0
+Way(s) Deleted: 385
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 4
+
+Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementRoundaboutsConflateTest-xml-replaced.osm for verification...
+
