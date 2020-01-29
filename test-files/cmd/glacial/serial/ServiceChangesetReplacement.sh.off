@@ -126,6 +126,13 @@ else
   EXISTING_WAY_NODE_TOLERANCE=${17}
 fi
 echo "existing way node tolerance: " $EXISTING_WAY_NODE_TOLERANCE 
+DISABLE_CONFLATION=${18}
+if [ "$DISABLE_CONFLATION" == "true" ]; then
+  DISABLE_CONFLATION="--disable-conflation"
+else
+  DISABLE_CONFLATION=""
+fi
+echo "disable conflation: " $DISABLE_CONFLATION
 CUSTOM_TAG_KEY="note"
 CUSTOM_TAG_VAL="Source"
 
@@ -165,6 +172,8 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   fi
   echo ""
   scripts/database/CleanAndInitializeOsmApiDb.sh
+  # Note that we're only throwing out source ids for this ref b/c they happen to be negative and we want them to be positive to better resemble
+  # OSM API data. Generally, you'd want reader.use.data.source.ids=true here. Same applies to the other workflows below.
   hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-db.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT 
   # needed for debugging only:
   #hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=true $REF_DB_INPUT $OUT_DIR/ref-original-tmp.osm
@@ -175,6 +184,8 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
     echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to a hoot api db (contains features to replace with)..."
   fi
   echo ""
+  # Note that we're throwing out source ids here and treating the secondary data as new data in order to avoid possible id conflicts with the
+  # reference.
   hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-db.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_DB_INPUT
   # needed for debugging only:
   #hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=true $SEC_DB_INPUT $OUT_DIR/sec-original-tmp.osm
@@ -184,9 +195,9 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   echo ""
   echo "Deriving a changeset between the osm api db and the hoot api db layers over: $REPLACEMENT_AOI, to file: $CHANGESET_DB that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  hoot changeset-derive-replacement $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
   # debug only
-  # hoot changeset-derive-replacement $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  # hoot changeset-derive-replacement $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
 
   # CHANGESET APPLICATION
 
@@ -249,7 +260,7 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_XML that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
   # debug only
   # hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
 
@@ -311,9 +322,9 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_JSON that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
   # debug only
-  # hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  # hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
 
   # CHANGESET APPLICATION
 
