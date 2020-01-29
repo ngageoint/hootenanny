@@ -82,9 +82,6 @@ class MergeOsmFilesCommand extends GrailCommand {
             command += " ${" + input + "}";
         }
 
-        filePaths.stream().forEach(f -> {
-
-        });
         command += " ${OUTPUT}";
 
         super.configureCommand(command, substitutionMap, caller);
