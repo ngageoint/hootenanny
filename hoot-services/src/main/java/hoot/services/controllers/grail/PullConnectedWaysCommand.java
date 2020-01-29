@@ -112,25 +112,16 @@ class PullConnectedWaysCommand implements InternalCommand {
                 Long id = Long.parseLong(attr.getValue());
                 if (id >= 0) nodeIds.add(id);
             }
-        } catch (ParserConfigurationException e1) {
+        } catch (ParserConfigurationException | SAXException | XPathExpressionException | IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
-        } catch (SAXException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
         return nodeIds;
     }
 
     private void getConnectedWays() {
         String url = "";
-        InputStream is = null;
+        InputStream is;
         try {
             //Read the crop.osm file for node ids
             is = new FileInputStream(new File(params.getOutput()));
@@ -151,15 +142,12 @@ class PullConnectedWaysCommand implements InternalCommand {
 
             //Get the full ways
             //http://localhost:3000/api/0.6/way/649672297/full
-            List<String> inputs = new ArrayList<>();
             for (Long id : allWayIds) {
                 url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/way/" + id + "/full");
 
                 File outputFile = new File(params.getWorkDir(), id + ".osm");
-                inputs.add(outputFile.getAbsolutePath());
                 URL requestUrl = new URL(url);
                 FileUtils.copyURLToFile(requestUrl, outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
-
             }
 
             //delete the crop.osm file
