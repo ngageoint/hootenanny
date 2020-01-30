@@ -127,26 +127,30 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   LOG_VART(cph.size());
 
   double distanceSquared = _distance * _distance;
-
   int processedCount = 0;
   cph.resetIterator();
   ExactTagDifferencer tagDiff;
+
   while (cph.next())
   {
     const std::vector<long>& v = cph.getMatch();
 
     for (size_t i = 0; i < v.size(); i++)
     {
-      if (!map->containsNode(v[i])) continue;
+      const long matchI = v[i];
+
+      if (!map->containsNode(matchI)) continue;
 
       for (size_t j = 0; j < v.size(); j++)
       {
         bool replace = false;
         double calcdDistanceSquared = -1.0;
-        if (v[i] != v[j] && map->containsNode(v[j]))
+        const long matchJ = v[j];
+
+        if (matchI != matchJ && map->containsNode(matchJ))
         {
-          const NodePtr& n1 = planar->getNode(v[i]);
-          const NodePtr& n2 = planar->getNode(v[j]);
+          const NodePtr& n1 = planar->getNode(matchI);
+          const NodePtr& n2 = planar->getNode(matchJ);
           LOG_VART(n1);
           LOG_VART(n2);
 
@@ -165,8 +169,8 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               // if the geographic bounds are specified, then make sure both points are inside.
               else
               {
-                const NodePtr& g1 = wgs84->getNode(v[i]);
-                const NodePtr& g2 = wgs84->getNode(v[j]);
+                const NodePtr& g1 = wgs84->getNode(matchI);
+                const NodePtr& g2 = wgs84->getNode(matchJ);
                 if (_bounds.contains(g1->getX(), g1->getY()) &&
                     _bounds.contains(g2->getX(), g2->getY()))
                 {
@@ -184,9 +188,9 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               if (replace)
               {
                 LOG_TRACE(
-                  "Merging nodes: " << ElementId(ElementType::Node, v[j]) << " and " <<
-                  ElementId(ElementType::Node, v[i]) << "...");
-                map->replaceNode(v[j], v[i]);
+                  "Merging nodes: " << ElementId(ElementType::Node, matchJ) << " and " <<
+                  ElementId(ElementType::Node, matchI) << "...");
+                map->replaceNode(matchI, matchJ);
                 _numAffected++;
               }
             }
@@ -199,12 +203,12 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
           if (calcdDistanceSquared != -1.0)
           {
             _logMergeResult(
-              v[i], v[j], map, replace, std::sqrt(distanceSquared),
+              matchI, matchJ, map, replace, std::sqrt(distanceSquared),
               std::sqrt(calcdDistanceSquared));
           }
           else
           {
-            _logMergeResult(v[i], v[j], map, replace);
+            _logMergeResult(matchI, matchJ, map, replace);
           }
         }
       }
