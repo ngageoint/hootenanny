@@ -3797,7 +3797,3 @@ Listing filters...
 
   NonBuildingAreaCriterion                     criterion         Identifies features that are areas but not buildings
 
-Listing JOSM validators...
-
-DuplicatedWayNodes                           Duplicated way nodes
-

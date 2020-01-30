@@ -6,7 +6,9 @@ mkdir -p bin
 
 # This could be changed downstream to package other JOSM versions with string replace of this var.
 JOSM_JAR=josm-snapshot-15553.jar
+# JOSM_JAR=me-josm-4.4.6.jar
 JOSM_DOWNLOAD_URL=https://josm.openstreetmap.de/download # leave this empty to specify a local file
+# JOSM_DOWNLOAD_URL=https://github.com/DigitalGlobe/me-josm/releases/download/v4.4.6/
 if test -f "$JOSM_JAR"; then
   echo $JOSM_JAR" already downloaded."
 elif test -z "$JOSM_DOWNLOAD_URL"; then
