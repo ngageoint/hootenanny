@@ -327,16 +327,21 @@ void HighwayMatchCreator::createMatches(
 {
   QElapsedTimer timer;
   timer.start();
-  LOG_INFO("Looking for matches with: " << className() << "...");
+  LOG_STATUS("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
+  const int matchesSizeBefore = matches.size();
+
   HighwayMatchVisitor v(
     map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff,
     _filter);
   map->visitWaysRo(v);
   map->visitRelationsRo(v);
-  LOG_INFO(
+  const int matchesSizeAfter = matches.size();
+
+  LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " highway match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
+    " highway match candidates and " <<
+    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
     " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 

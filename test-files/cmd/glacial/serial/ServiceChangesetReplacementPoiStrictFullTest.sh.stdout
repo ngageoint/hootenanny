@@ -18,6 +18,7 @@ retainment filter options:
 source formats:  xml
 way snap tolerance:  0.0
 existing way node tolerance:  0.0
+disable conflation: 
 
 Cropping the reference dataset from: test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm to: -122.43384,37.76069,-122.42742,37.76869, then writing it to an osm api db (contains features to be replaced)...
 

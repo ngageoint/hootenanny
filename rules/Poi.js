@@ -181,13 +181,13 @@ function additiveScore(map, e1, e2) {
     var reason = result.reasons;
 
     var ignoreType = false;
-    hoot.trace("hasName(e1): " + hasName(e1));
-    hoot.trace("hasName(e2): " + hasName(e2));
+    //hoot.trace("hasName(e1): " + hasName(e1));
+    //hoot.trace("hasName(e2): " + hasName(e2));
     if (hoot.get("poi.ignore.type.if.name.present") == 'true' && hasName(e1) && hasName(e2))
     {
       ignoreType = true;
     }
-    hoot.trace("ignoreType: " + ignoreType);
+    //hoot.trace("ignoreType: " + ignoreType);
 
     var t1 = e1.getTags().toDict();
     var t2 = e2.getTags().toDict();
@@ -195,15 +195,15 @@ function additiveScore(map, e1, e2) {
     // if there is no type information to compare the name becomes more
     // important
     var oneGeneric = hasTypeTag(t1) == false || hasTypeTag(t2) == false;
-    if (oneGeneric)
+    /*if (oneGeneric)
     {
       hoot.trace("One element in the pair is generic.");
-    }
+    }*/
 
     var e1SearchRadius = exports.getSearchRadius(e1);
-    hoot.trace("e1SearchRadius: " + e1SearchRadius);
+    //hoot.trace("e1SearchRadius: " + e1SearchRadius);
     var e2SearchRadius = exports.getSearchRadius(e2);
-    hoot.trace("e2SearchRadius: " + e2SearchRadius);
+    //hoot.trace("e2SearchRadius: " + e2SearchRadius);
     var searchRadius;
     if (oneGeneric)
     {
@@ -213,17 +213,17 @@ function additiveScore(map, e1, e2) {
     {
       searchRadius = Math.min(e1SearchRadius, e2SearchRadius);
     }
-    hoot.trace("searchRadius: " + searchRadius);
+    //hoot.trace("searchRadius: " + searchRadius);
 
     var d = distance(e1, e2);
-    hoot.trace("d: " + d);
+    //hoot.trace("d: " + d);
 
     if (d > searchRadius)
     {
-        hoot.trace(
-          "distance: " + d + " greater than search radius: " + searchRadius + "; returning score: " +
-          result.score);
-        return result;
+      /*hoot.trace(
+        "distance: " + d + " greater than search radius: " + searchRadius + "; returning score: " +
+        result.score);*/
+      return result;
     }
 
     var mean = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);
@@ -352,8 +352,8 @@ function additiveScore(map, e1, e2) {
     result.score = score;
     result.reasons = reason;
 
-    hoot.trace("score: " + result.score);
-    hoot.trace("reasons: " + result.reasons);
+    //hoot.trace("score: " + result.score);
+    //hoot.trace("reasons: " + result.reasons);
     return result;
 }
 
@@ -374,11 +374,11 @@ exports.matchScore = function(map, e1, e2) {
 
     if (e1.getStatusString() == e2.getStatusString()) 
     {
-      hoot.trace("same statuses: miss");
+      //hoot.trace("same statuses: miss");
       return result;
     }
 
-    hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+    /*hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
     if (e1.getTags().get("note"))
     {
       hoot.trace("e1 note: " + e1.getTags().get("note"));
@@ -387,13 +387,13 @@ exports.matchScore = function(map, e1, e2) {
     if (e2.getTags().get("note"))
     {
       hoot.trace("e2 note: " + e2.getTags().get("note"));
-    }
+    }*/
 
     var additiveResult = additiveScore(map, e1, e2);
     var score = additiveResult.score;
-    hoot.trace("score: " + score);
+    //hoot.trace("score: " + score);
     var reasons = additiveResult.reasons;
-    hoot.trace("reasons: " + reasons);
+    //hoot.trace("reasons: " + reasons);
     var d = "(" + prettyNumber(distance(e1, e2)) + "m)";
 
     var matchScore;
@@ -408,8 +408,8 @@ exports.matchScore = function(map, e1, e2) {
         matchScore = {match: 1, explain: "Very similar " + d + " - " + reasons.join(", ") };
         classification = 'match';
     }
-    hoot.trace("explanation: " + matchScore.explain);
-    hoot.trace("classification: " + classification);
+    //hoot.trace("explanation: " + matchScore.explain);
+    //hoot.trace("classification: " + classification);
 
     return matchScore;
 };

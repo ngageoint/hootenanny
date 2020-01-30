@@ -22,44 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FINDNODESINWAYFACTORY_H
-#define FINDNODESINWAYFACTORY_H
+package hoot.services.controllers.grail;
 
-#include <hoot/core/util/GeometryConverter.h>
+import org.springframework.stereotype.Component;
 
-namespace hoot
-{
 
 /**
- * Used by the GeometryUtils class to create a new way using only nodes from the old way, or by
- * creating new nodes. If new nodes are created then they are also used before creating another
- * node.
+ * Used for constructing a PullConnectedWaysCommand object
  */
-class FindNodesInWayFactory : public GeometryConverter::NodeFactory
-{
-public:
+@Component
+class PullConnectedWaysCommandFactory {
 
-  static std::string className() { return "hoot::FindNodesInWayFactory"; }
-
-  static int logWarnCount;
-
-  FindNodesInWayFactory() {}
-
-  FindNodesInWayFactory(const ConstWayPtr& w);
-
-  void addWay(const ConstWayPtr& w);
-
-  virtual NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
-    Status s, double circularError) override;
-
-private:
-
-  const ConstWayPtr _way;
-  std::set<long> _nodesToSearch;
-};
-
+    PullConnectedWaysCommand build(String jobId, GrailParams params, Class<?> caller) {
+        return new PullConnectedWaysCommand(params, jobId, caller);
+    }
 }
-
-#endif // FINDNODESINWAYFACTORY_H

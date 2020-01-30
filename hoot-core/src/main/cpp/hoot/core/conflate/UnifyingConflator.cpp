@@ -299,7 +299,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   {
     if (i % 10 == 0)
     {
-      PROGRESS_INFO("Applying merger: " << i + 1 << " / " << _mergers.size());
+      PROGRESS_INFO(
+        "Applying merger: " << StringUtils::formatLargeNumber(i + 1) << " / " <<
+        StringUtils::formatLargeNumber(_mergers.size()));
     }
     _mergers[i]->apply(map, replaced);
     LOG_VART(replaced);

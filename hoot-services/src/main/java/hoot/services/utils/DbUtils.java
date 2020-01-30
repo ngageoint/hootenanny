@@ -861,10 +861,10 @@ NOT EXISTS
         }
     }
 
-    // Sets the specified job to a status detail of conflicts
-    // if a diff-error.osc file is present in the job workspace
-    public static void checkConflicted(String jobId) {
-        File workDir = new File(CHANGESETS_FOLDER, jobId);
+    // Sets the specified upload changeset job to a status detail of CONFLICTS
+    // if a diff-error.osc file is present in the parent job workspace
+    public static void checkConflicted(String jobId, String parentId) {
+        File workDir = new File(CHANGESETS_FOLDER, parentId);
         File diffError = new File(workDir, "diff-error.osc");
         if (diffError.exists()) {
             // Find the job

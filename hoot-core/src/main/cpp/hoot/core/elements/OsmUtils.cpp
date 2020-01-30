@@ -112,6 +112,20 @@ std::vector<long> OsmUtils::nodesToNodeIds(const std::vector<std::shared_ptr<con
   return nodeIds;
 }
 
+QSet<ElementId> OsmUtils::elementsToElementIds(const std::vector<ElementPtr>& elements)
+{
+  QSet<ElementId> ids;
+  for (std::vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  {
+    ElementPtr element = *it;
+    if (element)
+    {
+      ids.insert(element->getElementId());
+    }
+  }
+  return ids;
+}
+
 QList<std::shared_ptr<const Node>> OsmUtils::nodeIdsToNodes(
   const QList<long>& nodeIds, const std::shared_ptr<const OsmMap>& map)
 {
@@ -298,6 +312,17 @@ QString OsmUtils::getElementDetailString(const ConstElementPtr& element, const C
   {
     ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
     str += OsmUtils::getRelationMembersDetailedString(relation, map) + "\n";
+  }
+  return str;
+}
+
+QString OsmUtils::getElementsDetailString(const std::vector<ElementPtr>& elements,
+                                          const ConstOsmMapPtr& map)
+{
+  QString str;
+  for (std::vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  {
+    str += getElementDetailString(*it, map);
   }
   return str;
 }
