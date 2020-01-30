@@ -29,6 +29,10 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/Node.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -46,6 +50,8 @@ class SettingsTest : public HootTestFixture
   CPPUNIT_TEST(replaceTest);
   CPPUNIT_TEST(storeTest);
   CPPUNIT_TEST(baseSettingsTest);
+  CPPUNIT_TEST(invalidOptionNameTest);
+  CPPUNIT_TEST(invalidOperatorsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -141,6 +147,91 @@ public:
     //  From NetworkAlgorithm.conf
     HOOT_STR_EQUALS("hoot::HighwayExpertClassifier", uut.getString("conflate.match.highway.classifier"));
     HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", uut.getString("way.subline.matcher"));
+  }
+
+  void invalidOptionNameTest()
+  {
+    QStringList args;
+    args.append("-D");
+    args.append("blah=true");
+    QString exceptionMsg;
+    try
+    {
+      Settings::parseCommonArguments(args);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Unknown settings option: (blah)").toStdString(), exceptionMsg.toStdString());
+  }
+
+  void invalidOperatorsTest()
+  {
+    QStringList args;
+    QString exceptionMsg;
+    QString expectedErrorMessage;
+
+    args.append("-D");
+    args.append(
+      ConfigOptions::getConvertOpsKey() + "=" +
+      QString::fromStdString(ReplaceElementOp::className()) + ";" +
+      QString::fromStdString(RemoveElementsVisitor::className()) + ";" +
+      QString::fromStdString(BuildingCriterion::className()) + ";" +
+      // fails; only ops, vis, and crits are valid
+      QString::fromStdString(Node::className()));
+    try
+    {
+      Settings::parseCommonArguments(args);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    expectedErrorMessage =
+      "Invalid option operator class name: " +
+      QString::fromStdString(Node::className());
+    CPPUNIT_ASSERT_EQUAL(expectedErrorMessage.toStdString(), exceptionMsg.toStdString());
+
+    args.clear();
+    args.append("-D");
+    args.append(
+      ConfigOptions::getConvertOpsKey() + "=" +
+      QString::fromStdString(ReplaceElementOp::className()) + ";" +
+      // fails; visitor is missing namespace
+      QString::fromStdString(RemoveElementsVisitor::className()).replace("hoot::", ""));
+    try
+    {
+      Settings::parseCommonArguments(args);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    expectedErrorMessage =
+      "Invalid option operator class name: " +
+      QString::fromStdString(RemoveElementsVisitor::className()).replace("hoot::", "");
+    CPPUNIT_ASSERT_EQUAL(expectedErrorMessage.toStdString(), exceptionMsg.toStdString());
+
+    args.clear();
+    args.append("-D");
+    args.append(
+      ConfigOptions::getConvertOpsKey() + "=" +
+      QString::fromStdString(ReplaceElementOp::className()) + ";" +
+      QString::fromStdString(RemoveElementsVisitor::className()) + ";" +
+      "blah");
+    exceptionMsg = "";
+    try
+    {
+      Settings::parseCommonArguments(args);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    expectedErrorMessage = "Invalid option operator class name: blah";
+    CPPUNIT_ASSERT_EQUAL(expectedErrorMessage.toStdString(), exceptionMsg.toStdString());
   }
 };
 

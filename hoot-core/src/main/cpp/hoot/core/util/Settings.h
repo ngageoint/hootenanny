@@ -101,7 +101,8 @@ public:
 
   double getDouble(const QString& key) const;
   double getDouble(const QString& key, double defaultValue) const;
-  double getDouble(const QString& key, double defaultValue, double minValue, double maxValue ) const;
+  double getDouble(const QString& key, double defaultValue, double minValue,
+                   double maxValue ) const;
   /**
    * Returns the double represented in the supplied string. Where necessary variables will be
    * resolved.
@@ -136,10 +137,11 @@ public:
    * Parses common arguments (e.g. "-D foo=bar --debug")
    * Any arguments parsed are removed from args.
    */
-  static void parseCommonArguments(QStringList &args);
+  static void parseCommonArguments(QStringList& args);
 
   void set(const QString& key, const char* value) { set(key, QString(value)); }
-  void set(const QString& key, const std::string& value) { set(key, QString::fromStdString(value)); }
+  void set(const QString& key, const std::string& value)
+  { set(key, QString::fromStdString(value)); }
   void set(const QString& key, const QString& value);
   void set(const QString& key, double value) { _settings[key] = QVariant(value); }
   void set(const QString& key, int value) { _settings[key] = QVariant(value); }
@@ -176,6 +178,12 @@ private:
   QString _replaceVariables(const QString& key, std::set<QString> used) const;
   QString _replaceVariablesValue(QString value) const;
   QString _replaceVariablesValue(QString value, std::set<QString> used) const;
+
+  /*
+   * This validates input for options that take a list of hoot operators (factory configurable
+   * ElementVisitor or OsmMapOperation)
+   */
+  static void _validateOperatorRefs(const QStringList& operators);
 };
 
 inline Settings& conf() { return Settings::getInstance(); }
