@@ -23,6 +23,7 @@ echo "Building hoot-josm jar..."
 mkdir -p target/classes
 # The main downside to this is it will always build, regardless of whether the file has been modified. Will worry about that later and maybe
 # get Maven in the mix or check file timestamps.
+rm -f sources
 find -name "*.java" > sources
 javac -d target/classes -cp bin/josm.jar @sources
 cd target/classes

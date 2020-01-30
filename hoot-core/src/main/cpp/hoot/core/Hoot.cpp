@@ -123,6 +123,10 @@ void Hoot::_init()
     loadLibrary("HootJs");
 # endif
 
+# ifdef HOOT_HAVE_JOSM
+  loadLibrary("HootJosm");
+# endif
+
   Log::getInstance().setLevel(Log::Info);
 }
 

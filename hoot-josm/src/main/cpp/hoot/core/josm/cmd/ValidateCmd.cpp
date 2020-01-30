@@ -35,8 +35,6 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/info/ApiEntityDisplayInfo.h>
 
-using namespace std;
-
 namespace hoot
 {
 
@@ -44,11 +42,13 @@ class ValidateCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::ValidateCmd"; }
+  static std::string className() { return "hoot::ValidateCmd"; }
 
   ValidateCmd() {}
 
   virtual QString getName() const override { return "validate"; }
+
+  virtual QString getType() const { return "josm"; }
 
   virtual QString getDescription() const override
   { return "Checks map data for validation errors using JOSM"; }
