@@ -5,7 +5,7 @@ AC_DEFUN([JOSM_INIT],[
     [AS_HELP_STRING([--with-josm],[Include support for validation/cleaning with JOSM (ARG=yes or no)])],
     [])
 
-  # Default to JOSM enabled.
+  # Default to JOSM enabled. Not actually checking for any JOSM files here. JOSM jar will be checked for when the JNI Java env is initiated.
   if test "$with_josm" = "no" -o "$with_josm" = ""; then
     JOSM_ENABLED=no
     AC_MSG_NOTICE("JOSM functions disabled.")

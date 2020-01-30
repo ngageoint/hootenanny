@@ -20,7 +20,7 @@ sed -i s/"-std=c++11"// Configure.pri.in
 PG_VERSION=`ls /etc/init.d | grep postgresql- | sort | tail -1 | egrep -o '[0-9]{1,}\.[0-9]{1,}'`
 
 aclocal && autoconf && autoheader && automake --add-missing && \
-  ./configure --quiet --with-rnd --with-services --with-postgresql=/usr/pgsql-$PG_VERSION/bin/pg_config
+  ./configure --quiet --with-rnd --with-services --with-josm --with-postgresql=/usr/pgsql-$PG_VERSION/bin/pg_config
 
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."

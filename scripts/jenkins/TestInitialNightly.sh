@@ -16,10 +16,6 @@ export HOOT_TEST_DIFF=--diff
 echo "Running glacial tests..."
 bin/HootTest $HOOT_TEST_DIFF --glacial --parallel
 
-# This is done in VagrantBuild.sh
-# cd $HOOT_HOME/docs
-# make -sj`nproc`
-
 make -sj`nproc` archive
 
 # Generate coverage reports
