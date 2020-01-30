@@ -145,10 +145,12 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       {
         bool replace = false;
         double calcdDistanceSquared = -1.0;
-        if (matchIdI != v[j] && map->containsNode(v[j]))
+        const long matchIdJ = v[j];
+
+        if (matchIdI != matchIdJ && map->containsNode(matchIdJ))
         {
           const NodePtr& n1 = planar->getNode(matchIdI);
-          const NodePtr& n2 = planar->getNode(v[j]);
+          const NodePtr& n2 = planar->getNode(matchIdJ);
           LOG_VART(n1);
           LOG_VART(n2);
 
@@ -168,7 +170,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               else
               {
                 const NodePtr& g1 = wgs84->getNode(matchIdI);
-                const NodePtr& g2 = wgs84->getNode(v[j]);
+                const NodePtr& g2 = wgs84->getNode(matchIdJ);
                 if (_bounds.contains(g1->getX(), g1->getY()) &&
                     _bounds.contains(g2->getX(), g2->getY()))
                 {
@@ -186,9 +188,9 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               if (replace)
               {
                 LOG_TRACE(
-                  "Merging nodes: " << ElementId(ElementType::Node, v[j]) << " and " <<
+                  "Merging nodes: " << ElementId(ElementType::Node, matchIdJ) << " and " <<
                   ElementId(ElementType::Node, matchIdI) << "...");
-                map->replaceNode(v[j], matchIdI);
+                map->replaceNode(matchIdJ, matchIdI);
                 _numAffected++;
               }
             }
@@ -201,12 +203,12 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
           if (calcdDistanceSquared != -1.0)
           {
             _logMergeResult(
-              matchIdI, v[j], map, replace, std::sqrt(distanceSquared),
+              matchIdI, matchIdJ, map, replace, std::sqrt(distanceSquared),
               std::sqrt(calcdDistanceSquared));
           }
           else
           {
-            _logMergeResult(matchIdI, v[j], map, replace);
+            _logMergeResult(matchIdI, matchIdJ, map, replace);
           }
         }
       }
