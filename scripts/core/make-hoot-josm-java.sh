@@ -3,8 +3,8 @@ set -e
 
 cd $HOOT_HOME/hoot-josm
 mkdir -p bin
-
 mkdir -p tmp
+
 # These params could be changed downstream to package other JOSM versions with string replace of this var. Since we don't have any compile-time
 # dep checks when using JNI against JOSM, don't blindly update to the latest version without checking tests first.
 JOSM_PATH=https://josm.openstreetmap.de/download # can either be a url or a dir
@@ -28,11 +28,11 @@ chmod 777 bin/josm.jar
 
 echo "Building hoot-josm jar..."
 mkdir -p target/classes
-# The main downside to this is it will always build, regardless of whether the file has been modified. Will worry about that later and maybe
-# get Maven in the mix or check file timestamps.
+# TODO: try to look at timestamps
 rm -f sources
 find -name "*.java" > sources
 javac -d target/classes -cp bin/josm.jar @sources
+rm -f sources
 cd target/classes
 jar cf $HOOT_HOME/hoot-josm/bin/hoot-josm.jar hoot
 cd $HOOT_HOME/hoot-josm
