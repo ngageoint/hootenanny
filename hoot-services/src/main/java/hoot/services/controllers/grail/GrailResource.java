@@ -147,6 +147,9 @@ public class GrailResource {
     @Autowired
     private UpdateParentCommandFactory updateParentCommandFactory;
 
+    @Autowired
+    private PullConnectedWaysCommandFactory connectedWaysCommandFactory;
+
     public GrailResource() {}
 
     private Command getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
@@ -165,6 +168,13 @@ public class GrailResource {
         }
 
         InternalCommand command = apiCommandFactory.build(jobId, params, this.getClass());
+        return command;
+    }
+
+    private Command getConnectedWaysApiCommand(String jobId, GrailParams params) throws UnavailableException {
+        params.setPullUrl(RAILSPORT_PULL_URL);
+
+        InternalCommand command = connectedWaysCommandFactory.build(jobId, params, this.getClass());
         return command;
     }
 
@@ -845,9 +855,28 @@ public class GrailResource {
             throw new UnavailableException("The Rails port API is offline.");
         }
 
-        params.setInput1(referenceOSMFile.getAbsolutePath());
+        GrailParams connectedWaysParams = new GrailParams(params);
+        connectedWaysParams.setInput1(referenceOSMFile.getAbsolutePath());
+        File cropFile = new File(params.getWorkDir(), "crop.osm");
+        connectedWaysParams.setOutput(cropFile.getAbsolutePath());
+        // Do an invert crop of this data to get nodes outside bounds
+        workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", InvertCropCommand.class, this.getClass()));
+
+        //read node ids
+        //pull connected ways
+        //pull entire ways
+        //remove cropfile
+        workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
+
+        // merge reference and ways osm files
+        GrailParams mergeOsmParams = new GrailParams(params);
+        File mergeFile = new File(params.getWorkDir(), "merge.osm");
+        mergeOsmParams.setOutput(mergeFile.getAbsolutePath());
+        workflow.add(grailCommandFactory.build(jobId, mergeOsmParams, "info", MergeOsmFilesCommand.class, this.getClass()));
         // Write the data to the hoot db
-        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
+        GrailParams pushParams = new GrailParams(params);
+        pushParams.setInput1(mergeFile.getAbsolutePath());
+        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, pushParams, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importRailsPort);
 
         // Set map tags marking dataset as eligible for derive changeset

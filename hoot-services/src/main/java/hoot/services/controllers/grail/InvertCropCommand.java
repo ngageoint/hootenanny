@@ -22,70 +22,48 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
-import static hoot.services.HootProperties.HOOTAPI_DB_URL;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import hoot.services.command.CommandResult;
 
 
 /**
  * Used for pushing OSM data to the database
  */
-class PushToDbCommand extends GrailCommand {
-    private static final Logger logger = LoggerFactory.getLogger(PushToDbCommand.class);
+class InvertCropCommand extends GrailCommand {
+    private static final Logger logger = LoggerFactory.getLogger(InvertCropCommand.class);
 
-    PushToDbCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
+    InvertCropCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
 
         logger.info("Params: " + params);
 
         List<String> options = new LinkedList<>();
-        options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("hootapi.db.writer.remap.ids=false");
-        options.add("job.id=" + jobId);
-        options.add("api.db.email=" + params.getUser().getEmail());
+        options.add("convert.ops=hoot::MapCropper;hoot::RemoveElementsVisitor");
+        options.add("remove.elements.visitor.element.criteria=hoot::WayCriterion;hoot::RelationCriterion");
+        options.add("remove.elements.visitor.recursive=false");
+        options.add("crop.bounds=" + params.getBounds());
+        options.add("crop.invert=true");
 
         List<String> hootOptions = toHootOptions(options);
-
-        String dbName = HOOTAPI_DB_URL + "/" + params.getOutput();
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        substitutionMap.put("DB_NAME", dbName);
         substitutionMap.put("INPUT", params.getInput1());
+        substitutionMap.put("OUTPUT", params.getOutput());
 
-        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${DB_NAME}";
+        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
 
-    @Override
-    public CommandResult execute() {
-        CommandResult commandResult = super.execute();
-
-        if (params.getWorkDir() != null) {
-            try {
-                FileUtils.forceDelete(params.getWorkDir());
-            }
-            catch (IOException ioe) {
-                logger.error("Error deleting folder: {} ", params.getWorkDir().getAbsolutePath(), ioe);
-            }
-        }
-
-        return commandResult;
-    }
 }
