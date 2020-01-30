@@ -343,7 +343,7 @@ public class FolderResource {
         }
 
 
-        DbUtils.setFolderParent(folderId, newParentFolderId);
+        DbUtils.setFolderParent(folderId, parentFolder);
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         ret.put("success", true);
