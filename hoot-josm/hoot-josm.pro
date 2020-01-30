@@ -7,7 +7,7 @@ QT += testlib \
     xml \
 
 TARGET = HootJosm
-QMAKE_EXTRA_TARGETS+=josmJava
+QMAKE_POST_LINK += ../scripts/core/make-hoot-josm-java.sh
 TEMPLATE = lib
 
 DEPENDPATH += \
@@ -49,5 +49,3 @@ cppunit {
 SOURCES += $$files(src/test/*.cpp, true)
 HEADERS += $$files(src/test/*.h, true)
 }
-
-josmJava.target = ../scripts/core/make-josm-2.sh

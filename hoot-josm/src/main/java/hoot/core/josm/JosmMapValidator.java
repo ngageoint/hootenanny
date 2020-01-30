@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.josm;
+package hoot.core.josm;
 
 import java.util.List;
 import java.util.ArrayList;
