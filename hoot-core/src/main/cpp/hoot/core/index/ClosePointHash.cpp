@@ -69,12 +69,9 @@ vector<long> ClosePointHash::getMatchesFor(long id)
 {
   vector<long> ids;
 
-  const std::vector<int64_t> bins = _idTobin[id];
-  for (std::vector<int64_t>::const_iterator it = bins.begin(); it != bins.end(); ++it)
+  foreach (int64_t binIx, _idTobin[id])
   {
-    const int64_t binIx = *it;
-    const std::vector<long> binIds = _bins[binIx];
-    ids.insert(ids.end(), binIds.begin(), binIds.end());
+    ids.insert(ids.end(), _bins[binIx].begin(), _bins[binIx].end());
   }
 
   // remove duplicates
