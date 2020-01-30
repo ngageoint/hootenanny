@@ -89,6 +89,7 @@ void JavaEnvironment::_initVm()
   options[4].optionString = strdup(headlessStr.toStdString().c_str());
   LOG_VART(options[4].optionString);
 
+  // for debuggin only
 //  const QString verboseStr = "-verbose:jni";
 //  options[5].optionString = strdup(verboseStr.toStdString().c_str());
 //  LOG_VART(options[5].optionString);

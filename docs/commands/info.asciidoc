@@ -256,7 +256,8 @@ hoot info --geometry-type-crieria
 === JOSM Validators
 
 The +--josm-validators++ option prints out all JOSM Java validator classes which can be used to validate map data (mark elements with 
-validation errors only) or clean map data (attempt to fix elements with validation errors).
+validation errors only) or clean map data (attempt to fix elements with validation errors). This command is only available when Hootenanny is 
+configured with JOSM (compiled --with-josm).
 
 ==== Usage
 

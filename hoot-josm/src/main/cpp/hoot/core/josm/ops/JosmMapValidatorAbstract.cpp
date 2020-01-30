@@ -84,7 +84,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   _josmInterface =
     // Thought it would be best to grab this as a global ref, since its possible it could be garbage
     // collected at any time. Then it can be cleaned up in the destructor. However, that's causing
-    // crashes during the tests, so need to think about it some more.
+    // crashes during the tests, so need to think about it some more and be sure its not needed.
     /*_javaEnv->NewGlobalRef(*/
       _javaEnv->NewObject(
         _josmInterfaceClass,

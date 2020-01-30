@@ -53,6 +53,9 @@ TestSuite(dir.toStdString())
 # ifndef HOOT_HAVE_RND
     ignorePrefix << "Rnd";
 # endif
+# ifndef HOOT_HAVE_JOSM
+    ignorePrefix << "Josm";
+# endif
 
   for (int i = 0; i < files.size(); i++)
   {

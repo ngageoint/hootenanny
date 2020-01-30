@@ -297,7 +297,13 @@ public:
     }
     else if (specifiedOpts.contains("--josm-validators"))
     {
-      _printJosmValidators();
+      # ifndef HOOT_HAVE_JOSM
+        _printJosmValidators();
+      # else
+        throw IllegalArgumentException(
+          "--josm-validators is an invalid option when Hootenanny is not configured for JOSM.")
+      # endif
+
     }
     // everything else
     else if (specifiedOpts.size() == 1)

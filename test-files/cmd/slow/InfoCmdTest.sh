@@ -206,9 +206,3 @@ echo "Listing filters..."
 echo ""
 hoot info --filters | grep "NonBuildingAreaCriterion"
 echo ""
-
-# JOSM MAP VALIDATORS
-echo "Listing JOSM validators..."
-echo ""
-hoot info --josm-validators | grep "DuplicatedWayNodes"
-echo ""

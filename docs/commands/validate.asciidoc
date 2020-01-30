@@ -3,7 +3,8 @@
 
 === Description
 
-The +validate+ command uses JOSM to identify (but does not fix) data with common erroneous aspects.
+The +validate+ command uses JOSM to identify (but does not fix) data with common erroneous aspects. This command is only available when
+Hootenanny is configured with JOSM (compiled --with-josm).
 
 * +input+  - Input; may be any supported input format (e.g. .osm file).
 * +output+ - (optional) Output file; may be any supported output format (e.g. .osm file). If specified, elements with validation will be marked
