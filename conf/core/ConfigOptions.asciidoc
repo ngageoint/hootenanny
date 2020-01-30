@@ -1850,7 +1850,7 @@ satisfy the criterion.
 
 * Data Type: list
 * Default Value:
-** `${HOOT_HOME}/tmp/hoot-josm.jar`
+** `${HOOT_HOME}/bin/josm.jar;${HOOT_HOME}/bin/hoot-josm.jar`
 
 A list of JAR files to place on the JAVA classpath when Hootenanny C++ code interacts with Java
 code using JNI.
