@@ -35,7 +35,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/ops/JosmMapValidator.h>
 
 // Qt
 #include <QUrl>
@@ -295,16 +294,6 @@ public:
     {
       std::cout << ApiEntityDisplayInfo::getDisplayInfoOps("conflate.pre.ops").toStdString();
     }
-    else if (specifiedOpts.contains("--josm-validators"))
-    {
-      # ifndef HOOT_HAVE_JOSM
-        _printJosmValidators();
-      # else
-        throw IllegalArgumentException(
-          "--josm-validators is an invalid option when Hootenanny is not configured for JOSM.")
-      # endif
-
-    }
     // everything else
     else if (specifiedOpts.size() == 1)
     {
@@ -376,22 +365,6 @@ private:
     options.append("--value-aggregators");
     options.append("--way-joiners");
     return options;
-  }
-
-  void _printJosmValidators()
-  {
-    const QMap<QString, QString> validators =
-      JosmMapValidator().getAvailableValidatorsWithDescription();
-    for (QMap<QString, QString>::const_iterator itr = validators.begin(); itr != validators.end();
-         ++itr)
-    {
-      const QString name = itr.key();
-      const QString description = itr.value();
-      const int indentAfterName = ApiEntityDisplayInfo::MAX_NAME_SIZE - name.size();
-      const int indentAfterDescription = ApiEntityDisplayInfo::MAX_TYPE_SIZE - description.size();
-      std::cout << name << QString(indentAfterName, ' ') << description <<
-                   QString(indentAfterDescription, ' ') << std::endl;
-    }
   }
 };
 

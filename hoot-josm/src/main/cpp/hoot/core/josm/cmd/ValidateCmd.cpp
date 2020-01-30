@@ -28,12 +28,13 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/ops/JosmMapValidator.h>
+#include <hoot/core/josm/ops/JosmMapValidator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/info/ApiEntityDisplayInfo.h>
 
 using namespace std;
 
@@ -55,35 +56,65 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    if (args.size() != 2)
+    if (args.size() < 1 || arg.size() > 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
     }
 
-    const QString input = args[0];
-    const QString output = args[1];
+    if (args.size() == 1)
+    {
+      if (!args.contains("--available-validators"))
+      {
+        throw IllegalArgumentException(
+          "When the validate command is called with one parameter, the parameter must be '--available-validators'.");
+      }
 
-    OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, input, true, Status::Unknown1);
+      _printJosmValidators();
+    }
+    else
+    {
+      const QString input = args[0];
+      const QString output = args[1];
 
-    JosmMapValidator validator;
-    validator.setConfiguration(conf());
-    LOG_INFO(validator.getInitStatusMessage());
-    validator.apply(map);
-    LOG_INFO(validator.getCompletedStatusMessage());
+      OsmMapPtr map(new OsmMap());
+      IoUtils::loadMap(map, input, true, Status::Unknown1);
 
-    MapProjector::projectToWgs84(map);
-    IoUtils::saveMap(map, output);
+      JosmMapValidator validator;
+      validator.setConfiguration(conf());
+      LOG_INFO(validator.getInitStatusMessage());
+      validator.apply(map);
+      LOG_INFO(validator.getCompletedStatusMessage());
 
-    std::cout << validator.getSummary() << std::endl;
+      MapProjector::projectToWgs84(map);
+      IoUtils::saveMap(map, output);
+
+      std::cout << validator.getSummary() << std::endl;
+    }
 
     return 0;
+  }
+
+private:
+
+  void _printJosmValidators()
+  {
+    const QMap<QString, QString> validators =
+      JosmMapValidator().getAvailableValidatorsWithDescription();
+    for (QMap<QString, QString>::const_iterator itr = validators.begin(); itr != validators.end();
+         ++itr)
+    {
+      const QString name = itr.key();
+      const QString description = itr.value();
+      const int indentAfterName = ApiEntityDisplayInfo::MAX_NAME_SIZE - name.size();
+      const int indentAfterDescription = ApiEntityDisplayInfo::MAX_TYPE_SIZE - description.size();
+      std::cout << name << QString(indentAfterName, ' ') << description <<
+                   QString(indentAfterDescription, ' ') << std::endl;
+    }
   }
 };
 
 HOOT_FACTORY_REGISTER(Command, ValidateCmd)
-
 
 }
 

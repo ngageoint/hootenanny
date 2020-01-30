@@ -16,6 +16,7 @@ rm -f bin/*.jar
 
 #chmod -R 777 /home/vagrant/hoot/tmp
 
+# This can be changed downstream to package with other JOSM versions with a file text replacement.
 wget --quiet https://josm.openstreetmap.de/download/josm-snapshot-15553.jar bin/josm.jar
 
 #rm -f sources

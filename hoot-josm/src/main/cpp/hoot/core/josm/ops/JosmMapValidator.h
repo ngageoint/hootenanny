@@ -28,7 +28,7 @@
 #define JOSM_MAP_VALIDATOR_H
 
 // hoot
-#include <hoot/core/ops/JosmMapValidatorAbstract.h>
+#include <hoot/core/josm/ops/JosmMapValidatorAbstract.h>
 
 namespace hoot
 {
