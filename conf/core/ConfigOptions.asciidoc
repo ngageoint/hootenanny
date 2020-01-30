@@ -1881,7 +1881,7 @@ for job output storage, the ID will be stored in the job status table of the ass
 === josm.map.validator.java.implementation
 
 * Data Type: string
-* Default Value: `hoot/services/josm/JosmMapValidator`
+* Default Value: `hoot/core/josm/JosmMapValidator`
 
 File path relative to Hootenanny root directory without file extension to Java class to use as the
 JOSM Java map valdidator/cleaner implementation.

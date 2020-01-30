@@ -522,9 +522,19 @@ ifeq ($(BUILD_RND),rnd)
 	genhtml coverage/core/rnd/RndTrimmed.info --output-directory coverage/core/rnd/ 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
 endif
 
-core-coverage: coverage/core/core/index.html coverage/core/tbs/index.html core-rnd-coverage
+core-josm-coverage:
+ifeq ($(BUILD_JOSM),josm)
+	echo "Generating core JOSM code coverage report..."
+	mkdir -p coverage/core/josm
+	rm -f coverage/core/josm/log
+	lcov --capture --ignore-errors source -d hoot-josm/tmp/debug -b hoot-josm/ --output-file coverage/core/josm/Josm.info 2>&1 | grep -v -F "geninfo" >> coverage/core/josm/log
+	lcov -r coverage/core/josm/Josm.info $(IGNORED) -o coverage/core/josm/JosmTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/josm/log
+	genhtml coverage/core/josm/JosmTrimmed.info --output-directory coverage/core/josm/ 2>&1 | grep -v -F "geninfo" >> coverage/core/josm/log
+endif
 
-coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/tbs/index.html core-rnd-coverage
+core-coverage: coverage/core/core/index.html coverage/core/tbs/index.html core-rnd-coverage core-josm-coverage
+
+coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/tbs/index.html core-rnd-coverage core-josm-coverage
 
 conf/dictionary/WordsAbridged.sqlite: conf/dictionary/WordsAbridged.sqlite.gz
 	gunzip -c $^ > $@

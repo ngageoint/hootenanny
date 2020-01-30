@@ -27,6 +27,10 @@ rnd {
 SUBDIRS += hoot-rnd
 }
 
+josm {
+SUBDIRS += hoot-josm
+}
+
 SUBDIRS += \
     hoot-cmd \
 

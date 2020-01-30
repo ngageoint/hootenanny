@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/ops/JosmMapCleaner.h>
+#include <hoot/core/josm/ops/JosmMapCleaner.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 

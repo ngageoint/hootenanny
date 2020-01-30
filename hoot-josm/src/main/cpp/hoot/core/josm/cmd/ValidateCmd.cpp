@@ -32,7 +32,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/info/ApiEntityDisplayInfo.h>
 
@@ -52,11 +51,11 @@ public:
   virtual QString getName() const override { return "validate"; }
 
   virtual QString getDescription() const override
-  { return "Marks erroneous map data with validation errors using JOSM"; }
+  { return "Checks map data for validation errors using JOSM"; }
 
   virtual int runSimple(QStringList& args) override
   {
-    if (args.size() < 1 || arg.size() > 2)
+    if (args.size() < 1 || args.size() > 2)
     {
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
@@ -67,7 +66,8 @@ public:
       if (!args.contains("--available-validators"))
       {
         throw IllegalArgumentException(
-          "When the validate command is called with one parameter, the parameter must be '--available-validators'.");
+          "When the validate command is called with one parameter, the parameter must be "
+          "'--available-validators'.");
       }
 
       _printJosmValidators();
