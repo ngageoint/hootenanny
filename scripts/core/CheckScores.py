@@ -53,7 +53,7 @@ for a in sys.argv[argi:]:
     if (len(v) > 2):
         upper = float(v[2])
     if (lower > upper):
-        print "Bad argument (%s); expected lower (%g) to be less than upper (%g)" % (key, lower, upper)
+        print "Bad argument (%s); expected lower (%g) to be less than upper (%g) in score file: (%s)" % (key, lower, upper, scoreFn)
         result = -1
     elif (key not in d):
         result = -1
@@ -62,12 +62,12 @@ for a in sys.argv[argi:]:
         n = d[key]
         if (n > upper):
             if (errorOnHigh):
-                print "%s is %g, expected a value between %g and %g" % (key, n, lower, upper)
+                print "%s is %g, expected a value between %g and %g in score file (%s)" % (key, n, lower, upper, scoreFn)
                 result = -1
             else:
-                print "%s is %g, This is better than expected. Expected a value between %g and %g" % (key, n, lower, upper)
+                print "%s is %g, This is better than expected. Expected a value between %g and %g in score file (%s)" % (key, n, lower, upper, scoreFn)
         elif (n < lower):
-            print "%s is %g, expected a value between %g and %g" % (key, n, lower, upper)
+            print "%s is %g, expected a value between %g and %g in score file (%s)" % (key, n, lower, upper, scoreFn)
             result = -1
 
 exit(result)
