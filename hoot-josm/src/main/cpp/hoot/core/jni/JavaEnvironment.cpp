@@ -69,7 +69,7 @@ void JavaEnvironment::_initVm()
   const int numOptions = 5;
   JavaVMOption options[numOptions];
 
-  const QString classPathStr = "-Djava.class.path=" + ConfigOptions().getJniClassPath().join(";");
+  const QString classPathStr = "-Djava.class.path=" + ConfigOptions().getJniClassPath().join(":");
   options[0].optionString = strdup(classPathStr.toStdString().c_str());
   LOG_VART(options[0].optionString);
 

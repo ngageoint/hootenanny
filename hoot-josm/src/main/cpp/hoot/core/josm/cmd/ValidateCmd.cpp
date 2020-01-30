@@ -57,7 +57,7 @@ public:
   {
     if (args.size() < 1 || args.size() > 2)
     {
-      cout << getHelp() << endl << endl;
+      std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
     }
 
