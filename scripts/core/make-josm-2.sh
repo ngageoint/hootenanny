@@ -21,5 +21,6 @@ wget --quiet https://josm.openstreetmap.de/download/josm-snapshot-15553.jar bin/
 #rm -f sources
 find -name "*.java" > sources
 javac -d target/classes -cp bin/josm.jar @sources
+jar cf bin/hoot-josm.jar target/classes
 
-cp bin/*.jar ../bin
+cp bin/*.jar $HOOT_HOME/bin
