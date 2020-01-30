@@ -32,7 +32,12 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigDefaults.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Boost
 #include <boost/property_tree/ptree.hpp>
@@ -460,9 +465,72 @@ void Settings::loadJson(QString path)
   l.load(ConfPath::search(path));
 }
 
+void Settings::_validateOperatorRefs(const QStringList& operators)
+{
+  for (int i = 0; i < operators.size(); i++)
+  {
+    const QString operatorName = operators[i];
+    LOG_VART(operatorName);
+    const QString errorMsg = "Invalid option operator class name: " + operatorName;
+
+    if (!operatorName.startsWith("hoot::"))
+    {
+      throw IllegalArgumentException(errorMsg);
+    }
+
+    // Should either be a visitor, op, or criterion, but we don't know which one, so check for all
+    // of them.
+    std::shared_ptr<OsmMapOperation> op;
+    try
+    {
+      op.reset(Factory::getInstance().constructObject<OsmMapOperation>(operatorName));
+    }
+    catch (const boost::bad_any_cast&)
+    {
+    }
+    catch (const HootException&)
+    {
+    }
+
+    if (!op)
+    {
+      std::shared_ptr<ElementVisitor> vis;
+      try
+      {
+        vis.reset(Factory::getInstance().constructObject<ElementVisitor>(operatorName));
+      }
+      catch (const boost::bad_any_cast&)
+      {
+      }
+      catch (const HootException&)
+      {
+      }
+      if (!vis)
+      {
+        std::shared_ptr<ElementCriterion> crit;
+        try
+        {
+          crit.reset(Factory::getInstance().constructObject<ElementCriterion>(operatorName));
+        }
+        catch (const boost::bad_any_cast&)
+        {
+        }
+        catch (const HootException&)
+        {
+        }
+        if (!crit)
+        {
+          throw IllegalArgumentException(errorMsg);
+        }
+      }
+    }
+  }
+}
+
 void Settings::parseCommonArguments(QStringList& args)
 {
   LOG_DEBUG("Parsing command arguments...");
+  LOG_VART(args);
 
   bool foundOne = true;
 
@@ -483,7 +551,7 @@ void Settings::parseCommonArguments(QStringList& args)
   hootTestCmdsIgnore.append("--exclude");
 
   const QString optionInputFormatErrorMsg =
-    "define must takes the form key=value (or key+=value, key++=value, or key-=value).";
+    "define must take the form key=value (or key+=value, key++=value, or key-=value).";
 
   while (args.size() > 0 && foundOne)
   {
@@ -543,12 +611,14 @@ void Settings::parseCommonArguments(QStringList& args)
       {
         throw HootException(optionInputFormatErrorMsg);
       }
+
       QString kv = args[1];
-      // '++=' prepends an option to an option list
-      QStringList kvl = kv.split("++=");
       bool append = false;
       bool remove = false;
       bool prepend = true;
+
+      // '++=' prepends an option to an option list
+      QStringList kvl = kv.split("++=");
       if (kvl.size() != 2)
       {
         // '+=' appends an option to an option list
@@ -563,6 +633,7 @@ void Settings::parseCommonArguments(QStringList& args)
         remove = false;
         prepend = false;
       }
+
       if (kvl.size() != 2)
       {
         // '-=' removes an option from an option list
@@ -577,6 +648,7 @@ void Settings::parseCommonArguments(QStringList& args)
         remove = true;
         prepend = false;
       }
+
       if (kvl.size() != 2)
       {
         // split on the first '='
@@ -591,43 +663,66 @@ void Settings::parseCommonArguments(QStringList& args)
         remove = false;
         prepend = false;
       }
+      LOG_VART(append);
+      LOG_VART(remove);
+      LOG_VART(prepend);
+
       if (kvl.size() != 2)
       {
-        throw HootException(optionInputFormatErrorMsg);
+        throw IllegalArgumentException(optionInputFormatErrorMsg);
       }
-      if (!conf().hasKey(kvl[0]))
+
+      const QString optionName = kvl[0];
+      LOG_VART(optionName);
+      const QString optionVal = kvl[1];
+      LOG_VART(optionVal);
+
+      if (!conf().hasKey(optionName))
       {
-        throw HootException("Unknown settings option: (" + kvl[0] + ")");
+        throw IllegalArgumentException("Unknown settings option: (" + optionName + ")");
       }
+
+      const QStringList values = optionVal.split(";", QString::SkipEmptyParts);
+      LOG_VART(values);
+
+      // There are many more options that take class names as input than this. It would be
+      // difficult to validate all of them since they inherit from various base classes, so just
+      // starting with these more commonly used options whose values are classes that all inherit
+      // from ElementVisitor, OsmMapOperation, or ElementCriterion.
+      if (optionName == ConfigOptions::getConvertOpsKey() ||
+          optionName == ConfigOptions::getConflatePreOpsKey() ||
+          optionName == ConfigOptions::getConflatePostOpsKey())
+      {
+        _validateOperatorRefs(values);
+      }
+
       if (append)
       {
-        QStringList values = kvl[1].split(";", QString::SkipEmptyParts);
-        conf().append(kvl[0], values);
+        conf().append(optionName, values);
       }
       else if (remove)
       {
-        QStringList values = kvl[1].split(";", QString::SkipEmptyParts);
         foreach (QString v, values)
         {
-          QStringList newList = conf().getList(kvl[0]);
+          QStringList newList = conf().getList(optionName);
           if (!newList.contains(v))
           {
-            throw HootException("Unknown default value: (" + v + ")");
+            throw IllegalArgumentException("Unknown default value: (" + v + ")");
           }
           newList.removeAll(v);
-          conf().set(kvl[0], newList);
+          conf().set(optionName, newList);
         }
       }
       else if (prepend)
       {
-        QStringList values = kvl[1].split(";", QString::SkipEmptyParts);
-        conf().prepend(kvl[0], values);
+        conf().prepend(optionName, values);
       }
       else
       {
-        conf().set(kvl[0], kvl[1]);
+        conf().set(optionName, optionVal);
       }
-      // move on to the next argument.
+
+      // move on to the next argument
       args = args.mid(2);
     }
     else
@@ -635,6 +730,7 @@ void Settings::parseCommonArguments(QStringList& args)
       foundOne = false;
     }
   }
+
   // re-initialize the logger and other resources after the settings have been parsed.
   Hoot::getInstance().reinit();
 }
