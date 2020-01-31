@@ -84,12 +84,11 @@ def createUiJSON(groups, options):
                         templateDefault = re.findall(r'(?<=\${).*(?=})', memberConfig['default'])
                         if len(templateDefault) == 1:
                             defaultKey = templateDefault[0]
-                            if '${' not in memberConfig['default']:
-                                memberConfig['default'] = next(
-                                    (m['member']['default'] for m in configMembers if m['member']['key'] == defaultKey),
-                                    ''
-                                    )
-                            else:
+                            memberConfig['default'] = next(
+                            (m['member']['default'] for m in configMembers if m['member']['key'] == defaultKey),
+                            ''
+                            )
+                            if '${' in memberConfig['default']:
                                 memberConfig['default'] = getDefaultValue(memberConfig['default'])
 
                         memberConfig['input'] = toInput(memberConfig['type'])
