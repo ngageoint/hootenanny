@@ -74,7 +74,7 @@ costs to support the seldomly used capability (so some of the conflation algorit
 computing...with some limitations). 
 
 Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the 
-density of the data being conflated and the RAM available on the machine.
+density of the data being conflated and the RAM available on the machine. Beyond that, new algorithms may need to be developed to handle very large quantities of map data.
 
 # Configuration
 
