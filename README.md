@@ -173,11 +173,10 @@ software. If you have any support questions, please create an issue in this repo
 
 As there are lot of different conflation scenarios out in the wild, there is no one-size fits all conflation workflow or algorithm.  Hootenanny 
 attempts to capture most conflation scenarios with the default configuration options, but sometimes you will need to modify configuration 
-options specific to the data you are conflating to get the best results.
+options specific to the data you are conflating in order to get the best results.
 
-Additionally, the availability of software features to the user interface may lag their initial availability from the CLI by multiple 
-development cycles. If you find a conflation feature you want to use mentioned in the CLI documentation but can't find it available in the UI, 
-let us know.
+Additionally, the availability of new software features to the user interface may lag their initial availability from the CLI by multiple 
+development cycles. If you find a conflation feature you wish to use that is mentioned in the CLI documentation but is not present within the UI, let us know.
 
 # Development
 * [Contributing](https://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md)
