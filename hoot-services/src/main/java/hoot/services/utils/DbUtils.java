@@ -56,6 +56,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 
+import com.querydsl.sql.dml.SQLUpdateClause;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -379,14 +380,21 @@ NOT EXISTS
      * Sets the parent directory for the specified folder
      *
      * @param folderId folder id whos parent we are setting
-     * @param parentId parent directory id that the folder will get linked to
+     * @param parent parent folder that the folder will get linked to
      */
-    public static void setFolderParent(Long folderId, Long parentId) {
-        createQuery()
+    public static void setFolderParent(Long folderId, Folders parent) {
+        SQLUpdateClause query = createQuery()
                 .update(folders)
                 .where(folders.id.eq(folderId))
-                .set(folders.parentId, parentId)
-                .execute();
+                .set(folders.parentId, parent.getId());
+
+        // dont want a private folder moved to root to become public
+        // otherwise inherit the visibility of the new parent folder
+        if(parent.getId() != 0) {
+            query.set(folders.publicCol, parent.getPublicCol());
+        }
+
+        query.execute();
     }
 
     public static String getDisplayNameById(long mapId) {

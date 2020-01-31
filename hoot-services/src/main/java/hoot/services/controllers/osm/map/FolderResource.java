@@ -343,7 +343,7 @@ public class FolderResource {
         }
 
 
-        DbUtils.setFolderParent(folderId, newParentFolderId);
+        DbUtils.setFolderParent(folderId, parentFolder);
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         ret.put("success", true);
@@ -398,14 +398,16 @@ public class FolderResource {
             throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to set/view it's attributes").build());
         }
 
+        // If a folder is changed to public, it will recurse up the parents and set those folders to public
+        // If a folder is changed private, it will recurse down that folder and set everything to private
         String query = String.format("with recursive related_folders as (" +
-                "     select id,parent_id,display_name,user_id,public,created_at from folders where id = %d" +
+                "     select id, parent_id, display_name, user_id, public, created_at from folders where id = %d" +
                 "     union" +
-                "     select f.id,f.parent_id,f.display_name,f.user_id,f.public,f.created_at from folders f" +
+                "     select f.id, f.parent_id, f.display_name, f.user_id, f.public, f.created_at from folders f" +
                 "     inner join related_folders rf on (" +
-                "          f.id != 0 AND (f.parent_id = rf.id" +
-                "          OR" +
-                "          f.id = rf.parent_id)" +
+                "          f.id != 0 AND (" +
+                            (visibility.equals("public") ? "f.id = rf.parent_id" : "f.parent_id = rf.id") +
+                "          )" +
                 "     )" +
                 ")" +
                 "update folders x set public = %s " +
