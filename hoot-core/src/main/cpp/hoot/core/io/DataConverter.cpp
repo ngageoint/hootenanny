@@ -319,6 +319,14 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   {
     throw HootException("Read limit may only be specified when converting OGR inputs.");
   }
+
+  QFileInfo outputInfo(output);
+  LOG_VARD(outputInfo.dir().absolutePath());
+  const bool outputDirSuccess = QDir().mkpath(outputInfo.dir().absolutePath());
+  if (!outputDirSuccess)
+  {
+    throw IllegalArgumentException("Unable to create output path for: " + output);
+  }
 }
 
 void DataConverter::_fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
