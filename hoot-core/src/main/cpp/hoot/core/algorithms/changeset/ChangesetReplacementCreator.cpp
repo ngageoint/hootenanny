@@ -807,7 +807,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   LOG_VARD(cutterMap->getElementCount());
   ConfigOptions opts(conf());
   LOG_VARD(OsmUtils::mapIsPointsOnly(cutterMap));
-  double cookieCutterAlpha = opts.getCookieCutterAlpha();
+  const double cookieCutterAlpha = opts.getCookieCutterAlpha();
   double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
   LOG_VARD(_fullReplacement);
   if (_fullReplacement)
