@@ -55,7 +55,7 @@ void JosmMapCleaner::setConfiguration(const Settings& conf)
   JosmMapValidatorAbstract::setConfiguration(conf);
 
   ConfigOptions opts(conf);
-  _addDetailTags = opts.getMapCleanerJosmAddDetailTags();
+  _addDetailTags = opts.getJosmMapCleanerAddDetailTags();
 }
 
 void JosmMapCleaner::apply(std::shared_ptr<OsmMap>& map)

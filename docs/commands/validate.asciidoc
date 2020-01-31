@@ -10,8 +10,8 @@ Hootenanny is configured with JOSM (compiled --with-josm).
 * +output+                 - (optional) Output file; may be any supported output format (e.g. .osm file). If specified, elements with 
                              validation will be marked with tags in the output file. If not specified, then only a validation error summary 
                              will be displayed.
-* +--available-validators+ - Displays available JOSM validators for usein validation. If this option is selected, neither an input or output 
-                             must be specified
+* +--available-validators+ - Displays available JOSM validators for use in validation. Not all validators have cleaning (auto-fix) capabilities. 
+                             If this option is selected, neither an input or output must be specified.
 
 === Usage
 
@@ -31,10 +31,10 @@ hoot validate input.osm
 hoot validate input.osm output.osm
 
 # list the available validators
-hoot validate --validators
+hoot validate --available-validators
 
 # run customized validation
-hoot validate -D josm.validators.include="..." input.osm
+hoot validate -D josm.validators.include="DuplicatedWayNodes" input.osm
 --------------------------------------
 
 ==== See Also

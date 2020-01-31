@@ -70,16 +70,6 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * @see OsmMapOperation
-   */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
-
-  /**
-   * @see OperationStatusInfo
-   */
-  virtual QString getCompletedStatusMessage() const { return _errorSummary; }
-
-  /**
    * Returns a collection of available JOSM validators
    *
    * @return collection of validator Java class names
@@ -92,6 +82,16 @@ public:
    * @return collection of validator Java class names with descriptions
    */
   QMap<QString, QString> getAvailableValidatorsWithDescription();
+
+  /**
+   * @see OsmMapOperation
+   */
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+
+  /**
+   * @see OperationStatusInfo
+   */
+  virtual QString getCompletedStatusMessage() const { return _errorSummary; }
 
   QString getSummary() const { return _errorSummary; }
   int getNumElementsProcessed() const { return _numAffected; }

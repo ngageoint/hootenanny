@@ -38,13 +38,14 @@ namespace hoot
  * cleans any failing elements where possible. Optionally marks elements that fail validation with
  * custom tags.
  *
- * TODO: and if elements were deleted adds their IDs to the map's base tags.
- *
  * See note in JosmMapValidatorAbstract about handling of collection objects via JNI.
  *
  * Not using inheritance with JosmMapValidator since both this and that class need to be factory
  * registered as OsmMapOperations and that can't be done in a class inherited from a class that
  * is already registered.
+ *
+ * One feature that could be added would be to add the IDs of elements that were deleted to the
+ * map's base tags for provenance.
  */
 class JosmMapCleaner : public JosmMapValidatorAbstract
 {

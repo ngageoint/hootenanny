@@ -191,44 +191,42 @@ See the User Guide for more details on command usage.
     hoot clean input.osm output.osm
 -----
 
-===== Clean erroneous data from two maps making use of JOSM cleaning capabilities:
+===== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus JOSM's cleaning capabilities:
 
 -----
     hoot clean -D map.cleaner.transforms++=hoot::JosmMapCleaner input.osm output.osm
 -----
 
-===== Clean erroneous data from two maps making use of a subset of JOSM cleaning capabilities via exclusion:
+===== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via exclusion:
 
 -----
     hoot clean -D map.cleaner.transforms++=hoot::JosmMapCleaner \
-      -D map.cleaner.josm.validators.exclude="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
+      -D mjosm.validators.exclude="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
 -----
 
-===== Clean erroneous data from two maps making use of a subset of JOSM cleaning capabilities via inclusion:
+===== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via inclusion:
 
 -----
     hoot clean -D map.cleaner.transforms++=hoot::JosmMapCleaner \
-      -D map.cleaner.josm.validators.include="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
+      -D josm.validators.include="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
 -----
 
-===== Run JOSM validation only on a map making use of a subset of JOSM cleaning capabilities via exclusion:
+===== Run JOSM cleaning only on a map:
 
 -----
-    hoot convert -D convert.ops=hoot::JosmValidator \
-      -D map.cleaner.josm.validators.exclude="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
+    hoot convert -D convert.ops=hoot::JosmMapCleaner input.osm output.osm
 -----
 
-===== Run JOSM validation only on a map making use of a subset of JOSM cleaning capabilities via inclusion:
+===== Run JOSM validation on a map:
 
 -----
-    hoot convert -D convert.ops=hoot::JosmValidator \
-      -D map.cleaner.josm.validators.exclude="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
+    hoot validate input.osm output.osm
 -----
 
-===== Run JOSM validation only on a map:
+===== List the available JOSM validators:
 
 -----
-    hoot convert -D convert.ops=hoot::JosmValidator input.osm output.osm
+    hoot validate --available-validators
 -----
 
 ===== Prepend a cleaning operation to the existing set of cleaning operations:

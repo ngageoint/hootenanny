@@ -1852,22 +1852,24 @@ satisfy the criterion.
 * Default Value:
 ** `${HOOT_HOME}/hoot-josm/target/dependency-jars/josm.jar;${HOOT_HOME}/hoot-josm/target/hoot-josm.jar`
 
-A list of JAR files to place on the JAVA classpath when Hootenanny C++ code interacts with Java
-code using JNI.
+A list of JAR files to place on the JAVA classpath when Hootenanny C++ code in the hoot-josm project
+interacts with Hootenany and JOSM Java code via JNI.
 
 === jni.initial.memory
 
 * Data Type: string
 * Default Value: `2g`
 
-JVM -Xms setting to use with JNI to configure the initial amount of memory available to the JVM.
+JVM -Xms setting to use with hoot-josm JNI to configure the initial amount of memory available to
+the JVM.
 
 === jni.max.memory
 
 * Data Type: string
 * Default Value: `8g`
 
-JVM -Xmx setting to use with JNI to configure the maximum amount of memory available to the JVM.
+JVM -Xmx setting to use with hoot-josm JNI to configure the maximum amount of memory available to
+the JVM.
 
 === job.id
 
@@ -1878,13 +1880,20 @@ This option allows for passing in a job ID for the currently executing command. 
 trying to track multiple commands across a single job. When the Hootenanny API database is used
 for job output storage, the ID will be stored in the job status table of the associated map.
 
+=== josm.map.cleaner.add.detail.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, cleaning/validation detail tags will be added to map outputs when cleaning maps with JOSM.
+
 === josm.map.validator.java.implementation
 
 * Data Type: string
 * Default Value: `hoot/core/josm/JosmMapValidator`
 
-File path relative to Hootenanny root directory without file extension to Java class to use as the
-JOSM Java map valdidator/cleaner implementation.
+File path relative to Hootenanny root directory without file extension or prefixed namespace to
+Java class to use as the JOSM Java map validator/cleaner implementation.
 
 === josm.max.elements.for.map.string
 
@@ -1900,8 +1909,9 @@ The default value was determined experimentally and may need tweaking per enviro
 * Default Value:
 ** ``
 
-A list of JOSM validator Java class names without namespace prefixes to explicitly exclude use of
-during validation or cleaning using JOSM. Overrides values set in josm.validators.include.
+A list of JOSM validator Java class names without namespace prefixes or file extensions
+(e.g. 'DuplicatedWayNodes') to explicitly exclude use of during validation or cleaning using JOSM.
+Overrides values set in josm.validators.include.
 
 === josm.validators.include
 
@@ -1909,8 +1919,9 @@ during validation or cleaning using JOSM. Overrides values set in josm.validator
 * Default Value:
 ** ``
 
-A list of JOSM validator Java class names without namespace prefixes to explicitly include use of
-during validation or cleaning using JOSM. Overridden by values set in josm.validators.exclude.
+A list of JOSM validator Java class names without namespace prefixes or file extensions
+(e.g. 'DuplicatedWayNodes') to explicitly include use of during validation or cleaning using JOSM.
+Overridden by values set in josm.validators.exclude.
 
 === josm.validators.requiring.user.certificate
 
@@ -1919,10 +1930,7 @@ during validation or cleaning using JOSM. Overridden by values set in josm.valid
 ** `ApiCapabilitiesTest`
 ** `MapCSSTagChecker`
 
-A list of JOSM validators known to require the user certificate specified in josm.certificate.path.
-These validators will be skipped if no user certificate is specified to avoid seeing unnecessary
-error message from JOSM when they cannot be properly run without the certificate. Clearly, this list
-may become out of sync with JOSM over time without maintenance.
+A list of JOSM validators known to require a user certificate. These validators will be skipped.
 
 === json.format.hootenanny
 
@@ -2248,13 +2256,6 @@ names with their namespace. An empty string (default) disables the filtering.
 The maximum number of warn log messages that will be emitted per class before they are silenced.
 A value of -1 passed to class will ensure that no warnings are logged by it, if it honors the option.
 A setting of -1 is useful for tests where you do not have granular enough logging control.
-
-=== map.cleaner.josm.add.detail.tags
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, cleaning detail tags will be added to map outputs when cleaning maps with JOSM.
 
 [[MapCleanerTransforms]]
 === map.cleaner.transforms
