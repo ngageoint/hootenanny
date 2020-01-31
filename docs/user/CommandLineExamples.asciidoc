@@ -201,7 +201,7 @@ See the User Guide for more details on command usage.
 
 -----
     hoot clean -D map.cleaner.transforms++=hoot::JosmMapCleaner \
-      -D mjosm.validators.exclude="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
+      -D josm.validators.exclude="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
 -----
 
 ===== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via inclusion:
