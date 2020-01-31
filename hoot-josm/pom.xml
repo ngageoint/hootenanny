@@ -1,0 +1,98 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+	http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>hoot.core.josm</groupId>
+	<artifactId>hoot-josm</artifactId>
+	<packaging>jar</packaging>
+	<version>0.0.1</version>
+	<name>hoot-josm</name>
+	<url>http://hootenanny.org</url>
+
+	<properties>
+		<jdk.version>1.8</jdk.version>
+	</properties>
+
+  <repositories>
+    <repository>
+      <id>org.openstreetmap.josm</id>
+      <url>https://josm.openstreetmap.de/nexus/content/repositories/releases/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+
+	<dependencies>
+		<dependency>
+    		<groupId>org.openstreetmap.josm</groupId>
+    		<artifactId>josm</artifactId>
+    		<version>15628</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>hoot-josm</finalName>
+		<plugins>
+
+			<!-- Set a compiler level -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+
+			<!-- Make this jar executable -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+				  <excludes>
+					<exclude>**/log4j.properties</exclude>
+				  </excludes>
+				  <archive>
+				    <manifest>
+					<addClasspath>true</addClasspath>
+					<!-- mainClass></mainClass -->
+					<classpathPrefix>dependency-jars/</classpathPrefix>
+				    </manifest>
+				  </archive>
+				</configuration>
+			</plugin>
+
+			<!-- Copy project dependency -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.1</version>
+				<executions>
+				  <execution>
+					<id>copy-dependencies</id>
+					<phase>package</phase>
+					<goals>
+						<goal>copy-dependencies</goal>
+					</goals>
+					<configuration>
+					  <!-- exclude junit, we need runtime dependency only -->
+					  <includeScope>runtime</includeScope>
+					  <outputDirectory>${project.build.directory}/dependency-jars/</outputDirectory>
+					</configuration>
+				  </execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>
+

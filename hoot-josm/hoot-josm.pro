@@ -8,8 +8,7 @@ QT += testlib \
 
 TARGET = HootJosm
 QMAKE_POST_LINK += ../scripts/core/make-hoot-josm-java.sh
-# specifying the full dir path for the remove isn't very extensible but QMAKE_CLEAN won't delete a dir
-QMAKE_CLEAN += target/classes/hoot/core/josm/*.class bin/*.jar
+QMAKE_CLEAN += target/hoot-josm.jar
 TEMPLATE = lib
 
 DEPENDPATH += \
