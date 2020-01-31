@@ -3,11 +3,8 @@ set -e
 
 cd $HOOT_HOME/hoot-josm
 
-# TODO: these are replicated in pom.xml
-JOSM_ARTIFACT_ID=josm
-JOSM_VERSION=15628
-#JOSM_ARTIFACT_ID=me-josm
-#JOSM_VERSION=4.4.9
+JOSM_ARTIFACT_ID=`awk -F '[<>]' '/<josm.artifactId>/{print $3}' pom.xml`
+JOSM_VERSION=`awk -F '[<>]' '/<josm.version>/{print $3}' pom.xml`
 JOSM_JAR=$JOSM_ARTIFACT_ID-$JOSM_VERSION.jar
 
 # needs to be done first time for the me jar only
