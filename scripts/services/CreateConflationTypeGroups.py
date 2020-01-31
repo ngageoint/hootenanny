@@ -12,8 +12,8 @@ import re
 from collections import OrderedDict
 
 if (len(sys.argv) != 5):
-    print "Usage:"
-    print sys.argv[0] + " (UI Groups file) (Config Options file) (Group Defaults file) (output file)"
+    print("Usage:")
+    print(sys.argv[0] + " (UI Groups file) (Config Options file) (Group Defaults file) (output file)")
     sys.exit(-1)
 
 fn = sys.argv[1]
@@ -42,12 +42,21 @@ def toInput(optionType):
 def toLabel(conflateType):
     return 'Poi to Polygon' if conflateType == 'PoiPolygon' else conflateType;
 
+def getDefaultValue(templateKey):
+    defaultValueKey =  ''.join( c for c in templateKey if c not in '${}').replace('.', ' ').title().replace(' ', '')
+    defaultValue = configOptions[defaultValueKey]['default']
+    if '${' in defaultValue:
+        getDefaultValue(defaultValue)
+    else:
+        return defaultValue;
+
  # merges matches between ConfigOptions.json and conflationTypesMap.json
  # on command key back into conflationTypesMap. Outputs as ConflationTypesGroups.json
 def createUiJSON(groups, options):
     try:
         uiGroupsArray = []
         configMembers = [{'key': key, 'member': member} for key, member in options.items()]
+        configDefault = [{'default': default } for default in options.items()]
         cleaningOptions = options['MapCleanerTransforms']['default'].split(';')
         for conflateType, conflateConfig in groups.items():
             if conflateType == 'RoadsNetwork': continue;
@@ -64,9 +73,10 @@ def createUiJSON(groups, options):
                     })
                 else:
                     match = next(
-                        (m['key'] for m in configMembers if m['member']['key'] == flag), 
+                        (m['key'] for m in configMembers if m['member']['key'] == flag),
                         None
                     )
+
                     if match != None:
                         memberConfig = { 'label': typeMembers[flag], 'id': match }
                         memberConfig.update(configOptions[match])
@@ -74,12 +84,18 @@ def createUiJSON(groups, options):
                         templateDefault = re.findall(r'(?<=\${).*(?=})', memberConfig['default'])
                         if len(templateDefault) == 1:
                             defaultKey = templateDefault[0]
-                            memberConfig['default'] = next(
-                                (m['member']['default'] for m in configMembers if m['member']['key'] == defaultKey),
-                                ''
-                            )
+                            if '${' not in memberConfig['default']:
+                                memberConfig['default'] = next(
+                                    (m['member']['default'] for m in configMembers if m['member']['key'] == defaultKey),
+                                    ''
+                                    )
+                            else:
+                                memberConfig['default'] = getDefaultValue(memberConfig['default'])
+
                         memberConfig['input'] = toInput(memberConfig['type'])
                         members.append(memberConfig)
+
+
 
 
 
