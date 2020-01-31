@@ -389,6 +389,7 @@ NOT EXISTS
                 .set(folders.parentId, parent.getId());
 
         // dont want a private folder moved to root to become public
+        // otherwise inherit the visibility of the new parent folder
         if(parent.getId() != 0) {
             query.set(folders.publicCol, parent.getPublicCol());
         }
