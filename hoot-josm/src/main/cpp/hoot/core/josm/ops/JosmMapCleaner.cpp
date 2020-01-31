@@ -263,7 +263,7 @@ QSet<ElementId> JosmMapCleaner::_elementIdStringsToElementIds(
 QString JosmMapCleaner::_errorCountsByTypeToSummaryStr(
   const QMap<QString, int>& errorCountsByType, const QMap<QString, int>& errorFixCountsByType) const
 {
-  assert(errorCountsByType.size() == errorFixCountsByType.size());
+  //assert(errorCountsByType.size() == errorFixCountsByType.size());
 
   const int longestErrorNameSize = 33;
   const int longestCountSize = 11;
@@ -271,7 +271,7 @@ QString JosmMapCleaner::_errorCountsByTypeToSummaryStr(
   for (QMap<QString, int>::const_iterator errorItr = errorCountsByType.begin();
        errorItr != errorCountsByType.end(); ++errorItr)
   {
-    assert(errorFixCountsByType.contains(errorItr.key()));
+    //assert(errorFixCountsByType.contains(errorItr.key()));
     const int indentAfterName = longestErrorNameSize - errorItr.key().size() + 1;
     const QString numErrorsForTypeStr = StringUtils::formatLargeNumber(errorItr.value());
     const int indentAfterCount = longestCountSize - numErrorsForTypeStr.size();
