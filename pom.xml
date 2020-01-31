@@ -23,18 +23,6 @@
   <packaging>pom</packaging>
   <version>0.0.1</version>
   <repositories>
-    <!-- repository>
-      <id>org.openstreetmap.josm</id>
-      <url>https://josm.openstreetmap.de/nexus/content/repositories/releases/</url>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-      </snapshots>
-    </repository -->
   </repositories>
   <build>
     <defaultGoal>install</defaultGoal>

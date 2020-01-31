@@ -80,7 +80,7 @@
                   <resource>
                     <directory>localDependencies</directory>
                     <includes>
-                      <include></include>
+                      <include>**/*.jar</include>
                     </includes>
                     <targetPath>WEB-INF/lib</targetPath>
                   </resource>

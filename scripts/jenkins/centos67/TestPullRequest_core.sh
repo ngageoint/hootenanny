@@ -7,7 +7,6 @@ cd $HOOT_HOME
 
 hoot --version --debug
 
-# TODO: Why are we excluding all of these?
 export HOOT_TEST_DIFF=--diff
 make -s -f Makefile.hoot services-test-all
 HootTest --exclude=.*ConflateAverageTest.sh \

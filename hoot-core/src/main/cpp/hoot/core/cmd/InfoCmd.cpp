@@ -351,7 +351,6 @@ private:
     options.append("--filters");
     options.append("--formats");
     options.append("--geometry-type-criteria");
-    options.append("--josm-validators");
     options.append("--languages");
     options.append("--matchers");
     options.append("--match-creators");
