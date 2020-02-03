@@ -56,7 +56,6 @@ def createUiJSON(groups, options):
     try:
         uiGroupsArray = []
         configMembers = [{'key': key, 'member': member} for key, member in options.items()]
-        configDefault = [{'default': default } for default in options.items()]
         cleaningOptions = options['MapCleanerTransforms']['default'].split(';')
         for conflateType, conflateConfig in groups.items():
             if conflateType == 'RoadsNetwork': continue;
