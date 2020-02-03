@@ -61,8 +61,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (5, 13, 2);
 /* create relation 2*/
 INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (2, 1, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_relations (id, changeset_id, visible, "timestamp", version) VALUES (2, 1, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_relation_tags (relation_id, k, v) VALUES (2, 'type', '');
-INSERT INTO relation_tags (relation_id, k, v, version) VALUES (2, 'type', '', 1);
 INSERT INTO current_relation_tags (relation_id, k, v) VALUES (2, 'key2', 'value2');
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (2, 'key2', 'value2', 1);
 INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (2, 'Node', 14, 'role1', 1, 1);

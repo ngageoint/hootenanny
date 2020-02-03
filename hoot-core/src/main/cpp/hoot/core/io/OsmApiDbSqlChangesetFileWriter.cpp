@@ -487,7 +487,8 @@ QString OsmApiDbSqlChangesetFileWriter::_getInsertValuesNodeStr(ConstNodePtr nod
       .arg(OsmApiDb::TIMESTAMP_FUNCTION);
 }
 
-QString OsmApiDbSqlChangesetFileWriter::_getInsertValuesWayOrRelationStr(ConstElementPtr element) const
+QString OsmApiDbSqlChangesetFileWriter::_getInsertValuesWayOrRelationStr(
+  ConstElementPtr element) const
 {
   return
     QString("changeset_id, visible, \"timestamp\", "
@@ -520,27 +521,35 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    QString k = it.key();
-    QString v = it.value();
+    QString key = it.key();
+    QString val = it.value();
 
-    //  Don't include the hoot hash, also don't include the circular error tag
-    //  unless circular error tags AND debug tags are turned on
-    if (k != MetadataTags::HootHash() &&
-       (k != MetadataTags::ErrorCircular() || (_includeCircularErrorTags && _includeDebugTags)))
+    if (key.isEmpty() == false && val.isEmpty() == false)
     {
+      //  Ignore 'hoot:hash' for nodes
+      if (key == MetadataTags::HootHash() && element->getElementType() == ElementType::Node)
+        continue;
+      else if (!_includeDebugTags && key.toLower().startsWith("hoot:"))
+        continue;
+      //  Don't include the hoot hash, also don't include the circular error tag
+      //  unless circular error tags AND debug tags are turned on
+      else if (key == MetadataTags::ErrorCircular() &&
+               !(_includeCircularErrorTags || _includeDebugTags))
+        continue;
+
       const QString currentTagValues =
       QString("(%1_id, k, v) VALUES (%2, '%3', '%4');\n")
         .arg(element->getElementId().getType().toString().toLower())
         .arg(element->getElementId().getId())
-        .arg(k.replace('\'', "''"))
-        .arg(v.replace('\'', "''"));
+        .arg(key.replace('\'', "''"))
+        .arg(val.replace('\'', "''"));
 
       const QString tagValues =
         QString("(%1_id, k, v, version) VALUES (%2, '%3', '%4', %5);\n")
           .arg(element->getElementId().getType().toString().toLower())
           .arg(element->getElementId().getId())
-          .arg(k.replace('\'', "''"))
-          .arg(v.replace('\'', "''"))
+          .arg(key.replace('\'', "''"))
+          .arg(val.replace('\'', "''"))
           .arg(element->getVersion());
 
       _outputSql.write(
