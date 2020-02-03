@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,12 +72,12 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
         List<String> options = new LinkedList<>();
         options.add("api.db.email=" + params.getUser().getEmail());
 
-        List<String> bounds = Arrays.asList(params.getBounds().split(","));
-        Double width = Double.valueOf(bounds.get(2)) - Double.valueOf(bounds.get(0));
-        Double height = Double.valueOf(bounds.get(1)) - Double.valueOf(bounds.get(3));
-        Double delta = Math.min(width, height);
-        Integer alpha = adaptiveAlpha(delta);
-        options.add("cookie.cutter.alpha=" + alpha);
+//        List<String> bounds = Arrays.asList(params.getBounds().split(","));
+//        Double width = Double.valueOf(bounds.get(2)) - Double.valueOf(bounds.get(0));
+//        Double height = Double.valueOf(bounds.get(1)) - Double.valueOf(bounds.get(3));
+//        Double delta = Math.min(width, height);
+//        Integer alpha = adaptiveAlpha(delta);
+//        options.add("cookie.cutter.alpha=" + alpha);
 
         List<String> hootOptions = toHootOptions(options);
 
