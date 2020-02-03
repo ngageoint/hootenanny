@@ -226,6 +226,7 @@ void JosmMapValidatorAbstract::_getStats()
   _numValidationErrors = _getNumValidationErrors();
   _numFailingValidators = _getNumFailingValidators();
 
+  // TODO: Try to simplify this with SingleStat.
   _errorSummary =
     "Total JOSM validation errors: " + StringUtils::formatLargeNumber(_numValidationErrors) +
     " found in " + StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
