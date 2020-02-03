@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SearchRadiusCalculator.h"
@@ -31,13 +31,14 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/criterion/OrCriterion.h>
 
 using namespace std;
 
@@ -63,71 +64,35 @@ void SearchRadiusCalculator::setConfiguration(const Settings& conf)
 
 void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
 {
-  //make a copy of the map with previously conflated data removed, as the rubber sheeting can't
-  //use it
-  std::shared_ptr<OsmMap> mapWithOnlyUnknown1And2(new OsmMap(map));
-
   LOG_VARD(map->getElementCount());
-  LOG_DEBUG(
-    "Element count before search radius calculation filtering: " <<
-    StringUtils::formatLargeNumber(mapWithOnlyUnknown1And2->getElementCount()));
+
+  // We need to filter out feature that don't need to be included in the search radius calculation.
 
   // don't care about conflated data and invalid data
-  LOG_INFO("Removing invalid and previously conflated data for search radius calculation...");
-  size_t elementCountTemp = mapWithOnlyUnknown1And2->getElementCount();
-  RemoveElementsVisitor elementRemover1;
-  elementRemover1.setRecursive(true);
-  elementRemover1.addCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)));
-  mapWithOnlyUnknown1And2->visitRw(elementRemover1);
-  RemoveElementsVisitor elementRemover2;
-  elementRemover2.setRecursive(true);
-  elementRemover2.addCriterion(ElementCriterionPtr(new StatusCriterion(Status::Invalid)));
-  mapWithOnlyUnknown1And2->visitRw(elementRemover2);
-  if (mapWithOnlyUnknown1And2->getElementCount() < elementCountTemp)
+  ElementCriterionPtr crit;
+  ElementCriterionPtr unknownCrit(
+    new OrCriterion(
+      ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+      ElementCriterionPtr(new StatusCriterion(Status::Unknown2))));
+  if (_elementCriterion.isEmpty())
   {
-    LOG_DEBUG(
-      "Filtered out: " <<
-      StringUtils::formatLargeNumber(elementCountTemp - mapWithOnlyUnknown1And2->getElementCount()) <<
-      " invalid or conflated elements.");
-    elementCountTemp = mapWithOnlyUnknown1And2->getElementCount();
+    crit = unknownCrit;
   }
-
-  // If a match candidate criterion was specified, filter out elements that don't fit the criterion.
-  // If no match candidate criterion was specified, then we'll use elements of all types.
-  // TODO: This logic doesn't support Generic Conflation calling scripts who implement the
-  // isMatchCandidate function. - see #3048
-  if (!_elementCriterion.isEmpty())
+  else
   {
-    LOG_DEBUG(
-      "Removing elements not satisfying: " << _elementCriterion <<
-      " for search radius calculation...");
-    std::shared_ptr<ElementCriterion> candidateCriterion(
+    // If a match candidate criterion was specified, filter out elements that don't fit the
+    // criterion. If no match candidate criterion was specified, then we'll use elements of all
+    // types.
+    // TODO: This logic doesn't support Generic Conflation calling scripts who implement the
+    // isMatchCandidate function. - see #3048
+    std::shared_ptr<ElementCriterion> candidateCrit(
       Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion));
-    RemoveElementsVisitor elementRemover3(true);
-    elementRemover3.setRecursive(true);
-    elementRemover3.addCriterion(candidateCriterion);
-    mapWithOnlyUnknown1And2->visitRw(elementRemover3);
+    crit.reset(new ChainCriterion(unknownCrit, candidateCrit));
   }
-
-  LOG_VARD(map->getElementCount());
-  if (mapWithOnlyUnknown1And2->getElementCount() < elementCountTemp)
-  {
-    LOG_DEBUG(
-      "Filtered out: " <<
-      StringUtils::formatLargeNumber(elementCountTemp - mapWithOnlyUnknown1And2->getElementCount()) <<
-      " elements not satisfying " << _elementCriterion << ".");
-  }
-
-  if (map->getElementCount() > mapWithOnlyUnknown1And2->getElementCount())
-  {
-    //should this be a warning?
-    LOG_DEBUG(
-      "Skipping " <<
-      StringUtils::formatLargeNumber(map->getElementCount() - mapWithOnlyUnknown1And2->getElementCount()) <<
-      " features with conflated or invalid status out of " <<
-      StringUtils::formatLargeNumber(map->getElementCount()) << " total features.");
-  }
-  if (mapWithOnlyUnknown1And2->getElementCount() == 0)
+  CopyMapSubsetOp mapCopier(map, crit);
+  OsmMapPtr subsetMap(new OsmMap());
+  mapCopier.apply(subsetMap);
+  if (subsetMap->getElementCount() == 0)
   {
     _result = _circularError;
     LOG_INFO(
@@ -135,10 +100,9 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
       "filtered out. Using default search radius value = " << _result);
     return;
   }
-
   LOG_DEBUG(
     "Element count after search radius calculation filtering: " <<
-    StringUtils::formatLargeNumber(mapWithOnlyUnknown1And2->getElementCount()));
+    StringUtils::formatLargeNumber(subsetMap->getElementCount()));
 
   std::shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
   rubberSheet->setReference(_rubberSheetRef);
@@ -147,7 +111,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
   rubberSheet->setLogWarningWhenRequirementsNotFound(false);
   try
   {
-    rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
+    rubberSheet->calculateTransform(/*mapWithOnlyUnknown1And2*/subsetMap);
   }
   catch (const HootException& e)
   {
@@ -159,13 +123,13 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
       "calculation.  Cleaning the data and attempting to calculate the transform again...");
     try
     {
-      MapCleaner().apply(mapWithOnlyUnknown1And2);
+      MapCleaner().apply(subsetMap);
       rubberSheet.reset(new RubberSheet());
       rubberSheet->setReference(_rubberSheetRef);
       rubberSheet->setMinimumTies(_minTies);
       rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
       rubberSheet->setLogWarningWhenRequirementsNotFound(false);
-      rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
+      rubberSheet->calculateTransform(subsetMap);
     }
     catch (const HootException& e)
     {
