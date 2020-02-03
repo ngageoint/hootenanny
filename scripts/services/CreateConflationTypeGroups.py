@@ -95,8 +95,6 @@ def createUiJSON(groups, options):
 
 
 
-
-
             if (conflateType == 'Roads'):
                 members = groupDefaults[conflateType] + members
 
