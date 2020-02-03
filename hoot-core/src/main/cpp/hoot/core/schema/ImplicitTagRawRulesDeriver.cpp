@@ -427,9 +427,14 @@ void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
     "sort --parallel=" + QString::number(_sortParallelCount) + " " + _countFile->fileName() +
     " | uniq -c | sort -n -r --parallel=" + QString::number(_sortParallelCount) + " | " +
     "sed -e 's/^ *//;s/ /\\t/' > " + _sortedCountFile->fileName();
-  if (std::system(cmd.toStdString().c_str()) != 0)
+  LOG_VARD(cmd);
+  const int cmdExitStatus = std::system(cmd.toStdString().c_str());
+  if (cmdExitStatus != 0)
   {
-    throw HootException("Unable to sort file.");
+    const QString msg =
+      "Unable to sort file. Command status: " + QString::number(cmdExitStatus) + "; command: " +
+      cmd;
+    throw HootException(msg);
   }
   LOG_INFO(
     "Wrote " <<
