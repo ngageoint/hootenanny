@@ -49,13 +49,6 @@ _numFailingValidators(0)
 
 JosmMapValidatorAbstract::~JosmMapValidatorAbstract()
 {
-  // See related note in _initJosmImplementation.
-  //if (_javaEnv != 0 && _josmInterface != 0)
-  //{
-    // We have a memory leak if this doesn't happen.
-    //LOG_DEBUG("Deleting josm interface...");
-    //_javaEnv->DeleteGlobalRef(_josmInterface);
-  //}
 }
 
 void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
@@ -82,17 +75,17 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   _javaEnv->ReleaseStringUTFChars(interfaceJavaStr, interfaceChars);
 
   _josmInterface =
-    // Thought it would be best to grab this as a global ref, since its possible it could be garbage
-    // collected at any time. Then it can be cleaned up in the destructor. However, that's causing
-    // crashes during the tests, so need to think about it some more and be sure its not needed.
-    /*_javaEnv->NewGlobalRef(*/
-      _javaEnv->NewObject(
-        _josmInterfaceClass,
-        // Java sig: <ClassName>(String logLevel, String userCertPath, String userCertPassword)
-        _javaEnv->GetMethodID(
-          _josmInterfaceClass, "<init>", "(Ljava/lang/String;)V"),
-        // logLevel
-        JniConversion::toJavaString(_javaEnv, Log::getInstance().getLevelAsString()));
+    // Thought it would be best to wrap this in a global ref, since its possible it could be garbage
+    // collected at any time. Then it could have been cleaned up in the destructor. However, that's
+    // causing crashes during the tests. I've not observed any leaks w/o using the global ref when
+    // running against large inputs so not using it.
+    _javaEnv->NewObject(
+      _josmInterfaceClass,
+      // Java sig: <ClassName>(String logLevel, String userCertPath, String userCertPassword)
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "<init>", "(Ljava/lang/String;)V"),
+      // logLevel
+      JniConversion::toJavaString(_javaEnv, Log::getInstance().getLevelAsString()));
   LOG_VART(_josmInterface == 0);
   JniUtils::checkForErrors(_javaEnv, _josmInterfaceName + " constructor");
   _josmInterfaceInitialized = true;
