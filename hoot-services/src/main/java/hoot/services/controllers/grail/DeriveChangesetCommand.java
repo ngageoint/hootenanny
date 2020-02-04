@@ -47,11 +47,6 @@ class DeriveChangesetCommand extends GrailCommand {
             options.add("changeset.allow.deleting.reference.features=false");
         }
 
-        //If passed a bounds, the changeset must be constrained to the bbox of the ref dataset
-        if(params.getBounds() != null) {
-            options.add("convert.bounding.box=" + params.getBounds());
-        }
-
         List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();
