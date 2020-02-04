@@ -79,8 +79,8 @@ void ManualMatchValidator::apply(const OsmMapPtr& map)
 
 void ManualMatchValidator::_validate(const ConstElementPtr& element)
 {
-  LOG_VARD(_requireRef1);
-  LOG_VARD(_allowUuidManualMatchIds);
+  LOG_VART(_requireRef1);
+  LOG_VART(_allowUuidManualMatchIds);
 
   // Just recording one error for each element for performance reasons, even if there are multiple.
 
