@@ -99,31 +99,8 @@ public:
     _numMatchCandidatesVisited = 0;
     _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
 
-//    Isolate* current = v8::Isolate::GetCurrent();
-//    HandleScope handleScope(current);
-//    Context::Scope context_scope(_script->getContext(current));
-//    Handle<Object> plugin = getPlugin();
-
-//    _candidateDistanceSigma = getNumber(plugin, "candidateDistanceSigma", 0.0, 1.0);
-
-//    //this is meant to have been set externally in a js rules file
-//    _customSearchRadius =
-//      getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
-//    LOG_VART(_customSearchRadius);
-
-//    Handle<Value> value = plugin->Get(toV8("getSearchRadius"));
-//    if (value->IsUndefined())
-//    {
-//      // pass
-//    }
-//    else if (value->IsFunction() == false)
-//    {
-//      throw HootException("getSearchRadius is not a function.");
-//    }
-//    else
-//    {
-//      _getSearchRadius.Reset(current, Handle<Function>::Cast(value));
-//    }
+    // Calls to script functions/var are expensive, both memory-wise and processing-wise. Since this
+    // constructor gets called repeatedly by createMatch, keep them out of this constructor.
 
     // Point/Polygon is not meant to conflate any polygons that are conflatable by other conflation
     // routines, hence the use of NonConflatableCriterion.
@@ -222,9 +199,6 @@ public:
       }
       LOG_VART(attemptToMatch);
 
-      // record the match in both directions
-      //const QString matchKey1 = e->getElementId().toString() % ";" % e2->getElementId().toString();
-      //const QString matchKey2 = e2->getElementId().toString() % ";" % e->getElementId().toString();
       if (attemptToMatch)
       {
         // score each candidate and push it on the result vector
@@ -235,16 +209,7 @@ public:
         {
           _result.push_back(m);
         }
-        // cache the match to speed up calls to createMatch by RemoveDuplicateReviewsOp and possibly
-        // others
-        //_matchCache[matchKey1] = m;
-        //_matchCache[matchKey2] = m;
       }
-//      else
-//      {
-//        _matchCache[matchKey1] = std::shared_ptr<ScriptMatch>();
-//        _matchCache[matchKey2] = std::shared_ptr<ScriptMatch>();
-//      }
     }
 
     _neighborCountSum += neighbors.size();
@@ -349,7 +314,6 @@ public:
       }
     }
 
-    //LOG_VART(result);
     return result;
   }
 
@@ -631,13 +595,6 @@ public:
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
-  //QHash<QString, std::shared_ptr<ScriptMatch>> getMatchCache() const { return _matchCache; }
-  //QHash<ElementId, bool> getMatchCandidateCache() const { return _matchCandidateCache; }
-
-//  Persistent<Function> getSearchRadiusFunction() const { return _getSearchRadius; }
-//  void setSearchRadiusFunction(const Persistent<Function>& function)
-//  { _getSearchRadius = function; }
-
 private:
 
   // don't hold on to the map.
@@ -657,8 +614,6 @@ private:
   Persistent<Function> _getSearchRadius;
 
   QHash<ElementId, bool> _matchCandidateCache;
-  // maps plugin script name to all matches found
-  //QHash<QString, std::shared_ptr<ScriptMatch>> _matchCache;
   QHash<ElementId, double> _searchRadiusCache;
   //QMap<QString, ElementCriterionPtr> _matchCandidateCriterionCache;
 
@@ -728,21 +683,8 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 {
   LOG_VART(map->size());
 
-  // Using a match cache here speeds up calls to the script matchers by class like
-  // RemoveDuplicateReviewsOp quite a bit. Unfortunately, this also functions as a band-aid, as it
-  // does seem as if this code has a memory leak somewhere that needs to be looked into (run
-  // somalia 3 regression test without this cache).
-//  if (_matchCache.contains(_scriptPath))
-//  {
-//    QHash<QString, std::shared_ptr<ScriptMatch>> cache = _matchCache[_scriptPath];
-//    const QString key = eid1.toString() % ";" % eid2.toString();
-//    QHash<QString, std::shared_ptr<ScriptMatch>>::const_iterator itr = cache.find(key);
-//    if (itr != cache.end())
-//    {
-//      LOG_TRACE("Match cache hit for " << _scriptPath << ": " << key);
-//      return itr.value();
-//    }
-//  }
+  // There may be some benefit at some point in caching matches calculated in ScriptMatchVisitor and
+  // accessing that cached information here to avoid extra calls into the JS match script.
 
   const bool isPointPolyConflation = _scriptPath.contains(POINT_POLYGON_SCRIPT_NAME);
   bool attemptToMatch = false;
@@ -798,17 +740,9 @@ void ScriptMatchCreator::createMatches(
   _descriptionCache[_scriptPath] = scriptInfo;
   v.setCreatorDescription(scriptInfo);
   v.initSearchRadiusInfo();
-  //_searchRadiusFunctionCache[_scriptPath] = v.getSearchRadiusFunction();
   v.calculateSearchRadius();
   _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
-  LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
-  //_candidateDistanceSigmaCache
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
-  LOG_VART(_candidateDistanceSigmaCache[_scriptPath]);
-//  _matchCache[_scriptPath] = v.getMatchCache();
-//  LOG_VARD(_matchCache[_scriptPath].size());
-//  _matchCandidateCache[_scriptPath] = v.getMatchCandidateCache();
-//  LOG_VARD(_matchCandidateCache[_scriptPath].size());
 
   LOG_VARD(GeometryTypeCriterion::typeToString(scriptInfo.geometryType));
   switch (scriptInfo.geometryType)
@@ -899,6 +833,8 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     _cachedScriptVisitor.reset(
       new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter));
     _cachedScriptVisitor->setScriptPath(scriptPath);
+    // setting these cached values on the visitor here for performance reasons; this could all be
+    // consolidated and cleaned up
     LOG_VART(_descriptionCache.contains(scriptPath));
     if (_descriptionCache.contains(scriptPath))
     {
@@ -909,11 +845,6 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     {
       _cachedScriptVisitor->setCandidateDistanceSigma(_candidateDistanceSigmaCache[scriptPath]);
     }
-//    LOG_VART(_searchRadiusFunctionCache.contains(scriptPath));
-//    if (_searchRadiusFunctionCache.contains(scriptPath))
-//    {
-//      _cachedScriptVisitor->setSearchRadiusFunction(_searchRadiusFunctionCache[scriptPath]);
-//    }
     //If the search radius has already been calculated for this matcher once, we don't want to do
     //it again due to the expense.
     LOG_VART(_cachedCustomSearchRadii.contains(scriptPath));
@@ -981,18 +912,6 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
   LOG_VART(map->size());
-
-//  if (_matchCandidateCache.contains(_scriptPath))
-//  {
-//    QHash<ElementId, bool> cache = _matchCandidateCache[_scriptPath];
-//    QHash<ElementId, bool>::const_iterator itr = cache.find(element->getElementId());
-//    if (itr != cache.end())
-//    {
-//      LOG_TRACE("Match candidate cache hit for " << _scriptPath << ": " << element->getElementId());
-//      return itr.value();
-//    }
-//  }
-  //return false;
 
   return _getCachedVisitor(map)->isMatchCandidate(element);
 }

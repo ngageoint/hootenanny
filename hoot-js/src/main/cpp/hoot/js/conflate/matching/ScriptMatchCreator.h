@@ -46,6 +46,7 @@ class ScriptMatch;
  * Match creator for all generic conflation scripts
  *
  * @sa ScriptMatch
+ * @todo This class could use some refactoring after recent changes.
  */
 class ScriptMatchCreator : public MatchCreator, public SearchRadiusProvider
 {
@@ -102,7 +103,6 @@ private:
   QMap<QString, Meters> _cachedCustomSearchRadii;
   QMap<QString, double> _candidateDistanceSigmaCache;
   QMap<QString, CreatorDescription> _descriptionCache;
-  //QMap<QString, Persistent<Function>> _searchRadiusFunctionCache;
 
   std::shared_ptr<ChainCriterion> _pointPolyPolyCrit;
   std::shared_ptr<ChainCriterion> _pointPolyPointCrit;
