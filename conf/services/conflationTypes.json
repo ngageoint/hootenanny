@@ -72,7 +72,7 @@
             "search.radius.generic.point": "Generic point search radius (m)"
         }
     },
-    "GenericPoint/Polygon": {
+    "GenericPointPolygon": {
         "matcher": "hoot::ScriptMatchCreator,PointPolygon.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
