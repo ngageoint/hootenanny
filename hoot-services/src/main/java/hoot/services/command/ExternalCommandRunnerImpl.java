@@ -98,6 +98,9 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         //strip out oauth tokens
         out = out.replaceAll("=\\w{40}\\s+", "=<redacted> ");
 
+        //strip out osm api url
+        out = out.replaceAll("https?://\\S+?/", "<osmapi>/");
+
         return out;
     }
 
