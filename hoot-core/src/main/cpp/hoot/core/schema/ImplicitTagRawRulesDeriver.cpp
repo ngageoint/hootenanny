@@ -42,6 +42,7 @@
 // Qt
 #include <QStringBuilder>
 #include <QThread>
+#include <QStorageInfo>
 
 namespace hoot
 {
@@ -431,9 +432,11 @@ void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
   const int cmdExitStatus = std::system(cmd.toStdString().c_str());
   if (cmdExitStatus != 0)
   {
+    QStorageInfo storageInfo(QDir("/tmp"));
     const QString msg =
-      "Unable to sort file. Command status: " + QString::number(cmdExitStatus) + "; command: " +
-      cmd;
+      "Unable to sort file. Command status: " + QString::number(cmdExitStatus) +
+      "; disk free space: " + QString::number(storageInfo.bytesAvailable()/1000/1000) +
+      "MB; command: " + cmd;
     throw HootException(msg);
   }
   LOG_INFO(
