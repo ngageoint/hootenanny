@@ -60,6 +60,8 @@ public:
 
   virtual ~ScriptMatchCreator();
 
+  virtual void init(const ConstOsmMapPtr& map) override;
+
   /**
    * @see SearchRadiusProvider
    */

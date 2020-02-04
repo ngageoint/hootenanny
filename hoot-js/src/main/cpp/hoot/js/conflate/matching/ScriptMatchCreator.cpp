@@ -651,6 +651,11 @@ ScriptMatchCreator::~ScriptMatchCreator()
 {
 }
 
+void ScriptMatchCreator::init(const ConstOsmMapPtr& map)
+{
+  _getCachedVisitor(map)->initSearchRadiusInfo();
+}
+
 Meters ScriptMatchCreator::calculateSearchRadius(const ConstOsmMapPtr& map,
   const ConstElementPtr& e)
 {

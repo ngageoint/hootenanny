@@ -42,6 +42,8 @@ public:
 
   ~SearchRadiusProvider() {}
 
+  virtual void init(const ConstOsmMapPtr& /*map*/) {}
+
   /**
    * Returns the search radius for the given element.
    */
