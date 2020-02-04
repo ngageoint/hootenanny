@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ChangesetReplacementCreator.h"
 
@@ -807,7 +807,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   LOG_VARD(cutterMap->getElementCount());
   ConfigOptions opts(conf());
   LOG_VARD(OsmUtils::mapIsPointsOnly(cutterMap));
-  double cookieCutterAlpha = opts.getCookieCutterAlpha();
+  const double cookieCutterAlpha = opts.getCookieCutterAlpha();
   double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
   LOG_VARD(_fullReplacement);
   if (_fullReplacement)

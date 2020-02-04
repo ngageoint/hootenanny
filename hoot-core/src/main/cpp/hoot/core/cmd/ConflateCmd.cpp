@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ConflateCmd.h"
@@ -64,7 +64,9 @@
 // Tgs
 #include <tgs/System/Timer.h>
 
+// Qt
 #include <QFileInfo>
+#include <QDir>
 
 using namespace std;
 using namespace Tgs;
@@ -161,6 +163,14 @@ int ConflateCmd::runSimple(QStringList& args)
   const QString input1 = args[0];
   const QString input2 = args[1];
   QString output = args[2];
+
+  QFileInfo outputInfo(output);
+  LOG_VARD(outputInfo.dir().absolutePath());
+  const bool outputDirSuccess = QDir().mkpath(outputInfo.dir().absolutePath());
+  if (!outputDirSuccess)
+  {
+    throw IllegalArgumentException("Unable to create output path for: " + output);
+  }
 
   QString osmApiDbUrl;
   if (output.endsWith(".osc.sql"))
