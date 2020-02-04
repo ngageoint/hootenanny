@@ -102,6 +102,27 @@ public:
     // Calls to script functions/var are expensive, both memory-wise and processing-wise. Since this
     // constructor gets called repeatedly by createMatch, keep them out of this constructor.
 
+    // This sets up the search radius function, which gets called elsewhere. Needs to be done here
+    // or calls to ScriptMatchCreator::calculateSearchRadius will return inaccurate results when
+    // ScriptMatchCreator is called as a SearchBoundsCalculator.
+    Isolate* current = v8::Isolate::GetCurrent();
+    HandleScope handleScope(current);
+    Context::Scope context_scope(_script->getContext(current));
+    Handle<Object> plugin = getPlugin();
+    Handle<Value> value = plugin->Get(toV8("getSearchRadius"));
+    if (value->IsUndefined())
+    {
+      // pass
+    }
+    else if (value->IsFunction() == false)
+    {
+      throw HootException("getSearchRadius is not a function.");
+    }
+    else
+    {
+      _getSearchRadius.Reset(current, Handle<Function>::Cast(value));
+    }
+
     // Point/Polygon is not meant to conflate any polygons that are conflatable by other conflation
     // routines, hence the use of NonConflatableCriterion.
     std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
@@ -126,20 +147,6 @@ public:
     _customSearchRadius =
       getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
     LOG_VART(_customSearchRadius);
-
-    Handle<Value> value = plugin->Get(toV8("getSearchRadius"));
-    if (value->IsUndefined())
-    {
-      // pass
-    }
-    else if (value->IsFunction() == false)
-    {
-      throw HootException("getSearchRadius is not a function.");
-    }
-    else
-    {
-      _getSearchRadius.Reset(current, Handle<Function>::Cast(value));
-    }
   }
 
   virtual QString getDescription() const { return ""; }
@@ -832,7 +839,9 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     vector<ConstMatchPtr> emptyMatches;
     _cachedScriptVisitor.reset(
       new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter));
+
     _cachedScriptVisitor->setScriptPath(scriptPath);
+
     // setting these cached values on the visitor here for performance reasons; this could all be
     // consolidated and cleaned up
     LOG_VART(_descriptionCache.contains(scriptPath));
@@ -840,11 +849,22 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     {
       _cachedScriptVisitor->setCreatorDescription(_descriptionCache[scriptPath]);
     }
+    else
+    {
+      _cachedScriptVisitor->setCreatorDescription(_getScriptDescription(scriptPath));
+    }
+
     LOG_VART(_candidateDistanceSigmaCache.contains(scriptPath));
     if (_candidateDistanceSigmaCache.contains(scriptPath))
     {
       _cachedScriptVisitor->setCandidateDistanceSigma(_candidateDistanceSigmaCache[scriptPath]);
     }
+    else
+    {
+      // TODO: hack
+      _cachedScriptVisitor->setCandidateDistanceSigma(1.0);
+    }
+
     //If the search radius has already been calculated for this matcher once, we don't want to do
     //it again due to the expense.
     LOG_VART(_cachedCustomSearchRadii.contains(scriptPath));

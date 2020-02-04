@@ -34,7 +34,7 @@
 
 #include <hoot/js/PluginContext.h>
 
-using namespace v8;
+//using namespace v8;
 
 namespace hoot
 {
@@ -106,12 +106,6 @@ private:
 
   std::shared_ptr<ChainCriterion> _pointPolyPolyCrit;
   std::shared_ptr<ChainCriterion> _pointPolyPointCrit;
-
-  // maps plugin script file path to a set of matches found by that script and recorded by
-  // ScriptMatchVisitor
-  QMap<QString, QHash<QString, std::shared_ptr<ScriptMatch>>> _matchCache;
-
-  QMap<QString, QHash<ElementId, bool>> _matchCandidateCache;
 
   CreatorDescription _getScriptDescription(QString path) const;
 
