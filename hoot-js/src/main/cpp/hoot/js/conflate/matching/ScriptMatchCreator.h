@@ -60,6 +60,9 @@ public:
 
   virtual ~ScriptMatchCreator();
 
+  /**
+   * @see SearchRadiusProvider
+   */
   virtual void init(const ConstOsmMapPtr& map) override;
 
   /**
@@ -68,7 +71,7 @@ public:
   virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e) override;
 
   /**
-   * Not implemented.
+   * @see MatchCreator
    */
   virtual MatchPtr createMatch(const ConstOsmMapPtr&, ElementId, ElementId) override;
 
@@ -78,8 +81,14 @@ public:
   virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
+  /**
+   * @see MatchCreator
+   */
   virtual std::vector<CreatorDescription> getAllCreators() const override;
 
+  /**
+   * @see MatchCreator
+   */
   virtual void setArguments(QStringList args) override;
 
   /**
@@ -91,8 +100,14 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
+  /**
+   * @see MatchCreator
+   */
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
+  /**
+   * @see MatchCreator
+   */
   virtual QString getName() const override;
 
 private:

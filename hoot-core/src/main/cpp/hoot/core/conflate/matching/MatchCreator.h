@@ -96,6 +96,11 @@ public:
    */
   QString getDescription() const { return _description; }
 
+  /**
+   * Returns the name of the match creator
+   *
+   * @return a name string
+   */
   virtual QString getName() const = 0;
 
 protected:

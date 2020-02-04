@@ -95,8 +95,16 @@ public:
    */
   void registerCreator(const QString& c);
 
+  /**
+   * Removes all the creators from the factory
+   */
   void reset();
 
+  /**
+   * Returns a printable string with the names of all MatchCreators available from the factory
+   *
+   * @return a names string
+   */
   QString getCreatorsStr() const;
 
 private:

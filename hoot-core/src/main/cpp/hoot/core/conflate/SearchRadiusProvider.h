@@ -42,6 +42,9 @@ public:
 
   ~SearchRadiusProvider() {}
 
+  /**
+   * Optional init
+   */
   virtual void init(const ConstOsmMapPtr& /*map*/) {}
 
   /**
