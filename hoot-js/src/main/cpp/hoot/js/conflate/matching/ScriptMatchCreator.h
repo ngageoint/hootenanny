@@ -30,6 +30,7 @@
 #include <hoot/core/conflate/SearchRadiusProvider.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 
 #include <hoot/js/PluginContext.h>
 
@@ -86,16 +87,21 @@ public:
 
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
+  virtual QString getName() const override;
+
 private:
 
   std::shared_ptr<PluginContext> _script;
   QString _scriptPath;
 
-  CreatorDescription _getScriptDescription(QString path) const;
-
   std::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   QMap<QString, Meters> _cachedCustomSearchRadii;
+
+  std::shared_ptr<ChainCriterion> _pointPolyPolyCrit;
+  std::shared_ptr<ChainCriterion> _pointPolyPointCrit;
+
+  CreatorDescription _getScriptDescription(QString path) const;
 
   std::shared_ptr<ScriptMatchVisitor> _getCachedVisitor(const ConstOsmMapPtr& map);
 };

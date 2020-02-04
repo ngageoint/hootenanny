@@ -71,6 +71,8 @@ public:
 
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
+  virtual QString getName() const { return QString::fromStdString(className()); }
+
 private:
 
   std::shared_ptr<HighwayClassifier> _classifier;

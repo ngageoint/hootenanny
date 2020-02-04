@@ -86,7 +86,8 @@ public:
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
    */
-  void registerCreator(const std::shared_ptr<MatchCreator>& creator) { _creators.push_back(creator); }
+  void registerCreator(const std::shared_ptr<MatchCreator>& creator)
+  { _creators.push_back(creator); }
 
   /**
    * @brief registerCreator Register the specified creator by string (constructs the creator)
@@ -96,10 +97,16 @@ public:
 
   void reset();
 
+  QString getCreatorsStr() const;
+
 private:
 
   // allows for matching a subset of the input data
   QString _tagFilter;
+
+  static std::shared_ptr<MatchFactory> _theInstance;
+
+  std::vector<std::shared_ptr<MatchCreator>> _creators;
 
   MatchFactory();
 
@@ -109,10 +116,6 @@ private:
   static void _setTagFilter(QString filter) { _theInstance->_tagFilter = filter; }
 
   static void _tempFixDefaults();
-
-  static std::shared_ptr<MatchFactory> _theInstance;
-
-  std::vector<std::shared_ptr<MatchCreator>> _creators;
 
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;

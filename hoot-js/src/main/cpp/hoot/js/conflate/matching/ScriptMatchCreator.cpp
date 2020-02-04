@@ -30,7 +30,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
-#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -42,6 +41,7 @@
 #include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
 
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -315,6 +315,8 @@ public:
     /*
      * This is meant to run one time when the match creator is initialized.
      */
+
+    LOG_DEBUG("Checking for existence of search radius export for: " << _scriptPath << "...");
 
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
@@ -619,11 +621,17 @@ private:
   std::shared_ptr<ChainCriterion> _pointPolyCrit;
 };
 
-
-
 ScriptMatchCreator::ScriptMatchCreator()
 {
   _cachedScriptVisitor.reset();
+
+  std::shared_ptr<NonConflatableCriterion> notConflatableCrit(new NonConflatableCriterion());
+
+  std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
+  _pointPolyPolyCrit.reset(new ChainCriterion(polyCrit, notConflatableCrit));
+
+  std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
+  _pointPolyPointCrit.reset(new ChainCriterion(pointCrit, notConflatableCrit));
 }
 
 ScriptMatchCreator::~ScriptMatchCreator()
@@ -659,7 +667,23 @@ void ScriptMatchCreator::setArguments(QStringList args)
 
 MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
-  if (isMatchCandidate(map->getElement(eid1), map) && isMatchCandidate(map->getElement(eid2), map))
+  const bool isPointPolyConflation = _scriptPath.contains(POINT_POLYGON_SCRIPT_NAME);
+  bool attemptToMatch = false;
+  if (!isPointPolyConflation)
+  {
+    attemptToMatch =
+      isMatchCandidate(map->getElement(eid1), map) && isMatchCandidate(map->getElement(eid2), map);
+  }
+  else
+  {
+    attemptToMatch =
+      (_pointPolyPointCrit->isSatisfied(map->getElement(eid1)) &&
+      _pointPolyPolyCrit->isSatisfied(map->getElement(eid2))) ||
+      (_pointPolyPolyCrit->isSatisfied(map->getElement(eid1)) &&
+      _pointPolyPointCrit->isSatisfied(map->getElement(eid2)));
+  }
+
+  if (attemptToMatch)
   {
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
@@ -670,6 +694,7 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 
     return MatchPtr(new ScriptMatch(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold()));
   }
+
   return MatchPtr();
 }
 
@@ -896,6 +921,12 @@ std::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
     }
   }
   return _matchThreshold;
+}
+
+QString ScriptMatchCreator::getName() const
+{
+  QFileInfo scriptFileInfo(_scriptPath);
+  return QString::fromStdString(className()) + ";" + scriptFileInfo.fileName();
 }
 
 }

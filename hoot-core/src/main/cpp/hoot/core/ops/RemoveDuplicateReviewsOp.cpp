@@ -75,6 +75,7 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   // loop through duplicate reviews
 
   LOG_DEBUG("Removing duplicate reviews...");
+  LOG_VARD(MatchFactory::getInstance().getCreatorsStr());
   ReviewMarker reviewMarker;
   QMap<set<ElementId>, QList<ReviewMarker::ReviewUid>>::iterator it = membersToReview.begin();
   while (it != membersToReview.end())

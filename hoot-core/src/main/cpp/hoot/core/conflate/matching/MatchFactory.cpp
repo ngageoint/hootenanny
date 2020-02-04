@@ -58,9 +58,12 @@ MatchPtr MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, El
 {
   LOG_VART(eid1);
   LOG_VART(eid2);
+  LOG_VART(_creators.size());
 
   for (size_t i = 0; i < _creators.size(); ++i)
   {
+    const QString name = _creators[i]->getName();
+    LOG_VART(name);
     MatchPtr m = _creators[i]->createMatch(map, eid1, eid2);
     if (m)
     {
@@ -314,5 +317,18 @@ void MatchFactory::reset()
   _creators.clear();
   _tagFilter = "";
 }
+
+QString MatchFactory::getCreatorsStr() const
+{
+  QString str;
+  for (size_t i = 0; i < _creators.size(); ++i)
+  {
+    const QString name = _creators[i]->getName();
+    str += name + ";";
+  }
+  str.chop(1);
+  return str;
+}
+
 
 }

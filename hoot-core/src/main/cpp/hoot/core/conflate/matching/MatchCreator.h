@@ -96,6 +96,8 @@ public:
    */
   QString getDescription() const { return _description; }
 
+  virtual QString getName() const = 0;
+
 protected:
 
   QString _description;

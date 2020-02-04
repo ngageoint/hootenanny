@@ -67,6 +67,8 @@ public:
 
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
+  virtual QString getName() const { return QString::fromStdString(className()); }
+
 private:
 
   /// Don't use this directly. See below.

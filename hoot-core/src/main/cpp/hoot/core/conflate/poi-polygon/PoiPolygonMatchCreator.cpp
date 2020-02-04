@@ -49,11 +49,11 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 }
 
 MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
-                                           ElementId eid2)
+                                             ElementId eid2)
 {
   if (!_infoCache)
   {
-    LOG_TRACE("Initializing info cache...");
+    LOG_DEBUG("Initializing info cache...");
     _infoCache.reset(new PoiPolygonInfoCache(map));
   }
 
@@ -87,7 +87,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
 
   if (!_infoCache)
   {
-    LOG_TRACE("Initializing info cache...");
+    LOG_DEBUG("Initializing info cache...");
     _infoCache.reset(new PoiPolygonInfoCache(map));
     _infoCache->setConfiguration(conf());
   }
