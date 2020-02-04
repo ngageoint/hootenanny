@@ -28,7 +28,6 @@ package hoot.services.command;
 
 
 import static hoot.services.HootProperties.replaceSensitiveData;
-import static hoot.services.models.db.QMaps.maps;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +53,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.job.JobType;
 import hoot.services.utils.DbUtils;
 
 
@@ -96,6 +94,9 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
         //escape single quotes
         out = out.replaceAll("'", "''");
+
+        //strip out oauth tokens
+        out = out.replaceAll("=\\w{40}\\s+", "=<redacted> ");
 
         return out;
     }
@@ -165,8 +166,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         CommandLine cmdLine = parse(commandTemplate, expandSensitiveProperties(substitutionMap));
 
         // Sensitive params obfuscated
-        obfuscatedCommand = Arrays.stream(parse(commandTemplate, substitutionMap).toStrings())
-            .collect(Collectors.joining(" "));
+        obfuscatedCommand = obfuscateConsoleLog(Arrays.stream(parse(commandTemplate, substitutionMap).toStrings())
+                .collect(Collectors.joining(" ")));
 
         LocalDateTime start = LocalDateTime.now();
         Exception exception = null;
