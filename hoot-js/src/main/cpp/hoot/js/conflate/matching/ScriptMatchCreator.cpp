@@ -102,27 +102,6 @@ public:
     // Calls to script functions/var are expensive, both memory-wise and processing-wise. Since this
     // constructor gets called repeatedly by createMatch, keep them out of this constructor.
 
-    // This sets up the search radius function, which gets called elsewhere. Needs to be done here
-    // or calls to ScriptMatchCreator::calculateSearchRadius will return inaccurate results when
-    // ScriptMatchCreator is called as a SearchBoundsCalculator.
-    Isolate* current = v8::Isolate::GetCurrent();
-    HandleScope handleScope(current);
-    Context::Scope context_scope(_script->getContext(current));
-    Handle<Object> plugin = getPlugin();
-    Handle<Value> value = plugin->Get(toV8("getSearchRadius"));
-    if (value->IsUndefined())
-    {
-      // pass
-    }
-    else if (value->IsFunction() == false)
-    {
-      throw HootException("getSearchRadius is not a function.");
-    }
-    else
-    {
-      _getSearchRadius.Reset(current, Handle<Function>::Cast(value));
-    }
-
     // Point/Polygon is not meant to conflate any polygons that are conflatable by other conflation
     // routines, hence the use of NonConflatableCriterion.
     std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
@@ -147,6 +126,20 @@ public:
     _customSearchRadius =
       getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
     LOG_VART(_customSearchRadius);
+
+    Handle<Value> value = plugin->Get(toV8("getSearchRadius"));
+    if (value->IsUndefined())
+    {
+      // pass
+    }
+    else if (value->IsFunction() == false)
+    {
+      throw HootException("getSearchRadius is not a function.");
+    }
+    else
+    {
+      _getSearchRadius.Reset(current, Handle<Function>::Cast(value));
+    }
   }
 
   virtual QString getDescription() const { return ""; }
