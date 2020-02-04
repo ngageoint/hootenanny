@@ -30,11 +30,9 @@
 #include <hoot/core/conflate/SearchRadiusProvider.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/util/NotImplementedException.h>
-#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 #include <hoot/js/PluginContext.h>
-
-//using namespace v8;
 
 namespace hoot
 {
@@ -121,8 +119,8 @@ private:
   QMap<QString, double> _candidateDistanceSigmaCache;
   QMap<QString, CreatorDescription> _descriptionCache;
 
-  std::shared_ptr<ChainCriterion> _pointPolyPolyCrit;
-  std::shared_ptr<ChainCriterion> _pointPolyPointCrit;
+  ElementCriterionPtr _pointPolyPolyCrit;
+  ElementCriterionPtr _pointPolyPointCrit;
 
   CreatorDescription _getScriptDescription(QString path) const;
 

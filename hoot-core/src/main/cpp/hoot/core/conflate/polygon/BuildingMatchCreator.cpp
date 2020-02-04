@@ -413,7 +413,7 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
 {
   QElapsedTimer timer;
   timer.start();
-  LOG_STATUS("Looking for matches with: " << className() << "...");
+  LOG_DEBUG("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
   const int matchesSizeBefore = matches.size();
 

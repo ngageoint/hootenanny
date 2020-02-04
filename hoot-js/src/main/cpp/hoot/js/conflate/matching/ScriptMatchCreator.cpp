@@ -45,6 +45,7 @@
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 
 // Qt
 #include <QFileInfo>
@@ -104,9 +105,10 @@ public:
 
     // Point/Polygon is not meant to conflate any polygons that are conflatable by other conflation
     // routines, hence the use of NonConflatableCriterion.
-    std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
-    std::shared_ptr<NonConflatableCriterion> notConflatableCrit(new NonConflatableCriterion());
-    _pointPolyCrit.reset(new ChainCriterion(polyCrit, notConflatableCrit));
+    _pointPolyCrit.reset(
+      new ChainCriterion(
+        ElementCriterionPtr(new PolygonCriterion()),
+        ElementCriterionPtr(new NonConflatableCriterion(map))));
   }
 
   ~ScriptMatchVisitor()
@@ -115,6 +117,8 @@ public:
 
   void initSearchRadiusInfo()
   {
+    LOG_DEBUG("Initializing search radius info...");
+
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
@@ -479,7 +483,6 @@ public:
   {
     if (_matchCandidateCache.contains(e->getElementId()))
     {
-      //LOG_TRACE("Found cached match candidate bool: " << e->getElementId());
       return _matchCandidateCache[e->getElementId()];
     }
 
@@ -637,14 +640,6 @@ private:
 ScriptMatchCreator::ScriptMatchCreator()
 {
   _cachedScriptVisitor.reset();
-
-  std::shared_ptr<NonConflatableCriterion> notConflatableCrit(new NonConflatableCriterion());
-
-  std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
-  _pointPolyPolyCrit.reset(new ChainCriterion(polyCrit, notConflatableCrit));
-
-  std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
-  _pointPolyPointCrit.reset(new ChainCriterion(pointCrit, notConflatableCrit));
 }
 
 ScriptMatchCreator::~ScriptMatchCreator()
@@ -679,34 +674,55 @@ void ScriptMatchCreator::setArguments(QStringList args)
   _description = QString::fromStdString(className()) + "," + args[0];
   _cachedScriptVisitor.reset();
 
-  QFileInfo scriptFileInfo(_scriptPath);
-  LOG_DEBUG("Set arguments for: " << className() << " - rules: " << scriptFileInfo.fileName());
+  LOG_DEBUG(
+    "Set arguments for: " << className() << " - rules: " << QFileInfo(_scriptPath).fileName());
 }
 
 MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
                                          ElementId eid2)
 {
-  LOG_VART(map->size());
+  LOG_VART(eid1);
+  LOG_VART(eid2);
 
   // There may be some benefit at some point in caching matches calculated in ScriptMatchVisitor and
-  // accessing that cached information here to avoid extra calls into the JS match script.
+  // accessing that cached information here to avoid extra calls into the JS match script. So far,
+  // haven't seen any performance improvement after adding match caching.
 
   const bool isPointPolyConflation = _scriptPath.contains(POINT_POLYGON_SCRIPT_NAME);
+  LOG_VART(isPointPolyConflation);
   bool attemptToMatch = false;
-  if (!isPointPolyConflation)
+  ConstElementPtr e1 = map->getElement(eid1);
+  ConstElementPtr e2 = map->getElement(eid2);
+  if (e1 && e2)
   {
-    attemptToMatch =
-      isMatchCandidate(map->getElement(eid1), map) && isMatchCandidate(map->getElement(eid2), map);
+    if (!isPointPolyConflation)
+    {
+      attemptToMatch = isMatchCandidate(e1, map) && isMatchCandidate(e2, map);
+    }
+    else
+    {
+      if (!_pointPolyPolyCrit)
+      {
+        _pointPolyPolyCrit.reset(
+          new ChainCriterion(
+            ElementCriterionPtr(new PolygonCriterion()),
+            ElementCriterionPtr(new NonConflatableCriterion(map))));
+      }
+      if (!_pointPolyPointCrit)
+      {
+        _pointPolyPointCrit.reset(
+          new ChainCriterion(
+            ElementCriterionPtr(new PointCriterion(map)),
+            ElementCriterionPtr(new NonConflatableCriterion(map))));
+      }
+
+      // see related note in ScriptMatchVisitor::checkForMatch
+      attemptToMatch =
+        (_pointPolyPointCrit->isSatisfied(e1) && _pointPolyPolyCrit->isSatisfied(e2)) ||
+        (_pointPolyPolyCrit->isSatisfied(e1) && _pointPolyPointCrit->isSatisfied(e2));
+    }
   }
-  else
-  {
-    // see related note in ScriptMatchVisitor::checkForMatch
-    attemptToMatch =
-      (_pointPolyPointCrit->isSatisfied(map->getElement(eid1)) &&
-       _pointPolyPolyCrit->isSatisfied(map->getElement(eid2))) ||
-      (_pointPolyPolyCrit->isSatisfied(map->getElement(eid1)) &&
-       _pointPolyPointCrit->isSatisfied(map->getElement(eid2)));
-  }
+  LOG_VART(attemptToMatch);
 
   if (attemptToMatch)
   {
@@ -734,7 +750,7 @@ void ScriptMatchCreator::createMatches(
   QElapsedTimer timer;
   timer.start();
   QFileInfo scriptFileInfo(_scriptPath);
-  LOG_STATUS(
+  LOG_DEBUG(
     "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
   LOG_VARD(*threshold);
   const int matchesSizeBefore = matches.size();
@@ -847,20 +863,11 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     {
       _cachedScriptVisitor->setCreatorDescription(_descriptionCache[scriptPath]);
     }
-    else
-    {
-      _cachedScriptVisitor->setCreatorDescription(_getScriptDescription(scriptPath));
-    }
 
     LOG_VART(_candidateDistanceSigmaCache.contains(scriptPath));
     if (_candidateDistanceSigmaCache.contains(scriptPath))
     {
       _cachedScriptVisitor->setCandidateDistanceSigma(_candidateDistanceSigmaCache[scriptPath]);
-    }
-    else
-    {
-      // TODO: hack
-      _cachedScriptVisitor->setCandidateDistanceSigma(1.0);
     }
 
     //If the search radius has already been calculated for this matcher once, we don't want to do
@@ -929,7 +936,6 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
   {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
-  LOG_VART(map->size());
 
   return _getCachedVisitor(map)->isMatchCandidate(element);
 }
