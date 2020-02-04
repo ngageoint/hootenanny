@@ -54,8 +54,8 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   _map = map;
 
   // go through all the relations to get duplicate reviews
-
   LOG_DEBUG("Retrieving duplicate reviews...");
+
   int totalMembersToReview = 0;
   const RelationMap& relations = map->getRelations();
   QMap<set<ElementId>, QList<ReviewMarker::ReviewUid>> membersToReview;
@@ -73,16 +73,14 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   LOG_VART(membersToReview);
 
   // loop through duplicate reviews
-
   LOG_DEBUG("Removing duplicate reviews...");
   LOG_VARD(MatchFactory::getInstance().getCreatorsStr());
+
   ReviewMarker reviewMarker;
   QMap<set<ElementId>, QList<ReviewMarker::ReviewUid>>::iterator it = membersToReview.begin();
   while (it != membersToReview.end())
   {
     set<ElementId> eids = it.key();
-
-    // remove duplicate reviews
 
     QList<ReviewMarker::ReviewUid> duplicateReviews = it.value();
 

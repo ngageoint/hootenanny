@@ -34,10 +34,13 @@
 
 #include <hoot/js/PluginContext.h>
 
+using namespace v8;
+
 namespace hoot
 {
 
 class ScriptMatchVisitor;
+class ScriptMatch;
 
 /**
  * Match creator for all generic conflation scripts
@@ -97,9 +100,18 @@ private:
   std::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   QMap<QString, Meters> _cachedCustomSearchRadii;
+  QMap<QString, double> _candidateDistanceSigmaCache;
+  QMap<QString, CreatorDescription> _descriptionCache;
+  //QMap<QString, Persistent<Function>> _searchRadiusFunctionCache;
 
   std::shared_ptr<ChainCriterion> _pointPolyPolyCrit;
   std::shared_ptr<ChainCriterion> _pointPolyPointCrit;
+
+  // maps plugin script file path to a set of matches found by that script and recorded by
+  // ScriptMatchVisitor
+  QMap<QString, QHash<QString, std::shared_ptr<ScriptMatch>>> _matchCache;
+
+  QMap<QString, QHash<ElementId, bool>> _matchCandidateCache;
 
   CreatorDescription _getScriptDescription(QString path) const;
 
