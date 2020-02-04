@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmXmlChangesetFileWriter.h"
 
@@ -424,16 +424,19 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
 
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    if (it.key().isEmpty() == false && it.value().isEmpty() == false)
+    const QString key = it.key();
+    const QString val = it.value();
+    if (key.isEmpty() == false && val.isEmpty() == false)
     {
       //  Ignore 'hoot:hash' for nodes
-      if (it.key() == MetadataTags::HootHash() && element->getElementType() == ElementType::Node)
+      if (key == MetadataTags::HootHash() && element->getElementType() == ElementType::Node)
         continue;
+      else if (!_includeDebugTags && key.toLower().startsWith("hoot:"))
+        continue;
+
       writer.writeStartElement("tag");
-      writer.writeAttribute(
-        "k", _invalidCharacterHandler.removeInvalidCharacters(it.key()));
-      writer.writeAttribute(
-        "v", _invalidCharacterHandler.removeInvalidCharacters(it.value()));
+      writer.writeAttribute("k", _invalidCharacterHandler.removeInvalidCharacters(key));
+      writer.writeAttribute("v", _invalidCharacterHandler.removeInvalidCharacters(val));
       writer.writeEndElement();
     }
   }
