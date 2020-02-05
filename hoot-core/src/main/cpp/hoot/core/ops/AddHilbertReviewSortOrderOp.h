@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ADD_HILBERT_REVIEW_SORT_ORDER_H__
 #define __ADD_HILBERT_REVIEW_SORT_ORDER_H__
@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -51,7 +52,7 @@ public:
   { return "Adding geospatial sorting tags to review relations..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Added " + QString::number(_numAffected) + " sorting tags"; }
+  { return "Added " + StringUtils::formatLargeNumber(_numAffected) + " sorting tags"; }
 
   virtual QString getDescription() const
   { return "Adds tags that enable sorting reviewable features geospatially"; }

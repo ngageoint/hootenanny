@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -45,11 +45,6 @@ class DeriveChangesetCommand extends GrailCommand {
 
         if(params.getConflationType() != null && params.getConflationType().contains("Differential")) {
             options.add("changeset.allow.deleting.reference.features=false");
-        }
-
-        //If passed a bounds, the changeset must be constrained to the bbox of the ref dataset
-        if(params.getBounds() != null) {
-            options.add("convert.bounding.box=" + params.getBounds());
         }
 
         List<String> hootOptions = toHootOptions(options);

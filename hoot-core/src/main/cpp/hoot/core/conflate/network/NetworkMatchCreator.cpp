@@ -92,7 +92,7 @@ void NetworkMatchCreator::createMatches(
 {
   QElapsedTimer timer;
   timer.start();
-  LOG_STATUS("Looking for matches with: " << className() << "...");
+  LOG_DEBUG("Looking for matches with: " << className() << "...");
   LOG_VART(threshold);
   const int matchesSizeBefore = matches.size();
 

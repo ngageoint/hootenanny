@@ -30,6 +30,7 @@
 #include <hoot/core/conflate/SearchRadiusProvider.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 #include <hoot/js/PluginContext.h>
 
@@ -37,11 +38,13 @@ namespace hoot
 {
 
 class ScriptMatchVisitor;
+class ScriptMatch;
 
 /**
  * Match creator for all generic conflation scripts
  *
  * @sa ScriptMatch
+ * @todo This class could use some refactoring after recent changes.
  */
 class ScriptMatchCreator : public MatchCreator, public SearchRadiusProvider
 {
@@ -58,10 +61,15 @@ public:
   /**
    * @see SearchRadiusProvider
    */
+  virtual void init(const ConstOsmMapPtr& map) override;
+
+  /**
+   * @see SearchRadiusProvider
+   */
   virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e) override;
 
   /**
-   * Not implemented.
+   * @see MatchCreator
    */
   virtual MatchPtr createMatch(const ConstOsmMapPtr&, ElementId, ElementId) override;
 
@@ -71,8 +79,14 @@ public:
   virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
+  /**
+   * @see MatchCreator
+   */
   virtual std::vector<CreatorDescription> getAllCreators() const override;
 
+  /**
+   * @see MatchCreator
+   */
   virtual void setArguments(QStringList args) override;
 
   /**
@@ -84,18 +98,31 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
+  /**
+   * @see MatchCreator
+   */
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
+
+  /**
+   * @see MatchCreator
+   */
+  virtual QString getName() const override;
 
 private:
 
   std::shared_ptr<PluginContext> _script;
   QString _scriptPath;
 
-  CreatorDescription _getScriptDescription(QString path) const;
-
   std::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   QMap<QString, Meters> _cachedCustomSearchRadii;
+  QMap<QString, double> _candidateDistanceSigmaCache;
+  QMap<QString, CreatorDescription> _descriptionCache;
+
+  ElementCriterionPtr _pointPolyPolyCrit;
+  ElementCriterionPtr _pointPolyPointCrit;
+
+  CreatorDescription _getScriptDescription(QString path) const;
 
   std::shared_ptr<ScriptMatchVisitor> _getCachedVisitor(const ConstOsmMapPtr& map);
 };

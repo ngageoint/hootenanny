@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReviewMarker.h"
 
@@ -191,7 +191,8 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
   LOG_TRACE("Marking review with note: " << note);
 }
 
-void ReviewMarker::mark(const OsmMapPtr &map, const std::vector<ElementId>& ids, const QString& note,
+void ReviewMarker::mark(
+  const OsmMapPtr &map, const std::vector<ElementId>& ids, const QString& note,
   const QString& reviewType, double score, vector<QString> choices)
 {
   if (note.isEmpty())

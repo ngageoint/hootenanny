@@ -129,9 +129,9 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
     {
       if (_explainText.isEmpty())
       {
-        throw IllegalArgumentException("If the match is a review an appropriate explanation must "
-                                       "be provided (E.g. { 'review': 1, "
-                                       "'explain': 'some reason' }.");
+        throw IllegalArgumentException(
+          "If the match is a review an appropriate explanation must be provided (E.g. "
+          "{ 'review': 1, 'explain': 'some reason' }.");
       }
     }
   }
