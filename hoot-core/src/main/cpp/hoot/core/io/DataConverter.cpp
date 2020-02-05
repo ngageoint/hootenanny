@@ -465,6 +465,8 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
 
     if (_convertOps.size() > 0)
     {
+      QElapsedTimer timer;
+      timer.start();
       NamedOp convertOps(_convertOps);
       convertOps.setProgress(
         Progress(
@@ -472,6 +474,9 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
           (float)(currentStep - 1) / (float)numSteps, 1.0 / (float)numSteps));
       convertOps.apply(map);
       currentStep++;
+      LOG_STATUS(
+        "Convert operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
+        " total.");
     }
 
     QElapsedTimer timer;
@@ -704,6 +709,8 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   if (_convertOps.size() > 0)
   {
+    QElapsedTimer timer;
+    timer.start();
     NamedOp convertOps(_convertOps);
     convertOps.setProgress(
       Progress(
@@ -711,6 +718,9 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
         (float)(currentTask - 1) / (float)numTasks, taskWeight));
     convertOps.apply(map);
     currentTask++;
+    LOG_STATUS(
+      "Convert operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
   }
 
   _progress.set(
@@ -847,6 +857,8 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
 
     if (_convertOps.size() > 0)
     {
+      QElapsedTimer timer;
+      timer.start();
       NamedOp convertOps(_convertOps);
       convertOps.setProgress(
         Progress(
@@ -854,6 +866,9 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
           (float)(currentTask - 1) / (float)numTasks, taskWeight));
       convertOps.apply(map);
       currentTask++;
+      LOG_STATUS(
+        "Convert operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
+        " total.");
     }
 
     _progress.set(

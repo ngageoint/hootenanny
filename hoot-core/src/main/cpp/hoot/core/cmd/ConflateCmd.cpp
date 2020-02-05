@@ -67,6 +67,7 @@
 // Qt
 #include <QFileInfo>
 #include <QDir>
+#include <QElapsedTimer>
 
 using namespace std;
 using namespace Tgs;
@@ -300,7 +301,7 @@ int ConflateCmd::runSimple(QStringList& args)
       map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
   }
-  LOG_INFO("Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
+  LOG_STATUS("Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
@@ -339,6 +340,8 @@ int ConflateCmd::runSimple(QStringList& args)
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
     // apply any user specified pre-conflate operations
+    QElapsedTimer timer;
+    timer.start();
     NamedOp preOps(ConfigOptions().getConflatePreOps());
     preOps.setProgress(
       Progress(
@@ -348,6 +351,9 @@ int ConflateCmd::runSimple(QStringList& args)
     stats.append(SingleStat("Apply Pre-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
     currentTask++;
+    LOG_STATUS(
+      "Conflate pre-operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
   }
 
   OsmMapPtr result = map;
@@ -381,6 +387,8 @@ int ConflateCmd::runSimple(QStringList& args)
   if (ConfigOptions().getConflatePostOps().size() > 0)
   {
     // apply any user specified post-conflate operations
+    QElapsedTimer timer;
+    timer.start();
     NamedOp postOps(ConfigOptions().getConflatePostOps());
     postOps.setProgress(
       Progress(
@@ -390,6 +398,9 @@ int ConflateCmd::runSimple(QStringList& args)
     stats.append(SingleStat("Apply Post-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
     currentTask++;
+    LOG_STATUS(
+      "Conflate post-operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
   }
 
   // doing this after the conflate post ops run, since some invalid reviews are removed by them

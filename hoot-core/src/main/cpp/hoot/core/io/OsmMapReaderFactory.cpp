@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapReaderFactory.h"
 
@@ -196,7 +196,7 @@ void OsmMapReaderFactory::_read(const OsmMapPtr& map,
   reader->open(url);
   reader->read(map);
   VALIDATE(map->validate(true));
-  LOG_INFO(
+  LOG_STATUS(
     "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
     " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
