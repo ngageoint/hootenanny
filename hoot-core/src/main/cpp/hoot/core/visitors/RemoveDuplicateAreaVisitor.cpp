@@ -46,6 +46,9 @@
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace geos::geom;
 using namespace std;
 
@@ -114,7 +117,7 @@ bool RemoveDuplicateAreaVisitor::_equals(const std::shared_ptr<Element>& e1,
   std::shared_ptr<Geometry> overlap;
   try
   {
-    overlap =std::shared_ptr<Geometry>(g1->intersection(g2.get()));
+    overlap = std::shared_ptr<Geometry>(g1->intersection(g2.get()));
   }
   catch (const geos::util::TopologyException&)
   {
@@ -161,12 +164,14 @@ void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e)
   {
     return;
   }
-  //LOG_VART(->getElementId());
+  LOG_VART(e->getElementId());
 
   if (e->getElementType() != ElementType::Node)
   {
     AreaCriterion areaCrit;
+    areaCrit.setOsmMap(_map);
     std::shared_ptr<Envelope> env(e->getEnvelope(_map->shared_from_this()));
+
     // if the envelope is null or the element is incomplete.
     if (env->isNull() ||
         CompletelyContainedByMapElementVisitor::isComplete(_map, e->getElementId()) == false ||
@@ -175,7 +180,8 @@ void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e)
       LOG_TRACE("Envelope null or incomplete element.");
       return;
     }
-    set<ElementId> neighbors = _map->getIndex().findWayRelations(*env);
+
+    set<ElementId> neighbors = _map->getIndex().findWayRelations(*env); // LARGEST BOTTLENECK
     LOG_VART(neighbors.size());
 
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
@@ -188,7 +194,7 @@ void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e)
         // check to see if e2 is null, it is possible that we removed it w/ a previous call to
         // remove a parent. run _equals() first as it is much faster than isSatisfied() (which
         // ends up doing lots of regex matching)
-        if (e2 != 0 && _equals(e, e2) && areaCrit.isSatisfied(e2) )
+        if (e2 != 0 && _equals(e, e2) && areaCrit.isSatisfied(e2))
         {
           LOG_TRACE("e2 is area and e1/e2 equal.");
           // remove the crummier one.

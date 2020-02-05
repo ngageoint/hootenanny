@@ -177,6 +177,8 @@ private:
 
   Match _emptyMatch;
 
+  int _maxAllowedWays;
+
   void _findTies();
 
   void _addIntersection(long nid, const std::set<long>& wids);

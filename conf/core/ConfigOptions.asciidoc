@@ -3936,6 +3936,16 @@ met.  e.g less than rubber.sheet.minimum.ties tie points are found.  Otherwise, 
 statement will be logged instead.  This setting is completely ignored if
 rubber.sheet.fail.when.minimum.tie.points.not.found is set to true.
 
+=== rubber.sheet.max.allowed.ways
+
+* Data Type: int
+* Default Value: `500000`
+
+A threshold above which rubber sheeting will not attempt to align a dataset. A value of -1 will
+impose no upper limit. This is in place for performance reasons, as rubbersheeting is a very
+expensive process and can be increased on a per usage basis. This option's default value may need
+some tweaking based on experiences with operational data.
+
 === rubber.sheet.max.interpolator.iterations
 
 * Data Type: int
