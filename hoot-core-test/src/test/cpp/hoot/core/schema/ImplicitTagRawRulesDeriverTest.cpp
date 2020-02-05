@@ -45,7 +45,7 @@ class ImplicitTagRawRulesDeriverTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ImplicitTagRawRulesDeriverTest);
 
   CPPUNIT_TEST(runBasicPoiTest);
-  // temp disable until we can figure out what's going on with Jenkins on 3511
+  // TODO: temp disable for 3511 branch
 //  CPPUNIT_TEST(runTranslateNamesFalsePoiTest);
 //  CPPUNIT_TEST(runMultipleInputsPoiTest);
 //  CPPUNIT_TEST(runDuplicateWordKeyCountPoiTest);
