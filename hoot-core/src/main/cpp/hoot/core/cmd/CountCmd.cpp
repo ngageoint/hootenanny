@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -126,7 +126,7 @@ private:
 
   ElementCriterionPtr _getCriterion(const QString& criterionClassName, const bool negate)
   {
-    LOG_TRACE("Getting criterion...");
+    LOG_TRACE("Getting criterion: " << criterionClassName << "...");
 
     ElementCriterionPtr crit;
 
@@ -138,6 +138,13 @@ private:
     catch (const boost::bad_any_cast&)
     {
       throw IllegalArgumentException("Invalid criterion: " + criterionClassName);
+    }
+
+    OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(crit.get());
+    if (omc)
+    {
+      throw IllegalArgumentException(
+        "Map consuming criterion are not currently supported as inputs to the count command.");
     }
 
     if (negate)
@@ -165,6 +172,7 @@ private:
                                                 ElementVisitorPtr countVis)
   {
     LOG_TRACE("Getting filtered input stream...");
+    LOG_VARD(criterionClassName);
 
     ElementInputStreamPtr filteredInputStream;
 

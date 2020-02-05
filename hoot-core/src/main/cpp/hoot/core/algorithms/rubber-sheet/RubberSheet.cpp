@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RubberSheet.h"
@@ -73,7 +73,8 @@ _ref(ConfigOptions().getRubberSheetRef()),
 _debug(ConfigOptions().getRubberSheetDebug()),
 _minimumTies(ConfigOptions().getRubberSheetMinimumTies()),
 _failWhenMinTiePointsNotFound(ConfigOptions().getRubberSheetFailWhenMinimumTiePointsNotFound()),
-_logWarningWhenRequirementsNotFound(ConfigOptions().getRubberSheetLogMissingRequirementsAsWarning())
+_logWarningWhenRequirementsNotFound(ConfigOptions().getRubberSheetLogMissingRequirementsAsWarning()),
+_maxAllowedWays(ConfigOptions().getRubberSheetMaxAllowedWays())
 {
   _emptyMatch.score = 0.0;
   _emptyMatch.p = 0.0;
@@ -139,6 +140,16 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
 
 void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
 {
+  if (_maxAllowedWays != -1 && map->getWayCount() > _maxAllowedWays)
+  {
+    LOG_WARN(
+      "Skipping rubber sheeting with map having " <<
+      StringUtils::formatLargeNumber(map->getWayCount()) << " ways and the "
+      "maximum allowed to rubber sheet by configuration is: " <<
+      StringUtils::formatLargeNumber(_maxAllowedWays) << ".");
+    return;
+  }
+
   std::shared_ptr<OGRSpatialReference> oldSrs = _projection;
   calculateTransform(map);
   _projection = oldSrs;

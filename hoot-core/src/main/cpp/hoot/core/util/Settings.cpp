@@ -707,7 +707,7 @@ void Settings::parseCommonArguments(QStringList& args)
           QStringList newList = conf().getList(optionName);
           if (!newList.contains(v))
           {
-            throw IllegalArgumentException("Unknown default value: (" + v + ")");
+            throw IllegalArgumentException("Option list does not contain value: (" + v + ")");
           }
           newList.removeAll(v);
           conf().set(optionName, newList);

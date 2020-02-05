@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapWriterFactory.h"
 
@@ -146,7 +146,7 @@ void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QStrin
     writer->open(url);
     // We could pass a progress in here to get more granular write status feedback.
     writer->write(map);
-    LOG_INFO(
+    LOG_STATUS(
       "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
       " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   }

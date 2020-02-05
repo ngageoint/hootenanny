@@ -13,6 +13,11 @@
             "hoot::DualWaySplitter": "Split divided highways"
         }
     },
+    "RubberSheeting": {
+        "members": {
+            "rubber.sheet.max.allowed.ways": "Maximum number of ways allowed to be rubber sheeted in a map"
+        }
+    },
     "Attribute": {
         "members": {
             "attribute.conflation.aggressive.highway.joining": "Aggressively join roads",
