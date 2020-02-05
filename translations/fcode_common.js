@@ -367,8 +367,8 @@ fcodeCommon = {
       ['F_CODE','EA050','landuse','vineyard'], // Vineyard
       ['F_CODE','EA055','landuse','hop_garden'], // Hop Field
       ['F_CODE','EB010','natural','grassland'], // Grassland
-      ['F_CODE','EB020','natural','thicket'], // Thicket (was FACC Scrub/Brush/Bush)
-      ['F_CODE','EB070','natural','scrub'], // Brush
+      ['F_CODE','EB020','natural','scrub'], // Thicket (was FACC Scrub/Brush/Bush)
+      ['F_CODE','EB070','natural','brush'], // Brush - possibly "heath"
       ['F_CODE','EC005','natural','tree'], // Tree
       ['F_CODE','EC010','natural','cane'], // Bamboo/Cane
       ['F_CODE','EC015','landuse','forest'], // Forest
