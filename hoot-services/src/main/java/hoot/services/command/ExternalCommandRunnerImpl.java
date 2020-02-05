@@ -333,6 +333,9 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public void terminate() {
         if (!this.watchDog.killedProcess()) {
             this.watchDog.destroyProcess();
+            logger.info("destroy processd");
+        } else {
+            logger.info("process already killed");
         }
     }
 }
