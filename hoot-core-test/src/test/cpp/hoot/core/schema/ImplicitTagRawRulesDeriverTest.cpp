@@ -43,7 +43,6 @@ namespace hoot
 class ImplicitTagRawRulesDeriverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRawRulesDeriverTest);
-  CPPUNIT_TEST(runSortCommandExistsTest);
   CPPUNIT_TEST(runBasicPoiTest);
   CPPUNIT_TEST(runTranslateNamesFalsePoiTest);
   CPPUNIT_TEST(runMultipleInputsPoiTest);
@@ -57,13 +56,6 @@ public:
     : HootTestFixture("test-files/schema/ImplicitTagRawRulesDeriverTest/",
                       "test-output/schema/ImplicitTagRawRulesDeriverTest/")
   {
-  }
-
-  void runSortCommandExistsTest()
-  {
-    const QString cmd = "sort --help > /dev/null";
-    const int cmdExitStatus = std::system(cmd.toStdString().c_str());
-    CPPUNIT_ASSERT(cmdExitStatus == 0);
   }
 
   void runBasicPoiTest()

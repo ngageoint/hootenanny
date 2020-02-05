@@ -37,6 +37,13 @@ namespace hoot
 QStringList ImplicitTagUtils::_nameCleaningTokens;
 QStringList ImplicitTagUtils::_streetTypes;
 
+bool ImplicitTagUtils::sortCommandExists()
+{
+  const QString cmd = "sort --help > /dev/null";
+  const int cmdExitStatus = std::system(cmd.toStdString().c_str());
+  return cmdExitStatus == 0;
+}
+
 void ImplicitTagUtils::cleanName(QString& name)
 {
   name = name.simplified();

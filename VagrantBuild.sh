@@ -34,8 +34,8 @@ if [ -f missing ]; then
   rm -f missing
 fi
 
-# Taking out ui-tests until we get Tomcat8 etc installed
-aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure $SILENT_CONFIGURE --with-rnd --with-services --with-uitests --with-josm
+# TODO: add --with-josm back in
+aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure $SILENT_CONFIGURE --with-rnd --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'

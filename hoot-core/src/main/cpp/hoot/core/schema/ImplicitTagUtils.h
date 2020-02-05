@@ -64,6 +64,13 @@ public:
   static QStringList translateNamesToEnglish(const QStringList names, const Tags& tags,
                                              std::shared_ptr<ToEnglishTranslator> translator);
 
+  /**
+   * Determines if the UNIX sort command is available
+   *
+   * @return true if the command is available; false otherwise
+   */
+  static bool sortCommandExists();
+
 private:
 
   static QStringList _nameCleaningTokens;

@@ -652,6 +652,11 @@ void ImplicitTagRawRulesDeriver::_sortByWord(const std::shared_ptr<QTemporaryFil
     throw HootException("Unable to sort file; file doesn't exist.");
   }
 
+  if (!ImplicitTagUtils::sortCommandExists())
+  {
+    throw HootException("The UNIX sort command does not exist.");
+  }
+
   //sort by word, then by tag
   const QString cmd =
     "sort -t$'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
