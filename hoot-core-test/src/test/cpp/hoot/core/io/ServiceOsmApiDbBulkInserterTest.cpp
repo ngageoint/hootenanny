@@ -47,6 +47,7 @@ namespace hoot
 class ServiceOsmApiDbBulkInserterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkInserterTest);
+  //CPPUNIT_TEST(runPsqlCommandExistsTest);
   CPPUNIT_TEST(runPsqlDbOfflineTest);
   CPPUNIT_TEST(runPsqlDbOfflineValidateOffTest);
   CPPUNIT_TEST(runPsqlDbOfflineStxxlTest);
@@ -68,6 +69,14 @@ public:
   {
     setResetType(ResetBasic);
   }
+
+//  void runPsqlCommandExistsTest()
+//  {
+//    if (system(QString("psql --version > /dev/null").toStdString().c_str()) != 0)
+//    {
+//      throw HootException("Unable to access the psql application.  Is Postgres installed?");
+//    }
+//  }
 
   void verifyDatabaseOutputOffline()
   {

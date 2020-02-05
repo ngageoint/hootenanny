@@ -37,8 +37,7 @@ class ImplicitTagRulesDatabaseDeriverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRulesDatabaseDeriverTest);
   CPPUNIT_TEST(runBasicTest);
-  // TODO: temp disable for 3511 branch
-  //CPPUNIT_TEST(runMinTagOccurrencePerWordTest);
+  CPPUNIT_TEST(runMinTagOccurrencePerWordTest);
   CPPUNIT_TEST(runMinWordLengthTest);
   CPPUNIT_TEST(runTagIgnoreTest);
   CPPUNIT_TEST(runWordIgnoreTest);

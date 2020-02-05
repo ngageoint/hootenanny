@@ -16,3 +16,5 @@ mvn package
 # This prevents from having to change the default value of jni.class.path in ConfigOptions.asciidoc.
 DEP_DIR=target/dependency-jars
 cp $DEP_DIR/$JOSM_JAR $DEP_DIR/hoot-josm.jar
+
+cd $HOOT_HOME
