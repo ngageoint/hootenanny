@@ -143,8 +143,10 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
   if (_maxAllowedWays != -1 && map->getWayCount() > _maxAllowedWays)
   {
     LOG_WARN(
-      "Skipping rubber sheeting with map having " <<  map->getWayCount() << " ways and the "
-      "maximum allowed to rubber sheet by configuration is: " << _maxAllowedWays << ".");
+      "Skipping rubber sheeting with map having " <<
+      StringUtils::formatLargeNumber(map->getWayCount()) << " ways and the "
+      "maximum allowed to rubber sheet by configuration is: " <<
+      StringUtils::formatLargeNumber(_maxAllowedWays) << ".");
     return;
   }
 
