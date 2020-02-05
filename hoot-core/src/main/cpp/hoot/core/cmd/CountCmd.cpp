@@ -90,6 +90,8 @@ public:
     }
     LOG_VARD(criterionClassName);
 
+    // TODO: test crit here and make call to either _countStreaming or _countMemoryBound methods
+
     const QString dataType = countFeaturesOnly ? "features" : "elements";
     for (int i = 0; i < inputs.size(); i++)
     {
@@ -208,6 +210,7 @@ private:
     return countVis;
   }
 
+  // TODO: rename to _countStreaming and make _countMemoryBound method
   long _count(const QString& input, const bool countFeaturesOnly, const QString& criterionClassName)
   {
     long inputTotal = 0;
