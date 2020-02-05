@@ -34,8 +34,7 @@ if [ -f missing ]; then
   rm -f missing
 fi
 
-# TODO: add --with-josm back in
-aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure $SILENT_CONFIGURE --with-rnd --with-services --with-uitests
+aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure $SILENT_CONFIGURE --with-rnd --with-josm --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
