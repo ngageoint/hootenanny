@@ -43,7 +43,7 @@ namespace hoot
 class ImplicitTagRawRulesDeriverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRawRulesDeriverTest);
-  //CPPUNIT_TEST(runSortCommandExistsTest);
+  CPPUNIT_TEST(runSortCommandExistsTest);
   CPPUNIT_TEST(runBasicPoiTest);
   CPPUNIT_TEST(runTranslateNamesFalsePoiTest);
   CPPUNIT_TEST(runMultipleInputsPoiTest);
@@ -59,24 +59,12 @@ public:
   {
   }
 
-//  void runSortCommandExistsTest()
-//  {
-//      const QString cmd =
-//        "sort --parallel=" + QString::number(_sortParallelCount) + " " + _countFile->fileName() +
-//        " | uniq -c | sort -n -r --parallel=" + QString::number(_sortParallelCount) + " | " +
-//        "sed -e 's/^ *//;s/ /\\t/' > " + _sortedCountFile->fileName();
-//      LOG_VARD(cmd);
-//      const int cmdExitStatus = std::system(cmd.toStdString().c_str());
-//      if (cmdExitStatus != 0)
-//      {
-//        QStorageInfo storageInfo(QDir("/tmp"));
-//        const QString msg =
-//          "Unable to sort file. Command status: " + QString::number(cmdExitStatus) +
-//          "; disk free space: " + QString::number(storageInfo.bytesAvailable()/1000/1000) +
-//          "MB; command: " + cmd;
-//        throw HootException(msg);
-//      }
-//  }
+  void runSortCommandExistsTest()
+  {
+    const QString cmd = "sort --help > /dev/null";
+    const int cmdExitStatus = std::system(cmd.toStdString().c_str());
+    CPPUNIT_ASSERT(cmdExitStatus == 0);
+  }
 
   void runBasicPoiTest()
   {

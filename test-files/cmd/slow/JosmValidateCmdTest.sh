@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-OUTPUT_DIR=test-output/cmd/quick/JosmValidateCmdTest
+OUTPUT_DIR=test-output/cmd/slow/JosmValidateCmdTest
 mkdir -p $OUTPUT_DIR
 LOG_LEVEL=--warn
 
