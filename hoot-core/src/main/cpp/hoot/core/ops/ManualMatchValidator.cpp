@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ManualMatchValidator.h"
 
@@ -79,8 +79,8 @@ void ManualMatchValidator::apply(const OsmMapPtr& map)
 
 void ManualMatchValidator::_validate(const ConstElementPtr& element)
 {
-  LOG_VARD(_requireRef1);
-  LOG_VARD(_allowUuidManualMatchIds);
+  LOG_VART(_requireRef1);
+  LOG_VART(_allowUuidManualMatchIds);
 
   // Just recording one error for each element for performance reasons, even if there are multiple.
 

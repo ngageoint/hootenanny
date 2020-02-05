@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SEARCHRADIUSPROVIDER_H
 #define SEARCHRADIUSPROVIDER_H
@@ -41,6 +41,11 @@ class SearchRadiusProvider
 public:
 
   ~SearchRadiusProvider() {}
+
+  /**
+   * Optional init
+   */
+  virtual void init(const ConstOsmMapPtr& /*map*/) {}
 
   /**
    * Returns the search radius for the given element.

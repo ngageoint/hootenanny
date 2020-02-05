@@ -49,11 +49,11 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 }
 
 MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
-                                           ElementId eid2)
+                                             ElementId eid2)
 {
   if (!_infoCache)
   {
-    LOG_TRACE("Initializing info cache...");
+    LOG_DEBUG("Initializing info cache...");
     _infoCache.reset(new PoiPolygonInfoCache(map));
   }
 
@@ -81,13 +81,13 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
                                            std::vector<ConstMatchPtr>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
-  LOG_STATUS("Looking for matches with: " << className() << "...");
+  LOG_DEBUG("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
   const int matchesSizeBefore = matches.size();
 
   if (!_infoCache)
   {
-    LOG_TRACE("Initializing info cache...");
+    LOG_DEBUG("Initializing info cache...");
     _infoCache.reset(new PoiPolygonInfoCache(map));
     _infoCache->setConfiguration(conf());
   }

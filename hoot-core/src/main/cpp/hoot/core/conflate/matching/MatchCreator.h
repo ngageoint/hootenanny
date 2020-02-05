@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCREATOR_H
 #define MATCHCREATOR_H
@@ -95,6 +95,13 @@ public:
    * CreatorDescription class.
    */
   QString getDescription() const { return _description; }
+
+  /**
+   * Returns the name of the match creator
+   *
+   * @return a name string
+   */
+  virtual QString getName() const = 0;
 
 protected:
 

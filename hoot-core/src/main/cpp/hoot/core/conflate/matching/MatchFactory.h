@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHFACTORY_H
 #define MATCHFACTORY_H
@@ -86,7 +86,8 @@ public:
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
    */
-  void registerCreator(const std::shared_ptr<MatchCreator>& creator) { _creators.push_back(creator); }
+  void registerCreator(const std::shared_ptr<MatchCreator>& creator)
+  { _creators.push_back(creator); }
 
   /**
    * @brief registerCreator Register the specified creator by string (constructs the creator)
@@ -94,12 +95,26 @@ public:
    */
   void registerCreator(const QString& c);
 
+  /**
+   * Removes all the creators from the factory
+   */
   void reset();
+
+  /**
+   * Returns a printable string with the names of all MatchCreators available from the factory
+   *
+   * @return a names string
+   */
+  QString getCreatorsStr() const;
 
 private:
 
   // allows for matching a subset of the input data
   QString _tagFilter;
+
+  static std::shared_ptr<MatchFactory> _theInstance;
+
+  std::vector<std::shared_ptr<MatchCreator>> _creators;
 
   MatchFactory();
 
@@ -109,10 +124,6 @@ private:
   static void _setTagFilter(QString filter) { _theInstance->_tagFilter = filter; }
 
   static void _tempFixDefaults();
-
-  static std::shared_ptr<MatchFactory> _theInstance;
-
-  std::vector<std::shared_ptr<MatchCreator>> _creators;
 
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;

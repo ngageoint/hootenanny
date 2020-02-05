@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SearchBoundsCalculator.h"
 
@@ -42,6 +42,11 @@ SearchBoundsCalculator::SearchBoundsCalculator(const SearchRadiusProviderPtr& ra
 Envelope SearchBoundsCalculator::calculateSearchBounds(const ConstOsmMapPtr& map,
   const ConstNodePtr& n) const
 {
+  // This is likely to cause some performance issues, but only seems to be called by Multiary code
+  // and not doing it here is causing ScriptMatchCreator crashes...so will deal with performance
+  // issue when necessary.
+  _radiusProvider->init(map);
+
   LOG_VART(map->getElementCount());
   LOG_VART(n->getElementId());
 
