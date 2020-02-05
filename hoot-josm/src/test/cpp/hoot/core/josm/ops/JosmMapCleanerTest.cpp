@@ -38,11 +38,10 @@ namespace hoot
 class JosmMapCleanerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmMapCleanerTest);
-  // TODO: re-enable
-//  CPPUNIT_TEST(runCleanNoErrorsTest);
-//  CPPUNIT_TEST(runCleanTest);
-//  CPPUNIT_TEST(runCleanNoDetailTagsTest);
-//  CPPUNIT_TEST(runCleanFileTest);
+  CPPUNIT_TEST(runCleanNoErrorsTest);
+  CPPUNIT_TEST(runCleanTest);
+  CPPUNIT_TEST(runCleanNoDetailTagsTest);
+  CPPUNIT_TEST(runCleanFileTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
