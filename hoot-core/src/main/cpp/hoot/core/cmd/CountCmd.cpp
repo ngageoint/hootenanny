@@ -146,6 +146,11 @@ private:
   {
     LOG_TRACE("Getting criterion: " << criterionClassName << "...");
 
+    if (criterionClassName.isEmpty())
+    {
+      return ElementCriterionPtr();
+    }
+
     ElementCriterionPtr crit;
 
     try
@@ -190,7 +195,7 @@ private:
 
   ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
                                                 const ElementCriterionPtr& criterion,
-                                                ElementVisitorPtr countVis)
+                                                ConstElementVisitorPtr countVis)
   {
     LOG_TRACE("Getting filtered input stream...");
     if (criterion)
@@ -214,11 +219,11 @@ private:
     return filteredInputStream;
   }
 
-  ElementVisitorPtr _getCountVis(const bool countFeaturesOnly)
+  ConstElementVisitorPtr _getCountVis(const bool countFeaturesOnly)
   {
     LOG_TRACE("Getting count vis...");
 
-    ElementVisitorPtr countVis;
+    ConstElementVisitorPtr countVis;
     if (countFeaturesOnly)
     {
       countVis.reset(new FeatureCountVisitor());
@@ -242,10 +247,17 @@ private:
       omc->setOsmMap(map.get());
     }
 
-    ElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
-
-    FilteredVisitor vis(criterion, countVis);
-    map->visitRo(vis);
+    ConstElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
+    ConstElementVisitorPtr vis;
+    if (criterion)
+    {
+      vis.reset(new FilteredVisitor(criterion, countVis));
+    }
+    else
+    {
+      vis = countVis;
+    }
+    map->visitRo(*vis);
 
     std::shared_ptr<SingleStatistic> counter =
       std::dynamic_pointer_cast<SingleStatistic>(countVis);
@@ -259,7 +271,7 @@ private:
 
     std::shared_ptr<PartialOsmMapReader> reader = _getStreamingReader(input);
 
-    ElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
+    ConstElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
 
     ElementInputStreamPtr filteredInputStream =
       _getFilteredInputStream(
