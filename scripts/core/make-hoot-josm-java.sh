@@ -11,7 +11,7 @@ JOSM_JAR=$JOSM_ARTIFACT_ID-$JOSM_VERSION.jar
 # wget --quiet http://me-josm-url
 # mvn install:install-file -Dfile=/home/vagrant/hoot/tmp/$JOSM_JAR -DgroupId=org.openstreetmap.josm -DartifactId=$JOSM_ARTIFACT_ID -Dversion=$JOSM_VERSION -Dpackaging=jar -DgeneratePom=true
 
-mvn package
+mvn -q package
 
 # This prevents from having to change the default value of jni.class.path in ConfigOptions.asciidoc.
 DEP_DIR=target/dependency-jars
