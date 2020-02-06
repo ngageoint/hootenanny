@@ -165,6 +165,11 @@ public:
     Persistent<Object> plugin(current, getPlugin(_script));
     Local<Object> mapJs(ToLocal(&_mapJs));
 
+    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
+    {
+      LOG_DEBUG("#6a: " << _timer.nsecsElapsed());
+    }
+
     LOG_VART(e->getElementId());
 
     ConstOsmMapPtr map = getMap();
@@ -176,6 +181,11 @@ public:
     env->expandBy(searchRadius);
     LOG_VART(env);
 
+    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
+    {
+      LOG_DEBUG("#6b: " << _timer.nsecsElapsed());
+    }
+
     // find other nearby candidates
     LOG_TRACE(
       "Finding neighbors for: " << e->getElementId() << " during conflation: " << _scriptPath <<
@@ -184,6 +194,11 @@ public:
       SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
     LOG_VART(neighbors);
     ElementId from = e->getElementId();
+
+    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
+    {
+      LOG_DEBUG("#6c: " << _timer.nsecsElapsed());
+    }
 
     _elementsEvaluated++;
 
@@ -224,14 +239,13 @@ public:
         }
       }
     }
+    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
+    {
+      LOG_DEBUG("#6d: " << _timer.nsecsElapsed());
+    }
 
     _neighborCountSum += neighbors.size();
     _neighborCountMax = std::max(_neighborCountMax, (int)neighbors.size());
-
-    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-    {
-      LOG_DEBUG("#6: " << _timer.nsecsElapsed());
-    }
   }
 
   ConstOsmMapPtr getMap() const { return _map.lock(); }
@@ -459,6 +473,8 @@ public:
         v.finalizeIndex();
       }
       LOG_VART(_indexToEid.size());
+
+      LOG_DEBUG("Script feature index created for: " << _scriptPath << ".");
     }
     return _index;
   }
@@ -500,7 +516,7 @@ public:
 
   bool isMatchCandidate(ConstElementPtr e)
   {
-    _timer.restart();
+    //_timer.restart();
 
     if (_matchCandidateCache.contains(e->getElementId()))
     {
@@ -576,22 +592,24 @@ public:
 
     _matchCandidateCache[e->getElementId()] = result;
 
-    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-    {
-      LOG_DEBUG("#8: " << _timer.nsecsElapsed());
-    }
+//    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
+//    {
+//      LOG_DEBUG("#8: " << _timer.nsecsElapsed());
+//    }
 
     return result;
   }
 
   virtual void visit(const ConstElementPtr& e)
   {
-    //_timer.restart();
+    _timer.restart();
 
-    //LOG_VART(e->getElementId());
     if (isMatchCandidate(e))
     {
-      //LOG_TRACE("isMatchCandidate: " << e->getElementId());
+      if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
+      {
+        LOG_DEBUG("#9: " << _timer.nsecsElapsed());
+      }
 
       checkForMatch(e);
 
@@ -611,11 +629,6 @@ public:
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
         StringUtils::formatLargeNumber(getMap()->getElementCount()) << " elements.");
     }
-
-//    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-//    {
-//      LOG_DEBUG("#9: " << _timer.nsecsElapsed());
-//    }
   }
 
   void setScriptPath(QString path) { _scriptPath = path; }

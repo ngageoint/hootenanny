@@ -58,7 +58,7 @@ public:
 
   static const QString POINT_POLYGON_SCRIPT_NAME;
 
-  static const int TIMER_INTERVAL = 1000000; // 1ms
+  static const int TIMER_INTERVAL = 10000000; // 10ms
 
   ScriptMatchCreator();
 
