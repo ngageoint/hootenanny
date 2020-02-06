@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DiffConflator.h"
 
@@ -58,6 +58,8 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 // standard
 #include <algorithm>
@@ -291,17 +293,17 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
       "elements. ");
   }
 
-  // Use the copy constructor
+  // Use the copy constructor to copy the entire map.
   _pOriginalMap.reset(new OsmMap(pMap));
 
   // We're storing this off for potential use later on if any roads get snapped after conflation.
-  // See additional comments in _getChangesetFromMap.
-  _pOriginalRef1Map.reset(new OsmMap(pMap));
-  ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref2()));
-  RemoveElementsVisitor removeRef2Visitor;
-  removeRef2Visitor.setRecursive(true);
-  removeRef2Visitor.addCriterion(pTagKeyCrit);
-  _pOriginalRef1Map->visitRw(removeRef2Visitor);
+  // Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
+  // TODO: Can we filter this down to whatever feature type the snapping is configured for?
+  std::shared_ptr<NotCriterion> crit(
+    new NotCriterion(ElementCriterionPtr(new TagKeyCriterion(MetadataTags::Ref2()))));
+  CopyMapSubsetOp mapCopier(pMap, crit);
+  _pOriginalRef1Map.reset(new OsmMap());
+  mapCopier.apply(_pOriginalRef1Map);
 }
 
 void DiffConflator::markInputElements(OsmMapPtr pMap)
