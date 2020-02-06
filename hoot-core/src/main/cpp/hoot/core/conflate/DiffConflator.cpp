@@ -134,11 +134,15 @@ void DiffConflator::apply(OsmMapPtr& map)
   // If we skip this part, then any non-matchable data will simply pass through to output.
   if (ConfigOptions().getDifferentialRemoveUnconflatableData())
   {
-    LOG_INFO("Discarding unconflatable elements...");
+    LOG_STATUS("Discarding unconflatable elements...");
+    const int mapSizeBefore = _pMap->size();
     NonConflatableElementRemover().apply(_pMap);
     _stats.append(
       SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
+    LOG_STATUS(
+      "Discarded " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
+      " unconflatable elements...");
   }
 
   // will reproject only if necessary
@@ -155,7 +159,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
-  LOG_INFO(
+  LOG_STATUS(
     "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
     " Differential Conflation matches.");
   double findMatchesTime = timer.getElapsedAndRestart();
@@ -201,13 +205,17 @@ void DiffConflator::apply(OsmMapPtr& map)
     _removeMatches(Status::Unknown1);
 
     // Now remove input1 elements
-    LOG_DEBUG("\tRemoving all reference elements...");
+    LOG_STATUS("\tRemoving all reference elements...");
+    const int mapSizeBefore = _pMap->size();
     ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
     RemoveElementsVisitor removeRef1Visitor;
     removeRef1Visitor.setRecursive(true);
     removeRef1Visitor.addCriterion(pTagKeyCrit);
     _pMap->visitRw(removeRef1Visitor);
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
+    LOG_STATUS(
+      "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
+      " reference elements...");
   }
 }
 
