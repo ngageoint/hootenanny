@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootNetworkRequest.h"
@@ -105,7 +105,6 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url,
     //  Setup the SSL configuration
     QSslConfiguration config(QSslConfiguration::defaultConfiguration());
     config.setProtocol(QSsl::SslProtocol::AnyProtocol);
-    config.setPeerVerifyMode(QSslSocket::VerifyPeer);
     config.setPeerVerifyMode(QSslSocket::VerifyNone);
     request.setSslConfiguration(config);
   }
