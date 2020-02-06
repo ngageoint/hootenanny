@@ -15,7 +15,7 @@ hoot count --warn "$INPUT_FILE_1;$INPUT_FILE_2"
 echo "counting all elements..."
 hoot count --warn "$INPUT_FILE_1;$INPUT_FILE_2" --all-elements
 
-# LinearWaterwayCriterion is not a map consumer
+# LinearWaterwayCriterion is not a map consumer, so streaming I/O can occur.
 
 echo "counting all rivers..."
 hoot count --warn "$INPUT_FILE_3;$INPUT_FILE_4" hoot::LinearWaterwayCriterion
@@ -23,11 +23,10 @@ hoot count --warn "$INPUT_FILE_3;$INPUT_FILE_4" hoot::LinearWaterwayCriterion
 echo "counting all elements that are not rivers..."
 hoot count --warn -D element.criterion.negate=true "$INPUT_FILE_3;$INPUT_FILE_4" hoot::LinearWaterwayCriterion
 
-# PoiCriterion is a map consumer
-# re-enable these after #3765
+# PoiCriterion is a map consumer, so streaming I/O cannot occur.
 
-#echo "counting all POIs..."
-# hoot count --warn "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
+echo "counting all POIs..."
+hoot count --warn "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
 
-#echo "counting all elements that are not POIs..."
-# hoot count --warn -D element.criterion.negate=true "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
+echo "counting all elements that are not POIs..."
+hoot count --warn -D element.criterion.negate=true "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion

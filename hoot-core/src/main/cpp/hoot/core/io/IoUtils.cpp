@@ -148,10 +148,20 @@ void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
     OgrReader reader;
     reader.setDefaultStatus(defaultStatus);
     reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map);
+    reader.close();
   }
   else
   {
     OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
+  }
+}
+
+void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId,
+                       Status defaultStatus)
+{
+  for (int i = 0; i < paths.size(); i++)
+  {
+    loadMap(map, paths.at(i), useFileId, defaultStatus);
   }
 }
 

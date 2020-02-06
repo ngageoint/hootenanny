@@ -41,6 +41,8 @@
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 
 namespace hoot
 {
@@ -80,26 +82,39 @@ public:
     }
     LOG_VARD(countFeaturesOnly);
 
-    const QStringList inputs = args[0].split(";");
+    const QStringList inputs = args[0].trimmed().split(";");
     LOG_VART(inputs.size());
 
     QString criterionClassName = "";
     if (args.size() > 1)
     {
-      criterionClassName = args[1];
+      criterionClassName = args[1].trimmed();
     }
     LOG_VARD(criterionClassName);
 
-    // TODO: test crit here and make call to either _countStreaming or _countMemoryBound methods
+    // test crit here to see if I/O can be streamed or not; if it requires a map, then it can't be
+    // streamed
+    bool isStreamableCrit = false;
+    ElementCriterionPtr crit =
+      _getCriterion(
+        criterionClassName, ConfigOptions().getElementCriterionNegate(), isStreamableCrit);
 
     const QString dataType = countFeaturesOnly ? "features" : "elements";
-    for (int i = 0; i < inputs.size(); i++)
+    if (isStreamableCrit)
     {
-      LOG_INFO(
-        "Counting " << dataType << " satisfying " << criterionClassName << " from " <<
-        inputs.at(i).right(25) << "...");
-      _total += _count(inputs.at(i), countFeaturesOnly, criterionClassName);
+      for (int i = 0; i < inputs.size(); i++)
+      {
+        LOG_INFO(
+          "Counting " << dataType << " satisfying " << criterionClassName << " from " <<
+          inputs.at(i).right(25) << "...");
+        _total += _countStreaming(inputs.at(i), countFeaturesOnly, crit);
+      }
     }
+    else
+    {
+      _total += _countMemoryBound(inputs, countFeaturesOnly, crit);
+    }
+
     LOG_VART(_total);
 
     //putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
@@ -113,7 +128,7 @@ private:
   long _total;
   int _taskStatusUpdateInterval;
 
-  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input)
+  std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input)
   {
     LOG_TRACE("Getting reader...");
 
@@ -126,7 +141,8 @@ private:
     return reader;
   }
 
-  ElementCriterionPtr _getCriterion(const QString& criterionClassName, const bool negate)
+  ElementCriterionPtr _getCriterion(const QString& criterionClassName, const bool negate,
+                                    bool& isStreamable)
   {
     LOG_TRACE("Getting criterion: " << criterionClassName << "...");
 
@@ -145,8 +161,11 @@ private:
     OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(crit.get());
     if (omc)
     {
-      throw IllegalArgumentException(
-        "Map consuming criterion are not currently supported as inputs to the count command.");
+      isStreamable = false;
+    }
+    else
+    {
+      isStreamable = true;
     }
 
     if (negate)
@@ -170,21 +189,22 @@ private:
   }
 
   ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
-                                                const QString& criterionClassName,
+                                                const ElementCriterionPtr& criterion,
                                                 ElementVisitorPtr countVis)
   {
     LOG_TRACE("Getting filtered input stream...");
-    LOG_VARD(criterionClassName);
+    if (criterion)
+    {
+      LOG_VARD(criterion->toString());
+    }
 
     ElementInputStreamPtr filteredInputStream;
 
     LOG_TRACE("Creating stream...");
-    if (!criterionClassName.trimmed().isEmpty())
+    if (criterion)
     {
-      ElementCriterionPtr crit =
-        _getCriterion(criterionClassName, ConfigOptions().getElementCriterionNegate());
       filteredInputStream.reset(
-        new ElementCriterionVisitorInputStream(inputStream, crit, countVis));
+        new ElementCriterionVisitorInputStream(inputStream, criterion, countVis));
     }
     else
     {
@@ -210,19 +230,41 @@ private:
     return countVis;
   }
 
-  // TODO: rename to _countStreaming and make _countMemoryBound method
-  long _count(const QString& input, const bool countFeaturesOnly, const QString& criterionClassName)
+  long _countMemoryBound(const QStringList& inputs, const bool countFeaturesOnly,
+                         const ElementCriterionPtr& criterion)
+  {
+    OsmMapPtr map(new OsmMap());
+    IoUtils::loadMaps(map, inputs, true);
+
+    OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(criterion.get());
+    if (omc)
+    {
+      omc->setOsmMap(map.get());
+    }
+
+    ElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
+
+    FilteredVisitor vis(criterion, countVis);
+    map->visitRo(vis);
+
+    std::shared_ptr<SingleStatistic> counter =
+      std::dynamic_pointer_cast<SingleStatistic>(countVis);
+    return (long)counter->getStat();
+  }
+
+  long _countStreaming(const QString& input, const bool countFeaturesOnly,
+                       const ElementCriterionPtr& criterion)
   {
     long inputTotal = 0;
 
-    std::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
+    std::shared_ptr<PartialOsmMapReader> reader = _getStreamingReader(input);
 
     ElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
 
     ElementInputStreamPtr filteredInputStream =
       _getFilteredInputStream(
         std::dynamic_pointer_cast<ElementInputStream>(reader),
-        criterionClassName,
+        criterion,
         countVis);
 
     std::shared_ptr<SingleStatistic> counter =
