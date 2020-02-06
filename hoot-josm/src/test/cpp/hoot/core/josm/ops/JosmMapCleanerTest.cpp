@@ -49,6 +49,7 @@ public:
   JosmMapCleanerTest() :
   HootTestFixture("test-files/ops/JosmMapCleanerTest", "test-output/ops/JosmMapCleanerTest")
   {
+    setResetType(ResetAll);
   }
 
   void runCleanNoErrorsTest()
