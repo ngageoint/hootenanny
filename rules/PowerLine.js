@@ -48,7 +48,7 @@ exports.calculateSearchRadius = function(map)
   }
   else
   {
-    exports.searchRadius = parseFloat(hoot.get("search.radius.default"));
+    exports.searchRadius = parseFloat(hoot.get("search.radius.power.line"));
     hoot.log("Using specified search radius for power line conflation: " + exports.searchRadius);
   }
 }

@@ -51,6 +51,7 @@
 #include <QFileInfo>
 #include <qnumeric.h>
 #include <QStringBuilder>
+#include <QElapsedTimer>
 
 // Standard
 #include <deque>
@@ -91,9 +92,6 @@ public:
     _filter(filter),
     _customSearchRadius(-1.0)
   {
-    _timer.start();
-    _timer.restart();
-
     _neighborCountMax = -1;
     _neighborCountSum = 0;
     _elementsEvaluated = 0;
@@ -111,11 +109,6 @@ public:
       new ChainCriterion(
         ElementCriterionPtr(new PolygonCriterion()),
         ElementCriterionPtr(new NonConflatableCriterion(map))));
-
-    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-    {
-      LOG_DEBUG("#5: " << _timer.nsecsElapsed());
-    }
   }
 
   ~ScriptMatchVisitor()
@@ -136,7 +129,7 @@ public:
     //this is meant to have been set externally in a js rules file
     _customSearchRadius =
       getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
-    LOG_VART(_customSearchRadius);
+    LOG_VARD(_customSearchRadius);
 
     Handle<Value> value = plugin->Get(toV8("getSearchRadius"));
     if (value->IsUndefined())
@@ -157,18 +150,11 @@ public:
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
-    _timer.restart();
-
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
     Persistent<Object> plugin(current, getPlugin(_script));
     Local<Object> mapJs(ToLocal(&_mapJs));
-
-    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-    {
-      LOG_DEBUG("#6a: " << _timer.nsecsElapsed());
-    }
 
     LOG_VART(e->getElementId());
 
@@ -181,24 +167,14 @@ public:
     env->expandBy(searchRadius);
     LOG_VART(env);
 
-    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-    {
-      LOG_DEBUG("#6b: " << _timer.nsecsElapsed());
-    }
-
     // find other nearby candidates
     LOG_TRACE(
       "Finding neighbors for: " << e->getElementId() << " during conflation: " << _scriptPath <<
       "...");
-    set<ElementId> neighbors =
-      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+    const set<ElementId> neighbors =
+      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, map);
     LOG_VART(neighbors);
     ElementId from = e->getElementId();
-
-    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-    {
-      LOG_DEBUG("#6c: " << _timer.nsecsElapsed());
-    }
 
     _elementsEvaluated++;
 
@@ -238,10 +214,6 @@ public:
           _result.push_back(m);
         }
       }
-    }
-    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-    {
-      LOG_DEBUG("#6d: " << _timer.nsecsElapsed());
     }
 
     _neighborCountSum += neighbors.size();
@@ -311,11 +283,13 @@ public:
       if (_customSearchRadius < 0)
       {
         //base the radius off of the element itself
+        LOG_TRACE("Calculating search radius based off of element...");
         result = e->getCircularError() * _candidateDistanceSigma;
       }
       else
       {
         //base the radius off some predefined radius
+        LOG_TRACE("Calculating search radius based off of custom defined script value...");
         result = _customSearchRadius * _candidateDistanceSigma;
       }
     }
@@ -323,6 +297,7 @@ public:
     {
       if (_searchRadiusCache.contains(e->getElementId()))
       {
+        LOG_TRACE("Retrieving search radius from cache...");
         result = _searchRadiusCache[e->getElementId()];
       }
       else
@@ -346,14 +321,13 @@ public:
       }
     }
 
+    LOG_VART(result);
     return result;
   }
 
   void calculateSearchRadius()
   {
     // This is meant to run one time when the match creator is initialized.
-
-    _timer.restart();
 
     LOG_DEBUG("Checking for existence of search radius export for: " << _scriptPath << "...");
 
@@ -397,11 +371,6 @@ public:
     LOG_DEBUG(
       "Search radius of: " << _customSearchRadius << " to be used for: " <<
       scriptFileInfo.fileName());
-
-    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-    {
-      LOG_DEBUG("#7: " << _timer.nsecsElapsed());
-    }
   }
 
   void cleanMapCache()
@@ -516,8 +485,6 @@ public:
 
   bool isMatchCandidate(ConstElementPtr e)
   {
-    //_timer.restart();
-
     if (_matchCandidateCache.contains(e->getElementId()))
     {
       return _matchCandidateCache[e->getElementId()];
@@ -592,25 +559,13 @@ public:
 
     _matchCandidateCache[e->getElementId()] = result;
 
-//    if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-//    {
-//      LOG_DEBUG("#8: " << _timer.nsecsElapsed());
-//    }
-
     return result;
   }
 
   virtual void visit(const ConstElementPtr& e)
   {
-    _timer.restart();
-
     if (isMatchCandidate(e))
     {
-      if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-      {
-        LOG_DEBUG("#9: " << _timer.nsecsElapsed());
-      }
-
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
@@ -682,13 +637,10 @@ private:
   int _taskStatusUpdateInterval;
 
   std::shared_ptr<ChainCriterion> _pointPolyCrit;
-
-  QElapsedTimer _timer;
 };
 
 ScriptMatchCreator::ScriptMatchCreator()
 {
-  _timer.start();
   _cachedScriptVisitor.reset();
 }
 
@@ -731,8 +683,6 @@ void ScriptMatchCreator::setArguments(QStringList args)
 MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
                                          ElementId eid2)
 {
-  _timer.restart();
-
   LOG_VART(eid1);
   LOG_VART(eid2);
 
@@ -786,11 +736,6 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
     Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(_script));
 
     return MatchPtr(new ScriptMatch(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold()));
-  }
-
-  if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-  {
-    LOG_DEBUG("#1: " << _timer.nsecsElapsed());
   }
 
   return MatchPtr();
@@ -893,8 +838,6 @@ vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
 std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
   const ConstOsmMapPtr& map)
 {
-  _timer.restart();
-
   if (!_cachedScriptVisitor.get() || _cachedScriptVisitor->getMap() != map)
   {
     LOG_VART(_cachedScriptVisitor.get());
@@ -943,20 +886,11 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     }
   }
 
-  if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-  {
-    LOG_DEBUG("#2: " << _timer.nsecsElapsed());
-  }
-
   return _cachedScriptVisitor;
 }
 
 CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
 {
-  //_timer.restart();
-  QElapsedTimer timer;
-  timer.restart();
-
   LOG_DEBUG("Getting script description...");
 
   CreatorDescription result;
@@ -997,11 +931,6 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   QFileInfo fi(path);
   result.className = (QString::fromStdString(className()) + "," + fi.fileName()).toStdString();
 
-  if (timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-  {
-    LOG_DEBUG("#3: " << timer.nsecsElapsed());
-  }
-
   return result;
 }
 
@@ -1012,16 +941,7 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
 
-  _timer.restart();
-
-  const bool result = _getCachedVisitor(map)->isMatchCandidate(element);
-
-  if (_timer.nsecsElapsed() > ScriptMatchCreator::TIMER_INTERVAL)
-  {
-    LOG_DEBUG("#4: " << _timer.nsecsElapsed());
-  }
-
-  return result;
+  return _getCachedVisitor(map)->isMatchCandidate(element);
 }
 
 std::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()

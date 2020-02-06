@@ -35,9 +35,6 @@
 
 #include <hoot/js/PluginContext.h>
 
-// Qt
-#include <QElapsedTimer>
-
 namespace hoot
 {
 
@@ -57,8 +54,6 @@ public:
   static std::string className() { return "hoot::ScriptMatchCreator"; }
 
   static const QString POINT_POLYGON_SCRIPT_NAME;
-
-  static const int TIMER_INTERVAL = 10000000; // 10ms
 
   ScriptMatchCreator();
 
@@ -127,8 +122,6 @@ private:
 
   ElementCriterionPtr _pointPolyPolyCrit;
   ElementCriterionPtr _pointPolyPointCrit;
-
-  QElapsedTimer _timer;
 
   CreatorDescription _getScriptDescription(QString path) const;
 
