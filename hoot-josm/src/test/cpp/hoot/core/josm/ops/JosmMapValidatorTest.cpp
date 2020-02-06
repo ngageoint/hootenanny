@@ -52,6 +52,7 @@ public:
   HootTestFixture(
     "test-files/ops/JosmMapValidatorTest", "test-output/ops/JosmMapValidatorTest")
   {
+    setResetType(ResetAll);
   }
 
   void runGetAvailableValidatorsTest()
@@ -187,6 +188,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "serial");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "serial");
 
 }
