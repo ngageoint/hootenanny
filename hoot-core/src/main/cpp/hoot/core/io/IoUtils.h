@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef IOUTILS_H
@@ -93,6 +93,18 @@ public:
     */
   static void loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
                       Status defaultStatus = Status::Invalid);
+
+  /**
+    Loads multiple OSM maps into an OsmMap object
+
+    @param map the object to load the map into
+    @param paths the file paths to load the maps from
+    @param useFileId if true, uses the element ID's in the map file; otherwise, generates new
+    element ID's
+    @param defaultStatus the hoot status to assign to all elements
+    */
+  static void loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId,
+                       Status defaultStatus = Status::Invalid);
 
   /**
     Saves an OSM map to an OsmMap object
