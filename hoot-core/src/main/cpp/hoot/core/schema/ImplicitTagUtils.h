@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICITTAGUTILS_H
 #define IMPLICITTAGUTILS_H
@@ -63,6 +63,13 @@ public:
    */
   static QStringList translateNamesToEnglish(const QStringList names, const Tags& tags,
                                              std::shared_ptr<ToEnglishTranslator> translator);
+
+  /**
+   * Determines if the UNIX sort command is available
+   *
+   * @return true if the command is available; false otherwise
+   */
+  static bool sortCommandExists();
 
 private:
 

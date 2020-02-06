@@ -48,6 +48,9 @@ class ApiEntityDisplayInfo
 {
 public:
 
+  static const int MAX_NAME_SIZE;
+  static const int MAX_TYPE_SIZE;
+
   /**
    * Gets display information about an ApiEntity as a string
    *

@@ -31,7 +31,7 @@ Hootenanny conflation occurs at the dataset level, where the user’s workflow d
 * Roads
 
 Additional feature types may have custom conflation routines created for them via Javascript by using Hootenanny's 
-[Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc). Any feature that does not fit into the list above will be conflated with Generic Geometry Conflation.
+[Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc). Any feature that does not fit into the list above will be conflated with [Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/GenericGeometryConflation.asciidoc).
 
 # [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) Workflows
 * **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** (default) - _Keep the best of both_ - Conflate the best geometry and tag parts of map B into map A, favoring map A's data. Use this type of conflation when you want conflated output based on the best state of both input datasets.
@@ -52,6 +52,13 @@ Hootenanny leverages the OSM key value pair tag concept to support translation b
 * [others](https://github.com/ngageoint/hootenanny/tree/master/translations)
 
 Users can define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) via Javascript or Python.
+
+# Feature Validation and Cleaning
+
+Hootenanny has a variety of map cleaning capabilities to automatically correct erroneous data. In addition to the built-in cleaning operations,
+Hootenanny is integrated with the feature cleaning capabilities in [JOSM](https://josm.openstreetmap.de/). For situations where you want feature
+validation only and no automatic cleaning, JOSM validation may be used alone. There is more information on Hootenanny validation and 
+cleaning [here](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc).
 
 # Feature Filtering
 

@@ -57,6 +57,9 @@
 namespace hoot
 {
 
+const int ApiEntityDisplayInfo::MAX_NAME_SIZE = 45;
+const int ApiEntityDisplayInfo::MAX_TYPE_SIZE = 18;
+
 template<typename ApiEntity>
 class ApiEntityNameComparator
 {
@@ -71,9 +74,6 @@ public:
       QString::fromStdString(name2).replace("hoot::", "");
   }
 };
-
-static const int MAX_NAME_SIZE = 45;
-static const int MAX_TYPE_SIZE = 18;
 
 QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
 {

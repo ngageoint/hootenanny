@@ -193,4 +193,25 @@ void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
   }
 }
 
+bool StringUtils::containsAny(const QStringList& input, const QStringList& toCompare)
+{
+  for (int i = 0; i < toCompare.size(); i++)
+  {
+    // may eventually want a case sensitivity option here
+    if (input.contains(toCompare.at(i)))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+void StringUtils::removeAllWithKey(QMap<QString, QString>& input, const QStringList& keysToRemove)
+{
+  for (int i = 0; i < keysToRemove.size(); i++)
+  {
+    input.remove(keysToRemove.at(i));
+  }
+}
+
 }

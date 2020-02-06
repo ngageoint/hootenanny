@@ -39,9 +39,6 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
-// Qt
-#include <QTemporaryFile>
-
 namespace hoot
 {
 
