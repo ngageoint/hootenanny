@@ -450,7 +450,7 @@ together when matched.
 === building.miss.threshold
 
 * Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
+* Default Value: `${conflate.miss.threshold.default}`
 
 The threshold at which a miss is called a miss for buildings.
 
