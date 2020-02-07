@@ -350,7 +350,7 @@ public:
       return;
     }
 
-    LOG_DEBUG("Calculating search radius for: " << _scriptPath << "...");
+    LOG_STATUS("Calculating search radius for: " << _scriptPath << "...");
 
     Handle<Function> func = Handle<Function>::Cast(value);
     Handle<Value> jsArgs[1];
@@ -600,6 +600,8 @@ public:
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
+  bool hasCustomSearchRadiusFunction() const { return !_getSearchRadius.IsEmpty(); }
+
 private:
 
   // don't hold on to the map.
@@ -751,11 +753,6 @@ void ScriptMatchCreator::createMatches(
 
   QElapsedTimer timer;
   timer.start();
-  QFileInfo scriptFileInfo(_scriptPath);
-  LOG_DEBUG(
-    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
-  LOG_VARD(*threshold);
-  const int matchesSizeBefore = matches.size();
 
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
@@ -764,7 +761,32 @@ void ScriptMatchCreator::createMatches(
   v.setCreatorDescription(scriptInfo);
   v.initSearchRadiusInfo();
   v.calculateSearchRadius();
-  _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
+
+  QFileInfo scriptFileInfo(_scriptPath);
+  // This doesn't work with _candidateDistanceSigma, but right now its set to 1.0 in every script
+  // and has no effect on the search radius.
+  QString searchRadiusStr;
+  const double searchRadius = v.getCustomSearchRadius();
+  if (v.hasCustomSearchRadiusFunction())
+  {
+    searchRadiusStr = "within a function calculated search radius";
+  }
+  else if (searchRadius < 0)
+  {
+    searchRadiusStr = "within a feature dependent search radius";
+  }
+  else
+  {
+    searchRadiusStr =
+      "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
+  }
+  LOG_STATUS(
+    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << " " <<
+     searchRadiusStr << "...");
+  LOG_VARD(*threshold);
+  const int matchesSizeBefore = matches.size();
+
+  _cachedCustomSearchRadii[_scriptPath] = searchRadius;
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
   LOG_VARD(GeometryTypeCriterion::typeToString(scriptInfo.geometryType));
