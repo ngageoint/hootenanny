@@ -10,9 +10,12 @@ exports.baseFeatureType = "Waterway";
 exports.geometryType = "line";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.matchThreshold = parseFloat(hoot.get("waterway.match.threshold"));
-exports.missThreshold = parseFloat(hoot.get("waterway.miss.threshold"));
-exports.reviewThreshold = parseFloat(hoot.get("waterway.review.threshold"));
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
+// If that ever changes, then the generic score threshold configuration options used below should 
+// be replaced with custom score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion"; // See #3047
 
 var sublineMatcher =

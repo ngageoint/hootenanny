@@ -450,7 +450,7 @@ together when matched.
 === building.miss.threshold
 
 * Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
+* Default Value: `${conflate.match.threshold.default}`
 
 The threshold at which a miss is called a miss for buildings.
 
@@ -1171,46 +1171,12 @@ Absolute file path to dictionaries of English words. The first file found will b
 dictionary of English words and used by some algorithms. If the files are not found then the English
 words will be silently ignored.
 
-=== generic.line.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for generic lines.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === generic.line.matcher.max.angle
 
 * Data Type: double
 * Default Value: `90.0`
 
 Sets that maximum angle that is still considered a generic line match. Units in degrees.
-
-=== generic.line.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for generic lines.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.line.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for generic lines. See
-`conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === generic.line.subline.matcher
 
@@ -1227,40 +1193,6 @@ The way subline matcher to use when determining matching sublines with generic l
 Tag similarity threshold (0.0 to 1.0) at or above which an linear element not conflatable by
 specific Hootenanny conflation routines is considered to have similar tags.
 
-=== generic.point.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for generic points.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.point.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for generic points.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.point.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for generic points. See
-`conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === generic.point.tag.threshold
 
 * Data Type: double
@@ -1269,40 +1201,6 @@ See also:
 Tag similarity threshold (0.0 to 1.0) at or above which an point element not conflatable by
 specific Hootenanny conflation routines is considered to have similar tags.
 
-=== generic.point.polygon.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for generic points conflated with polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.point.polygon.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for generic points conflated with polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.point.polygon.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for generic points conflated with polygons. See
-`conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === generic.point.polygon.tag.threshold
 
 * Data Type: double
@@ -1310,40 +1208,6 @@ See also:
 
 Tag similarity threshold (0.0 to 1.0) at or above which a pair of point and polygon elements not
 conflatable by specific Hootenanny conflation routines is considered to have similar tags.
-
-=== generic.polygon.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for generic polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.polygon.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for generic polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.polygon.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for generic polygons. See
-`conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === generic.polygon.tag.threshold
 
@@ -3292,28 +3156,6 @@ current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 If true, POI to POI conflation will ignore the types of the features being compared completely as
 long as those being compared have a populated name field.
 
-=== poi.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for POIs.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== poi.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for POIs.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === poi.polygon.additional.search.distance
 
 * Data Type: double
@@ -3552,18 +3394,6 @@ schema.  This can have significant impact on the runtime performance of conflati
 and should only be enabled if the source data is known to have non-English type values.  The
 configuration option, 'language.translation.translator', controls which translator is used.
 
-=== poi.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for POIs. See
-`conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === power.line.auto.calc.search.radius
 
 * Data Type: bool
@@ -3593,6 +3423,13 @@ A weighting coefficient value from 0.0 to 1.0 for the applying distance weightin
 matches.  This will favor feature that are closer together.  The higher the coefficient value, the
 higher the weighting applied.  A value of 0.0 will disable distance weighting.
 
+=== power.line.matcher.max.angle
+
+* Data Type: double
+* Default Value: `155.0`
+
+Sets that maximum angle that is still considered a power line match. Units in degrees.
+
 === power.line.miss.threshold
 
 * Data Type: double
@@ -3604,20 +3441,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== power.line.subline.matcher
-
-* Data Type: string
-* Default Value: `hoot::FrechetSublineMatcher`
-
-The way subline matcher to use when determining matching power line sublines.
-
-=== power.line.matcher.max.angle
-
-* Data Type: double
-* Default Value: `155.0`
-
-Sets that maximum angle that is still considered a power line match. Units in degrees.
-
 === power.line.review.threshold
 
 * Data Type: double
@@ -3628,6 +3451,13 @@ The threshold at which a review is called a review for power lines.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== power.line.subline.matcher
+
+* Data Type: string
+* Default Value: `hoot::FrechetSublineMatcher`
+
+The way subline matcher to use when determining matching power line sublines.
 
 === quantile.aggregator.quantile
 
@@ -3652,17 +3482,6 @@ Maximum length, in characters, allowed when logging a variable value during prog
 Distance, in meters, used for sampling railway data during angle histogram extraction with the
 SampledAngleHistogramExtractor
 
-=== railway.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for railways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === railway.matcher.heading.delta
 
 * Data Type: double
@@ -3677,28 +3496,6 @@ The distance around a point on a railway to look when calculating the heading. S
 * Default Value: `90.0`
 
 Sets that maximum angle that is still considered a railway match. Units in degrees.
-
-=== railway.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for railways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== railway.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for railways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === railway.subline.matcher
 
@@ -4842,17 +4639,6 @@ Automatically calculates the search radius to be used during conflation of water
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
 
-=== waterway.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for waterways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === waterway.matcher.heading.delta
 
 * Data Type: double
@@ -4867,28 +4653,6 @@ The distance around a point on a waterway to look when calculating the heading. 
 * Default Value: `90.0`
 
 Sets that maximum angle that is still considered a waterway match. Units in degrees.
-
-=== waterway.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for waterways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== waterway.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for waterways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === waterway.rubber.sheet.minimum.ties
 
