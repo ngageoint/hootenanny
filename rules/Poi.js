@@ -10,7 +10,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("poi.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("poi.review.threshold"));
-exports.searchRadius = -1.0;
+exports.searchRadius = parseFloat(hoot.get("search.radius.poi"));
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "point";
 
@@ -98,9 +98,16 @@ function isSuperClose(e1, e2) {
     return result;
 }
 
-exports.getSearchRadius = function(e) {
-    var tags = e.getTags();
+exports.getSearchRadius = function(e) 
+{
+  if (exports.searchRadius == -1.0)
+  {
+    // If no search radius was defined by the config (it was set to default val of -1.0), then 
+    // use our distance table to calculate it.
 
+    hoot.trace("Using custom search radius function...");
+    
+    var tags = e.getTags();
     var radius = e.getCircularError();
     //hoot.trace("radius start: " + radius);
 
@@ -113,9 +120,14 @@ exports.getSearchRadius = function(e) {
         }
     }
 
-    //hoot.trace("radius final: " + radius);
-
+    hoot.trace("calculated search radius: " + radius);
     return radius;
+  }
+  else
+  {
+    hoot.trace("Returning user defined search radius: " + exports.searchRadius + "...");
+    return exports.searchRadius;
+  }   
 }
 
 /**

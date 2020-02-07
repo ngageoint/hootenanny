@@ -15,7 +15,8 @@
     },
     "RubberSheeting": {
         "members": {
-            "rubber.sheet.max.allowed.ways": "Maximum number of ways allowed to be rubber sheeted in a map"
+            "rubber.sheet.max.allowed.ways": "Maximum number of ways allowed to be rubber sheeted in a map",
+            "rubber.sheet.minimum.ties": "The minimum number of tie points required to calculate a rubbersheeting solution."
         }
     },
     "Attribute": {
@@ -97,7 +98,8 @@
         "matcher": "hoot::ScriptMatchCreator,Poi.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "poi.ignore.type.if.name.present": "Ignore type if name present"
+            "poi.ignore.type.if.name.present": "Ignore type if name present",
+            "search.radius.poi": "POI search radius (m). The default value of -1.0m results in a custom search distance calculated based on the input feature's type."
         }
     },
     "PoiPolygon": {
@@ -124,7 +126,9 @@
     "Powerlines": {
         "matcher": "hoot::ScriptMatchCreator,PowerLine.js",
         "merger": "hoot::ScriptMergerCreator",
-        "members": {}
+        "members": {
+            "search.radius.power.line": "Power line search radius (m)"
+        }
     },
     "Railways": {
         "matcher": "hoot::ScriptMatchCreator,Railway.js",
