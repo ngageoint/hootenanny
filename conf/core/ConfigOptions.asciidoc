@@ -3573,6 +3573,17 @@ Automatically calculates the search radius to be used during conflation of power
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
 
+=== power.line.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match for power lines.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
 === power.line.matcher.distance.weight.coefficient
 
 * Data Type: double
@@ -3581,6 +3592,17 @@ pre-conflation operation on the input data to be conflated.
 A weighting coefficient value from 0.0 to 1.0 for the applying distance weighting to power line
 matches.  This will favor feature that are closer together.  The higher the coefficient value, the
 higher the weighting applied.  A value of 0.0 will disable distance weighting.
+
+=== power.line.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss for power lines.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === power.line.subline.matcher
 
@@ -3595,6 +3617,17 @@ The way subline matcher to use when determining matching power line sublines.
 * Default Value: `155.0`
 
 Sets that maximum angle that is still considered a power line match. Units in degrees.
+
+=== power.line.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for power lines.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === quantile.aggregator.quantile
 
@@ -3624,7 +3657,7 @@ SampledAngleHistogramExtractor
 * Data Type: double
 * Default Value: `${conflate.match.threshold.default}`
 
-The threshold at which a match is called a match for railwayss.
+The threshold at which a match is called a match for railways.
 
 See also:
 

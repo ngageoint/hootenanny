@@ -49,7 +49,7 @@ InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
     // log that.
     if (source->getElementCount() > 0)
     {
-      LOG_INFO(
+      LOG_STATUS(
         "Sorting " << StringUtils::formatLargeNumber(source->getElementCount()) <<
         " elements in-memory...");
     }

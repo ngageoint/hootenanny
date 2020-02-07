@@ -142,7 +142,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
     LOG_STATUS(
       "Discarded " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
-      " unconflatable elements...");
+      " unconflatable elements.");
   }
 
   // will reproject only if necessary
