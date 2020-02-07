@@ -72,6 +72,7 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   // It is not something we can conflate
   LOG_TRACE("Element: " << e->getElementId() << " is not conflatable.");
+  //LOG_VART(e);
   return true;
 }
 
