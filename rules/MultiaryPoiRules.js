@@ -9,9 +9,9 @@ exports.baseFeatureType = "POI";
 exports.geometryType = "point";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.matchThreshold = parseFloat(hoot.get("poi.match.threshold"));
-exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
-exports.reviewThreshold = parseFloat(hoot.get("poi.review.threshold"));
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 exports.searchRadius = -1.0;;
 
 var soundexExtractor = new hoot.NameExtractor(
