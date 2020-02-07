@@ -4159,6 +4159,13 @@ debugging tests which may hang on a remote build server.
 
 The search radius, in meters, to use when conflating areas. See `search.radius.default`
 
+=== search.radius.building
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius, in meters, to use when conflating buildings. See `search.radius.default`.
+
 === search.radius.calculator.element.criterion
 
 * Data Type: string
