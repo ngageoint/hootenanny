@@ -298,6 +298,14 @@ public class BasemapResource {
             FileUtils.forceDelete(tilesDir);
         }
         
+        FileFilter fileFilter = new WildcardFileFilter(basemapName + ".*");
+        File[] files = new File(BASEMAPS_FOLDER).listFiles(fileFilter);
+        if (files != null) {
+            for (File file : files) {
+                FileUtils.forceDelete(file);
+            }
+        }
+        
         if ( basemapName.contains("failed")  ) {
         	FileFilter failedFilter = new WildcardFileFilter(basemapName);
         	
@@ -307,14 +315,6 @@ public class BasemapResource {
         			FileUtils.forceDelete(file);
         		}
         	}
-        }
-
-        FileFilter fileFilter = new WildcardFileFilter(basemapName + ".*");
-        File[] files = new File(BASEMAPS_FOLDER).listFiles(fileFilter);
-        if (files != null) {
-            for (File file : files) {
-                FileUtils.forceDelete(file);
-            }
         }
     }
 
