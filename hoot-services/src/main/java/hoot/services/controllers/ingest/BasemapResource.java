@@ -328,10 +328,6 @@ public class BasemapResource {
 
                 File xmlFile = new File(new File(BASEMAPS_TILES_FOLDER, name), "tilemapresource.xml");
                 
-                if ( ext.equals("failed") ) {
-                	deleteBaseMapHelper(basemapName);
-                }
-
                 if (xmlFile.exists()) {
                     try {
                         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

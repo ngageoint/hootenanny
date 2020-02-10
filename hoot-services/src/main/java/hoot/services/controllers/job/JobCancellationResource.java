@@ -107,6 +107,7 @@ public class JobCancellationResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response process(@Context HttpServletRequest request, @PathParam("jobId") String jobId) {
+    	
 
         Users user = Users.fromRequest(request);
 
