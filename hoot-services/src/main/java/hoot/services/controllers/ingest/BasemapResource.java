@@ -297,6 +297,17 @@ public class BasemapResource {
         if (tilesDir.exists()) {
             FileUtils.forceDelete(tilesDir);
         }
+        
+        if ( basemapName.contains("failed")  ) {
+        	FileFilter failedFilter = new WildcardFileFilter(basemapName);
+        	
+        	File[] failedFiles = new File(BASEMAPS_FOLDER).listFiles(failedFilter);
+        	if ( failedFiles != null) {
+        		for ( File file : failedFiles ) {
+        			FileUtils.forceDelete(file);
+        		}
+        	}
+        }
 
         FileFilter fileFilter = new WildcardFileFilter(basemapName + ".*");
         File[] files = new File(BASEMAPS_FOLDER).listFiles(fileFilter);
@@ -327,6 +338,10 @@ public class BasemapResource {
                 JSONObject jsonExtent = null;
 
                 File xmlFile = new File(new File(BASEMAPS_TILES_FOLDER, name), "tilemapresource.xml");
+                
+                if ( ext.equals("failed") ) {
+                	deleteBaseMapHelper(basemapName);
+                }
 
                 if (xmlFile.exists()) {
                     try {
