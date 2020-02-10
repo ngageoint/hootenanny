@@ -1,0 +1,1007 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="2.7766" minlon="32.2948" maxlat="2.7807" maxlon="32.2997"/>
+    <node visible="true" id="-424053" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7769704322783269" lon="32.2948000000000022"/>
+    <node visible="true" id="-424052" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7806999999999999" lon="32.2964543343445740"/>
+    <node visible="true" id="-424051" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7766000000000002" lon="32.2985227201807987"/>
+    <node visible="true" id="-424050" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7789980366231744" lon="32.2948000000000022"/>
+    <node visible="true" id="-424049" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7766000000000002" lon="32.2996925211341050"/>
+    <node visible="true" id="-424048" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7802302174146556" lon="32.2948000000000022"/>
+    <node visible="true" id="-424047" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7806999999999999" lon="32.2948615871501872"/>
+    <node visible="true" id="-424046" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7792108274089631" lon="32.2997000000000014"/>
+    <node visible="true" id="-424045" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7806999999999999" lon="32.2969940710825796"/>
+    <node visible="true" id="-424044" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7774845037998643" lon="32.2997000000000014"/>
+    <node visible="true" id="-424043" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7806999999999999" lon="32.2962170523098280"/>
+    <node visible="true" id="-424042" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7766000000000002" lon="32.2973002854333870"/>
+    <node visible="true" id="-424041" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.7776847598532020" lon="32.2997000000000014"/>
+    <node visible="true" id="-400264" timestamp="2020-02-07T17:57:40Z" version="1" lat="2.7766812980759199" lon="32.2972883666062032"/>
+    <node visible="true" id="-400263" timestamp="2020-02-07T17:57:40Z" version="1" lat="2.7769523387945800" lon="32.2972517846122997"/>
+    <node visible="true" id="-400262" timestamp="2020-02-07T17:57:40Z" version="1" lat="2.7771899749620199" lon="32.2972141754824023"/>
+    <node visible="true" id="-362401" timestamp="2020-02-07T17:57:22Z" version="1" lat="2.7790747222463801" lon="32.2962826583056000"/>
+    <node visible="true" id="-362400" timestamp="2020-02-07T17:57:22Z" version="1" lat="2.7790576488356300" lon="32.2961947257553987"/>
+    <node visible="true" id="-362399" timestamp="2020-02-07T17:57:22Z" version="1" lat="2.7790489272173700" lon="32.2961377013033015"/>
+    <node visible="true" id="-362398" timestamp="2020-02-07T17:57:22Z" version="1" lat="2.7790278750120700" lon="32.2959181961172987"/>
+    <node visible="true" id="-362397" timestamp="2020-02-07T17:57:22Z" version="1" lat="2.7789901570095998" lon="32.2956182804691991"/>
+    <node visible="true" id="-362396" timestamp="2020-02-07T17:57:22Z" version="1" lat="2.7789809746809002" lon="32.2955324225370006"/>
+    <node visible="true" id="-362395" timestamp="2020-02-07T17:57:22Z" version="1" lat="2.7789740140146200" lon="32.2954423091296974"/>
+    <node visible="true" id="-362394" timestamp="2020-02-07T17:57:22Z" version="1" lat="2.7789699294789498" lon="32.2953520215660035"/>
+    <node visible="true" id="-362393" timestamp="2020-02-07T17:57:22Z" version="1" lat="2.7789689964763600" lon="32.2952618810179999"/>
+    <node visible="true" id="-362392" timestamp="2020-02-07T17:57:22Z" version="1" lat="2.7789724255123098" lon="32.2951664064648014"/>
+    <node visible="true" id="-341178" timestamp="2020-02-07T17:57:23Z" version="1" lat="2.7804266353601501" lon="32.2964348474243010"/>
+    <node visible="true" id="-341177" timestamp="2020-02-07T17:57:23Z" version="1" lat="2.7805079593334501" lon="32.2963666091931998"/>
+    <node visible="true" id="-341176" timestamp="2020-02-07T17:57:23Z" version="1" lat="2.7806846759986201" lon="32.2962260576761011"/>
+    <node visible="true" id="-340933" timestamp="2020-02-07T17:57:23Z" version="1" lat="2.7774371355780700" lon="32.2995936087139981"/>
+    <node visible="true" id="-309139" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7770739994837501" lon="32.2954084708673008"/>
+    <node visible="true" id="-309138" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7773665222192299" lon="32.2953558664478990"/>
+    <node visible="true" id="-309137" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7775371941190001" lon="32.2953307884130965"/>
+    <node visible="true" id="-309136" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7777085094541101" lon="32.2953098296460013"/>
+    <node visible="true" id="-309135" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7781376019073698" lon="32.2952631078974974"/>
+    <node visible="true" id="-302359" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7801906146286002" lon="32.2964597252812027"/>
+    <node visible="true" id="-302358" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7802249809171902" lon="32.2964536681096988"/>
+    <node visible="true" id="-302357" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7802751159966999" lon="32.2964463398967965"/>
+    <node visible="true" id="-302356" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7803254777025201" lon="32.2964407561984004"/>
+    <node visible="true" id="-302355" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7803760046767501" lon="32.2964369238178008"/>
+    <node visible="true" id="-299687" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805536100837802" lon="32.2964375926361029"/>
+    <node visible="true" id="-299686" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805448932981300" lon="32.2964562041460965"/>
+    <node visible="true" id="-299685" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805371092067901" lon="32.2964752201790972"/>
+    <node visible="true" id="-299684" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805302767189599" lon="32.2964945945410022"/>
+    <node visible="true" id="-299683" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805244124322499" lon="32.2965142801673011"/>
+    <node visible="true" id="-299682" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805195305922599" lon="32.2965342292375013"/>
+    <node visible="true" id="-299681" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805156430580400" lon="32.2965543932911032"/>
+    <node visible="true" id="-299680" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805127592732499" lon="32.2965747233452021"/>
+    <node visible="true" id="-299679" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805108862432300" lon="32.2965951700138021"/>
+    <node visible="true" id="-299678" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805100285179898" lon="32.2966156836275999"/>
+    <node visible="true" id="-299677" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805101881811400" lon="32.2966362143545993"/>
+    <node visible="true" id="-299676" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805113648448301" lon="32.2966567123213011"/>
+    <node visible="true" id="-299675" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805135556507099" lon="32.2966771277339006"/>
+    <node visible="true" id="-299674" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805167552768602" lon="32.2966974109988030"/>
+    <node visible="true" id="-299673" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805209559507098" lon="32.2967175128437987"/>
+    <node visible="true" id="-299672" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805261474679601" lon="32.2967373844371011"/>
+    <node visible="true" id="-299671" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805245569723098" lon="32.2967532985960020"/>
+    <node visible="true" id="-299670" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805240290916098" lon="32.2967692825488015"/>
+    <node visible="true" id="-299669" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805245661408300" lon="32.2967852661994996"/>
+    <node visible="true" id="-299668" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805261657648099" lon="32.2968011794537020"/>
+    <node visible="true" id="-299667" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805288209485899" lon="32.2968169525256030"/>
+    <node visible="true" id="-299666" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805325200481601" lon="32.2968325162441019"/>
+    <node visible="true" id="-299665" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805372468415501" lon="32.2968478023561971"/>
+    <node visible="true" id="-299664" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805429805999302" lon="32.2968627438264022"/>
+    <node visible="true" id="-299663" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805496961785701" lon="32.2968772751304982"/>
+    <node visible="true" id="-299662" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805573641270298" lon="32.2968913325430975"/>
+    <node visible="true" id="-299661" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805659508184002" lon="32.2969048544170008"/>
+    <node visible="true" id="-299660" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805754185966900" lon="32.2969177814534021"/>
+    <node visible="true" id="-299659" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805857259420201" lon="32.2969300569622035"/>
+    <node visible="true" id="-299658" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7805968276526700" lon="32.2969416271105985"/>
+    <node visible="true" id="-299657" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7806086750433101" lon="32.2969524411589006"/>
+    <node visible="true" id="-299656" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7806240333863701" lon="32.2969601827374007"/>
+    <node visible="true" id="-299655" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7806583129355400" lon="32.2969763882787007"/>
+    <node visible="true" id="-299654" timestamp="2020-02-07T17:57:25Z" version="1" lat="2.7806931403000501" lon="32.2969913941988978"/>
+    <node visible="true" id="-263984" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7792022892283499" lon="32.2996321148190972"/>
+    <node visible="true" id="-263983" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791902029950202" lon="32.2995085121716983"/>
+    <node visible="true" id="-263982" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791479205242302" lon="32.2989834577483990"/>
+    <node visible="true" id="-263981" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791315907305298" lon="32.2987766773950966"/>
+    <node visible="true" id="-263980" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791246982731699" lon="32.2986553633340989"/>
+    <node visible="true" id="-263979" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791230486703600" lon="32.2985744034322977"/>
+    <node visible="true" id="-263978" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791239709769000" lon="32.2985348622788990"/>
+    <node visible="true" id="-263977" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791282559892800" lon="32.2984823032194015"/>
+    <node visible="true" id="-263976" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791362574831102" lon="32.2984225754577992"/>
+    <node visible="true" id="-263975" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791482647869201" lon="32.2983674966233991"/>
+    <node visible="true" id="-263974" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791573715253901" lon="32.2983370555132012"/>
+    <node visible="true" id="-263973" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791681365765100" lon="32.2983031686358970"/>
+    <node visible="true" id="-263972" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791799282448499" lon="32.2982696353302998"/>
+    <node visible="true" id="-263971" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791925796028298" lon="32.2982363990170995"/>
+    <node visible="true" id="-263970" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7792059237229001" lon="32.2982034031176966"/>
+    <node visible="true" id="-263969" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7792194809194601" lon="32.2981713309427008"/>
+    <node visible="true" id="-263968" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7792340225390002" lon="32.2981379062442002"/>
+    <node visible="true" id="-263967" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7792771932894600" lon="32.2980400495640012"/>
+    <node visible="true" id="-263966" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7792911885029801" lon="32.2980073079898986"/>
+    <node visible="true" id="-263965" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7794221618565702" lon="32.2976955792871010"/>
+    <node visible="true" id="-263964" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7794433005530799" lon="32.2976400568823010"/>
+    <node visible="true" id="-263963" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7794570386275002" lon="32.2975972691074986"/>
+    <node visible="true" id="-263962" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7794609369698202" lon="32.2975806660790994"/>
+    <node visible="true" id="-263961" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7794632400624399" lon="32.2975539616876972"/>
+    <node visible="true" id="-263960" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7794605108359001" lon="32.2975141534396002"/>
+    <node visible="true" id="-263959" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7794552230133300" lon="32.2974880624872966"/>
+    <node visible="true" id="-263958" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7794472236061298" lon="32.2974626635860034"/>
+    <node visible="true" id="-263957" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7794372986509002" lon="32.2974413865974981"/>
+    <node visible="true" id="-263956" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7792366533190900" lon="32.2973305133172985"/>
+    <node visible="true" id="-263955" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790590854791501" lon="32.2971950077516965"/>
+    <node visible="true" id="-263954" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790439614195099" lon="32.2971767879592022"/>
+    <node visible="true" id="-263953" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790294859569200" lon="32.2971580543520034"/>
+    <node visible="true" id="-263952" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790156767274601" lon="32.2971388297540969"/>
+    <node visible="true" id="-263951" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790025505555400" lon="32.2971191375876998"/>
+    <node visible="true" id="-263950" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789969358401998" lon="32.2971102347032968"/>
+    <node visible="true" id="-262373" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789158003601702" lon="32.2968977138286988"/>
+    <node visible="true" id="-262372" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789220950621401" lon="32.2968957985218026"/>
+    <node visible="true" id="-262371" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789299700752599" lon="32.2968936699360967"/>
+    <node visible="true" id="-262370" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789379149892102" lon="32.2968918159670011"/>
+    <node visible="true" id="-262369" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789459201243600" lon="32.2968902388730967"/>
+    <node visible="true" id="-262368" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789539757276800" lon="32.2968889405758972"/>
+    <node visible="true" id="-262367" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789620719846599" lon="32.2968879226572980"/>
+    <node visible="true" id="-262366" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789701990312601" lon="32.2968871863574023"/>
+    <node visible="true" id="-262365" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789783469659302" lon="32.2968867325731992"/>
+    <node visible="true" id="-262364" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789865058616701" lon="32.2968865618576970"/>
+    <node visible="true" id="-262363" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7789946657781202" lon="32.2968866744188006"/>
+    <node visible="true" id="-262362" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790028167736800" lon="32.2968870701194035"/>
+    <node visible="true" id="-262361" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790109489176200" lon="32.2968877484774026"/>
+    <node visible="true" id="-262360" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790190523021798" lon="32.2968887086663017"/>
+    <node visible="true" id="-262359" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790278303351501" lon="32.2968920887473985"/>
+    <node visible="true" id="-262358" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790363374789999" lon="32.2968960957244988"/>
+    <node visible="true" id="-262357" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790445285368999" lon="32.2969007083091029"/>
+    <node visible="true" id="-262356" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790523599912902" lon="32.2969059019956006"/>
+    <node visible="true" id="-262355" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790597902351202" lon="32.2969116491907968"/>
+    <node visible="true" id="-262354" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790667797929101" lon="32.2969179193610003"/>
+    <node visible="true" id="-262353" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790732915304499" lon="32.2969246791940989"/>
+    <node visible="true" id="-262352" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790792908521000" lon="32.2969318927762004"/>
+    <node visible="true" id="-262351" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790847458845800" lon="32.2969395217830026"/>
+    <node visible="true" id="-262350" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790896276463202" lon="32.2969475256830023"/>
+    <node visible="true" id="-262349" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790939102014498" lon="32.2969558619530019"/>
+    <node visible="true" id="-262348" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790975707975401" lon="32.2969644863038994"/>
+    <node visible="true" id="-262347" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791005899865300" lon="32.2969733529161971"/>
+    <node visible="true" id="-262346" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791029517280301" lon="32.2969824146832991"/>
+    <node visible="true" id="-262345" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791046434745401" lon="32.2969916234616008"/>
+    <node visible="true" id="-262344" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791051378101401" lon="32.2970012255008001"/>
+    <node visible="true" id="-262343" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791047678590699" lon="32.2970108330748005"/>
+    <node visible="true" id="-262342" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791035365780701" lon="32.2970203693972024"/>
+    <node visible="true" id="-262341" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7791014538078902" lon="32.2970297582508010"/>
+    <node visible="true" id="-262340" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790985361946499" lon="32.2970389245972029"/>
+    <node visible="true" id="-262339" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790948070567598" lon="32.2970477951761978"/>
+    <node visible="true" id="-262338" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790902961985702" lon="32.2970562990916008"/>
+    <node visible="true" id="-262337" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790850396722000" lon="32.2970643683775975"/>
+    <node visible="true" id="-262336" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790790794893199" lon="32.2970719385419969"/>
+    <node visible="true" id="-262335" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790724632854902" lon="32.2970789490819996"/>
+    <node visible="true" id="-262334" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790652439393200" lon="32.2970853439671970"/>
+    <node visible="true" id="-262333" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790574791499600" lon="32.2970910720879019"/>
+    <node visible="true" id="-262332" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790492309758599" lon="32.2970960876630997"/>
+    <node visible="true" id="-262331" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790405653388501" lon="32.2971003506071028"/>
+    <node visible="true" id="-262330" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790315514972499" lon="32.2971038268491029"/>
+    <node visible="true" id="-262329" timestamp="2020-02-07T17:57:27Z" version="1" lat="2.7790242644109999" lon="32.2971056841855031"/>
+    <node visible="true" id="-234613" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7776826474353000" lon="32.2992821264148020"/>
+    <node visible="true" id="-234612" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7776719875511802" lon="32.2993044213613985"/>
+    <node visible="true" id="-234611" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7776440386302998" lon="32.2993568839232026"/>
+    <node visible="true" id="-234610" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7776133843055302" lon="32.2994078301435010"/>
+    <node visible="true" id="-234609" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7775801075251700" lon="32.2994571221653999"/>
+    <node visible="true" id="-234608" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7775318157337399" lon="32.2995200418195978"/>
+    <node visible="true" id="-234607" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7774710615923799" lon="32.2995745703018997"/>
+    <node visible="true" id="-234606" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7774541148099798" lon="32.2995857555438022"/>
+    <node visible="true" id="-228909" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7770787292631698" lon="32.2954424312888975"/>
+    <node visible="true" id="-228908" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7770807222976899" lon="32.2954718424969016"/>
+    <node visible="true" id="-228907" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7770782669788101" lon="32.2955808140050991"/>
+    <node visible="true" id="-228906" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7770817892337001" lon="32.2956705918687987"/>
+    <node visible="true" id="-228905" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7770881015616600" lon="32.2957475602725026"/>
+    <node visible="true" id="-228904" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7771043240371598" lon="32.2959079210252966"/>
+    <node visible="true" id="-228903" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7771116826745001" lon="32.2960116855251016"/>
+    <node visible="true" id="-228902" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7771202173468099" lon="32.2961424051902029"/>
+    <node visible="true" id="-228901" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7771294554076400" lon="32.2962343203032987"/>
+    <node visible="true" id="-228900" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7772307442505402" lon="32.2969431351758018"/>
+    <node visible="true" id="-228899" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7772501254376700" lon="32.2970529479139969"/>
+    <node visible="true" id="-228898" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7772836575038702" lon="32.2972018287101008"/>
+    <node visible="true" id="-227403" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7802820953679199" lon="32.2949715954966976"/>
+    <node visible="true" id="-227402" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7803884947554902" lon="32.2949496516802981"/>
+    <node visible="true" id="-227401" timestamp="2020-02-07T17:57:28Z" version="1" lat="2.7804898163031702" lon="32.2949240333992975"/>
+    <node visible="true" id="-225781" timestamp="2020-02-07T17:57:29Z" version="1" lat="2.7787246979159801" lon="32.2970775161554968"/>
+    <node visible="true" id="-225780" timestamp="2020-02-07T17:57:29Z" version="1" lat="2.7786797299840198" lon="32.2970641285152027"/>
+    <node visible="true" id="-225779" timestamp="2020-02-07T17:57:29Z" version="1" lat="2.7786626640867498" lon="32.2970611807515979"/>
+    <node visible="true" id="-225778" timestamp="2020-02-07T17:57:29Z" version="1" lat="2.7786476470914199" lon="32.2970604072307026"/>
+    <node visible="true" id="-225777" timestamp="2020-02-07T17:57:29Z" version="1" lat="2.7785026490386202" lon="32.2970730894105031"/>
+    <node visible="true" id="-225776" timestamp="2020-02-07T17:57:29Z" version="1" lat="2.7782770375765700" lon="32.2970885723320009"/>
+    <node visible="true" id="-225775" timestamp="2020-02-07T17:57:29Z" version="1" lat="2.7780744641452100" lon="32.2971089943925023"/>
+    <node visible="true" id="-225774" timestamp="2020-02-07T17:57:29Z" version="1" lat="2.7774859531654599" lon="32.2971798678577002"/>
+    <node visible="true" id="-210677" timestamp="2020-02-07T17:57:29Z" version="1" lat="2.7802648640015999" lon="32.2949085176392998"/>
+    <node visible="true" id="-203354" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7789756518014199" lon="32.2971137787374971"/>
+    <node visible="true" id="-203353" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7789264630866199" lon="32.2971169087592997"/>
+    <node visible="true" id="-203352" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7788772095489001" lon="32.2971150417172979"/>
+    <node visible="true" id="-203351" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7788284031443000" lon="32.2971081970185026"/>
+    <node visible="true" id="-203350" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7787963648221199" lon="32.2971009015447024"/>
+    <node visible="true" id="-197552" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7777625781590798" lon="32.2982053222500980"/>
+    <node visible="true" id="-197551" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7777592718040300" lon="32.2982069500548974"/>
+    <node visible="true" id="-197550" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7777360311306998" lon="32.2982178231942001"/>
+    <node visible="true" id="-197549" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7777124230451200" lon="32.2982278830908029"/>
+    <node visible="true" id="-197548" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7776884763101299" lon="32.2982371174884975"/>
+    <node visible="true" id="-197547" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7776642201011699" lon="32.2982455151365002"/>
+    <node visible="true" id="-197546" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7776396839707300" lon="32.2982530658035998"/>
+    <node visible="true" id="-197545" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7776148978123198" lon="32.2982597602904988"/>
+    <node visible="true" id="-197544" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7775898918241002" lon="32.2982655904410976"/>
+    <node visible="true" id="-197543" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7775646964720200" lon="32.2982705491522992"/>
+    <node visible="true" id="-197542" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7775393424527901" lon="32.2982746303827000"/>
+    <node visible="true" id="-197541" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7775138606563701" lon="32.2982778291599999"/>
+    <node visible="true" id="-197540" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7774882821284401" lon="32.2982801415870000"/>
+    <node visible="true" id="-197539" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7774626380325098" lon="32.2982815648464978"/>
+    <node visible="true" id="-197538" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7774369596119799" lon="32.2982820972044991"/>
+    <node visible="true" id="-188837" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7790849044578998" lon="32.2966474247637976"/>
+    <node visible="true" id="-188836" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7790754723971700" lon="32.2966777410874002"/>
+    <node visible="true" id="-188835" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7790487077257802" lon="32.2967350256286991"/>
+    <node visible="true" id="-188834" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7790156438949700" lon="32.2967881261537002"/>
+    <node visible="true" id="-188833" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7789777924808599" lon="32.2968364954355991"/>
+    <node visible="true" id="-188832" timestamp="2020-02-07T17:57:30Z" version="1" lat="2.7789366650597498" lon="32.2968795862481031"/>
+    <node visible="true" id="-179534" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7767254579384502" lon="32.2996735266724002"/>
+    <node visible="true" id="-179533" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7770877203034501" lon="32.2996131343109028"/>
+    <node visible="true" id="-179532" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7772090356714800" lon="32.2995961566197991"/>
+    <node visible="true" id="-179531" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7772671674411900" lon="32.2995912485744014"/>
+    <node visible="true" id="-179530" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7772893357687201" lon="32.2995909546071971"/>
+    <node visible="true" id="-179529" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7773724616824600" lon="32.2996009689238974"/>
+    <node visible="true" id="-179528" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7773915670920002" lon="32.2996018872200992"/>
+    <node visible="true" id="-179527" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7774156763440998" lon="32.2995995663855027"/>
+    <node visible="true" id="-164548" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7774251529098199" lon="32.2982169092732008"/>
+    <node visible="true" id="-164547" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7774179126540699" lon="32.2981668106442967"/>
+    <node visible="true" id="-164546" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7774030133222798" lon="32.2980314393681027"/>
+    <node visible="true" id="-164545" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7773906753164899" lon="32.2978988167995027"/>
+    <node visible="true" id="-164544" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7773727898948302" lon="32.2977247211759035"/>
+    <node visible="true" id="-164543" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7773336814374101" lon="32.2974426710620008"/>
+    <node visible="true" id="-164542" timestamp="2020-02-07T17:57:31Z" version="1" lat="2.7773145289795398" lon="32.2973382157608029"/>
+    <node visible="true" id="-154708" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7801431587327698" lon="32.2949945766952027"/>
+    <node visible="true" id="-154707" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7793237368115800" lon="32.2951133933273979"/>
+    <node visible="true" id="-154706" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7792989576203100" lon="32.2951171252784022"/>
+    <node visible="true" id="-154705" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7792494921451198" lon="32.2951252056762996"/>
+    <node visible="true" id="-154704" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7791753777756401" lon="32.2951378700906986"/>
+    <node visible="true" id="-154703" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7791456877739402" lon="32.2951427593902025"/>
+    <node visible="true" id="-154702" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7791259086498701" lon="32.2951458998063998"/>
+    <node visible="true" id="-154701" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7791011265381602" lon="32.2951495912118034"/>
+    <node visible="true" id="-154700" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7790762995339202" lon="32.2951529783225979"/>
+    <node visible="true" id="-148937" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7783277573913798" lon="32.2962925453375007"/>
+    <node visible="true" id="-148936" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7783644627528599" lon="32.2963051594362014"/>
+    <node visible="true" id="-148935" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7783756213934598" lon="32.2963076869760002"/>
+    <node visible="true" id="-148934" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7784549540499199" lon="32.2963174243649007"/>
+    <node visible="true" id="-148933" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7785335638757300" lon="32.2963240213678020"/>
+    <node visible="true" id="-148932" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7786210910917499" lon="32.2963291251494979"/>
+    <node visible="true" id="-148931" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7787358522794001" lon="32.2963312827966007"/>
+    <node visible="true" id="-148930" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7787924492000000" lon="32.2963296854335979"/>
+    <node visible="true" id="-148929" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7788489621043699" lon="32.2963262285276969"/>
+    <node visible="true" id="-148928" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7789053292336101" lon="32.2963209158563984"/>
+    <node visible="true" id="-148927" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7789614889881200" lon="32.2963137532252986"/>
+    <node visible="true" id="-148926" timestamp="2020-02-07T17:57:32Z" version="1" lat="2.7789893211751799" lon="32.2962968428053969"/>
+    <node visible="true" id="-127659" timestamp="2020-02-07T17:57:33Z" version="1" lat="2.7788937732080199" lon="32.2969168513654026"/>
+    <node visible="true" id="-127658" timestamp="2020-02-07T17:57:33Z" version="1" lat="2.7788506285021701" lon="32.2969477435619012"/>
+    <node visible="true" id="-127657" timestamp="2020-02-07T17:57:33Z" version="1" lat="2.7788087425187098" lon="32.2969717156124005"/>
+    <node visible="true" id="-127656" timestamp="2020-02-07T17:57:33Z" version="1" lat="2.7787511992954101" lon="32.2970004466722997"/>
+    <node visible="true" id="-127655" timestamp="2020-02-07T17:57:33Z" version="1" lat="2.7787435002936900" lon="32.2970068167703985"/>
+    <node visible="true" id="-127654" timestamp="2020-02-07T17:57:33Z" version="1" lat="2.7787364401982200" lon="32.2970180036822967"/>
+    <node visible="true" id="-127653" timestamp="2020-02-07T17:57:33Z" version="1" lat="2.7787309531035702" lon="32.2970335158837969"/>
+    <node visible="true" id="-127652" timestamp="2020-02-07T17:57:33Z" version="1" lat="2.7787270390095600" lon="32.2970533533747997"/>
+    <node visible="true" id="-118002" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7766088786048702" lon="32.2985195814665005"/>
+    <node visible="true" id="-118001" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7766309113177701" lon="32.2985105594903033"/>
+    <node visible="true" id="-118000" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7766524727091100" lon="32.2985004740034967"/>
+    <node visible="true" id="-117999" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7766735109103799" lon="32.2984893492679035"/>
+    <node visible="true" id="-117998" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7766939753116500" lon="32.2984772120453982"/>
+    <node visible="true" id="-117997" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7767138166833498" lon="32.2984640915333969"/>
+    <node visible="true" id="-117996" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7767329872946700" lon="32.2984500192949966"/>
+    <node visible="true" id="-117995" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7767952554397999" lon="32.2984237017090976"/>
+    <node visible="true" id="-117994" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7768679156497500" lon="32.2983897691734967"/>
+    <node visible="true" id="-117993" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7769000417745802" lon="32.2983774209166015"/>
+    <node visible="true" id="-117992" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7769349978565998" lon="32.2983687012281990"/>
+    <node visible="true" id="-117991" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7769725299953301" lon="32.2983627060958014"/>
+    <node visible="true" id="-117990" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7771433411058801" lon="32.2983478908695005"/>
+    <node visible="true" id="-117989" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7771899450191602" lon="32.2983419583240021"/>
+    <node visible="true" id="-117988" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7772376015852398" lon="32.2983333262564969"/>
+    <node visible="true" id="-117987" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7772860569032298" lon="32.2983210906537010"/>
+    <node visible="true" id="-117986" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7773390139459302" lon="32.2983055209448011"/>
+    <node visible="true" id="-107327" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7790862553409301" lon="32.2963451450642012"/>
+    <node visible="true" id="-107326" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7790934061626000" lon="32.2963965733989014"/>
+    <node visible="true" id="-107325" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7791028556961499" lon="32.2964862556406018"/>
+    <node visible="true" id="-107324" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7791040579580000" lon="32.2965528088653997"/>
+    <node visible="true" id="-107323" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7790944263331601" lon="32.2966168197570980"/>
+    <node visible="true" id="-106325" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7805785326282200" lon="32.2964391687532029"/>
+    <node visible="true" id="-106324" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7806289611560100" lon="32.2964441201833026"/>
+    <node visible="true" id="-106323" timestamp="2020-02-07T17:57:34Z" version="1" lat="2.7806791852046899" lon="32.2964508188340034"/>
+    <node visible="true" id="-92693" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7793061826668599" lon="32.2965840227615004"/>
+    <node visible="true" id="-92692" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7793714551548900" lon="32.2965687687937972"/>
+    <node visible="true" id="-92691" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7793869065920900" lon="32.2965579304608994"/>
+    <node visible="true" id="-92690" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7794303706162600" lon="32.2965450561986032"/>
+    <node visible="true" id="-92689" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7794444617889198" lon="32.2965452244570983"/>
+    <node visible="true" id="-92688" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7795905576110398" lon="32.2965205264260007"/>
+    <node visible="true" id="-92687" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7797573833053399" lon="32.2964819104586027"/>
+    <node visible="true" id="-92686" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7798251073870599" lon="32.2964721617457968"/>
+    <node visible="true" id="-92685" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7798659443090501" lon="32.2964713657132023"/>
+    <node visible="true" id="-92684" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7799190543354100" lon="32.2964677480541980"/>
+    <node visible="true" id="-92683" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7799565540837601" lon="32.2964673701593981"/>
+    <node visible="true" id="-92682" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7799515256394498" lon="32.2963401706744975"/>
+    <node visible="true" id="-92681" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7799286005237200" lon="32.2960484939745029"/>
+    <node visible="true" id="-92680" timestamp="2020-02-07T17:57:35Z" version="1" lat="2.7799148692709998" lon="32.2958915832183990"/>
+    <node visible="true" id="-61423" timestamp="2020-02-07T17:57:36Z" version="1" lat="2.7770137855736001" lon="32.2951331858425021"/>
+    <node visible="true" id="-61422" timestamp="2020-02-07T17:57:36Z" version="1" lat="2.7770279992641802" lon="32.2952081316341975"/>
+    <node visible="true" id="-61421" timestamp="2020-02-07T17:57:36Z" version="1" lat="2.7770631254490201" lon="32.2953548897616969"/>
+    <node visible="true" id="-16396" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7804773080670699" lon="32.2964345295478026"/>
+    <node visible="true" id="-16395" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7805279610607099" lon="32.2964359705758994"/>
+    <node visible="true" id="-15034" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7790860759842801" lon="32.2966468860918994"/>
+    <node visible="true" id="-15033" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7790993915745101" lon="32.2966392191333966"/>
+    <node visible="true" id="-15032" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7791130274220599" lon="32.2966321307132986"/>
+    <node visible="true" id="-15031" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7791269581266498" lon="32.2966256340356992"/>
+    <node visible="true" id="-15030" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7791411577387000" lon="32.2966197412023988"/>
+    <node visible="true" id="-15029" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7791555998077699" lon="32.2966144631904015"/>
+    <node visible="true" id="-15028" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7791702574317498" lon="32.2966098098312031"/>
+    <node visible="true" id="-15027" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7791851033070198" lon="32.2966057897930980"/>
+    <node visible="true" id="-15026" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7792001097792700" lon="32.2966024105643967"/>
+    <node visible="true" id="-15025" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7792152488950599" lon="32.2965996784397973"/>
+    <node visible="true" id="-15024" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7792304924538498" lon="32.2965975985086970"/>
+    <node visible="true" id="-15023" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7792458120605499" lon="32.2965961746454013"/>
+    <node visible="true" id="-15022" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7792611791784201" lon="32.2965954095024017"/>
+    <node visible="true" id="-15021" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7792765651822098" lon="32.2965953045047982"/>
+    <node visible="true" id="-15020" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7792919414114801" lon="32.2965958598485017"/>
+    <node visible="true" id="-15019" timestamp="2020-02-07T17:57:38Z" version="1" lat="2.7793072792240099" lon="32.2965970744986990"/>
+    <node visible="true" id="-10520" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776844812841599" lon="32.2992782909542981"/>
+    <node visible="true" id="-10519" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776890795083502" lon="32.2992686738545984"/>
+    <node visible="true" id="-10518" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777123550695801" lon="32.2992140013760007"/>
+    <node visible="true" id="-10517" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777327403677599" lon="32.2991581991857970"/>
+    <node visible="true" id="-10516" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777501802418501" lon="32.2991014182805998"/>
+    <node visible="true" id="-10515" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777646275009098" lon="32.2990438123054986"/>
+    <node visible="true" id="-10514" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777739975855300" lon="32.2989894864088996"/>
+    <node visible="true" id="-10513" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777767883036200" lon="32.2989851063192006"/>
+    <node visible="true" id="-10512" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777790341722999" lon="32.2989804266602007"/>
+    <node visible="true" id="-10511" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777807031720601" lon="32.2989755141502002"/>
+    <node visible="true" id="-10510" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777817715078301" lon="32.2989704388271974"/>
+    <node visible="true" id="-10509" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777822239482699" lon="32.2989652730505981"/>
+    <node visible="true" id="-10508" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777820540428899" lon="32.2989600904691017"/>
+    <node visible="true" id="-10507" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777812642140498" lon="32.2989549649713013"/>
+    <node visible="true" id="-10506" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777798657224202" lon="32.2989499696318987"/>
+    <node visible="true" id="-10505" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777778785063898" lon="32.2989451756697008"/>
+    <node visible="true" id="-10504" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777753308978701" lon="32.2989406514326021"/>
+    <node visible="true" id="-10503" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777722592183198" lon="32.2989364614232031"/>
+    <node visible="true" id="-10502" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777687072609001" lon="32.2989326653786009"/>
+    <node visible="true" id="-10501" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777647256661600" lon="32.2989293174193008"/>
+    <node visible="true" id="-10500" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777603712000198" lon="32.2989264652775034"/>
+    <node visible="true" id="-10499" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777557059444300" lon="32.2989241496163970"/>
+    <node visible="true" id="-10498" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777478114333500" lon="32.2989233451452975"/>
+    <node visible="true" id="-10497" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777398507003501" lon="32.2989228115486995"/>
+    <node visible="true" id="-10496" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777318760913601" lon="32.2989225545717034"/>
+    <node visible="true" id="-10495" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777238973222400" lon="32.2989225745276016"/>
+    <node visible="true" id="-10494" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777159241138700" lon="32.2989228713919019"/>
+    <node visible="true" id="-10493" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777079661803801" lon="32.2989234448031013"/>
+    <node visible="true" id="-10492" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7777000332172901" lon="32.2989242940624024"/>
+    <node visible="true" id="-10491" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776921348896901" lon="32.2989254181351981"/>
+    <node visible="true" id="-10490" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776842808204698" lon="32.2989268156520026"/>
+    <node visible="true" id="-10489" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776764805786001" lon="32.2989284849100997"/>
+    <node visible="true" id="-10488" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776687436674701" lon="32.2989304238757029"/>
+    <node visible="true" id="-10487" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776610795133201" lon="32.2989326301865987"/>
+    <node visible="true" id="-10486" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776534974537301" lon="32.2989351011545978"/>
+    <node visible="true" id="-10485" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776449427915599" lon="32.2989374769300994"/>
+    <node visible="true" id="-10484" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776361905600400" lon="32.2989389811164997"/>
+    <node visible="true" id="-10483" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776273303062098" lon="32.2989395983240968"/>
+    <node visible="true" id="-10482" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776184526823302" lon="32.2989393222380983"/>
+    <node visible="true" id="-10481" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776096485183501" lon="32.2989381556831034"/>
+    <node visible="true" id="-10480" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7776010078926401" lon="32.2989361105947026"/>
+    <node visible="true" id="-10479" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775926192103602" lon="32.2989332078967024"/>
+    <node visible="true" id="-10478" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775845682989302" lon="32.2989294772878992"/>
+    <node visible="true" id="-10477" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775769375299402" lon="32.2989249569370998"/>
+    <node visible="true" id="-10476" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775698049763502" lon="32.2989196930938007"/>
+    <node visible="true" id="-10475" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775632436137001" lon="32.2989137396141004"/>
+    <node visible="true" id="-10474" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775573205735000" lon="32.2989071574099000"/>
+    <node visible="true" id="-10473" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775520964563598" lon="32.2989000138261986"/>
+    <node visible="true" id="-10472" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775476247119602" lon="32.2988923819512976"/>
+    <node visible="true" id="-10471" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775439510922300" lon="32.2988843398694030"/>
+    <node visible="true" id="-10470" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775400313390599" lon="32.2988718176950016"/>
+    <node visible="true" id="-10469" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775350054177399" lon="32.2988538996008003"/>
+    <node visible="true" id="-10468" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775306113552500" lon="32.2988358179865003"/>
+    <node visible="true" id="-10467" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775268545050702" lon="32.2988175948816973"/>
+    <node visible="true" id="-10466" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775237394443399" lon="32.2987992524884007"/>
+    <node visible="true" id="-10465" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775212699682599" lon="32.2987808131540035"/>
+    <node visible="true" id="-10464" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775194490855002" lon="32.2987622993437995"/>
+    <node visible="true" id="-10463" timestamp="2020-02-07T17:57:39Z" version="1" lat="2.7775182790145099" lon="32.2987437336142023"/>
+    <way visible="true" id="-15993" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-309139"/>
+        <nd ref="-61421"/>
+        <nd ref="-61422"/>
+        <nd ref="-61423"/>
+        <nd ref="-424053"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.023Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:46Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15992" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-424052"/>
+        <nd ref="-106323"/>
+        <nd ref="-106324"/>
+        <nd ref="-106325"/>
+        <nd ref="-299687"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.210Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:46Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15991" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-197538"/>
+        <nd ref="-117986"/>
+        <nd ref="-117987"/>
+        <nd ref="-117988"/>
+        <nd ref="-117989"/>
+        <nd ref="-117990"/>
+        <nd ref="-117991"/>
+        <nd ref="-117992"/>
+        <nd ref="-117993"/>
+        <nd ref="-117994"/>
+        <nd ref="-117995"/>
+        <nd ref="-117996"/>
+        <nd ref="-117997"/>
+        <nd ref="-117998"/>
+        <nd ref="-117999"/>
+        <nd ref="-118000"/>
+        <nd ref="-118001"/>
+        <nd ref="-118002"/>
+        <nd ref="-424051"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.261Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:46Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15990" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-362392"/>
+        <nd ref="-424050"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.346Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:45Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15989" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-340933"/>
+        <nd ref="-179527"/>
+        <nd ref="-179528"/>
+        <nd ref="-179529"/>
+        <nd ref="-179530"/>
+        <nd ref="-179531"/>
+        <nd ref="-179532"/>
+        <nd ref="-179533"/>
+        <nd ref="-179534"/>
+        <nd ref="-424049"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.533Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:45Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15988" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-227403"/>
+        <nd ref="-210677"/>
+        <nd ref="-424048"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.673Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:44Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15987" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-424047"/>
+        <nd ref="-227401"/>
+        <nd ref="-227402"/>
+        <nd ref="-227403"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.745Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:44Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15986" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-263950"/>
+        <nd ref="-263951"/>
+        <nd ref="-263952"/>
+        <nd ref="-263953"/>
+        <nd ref="-263954"/>
+        <nd ref="-263955"/>
+        <nd ref="-263956"/>
+        <nd ref="-263957"/>
+        <nd ref="-263958"/>
+        <nd ref="-263959"/>
+        <nd ref="-263960"/>
+        <nd ref="-263961"/>
+        <nd ref="-263962"/>
+        <nd ref="-263963"/>
+        <nd ref="-263964"/>
+        <nd ref="-263965"/>
+        <nd ref="-263966"/>
+        <nd ref="-263967"/>
+        <nd ref="-263968"/>
+        <nd ref="-263969"/>
+        <nd ref="-263970"/>
+        <nd ref="-263971"/>
+        <nd ref="-263972"/>
+        <nd ref="-263973"/>
+        <nd ref="-263974"/>
+        <nd ref="-263975"/>
+        <nd ref="-263976"/>
+        <nd ref="-263977"/>
+        <nd ref="-263978"/>
+        <nd ref="-263979"/>
+        <nd ref="-263980"/>
+        <nd ref="-263981"/>
+        <nd ref="-263982"/>
+        <nd ref="-263983"/>
+        <nd ref="-263984"/>
+        <nd ref="-424046"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.919Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:44Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15985" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-424045"/>
+        <nd ref="-299654"/>
+        <nd ref="-299655"/>
+        <nd ref="-299656"/>
+        <nd ref="-299657"/>
+        <nd ref="-299658"/>
+        <nd ref="-299659"/>
+        <nd ref="-299660"/>
+        <nd ref="-299661"/>
+        <nd ref="-299662"/>
+        <nd ref="-299663"/>
+        <nd ref="-299664"/>
+        <nd ref="-299665"/>
+        <nd ref="-299666"/>
+        <nd ref="-299667"/>
+        <nd ref="-299668"/>
+        <nd ref="-299669"/>
+        <nd ref="-299670"/>
+        <nd ref="-299671"/>
+        <nd ref="-299672"/>
+        <nd ref="-299673"/>
+        <nd ref="-299674"/>
+        <nd ref="-299675"/>
+        <nd ref="-299676"/>
+        <nd ref="-299677"/>
+        <nd ref="-299678"/>
+        <nd ref="-299679"/>
+        <nd ref="-299680"/>
+        <nd ref="-299681"/>
+        <nd ref="-299682"/>
+        <nd ref="-299683"/>
+        <nd ref="-299684"/>
+        <nd ref="-299685"/>
+        <nd ref="-299686"/>
+        <nd ref="-299687"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:17.069Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:43Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15984" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-424044"/>
+        <nd ref="-340933"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:17.255Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:42Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15983" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-424043"/>
+        <nd ref="-341176"/>
+        <nd ref="-341177"/>
+        <nd ref="-341178"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:17.257Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:42Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15982" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-228898"/>
+        <nd ref="-400262"/>
+        <nd ref="-400263"/>
+        <nd ref="-400264"/>
+        <nd ref="-424042"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:17.539Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:42Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-15981" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-424041"/>
+        <nd ref="-234613"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:17.542Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:42Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-13555" timestamp="2020-02-07T17:57:42Z" version="1">
+        <nd ref="-362392"/>
+        <nd ref="-362393"/>
+        <nd ref="-362394"/>
+        <nd ref="-362395"/>
+        <nd ref="-362396"/>
+        <nd ref="-362397"/>
+        <nd ref="-362398"/>
+        <nd ref="-362399"/>
+        <nd ref="-362400"/>
+        <nd ref="-362401"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:17.351Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:42Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-11323" timestamp="2020-02-07T17:57:43Z" version="1">
+        <nd ref="-362392"/>
+        <nd ref="-309135"/>
+        <nd ref="-309136"/>
+        <nd ref="-309137"/>
+        <nd ref="-309138"/>
+        <nd ref="-309139"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:17.110Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:43Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-11056" timestamp="2020-02-07T17:57:43Z" version="1">
+        <nd ref="-341178"/>
+        <nd ref="-302355"/>
+        <nd ref="-302356"/>
+        <nd ref="-302357"/>
+        <nd ref="-302358"/>
+        <nd ref="-302359"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:17.081Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:43Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-9545" timestamp="2020-02-07T17:57:44Z" version="1">
+        <nd ref="-263950"/>
+        <nd ref="-262329"/>
+        <nd ref="-262330"/>
+        <nd ref="-262331"/>
+        <nd ref="-262332"/>
+        <nd ref="-262333"/>
+        <nd ref="-262334"/>
+        <nd ref="-262335"/>
+        <nd ref="-262336"/>
+        <nd ref="-262337"/>
+        <nd ref="-262338"/>
+        <nd ref="-262339"/>
+        <nd ref="-262340"/>
+        <nd ref="-262341"/>
+        <nd ref="-262342"/>
+        <nd ref="-262343"/>
+        <nd ref="-262344"/>
+        <nd ref="-262345"/>
+        <nd ref="-262346"/>
+        <nd ref="-262347"/>
+        <nd ref="-262348"/>
+        <nd ref="-262349"/>
+        <nd ref="-262350"/>
+        <nd ref="-262351"/>
+        <nd ref="-262352"/>
+        <nd ref="-262353"/>
+        <nd ref="-262354"/>
+        <nd ref="-262355"/>
+        <nd ref="-262356"/>
+        <nd ref="-262357"/>
+        <nd ref="-262358"/>
+        <nd ref="-262359"/>
+        <nd ref="-262360"/>
+        <nd ref="-262361"/>
+        <nd ref="-262362"/>
+        <nd ref="-262363"/>
+        <nd ref="-262364"/>
+        <nd ref="-262365"/>
+        <nd ref="-262366"/>
+        <nd ref="-262367"/>
+        <nd ref="-262368"/>
+        <nd ref="-262369"/>
+        <nd ref="-262370"/>
+        <nd ref="-262371"/>
+        <nd ref="-262372"/>
+        <nd ref="-262373"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.914Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:44Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-8505" timestamp="2020-02-07T17:57:44Z" version="1">
+        <nd ref="-340933"/>
+        <nd ref="-234606"/>
+        <nd ref="-234607"/>
+        <nd ref="-234608"/>
+        <nd ref="-234609"/>
+        <nd ref="-234610"/>
+        <nd ref="-234611"/>
+        <nd ref="-234612"/>
+        <nd ref="-234613"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.775Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:44Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-8296" timestamp="2020-02-07T17:57:44Z" version="1">
+        <nd ref="-228898"/>
+        <nd ref="-228899"/>
+        <nd ref="-228900"/>
+        <nd ref="-228901"/>
+        <nd ref="-228902"/>
+        <nd ref="-228903"/>
+        <nd ref="-228904"/>
+        <nd ref="-228905"/>
+        <nd ref="-228906"/>
+        <nd ref="-228907"/>
+        <nd ref="-228908"/>
+        <nd ref="-228909"/>
+        <nd ref="-309139"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.751Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:44Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-8183" timestamp="2020-02-07T17:57:44Z" version="1">
+        <nd ref="-228898"/>
+        <nd ref="-225774"/>
+        <nd ref="-225775"/>
+        <nd ref="-225776"/>
+        <nd ref="-225777"/>
+        <nd ref="-225778"/>
+        <nd ref="-225779"/>
+        <nd ref="-225780"/>
+        <nd ref="-225781"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.739Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:44Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-7341" timestamp="2020-02-07T17:57:44Z" version="1">
+        <nd ref="-225781"/>
+        <nd ref="-203350"/>
+        <nd ref="-203351"/>
+        <nd ref="-203352"/>
+        <nd ref="-203353"/>
+        <nd ref="-203354"/>
+        <nd ref="-263950"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.644Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:44Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-7083" timestamp="2020-02-07T17:57:45Z" version="1">
+        <nd ref="-197538"/>
+        <nd ref="-197539"/>
+        <nd ref="-197540"/>
+        <nd ref="-197541"/>
+        <nd ref="-197542"/>
+        <nd ref="-197543"/>
+        <nd ref="-197544"/>
+        <nd ref="-197545"/>
+        <nd ref="-197546"/>
+        <nd ref="-197547"/>
+        <nd ref="-197548"/>
+        <nd ref="-197549"/>
+        <nd ref="-197550"/>
+        <nd ref="-197551"/>
+        <nd ref="-197552"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.617Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:45Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-6750" timestamp="2020-02-07T17:57:45Z" version="1">
+        <nd ref="-262373"/>
+        <nd ref="-188832"/>
+        <nd ref="-188833"/>
+        <nd ref="-188834"/>
+        <nd ref="-188835"/>
+        <nd ref="-188836"/>
+        <nd ref="-188837"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.571Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:45Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-5818" timestamp="2020-02-07T17:57:45Z" version="1">
+        <nd ref="-228898"/>
+        <nd ref="-164542"/>
+        <nd ref="-164543"/>
+        <nd ref="-164544"/>
+        <nd ref="-164545"/>
+        <nd ref="-164546"/>
+        <nd ref="-164547"/>
+        <nd ref="-164548"/>
+        <nd ref="-197538"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.468Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:45Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-5428" timestamp="2020-02-07T17:57:45Z" version="1">
+        <nd ref="-362392"/>
+        <nd ref="-154700"/>
+        <nd ref="-154701"/>
+        <nd ref="-154702"/>
+        <nd ref="-154703"/>
+        <nd ref="-154704"/>
+        <nd ref="-154705"/>
+        <nd ref="-154706"/>
+        <nd ref="-154707"/>
+        <nd ref="-154708"/>
+        <nd ref="-227403"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.425Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:45Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-5262" timestamp="2020-02-07T17:57:45Z" version="1">
+        <nd ref="-362401"/>
+        <nd ref="-148926"/>
+        <nd ref="-148927"/>
+        <nd ref="-148928"/>
+        <nd ref="-148929"/>
+        <nd ref="-148930"/>
+        <nd ref="-148931"/>
+        <nd ref="-148932"/>
+        <nd ref="-148933"/>
+        <nd ref="-148934"/>
+        <nd ref="-148935"/>
+        <nd ref="-148936"/>
+        <nd ref="-148937"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.405Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:45Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-4430" timestamp="2020-02-07T17:57:45Z" version="1">
+        <nd ref="-225781"/>
+        <nd ref="-127652"/>
+        <nd ref="-127653"/>
+        <nd ref="-127654"/>
+        <nd ref="-127655"/>
+        <nd ref="-127656"/>
+        <nd ref="-127657"/>
+        <nd ref="-127658"/>
+        <nd ref="-127659"/>
+        <nd ref="-262373"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.301Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:45Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-3654" timestamp="2020-02-07T17:57:46Z" version="1">
+        <nd ref="-188837"/>
+        <nd ref="-107323"/>
+        <nd ref="-107324"/>
+        <nd ref="-107325"/>
+        <nd ref="-107326"/>
+        <nd ref="-107327"/>
+        <nd ref="-362401"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.215Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:46Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-3135" timestamp="2020-02-07T17:57:46Z" version="1">
+        <nd ref="-92680"/>
+        <nd ref="-92681"/>
+        <nd ref="-92682"/>
+        <nd ref="-92683"/>
+        <nd ref="-92684"/>
+        <nd ref="-92685"/>
+        <nd ref="-92686"/>
+        <nd ref="-92687"/>
+        <nd ref="-92688"/>
+        <nd ref="-92689"/>
+        <nd ref="-92690"/>
+        <nd ref="-92691"/>
+        <nd ref="-92692"/>
+        <nd ref="-92693"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:16.152Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:46Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-580" timestamp="2020-02-07T17:57:47Z" version="1">
+        <nd ref="-299687"/>
+        <nd ref="-16395"/>
+        <nd ref="-16396"/>
+        <nd ref="-341178"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:15.845Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:47Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-533" timestamp="2020-02-07T17:57:47Z" version="1">
+        <nd ref="-15019"/>
+        <nd ref="-15020"/>
+        <nd ref="-15021"/>
+        <nd ref="-15022"/>
+        <nd ref="-15023"/>
+        <nd ref="-15024"/>
+        <nd ref="-15025"/>
+        <nd ref="-15026"/>
+        <nd ref="-15027"/>
+        <nd ref="-15028"/>
+        <nd ref="-15029"/>
+        <nd ref="-15030"/>
+        <nd ref="-15031"/>
+        <nd ref="-15032"/>
+        <nd ref="-15033"/>
+        <nd ref="-15034"/>
+        <nd ref="-188837"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:15.838Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:47Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+    <way visible="true" id="-350" timestamp="2020-02-07T17:57:47Z" version="1">
+        <nd ref="-197538"/>
+        <nd ref="-10463"/>
+        <nd ref="-10464"/>
+        <nd ref="-10465"/>
+        <nd ref="-10466"/>
+        <nd ref="-10467"/>
+        <nd ref="-10468"/>
+        <nd ref="-10469"/>
+        <nd ref="-10470"/>
+        <nd ref="-10471"/>
+        <nd ref="-10472"/>
+        <nd ref="-10473"/>
+        <nd ref="-10474"/>
+        <nd ref="-10475"/>
+        <nd ref="-10476"/>
+        <nd ref="-10477"/>
+        <nd ref="-10478"/>
+        <nd ref="-10479"/>
+        <nd ref="-10480"/>
+        <nd ref="-10481"/>
+        <nd ref="-10482"/>
+        <nd ref="-10483"/>
+        <nd ref="-10484"/>
+        <nd ref="-10485"/>
+        <nd ref="-10486"/>
+        <nd ref="-10487"/>
+        <nd ref="-10488"/>
+        <nd ref="-10489"/>
+        <nd ref="-10490"/>
+        <nd ref="-10491"/>
+        <nd ref="-10492"/>
+        <nd ref="-10493"/>
+        <nd ref="-10494"/>
+        <nd ref="-10495"/>
+        <nd ref="-10496"/>
+        <nd ref="-10497"/>
+        <nd ref="-10498"/>
+        <nd ref="-10499"/>
+        <nd ref="-10500"/>
+        <nd ref="-10501"/>
+        <nd ref="-10502"/>
+        <nd ref="-10503"/>
+        <nd ref="-10504"/>
+        <nd ref="-10505"/>
+        <nd ref="-10506"/>
+        <nd ref="-10507"/>
+        <nd ref="-10508"/>
+        <nd ref="-10509"/>
+        <nd ref="-10510"/>
+        <nd ref="-10511"/>
+        <nd ref="-10512"/>
+        <nd ref="-10513"/>
+        <nd ref="-10514"/>
+        <nd ref="-10515"/>
+        <nd ref="-10516"/>
+        <nd ref="-10517"/>
+        <nd ref="-10518"/>
+        <nd ref="-10519"/>
+        <nd ref="-10520"/>
+        <nd ref="-234613"/>
+        <tag k="source:ingest:datetime" v="2020-02-07T17:57:15.808Z"/>
+        <tag k="source:datetime" v="2020-02-07T17:57:47Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-09-20"/>
+    </way>
+</osm>
