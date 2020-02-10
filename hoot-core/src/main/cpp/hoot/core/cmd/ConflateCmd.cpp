@@ -215,10 +215,16 @@ int ConflateCmd::runSimple(QStringList& args)
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
 
-  _updateConfigOptionsForAttributeConflation();
-  if (isDiffConflate)
+  // The highway.merge.tags.only option only gets used with Attribute Conflation for now, so we'll
+  // use it as the sole identifier for it. If that ever changes, then we'll need a different way
+  // to recognize when AC is occurring.
+  if (ConfigOptions().getHighwayMergeTagsOnly())
   {
-    _updateConfigOptionsForDifferentialConflation();
+    _updateConfigOptionsForAttributeConflation();
+  }
+  if (isDiffConflate || ConfigOptions().getHighwayMergeTagsOnly())
+  {
+    _disableRoundaboutRemoval();
   }
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
@@ -530,12 +536,23 @@ float ConflateCmd::_getJobPercentComplete(const int currentTaskNum) const
   return (float)currentTaskNum / (float)_numTotalTasks;
 }
 
-void ConflateCmd::_updateConfigOptionsForDifferentialConflation()
+void ConflateCmd::_disableRoundaboutRemoval()
 {
+  // This applies to both Attribute and Differential Conflation.
+
   // Since Differential throws out all matches, there's no way we can have a bad merge between
   // ref/secondary roundabouts. Therefore, no need to replace/remove them. If there's a match, we'll
-  // end with no secondary roundabout in the diff output and only the ref roundabout when the diff
-  // is applied back to the ref.
+  // end up with no secondary roundabout in the diff output and only the ref roundabout when the
+  // diff is applied back to the ref.
+
+  // Our roundabout handling used with other types of conflation makes no sense for Attribute
+  // Conflation. For the other types of conflation we remove roundabouts b/c hoot isn't very good
+  // at merging them together, so we keep the ref roundabouts and skip conflating them altogether.
+  // Since we always keep the ref geometry in AC, there's no opportunity for bad merging and,
+  // thus, no need to remove them in the first place. So, we'll override that behavior here.
+
+  // If the work for #3442 is done, then we could handle this removal in AttributeConflation.conf
+  // add DifferentialConflation.conf instead of doing it here.
 
   QStringList preConflateOps = ConfigOptions().getConflatePreOps();
   const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
@@ -560,25 +577,19 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
   // There may be a way to eliminate these by adding more custom behavior to the UI.
 
-  // This option only gets used with Attribute Conflation for now, so we'll use it as the sole
-  // identifier for it.  This could change in the future, but hopefully if that happens, by then
-  // we have a better solution for changing these opts in place.
-  if (ConfigOptions().getHighwayMergeTagsOnly())
-  {
-    const QString reviewRelationCritName =
-      QString::fromStdString(ReviewRelationCriterion::className());
+  const QString reviewRelationCritName =
+    QString::fromStdString(ReviewRelationCriterion::className());
 
-    // This swaps the logic that removes all reviews with the logic that removes them based on score
-    // thresholding.
-    if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
-    {
-      QStringList removeElementsCriteria =
-        conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
-      removeElementsCriteria.replaceInStrings(
-        reviewRelationCritName, QString::fromStdString(ReviewScoreCriterion::className()));
-      conf().set(
-        ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
-    }
+  // This swaps the logic that removes all reviews with the logic that removes them based on score
+  // thresholding.
+  if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
+  {
+    QStringList removeElementsCriteria =
+      conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
+    removeElementsCriteria.replaceInStrings(
+      reviewRelationCritName, QString::fromStdString(ReviewScoreCriterion::className()));
+    conf().set(
+      ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
   }
 }
 

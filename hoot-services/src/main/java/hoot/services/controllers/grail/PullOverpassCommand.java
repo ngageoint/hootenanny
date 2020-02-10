@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -32,11 +32,17 @@ import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -44,7 +50,6 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
 import hoot.services.geo.BoundingBox;
@@ -94,10 +99,11 @@ class PullOverpassCommand implements InternalCommand {
                 url = replaceSensitiveData(getOverpassUrl(replaceSensitiveData(params.getPullUrl()), params.getBounds(), "xml", customQuery));
             }
 
-            URL requestUrl = new URL(url);
             File outputFile = new File(params.getOutput());
+            //write to intermediate file
+            InputStream is = PullOverpassCommand.getOverpassInputStream(url);
+            FileUtils.copyInputStreamToFile(is, outputFile);
 
-            FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
         }
         catch (Exception ex) {
             String msg = "Failure to pull data from Overpass [" + url + "]" + ex.getMessage();
@@ -161,5 +167,23 @@ class PullOverpassCommand implements InternalCommand {
         } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
 
         return overpassUrl + "?data=" + overpassQuery;
+    }
+
+    static InputStream getOverpassInputStream(String url) throws IOException {
+        InputStream inputStream;
+        if ("https://overpass-api.de/api/interpreter".equalsIgnoreCase(PUBLIC_OVERPASS_URL)) {
+            URLConnection conn = new URL(url).openConnection();
+            inputStream = conn.getInputStream();
+        } else { // add no cert checker if using a public mirror
+            HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
+            conn.setHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession sslSession) {
+                    return true;
+                }
+            });
+            inputStream = conn.getInputStream();
+        }
+        return inputStream;
     }
 }
