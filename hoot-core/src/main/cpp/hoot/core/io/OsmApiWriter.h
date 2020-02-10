@@ -62,12 +62,19 @@ public:
   const static char* API_PATH_CLOSE_CHANGESET;
   const static char* API_PATH_UPLOAD_CHANGESET;
   const static char* API_PATH_GET_ELEMENT;
+  /** Default content type */
+  const static char* CONTENT_TYPE_XML;
   /**
    *  Max number of jobs waiting in the work queue = multiplier * number of threads,
    *  this keeps the producer thread from creating too many sub-changesets too early
    *  that only consist of nodes after ways are blocked.
    */
   const int QUEUE_SIZE_MULTIPLIER = 2;
+  /** Constructor with one or multiple files consisting of one large changeset to run
+   *  the test apply
+   */
+  OsmApiWriter(const QString& output_file, const QString& changeset);
+  OsmApiWriter(const QString& output_file, const QList<QString>& changesets);
   /** Constructors with one or multiple files consisting of one large changeset */
   OsmApiWriter(const QUrl& url, const QString& changeset);
   OsmApiWriter(const QUrl& url, const QList<QString>& changesets);
@@ -87,6 +94,11 @@ public:
    * @return success
    */
   bool apply();
+  /**
+   * @brief testApply Actually load, divide, and write the changesets to files instead of OSM API
+   * @return list of filepaths for output files
+   */
+  QStringList testApply();
   /**
    * @brief containsFailed
    * @return true if there are failed changes in the changeset
@@ -330,6 +342,8 @@ private:
   int _changesetCount;
   /** Mutex for changeset count */
   std::mutex _changesetCountMutex;
+  /** Full pathname of the output file created during --test-apply */
+  QString _testApplyPathname;
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */

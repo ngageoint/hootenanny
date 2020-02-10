@@ -59,6 +59,7 @@ public:
   {
     bool showStats = false;
     bool showProgress = false;
+    bool testApply = false;
     //  Check for stats flag
     if (args.contains("--stats"))
     {
@@ -71,90 +72,30 @@ public:
       showProgress = true;
       args.removeAll("--progress");
     }
+    //  Check for test apply flag
+    if (args.contains("--test-apply"))
+    {
+      testApply = true;
+      args.removeAll("--test-apply");
+    }
 
     //  Make sure that there are at least two other arguments
     if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
       throw HootException(
-        QString("%1 takes at least two parameters and was given %2 parameters")
+        QString("%1 takes at least 2 parameters and was given %2 parameters")
           .arg(getName())
           .arg(args.size()));
     }
-
-    Progress progress(ConfigOptions().getJobId(), "Apply Changeset", Progress::JobState::Running);
-
     //  Write changeset/OSM XML to OSM API
     if (args[0].endsWith(".osc") || args[0].endsWith(".osm"))
     {
-      //  Get the endpoint URL
-      const QString urlStr = args[args.size() - 1];
-      if (!urlStr.toLower().startsWith("http://") && !urlStr.toLower().startsWith("https://"))
-      {
-        throw IllegalArgumentException(
-          QString("XML changesets must be written to an OpenStreetMap compatible web service. ") +
-          QString("Tried to write to: " + urlStr));
-      }
-      QUrl osm;
-      osm.setUrl(args[args.size() - 1]);
-
-      //  Create a URL without IP and user info for logging
-      QString printableUrl = osm.toString(QUrl::RemoveUserInfo);
-      HootNetworkRequest::removeIpFromUrlString(printableUrl, osm);
-
-      const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
-
-      //  Grab all the changeset files
-      QList<QString> changesets;
-      for (int i = 0; i < args.size() - 1; ++i)
-      {
-        progress.set(
-          0.0,
-          "Adding changeset: ..." + args[i].right(maxFilePrintLength) + " for application to: " +
-          printableUrl.left(maxFilePrintLength) + "...", true);
-        changesets.append(args[i]);
-      }
-
-      //  Get the error changeset pathname to pass to the writer
-      QFileInfo path(args[0]);
-      QString errorFilename =
-        path.absolutePath() + QDir::separator() +
-        path.baseName() + "-error." + path.completeSuffix();
-
-      //  Do the actual splitting and uploading
-      OsmApiWriter writer(osm, changesets);
-      writer.setErrorPathname(errorFilename);
-      writer.showProgress(showProgress);
-      if (showProgress)
-      {
-        // OsmApiWriter is doing all the progress reporting but will pass a progress object in
-        // anyway, just in case we ever add any extra job steps outside of it.
-        writer.setProgress(progress);
-      }
-      writer.apply();
-
-      progress.set(
-        1.0, writer.containsFailed() ? Progress::JobState::Failed : Progress::JobState::Successful,
-        "Changeset(s) applied to: " + printableUrl.left(maxFilePrintLength) + "...");
-
-      //  Write out the failed changeset if there is one
-      if (writer.containsFailed())
-      {
-        //  Output the errors from 'changeset.osc' to 'changeset-error.osc'
-        LOG_ERROR(
-          QString("Some changeset elements failed to upload. Stored in %1.").arg(errorFilename));
-        writer.writeErrorFile();
-      }
-
-      //  Output the stats if requested
-      if (showStats)
-      {
-        //  Jump through a few hoops to use the MapStatsWriter
-        QList<QList<SingleStat>> allStats;
-        allStats.append(writer.getStats());
-        QString statsMsg = MapStatsWriter().statsToString(allStats, "\t");
-        cout << "stats = (stat)\n" << statsMsg << endl;
-      }
+      //  Run the the test apply command
+      if (testApply)
+        runChangesetOscTestApply(args, showStats, showProgress);
+      else
+        runChangesetOscApply(args, showStats, showProgress);
     }
     //  Write changeset SQL directly to the database
     else if (args[0].endsWith(".osc.sql"))
@@ -200,6 +141,120 @@ public:
     }
 
     return 0;
+  }
+
+  void runChangesetOscApply(QStringList& args, bool showStats, bool showProgress)
+  {
+    Progress progress(ConfigOptions().getJobId(), "Apply Changeset", Progress::JobState::Running);
+    //  Get the endpoint URL
+    const QString urlStr = args[args.size() - 1];
+    if (!urlStr.toLower().startsWith("http://") && !urlStr.toLower().startsWith("https://"))
+    {
+      throw IllegalArgumentException(
+        QString("XML changesets must be written to an OpenStreetMap compatible web service. ") +
+        QString("Tried to write to: " + urlStr));
+    }
+    QUrl osm;
+    osm.setUrl(args[args.size() - 1]);
+
+    //  Create a URL without IP and user info for logging
+    QString printableUrl = osm.toString(QUrl::RemoveUserInfo);
+    HootNetworkRequest::removeIpFromUrlString(printableUrl, osm);
+
+    const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+
+    //  Grab all the changeset files
+    QList<QString> changesets;
+    for (int i = 0; i < args.size() - 1; ++i)
+    {
+      progress.set(
+        0.0,
+        "Adding changeset: ..." + args[i].right(maxFilePrintLength) + " for application to: " +
+        printableUrl.left(maxFilePrintLength) + "...", true);
+      changesets.append(args[i]);
+    }
+
+    //  Get the error changeset pathname to pass to the writer
+    QFileInfo path(args[0]);
+    QString errorFilename =
+      path.absolutePath() + QDir::separator() +
+      path.baseName() + "-error." + path.completeSuffix();
+
+    //  Do the actual splitting and uploading
+    OsmApiWriter writer(osm, changesets);
+    writer.setErrorPathname(errorFilename);
+    writer.showProgress(showProgress);
+    if (showProgress)
+    {
+      // OsmApiWriter is doing all the progress reporting but will pass a progress object in
+      // anyway, just in case we ever add any extra job steps outside of it.
+      writer.setProgress(progress);
+    }
+    writer.apply();
+
+    progress.set(
+      1.0, writer.containsFailed() ? Progress::JobState::Failed : Progress::JobState::Successful,
+      "Changeset(s) applied to: " + printableUrl.left(maxFilePrintLength) + "...");
+
+    //  Write out the failed changeset if there is one
+    if (writer.containsFailed())
+    {
+      //  Output the errors from 'changeset.osc' to 'changeset-error.osc'
+      LOG_ERROR(
+        QString("Some changeset elements failed to upload. Stored in %1.").arg(errorFilename));
+      writer.writeErrorFile();
+    }
+
+    //  Output the stats if requested
+    if (showStats)
+    {
+      //  Jump through a few hoops to use the MapStatsWriter
+      QList<QList<SingleStat>> allStats;
+      allStats.append(writer.getStats());
+      QString statsMsg = MapStatsWriter().statsToString(allStats, "\t");
+      cout << "stats = (stat)\n" << statsMsg << endl;
+    }
+  }
+
+  void runChangesetOscTestApply(QStringList& args, bool showStats, bool showProgress)
+  {
+    Progress progress(ConfigOptions().getJobId(), "Apply Changeset", Progress::JobState::Running);
+    const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+    QString output_filename = args[args.size() - 1];
+    //  Grab all the changeset files
+    QList<QString> changesets;
+    for (int i = 0; i < args.size() - 1; ++i)
+    {
+      progress.set(
+        0.0,
+        "Adding changeset: ..." + args[i].right(maxFilePrintLength) + " for test application...", true);
+      changesets.append(args[i]);
+    }
+
+    //  Do the actual splitting and uploading
+    OsmApiWriter writer(output_filename, changesets);
+    writer.showProgress(showProgress);
+    if (showProgress)
+    {
+      // OsmApiWriter is doing all the progress reporting but will pass a progress object in
+      // anyway, just in case we ever add any extra job steps outside of it.
+      writer.setProgress(progress);
+    }
+    writer.testApply();
+
+    progress.set(
+      1.0, writer.containsFailed() ? Progress::JobState::Failed : Progress::JobState::Successful,
+      "Changeset(s) test application complete...");
+
+    //  Output the stats if requested
+    if (showStats)
+    {
+      //  Jump through a few hoops to use the MapStatsWriter
+      QList<QList<SingleStat>> allStats;
+      allStats.append(writer.getStats());
+      QString statsMsg = MapStatsWriter().statsToString(allStats, "\t");
+      cout << "stats = (stat)\n" << statsMsg << endl;
+    }
   }
 };
 
