@@ -68,7 +68,7 @@ private:
   int _numTotalTasks;
 
   void _updateConfigOptionsForAttributeConflation();
-  void _updateConfigOptionsForDifferentialConflation();
+  void _disableRoundaboutRemoval();
   void _checkForTagValueTruncationOverride();
 
   float _getJobPercentComplete(const int currentTaskNum) const;
