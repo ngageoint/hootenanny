@@ -92,7 +92,19 @@ void NetworkMatchCreator::createMatches(
 {
   QElapsedTimer timer;
   timer.start();
-  LOG_DEBUG("Looking for matches with: " << className() << "...");
+
+  QString searchRadiusStr;
+  const double searchRadius = ConfigOptions().getSearchRadiusHighway();
+  if (searchRadius < 0)
+  {
+    searchRadiusStr = "within a feature dependent search radius";
+  }
+  else
+  {
+    searchRadiusStr =
+      "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
+  }
+  LOG_STATUS("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VART(threshold);
   const int matchesSizeBefore = matches.size();
 

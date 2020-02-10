@@ -62,6 +62,7 @@ hoot-rnd/Makefile
 hoot-test/Makefile
 hoot-core-test/Makefile
 hoot-core/Makefile
+hoot-josm/Makefile
 hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h

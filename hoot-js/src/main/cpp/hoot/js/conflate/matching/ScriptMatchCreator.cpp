@@ -50,8 +50,8 @@
 // Qt
 #include <QFileInfo>
 #include <qnumeric.h>
-#include <QElapsedTimer>
 #include <QStringBuilder>
+#include <QElapsedTimer>
 
 // Standard
 #include <deque>
@@ -129,7 +129,7 @@ public:
     //this is meant to have been set externally in a js rules file
     _customSearchRadius =
       getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
-    LOG_VART(_customSearchRadius);
+    LOG_VARD(_customSearchRadius);
 
     Handle<Value> value = plugin->Get(toV8("getSearchRadius"));
     if (value->IsUndefined())
@@ -171,8 +171,8 @@ public:
     LOG_TRACE(
       "Finding neighbors for: " << e->getElementId() << " during conflation: " << _scriptPath <<
       "...");
-    set<ElementId> neighbors =
-      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+    const set<ElementId> neighbors =
+      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, map);
     LOG_VART(neighbors);
     ElementId from = e->getElementId();
 
@@ -283,11 +283,13 @@ public:
       if (_customSearchRadius < 0)
       {
         //base the radius off of the element itself
+        LOG_TRACE("Calculating search radius based off of element...");
         result = e->getCircularError() * _candidateDistanceSigma;
       }
       else
       {
         //base the radius off some predefined radius
+        LOG_TRACE("Calculating search radius based off of custom defined script value...");
         result = _customSearchRadius * _candidateDistanceSigma;
       }
     }
@@ -295,6 +297,7 @@ public:
     {
       if (_searchRadiusCache.contains(e->getElementId()))
       {
+        LOG_TRACE("Retrieving search radius from cache...");
         result = _searchRadiusCache[e->getElementId()];
       }
       else
@@ -318,14 +321,13 @@ public:
       }
     }
 
+    LOG_VART(result);
     return result;
   }
 
   void calculateSearchRadius()
   {
-    /*
-     * This is meant to run one time when the match creator is initialized.
-     */
+    // This is meant to run one time when the match creator is initialized.
 
     LOG_DEBUG("Checking for existence of search radius export for: " << _scriptPath << "...");
 
@@ -348,7 +350,7 @@ public:
       return;
     }
 
-    LOG_DEBUG("Calculating search radius for: " << _scriptPath << "...");
+    LOG_STATUS("Calculating search radius for: " << _scriptPath << "...");
 
     Handle<Function> func = Handle<Function>::Cast(value);
     Handle<Value> jsArgs[1];
@@ -440,6 +442,8 @@ public:
         v.finalizeIndex();
       }
       LOG_VART(_indexToEid.size());
+
+      LOG_DEBUG("Script feature index created for: " << _scriptPath << ".");
     }
     return _index;
   }
@@ -554,16 +558,14 @@ public:
     //}
 
     _matchCandidateCache[e->getElementId()] = result;
+
     return result;
   }
 
   virtual void visit(const ConstElementPtr& e)
   {
-    //LOG_VART(e->getElementId());
     if (isMatchCandidate(e))
     {
-      //LOG_TRACE("isMatchCandidate: " << e->getElementId());
-
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
@@ -597,6 +599,8 @@ public:
   void setCreatorDescription(const CreatorDescription& description) { _scriptInfo = description; }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
+
+  bool hasCustomSearchRadiusFunction() const { return !_getSearchRadius.IsEmpty(); }
 
 private:
 
@@ -749,11 +753,6 @@ void ScriptMatchCreator::createMatches(
 
   QElapsedTimer timer;
   timer.start();
-  QFileInfo scriptFileInfo(_scriptPath);
-  LOG_DEBUG(
-    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
-  LOG_VARD(*threshold);
-  const int matchesSizeBefore = matches.size();
 
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
@@ -762,7 +761,32 @@ void ScriptMatchCreator::createMatches(
   v.setCreatorDescription(scriptInfo);
   v.initSearchRadiusInfo();
   v.calculateSearchRadius();
-  _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
+
+  QFileInfo scriptFileInfo(_scriptPath);
+  // This doesn't work with _candidateDistanceSigma, but right now its set to 1.0 in every script
+  // and has no effect on the search radius.
+  QString searchRadiusStr;
+  const double searchRadius = v.getCustomSearchRadius();
+  if (v.hasCustomSearchRadiusFunction())
+  {
+    searchRadiusStr = "within a function calculated search radius";
+  }
+  else if (searchRadius < 0)
+  {
+    searchRadiusStr = "within a feature dependent search radius";
+  }
+  else
+  {
+    searchRadiusStr =
+      "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
+  }
+  LOG_STATUS(
+    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << " " <<
+     searchRadiusStr << "...");
+  LOG_VARD(*threshold);
+  const int matchesSizeBefore = matches.size();
+
+  _cachedCustomSearchRadii[_scriptPath] = searchRadius;
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
   LOG_VARD(GeometryTypeCriterion::typeToString(scriptInfo.geometryType));
@@ -889,6 +913,8 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
 
 CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
 {
+  LOG_DEBUG("Getting script description...");
+
   CreatorDescription result;
   result.experimental = true;
 

@@ -126,6 +126,7 @@ parallel --joblog $logJobs $HOOT_HOME/scripts/copyright/UpdateDirCopyrightHeader
   $HOOT_HOME/tgs \
   $HOOT_HOME/hoot-js \
   $HOOT_HOME/hoot-rnd \
+  $HOOT_HOME/hoot-josm \
   $HOOT_HOME/tbs \
   $HOOT_HOME/hoot-test \
   $HOOT_HOME/hoot-cmd

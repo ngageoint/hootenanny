@@ -81,7 +81,24 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
                                            std::vector<ConstMatchPtr>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
-  LOG_DEBUG("Looking for matches with: " << className() << "...");
+  QElapsedTimer timer;
+  timer.start();
+
+  //poi.polygon.additional.search.distance
+  //poi.polygon.match.distance.threshold
+  QString searchRadiusStr;
+  const double additionalDistance = ConfigOptions().getPoiPolygonAdditionalSearchDistance();
+  if (additionalDistance <= 0)
+  {
+    searchRadiusStr = "within a feature dependent search radius";
+  }
+  else
+  {
+    searchRadiusStr =
+      "within a feature dependent search radius plus an additional distance of " +
+      QString::number(additionalDistance, 'g', 2) + " meters";
+  }
+  LOG_STATUS("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
   const int matchesSizeBefore = matches.size();
 
@@ -94,8 +111,6 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
 
   PoiPolygonMatch::resetMatchDistanceInfo();
 
-  QElapsedTimer timer;
-  timer.start();
   PoiPolygonMatchVisitor matchVis(map, matches, threshold, _getRf(), _infoCache, _filter);
   map->visitNodesRo(matchVis);
   const int matchesSizeAfter = matches.size();

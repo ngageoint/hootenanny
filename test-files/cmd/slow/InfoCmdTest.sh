@@ -142,7 +142,7 @@ echo ""
 # OPERATORS
 echo "Listing an op..."
 echo ""
-hoot info --operators | grep "MapCleaner"
+hoot info --operators | grep "DuplicateNameRemover"
 echo ""
 echo "Listing a visitor..."
 echo ""

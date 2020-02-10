@@ -8,9 +8,11 @@
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Line String Generic Test";
-exports.matchThreshold = parseFloat(hoot.get("generic.line.match.threshold"));
-exports.missThreshold = parseFloat(hoot.get("generic.line.miss.threshold"));
-exports.reviewThreshold = parseFloat(hoot.get("generic.line.review.threshold"));
+// This matcher only sets match/miss/review values to 1.0, therefore score thresholds aren't used. If that
+// ever changes, then custom score threshold configuration options should be added for this matcher.
+//exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+//exports.missThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+//exports.reviewThreshold = parseFloat(hoot.get("conflate.match.threshold.default"))
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
 exports.baseFeatureType = "Line";
 exports.geometryType = "line";

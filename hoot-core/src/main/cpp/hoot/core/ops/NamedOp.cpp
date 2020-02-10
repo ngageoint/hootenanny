@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NamedOp.h"
 
@@ -156,7 +156,7 @@ void NamedOp::apply(OsmMapPtr& map)
       StringUtils::formatLargeNumber(map->getElementCount()));
     if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
     {
-      LOG_DEBUG(
+      LOG_STATUS(
         "\t" << statusInfo->getCompletedStatusMessage() + " in " +
         StringUtils::millisecondsToDhms(timer.elapsed()));
     }
@@ -172,6 +172,8 @@ void NamedOp::_updateProgress(const int currentStep, const QString& message)
 {
   // Always check for a valid task weight and that the job was set to running. Otherwise, this is
   // just an empty progress object, and we shouldn't log progress.
+  LOG_VARD(_progress.getTaskWeight());
+  LOG_VARD(_progress.getState());
   if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
   {
     _progress.setFromRelative(
@@ -191,6 +193,7 @@ QString NamedOp::_getInitMessage(const QString& message,
   {
     initMessage += message + "...";
   }
+  LOG_VARD(initMessage);
   return initMessage;
 }
 

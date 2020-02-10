@@ -1177,7 +1177,6 @@ mgcp = {
             ["t.man_made && t.building == 'yes'","delete t.building"],
             ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
             ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'disappearing'; delete t.natural"],
-            ["t.natural == 'scrub'","t.natural = 'grassland'; t['grassland:type'] = 'grassland_with_trees'"],
             ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
             ["t.natural == 'wood'","t.landuse = 'forest'"],
             ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -135,12 +135,17 @@ private:
     for (size_t i = 0; i < cmds.size(); i++)
     {
       const string cmdClassName = cmds[i];
+      LOG_VART(cmdClassName);
       std::shared_ptr<Command> command(
         Factory::getInstance().constructObject<Command>(cmdClassName));
       if (command->displayInHelp())
       {
         const QString commandName = command->getName();
-        if (command->getType() == "core" && !_forceToRndList.contains(commandName))
+        LOG_VART(commandName);
+        // Currently, there's only one josm command and we want it in the main list. So, just lump
+        // it in with the core commands.
+        if ((command->getType() == "core" || command->getType() == "josm") &&
+            !_forceToRndList.contains(commandName))
         {
           coreCmds.push_back(command);
         }
@@ -153,6 +158,8 @@ private:
     }
     sort(coreCmds.begin(), coreCmds.end(), commandCompare2);
     sort(rndCmds.begin(), rndCmds.end(), commandCompare2);
+    LOG_VART(coreCmds.size());
+    LOG_VART(rndCmds.size());
 
     // Please update the asciidoc user documentation if you change this usage.
     cout << "usage: hoot <command> [--trace] [--debug] [--status] [--warn] [--error] " <<
@@ -172,6 +179,7 @@ private:
     for (size_t i = 0; i < cmds.size(); i++)
     {
       std::shared_ptr<Command> command = cmds[i];
+      LOG_VART(command->getName());
       //spacing here is roughly the size of the longest command name plus a small buffer
       const int spaceSize = 30 - command->getName().size();
       const QString line = command->getName() + QString(spaceSize, ' ') + command->getDescription();
@@ -182,6 +190,7 @@ private:
   int _printVerbose()
   {
     vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
+    LOG_VART(cmds);
     sort(cmds.begin(), cmds.end(), commandCompare);
     for (size_t i = 0; i < cmds.size(); i++)
     {
