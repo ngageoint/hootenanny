@@ -193,8 +193,11 @@ public class ReviewBookmarkResource {
                 appendHstoreElement(hstoreMap.get("bookmarkreviewitem"), json, "bookmarkreviewitem");
 
                 JSONParser parser = new JSONParser();
-                JSONArray jsonArray = (JSONArray) parser.parse(hstoreMap.get("taggedUsers"));
-                json.put("taggedUsers", jsonArray);
+                String usersArray = hstoreMap.get("taggedUsers");
+                if(usersArray != null) {
+                    JSONArray jsonArray = (JSONArray) parser.parse(hstoreMap.get("taggedUsers"));
+                    json.put("taggedUsers", jsonArray);
+                }
 
                 reviewBookmark.setDetail(json);
             }
