@@ -51,6 +51,7 @@ void NonConflatableCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   _ignoreChildren = config.getNonConflatableCriterionIgnoreRelationMembers();
+  LOG_VARD(_ignoreChildren);
 }
 
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -74,7 +75,8 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
     if (crit->isSatisfied(e))
     {
       // It is something we can conflate.
-      LOG_TRACE("Element: " << e->getElementId() << " is conflatable with: " << itr.key());
+      // TODO: change back to trace
+      LOG_DEBUG("Element: " << e->getElementId() << " is conflatable with: " << itr.key());
       return false;
     }
   }
@@ -95,7 +97,8 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
       ConstElementPtr memberElement = _map->getElement(member.getElementId());
       if (memberElement && isSatisfied(memberElement))
       {
-        LOG_TRACE(
+        // It is something we can conflate.
+        LOG_DEBUG(
           "Element: " << e->getElementId() << " has a child that is conflatable: " <<
           memberElement->getElementId() << ", and member children are not being ignored, " <<
           "therefore it is conflatable.");
@@ -105,7 +108,7 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
   }
 
   // It is not something we can conflate.
-  LOG_TRACE("Element: " << e->getElementId() << " is not conflatable.");
+  LOG_DEBUG("Element: " << e->getElementId() << " is not conflatable.");
   LOG_VART(e);
   return true;
 }
