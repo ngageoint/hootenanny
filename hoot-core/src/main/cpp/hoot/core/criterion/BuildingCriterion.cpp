@@ -78,6 +78,8 @@ bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 
+  LOG_VART(e->getElementId());
+
   // if it is a building
 
   LOG_VART(e->getElementType() == ElementType::Node);

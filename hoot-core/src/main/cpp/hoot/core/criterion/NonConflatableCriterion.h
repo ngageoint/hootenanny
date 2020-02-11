@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QList>
@@ -42,7 +43,8 @@ namespace hoot
  * A filter that will remove elements that aren't conflatable by Hootenanny. These are elements
  * for which we have no matchers defined.
  */
-class NonConflatableCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class NonConflatableCriterion : public ElementCriterion, public ConstOsmMapConsumer,
+  public Configurable
 {
 
 public:
@@ -53,6 +55,8 @@ public:
   NonConflatableCriterion(ConstOsmMapPtr map);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
+
+  virtual void setConfiguration(const Settings& conf);
 
   virtual ElementCriterionPtr clone()
   {
@@ -69,6 +73,8 @@ public:
 private:
 
   ConstOsmMapPtr _map;
+
+  bool _ignoreChildren;
 };
 
 }

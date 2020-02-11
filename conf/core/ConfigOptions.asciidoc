@@ -2551,15 +2551,14 @@ strict.
 An element criterion to be used for filtering ways whose nodes are counted. The elements must be
 ways for their nodes to be counted, otherwise the criterion will be ignored.
 
-=== tags.visitor.keys
+=== non.conflatable.criterion.ignore.relation.members
 
-* Data Type: list
-* Default Value:
-** ``
+* Data Type: bool
+* Default Value: `false`
 
-List of tag keys for which the AverageNumericTagsVisitor, SumNumericTagsVisitor, or
-TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in double quotes when
-passing in from the command line.
+If false, in order for a relation to be deemed not conflatable all of its members must also not be
+conflatable. If true, a relation can be deemed not conflatable even if any of its members are also
+conflatable.
 
 === ogr.add.uuid
 
@@ -4483,6 +4482,16 @@ Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to b
 * Default Value: `-1`
 
 Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to be satisified.
+
+=== tags.visitor.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of tag keys for which the AverageNumericTagsVisitor, SumNumericTagsVisitor, or
+TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in double quotes when
+passing in from the command line.
 
 === task.status.update.interval
 
