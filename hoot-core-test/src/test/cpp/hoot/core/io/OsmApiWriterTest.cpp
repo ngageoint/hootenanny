@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //  hoot
@@ -61,6 +61,7 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runChangesetConflictTest);
   CPPUNIT_TEST(oauthTest);
 #endif
+  CPPUNIT_TEST(runApplyTestTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -383,6 +384,33 @@ public:
 
     writer.apply();
 #endif
+  }
+
+  void runApplyTestTest()
+  {
+    QString toyInputFilename = _inputPath + "ToyTestA.osc";
+    QString toyOutputFilename = _outputPath + "ApplyChangesetTest-Output-1.osc";
+    std::shared_ptr<OsmApiWriter> writer(new OsmApiWriter(toyOutputFilename, toyInputFilename));
+    QStringList files = writer->testApply();
+
+    CPPUNIT_ASSERT_EQUAL(1, files.size());
+    //  Check the changeset error file
+    HOOT_FILE_EQUALS( _inputPath + "ApplyChangesetTest-Expected-1-0001.osc",
+                     files[0]);
+
+    toyOutputFilename = _outputPath + "ApplyChangesetTest-Output-2.osc";
+    writer.reset(new OsmApiWriter(toyOutputFilename, toyInputFilename));
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 20);
+    writer->setConfiguration(s);
+    files = writer->testApply();
+
+    CPPUNIT_ASSERT_EQUAL(2, files.size());
+    //  Check the changeset error file
+    HOOT_FILE_EQUALS( _inputPath + "ApplyChangesetTest-Expected-2-0001.osc",
+                     files[0]);
+    HOOT_FILE_EQUALS( _inputPath + "ApplyChangesetTest-Expected-2-0002.osc",
+                     files[1]);
   }
 
   void checkStats(QList<SingleStat> stats,

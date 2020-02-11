@@ -85,6 +85,11 @@ public:
    */
   void updateChangeset(const QString& changes);
   /**
+   * @brief updateChangeset Update the changeset setting all elements to "uploaded" for the apply test scenario
+   * @param changeset_info - Pointer to the changeset info object
+   */
+  void updateChangeset(const ChangesetInfoPtr& changeset_info);
+  /**
    * @brief fixChangeset Update the underlying element to fix changeset upload errors
    * @param update - OSM XML from OSM API to fix changeset errors
    * @return True if a change was made to fix the changeset

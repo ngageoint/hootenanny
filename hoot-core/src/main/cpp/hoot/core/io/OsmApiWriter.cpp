@@ -55,6 +55,48 @@ const char* OsmApiWriter::API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/clos
 const char* OsmApiWriter::API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload";
 const char* OsmApiWriter::API_PATH_GET_ELEMENT = "/api/0.6/%1/%2";
 
+const char* OsmApiWriter::CONTENT_TYPE_XML = "text/xml; charset=UTF-8";
+
+OsmApiWriter::OsmApiWriter(const QString& output_file, const QList<QString>& changesets)
+  : _changesets(changesets),
+    _description(ConfigOptions().getChangesetDescription()),
+    _source(ConfigOptions().getChangesetSource()),
+    _hashtags(ConfigOptions().getChangesetHashtags()),
+    _maxWriters(1),           //  Not used in test apply
+    _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
+    _throttleWriters(false),  //  Not used in test apply
+    _throttleTime(0),         //  Not used in test apply
+    _showProgress(false),
+    _consumerKey(""),         //  Not used in test apply
+    _consumerSecret(""),      //  Not used in test apply
+    _accessToken(""),         //  Not used in test apply
+    _secretToken(""),         //  Not used in test apply
+    _changesetCount(0),
+    _testApplyPathname(output_file)
+{
+}
+
+OsmApiWriter::OsmApiWriter(const QString& output_file, const QString& changeset)
+  : _description(ConfigOptions().getChangesetDescription()),
+    _source(ConfigOptions().getChangesetSource()),
+    _hashtags(ConfigOptions().getChangesetHashtags()),
+    _maxWriters(1),           //  Not used in test apply
+    _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
+    _throttleWriters(false),  //  Not used in test apply
+    _throttleTime(0),         //  Not used in test apply
+    _showProgress(false),
+    _consumerKey(""),         //  Not used in test apply
+    _consumerSecret(""),      //  Not used in test apply
+    _accessToken(""),         //  Not used in test apply
+    _secretToken(""),         //  Not used in test apply
+    _changesetCount(0),
+    _testApplyPathname(output_file)
+{
+  _changesets.push_back(changeset);
+}
+
 OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
   : _description(ConfigOptions().getChangesetDescription()),
     _source(ConfigOptions().getChangesetSource()),
@@ -69,7 +111,8 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
     _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
-    _changesetCount(0)
+    _changesetCount(0),
+    _testApplyPathname("")
 {
   _changesets.push_back(changeset);
   if (isSupported(url))
@@ -91,7 +134,8 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
     _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
-    _changesetCount(0)
+    _changesetCount(0),
+    _testApplyPathname("")
 {
   if (isSupported(url))
     _url = url;
@@ -234,6 +278,85 @@ bool OsmApiWriter::apply()
   _stats.append(SingleStat("Total Errors", _changeset.getFailedCount()));
   //  Return successfully
   return success;
+}
+
+QStringList OsmApiWriter::testApply()
+{
+  Timer timer;
+  QStringList output_paths;
+  //  Load all of the changesets into memory
+  _changeset.setMaxPushSize(_maxPushSize);
+  for (int i = 0; i < _changesets.size(); ++i)
+  {
+    LOG_INFO("Loading changeset: " << _changesets[i]);
+    _changeset.loadChangeset(_changesets[i]);
+    _stats.append(SingleStat(QString("Changeset (%1) Load Time (sec)").arg(_changesets[i]), timer.getElapsedAndRestart()));
+  }
+  //  Split any ways that need splitting
+  _changeset.splitLongWays(_capabilities.getWayNodes());
+  //  Setup the progress indicators
+  long total = _changeset.getTotalElementCount();
+  float progress = 0.0f;
+  float increment = 0.01f;
+  long id = 1;
+  long changesetSize = 0;
+  int file_id = 1;
+  //  Setup the increment
+  if (total < 10000)
+    increment = 0.1f;
+  else if (total < 100000)
+    increment = 0.05f;
+  QFileInfo file(_testApplyPathname);
+  //  Iterate all changes until there are no more elements to send
+  while (_changeset.hasElementsToSend())
+  {
+    //  Divide up the changes into atomic changesets
+    ChangesetInfoPtr changeset_info(new ChangesetInfo());
+    //  Repeat divide until all changes have been committed
+    _changeset.calculateChangeset(changeset_info);
+    //  Write out the changeset to disk
+    changesetSize += changeset_info->size();
+    //  Write out the changeset file
+    QString output = QString("%1/%2-%3.%4")
+        .arg(file.absolutePath())
+        .arg(file.baseName())
+        .arg(QString::number(file_id), 4, '0')
+        .arg(file.completeSuffix());
+    FileUtils::writeFully(output, _changeset.getChangesetString(changeset_info, id));
+    _changeset.updateChangeset(changeset_info);
+    changesetSize += changeset_info->size();
+    //  Keep the output pathname
+    output_paths.push_back(output);
+    //  When the current changeset is nearing the 50k max (or the specified max), close the changeset
+    //  otherwise keep it open and go again
+    if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
+      id++;
+    //  Show the progress
+    if (_showProgress)
+    {
+      float percent_complete = _changeset.getProcessedCount() / (float)total;
+      //  Actual progress is calculated and once it passes the next increment it is reported
+      if (percent_complete >= progress + increment)
+      {
+        progress = percent_complete - fmod(percent_complete, increment);
+        _progress.set(percent_complete, "Apply changeset test...");
+      }
+    }
+    file_id++;
+  }
+  LOG_INFO("Apply test progress: 100%");
+  //  Keep some stats
+  _stats.append(SingleStat("API Upload Time (sec)", timer.getElapsedAndRestart()));
+  _stats.append(SingleStat("Total OSM Changesets Uploaded", _changesetCount));
+  _stats.append(SingleStat("Total Nodes in Changeset", _changeset.getTotalNodeCount()));
+  _stats.append(SingleStat("Total Ways in Changeset", _changeset.getTotalWayCount()));
+  _stats.append(SingleStat("Total Relations in Changeset", _changeset.getTotalRelationCount()));
+  _stats.append(SingleStat("Total Elements Created", _changeset.getTotalCreateCount()));
+  _stats.append(SingleStat("Total Elements Modified", _changeset.getTotalModifyCount()));
+  _stats.append(SingleStat("Total Elements Deleted", _changeset.getTotalDeleteCount()));
+  _stats.append(SingleStat("Total Errors", _changeset.getFailedCount()));
+  //  Return the output paths
+  return output_paths;
 }
 
 void OsmApiWriter::_changesetThreadFunc(int index)
@@ -602,7 +725,12 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
       "  </changeset>"
       "</osm>").arg(HOOT_NAME).arg(description).arg(source).arg(hashtags);
 
-    request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, xml.toUtf8());
+    QByteArray content = xml.toUtf8();
+    QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
+    headers[QNetworkRequest::ContentTypeHeader] = CONTENT_TYPE_XML;
+    headers[QNetworkRequest::ContentLengthHeader] = content.length();
+
+    request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, content);
 
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
 
@@ -682,10 +810,12 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
     QUrl change = _url;
     change.setPath(QString(API_PATH_UPLOAD_CHANGESET).arg(id));
 
+    QByteArray content = changeset.toUtf8();
     QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
-    headers[QNetworkRequest::ContentTypeHeader] = "text/xml";
+    headers[QNetworkRequest::ContentTypeHeader] = CONTENT_TYPE_XML;
+    headers[QNetworkRequest::ContentLengthHeader] = content.length();
 
-    request->networkRequest(change, headers, QNetworkAccessManager::Operation::PostOperation, changeset.toUtf8());
+    request->networkRequest(change, headers, QNetworkAccessManager::Operation::PostOperation, content);
 
     info->response = QString::fromUtf8(request->getResponseContent().data());
     info->status = request->getHttpStatus();
