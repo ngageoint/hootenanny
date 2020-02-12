@@ -75,8 +75,9 @@ public:
     matchCreators.append(QString::fromStdString(BuildingMatchCreator::className()));
     MatchFactory::getInstance().reset();
     MatchFactory::_setMatchCreators(matchCreators);
-    // This is a snapshot of the ops to avoid changes to them requiring this test to change over
-    // time.
+    // This is a snapshot of the ops in order to avoid any changes made to them result in requiring
+    // this test's results to change over time. Clearly, any newly added ops could be being filtered
+    // incorrectly, and we can update this list periodically if that's deemed important.
     conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
     conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
     conf().set(

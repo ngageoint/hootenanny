@@ -69,8 +69,7 @@ public:
     matchCreators.append(scriptMatchCreatorName + ",Area.js");
     MatchFactory::getInstance().reset();
     MatchFactory::_setMatchCreators(matchCreators);
-    // This is a snapshot of the ops to avoid changes to them requiring this test to change over
-    // time.
+    // see related note in ConflateCmdOpFilteringTest::runOpFilterTest
     conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
     conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
     conf().set(

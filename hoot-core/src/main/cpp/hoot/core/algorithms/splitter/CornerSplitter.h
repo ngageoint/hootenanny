@@ -50,6 +50,8 @@ class Way;
  * Given an OsmMap, ways are split at sharp (or rounded, if desired) corners. This can help
  * when conflating data that is mostly major roads with data that contains a lot of
  * neighborhood-level data.
+ *
+ * TODO: rename to HighwayCornerSplitter
  */
 class CornerSplitter : public OsmMapOperation, Configurable, public OperationStatusInfo
 {

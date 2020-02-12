@@ -51,6 +51,8 @@ class Way;
  * the tunnel. If two roads implicitly should be marked as divided based on the surrounding roads,
  * mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to
  * be marked as divided.
+ *
+ * TODO: rename to HighwayImpliedDividedMarker
  */
 class ImpliedDividedMarker : public OsmMapOperation, public OperationStatusInfo
 {

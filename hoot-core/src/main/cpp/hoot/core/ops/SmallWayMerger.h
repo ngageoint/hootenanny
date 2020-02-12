@@ -59,6 +59,8 @@ class NodeToWayMap;
  * Assumptions:
  *  - All intersections have been split. (IntersectionSplitter)
  *  - All duplicate ways have been removed. (DuplicateWayRemover)
+ *
+ * TODO: rename to SmallHighwayMerger
  */
 class SmallWayMerger : public OsmMapOperation, public OperationStatusInfo
 {
@@ -97,7 +99,6 @@ protected:
   std::shared_ptr<TagDifferencer> _diff;
 
   void _mergeNeighbors(const std::shared_ptr<Way>& w);
-
   void _mergeWays(const std::set<long>& ids);
 };
 
