@@ -65,7 +65,7 @@ _delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
 {
 }
 
-QStringList NodeMatcher::getNetworkClassNames()
+QStringList NodeMatcher::getNetworkCriterionClassNames()
 {
   // TODO: Should LinearCriterion be added here?
   QStringList critClasses;
@@ -80,7 +80,7 @@ bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
 {
   if (_networkFeatureTypeCriteria.isEmpty())
   {
-    const QStringList critClasses = getNetworkClassNames();
+    const QStringList critClasses = getNetworkCriterionClassNames();
     for (int i = 0; i < critClasses.size(); i++)
     {
       _networkFeatureTypeCriteria.append(

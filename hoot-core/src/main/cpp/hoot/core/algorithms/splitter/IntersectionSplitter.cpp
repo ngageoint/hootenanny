@@ -275,7 +275,7 @@ void IntersectionSplitter::apply(std::shared_ptr<OsmMap> &map)
 
 QStringList IntersectionSplitter::getCriteria() const
 {
-  return NodeMatcher::getNetworkClassNames();
+  return NodeMatcher::getNetworkCriterionClassNames();
 }
 
 }

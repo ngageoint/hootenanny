@@ -33,14 +33,19 @@
 namespace hoot
 {
 
+/**
+ * This interface allows for identifying feature types associated with a hoot operator. This is
+ * currently used by ConflateCmd to weed out unnecessary conflate ops specified in the
+ * configuration.
+ */
 class FilteredByCriteria
 {
 public:
 
   /**
-   * TODO
+   * Returns all associated ElementCriterion class names
    *
-   * @return
+   * @return a list of class names
    */
   virtual QStringList getCriteria() const = 0;
 };

@@ -22,6 +22,8 @@ Hootenanny conflation occurs at the dataset level, where the user’s workflow d
 * Create up-to-date routable transportation networks from multiple sources
 
 # Conflatable Feature Types
+
+Hootenanny has conflation algorithms available for the following data types:
 * Areas
 * Buildings
 * Points of Interest (POIs)
@@ -30,8 +32,8 @@ Hootenanny conflation occurs at the dataset level, where the user’s workflow d
 * Rivers
 * Roads
 
-Additional feature types may have custom conflation routines created for them via Javascript by using Hootenanny's 
-[Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc). Any feature that does not fit into the list above will be conflated with [Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/GenericGeometryConflation.asciidoc).
+Any feature that does not fit into the list above will be conflated with [Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/GenericGeometryConflation.asciidoc), which uses a simpler approach than the specific conflation algorithms. Additional 
+feature types may have custom conflation routines created for them [Javascript ](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc). 
 
 # [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) Workflows
 * **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** (default) - _Keep the best of both_ - Conflate the best geometry and tag parts of map B into map A, favoring map A's data. Use this type of conflation when you want conflated output based on the best state of both input datasets.

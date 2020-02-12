@@ -190,23 +190,23 @@ public:
   static bool mkpath(const QString& path);
 
   /**
-   * TODO
+   * This is a snapshot of the option, conflate.pre.ops (circa 2/12/20), for testing purposes.
    *
-   * @return
+   * @return a list of operator class names
    */
   static QStringList getConflateCmdSnapshotPreOps();
 
   /**
-   * TODO
+   * This is a snapshot of the option, conflate.post.ops (circa 2/12/20), for testing purposes.
    *
-   * @return
+   * @return a list of operator class names
    */
   static QStringList getConflateCmdSnapshotPostOps();
 
   /**
-   * TODO
+   * This is a snapshot of the option, map.cleaner.transforms (circa 2/12/20), for testing purposes.
    *
-   * @return
+   * @return a list of operator class names
    */
   static QStringList getConflateCmdSnapshotCleaningOps();
 

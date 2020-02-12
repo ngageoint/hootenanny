@@ -702,9 +702,16 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 === conflate.remove.superfluous.ops
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
-TODO: comment and change to true (?)
+Enabling this option allows Hootenanny to remove any operators defined in `conflate.pre.ops`,
+`conflate.post.ops`, or `map.cleaner.transforms` before running conflation that are not associated
+with the feature types being conflated as specified in the `match.creators` option. Doing so can
+increase runtime performance for some inputs. e.g. If you're only conflating buildings, then any
+operators used strictly for road data cleaning will be automatically disabled. This is primarily
+used for debugging purposes and should normally be left enabled. See the `FilteredByCriteria`
+interface for information about determining which feature types are associated with conflate
+operators.
 
 === conflate.review.threshold.default
 

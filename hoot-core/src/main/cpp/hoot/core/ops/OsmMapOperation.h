@@ -80,6 +80,11 @@ public:
 
   /**
    * @see FilteredByCriteria
+   *
+   * An empty list returned here means that the operation is associated no specific criteria and
+   * can be run against any feature type. Any operations that want to control which feature types
+   * they are run against during conflation should populate this list. The list is treated in a
+   * logical OR fashion.
    */
   virtual QStringList getCriteria() const { return QStringList(); }
 

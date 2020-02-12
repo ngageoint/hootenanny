@@ -93,13 +93,13 @@ public:
   static bool isNetworkFeatureType(ConstElementPtr element);
 
   /**
-   * TODO
+   * Returns the class names of all criterion associated with a network based feature type
    *
-   * Is there a better location for this?
+   * Is there a better class location for this?
    *
-   * @return
+   * @return a list of criterion class names
    */
-  static QStringList getNetworkClassNames();
+  static QStringList getNetworkCriterionClassNames();
 
 private:
 
