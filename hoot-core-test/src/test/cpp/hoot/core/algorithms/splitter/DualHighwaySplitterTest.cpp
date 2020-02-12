@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/splitter/DualWaySplitter.h>
+#include <hoot/core/algorithms/splitter/DualHighwaySplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MapProjector.h>
@@ -46,16 +46,16 @@ using namespace Tgs;
 namespace hoot
 {
 
-class DualWaySplitterTest : public HootTestFixture
+class DualHighwaySplitterTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(DualWaySplitterTest);
+    CPPUNIT_TEST_SUITE(DualHighwaySplitterTest);
     CPPUNIT_TEST(simpleTest);
     CPPUNIT_TEST(allTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  DualWaySplitterTest()
+  DualHighwaySplitterTest()
     : HootTestFixture("test-files/algorithms/splitter/",
                       "test-output/algorithms/splitter/")
   {
@@ -72,15 +72,15 @@ public:
 
     MapProjector::projectToOrthographic(map);
 
-    OsmMapPtr after = DualWaySplitter::splitAll(map, DualWaySplitter::Right, 10.0);
+    OsmMapPtr after = DualHighwaySplitter::splitAll(map, DualHighwaySplitter::Right, 10.0);
 
     MapProjector::projectToWgs84(after);
 
     OsmXmlWriter writer;
-    writer.write(after, _outputPath + "DualWaySplitterSimpleOutput.osm");
+    writer.write(after, _outputPath + "DualHighwaySplitterSimpleOutput.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "DualWaySplitterSimpleExpected.osm",
-                     _outputPath + "DualWaySplitterSimpleOutput.osm");
+    HOOT_FILE_EQUALS( _inputPath + "DualHighwaySplitterSimpleExpected.osm",
+                     _outputPath + "DualHighwaySplitterSimpleOutput.osm");
   }
 
   void allTest()
@@ -93,18 +93,18 @@ public:
 
     MapProjector::projectToOrthographic(map);
 
-    OsmMapPtr after = DualWaySplitter::splitAll(map, DualWaySplitter::Right, 10.0);
+    OsmMapPtr after = DualHighwaySplitter::splitAll(map, DualHighwaySplitter::Right, 10.0);
 
     MapProjector::projectToWgs84(after);
 
     OsmXmlWriter writer;
-    writer.write(after, _outputPath + "DualWaySplitterTest.osm");
+    writer.write(after, _outputPath + "DualHighwaySplitterTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "DualWaySplitterTestExpected.osm",
-                     _outputPath + "DualWaySplitterTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "DualHighwaySplitterTestExpected.osm",
+                     _outputPath + "DualHighwaySplitterTest.osm");
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DualWaySplitterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DualHighwaySplitterTest, "quick");
 
 }

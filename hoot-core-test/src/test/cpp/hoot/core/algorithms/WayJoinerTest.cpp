@@ -29,7 +29,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/WayJoinerAdvanced.h>
 #include <hoot/core/algorithms/WayJoinerBasic.h>
-#include <hoot/core/algorithms/splitter/CornerSplitter.h>
+#include <hoot/core/algorithms/splitter/HighwayCornerSplitter.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/io/OsmXmlReader.h>
@@ -85,7 +85,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "WayJoinerCornerSplitterInput.osm", map);
 
-    CornerSplitter::splitCorners(map);
+    HighwayCornerSplitter::splitCorners(map);
 
     WayJoinerBasic::joinWays(map);
 

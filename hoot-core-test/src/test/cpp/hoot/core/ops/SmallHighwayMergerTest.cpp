@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/ops/SmallWayMerger.h>
+#include <hoot/core/ops/SmallHighwayMerger.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
@@ -43,17 +43,17 @@
 namespace hoot
 {
 
-class SmallWayMergerTest : public HootTestFixture
+class SmallHighWayMergerTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(SmallWayMergerTest);
+  CPPUNIT_TEST_SUITE(SmallHighWayMergerTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   SmallWayMergerTest()
-    : HootTestFixture("test-files/ops/SmallWayMerger/",
-                      "test-output/ops/SmallWayMerger/")
+    : HootTestFixture("test-files/ops/SmallHighwayMerger/",
+                      "test-output/ops/SmallHighwayMerger/")
   {
     setResetType(ResetBasic);
   }
@@ -64,20 +64,20 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "SmallWayMergerInput1.osm", map);
+    reader.read(_inputPath + "SmallHighwayMergerInput1.osm", map);
 
     MapProjector::projectToPlanar(map);
-    SmallWayMerger::mergeWays(map, 15.0);
+    SmallHighwayMerger::mergeWays(map, 15.0);
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
-    writer.write(map, _outputPath + "SmallWayMergerOutput1.osm");
-    HOOT_FILE_EQUALS( _inputPath + "SmallWayMergerOutput1.osm",
-                     _outputPath + "SmallWayMergerOutput1.osm");
+    writer.write(map, _outputPath + "SmallHighwayMergerOutput1.osm");
+    HOOT_FILE_EQUALS( _inputPath + "SmallHighwayMergerOutput1.osm",
+                     _outputPath + "SmallHighwayMergerOutput1.osm");
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SmallWayMergerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SmallHighWayMergerTest, "quick");
 
 }

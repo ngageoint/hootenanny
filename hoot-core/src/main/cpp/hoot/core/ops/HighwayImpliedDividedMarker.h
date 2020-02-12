@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef IMPLIEDDIVIDEDMARKER_H
-#define IMPLIEDDIVIDEDMARKER_H
+#ifndef HIGHWAYIMPLIEDDIVIDEDMARKER_H
+#define HIGHWAYIMPLIEDDIVIDEDMARKER_H
 
 // Hoot
 #include <hoot/core/util/Units.h>
@@ -51,18 +51,15 @@ class Way;
  * the tunnel. If two roads implicitly should be marked as divided based on the surrounding roads,
  * mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to
  * be marked as divided.
- *
- * TODO: rename to HighwayImpliedDividedMarker
  */
-class ImpliedDividedMarker : public OsmMapOperation, public OperationStatusInfo
+class HighwayImpliedDividedMarker : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::ImpliedDividedMarker"; }
+  static std::string className() { return "hoot::HighwayImpliedDividedMarker"; }
 
-  ImpliedDividedMarker();
-
-  ImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map);
+  HighwayImpliedDividedMarker();
+  HighwayImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map);
 
   void apply(std::shared_ptr<OsmMap>& map);
 
@@ -107,4 +104,4 @@ private:
 
 }
 
-#endif // IMPLIEDDIVIDEDMARKER_H
+#endif // HIGHWAYIMPLIEDDIVIDEDMARKER_H

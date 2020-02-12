@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef DUALWAYSPLITTER_H
-#define DUALWAYSPLITTER_H
+#ifndef DUALHIGHWAYSPLITTER_H
+#define DUALHIGHWAYSPLITTER_H
 
 // GEOS
 #include <geos/geom/Coordinate.h>
@@ -50,14 +50,12 @@ class Way;
  * before this method is called. Failure to do so will result in undefined behavior. A number of
  * assumptions must be made to do this including assumptions about the direction of travel on
  * roads (right or left hand drivers).
- *
- * TODO: rename to DualHighwaySplitter
  */
-class DualWaySplitter : public OsmMapOperation, public OperationStatusInfo
+class DualHighwaySplitter : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::DualWaySplitter"; }
+  static std::string className() { return "hoot::DualHighwaySplitter"; }
 
   static int logWarnCount;
 
@@ -67,9 +65,9 @@ public:
     Right
   } DrivingSide;
 
-  DualWaySplitter();
-  DualWaySplitter(const std::shared_ptr<const OsmMap>& map, DrivingSide drivingSide,
-                  Meters splitSize);
+  DualHighwaySplitter();
+  DualHighwaySplitter(const std::shared_ptr<const OsmMap>& map, DrivingSide drivingSide,
+                      Meters splitSize);
 
   std::shared_ptr<OsmMap> splitAll();
 
@@ -131,4 +129,4 @@ private:
 
 }
 
-#endif // DUALWAYSPLITTER_H
+#endif // DUALHIGHWAYSPLITTER_H

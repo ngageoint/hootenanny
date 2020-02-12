@@ -88,7 +88,7 @@
                 "elem_type":"checkbox",
                 "description":"Split highway types that are marked as divided into two separate geometries marked as oneway roads. A number of assumptions must be made to do this including assumptions about the direction of travel on roads (right or left hand drivers).",
                 "name":"Split Dual Ways",
-                "hoot_val":"hoot::DualWaySplitter",
+                "hoot_val":"hoot::DualHighwaySplitter",
                 "defaultvalue":"true"
             },
             {
@@ -114,9 +114,9 @@
                 "override":{
                     "elem_type":"checkplus"
                 },
-                "description":"Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.way.merger.threshold` for setting the threshold value.",
+                "description":"Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.highway.merger.threshold` for setting the threshold value.",
                 "name":"Merge Small Ways",
-                "hoot_val":"hoot::SmallWayMerger",
+                "hoot_val":"hoot::SmallHighwayMerger",
                 "onchange":"true",
                 "defaultvalue":"true",
                 "members":[
@@ -126,9 +126,9 @@
                         "elem_type":"double",
                         "description":"If highways are smaller than threshold and the tags matched then they will be merged together into a single way.",
                         "maxvalue":"",
-                        "name":"Small Way Merger Threshold",
+                        "name":"Small Highway Merger Threshold",
                         "defaultvalue":"15",
-                        "hoot_key":"small.way.merger.threshold"
+                        "hoot_key":"small.highway.merger.threshold"
                     }
                 ]
             },
@@ -185,7 +185,7 @@
                 "elem_type":"checkbox",
                 "description":"Split roads at sharp corners.",
                 "name":"Split Sharp Road Corners",
-                "hoot_val":"hoot::CornerSplitter",
+                "hoot_val":"hoot::HighwayCornerSplitter",
                 "defaultvalue":"true"
             },
             {

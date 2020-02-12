@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "SmallWayMerger.h"
+#include "SmallHighwayMerger.h"
 
 // GEOS
 #include <geos/geom/LineString.h>
@@ -55,9 +55,9 @@ using namespace Tgs;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, SmallWayMerger)
+HOOT_FACTORY_REGISTER(OsmMapOperation, SmallHighwayMerger)
 
-SmallWayMerger::SmallWayMerger(Meters threshold)
+SmallHighwayMerger::SmallHighwayMerger(Meters threshold)
 {
   ConfigOptions opts = ConfigOptions();
   if (threshold >= 0)
@@ -66,12 +66,13 @@ SmallWayMerger::SmallWayMerger(Meters threshold)
   }
   else
   {
-    _threshold = opts.getSmallWayMergerThreshold();
+    _threshold = opts.getSmallHighwayMergerThreshold();
   }
-  _diff.reset(Factory::getInstance().constructObject<TagDifferencer>(opts.getSmallWayMergerDiff()));
+  _diff.reset(
+    Factory::getInstance().constructObject<TagDifferencer>(opts.getSmallHighwayMergerDiff()));
 }
 
-void SmallWayMerger::apply(std::shared_ptr<OsmMap>& map)
+void SmallHighwayMerger::apply(std::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
@@ -101,7 +102,7 @@ void SmallWayMerger::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-void SmallWayMerger::_mergeNeighbors(const std::shared_ptr<Way>& w)
+void SmallHighwayMerger::_mergeNeighbors(const std::shared_ptr<Way>& w)
 {
   NodeToWayMap& n2w = *_n2w;
 
@@ -121,7 +122,7 @@ void SmallWayMerger::_mergeNeighbors(const std::shared_ptr<Way>& w)
   }
 }
 
-void SmallWayMerger::_mergeWays(const set<long>& ids)
+void SmallHighwayMerger::_mergeWays(const set<long>& ids)
 {
   assert(ids.size() == 2);
 
@@ -232,9 +233,9 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
   }
 }
 
-void SmallWayMerger::mergeWays(std::shared_ptr<OsmMap> map, Meters threshold)
+void SmallHighwayMerger::mergeWays(std::shared_ptr<OsmMap> map, Meters threshold)
 {
-  SmallWayMerger a(threshold);
+  SmallHighwayMerger a(threshold);
   a.apply(map);
 }
 

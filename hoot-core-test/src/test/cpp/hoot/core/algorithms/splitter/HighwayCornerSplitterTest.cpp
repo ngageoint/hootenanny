@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/splitter/CornerSplitter.h>
+#include <hoot/core/algorithms/splitter/HighwayCornerSplitter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -43,9 +43,9 @@
 namespace hoot
 {
 
-class CornerSplitterTest : public HootTestFixture
+class HighwayCornerSplitterTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(CornerSplitterTest);
+  CPPUNIT_TEST_SUITE(HighwayCornerSplitterTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(runRoundedTest);
   CPPUNIT_TEST(runDogLegTest);
@@ -53,7 +53,7 @@ class CornerSplitterTest : public HootTestFixture
 
 public:
 
-  CornerSplitterTest()
+  HighwayCornerSplitterTest()
     : HootTestFixture("test-files/algorithms/splitter/",
                       "test-output/algorithms/splitter/")
   {
@@ -70,16 +70,16 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    CornerSplitter::splitCorners(map);
+    HighwayCornerSplitter::splitCorners(map);
 
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, _outputPath + "CornerSplitterOut.osm");
+    writer.write(map, _outputPath + "HighwayCornerSplitterOut.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CornerSplitterExpected.osm",
-                     _outputPath + "CornerSplitterOut.osm");
+    HOOT_FILE_EQUALS( _inputPath + "HighwayCornerSplitterExpected.osm",
+                     _outputPath + "HighwayCornerSplitterOut.osm");
   }
 
   void runRoundedTest()
@@ -94,11 +94,11 @@ public:
 
     Settings s;
     //  Turn on the rounded corner splitting
-    s.set(ConfigOptions::getCornerSplitterRoundedSplitKey(), true);
-    s.set(ConfigOptions::getCornerSplitterRoundedMaxNodeCountKey(), 10);
-    s.set(ConfigOptions::getCornerSplitterRoundedThresholdKey(), 75.0);
+    s.set(ConfigOptions::getHighwayCornerSplitterRoundedSplitKey(), true);
+    s.set(ConfigOptions::getHighwayCornerSplitterRoundedMaxNodeCountKey(), 10);
+    s.set(ConfigOptions::getHighwayCornerSplitterRoundedThresholdKey(), 75.0);
 
-    CornerSplitter splitter(map);
+    HighwayCornerSplitter splitter(map);
     splitter.setConfiguration(s);
     splitter.splitCorners();
 
@@ -106,10 +106,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, _outputPath + "CornerSplitterRoundedOut.osm");
+    writer.write(map, _outputPath + "HighwayCornerSplitterRoundedOut.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CornerSplitterRoundedExpected.osm",
-                     _outputPath + "CornerSplitterRoundedOut.osm");
+    HOOT_FILE_EQUALS( _inputPath + "HighwayCornerSplitterRoundedExpected.osm",
+                     _outputPath + "HighwayCornerSplitterRoundedOut.osm");
   }
 
   void runDogLegTest()
@@ -118,24 +118,24 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "CornerSplitterDogLeg.osm", map);
+    reader.read(_inputPath + "HighwayCornerSplitterDogLeg.osm", map);
 
     MapProjector::projectToPlanar(map);
 
-    CornerSplitter::splitCorners(map);
+    HighwayCornerSplitter::splitCorners(map);
 
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, _outputPath + "CornerSplitterDogLegOut.osm");
+    writer.write(map, _outputPath + "HighwayCornerSplitterDogLegOut.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CornerSplitterDogLegExpected.osm",
-                     _outputPath + "CornerSplitterDogLegOut.osm");
+    HOOT_FILE_EQUALS( _inputPath + "HighwayCornerSplitterDogLegExpected.osm",
+                     _outputPath + "HighwayCornerSplitterDogLegOut.osm");
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CornerSplitterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HighwayCornerSplitterTest, "quick");
 
 }

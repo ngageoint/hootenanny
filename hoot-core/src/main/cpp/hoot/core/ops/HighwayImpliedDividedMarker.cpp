@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "ImpliedDividedMarker.h"
+#include "HighwayImpliedDividedMarker.h"
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -49,18 +49,18 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, ImpliedDividedMarker)
+HOOT_FACTORY_REGISTER(OsmMapOperation, HighwayImpliedDividedMarker)
 
-ImpliedDividedMarker::ImpliedDividedMarker()
+HighwayImpliedDividedMarker::HighwayImpliedDividedMarker()
 {
 }
 
-ImpliedDividedMarker::ImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map) :
+HighwayImpliedDividedMarker::HighwayImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map) :
 _inputMap(map)
 {
 }
 
-bool ImpliedDividedMarker::_dividerSandwich(const std::shared_ptr<Way>& w)
+bool HighwayImpliedDividedMarker::_dividerSandwich(const std::shared_ptr<Way>& w)
 {
   long firstNodeId = w->getNodeId(0);
   long lastNodeId = w->getLastNodeId();
@@ -76,7 +76,7 @@ bool ImpliedDividedMarker::_dividerSandwich(const std::shared_ptr<Way>& w)
   }
 }
 
-bool ImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId)
+bool HighwayImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId)
 {
   const set<long>& wayIds = (*_n2w)[nodeId];
 
@@ -95,13 +95,14 @@ bool ImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId)
   return false;
 }
 
-std::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided(const std::shared_ptr<const OsmMap>& map)
+std::shared_ptr<OsmMap> HighwayImpliedDividedMarker::markDivided(
+  const std::shared_ptr<const OsmMap>& map)
 {
-  ImpliedDividedMarker t(map);
+  HighwayImpliedDividedMarker t(map);
   return t.markDivided();
 }
 
-std::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
+std::shared_ptr<OsmMap> HighwayImpliedDividedMarker::markDivided()
 {
   _numAffected = 0;
   std::shared_ptr<OsmMap> result(new OsmMap(_inputMap));
@@ -133,7 +134,7 @@ std::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
   return result;
 }
 
-void ImpliedDividedMarker::apply(std::shared_ptr<OsmMap>& map)
+void HighwayImpliedDividedMarker::apply(std::shared_ptr<OsmMap>& map)
 {
   map = markDivided(map);
 }

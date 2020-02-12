@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef CORNERSPLITTER_H
-#define CORNERSPLITTER_H
+#ifndef HIGHWAYCORNERSPLITTER_H
+#define HIGHWAYCORNERSPLITTER_H
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
@@ -50,18 +50,15 @@ class Way;
  * Given an OsmMap, ways are split at sharp (or rounded, if desired) corners. This can help
  * when conflating data that is mostly major roads with data that contains a lot of
  * neighborhood-level data.
- *
- * TODO: rename to HighwayCornerSplitter
  */
-class CornerSplitter : public OsmMapOperation, Configurable, public OperationStatusInfo
+class HighwayCornerSplitter : public OsmMapOperation, Configurable, public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::CornerSplitter"; }
+  static std::string className() { return "hoot::HighwayCornerSplitter"; }
 
-  CornerSplitter();
-
-  CornerSplitter(const std::shared_ptr<OsmMap>& map);
+  HighwayCornerSplitter();
+  HighwayCornerSplitter(const std::shared_ptr<OsmMap>& map);
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -117,4 +114,4 @@ private:
 
 }
 
-#endif // CORNERSPLITTER_H
+#endif // HIGHWAYCORNERSPLITTER_H

@@ -327,7 +327,7 @@ QStringList TestUtils::getConflateCmdSnapshotPreOps()
   conflatePreOps.append("hoot::BuildingOutlineRemoveOp");
   conflatePreOps.append("hoot::RemoveRoundabouts");
   conflatePreOps.append("hoot::MapCleaner");
-  conflatePreOps.append("hoot::CornerSplitter");
+  conflatePreOps.append("hoot::HighwayCornerSplitter");
   return conflatePreOps;
 }
 
@@ -335,7 +335,7 @@ QStringList TestUtils::getConflateCmdSnapshotPostOps()
 {
   QStringList conflatePostOps;
   conflatePostOps.append("hoot::SuperfluousNodeRemover");
-  conflatePostOps.append("hoot::SmallWayMerger");
+  conflatePostOps.append("hoot::SmallHighwayMerger");
   conflatePostOps.append("hoot::ReplaceRoundabouts");
   conflatePostOps.append("hoot::RemoveMissingElementsVisitor");
   conflatePostOps.append("hoot::RemoveInvalidReviewRelationsVisitor");
@@ -362,10 +362,10 @@ QStringList TestUtils::getConflateCmdSnapshotCleaningOps()
   mapCleanerTransforms.append("hoot::SuperfluousWayRemover");
   mapCleanerTransforms.append("hoot::IntersectionSplitter");
   mapCleanerTransforms.append("hoot::UnlikelyIntersectionRemover");
-  mapCleanerTransforms.append("hoot::DualWaySplitter");
-  mapCleanerTransforms.append("hoot::ImpliedDividedMarker");
+  mapCleanerTransforms.append("hoot::DualHighwaySplitter");
+  mapCleanerTransforms.append("hoot::HighwayImpliedDividedMarker");
   mapCleanerTransforms.append("hoot::DuplicateNameRemover");
-  mapCleanerTransforms.append("hoot::SmallWayMerger");
+  mapCleanerTransforms.append("hoot::SmallHighwayMerger");
   mapCleanerTransforms.append("hoot::RemoveEmptyAreasVisitor");
   mapCleanerTransforms.append("hoot::RemoveDuplicateRelationMembersVisitor");
   mapCleanerTransforms.append("hoot::RelationCircularRefRemover");

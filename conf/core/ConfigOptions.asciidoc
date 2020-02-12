@@ -667,7 +667,7 @@ See also:
 * Data Type: list
 * Default Value:
 ** `hoot::SuperfluousNodeRemover`
-** `hoot::SmallWayMerger`
+** `hoot::SmallHighwayMerger`
 ** `hoot::ReplaceRoundabouts`
 ** `hoot::RemoveMissingElementsVisitor`
 ** `hoot::RemoveInvalidReviewRelationsVisitor`
@@ -692,7 +692,7 @@ List of operations to run in the conflate command after data is conflated, but b
 ** `hoot::BuildingOutlineRemoveOp`
 ** `hoot::RemoveRoundabouts`
 ** `hoot::MapCleaner`
-** `hoot::CornerSplitter`
+** `hoot::HighwayCornerSplitter`
 
 Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
 about the available operations.
@@ -900,37 +900,6 @@ The buffer to add to the alpha shape before cutting by the cookie cutter map ope
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (see CookieCutterOp).
 
-=== corner.splitter.rounded.max.node.count
-
-* Data Type: int
-* Default Value: `6`
-
-Maximum number of nodes in a row to consider for a bend in a way to determine if the way
-is a rounded corner that should be split.  The higher the number, the more heading calculations
-are required.  The lower the number, the less accurate it will be.
-
-=== corner.splitter.rounded.split
-
-* Data Type: bool
-* Default Value: `false`
-
-Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not
-conflate.
-
-=== corner.splitter.rounded.threshold
-
-* Data Type: double
-* Default Value: `55.0`
-
-Threshold in degrees between the heading of rounded bends in way that constitutes a corner.
-
-=== corner.splitter.threshold
-
-* Data Type: double
-* Default Value: `55.0`
-
-Threshold in degrees between the heading of two way segments that constitutes a corner.
-
 === create.bogus.review.tags
 
 * Data Type: bool
@@ -1068,7 +1037,7 @@ searching for nodes.
 Distance in meters that the DistanceNodeCriterion should search for nodes out from a center
 specified by 'distance.node.criterion.center'.
 
-=== dual.way.splitter.driving.side
+=== dual.highway.splitter.driving.side
 
 * Data Type: string
 * Default Value: `right`
@@ -1077,13 +1046,13 @@ When splitting divided highways, do we assume the drivers are on the right or le
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
-=== dual.way.splitter.split.size
+=== dual.highway.splitter.split.size
 
 * Data Type: double
 * Default Value: `12.5`
 
 By default how much space should be put between two divided roads when they're divided by the
-DividedHighwaySplitter. Units are in meters.
+DualHighwaySplitter. Units are in meters.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
@@ -1302,6 +1271,37 @@ The maximum number of graph comparator threads that can be launched by the Compa
 
 Sets the Qt hash seed to 0 for consistent hash values and hash based container content order. This
 is required for unit tests, but shouldn't be used in normal operation.
+
+=== highway.corner.splitter.rounded.max.node.count
+
+* Data Type: int
+* Default Value: `6`
+
+Maximum number of nodes in a row to consider for a bend in a way to determine if the way
+is a rounded corner that should be split.  The higher the number, the more heading calculations
+are required.  The lower the number, the less accurate it will be.
+
+=== highway.corner.splitter.rounded.split
+
+* Data Type: bool
+* Default Value: `false`
+
+Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not
+conflate.
+
+=== highway.corner.splitter.rounded.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of rounded bends in way that constitutes a corner.
+
+=== highway.corner.splitter.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of two way segments that constitutes a corner.
 
 === highway.match.threshold
 
@@ -2152,10 +2152,10 @@ option. A setting of -1 is useful for tests where you do not have granular enoug
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::IntersectionSplitter`
 ** `hoot::UnlikelyIntersectionRemover`
-** `hoot::DualWaySplitter`
-** `hoot::ImpliedDividedMarker`
+** `hoot::DualHighwaySplitter`
+** `hoot::HighwayImpliedDividedMarker`
 ** `hoot::DuplicateNameRemover`
-** `hoot::SmallWayMerger`
+** `hoot::SmallHighwayMerger`
 ** `hoot::RemoveEmptyAreasVisitor`
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RelationCircularRefRemover`
@@ -4163,7 +4163,7 @@ shape file and cannot be used in combination with a translation.  If this option
 then the list of columns will be automatically determined based on the most frequently populated
 tags.
 
-=== small.way.merger.diff
+=== small.highway.merger.diff
 
 * Data Type: string
 * Default Value: `hoot::ExactTagDifferencer`
@@ -4171,7 +4171,7 @@ tags.
 Use this class for calculating the difference between element tags. If the difference is exactly 0
 then they'll be a candidate for merging.
 
-=== small.way.merger.threshold
+=== small.highway.merger.threshold
 
 * Data Type: double
 * Default Value: `15`
@@ -4610,7 +4610,7 @@ Path to the translation script when using the tag differencer, `hoot::Translated
 This tag differencer is most useful when deciding how difference between two sets of tags should be
 calculated. It can be used with:
 
-* `small.way.merger.diff`
+* `small.highway.merger.diff`
 * `remove.duplicate.areas.diff`
 
 === transliteration.max.cache.size

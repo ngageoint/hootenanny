@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "CornerSplitter.h"
+#include "HighwayCornerSplitter.h"
 
 // Hoot
 #include <hoot/core/algorithms/Distance.h>
@@ -52,9 +52,9 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, CornerSplitter)
+HOOT_FACTORY_REGISTER(OsmMapOperation, HighwayCornerSplitter)
 
-CornerSplitter::CornerSplitter()
+HighwayCornerSplitter::HighwayCornerSplitter()
   : _cornerThreshold(ConfigOptions().getCornerSplitterThresholdDefaultValue()),
     _splitRounded(ConfigOptions().getCornerSplitterRoundedSplitDefaultValue()),
     _roundedThreshold(ConfigOptions().getCornerSplitterRoundedThresholdDefaultValue()),
@@ -62,7 +62,7 @@ CornerSplitter::CornerSplitter()
 {
 }
 
-CornerSplitter::CornerSplitter(const std::shared_ptr<OsmMap>& map)
+HighwayCornerSplitter::HighwayCornerSplitter(const std::shared_ptr<OsmMap>& map)
   : _map(map),
     _cornerThreshold(ConfigOptions().getCornerSplitterThresholdDefaultValue()),
     _splitRounded(ConfigOptions().getCornerSplitterRoundedSplitDefaultValue()),
@@ -71,13 +71,13 @@ CornerSplitter::CornerSplitter(const std::shared_ptr<OsmMap>& map)
 {
 }
 
-void CornerSplitter::splitCorners(const std::shared_ptr<OsmMap>& map)
+void HighwayCornerSplitter::splitCorners(const std::shared_ptr<OsmMap>& map)
 {
-  CornerSplitter splitter(map);
+  HighwayCornerSplitter splitter(map);
   return splitter.splitCorners();
 }
 
-void CornerSplitter::splitCorners()
+void HighwayCornerSplitter::splitCorners()
 {
   _numAffected = 0;
 
@@ -135,7 +135,7 @@ void CornerSplitter::splitCorners()
     _splitRoundedCorners();
 }
 
-void CornerSplitter::_splitRoundedCorners()
+void HighwayCornerSplitter::_splitRoundedCorners()
 {
   _todoWays.clear();
   //  Get a list of ways (that look like roads) in the map
@@ -177,7 +177,8 @@ void CornerSplitter::_splitRoundedCorners()
       }
       int max_start_index = 0;
       double max_total_delta = 0.0;
-      //  Iterate the headings `max_node_count` at a time to find the largest heading delta and use that section as the curve
+      //  Iterate the headings `max_node_count` at a time to find the largest heading delta and use
+      // that section as the curve
       for (int start_index = 0; start_index < headings.size() - 2; ++start_index)
       {
         double total = 0.0;
@@ -199,7 +200,8 @@ void CornerSplitter::_splitRoundedCorners()
         //  Find the middle of the threshold to split at
         double mid_point = max_total_delta / 2.0;
         double total = 0.0;
-        for (int index = max_start_index + 1; index < max_start_index + _roundedMaxNodeCount && index < headings.size(); ++index)
+        for (int index = max_start_index + 1;
+             index < max_start_index + _roundedMaxNodeCount && index < headings.size(); ++index)
         {
           double delta = headings[index] - headings[index - 1];
           total += delta;
@@ -217,7 +219,8 @@ void CornerSplitter::_splitRoundedCorners()
         QString buffer;
         QTextStream ts(&buffer);
         for (int i = 0; i < headings.size(); ++i)
-          ts << QString().setNum(headings[i], 'f') << "\t| " << QString().setNum(distances[i], 'f') << "\n";
+          ts << QString().setNum(headings[i], 'f') << "\t| " <<
+                QString().setNum(distances[i], 'f') << "\n";
         //  Output a bunch of stuff here to help develop the algorithm
         LOG_TRACE("\nWay: " << pWay->getTags().getName() <<
                   "\nHeadings\t| Distances" <<
@@ -228,7 +231,7 @@ void CornerSplitter::_splitRoundedCorners()
   }
 }
 
-bool CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, bool sharpCorner)
+bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, bool sharpCorner)
 {
   WayPtr pWay = _map->getWay(wayId);
   if (!pWay)
@@ -300,12 +303,12 @@ bool CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, bool sharp
   return false;
 }
 
-void CornerSplitter::apply(std::shared_ptr<OsmMap> &map)
+void HighwayCornerSplitter::apply(std::shared_ptr<OsmMap> &map)
 {
   splitCorners(map);
 }
 
-void CornerSplitter::setConfiguration(const Settings& conf)
+void HighwayCornerSplitter::setConfiguration(const Settings& conf)
 {
   ConfigOptions options(conf);
   _cornerThreshold = options.getCornerSplitterThreshold();

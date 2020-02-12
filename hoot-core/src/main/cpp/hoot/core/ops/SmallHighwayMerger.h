@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef SMALLWAYMERGER_H
-#define SMALLWAYMERGER_H
+#ifndef SMALLHIGHWAYMERGER_H
+#define SMALLHIGHWAYMERGER_H
 
 // Hoot
 #include <hoot/core/info/OperationStatusInfo.h>
@@ -47,9 +47,9 @@ class NodeToWayMap;
 
 /**
  * Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID`
- * are ignored. See `small.way.merger.threshold` for setting the threshold value. Searches for itty
- * bitty ways that connect end to end. For some reason some files provide little  way segments of
- * 2m or less in length. Silliness. If:
+ * are ignored. See `small.highway.merger.threshold` for setting the threshold value. Searches for
+ * itty bitty ways that connect end to end. For some reason some files provide little  way segments
+ * of 2m or less in length. Silliness. If:
  *   - the attributes are essentially identical
  *   - there are only two ways meeting (not an intersection)
  *   - and one is less than the specified threshold
@@ -59,16 +59,14 @@ class NodeToWayMap;
  * Assumptions:
  *  - All intersections have been split. (IntersectionSplitter)
  *  - All duplicate ways have been removed. (DuplicateWayRemover)
- *
- * TODO: rename to SmallHighwayMerger
  */
-class SmallWayMerger : public OsmMapOperation, public OperationStatusInfo
+class SmallHighwayMerger : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::SmallWayMerger"; }
+  static std::string className() { return "hoot::SmallHighwayMerger"; }
 
-  SmallWayMerger(Meters threshold = -1);
+  SmallHighwayMerger(Meters threshold = -1);
 
   void apply(std::shared_ptr<OsmMap>& map);
 
@@ -77,12 +75,12 @@ public:
    */
   static void mergeWays(std::shared_ptr<OsmMap> map, Meters threshold);
 
-  virtual QString getInitStatusMessage() const { return "Merging very small ways..."; }
+  virtual QString getInitStatusMessage() const { return "Merging very small roads..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Merged " + QString::number(_numAffected) + " very small ways"; }
+  { return "Merged " + QString::number(_numAffected) + " very small roads"; }
 
-  virtual QString getDescription() const { return "Merges very small ways"; }
+  virtual QString getDescription() const { return "Merges very small roads"; }
 
   /**
    * @see FilteredByCriteria
@@ -104,4 +102,4 @@ protected:
 
 }
 
-#endif // SMALLWAYMERGER_H
+#endif // SMALLHIGHWAYMERGER_H
