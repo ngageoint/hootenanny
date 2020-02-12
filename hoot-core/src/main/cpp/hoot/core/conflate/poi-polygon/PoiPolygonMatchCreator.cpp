@@ -569,4 +569,12 @@ std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
   return _rf;
 }
 
+QStringList PoiPolygonMatchCreator::getCriteria() const
+{
+  QStringList criteria;
+  criteria.append(QString::fromStdString(PoiPolygonPoiCriterion::className()));
+  criteria.append(QString::fromStdString(PoiPolygonPolyCriterion::className()));
+  return criteria;
+}
+
 }

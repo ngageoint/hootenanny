@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/criterion/FilteredByCriteria.h>
 
 // Standard
 #include <string>
@@ -37,7 +38,7 @@
 // Boost
 #include <boost/any.hpp>
 
-//Qt
+// Qt
 #include <QString>
 
 namespace hoot
@@ -52,7 +53,7 @@ class OsmMap;
  * entire input map in memory at one time (operation logic does not require it and you are not
  * running in the conflate pipeline), consider using ElementVisitor instead.
  */
-class OsmMapOperation : public ApiEntityInfo
+class OsmMapOperation : public ApiEntityInfo, public FilteredByCriteria
 {
 public:
 
@@ -76,6 +77,11 @@ public:
   virtual boost::any getResult() { boost::any ptr; return ptr; }
 
   long getNumAffected() const { return _numAffected; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const { return QStringList(); }
 
 protected:
 

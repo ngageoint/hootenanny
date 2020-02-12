@@ -22,44 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef FILTERED_BY_CRITERIA_H
+#define FILTERED_BY_CRITERIA_H
 
-#include "WayJoinerOp.h"
-
-//  Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, WayJoinerOp)
-
-WayJoinerOp::WayJoinerOp()
+class FilteredByCriteria
 {
-  setConfiguration(conf());
-}
+public:
 
-void WayJoinerOp::setConfiguration(const Settings& conf)
-{
-  ConfigOptions options(conf);
-  _wayJoiner.reset(Factory::getInstance().constructObject<WayJoiner>(options.getWayJoiner()));
-  _wayJoiner->setLeavePid(options.getWayJoinerLeaveParentId());
-}
-
-void WayJoinerOp::apply(OsmMapPtr& map)
-{
-  _wayJoiner->join(map);
-}
-
-QStringList WayJoinerOp::getCriteria() const
-{
-  QStringList criteria;
-  criteria.append(QString::fromStdString(LinearCriterion::className()));
-  criteria.append(QString::fromStdString(PolygonCriterion::className()));
-  return criteria;
-}
+  /**
+   * TODO
+   *
+   * @return
+   */
+  virtual QStringList getCriteria() const = 0;
+};
 
 }
+
+#endif // FILTERED_BY_CRITERIA_H

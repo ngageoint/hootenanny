@@ -268,8 +268,9 @@ std::shared_ptr<OsmMap> DualWaySplitter::splitAll()
   _numAffected = 0;
   std::shared_ptr<OsmMap> result(new OsmMap(_map));
   _result = result;
-
+  // Why does the class description ref 'divided=yes' and this uses 'divider=yes'?
   TagCriterion tagCrit("divider", "yes");
+  // Should HighwayCriterion by used here instead of WayCriterion?
   vector<long> wayIds = ElementIdsVisitor::findElements(_result, ElementType::Way, &tagCrit);
 
   bool todoLogged = false;

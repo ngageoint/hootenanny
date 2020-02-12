@@ -78,6 +78,11 @@ public:
   virtual QString getDescription() const
   { return "Removes ways not in relations or containing zero or all identical nodes"; }
 
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
+
 protected:
 
   std::shared_ptr<OsmMap> _inputMap;

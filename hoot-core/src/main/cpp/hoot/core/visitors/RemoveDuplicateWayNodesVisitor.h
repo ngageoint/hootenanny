@@ -67,6 +67,11 @@ public:
   { return "Removed " + QString::number(_numAffected) + " duplicate way nodes"; }
 
   virtual QString getDescription() const { return "Removes duplicate way nodes"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
 };
 
 }

@@ -57,6 +57,11 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
+
 
 // Standard
 #include <fstream>
@@ -80,7 +85,8 @@ const QString ConflateCmd::JOB_SOURCE = "Conflate";
 HOOT_FACTORY_REGISTER(Command, ConflateCmd)
 
 ConflateCmd::ConflateCmd() :
-_numTotalTasks(0)
+_numTotalTasks(0),
+_filterOps(ConfigOptions().getConflateRemoveSuperfluousOps())
 {
 }
 
@@ -225,6 +231,10 @@ int ConflateCmd::runSimple(QStringList& args)
   if (isDiffConflate || ConfigOptions().getHighwayMergeTagsOnly())
   {
     _disableRoundaboutRemoval();
+  }
+  if (_filterOps)
+  {
+    _removeSuperfluousOps();
   }
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
@@ -534,6 +544,160 @@ float ConflateCmd::_getTaskWeight() const
 float ConflateCmd::_getJobPercentComplete(const int currentTaskNum) const
 {
   return (float)currentTaskNum / (float)_numTotalTasks;
+}
+
+void ConflateCmd::_removeSuperfluousOps()
+{
+  const QSet<QString> matcherCrits = _getMatchCreatorCrits();
+
+  QStringList removedOps;
+
+  const QStringList modifiedPreConflateOps =
+    _filterOutUnneededOps(
+      matcherCrits, ConfigOptions().getConflatePreOps(), removedOps);
+  if (modifiedPreConflateOps.size() != ConfigOptions().getConflatePreOps().size())
+  {
+    conf().set(ConfigOptions::getConflatePreOpsKey(), modifiedPreConflateOps);
+  }
+
+  const QStringList modifiedPostConflateOps =
+    _filterOutUnneededOps(
+      matcherCrits, ConfigOptions().getConflatePostOps(), removedOps);
+  if (modifiedPostConflateOps.size() != ConfigOptions().getConflatePostOps().size())
+  {
+    conf().set(ConfigOptions::getConflatePostOpsKey(), modifiedPostConflateOps);
+  }
+
+  if (modifiedPreConflateOps.contains(ConfigOptions::getMapCleanerTransformsKey()) ||
+      modifiedPostConflateOps.contains(ConfigOptions::getMapCleanerTransformsKey()))
+  {
+    const QStringList modifiedCleaningOps =
+      _filterOutUnneededOps(
+        matcherCrits, ConfigOptions().getMapCleanerTransforms(), removedOps);
+    if (modifiedCleaningOps.size() != ConfigOptions().getMapCleanerTransforms().size())
+    {
+      conf().set(ConfigOptions::getMapCleanerTransformsKey(), modifiedCleaningOps);
+    }
+  }
+
+  if (removedOps.size() > 0)
+  {
+    LOG_INFO(
+      "Removed the following conflate pre/post operations with no relevance to the selected " <<
+      "matchers: " << removedOps.join(", "));
+  }
+}
+
+QStringList ConflateCmd::_filterOutUnneededOps(
+  const QSet<QString>& matcherCrits, const QStringList& ops, QStringList& removedOps)
+{
+  QStringList modifiedOps;
+
+  for (int i = 0; i < ops.size(); i++)
+  {
+    const QString opName = ops.at(i);
+
+    if (opName == ConfigOptions::getMapCleanerTransformsKey())
+    {
+      modifiedOps.append(opName);
+      continue;
+    }
+
+    std::shared_ptr<FilteredByCriteria> op;
+    if (Factory::getInstance().hasBase<OsmMapOperation>(opName.toStdString()))
+    {
+      op =
+        std::dynamic_pointer_cast<FilteredByCriteria>(
+          std::shared_ptr<OsmMapOperation>(
+            Factory::getInstance().constructObject<OsmMapOperation>(opName)));
+    }
+    else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
+    {
+      op =
+        std::dynamic_pointer_cast<FilteredByCriteria>(
+          std::shared_ptr<ElementVisitor>(
+            Factory::getInstance().constructObject<ElementVisitor>(opName)));
+    }
+
+    if (op)
+    {
+      const QStringList opCrits = op->getCriteria();
+
+      if (opCrits.isEmpty())
+      {
+        modifiedOps.append(opName);
+        continue;
+      }
+
+      for (int j = 0; j < opCrits.size(); j++)
+      {
+        const QString opCrit = opCrits.at(j);
+        if (matcherCrits.contains(opCrit))
+        {
+          modifiedOps.append(opName);
+        }
+        else
+        {
+          removedOps.append(opName);
+        }
+      }
+    }
+    else
+    {
+      removedOps.append(opName);
+    }
+  }
+
+  return modifiedOps;
+}
+
+QSet<QString> ConflateCmd::_getMatchCreatorCrits()
+{
+  QSet<QString> matcherCrits;
+
+  std::vector<std::shared_ptr<MatchCreator>> matchCreators =
+      MatchFactory::getInstance().getCreators();
+  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator it = matchCreators.begin();
+       it != matchCreators.end(); ++it)
+  {
+    std::shared_ptr<FilteredByCriteria> critFilter =
+      std::dynamic_pointer_cast<FilteredByCriteria>(*it);
+    const QStringList crits = critFilter->getCriteria();
+    for (int i = 0; i < crits.size(); i++)
+    {
+      const QString critStr = crits.at(i);
+      if (Factory::getInstance().hasBase<ElementCriterion>(critStr.toStdString()))
+      {
+        matcherCrits.insert(critStr);
+
+        const QStringList pointCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByType(
+            GeometryTypeCriterion::GeometryType::Point);
+        if (pointCrits.contains(critStr))
+        {
+          matcherCrits.insert(QString::fromStdString(PointCriterion::className()));
+        }
+
+        const QStringList lineCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByType(
+            GeometryTypeCriterion::GeometryType::Line);
+        if (lineCrits.contains(critStr))
+        {
+          matcherCrits.insert(QString::fromStdString(LinearCriterion::className()));
+        }
+
+        const QStringList polyCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByType(
+            GeometryTypeCriterion::GeometryType::Polygon);
+        if (polyCrits.contains(critStr))
+        {
+          matcherCrits.insert(QString::fromStdString(PolygonCriterion::className()));
+        }
+      }
+    }
+  }
+
+  return matcherCrits;
 }
 
 void ConflateCmd::_disableRoundaboutRemoval()

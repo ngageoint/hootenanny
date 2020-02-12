@@ -31,6 +31,7 @@
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -57,6 +58,12 @@ public:
 
   virtual QString getDescription() const
   { return "Replaces all reversed one way roads with regular one way roads"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
 };
 
 }

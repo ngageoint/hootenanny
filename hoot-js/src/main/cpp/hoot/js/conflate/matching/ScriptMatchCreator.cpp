@@ -756,9 +756,9 @@ void ScriptMatchCreator::createMatches(
 
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
-  const CreatorDescription scriptInfo = _getScriptDescription(_scriptPath);
-  _descriptionCache[_scriptPath] = scriptInfo;
-  v.setCreatorDescription(scriptInfo);
+  _scriptInfo = _getScriptDescription(_scriptPath);
+  _descriptionCache[_scriptPath] = _scriptInfo;
+  v.setCreatorDescription(_scriptInfo);
   v.initSearchRadiusInfo();
   v.calculateSearchRadius();
 
@@ -789,8 +789,8 @@ void ScriptMatchCreator::createMatches(
   _cachedCustomSearchRadii[_scriptPath] = searchRadius;
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
-  LOG_VARD(GeometryTypeCriterion::typeToString(scriptInfo.geometryType));
-  switch (scriptInfo.geometryType)
+  LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.geometryType));
+  switch (_scriptInfo.geometryType)
   {
     case GeometryTypeCriterion::GeometryType::Point:
       map->visitNodesRo(v);
@@ -810,7 +810,7 @@ void ScriptMatchCreator::createMatches(
   }
   const int matchesSizeAfter = matches.size();
 
-  QString matchType = CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType);
+  QString matchType = CreatorDescription::baseFeatureTypeToString(_scriptInfo.baseFeatureType);
   // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
   // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
   if (_scriptPath.contains(POINT_POLYGON_SCRIPT_NAME))
@@ -949,6 +949,21 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     Handle<Value> value = ToLocal(&plugin)->Get(geometryTypeStr);
     result.geometryType = GeometryTypeCriterion::typeFromString(toCpp<QString>(value));
   }
+  Handle<String> matchCandidateCriterionStr =
+    String::NewFromUtf8(current, "matchCandidateCriterion");
+  if (ToLocal(&plugin)->Has(matchCandidateCriterionStr))
+  {
+    Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStr);
+    const QString valueStr = toCpp<QString>(value);
+    if (valueStr.contains(";"))
+    {
+      result.matchCandidateCriteria = valueStr.split(";");
+    }
+    else
+    {
+      result.matchCandidateCriteria = QStringList(valueStr);
+    }
+  }
 
   QFileInfo fi(path);
   result.className = (QString::fromStdString(className()) + "," + fi.fileName()).toStdString();
@@ -1009,6 +1024,11 @@ QString ScriptMatchCreator::getName() const
 {
   QFileInfo scriptFileInfo(_scriptPath);
   return QString::fromStdString(className()) + ";" + scriptFileInfo.fileName();
+}
+
+QStringList ScriptMatchCreator::getCriteria() const
+{
+  return _scriptInfo.matchCandidateCriteria;
 }
 
 }

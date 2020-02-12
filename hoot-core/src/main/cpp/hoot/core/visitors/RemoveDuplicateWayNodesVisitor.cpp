@@ -31,6 +31,8 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 // Qt
 #include <QVector>
@@ -97,6 +99,14 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
       way->setNodes(parsedNodeIds.toStdVector());
     }
   }
+}
+
+QStringList RemoveDuplicateWayNodesVisitor::getCriteria() const
+{
+  QStringList criteria;
+  criteria.append(QString::fromStdString(LinearCriterion::className()));
+  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  return criteria;
 }
 
 }

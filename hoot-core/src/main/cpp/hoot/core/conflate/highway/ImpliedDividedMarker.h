@@ -32,6 +32,7 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Standard
 #include <set>
@@ -78,6 +79,15 @@ public:
 
   virtual QString getDescription() const
   { return "Marks road sections that implicitly appear to be divided highways"; }
+
+  /**
+   * @see FilteredByCriteria
+   *
+   * This isn't actually using HighwayCriterion in the filtering, but for the purposes of reducing
+   * unnecessary conflate ops we don't need to run it unless we're running road conflation.
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
 
 private:
 

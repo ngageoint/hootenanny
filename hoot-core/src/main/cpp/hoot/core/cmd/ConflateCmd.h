@@ -63,16 +63,25 @@ public:
 
   virtual int runSimple(QStringList& args) override;
 
+  void setFilterOps(bool filter) { _filterOps = filter; }
+
 private:
 
   int _numTotalTasks;
+  bool _filterOps;
 
   void _updateConfigOptionsForAttributeConflation();
   void _disableRoundaboutRemoval();
   void _checkForTagValueTruncationOverride();
+  void _removeSuperfluousOps();
+  QSet<QString> _getMatchCreatorCrits();
+  QStringList _filterOutUnneededOps(
+    const QSet<QString>& matcherCrits, const QStringList& ops, QStringList& removedOps);
 
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
+
+  friend class ConflateCmdTest;
 };
 
 }

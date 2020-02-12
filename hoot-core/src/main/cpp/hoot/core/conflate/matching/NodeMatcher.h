@@ -92,6 +92,15 @@ public:
    */
   static bool isNetworkFeatureType(ConstElementPtr element);
 
+  /**
+   * TODO
+   *
+   * Is there a better location for this?
+   *
+   * @return
+   */
+  static QStringList getNetworkClassNames();
+
 private:
 
   std::shared_ptr<const OsmMap> _map;

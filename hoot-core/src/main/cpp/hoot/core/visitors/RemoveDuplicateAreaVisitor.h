@@ -70,6 +70,11 @@ public:
 
   virtual QString getDescription() const { return "Removes duplicate areas"; }
 
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
+
 private:
 
   std::shared_ptr<TagDifferencer> _diff;

@@ -74,6 +74,11 @@ public:
   virtual QString getDescription() const override
   { return "Makes all road intersections contain only way end nodes"; }
 
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
+
 private:
 
   std::shared_ptr<OsmMap> _map;

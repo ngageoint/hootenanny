@@ -59,6 +59,11 @@ public:
 
   virtual QString getDescription() const { return "Removes empty areas"; }
 
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
+
 private:
 
   std::shared_ptr<ElementConverter> _ec;

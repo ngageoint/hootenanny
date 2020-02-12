@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/criterion/FilteredByCriteria.h>
 
 namespace hoot
 {
@@ -42,7 +43,7 @@ namespace hoot
  * does not require it and you are not running in the conflate pipeline where all map data must
  * be read into memory).
  */
-class ElementVisitor : public ApiEntityInfo
+class ElementVisitor : public ApiEntityInfo, public FilteredByCriteria
 {
 public:
 
@@ -52,6 +53,11 @@ public:
   virtual ~ElementVisitor() {}
 
   virtual void visit(const ElementPtr& e) = 0;
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const { return QStringList(); }
 
 protected:
 

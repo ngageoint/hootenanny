@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/highway/Roundabout.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QMultiHash>
@@ -88,6 +89,12 @@ public:
 
   virtual QString getDescription() const override
   { return "Replaces road roundabouts with simple intersections"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
 
 private:
 

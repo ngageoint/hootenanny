@@ -31,6 +31,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 // Standard
 #include <set>
@@ -66,6 +67,12 @@ public:
   { return "Removed " + QString::number(_numAffected) + " building outlines"; }
 
   virtual QString getDescription() const override { return "Removes the outline around buildings"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(BuildingCriterion::className())); }
 
 private:
 

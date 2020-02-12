@@ -32,6 +32,7 @@
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Std
 #include <set>
@@ -80,6 +81,12 @@ public:
   { return "Merged " + QString::number(_numAffected) + " very small ways"; }
 
   virtual QString getDescription() const { return "Merges very small ways"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
 
 protected:
 

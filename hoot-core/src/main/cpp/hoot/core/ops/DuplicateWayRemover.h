@@ -81,6 +81,11 @@ public:
 
   virtual QString getDescription() const { return "Removes duplicate ways from a map"; }
 
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
+
 protected:
 
   OsmMapPtr _map;

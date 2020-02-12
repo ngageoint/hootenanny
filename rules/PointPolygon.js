@@ -16,11 +16,11 @@ exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point.polygon"));
 exports.tagThreshold = parseFloat(hoot.get("generic.point.polygon.tag.threshold"));
 exports.writeDebugTags = hoot.get("writer.include.debug.tags");
-//exports.baseFeatureType = ""; // 
-//exports.geometryType = "";
-//exports.matchCandidateCriterion = "";
 // The baseFeatureType and geometryType vars don't work for Point/Polygon due to it conflating different geometry types.
 // Logic has been added to ScriptMatchCreator to handle this, so they can remain empty.
+//exports.baseFeatureType = ""; // 
+//exports.geometryType = "";
+exports.matchCandidateCriterion = "hoot::PointCriterion;hoot::PolygonCriterion"; // See #3047
 
 var distanceExtractor = 
   new hoot.EuclideanDistanceExtractor({ "convert.require.area.for.polygon": "false" });

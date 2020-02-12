@@ -35,6 +35,7 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 #include <unordered_set>
 
@@ -65,7 +66,8 @@ public:
   } DrivingSide;
 
   DualWaySplitter();
-  DualWaySplitter(const std::shared_ptr<const OsmMap>& map, DrivingSide drivingSide, Meters splitSize);
+  DualWaySplitter(const std::shared_ptr<const OsmMap>& map, DrivingSide drivingSide,
+                  Meters splitSize);
 
   std::shared_ptr<OsmMap> splitAll();
 
@@ -81,7 +83,16 @@ public:
   { return "Split " + QString::number(_numAffected) + " divided highways"; }
 
   virtual QString getDescription() const
-  { return "Splits all 'divided=yes'' highways into two one way streets"; }
+  { return "Splits all 'divided=yes' highways into two one way streets"; }
+
+  /**
+   * @see FilteredByCriteria
+   *
+   * This isn't actually using HighwayCriterion in the filtering, but for the purposes of reducing
+   * unnecessary conflate ops we don't need to run it unless we're running road conflation.
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
 
 private:
 
@@ -97,13 +108,10 @@ private:
   Meters _splitSize;
 
   void _addConnector(long nodeId);
-
-  std::shared_ptr<Way> _createOneWay(const std::shared_ptr<const Way>& w, Meters bufferSize, bool left);
-
+  std::shared_ptr<Way> _createOneWay(const std::shared_ptr<const Way>& w, Meters bufferSize,
+                                     bool left);
   void _createStub(const std::shared_ptr<Way>& dividedWay, long centerNodeId, long edgeNodeId);
-
   double _dotProduct(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2) const;
-
   void _fixLanes(const std::shared_ptr<Way>& w);
 
   /**
@@ -112,13 +120,10 @@ private:
   long _nearestNode(long nid, const std::shared_ptr<const Way>& w);
 
   geos::geom::Coordinate _normalizedVector(long nid1, long nid2);
-
-  bool _onRight(long intersectionId, const std::shared_ptr<Way>& inbound, long leftNn, long rightNn);
-
+  bool _onRight(long intersectionId, const std::shared_ptr<Way>& inbound, long leftNn,
+                long rightNn);
   void _reconnectEnd(long centerNodeId, const std::shared_ptr<Way>& edge);
-
   void _splitIntersectingWays(long nid);
-
   void _splitWay(long wid);
 };
 

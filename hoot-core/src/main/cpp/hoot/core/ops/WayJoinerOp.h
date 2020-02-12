@@ -32,6 +32,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/algorithms/WayJoiner.h>
 
 namespace hoot
 {
@@ -59,6 +60,11 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Rejoined " + QString::number(_numAffected) + " ways"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
 
 private:
 

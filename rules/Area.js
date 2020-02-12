@@ -17,6 +17,7 @@ exports.experimental = true;
 exports.baseFeatureType = "Area";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "polygon";
+exports.matchCandidateCriterion = "hoot::AreaCriterion"; // See #3047
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 

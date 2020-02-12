@@ -16,6 +16,7 @@ exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default
 exports.searchRadius = parseFloat(hoot.get("search.radius.poi"));
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "point";
+exports.matchCandidateCriterion = "hoot::PoiCriterion"; // See #3047
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());

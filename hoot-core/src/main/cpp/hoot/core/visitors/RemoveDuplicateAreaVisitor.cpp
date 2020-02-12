@@ -44,6 +44,7 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -216,6 +217,16 @@ void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e)
       "\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) <<
       " elements for duplicate area removal.");
   }
+}
+
+QStringList RemoveDuplicateAreaVisitor::getCriteria() const
+{
+  QStringList criteria;
+  // need to also add building here for unecessary conflation op removal purposes, since
+  // AreaCriterion includes buildings in some instances
+  criteria.append(QString::fromStdString(BuildingCriterion::className()));
+  criteria.append(QString::fromStdString(AreaCriterion::className()));
+  return criteria;
 }
 
 }

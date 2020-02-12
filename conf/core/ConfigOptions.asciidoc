@@ -699,6 +699,13 @@ about the available operations.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
+=== conflate.remove.superfluous.ops
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === conflate.review.threshold.default
 
 * Data Type: double
