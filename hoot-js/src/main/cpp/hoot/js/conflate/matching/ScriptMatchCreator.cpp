@@ -949,6 +949,9 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     Handle<Value> value = ToLocal(&plugin)->Get(geometryTypeStr);
     result.geometryType = GeometryTypeCriterion::typeFromString(toCpp<QString>(value));
   }
+  // This controls which feature types a script conflates and is required. It allows for disabling
+  // superfluous conflate ops. It should probably be integrated with isMatchCandidate somehow at
+  // some point, if possible.
   Handle<String> matchCandidateCriterionStr =
     String::NewFromUtf8(current, "matchCandidateCriterion");
   if (ToLocal(&plugin)->Has(matchCandidateCriterionStr))

@@ -37,6 +37,9 @@ namespace hoot
  * This interface allows for identifying feature types associated with a hoot operator. This is
  * currently used by ConflateCmd to weed out unnecessary conflate ops specified in the
  * configuration.
+ *
+ * At some point we may want the ops to call this to create the actual filtering criteria they use
+ * in their logic, but for now they don't.
  */
 class FilteredByCriteria
 {
