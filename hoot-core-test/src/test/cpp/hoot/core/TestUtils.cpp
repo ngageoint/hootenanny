@@ -321,4 +321,58 @@ bool TestUtils::mkpath(const QString& path)
   return false;
 }
 
+QStringList TestUtils::getConflateCmdSnapshotPreOps()
+{
+  QStringList conflatePreOps;
+  conflatePreOps.append("hoot::BuildingOutlineRemoveOp");
+  conflatePreOps.append("hoot::RemoveRoundabouts");
+  conflatePreOps.append("hoot::MapCleaner");
+  conflatePreOps.append("hoot::CornerSplitter");
+  return conflatePreOps;
+}
+
+QStringList TestUtils::getConflateCmdSnapshotPostOps()
+{
+  QStringList conflatePostOps;
+  conflatePostOps.append("hoot::SuperfluousNodeRemover");
+  conflatePostOps.append("hoot::SmallWayMerger");
+  conflatePostOps.append("hoot::ReplaceRoundabouts");
+  conflatePostOps.append("hoot::RemoveMissingElementsVisitor");
+  conflatePostOps.append("hoot::RemoveInvalidReviewRelationsVisitor");
+  conflatePostOps.append("hoot::RemoveDuplicateReviewsOp");
+  conflatePostOps.append("hoot::BuildingOutlineUpdateOp");
+  conflatePostOps.append("hoot::WayJoinerOp");
+  conflatePostOps.append("hoot::RemoveInvalidRelationVisitor");
+  conflatePostOps.append("hoot::RemoveInvalidMultilineStringMembersVisitor");
+  conflatePostOps.append("hoot::SuperfluousWayRemover");
+  conflatePostOps.append("hoot::RemoveDuplicateWayNodesVisitor");
+  conflatePostOps.append("hoot::RemoveEmptyRelationsOp");
+  conflatePostOps.append("hoot::ApiTagTruncateVisitor");
+  conflatePostOps.append("hoot::AddHilbertReviewSortOrderOp");
+  return conflatePostOps;
+}
+
+QStringList TestUtils::getConflateCmdSnapshotCleaningOps()
+{
+  QStringList mapCleanerTransforms;
+  mapCleanerTransforms.append("hoot::ReprojectToPlanarOp");
+  mapCleanerTransforms.append("hoot::DuplicateNodeRemover");
+  mapCleanerTransforms.append("hoot::OneWayRoadStandardizer");
+  mapCleanerTransforms.append("hoot::DuplicateWayRemover");
+  mapCleanerTransforms.append("hoot::SuperfluousWayRemover");
+  mapCleanerTransforms.append("hoot::IntersectionSplitter");
+  mapCleanerTransforms.append("hoot::UnlikelyIntersectionRemover");
+  mapCleanerTransforms.append("hoot::DualWaySplitter");
+  mapCleanerTransforms.append("hoot::ImpliedDividedMarker");
+  mapCleanerTransforms.append("hoot::DuplicateNameRemover");
+  mapCleanerTransforms.append("hoot::SmallWayMerger");
+  mapCleanerTransforms.append("hoot::RemoveEmptyAreasVisitor");
+  mapCleanerTransforms.append("hoot::RemoveDuplicateRelationMembersVisitor");
+  mapCleanerTransforms.append("hoot::RelationCircularRefRemover");
+  mapCleanerTransforms.append("hoot::RemoveEmptyRelationsOp");
+  mapCleanerTransforms.append("hoot::RemoveDuplicateAreaVisitor");
+  mapCleanerTransforms.append("hoot::NoInformationElementRemover");
+  return mapCleanerTransforms;
+}
+
 }

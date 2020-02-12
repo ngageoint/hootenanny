@@ -189,6 +189,27 @@ public:
    */
   static bool mkpath(const QString& path);
 
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static QStringList getConflateCmdSnapshotPreOps();
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static QStringList getConflateCmdSnapshotPostOps();
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static QStringList getConflateCmdSnapshotCleaningOps();
+
 private:
 
   QList<RegisteredReset*> _resets;

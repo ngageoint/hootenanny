@@ -35,6 +35,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 // Std
 #include <float.h>
@@ -572,8 +574,8 @@ std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
 QStringList PoiPolygonMatchCreator::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(PoiPolygonPoiCriterion::className()));
-  criteria.append(QString::fromStdString(PoiPolygonPolyCriterion::className()));
+  criteria.append(QString::fromStdString(PoiCriterion::className()));
+  criteria.append(QString::fromStdString(BuildingCriterion::className()));
   return criteria;
 }
 

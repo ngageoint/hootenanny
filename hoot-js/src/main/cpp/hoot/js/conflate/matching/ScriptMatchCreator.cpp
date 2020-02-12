@@ -677,6 +677,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   //bit of a hack...see MatchCreator.h...need to refactor
   _description = QString::fromStdString(className()) + "," + args[0];
   _cachedScriptVisitor.reset();
+  _scriptInfo = _getScriptDescription(_scriptPath);
 
   LOG_DEBUG(
     "Set arguments for: " << className() << " - rules: " << QFileInfo(_scriptPath).fileName());
@@ -756,7 +757,6 @@ void ScriptMatchCreator::createMatches(
 
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
-  _scriptInfo = _getScriptDescription(_scriptPath);
   _descriptionCache[_scriptPath] = _scriptInfo;
   v.setCreatorDescription(_scriptInfo);
   v.initSearchRadiusInfo();

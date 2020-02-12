@@ -20,7 +20,7 @@ exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 // Logic has been added to ScriptMatchCreator to handle this, so they can remain empty.
 //exports.baseFeatureType = ""; // 
 //exports.geometryType = "";
-exports.matchCandidateCriterion = "hoot::PointCriterion;hoot::PolygonCriterion"; // See #3047
+exports.matchCandidateCriterion = "hoot::PointCriterion;hoot::PolygonCriterion";
 
 var distanceExtractor = 
   new hoot.EuclideanDistanceExtractor({ "convert.require.area.for.polygon": "false" });

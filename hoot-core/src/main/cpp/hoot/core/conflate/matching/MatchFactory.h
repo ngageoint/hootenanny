@@ -127,6 +127,8 @@ private:
 
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;
+  friend class ConflateCmdOpFilteringTest;
+  friend class ConflateCmdOpFilteringJsTest;
 };
 
 }

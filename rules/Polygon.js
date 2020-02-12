@@ -18,7 +18,7 @@ exports.experimental = false;
 exports.baseFeatureType = "Polygon";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "polygon";
-exports.matchCandidateCriterion = "hoot::PolygonCriterion"; // See #3047
+exports.matchCandidateCriterion = "hoot::PolygonCriterion";
 
 var overlapExtractor = 
   new hoot.SmallerOverlapExtractor({ "convert.require.area.for.polygon": "false" });

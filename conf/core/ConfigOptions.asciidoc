@@ -702,9 +702,9 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 === conflate.remove.superfluous.ops
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
-TODO
+TODO: comment and change to true (?)
 
 === conflate.review.threshold.default
 

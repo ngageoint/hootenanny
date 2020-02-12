@@ -61,6 +61,7 @@
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/ops/MapCleaner.h>
 
 
 // Standard
@@ -550,7 +551,7 @@ void ConflateCmd::_removeSuperfluousOps()
 {
   const QSet<QString> matcherCrits = _getMatchCreatorCrits();
 
-  QStringList removedOps;
+  QSet<QString> removedOps;
 
   const QStringList modifiedPreConflateOps =
     _filterOutUnneededOps(
@@ -568,8 +569,9 @@ void ConflateCmd::_removeSuperfluousOps()
     conf().set(ConfigOptions::getConflatePostOpsKey(), modifiedPostConflateOps);
   }
 
-  if (modifiedPreConflateOps.contains(ConfigOptions::getMapCleanerTransformsKey()) ||
-      modifiedPostConflateOps.contains(ConfigOptions::getMapCleanerTransformsKey()))
+  const QString mapCleanerName = QString::fromStdString(MapCleaner::className());
+  if (modifiedPreConflateOps.contains(mapCleanerName) ||
+      modifiedPostConflateOps.contains(mapCleanerName))
   {
     const QStringList modifiedCleaningOps =
       _filterOutUnneededOps(
@@ -582,22 +584,27 @@ void ConflateCmd::_removeSuperfluousOps()
 
   if (removedOps.size() > 0)
   {
+    QStringList removedOpsList = removedOps.values();
+    qSort(removedOpsList);
     LOG_INFO(
       "Removed the following conflate pre/post operations with no relevance to the selected " <<
-      "matchers: " << removedOps.join(", "));
+      "matchers: " << removedOpsList.join(", "));
   }
 }
 
 QStringList ConflateCmd::_filterOutUnneededOps(
-  const QSet<QString>& matcherCrits, const QStringList& ops, QStringList& removedOps)
+  const QSet<QString>& matcherCrits, const QStringList& ops, QSet<QString>& removedOps)
 {
+  LOG_TRACE("ops before: " << ops);
+
   QStringList modifiedOps;
 
   for (int i = 0; i < ops.size(); i++)
   {
     const QString opName = ops.at(i);
+    LOG_VART(opName);
 
-    if (opName == ConfigOptions::getMapCleanerTransformsKey())
+    if (opName == QString::fromStdString(MapCleaner::className()))
     {
       modifiedOps.append(opName);
       continue;
@@ -622,6 +629,7 @@ QStringList ConflateCmd::_filterOutUnneededOps(
     if (op)
     {
       const QStringList opCrits = op->getCriteria();
+      LOG_VART(opCrits);
 
       if (opCrits.isEmpty())
       {
@@ -629,25 +637,30 @@ QStringList ConflateCmd::_filterOutUnneededOps(
         continue;
       }
 
+      bool opAdded = false;
       for (int j = 0; j < opCrits.size(); j++)
       {
         const QString opCrit = opCrits.at(j);
         if (matcherCrits.contains(opCrit))
         {
           modifiedOps.append(opName);
+          opAdded = true;
+          break;
         }
-        else
-        {
-          removedOps.append(opName);
-        }
+      }
+      if (!opAdded)
+      {
+        removedOps.insert(opName);
       }
     }
     else
     {
-      removedOps.append(opName);
+      removedOps.insert(opName);
     }
   }
 
+  LOG_TRACE("ops after: " << modifiedOps);
+  LOG_VART(removedOps);
   return modifiedOps;
 }
 
@@ -666,6 +679,7 @@ QSet<QString> ConflateCmd::_getMatchCreatorCrits()
     for (int i = 0; i < crits.size(); i++)
     {
       const QString critStr = crits.at(i);
+      LOG_VART(critStr);
       if (Factory::getInstance().hasBase<ElementCriterion>(critStr.toStdString()))
       {
         matcherCrits.insert(critStr);
@@ -673,6 +687,7 @@ QSet<QString> ConflateCmd::_getMatchCreatorCrits()
         const QStringList pointCrits =
           GeometryTypeCriterion::getCriterionClassNamesByType(
             GeometryTypeCriterion::GeometryType::Point);
+        LOG_VART(pointCrits);
         if (pointCrits.contains(critStr))
         {
           matcherCrits.insert(QString::fromStdString(PointCriterion::className()));
@@ -681,6 +696,7 @@ QSet<QString> ConflateCmd::_getMatchCreatorCrits()
         const QStringList lineCrits =
           GeometryTypeCriterion::getCriterionClassNamesByType(
             GeometryTypeCriterion::GeometryType::Line);
+        LOG_VART(lineCrits);
         if (lineCrits.contains(critStr))
         {
           matcherCrits.insert(QString::fromStdString(LinearCriterion::className()));
@@ -689,6 +705,7 @@ QSet<QString> ConflateCmd::_getMatchCreatorCrits()
         const QStringList polyCrits =
           GeometryTypeCriterion::getCriterionClassNamesByType(
             GeometryTypeCriterion::GeometryType::Polygon);
+        LOG_VART(polyCrits);
         if (polyCrits.contains(critStr))
         {
           matcherCrits.insert(QString::fromStdString(PolygonCriterion::className()));
@@ -697,6 +714,7 @@ QSet<QString> ConflateCmd::_getMatchCreatorCrits()
     }
   }
 
+  LOG_VART(matcherCrits);
   return matcherCrits;
 }
 

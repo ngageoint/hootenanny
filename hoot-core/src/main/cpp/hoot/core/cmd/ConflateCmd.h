@@ -76,12 +76,13 @@ private:
   void _removeSuperfluousOps();
   QSet<QString> _getMatchCreatorCrits();
   QStringList _filterOutUnneededOps(
-    const QSet<QString>& matcherCrits, const QStringList& ops, QStringList& removedOps);
+    const QSet<QString>& matcherCrits, const QStringList& ops, QSet<QString>& removedOps);
 
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
 
-  friend class ConflateCmdTest;
+  friend class ConflateCmdOpFilteringTest;
+  friend class ConflateCmdOpFilteringJsTest;
 };
 
 }
