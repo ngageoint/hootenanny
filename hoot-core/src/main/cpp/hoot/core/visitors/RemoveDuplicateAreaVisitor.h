@@ -52,6 +52,8 @@ class TagDifferencer;
  * then the element with the smaller id is deleted.
  *
  * RecursiveElementRemover is used to remove the element.
+ *
+ * TODO: rename to RemoveDuplicateAreasVisitor
  */
 class RemoveDuplicateAreaVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {

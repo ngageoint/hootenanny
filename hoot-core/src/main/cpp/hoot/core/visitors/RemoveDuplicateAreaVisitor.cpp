@@ -209,6 +209,8 @@ void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e)
     }
   }
 
+  // TODO: let's give this the PoiPolygonMatchVisitor status update treatment to throttle the
+  // interval down for slower jobs
   _numProcessed++;
   if (_numProcessed % 10000 == 0)
   {
