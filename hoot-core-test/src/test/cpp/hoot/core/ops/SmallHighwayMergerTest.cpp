@@ -43,15 +43,15 @@
 namespace hoot
 {
 
-class SmallHighWayMergerTest : public HootTestFixture
+class SmallHighwayMergerTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(SmallHighWayMergerTest);
+  CPPUNIT_TEST_SUITE(SmallHighwayMergerTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  SmallWayMergerTest()
+  SmallHighwayMergerTest()
     : HootTestFixture("test-files/ops/SmallHighwayMerger/",
                       "test-output/ops/SmallHighwayMerger/")
   {
@@ -78,6 +78,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SmallHighWayMergerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SmallHighwayMergerTest, "quick");
 
 }
