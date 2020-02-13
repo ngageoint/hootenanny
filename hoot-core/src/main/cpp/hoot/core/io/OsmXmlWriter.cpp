@@ -353,6 +353,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map)
   }
 
   // sort the values to give consistent results.
+  LOG_INFO("Sorting nodes...");
   qSort(nids.begin(), nids.end(), qLess<long>());
   for (int i = 0; i < nids.size(); i++)
   {
@@ -370,6 +371,7 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map)
   }
 
   // sort the values to give consistent results.
+  LOG_INFO("Sorting ways...");
   qSort(wids.begin(), wids.end(), qLess<long>());
   for (int i = 0; i < wids.size(); i++)
   {
@@ -396,6 +398,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map)
   }
 
   // sort the values to give consistent results.
+  LOG_INFO("Sorting relations...");
   qSort(rids.begin(), rids.end(), qLess<long>());
   for (int i = 0; i < rids.size(); i++)
   {

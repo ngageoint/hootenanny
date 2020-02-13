@@ -522,7 +522,7 @@ Coordinate MapProjector::project(const Coordinate& c,
 void MapProjector::project(const std::shared_ptr<OsmMap>& map,
                            const std::shared_ptr<OGRSpatialReference>& ref)
 {
-  LOG_STATUS("Reprojecting map...");
+  LOG_DEBUG("Reprojecting map...");
 
   std::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
