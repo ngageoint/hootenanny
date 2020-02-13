@@ -52,6 +52,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -263,7 +264,8 @@ public class ReviewBookmarkResource {
             @QueryParam("orderBy") @DefaultValue("") String orderByCol,
             @QueryParam("creatorFilter") String creatorFilter,
             @QueryParam("layerNameFilter") String layerNameFilter,
-            @QueryParam("offset") @DefaultValue("0") String offset) {
+            @QueryParam("offset") @DefaultValue("0") String offset,
+            @QueryParam("showTagged") boolean showTagged) {
 
         Users user = Users.fromRequest(request);
         long userId = user.getId();
@@ -290,7 +292,7 @@ public class ReviewBookmarkResource {
                 layerId = Long.parseLong(layerNameFilter);
             }
 
-            SQLQuery<ReviewBookmarks> getQuery = retrieveAll(userId, orderByCol, limit, offsetCnt, creatorId, layerId);
+            SQLQuery<ReviewBookmarks> getQuery = retrieveAll(userId, orderByCol, limit, offsetCnt, creatorId, layerId, showTagged);
             List<ReviewBookmarks> reviewBookmarks = getQuery.fetch();
 
             for (ReviewBookmarks reviewBookmark : reviewBookmarks) {
@@ -306,7 +308,7 @@ public class ReviewBookmarkResource {
             }
             response.put("reviewBookmarks", reviewBookmarks);
 
-            SQLQuery filteredBookmarkQuery = retrieveAll(userId, orderByCol, -1, -1, creatorId, layerId);
+            SQLQuery filteredBookmarkQuery = retrieveAll(userId, orderByCol, -1, -1, creatorId, layerId, showTagged);
             response.put("totalCount", filteredBookmarkQuery.fetchCount());
 
             List<String> creators = getUsers();
@@ -414,7 +416,7 @@ public class ReviewBookmarkResource {
      *            - offset row for paging
      * @return - list of Review tags
      */
-    private static SQLQuery<ReviewBookmarks> retrieveAll(long userId, String orderByCol, long limit, long offset, long creator, long layer) {
+    private static SQLQuery<ReviewBookmarks> retrieveAll(long userId, String orderByCol, long limit, long offset, long creator, long layer, boolean showTagged) {
         SQLQuery<ReviewBookmarks> query = createQuery()
                 .select(reviewBookmarks)
                 .from(reviewBookmarks)
@@ -444,6 +446,10 @@ public class ReviewBookmarkResource {
                 .or(folders.publicCol.isTrue())); // or in a public folder
 
             query.where(isVisible);
+        }
+
+        if (showTagged) {
+            query.where(Expressions.booleanTemplate("{0} = ANY(TRANSLATE((detail->'taggedUsers')::jsonb::text, '[]','{}')::INT[])", userId));
         }
 
         query.orderBy(getSpecifier(orderByCol, true));
