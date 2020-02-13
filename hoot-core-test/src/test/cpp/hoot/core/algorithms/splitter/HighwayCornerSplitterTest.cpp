@@ -66,7 +66,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "CornerSplitter.osm", map);
+    reader.read(_inputPath + "HighwayCornerSplitter.osm", map);
 
     MapProjector::projectToPlanar(map);
 

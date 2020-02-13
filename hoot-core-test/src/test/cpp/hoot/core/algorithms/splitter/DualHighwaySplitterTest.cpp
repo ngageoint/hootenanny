@@ -68,7 +68,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "DualWaySplitterSimpleInput.osm", map);
+    reader.read(_inputPath + "DualHighwaySplitterSimpleInput.osm", map);
 
     MapProjector::projectToOrthographic(map);
 
