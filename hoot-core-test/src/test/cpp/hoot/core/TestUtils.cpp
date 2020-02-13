@@ -41,6 +41,7 @@
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/cmd/ConflateCmd.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -373,6 +374,41 @@ QStringList TestUtils::getConflateCmdSnapshotCleaningOps()
   mapCleanerTransforms.append("hoot::RemoveDuplicateAreaVisitor");
   mapCleanerTransforms.append("hoot::NoInformationElementRemover");
   return mapCleanerTransforms;
+}
+
+void TestUtils::runConflateOpReductionTest(
+  const QStringList& matchCreators, const int expectedPreOpSize, const int expectedPostOpsSize,
+  const int expectedCleaningOpsSize)
+{
+  QStringList actualOps;
+
+  ConflateCmd uut;
+  uut.setFilterOps(true);
+
+  CPPUNIT_ASSERT_EQUAL(4,  TestUtils::getConflateCmdSnapshotPreOps().size());
+  CPPUNIT_ASSERT_EQUAL(15,  TestUtils::getConflateCmdSnapshotPostOps().size());
+  CPPUNIT_ASSERT_EQUAL(17,  TestUtils::getConflateCmdSnapshotCleaningOps().size());
+
+  MatchFactory::getInstance().reset();
+  MatchFactory::_setMatchCreators(matchCreators);
+  // This is a snapshot of the ops in order to avoid any changes made to them result in requiring
+  // this test's results to change over time. Clearly, any newly added ops could be being filtered
+  // incorrectly, and we can update this list periodically if that's deemed important.
+  conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
+  conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
+  conf().set(
+    ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
+
+  uut._removeSuperfluousOps();
+
+  actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
+  CPPUNIT_ASSERT_EQUAL(expectedPreOpSize, actualOps.size());
+
+  actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
+  CPPUNIT_ASSERT_EQUAL(expectedPostOpsSize, actualOps.size());
+
+  actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
+  CPPUNIT_ASSERT_EQUAL(expectedCleaningOpsSize, actualOps.size());
 }
 
 }

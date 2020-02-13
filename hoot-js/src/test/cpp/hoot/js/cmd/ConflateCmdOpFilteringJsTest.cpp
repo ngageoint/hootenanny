@@ -27,10 +27,8 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/cmd/ConflateCmd.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/conflate/matching/ScriptMatchCreator.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -44,7 +42,16 @@ namespace hoot
 class ConflateCmdOpFilteringJsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ConflateCmdOpFilteringJsTest);
-  CPPUNIT_TEST(runOpFilterTest);
+  CPPUNIT_TEST(runOpFilter1Test);
+  CPPUNIT_TEST(runOpFilter2Test);
+  CPPUNIT_TEST(runOpFilter3Test);
+  CPPUNIT_TEST(runOpFilter4Test);
+  CPPUNIT_TEST(runOpFilter5Test);
+  CPPUNIT_TEST(runOpFilter6Test);
+  CPPUNIT_TEST(runOpFilter7Test);
+  CPPUNIT_TEST(runOpFilter8Test);
+  CPPUNIT_TEST(runOpFilter9Test);
+  CPPUNIT_TEST(runOpFilterCombinedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -52,219 +59,67 @@ public:
   ConflateCmdOpFilteringJsTest()
   {
     setResetType(ResetAll);
+
+    scriptMatchCreatorName = QString::fromStdString(ScriptMatchCreator::className());
   }
 
-  void runOpFilterTest()
+  void runOpFilter1Test()
+  {
+    TestUtils::runConflateOpReductionTest(
+      QStringList(scriptMatchCreatorName + ",Area.js"), 1, 12, 11);
+  }
+
+  void runOpFilter2Test()
+  {
+    TestUtils::runConflateOpReductionTest(
+      QStringList(scriptMatchCreatorName + ",Line.js"), 1, 12, 10);
+  }
+
+  void runOpFilter3Test()
+  {
+    TestUtils::runConflateOpReductionTest(
+      QStringList(scriptMatchCreatorName + ",Poi.js"), 1, 9, 7);
+  }
+
+  void runOpFilter4Test()
+  {
+    TestUtils::runConflateOpReductionTest(
+      QStringList(scriptMatchCreatorName + ",Point.js"), 1, 9, 7);
+  }
+
+  void runOpFilter5Test()
+  {
+    TestUtils::runConflateOpReductionTest(
+      QStringList(scriptMatchCreatorName + ",PointPolygon.js"), 1, 12, 9);
+  }
+
+  void runOpFilter6Test()
+  {
+    TestUtils::runConflateOpReductionTest(
+      QStringList(scriptMatchCreatorName + ",Polygon.js"), 1, 12, 9);
+  }
+
+  void runOpFilter7Test()
+  {
+    TestUtils::runConflateOpReductionTest(
+      QStringList(scriptMatchCreatorName + ",PowerLine.js"), 1, 12, 11);
+  }
+
+  void runOpFilter8Test()
+  {
+    TestUtils::runConflateOpReductionTest(
+      QStringList(scriptMatchCreatorName + ",Railway.js"), 1, 12, 11);
+  }
+
+  void runOpFilter9Test()
+  {
+    TestUtils::runConflateOpReductionTest(
+      QStringList(scriptMatchCreatorName + ",River.js"), 1, 12, 11);
+  }
+
+  void runOpFilterCombinedTest()
   {
     QStringList matchCreators;
-    QStringList actualOps;
-    const QString scriptMatchCreatorName = QString::fromStdString(ScriptMatchCreator::className());
-
-    ConflateCmd uut;
-    uut.setFilterOps(true);
-
-    // test 1
-
-    matchCreators.clear();
-    matchCreators.append(scriptMatchCreatorName + ",Area.js");
-    MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
-    // see related note in ConflateCmdOpFilteringTest::runOpFilterTest
-    conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
-    conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
-    conf().set(
-      ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
-
-    uut._removeSuperfluousOps();
-
-    actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
-    CPPUNIT_ASSERT_EQUAL(1, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-    CPPUNIT_ASSERT_EQUAL(12, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
-    CPPUNIT_ASSERT_EQUAL(11, actualOps.size());
-
-    // test 2
-
-    matchCreators.clear();
-    matchCreators.append(scriptMatchCreatorName + ",Line.js");
-    MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
-    conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
-    conf().set(
-      ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
-
-    uut._removeSuperfluousOps();
-
-    actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
-    CPPUNIT_ASSERT_EQUAL(1, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-    CPPUNIT_ASSERT_EQUAL(12, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
-    CPPUNIT_ASSERT_EQUAL(10, actualOps.size());
-
-    // test 3
-
-    matchCreators.clear();
-    matchCreators.append(scriptMatchCreatorName + ",Poi.js");
-    MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
-    conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
-    conf().set(
-      ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
-
-    uut._removeSuperfluousOps();
-
-    actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
-    CPPUNIT_ASSERT_EQUAL(1, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-    CPPUNIT_ASSERT_EQUAL(9, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
-    CPPUNIT_ASSERT_EQUAL(7, actualOps.size());
-
-    // test 4
-
-    matchCreators.clear();
-    matchCreators.append(scriptMatchCreatorName + ",Point.js");
-    MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
-    conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
-    conf().set(
-      ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
-
-    uut._removeSuperfluousOps();
-
-    actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
-    CPPUNIT_ASSERT_EQUAL(1, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-    CPPUNIT_ASSERT_EQUAL(9, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
-    CPPUNIT_ASSERT_EQUAL(7, actualOps.size());
-
-    // test 5
-
-    matchCreators.clear();
-    matchCreators.append(scriptMatchCreatorName + ",PointPolygon.js");
-    MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
-    conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
-    conf().set(
-      ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
-
-    uut._removeSuperfluousOps();
-
-    actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
-    CPPUNIT_ASSERT_EQUAL(1, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-    CPPUNIT_ASSERT_EQUAL(12, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
-    CPPUNIT_ASSERT_EQUAL(9, actualOps.size());
-
-    // test 6
-
-    matchCreators.clear();
-    matchCreators.append(scriptMatchCreatorName + ",Polygon.js");
-    MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
-    conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
-    conf().set(
-      ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
-
-    uut._removeSuperfluousOps();
-
-    actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
-    CPPUNIT_ASSERT_EQUAL(1, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-    CPPUNIT_ASSERT_EQUAL(12, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
-    CPPUNIT_ASSERT_EQUAL(9, actualOps.size());
-
-    // test 7
-
-    matchCreators.clear();
-    matchCreators.append(scriptMatchCreatorName + ",PowerLine.js");
-    MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
-    conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
-    conf().set(
-      ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
-
-    uut._removeSuperfluousOps();
-
-    actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
-    CPPUNIT_ASSERT_EQUAL(1, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-    CPPUNIT_ASSERT_EQUAL(12, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
-    CPPUNIT_ASSERT_EQUAL(11, actualOps.size());
-
-    // test 8
-
-    matchCreators.clear();
-    matchCreators.append(scriptMatchCreatorName + ",Railway.js");
-    MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
-    conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
-    conf().set(
-      ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
-
-    uut._removeSuperfluousOps();
-
-    actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
-    CPPUNIT_ASSERT_EQUAL(1, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-    CPPUNIT_ASSERT_EQUAL(12, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
-    CPPUNIT_ASSERT_EQUAL(11, actualOps.size());
-
-    // test 9
-
-    matchCreators.clear();
-    matchCreators.append(scriptMatchCreatorName + ",River.js");
-    MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
-    conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
-    conf().set(
-      ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
-
-    uut._removeSuperfluousOps();
-
-    actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
-    CPPUNIT_ASSERT_EQUAL(1, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-    CPPUNIT_ASSERT_EQUAL(12, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
-    CPPUNIT_ASSERT_EQUAL(11, actualOps.size());
-
-    // combined test
-
-    matchCreators.clear();
     matchCreators.append(scriptMatchCreatorName + ",Area.js");
     matchCreators.append(scriptMatchCreatorName + ",Line.js");
     matchCreators.append(scriptMatchCreatorName + ",Poi.js");
@@ -274,26 +129,16 @@ public:
     matchCreators.append(scriptMatchCreatorName + ",PowerLine.js");
     matchCreators.append(scriptMatchCreatorName + ",Railway.js");
     matchCreators.append(scriptMatchCreatorName + ",River.js");
-    MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
-    conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
-    conf().set(
-      ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
 
-    uut._removeSuperfluousOps();
-
-    actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
-    CPPUNIT_ASSERT_EQUAL(1, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-    CPPUNIT_ASSERT_EQUAL(12, actualOps.size());
-
-    actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
-    CPPUNIT_ASSERT_EQUAL(13, actualOps.size());
+    TestUtils::runConflateOpReductionTest(matchCreators, 1, 12, 13);
   }
+
+private:
+
+  QString scriptMatchCreatorName;
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateCmdOpFilteringJsTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateCmdOpFilteringJsTest, "serial");
 
 }

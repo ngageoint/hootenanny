@@ -98,8 +98,7 @@ private:
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
 
-  friend class ConflateCmdOpFilteringTest;
-  friend class ConflateCmdOpFilteringJsTest;
+  friend class TestUtils;
 };
 
 }

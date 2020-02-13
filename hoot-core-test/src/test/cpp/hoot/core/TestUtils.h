@@ -210,6 +210,18 @@ public:
    */
   static QStringList getConflateCmdSnapshotCleaningOps();
 
+  /**
+   * TODO
+   *
+   * @param matchCreators
+   * @param expectedPreOpSize
+   * @param expectedPostOpsSize
+   * @param expectedCleaningOpsSize
+   */
+  static void runConflateOpReductionTest(
+    const QStringList& matchCreators, const int expectedPreOpSize, const int expectedPostOpsSize,
+    const int expectedCleaningOpsSize);
+
 private:
 
   QList<RegisteredReset*> _resets;
