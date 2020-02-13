@@ -230,6 +230,7 @@ public:
 
 #ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesHootServicesLoginManagerTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesHootServicesLoginManagerTest, "serial");
 #endif  // HOOT_HAVE_SERVICES
 
 }
