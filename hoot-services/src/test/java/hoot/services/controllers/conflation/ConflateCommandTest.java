@@ -67,8 +67,8 @@ public class ConflateCommandTest {
         advancedOptions.add("\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
                 "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
                 "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
-                "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
-                "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
+                "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
+                "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
                 "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
                 "hoot::NoInformationElementRemover\"");
 
@@ -99,8 +99,8 @@ public class ConflateCommandTest {
         assertTrue(command.endsWith("-D, \"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
                                     "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
                                     "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
-                                    "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
-                                    "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
+                                    "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
+                                    "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
                                     "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
                                     "hoot::NoInformationElementRemover\"]"));
         assertTrue(command.contains("-D, job.id="));
@@ -260,10 +260,10 @@ public class ConflateCommandTest {
         assertTrue(options.contains("\"highway.merge.tags.only=true\""));
 
         // handles cleaning options...
-        conflateParams.setCleaningOpts(Arrays.asList("DualWaySplitter"));
+        conflateParams.setCleaningOpts(Arrays.asList("DualHighwaySplitter"));
         conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
         options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
-        assertTrue(options.contains("\"map.cleaner.transforms-=hoot::DualWaySplitter\""));
+        assertTrue(options.contains("\"map.cleaner.transforms-=hoot::DualHighwaySplitter\""));
 
     }
 
