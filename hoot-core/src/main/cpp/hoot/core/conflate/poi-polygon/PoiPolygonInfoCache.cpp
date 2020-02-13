@@ -173,6 +173,13 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
   }
   _geometryCache[element->getElementId()] = newGeom;
   _incrementCacheSizeCount("geometry");
+
+  if (_geometryCache.size() % CACHE_SIZE_UPDATE_INTERVAL == 0)
+  {
+    LOG_DEBUG(
+      "_geometryCache size: " << _geometryCache.size() << ", memory: " << sizeof _geometryCache);
+  }
+
   return newGeom;
 }
 
@@ -229,6 +236,14 @@ int PoiPolygonInfoCache::numAddresses(const ConstElementPtr& element)
   const int numAddresses = _addressParser.numAddressesRecursive(element, *_map);
   _numAddressesCache[element->getElementId()] = numAddresses;
   _incrementCacheSizeCount("numAddresses");
+
+  if (_numAddressesCache.size() % CACHE_SIZE_UPDATE_INTERVAL == 0)
+  {
+    LOG_DEBUG(
+      "_numAddressesCache size: " << _numAddressesCache.size() << ", memory: " <<
+      sizeof _numAddressesCache);
+  }
+
   return numAddresses;
 }
 
@@ -308,6 +323,14 @@ bool PoiPolygonInfoCache::elementsIntersect(
   }
   _elementIntersectsCache[key1] = intersects;
   _incrementCacheSizeCount("intersects");
+
+  if (_elementIntersectsCache.size() % CACHE_SIZE_UPDATE_INTERVAL == 0)
+  {
+    LOG_DEBUG(
+      "_elementIntersectsCache size: " << _elementIntersectsCache.size() << ", memory: " <<
+      sizeof _elementIntersectsCache);
+  }
+
   return intersects;
 }
 
@@ -383,6 +406,14 @@ bool PoiPolygonInfoCache::hasCriterion(const ConstElementPtr& element,
   const bool hasCrit = crit->isSatisfied(element);
   _hasCriterionCache[key] = hasCrit;
   _incrementCacheSizeCount("hasCrit");
+
+  if (_hasCriterionCache.size() % CACHE_SIZE_UPDATE_INTERVAL == 0)
+  {
+    LOG_DEBUG(
+      "_hasCriterionCache size: " << _hasCriterionCache.size() << ", memory: " <<
+      sizeof _hasCriterionCache);
+  }
+
   return hasCrit;
 }
 
@@ -409,6 +440,14 @@ ElementCriterionPtr PoiPolygonInfoCache::_getCrit(const QString& criterionClassN
       "Invalid criterion passed to PoiPolygonInfoCache::hasCriterion: " + criterionClassName);
   }
   _criterionCache[criterionClassName] = crit;
+
+  if (_criterionCache.size() % CACHE_SIZE_UPDATE_INTERVAL == 0)
+  {
+    LOG_DEBUG(
+      "_criterionCache size: " << _criterionCache.size() << ", memory: " <<
+      sizeof _criterionCache);
+  }
+
   return crit;
 }
 
@@ -474,6 +513,13 @@ bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygo
   _isTypeCache[key] = isType;
   _incrementCacheSizeCount("isType");
 
+  if (_isTypeCache.size() % CACHE_SIZE_UPDATE_INTERVAL == 0)
+  {
+    LOG_DEBUG(
+      "_isTypeCache size: " << _isTypeCache.size() << ", memory: " <<
+      sizeof _isTypeCache);
+  }
+
   return isType;
 }
 
@@ -495,6 +541,14 @@ bool PoiPolygonInfoCache::hasMoreThanOneType(const ConstElementPtr& element)
   const bool hasMoreThanOneType = PoiPolygonSchema::hasMoreThanOneType(element);
   _hasMoreThanOneTypeCache[element->getElementId()] = hasMoreThanOneType;
   _incrementCacheSizeCount("hasMoreThanOneType");
+
+  if (_hasMoreThanOneTypeCache.size() % CACHE_SIZE_UPDATE_INTERVAL == 0)
+  {
+    LOG_DEBUG(
+      "_hasMoreThanOneTypeCache size: " << _hasMoreThanOneTypeCache.size() << ", memory: " <<
+      sizeof _hasMoreThanOneTypeCache);
+  }
+
   return hasMoreThanOneType;
 }
 
@@ -543,6 +597,14 @@ double PoiPolygonInfoCache::getReviewDistance(const ConstElementPtr& element,
     }
     _reviewDistanceCache[element->getElementId()] = distance;
     _incrementCacheSizeCount("reviewDistance");
+
+    if (_reviewDistanceCache.size() % CACHE_SIZE_UPDATE_INTERVAL == 0)
+    {
+      LOG_DEBUG(
+        "_reviewDistanceCache size: " << _reviewDistanceCache.size() << ", memory: " <<
+        sizeof _reviewDistanceCache);
+    }
+
     return distance;
   }
 }
