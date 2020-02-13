@@ -311,10 +311,10 @@ void HighwayCornerSplitter::apply(std::shared_ptr<OsmMap> &map)
 void HighwayCornerSplitter::setConfiguration(const Settings& conf)
 {
   ConfigOptions options(conf);
-  _cornerThreshold = options.getCornerSplitterThreshold();
-  _splitRounded = options.getCornerSplitterRoundedSplit();
-  _roundedThreshold = options.getCornerSplitterRoundedThreshold();
-  _roundedMaxNodeCount = options.getCornerSplitterRoundedMaxNodeCount();
+  _cornerThreshold = options.getHighwayCornerSplitterThreshold();
+  _splitRounded = options.getHighwayCornerSplitterRoundedSplit();
+  _roundedThreshold = options.getHighwayCornerSplitterRoundedThreshold();
+  _roundedMaxNodeCount = options.getHighwayCornerSplitterRoundedMaxNodeCount();
 }
 
 }
