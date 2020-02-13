@@ -522,6 +522,8 @@ Coordinate MapProjector::project(const Coordinate& c,
 void MapProjector::project(const std::shared_ptr<OsmMap>& map,
                            const std::shared_ptr<OGRSpatialReference>& ref)
 {
+  LOG_STATUS("Reprojecting map...");
+
   std::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
 
@@ -562,7 +564,7 @@ void MapProjector::project(const std::shared_ptr<OsmMap>& map,
 
     if (count % 10000 == 0)
     {
-      PROGRESS_DEBUG(
+      PROGRESS_INFO(
         "Reprojecting " << StringUtils::formatLargeNumber(count) << " / " <<
         StringUtils::formatLargeNumber(nodes.size()));
     }
