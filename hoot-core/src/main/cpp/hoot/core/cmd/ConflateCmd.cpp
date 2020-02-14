@@ -237,8 +237,7 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     // Let's see if we can remove any ops in the configuration that will have no effect on the
     // feature types we're conflating in order to improve runtime performance.
-    // TODO: RE-ENABLE ME
-    //_removeSuperfluousOps();
+    _removeSuperfluousOps();
   }
 
   // The number of steps here must be updated as you add/remove job steps in the logic.

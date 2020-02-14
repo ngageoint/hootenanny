@@ -211,12 +211,14 @@ public:
   static QStringList getConflateCmdSnapshotCleaningOps();
 
   /**
-   * TODO
+   * Runs a conflate op reduction test which tests for which superfluous conflate pre/post/cleaning
+   * ops are removed by ConflateCmd
    *
-   * @param matchCreators
-   * @param expectedPreOpSize
-   * @param expectedPostOpsSize
-   * @param expectedCleaningOpsSize
+   * @param matchCreators the match creator class names involved in the conflation job
+   * @param expectedPreOpSize the expected number of conflation pre ops after op reduction
+   * @param expectedPostOpsSize the expected number of conflation post ops after op reduction
+   * @param expectedCleaningOpsSize the expected number of conflation cleaning ops after op
+   * reduction
    */
   static void runConflateOpReductionTest(
     const QStringList& matchCreators, const int expectedPreOpSize, const int expectedPostOpsSize,
