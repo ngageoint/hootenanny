@@ -365,41 +365,6 @@ void XmlChangeset::updateChangeset(const QString &changes)
   }
 }
 
-void XmlChangeset::updateChangeset(const ChangesetInfoPtr& changeset_info)
-{
-  //  Iterate the three changeset type arrays looking for elements to mark
-  for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-  {
-    //  Set the relation's status to failed
-    for (ChangesetInfo::iterator it = changeset_info->begin(ElementType::Relation, (ChangesetType)current_type);
-         it != changeset_info->end(ElementType::Relation, (ChangesetType)current_type); ++it)
-    {
-      //  Finalize the relation
-      _allRelations[*it]->setStatus(ChangesetElement::ElementStatus::Finalized);
-      //  Update the processed count
-      _processedCount++;
-    }
-    //  Set the way's status to failed
-    for (ChangesetInfo::iterator it = changeset_info->begin(ElementType::Way, (ChangesetType)current_type);
-         it != changeset_info->end(ElementType::Way, (ChangesetType)current_type); ++it)
-    {
-      //  Finalize the way
-      _allWays[*it]->setStatus(ChangesetElement::ElementStatus::Finalized);
-      //  Update the processed count
-      _processedCount++;
-    }
-    //  Set the node's status to failed
-    for (ChangesetInfo::iterator it = changeset_info->begin(ElementType::Node, (ChangesetType)current_type);
-         it != changeset_info->end(ElementType::Node, (ChangesetType)current_type); ++it)
-    {
-      //  Finalize the node
-      _allNodes[*it]->setStatus(ChangesetElement::ElementStatus::Finalized);
-      //  Update the processed count
-      _processedCount++;
-    }
-  }
-}
-
 bool XmlChangeset::fixChangeset(const QString& update)
 {
   /* <osm>

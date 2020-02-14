@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HttpTestServer.h"
@@ -173,12 +173,22 @@ bool HttpTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
   return !_interupt;
 }
 
-std::string HttpTestServer::read_request_headers(HttpConnection::HttpConnectionPtr &connection)
+std::string HttpTestServer::read_request_headers(HttpConnection::HttpConnectionPtr& connection)
 {
   //  Read the HTTP request headers
   boost::asio::streambuf buf;
   boost::asio::read_until(connection->socket(), buf, "\r\n\r\n");
   return boost::asio::buffer_cast<const char*>(buf.data());
+}
+
+std::string HttpTestServer::read_request_body(const std::string& headers, HttpConnection::HttpConnectionPtr& connection)
+{
+  //  Parse the headers to get the content length
+  long content_length = parse_content_length(headers);
+  std::vector<char> buf(content_length);
+  //  Read the HTTP request body
+  boost::asio::read(connection->socket(), boost::asio::buffer(buf));
+  return buf.data();
 }
 
 void HttpTestServer::write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response)
@@ -187,6 +197,30 @@ void HttpTestServer::write_response(HttpConnection::HttpConnectionPtr& connectio
   //  Write the response to the socket synchronously
   boost::asio::write(connection->socket(), boost::asio::buffer(response));
   connection->socket().close();
+}
+
+long HttpTestServer::parse_content_length(const std::string& headers)
+{
+  try
+  {
+    const std::string content_length = "Content-Length: ";
+    //  Find the beginning of the string
+    std::size_t start = headers.find(content_length);
+    if (start != std::string::npos)
+    {
+      //
+      start += content_length.length();
+      //  Find the next end of line
+      std::size_t end = headers.find("\r\n", start);
+      if (end != std::string::npos)
+      {
+        std::string value = headers.substr(start, end - start);
+        return std::stol(value);
+      }
+    }
+  }
+  catch(...) {}
+  return 0;
 }
 
 }
