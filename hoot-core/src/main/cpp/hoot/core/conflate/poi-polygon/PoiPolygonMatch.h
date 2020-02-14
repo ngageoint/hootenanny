@@ -151,6 +151,7 @@ public:
 private:
 
   friend class PoiPolygonMergerCreatorTest;
+  friend class PoiPolygonMatchTest;
 
   ConstOsmMapPtr _map;
 
@@ -241,6 +242,8 @@ private:
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
 
   bool _skipForReviewTypeDebugging() const;
+
+  void _clearCache();
 };
 
 }

@@ -105,6 +105,7 @@ _dateFormat(ConfigOptions().getBuildingDateFormat())
   else if (type != MatchType::Review && ConfigOptions().getBuildingAddressMatchEnabled())
   {
     AddressScoreExtractor addressScorer;
+    addressScorer.setOsmMap(map.get());
     addressScorer.setConfiguration((conf()));
     // address scorer only returns 1.0 for a match...no partial matches
     const double score = addressScorer.extract(*map, element1, element2);

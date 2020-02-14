@@ -54,6 +54,8 @@ namespace hoot
 class AddressScoreExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AddressScoreExtractorTest);
+  // TODO: remove
+  //CPPUNIT_TEST(runTempTest);
   CPPUNIT_TEST(runTagTest);
   CPPUNIT_TEST(runCombinedTagTest);
   CPPUNIT_TEST(runRangeTest);
@@ -74,6 +76,37 @@ public:
   AddressScoreExtractorTest()
   {
   }
+
+//  void runTempTest()
+//  {
+//    int maxCacheSizePercentage = 10;
+//    LOG_VARD(maxCacheSizePercentage);
+//    int mapSize = 100;
+//    LOG_VARD(mapSize);
+//    int maxCacheSize = (int)((double)mapSize * (double)((double)maxCacheSizePercentage / 100.0));
+//    LOG_VARD(maxCacheSize);
+
+//    maxCacheSizePercentage = 10;
+//    LOG_VARD(maxCacheSizePercentage);
+//    mapSize = 13;
+//    LOG_VARD(mapSize);
+//    maxCacheSize = (int)((double)mapSize * (double)((double)maxCacheSizePercentage / 100.0));
+//    LOG_VARD(maxCacheSize);
+
+//    maxCacheSizePercentage = 10;
+//    LOG_VARD(maxCacheSizePercentage);
+//    mapSize = 9;
+//    LOG_VARD(mapSize);
+//    maxCacheSize = (int)((double)mapSize * (double)((double)maxCacheSizePercentage / 100.0));
+//    LOG_VARD(maxCacheSize);
+
+//    maxCacheSizePercentage = 10;
+//    LOG_VARD(maxCacheSizePercentage);
+//    mapSize = 2;
+//    LOG_VARD(mapSize);
+//    maxCacheSize = (int)((double)mapSize * (double)((double)maxCacheSizePercentage / 100.0));
+//    LOG_VARD(maxCacheSize);
+//  }
 
   void runTagTest()
   {

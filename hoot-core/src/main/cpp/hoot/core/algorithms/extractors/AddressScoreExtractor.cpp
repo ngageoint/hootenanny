@@ -39,7 +39,8 @@ using namespace std;
 namespace hoot
 {
 
-QHash<ElementId, QList<Address>> AddressScoreExtractor::_addressesCache;
+QCache<ElementId, QList<Address>> AddressScoreExtractor::_addressesCache(
+  AddressScoreExtractor::CACHE_SIZE_DEFAULT);
 int AddressScoreExtractor::_addressCacheHits = 0;
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, AddressScoreExtractor)
@@ -71,6 +72,21 @@ void AddressScoreExtractor::setConfiguration(const Settings& conf)
   _addressParser.setPreTranslateTagValuesToEnglish(preTranslateTagValuesToEnglish, conf);
 
   _cacheEnabled = config.getAddressScorerEnableCaching();
+  if (_cacheEnabled)
+  {
+    // TODO
+    const int maxCacheSizePercentage = config.getPoiPolygonCacheSizePercentage();
+    LOG_VARD(maxCacheSizePercentage);
+    LOG_VARD(_map->size());
+    int maxCacheSize =
+      (int)((double)_map->size() * (double)((double)maxCacheSizePercentage / 100.0));
+    LOG_VARD(maxCacheSize);
+    if (maxCacheSize == 0 && maxCacheSizePercentage != 0)
+    {
+      maxCacheSize = 1;
+    }
+    _addressesCache.setMaxCost(maxCacheSize);
+  }
 }
 
 QList<Address> AddressScoreExtractor::_getElementAddresses(
@@ -80,13 +96,12 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
   LOG_TRACE("Collecting addresses from: " << element->getElementId() << "...");
 
   if (_cacheEnabled)
-  {
-    QHash<ElementId, QList<Address>>::const_iterator itr =
-      _addressesCache.find(element->getElementId());
-    if (itr != _addressesCache.end())
+  { 
+    const QList<Address>* cachedVal = _addressesCache[element->getElementId()];
+    if (cachedVal != 0)
     {
       _addressCacheHits++;
-      return itr.value();
+      return *cachedVal;
     }
   }
 
@@ -114,7 +129,7 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
 
   if (_cacheEnabled)
   {
-    _addressesCache[element->getElementId()] = elementAddresses;
+    _addressesCache.insert(element->getElementId(), new QList<Address>(elementAddresses));
   }
 
   return elementAddresses;

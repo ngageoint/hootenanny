@@ -39,19 +39,20 @@ namespace hoot
 class PoiPolygonMatchTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonMatchTest);
-  CPPUNIT_TEST(matchTest);
-  CPPUNIT_TEST(missTest);
-  CPPUNIT_TEST(reviewTest);
-  CPPUNIT_TEST(reviewIfMatchedTypedTest);
-  CPPUNIT_TEST(badMatchDistanceInputsTest);
-  CPPUNIT_TEST(badReviewDistanceInputsTest);
-  CPPUNIT_TEST(badNameScoreThresholdInputsTest);
-  CPPUNIT_TEST(badTypeScoreThresholdInputsTest);
-  CPPUNIT_TEST(badReviewIfMatchedTypesInputsTest);
-  CPPUNIT_TEST(exactSourceMatchDisableConflationTest);
-  CPPUNIT_TEST(sourceMatchTagKeyPrefixOnlyDisableConflationTest);
-  CPPUNIT_TEST(sourceTagKeyMismatchDisableConflationTest);
-  CPPUNIT_TEST(missingSourceTagTest);
+  // TODO: re-enable
+//  CPPUNIT_TEST(matchTest);
+//  CPPUNIT_TEST(missTest);
+//  CPPUNIT_TEST(reviewTest);
+//  CPPUNIT_TEST(reviewIfMatchedTypedTest);
+//  CPPUNIT_TEST(badMatchDistanceInputsTest);
+//  CPPUNIT_TEST(badReviewDistanceInputsTest);
+//  CPPUNIT_TEST(badNameScoreThresholdInputsTest);
+//  CPPUNIT_TEST(badTypeScoreThresholdInputsTest);
+//  CPPUNIT_TEST(badReviewIfMatchedTypesInputsTest);
+//  CPPUNIT_TEST(exactSourceMatchDisableConflationTest);
+//  CPPUNIT_TEST(sourceMatchTagKeyPrefixOnlyDisableConflationTest);
+//  CPPUNIT_TEST(sourceTagKeyMismatchDisableConflationTest);
+//  CPPUNIT_TEST(missingSourceTagTest);
   CPPUNIT_TEST(multiUseBuildingTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -772,6 +773,7 @@ public:
     PoiPolygonMatch uut(
       map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
       PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+    uut.setConfiguration(conf());
     uut.setEnableReviewReduction(true);
     uut.setMatchDistanceThreshold(0.0);
     uut.setReviewDistanceThreshold(0.0);
@@ -783,6 +785,8 @@ public:
     uut.setReviewMultiUseBuildings(true);
 
     {
+      LOG_DEBUG("test1");
+
       n1->getTags()["name"] = "Staunton Elementary";
 
       WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
@@ -791,6 +795,7 @@ public:
       w1->getTags().set("building:use", "multipurpose");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
+     // uut._clearCache();
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
       CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
@@ -799,6 +804,8 @@ public:
     }
 
     {
+      LOG_DEBUG("test2");
+
       n1->getTags()["name"] = "Staunton Elementary";
 
       WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
@@ -807,6 +814,7 @@ public:
       w1->getTags().set("building:use", "multipurpose");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
+      //uut._clearCache();
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
       CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
@@ -815,6 +823,8 @@ public:
     }
 
     {
+      LOG_DEBUG("test3");
+
       n1->getTags()["name"] = "Honey Creek Mall";
       n1->getTags()["shop"] = "mall";
 
@@ -824,6 +834,7 @@ public:
       w1->getTags().set("shop", "mall");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
+      //uut._clearCache();
 
       LOG_VART(uut.getClassification());
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
@@ -836,6 +847,8 @@ public:
     // be considered a building without also having building=yes, now it can be considered a
     // building with the tag alone.
     {
+      LOG_DEBUG("test4");
+
       n1->getTags()["name"] = "Honey Creek Mall";
       n1->getTags()["shop"] = "mall";
 
@@ -844,6 +857,7 @@ public:
       w1->getTags().set("shop", "mall");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
+      //uut._clearCache();
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
       CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
@@ -852,6 +866,8 @@ public:
     }
 
     {
+      LOG_DEBUG("test5");
+
       n1->getTags()["name"] = "Staunton Elementary";
 
       WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
@@ -860,6 +876,7 @@ public:
       w1->getTags().set("building:use", "multipurpose");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
+      //uut._clearCache();
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
       CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
@@ -868,6 +885,8 @@ public:
     }
 
     {
+      LOG_DEBUG("test6");
+
       n1->getTags()["name"] = "Staunton Elementary";
 
       WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
@@ -875,6 +894,7 @@ public:
       w1->getTags().set("building", "yes");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
+      //uut._clearCache();
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
       CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
@@ -883,6 +903,8 @@ public:
     }
 
     {
+      LOG_DEBUG("test7");
+
       n1->getTags()["name"] = "Staunton Elementary";
 
       WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
@@ -890,6 +912,7 @@ public:
       w1->getTags().set("amenity", "school");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
+      uut._clearCache();
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
       CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
@@ -898,6 +921,8 @@ public:
     }
 
     {
+      LOG_DEBUG("test8");
+
       n1->getTags()["name"] = "Staunton Elementary";
 
       WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
@@ -906,6 +931,7 @@ public:
       w1->getTags().set("building:use", "multipurpose");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
+      uut._clearCache();
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
       CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));

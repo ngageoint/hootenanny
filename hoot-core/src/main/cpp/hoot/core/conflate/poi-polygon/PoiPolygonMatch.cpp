@@ -249,6 +249,7 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   _addressMatchEnabled = config.getPoiPolygonAddressMatchEnabled();
   if (_addressMatchEnabled)
   {
+    _addressScorer.setOsmMap(_map.get());
     _addressScorer.setConfiguration(conf);
   }
   if (!_typeScorer)
@@ -830,6 +831,14 @@ QString PoiPolygonMatch::toString() const
         .arg(_typeScore)
         .arg(_nameScore)
         .arg(_addressScore);
+  }
+}
+
+void PoiPolygonMatch::_clearCache()
+{
+  if (_infoCache)
+  {
+    _infoCache->clear();
   }
 }
 

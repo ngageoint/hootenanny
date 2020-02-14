@@ -202,13 +202,7 @@ private:
 
   AddressParser _addressParser;
 
-  // Using QHash here for all of these instead of QCache, since we're mostly just storing primitives
-  // for values and they all take up the same amount of space. Tried to use QCache with the
-  // geometries, but since ElementConverter returns a shared pointer and QCache takes ownership, had
-  // trouble making it work. Also, not doing any management of the size of these caches, which may
-  // eventually end up being needed to control memory usage.
-
-  // Also, didn't see any performance improvement by reserving initial sizes for these caches.
+  //Didn't see any performance improvement by reserving initial sizes for these caches.
 
   // key is "elementID 1;elementID 2"; ordering of the ID keys doesn't matter here, since we check
   // in both directions
@@ -220,9 +214,11 @@ private:
   // key is "elementId;criterion class name"
   QCache<QString, bool> _hasCriterionCache;
 
-  // key is element criterion class name
+  // key is element criterion class name; leaving this as a hash, since it shouldn't ever get big
+  // enough to require any cache size management
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
+  //QCache<ElementId, geos::geom::Geometry> _geometryCache;
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
   QCache<ElementId, bool> _hasMoreThanOneTypeCache;
   QCache<ElementId, int> _numAddressesCache;

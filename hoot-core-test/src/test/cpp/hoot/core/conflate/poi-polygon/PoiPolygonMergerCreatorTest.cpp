@@ -141,10 +141,12 @@ public:
 
     vector<ConstMatchPtr> matchesV;
 
+    LOG_DEBUG("test1");
     std::shared_ptr<PoiPolygonMatch> match1(
           new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
                               std::shared_ptr<PoiPolygonRfClassifier>(),
                               PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map))));
+    //match1->setConfiguration(conf());
     match1->setMatchEvidenceThreshold(3);
     match1->setReviewEvidenceThreshold(1);
     match1->calculateMatch(w1->getElementId(), n1->getElementId());
@@ -152,22 +154,26 @@ public:
     std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
     BuildingMatchCreator().createMatches(map, matchesV, threshold);
 
+    LOG_DEBUG("test2");
     std::shared_ptr<PoiPolygonMatch> match2(
           new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
                               std::shared_ptr<PoiPolygonRfClassifier>(),
                               PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map))));
+    //match2->setConfiguration(conf());
     match2->setMatchEvidenceThreshold(3);
     match2->setReviewEvidenceThreshold(1);
     match2->calculateMatch(w2->getElementId(), n1->getElementId());
     matchesV.push_back(match2);
     LOG_VAR(match2);
 
+    LOG_DEBUG("test3");
     MatchSet matches;
     matches.insert(matchesV.begin(), matchesV.end());
     vector<MergerPtr> mergers;
     PoiPolygonMergerCreator uut;
     uut.setOsmMap(map.get());
 
+    LOG_DEBUG("test4");
     HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
     HOOT_STR_EQUALS(1, mergers.size());
     LOG_VART(*mergers[0]);
@@ -181,13 +187,15 @@ public:
 
     vector<ConstMatchPtr> matchesV;
 
-    std::shared_ptr<BuildingMatch> match1(new BuildingMatch(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.5, 0.5, 0.5))));
+    std::shared_ptr<BuildingMatch> match1(
+      new BuildingMatch(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.5, 0.5, 0.5))));
     match1->_p.setMatch();
     match1->_eid1 = ElementId(ElementType::Way, 1);
     match1->_eid2 = ElementId(ElementType::Node, 1);
     matchesV.push_back(match1);
 
-    std::shared_ptr<PoiPolygonMatch> match2(new PoiPolygonMatch(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.6, 0.6, 0.6))));
+    std::shared_ptr<PoiPolygonMatch> match2(
+      new PoiPolygonMatch(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.6, 0.6, 0.6))));
     match2->_class.setMatch();
     match2->_eid1 = ElementId(ElementType::Way, 2);
     match2->_eid2 = ElementId(ElementType::Node, 1);

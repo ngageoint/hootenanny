@@ -51,6 +51,7 @@ _map(map),
 _elementIntersectsCache(CACHE_SIZE_DEFAULT),
 _isTypeCache(CACHE_SIZE_DEFAULT),
 _hasCriterionCache(CACHE_SIZE_DEFAULT),
+//_geometryCache(CACHE_SIZE_DEFAULT),
 _hasMoreThanOneTypeCache(CACHE_SIZE_DEFAULT),
 _numAddressesCache(CACHE_SIZE_DEFAULT),
 _reviewDistanceCache(CACHE_SIZE_DEFAULT)
@@ -63,18 +64,26 @@ void PoiPolygonInfoCache::setConfiguration(const Settings& conf)
 
   const int maxCacheSizePercentage = ConfigOptions(conf).getPoiPolygonCacheSizePercentage();
   LOG_VARD(maxCacheSizePercentage);
-  const int maxCacheSize = (int)(_map->size() * (double)(maxCacheSizePercentage / 100));
+  int maxCacheSize =
+    (int)((double)_map->size() * (double)((double)maxCacheSizePercentage / 100.0));
   LOG_VARD(maxCacheSize);
+  if (maxCacheSize == 0 && maxCacheSizePercentage != 0)
+  {
+    maxCacheSize = 1;
+  }
   _elementIntersectsCache.setMaxCost(maxCacheSize);
   _isTypeCache.setMaxCost(maxCacheSize);
   _hasCriterionCache.setMaxCost(maxCacheSize);
   _hasMoreThanOneTypeCache.setMaxCost(maxCacheSize);
   _numAddressesCache.setMaxCost(maxCacheSize);
   _reviewDistanceCache.setMaxCost(maxCacheSize);
+  //_geometryCache.setMaxCost(maxCacheSize);
 }
 
 void PoiPolygonInfoCache::clear()
 {
+  LOG_DEBUG("Clearing cache...");
+
   _numCacheHitsByCacheType.clear();
   _numCacheEntriesByCacheType.clear();
 
@@ -147,6 +156,12 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
     throw IllegalArgumentException("The input element is null.");
   }
 
+//  geos::geom::Geometry* cachedVal = _geometryCache[element->getElementId()];
+//  if (cachedVal != 0)
+//  {
+//    _incrementCacheHitCount("geometry");
+//    return std::shared_ptr<geos::geom::Geometry>(cachedVal);
+//  }
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>>::const_iterator itr =
     _geometryCache.find(element->getElementId());
   if (itr != _geometryCache.end())
@@ -189,6 +204,10 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
     newGeom.reset();
   }
   _geometryCache[element->getElementId()] = newGeom;
+  // TODO
+  //geos::geom::Geometry* geomToCache = newGeom->clone();
+  ////newGeom.reset();    // TODO: why can't I do this?
+  //_geometryCache.insert(element->getElementId(), geomToCache);
   _incrementCacheSizeCount("geometry");
 
   if (_geometryCache.size() % CACHE_SIZE_UPDATE_INTERVAL == 0)
