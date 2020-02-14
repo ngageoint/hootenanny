@@ -3195,6 +3195,13 @@ If true, instances where multiple POIs were matched to a single polygon will res
 POIs being automatically merged into the polygon.  If false, then each matched POI will generate a
 review against the polygon instead.
 
+=== poi.polygon.cache.size.percentage
+
+* Data Type: int
+* Default Value: `10`
+
+TODO
+
 === poi.polygon.disable.same.source.conflation
 
 * Data Type: bool

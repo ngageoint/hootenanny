@@ -38,6 +38,9 @@
 #include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 
+// Qt
+#include <QCache>
+
 namespace hoot
 {
 
@@ -209,26 +212,27 @@ private:
 
   // key is "elementID 1;elementID 2"; ordering of the ID keys doesn't matter here, since we check
   // in both directions
-  QHash<QString, bool> _elementIntersectsCache;
+  QCache<QString, bool> _elementIntersectsCache;
 
   // key is "elementId;type string"
-  QHash<QString, bool> _isTypeCache;
+  QCache<QString, bool> _isTypeCache;
 
   // key is "elementId;criterion class name"
-  QHash<QString, bool> _hasCriterionCache;
+  QCache<QString, bool> _hasCriterionCache;
 
   // key is element criterion class name
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
-  QHash<ElementId, bool> _hasMoreThanOneTypeCache;
-  QHash<ElementId, int> _numAddressesCache;
-  QHash<ElementId, double> _reviewDistanceCache;
+  QCache<ElementId, bool> _hasMoreThanOneTypeCache;
+  QCache<ElementId, int> _numAddressesCache;
+  QCache<ElementId, double> _reviewDistanceCache;
 
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
 
   static const int CACHE_SIZE_UPDATE_INTERVAL = 100000;
+  static const int CACHE_SIZE_DEFAULT = 10000;
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element);
   ElementCriterionPtr _getCrit(const QString& criterionClassName);
