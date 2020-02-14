@@ -154,7 +154,7 @@ private:
 
 #ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "slow");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "serial");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "serial");
 #endif  // HOOT_HAVE_SERVICES
 
 }

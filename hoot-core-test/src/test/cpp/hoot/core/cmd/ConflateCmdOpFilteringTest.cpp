@@ -45,12 +45,11 @@ namespace hoot
 class ConflateCmdOpFilteringTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ConflateCmdOpFilteringTest);
-  // TODO: temp disable
-//  CPPUNIT_TEST(runOpFilter1Test);
-//  CPPUNIT_TEST(runOpFilter2Test);
-//  CPPUNIT_TEST(runOpFilter3Test);
-//  CPPUNIT_TEST(runOpFilter4Test);
-//  CPPUNIT_TEST(runOpFilterCombinedTest);
+  CPPUNIT_TEST(runOpFilter1Test);
+  CPPUNIT_TEST(runOpFilter2Test);
+  CPPUNIT_TEST(runOpFilter3Test);
+  CPPUNIT_TEST(runOpFilter4Test);
+  CPPUNIT_TEST(runOpFilterCombinedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -97,6 +96,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateCmdOpFilteringTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateCmdOpFilteringTest, "serial");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateCmdOpFilteringTest, "serial");
 
 }
