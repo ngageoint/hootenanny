@@ -321,4 +321,14 @@ bool TestUtils::mkpath(const QString& path)
   return false;
 }
 
+OsmMapPtr TestUtils::getNodeMapOfSize(const int size)
+{
+  OsmMapPtr map(new OsmMap());
+  for (int i = 0; i < size; i++)
+  {
+    createNode(map, Status::Unknown1, 0.0 + i, 0.0 + i);
+  }
+  return map;
+}
+
 }

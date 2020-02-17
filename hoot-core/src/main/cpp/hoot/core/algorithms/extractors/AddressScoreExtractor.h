@@ -66,7 +66,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void setOsmMap(const OsmMap* map) override { LOG_DEBUG("testa"); _map = map; }
+  virtual void setOsmMap(const OsmMap* map) override { _map = map; }
 
   /**
    * Calculates the address similarity score of two features
@@ -90,6 +90,8 @@ public:
   { _addressParser.setAllowLenientHouseNumberMatching(allow); }
 
   static int getAddressCacheSize() { return _addressesCache.size(); }
+  static int getAddressCacheMaxSize() { return _addressesCache.maxCost(); }
+  static void setAddressCacheMaxSizePercentage(const int percentage, const OsmMap* map);
   static int getNumAddressCacheHits() { return _addressCacheHits; }
   void setCacheEnabled(const bool enabled) { _cacheEnabled = enabled; }
 

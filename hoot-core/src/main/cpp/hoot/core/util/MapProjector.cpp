@@ -564,7 +564,7 @@ void MapProjector::project(const std::shared_ptr<OsmMap>& map,
 
     if (count % 10000 == 0)
     {
-      PROGRESS_INFO(
+      PROGRESS_DEBUG(
         "Reprojecting " << StringUtils::formatLargeNumber(count) << " / " <<
         StringUtils::formatLargeNumber(nodes.size()));
     }

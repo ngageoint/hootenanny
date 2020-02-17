@@ -189,6 +189,14 @@ public:
    */
   static bool mkpath(const QString& path);
 
+  /**
+   * TODO
+   *
+   * @param size
+   * @return
+   */
+  static OsmMapPtr getNodeMapOfSize(const int size);
+
 private:
 
   QList<RegisteredReset*> _resets;
