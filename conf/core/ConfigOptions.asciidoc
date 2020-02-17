@@ -1749,7 +1749,7 @@ interacts with Hootenany and JOSM Java code via JNI.
 === jni.initial.memory
 
 * Data Type: string
-* Default Value: `2g`
+* Default Value: `256m`
 
 JVM -Xms setting to use with hoot-josm JNI to configure the initial amount of memory available to
 the JVM.
@@ -1757,7 +1757,7 @@ the JVM.
 === jni.max.memory
 
 * Data Type: string
-* Default Value: `8g`
+* Default Value: `2g`
 
 JVM -Xmx setting to use with hoot-josm JNI to configure the maximum amount of memory available to
 the JVM.
