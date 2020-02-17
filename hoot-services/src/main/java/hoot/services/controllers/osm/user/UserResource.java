@@ -47,6 +47,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -54,6 +55,9 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +68,8 @@ import org.w3c.dom.Element;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.sql.SQLQuery;
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 import hoot.services.controllers.auth.UserManager;
 import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
@@ -82,6 +88,7 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Transactional
 public class UserResource {
     private static final Logger logger = LoggerFactory.getLogger(UserResource.class);
+    private JSONArray favoriteAdvOpts;
 
     @Autowired
     UserManager userManager;
@@ -197,13 +204,15 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers(@Context HttpServletRequest request,
             @QueryParam("sort") @DefaultValue("") String sort,
-            @QueryParam("privileges") @DefaultValue("") String privileges) {
+            @QueryParam("privileges") @DefaultValue("") String privileges,
+    		@QueryParam("favoriteOpts") @DefaultValue("") String favoriteOpts){
         Users currentUser = Users.fromRequest(request);
 
         try {
             List<Tuple> userInfo;
             OrderSpecifier<?> sorter;
             Collection<String> activePrivileges = new ArrayList<>();
+            Collection<String> activeFavoriteOpts = new ArrayList<>();
 
             switch (sort) {
                 case "-auth":
@@ -229,8 +238,13 @@ public class UserResource {
                             .collect(Collectors.toList());
                 }
 
+                if (!favoriteOpts.isEmpty()) {
+                	activeFavoriteOpts = Arrays.stream(favoriteOpts.split(","))
+                			.collect(Collectors.toList());
+                }
+
                 userInfo = createQuery()
-                        .select(users.id, users.displayName, users.hootservices_last_authorize, users.privileges)
+                        .select(users.id, users.displayName, users.hootservices_last_authorize, users.privileges, users.favoriteOpts)
                         .from(users)
                         .orderBy(sorter)
                         .fetch();
@@ -253,14 +267,19 @@ public class UserResource {
                             .stream().filter(map -> substitutionMap.get(map).equals("true"))
                             .collect(Collectors.toSet());
 
-                    if (activePrivileges.size() == 0 || filterPrivileges.containsAll(activePrivileges)) {
+                    Map<String, String> favSubstitutionMap = (Map<String, String>) tuple.get(users.favoriteOpts);
+                    Collection<String> filterFavOpts = substitutionMap.keySet()
+                            .stream().filter(map -> substitutionMap.get(map).equals("true"))
+                            .collect(Collectors.toSet());
+
+                    if (activePrivileges.size() == 0 || filterPrivileges.containsAll(activePrivileges) ) {
                         user.setId(tuple.get(users.id));
                         user.setDisplayName(tuple.get(users.displayName));
                         user.setHootservicesLastAuthorize(tuple.get(users.hootservices_last_authorize));
                         user.setPrivileges(tuple.get(users.privileges));
+                        //user.setFavoriteOpts(tuple.get(users.favoriteOpts));
                         userList.add(user);
                     }
-
                 } else {
                     user.setId(tuple.get(users.id));
                     user.setDisplayName(tuple.get(users.displayName));
@@ -341,6 +360,73 @@ public class UserResource {
     }
 
     /**
+    *
+    * Saves the favorite adv opts for the specified users list
+    *
+    * POST hoot-services/osm/api/0.6/user/saveFavoriteOpts
+    *
+    * @param request
+    * @param userList list of objects containing the users id and favorite
+    *  looks like:
+    *      [
+    *        {
+    *        	id:1, favorites:
+    *        		{
+    *        			description: "If true, not only will....",
+    *        			id: AddReviewTagsToFeatures,
+    *        			type: "bool",
+    *        			value: true
+    *        		}
+    *        },
+    *
+    *      ]
+    * @return success status if everything is updated.
+    * @throws org.json.simple.parser.ParseException
+    */
+    @POST
+    @Path("/saveFavoriteOpts")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response saveFavoriteOpts(@Context HttpServletRequest request,
+           List<LinkedHashMap> userList, String favoriteOpts) throws org.json.simple.parser.ParseException {
+
+               JSONParser parser = new JSONParser();
+               JSONObject json = (JSONObject) parser.parse(favoriteOpts);
+
+       for (LinkedHashMap user : userList) {
+           Long userId = Long.valueOf(user.get("id").toString());
+
+           createQuery().update(users)
+               .where(users.id.eq(userId))
+               .set(users.favoriteOpts, user.get("favoriteOpts"))
+               .execute();
+
+           userManager.clearCachedUser(userId);
+
+       }
+
+       return Response.ok().build();
+   }
+
+    /**
+     * Gets the current users favorite adv opts
+     *
+     * GET hoot-services/osm/api/0.6/user/getFavoriteOpts
+     * @param <FavoriteOpts>
+     *
+     * @param request
+     * @return the current user's favorite adv opts
+     */
+    @GET
+    @Path("/getFavoriteOpts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFavoriteOpts(@Context HttpServletRequest request) {
+        Users user = Users.fromRequest(request);
+        Map<String, String> json = PostgresUtils.postgresObjToHStore(user.getFavoriteOpts());
+
+        return Response.ok(json).build();
+    }
+
+    /**
      * Checks if the specified user is an admin user
      *
      * @param user
@@ -354,6 +440,12 @@ public class UserResource {
         if (user == null) return false;
         Map<String, String> privileges = PostgresUtils.postgresObjToHStore(user.getPrivileges());
         return ("true").equals(privileges.get(priv));
+    }
+
+    public static boolean userFavoriteOptsCheck( Users user, String opts) {
+    	if ( user == null) return false;
+    	Map <String, String> favoriteOpts = PostgresUtils.postgresObjToHStore(user.getFavoriteOpts());
+    	return ("true").equals(favoriteOpts.get(opts));
     }
 
     private static Document writeResponse(User user) throws ParserConfigurationException {

@@ -28,6 +28,9 @@ package hoot.services.models.db;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+
 
 import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
@@ -74,6 +77,8 @@ public class Users {
     private Timestamp provider_created_at;
 
     private Object privileges;
+
+    private Object favoriteOpts;
 
     @JsonProperty(value = "display_name")
     public String getDisplayName() {
@@ -165,6 +170,15 @@ public class Users {
 
     public void setPrivileges(Object privileges) {
         this.privileges = privileges;
+    }
+
+    @JsonProperty(value = "favoriteOpts")
+    public Object getFavoriteOpts() {
+    	return favoriteOpts;
+    }
+
+    public void setFavoriteOpts( Object favoriteOpts ) {
+    	this.favoriteOpts = favoriteOpts;
     }
 
     @Override

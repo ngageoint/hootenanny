@@ -96,7 +96,7 @@ public:
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedHootDbVersion() { return "29:bobby.simic"; }
+  static QString expectedHootDbVersion() { return "30:bobby.simic"; }
   static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
