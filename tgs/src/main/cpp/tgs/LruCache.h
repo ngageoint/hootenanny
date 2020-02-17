@@ -91,6 +91,12 @@ public:
     return result;
   }
 
+  void clear()
+  {
+    _cacheList.clear();
+    _cacheMap.clear();
+  }
+
 private:
 
   size_t _maxSize;

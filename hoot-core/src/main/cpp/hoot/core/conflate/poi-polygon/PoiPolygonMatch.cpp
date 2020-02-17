@@ -249,7 +249,6 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   _addressMatchEnabled = config.getPoiPolygonAddressMatchEnabled();
   if (_addressMatchEnabled)
   {
-    _addressScorer.setOsmMap(_map.get());
     _addressScorer.setConfiguration(conf);
   }
   if (!_typeScorer)

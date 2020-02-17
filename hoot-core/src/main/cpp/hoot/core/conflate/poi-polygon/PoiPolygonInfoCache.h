@@ -222,7 +222,7 @@ private:
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
   //QCache<ElementId, geos::geom::Geometry> _geometryCache;
-  Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
+  std::shared_ptr<Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>> _geometryCache;
   QCache<ElementId, bool> _hasMoreThanOneTypeCache;
   QCache<ElementId, int> _numAddressesCache;
   QCache<ElementId, double> _reviewDistanceCache;

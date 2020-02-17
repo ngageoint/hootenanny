@@ -74,25 +74,8 @@ void AddressScoreExtractor::setConfiguration(const Settings& conf)
   _cacheEnabled = config.getAddressScorerEnableCaching();
   if (_cacheEnabled)
   {
-    // TODO
-    const int maxCacheSizePercentage = config.getPoiPolygonCacheSizePercentage();
-    LOG_VARD(maxCacheSizePercentage);
-    setAddressCacheMaxSizePercentage(maxCacheSizePercentage, _map);
+    _addressesCache.setMaxCost(config.getPoiPolygonMaxCacheSize());
   }
-}
-
-void AddressScoreExtractor::setAddressCacheMaxSizePercentage(const int percentage,
-                                                             const OsmMap* map)
-{
-  LOG_VARD(map->size());
-  int maxCacheSize =
-    (int)((double)map->size() * (double)((double)percentage / 100.0));
-  LOG_VARD(maxCacheSize);
-  if (maxCacheSize == 0 && percentage != 0)
-  {
-    maxCacheSize = 1;
-  }
-  _addressesCache.setMaxCost(maxCacheSize);
 }
 
 QList<Address> AddressScoreExtractor::_getElementAddresses(

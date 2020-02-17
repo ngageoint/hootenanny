@@ -67,7 +67,6 @@ class AddressScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(invalidFullAddressTest);
   CPPUNIT_TEST(invalidComponentAddressTest);
   CPPUNIT_TEST(addressNormalizationTest);
-  CPPUNIT_TEST(runMaxCacheSizeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -569,33 +568,6 @@ public:
     way1->getTags().set(
       TestUtils::FULL_ADDRESS_TAG_NAME, QString::fromUtf8("92 avenue des champs elysees"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
-  }
-
-  void runMaxCacheSizeTest()
-  {
-    AddressScoreExtractor uut;
-
-    ConstOsmMapPtr map = TestUtils::getNodeMapOfSize(100);
-
-    uut.setAddressCacheMaxSizePercentage(10, map.get());
-    CPPUNIT_ASSERT_EQUAL(10, uut.getAddressCacheMaxSize());
-
-    uut.setAddressCacheMaxSizePercentage(1, map.get());
-    CPPUNIT_ASSERT_EQUAL(1, uut.getAddressCacheMaxSize());
-
-    uut.setAddressCacheMaxSizePercentage(100, map.get());
-    CPPUNIT_ASSERT_EQUAL(100, uut.getAddressCacheMaxSize());
-
-    map = TestUtils::getNodeMapOfSize(13);
-
-    uut.setAddressCacheMaxSizePercentage(10, map.get());
-    CPPUNIT_ASSERT_EQUAL(1, uut.getAddressCacheMaxSize());
-
-    uut.setAddressCacheMaxSizePercentage(1, map.get());
-    CPPUNIT_ASSERT_EQUAL(1, uut.getAddressCacheMaxSize());
-
-    uut.setAddressCacheMaxSizePercentage(100, map.get());
-    CPPUNIT_ASSERT_EQUAL(13, uut.getAddressCacheMaxSize());
   }
 };
 

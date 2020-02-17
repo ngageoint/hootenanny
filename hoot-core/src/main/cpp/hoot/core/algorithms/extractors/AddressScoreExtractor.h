@@ -33,7 +33,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
 #include <hoot/core/conflate/address/AddressParser.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 // Qt
 #include <QCache>
@@ -53,8 +52,7 @@ class Address;
  * city, etc.), and we basically assume feature addresses are valid anyway...we're just trying to
  * match them to each other.
  */
-class AddressScoreExtractor : public FeatureExtractorBase, public Configurable,
-  public ConstOsmMapConsumer
+class AddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
@@ -65,8 +63,6 @@ public:
   virtual std::string getClassName() const { return AddressScoreExtractor::className(); }
 
   virtual void setConfiguration(const Settings& conf);
-
-  virtual void setOsmMap(const OsmMap* map) override { _map = map; }
 
   /**
    * Calculates the address similarity score of two features
@@ -90,8 +86,6 @@ public:
   { _addressParser.setAllowLenientHouseNumberMatching(allow); }
 
   static int getAddressCacheSize() { return _addressesCache.size(); }
-  static int getAddressCacheMaxSize() { return _addressesCache.maxCost(); }
-  static void setAddressCacheMaxSizePercentage(const int percentage, const OsmMap* map);
   static int getNumAddressCacheHits() { return _addressCacheHits; }
   void setCacheEnabled(const bool enabled) { _cacheEnabled = enabled; }
 

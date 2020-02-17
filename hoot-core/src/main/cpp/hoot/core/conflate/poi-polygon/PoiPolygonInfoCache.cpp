@@ -51,33 +51,27 @@ _map(map),
 _elementIntersectsCache(CACHE_SIZE_DEFAULT),
 _isTypeCache(CACHE_SIZE_DEFAULT),
 _hasCriterionCache(CACHE_SIZE_DEFAULT),
-_geometryCache(CACHE_SIZE_DEFAULT),
 _hasMoreThanOneTypeCache(CACHE_SIZE_DEFAULT),
 _numAddressesCache(CACHE_SIZE_DEFAULT),
 _reviewDistanceCache(CACHE_SIZE_DEFAULT)
 {
+  _geometryCache.reset(
+    new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(CACHE_SIZE_DEFAULT));
 }
 
 void PoiPolygonInfoCache::setConfiguration(const Settings& conf)
 {
   _addressParser.setConfiguration(conf);
 
-  const int maxCacheSizePercentage = ConfigOptions(conf).getPoiPolygonCacheSizePercentage();
-  LOG_VARD(maxCacheSizePercentage);
-  int maxCacheSize =
-    (int)((double)_map->size() * (double)((double)maxCacheSizePercentage / 100.0));
-  LOG_VARD(maxCacheSize);
-  if (maxCacheSize == 0 && maxCacheSizePercentage != 0)
-  {
-    maxCacheSize = 1;
-  }
+  const int maxCacheSize = ConfigOptions(conf).getPoiPolygonMaxCacheSize();
   _elementIntersectsCache.setMaxCost(maxCacheSize);
   _isTypeCache.setMaxCost(maxCacheSize);
   _hasCriterionCache.setMaxCost(maxCacheSize);
   _hasMoreThanOneTypeCache.setMaxCost(maxCacheSize);
   _numAddressesCache.setMaxCost(maxCacheSize);
   _reviewDistanceCache.setMaxCost(maxCacheSize);
-  //_geometryCache.setMaxCost(maxCacheSize);
+  _geometryCache.reset(
+    new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(maxCacheSize));
 }
 
 void PoiPolygonInfoCache::clear()
@@ -90,7 +84,7 @@ void PoiPolygonInfoCache::clear()
   _isTypeCache.clear();
   _hasCriterionCache.clear();
   _criterionCache.clear();
-  //_geometryCache.clear();
+  _geometryCache->clear();
   _hasMoreThanOneTypeCache.clear();
   _numAddressesCache.clear();
   _elementIntersectsCache.clear();
@@ -157,7 +151,7 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
   }
 
   std::shared_ptr<geos::geom::Geometry> cachedVal;
-  if (_geometryCache.get(element->getElementId(), cachedVal))
+  if (_geometryCache->get(element->getElementId(), cachedVal))
   {
     _incrementCacheHitCount("geometry");
     return cachedVal;
@@ -197,7 +191,7 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
     newGeom.reset();
   }
 
-  _geometryCache.insert(element->getElementId(), newGeom);
+  _geometryCache->insert(element->getElementId(), newGeom);
   _incrementCacheSizeCount("geometry");
 
   return newGeom;
