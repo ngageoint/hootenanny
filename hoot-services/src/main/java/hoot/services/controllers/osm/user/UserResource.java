@@ -370,12 +370,14 @@ public class UserResource {
     *  looks like:
     *      [
     *        {
-    *        	id:1, favorites:
+    *        	favorites:
     *        		{
-    *        			description: "If true, not only will....",
-    *        			id: AddReviewTagsToFeatures,
-    *        			type: "bool",
-    *        			value: true
+    *                   description:  "If true, not only will....",
+    *                   value: true,
+    *                   input: opt.input,
+    *                   type: "boolean",
+    *                   id: AddReviewTagsToFeatures,
+    *                   label: Add Review Tags
     *        		}
     *        },
     *
@@ -411,7 +413,6 @@ public class UserResource {
      * Gets the current users favorite adv opts
      *
      * GET hoot-services/osm/api/0.6/user/getFavoriteOpts
-     * @param <FavoriteOpts>
      *
      * @param request
      * @return the current user's favorite adv opts
