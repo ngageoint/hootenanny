@@ -156,19 +156,19 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
     throw IllegalArgumentException("The input element is null.");
   }
 
-//  geos::geom::Geometry* cachedVal = _geometryCache[element->getElementId()];
-//  if (cachedVal != 0)
-//  {
-//    _incrementCacheHitCount("geometry");
-//    return std::shared_ptr<geos::geom::Geometry>(cachedVal);
-//  }
-  QHash<ElementId, std::shared_ptr<geos::geom::Geometry>>::const_iterator itr =
-    _geometryCache.find(element->getElementId());
-  if (itr != _geometryCache.end())
+  geos::geom::Geometry* cachedVal = _geometryCache[element->getElementId()];
+  if (cachedVal != 0)
   {
     _incrementCacheHitCount("geometry");
-    return itr.value();
+    return std::shared_ptr<geos::geom::Geometry>(cachedVal);
   }
+//  QHash<ElementId, std::shared_ptr<geos::geom::Geometry>>::const_iterator itr =
+//    _geometryCache.find(element->getElementId());
+//  if (itr != _geometryCache.end())
+//  {
+//    _incrementCacheHitCount("geometry");
+//    return itr.value();
+//  }
 
   std::shared_ptr<geos::geom::Geometry> newGeom;
   QString errorMsg =
@@ -203,11 +203,13 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
     }
     newGeom.reset();
   }
-  _geometryCache[element->getElementId()] = newGeom;
-  // TODO
-  //geos::geom::Geometry* geomToCache = newGeom->clone();
+
+  //_geometryCache[element->getElementId()] = newGeom;
+
+  // TODO: replace this with LruCache
+  geos::geom::Geometry* geomToCache = newGeom->clone();
   ////newGeom.reset();    // TODO: why can't I do this?
-  //_geometryCache.insert(element->getElementId(), geomToCache);
+  _geometryCache.insert(element->getElementId(), geomToCache);
   _incrementCacheSizeCount("geometry");
 
   if (_geometryCache.size() % CACHE_SIZE_UPDATE_INTERVAL == 0)

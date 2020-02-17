@@ -38,6 +38,9 @@
 #include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 
+// Tgs
+#include <tgs/LruCache.h>
+
 // Qt
 #include <QCache>
 
@@ -219,7 +222,7 @@ private:
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
   //QCache<ElementId, geos::geom::Geometry> _geometryCache;
-  QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
+  Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
   QCache<ElementId, bool> _hasMoreThanOneTypeCache;
   QCache<ElementId, int> _numAddressesCache;
   QCache<ElementId, double> _reviewDistanceCache;
