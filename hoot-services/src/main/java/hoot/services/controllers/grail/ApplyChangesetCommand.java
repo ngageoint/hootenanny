@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -30,8 +30,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import hoot.services.models.db.Users;
 
@@ -48,9 +46,9 @@ class ApplyChangesetCommand extends GrailCommand {
 
         List<String> options = new LinkedList<>();
         //append any tags from UI
-        if (params.getComment() != null) options.add("changeset.description=" + StringEscapeUtils.escapeXml(params.getComment()));
-        if (params.getHashtags() != null) options.add("changeset.hashtags=" + StringEscapeUtils.escapeXml(params.getHashtags()));
-        if (params.getSource() != null) options.add("changeset.source=" + StringEscapeUtils.escapeXml(params.getSource()));
+        if (params.getComment() != null) options.add("changeset.description=" + params.getComment());
+        if (params.getHashtags() != null) options.add("changeset.hashtags=" + params.getHashtags());
+        if (params.getSource() != null) options.add("changeset.source=" + params.getSource());
         options.add("hoot.osm.auth.access.token=" + user.getProviderAccessKey());
         options.add("hoot.osm.auth.access.token.secret=" + user.getProviderAccessToken());
         options.add("hoot.osm.auth.consumer.key=" + params.getConsumerKey());

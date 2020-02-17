@@ -18,11 +18,13 @@ represented by a timestamp that intersect with a specified AOI, the command will
                         when writing the changeset directly to an OSM API database
 * +--stats+           - Output statistics (element, node, way, relation, failure, create, modify, and delete counts)
 * +--progress+        - Display progress as a percent complete while the upload is working
+* +--test-apply+      - Run the changeset-apply command but don't actually apply it to an OSM API
 
 === Usage
 
 --------------------------------------
 changeset-apply (changeset.os*) [changeset2.os* ...] (targetUrl) [--stats] [--progress]
+changeset-apply (changeset.os*) (changeset-output-file.osc) --test-apply [--stats] [--progress]
 changeset-apply (changeset.osc.sql) (targetUrl) [conflictAoi] [conflictTimestamp]
 --------------------------------------
 
@@ -37,6 +39,9 @@ hoot changeset-apply changeset.osc changeset-001.osc changeset-002.osc https://u
 
 # Apply 'sourcedata.osm' as <create> operations to 'localhost' using 'username' and 'password', display stats and progress
 hoot changeset-apply sourcedata.osm http://username:password@localhost/ --stats --progress
+
+# Test apply 'changeset.osc' output each changeset upload to a different file
+hoot changeset-apply changeset.osc ~/changeset-split.osc --test-apply
 
 # Apply SQL file 'changeset.osc.sql' to 'localhost' using 'username' and 'password' to the database `databaseName'
 hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName

@@ -516,27 +516,6 @@ This value is used when splitting a changeset into smaller pieces.
 NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the
 database can handle in a single changeset.
 
-=== changeset.apidb.writer.debug.output
-
-* Data Type: bool
-* Default Value: `false`
-
-When set to true the `OsmApiWriter` class will write each changeset upload request and
-response to the `$HOOT_HOME/tmp` directory (by default) for debugging.
-
-NOTE: Use with care, the 28 MB Djibouti test changeset ballooned into 37 MB of debug output
-files
-
-=== changeset.apidb.writer.debug.output.path
-
-* Data Type: string
-* Default Value: `tmp`
-
-Directory path to store debug output files in for `changeset-appy` commands.
-
-NOTE: Use with care, the 28 MB Djibouti test changeset ballooned into 37 MB of debug output
-files
-
 === changeset.apidb.writers.max
 
 * Data Type: long
@@ -613,7 +592,6 @@ The user ID used by certain changeset writers when writing to an OSM API databas
 If true, XML changesets will add the 'timestamp' attribute to the element tags.  If false, the
 timestamp attribute will not be added.  This generally should only be set to false for testing
 purposes.
-
 
 === circular.error.default.value
 
