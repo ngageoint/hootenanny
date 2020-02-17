@@ -3220,9 +3220,10 @@ review against the polygon instead.
 === poi.polygon.max.cache.size
 
 * Data Type: int
-* Default Value: `100000`
+* Default Value: `50000`
 
-TODO
+The maximum number of elements to cache information for when using POI/Polygon Conflation. This
+maximum size is repeated across multiple internal element information caches.
 
 === poi.polygon.disable.same.source.conflation
 

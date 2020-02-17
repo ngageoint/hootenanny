@@ -60,8 +60,7 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& /*map*/, const ConstEl
     LOG_VART(poly->getElementId());
 
     //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
-    // TODO: re-enable
-    //DisableLog dl(Log::Warn);
+    DisableLog dl(Log::Warn);
 
     return _infoCache->getDistance(poly, poi);
   }

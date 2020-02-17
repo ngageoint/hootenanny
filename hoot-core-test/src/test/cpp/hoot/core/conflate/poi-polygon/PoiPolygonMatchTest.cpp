@@ -39,20 +39,19 @@ namespace hoot
 class PoiPolygonMatchTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonMatchTest);
-  // TODO: re-enable
-//  CPPUNIT_TEST(matchTest);
-//  CPPUNIT_TEST(missTest);
-//  CPPUNIT_TEST(reviewTest);
-//  CPPUNIT_TEST(reviewIfMatchedTypedTest);
-//  CPPUNIT_TEST(badMatchDistanceInputsTest);
-//  CPPUNIT_TEST(badReviewDistanceInputsTest);
-//  CPPUNIT_TEST(badNameScoreThresholdInputsTest);
-//  CPPUNIT_TEST(badTypeScoreThresholdInputsTest);
-//  CPPUNIT_TEST(badReviewIfMatchedTypesInputsTest);
-//  CPPUNIT_TEST(exactSourceMatchDisableConflationTest);
-//  CPPUNIT_TEST(sourceMatchTagKeyPrefixOnlyDisableConflationTest);
-//  CPPUNIT_TEST(sourceTagKeyMismatchDisableConflationTest);
-//  CPPUNIT_TEST(missingSourceTagTest);
+  CPPUNIT_TEST(matchTest);
+  CPPUNIT_TEST(missTest);
+  CPPUNIT_TEST(reviewTest);
+  CPPUNIT_TEST(reviewIfMatchedTypedTest);
+  CPPUNIT_TEST(badMatchDistanceInputsTest);
+  CPPUNIT_TEST(badReviewDistanceInputsTest);
+  CPPUNIT_TEST(badNameScoreThresholdInputsTest);
+  CPPUNIT_TEST(badTypeScoreThresholdInputsTest);
+  CPPUNIT_TEST(badReviewIfMatchedTypesInputsTest);
+  CPPUNIT_TEST(exactSourceMatchDisableConflationTest);
+  CPPUNIT_TEST(sourceMatchTagKeyPrefixOnlyDisableConflationTest);
+  CPPUNIT_TEST(sourceTagKeyMismatchDisableConflationTest);
+  CPPUNIT_TEST(missingSourceTagTest);
   CPPUNIT_TEST(multiUseBuildingTest);
   CPPUNIT_TEST_SUITE_END();
 
