@@ -51,7 +51,7 @@ _map(map),
 _elementIntersectsCache(CACHE_SIZE_DEFAULT),
 _isTypeCache(CACHE_SIZE_DEFAULT),
 _hasCriterionCache(CACHE_SIZE_DEFAULT),
-//_geometryCache(CACHE_SIZE_DEFAULT),
+_geometryCache(CACHE_SIZE_DEFAULT),
 _hasMoreThanOneTypeCache(CACHE_SIZE_DEFAULT),
 _numAddressesCache(CACHE_SIZE_DEFAULT),
 _reviewDistanceCache(CACHE_SIZE_DEFAULT)
@@ -90,7 +90,7 @@ void PoiPolygonInfoCache::clear()
   _isTypeCache.clear();
   _hasCriterionCache.clear();
   _criterionCache.clear();
-  _geometryCache.clear();
+  //_geometryCache.clear();
   _hasMoreThanOneTypeCache.clear();
   _numAddressesCache.clear();
   _elementIntersectsCache.clear();
@@ -156,19 +156,12 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
     throw IllegalArgumentException("The input element is null.");
   }
 
-  geos::geom::Geometry* cachedVal = _geometryCache[element->getElementId()];
-  if (cachedVal != 0)
+  std::shared_ptr<geos::geom::Geometry> cachedVal;
+  if (_geometryCache.get(element->getElementId(), cachedVal))
   {
     _incrementCacheHitCount("geometry");
-    return std::shared_ptr<geos::geom::Geometry>(cachedVal);
+    return cachedVal;
   }
-//  QHash<ElementId, std::shared_ptr<geos::geom::Geometry>>::const_iterator itr =
-//    _geometryCache.find(element->getElementId());
-//  if (itr != _geometryCache.end())
-//  {
-//    _incrementCacheHitCount("geometry");
-//    return itr.value();
-//  }
 
   std::shared_ptr<geos::geom::Geometry> newGeom;
   QString errorMsg =
@@ -204,19 +197,8 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
     newGeom.reset();
   }
 
-  //_geometryCache[element->getElementId()] = newGeom;
-
-  // TODO: replace this with LruCache
-  geos::geom::Geometry* geomToCache = newGeom->clone();
-  ////newGeom.reset();    // TODO: why can't I do this?
-  _geometryCache.insert(element->getElementId(), geomToCache);
+  _geometryCache.insert(element->getElementId(), newGeom);
   _incrementCacheSizeCount("geometry");
-
-  if (_geometryCache.size() % CACHE_SIZE_UPDATE_INTERVAL == 0)
-  {
-    LOG_DEBUG(
-      "_geometryCache size: " << _geometryCache.size() << ", memory: " << sizeof _geometryCache);
-  }
 
   return newGeom;
 }
