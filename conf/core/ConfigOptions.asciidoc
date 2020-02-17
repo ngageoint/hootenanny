@@ -3217,7 +3217,7 @@ If true, instances where multiple POIs were matched to a single polygon will res
 POIs being automatically merged into the polygon.  If false, then each matched POI will generate a
 review against the polygon instead.
 
-=== poi.polygon.max.cache.size
+=== poi.polygon.max.size.per.cache
 
 * Data Type: int
 * Default Value: `50000`

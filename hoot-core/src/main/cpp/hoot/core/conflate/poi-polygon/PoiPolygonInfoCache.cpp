@@ -63,7 +63,7 @@ void PoiPolygonInfoCache::setConfiguration(const Settings& conf)
 {
   _addressParser.setConfiguration(conf);
 
-  const int maxCacheSize = ConfigOptions(conf).getPoiPolygonMaxCacheSize();
+  const int maxCacheSize = ConfigOptions(conf).getPoiPolygonMaxSizeCachePerCache();
   _elementIntersectsCache.setMaxCost(maxCacheSize);
   _isTypeCache.setMaxCost(maxCacheSize);
   _hasCriterionCache.setMaxCost(maxCacheSize);
