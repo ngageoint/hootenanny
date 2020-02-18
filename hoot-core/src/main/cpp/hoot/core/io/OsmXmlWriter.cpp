@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmXmlWriter.h"
 
@@ -353,6 +353,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map)
   }
 
   // sort the values to give consistent results.
+  LOG_INFO("Sorting nodes...");
   qSort(nids.begin(), nids.end(), qLess<long>());
   for (int i = 0; i < nids.size(); i++)
   {
@@ -370,6 +371,7 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map)
   }
 
   // sort the values to give consistent results.
+  LOG_INFO("Sorting ways...");
   qSort(wids.begin(), wids.end(), qLess<long>());
   for (int i = 0; i < wids.size(); i++)
   {
@@ -396,6 +398,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map)
   }
 
   // sort the values to give consistent results.
+  LOG_INFO("Sorting relations...");
   qSort(rids.begin(), rids.end(), qLess<long>());
   for (int i = 0; i < rids.size(); i++)
   {

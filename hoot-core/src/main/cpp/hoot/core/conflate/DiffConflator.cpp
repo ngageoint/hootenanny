@@ -69,6 +69,9 @@
 #include <tgs/System/Time.h>
 #include <tgs/System/Timer.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace std;
 using namespace Tgs;
 
@@ -379,7 +382,9 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
 
 void DiffConflator::_calcAndStoreTagChanges()
 {
-  LOG_INFO("Storing tag changes...");
+  QElapsedTimer timer;
+  timer.start();
+  LOG_DEBUG("Storing tag changes...");
 
   MapProjector::projectToWgs84(_pMap);
 
@@ -463,6 +468,9 @@ void DiffConflator::_calcAndStoreTagChanges()
             StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
     }
   }
+  LOG_STATUS(
+    "Stored tag changes for " << StringUtils::formatLargeNumber(numMatchesProcessed) <<
+    " matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
 }

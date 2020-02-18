@@ -243,7 +243,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating highway feature index...");
+      LOG_STATUS("Creating highway feature index...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -262,6 +262,8 @@ public:
 
       getMap()->visitRo(v);
       v.finalizeIndex();
+
+      LOG_STATUS("Highway feature index created with " << v.getSize() << " elements.");
     }
 
     return _index;

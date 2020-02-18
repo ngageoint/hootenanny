@@ -382,7 +382,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating script feature index for: " << _scriptPath << "...");
+      LOG_STATUS("Creating script feature index for: " << _scriptPath << "...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -398,6 +398,7 @@ public:
       // Point/Polygon conflation behaves diferently than all other generic scripts in that it
       // conflates geometries of different types. This class wasn't really originally designed to
       // handle that, so we add a logic path here to accommodate Point/Polygon.
+      long numElementsIndexed = 0;
       if (!_scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME))
       {
         std::function<bool (ConstElementPtr)> f =
@@ -428,6 +429,7 @@ public:
             break;
         }
         v.finalizeIndex();
+        numElementsIndexed = v.getSize();
       }
       else
       {
@@ -440,10 +442,12 @@ public:
         getMap()->visitWaysRo(v);
         getMap()->visitRelationsRo(v);
         v.finalizeIndex();
+        numElementsIndexed = v.getSize();
       }
-      LOG_VART(_indexToEid.size());
 
-      LOG_DEBUG("Script feature index created for: " << _scriptPath << ".");
+      LOG_STATUS(
+        "Script feature index created for: " << _scriptPath << "with " << numElementsIndexed <<
+        " elements.");
     }
     return _index;
   }
