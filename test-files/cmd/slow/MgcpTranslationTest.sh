@@ -31,7 +31,7 @@ function checkMgcpV3 {
     # Export as TRDv4
     OUT4=test-output/cmd/slow/translation/$1
     rm -rf $OUT4
-    hoot convert -C Testing.conf --debug -D schema.translation.script=translations/MGCP_TRD4.js $OUT $OUT4.shp
+    hoot convert -C Testing.conf --info -D schema.translation.script=translations/MGCP_TRD4.js $OUT $OUT4.shp
 }
 
 # Building Areas
