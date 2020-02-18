@@ -78,8 +78,8 @@ public class ExternalCommandRunnerImplTest {
         hootOptions.add("\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
                           "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
                           "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
-                          "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
-                          "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
+                          "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
+                          "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
                           "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
                           "hoot::NoInformationElementRemover\"");
 

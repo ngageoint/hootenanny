@@ -63,16 +63,42 @@ public:
 
   virtual int runSimple(QStringList& args) override;
 
+  void setFilterOps(bool filter) { _filterOps = filter; }
+
 private:
 
   int _numTotalTasks;
+  bool _filterOps;
 
   void _updateConfigOptionsForAttributeConflation();
   void _disableRoundaboutRemoval();
   void _checkForTagValueTruncationOverride();
 
+  /*
+   * Removes any operators specified in conflate pre/post ops that aren't associated with the
+   * configured matchers
+   */
+  void _removeSuperfluousOps();
+  /*
+   * Returns all ElementCriterion class names associated with the current matcher config
+   */
+  QSet<QString> _getMatchCreatorCrits();
+  /*
+   * Given a matcher configuration determines which operators should be disabled
+   *
+   * @param matcherCrits a list of all ElementCriterion class names associated with the current
+   * matcher config
+   * @param ops a list of operator class names to be filtered
+   * @param removedOps a list of the operators removed
+   * @return the input operator list with unnecessary ops filtered out
+   */
+  QStringList _filterOutUnneededOps(
+    const QSet<QString>& matcherCrits, const QStringList& ops, QSet<QString>& removedOps);
+
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
+
+  friend class TestUtils;
 };
 
 }

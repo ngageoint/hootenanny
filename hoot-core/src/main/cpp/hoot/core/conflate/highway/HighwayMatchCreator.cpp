@@ -46,7 +46,6 @@
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Standard

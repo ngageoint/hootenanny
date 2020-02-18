@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTVISITOR_H
 #define ELEMENTVISITOR_H
@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/criterion/FilteredByCriteria.h>
 
 namespace hoot
 {
@@ -42,7 +43,7 @@ namespace hoot
  * does not require it and you are not running in the conflate pipeline where all map data must
  * be read into memory).
  */
-class ElementVisitor : public ApiEntityInfo
+class ElementVisitor : public ApiEntityInfo, public FilteredByCriteria
 {
 public:
 
@@ -52,6 +53,16 @@ public:
   virtual ~ElementVisitor() {}
 
   virtual void visit(const ElementPtr& e) = 0;
+
+  /**
+   * @see FilteredByCriteria
+   *
+   * An empty list returned here means that the visitor is associated no specific criteria and
+   * can be run against any feature type. Any visitors that want to control which feature types
+   * they are run against during conflation should populate this list. The list is treated in a
+   * logical OR fashion.
+   */
+  virtual QStringList getCriteria() const { return QStringList(); }
 
 protected:
 

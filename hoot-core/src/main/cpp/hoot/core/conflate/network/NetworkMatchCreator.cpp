@@ -33,7 +33,6 @@
 #include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>

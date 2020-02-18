@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEEMPTYAREASVISITOR_H
 #define REMOVEEMPTYAREASVISITOR_H
@@ -58,6 +58,11 @@ public:
   { return "Removed " + QString::number(_numAffected) + " empty areas"; }
 
   virtual QString getDescription() const { return "Removes empty areas"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
 
 private:
 

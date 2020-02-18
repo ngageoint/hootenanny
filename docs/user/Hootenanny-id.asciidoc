@@ -932,7 +932,7 @@ The following advanced configuration parameters are provided to the user via the
 * *Remove Unlikely Intersections*: Remove implied intersections that are likely incorrect. For example, a motorway overpass intersecting a residential street at a 90° is considered unlikely and "unsnapped". The geometry location is not modified.
 * *DualWay Splitter*: Split highway types that are marked as divided into two separate geometries marked as oneway roads. A number of assumptions must be made to do this including assumptions about the direction of travel on roads (right or left hand drivers).
 * *Implied Divided Marker*: If two roads implicitly should be marked as divided based on the surrounding roads, mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to be marked as divided.
-* *Small Way Merger*: Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.way.merger.threshold` for setting the threshold value.
+* *Small Way Merger*: Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.highway.merger.threshold` for setting the threshold value.
 * *Small Way Merger Threshold*: If highways are smaller than threshold and the tags matched then they will be merged together into a single way.
 * *Remove Empty Areas*: Remove all area elements that have a area of zero.
 * *Remove Duplicate Areas*: Remove any area elements that are essentially the same.

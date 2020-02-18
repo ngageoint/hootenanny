@@ -18,7 +18,7 @@ exports.tagThreshold = parseFloat(hoot.get("generic.point.tag.threshold"));
 exports.baseFeatureType = "Point";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "point";
-exports.matchCandidateCriterion = "hoot::PointCriterion"; // See #3047
+exports.matchCandidateCriterion = "hoot::PointCriterion";
 
 function distance(e1, e2) 
 {

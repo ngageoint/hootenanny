@@ -22,16 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef IMPLIEDDIVIDEDMARKER_H
-#define IMPLIEDDIVIDEDMARKER_H
+#ifndef HIGHWAYIMPLIEDDIVIDEDMARKER_H
+#define HIGHWAYIMPLIEDDIVIDEDMARKER_H
 
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Standard
 #include <set>
@@ -51,15 +52,14 @@ class Way;
  * mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to
  * be marked as divided.
  */
-class ImpliedDividedMarker : public OsmMapOperation, public OperationStatusInfo
+class HighwayImpliedDividedMarker : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::ImpliedDividedMarker"; }
+  static std::string className() { return "hoot::HighwayImpliedDividedMarker"; }
 
-  ImpliedDividedMarker();
-
-  ImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map);
+  HighwayImpliedDividedMarker();
+  HighwayImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map);
 
   void apply(std::shared_ptr<OsmMap>& map);
 
@@ -79,6 +79,15 @@ public:
   virtual QString getDescription() const
   { return "Marks road sections that implicitly appear to be divided highways"; }
 
+  /**
+   * @see FilteredByCriteria
+   *
+   * This isn't actually using HighwayCriterion in the filtering, but for the purposes of reducing
+   * unnecessary conflate ops we don't need to run it unless we're running road conflation.
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+
 private:
 
   std::shared_ptr<const OsmMap> _inputMap;
@@ -95,4 +104,4 @@ private:
 
 }
 
-#endif // IMPLIEDDIVIDEDMARKER_H
+#endif // HIGHWAYIMPLIEDDIVIDEDMARKER_H

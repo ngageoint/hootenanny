@@ -69,6 +69,12 @@ public:
 
   virtual QString getName() const { return QString::fromStdString(className()); }
 
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(BuildingCriterion::className())); }
+
 private:
 
   /// Don't use this directly. See below.

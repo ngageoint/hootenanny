@@ -99,26 +99,6 @@ private:
   bool _has_error;
 };
 
-class ChangesetOutputTestServer : public HttpTestServer
-{
-public:
-  /** Constructor */
-  ChangesetOutputTestServer(int port) : HttpTestServer(port) { }
-
-protected:
-  /** respond() function that responds to a series of OSM API requests
-   *  to simulate a
-   *  Requests, in order:
-   *   - Capabilities
-   *   - Permissions
-   *   - Changeset Create
-   *   - Changeset Upload - responds with HTTP 200
-   *   - Changeset Upload - responds with HTTP 200
-   *   - Changeset Close
-   */
-  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
-};
-
 class OsmApiSampleRequestResponse
 {
 public:
@@ -138,9 +118,6 @@ public:
   static const char* SAMPLE_CHANGESET_1_RESPONSE;
   /** Sample element GET response from '/api/0.6/way/1' */
   static const char* SAMPLE_ELEMENT_1_GET_RESPONSE;
-  /** Sample Changeset upload response bodies from '/api/0.6/changeset/1/upload' divided into two responses */
-  static const char* SAMPLE_CHANGESET_SUCCESS_1_RESPONSE;
-  static const char* SAMPLE_CHANGESET_SUCCESS_2_RESPONSE;
 };
 
 }
