@@ -398,6 +398,7 @@ public:
       // Point/Polygon conflation behaves diferently than all other generic scripts in that it
       // conflates geometries of different types. This class wasn't really originally designed to
       // handle that, so we add a logic path here to accommodate Point/Polygon.
+      long numElementsIndexed = 0;
       if (!_scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME))
       {
         std::function<bool (ConstElementPtr)> f =
@@ -428,6 +429,7 @@ public:
             break;
         }
         v.finalizeIndex();
+        numElementsIndexed = v.getSize();
       }
       else
       {
@@ -440,10 +442,11 @@ public:
         getMap()->visitWaysRo(v);
         getMap()->visitRelationsRo(v);
         v.finalizeIndex();
+        numElementsIndexed = v.getSize();
       }
 
       LOG_STATUS(
-        "Script feature index created for: " << _scriptPath << "with " << v.getSize() <<
+        "Script feature index created for: " << _scriptPath << "with " << numElementsIndexed <<
         " elements.");
     }
     return _index;
