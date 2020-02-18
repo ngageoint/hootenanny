@@ -188,6 +188,7 @@ bool OsmApiWriter::apply()
     _threadStatus.push_back(ThreadStatus::Working);
     _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this, i));
   }
+  _threadIdle.reserve(_maxWriters);
   //  Setup the progress indicators
   long total = _changeset.getTotalElementCount();
   float progress = 0.0f;
@@ -409,6 +410,14 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         //  Try a new create changeset request
         continue;
       }
+      //  Make sure that the changeset is valid and isn't empty
+      if (workInfo->size() < 1)
+      {
+        LOG_DEBUG("Empty changeset created.");
+        //  Jump back to the beginning and release the empty workInfo object
+        continue;
+      }
+      QString changeset = _changeset.getChangesetString(workInfo, id);
       //  Display the changeset in TRACE mode
       LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << _changeset.getChangesetString(workInfo, id));
       //  Upload the changeset
@@ -534,11 +543,43 @@ void OsmApiWriter::_changesetThreadFunc(int index)
     }
     else
     {
-      if (!_changeset.hasElementsToSend() && queueSize == 0 && _threadsAreIdle())
+      if (!_changeset.hasElementsToSend() && !_changeset.isDone() && queueSize == 0)
       {
-        //  In this case there are elements that have been sent and not reported back
-        //  BUT there are no threads that are waiting for them either
-        stop_thread = true;
+        //  This is a bad state where the producer thread says all elements are sent and
+        //  waits for all threads to join but the changeset isn't "done".
+        //  Set the status to idle and start idle timer
+        _threadStatusMutex.lock();
+        if (_threadStatus[index] != ThreadStatus::Idle)
+        {
+          _threadStatus[index] = ThreadStatus::Idle;
+          _threadIdle[index].reset();
+        }
+        else if (id > 0 && _threadIdle[index].getElapsed() > 10 * 1000)
+        {
+          //  Close the current changeset so all data is "committed"
+          _closeChangeset(request, id);
+          id = -1;
+        }
+        _threadStatusMutex.unlock();
+        if (_threadsAreIdle())
+        {
+          //  In this case there are elements that have been sent and not reported back
+          //  BUT there are no threads that are waiting for them either.  Every thread
+          //  except the "first" worker thread will exit here.  The first worker thread
+          //  Tries to calculate the remaining changeset and push in on the queue.  It then
+          //  loops around and picks up the remaining changeset to process.  Next time around
+          //  calculateRemainingChangeset() fails and this thread is stopped.
+          if (index != 0)
+            stop_thread = true;
+          else if (_changeset.calculateRemainingChangeset(workInfo))
+          {
+            _workQueueMutex.lock();
+            _workQueue.push(workInfo);
+            _workQueueMutex.unlock();
+          }
+          else
+            stop_thread = true;
+        }
       }
       else
       {

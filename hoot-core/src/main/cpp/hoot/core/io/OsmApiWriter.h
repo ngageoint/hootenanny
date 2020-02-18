@@ -37,6 +37,9 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ProgressReporter.h>
 
+//  Tgs
+#include <tgs/System/Timer.h>
+
 //  Standard
 #include <mutex>
 #include <queue>
@@ -296,6 +299,8 @@ private:
   std::vector<ThreadStatus> _threadStatus;
   /** Mutex protecting status vector */
   std::mutex _threadStatusMutex;
+  /** Vector of idle times for thread monitoring */
+  std::vector<Tgs::Timer> _threadIdle;
   /** Base URL for the target OSM API, including authentication information */
   QUrl _url;
   /** List of pathnames for changeset divided across files */
@@ -336,8 +341,6 @@ private:
   QString _accessToken;
   /** OAuth 1.0 secret token granted through OAuth authorization */
   QString _secretToken;
-  /** Full pathname of the error file changeset, if any errors occur */
-  QString _errorPathname;
   /** Number of changesets written to API */
   int _changesetCount;
   /** Mutex for changeset count */
