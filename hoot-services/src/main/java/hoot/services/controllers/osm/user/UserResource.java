@@ -390,7 +390,7 @@ public class UserResource {
     @POST
     @Path("/saveFavoriteOpts")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response saveFavoriteOpts(@Context HttpServletRequest request, @QueryParam("favorites") String favoriteOpts) {
+    public Response saveFavoriteOpts(@Context HttpServletRequest request, String favoriteOpts) {
     	    	
     	try {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
     		Users user = Users.fromRequest(request);
