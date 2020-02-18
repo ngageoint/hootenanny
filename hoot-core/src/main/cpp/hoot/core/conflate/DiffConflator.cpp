@@ -174,11 +174,14 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   currentStep++;
 
-  // Use matches to calculate and store tag diff. We must do this before we create the map diff,
-  // because that operation deletes all of the info needed for calculating the tag diff.
-  _updateProgress(currentStep - 1, "Storing tag differentials...");
-  _calcAndStoreTagChanges();
-  currentStep++;
+  if (_conflateTags)
+  {
+    // Use matches to calculate and store tag diff. We must do this before we create the map diff,
+    // because that operation deletes all of the info needed for calculating the tag diff.
+    _updateProgress(currentStep - 1, "Storing tag differentials...");
+    _calcAndStoreTagChanges();
+    currentStep++;
+  }
 
   QString message = "Dropping match conflicts";
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
