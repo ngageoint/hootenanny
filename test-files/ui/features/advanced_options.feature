@@ -103,7 +103,7 @@ Feature: Advanced Conflation Options
         And I should see element "#poipolygon_name_score_threshold" with no value and placeholder "0.8"
         And I should see element "#poipolygon_type_score_threshold" with no value and placeholder "0.7"
         And I should see element "#poipolygon_match_distance_threshold" with no value and placeholder "5.0"
-        And I should see element "#poipolygon_additional_search_distance" with no value and placeholder "125.0"
+        And I should see element "#poipolygon_additional_search_distance" with no value and placeholder "50.0"
         And I should see element "#poipolygon_review_if_matched_types" with no value and placeholder ""
         And I should see checkbox "Disable Same Source Conflation" unchecked
         And I should see checkbox "Disable Same Source Conflation Match Tag Key Prefix Only" checked

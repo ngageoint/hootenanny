@@ -501,7 +501,7 @@ int ConflateCmd::runSimple(QStringList& args)
   stats.append(IoSingleStat(IoSingleStat::CancelledWriteBytes));
   stats.append(SingleStat("(Dubious) Bytes Processed per Second", inputBytes / totalElapsed));
 
-  if (isDiffConflate)
+  if (isDiffConflate && displayStats)
   {
     progress.set(
       _getJobPercentComplete(currentTask - 1),

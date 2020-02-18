@@ -110,6 +110,8 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Indexed " + QString::number(_numAffected) + " elements."; }
 
+  long getSize() const { return _numAffected; }
+
 private:
 
   std::shared_ptr<ElementCriterion> _criterion;

@@ -3172,7 +3172,7 @@ long as those being compared have a populated name field.
 === poi.polygon.additional.search.distance
 
 * Data Type: double
-* Default Value: `125.0`
+* Default Value: `50.0`
 
 The maximum distance, in meters, added to the circular error of the features being compared, the
 total of which allows the features to be considered for match or review based on distance criteria
@@ -3208,6 +3208,15 @@ a merge between all features involved in the Building and POI to Polygon conflat
 If true, instances where multiple POIs were matched to a single polygon will result in all of those
 POIs being automatically merged into the polygon.  If false, then each matched POI will generate a
 review against the polygon instead.
+
+=== poi.polygon.max.size.per.cache
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum number of elements to cache information for when using POI/Polygon Conflation. This
+maximum size is repeated across multiple internal element information caches. To disable caching,
+specify a value less than one.
 
 === poi.polygon.disable.same.source.conflation
 

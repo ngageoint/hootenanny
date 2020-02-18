@@ -86,8 +86,6 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   QElapsedTimer timer;
   timer.start();
 
-  //poi.polygon.additional.search.distance
-  //poi.polygon.match.distance.threshold
   QString searchRadiusStr;
   const double additionalDistance = ConfigOptions().getPoiPolygonAdditionalSearchDistance();
   if (additionalDistance <= 0)
@@ -97,8 +95,15 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   else
   {
     searchRadiusStr =
-      "within a feature dependent search radius plus an additional distance of " +
-      QString::number(additionalDistance, 'g', 2) + " meters";
+      "within a feature dependent search radius plus an additional distance of ";
+    if (additionalDistance < 1000)
+    {
+      searchRadiusStr += QString::number(additionalDistance, 'g', 3) + " meters";
+    }
+    else
+    {
+      searchRadiusStr += QString::number(additionalDistance / 1000.0, 'g', 3) + " kilometers";
+    }
   }
   LOG_STATUS("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
