@@ -205,6 +205,8 @@ private:
 
   AddressParser _addressParser;
 
+  bool _cacheEnabled;
+
   //Didn't see any performance improvement by reserving initial sizes for these caches.
 
   // key is "elementID 1;elementID 2"; ordering of the ID keys doesn't matter here, since we check
@@ -221,7 +223,6 @@ private:
   // enough to require any cache size management
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
-  //QCache<ElementId, geos::geom::Geometry> _geometryCache;
   std::shared_ptr<Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>> _geometryCache;
   QCache<ElementId, bool> _hasMoreThanOneTypeCache;
   QCache<ElementId, int> _numAddressesCache;
