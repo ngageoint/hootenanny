@@ -78,7 +78,7 @@ public class Users {
 
     private Object privileges;
 
-    private Object favoriteOpts;
+    public Object favoriteOpts;
 
     @JsonProperty(value = "display_name")
     public String getDisplayName() {
@@ -172,7 +172,7 @@ public class Users {
         this.privileges = privileges;
     }
 
-    @JsonProperty(value = "favoriteOpts")
+    @JsonProperty(value = "favorites")
     public Object getFavoriteOpts() {
     	return favoriteOpts;
     }

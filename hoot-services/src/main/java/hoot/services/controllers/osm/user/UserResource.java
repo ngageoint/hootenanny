@@ -32,6 +32,8 @@ import static hoot.services.utils.DbUtils.createQuery;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,6 +73,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.sql.SQLQuery;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
+import hoot.services.ExceptionFilter;
 import hoot.services.controllers.auth.UserManager;
 import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.models.db.QUsers;
@@ -88,7 +91,6 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Transactional
 public class UserResource {
     private static final Logger logger = LoggerFactory.getLogger(UserResource.class);
-    private JSONArray favoriteAdvOpts;
 
     @Autowired
     UserManager userManager;
@@ -388,23 +390,27 @@ public class UserResource {
     @POST
     @Path("/saveFavoriteOpts")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response saveFavoriteOpts(@Context HttpServletRequest request,
-           List<LinkedHashMap> userList, String favoriteOpts) throws org.json.simple.parser.ParseException {
+    public Response saveFavoriteOpts(@Context HttpServletRequest request, @QueryParam("favorites") String favoriteOpts) {
+    	    	
+    	try {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+    		Users user = Users.fromRequest(request);
+    		Long userId = user.getId();
+    		
+    		JSONParser parser = new JSONParser();
+    		JSONObject json = (JSONObject) parser.parse(favoriteOpts);
+    		
+    		JSONArray jsonArray = (JSONArray) json.get("favorites");
+    		
+    		createQuery().update(users)
+			.where(users.id.eq(userId))
+			.set(users.favoriteOpts, jsonArray)
+			.execute();
 
-               JSONParser parser = new JSONParser();
-               JSONObject json = (JSONObject) parser.parse(favoriteOpts);
-
-       for (LinkedHashMap user : userList) {
-           Long userId = Long.valueOf(user.get("id").toString());
-
-           createQuery().update(users)
-               .where(users.id.eq(userId))
-               .set(users.favoriteOpts, user.get("favoriteOpts"))
-               .execute();
-
-           userManager.clearCachedUser(userId);
-
-       }
+    	} catch (Exception e) {
+    		// TODO Auto-generated catch block
+    		final Logger logger = LoggerFactory.getLogger(ExceptionFilter.class);
+    		logger.warn(e.toString());    		
+        }
 
        return Response.ok().build();
    }
