@@ -223,7 +223,12 @@ private:
   // enough to require any cache size management
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
+  // QCache doesn't play nicely with shared pointers created elsewhere...tried using them with it
+  // for _geometryCache but failed. Another alternative was to modify ElementConverter to also
+  // allow for returing Geometry raw pointers in addition to shared pointers...tried that and failed
+  // as well. Decided to use LruCache for this one instead.
   std::shared_ptr<Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>> _geometryCache;
+
   QCache<ElementId, bool> _hasMoreThanOneTypeCache;
   QCache<ElementId, int> _numAddressesCache;
   QCache<ElementId, double> _reviewDistanceCache;
