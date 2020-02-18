@@ -141,7 +141,6 @@ public:
 
     vector<ConstMatchPtr> matchesV;
 
-    LOG_DEBUG("test1");
     std::shared_ptr<PoiPolygonMatch> match1(
           new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
                               std::shared_ptr<PoiPolygonRfClassifier>(),
@@ -154,7 +153,6 @@ public:
     std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
     BuildingMatchCreator().createMatches(map, matchesV, threshold);
 
-    LOG_DEBUG("test2");
     std::shared_ptr<PoiPolygonMatch> match2(
           new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
                               std::shared_ptr<PoiPolygonRfClassifier>(),
@@ -166,14 +164,12 @@ public:
     matchesV.push_back(match2);
     LOG_VAR(match2);
 
-    LOG_DEBUG("test3");
     MatchSet matches;
     matches.insert(matchesV.begin(), matchesV.end());
     vector<MergerPtr> mergers;
     PoiPolygonMergerCreator uut;
     uut.setOsmMap(map.get());
 
-    LOG_DEBUG("test4");
     HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
     HOOT_STR_EQUALS(1, mergers.size());
     LOG_VART(*mergers[0]);

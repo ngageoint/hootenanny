@@ -794,7 +794,6 @@ public:
       w1->getTags().set("building:use", "multipurpose");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
-     // uut._clearCache();
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
       CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
@@ -813,7 +812,6 @@ public:
       w1->getTags().set("building:use", "multipurpose");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
-      //uut._clearCache();
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
       CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
@@ -833,7 +831,6 @@ public:
       w1->getTags().set("shop", "mall");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
-      //uut._clearCache();
 
       LOG_VART(uut.getClassification());
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
@@ -856,7 +853,6 @@ public:
       w1->getTags().set("shop", "mall");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
-      //uut._clearCache();
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
       CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
@@ -875,7 +871,6 @@ public:
       w1->getTags().set("building:use", "multipurpose");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
-      //uut._clearCache();
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
       CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
@@ -893,7 +888,6 @@ public:
       w1->getTags().set("building", "yes");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
-      //uut._clearCache();
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
       CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
@@ -911,7 +905,6 @@ public:
       w1->getTags().set("amenity", "school");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
-      uut._clearCache();
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
       CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
@@ -930,7 +923,6 @@ public:
       w1->getTags().set("building:use", "multipurpose");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
-      uut._clearCache();
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
       CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
