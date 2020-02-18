@@ -382,7 +382,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating script feature index for: " << _scriptPath << "...");
+      LOG_STATUS("Creating script feature index for: " << _scriptPath << "...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -441,9 +441,10 @@ public:
         getMap()->visitRelationsRo(v);
         v.finalizeIndex();
       }
-      LOG_VART(_indexToEid.size());
 
-      LOG_DEBUG("Script feature index created for: " << _scriptPath << ".");
+      LOG_STATUS(
+        "Script feature index created for: " << _scriptPath << "with " << v.getSize() <<
+        " elements.");
     }
     return _index;
   }

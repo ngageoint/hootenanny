@@ -242,7 +242,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating building feature index...");
+      LOG_STATUS("Creating building feature index...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -264,6 +264,8 @@ public:
 
       getMap()->visitRo(v);
       v.finalizeIndex();
+
+      LOG_STATUS("Building feature index created with " << v.getSize() << " elements.");
     }
 
     return _index;
