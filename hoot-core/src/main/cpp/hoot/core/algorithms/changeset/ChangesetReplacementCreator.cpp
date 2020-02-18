@@ -363,7 +363,7 @@ void ChangesetReplacementCreator::create(
   LOG_VARD(conflatedMaps.size());
   if (refMaps.size() == 0 || conflatedMaps.size() == 0)
   {
-    LOG_INFO("No features remain after filtering. Skipping changeset generation...");
+    LOG_WARN("No features remain after filtering so no changeset will be generated.");
     return;
   }
   assert(refMaps.size() == conflatedMaps.size());
@@ -874,8 +874,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
     if (e.getWhat().contains("Alpha Shape area is zero"))
     {
       LOG_ERROR(
-        "No cut shape generated from secondary data. " << e.getWhat() <<
-        " Is your secondary data empty or have you filtered it to be empty?");
+        "No cut shape generated from secondary data. Is your secondary data empty or have you " <<
+        "filtered it to be empty? error: " << e.getWhat());
     }
     //  Rethrow the original exception
     throw;
