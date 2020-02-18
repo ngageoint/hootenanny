@@ -18,6 +18,8 @@ changeset will be written, instead of an OSM map.
                         from Input1, with new/updated tags from Input2 applied, using an overwrite-merge.
 * +--stats+           - Hootenanny map statistics such as node and way count; must be the last option entered and may be optionally followed
                         by an output JSON file name
+* +--write-bounds+    - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
+                        The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Feature Filtering
 

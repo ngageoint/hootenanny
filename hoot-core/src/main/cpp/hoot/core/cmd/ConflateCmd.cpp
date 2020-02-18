@@ -106,6 +106,8 @@ int ConflateCmd::runSimple(QStringList& args)
   Timer totalTime;
   Timer t;
 
+  BoundedCommand::runSimple(args);
+
   QList<SingleStat> stats;
   bool displayStats = false;
   //force stats to always be the last optional param so it can be followed by an optional

@@ -55,6 +55,8 @@ void BoundedCommand::_writeBoundsFile()
   ConfigOptions opts;
   // We could rename convert.bounding.box to something more generic now that we use it in so many
   // places.
+  // TODO: We aren't dealing with the osm/hoot api db reader version of bounding box, which could
+  // eventually cause a problem.
   const QString boundsStr = opts.getConvertBoundingBox().trimmed();
   if (!boundsStr.isEmpty())
   {
