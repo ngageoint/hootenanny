@@ -400,6 +400,7 @@ public class UserResource {
     		JSONObject json = (JSONObject) parser.parse(favoriteOpts);
     		
     		JSONArray jsonArray = (JSONArray) json.get("favorites");
+    		JSONArray getName 	= (JSONArray) json.get("name");
     		
     		createQuery().update(users)
 			.where(users.id.eq(userId))
