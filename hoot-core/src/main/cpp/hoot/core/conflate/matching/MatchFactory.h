@@ -127,6 +127,7 @@ private:
 
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;
+  friend class TestUtils;
 };
 
 }

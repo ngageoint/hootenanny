@@ -188,6 +188,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "serial");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "serial");
 
 }

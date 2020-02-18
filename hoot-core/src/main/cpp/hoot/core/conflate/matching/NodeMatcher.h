@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NODEMATCHER_H
@@ -91,6 +91,15 @@ public:
    * @return true if the element is a network type; false otherwise
    */
   static bool isNetworkFeatureType(ConstElementPtr element);
+
+  /**
+   * Returns the class names of all criterion associated with a network based feature type
+   *
+   * Is there a better class location for this?
+   *
+   * @return a list of criterion class names
+   */
+  static QStringList getNetworkCriterionClassNames();
 
 private:
 

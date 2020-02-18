@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OsmMapOperation_H
@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/criterion/FilteredByCriteria.h>
 
 // Standard
 #include <string>
@@ -37,7 +38,7 @@
 // Boost
 #include <boost/any.hpp>
 
-//Qt
+// Qt
 #include <QString>
 
 namespace hoot
@@ -52,7 +53,7 @@ class OsmMap;
  * entire input map in memory at one time (operation logic does not require it and you are not
  * running in the conflate pipeline), consider using ElementVisitor instead.
  */
-class OsmMapOperation : public ApiEntityInfo
+class OsmMapOperation : public ApiEntityInfo, public FilteredByCriteria
 {
 public:
 
@@ -76,6 +77,16 @@ public:
   virtual boost::any getResult() { boost::any ptr; return ptr; }
 
   long getNumAffected() const { return _numAffected; }
+
+  /**
+   * @see FilteredByCriteria
+   *
+   * An empty list returned here means that the operation is associated no specific criteria and
+   * can be run against any feature type. Any operations that want to control which feature types
+   * they are run against during conflation should populate this list. The list is treated in a
+   * logical OR fashion.
+   */
+  virtual QStringList getCriteria() const { return QStringList(); }
 
 protected:
 

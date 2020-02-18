@@ -189,6 +189,41 @@ public:
    */
   static bool mkpath(const QString& path);
 
+  /**
+   * This is a snapshot of the option, conflate.pre.ops (circa 2/12/20), for testing purposes.
+   *
+   * @return a list of operator class names
+   */
+  static QStringList getConflateCmdSnapshotPreOps();
+
+  /**
+   * This is a snapshot of the option, conflate.post.ops (circa 2/12/20), for testing purposes.
+   *
+   * @return a list of operator class names
+   */
+  static QStringList getConflateCmdSnapshotPostOps();
+
+  /**
+   * This is a snapshot of the option, map.cleaner.transforms (circa 2/12/20), for testing purposes.
+   *
+   * @return a list of operator class names
+   */
+  static QStringList getConflateCmdSnapshotCleaningOps();
+
+  /**
+   * Runs a conflate op reduction test which tests for which superfluous conflate pre/post/cleaning
+   * ops are removed by ConflateCmd
+   *
+   * @param matchCreators the match creator class names involved in the conflation job
+   * @param expectedPreOpSize the expected number of conflation pre ops after op reduction
+   * @param expectedPostOpsSize the expected number of conflation post ops after op reduction
+   * @param expectedCleaningOpsSize the expected number of conflation cleaning ops after op
+   * reduction
+   */
+  static void runConflateOpReductionTest(
+    const QStringList& matchCreators, const int expectedPreOpSize, const int expectedPostOpsSize,
+    const int expectedCleaningOpsSize);
+
 private:
 
   QList<RegisteredReset*> _resets;

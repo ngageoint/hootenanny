@@ -34,6 +34,7 @@
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 
 using namespace geos::geom;
@@ -88,5 +89,14 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
   }
 }
 
+QStringList RemoveEmptyAreasVisitor::getCriteria() const
+{
+  QStringList criteria;
+  // need to also add building here for unecessary conflation op removal purposes, since
+  // AreaCriterion includes buildings in some instances
+  criteria.append(QString::fromStdString(BuildingCriterion::className()));
+  criteria.append(QString::fromStdString(AreaCriterion::className()));
+  return criteria;
+}
 
 }

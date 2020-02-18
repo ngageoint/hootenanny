@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-OUTPUT_DIR=test-output/cmd/quick/JosmCleanCmdTest
+OUTPUT_DIR=test-output/cmd/slow/JosmCleanCmdTest
 mkdir -p $OUTPUT_DIR
 LOG_LEVEL=--warn
 

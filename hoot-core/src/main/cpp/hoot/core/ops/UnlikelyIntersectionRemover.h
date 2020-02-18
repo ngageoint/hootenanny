@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNLIKELYINTERSECTIONREMOVER_H
@@ -32,6 +32,7 @@
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 
 // Standard
 #include <set>
@@ -74,14 +75,19 @@ public:
   virtual QString getDescription() const override
   { return "Removes road intersections that are likely mistakes"; }
 
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(LinearCriterion::className())); }
+
 protected:
 
   std::shared_ptr<OsmMap> _result;
 
   void _evaluateAndSplit(long intersectingNode, const std::set<long>& wayIds);
-
-  double _pIntersection(long intersectingNode, const std::shared_ptr<Way>& w1, const std::shared_ptr<Way>& w2);
-
+  double _pIntersection(long intersectingNode, const std::shared_ptr<Way>& w1,
+                        const std::shared_ptr<Way>& w2);
   void _splitIntersection(long intersectingNode, const std::vector<std::shared_ptr<Way>>& g2);
 };
 

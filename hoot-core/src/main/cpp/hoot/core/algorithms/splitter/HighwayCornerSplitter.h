@@ -22,16 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef CORNERSPLITTER_H
-#define CORNERSPLITTER_H
+#ifndef HIGHWAYCORNERSPLITTER_H
+#define HIGHWAYCORNERSPLITTER_H
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QMultiHash>
@@ -50,15 +51,14 @@ class Way;
  * when conflating data that is mostly major roads with data that contains a lot of
  * neighborhood-level data.
  */
-class CornerSplitter : public OsmMapOperation, Configurable, public OperationStatusInfo
+class HighwayCornerSplitter : public OsmMapOperation, Configurable, public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::CornerSplitter"; }
+  static std::string className() { return "hoot::HighwayCornerSplitter"; }
 
-  CornerSplitter();
-
-  CornerSplitter(const std::shared_ptr<OsmMap>& map);
+  HighwayCornerSplitter();
+  HighwayCornerSplitter(const std::shared_ptr<OsmMap>& map);
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -76,6 +76,12 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Split " + QString::number(_numAffected) + " road corners"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
 
 private:
 
@@ -108,4 +114,4 @@ private:
 
 }
 
-#endif // CORNERSPLITTER_H
+#endif // HIGHWAYCORNERSPLITTER_H
