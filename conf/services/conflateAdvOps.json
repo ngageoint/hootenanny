@@ -96,7 +96,7 @@
                 "elem_type":"checkbox",
                 "description":"If two roads implicitly should be marked as divided based on the surrounding roads, mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to be marked as divided.",
                 "name":"Divided Road Marker Implied",
-                "hoot_val":"hoot::ImpliedDividedMarker",
+                "hoot_val":"hoot::HighwayImpliedDividedMarker",
                 "defaultvalue":"true"
             },
             {
