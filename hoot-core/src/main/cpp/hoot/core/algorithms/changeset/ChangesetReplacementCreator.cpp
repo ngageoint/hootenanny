@@ -321,7 +321,7 @@ void ChangesetReplacementCreator::create(
     OsmMapPtr refMap;
     OsmMapPtr conflatedMap;
     QStringList linearFilterClassNames;
-    LOG_VARD(itr.value().get());
+    //LOG_VARD(itr.value().get());
     if (itr.key() == GeometryTypeCriterion::GeometryType::Line)
     {
       linearFilterClassNames = _linearFilterClassNames;
@@ -330,12 +330,28 @@ void ChangesetReplacementCreator::create(
       refMap, conflatedMap, input1, input2, boundsStr, itr.value(), secFilters[itr.key()],
       itr.key(), linearFilterClassNames);
 
-    LOG_VARD(refMap.get());
-    LOG_VARD(conflatedMap.get());
-    if (refMap && conflatedMap && conflatedMap->size() > 0)
+    if (!refMap)
+    {
+      LOG_DEBUG("ref map null");
+    }
+    else
     {
       LOG_VARD(refMap->size());
-      LOG_VARD(conflatedMap.get());
+    }
+    if (!conflatedMap)
+    {
+      LOG_DEBUG("conflated map null");
+    }
+    else
+    {
+      LOG_VARD(conflatedMap->size());
+    }
+    if (refMap && conflatedMap && conflatedMap->size() > 0)
+    {
+      LOG_DEBUG(
+        "Adding ref map of size: " << refMap->size() << " and conflated map of size: " <<
+        conflatedMap->size() << " for geometry type: " <<
+        GeometryTypeCriterion::typeToString(itr.key()) << "...");
       refMaps.append(refMap);
       conflatedMaps.append(conflatedMap);
     }
@@ -398,7 +414,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Prune the ref dataset down to just the geometry types specified by the filter, so we don't end
   // up modifying anything else.
 
-  _filterFeatures(refMap, refFeatureFilter, conf(), "ref-after-type-pruning");
+  _filterFeatures(
+    refMap, refFeatureFilter, conf(),
+    "ref-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
 
   // Load the sec dataset and crop to the specified aoi.
 
@@ -407,7 +425,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.
 
-  _filterFeatures(secMap, secFeatureFilter, _replacementFilterOptions, "sec-after-type-pruning");
+  _filterFeatures(
+    secMap, secFeatureFilter, _replacementFilterOptions,
+    "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
 
   LOG_VARD(refMap->getElementCount());
   LOG_VARD(secMap->getElementCount());
