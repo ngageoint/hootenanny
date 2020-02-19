@@ -462,7 +462,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Conflate the cookie cut ref map with the sec map.
 
   conflatedMap = cookieCutRefMap;
-  if (_conflationEnabled && conflatedMap->size() > 0)
+  if (_conflationEnabled && secMapSize > 0)
   {
     // TODO: do something with reviews - #3361
     _conflate(conflatedMap, _lenientBounds);
