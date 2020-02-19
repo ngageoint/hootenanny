@@ -29,8 +29,8 @@
 #define CONFLATECMD_H
 
 // Hoot
-#include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/cmd/BoundedCommand.h>
 
 // Standard
 #include <fstream>
@@ -43,7 +43,7 @@ namespace hoot
 
 class SingleStat;
 
-class ConflateCmd : public BaseCommand
+class ConflateCmd : public BoundedCommand
 {
 
 public:

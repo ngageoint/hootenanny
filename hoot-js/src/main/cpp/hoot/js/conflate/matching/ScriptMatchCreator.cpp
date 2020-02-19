@@ -446,8 +446,8 @@ public:
       }
 
       LOG_STATUS(
-        "Script feature index created for: " << _scriptPath << "with " << numElementsIndexed <<
-        " elements.");
+        "Script feature index created for: " << _scriptPath << "with " <<
+        StringUtils::formatLargeNumber(numElementsIndexed) << " elements.");
     }
     return _index;
   }

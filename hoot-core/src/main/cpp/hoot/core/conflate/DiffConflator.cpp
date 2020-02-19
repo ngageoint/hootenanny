@@ -164,7 +164,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   }
   LOG_STATUS(
     "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
-    " Differential Conflation matches.");
+    " Differential Conflation match conflicts to be removed.");
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
   _stats.append(SingleStat("Number of Matches Found", _matches.size()));
