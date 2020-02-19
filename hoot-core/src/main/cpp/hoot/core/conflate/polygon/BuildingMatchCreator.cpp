@@ -265,7 +265,9 @@ public:
       getMap()->visitRo(v);
       v.finalizeIndex();
 
-      LOG_STATUS("Building feature index created with " << v.getSize() << " elements.");
+      LOG_STATUS(
+        "Building feature index created with " << StringUtils::formatLargeNumber(v.getSize()) <<
+        " elements.");
     }
 
     return _index;
