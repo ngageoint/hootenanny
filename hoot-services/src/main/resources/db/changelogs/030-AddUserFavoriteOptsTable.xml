@@ -9,14 +9,14 @@
         </comment>
 
         <addColumn tableName="users">
-            <column name="favoriteOpts" type="hstore" />
+            <column name="favorite_opts" type="hstore" />
         </addColumn>
 
         <!-- sets a default value for future rows inserted into the column -->
-        <addDefaultValue tableName="users" columnName="favoriteOpts" defaultValue="" />
+        <addDefaultValue tableName="users" columnName="favorite_opts" defaultValue="" />
 
         <!-- change the value of already existing rows to '' -->
-        <addNotNullConstraint tableName="users" columnName="favoriteOpts" defaultNullValue="" />
+        <addNotNullConstraint tableName="users" columnName="favorite_opts" defaultNullValue="" />
 
     </changeSet>
 </databaseChangeLog>

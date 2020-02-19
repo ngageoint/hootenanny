@@ -70,6 +70,7 @@ import org.w3c.dom.Element;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
@@ -207,7 +208,7 @@ public class UserResource {
     public Response getAllUsers(@Context HttpServletRequest request,
             @QueryParam("sort") @DefaultValue("") String sort,
             @QueryParam("privileges") @DefaultValue("") String privileges,
-    		@QueryParam("favoriteOpts") @DefaultValue("") String favoriteOpts){
+    		@QueryParam("favorite_opts") @DefaultValue("") String favoriteOpts){
         Users currentUser = Users.fromRequest(request);
 
         try {
@@ -399,20 +400,28 @@ public class UserResource {
     		JSONParser parser = new JSONParser();
     		JSONObject json = (JSONObject) parser.parse(favoriteOpts);
     		
-    		JSONArray jsonArray = (JSONArray) json.get("favorites");
-    		JSONArray getName 	= (JSONArray) json.get("name");
+    		String getName = (String) json.get("name");
     		
-    		createQuery().update(users)
-			.where(users.id.eq(userId))
-			.set(users.favoriteOpts, jsonArray)
-			.execute();
+    		Object favoritesColumn = createQuery()
+    				.select(users.favoriteOpts)
+    				.from(users)
+    				.where(users.id.eq(userId))
+    				.fetchOne();
+    		
+    		Map<String, String> tags = PostgresUtils.postgresObjToHStore(favoritesColumn);
+    		
+            if ( !tags.containsKey(getName) ) {
+                String getFavorites = json.get("favorites").toString();
+                tags.put(getName, getFavorites);
+                createQuery().update(users)
+                    .where(users.id.eq(userId))
+                    .set(users.favoriteOpts, tags)
+                    .execute();
+            }
 
     	} catch (Exception e) {
-    		// TODO Auto-generated catch block
-    		final Logger logger = LoggerFactory.getLogger(ExceptionFilter.class);
-    		logger.warn(e.toString());    		
+    		Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
-
        return Response.ok().build();
    }
 
@@ -429,7 +438,15 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFavoriteOpts(@Context HttpServletRequest request) {
         Users user = Users.fromRequest(request);
-        Map<String, String> json = PostgresUtils.postgresObjToHStore(user.getFavoriteOpts());
+        Long userId = user.getId();
+                
+		Object favoritesColumn = createQuery()
+				.select(users.favoriteOpts)
+				.from(users)
+				.where(users.id.eq(userId))
+				.fetchOne();
+		
+        Map<String, String> json = PostgresUtils.postgresObjToHStore(favoritesColumn);
 
         return Response.ok(json).build();
     }
