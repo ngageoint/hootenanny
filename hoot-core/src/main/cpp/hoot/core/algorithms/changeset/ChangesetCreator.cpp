@@ -227,16 +227,17 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
   {
     OsmMapPtr map1 = map1Inputs.at(i);
     OsmMapPtr map2 = map2Inputs.at(i);
-    if (map2->isEmpty())
-    {
-      // An empty map2 makes no sense, b/c you would just have an empty changeset.
-      LOG_INFO(
-        "Second map is empty. Skipping changeset generation for maps at index: " << i + 1 << "...");
-      continue;
-    }
+//    if (map2->isEmpty())
+//    {
+//      // An empty map2 makes no sense, b/c you would just have an empty changeset.
+//      LOG_INFO(
+//        "Second map is empty. Skipping changeset generation for maps at index: " << i + 1 << "...");
+//      continue;
+//    }
     LOG_DEBUG(
-      "Creating changeset from inputs: " << map1->getName() << " and " << map2->getName() <<
-      " to output: " << output << "...");
+      "Creating changeset from inputs: " << map1->getName() << " of size: " << map1->size() <<
+      " and " << map2->getName() << " of size: " << map2->size() << " to output: " <<
+      output.right(25) << "...");
     OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation");
     OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation");
 
@@ -673,14 +674,17 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     _numModifyChanges += changesetDeriver->getNumModifyChanges();
     _numDeleteChanges += changesetDeriver->getNumDeleteChanges();
 
-    LOG_VARD(changesetDeriver->getNumCreateChanges());
-    LOG_VARD(changesetDeriver->getNumModifyChanges());
-    LOG_VARD(changesetDeriver->getNumDeleteChanges());
-    LOG_VARD(changesetDeriver->getNumFromElementsParsed());
-    LOG_VARD(changesetDeriver->getNumToElementsParsed());
+    LOG_VART(changesetDeriver->getNumFromElementsParsed());
+    LOG_VART(changesetDeriver->getNumToElementsParsed());
     if (changesetDeriver->getNumChanges() == 0)
     {
-      LOG_WARN("No changes written to changeset.");
+      LOG_DEBUG("No changes written to changeset.");
+    }
+    else
+    {
+      LOG_VARD(changesetDeriver->getNumCreateChanges());
+      LOG_VARD(changesetDeriver->getNumModifyChanges());
+      LOG_VARD(changesetDeriver->getNumDeleteChanges());
     }
 
     // close the output stream
@@ -702,16 +706,16 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     input2->close();
   }
 
-  LOG_VARD(_printDetailedStats);
+  LOG_VART(_printDetailedStats);
   if (_printDetailedStats && !detailedStats.isEmpty())
   {
     LOG_STATUS("Changeset Stats:\n" << detailedStats);
   }
   else
   {
-    LOG_VARD(_numCreateChanges);
-    LOG_VARD(_numModifyChanges);
-    LOG_VARD(_numDeleteChanges);
+    LOG_DEBUG("Total create changes: " << _numCreateChanges);
+    LOG_DEBUG("Total modify changes: " << _numModifyChanges);
+    LOG_DEBUG("Total delete changes: " <<_numDeleteChanges);
   }
 }
 

@@ -42,8 +42,8 @@ _numFromElementsParsed(0),
 _numToElementsParsed(0),
 _allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferenceFeatures())
 {
-  LOG_VARD(_from.get());
-  LOG_VARD(_to.get());
+  LOG_VART(_from.get());
+  LOG_VART(_to.get());
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
   {
@@ -58,7 +58,7 @@ _allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferen
   _changesByType[Change::ChangeType::Modify] = 0;
   _changesByType[Change::ChangeType::Delete] = 0;
 
-  LOG_VARD(_allowDeletingReferenceFeatures);
+  LOG_VART(_allowDeletingReferenceFeatures);
 }
 
 ChangesetDeriver::~ChangesetDeriver()
