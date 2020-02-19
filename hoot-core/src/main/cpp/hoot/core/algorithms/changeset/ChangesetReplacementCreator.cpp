@@ -348,7 +348,7 @@ void ChangesetReplacementCreator::create(
     {
       LOG_VARD(conflatedMap->size());
     }
-    if (refMap && conflatedMap /*&& conflatedMap->size() > 0*/)
+    if (refMap && conflatedMap)
     {
       LOG_DEBUG(
         "Adding ref map of size: " << refMap->size() << " and conflated map of size: " <<
@@ -363,7 +363,6 @@ void ChangesetReplacementCreator::create(
 
   LOG_VART(refMaps.size());
   LOG_VART(conflatedMaps.size());
-  //if (refMaps.size() == 0 || conflatedMaps.size() == 0)
   if (refMaps.size() == 0 && conflatedMaps.size() == 0)
   {
     LOG_WARN("No features remain after filtering so no changeset will be generated.");
@@ -433,18 +432,11 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
 
   const int refMapSize = refMap->size();
+  // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a
+  // changeset with delete statements if the option to allow deleting reference features is enabled.
   const int secMapSize = secMap->size();
   LOG_VARD(refMapSize);
   LOG_VARD(secMapSize);
-  // If the secondary dataset is empty here, then the filtering must have removed everything from
-  // it...no changeset to calculate. Note, the ref map could be empty by this point, and that will
-  // just result in an all add changeset with secondary features in it for the current geometry
-  // type being replaced
-//  if (secMap->getElementCount() == 0)
-//  {
-//    LOG_INFO("Secondary input map empty after filtering. Skipping changeset generation...");
-//    return;
-//  }
 
   // COOKIE CUT
 
@@ -470,7 +462,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Conflate the cookie cut ref map with the sec map.
 
   conflatedMap = cookieCutRefMap;
-  if (_conflationEnabled && secMapSize > 0)
+  if (_conflationEnabled && conflatedMap->size() > 0)
   {
     // TODO: do something with reviews - #3361
     _conflate(conflatedMap, _lenientBounds);
@@ -822,6 +814,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   {
     if (_fullReplacement)
     {
+      // If the sec map is empty and we're doing full replacement, we want everything deleted out
+      // of the ref for the current feature type in the changeset. So, return an empty map.
       LOG_DEBUG(
         "Nothing in cutter map. Full replacement not enabled, so returning an empty map " <<
         "as the cut map...");
@@ -829,6 +823,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
     }
     else
     {
+      // If the sec map is empty and we're not doing full replacement, there's nothing in the sec
+      // to overlap with the ref, so leave the ref untouched.
       LOG_DEBUG(
         "Nothing in cutter map. Full replacement enabled, so returning the entire dough map " <<
         "as the cut map...");
@@ -854,7 +850,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   const double cookieCutterAlpha = opts.getCookieCutterAlpha();
   double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
   LOG_VART(_fullReplacement);
-  if (_fullReplacement /*|| cutterMap->size() == 0*/)
+  if (_fullReplacement)
   {
     // Generate a cutter shape based on the ref map, which will cause all the ref data to be
     // replaced.

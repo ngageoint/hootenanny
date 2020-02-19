@@ -226,14 +226,8 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
   for (int i = 0; i < map1Inputs.size(); i++)
   {
     OsmMapPtr map1 = map1Inputs.at(i);
+    // If map2 is empty, we'll end up deleting features from map1 in the resultant changeset.
     OsmMapPtr map2 = map2Inputs.at(i);
-//    if (map2->isEmpty())
-//    {
-//      // An empty map2 makes no sense, b/c you would just have an empty changeset.
-//      LOG_INFO(
-//        "Second map is empty. Skipping changeset generation for maps at index: " << i + 1 << "...");
-//      continue;
-//    }
     LOG_DEBUG(
       "Creating changeset from inputs: " << map1->getName() << " of size: " << map1->size() <<
       " and " << map2->getName() << " of size: " << map2->size() << " to output: " <<
