@@ -31,6 +31,7 @@
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 //  Qt
@@ -206,7 +207,7 @@ void ParallelBoundedApiReader::_process()
       QString result = QString::fromUtf8(request.getResponseContent().data());
       switch (status)
       {
-      case 200:
+      case HttpResponseCode::HTTP_OK:
         //  Store the result and increment the number of results received
         _resultsMutex.lock();
         _resultsList.append(result);
@@ -215,7 +216,7 @@ void ParallelBoundedApiReader::_process()
         //  Write out a "debug map" for each result that comes in
         writeDebugMap(result, "bounded-reader-result");
         break;
-      case 400:
+      case HttpResponseCode::HTTP_BAD_REQUEST:
         //  Split the envelope in quarters and push them all back on the queue
         {
           double lon1 = envelope.getMinX();

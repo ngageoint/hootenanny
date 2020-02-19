@@ -28,6 +28,7 @@
 #include "HttpTestServer.h"
 
 //  Hootenanny
+#include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -41,7 +42,7 @@ HttpResponse::HttpResponse(int status, const std::string& response)
   add_header("Host", "localhost");
   add_header("Connection", "closed");
   if (response != "")
-    add_header("Content-Type", "text/xml");
+    add_header("Content-Type", HootNetworkUtils::CONTENT_TYPE_XML);
 }
 
 void HttpResponse::add_header(const std::string& header, const std::string& value)
@@ -75,12 +76,12 @@ std::string HttpResponse::get_status_text()
   //  Convert the HTTP status code to status text
   switch (_status)
   {
-  case 200:   return "OK";
-  case 400:   return "Bad Request";
-  case 404:
-  default:    return "Not Found";
-  case 405:   return "Method Not Allowed";
-  case 409:   return "Conflict";
+  case HttpResponseCode::HTTP_OK:                 return "OK";
+  case HttpResponseCode::HTTP_BAD_REQUEST:        return "Bad Request";
+  case HttpResponseCode::HTTP_NOT_FOUND:          return "Not Found";
+  case HttpResponseCode::HTTP_METHOD_NOT_ALLOWED: return "Method Not Allowed";
+  case HttpResponseCode::HTTP_CONFLICT:           return "Conflict";
+  default:                                        return "Unknown Status";
   }
 }
 
@@ -166,7 +167,7 @@ bool HttpTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
   //  Read the HTTP request, and ignore them
   read_request_headers(connection);
   //  Respond with HTTP 200 OK
-  HttpResponse response(200);
+  HttpResponse response(HttpResponseCode::HTTP_OK);
   //  Write out the response
   write_response(connection, response.to_string());
   //  Return true if we should continue listening and processing requests

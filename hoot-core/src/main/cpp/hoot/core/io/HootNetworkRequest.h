@@ -150,7 +150,7 @@ private:
   /**
    * @brief _getHttpResponseCode Get the HTTP response code from the response object
    * @param reply Network reply object
-   * @return HTTP response code as a number, 200 instead of "200"
+   * @return HTTP response code as an integer instead of a string
    */
   int _getHttpResponseCode(QNetworkReply* reply);
   /**

@@ -58,15 +58,6 @@ class OsmApiWriterTest;
 class OsmApiWriter : public Configurable, public ProgressReporter
 {
 public:
-  /** OSM API URL paths */
-  const static char* API_PATH_CAPABILITIES;
-  const static char* API_PATH_PERMISSIONS;
-  const static char* API_PATH_CREATE_CHANGESET;
-  const static char* API_PATH_CLOSE_CHANGESET;
-  const static char* API_PATH_UPLOAD_CHANGESET;
-  const static char* API_PATH_GET_ELEMENT;
-  /** Default content type */
-  const static char* CONTENT_TYPE_XML;
   /**
    *  Max number of jobs waiting in the work queue = multiplier * number of threads,
    *  this keeps the producer thread from creating too many sub-changesets too early
