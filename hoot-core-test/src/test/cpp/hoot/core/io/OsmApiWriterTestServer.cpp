@@ -28,8 +28,9 @@
 #include "OsmApiWriterTestServer.h"
 
 //  Hootenanny
-#include <hoot/core/io/OsmApiWriter.h>
+#include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/OsmApiUtils.h>
 
 namespace hoot
 {
@@ -40,10 +41,10 @@ bool CapabilitiesTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
   std::string headers = read_request_headers(connection);
   //  Make sure that the capabilities were requested
   HttpResponsePtr response;
-  if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
-    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
+  if (headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
   else
-    response.reset(new HttpResponse(404));
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
   //  Write out the response
   write_response(connection, response->to_string());
   //  Only respond once to the client
@@ -56,10 +57,10 @@ bool PermissionsTestServer::respond(HttpConnection::HttpConnectionPtr &connectio
   std::string headers = read_request_headers(connection);
   //  Make sure that the permissions were requested
   HttpResponsePtr response;
-  if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
-    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
+  if (headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
   else
-    response.reset(new HttpResponse(404));
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
   //  Write out the response
   write_response(connection, response->to_string());
   //  Only respond once to the client
@@ -74,26 +75,26 @@ bool RetryConflictsTestServer::respond(HttpConnection::HttpConnectionPtr& connec
   std::string headers = read_request_headers(connection);
   //  Determine the response message's HTTP header
   HttpResponsePtr response;
-  if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
-    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
-  else if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
-    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
-  else if (headers.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
-    response.reset(new HttpResponse(200, "1"));
+  if (headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, "1"));
   else if (headers.find("POST") != std::string::npos)
   {
-    response.reset(new HttpResponse(405));
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_METHOD_NOT_ALLOWED));
     response->add_header("Allow", "GET");
   }
-  else if (headers.find(QString(OsmApiWriter::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
   {
-    response.reset(new HttpResponse(200));
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK));
     continue_processing = false;
   }
   else
   {
     //  Error out here
-    response.reset(new HttpResponse(404));
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
     continue_processing = false;
   }
   //  Write out the response
@@ -120,39 +121,39 @@ bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
   //  Determine the response message's HTTP response
   HttpResponsePtr response;
   //  Capabilities
-  if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
-    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
+  if (headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
   //  Permissions
-  else if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
-    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
   //  Create changeset
-  else if (headers.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
-    response.reset(new HttpResponse(200, "1"));
+  else if (headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, "1"));
   //  Upload changeset 1
-  else if (headers.find(QString(OsmApiWriter::API_PATH_UPLOAD_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_UPLOAD_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     //  The first time through, the 'version' of element 1 should fail.
     if (!_has_error)
     {
-      response.reset(new HttpResponse(409, "Changeset conflict: Version mismatch: Provided 2, server had: 1 of Way 1"));
+      response.reset(new HttpResponse(HttpResponseCode::HTTP_CONFLICT, "Changeset conflict: Version mismatch: Provided 2, server had: 1 of Way 1"));
       _has_error = true;
     }
     else
-      response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_1_RESPONSE));
+      response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_1_RESPONSE));
   }
   //  Get way 1's updated version
-  else if (headers.find(QString(OsmApiWriter::API_PATH_GET_ELEMENT).arg("way").arg(1).toStdString()) != std::string::npos)
-    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_ELEMENT_1_GET_RESPONSE));
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(1).toStdString()) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_ELEMENT_1_GET_RESPONSE));
   //  Close changeset
-  else if (headers.find(QString(OsmApiWriter::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
   {
-    response.reset(new HttpResponse(200));
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK));
     continue_processing = false;
   }
   else
   {
     //  Error out here
-    response.reset(new HttpResponse(404));
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
     continue_processing = false;
   }
   //  Write out the response
