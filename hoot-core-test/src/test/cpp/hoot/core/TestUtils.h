@@ -37,6 +37,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfPath.h>
 
 // Qt
 #include <QString>
@@ -296,6 +297,10 @@ public:
       TestUtils::resetBasic();
     else if (_reset == ResetAll)
       TestUtils::resetEnvironment();
+
+    // We require that all tests use Testing.conf and that it be loaded last in order to override
+    // any previously set settings.
+    conf().loadJson(ConfPath::search("Testing.conf"));
   }
 
   static const QString UNUSED_PATH;

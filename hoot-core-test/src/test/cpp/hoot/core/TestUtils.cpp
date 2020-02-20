@@ -42,6 +42,7 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/cmd/ConflateCmd.h>
+#include <hoot/core/util/ConfPath.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -221,12 +222,17 @@ std::string TestUtils::readFile(QString f1)
 void TestUtils::resetBasic()
 {
   LOG_DEBUG("Resetting test environment...");
+
   // provide the most basic configuration.
   OsmMap::resetCounters();
   // make sure the UUIDs are repeatable
   UuidHelper::resetRepeatableKey();
   //  Reset the pseudo random number generator seed
   Tgs::Random::instance()->seed();
+
+  // We require that all tests use Testing.conf and that it be loaded last in order to override
+  // any previously set settings.
+  conf().loadJson(ConfPath::search("Testing.conf"));
 }
 
 void TestUtils::resetEnvironment(const QStringList confs)
@@ -267,6 +273,10 @@ void TestUtils::resetEnvironment(const QStringList confs)
   }
   //  Reset the pseudo random number generator seed
   Tgs::Random::instance()->seed();
+
+  // We require that all tests use Testing.conf and that it be loaded last in order to override
+  // any previously set settings.
+  conf().loadJson(ConfPath::search("Testing.conf"));
 }
 
 QString TestUtils::toQuotedString(QString str)

@@ -7,6 +7,8 @@ var HOOT_HOME = process.env.HOOT_HOME
 var hoot = require(HOOT_HOME + '/lib/HootJs');
 
 hoot.Settings.set({"api.db.email":"test@test.com"});
+// This should probably be removed.
+hoot.Settings.set({"writer.include.circular.error.tags":"true"});
 
 var input = process.argv[2]
 var output = process.argv[3]
