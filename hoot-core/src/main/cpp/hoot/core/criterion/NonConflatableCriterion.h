@@ -80,6 +80,8 @@ private:
 
   bool _ignoreChildren;
 
+  // allows for only checking conflatable types that support a specific geometry for optimization
+  // purposes
   GeometryTypeCriterion::GeometryType _geometryTypeFilter;
 };
 
