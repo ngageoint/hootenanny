@@ -46,6 +46,26 @@ QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCr
   return _conflatableCriteria;
 }
 
+QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCriteria(
+  const GeometryType& geometryType)
+{
+  const QMap<QString, ElementCriterionPtr> conflatableCriteria = getConflatableCriteria();
+
+  QMap<QString, ElementCriterionPtr> conflatableCriteriaForGeometryType;
+  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
+       itr != conflatableCriteria.end(); ++itr)
+  {
+    ElementCriterionPtr crit = itr.value();
+    std::shared_ptr<GeometryTypeCriterion> geometryCrit =
+      std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+    if (geometryCrit && geometryCrit->getGeometryType() == geometryType)
+    {
+      conflatableCriteriaForGeometryType[itr.key()] = crit;
+    }
+  }
+  return conflatableCriteriaForGeometryType;
+}
+
 void ConflatableElementCriterion::_createConflatableCriteria()
 {
   const std::vector<std::string> criterionClassNames =
@@ -65,14 +85,11 @@ void ConflatableElementCriterion::_createConflatableCriteria()
 
 QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(const ConstElementPtr& e)
 {
-  if (_conflatableCriteria.isEmpty())
-  {
-    _createConflatableCriteria();
-  }
+  const QMap<QString, ElementCriterionPtr> conflatableCriteria = getConflatableCriteria();
 
   QStringList conflatableCriteriaForElement;
-  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = _conflatableCriteria.begin();
-       itr != _conflatableCriteria.end(); ++itr)
+  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
+       itr != conflatableCriteria.end(); ++itr)
   {
     LOG_VART(itr.key());
     if (itr.value()->isSatisfied(e))
@@ -85,7 +102,7 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(const 
   return conflatableCriteriaForElement;
 }
 
-QStringList ConflatableElementCriterion::getCriterionClassNamesByType(const GeometryType& type)
+QStringList ConflatableElementCriterion::getCriterionClassNamesByGeometryType(const GeometryType& type)
 {
   QStringList classNamesByType;
   std::vector<std::string> classNames =

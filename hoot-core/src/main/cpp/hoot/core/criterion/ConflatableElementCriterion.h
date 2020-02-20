@@ -63,12 +63,21 @@ public:
   static QMap<QString, ElementCriterionPtr> getConflatableCriteria();
 
   /**
+   * Returns instantiations of conflatable criteria index by class name
+   *
+   * @param geometryType
+   * @return a conflatable criteria map
+   */
+  static QMap<QString, ElementCriterionPtr> getConflatableCriteria(
+    const GeometryType& geometryType);
+
+  /**
    * Returns all ConflatableElementCriterion class names for a given geometry type
    *
-   * @param type geometry type
+   * @param geometryType geometry type
    * @return a list of class names inheriting from ConflatableElementCriterion
    */
-  static QStringList getCriterionClassNamesByType(const GeometryType& type);
+  static QStringList getCriterionClassNamesByGeometryType(const GeometryType& geometryType);
 
 private:
 
