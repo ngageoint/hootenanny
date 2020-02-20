@@ -411,7 +411,7 @@ public class UserResource {
     		Map<String, String> tags = PostgresUtils.postgresObjToHStore(favoritesColumn);
     		
             if ( !tags.containsKey(getName) ) {
-                String getFavorites = json.get("favorites").toString();
+                String getFavorites = json.get("members").toString();
                 tags.put(getName, getFavorites);
                 createQuery().update(users)
                     .where(users.id.eq(userId))

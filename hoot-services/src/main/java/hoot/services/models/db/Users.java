@@ -172,7 +172,7 @@ public class Users {
         this.privileges = privileges;
     }
 
-    @JsonProperty(value = "favorites")
+    @JsonProperty(value = "members")
     public Object getFavoriteOpts() {
     	return favoriteOpts;
     }
