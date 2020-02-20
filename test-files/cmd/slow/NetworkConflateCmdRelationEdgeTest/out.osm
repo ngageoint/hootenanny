@@ -3561,7 +3561,7 @@
         <member type="relation" ref="-2" role="reviewee"/>
         <tag k="hoot:review:type" v="Line"/>
         <tag k="hoot:review:sort_order" v="0"/>
-        <tag k="hoot:review:note" v="Internal Error: When matching sublines expected a multilinestring relation not a route. A non-multilinestring should never be found here. Please report this to https://github.com/ngageoint/hootenanny."/>
+        <tag k="hoot:review:note" v="Elements contain too many ways and the computational complexity is unreasonable."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:score" v="1"/>
