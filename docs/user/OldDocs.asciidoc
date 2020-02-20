@@ -178,7 +178,6 @@ are listed the possible solutions where Hootenanny may request a manual review f
 | MultiLineString relations can only contain ways when matching sublines. | A input being conflated of geometry type multiline string contained an OSM feature type other than a way (nodes or relations). | Review this feature manually. This is invalid input data for Hootenanny conflation purposes and cannot be conflated automatically.
 | Multiple overlapping way matches were found within one set of ways. | When attempting to conflate sublines from line inputs, multiple overlapping lines were found. | TODO
 | No valid matching subline found. | When conflating two linear inputs, Hootenanny could not find a corresponding matching subline part in one of the inputs. | Review this feature manually, as Hootenanny can not determine automatically whether it matches any feature in the opposite input dataset.
-| When matching sublines expected a multilinestring relation not a <osm feature type>. | When conflating linear features, Hootenanny expects all relations to be of the type multilinestring. | Review this feature manually. This is invalid input data for Hootenanny conflation purposes and cannot be conflated.
 |======
 
 [[RailwayConflation]]

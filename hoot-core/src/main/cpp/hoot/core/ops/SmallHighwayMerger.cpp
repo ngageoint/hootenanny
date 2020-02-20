@@ -45,6 +45,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/schema/TagDifferencer.h>
+#include <hoot/core/criterion/BridgeCriterion.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -132,7 +133,7 @@ void SmallHighwayMerger::_mergeWays(const set<long>& ids)
 
   HighwayCriterion highwayCrit(_map);
   // if either way is not a highway
-  // TODO: could we gain anything by opening this up to other linear feature types?
+  // TODO: could we gain anything by opening this whole class up to other linear feature types?
   if (highwayCrit.isSatisfied(w1) == false || highwayCrit.isSatisfied(w2) == false)
   {
     return;
@@ -156,6 +157,15 @@ void SmallHighwayMerger::_mergeWays(const set<long>& ids)
          w2->getNodeId(0) != w1->getLastNodeId()))
     {
       // They aren't headed in a consistent direction. No need to merge.
+      return;
+    }
+
+    BridgeCriterion bridgeCrit;
+    const bool w1IsBridge = bridgeCrit.isSatisfied(w1);
+    const bool w2IsBridge = bridgeCrit.isSatisfied(w2);
+    if ((w1IsBridge && !w2IsBridge) || (w2IsBridge && !w1IsBridge))
+    {
+      // One is a bridge and the other isn't. Don't merge.
       return;
     }
 
