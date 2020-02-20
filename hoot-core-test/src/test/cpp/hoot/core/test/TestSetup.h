@@ -51,7 +51,6 @@ public:
 private:
 
   QStringList _confs;
-
 };
 
 }

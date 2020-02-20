@@ -30,7 +30,6 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/SchemaChecker.h>
-#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Log.h>
 
 // CPP Unit
