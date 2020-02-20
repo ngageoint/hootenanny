@@ -23,14 +23,14 @@ $vbCpu = ENV['VBCPU']
 if $vbCpu.nil?
   $vbCpu = 4
 else
-  puts '## Allocating ' + $vbCpu + ' CPU cores to the VM'
+  puts "# Allocating #{$vbCpu} CPU cores to the VM"
 end
 
 $vbRam = ENV['VBRAM']
 if $vbRam.nil?
   $vbRam = 10240
 else
-  puts '## Allocating ' + $vbRam + ' RAM to the VM'
+  puts "## Allocating #{$vbRam} RAM to the VM"
 end
 
 # By default, don't try to add software repos or run "yum upgrade" in the VM's
@@ -38,33 +38,26 @@ end
 $addRepos = "no"
 $yumUpdate = "no"
 
+# Hootenanny port mapping
+# If this is set, the VM will not forward any ports to the host
+$disableForwarding = ENV['DISABLE_VAGRANT_FORWARDING']
+
+$tomcatPort = ENV['TOMCAT_PORT']
+if $tomcatPort.nil?
+  $tomcatPort = 8888
+end
+
+$transPort = ENV['NODEJS_PORT']
+if $transPort.nil?
+  $transPort = 8094
+end
+
+$mergePort = ENV['P2P_PORT']
+if $mergePort.nil?
+  $mergePort = 8096
+end
 
 Vagrant.configure(2) do |config|
-  # Hoot port mapping
-  tomcatPort = ENV['TOMCAT_PORT']
-  if tomcatPort.nil?
-    tomcatPort = '8888'
-  end
-
-  transPort = ENV['NODEJS_PORT']
-  if transPort.nil?
-    transPort = '8094'
-  end
-
-  mergePort = ENV['P2P_PORT']
-  if mergePort.nil?
-    mergePort = '8096'
-  end
-
-  disableForwarding = ENV['DISABLE_VAGRANT_FORWARDING']
-  if disableForwarding.nil?
-    # tomcat service
-    config.vm.network "forwarded_port", guest: 8080, host: tomcatPort
-    # translation nodejs service
-    config.vm.network "forwarded_port", guest: 8094, host: transPort
-    # merge nodejs service
-    config.vm.network "forwarded_port", guest: 8096, host: mergePort
-  end
 
   def aws_provider(config, os)
     # AWS Provider.  Set enviornment variables for values below to use
@@ -144,11 +137,21 @@ Vagrant.configure(2) do |config|
     config.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
   end
 
+  def set_forwarding(config)
+    if $disableForwarding.nil?
+      config.vm.network "forwarded_port", guest: 8080, host: $tomcatPort  # Tomcat service
+      config.vm.network "forwarded_port", guest: 8094, host: $transPort  # NodeJS Translation service
+      config.vm.network "forwarded_port", guest: 8096, host: $mergePort  # NodeJS Merge service
+    end
+  end
+
+
   # Centos7 box - Preprovisioned for compiling hootenanny
   config.vm.define "default", primary: true do |hoot_centos7_prov|
     hoot_centos7_prov.vm.box = "hoot/centos7-hoot"
     hoot_centos7_prov.vm.hostname = "centos7-hoot"
 
+    set_forwarding(hoot_centos7_prov)
     mount_shares(hoot_centos7_prov)
     set_provisioners(hoot_centos7_prov)
     aws_provider(hoot_centos7_prov, 'CentOS7')
@@ -159,6 +162,7 @@ Vagrant.configure(2) do |config|
     hoot_centos7.vm.box = "hoot/centos7-minimal"
     hoot_centos7.vm.hostname = "hoot-centos"
 
+    set_forwarding(hoot_centos7)
     mount_shares(hoot_centos7)
 
     # We do want to add repos and update this box
@@ -170,11 +174,6 @@ Vagrant.configure(2) do |config|
 
   # Centos7 - Hoot core ONLY. No UI
   config.vm.define "hoot_centos7_core", autostart: false do |hoot_centos7_core|
-    # Turn off port forwarding
-    config.vm.network "forwarded_port", guest: 8080, host: tomcatPort, disabled: true
-    config.vm.network "forwarded_port", guest: 8094, host: transPort, disabled: true
-    config.vm.network "forwarded_port", guest: 8096, host: mergePort, disabled: true
-
     hoot_centos7_core.vm.box = "bento/centos-7.2"
     hoot_centos7_core.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.2"
 
@@ -217,15 +216,11 @@ Vagrant.configure(2) do |config|
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
   config.vm.provider "virtualbox" do |vb|
     # Display the VirtualBox GUI when booting the machine
     #vb.gui = true
 
-  # Customize the amount of memory on the VM:
-    # vb.memory = 10240
-    # vb.cpus = 4
+    # Customize the amount of memory on the VM:
     vb.memory = $vbRam
     vb.cpus = $vbCpu
   end
