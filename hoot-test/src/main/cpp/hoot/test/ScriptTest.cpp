@@ -285,11 +285,8 @@ void ScriptTest::_runDiff(QString file1, QString file2)
 
 void ScriptTest::_runProcess()
 {
-  // We require that all tests use Testing.conf. We want to load it first in order to give each
-  // test a chance to override it when necessary.
-  // TODO: test this by removing Testing.conf from a script where its needed and uncommenting this.
-  //confs.prepend(ConfPath::search("Testing.conf"));
-
+  // TODO: It would be nice if we could specify Testing.conf here to avoid having to specify it
+  // in every test files (#3823).
   QProcess p;
   p.start(_script, QProcess::ReadOnly);
 
