@@ -229,30 +229,33 @@ void TestUtils::resetBasic()
   UuidHelper::resetRepeatableKey();
   //  Reset the pseudo random number generator seed
   Tgs::Random::instance()->seed();
-
-  // We require that all tests use Testing.conf and that it be loaded last in order to override
-  // any previously set settings.
-  conf().loadJson(ConfPath::search("Testing.conf"));
 }
 
 void TestUtils::resetEnvironment(const QStringList confs)
 {
   LOG_DEBUG("Resetting test environment...");
 
-  // provide the most basic configuration.
+  // provide the most basic configuration
+
   OsmMap::resetCounters();
+
   conf().clear();
   ConfigOptions::populateDefaults(conf());
-  //The primary reason for allowing custom configs to be loaded here is in certain situaions to
-  //prevent the ConfigOptions defaults from being loaded, as they may be too bulky when running
-  //many hoot commands at once.
+
+  // We require that all tests use Testing.conf as a starting point and any conf values
+  // specified by it may be overridden when necessary.
+  conf().loadJson(ConfPath::search("Testing.conf"));
+
+  // The primary reason for allowing custom configs to be loaded here is in certain situations to
+  // prevent the ConfigOptions defaults from being loaded, as they may be too bulky when running
+  // many hoot commands at once.
   LOG_VART(confs.size());
   for (int i = 0; i < confs.size(); i++)
   {
     LOG_VART(confs[i]);
     conf().loadJson(confs[i]);
   }
-  //LOG_VART(conf());
+  LOG_VART(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
   // Sometimes we add new projections to the MapProjector, when this happens it may pick a new
@@ -273,10 +276,6 @@ void TestUtils::resetEnvironment(const QStringList confs)
   }
   //  Reset the pseudo random number generator seed
   Tgs::Random::instance()->seed();
-
-  // We require that all tests use Testing.conf and that it be loaded last in order to override
-  // any previously set settings.
-  conf().loadJson(ConfPath::search("Testing.conf"));
 }
 
 QString TestUtils::toQuotedString(QString str)

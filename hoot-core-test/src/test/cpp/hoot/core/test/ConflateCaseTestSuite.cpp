@@ -122,9 +122,9 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
   }
   else
   {
-    // We require that all tests use Testing.conf and that it be loaded last in order to override
-    // any previously set settings.
-    confs.append(ConfPath::search("Testing.conf"));
+    // We require that all tests use Testing.conf. We want to load it first in order to give each
+    // test a chance to override it when necessary.
+    confs.prepend(ConfPath::search("Testing.conf"));
 
     addTest(new ConflateCaseTest(d, confs));
     _numTests++;
