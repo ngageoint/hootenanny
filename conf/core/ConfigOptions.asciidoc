@@ -4883,9 +4883,12 @@ NoInformationElementRemover cleaning operation.
 === writer.include.circular.error.tags
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 When true, writers will include circular error information. Not necessarily honored by all writers.
+This should be left enabled by default to prevent custom accuracy tags from being dropped by writers
+in intermediary steps during a conflation workflow. Disable the option only on the final write for
+a dataset.
 
 === writer.include.conflate.review.detail.tags
 
