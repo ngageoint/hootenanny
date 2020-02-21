@@ -200,7 +200,7 @@ this conflation.
 Railway Conflation can further be customized with the railway.* configuration options. See the "Configuration Options" section of User Guide 
 for more detail.
 
-[[OldDocsConflation]]
+[[ConflationFeatureAccuracyHandling]]
 == Conflation Feature Accuracy Handling
 
 Feature accuracy is measure of the confidence in how accurately a feature's geospatial coordinates are. Feature accuracy values affect the
