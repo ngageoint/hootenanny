@@ -22,21 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootServicesLanguageDetectorClient.h"
 
 // hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/auth/HootServicesLoginManager.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/io/NetworkIoUtils.h>
-#include <hoot/core/auth/HootServicesLoginManager.h>
-#include "LanguageUtils.h"
+#include <hoot/core/language/LanguageUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/HootNetworkUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QByteArray>
@@ -210,7 +211,7 @@ QString HootServicesLanguageDetectorClient::detect(const QString& text)
 
   QUrl url(_getDetectUrl());
   QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
-  headers[QNetworkRequest::ContentTypeHeader] = "application/json";
+  headers[QNetworkRequest::ContentTypeHeader] = HootNetworkUtils::CONTENT_TYPE_JSON;
   HootNetworkRequest request;
   if (_useCookies)
   {
@@ -227,7 +228,7 @@ QString HootServicesLanguageDetectorClient::detect(const QString& text)
   {
     throw HootException("Error detecting language for text: " + text + ". error: " + e.what());
   }
-  if (request.getHttpStatus() != 200)
+  if (request.getHttpStatus() != HttpResponseCode::HTTP_OK)
   {
     throw HootException(
       "Error detecting language for text: " + text + ".  HTTP status: " +

@@ -718,7 +718,7 @@ QSet<QString> ConflateCmd::_getMatchCreatorCrits()
         // also add any generic geometry crits the crit inherits from
 
         const QStringList pointCrits =
-          GeometryTypeCriterion::getCriterionClassNamesByType(
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
             GeometryTypeCriterion::GeometryType::Point);
         LOG_VART(pointCrits);
         if (pointCrits.contains(critStr))
@@ -727,7 +727,7 @@ QSet<QString> ConflateCmd::_getMatchCreatorCrits()
         }
 
         const QStringList lineCrits =
-          GeometryTypeCriterion::getCriterionClassNamesByType(
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
             GeometryTypeCriterion::GeometryType::Line);
         LOG_VART(lineCrits);
         if (lineCrits.contains(critStr))
@@ -736,7 +736,7 @@ QSet<QString> ConflateCmd::_getMatchCreatorCrits()
         }
 
         const QStringList polyCrits =
-          GeometryTypeCriterion::getCriterionClassNamesByType(
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
             GeometryTypeCriterion::GeometryType::Polygon);
         LOG_VART(polyCrits);
         if (polyCrits.contains(critStr))

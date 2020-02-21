@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HOOT_NETWORK_REQUEST_H
@@ -150,7 +150,7 @@ private:
   /**
    * @brief _getHttpResponseCode Get the HTTP response code from the response object
    * @param reply Network reply object
-   * @return HTTP response code as a number, 200 instead of "200"
+   * @return HTTP response code as an integer instead of a string
    */
   int _getHttpResponseCode(QNetworkReply* reply);
   /**
