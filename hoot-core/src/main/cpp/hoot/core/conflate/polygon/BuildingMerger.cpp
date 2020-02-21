@@ -246,6 +246,9 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   ReuseNodeIdsOnWayOp(scrap->getElementId(), keeper->getElementId()).apply(map);
   // Replace the scrap with the keeper in any parents
   ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
+  // Favor the positive ID over the negative ID
+  if (keeper->getId() < 0 && scrap->getId() > 0)
+    preserveBuildingId = true;
   // Swap the IDs of the two elements if keeper isn't UNKNOWN1
   if (preserveBuildingId)
   {
