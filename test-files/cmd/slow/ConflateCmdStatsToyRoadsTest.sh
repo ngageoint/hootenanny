@@ -11,7 +11,7 @@ HOOT_OPTS="-C Testing.conf -C UnifyingAlgorithm.conf -C ReferenceConflation.conf
 
 hoot conflate $HOOT_OPTS test-files/ToyTestA.osm test-files/ToyTestB.osm $STATS_OUT.osm --stats > $STATS_OUT
 
-hoot diff $STATS_OUT.osm $IN_DIR/toy-roads-out.osm || diff $STATS_OUT.osm $IN_DIR/toy-roads-out.osm
+hoot diff $HOOT_OPTS $STATS_OUT.osm $IN_DIR/toy-roads-out.osm || diff $STATS_OUT.osm $IN_DIR/toy-roads-out.osm
 
 #read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
 EDIT_CMD=""

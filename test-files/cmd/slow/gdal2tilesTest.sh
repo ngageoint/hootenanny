@@ -26,7 +26,6 @@ fi
 # 2. Make some tiles
 gdal2tiles.py $OPT $INPUT_FILE $OUTPUT_TILES
 
-
 # 3. Compare the tiles to a known good set of tiles.
 NEWFILES=`ls -R $OUTPUT_TILES | wc -l`
 

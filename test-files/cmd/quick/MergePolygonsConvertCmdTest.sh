@@ -1,12 +1,13 @@
 #!/bin/bash
 #set -e
 
-DEBUG_OPT="--warn"
+DEBUG_OPT="--warn -C Testing.conf"
 
 INPUTFILEDIR=test-files/cmd/quick/MergePolygonsConvertCmdTest
 OUTPUTFILEDIR=test-output/cmd/quick/MergePolygonsConvertCmdTest
 
 mkdir -p $OUTPUTFILEDIR
+
 
 # Input: 2 x polygons
 # Output: 1 x polygon 

@@ -10,7 +10,7 @@ export outputfolder=$HOOT_HOME/tmp/$outputname
 export inputfile=DcGisRoads
 export input=$inputfile_$outputname
 export inputtype=db
-export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=test@test.com -D writer.include.debug.tags=true --warn"
+export HOOT_OPTS="-C Testing.conf -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=test@test.com -D writer.include.debug.tags=true --warn"
 
 echo "Ingest the data"
 hoot convert $HOOT_OPTS test-files/$inputfile.osm $DB_URL/$input

@@ -15,7 +15,7 @@ EXPORT_CONF="
 -D metadata.grid.cell.size=0.05"
 
 hoot convert -C Testing.conf $EXPORT_CONF $INPUTFILE_EXPORT $OUTPUTFILE_EXPORT
-hoot diff $COMPAREFILE_EXPORT $OUTPUTFILE_EXPORT
+hoot diff -C Testing.conf $COMPAREFILE_EXPORT $OUTPUTFILE_EXPORT
 
 # import test
 INPUTFILE_IMPORT=$INPATH/MetadataImportOpsTestIn.osm
@@ -28,4 +28,4 @@ IMPORT_CONF="
 -D metadata.tags=source;unknown;surface;ground"
 
 hoot convert -C Testing.conf $IMPORT_CONF $INPUTFILE_IMPORT $OUTPUTFILE_IMPORT
-hoot diff $COMPAREFILE_IMPORT $OUTPUTFILE_IMPORT
+hoot diff -C Testing.conf $COMPAREFILE_IMPORT $OUTPUTFILE_IMPORT
