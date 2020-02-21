@@ -34,6 +34,7 @@ namespace hoot
 {
 
 QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::_conflatableCriteria;
+QMap<QString, QMap<QString, ElementCriterionPtr>>  ConflatableElementCriterion::_conflatableCriteriaByGeometryType;
 
 QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCriteria()
 {
@@ -49,21 +50,28 @@ QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCr
 QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCriteria(
   const GeometryType& geometryType)
 {
-  const QMap<QString, ElementCriterionPtr> conflatableCriteria = getConflatableCriteria();
-
-  QMap<QString, ElementCriterionPtr> conflatableCriteriaForGeometryType;
-  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
-       itr != conflatableCriteria.end(); ++itr)
+  const QString geometryTypeStr = GeometryTypeCriterion::typeToString(geometryType);
+  if (!_conflatableCriteriaByGeometryType[geometryTypeStr].isEmpty())
   {
-    ElementCriterionPtr crit = itr.value();
-    std::shared_ptr<GeometryTypeCriterion> geometryCrit =
-      std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
-    if (geometryCrit && geometryCrit->getGeometryType() == geometryType)
-    {
-      conflatableCriteriaForGeometryType[itr.key()] = crit;
-    }
+    return _conflatableCriteriaByGeometryType[geometryTypeStr];
   }
-  return conflatableCriteriaForGeometryType;
+  else
+  {
+    const QMap<QString, ElementCriterionPtr> conflatableCriteria = getConflatableCriteria();
+
+    for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
+         itr != conflatableCriteria.end(); ++itr)
+    {
+      ElementCriterionPtr crit = itr.value();
+      std::shared_ptr<GeometryTypeCriterion> geometryCrit =
+        std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+      if (geometryCrit && geometryCrit->getGeometryType() == geometryType)
+      {
+        _conflatableCriteriaByGeometryType[geometryTypeStr][itr.key()] = itr.value();
+      }
+    }
+    return _conflatableCriteriaByGeometryType[geometryTypeStr];
+  }
 }
 
 void ConflatableElementCriterion::_createConflatableCriteria()

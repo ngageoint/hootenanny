@@ -85,6 +85,9 @@ private:
   // criterion class names to criterion objects
   static QMap<QString, ElementCriterionPtr> _conflatableCriteria;
 
+  // geometry type string to a map of criterion class names to criterion objects
+  static QMap<QString, QMap<QString, ElementCriterionPtr>> _conflatableCriteriaByGeometryType;
+
   static void _createConflatableCriteria();
 };
 
