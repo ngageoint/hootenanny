@@ -296,16 +296,43 @@ void OsmSchemaJs::isHighway(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(Boolean::New(current, HighwayCriterion().isSatisfied(e)));
 }
 
-void OsmSchemaJs::isSpecificallyConflatable(const FunctionCallbackInfo<Value>& args)
+void OsmSchemaJs::isSpecificallyConflatable(
+  const FunctionCallbackInfo<Value>& args)
 {
+  bool isSpecificallyConflatable = false;
+
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
   OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  NonConflatableCriterion crit(mapJs->getConstMap());
+
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(
-    Boolean::New(current, !NonConflatableCriterion(mapJs->getConstMap()).isSatisfied(e)));
+  const QString geometryTypeFilterStr = toCpp<QString>(args[2]).trimmed();
+  QStringList geometryTypeFilters;
+  if (!geometryTypeFilterStr.isEmpty())
+  {
+    geometryTypeFilters = geometryTypeFilterStr.split(";");
+    for (int i = 0; i < geometryTypeFilters.size(); i++)
+    {
+      const GeometryTypeCriterion::GeometryType geometryType =
+        GeometryTypeCriterion::typeFromString(geometryTypeFilters.at(i));
+      crit.setGeometryTypeFilter(geometryType);
+      if (!crit.isSatisfied(e))
+      {
+        isSpecificallyConflatable = false;
+        break;
+      }
+    }
+    isSpecificallyConflatable = true;
+  }
+  else
+  {
+    isSpecificallyConflatable = !crit.isSatisfied(e);
+  }
+
+  args.GetReturnValue().Set(Boolean::New(current, isSpecificallyConflatable));
 }
 
 void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)

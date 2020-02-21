@@ -144,7 +144,7 @@ void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterCl
     _geometryFiltersSpecified = false;
     _geometryTypeFilters = _getDefaultGeometryFilters();
     _linearFilterClassNames =
-      ConflatableElementCriterion::getCriterionClassNamesByType(
+      ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
         GeometryTypeCriterion::GeometryType::Line);
   }
 
@@ -665,7 +665,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     {
       _geometryTypeFilters = _getDefaultGeometryFilters();
       _linearFilterClassNames =
-        ConflatableElementCriterion::getCriterionClassNamesByType(
+        ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
           GeometryTypeCriterion::GeometryType::Line);
     }
     combinedFilters = _geometryTypeFilters;

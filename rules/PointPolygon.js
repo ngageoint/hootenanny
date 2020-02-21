@@ -16,7 +16,7 @@ exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point.polygon"));
 exports.tagThreshold = parseFloat(hoot.get("generic.point.polygon.tag.threshold"));
 exports.writeDebugTags = hoot.get("writer.include.debug.tags");
-// The baseFeatureType and geometryType vars don't work for Point/Polygon due to it conflating different geometry types.
+// The baseFeatureType and geometryType vars don't work for Point/Polygon with stats due to it conflating different geometry types.
 // Logic has been added to ScriptMatchCreator to handle this, so they can remain empty.
 //exports.baseFeatureType = ""; // 
 //exports.geometryType = "";
@@ -36,8 +36,9 @@ var distanceExtractor =
 exports.isMatchCandidate = function(map, e)
 {
   // We follow the same convention as POI/Polygon conflation here where all the match candidates are just points (not polys) and
-  // we find polygon neighbors to match with inside of ScriptMatchCreator.
-  return isPoint(map, e)  && !isSpecificallyConflatable(map, e);
+  // we find polygon neighbors to match with inside of ScriptMatchCreator. We're not getting the geometry type from 
+  // exports.geometryType for the reason described above.
+  return isPoint(map, e) && !isSpecificallyConflatable(map, e, "point");
 };
 
 /**

@@ -33,7 +33,7 @@ var overlapExtractor =
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPolygon(e) && !isSpecificallyConflatable(map, e);
+  return isPolygon(e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**
