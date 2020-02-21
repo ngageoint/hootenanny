@@ -63,6 +63,8 @@ public:
   virtual QString getDescription() const
   { return "Determines the highest circular error value"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   Meters _worst;

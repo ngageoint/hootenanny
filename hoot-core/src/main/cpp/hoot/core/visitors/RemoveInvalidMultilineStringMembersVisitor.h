@@ -29,13 +29,11 @@
 
 //  hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
-class RemoveInvalidMultilineStringMembersVisitor : public ElementOsmMapVisitor,
-  public OperationStatusInfo
+class RemoveInvalidMultilineStringMembersVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -54,6 +52,8 @@ public:
 
   virtual QString getDescription() const
   { return "Removes invalid multiline string relation members"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

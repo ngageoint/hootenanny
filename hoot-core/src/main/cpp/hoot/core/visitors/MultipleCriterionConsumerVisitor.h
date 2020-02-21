@@ -59,6 +59,8 @@ public:
 
   QString toString() const;
 
+  virtual std::string getClassName() const { return className(); }
+
 protected:
 
   std::vector<ElementCriterionPtr> _criteria;

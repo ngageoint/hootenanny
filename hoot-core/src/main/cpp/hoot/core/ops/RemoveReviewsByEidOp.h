@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -39,8 +38,7 @@
 namespace hoot
 {
 
-class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementConsumer,
-  public OperationStatusInfo
+class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
 
@@ -72,6 +70,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " conflation reviews"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

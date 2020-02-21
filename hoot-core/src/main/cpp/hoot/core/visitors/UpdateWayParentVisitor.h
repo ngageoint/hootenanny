@@ -37,16 +37,21 @@ class UpdateWayParentVisitor : public ElementVisitor
 {
 public:
 
+  static std::string className() { return "hoot::UpdateWayParentVisitor"; }
+
   UpdateWayParentVisitor(long oldParentId, long newParentId);
 
   virtual void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const override { return "Updates all way parent IDs to a new ID"; }
+  virtual QString getDescription() const override
+  { return "Updates all way parent IDs to a new ID"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
+
   long _oldParentId;
   long _newParentId;
-
 };
 
 }

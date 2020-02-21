@@ -93,7 +93,7 @@ public:
     writer.setIsDebugMap(true);
     writer.write(map, _outputPath + testName +  + "Out.osm");
 
-    CPPUNIT_ASSERT_EQUAL(43L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(43L, uut.getNumFeaturesAffected());
     CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWayNodes());
     CPPUNIT_ASSERT_EQUAL(38L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");

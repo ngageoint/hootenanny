@@ -32,7 +32,6 @@
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -47,7 +46,7 @@ class RdpWayGeneralizer;
  * @see RdpWayGeneralizer
  */
 class WayGeneralizeVisitor : public ElementOsmMapVisitor, public Configurable,
-  public ElementCriterionConsumer, public OperationStatusInfo
+  public ElementCriterionConsumer
 {
 public:
 
@@ -84,6 +83,8 @@ public:
   virtual void addCriterion(const ElementCriterionPtr& crit);
 
   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

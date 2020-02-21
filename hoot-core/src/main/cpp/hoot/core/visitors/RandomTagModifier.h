@@ -65,6 +65,8 @@ public:
 
   virtual QString getDescription() const { return "Randomly modifies feature tags"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   double _p;

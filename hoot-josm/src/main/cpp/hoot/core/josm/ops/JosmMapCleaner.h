@@ -82,6 +82,8 @@ public:
   void setAddDetailTags(const bool add) { _addDetailTags = add; }
   int getNumFailedCleaningOperations() const { return _numFailedCleaningOperations; }
 
+  virtual std::string getClassName() const { return className(); }
+
 protected:
 
   /*

@@ -31,7 +31,6 @@
 #include <memory>
 
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -40,7 +39,7 @@ class ElementConverter;
 /**
  * Removes all "area" elements that have an area of zero.
  */
-class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -63,6 +62,8 @@ public:
    * @see FilteredByCriteria
    */
   virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

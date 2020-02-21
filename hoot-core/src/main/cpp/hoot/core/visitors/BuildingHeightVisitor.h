@@ -32,7 +32,6 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QRegularExpression>
@@ -40,8 +39,7 @@
 namespace hoot
 {
 
-class BuildingHeightVisitor : public ConstElementVisitor, public NumericStatistic,
-  public OperationStatusInfo
+class BuildingHeightVisitor : public ConstElementVisitor, public NumericStatistic
 {
 public:
 
@@ -70,6 +68,8 @@ public:
     const double average = _numAffected == 0 ? 0.0 : _totalHeight / _numAffected;
     return average;
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

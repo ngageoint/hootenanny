@@ -28,7 +28,6 @@
 #define RANDOM_ELEMENT_REMOVER_H
 
 // hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/RngConsumer.h>
@@ -40,7 +39,7 @@ namespace hoot
  * Randomly removes elements from a map
  */
 class RandomElementRemover : public ElementOsmMapVisitor, public RngConsumer,
-    public Configurable, public OperationStatusInfo
+    public Configurable
 {
 public:
 
@@ -70,6 +69,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Randomly removed " + QString::number(_numAffected) + " elements"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

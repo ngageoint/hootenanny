@@ -27,6 +27,8 @@
 #ifndef OPERATION_STATUS_INFO_H
 #define OPERATION_STATUS_INFO_H
 
+#include <QString>
+
 namespace hoot
 {
 
@@ -57,6 +59,20 @@ public:
     e.g. "Removed 20 duplicate ways"
     */
   virtual QString getCompletedStatusMessage() const = 0;
+
+  /**
+   * Returns the number of elements affected by the visitor
+   *
+   * @return a number of elements
+   */
+  virtual long getNumFeaturesAffected() const = 0;
+
+  /**
+   * Returns the number of elements processed by the visitor
+   *
+   * @return a number of elements
+   */
+  virtual long getNumFeaturesProcessed() const = 0;
 };
 
 }

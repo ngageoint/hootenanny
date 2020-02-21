@@ -29,7 +29,6 @@
 
 //  Hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -44,7 +43,7 @@ namespace hoot
  *  to include only the last date in the list.  Thirdly the `uuid` field is handled the
  *  same way, only the last UUID in the list is preserved.
  */
-class ApiTagTruncateVisitor : public ElementVisitor, public OperationStatusInfo
+class ApiTagTruncateVisitor : public ElementVisitor
 {
 public:
 
@@ -77,6 +76,8 @@ public:
    * @return Empty string if nothing is changed, truncated string otherwise
    */
   static QString truncateTag(const QString& key, const QString& value);
+
+  virtual std::string getClassName() const { return className(); }
 
 };
 

@@ -54,6 +54,8 @@ public:
   virtual QString getDescription() const
   { return "Projects features to a geographic coordinate system"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   OGRCoordinateTransformation* _transform;

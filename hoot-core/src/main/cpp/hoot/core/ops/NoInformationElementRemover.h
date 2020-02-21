@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -41,31 +40,33 @@ namespace hoot
    another element (e.g. only contains UUID and source, but not FCODE equivalent or other
    informative tags).
  */
-class NoInformationElementRemover : public OsmMapOperation, public OperationStatusInfo
+class NoInformationElementRemover : public OsmMapOperation
 {
-  public:
+public:
 
-    static std::string className() { return "hoot::NoInformationElementRemover"; }
+  static std::string className() { return "hoot::NoInformationElementRemover"; }
 
-    NoInformationElementRemover();
+  NoInformationElementRemover();
 
-    /**
-      @see OsmMapOperation
-    */
-    void apply(std::shared_ptr<OsmMap>& map);
+  /**
+    @see OsmMapOperation
+  */
+  void apply(std::shared_ptr<OsmMap>& map);
 
-    virtual QString getInitStatusMessage() const
-    { return "Removing elements with no information tags..."; }
+  virtual QString getInitStatusMessage() const
+  { return "Removing elements with no information tags..."; }
 
-    virtual QString getCompletedStatusMessage() const
-    { return "Removed " + QString::number(_numAffected) + " elements with no information tags"; }
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_numAffected) + " elements with no information tags"; }
 
-    virtual QString getDescription() const
-    { return "Removes elements containing no information in tags"; }
+  virtual QString getDescription() const
+  { return "Removes elements containing no information in tags"; }
 
-  protected:
+  virtual std::string getClassName() const { return className(); }
 
-    std::shared_ptr<OsmMap> _map;
+protected:
+
+  std::shared_ptr<OsmMap> _map;
 };
 
 }

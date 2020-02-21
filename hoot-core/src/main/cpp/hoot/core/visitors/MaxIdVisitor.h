@@ -55,6 +55,8 @@ public:
   virtual QString getDescription() const
   { return "Returns the largest element ID value found"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   long _maxId;

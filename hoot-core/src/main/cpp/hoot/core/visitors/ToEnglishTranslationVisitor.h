@@ -43,8 +43,7 @@ namespace hoot
 /**
  * Translates selected tag values to English
  */
-class ToEnglishTranslationVisitor : public ElementVisitor, public Configurable,
-  public OperationStatusInfo
+class ToEnglishTranslationVisitor : public ElementVisitor, public Configurable
 {
 
 public:
@@ -70,6 +69,8 @@ public:
       "Translated " + QString::number(_numTagTranslationsMade) + " tags to English on " +
       QString::number(_numProcessedElements) + " different elements";
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

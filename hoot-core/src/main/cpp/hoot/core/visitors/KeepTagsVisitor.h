@@ -48,6 +48,8 @@ public:
   virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const { return "Keeps tags by key"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

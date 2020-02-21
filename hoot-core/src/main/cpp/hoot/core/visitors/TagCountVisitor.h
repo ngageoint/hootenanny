@@ -39,8 +39,7 @@ namespace hoot
  * A visitor for counting element tags.  It distinguishes between metadata and information tags,
  * and both are included in the total count.  Debug tags are not included in the total count.
  */
-class TagCountVisitor : public ConstElementVisitor, public NumericStatistic,
-  public OperationStatusInfo
+class TagCountVisitor : public ConstElementVisitor, public NumericStatistic
 {
 public:
 
@@ -79,6 +78,8 @@ public:
         (double)_informationCount / (double)_numInformationAffected;
     return average;
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

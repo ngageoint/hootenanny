@@ -60,6 +60,8 @@ public:
    *  Pure virtual function called by constructor to create the intersection visitor
    */
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor() = 0;
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 /**
@@ -74,6 +76,8 @@ public:
   virtual QString getDescription() const override { return "Identifies highway intersections"; }
 
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 /**
@@ -88,6 +92,8 @@ public:
   virtual QString getDescription() const override { return "Identifies railway intersections"; }
 
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

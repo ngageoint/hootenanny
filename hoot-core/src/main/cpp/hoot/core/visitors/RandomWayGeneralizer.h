@@ -96,6 +96,8 @@ public:
 
   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   boost::minstd_rand* _rng;

@@ -53,6 +53,8 @@ public:
   virtual void parseArguments(const QHash<QString, QString>& arguments) override;
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
   const double DEFAULT_AREA = 15000;
   const double DEFAULT_LENGTH = 0;

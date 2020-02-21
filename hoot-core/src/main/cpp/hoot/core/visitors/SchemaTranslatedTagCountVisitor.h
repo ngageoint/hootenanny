@@ -68,6 +68,8 @@ public:
   virtual QString getDescription() const
   { return "Counts the number of tags translated to a schema"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   const OsmMap* _map;

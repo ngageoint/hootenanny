@@ -68,6 +68,8 @@ public:
 
   virtual QString getDescription() const { return "Collects the element IDs visited"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   std::vector<long> _elementIds;

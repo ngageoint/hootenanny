@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -39,7 +38,7 @@ namespace hoot
  * Sometimes name fields have more characters than we'd like. This method takes all names beyond
  * the a specified character limit and puts them into fields named 'name:0', 'name:1', etc.
  */
-class SplitNameVisitor : public ElementVisitor, public OperationStatusInfo, public Configurable
+class SplitNameVisitor : public ElementVisitor, public Configurable
 {
 public:
 
@@ -61,6 +60,8 @@ public:
   { return "Removed " + QString::number(_numAffected) + " building outlines"; }
 
   virtual void setConfiguration(const Settings& conf);
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

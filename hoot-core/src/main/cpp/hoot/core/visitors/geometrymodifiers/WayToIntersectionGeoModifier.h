@@ -63,9 +63,13 @@ public:
   virtual void parseArguments(const QHash<QString, QString>& /*arguments*/) override { }
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
+
   void processIntersections(OsmMap* pMap, const WayPtr pWay, std::vector<IntersectionInfo>& inters);
-  bool assignToAdjacentWay(OsmMap* pMap, const std::shared_ptr<NodeToWayMap>& n2w, long myWayId, const std::vector<long>& nodesToAttach);
+  bool assignToAdjacentWay(OsmMap* pMap, const std::shared_ptr<NodeToWayMap>& n2w, long myWayId,
+                           const std::vector<long>& nodesToAttach);
 };
 
 }

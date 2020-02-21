@@ -57,6 +57,8 @@ public:
 
   void clear();
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   std::set<ReviewMarker::ReviewUid> _reviews;

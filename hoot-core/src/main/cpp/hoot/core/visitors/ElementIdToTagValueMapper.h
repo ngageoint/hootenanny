@@ -28,7 +28,6 @@
 #define ELEMENT_ID_TO_TAG_VALUE_MAPPER_H
 
 // hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
@@ -39,8 +38,7 @@ namespace hoot
 /**
  * Creates a mapping between an element ID and the value of the specified tag, if it has the tag
  */
-class ElementIdToTagValueMapper : public ConstElementVisitor, public OperationStatusInfo,
-  public ElementCriterionConsumer
+class ElementIdToTagValueMapper : public ConstElementVisitor, public ElementCriterionConsumer
 {
 
 public:
@@ -64,6 +62,8 @@ public:
   QMap<ElementId, QString> getIdToTagValueMappings() const { return _idToTagValueMappings; }
 
   void setTagKey(const QString& key) { _tagKey = key; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

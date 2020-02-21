@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 
 // Standard
@@ -52,7 +51,7 @@ class Way;
  * mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to
  * be marked as divided.
  */
-class HighwayImpliedDividedMarker : public OsmMapOperation, public OperationStatusInfo
+class HighwayImpliedDividedMarker : public OsmMapOperation
 {
 public:
 
@@ -87,6 +86,8 @@ public:
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

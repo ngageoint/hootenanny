@@ -62,6 +62,8 @@ public:
   void setAllowWordsInvolvedInMultipleRules(bool allow)
   { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
 
+  virtual std::string getClassName() const { return className(); }
+
 protected:
 
   virtual bool _visitElement(const ElementPtr& e) = 0;

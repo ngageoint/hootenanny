@@ -34,7 +34,6 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 
 #include <unordered_set>
@@ -51,7 +50,7 @@ class Way;
  * assumptions must be made to do this including assumptions about the direction of travel on
  * roads (right or left hand drivers).
  */
-class DualHighwaySplitter : public OsmMapOperation, public OperationStatusInfo
+class DualHighwaySplitter : public OsmMapOperation
 {
 public:
 
@@ -93,6 +92,8 @@ public:
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

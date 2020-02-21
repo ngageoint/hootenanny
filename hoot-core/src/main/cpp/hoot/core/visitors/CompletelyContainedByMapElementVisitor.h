@@ -68,6 +68,8 @@ public:
   virtual QString getDescription() const
   { return "Determines if a element is completely contained within a map"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 protected:
 
   bool _complete;

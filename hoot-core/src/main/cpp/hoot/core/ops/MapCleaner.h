@@ -59,6 +59,8 @@ public:
 
   virtual QString getDescription() const override { return "Cleans map data"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   Progress _progress;

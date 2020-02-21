@@ -31,7 +31,6 @@
 //  Hoot
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -41,7 +40,7 @@ namespace hoot
  * and multilinestring relation that has less that two members thus
  * making them not "multi" linestrings.
  */
-class RemoveInvalidRelationVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class RemoveInvalidRelationVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -62,6 +61,8 @@ public:
   {
     return "Removes duplicate ways in relations and invalid relations";
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

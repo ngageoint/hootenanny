@@ -60,6 +60,8 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   std::shared_ptr<ElementVisitor> _visitor;

@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/ElementAttributeType.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 
 namespace hoot
@@ -40,8 +39,7 @@ namespace hoot
  * Adds one or more attributes to elements.  Only common OSM attributes may be added
  * (see ElementAttributeType).
  */
-class AddAttributesVisitor : public MultipleCriterionConsumerVisitor, public Configurable,
-  public OperationStatusInfo
+class AddAttributesVisitor : public MultipleCriterionConsumerVisitor, public Configurable
 {
 
 public:
@@ -65,6 +63,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Added " + QString::number(_numAffected) + " attributes"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

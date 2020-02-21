@@ -31,7 +31,6 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QString>
@@ -45,7 +44,7 @@ namespace hoot
  * instead if memory is a concern, as it does not require the whole map to be read into memory at
  * once.
  */
-class SchemaTranslationOp : public OsmMapOperation, public Configurable, public OperationStatusInfo
+class SchemaTranslationOp : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -69,6 +68,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return _translator.getCompletedStatusMessage(); }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -60,6 +60,8 @@ public:
   virtual QString getDescription() const
   { return "Counts the number of elements matching a criterion"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   uint64_t _count;

@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -69,8 +68,7 @@ namespace hoot
  * yet if/whether that can be addressed or not. Technically, the way joiner (I think) run later on
  * could fix the problem.
  */
-class UnconnectedWaySnapper : public OsmMapOperation, public OperationStatusInfo,
-  public Configurable
+class UnconnectedWaySnapper : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -132,6 +130,8 @@ public:
    */
   static bool snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected,
                                        const WayPtr& connectTo);
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

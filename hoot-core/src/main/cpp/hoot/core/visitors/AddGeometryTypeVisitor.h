@@ -43,6 +43,8 @@ public:
   virtual void visit(const std::shared_ptr<Element>& e) override;
 
   virtual QString getDescription() const { return "Adds geometry types"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

@@ -31,7 +31,6 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 // Geos
@@ -52,7 +51,7 @@ namespace hoot
  *    - the combined closed way members of a relationship where outer
  *      entries are added and inner entries are subtracted
  */
-class AddMeasurementTagsVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class AddMeasurementTagsVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -68,7 +67,10 @@ public:
 
   // OperationStatusInfo
   virtual QString getInitStatusMessage() const { return "Adding measurement tags..."; }
-  virtual QString getCompletedStatusMessage() const { return "Added tags to " + QString::number(_numAffected) + " elements"; }
+  virtual QString getCompletedStatusMessage() const
+  { return "Added tags to " + QString::number(_numAffected) + " elements"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

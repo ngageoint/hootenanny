@@ -140,7 +140,7 @@ long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
   LOG_INFO(nodeRemover.getInitStatusMessage());
   nodeRemover.apply(map);
   LOG_DEBUG(nodeRemover.getCompletedStatusMessage());
-  return nodeRemover.getNumAffected();
+  return nodeRemover.getNumFeaturesAffected();
 }
 
 void SuperfluousNodeRemover::setBounds(const Envelope &bounds)

@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 
@@ -40,8 +39,8 @@ namespace hoot
 /**
  * Allows for setting tags on elements and their children (way nodes, relation members)
  */
-class RecursiveSetTagValueOp : public OsmMapOperation, public OperationStatusInfo,
-  public ElementCriterionConsumer, public Configurable
+class RecursiveSetTagValueOp : public OsmMapOperation, public ElementCriterionConsumer,
+  public Configurable
 {
 public:
 
@@ -98,6 +97,8 @@ public:
    * @see OperationStatusInfo
    */
   virtual QString getCompletedStatusMessage() const { return _tagger->getCompletedStatusMessage(); }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

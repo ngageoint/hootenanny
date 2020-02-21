@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -40,7 +39,7 @@ namespace hoot
  * Removes all relations that have no members.  This needs to be an op, rather than a visitor, so
  * that we can delete relations that are children of other relations.
  */
-class RemoveEmptyRelationsOp : public OsmMapOperation, public OperationStatusInfo
+class RemoveEmptyRelationsOp : public OsmMapOperation
 {
 public:
 

@@ -58,6 +58,8 @@ public:
   virtual QString getDescription() const
   { return "Returns the smallest element ID value found"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   long _minId;

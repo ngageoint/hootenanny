@@ -52,6 +52,8 @@ public:
 
   virtual QString getDescription() const { return "Sets element statuses"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   //status to apply to elements

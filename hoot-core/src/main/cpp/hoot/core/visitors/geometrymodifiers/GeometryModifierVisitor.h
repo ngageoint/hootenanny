@@ -34,7 +34,6 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -45,7 +44,7 @@ namespace hoot
  * Applies the filter to the node and if it matches calls the requested modifier's
  * process function.
  */
-class GeometryModifierVisitor : public ElementVisitor, public OperationStatusInfo
+class GeometryModifierVisitor : public ElementVisitor
 {
   friend class GeometryModifierOp;
 
@@ -64,7 +63,10 @@ public:
 
   // OperationStatusInfo
   virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
-  virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
+  virtual QString getCompletedStatusMessage() const
+  { return "Modified " + QString::number(_numAffected) + " elements"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
   OsmMap* _pMap;

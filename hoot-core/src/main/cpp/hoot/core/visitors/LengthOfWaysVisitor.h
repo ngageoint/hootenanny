@@ -67,6 +67,8 @@ public:
     return average;
   }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   Meters _total;

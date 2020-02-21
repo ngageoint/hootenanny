@@ -53,6 +53,8 @@ public:
 
   virtual QString getDescription() const { return "Adds REF1 tags"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   int _count;

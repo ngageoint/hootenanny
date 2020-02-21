@@ -31,7 +31,6 @@
 // hoot
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -42,7 +41,7 @@ namespace hoot
  *
  * This is compatible with fourpass.
  */
-class ReprojectToPlanarOp : public OsmMapOperation, public Serializable, public OperationStatusInfo
+class ReprojectToPlanarOp : public OsmMapOperation, public Serializable
 {
 public:
 

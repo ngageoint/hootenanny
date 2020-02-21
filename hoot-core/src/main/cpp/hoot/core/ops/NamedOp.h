@@ -61,6 +61,8 @@ public:
   virtual void setProgress(Progress progress) override { _progress = progress; }
   virtual unsigned int getNumSteps() const override { return _namedOps.size(); }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   const Settings* _conf;

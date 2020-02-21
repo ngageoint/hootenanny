@@ -36,6 +36,9 @@ namespace hoot
 class MultiaryMatchTrainingValidator : public OsmMapOperation
 {
 public:
+
+  static std::string className() { return "hoot::AddressCountVisitor"; }
+
   MultiaryMatchTrainingValidator();
 
   /**
@@ -44,6 +47,8 @@ public:
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual QString getDescription() const override { return "TODO"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

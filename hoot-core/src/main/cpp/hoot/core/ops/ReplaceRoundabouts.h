@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/conflate/highway/Roundabout.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 
@@ -52,7 +51,7 @@ class Way;
  * replace them with simple intersections. Post conflation, if the roundabout
  * is in the reference data, it will be put back.
  */
-class ReplaceRoundabouts : public OsmMapOperation, public OperationStatusInfo
+class ReplaceRoundabouts : public OsmMapOperation
 {
 public:
 
@@ -95,6 +94,8 @@ public:
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

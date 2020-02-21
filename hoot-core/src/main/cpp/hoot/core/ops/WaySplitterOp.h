@@ -33,7 +33,6 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QString>
@@ -48,8 +47,7 @@ namespace hoot
  *
  * If way.splitter.max.length is not specified then it defaults to 5km.
  */
-class WaySplitterOp : public OsmMapOperation, public Serializable, public Configurable,
-  public OperationStatusInfo
+class WaySplitterOp : public OsmMapOperation, public Serializable, public Configurable
 {
 public:
 

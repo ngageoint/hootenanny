@@ -56,6 +56,8 @@ public:
 
   virtual QString getDescription() const { return "Counts manual matches"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   long _numManualMatches;

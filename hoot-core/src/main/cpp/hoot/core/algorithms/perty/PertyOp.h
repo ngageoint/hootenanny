@@ -104,6 +104,8 @@ public:
 
   virtual QString getDescription() const { return "Perturbs map data"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   Meters _D;

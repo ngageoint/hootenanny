@@ -107,6 +107,8 @@ public:
 
   virtual QString getDescription() const { return "Randomly splits ways"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   boost::minstd_rand* _rng;

@@ -59,6 +59,8 @@ public:
   virtual QString getDescription() const
   { return "Removes elements meeting a criterion and updates REF tags"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   ElementCriterionPtr _criterion;

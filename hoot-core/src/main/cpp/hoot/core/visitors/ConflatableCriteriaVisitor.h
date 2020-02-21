@@ -46,6 +46,8 @@ public:
 
   virtual QString getDescription() const
   { return "Marks elements with all criterion classes that consider them conflatable"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

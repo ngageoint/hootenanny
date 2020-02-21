@@ -31,7 +31,6 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/StringUtils.h>
@@ -94,8 +93,7 @@ namespace hoot
  * buildings? Or should we change it only to be more strict and only merge building:part features
  * (if that's possible; or maybe its already doing that)?
  */
-class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo,
-  public Configurable
+class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public Configurable
 {
 public:
 

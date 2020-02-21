@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -38,8 +37,7 @@ namespace hoot
 /**
  * Renames all keys for all elements with the specified key to a new key
  */
-class TagRenameKeyVisitor : public ElementVisitor, public Configurable,
-  public OperationStatusInfo
+class TagRenameKeyVisitor : public ElementVisitor, public Configurable
 {
 public:
 
@@ -62,6 +60,8 @@ public:
 
   void setOldKey(const QString& key) { _oldKey = key; }
   void setNewKey(const QString& key) { _newKey = key; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

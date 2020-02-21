@@ -35,7 +35,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/WayMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
@@ -51,7 +50,7 @@
 namespace hoot
 {
 
-class MetadataOp : public OsmMapOperation, public OperationStatusInfo, public Configurable
+class MetadataOp : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -67,6 +66,8 @@ public:
 
   // Configurable
   virtual void setConfiguration(const Settings& conf);
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

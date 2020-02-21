@@ -31,7 +31,6 @@
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -42,7 +41,7 @@ namespace hoot
  * This really should be an ElementVisitor. See #2831.
  */
 class RemoveTagsVisitor : public ElementOsmMapVisitor, public Configurable,
-  public ElementCriterionConsumer, public OperationStatusInfo
+  public ElementCriterionConsumer
 {
 public:
 
@@ -70,6 +69,8 @@ public:
       "Removed " + QString::number(_numTagsRemoved) + " tags from " +
       QString::number(_numAffected) + " different elements";
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

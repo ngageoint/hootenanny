@@ -63,6 +63,8 @@ public:
   virtual QString getDescription() const
   { return "Removes one or more common OSM attributes from features"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   QList<ElementAttributeType> _types;

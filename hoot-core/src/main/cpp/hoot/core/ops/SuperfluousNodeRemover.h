@@ -36,7 +36,6 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -53,8 +52,7 @@ class OsmMap;
  * of a way and inside the bounds will be removed. This is most useful when performing tile based
  * operations such as the FourPassDriver.
  */
-class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable,
-  public OperationStatusInfo
+class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable
 {
 public:
 

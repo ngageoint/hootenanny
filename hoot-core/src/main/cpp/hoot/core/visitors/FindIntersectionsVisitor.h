@@ -32,7 +32,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -40,8 +39,7 @@ namespace hoot
 /**
  * Finds all intersections (nodes), adds some parameters to them and records their node ids
  */
-class FindIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsumer,
-  public OperationStatusInfo
+class FindIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsumer
 {
 public:
 
@@ -66,6 +64,8 @@ public:
   { return "Found " + QString::number(_numAffected) + " intersections"; }
 
   virtual ElementCriterionPtr createCriterion(ConstOsmMapPtr map) = 0;
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

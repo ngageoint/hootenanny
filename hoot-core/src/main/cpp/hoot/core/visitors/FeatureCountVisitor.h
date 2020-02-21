@@ -55,6 +55,8 @@ public:
   virtual QString getDescription() const
   { return "Counts the number of elements having at least one information tag"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   int _count;

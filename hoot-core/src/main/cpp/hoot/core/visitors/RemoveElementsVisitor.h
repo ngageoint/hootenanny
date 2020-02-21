@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -41,7 +40,7 @@ namespace hoot
  * Removes any elements where that satisfy a criterion
  */
 class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public OsmMapConsumer,
-  public Configurable, public OperationStatusInfo
+  public Configurable
 {
 public:
 
@@ -70,7 +69,10 @@ public:
   {
     return
       "Removed " + StringUtils::formatLargeNumber(_count) + " / " +
-      StringUtils::formatLargeNumber(_startElementCount) + " elements."; }
+      StringUtils::formatLargeNumber(_startElementCount) + " elements.";
+  }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

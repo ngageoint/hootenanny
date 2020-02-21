@@ -84,6 +84,8 @@ public:
 
   virtual QString getDescription() const override { return "Replaces one element with another"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   ElementId _from;

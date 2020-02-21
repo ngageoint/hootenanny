@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>
 
 namespace hoot
@@ -41,7 +40,7 @@ class OsmMap;
 /**
  * A map operation making use of UnionPolyonsVisitor
  */
-class UnionPolygonsOp : public OsmMapOperation, public OperationStatusInfo
+class UnionPolygonsOp : public OsmMapOperation
 {
 public:
 

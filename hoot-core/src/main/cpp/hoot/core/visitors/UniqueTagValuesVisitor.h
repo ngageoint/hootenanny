@@ -41,6 +41,8 @@ class UniqueTagValuesVisitor : public ConstElementVisitor
 {
 public:
 
+  static std::string className() { return "hoot::UniqueTagValuesVisitor"; }
+
   /**
    * @param split If split is set to true then the values in the tag are split before they're placed
    *  in the bag.
@@ -54,6 +56,8 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Returns all the unique element IDs visited"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

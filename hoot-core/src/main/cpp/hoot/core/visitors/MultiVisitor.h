@@ -48,6 +48,8 @@ public:
 
   virtual QString getDescription() const { return "Allows for combining multiple visitors"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   std::vector<ElementOsmMapVisitor *> _visitors;

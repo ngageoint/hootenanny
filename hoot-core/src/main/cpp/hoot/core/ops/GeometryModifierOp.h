@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/geometrymodifiers/GeometryModifierVisitor.h>
 
@@ -57,7 +56,7 @@ namespace hoot
    * GeometryModifierVisitor to go through all map elements to apply each specified action.
    * Each action is performed on the entire map before it moves on to the next action.
    */
-  class GeometryModifierOp : public OsmMapOperation, public OperationStatusInfo, public Configurable
+  class GeometryModifierOp : public OsmMapOperation, public Configurable
   {
   public:
 
@@ -77,6 +76,8 @@ namespace hoot
 
     // Configurable
     virtual void setConfiguration(const Settings& conf);
+
+    virtual std::string getClassName() const { return className(); }
 
   private:
     // json rules file name

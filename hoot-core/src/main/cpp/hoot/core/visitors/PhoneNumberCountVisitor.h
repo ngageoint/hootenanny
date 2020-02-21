@@ -65,6 +65,8 @@ public:
   virtual QString getDescription() const
   { return "Counts the number of valid element phone numbers"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   int _count;

@@ -44,6 +44,8 @@ public:
 
   virtual QString getDescription() const
   { return "Adds a bounding box tag to applicable elements"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

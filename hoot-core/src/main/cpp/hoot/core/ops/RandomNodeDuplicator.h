@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/RngConsumer.h>
 
 // Qt
@@ -45,8 +44,7 @@ namespace hoot
  *
  * @todo This should really change the node after it has been duplicated.
  */
-class RandomNodeDuplicator : public OsmMapOperation, public Configurable, public RngConsumer,
-  public OperationStatusInfo
+class RandomNodeDuplicator : public OsmMapOperation, public Configurable, public RngConsumer
 {
 public:
 
@@ -90,6 +88,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Randomly duplicated " + QString::number(_numAffected) + " nodes"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

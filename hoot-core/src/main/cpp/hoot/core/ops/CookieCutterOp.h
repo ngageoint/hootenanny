@@ -59,6 +59,8 @@ public:
   virtual QString getDescription() const override
   { return "Cookie cuts one dataset out of another"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   // see AlphaShapeGenerator

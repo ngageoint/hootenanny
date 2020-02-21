@@ -52,6 +52,8 @@ public:
 
   virtual QString getDescription() const { return "Calculates the median node"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   QList<ConstNodePtr> _nodes;

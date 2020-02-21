@@ -138,6 +138,8 @@ public:
     */
    virtual QStringList getCriteria() const;
 
+   virtual std::string getClassName() const { return className(); }
+
 private:
 
   typedef std::map<long, std::list<Match>> MatchList;

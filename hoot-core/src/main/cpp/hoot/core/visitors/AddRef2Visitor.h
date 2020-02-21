@@ -52,6 +52,8 @@ public:
 
   virtual QString getDescription() const { return "Adds REF2 tags"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   bool _informationOnly;

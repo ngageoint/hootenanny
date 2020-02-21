@@ -73,6 +73,8 @@ public:
   virtual QString getDescription() const
   { return "Removes REF2 tags when a criterion is met for both REF1 and REF2 elements"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 protected:
 
   ElementCriterionPtr _criterion;

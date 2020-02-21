@@ -28,7 +28,6 @@
 #define SPLITLONGLINEARWAYSVISITOR_H
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 // Std
@@ -42,7 +41,7 @@ class OsmMap;
 class Element;
 class Settings;
 
-class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -68,6 +67,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Split " + QString::number(_numAffected) + " ways"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

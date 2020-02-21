@@ -66,6 +66,8 @@ public:
       QString::number(_numProcessedElements) + " different elements";
   }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   //scores the similarity of the pre-translated and translated texts

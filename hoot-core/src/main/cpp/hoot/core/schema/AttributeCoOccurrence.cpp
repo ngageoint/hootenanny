@@ -83,6 +83,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
 private:
 
@@ -105,6 +106,7 @@ public:
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   virtual void visit(const ConstElementPtr& e)
   {

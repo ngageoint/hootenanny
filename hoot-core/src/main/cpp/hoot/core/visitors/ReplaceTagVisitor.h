@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -45,7 +44,7 @@ namespace hoot
  * Feel free to extend this class. Maybe add a flag for case-insensitive
  * matching. Or support for wildcards.
  */
-class ReplaceTagVisitor : public ElementVisitor, public Configurable, public OperationStatusInfo
+class ReplaceTagVisitor : public ElementVisitor, public Configurable
 {
 public:
 
@@ -103,6 +102,8 @@ public:
   {
     return "Replaced " + QString::number(_numAffected) + " element tags";
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

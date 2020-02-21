@@ -37,6 +37,8 @@ class WaysVisitor : public ConstElementVisitor
 {
 public:
 
+  static std::string className() { return "hoot::WaysVisitor"; }
+
   WaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) {}
 
   virtual void visit(const std::shared_ptr<const Element>& e) override;
@@ -47,6 +49,8 @@ public:
   static std::vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Collects the ways visited"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

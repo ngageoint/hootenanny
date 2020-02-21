@@ -58,6 +58,8 @@ public:
   virtual QString getDescription() const
   { return "Counts the total number of valid element addresses"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   int _totalCount;

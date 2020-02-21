@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/stats/DataProducer.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -44,7 +43,7 @@ class MatchCreator;
  * of match creators.
  */
 class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public SingleStatistic,
-                                   public DataProducer, public OperationStatusInfo
+                                   public DataProducer
 {
 public:
 
@@ -67,6 +66,8 @@ public:
   {
     return "Counted " + StringUtils::formatLargeNumber(_totalCandidateCount) + " match candidates.";
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

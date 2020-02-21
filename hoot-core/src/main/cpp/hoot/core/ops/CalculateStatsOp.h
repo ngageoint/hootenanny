@@ -90,6 +90,8 @@ public:
   // Configurable
   virtual void setConfiguration(const Settings& conf);
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   // Enum defining what stat value of the SingleStatistic or NumericStatistic
@@ -133,6 +135,8 @@ private:
 
   QList<StatData> _quickStatData;
   QList<StatData> _slowStatData;
+  //int _currentStatIndex;
+  //int _totalStats;
 
   void _readGenericStatsData();
   void _addStat(const QString& name, double value);
@@ -151,10 +155,13 @@ private:
     const std::vector<std::shared_ptr<MatchCreator>>& matchCreators,
     const QString &matchCreatorName, CreatorDescription::BaseFeatureType &featureType);
 
-  double _applyVisitor(const hoot::FilteredVisitor &v, StatCall call = Stat);
-  double _applyVisitor(const hoot::FilteredVisitor &v, boost::any& visitorData, StatCall call = Stat);
-  double _applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis, StatCall call = Stat);
-  void _applyVisitor(ConstElementVisitor *v);
+  double _applyVisitor(const hoot::FilteredVisitor &v, const QString& statName,
+                       StatCall call = Stat);
+  double _applyVisitor(const hoot::FilteredVisitor &v, boost::any& visitorData, const
+                       QString& statName, StatCall call = Stat);
+  double _applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis,
+                       const QString& statName, StatCall call = Stat);
+  void _applyVisitor(ConstElementVisitor* v, const QString& statName);
 
   static bool _matchDescriptorCompare(const CreatorDescription& m1,
                                       const CreatorDescription& m2);

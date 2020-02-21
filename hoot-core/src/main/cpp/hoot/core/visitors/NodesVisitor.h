@@ -41,11 +41,15 @@ class NodesVisitor : public ConstElementVisitor
 {
 public:
 
+  static std::string className() { return "hoot::NodesVisitor"; }
+
   NodesVisitor(QList<ConstNodePtr>& n) : _n(n) {}
 
   virtual void visit(const std::shared_ptr<const Element>& e);
 
   virtual QString getDescription() const { return "Collects the nodes visited"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

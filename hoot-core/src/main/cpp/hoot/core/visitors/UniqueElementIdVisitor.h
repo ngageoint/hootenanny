@@ -55,6 +55,8 @@ public:
 
   virtual QString getDescription() const { return "Returns the unqiue element IDs visited"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   std::set<ElementId> _elements;

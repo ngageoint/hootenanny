@@ -74,7 +74,10 @@ public:
    * Returns a string uniquely identifying the criterion. May contain information about the data
    * contained within the criterion.
    *
-   * @return a descriptive string
+   * @return a string
+   * @todo Many of the crits are only returning their class names in toString(). So, we may want to
+   * add getClassName() here to mimic OsmMapOperation and ElementVisitor and make toString()
+   * optional.
    */
   virtual QString toString() const = 0;
 };

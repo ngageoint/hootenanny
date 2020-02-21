@@ -60,6 +60,8 @@ public:
 
   virtual QString getDescription() const { return "Calculates the extent of a map"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   OGREnvelope _envelope;

@@ -47,11 +47,13 @@ public:
 
   int getCount() const { return _count; }
 
-  double getStat() const { return _count; }
+  virtual double getStat() const { return _count; }
 
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Counts the number of elements"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

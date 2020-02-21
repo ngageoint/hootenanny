@@ -48,6 +48,8 @@ public:
   virtual QString getDescription() const override
   { return "Adds tags to POIs implicitly derived from their names"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 protected:
 
   virtual bool _visitElement(const ElementPtr& e);

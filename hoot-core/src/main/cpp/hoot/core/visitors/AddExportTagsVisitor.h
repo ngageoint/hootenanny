@@ -59,6 +59,8 @@ public:
   { _includeCircularError = includeCircularError; }
   void overrideDebugSettings();
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   bool _includeIds;

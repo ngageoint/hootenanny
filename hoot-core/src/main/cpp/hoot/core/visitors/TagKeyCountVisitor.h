@@ -57,6 +57,8 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   QStringList _keys;

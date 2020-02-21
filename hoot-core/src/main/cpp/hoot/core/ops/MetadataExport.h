@@ -67,6 +67,8 @@ public:
   // OsmMapOperation
   virtual QString getDescription() const override { return "Creates and exports metadata"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   // MetadataOp

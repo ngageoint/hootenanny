@@ -30,13 +30,12 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
 
-class ElementIdToVersionMapper : public ConstOsmMapOperation, public OperationStatusInfo
+class ElementIdToVersionMapper : public ConstOsmMapOperation
 {
 public:
 
@@ -56,6 +55,8 @@ public:
 
   virtual QString getDescription() const
   { return "Maintains a mapping of element IDs to changeset versions"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

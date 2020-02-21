@@ -56,6 +56,8 @@ public:
 
   virtual QString getDescription() const { return "Counts unique names"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   QSet<QString> _names;

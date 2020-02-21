@@ -60,6 +60,8 @@ public:
   static QString toHashString(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

@@ -59,6 +59,8 @@ public:
 
   virtual QString getDescription() const { return "Calculates feature area totals"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   Meters _total;

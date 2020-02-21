@@ -29,7 +29,6 @@
 #define RANDOM_MAP_CROPPER_H
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/MapCropper.h>
@@ -40,7 +39,7 @@ namespace hoot
 /**
  * Uses MapCropper to randomly crop a section of data with a specified maximum number of nodes.
  */
-class RandomMapCropper : public OsmMapOperation, public Configurable, public OperationStatusInfo
+class RandomMapCropper : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -67,6 +66,8 @@ public:
   void setRandomSeed(int seed) { _randomSeed = seed; }
   void setTileFootprintOutputPath(QString path);
   void setPixelSize(double size) { _pixelSize = size; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

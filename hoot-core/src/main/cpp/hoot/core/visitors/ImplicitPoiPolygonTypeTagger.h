@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -38,7 +37,7 @@ namespace hoot
 /**
  * Adds tags implicitly derived from feature names to POIs and polygons
  */
-class ImplicitPoiPolygonTypeTagger : public ImplicitPoiTypeTagger, public OperationStatusInfo
+class ImplicitPoiPolygonTypeTagger : public ImplicitPoiTypeTagger
 {
 public:
 
@@ -54,6 +53,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Added " + QString::number(_numAffected) + " tags to POIs and polygons"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

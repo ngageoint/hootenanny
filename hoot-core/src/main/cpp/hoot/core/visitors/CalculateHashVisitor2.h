@@ -49,6 +49,8 @@ public:
 
   virtual QString getDescription() const
   { return "Calculates unique hash values for elements used by the multiary ingester"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }
