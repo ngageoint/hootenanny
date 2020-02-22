@@ -53,6 +53,8 @@ class ApplyChangesetCommand extends GrailCommand {
         options.add("hoot.osm.auth.access.token.secret=" + user.getProviderAccessToken());
         options.add("hoot.osm.auth.consumer.key=" + params.getConsumerKey());
         options.add("hoot.osm.auth.consumer.secret=" + params.getConsumerSecret());
+        options.add("changeset.apidb.writer.debug.output=true");
+        options.add("changeset.apidb.writer.debug.output.path=" + params.getWorkDir());
 
         List<String> hootOptions = toHootOptions(options);
 
