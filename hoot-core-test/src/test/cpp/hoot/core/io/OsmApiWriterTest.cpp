@@ -63,7 +63,6 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runChangesetConflictTest);
   CPPUNIT_TEST(oauthTest);
 #endif
-  CPPUNIT_TEST(runApplyTestTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
