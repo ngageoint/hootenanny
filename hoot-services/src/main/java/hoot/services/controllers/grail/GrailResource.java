@@ -413,6 +413,7 @@ public class GrailResource {
         json.put("jobid", jobId);
         String jobDir = reqParams.getParentId();
         File workDir = new File(CHANGESETS_FOLDER, jobDir);
+        params.setWorkDir(workDir);
 
         if (!workDir.exists()) {
             logger.error("ApplyChangeset: jobDir {} does not exist.", workDir.getAbsolutePath());
