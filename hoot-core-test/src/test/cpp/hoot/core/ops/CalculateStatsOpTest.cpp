@@ -80,7 +80,7 @@ public:
   void runStatsNumTest()
   {
     std::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types.osm");
-    CPPUNIT_ASSERT_EQUAL(191, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(194, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
