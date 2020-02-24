@@ -64,11 +64,6 @@ public:
    *  that only consist of nodes after ways are blocked.
    */
   const int QUEUE_SIZE_MULTIPLIER = 2;
-  /** Constructor with one or multiple files consisting of one large changeset to run
-   *  the test apply
-   */
-  OsmApiWriter(const QString& output_file, const QString& changeset);
-  OsmApiWriter(const QString& output_file, const QList<QString>& changesets);
   /** Constructors with one or multiple files consisting of one large changeset */
   OsmApiWriter(const QUrl& url, const QString& changeset);
   OsmApiWriter(const QUrl& url, const QList<QString>& changesets);
@@ -88,11 +83,6 @@ public:
    * @return success
    */
   bool apply();
-  /**
-   * @brief testApply Actually load, divide, and write the changesets to files instead of OSM API
-   * @return list of filepaths for output files
-   */
-  QStringList testApply();
   /**
    * @brief containsFailed
    * @return true if there are failed changes in the changeset
@@ -270,6 +260,20 @@ private:
    * @return True if the changeset was split
    */
   bool _splitChangeset(const ChangesetInfoPtr& workInfo, const QString& response);
+  /**
+   * @brief _writeDebugFile Write out the request or response file for debugging uploads
+   * @param type "request" or "response" output file
+   * @param data Contents of the file to write
+   * @param file_id File ID for unique filenames
+   * @param changeset_id Changeset ID that is currently open
+   * @param status HTTP status code returned for response, 000 for request
+   */
+  void _writeDebugFile(const QString& type, const QString& data, int file_id, long changeset_id, int status = 0);
+  /**
+   * @brief _getNextApiId Get the next API ID from the counter for unique debug filenames
+   * @return next ID
+   */
+  int _getNextApiId();
   /** Changeset processing thread pool */
   std::vector<std::thread> _threadPool;
   /** Queue for producer/consumer work model */
@@ -336,8 +340,14 @@ private:
   int _changesetCount;
   /** Mutex for changeset count */
   std::mutex _changesetCountMutex;
-  /** Full pathname of the output file created during --test-apply */
-  QString _testApplyPathname;
+  /** Output requests and responses for debugging  */
+  bool _debugOutput;
+  /** Path for the output requests and responses */
+  QString _debugOutputPath;
+  /** API ID counter used in debug output */
+  int _apiId;
+  /** Mutex for API ID counter */
+  std::mutex _apiIdMutex;
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */
