@@ -613,12 +613,7 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
 
       FilteredVisitor filteredVisitor =
         FilteredVisitor(pCrit, ConstElementVisitorPtr(pCriterionVisitor));
-      val =
-        _applyVisitor(
-          filteredVisitor,
-          QString::fromStdString(pCriterionVisitor->getClassName()).replace("hoot::", "") + " + " +
-            pCrit->toString(),
-          d.statCall);
+      val = _applyVisitor(filteredVisitor, d.name, d.statCall);
       _numInterpresetStatDataCalls++;
     }
     else
@@ -632,9 +627,8 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
         // Even though this is cached, and its a freebie runtime-wise, we'll still log status to
         // ensure the stat calc index remains acurate.
         LOG_STATUS(
-          "Calculating statistic: " <<
-          QString::fromStdString(pVisitor->getClassName()).replace("hoot::", "") << " (" <<
-          _currentStatCalcIndex << "/" << _totalStatCalcs << ") ...");
+          "Calculating statistic: " << d.name << " (" << _currentStatCalcIndex << "/" <<
+          _totalStatCalcs << ") ...");
 
         _currentStatCalcIndex++;
         _numInterpretStatVisCacheHits++;
@@ -656,8 +650,7 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
         }
 
         // without criterion, apply the visitor directly and interpret as NumericStatistic
-        _applyVisitor(
-          pVisitor.get(), QString::fromStdString(pVisitor->getClassName()).replace("hoot::", ""));
+        _applyVisitor(pVisitor.get(), d.name);
         _appliedVisitorCache[d.visitor] = pVisitor;
         _numInterpresetStatDataCalls++;
       }
