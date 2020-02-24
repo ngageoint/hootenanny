@@ -68,6 +68,7 @@ void SumNumericTagsVisitor::visit(const ConstElementPtr& e)
       if (parsed)
       {
         _sum += value;
+        _numAffected++;
       }
       else
       {
@@ -85,6 +86,7 @@ void SumNumericTagsVisitor::visit(const ConstElementPtr& e)
       }
     }
   }
+  _numProcessed++;
 }
 
 }

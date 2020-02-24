@@ -118,8 +118,8 @@ public:
 
   ~HighwayMatchVisitor()
   {
-    LOG_DEBUG("neighbor counts, max: " << _neighborCountMax << " mean: " <<
-             (double)_neighborCountSum / (double)_elementsEvaluated);
+    LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
+              (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
   virtual QString getDescription() const { return ""; }

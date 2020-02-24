@@ -51,7 +51,8 @@ SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
   _map(),
   _populatedCount(),
   _defaultCount(),
-  _nullCount()
+  _nullCount(),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(t);
   if (!_translator)
@@ -125,6 +126,14 @@ void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
     {
       _countTags(f[i].feature);
     }
+    _numAffected++;
+  }
+  _numProcessed++;
+
+  if (_numProcessed % _taskStatusUpdateInterval == 0)
+  {
+    PROGRESS_INFO(
+      "Processed  " <<  StringUtils::formatLargeNumber(_numProcessed) << " features...");
   }
 }
 

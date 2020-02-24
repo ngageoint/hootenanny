@@ -37,6 +37,10 @@
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -63,6 +67,9 @@ public:
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
+
+    QElapsedTimer timer;
+    timer.start();
 
     const QString QUICK_SWITCH = "--brief";
     const QString OUTPUT_SWITCH = "--output=";
@@ -96,6 +103,9 @@ public:
     QList<QList<SingleStat>> allStats;
     for (int i = 0; i < inputs.size(); i++)
     {
+      QElapsedTimer timer2;
+      timer2.restart();
+
       OsmMapPtr map(new OsmMap());
       // Tried using IoUtils::loadMap here, but it has extra logic beyond OsmMapReaderFactory::read
       // for reading in OGR layers. Using it causes the last part of Osm2OgrTranslationTest to fail.
@@ -103,11 +113,18 @@ public:
       OsmMapReaderFactory::read(map, inputs[i], true, Status::Invalid);
       MapProjector::projectToPlanar(map);
 
-      LOG_STATUS("Calculating statistics for map " << i + 1 << " of " << inputs.size() << "...");
+      LOG_STATUS(
+        "Calculating statistics for map " << i + 1 << " of " << inputs.size() << ": " <<
+        inputs[i].right(25) << "...");
+
       std::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
       cso->setQuickSubset(quick);
       cso->apply(map);
       allStats.append(cso->getStats());
+
+      LOG_STATUS(
+        "Statistics calculated for map " << i + 1 << " of " << inputs.size() << ": " <<
+        inputs[i].right(25) << " in " + StringUtils::millisecondsToDhms(timer2.elapsed()));
     }
 
     if (toFile)
@@ -124,6 +141,10 @@ public:
       cout << "Stat Name\t" << inputs.join(sep) << endl;
       cout << MapStatsWriter().statsToString(allStats, sep);
     }
+
+    LOG_STATUS(
+      "Map statistics calculated in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
 
     return 0;
   }

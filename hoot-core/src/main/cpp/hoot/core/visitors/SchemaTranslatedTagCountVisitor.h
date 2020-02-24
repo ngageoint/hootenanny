@@ -31,6 +31,7 @@
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -51,15 +52,11 @@ public:
   SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
 
   long getPopulatedCount() const { return _populatedCount; }
-
   long getDefaultCount() const { return _defaultCount; }
-
   long getNullCount() const { return _nullCount; }
-
   long getTotalCount() const { return getPopulatedCount() + getDefaultCount() + getNullCount(); }
 
-  double getStat() const { return (double)getPopulatedCount() /
-        (double)getTotalCount(); }
+  double getStat() const { return (double)getPopulatedCount() / (double)getTotalCount(); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
@@ -70,12 +67,23 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  virtual QString getInitStatusMessage() const { return "Counting translated tags..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  {
+    return
+      "Counted " + StringUtils::formatLargeNumber(getTotalCount()) + " translated tags on " +
+      StringUtils::formatLargeNumber(_numAffected) + " features.";
+  }
+
 private:
 
   const OsmMap* _map;
   std::shared_ptr<const Schema> _schema;
   std::shared_ptr<ScriptToOgrSchemaTranslator> _translator;
   long _populatedCount, _defaultCount, _nullCount;
+
+  int _taskStatusUpdateInterval;
 
   void _countTags(std::shared_ptr<Feature>& f);
 };

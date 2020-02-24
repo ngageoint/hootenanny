@@ -31,6 +31,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -68,6 +69,15 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual std::string getClassName() const { return className(); }
+
+  virtual QString getInitStatusMessage() const { return "Summing values of numeric tags..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  {
+    return
+      "Summed " + StringUtils::formatLargeNumber(_numAffected) + " numeric tags on " +
+      StringUtils::formatLargeNumber(_numProcessed) + " features.";
+  }
 
 private:
 

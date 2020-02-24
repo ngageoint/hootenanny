@@ -135,9 +135,23 @@ private:
 
   QList<StatData> _quickStatData;
   QList<StatData> _slowStatData;
-  //int _currentStatIndex;
-  //int _totalStats;
+  // the index of the stat calculation we are currently doing
+  int _currentStatCalcIndex;
+  // total number of stat calculations made with a visitor; basically any time _applyVisitor is
+  // called; any time a stat is added that results in another manual call to _applyVisitor (done
+  // outside of _interpretStatData), this total needs to be incremented.
+  int _totalStatCalcs;
+  QStringList _featureTypesToSkip;
 
+  // These are here for debugging purposes only.
+  int _numInterpresetStatDataCalls;
+  int _numInterpretStatVisCacheHits;
+  int _numGenerateFeatureStatCalls;
+
+  QMap<CreatorDescription::BaseFeatureType, double> _conflatableFeatureCounts;
+
+  void _initStatCalc();
+  void _initConflatableFeatureCounts();
   void _readGenericStatsData();
   void _addStat(const QString& name, double value);
   void _addStat(const char* name, double value);
@@ -153,11 +167,11 @@ private:
    */
   std::shared_ptr<MatchCreator> getMatchCreator(
     const std::vector<std::shared_ptr<MatchCreator>>& matchCreators,
-    const QString &matchCreatorName, CreatorDescription::BaseFeatureType &featureType);
+    const QString &matchCreatorName, CreatorDescription::BaseFeatureType& featureType);
 
-  double _applyVisitor(const hoot::FilteredVisitor &v, const QString& statName,
+  double _applyVisitor(const hoot::FilteredVisitor& v, const QString& statName,
                        StatCall call = Stat);
-  double _applyVisitor(const hoot::FilteredVisitor &v, boost::any& visitorData, const
+  double _applyVisitor(const hoot::FilteredVisitor& v, boost::any& visitorData, const
                        QString& statName, StatCall call = Stat);
   double _applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis,
                        const QString& statName, StatCall call = Stat);
