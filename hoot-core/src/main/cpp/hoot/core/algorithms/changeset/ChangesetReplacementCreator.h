@@ -283,6 +283,8 @@ private:
     const ElementCriterionPtr& secFeatureFilter,
     const GeometryTypeCriterion::GeometryType& geometryType,
     const QStringList& linearFilterClassNames = QStringList());
+
+  void _cleanupMissingElements(OsmMapPtr& map);
 };
 
 }
