@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osmChange version="0.6" generator="hootenanny">
-	<delete if-unused="true">
+	<delete>
 		<node id="16" version="1" lat="38.8535166057996975" lon="-104.8992698972467963" timestamp="" changeset="4"/>
 		<node id="17" version="1" lat="38.8535689160700528" lon="-104.8990568001256065" timestamp="" changeset="4"/>
 		<node id="18" version="1" lat="38.8535508780501431" lon="-104.8988321216391171" timestamp="" changeset="4"/>
