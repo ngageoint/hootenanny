@@ -367,9 +367,9 @@ mgcp = {
             if (['FCODE','error_circ','CPYRT_NOTE','SRC_INFO','SRC_DATE','SMC'].indexOf(col) > -1) continue;
 
             // Look for Attributes
-            if (col in mgcp.rules.numBiased) continue;
+            if (col in mgcp.numLookup) continue;
 
-            if (col in mgcp.rules.txtBiased) continue;
+            if (col in mgcp.txtLookup) continue;
 
             if (col in mgcp.lookup) continue;
 
@@ -2036,6 +2036,23 @@ mgcp = {
 
             mgcp.lookup = translate.createLookup(mgcp.rules.one2one);
         }
+
+        if (mgcp.txtLookup == undefined)
+        {
+            mgcp.txtLookup = {};
+            // Add the MGCPv3.0 specific attributes to the v4.0/common attribute table
+            for (var i in mgcp.rules.txtBiased) mgcp.txtLookup[i] = mgcp.rules.txtBiased[i];
+            for (var i in mgcp.rules.txtBiasedV3) mgcp.txtLookup[i] = mgcp.rules.txtBiasedV3[i];
+        }
+
+        if (mgcp.numLookup == undefined)
+        {
+            mgcp.numLookup = {};
+            for (var i in mgcp.rules.numBiased) mgcp.numLookup[i] = mgcp.rules.numBiased[i];
+            for (var i in mgcp.rules.numBiasedV3) mgcp.numLookup[i] = mgcp.rules.numBiasedV3[i];
+        }
+
+
         // A little cleaning before we try to untangle stuff
         delete attrs.SHAPE_Length;
         delete attrs.SHAPE_Area;
@@ -2078,8 +2095,8 @@ mgcp = {
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
-        translate.applySimpleNumBiased(notUsedAttrs, tags, mgcp.rules.numBiased,'forward',[]);
-        translate.applySimpleTxtBiased(notUsedAttrs, tags,  mgcp.rules.txtBiased,'forward');
+        translate.applySimpleNumBiased(notUsedAttrs, tags, mgcp.numLookup,'forward',[]);
+        translate.applySimpleTxtBiased(notUsedAttrs, tags,  mgcp.txtLookup,'forward');
 
         // one 2 one
         translate.applyOne2One(notUsedAttrs, tags, mgcp.lookup, {'k':'v'});

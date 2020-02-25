@@ -685,7 +685,7 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
   }
   else
   {
-    throw HootException("Unexpected column type: " + type);
+    throw HootException("Unexpected column type: " + type + " for " + map["name"].toString());
   }
 
   if (map.contains("name") == false)
