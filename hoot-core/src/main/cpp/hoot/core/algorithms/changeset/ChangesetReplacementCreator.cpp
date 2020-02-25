@@ -1160,6 +1160,8 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   // For this being enabled to have any effect,
   // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
   conf().set(ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
+  // will have to see if setting this to false causes problems in the future...
+  conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
   // turn on for testing only
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 
