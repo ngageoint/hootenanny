@@ -29,6 +29,8 @@ pipeline {
         booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
         booleanParam(name: 'Sonar', defaultValue: false)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
+        //  Remove once sonar is working
+        booleanParam(name: 'SkipSonar', defaultValue: true)
     }
 
     stages {
@@ -89,7 +91,10 @@ pipeline {
                 anyOf {
                     // Configure for sonar if user selected it, pull-request, or nightly run of master
                     expression { return params.Sonar }
-                    changeRequest()
+                    allOf {
+                        changeRequest()
+                        expression { return !params.SkipSonar }
+                    }
                     allOf {
                         triggeredBy 'TimerTrigger'
                         branch 'master'
@@ -151,7 +156,10 @@ pipeline {
             when {
                 anyOf {
                     expression { return params.Sonar }
-                    changeRequest()
+                    allOf {
+                        changeRequest()
+                        expression { return !params.SkipSonar }
+                    }
                     allOf {
                         triggeredBy 'TimerTrigger'
                         branch 'master'
