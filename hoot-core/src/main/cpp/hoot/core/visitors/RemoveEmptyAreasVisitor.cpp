@@ -73,7 +73,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
     LOG_VARD(_requireAreaForPolygonConversion);
     // TODO: This is directly related to the relation change commented out below. If this logic
     // isn't needed, then we can remove implementation of the Configurable interface.
-    //_ec->setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
+    _ec->setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
   }
 
   //LOG_VART(e);
@@ -88,24 +88,20 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
       LOG_VART(GeometryUtils::geometryTypeIdToString(g->getGeometryTypeId()));
       LOG_VART(g->getArea());
     }
-    if (g.get())
+    bool removeArea = false;
+    if (g.get() && g->getArea() == 0.0)
     {
-      bool removeArea = false;
-      // TODO: This relation logic was added in order to fix the issue with relations of type=site
-      // in the test, ServiceChangesetReplacementRelationCopTest, added as part of #3834. However, a
-      // bunch of unit tests went south really quick after this change, so opened up #? to deal with
-      // the issue separately.
-/*      if (e->getElementType() == ElementType::Relation)
+      if (e->getElementType() == ElementType::Relation)
       {
         // require that all way children of this relation have empty areas in order to remove it
         ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
         const std::vector<RelationData::Entry>& members = relation->getMembers();
+        bool anyMemberHasPositiveArea = false;
         for (size_t i = 0; i < members.size(); i++)
         {
           const RelationData::Entry& member = members[i];
           // not going down more than one relation level here, but that may eventually need to be
-          // done
-          // TODO: Should we also require that each child way also satisfy AreaCriterion?
+          // done; Also, should we also require that each child way also satisfy AreaCriterion?
           if (member.getElementId().getType() == ElementType::Way)
           {
             ConstWayPtr memberWay =
@@ -113,26 +109,28 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
             if (memberWay)
             {
               std::shared_ptr<Geometry> wayGeom = _ec->convertToGeometry(memberWay);
-              if (wayGeom && wayGeom->getArea() == 0.0)
+              if (wayGeom && wayGeom->getArea() > 0.0)
               {
-                removeArea = true;
+                LOG_TRACE(memberWay->getElementId() << " has positive area.");
+                anyMemberHasPositiveArea = true;
                 break;
               }
             }
           }
         }
+        removeArea = !anyMemberHasPositiveArea;
       }
-      else */if (e->getElementType() == ElementType::Way && g->getArea() == 0.0)
+      else
       {
         removeArea = true;
-      }
+      } 
+    }
 
-      if (removeArea)
-      {
-        LOG_TRACE("Recursively removing empty area: " << e->getElementId() << "...");
-        RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
-        _numAffected++;
-      }
+    if (removeArea)
+    {
+      LOG_TRACE("Recursively removing empty area: " << e->getElementId() << "...");
+      RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
+      _numAffected++;
     }
   }
 
