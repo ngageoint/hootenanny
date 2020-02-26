@@ -699,6 +699,7 @@ See also:
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::RemoveDuplicateWayNodesVisitor`
+** `hoot::DuplicateWayRemover`
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
