@@ -71,7 +71,9 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
   {
     _ec.reset(new ElementConverter(_map->shared_from_this()));
     LOG_VARD(_requireAreaForPolygonConversion);
-    _ec->setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
+    // TODO: This is directly related to the relation change commented out below. If this logic
+    // isn't needed, then we can remove implementation of the Configurable interface.
+    //_ec->setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
   }
 
   //LOG_VART(e);
@@ -89,7 +91,11 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
     if (g.get())
     {
       bool removeArea = false;
-      if (e->getElementType() == ElementType::Relation)
+      // TODO: This relation logic was added in order to fix the issue with relations of type=site
+      // in the test, ServiceChangesetReplacementRelationCopTest, added as part of #3834. However, a
+      // bunch of unit tests went south really quick after this change, so opened up #? to deal with
+      // the issue separately.
+/*      if (e->getElementType() == ElementType::Relation)
       {
         // require that all way children of this relation have empty areas in order to remove it
         ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
@@ -116,7 +122,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
           }
         }
       }
-      else if (e->getElementType() == ElementType::Way && g->getArea() == 0.0)
+      else */if (e->getElementType() == ElementType::Way && g->getArea() == 0.0)
       {
         removeArea = true;
       }
