@@ -33,6 +33,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import hoot.services.HootProperties;
 import hoot.services.models.db.Users;
 
 
@@ -55,9 +56,13 @@ class ApplyChangesetCommand extends GrailCommand {
         options.add("hoot.osm.auth.access.token.secret=" + user.getProviderAccessToken());
         options.add("hoot.osm.auth.consumer.key=" + params.getConsumerKey());
         options.add("hoot.osm.auth.consumer.secret=" + params.getConsumerSecret());
-        options.add("changeset.apidb.writer.debug.output=true");
-        options.add("changeset.apidb.writer.debug.output.path=" + params.getWorkDir());
-
+        if (HootProperties.CHANGESET_APPLY_DEBUG) {
+            options.add("changeset.apidb.writer.debug.output=true");
+            options.add("changeset.apidb.writer.debug.output.path=" + params.getWorkDir());
+        }
+        if (HootProperties.CHANGESET_APPLY_SINGLETHREADED) {
+            options.add("changeset.apidb.writers.max=1");
+        }
         List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();
