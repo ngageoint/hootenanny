@@ -3,6 +3,7 @@
         "members": {
             "add.review.tags.to.features": "Add review tags to individual features",
             "circular.error.default.value": "Default accuracy for loaded data; default to 15m. Generally the higher the value, more matches may be found but the longer the conflate time.",
+            "duplicate.way.remover.strict.tag.matching": "Duplicate Way Removal strict tag matching",
             "highway.corner.splitter.rounded.split": "Round corners when splitting roads",
             "overwrite.tag.merger.exclude": "Tag overwrite exclude list",
             "review.score.criterion.max.threshold": "Maximum review score; 0.0 to 1.0",
