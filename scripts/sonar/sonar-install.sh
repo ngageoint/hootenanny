@@ -2,7 +2,7 @@
 set -e
 
 # Main sonar scanner
-SONAR_VERSION=4.2.0.1873
+SONAR_VERSION=4.3.0.2102
 SONAR_CLI=sonar-scanner-cli-$SONAR_VERSION-linux
 SONAR_PKG=sonar-scanner-$SONAR_VERSION-linux
 SONAR_ZIP=$SONAR_CLI.zip
