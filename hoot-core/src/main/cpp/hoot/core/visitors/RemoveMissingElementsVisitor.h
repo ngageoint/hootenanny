@@ -22,23 +22,21 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
 
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
 /**
- * Removes non-existent element references from relations or ways with negative IDs.
+ * Removes non-existent element references from relations or ways
  */
-class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
-  public OperationStatusInfo
+class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer
 {
 public:
 
@@ -48,7 +46,6 @@ public:
                                const int maxReport = Log::getWarnMessageLimit());
 
   virtual void setOsmMap(OsmMap* map) { _v->setOsmMap(map);}
-
   virtual void setOsmMap(const OsmMap* /*map*/)
   { throw NotImplementedException("Set Map with const is not supported"); }
 
@@ -62,6 +59,8 @@ public:
 
   virtual QString getDescription() const
   { return "Removes references to any elements that do not exist"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

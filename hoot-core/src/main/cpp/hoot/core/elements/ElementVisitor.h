@@ -31,6 +31,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/criterion/FilteredByCriteria.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -42,8 +43,11 @@ namespace hoot
  * OsmMapOperation when you do not need the entire input map in memory at once (visitor logic
  * does not require it and you are not running in the conflate pipeline where all map data must
  * be read into memory).
+ *
+ * @todo We could eventually remove the default empty string implementations of OperationStatusInfo
+ * methods and require them to be implemented in children.
  */
-class ElementVisitor : public ApiEntityInfo, public FilteredByCriteria
+class ElementVisitor : public ApiEntityInfo, public FilteredByCriteria, public OperationStatusInfo
 {
 public:
 
@@ -52,7 +56,32 @@ public:
   ElementVisitor() : _numAffected(0), _numProcessed(0) {}
   virtual ~ElementVisitor() {}
 
+  /**
+   * Performs the visitor's logic on a single element
+   *
+   * @param e the element to operate on
+   */
   virtual void visit(const ElementPtr& e) = 0;
+
+  /**
+   * @see OperationStatusInfo
+   */
+  virtual long getNumFeaturesAffected() const { return _numAffected; }
+
+  /**
+   * @see OperationStatusInfo
+   */
+  virtual long getNumFeaturesProcessed() const { return _numProcessed; }
+
+  /**
+   * @see OperationStatusInfo
+   */
+  virtual QString getInitStatusMessage() const { return ""; }
+
+  /**
+   * @see OperationStatusInfo
+   */
+  virtual QString getCompletedStatusMessage() const { return ""; }
 
   /**
    * @see FilteredByCriteria
@@ -63,6 +92,13 @@ public:
    * logical OR fashion.
    */
   virtual QStringList getCriteria() const { return QStringList(); }
+
+  /**
+   * Returns the visitor's class name
+   *
+   * @return class name string
+   */
+  virtual std::string getClassName() const = 0;
 
 protected:
 

@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/elements/Way.h>
 
 namespace hoot
@@ -44,7 +43,7 @@ namespace hoot
  * duplicated nodes appears to be in the conflation routines somewhere and should be found and
  * fixed.  If that happens, this visitor could be removed from the post conflation ops.
  */
-class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OperationStatusInfo
+class RemoveDuplicateWayNodesVisitor : public ElementVisitor
 {
 public:
 
@@ -72,6 +71,8 @@ public:
    * @see FilteredByCriteria
    */
   virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

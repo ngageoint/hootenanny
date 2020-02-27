@@ -516,6 +516,27 @@ This value is used when splitting a changeset into smaller pieces.
 NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the
 database can handle in a single changeset.
 
+=== changeset.apidb.writer.debug.output
+
+* Data Type: bool
+* Default Value: `false`
+
+When set to true the `OsmApiWriter` class will write each changeset upload request and
+response to the `$HOOT_HOME/tmp` directory (by default) for debugging.
+
+NOTE: Use with care, the 28 MB Djibouti test changeset ballooned into 37 MB of debug output
+files
+
+=== changeset.apidb.writer.debug.output.path
+
+* Data Type: string
+* Default Value: `tmp`
+
+Directory path to store debug output files in for `changeset-appy` commands.
+
+NOTE: Use with care, the 28 MB Djibouti test changeset ballooned into 37 MB of debug output
+files
+
 === changeset.apidb.writers.max
 
 * Data Type: long
@@ -678,6 +699,7 @@ See also:
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::RemoveDuplicateWayNodesVisitor`
+** `hoot::DuplicateWayRemover`
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
@@ -4885,7 +4907,10 @@ NoInformationElementRemover cleaning operation.
 * Data Type: bool
 * Default Value: `true`
 
-When true, writers will include circular error information. Not honored by all writers.
+When true, writers will include circular error information. Not necessarily honored by all writers.
+This should be left enabled by default to prevent custom accuracy tags from being dropped by writers
+in intermediary steps during a conflation workflow. Disable the option only on the final write for
+a dataset.
 
 === writer.include.conflate.review.detail.tags
 

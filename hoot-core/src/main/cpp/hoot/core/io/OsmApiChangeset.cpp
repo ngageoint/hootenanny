@@ -369,41 +369,6 @@ void XmlChangeset::updateChangeset(const QString &changes)
   }
 }
 
-void XmlChangeset::updateChangeset(const ChangesetInfoPtr& changeset_info)
-{
-  //  Iterate the three changeset type arrays looking for elements to mark
-  for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-  {
-    //  Set the relation's status to failed
-    for (ChangesetInfo::iterator it = changeset_info->begin(ElementType::Relation, (ChangesetType)current_type);
-         it != changeset_info->end(ElementType::Relation, (ChangesetType)current_type); ++it)
-    {
-      //  Finalize the relation
-      _allRelations[*it]->setStatus(ChangesetElement::ElementStatus::Finalized);
-      //  Update the processed count
-      _processedCount++;
-    }
-    //  Set the way's status to failed
-    for (ChangesetInfo::iterator it = changeset_info->begin(ElementType::Way, (ChangesetType)current_type);
-         it != changeset_info->end(ElementType::Way, (ChangesetType)current_type); ++it)
-    {
-      //  Finalize the way
-      _allWays[*it]->setStatus(ChangesetElement::ElementStatus::Finalized);
-      //  Update the processed count
-      _processedCount++;
-    }
-    //  Set the node's status to failed
-    for (ChangesetInfo::iterator it = changeset_info->begin(ElementType::Node, (ChangesetType)current_type);
-         it != changeset_info->end(ElementType::Node, (ChangesetType)current_type); ++it)
-    {
-      //  Finalize the node
-      _allNodes[*it]->setStatus(ChangesetElement::ElementStatus::Finalized);
-      //  Update the processed count
-      _processedCount++;
-    }
-  }
-}
-
 bool XmlChangeset::fixChangeset(const QString& update)
 {
   /* <osm>
@@ -1580,10 +1545,9 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long changeset_id
     category = "delete";
   if (changeset->size(ElementType::Node, type) > 0 || changeset->size(ElementType::Way, type) > 0 || changeset->size(ElementType::Relation, type) > 0)
   {
-    ts << "\t<" << category;
+    ts << "\t<" << category << ">\n";
     if (type != ChangesetType::TypeDelete)
     {
-      ts << ">\n";
       //  Nodes go first in each category
       writeNodes(changeset, ts, type, changeset_id);
       //  Followed by ways
@@ -1593,7 +1557,6 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long changeset_id
     }
     else
     {
-      ts << " if-unused=\"true\">\n";
       //  Relations first for deletes
       writeRelations(changeset, ts, type, changeset_id);
       //  Followed by ways

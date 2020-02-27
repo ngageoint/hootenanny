@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SPLITLONGLINEARWAYSVISITOR_H
 #define SPLITLONGLINEARWAYSVISITOR_H
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 // Std
@@ -42,7 +41,7 @@ class OsmMap;
 class Element;
 class Settings;
 
-class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -68,6 +67,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Split " + QString::number(_numAffected) + " ways"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

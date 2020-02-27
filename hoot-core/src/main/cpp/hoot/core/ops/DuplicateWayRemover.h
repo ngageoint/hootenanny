@@ -32,7 +32,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -46,7 +45,7 @@ namespace hoot
  *
  * Area ways will be ignored.
  */
-class DuplicateWayRemover : public OsmMapOperation, public OperationStatusInfo
+class DuplicateWayRemover : public OsmMapOperation
 {
 public:
 
@@ -85,6 +84,8 @@ public:
    * @see FilteredByCriteria
    */
   virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

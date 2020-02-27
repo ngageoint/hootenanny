@@ -330,20 +330,5 @@
             <tag k="name:fr" v="47"/>
             <tag k="source:datetime" v="2015-07-23T09:37:44.000Z"/>
         </node>
-        <way id="-374004" version="1" timestamp="">
-            <nd ref="-374018"/>
-            <nd ref="-371811"/>
-            <nd ref="-373576"/>
-            <nd ref="-371886"/>
-            <nd ref="-371869"/>
-            <nd ref="-371865"/>
-            <nd ref="-372849"/>
-            <nd ref="-366142"/>
-            <nd ref="-366143"/>
-            <nd ref="-371860"/>
-            <nd ref="-374019"/>
-            <tag k="barrier" v="wall"/>
-            <tag k="source:datetime" v="2015-07-23T10:43:07Z;2015-07-23T10:43:07.000Z"/>
-        </way>
     </modify>
 </osmChange>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NODES_PER_WAY_VISITOR_H
@@ -30,7 +30,6 @@
 
 // hoot
 #include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
@@ -47,7 +46,7 @@ namespace hoot
  * not exactly sure why yet. See related note in MultipleCriterionConsumerVisitor.
  */
 class NodesPerWayVisitor : public ConstElementVisitor, public NumericStatistic,
-  public OperationStatusInfo, public Configurable, public ElementCriterionConsumer
+  public Configurable, public ElementCriterionConsumer
 {
 public:
 
@@ -78,6 +77,8 @@ public:
     const double average = _numAffected == 0 ? 0.0 : _totalWayNodes / _numAffected;
     return average;
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

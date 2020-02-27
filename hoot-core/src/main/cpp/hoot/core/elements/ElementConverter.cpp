@@ -103,7 +103,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
   const std::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
 {
-  LOG_VART(e->getElementType().toString());
+  LOG_VART(e->getElementId());
   switch (e->getElementType().getEnum())
   {
   case ElementType::Node:

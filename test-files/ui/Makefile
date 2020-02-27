@@ -23,6 +23,7 @@ CWD=$(shell pwd)
 $(shell $(HOOT_HOME)/scripts/ReplaceEnvironmentVariables.sh DbSettings.inc.in DbSettings.inc)
 -include DbSettings.inc
 
+HOOT_OPTS+= -C Testing.conf
 HOOT_OPTS+= -D convert.ops=hoot::DecomposeBuildingRelationsVisitor
 HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true
 HOOT_OPTS+= -D api.db.email=test@test.com

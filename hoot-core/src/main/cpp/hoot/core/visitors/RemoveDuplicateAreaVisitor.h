@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -53,7 +52,7 @@ class TagDifferencer;
  *
  * RecursiveElementRemover is used to remove the element.
  */
-class RemoveDuplicateAreaVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class RemoveDuplicateAreaVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -74,6 +73,8 @@ public:
    * @see FilteredByCriteria
    */
   virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

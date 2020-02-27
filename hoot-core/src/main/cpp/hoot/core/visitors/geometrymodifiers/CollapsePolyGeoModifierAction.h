@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COLLAPSEPOLYGEOMODIFIERACTION_H
 #define COLLAPSEPOLYGEOMODIFIERACTION_H
@@ -52,6 +52,8 @@ public:
 
   virtual void parseArguments(const QHash<QString, QString>& arguments) override;
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
   const double DEFAULT_AREA = 15000;

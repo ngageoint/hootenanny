@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDINTERSECTIONSVISITOR_H
 #define FINDINTERSECTIONSVISITOR_H
@@ -32,7 +32,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -40,8 +39,7 @@ namespace hoot
 /**
  * Finds all intersections (nodes), adds some parameters to them and records their node ids
  */
-class FindIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsumer,
-  public OperationStatusInfo
+class FindIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsumer
 {
 public:
 
@@ -66,6 +64,8 @@ public:
   { return "Found " + QString::number(_numAffected) + " intersections"; }
 
   virtual ElementCriterionPtr createCriterion(ConstOsmMapPtr map) = 0;
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

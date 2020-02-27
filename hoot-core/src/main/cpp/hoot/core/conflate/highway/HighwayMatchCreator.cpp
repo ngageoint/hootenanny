@@ -118,11 +118,12 @@ public:
 
   ~HighwayMatchVisitor()
   {
-    LOG_DEBUG("neighbor counts, max: " << _neighborCountMax << " mean: " <<
-             (double)_neighborCountSum / (double)_elementsEvaluated);
+    LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
+              (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {

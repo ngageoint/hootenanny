@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ScriptTest.h"
@@ -285,6 +285,8 @@ void ScriptTest::_runDiff(QString file1, QString file2)
 
 void ScriptTest::_runProcess()
 {
+  // TODO: It would be nice if we could specify Testing.conf here to avoid having to specify it
+  // in every test files (#3823).
   QProcess p;
   p.start(_script, QProcess::ReadOnly);
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATEAREAFORSTATSVISITOR_H
 #define CALCULATEAREAFORSTATSVISITOR_H
@@ -59,6 +59,8 @@ public:
 
   // We don't use this outside of stats, so hide it from the info API.
   virtual QString getDescription() const { return ""; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

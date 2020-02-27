@@ -29,7 +29,6 @@
 #define SMALLHIGHWAYMERGER_H
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
@@ -60,7 +59,7 @@ class NodeToWayMap;
  *  - All intersections have been split. (IntersectionSplitter)
  *  - All duplicate ways have been removed. (DuplicateWayRemover)
  */
-class SmallHighwayMerger : public OsmMapOperation, public OperationStatusInfo
+class SmallHighwayMerger : public OsmMapOperation
 {
 public:
 
@@ -87,6 +86,8 @@ public:
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

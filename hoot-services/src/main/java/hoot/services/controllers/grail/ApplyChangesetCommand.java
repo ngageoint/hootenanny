@@ -31,6 +31,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
+import hoot.services.HootProperties;
 import hoot.services.models.db.Users;
 
 
@@ -46,14 +49,20 @@ class ApplyChangesetCommand extends GrailCommand {
 
         List<String> options = new LinkedList<>();
         //append any tags from UI
-        if (params.getComment() != null) options.add("changeset.description=" + params.getComment());
-        if (params.getHashtags() != null) options.add("changeset.hashtags=" + params.getHashtags());
-        if (params.getSource() != null) options.add("changeset.source=" + params.getSource());
+        if (params.getComment() != null) options.add("changeset.description=" + StringEscapeUtils.escapeXml(params.getComment()));
+        if (params.getHashtags() != null) options.add("changeset.hashtags=" + StringEscapeUtils.escapeXml(params.getHashtags()));
+        if (params.getSource() != null) options.add("changeset.source=" + StringEscapeUtils.escapeXml(params.getSource()));
         options.add("hoot.osm.auth.access.token=" + user.getProviderAccessKey());
         options.add("hoot.osm.auth.access.token.secret=" + user.getProviderAccessToken());
         options.add("hoot.osm.auth.consumer.key=" + params.getConsumerKey());
         options.add("hoot.osm.auth.consumer.secret=" + params.getConsumerSecret());
-
+        if (HootProperties.CHANGESET_APPLY_DEBUG) {
+            options.add("changeset.apidb.writer.debug.output=true");
+            options.add("changeset.apidb.writer.debug.output.path=" + params.getWorkDir());
+        }
+        if (HootProperties.CHANGESET_APPLY_SINGLETHREADED) {
+            options.add("changeset.apidb.writers.max=1");
+        }
         List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();

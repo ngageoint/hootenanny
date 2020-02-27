@@ -79,6 +79,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   std::set<ElementId>& getElementsAdded() { return _elementsAdded; }
 

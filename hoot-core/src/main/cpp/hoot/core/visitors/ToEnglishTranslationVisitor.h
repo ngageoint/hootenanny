@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TO_ENGLISH_TRANSLATION_VISITOR_H
@@ -43,8 +43,7 @@ namespace hoot
 /**
  * Translates selected tag values to English
  */
-class ToEnglishTranslationVisitor : public ElementVisitor, public Configurable,
-  public OperationStatusInfo
+class ToEnglishTranslationVisitor : public ElementVisitor, public Configurable
 {
 
 public:
@@ -70,6 +69,8 @@ public:
       "Translated " + QString::number(_numTagTranslationsMade) + " tags to English on " +
       QString::number(_numProcessedElements) + " different elements";
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

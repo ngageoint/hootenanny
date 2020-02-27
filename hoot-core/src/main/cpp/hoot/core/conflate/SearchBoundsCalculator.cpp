@@ -42,6 +42,8 @@ SearchBoundsCalculator::SearchBoundsCalculator(const SearchRadiusProviderPtr& ra
 Envelope SearchBoundsCalculator::calculateSearchBounds(const ConstOsmMapPtr& map,
   const ConstNodePtr& n) const
 {
+  LOG_INFO("Calculating search radius...");
+
   // This is likely to cause some performance issues, but only seems to be called by Multiary code
   // and not doing it here is causing ScriptMatchCreator crashes...so will deal with performance
   // issue when necessary.

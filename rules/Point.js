@@ -36,7 +36,7 @@ function distance(e1, e2)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPoint(map, e) && !isSpecificallyConflatable(map, e);
+  return isPoint(map, e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**

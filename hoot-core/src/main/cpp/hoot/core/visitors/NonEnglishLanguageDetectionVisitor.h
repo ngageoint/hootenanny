@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NON_ENGLISH_LANGUAGE_DETECTION_VISITOR_H
@@ -33,7 +33,6 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/language/LanguageDetector.h>
 #include <hoot/core/language/LanguageInfoProvider.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QMap>
@@ -49,8 +48,7 @@ namespace hoot
  * this class is useful if you're uncertain which source languages to declare for translation and
  * don't have the resources to stand up a translation server for every possible language.
  */
-class NonEnglishLanguageDetectionVisitor : public ElementVisitor, public Configurable,
-  public OperationStatusInfo
+class NonEnglishLanguageDetectionVisitor : public ElementVisitor, public Configurable
 {
 
 public:
@@ -72,6 +70,8 @@ public:
 
   virtual QString getInitStatusMessage() const;
   virtual QString getCompletedStatusMessage() const;
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

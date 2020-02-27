@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/criterion/FilteredByCriteria.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <string>
@@ -52,8 +53,12 @@ class OsmMap;
  * Due to needing an entire map, this does not support streaming I/O.  If you do not need the
  * entire input map in memory at one time (operation logic does not require it and you are not
  * running in the conflate pipeline), consider using ElementVisitor instead.
+ *
+ * @todo We could eventually remove the default empty string implementations of OperationStatusInfo
+ * methods and require them to be implemented in children.
  */
-class OsmMapOperation : public ApiEntityInfo, public FilteredByCriteria
+class OsmMapOperation : public ApiEntityInfo, public FilteredByCriteria,
+  public OperationStatusInfo
 {
 public:
 
@@ -76,7 +81,25 @@ public:
    */
   virtual boost::any getResult() { boost::any ptr; return ptr; }
 
-  long getNumAffected() const { return _numAffected; }
+  /**
+   * @see OperationStatusInfo
+   */
+  virtual long getNumFeaturesAffected() const { return _numAffected; }
+
+  /**
+   * @see OperationStatusInfo
+   */
+  virtual long getNumFeaturesProcessed() const { return _numProcessed; }
+
+  /**
+   * @see OperationStatusInfo
+   */
+  virtual QString getInitStatusMessage() const { return ""; }
+
+  /**
+   * @see OperationStatusInfo
+   */
+  virtual QString getCompletedStatusMessage() const { return ""; }
 
   /**
    * @see FilteredByCriteria
@@ -87,6 +110,13 @@ public:
    * logical OR fashion.
    */
   virtual QStringList getCriteria() const { return QStringList(); }
+
+  /**
+   * Returns the operation's class name
+   *
+   * @return class name string
+   */
+  virtual std::string getClassName() const = 0;
 
 protected:
 

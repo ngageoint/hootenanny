@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/conflate/highway/Roundabout.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
@@ -57,7 +56,7 @@ class Way;
  * Note that it is pretty important to run this operation before doing
  * some other things to the map, like splitting intersections!
  */
-class RemoveRoundabouts : public OsmMapOperation, public OperationStatusInfo
+class RemoveRoundabouts : public OsmMapOperation
 {
 public:
 
@@ -98,6 +97,8 @@ public:
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

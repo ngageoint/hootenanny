@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SchemaTranslatedTagCountVisitor.h"
 
@@ -51,7 +51,8 @@ SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
   _map(),
   _populatedCount(),
   _defaultCount(),
-  _nullCount()
+  _nullCount(),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(t);
   if (!_translator)
@@ -125,6 +126,14 @@ void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
     {
       _countTags(f[i].feature);
     }
+    _numAffected++;
+  }
+  _numProcessed++;
+
+  if (_numProcessed % _taskStatusUpdateInterval == 0)
+  {
+    PROGRESS_INFO(
+      "Processed  " <<  StringUtils::formatLargeNumber(_numProcessed) << " features...");
   }
 }
 

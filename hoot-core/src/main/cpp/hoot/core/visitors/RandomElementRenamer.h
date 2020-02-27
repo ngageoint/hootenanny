@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RANDOM_ELEMENT_RENAMER_H
 #define RANDOM_ELEMENT_RENAMER_H
@@ -31,7 +31,6 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/RngConsumer.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -39,8 +38,7 @@ namespace hoot
 /**
  * A simple random name changer. This is not part of the original PERTY paper.
  */
-class RandomElementRenamer : public ElementVisitor, public RngConsumer, public Configurable,
-  public OperationStatusInfo
+class RandomElementRenamer : public ElementVisitor, public RngConsumer, public Configurable
 {
 public:
 
@@ -74,6 +72,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Randomly changed " + QString::number(_numAffected) + " element names"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

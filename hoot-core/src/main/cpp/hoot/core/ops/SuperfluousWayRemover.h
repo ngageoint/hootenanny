@@ -29,7 +29,6 @@
 #define SUPERFLUOUSWAYREMOVER_H
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 
@@ -47,7 +46,7 @@ class OsmMap;
  *
  * @todo what about one node ways?
  */
-class SuperfluousWayRemover : public OsmMapOperation, public OperationStatusInfo
+class SuperfluousWayRemover : public OsmMapOperation
 {
 public:
 
@@ -82,6 +81,8 @@ public:
    * @see FilteredByCriteria
    */
   virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

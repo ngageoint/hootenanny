@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NORMALIZE_ADDRESSES_VISITOR_H
@@ -31,7 +31,6 @@
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/conflate/address/AddressNormalizer.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -39,7 +38,7 @@ namespace hoot
 /**
  * Normalizes element address tag values
  */
-class NormalizeAddressesVisitor : public ElementVisitor, public OperationStatusInfo
+class NormalizeAddressesVisitor : public ElementVisitor
 {
 public:
 
@@ -58,6 +57,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Normalized " + QString::number(_addressNormalizer.getNumNormalized()) + " addresses"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 
