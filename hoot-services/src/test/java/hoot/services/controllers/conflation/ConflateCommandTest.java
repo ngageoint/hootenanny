@@ -69,7 +69,7 @@ public class ConflateCommandTest {
                 "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
                 "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
                 "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
-                "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
+                "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreasVisitor;" +
                 "hoot::NoInformationElementRemover\"");
 
         conflateParams.setAdvancedOptions(advancedOptions.stream().collect(Collectors.joining(" ")));
@@ -101,7 +101,7 @@ public class ConflateCommandTest {
                                     "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
                                     "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
                                     "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
-                                    "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
+                                    "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreasVisitor;" +
                                     "hoot::NoInformationElementRemover\"]"));
         assertTrue(command.contains("-D, job.id="));
 

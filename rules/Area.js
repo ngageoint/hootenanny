@@ -120,9 +120,6 @@ exports.matchScore = function(map, e1, e2)
 
 exports.mergePair = function(map, e1, e2)
 {
-  // see comments in ConflateCmd as to why we use this option to identify Attribute Conflation
-  var isAttributeConflation = (hoot.get("highway.merge.tags.only") === 'true');
-
   // replace instances of e2 with e1 and merge tags
   mergeElements(map, e1, e2);
   e1.setStatusString("conflated");

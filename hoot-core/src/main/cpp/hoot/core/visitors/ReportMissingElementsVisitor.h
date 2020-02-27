@@ -32,6 +32,7 @@
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -68,7 +69,7 @@ public:
   virtual QString getInitStatusMessage() const { return "Reporting missing elements..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Reported " + QString::number(_missingCount) + " missing elements."; }
+  { return "Reported " + StringUtils::formatLargeNumber(_missingCount) + " missing elements."; }
 
   virtual std::string getClassName() const { return className(); }
 

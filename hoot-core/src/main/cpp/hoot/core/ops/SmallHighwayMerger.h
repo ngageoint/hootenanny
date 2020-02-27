@@ -97,6 +97,8 @@ protected:
   NodeToWayMap* _n2w;
   std::shared_ptr<TagDifferencer> _diff;
 
+  int _taskStatusUpdateInterval;
+
   void _mergeNeighbors(const std::shared_ptr<Way>& w);
   void _mergeWays(const std::set<long>& ids);
 };

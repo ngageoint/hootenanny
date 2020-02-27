@@ -87,7 +87,7 @@ public:
   virtual QString getDescription() const { return "Recursively removes elements from a map"; }
 
   virtual QString getInitStatusMessage() const
-  { return "Removing elements..."; }
+  { return "Recursively removing elements..."; }
 
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " elements"; }

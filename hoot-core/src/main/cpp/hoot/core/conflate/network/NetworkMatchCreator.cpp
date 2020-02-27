@@ -182,10 +182,8 @@ void NetworkMatchCreator::createMatches(
   const int matchesSizeAfter = matches.size();
 
   LOG_STATUS(
-    "Found " << StringUtils::formatLargeNumber(matches.size()) <<
-    " highway match candidates and " <<
-    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
-    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    "Found " << StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
+    " total highway matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const

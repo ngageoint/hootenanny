@@ -169,7 +169,7 @@
                 "elem_type":"checkbox",
                 "description":"Remove any area elements that are essentially the same.",
                 "name":"Remove Duplicate Areas",
-                "hoot_val":"hoot::RemoveDuplicateAreaVisitor",
+                "hoot_val":"hoot::RemoveDuplicateAreasVisitor",
                 "defaultvalue":"true"
             },
             {
