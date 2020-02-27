@@ -224,7 +224,7 @@ fcodeCommon = {
       ['F_CODE','AQ170','amenity','fuel'], // Motor Vehicle Station
       ['F_CODE','AQ180','man_made','weigh_station'], // Weigh Station
       ['F_CODE','AT005','cable','yes'], // Cable
-      ['F_CODE','AT010','landmark','dish_aerial'], // Dish Aerial
+      ['F_CODE','AT010','man_made','satellite_dish'], // Dish Aerial
       ['F_CODE','AT011','man_made','antenna'], // Aerial
       ['F_CODE','AT012','landuse','aerial_farm'], // Aerial Farm
       ['F_CODE','AT041','cableway','yes'], // Cableway
