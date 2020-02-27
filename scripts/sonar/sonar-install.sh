@@ -46,6 +46,7 @@ if [ ! -f $SONAR_PATH/bin/$SONAR_BLD_PKG-64 ]; then
     sudo mv $SONAR_BLD_PKG/$SONAR_BLD_PKG-64 $SONAR_PATH/bin/
     sudo mv $SONAR_BLD_PKG/libinterceptor-x86_64.so $SONAR_PATH/bin/
     sudo mv $SONAR_BLD_PKG/libinterceptor-i686.so $SONAR_PATH/bin/
+    sudo mv $SONAR_BLD_PKG/libinterceptor-haswell.so $SONAR_PATH/bin/
     rm -rf $SONAR_BLD_PKG
 fi
 
