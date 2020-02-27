@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVETAGSVISITOR_H
 #define REMOVETAGSVISITOR_H
@@ -31,7 +31,6 @@
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -42,7 +41,7 @@ namespace hoot
  * This really should be an ElementVisitor. See #2831.
  */
 class RemoveTagsVisitor : public ElementOsmMapVisitor, public Configurable,
-  public ElementCriterionConsumer, public OperationStatusInfo
+  public ElementCriterionConsumer
 {
 public:
 
@@ -70,6 +69,8 @@ public:
       "Removed " + QString::number(_numTagsRemoved) + " tags from " +
       QString::number(_numAffected) + " different elements";
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

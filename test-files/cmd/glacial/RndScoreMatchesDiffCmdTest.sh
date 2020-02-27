@@ -9,5 +9,5 @@ IN_DIR=test-files/cmd/glacial/RndScoreMatchesDiffCmdTest
 OUT_DIR=test-output/cmd/glacial/RndScoreMatchesDiffCmdTest
 mkdir -p $OUT_DIR
 
-hoot score-matches-diff --warn $IN_DIR/input1.osm $IN_DIR/input2.osm $OUT_DIR/output
+hoot score-matches-diff --warn -C Testing.conf $IN_DIR/input1.osm $IN_DIR/input2.osm $OUT_DIR/output
 diff $IN_DIR/output $OUT_DIR/output

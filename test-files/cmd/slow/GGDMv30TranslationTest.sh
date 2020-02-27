@@ -12,7 +12,7 @@ mkdir -p $outputDir
 rm -rf $outputDir/*
 
 # Normal Hoot options
-HOOT_OPT="-C Testing.conf --warn"
+HOOT_OPT="--warn -C Testing.conf"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
@@ -38,7 +38,7 @@ hoot convert $HOOT_OPT -D schema.translation.script=$TRANS $inputDir/*.shp $outp
 
 # Compare the new and old OSM files
 # NOTE: ZI031 DATASET_S does not have a UUID (UFI) but it gets one on import which screws up the test
-hoot diff --ignore-uuid $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm # || diff $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm
+hoot diff $HOOT_OPT --ignore-uuid $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm # || diff $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm
 
 # Make shapefiles from the new OSM file
 # NOTE: This assumes that outputDir does not have any shapefiles in it!
@@ -76,7 +76,6 @@ hoot convert --debug -C Testing.conf -D schema.translation.script=$TRANS $output
 # hoot diff --ignore-uuid $outputDir/second_GGDMv30.osm $outputDir/new_GGDMv30.osm || diff $outputDir/second_GGDMv30.osm $outputDir/new_GGDMv30.osm
 # echo
 # echo
-
 
 # This is commented out until Jenkins has python-gdal support
 #

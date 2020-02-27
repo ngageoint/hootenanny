@@ -31,11 +31,12 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/util/OsmApiUtils.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
 // Qt
 #include <QBuffer>
@@ -90,13 +91,12 @@ QString OsmApiReader::supportedFormats()
 
 bool OsmApiReader::isSupported(const QString& url)
 {
-  //  TODO: Add more extensive checking maybe must include '/api/0.6/map'
   QStringList validPrefixes = supportedFormats().split(";");
   const QString checkString(url.toLower());
   //  Support HTTP and HTTPS URLs to OSM API servers
   for (int i = 0; i < validPrefixes.size(); ++i)
   {
-    if (checkString.startsWith(validPrefixes[i]) && checkString.endsWith("/api/0.6/map"))
+    if (checkString.startsWith(validPrefixes[i]) && checkString.endsWith(OsmApiEndpoints::API_PATH_MAP))
       return true;
   }
   //  If we fall out of loop, no dice

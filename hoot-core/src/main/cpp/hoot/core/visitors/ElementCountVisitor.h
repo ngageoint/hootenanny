@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCOUNTVISITOR_H
 #define ELEMENTCOUNTVISITOR_H
@@ -47,11 +47,13 @@ public:
 
   int getCount() const { return _count; }
 
-  double getStat() const { return _count; }
+  virtual double getStat() const { return _count; }
 
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Counts the number of elements"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

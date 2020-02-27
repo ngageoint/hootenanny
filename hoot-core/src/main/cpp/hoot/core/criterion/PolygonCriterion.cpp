@@ -46,6 +46,7 @@ PolygonCriterion::PolygonCriterion()
 bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
+  LOG_VART(e);
 
   bool result = false;
 
@@ -58,10 +59,13 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
     ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
     result |= r->getType() == MetadataTags::RelationBuilding();
     result |= r->getType() == MetadataTags::RelationMultiPolygon();
+    result |= r->getType() == MetadataTags::RelationSite();
   }
   else if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
+    LOG_VART(way->isValidPolygon());
+    LOG_VART(way->isClosedArea());
     if (way->isValidPolygon() && way->isClosedArea())
     {
       LOG_TRACE("Way is valid closed area; crit satisfied.");

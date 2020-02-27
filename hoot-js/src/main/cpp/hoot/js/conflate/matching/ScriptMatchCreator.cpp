@@ -147,6 +147,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -382,7 +383,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating script feature index for: " << _scriptPath << "...");
+      LOG_STATUS("Creating script feature index for: " << _scriptPath << "...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -398,6 +399,7 @@ public:
       // Point/Polygon conflation behaves diferently than all other generic scripts in that it
       // conflates geometries of different types. This class wasn't really originally designed to
       // handle that, so we add a logic path here to accommodate Point/Polygon.
+      long numElementsIndexed = 0;
       if (!_scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME))
       {
         std::function<bool (ConstElementPtr)> f =
@@ -428,6 +430,7 @@ public:
             break;
         }
         v.finalizeIndex();
+        numElementsIndexed = v.getSize();
       }
       else
       {
@@ -440,10 +443,12 @@ public:
         getMap()->visitWaysRo(v);
         getMap()->visitRelationsRo(v);
         v.finalizeIndex();
+        numElementsIndexed = v.getSize();
       }
-      LOG_VART(_indexToEid.size());
 
-      LOG_DEBUG("Script feature index created for: " << _scriptPath << ".");
+      LOG_STATUS(
+        "Script feature index created for: " << _scriptPath << "with " <<
+        StringUtils::formatLargeNumber(numElementsIndexed) << " elements.");
     }
     return _index;
   }
@@ -677,6 +682,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   //bit of a hack...see MatchCreator.h...need to refactor
   _description = QString::fromStdString(className()) + "," + args[0];
   _cachedScriptVisitor.reset();
+  _scriptInfo = _getScriptDescription(_scriptPath);
 
   LOG_DEBUG(
     "Set arguments for: " << className() << " - rules: " << QFileInfo(_scriptPath).fileName());
@@ -756,9 +762,8 @@ void ScriptMatchCreator::createMatches(
 
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
-  const CreatorDescription scriptInfo = _getScriptDescription(_scriptPath);
-  _descriptionCache[_scriptPath] = scriptInfo;
-  v.setCreatorDescription(scriptInfo);
+  _descriptionCache[_scriptPath] = _scriptInfo;
+  v.setCreatorDescription(_scriptInfo);
   v.initSearchRadiusInfo();
   v.calculateSearchRadius();
 
@@ -789,8 +794,8 @@ void ScriptMatchCreator::createMatches(
   _cachedCustomSearchRadii[_scriptPath] = searchRadius;
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
-  LOG_VARD(GeometryTypeCriterion::typeToString(scriptInfo.geometryType));
-  switch (scriptInfo.geometryType)
+  LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.geometryType));
+  switch (_scriptInfo.geometryType)
   {
     case GeometryTypeCriterion::GeometryType::Point:
       map->visitNodesRo(v);
@@ -810,7 +815,7 @@ void ScriptMatchCreator::createMatches(
   }
   const int matchesSizeAfter = matches.size();
 
-  QString matchType = CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType);
+  QString matchType = CreatorDescription::baseFeatureTypeToString(_scriptInfo.baseFeatureType);
   // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
   // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
   if (_scriptPath.contains(POINT_POLYGON_SCRIPT_NAME))
@@ -949,6 +954,24 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     Handle<Value> value = ToLocal(&plugin)->Get(geometryTypeStr);
     result.geometryType = GeometryTypeCriterion::typeFromString(toCpp<QString>(value));
   }
+  // This controls which feature types a script conflates and is required. It allows for disabling
+  // superfluous conflate ops. It should probably be integrated with isMatchCandidate somehow at
+  // some point, if possible.
+  Handle<String> matchCandidateCriterionStr =
+    String::NewFromUtf8(current, "matchCandidateCriterion");
+  if (ToLocal(&plugin)->Has(matchCandidateCriterionStr))
+  {
+    Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStr);
+    const QString valueStr = toCpp<QString>(value);
+    if (valueStr.contains(";"))
+    {
+      result.matchCandidateCriteria = valueStr.split(";");
+    }
+    else
+    {
+      result.matchCandidateCriteria = QStringList(valueStr);
+    }
+  }
 
   QFileInfo fi(path);
   result.className = (QString::fromStdString(className()) + "," + fi.fileName()).toStdString();
@@ -1009,6 +1032,11 @@ QString ScriptMatchCreator::getName() const
 {
   QFileInfo scriptFileInfo(_scriptPath);
   return QString::fromStdString(className()) + ";" + scriptFileInfo.fileName();
+}
+
+QStringList ScriptMatchCreator::getCriteria() const
+{
+  return _scriptInfo.matchCandidateCriteria;
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DUPLICATENAMEREMOVER_H
@@ -32,7 +32,6 @@
 #include <QString>
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -44,7 +43,7 @@ class OsmMap;
  * Searches for ways that contain the same name multiple times in the name and/or alt_name fields.
  * Any duplicates in the alt_name field will be removed.
  */
-class DuplicateNameRemover : public OsmMapOperation, public OperationStatusInfo, public Configurable
+class DuplicateNameRemover : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -69,6 +68,8 @@ public:
   { return "Removed " + QString::number(_numAffected) + " duplicate name tags"; }
 
   virtual QString getDescription() const { return "Removes duplicate name tags from a feature"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

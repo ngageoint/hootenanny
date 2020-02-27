@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DUPLICATEWAYREMOVER_H
@@ -32,7 +32,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -46,7 +45,7 @@ namespace hoot
  *
  * Area ways will be ignored.
  */
-class DuplicateWayRemover : public OsmMapOperation, public OperationStatusInfo
+class DuplicateWayRemover : public OsmMapOperation
 {
 public:
 
@@ -80,6 +79,13 @@ public:
   { return "Removed " + QString::number(_numAffected) + " duplicate ways"; }
 
   virtual QString getDescription() const { return "Removes duplicate ways from a map"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

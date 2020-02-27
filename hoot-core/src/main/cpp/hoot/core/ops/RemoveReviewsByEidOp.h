@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEREVIEWSBYEIDOP_H
 #define REMOVEREVIEWSBYEIDOP_H
@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -39,8 +38,7 @@
 namespace hoot
 {
 
-class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementConsumer,
-  public OperationStatusInfo
+class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
 
@@ -72,6 +70,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " conflation reviews"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

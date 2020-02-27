@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSublineStringMatcher.h"
 
@@ -350,27 +350,36 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
 
   ConstElementPtr e = map->getElement(eid);
 
-  if (e->getElementType() == ElementType::Relation)
-  {
-    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
+//  if (e->getElementType() == ElementType::Relation)
+//  {
+//    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
 
-    if (MultiLineStringCriterion().isSatisfied(r) == false)
-    {
-      throw NeedsReviewException("Internal Error: When matching sublines expected a multilinestring "
-        "relation not a " + r->getType() + ".  A non-multilinestring should never be found here.  "
-        "Please report this to  https://github.com/ngageoint/hootenanny.");
-    }
+//    // Don't know the complete history behind this, but while working on #3815 came across an
+//    // example of a type=route relation. After removing this restriction, hoot seems to be able
+//    // to conflate it correctly. Therefore, disabling this. Leaving it commented out in case at
+//    // some point in the near future we come across data in a relation with type other than
+//    // multilinestring that hoot can't conflate.
 
-    const vector<RelationData::Entry>& entries = r->getMembers();
-    for (size_t i = 0; i < entries.size(); i++)
-    {
-      if (entries[i].getElementId().getType() != ElementType::Way)
-      {
-        throw NeedsReviewException("MultiLineString relations can only contain ways when matching "
-                                   "sublines.");
-      }
-    }
-  }
+//    if (MultiLineStringCriterion().isSatisfied(r) == false)
+//    {
+//      throw NeedsReviewException("Internal Error: When matching sublines expected a multilinestring "
+//        "relation not a " + r->getType() + ".  A non-multilinestring should never be found here.  "
+//        "Please report this to  https://github.com/ngageoint/hootenanny.");
+//    }
+
+//    // See relation type=route message above.
+
+//    const vector<RelationData::Entry>& entries = r->getMembers();
+//    for (size_t i = 0; i < entries.size(); i++)
+//    {
+//      if (entries[i].getElementId().getType() != ElementType::Way)
+//      {
+//        throw NeedsReviewException("MultiLineString relations can only contain ways when matching "
+//                                   "sublines.");
+//      }
+//    }
+//  }
+
   if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);

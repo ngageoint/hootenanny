@@ -361,41 +361,10 @@ void XmlChangeset::updateChangeset(const QString &changes)
         updateElement(_ways, old_id, new_id, version);
       else if (name == "relation")
         updateElement(_relations, old_id, new_id, version);
-    }
-  }
-}
-
-void XmlChangeset::updateChangeset(const ChangesetInfoPtr& changeset_info)
-{
-  //  Iterate the three changeset type arrays looking for elements to mark
-  for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-  {
-    //  Set the relation's status to failed
-    for (ChangesetInfo::iterator it = changeset_info->begin(ElementType::Relation, (ChangesetType)current_type);
-         it != changeset_info->end(ElementType::Relation, (ChangesetType)current_type); ++it)
-    {
-      //  Finalize the relation
-      _allRelations[*it]->setStatus(ChangesetElement::ElementStatus::Finalized);
-      //  Update the processed count
-      _processedCount++;
-    }
-    //  Set the way's status to failed
-    for (ChangesetInfo::iterator it = changeset_info->begin(ElementType::Way, (ChangesetType)current_type);
-         it != changeset_info->end(ElementType::Way, (ChangesetType)current_type); ++it)
-    {
-      //  Finalize the way
-      _allWays[*it]->setStatus(ChangesetElement::ElementStatus::Finalized);
-      //  Update the processed count
-      _processedCount++;
-    }
-    //  Set the node's status to failed
-    for (ChangesetInfo::iterator it = changeset_info->begin(ElementType::Node, (ChangesetType)current_type);
-         it != changeset_info->end(ElementType::Node, (ChangesetType)current_type); ++it)
-    {
-      //  Finalize the node
-      _allNodes[*it]->setStatus(ChangesetElement::ElementStatus::Finalized);
-      //  Update the processed count
-      _processedCount++;
+      if (old_id == 0)
+      {
+        LOG_ERROR("Element cannot be updated. No ID given.");
+      }
     }
   }
 }
@@ -1576,10 +1545,9 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long changeset_id
     category = "delete";
   if (changeset->size(ElementType::Node, type) > 0 || changeset->size(ElementType::Way, type) > 0 || changeset->size(ElementType::Relation, type) > 0)
   {
-    ts << "\t<" << category;
+    ts << "\t<" << category << ">\n";
     if (type != ChangesetType::TypeDelete)
     {
-      ts << ">\n";
       //  Nodes go first in each category
       writeNodes(changeset, ts, type, changeset_id);
       //  Followed by ways
@@ -1589,7 +1557,6 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long changeset_id
     }
     else
     {
-      ts << " if-unused=\"true\">\n";
       //  Relations first for deletes
       writeRelations(changeset, ts, type, changeset_id);
       //  Followed by ways
@@ -1630,6 +1597,10 @@ void XmlChangeset::updateElement(ChangesetTypeMap& map, long old_id, long new_id
     if (version >= 0)
       element->setVersion(version);
     _processedCount++;
+  }
+  else
+  {
+    LOG_ERROR("Element cannot be updated. ID " << old_id);
   }
 }
 
@@ -1844,8 +1815,18 @@ bool XmlChangeset::calculateRemainingChangeset(ChangesetInfoPtr &changeset)
   }
   //  Clear the send buffer
   _sendBuffer.clear();
+  bool empty_changeset = changeset->size() == 0;
+  //  Output the remaining changeset to a file to inform the user where the issues lie
+  if (!empty_changeset && !_errorPathname.isEmpty())
+  {
+    //  Replace error with remaining in the error pathname
+    QString pathname = _errorPathname;
+    pathname.replace("error", "remaining");
+    //  Write the file with changeset ID of zero
+    FileUtils::writeFully(pathname, this->getChangesetString(changeset, 0));
+  }
   //  Return true if there is anything in the changeset
-  return changeset->size() > 0;
+  return !empty_changeset;
 }
 
 ChangesetInfo::ChangesetInfo()

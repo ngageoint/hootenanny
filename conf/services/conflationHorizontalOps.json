@@ -78,7 +78,7 @@
         "maxvalue": "",
         "name": "Small Way Merger Threshold",
         "defaultvalue": "15",
-        "hoot_key": "small.way.merger.threshold"
+        "hoot_key": "small.highway.merger.threshold"
       },
 			{
 				"id":"horizontal_conflate_pre_ops",

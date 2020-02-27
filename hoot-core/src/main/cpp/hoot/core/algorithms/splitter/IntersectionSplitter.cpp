@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "IntersectionSplitter.h"
@@ -38,7 +38,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/util/StringUtils.h>
-
+#include <hoot/core/conflate/matching/NodeMatcher.h>
 // Qt
 #include <QDebug>
 
@@ -271,6 +271,11 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
 void IntersectionSplitter::apply(std::shared_ptr<OsmMap> &map)
 {
   splitIntersections(map);
+}
+
+QStringList IntersectionSplitter::getCriteria() const
+{
+  return NodeMatcher::getNetworkCriterionClassNames();
 }
 
 }

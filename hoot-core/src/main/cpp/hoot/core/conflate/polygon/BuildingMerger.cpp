@@ -254,7 +254,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     IdSwapOp swapOp(oldScrapId, oldKeeperId);
     swapOp.apply(map);
     // Now swap the pointers so that the wrong one isn't deleted
-    if (swapOp.getNumAffected() > 0)
+    if (swapOp.getNumFeaturesAffected() > 0)
     {
       scrap = map->getElement(oldKeeperId);
       keeper = map->getElement(oldScrapId);

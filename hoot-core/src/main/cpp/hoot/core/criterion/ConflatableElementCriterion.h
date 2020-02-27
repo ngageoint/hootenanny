@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLATABLE_ELEMENT_CRITERION_H
 #define CONFLATABLE_ELEMENT_CRITERION_H
@@ -58,22 +58,35 @@ public:
   /**
    * Returns instantiations of conflatable criteria index by class name
    *
-   * @return a conflatable criteria map
+   * @return a conflatable criteria map of class names to criterion
    */
   static QMap<QString, ElementCriterionPtr> getConflatableCriteria();
 
   /**
+   * Returns instantiations of conflatable criteria index by class name
+   *
+   * @param geometryType a geometry type filter; only criteria supporting the specified geometry
+   * type will be returned
+   * @return a conflatable criteria map of class names to criterion
+   */
+  static QMap<QString, ElementCriterionPtr> getConflatableCriteria(
+    const GeometryType& geometryType);
+
+  /**
    * Returns all ConflatableElementCriterion class names for a given geometry type
    *
-   * @param type geometry type
+   * @param geometryType geometry type
    * @return a list of class names inheriting from ConflatableElementCriterion
    */
-  static QStringList getCriterionClassNamesByType(const GeometryType& type);
+  static QStringList getCriterionClassNamesByGeometryType(const GeometryType& geometryType);
 
 private:
 
   // criterion class names to criterion objects
   static QMap<QString, ElementCriterionPtr> _conflatableCriteria;
+
+  // geometry type string to a map of criterion class names to criterion objects
+  static QMap<QString, QMap<QString, ElementCriterionPtr>> _conflatableCriteriaByGeometryType;
 
   static void _createConflatableCriteria();
 };

@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HttpTestServer.h"
 
 //  Hootenanny
+#include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -41,7 +42,7 @@ HttpResponse::HttpResponse(int status, const std::string& response)
   add_header("Host", "localhost");
   add_header("Connection", "closed");
   if (response != "")
-    add_header("Content-Type", "text/xml");
+    add_header("Content-Type", HootNetworkUtils::CONTENT_TYPE_XML);
 }
 
 void HttpResponse::add_header(const std::string& header, const std::string& value)
@@ -75,12 +76,12 @@ std::string HttpResponse::get_status_text()
   //  Convert the HTTP status code to status text
   switch (_status)
   {
-  case 200:   return "OK";
-  case 400:   return "Bad Request";
-  case 404:
-  default:    return "Not Found";
-  case 405:   return "Method Not Allowed";
-  case 409:   return "Conflict";
+  case HttpResponseCode::HTTP_OK:                 return "OK";
+  case HttpResponseCode::HTTP_BAD_REQUEST:        return "Bad Request";
+  case HttpResponseCode::HTTP_NOT_FOUND:          return "Not Found";
+  case HttpResponseCode::HTTP_METHOD_NOT_ALLOWED: return "Method Not Allowed";
+  case HttpResponseCode::HTTP_CONFLICT:           return "Conflict";
+  default:                                        return "Unknown Status";
   }
 }
 
@@ -166,19 +167,29 @@ bool HttpTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
   //  Read the HTTP request, and ignore them
   read_request_headers(connection);
   //  Respond with HTTP 200 OK
-  HttpResponse response(200);
+  HttpResponse response(HttpResponseCode::HTTP_OK);
   //  Write out the response
   write_response(connection, response.to_string());
   //  Return true if we should continue listening and processing requests
   return !_interupt;
 }
 
-std::string HttpTestServer::read_request_headers(HttpConnection::HttpConnectionPtr &connection)
+std::string HttpTestServer::read_request_headers(HttpConnection::HttpConnectionPtr& connection)
 {
   //  Read the HTTP request headers
   boost::asio::streambuf buf;
   boost::asio::read_until(connection->socket(), buf, "\r\n\r\n");
   return boost::asio::buffer_cast<const char*>(buf.data());
+}
+
+std::string HttpTestServer::read_request_body(const std::string& headers, HttpConnection::HttpConnectionPtr& connection)
+{
+  //  Parse the headers to get the content length
+  long content_length = parse_content_length(headers);
+  std::vector<char> buf(content_length);
+  //  Read the HTTP request body
+  boost::asio::read(connection->socket(), boost::asio::buffer(buf));
+  return buf.data();
 }
 
 void HttpTestServer::write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response)
@@ -187,6 +198,30 @@ void HttpTestServer::write_response(HttpConnection::HttpConnectionPtr& connectio
   //  Write the response to the socket synchronously
   boost::asio::write(connection->socket(), boost::asio::buffer(response));
   connection->socket().close();
+}
+
+long HttpTestServer::parse_content_length(const std::string& headers)
+{
+  try
+  {
+    const std::string content_length = "Content-Length: ";
+    //  Find the beginning of the string
+    std::size_t start = headers.find(content_length);
+    if (start != std::string::npos)
+    {
+      //
+      start += content_length.length();
+      //  Find the next end of line
+      std::size_t end = headers.find("\r\n", start);
+      if (end != std::string::npos)
+      {
+        std::string value = headers.substr(start, end - start);
+        return std::stol(value);
+      }
+    }
+  }
+  catch(...) {}
+  return 0;
 }
 
 }

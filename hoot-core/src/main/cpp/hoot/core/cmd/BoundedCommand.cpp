@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BoundedCommand.h"
@@ -55,6 +55,8 @@ void BoundedCommand::_writeBoundsFile()
   ConfigOptions opts;
   // We could rename convert.bounding.box to something more generic now that we use it in so many
   // places.
+  // TODO: We aren't dealing with the osm/hoot api db reader version of bounding box, which could
+  // eventually cause a problem.
   const QString boundsStr = opts.getConvertBoundingBox().trimmed();
   if (!boundsStr.isEmpty())
   {

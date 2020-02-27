@@ -22,17 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootServicesLoginManager.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/HootNetworkCookieJar.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/HootNetworkUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Std
 #include <iostream>
@@ -96,7 +97,7 @@ QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
     const QString exceptionMsg = e.what();
     throw HootException("Error retrieving request token. error: " + exceptionMsg);
   }
-  if (requestTokenRequest.getHttpStatus() != 200)
+  if (requestTokenRequest.getHttpStatus() != HttpResponseCode::HTTP_OK)
   {
     throw HootException(
       "Error retrieving request token. error: " + requestTokenRequest.getErrorString());
@@ -139,7 +140,7 @@ long HootServicesLoginManager::verifyUserAndLogin(const QString& requestToken,
     const QString exceptionMsg = e.what();
     throw HootException("Error verifying user. error: " + exceptionMsg);
   }
-  if (loginRequest.getHttpStatus() != 200)
+  if (loginRequest.getHttpStatus() != HttpResponseCode::HTTP_OK)
   {
     throw HootException("Error verifying user. error: " + loginRequest.getErrorString());
   }
@@ -236,7 +237,7 @@ bool HootServicesLoginManager::logout(const QString& userName, const QString& ac
   {
     throw HootException("Error logging out user: " + userName + ". error: " + e.what());
   }
-  if (logoutRequest.getHttpStatus() != 200)
+  if (logoutRequest.getHttpStatus() != HttpResponseCode::HTTP_OK)
   {
     return false;
   }

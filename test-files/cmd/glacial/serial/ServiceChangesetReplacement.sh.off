@@ -10,6 +10,26 @@ set -e
 # Pay close attention to the modify change counts, as you can end up with output that looks correct but isn't due to ways being deleted and 
 # re-created when they should have been modified.
 
+# Input Parameters (see changeset-derive-replacement command doc for more detail):
+# 1 - test name
+# 2 - ref input file path
+# 3 - sec input file path
+# 4 - replacement aoi - what section is being replaced; e.g. "-180,-90,180,90
+# 5 - crop aoi - an initial aoi to crop both datasets down to in order to save processing time; use global bounds to bypass: "-180,-90,180,90
+# 6 - full replacement (not just overlapping features); true or false
+# 7 - strict bounds (how are bounds overlapping features handled?); true or false
+# 8 - geometry filters - what types of geometries are being replaced?; delimited ElementCriterion class name list; leave empty to bypass
+# 9 - replacement filters - what types of features are we removing?; delimited ElementCriterion class name list; leave empty to bypass
+# 10 - chain replacement filters together (logical AND)?; true or false
+# 11 - replacement filter options - semicolon delimited list of config opts to be applied to the replacement filters only; leave empty to bypass
+# 12 - retainment filters - what types of features are we keeping?; delimited ElementCriterion class name list; leave empty to bypass
+# 13 - chain retainment filters together (logical AND)?; true or false
+# 14 - retainment filter options - semicolon delimited list of config opts to be applied to the retainment filters only; leave empty to bypass
+# 15 - file formats - what types of outputs do we want to generate?; semicolon delimited list: db, xml, and/or json
+# 16 - way snap tolerance (m) - how far can we snap ways to other ways?; leave empty to specify 0.0m 
+# 17 - way snap node tolerance (m) - how far can we snap way nodes directly to other way nodes?; leave empty to specify 0.0m 
+# 18 - disable conflation; true or false
+
 # TODO: 
 # - consolidate the three replacement workflows into a single function
 # - can maybe also ditch the single geometry tests, as they may be redundant with the multiple geometry tests (except for the POI test)

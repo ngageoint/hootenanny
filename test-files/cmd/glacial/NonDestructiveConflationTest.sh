@@ -17,7 +17,7 @@ hoot changeset-derive -C Testing.conf --stats \
  test-output/cmd/glacial/NonDestructiveTest/changeset.osc
 
 # Check the output against the expected output
-hoot diff \
+hoot diff -C Testing.conf \
   test-output/cmd/glacial/NonDestructiveTest/output.osm \
   test-files/cmd/glacial/NonDestructiveTest/Expected.osm || \
   diff \

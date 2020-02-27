@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENT_IDS_VISITOR_H
 #define ELEMENT_IDS_VISITOR_H
@@ -67,6 +67,8 @@ public:
   static std::vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
 
   virtual QString getDescription() const { return "Collects the element IDs visited"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

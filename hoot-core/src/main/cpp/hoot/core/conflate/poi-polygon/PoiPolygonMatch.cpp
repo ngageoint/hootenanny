@@ -833,5 +833,13 @@ QString PoiPolygonMatch::toString() const
   }
 }
 
+void PoiPolygonMatch::_clearCache()
+{
+  if (_infoCache)
+  {
+    _infoCache->clear();
+  }
+}
+
 }
 

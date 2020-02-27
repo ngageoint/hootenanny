@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLATABLE_CRITERIA_VISITOR_H
 #define CONFLATABLE_CRITERIA_VISITOR_H
@@ -46,6 +46,8 @@ public:
 
   virtual QString getDescription() const
   { return "Marks elements with all criterion classes that consider them conflatable"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

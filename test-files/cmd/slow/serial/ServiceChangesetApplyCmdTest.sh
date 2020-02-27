@@ -12,9 +12,11 @@ psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 rm -rf test-output/cmd/slow/serial/ServiceChangesetApplyCmdTest
 mkdir -p test-output/cmd/slow/serial/ServiceChangesetApplyCmdTest
 
+CONFIG="-C Testing.conf"
+
 # write the contents
-hoot changeset-apply --debug test-files/cmd/slow/serial/ServiceChangesetApplyCmdTest/changeset.osc.sql $DB_URL
+hoot changeset-apply --debug $CONFIG test-files/cmd/slow/serial/ServiceChangesetApplyCmdTest/changeset.osc.sql $DB_URL
 
 # read the contents back out
-hoot convert $DB_URL test-output/cmd/slow/serial/ServiceChangesetApplyCmdTest/output.osm
-hoot diff test-files/cmd/slow/serial/ServiceChangesetApplyCmdTest/output.osm test-output/cmd/slow/serial/ServiceChangesetApplyCmdTest/output.osm
+hoot convert $CONFIG $DB_URL test-output/cmd/slow/serial/ServiceChangesetApplyCmdTest/output.osm
+hoot diff $CONFIG test-files/cmd/slow/serial/ServiceChangesetApplyCmdTest/output.osm test-output/cmd/slow/serial/ServiceChangesetApplyCmdTest/output.osm

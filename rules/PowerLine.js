@@ -12,7 +12,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("power.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("power.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("power.line.review.threshold"));
-exports.matchCandidateCriterion = "hoot::PowerLineCriterion"; // See #3047
+exports.matchCandidateCriterion = "hoot::PowerLineCriterion";
 exports.geometryType = "line";
 
 var sublineMatcher =

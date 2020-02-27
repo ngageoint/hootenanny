@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDINTERSECTIONSOP_H
 #define FINDINTERSECTIONSOP_H
@@ -60,6 +60,8 @@ public:
    *  Pure virtual function called by constructor to create the intersection visitor
    */
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor() = 0;
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 /**
@@ -74,6 +76,8 @@ public:
   virtual QString getDescription() const override { return "Identifies highway intersections"; }
 
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 /**
@@ -88,6 +92,8 @@ public:
   virtual QString getDescription() const override { return "Identifies railway intersections"; }
 
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

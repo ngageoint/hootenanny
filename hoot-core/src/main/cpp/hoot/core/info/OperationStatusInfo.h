@@ -22,10 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OPERATION_STATUS_INFO_H
 #define OPERATION_STATUS_INFO_H
+
+#include <QString>
 
 namespace hoot
 {
@@ -57,6 +59,20 @@ public:
     e.g. "Removed 20 duplicate ways"
     */
   virtual QString getCompletedStatusMessage() const = 0;
+
+  /**
+   * Returns the number of elements affected by the visitor
+   *
+   * @return a number of elements
+   */
+  virtual long getNumFeaturesAffected() const = 0;
+
+  /**
+   * Returns the number of elements processed by the visitor
+   *
+   * @return a number of elements
+   */
+  virtual long getNumFeaturesProcessed() const = 0;
 };
 
 }

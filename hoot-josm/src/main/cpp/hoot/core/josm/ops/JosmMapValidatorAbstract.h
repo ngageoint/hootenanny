@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 // JNI
@@ -54,8 +53,7 @@ namespace hoot
  * Note that we're passing maps as XML to JOSM vs trying to build a JOSM map dataset to avoid
  * complexity in the code.
  */
-class JosmMapValidatorAbstract : public OsmMapOperation, public Configurable,
-  public OperationStatusInfo
+class JosmMapValidatorAbstract : public OsmMapOperation, public Configurable
 {
 
 public:
