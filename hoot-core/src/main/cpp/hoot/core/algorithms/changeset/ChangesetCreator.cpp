@@ -232,8 +232,8 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
       "Creating changeset from inputs: " << map1->getName() << " of size: " << map1->size() <<
       " and " << map2->getName() << " of size: " << map2->size() << " to output: " <<
       output.right(25) << "...");
-    OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation");
-    OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation");
+    OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation-" + map1->getName());
+    OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation-" + map2->getName());
 
     // don't want to include review relations - may need to remove this depending on what happens
     // with #3361

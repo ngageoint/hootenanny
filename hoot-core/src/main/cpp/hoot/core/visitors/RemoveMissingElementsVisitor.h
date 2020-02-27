@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * Removes non-existent element references from relations or ways with negative IDs.
+ * Removes non-existent element references from relations or ways
  */
 class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer
 {

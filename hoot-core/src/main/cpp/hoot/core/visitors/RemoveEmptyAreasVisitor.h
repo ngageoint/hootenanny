@@ -31,6 +31,7 @@
 #include <memory>
 
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -39,7 +40,7 @@ class ElementConverter;
 /**
  * Removes all "area" elements that have an area of zero.
  */
-class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor
+class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor, public Configurable
 {
 public:
 
@@ -65,9 +66,15 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  /**
+   * @see Configurable
+   */
+  virtual void setConfiguration(const Settings& conf);
+
 private:
 
   std::shared_ptr<ElementConverter> _ec;
+  bool _requireAreaForPolygonConversion;
 };
 
 }
