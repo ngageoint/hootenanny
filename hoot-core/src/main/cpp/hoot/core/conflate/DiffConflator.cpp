@@ -233,7 +233,7 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   roadSnapper.apply(_pMap);
   LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
-  return roadSnapper.getNumAffected();
+  return roadSnapper.getNumFeaturesAffected();
 }
 
 void DiffConflator::_removeMatches(const Status& status)

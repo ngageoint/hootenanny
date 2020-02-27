@@ -31,7 +31,6 @@
 //  Hoot
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -43,7 +42,7 @@ namespace hoot
  * TODO: split out duplicate review relation vis into its own class; rename this class to
  * RemoveDuplicateMultilineStringRelationVisitor
  */
-class RemoveInvalidRelationVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class RemoveInvalidRelationVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -64,6 +63,8 @@ public:
   {
     return "Removes duplicate ways in relations and invalid relations";
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

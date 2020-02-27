@@ -29,7 +29,6 @@
 #define UNLIKELYINTERSECTIONREMOVER_H
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/criterion/LinearCriterion.h>
@@ -51,7 +50,7 @@ class Way;
  * For example, a motorway overpass intersecting a residential street at a 90° is considered
  * unlikely and "unsnapped". The geometry location is not modified.
  */
-class UnlikelyIntersectionRemover : public OsmMapOperation, public OperationStatusInfo
+class UnlikelyIntersectionRemover : public OsmMapOperation
 {
 public:
 
@@ -80,6 +79,8 @@ public:
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(LinearCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

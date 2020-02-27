@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SUPERFLUOUSNODEREMOVER_H
@@ -36,7 +36,6 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -53,8 +52,7 @@ class OsmMap;
  * of a way and inside the bounds will be removed. This is most useful when performing tile based
  * operations such as the FourPassDriver.
  */
-class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable,
-  public OperationStatusInfo
+class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable
 {
 public:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef AVERAGE_NUMERIC_TAGS_VISITOR_H
@@ -70,6 +70,8 @@ public:
   virtual QString getDescription() const { return "Calculates the average of numeric tag values"; }
 
   virtual void setConfiguration(const Settings& conf);
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

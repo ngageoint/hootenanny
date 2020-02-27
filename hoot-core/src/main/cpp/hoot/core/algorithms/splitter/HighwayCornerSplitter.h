@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
@@ -51,7 +50,7 @@ class Way;
  * when conflating data that is mostly major roads with data that contains a lot of
  * neighborhood-level data.
  */
-class HighwayCornerSplitter : public OsmMapOperation, Configurable, public OperationStatusInfo
+class HighwayCornerSplitter : public OsmMapOperation, Configurable
 {
 public:
 
@@ -82,6 +81,8 @@ public:
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

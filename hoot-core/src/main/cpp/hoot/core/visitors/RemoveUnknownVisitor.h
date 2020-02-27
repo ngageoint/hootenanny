@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVE_UNKNOWN_VISITOR_H
 #define REMOVE_UNKNOWN_VISITOR_H
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -37,7 +36,7 @@ namespace hoot
 /**
  * Removes all elements of a given status.
  */
-class RemoveUnknownVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class RemoveUnknownVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -79,6 +78,8 @@ public:
 
   virtual QString getDescription() const override
   { return "Removes all elements with a status of Unknown1"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 /**
@@ -94,6 +95,8 @@ public:
 
   virtual QString getDescription() const override
   { return "Removes all elements with a status of Unknown2"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

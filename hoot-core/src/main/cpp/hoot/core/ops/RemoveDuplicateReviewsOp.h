@@ -28,7 +28,6 @@
 #define DUPLICATEREVIEWSOP_H
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
@@ -42,8 +41,7 @@ class OsmMap;
 /**
  * Goes through all relations and check if there are any duplicate reviews.
  */
-class RemoveDuplicateReviewsOp : public OsmMapOperation, public Serializable,
-  public OperationStatusInfo
+class RemoveDuplicateReviewsOp : public OsmMapOperation, public Serializable
 {
 public:
 

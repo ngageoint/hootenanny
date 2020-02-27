@@ -550,6 +550,7 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  Elem
     }
 
     virtual QString getDescription() const { return ""; }
+    virtual std::string getClassName() const { return ""; }
 
     virtual void visit(const std::shared_ptr<Element>& e)
     {

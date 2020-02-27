@@ -30,7 +30,6 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
@@ -39,7 +38,7 @@ namespace hoot
 /**
  * Replaces all reversed one way roads with regular one way roads
  */
-class OneWayRoadStandardizer : public ElementVisitor, public OperationStatusInfo
+class OneWayRoadStandardizer : public ElementVisitor
 {
 
 public:
@@ -64,6 +63,8 @@ public:
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

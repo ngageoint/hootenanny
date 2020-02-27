@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MAPCROPPER_H
@@ -34,7 +34,6 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
@@ -61,7 +60,7 @@ class Way;
  * should be reprojected using ReprojectToGeographicOp.
  */
 class MapCropper : public OsmMapOperation, public Serializable, public Boundable,
-  public Configurable, public OperationStatusInfo
+  public Configurable
 {
 public:
 

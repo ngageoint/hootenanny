@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryMatchComparator.h"
 
@@ -344,6 +344,7 @@ void MultiaryMatchComparator::_findActualMatches(const ConstOsmMapPtr& conflated
   class TmpVisitor : public ConstElementVisitor
   {
   public:
+
     TmpVisitor(const IdToEid& expectedIdToEid, IdToEid& actualIdToEid,
       QHash<QString, IdClusterPtr>& matchGroups) :
       _actualIdToEid(actualIdToEid),
@@ -353,6 +354,7 @@ void MultiaryMatchComparator::_findActualMatches(const ConstOsmMapPtr& conflated
     }
 
     virtual QString getDescription() const { return ""; }
+    virtual std::string getClassName() const { return ""; }
 
     virtual void visit(const ConstElementPtr& e)
     {
@@ -382,6 +384,7 @@ void MultiaryMatchComparator::_findActualMatches(const ConstOsmMapPtr& conflated
     }
 
   private:
+
     IdToEid& _actualIdToEid;
     const IdToEid& _expectedIdToEid;
     QHash<QString, IdClusterPtr>& _matchGroups;
@@ -434,6 +437,7 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
   class TmpVisitor : public ConstElementVisitor
   {
   public:
+
     TmpVisitor(IdToEid& idToEid, QHash<QString, IdClusterPtr>& matchGroups) :
       _idToEid(idToEid),
       _matchGroups(matchGroups)
@@ -441,6 +445,7 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
     }
 
     virtual QString getDescription() const { return ""; }
+    virtual std::string getClassName() const { return ""; }
 
     virtual void visit(const ConstElementPtr& e)
     {
@@ -489,6 +494,7 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
     }
 
   private:
+
     IdToEid& _idToEid;
     QHash<QString, IdClusterPtr>& _matchGroups;
   };
@@ -511,12 +517,14 @@ void MultiaryMatchComparator::_findExpectedReviews(const ConstOsmMapPtr& in)
   class TmpVisitor : public ConstElementVisitor
   {
   public:
+
     TmpVisitor(ReviewClusterIndex& index) :
       _index(index)
     {
     }
 
     virtual QString getDescription() const { return ""; }
+    virtual std::string getClassName() const { return ""; }
 
     virtual void visit(const ConstElementPtr& e)
     {
@@ -552,6 +560,7 @@ void MultiaryMatchComparator::_findExpectedReviews(const ConstOsmMapPtr& in)
     }
 
   private:
+
     ReviewClusterIndex& _index;
   };
 

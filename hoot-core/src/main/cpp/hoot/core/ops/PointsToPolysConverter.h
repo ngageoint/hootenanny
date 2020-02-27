@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef _POINTS_TO_POLYS_CONVERTER_H_
 #define _POINTS_TO_POLYS_CONVERTER_H_
@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -40,7 +39,7 @@ namespace hoot
  * Converts any node in a map that isn't a child of another element to a small square polygon. This
  * can be useful if you need to calculate an alpha shape for a small number of points.
  */
-class PointsToPolysConverter : public OsmMapOperation, public OperationStatusInfo
+class PointsToPolysConverter : public OsmMapOperation
 {
 public:
 

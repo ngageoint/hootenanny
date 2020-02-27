@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 
 // Standard
@@ -44,8 +43,7 @@ class Relation;
 /**
  * Goes through all building relations and removes features with the outline role.
  */
-class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable,
-  public OperationStatusInfo
+class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable
 {
 public:
 

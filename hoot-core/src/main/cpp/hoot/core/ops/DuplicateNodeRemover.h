@@ -29,7 +29,6 @@
 #define DUPLICATE_NODE_REMOVER_H
 
 // hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
@@ -50,8 +49,7 @@ namespace hoot
  * This class works with four pass as long as distance is less than the four pass buffer. The input
  * map can be in either a planar or geographic projection.
  */
-class DuplicateNodeRemover : public OsmMapOperation, public Serializable, public Boundable,
-  public OperationStatusInfo
+class DuplicateNodeRemover : public OsmMapOperation, public Serializable, public Boundable
 {
 public:
 

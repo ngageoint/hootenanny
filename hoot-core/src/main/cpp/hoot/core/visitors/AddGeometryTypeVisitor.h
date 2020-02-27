@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDGEOMETRYTYPEVISITOR_H
 #define ADDGEOMETRYTYPEVISITOR_H
@@ -43,6 +43,8 @@ public:
   virtual void visit(const std::shared_ptr<Element>& e) override;
 
   virtual QString getDescription() const { return "Adds geometry types"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

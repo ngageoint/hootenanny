@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCHEMATRANSLATIONOP_H
 #define SCHEMATRANSLATIONOP_H
@@ -31,7 +31,6 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QString>
@@ -45,7 +44,7 @@ namespace hoot
  * instead if memory is a concern, as it does not require the whole map to be read into memory at
  * once.
  */
-class SchemaTranslationOp : public OsmMapOperation, public Configurable, public OperationStatusInfo
+class SchemaTranslationOp : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -69,6 +68,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return _translator.getCompletedStatusMessage(); }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -66,6 +66,8 @@ protected:
    */
   virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   /*
