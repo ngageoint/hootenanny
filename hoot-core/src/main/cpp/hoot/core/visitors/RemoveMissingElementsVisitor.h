@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Removes non-existent element references from relations or ways with negative IDs.
+ * Removes non-existent element references from relations or ways
  */
 class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
   public OperationStatusInfo

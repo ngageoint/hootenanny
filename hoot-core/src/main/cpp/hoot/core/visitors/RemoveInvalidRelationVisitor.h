@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REMOVE_INVALID_RELATION_VISITOR_H
@@ -37,9 +37,11 @@ namespace hoot
 {
 
 /**
- * Remove all duplicate linestrings from multilinestring relations and
- * and multilinestring relation that has less that two members thus
- * making them not "multi" linestrings.
+ * Remove all duplicate linestrings from multilinestring relations and multilinestring relations
+ * that have less than two members, thus making them not "multi" linestrings.
+ *
+ * TODO: split out duplicate review relation vis into its own class; rename this class to
+ * RemoveDuplicateMultilineStringRelationVisitor
  */
 class RemoveInvalidRelationVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {

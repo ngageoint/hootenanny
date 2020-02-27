@@ -60,7 +60,9 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/PointsToPolysConverter.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/ops/WayJoinerOp.h>
 
 #include <hoot/core/util/Boundable.h>
@@ -73,6 +75,7 @@
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 
 namespace hoot
@@ -354,7 +357,10 @@ void ChangesetReplacementCreator::create(
         "Adding ref map of size: " << refMap->size() << " and conflated map of size: " <<
         conflatedMap->size() << " to changeset derivation queue for geometry type: " <<
         GeometryTypeCriterion::typeToString(itr.key()) << "...");
+      refMap->setName(refMap->getName() + "-" + GeometryTypeCriterion::typeToString(itr.key()));
       refMaps.append(refMap);
+      conflatedMap->setName(
+        conflatedMap->getName() + "-" + GeometryTypeCriterion::typeToString(itr.key()));
       conflatedMaps.append(conflatedMap);
     }
 
@@ -585,8 +591,29 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     _excludeFeaturesFromChangesetDeletion(refMap, boundsStr);
   }
 
+  _cleanupMissingElements(refMap);
+  _cleanupMissingElements(conflatedMap);
+
   LOG_VART(refMap->getElementCount());
   LOG_VART(conflatedMap->getElementCount());
+}
+
+void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
+{
+  //SuperfluousWayRemover::removeWays(map);
+  //SuperfluousNodeRemover::removeNodes(map);
+
+  // This will handle removing refs in relation members we've cropped out.
+  RemoveMissingElementsVisitor missingElementsRemover;
+  LOG_INFO("\t" << missingElementsRemover.getInitStatusMessage());
+  map->visitRw(missingElementsRemover);
+  LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
+
+  // This will remove any relations that were already empty or became empty after the previous step.
+  RemoveEmptyRelationsOp emptyRelationRemover;
+  LOG_INFO("\t" << emptyRelationRemover.getInitStatusMessage());
+  emptyRelationRemover.apply(map);
+  LOG_DEBUG("\t" << emptyRelationRemover.getCompletedStatusMessage());
 }
 
 void ChangesetReplacementCreator::_validateInputs(const QString& input1, const QString& input2)
@@ -1133,6 +1160,8 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   // For this being enabled to have any effect,
   // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
   conf().set(ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
+  // will have to see if setting this to false causes problems in the future...
+  conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
   // turn on for testing only
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 
