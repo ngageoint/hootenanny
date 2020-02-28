@@ -2,7 +2,7 @@
 set -e
 
 # Main sonar scanner
-SONAR_VERSION=4.2.0.1873
+SONAR_VERSION=4.3.0.2102
 SONAR_CLI=sonar-scanner-cli-$SONAR_VERSION-linux
 SONAR_PKG=sonar-scanner-$SONAR_VERSION-linux
 SONAR_ZIP=$SONAR_CLI.zip
@@ -46,6 +46,7 @@ if [ ! -f $SONAR_PATH/bin/$SONAR_BLD_PKG-64 ]; then
     sudo mv $SONAR_BLD_PKG/$SONAR_BLD_PKG-64 $SONAR_PATH/bin/
     sudo mv $SONAR_BLD_PKG/libinterceptor-x86_64.so $SONAR_PATH/bin/
     sudo mv $SONAR_BLD_PKG/libinterceptor-i686.so $SONAR_PATH/bin/
+    sudo mv $SONAR_BLD_PKG/libinterceptor-haswell.so $SONAR_PATH/bin/
     rm -rf $SONAR_BLD_PKG
 fi
 
