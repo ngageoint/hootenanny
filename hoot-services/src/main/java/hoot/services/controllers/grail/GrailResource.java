@@ -52,7 +52,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -414,6 +413,7 @@ public class GrailResource {
         json.put("jobid", jobId);
         String jobDir = reqParams.getParentId();
         File workDir = new File(CHANGESETS_FOLDER, jobDir);
+        params.setWorkDir(workDir);
 
         if (!workDir.exists()) {
             logger.error("ApplyChangeset: jobDir {} does not exist.", workDir.getAbsolutePath());
@@ -602,6 +602,7 @@ public class GrailResource {
         String bbox = reqParams.getBounds();
         String layerName = reqParams.getInput1();
         String jobId = UUID.randomUUID().toString().replace("-", "");
+        File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
 
         if (DbUtils.mapExists(layerName)) {
             throw new BadRequestException("Record with name : " + layerName + " already exists.  Please try a different name.");
@@ -624,14 +625,22 @@ public class GrailResource {
             if (customQuery == null || customQuery.equals("")) {
                 url = "'" + PullOverpassCommand.getOverpassUrl(bbox) + "'";
             } else {
-                url = "'" + PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), bbox, "json", customQuery) + "'";
+                url = "'" + PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), bbox, "xml", customQuery) + "'";
             }
 
         } catch(IllegalArgumentException exc) {
             return Response.status(Response.Status.BAD_REQUEST).entity(exc.getMessage()).build();
         }
 
-        params.setInput1(url);
+
+        File overpassOSMFile = new File(workDir, SECONDARY + ".osm");
+        GrailParams getOverpassParams = new GrailParams(params);
+        getOverpassParams.setOutput(overpassOSMFile.getAbsolutePath());
+        if (overpassOSMFile.exists()) overpassOSMFile.delete();
+        workflow.add(getPublicOverpassCommand(jobId, getOverpassParams));
+
+
+        params.setInput1(overpassOSMFile.getAbsolutePath());
         params.setOutput(layerName);
         ExternalCommand importOverpass = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importOverpass);
@@ -984,8 +993,7 @@ public class GrailResource {
             if (usePrivateOverpass && !replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH).equals(PRIVATE_OVERPASS_CERT_PATH)) {
                 inputStream = PullApiCommand.getHttpResponseWithSSL(url);
             } else {
-                URLConnection conn = new URL(url).openConnection();
-                inputStream = conn.getInputStream();
+                inputStream = PullOverpassCommand.getOverpassInputStream(url);
             }
 
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));

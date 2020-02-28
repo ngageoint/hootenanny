@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DuplicateWayRemover.h"
@@ -42,6 +42,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 // Standard
 #include <iostream>
@@ -333,6 +334,14 @@ void DuplicateWayRemover::_replaceMultiple(const ConstWayPtr& oldWay,
     if (r)
       r->replaceElements(old, newValues.begin(), newValues.end());
   }
+}
+
+QStringList DuplicateWayRemover::getCriteria() const
+{
+  QStringList criteria;
+  criteria.append(QString::fromStdString(LinearCriterion::className()));
+  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  return criteria;
 }
 
 }

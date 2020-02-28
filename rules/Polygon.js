@@ -6,16 +6,19 @@
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches polygons";
-exports.matchThreshold = parseFloat(hoot.get("generic.polygon.match.threshold"));
-exports.missThreshold = parseFloat(hoot.get("generic.polygon.miss.threshold"));
-exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"));
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
+// If that ever changes, then the generic score threshold configuration options used below should 
+// be replaced with custom score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.polygon"));
 exports.tagThreshold = parseFloat(hoot.get("generic.polygon.tag.threshold"));
 exports.experimental = false;
 exports.baseFeatureType = "Polygon";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "polygon";
-exports.matchCandidateCriterion = "hoot::PolygonCriterion"; // See #3047
+exports.matchCandidateCriterion = "hoot::PolygonCriterion";
 
 var overlapExtractor = 
   new hoot.SmallerOverlapExtractor({ "convert.require.area.for.polygon": "false" });
@@ -30,7 +33,7 @@ var overlapExtractor =
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPolygon(e) && !isSpecificallyConflatable(map, e);
+  return isPolygon(e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**

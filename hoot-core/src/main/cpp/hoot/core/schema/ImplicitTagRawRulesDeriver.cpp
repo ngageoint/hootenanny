@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ImplicitTagRawRulesDeriver.h"
 
@@ -42,6 +42,7 @@
 // Qt
 #include <QStringBuilder>
 #include <QThread>
+#include <QStorageInfo>
 
 namespace hoot
 {
@@ -427,9 +428,16 @@ void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
     "sort --parallel=" + QString::number(_sortParallelCount) + " " + _countFile->fileName() +
     " | uniq -c | sort -n -r --parallel=" + QString::number(_sortParallelCount) + " | " +
     "sed -e 's/^ *//;s/ /\\t/' > " + _sortedCountFile->fileName();
-  if (std::system(cmd.toStdString().c_str()) != 0)
+  LOG_VARD(cmd);
+  const int cmdExitStatus = std::system(cmd.toStdString().c_str());
+  if (cmdExitStatus != 0)
   {
-    throw HootException("Unable to sort file.");
+    QStorageInfo storageInfo(QDir("/tmp"));
+    const QString msg =
+      "Unable to sort file. Command status: " + QString::number(cmdExitStatus) +
+      "; disk free space: " + QString::number(storageInfo.bytesAvailable()/1000/1000) +
+      "MB; command: " + cmd;
+    throw HootException(msg);
   }
   LOG_INFO(
     "Wrote " <<
@@ -642,6 +650,11 @@ void ImplicitTagRawRulesDeriver::_sortByWord(const std::shared_ptr<QTemporaryFil
   if (!input->exists())
   {
     throw HootException("Unable to sort file; file doesn't exist.");
+  }
+
+  if (!ImplicitTagUtils::sortCommandExists())
+  {
+    throw HootException("The UNIX sort command does not exist.");
   }
 
   //sort by word, then by tag

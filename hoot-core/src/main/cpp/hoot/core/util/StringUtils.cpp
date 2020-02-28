@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "StringUtils.h"
@@ -190,6 +190,27 @@ void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
   for (int i = 0; i < toRemove.size(); i++)
   {
     input.removeAll(toRemove.at(i));
+  }
+}
+
+bool StringUtils::containsAny(const QStringList& input, const QStringList& toCompare)
+{
+  for (int i = 0; i < toCompare.size(); i++)
+  {
+    // may eventually want a case sensitivity option here
+    if (input.contains(toCompare.at(i)))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+void StringUtils::removeAllWithKey(QMap<QString, QString>& input, const QStringList& keysToRemove)
+{
+  for (int i = 0; i < keysToRemove.size(); i++)
+  {
+    input.remove(keysToRemove.at(i));
   }
 }
 

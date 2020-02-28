@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MapCropper.h"
@@ -58,6 +58,7 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 // Standard
 #include <limits>
@@ -437,11 +438,6 @@ void MapCropper::apply(OsmMapPtr& map)
     }
   }
 
-  RemoveEmptyRelationsOp emptyRelationRemover;
-  LOG_INFO(emptyRelationRemover.getInitStatusMessage());
-  emptyRelationRemover.apply(map);
-  LOG_DEBUG(emptyRelationRemover.getCompletedStatusMessage());
-
   // Remove dangling features here now, which used to be done in CropCmd only. Haven't seen any
   // bad side effects yet.
   long numSuperfluousWaysRemoved = 0;
@@ -451,6 +447,18 @@ void MapCropper::apply(OsmMapPtr& map)
     numSuperfluousWaysRemoved = SuperfluousWayRemover::removeWays(map);
     numSuperfluousNodesRemoved = SuperfluousNodeRemover::removeNodes(map);
   }
+
+  // This will handle removing refs in relation members we've cropped out.
+  RemoveMissingElementsVisitor missingElementsRemover;
+  LOG_INFO("\t" << missingElementsRemover.getInitStatusMessage());
+  map->visitRw(missingElementsRemover);
+  LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
+
+  // This will remove any relations that were already empty or became empty after the previous step.
+  RemoveEmptyRelationsOp emptyRelationRemover;
+  LOG_INFO("\t" << emptyRelationRemover.getInitStatusMessage());
+  emptyRelationRemover.apply(map);
+  LOG_DEBUG("\t" << emptyRelationRemover.getCompletedStatusMessage());
 
   LOG_VARD(_numAffected);
   LOG_VARD(map->size());

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Hoot.h"
 
@@ -121,6 +121,10 @@ void Hoot::_init()
   // sometimes HootJs is loaded by node.js before we get to init.
   if (Factory::getInstance().hasClass(QString("hoot::HootJsLoaded")) == false)
     loadLibrary("HootJs");
+# endif
+
+# ifdef HOOT_HAVE_JOSM
+  loadLibrary("HootJosm");
 # endif
 
   Log::getInstance().setLevel(Log::Info);

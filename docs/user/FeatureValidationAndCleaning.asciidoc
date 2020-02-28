@@ -1,0 +1,22 @@
+
+[[FeatureValidation]]
+== Feature Validation
+
+Hootenanny allows for tagging features which fail JOSM validation tests without attempting to fix validation errors.
+
+"validation examples":https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#run-josm-validation-on-a-map
+
+Map elements will be tagged with 'hoot:validation:error' which describes the error and 'hoot:validation:error:source' which shows the validator
+that found the error.
+
+"list validators example":https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-the-available-josm-validators
+
+[[FeatureCleaning]]
+== Feature Cleaning
+
+Hootenanny allows for cleaning features which fail JOSM validation tests or Hootenanny identifies as requiring cleaning.
+
+"cleaning examples":https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#clean-erroneous-data-from-two-maps
+
+"list cleaners example:https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-available-cleaning-operations
+

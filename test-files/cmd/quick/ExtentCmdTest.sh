@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-hoot extent test-files/DcGisRoads.osm
+hoot extent -C Testing.conf test-files/DcGisRoads.osm

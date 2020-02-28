@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
@@ -43,7 +43,6 @@ namespace hoot
 class ImplicitTagRawRulesDeriverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRawRulesDeriverTest);
-
   CPPUNIT_TEST(runBasicPoiTest);
   CPPUNIT_TEST(runTranslateNamesFalsePoiTest);
   CPPUNIT_TEST(runMultipleInputsPoiTest);
@@ -305,5 +304,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRawRulesDeriverTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRawRulesDeriverTest, "serial");
 
 }

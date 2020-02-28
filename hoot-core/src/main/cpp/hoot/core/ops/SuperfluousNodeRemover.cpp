@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SuperfluousNodeRemover.h"
@@ -140,7 +140,7 @@ long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
   LOG_INFO(nodeRemover.getInitStatusMessage());
   nodeRemover.apply(map);
   LOG_DEBUG(nodeRemover.getCompletedStatusMessage());
-  return nodeRemover.getNumAffected();
+  return nodeRemover.getNumFeaturesAffected();
 }
 
 void SuperfluousNodeRemover::setBounds(const Envelope &bounds)

@@ -81,7 +81,10 @@ class JobRunnable implements Runnable {
                 CommandResult result = command.execute();
 
                 if (result.failed()) {
-                    jobStatusManager.setFailed(job.getJobId(), "Command with ID = " + result.getId() + " caused the failure.");
+                    //Cancelled jobs also have non-zero exit code, but should not be marked FAILED
+                    if (!JobStatus.CANCELLED.equals(jobStatusManager.getJobStatusObj(job.getJobId()).getStatus())) {
+                        jobStatusManager.setFailed(job.getJobId(), "Command with ID = " + result.getId() + " caused the failure.");
+                    }
                     break;
                 }
                 else {

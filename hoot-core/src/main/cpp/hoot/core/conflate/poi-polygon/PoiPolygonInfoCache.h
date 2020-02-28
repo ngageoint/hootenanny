@@ -38,6 +38,12 @@
 #include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 
+// Tgs
+#include <tgs/LruCache.h>
+
+// Qt
+#include <QCache>
+
 namespace hoot
 {
 
@@ -199,34 +205,39 @@ private:
 
   AddressParser _addressParser;
 
-  // Using QHash here for all of these instead of QCache, since we're mostly just storing primitives
-  // for values and they all take up the same amount of space. Tried to use QCache with the
-  // geometries, but since ElementConverter returns a shared pointer and QCache takes ownership, had
-  // trouble making it work. Also, not doing any management of the size of these caches, which may
-  // eventually end up being needed to control memory usage.
+  bool _cacheEnabled;
 
-  // Also, didn't see any performance improvement by reserving initial sizes for these caches.
+  //Didn't see any performance improvement by reserving initial sizes for these caches.
 
   // key is "elementID 1;elementID 2"; ordering of the ID keys doesn't matter here, since we check
   // in both directions
-  QHash<QString, bool> _elementIntersectsCache;
+  QCache<QString, bool> _elementIntersectsCache;
 
   // key is "elementId;type string"
-  QHash<QString, bool> _isTypeCache;
+  QCache<QString, bool> _isTypeCache;
 
   // key is "elementId;criterion class name"
-  QHash<QString, bool> _hasCriterionCache;
+  QCache<QString, bool> _hasCriterionCache;
 
-  // key is element criterion class name
+  // key is element criterion class name; leaving this as a hash, since it shouldn't ever get big
+  // enough to require any cache size management
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
-  QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
-  QHash<ElementId, bool> _hasMoreThanOneTypeCache;
-  QHash<ElementId, int> _numAddressesCache;
-  QHash<ElementId, double> _reviewDistanceCache;
+  // QCache doesn't play nicely with shared pointers created elsewhere...tried using them with it
+  // for _geometryCache but failed. Another alternative was to modify ElementConverter to also
+  // allow for returing Geometry raw pointers in addition to shared pointers...tried that and failed
+  // as well. Decided to use LruCache for this one instead.
+  std::shared_ptr<Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>> _geometryCache;
+
+  QCache<ElementId, bool> _hasMoreThanOneTypeCache;
+  QCache<ElementId, int> _numAddressesCache;
+  QCache<ElementId, double> _reviewDistanceCache;
 
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
+
+  static const int CACHE_SIZE_UPDATE_INTERVAL = 100000;
+  static const int CACHE_SIZE_DEFAULT = 10000;
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element);
   ElementCriterionPtr _getCrit(const QString& criterionClassName);

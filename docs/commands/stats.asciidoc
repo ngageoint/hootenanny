@@ -3,9 +3,9 @@
 
 === Description
 
-The +stats+ command reads input and writes out map statistics such as node and way count.
+The +stats+ command reads input(s) and writes out map statistics.
 
-* +input+         - Input map; may be any supported input format (e.g. OSM file).
+* +input(s)+      - Input map(s); one or more inputs in a semi-colon delimited list; may be any supported input format (e.g. OSM file).
 * +--brief+       - Only calculate subset of statistics.
 * +--output=path+ - Output file path; supported file types are text (*.txt) and JSON (*.json). 
 

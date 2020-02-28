@@ -139,6 +139,11 @@ SERVICES_INIT()
 m4_include([m4/rnd.m4])
 RND_INIT()
 
+# Include JOSM
+# This enables validation/cleaning functionality from JOSM.
+m4_include([m4/josm.m4])
+JOSM_INIT()
+
 # Include UI tests
 m4_include([m4/ax_compare_version.m4])
 m4_include([m4/ruby.m4])

@@ -516,6 +516,27 @@ This value is used when splitting a changeset into smaller pieces.
 NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the
 database can handle in a single changeset.
 
+=== changeset.apidb.writer.debug.output
+
+* Data Type: bool
+* Default Value: `false`
+
+When set to true the `OsmApiWriter` class will write each changeset upload request and
+response to the `$HOOT_HOME/tmp` directory (by default) for debugging.
+
+NOTE: Use with care, the 28 MB Djibouti test changeset ballooned into 37 MB of debug output
+files
+
+=== changeset.apidb.writer.debug.output.path
+
+* Data Type: string
+* Default Value: `tmp`
+
+Directory path to store debug output files in for `changeset-appy` commands.
+
+NOTE: Use with care, the 28 MB Djibouti test changeset ballooned into 37 MB of debug output
+files
+
 === changeset.apidb.writers.max
 
 * Data Type: long
@@ -551,7 +572,8 @@ The text description that is written to the OSM API database with a changeset.
 * Data Type: string
 * Default Value: `#hootbot`
 
-Set of semicolon separated hashtags associated with a changeset, used for querying changesets and for conflation campaigns
+Set of semicolon separated hashtags associated with a changeset, used for querying changesets and
+for conflation campaigns
 
 === changeset.max.size
 
@@ -666,7 +688,7 @@ See also:
 * Data Type: list
 * Default Value:
 ** `hoot::SuperfluousNodeRemover`
-** `hoot::SmallWayMerger`
+** `hoot::SmallHighwayMerger`
 ** `hoot::ReplaceRoundabouts`
 ** `hoot::RemoveMissingElementsVisitor`
 ** `hoot::RemoveInvalidReviewRelationsVisitor`
@@ -677,6 +699,7 @@ See also:
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::RemoveDuplicateWayNodesVisitor`
+** `hoot::DuplicateWayRemover`
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
@@ -691,12 +714,26 @@ List of operations to run in the conflate command after data is conflated, but b
 ** `hoot::BuildingOutlineRemoveOp`
 ** `hoot::RemoveRoundabouts`
 ** `hoot::MapCleaner`
-** `hoot::CornerSplitter`
+** `hoot::HighwayCornerSplitter`
 
 Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
 about the available operations.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
+
+=== conflate.remove.superfluous.ops
+
+* Data Type: bool
+* Default Value: `true`
+
+Enabling this option allows Hootenanny to remove any operators defined in `conflate.pre.ops`,
+`conflate.post.ops`, or `map.cleaner.transforms` before running conflation that are not associated
+with the feature types being conflated as specified in the `match.creators` option. Doing so can
+increase runtime performance for some inputs. e.g. If you're only conflating buildings, then any
+operators used strictly for road data cleaning will be automatically disabled. This is primarily
+used for debugging purposes and should normally be left enabled. See the `FilteredByCriteria`
+interface for information about determining which feature types are associated with conflate
+operators.
 
 === conflate.review.threshold.default
 
@@ -776,9 +813,10 @@ ID of the node that ContainsNodeCriterion should search for.
 * Default Value: ``
 
 If specified, supporting readers will limit data read from the data source to only features that
-intersect the given bounding box. The format is "minx,miny,maxx,maxy" or "min_lon,min_lat,max_lon,max_lat"
-specified in the projection of the input data source.  This setting can be used with both the convert and
-conflate commands. See the documentation for more details.
+intersect the given bounding box. The format is "minx,miny,maxx,maxy" or
+"min_lon,min_lat,max_lon,max_lat" specified in the projection of the input data source.  This
+setting can be used with both the convert and conflate commands. See the documentation for more
+details.
 
 Example Usage:
 
@@ -855,8 +893,9 @@ be converted to a GEOS polygon.
 * Default Value:
 ** ``
 
-Specifies one or more semi-colon delimited map operations or visitors to apply before writing converted data.  This is only applicable to 
-the convert command. 'hoot info --operators' displays information about the available operations.
+Specifies one or more semi-colon delimited map operations or visitors to apply before writing
+converted data.  This is only applicable to the convert command. 'hoot info --operators' displays
+information about the available operations.
 
 === cookie.cutter.alpha
 
@@ -882,37 +921,6 @@ The buffer to add to the alpha shape before cutting by the cookie cutter map ope
 
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (see CookieCutterOp).
-
-=== corner.splitter.rounded.max.node.count
-
-* Data Type: int
-* Default Value: `6`
-
-Maximum number of nodes in a row to consider for a bend in a way to determine if the way
-is a rounded corner that should be split.  The higher the number, the more heading calculations
-are required.  The lower the number, the less accurate it will be.
-
-=== corner.splitter.rounded.split
-
-* Data Type: bool
-* Default Value: `false`
-
-Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not
-conflate.
-
-=== corner.splitter.rounded.threshold
-
-* Data Type: double
-* Default Value: `55.0`
-
-Threshold in degrees between the heading of rounded bends in way that constitutes a corner.
-
-=== corner.splitter.threshold
-
-* Data Type: double
-* Default Value: `55.0`
-
-Threshold in degrees between the heading of two way segments that constitutes a corner.
 
 === create.bogus.review.tags
 
@@ -1051,7 +1059,7 @@ searching for nodes.
 Distance in meters that the DistanceNodeCriterion should search for nodes out from a center
 specified by 'distance.node.criterion.center'.
 
-=== dual.way.splitter.driving.side
+=== dual.highway.splitter.driving.side
 
 * Data Type: string
 * Default Value: `right`
@@ -1060,13 +1068,13 @@ When splitting divided highways, do we assume the drivers are on the right or le
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
-=== dual.way.splitter.split.size
+=== dual.highway.splitter.split.size
 
 * Data Type: double
 * Default Value: `12.5`
 
 By default how much space should be put between two divided roads when they're divided by the
-DividedHighwaySplitter. Units are in meters.
+DualHighwaySplitter. Units are in meters.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
@@ -1168,46 +1176,12 @@ Absolute file path to dictionaries of English words. The first file found will b
 dictionary of English words and used by some algorithms. If the files are not found then the English
 words will be silently ignored.
 
-=== generic.line.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for generic lines.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === generic.line.matcher.max.angle
 
 * Data Type: double
 * Default Value: `90.0`
 
 Sets that maximum angle that is still considered a generic line match. Units in degrees.
-
-=== generic.line.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for generic lines.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.line.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for generic lines. See
-`conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === generic.line.subline.matcher
 
@@ -1224,40 +1198,6 @@ The way subline matcher to use when determining matching sublines with generic l
 Tag similarity threshold (0.0 to 1.0) at or above which an linear element not conflatable by
 specific Hootenanny conflation routines is considered to have similar tags.
 
-=== generic.point.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for generic points.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.point.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for generic points.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.point.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for generic points. See
-`conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === generic.point.tag.threshold
 
 * Data Type: double
@@ -1266,40 +1206,6 @@ See also:
 Tag similarity threshold (0.0 to 1.0) at or above which an point element not conflatable by
 specific Hootenanny conflation routines is considered to have similar tags.
 
-=== generic.point.polygon.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for generic points conflated with polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.point.polygon.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for generic points conflated with polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.point.polygon.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for generic points conflated with polygons. See
-`conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === generic.point.polygon.tag.threshold
 
 * Data Type: double
@@ -1307,40 +1213,6 @@ See also:
 
 Tag similarity threshold (0.0 to 1.0) at or above which a pair of point and polygon elements not
 conflatable by specific Hootenanny conflation routines is considered to have similar tags.
-
-=== generic.polygon.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for generic polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.polygon.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for generic polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== generic.polygon.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for generic polygons. See
-`conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === generic.polygon.tag.threshold
 
@@ -1422,6 +1294,37 @@ The maximum number of graph comparator threads that can be launched by the Compa
 Sets the Qt hash seed to 0 for consistent hash values and hash based container content order. This
 is required for unit tests, but shouldn't be used in normal operation.
 
+=== highway.corner.splitter.rounded.max.node.count
+
+* Data Type: int
+* Default Value: `6`
+
+Maximum number of nodes in a row to consider for a bend in a way to determine if the way
+is a rounded corner that should be split.  The higher the number, the more heading calculations
+are required.  The lower the number, the less accurate it will be.
+
+=== highway.corner.splitter.rounded.split
+
+* Data Type: bool
+* Default Value: `false`
+
+Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not
+conflate.
+
+=== highway.corner.splitter.rounded.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of rounded bends in way that constitutes a corner.
+
+=== highway.corner.splitter.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of two way segments that constitutes a corner.
+
 === highway.match.threshold
 
 * Data Type: double
@@ -1482,7 +1385,8 @@ See also:
 * Data Type: double
 * Default Value: `0.25`
 
-The threshold at which a review is called a review for roads. See `conflate.review.threshold.default`.
+The threshold at which a review is called a review for roads. See
+`conflate.review.threshold.default`.
 
 See also:
 
@@ -1515,8 +1419,8 @@ derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
 * Data Type: string
 * Default Value: ``
 
-OpenstreetMap OAuth Private Consumer Key found after registering Hootenanny with OpenstreetMap (or its
-derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
+OpenstreetMap OAuth Private Consumer Key found after registering Hootenanny with OpenstreetMap (or
+its derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
 
 === hoot.osm.auth.access.token
 
@@ -1681,7 +1585,8 @@ A list of additional tag keys to be considered as names when tagging implicitly 
 
 If true, implicit taggers will attempt to add more specific tags to existing non-generic elements
 (dependent on the element type filter; e.g. for POIs, elements with a tag more specific than
-"poi=yes").  If false, implicit taggers will ignore all non-generic elements during implicit tagging.
+"poi=yes").  If false, implicit taggers will ignore all non-generic elements during implicit
+tagging.
 
 === implicit.tagger.allow.words.involved.in.multiple.rules
 
@@ -1846,6 +1751,31 @@ If true, InBoundsCriterion requires features exist completely within `in.bounds.
 in order for the criterion to be satisfied. If false, features that cross the bounds may also
 satisfy the criterion.
 
+=== jni.class.path
+
+* Data Type: list
+* Default Value:
+** `${HOOT_HOME}/hoot-josm/target/dependency-jars/josm.jar;${HOOT_HOME}/hoot-josm/target/hoot-josm.jar`
+
+A list of JAR files to place on the JAVA classpath when Hootenanny C++ code in the hoot-josm project
+interacts with Hootenany and JOSM Java code via JNI.
+
+=== jni.initial.memory
+
+* Data Type: string
+* Default Value: `256m`
+
+JVM -Xms setting to use with hoot-josm JNI to configure the initial amount of memory available to
+the JVM.
+
+=== jni.max.memory
+
+* Data Type: string
+* Default Value: `2g`
+
+JVM -Xmx setting to use with hoot-josm JNI to configure the maximum amount of memory available to
+the JVM.
+
 === job.id
 
 * Data Type: string
@@ -1854,6 +1784,58 @@ satisfy the criterion.
 This option allows for passing in a job ID for the currently executing command. This is useful when
 trying to track multiple commands across a single job. When the Hootenanny API database is used
 for job output storage, the ID will be stored in the job status table of the associated map.
+
+=== josm.map.cleaner.add.detail.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, cleaning/validation detail tags will be added to map outputs when cleaning maps with JOSM.
+
+=== josm.map.validator.java.implementation
+
+* Data Type: string
+* Default Value: `hoot/core/josm/JosmMapValidator`
+
+File path relative to Hootenanny root directory without file extension or prefixed namespace to
+Java class to use as the JOSM Java map validator/cleaner implementation.
+
+=== josm.max.elements.for.map.string
+
+* Data Type: int
+* Default Value: `2000000`
+
+The maximum size in elements for a map allowed to be passed as a string between Hootenanny and JOSM.
+The default value was determined experimentally and may need tweaking per environment.
+
+=== josm.validators.exclude
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of JOSM validator Java class names without namespace prefixes or file extensions
+(e.g. 'DuplicatedWayNodes') to explicitly exclude use of during validation or cleaning using JOSM.
+Overrides values set in josm.validators.include.
+
+=== josm.validators.include
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of JOSM validator Java class names without namespace prefixes or file extensions
+(e.g. 'DuplicatedWayNodes') to explicitly include use of during validation or cleaning using JOSM.
+Overridden by values set in josm.validators.exclude.
+
+=== josm.validators.requiring.user.certificate
+
+* Data Type: list
+* Default Value:
+** `ApiCapabilitiesTest`
+** `MapCSSTagChecker`
+
+A list of JOSM validators known to require a user certificate. These validators will be skipped.
 
 === json.format.hootenanny
 
@@ -1989,11 +1971,13 @@ side detectors via the API, confidence support information is included.
 ** `TikaLanguageDetector`
 ** `OpenNlpLanguageDetector`
 
-When using 'HootServicesTranslatorClient' as the to English language translator or HootServicesLanguageDetectorClient as a source 
-language detector, one or more hoot-services Java class names implementing LanguageDetector.  Language detectors are used in order of 
-entry. 'hoot info --languages --detectors' displays information about the available server side detectors. If no detectors are specified, then 
-language translation will attempt to use as many detectors as needed, in a pre-determined order, to get a positive detection. 
-Separate values with a ';' and surround in quotes when passing in from the command line.
+When using 'HootServicesTranslatorClient' as the to English language translator or
+HootServicesLanguageDetectorClient as a source language detector, one or more hoot-services Java
+class names implementing LanguageDetector.  Language detectors are used in order of entry.
+'hoot info --languages --detectors' displays information about the available server side detectors.
+If no detectors are specified, then language translation will attempt to use as many detectors as
+needed, in a pre-determined order, to get a positive detection. Separate values with a ';' and
+surround in quotes when passing in from the command line.
 
 === language.info.provider
 
@@ -2127,8 +2111,8 @@ Only applies if language.translation.translator is set to hoot::ToEnglishDiction
 * Data Type: bool
 * Default Value: `true`
 
-If true and language.translation.translator is set to hoot::ToEnglishDictionaryTranslator, will attempt to
-retrieve multiple translations when scoring string comparisons.  Otherwise, only a single
+If true and language.translation.translator is set to hoot::ToEnglishDictionaryTranslator, will
+attempt to retrieve multiple translations when scoring string comparisons.  Otherwise, only a single
 translation is retrieved.
 
 === language.translation.translator
@@ -2175,8 +2159,8 @@ names with their namespace. An empty string (default) disables the filtering.
 * Default Value: `3`
 
 The maximum number of warn log messages that will be emitted per class before they are silenced.
-A value of -1 passed to class will ensure that no warnings are logged by it, if it honors the option.
-A setting of -1 is useful for tests where you do not have granular enough logging control.
+A value of -1 passed to class will ensure that no warnings are logged by it, if it honors the
+option. A setting of -1 is useful for tests where you do not have granular enough logging control.
 
 [[MapCleanerTransforms]]
 === map.cleaner.transforms
@@ -2190,10 +2174,10 @@ A setting of -1 is useful for tests where you do not have granular enough loggin
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::IntersectionSplitter`
 ** `hoot::UnlikelyIntersectionRemover`
-** `hoot::DualWaySplitter`
-** `hoot::ImpliedDividedMarker`
+** `hoot::DualHighwaySplitter`
+** `hoot::HighwayImpliedDividedMarker`
 ** `hoot::DuplicateNameRemover`
-** `hoot::SmallWayMerger`
+** `hoot::SmallHighwayMerger`
 ** `hoot::RemoveEmptyAreasVisitor`
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RelationCircularRefRemover`
@@ -2259,8 +2243,8 @@ Used in the calculation of the match parallel score, cos (delta) ^ match.paralle
 ** `source:metadata`
 ** `dataset`
 
-Single tag/value pair indicating that an element is a dataset used as import source or export destination
-for metadata values.
+Single tag/value pair indicating that an element is a dataset used as import source or export
+destination for metadata values.
 
 === metadata.tags
 
@@ -2603,15 +2587,14 @@ strict.
 An element criterion to be used for filtering ways whose nodes are counted. The elements must be
 ways for their nodes to be counted, otherwise the criterion will be ignored.
 
-=== tags.visitor.keys
+=== non.conflatable.criterion.ignore.relation.members
 
-* Data Type: list
-* Default Value:
-** ``
+* Data Type: bool
+* Default Value: `false`
 
-List of tag keys for which the AverageNumericTagsVisitor, SumNumericTagsVisitor, or
-TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in double quotes when
-passing in from the command line.
+If false, in order for a relation to be deemed not conflatable all of its members must also not be
+conflatable. If true, a relation can be deemed not conflatable even if any of its members are also
+conflatable.
 
 === ogr.add.uuid
 
@@ -2793,8 +2776,8 @@ If set, the ogr reader will use the value at the specified field to populate nod
 * Data Type: string
 * Default Value: `yes`
 
-GDAL Option: When reading OGDI datasources (VPF etc), setting this to 'yes' causes the layer names to be simplified.
-For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'
+GDAL Option: When reading OGDI datasources (VPF etc), setting this to 'yes' causes the layer names
+to be simplified. For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'
 
 === ogr.split.o2s
 
@@ -3007,7 +2990,8 @@ GeoJSON web sources.
 * Data Type: bool
 * Default Value: `true`
 
-If true, the data is rubbersheeted before conflation, moving perturbed data closer to reference data.
+If true, the data is rubbersheeted before conflation, moving perturbed data closer to reference
+data.
 
 === perty.csm.D
 
@@ -3073,8 +3057,8 @@ A score variance in the range of 0.0 to 1.0 by which a `perty-test` test run sco
 while still allowing the test run's status to be described as passing.  Test run score differences
 larger than this value will cause the test run's status to be described as failing.  If you are
 not sure what your expected scores should be and want to bypass this check, create a list with
-all entries equal to "1.0" of the same size as perty.test.num.runs, and then
-set perty.test.allowed.score.variance to "1.0".  This effectively disables the score validation.
+all entries equal to "1.0" of the same size as perty.test.num.runs, and then set
+perty.test.allowed.score.variance to "1.0".  This effectively disables the score validation.
 
 === perty.test.dynamic.variable.increment
 
@@ -3207,32 +3191,10 @@ current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 If true, POI to POI conflation will ignore the types of the features being compared completely as
 long as those being compared have a populated name field.
 
-=== poi.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for POIs.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== poi.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for POIs.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === poi.polygon.additional.search.distance
 
 * Data Type: double
-* Default Value: `125.0`
+* Default Value: `50.0`
 
 The maximum distance, in meters, added to the circular error of the features being compared, the
 total of which allows the features to be considered for match or review based on distance criteria
@@ -3268,6 +3230,15 @@ a merge between all features involved in the Building and POI to Polygon conflat
 If true, instances where multiple POIs were matched to a single polygon will result in all of those
 POIs being automatically merged into the polygon.  If false, then each matched POI will generate a
 review against the polygon instead.
+
+=== poi.polygon.max.size.per.cache
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum number of elements to cache information for when using POI/Polygon Conflation. This
+maximum size is repeated across multiple internal element information caches. To disable caching,
+specify a value less than one.
 
 === poi.polygon.disable.same.source.conflation
 
@@ -3402,9 +3373,8 @@ does not meet the threshold defined by 'poi.polygon.match.evidence.threshold'.  
 0 to 3.  If an evidence score for a feature pair falls below this value, the relationship between
 the features will be classified as a miss.  If the value is set to 0, all feature pairs which did
 not match will be reviewed.  If the value is set greater than or equal to
-'poi.polygon.match.evidence.threshold', an error will occur.  Generally, this setting
-should not be changed except when working with specific POI/Polygon conflation use cases that
-require it.
+'poi.polygon.match.evidence.threshold', an error will occur.  Generally, this setting should not be
+changed except when working with specific POI/Polygon conflation use cases that require it.
 
 === poi.polygon.review.if.matched.types
 
@@ -3468,17 +3438,6 @@ schema.  This can have significant impact on the runtime performance of conflati
 and should only be enabled if the source data is known to have non-English type values.  The
 configuration option, 'language.translation.translator', controls which translator is used.
 
-=== poi.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for POIs. See `conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === power.line.auto.calc.search.radius
 
 * Data Type: bool
@@ -3487,6 +3446,17 @@ See also:
 Automatically calculates the search radius to be used during conflation of power lines using rubber
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
+
+=== power.line.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match for power lines.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === power.line.matcher.distance.weight.coefficient
 
@@ -3497,19 +3467,41 @@ A weighting coefficient value from 0.0 to 1.0 for the applying distance weightin
 matches.  This will favor feature that are closer together.  The higher the coefficient value, the
 higher the weighting applied.  A value of 0.0 will disable distance weighting.
 
-=== power.line.subline.matcher
-
-* Data Type: string
-* Default Value: `hoot::FrechetSublineMatcher`
-
-The way subline matcher to use when determining matching power line sublines.
-
 === power.line.matcher.max.angle
 
 * Data Type: double
 * Default Value: `155.0`
 
 Sets that maximum angle that is still considered a power line match. Units in degrees.
+
+=== power.line.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss for power lines.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== power.line.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for power lines.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== power.line.subline.matcher
+
+* Data Type: string
+* Default Value: `hoot::FrechetSublineMatcher`
+
+The way subline matcher to use when determining matching power line sublines.
 
 === quantile.aggregator.quantile
 
@@ -3534,17 +3526,6 @@ Maximum length, in characters, allowed when logging a variable value during prog
 Distance, in meters, used for sampling railway data during angle histogram extraction with the
 SampledAngleHistogramExtractor
 
-=== railway.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for railwayss.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === railway.matcher.heading.delta
 
 * Data Type: double
@@ -3559,28 +3540,6 @@ The distance around a point on a railway to look when calculating the heading. S
 * Default Value: `90.0`
 
 Sets that maximum angle that is still considered a railway match. Units in degrees.
-
-=== railway.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for railways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== railway.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for railways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === railway.subline.matcher
 
@@ -3742,16 +3701,16 @@ reject anything larger than 1 square degree.
 * Data Type: double
 * Default Value: `0.25`
 
-Maximum size of an HTTP request's bounding box in degrees before it is split up into smaller bounding
-boxes and run in parallel
+Maximum size of an HTTP request's bounding box in degrees before it is split up into smaller
+bounding boxes and run in parallel
 
 === reader.http.bbox.thread.count
 
 * Data Type: int
 * Default Value: `4`
 
-Number of threads in the thread pool to process HTTP requests that contain bounding boxes that are too
-large to query at once (see `reader.http.bbox.max.size`).
+Number of threads in the thread pool to process HTTP requests that contain bounding boxes that are
+too large to query at once (see `reader.http.bbox.max.size`).
 
 === reader.keep.status.tag
 
@@ -3823,7 +3782,7 @@ The criterion used by RelationWithMostMembersOp to filter relations.
 * Default Value:
 ** ``
 
-List of element attributes to remove with the RemoveAttributesVisitor.  Valid values are: changeset,
+List of element attributes to remove with the RemoveAttributesVisitor. Valid values are: changeset,
 timestamp, user, uid, or version.
 
 === remove.duplicate.areas.diff
@@ -3961,7 +3920,7 @@ in the selection of a suboptimal interpolator.
 * Data Type: int
 * Default Value: `4`
 
-Sets the minimum number of tie points that will be used when calculating a rubbersheeting solution.
+The minimum number of tie points required to calculate a rubbersheeting solution.
 
 === rubber.sheet.ref
 
@@ -4070,9 +4029,16 @@ debugging tests which may hang on a remote build server.
 === search.radius.area
 
 * Data Type: double
-* Default Value: `${search.radius.generic.polygon}`
+* Default Value: `${search.radius.default}`
 
-The search radius to use when conflating areas.  See `search.radius.default`
+The search radius, in meters, to use when conflating areas. See `search.radius.default`
+
+=== search.radius.building
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius, in meters, to use when conflating buildings. See `search.radius.default`.
 
 === search.radius.calculator.element.criterion
 
@@ -4088,31 +4054,32 @@ making use of automatic search radius calculation should set this value appropri
 * Data Type: double
 * Default Value: `-1.0`
 
-The default search radius to use when conflating features. If two features are within the search
-radius then they will be considered for conflation.  If the value is -1 then the circular error will
-be used to calculate an appropriate search radius.  Not all feature matching routines will honor
-the default value.
+The default search radius, in meters, to use when conflating features. If two features are within
+the search radius then they will be considered for matching. If the value is set to the default
+value of -1.0, then the circular error will be used to calculate an appropriate search radius
+('error:circular' or 'accuracy' tag). Some feature matching routines may not strictly honor the
+default value.
 
 === search.radius.generic.line
 
 * Data Type: double
 * Default Value: `${search.radius.default}`
 
-The search radius to use when conflating generic lines.  See `search.radius.default`.
+The search radius, in meters, to use when conflating generic lines. See `search.radius.default`.
 
 === search.radius.generic.point
 
 * Data Type: double
 * Default Value: `${search.radius.default}`
 
-The search radius to use when conflating generic points.  See `search.radius.default`.
+The search radius, in meters, to use when conflating generic points. See `search.radius.default`.
 
 === search.radius.generic.point.polygon
 
 * Data Type: double
 * Default Value: `${search.radius.default}`
 
-The search radius to use when conflating generic points with generic polygons.  See
+The search radius, in meters, to use when conflating generic points with generic polygons. See
 `search.radius.default`.
 
 === search.radius.generic.polygon
@@ -4120,29 +4087,48 @@ The search radius to use when conflating generic points with generic polygons.  
 * Data Type: double
 * Default Value: `${search.radius.default}`
 
-The search radius to use when conflating generic polygons.  See `search.radius.default`.
+The search radius, in meters, to use when conflating generic polygons. See `search.radius.default`.
 
 === search.radius.highway
 
 * Data Type: double
 * Default Value: `${search.radius.default}`
 
-The search radius to use when conflating highways.  See `search.radius.default`.
+The search radius, in meters, to use when conflating highways. See `search.radius.default`.
+
+=== search.radius.poi
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius, in meters, to use when conflating POIs. If `search.radius.default` is used, POI
+conflation will calculate a custom search distance based on the input feature types. See
+`search.radius.default`.
+
+=== search.radius.power.line
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius to use when conflating power lines. This value is not used if
+`power.line.auto.calc.search.radius=true`, and in that case the search radius is auto-calculated for
+the entire input dataset.  See `search.radius.default`.
 
 === search.radius.railway
 
 * Data Type: double
 * Default Value: `${search.radius.default}`
 
-The search radius to use when conflating railways.  See `search.radius.default`.
+The search radius, in meters, to use when conflating railways. See `search.radius.default`.
 
 === search.radius.waterway
 
 * Data Type: double
 * Default Value: `${search.radius.default}`
 
-The search radius to use when conflating waterways.  Not used if
-waterway.auto.calc.search.radius = true.  See `search.radius.default`.
+The search radius to use when conflating waterways. This value is not used if
+`waterway.auto.calc.search.radius=true`, and in that case the search radius is auto-calculated for
+the entire input dataset.  See `search.radius.default`.
 
 === set.tag.value.visitor.append.to.existing.value
 
@@ -4208,7 +4194,7 @@ shape file and cannot be used in combination with a translation.  If this option
 then the list of columns will be automatically determined based on the most frequently populated
 tags.
 
-=== small.way.merger.diff
+=== small.highway.merger.diff
 
 * Data Type: string
 * Default Value: `hoot::ExactTagDifferencer`
@@ -4216,7 +4202,7 @@ tags.
 Use this class for calculating the difference between element tags. If the difference is exactly 0
 then they'll be a candidate for merging.
 
-=== small.way.merger.threshold
+=== small.highway.merger.threshold
 
 * Data Type: double
 * Default Value: `15`
@@ -4542,6 +4528,16 @@ Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to b
 
 Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to be satisified.
 
+=== tags.visitor.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of tag keys for which the AverageNumericTagsVisitor, SumNumericTagsVisitor, or
+TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in double quotes when
+passing in from the command line.
+
 === task.status.update.interval
 
 * Data Type: int
@@ -4641,13 +4637,11 @@ See also:
 * Data Type: string
 * Default Value: ``
 
-Path to the translation script when using the hoot::TranslatedTagDifferencer. The
-hoot::TranslatedTagDifferencer is most useful when deciding how difference between two sets of
-tags should be calculated.
+Path to the translation script when using the tag differencer, `hoot::TranslatedTagDifferencer`.
+This tag differencer is most useful when deciding how difference between two sets of tags should be
+calculated. It can be used with:
 
-This differencer can be used with:
-
-* `small.way.merger.diff`
+* `small.highway.merger.diff`
 * `remove.duplicate.areas.diff`
 
 === transliteration.max.cache.size
@@ -4706,17 +4700,6 @@ Automatically calculates the search radius to be used during conflation of water
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
 
-=== waterway.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for waterways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === waterway.matcher.heading.delta
 
 * Data Type: double
@@ -4731,28 +4714,6 @@ The distance around a point on a waterway to look when calculating the heading. 
 * Default Value: `90.0`
 
 Sets that maximum angle that is still considered a waterway match. Units in degrees.
-
-=== waterway.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for waterways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== waterway.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for waterways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === waterway.rubber.sheet.minimum.ties
 
@@ -4946,7 +4907,10 @@ NoInformationElementRemover cleaning operation.
 * Data Type: bool
 * Default Value: `true`
 
-When true, writers will include circular error information. Not honored by all writers.
+When true, writers will include circular error information. Not necessarily honored by all writers.
+This should be left enabled by default to prevent custom accuracy tags from being dropped by writers
+in intermediary steps during a conflation workflow. Disable the option only on the final write for
+a dataset.
 
 === writer.include.conflate.review.detail.tags
 

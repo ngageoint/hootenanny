@@ -7,15 +7,18 @@
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches generic points";
 exports.experimental = false;
-exports.matchThreshold = parseFloat(hoot.get("generic.point.match.threshold"));
-exports.missThreshold = parseFloat(hoot.get("generic.point.miss.threshold"));
-exports.reviewThreshold = parseFloat(hoot.get("generic.point.review.threshold"));
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
+// If that ever changes, then the generic score threshold configuration options used below should 
+// be replaced with custom score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point"));
 exports.tagThreshold = parseFloat(hoot.get("generic.point.tag.threshold"));
 exports.baseFeatureType = "Point";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "point";
-exports.matchCandidateCriterion = "hoot::PointCriterion"; // See #3047
+exports.matchCandidateCriterion = "hoot::PointCriterion";
 
 function distance(e1, e2) 
 {
@@ -33,7 +36,7 @@ function distance(e1, e2)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPoint(map, e) && !isSpecificallyConflatable(map, e);
+  return isPoint(map, e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**

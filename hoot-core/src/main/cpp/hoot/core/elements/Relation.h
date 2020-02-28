@@ -102,7 +102,6 @@ public:
 
   virtual geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
-
   virtual const geos::geom::Envelope& getEnvelopeInternal(
     const std::shared_ptr<const ElementProvider>& ep) const override;
 
@@ -169,7 +168,6 @@ public:
   QString toString() const;
 
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
-
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
 
 private:
@@ -177,14 +175,12 @@ private:
   std::shared_ptr<RelationData> _relationData;
 
   virtual ElementData& _getElementData() { _makeWritable(); return *_relationData; }
-
   virtual const ElementData& _getElementData() const { return *_relationData; }
 
   void _makeWritable();
 
   void _visitRo(const ElementProvider& map, ConstElementVisitor& filter,
     QList<long>& visitedRelations) const;
-
   void _visitRw(ElementProvider& map, ConstElementVisitor& filter,
     QList<long> &visitedRelations);
 };

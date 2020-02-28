@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SuperfluousWayRemover.h"
@@ -32,6 +32,8 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 using namespace std;
 
@@ -56,7 +58,7 @@ long SuperfluousWayRemover::removeWays(const std::shared_ptr<OsmMap>& map)
   LOG_DEBUG(wayRemover.getInitStatusMessage());
   wayRemover.removeWays();
   LOG_DEBUG(wayRemover.getCompletedStatusMessage());
-  return wayRemover.getNumAffected();
+  return wayRemover.getNumFeaturesAffected();
 }
 
 void SuperfluousWayRemover::removeWays()
@@ -106,6 +108,14 @@ void SuperfluousWayRemover::removeWays()
 void SuperfluousWayRemover::apply(std::shared_ptr<OsmMap>& map)
 {
   removeWays(map);
+}
+
+QStringList SuperfluousWayRemover::getCriteria() const
+{
+  QStringList criteria;
+  criteria.append(QString::fromStdString(LinearCriterion::className()));
+  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  return criteria;
 }
 
 }

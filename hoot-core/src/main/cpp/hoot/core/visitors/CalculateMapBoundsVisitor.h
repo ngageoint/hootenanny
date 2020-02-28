@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CALCULATEMAPBOUNDSVISITOR_H
@@ -59,6 +59,8 @@ public:
   static geos::geom::Envelope getGeosBounds(const ConstOsmMapPtr& map);
 
   virtual QString getDescription() const { return "Calculates the extent of a map"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

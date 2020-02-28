@@ -84,6 +84,7 @@ public:
   QString description;
   BaseFeatureType baseFeatureType;
   GeometryTypeCriterion::GeometryType geometryType;
+  QStringList matchCandidateCriteria;
 
   static QString baseFeatureTypeToString(BaseFeatureType t);
 

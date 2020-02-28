@@ -34,7 +34,9 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/OsmApiUtils.h>
 
 //  Tgs
 #include <tgs/System/Timer.h>
@@ -47,13 +49,6 @@ using namespace Tgs;
 
 namespace hoot
 {
-
-const char* OsmApiWriter::API_PATH_CAPABILITIES = "/api/capabilities";
-const char* OsmApiWriter::API_PATH_PERMISSIONS = "/api/0.6/permissions";
-const char* OsmApiWriter::API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create";
-const char* OsmApiWriter::API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close";
-const char* OsmApiWriter::API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload";
-const char* OsmApiWriter::API_PATH_GET_ELEMENT = "/api/0.6/%1/%2";
 
 OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
   : _description(ConfigOptions().getChangesetDescription()),
@@ -69,7 +64,10 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
     _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
-    _changesetCount(0)
+    _changesetCount(0),
+    _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
+    _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
+    _apiId(0)
 {
   _changesets.push_back(changeset);
   if (isSupported(url))
@@ -91,7 +89,10 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
     _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
-    _changesetCount(0)
+    _changesetCount(0),
+    _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
+    _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
+    _apiId(0)
 {
   if (isSupported(url))
     _url = url;
@@ -144,6 +145,7 @@ bool OsmApiWriter::apply()
     _threadStatus.push_back(ThreadStatus::Working);
     _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this, i));
   }
+  _threadIdle.reserve(_maxWriters);
   //  Setup the progress indicators
   long total = _changeset.getTotalElementCount();
   float progress = 0.0f;
@@ -286,17 +288,32 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         //  Try a new create changeset request
         continue;
       }
+      //  Make sure that the changeset is valid and isn't empty
+      if (workInfo->size() < 1)
+      {
+        LOG_DEBUG("Empty changeset created.");
+        //  Jump back to the beginning and release the empty workInfo object
+        continue;
+      }
+      QString changeset = _changeset.getChangesetString(workInfo, id);
       //  Display the changeset in TRACE mode
-      LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << _changeset.getChangesetString(workInfo, id));
+      LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << changeset);
+      //  Output the debug request if requested
+      int apiId = _getNextApiId();
+      if (_debugOutput)
+        _writeDebugFile("Request-", changeset, apiId, id);
       //  Upload the changeset
-      OsmApiFailureInfoPtr info = _uploadChangeset(request, id, _changeset.getChangesetString(workInfo, id));
+      OsmApiFailureInfoPtr info = _uploadChangeset(request, id, changeset);
+      //  Output the debug response if requested
+      if (_debugOutput)
+        _writeDebugFile("Response", info->response, apiId, id, info->status);
       if (info->success)
       {
         //  Display the upload response in TRACE mode
-        LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << QString(request->getResponseContent()));
+        LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << info->response);
         //  Update the changeset with the response
         _changesetMutex.lock();
-        _changeset.updateChangeset(QString(request->getResponseContent()));
+        _changeset.updateChangeset(info->response);
         _changesetMutex.unlock();
         //  Update the size of the current changeset that is open
         changesetSize += workInfo->size();
@@ -328,7 +345,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         //  Split the changeset on conflict errors
         switch (info->status)
         {
-        case 409:   //  Conflict, check for version conflicts and fix, or split and continue
+        case HttpResponseCode::HTTP_CONFLICT:   //  Conflict, check for version conflicts and fix, or split and continue
           {
             if (_changesetClosed(info->response))
             {
@@ -353,9 +370,9 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             //  This includes when the changeset is too big, i.e.:
             //    The changeset <id> was closed at <dtg> UTC
           }
-        case 400:   //  Placeholder ID is missing or not unique
-        case 404:   //  Diff contains elements where the given ID could not be found
-        case 412:   //  Precondition Failed, Relation with id cannot be saved due to other member
+        case HttpResponseCode::HTTP_BAD_REQUEST:          //  Placeholder ID is missing or not unique
+        case HttpResponseCode::HTTP_NOT_FOUND:            //  Diff contains elements where the given ID could not be found
+        case HttpResponseCode::HTTP_PRECONDITION_FAILED:  //  Precondition Failed, Relation with id cannot be saved due to other member
           if (!_splitChangeset(workInfo, info->response))
           {
             if (!workInfo->getAttemptedResolveChangesetIssues())
@@ -377,9 +394,9 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             }
           }
           break;
-        case 500:   //  Internal Server Error, could be caused by the database being saturated
-        case 502:   //  Bad Gateway, there are issues with the gateway, split and retry
-        case 504:   //  Gateway Timeout, server is taking too long, split and retry
+        case HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR:  //  Internal Server Error, could be caused by the database being saturated
+        case HttpResponseCode::HTTP_BAD_GATEWAY:            //  Bad Gateway, there are issues with the gateway, split and retry
+        case HttpResponseCode::HTTP_GATEWAY_TIMEOUT:        //  Gateway Timeout, server is taking too long, split and retry
           if (!_splitChangeset(workInfo, info->response))
           {
             //  Splitting failed which means that the changeset only has one element in it,
@@ -394,7 +411,8 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         default:
           //  This is a big problem, report it and try again
           LOG_ERROR("Changeset upload responded with HTTP status response: " << request->getHttpStatus());
-        case 405:
+          //  Fall through
+        case HttpResponseCode::HTTP_METHOD_NOT_ALLOWED:
           //  This shouldn't ever happen, push back on the queue, only process a certain amount of times
           workInfo->retry();
           if (workInfo->canRetry())
@@ -411,11 +429,43 @@ void OsmApiWriter::_changesetThreadFunc(int index)
     }
     else
     {
-      if (!_changeset.hasElementsToSend() && queueSize == 0 && _threadsAreIdle())
+      if (!_changeset.hasElementsToSend() && !_changeset.isDone() && queueSize == 0)
       {
-        //  In this case there are elements that have been sent and not reported back
-        //  BUT there are no threads that are waiting for them either
-        stop_thread = true;
+        //  This is a bad state where the producer thread says all elements are sent and
+        //  waits for all threads to join but the changeset isn't "done".
+        //  Set the status to idle and start idle timer
+        _threadStatusMutex.lock();
+        if (_threadStatus[index] != ThreadStatus::Idle)
+        {
+          _threadStatus[index] = ThreadStatus::Idle;
+          _threadIdle[index].reset();
+        }
+        else if (id > 0 && _threadIdle[index].getElapsed() > 10 * 1000)
+        {
+          //  Close the current changeset so all data is "committed"
+          _closeChangeset(request, id);
+          id = -1;
+        }
+        _threadStatusMutex.unlock();
+        if (_threadsAreIdle())
+        {
+          //  In this case there are elements that have been sent and not reported back
+          //  BUT there are no threads that are waiting for them either.  Every thread
+          //  except the "first" worker thread will exit here.  The first worker thread
+          //  Tries to calculate the remaining changeset and push in on the queue.  It then
+          //  loops around and picks up the remaining changeset to process.  Next time around
+          //  calculateRemainingChangeset() fails and this thread is stopped.
+          if (index != 0)
+            stop_thread = true;
+          else if (_changeset.calculateRemainingChangeset(workInfo))
+          {
+            _workQueueMutex.lock();
+            _workQueue.push(workInfo);
+            _workQueueMutex.unlock();
+          }
+          else
+            stop_thread = true;
+        }
       }
       else
       {
@@ -448,6 +498,8 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
   _consumerSecret = options.getHootOsmAuthConsumerSecret();
   _accessToken = options.getHootOsmAuthAccessToken();
   _secretToken = options.getHootOsmAuthAccessTokenSecret();
+  _debugOutput = options.getChangesetApidbWriterDebugOutput();
+  _debugOutputPath = options.getChangesetApidbWriterDebugOutputPath();
 }
 
 bool OsmApiWriter::isSupported(const QUrl &url)
@@ -472,7 +524,7 @@ bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
   try
   {
     QUrl capabilities = _url;
-    capabilities.setPath(API_PATH_CAPABILITIES);
+    capabilities.setPath(OsmApiEndpoints::API_PATH_CAPABILITIES);
     request->networkRequest(capabilities);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     QString printableUrl = capabilities.toString(QUrl::RemoveUserInfo);
@@ -496,7 +548,7 @@ bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request)
   try
   {
     QUrl permissions = _url;
-    permissions.setPath(API_PATH_PERMISSIONS);
+    permissions.setPath(OsmApiEndpoints::API_PATH_PERMISSIONS);
     request->networkRequest(permissions);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     success = _parsePermissions(responseXml);
@@ -590,7 +642,7 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
   try
   {
     QUrl changeset = _url;
-    changeset.setPath(API_PATH_CREATE_CHANGESET);
+    changeset.setPath(OsmApiEndpoints::API_PATH_CREATE_CHANGESET);
     QString xml = QString(
       "<osm>"
       "  <changeset>"
@@ -602,7 +654,12 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
       "  </changeset>"
       "</osm>").arg(HOOT_NAME).arg(description).arg(source).arg(hashtags);
 
-    request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, xml.toUtf8());
+    QByteArray content = xml.toUtf8();
+    QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
+    headers[QNetworkRequest::ContentTypeHeader] = HootNetworkUtils::CONTENT_TYPE_XML;
+    headers[QNetworkRequest::ContentLengthHeader] = content.length();
+
+    request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, content);
 
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
 
@@ -621,18 +678,18 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
   try
   {
     QUrl changeset = _url;
-    changeset.setPath(QString(API_PATH_CLOSE_CHANGESET).arg(id));
+    changeset.setPath(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(id));
     request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     switch (request->getHttpStatus())
     {
-    case 404:
+    case HttpResponseCode::HTTP_NOT_FOUND:
       LOG_WARN("Unknown changeset");
       break;
-    case 409:
+    case HttpResponseCode::HTTP_CONFLICT:
       LOG_WARN("Changeset conflict: " << responseXml);
       break;
-    case 200:
+    case HttpResponseCode::HTTP_OK:
       //  Changeset closed successfully
       _changesetCountMutex.lock();
       _changesetCount++;
@@ -680,31 +737,33 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
   try
   {
     QUrl change = _url;
-    change.setPath(QString(API_PATH_UPLOAD_CHANGESET).arg(id));
+    change.setPath(QString(OsmApiEndpoints::API_PATH_UPLOAD_CHANGESET).arg(id));
 
+    QByteArray content = changeset.toUtf8();
     QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
-    headers[QNetworkRequest::ContentTypeHeader] = "text/xml";
+    headers[QNetworkRequest::ContentTypeHeader] = HootNetworkUtils::CONTENT_TYPE_XML;
+    headers[QNetworkRequest::ContentLengthHeader] = content.length();
 
-    request->networkRequest(change, headers, QNetworkAccessManager::Operation::PostOperation, changeset.toUtf8());
+    request->networkRequest(change, headers, QNetworkAccessManager::Operation::PostOperation, content);
 
     info->response = QString::fromUtf8(request->getResponseContent().data());
     info->status = request->getHttpStatus();
 
     switch (info->status)
     {
-    case 200:
+    case HttpResponseCode::HTTP_OK:
       info->success = true;
       break;
-    case 400:
+    case HttpResponseCode::HTTP_BAD_REQUEST:
       LOG_WARN("Changeset Upload Error: Error parsing XML changeset - " << info->response);
       break;
-    case 404:
+    case HttpResponseCode::HTTP_NOT_FOUND:
       LOG_WARN("Unknown changeset or elements don't exist");
       break;
-    case 409:
+    case HttpResponseCode::HTTP_CONFLICT:
       LOG_WARN("Changeset conflict: " << info->response);
       break;
-    case 412:
+    case HttpResponseCode::HTTP_PRECONDITION_FAILED:
       LOG_WARN("Changeset precondition failed: " << info->response);
       break;
     default:
@@ -791,7 +850,7 @@ QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id)
   if (id < 1)
     return "";
   //  Get the node by ID
-  return _getElement(request, QString(API_PATH_GET_ELEMENT).arg("node").arg(id));
+  return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("node").arg(id));
 }
 
 QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id)
@@ -800,7 +859,7 @@ QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id)
   if (id < 1)
     return "";
   //  Get the way by ID
-  return _getElement(request, QString(API_PATH_GET_ELEMENT).arg("way").arg(id));
+  return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(id));
 }
 
 QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id)
@@ -809,20 +868,20 @@ QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id)
   if (id < 1)
     return "";
   //  Get the relation by ID
-  return _getElement(request, QString(API_PATH_GET_ELEMENT).arg("relation").arg(id));
+  return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("relation").arg(id));
 }
 
 QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& endpoint)
 {
   //  Don't follow an uninitialized URL or empty endpoint
-  if (endpoint == API_PATH_GET_ELEMENT || endpoint == "")
+  if (endpoint == OsmApiEndpoints::API_PATH_GET_ELEMENT || endpoint == "")
     return "";
   try
   {
     QUrl get = _url;
     get.setPath(endpoint);
     request->networkRequest(get);
-    if (request->getHttpStatus() == 200)
+    if (request->getHttpStatus() == HttpResponseCode::HTTP_OK)
       return QString::fromUtf8(request->getResponseContent().data());
     else
       LOG_WARN("GET error: " << QString::fromUtf8(request->getResponseContent().data()));
@@ -896,5 +955,24 @@ bool OsmApiWriter::_splitChangeset(const ChangesetInfoPtr& workInfo, const QStri
   return false;
 }
 
+void OsmApiWriter::_writeDebugFile(const QString& type, const QString& data, int file_id, long changeset_id, int status)
+{
+  //  Setup the path including the changeset and file IDs, type and HTTP status
+  QString path = QString("%1/OsmApiWriter-%2-%3-%4-%5.osc")
+      .arg(_debugOutputPath)
+      .arg(QString::number(file_id), 6, '0')
+      .arg(QString::number(changeset_id), 5, '0')
+      .arg(type)
+      .arg(QString::number(status), 3, '0');
+  //  Write the data to the file
+  FileUtils::writeFully(path, data);
+}
+
+int OsmApiWriter::_getNextApiId()
+{
+  //  Lock the mutex and increment the API ID counter
+  std::lock_guard<std::mutex> lock(_apiIdMutex);
+  return ++_apiId;
+}
 
 }

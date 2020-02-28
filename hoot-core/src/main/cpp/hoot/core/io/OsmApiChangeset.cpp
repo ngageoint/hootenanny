@@ -361,6 +361,10 @@ void XmlChangeset::updateChangeset(const QString &changes)
         updateElement(_ways, old_id, new_id, version);
       else if (name == "relation")
         updateElement(_relations, old_id, new_id, version);
+      if (old_id == 0)
+      {
+        LOG_ERROR("Element cannot be updated. No ID given.");
+      }
     }
   }
 }
@@ -1541,10 +1545,9 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long changeset_id
     category = "delete";
   if (changeset->size(ElementType::Node, type) > 0 || changeset->size(ElementType::Way, type) > 0 || changeset->size(ElementType::Relation, type) > 0)
   {
-    ts << "\t<" << category;
+    ts << "\t<" << category << ">\n";
     if (type != ChangesetType::TypeDelete)
     {
-      ts << ">\n";
       //  Nodes go first in each category
       writeNodes(changeset, ts, type, changeset_id);
       //  Followed by ways
@@ -1554,7 +1557,6 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long changeset_id
     }
     else
     {
-      ts << " if-unused=\"true\">\n";
       //  Relations first for deletes
       writeRelations(changeset, ts, type, changeset_id);
       //  Followed by ways
@@ -1595,6 +1597,10 @@ void XmlChangeset::updateElement(ChangesetTypeMap& map, long old_id, long new_id
     if (version >= 0)
       element->setVersion(version);
     _processedCount++;
+  }
+  else
+  {
+    LOG_ERROR("Element cannot be updated. ID " << old_id);
   }
 }
 
@@ -1809,8 +1815,18 @@ bool XmlChangeset::calculateRemainingChangeset(ChangesetInfoPtr &changeset)
   }
   //  Clear the send buffer
   _sendBuffer.clear();
+  bool empty_changeset = changeset->size() == 0;
+  //  Output the remaining changeset to a file to inform the user where the issues lie
+  if (!empty_changeset && !_errorPathname.isEmpty())
+  {
+    //  Replace error with remaining in the error pathname
+    QString pathname = _errorPathname;
+    pathname.replace("error", "remaining");
+    //  Write the file with changeset ID of zero
+    FileUtils::writeFully(pathname, this->getChangesetString(changeset, 0));
+  }
   //  Return true if there is anything in the changeset
-  return changeset->size() > 0;
+  return !empty_changeset;
 }
 
 ChangesetInfo::ChangesetInfo()

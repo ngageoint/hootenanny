@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEDUPLICATEAREAVISITOR_H
 #define REMOVEDUPLICATEAREAVISITOR_H
 
 // Hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -53,7 +52,7 @@ class TagDifferencer;
  *
  * RecursiveElementRemover is used to remove the element.
  */
-class RemoveDuplicateAreaVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class RemoveDuplicateAreaVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -69,6 +68,13 @@ public:
   { return "Removed " + QString::number(_numAffected) + " duplicate areas"; }
 
   virtual QString getDescription() const { return "Removes duplicate areas"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DiffConflator.h"
 
@@ -58,6 +58,8 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 // standard
 #include <algorithm>
@@ -66,6 +68,9 @@
 #include <tgs/System/SystemInfo.h>
 #include <tgs/System/Time.h>
 #include <tgs/System/Timer.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 using namespace Tgs;
@@ -132,11 +137,15 @@ void DiffConflator::apply(OsmMapPtr& map)
   // If we skip this part, then any non-matchable data will simply pass through to output.
   if (ConfigOptions().getDifferentialRemoveUnconflatableData())
   {
-    LOG_INFO("Discarding unconflatable elements...");
+    LOG_STATUS("Discarding unconflatable elements...");
+    const int mapSizeBefore = _pMap->size();
     NonConflatableElementRemover().apply(_pMap);
     _stats.append(
       SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
+    LOG_STATUS(
+      "Discarded " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
+      " unconflatable elements.");
   }
 
   // will reproject only if necessary
@@ -153,9 +162,9 @@ void DiffConflator::apply(OsmMapPtr& map)
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
-  LOG_INFO(
+  LOG_STATUS(
     "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
-    " Differential Conflation matches.");
+    " Differential Conflation match conflicts to be removed.");
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
   _stats.append(SingleStat("Number of Matches Found", _matches.size()));
@@ -165,11 +174,14 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   currentStep++;
 
-  // Use matches to calculate and store tag diff. We must do this before we create the map diff,
-  // because that operation deletes all of the info needed for calculating the tag diff.
-  _updateProgress(currentStep - 1, "Storing tag differentials...");
-  _calcAndStoreTagChanges();
-  currentStep++;
+  if (_conflateTags)
+  {
+    // Use matches to calculate and store tag diff. We must do this before we create the map diff,
+    // because that operation deletes all of the info needed for calculating the tag diff.
+    _updateProgress(currentStep - 1, "Storing tag differentials...");
+    _calcAndStoreTagChanges();
+    currentStep++;
+  }
 
   QString message = "Dropping match conflicts";
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
@@ -199,13 +211,17 @@ void DiffConflator::apply(OsmMapPtr& map)
     _removeMatches(Status::Unknown1);
 
     // Now remove input1 elements
-    LOG_DEBUG("\tRemoving all reference elements...");
+    LOG_STATUS("\tRemoving all reference elements...");
+    const int mapSizeBefore = _pMap->size();
     ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
     RemoveElementsVisitor removeRef1Visitor;
     removeRef1Visitor.setRecursive(true);
     removeRef1Visitor.addCriterion(pTagKeyCrit);
     _pMap->visitRw(removeRef1Visitor);
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
+    LOG_STATUS(
+      "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
+      " reference elements...");
   }
 }
 
@@ -217,7 +233,7 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   roadSnapper.apply(_pMap);
   LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
-  return roadSnapper.getNumAffected();
+  return roadSnapper.getNumFeaturesAffected();
 }
 
 void DiffConflator::_removeMatches(const Status& status)
@@ -291,17 +307,17 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
       "elements. ");
   }
 
-  // Use the copy constructor
+  // Use the copy constructor to copy the entire map.
   _pOriginalMap.reset(new OsmMap(pMap));
 
   // We're storing this off for potential use later on if any roads get snapped after conflation.
-  // See additional comments in _getChangesetFromMap.
-  _pOriginalRef1Map.reset(new OsmMap(pMap));
-  ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref2()));
-  RemoveElementsVisitor removeRef2Visitor;
-  removeRef2Visitor.setRecursive(true);
-  removeRef2Visitor.addCriterion(pTagKeyCrit);
-  _pOriginalRef1Map->visitRw(removeRef2Visitor);
+  // Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
+  // TODO: Can we filter this down to whatever feature type the snapping is configured for?
+  std::shared_ptr<NotCriterion> crit(
+    new NotCriterion(ElementCriterionPtr(new TagKeyCriterion(MetadataTags::Ref2()))));
+  CopyMapSubsetOp mapCopier(pMap, crit);
+  _pOriginalRef1Map.reset(new OsmMap());
+  mapCopier.apply(_pOriginalRef1Map);
 }
 
 void DiffConflator::markInputElements(OsmMapPtr pMap)
@@ -347,10 +363,10 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
     }
     else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
     {
-      // Diff conflation w/ tags doesn't handle relations. Changed this to silently log that the
-      // relations are being skipped for now. #3449 was created to deal with adding relation support
-      // and then closed since we lack a use case currently that requires it. If we ever get one,
-      // then we can re-open that issue.
+      // Diff conflation w/ tags doesn't handle relations. Changed this to log that the relations
+      // are being skipped for now. #3449 was created to deal with adding relation support and then
+      // closed since we lack a use case currently that requires it. If we ever get one, then we
+      // can re-open that issue.
 
       LOG_DEBUG("Relation handling not implemented with differential conflation: " << c);
       if (Log::getInstance().getLevel() <= Log::Trace)
@@ -366,7 +382,9 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
 
 void DiffConflator::_calcAndStoreTagChanges()
 {
-  LOG_INFO("Storing tag changes...");
+  QElapsedTimer timer;
+  timer.start();
+  LOG_DEBUG("Storing tag changes...");
 
   MapProjector::projectToWgs84(_pMap);
 
@@ -450,6 +468,9 @@ void DiffConflator::_calcAndStoreTagChanges()
             StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
     }
   }
+  LOG_STATUS(
+    "Stored tag changes for " << StringUtils::formatLargeNumber(numMatchesProcessed) <<
+    " matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
 }

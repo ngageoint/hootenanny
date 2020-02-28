@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+	<modify>
+		<way id="1" version="2" changeset="1">
+			<nd ref="1"/>
+			<nd ref="2"/>
+			<nd ref="3"/>
+			<tag k="name" v="Way 1"/>
+			<tag k="hoot:status" v="3"/>
+		</way>
+		<way id="2" version="1" changeset="1">
+			<nd ref="4"/>
+			<nd ref="5"/>
+			<nd ref="6"/>
+			<tag k="name" v="Way 2"/>
+			<tag k="hoot:status" v="1"/>
+		</way>
+	</modify>
+</osmChange>

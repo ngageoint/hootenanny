@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflateCaseTestSuite.h"
 
@@ -32,6 +32,7 @@
 #include <hoot/core/test/ConflateCaseTest.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfPath.h>
 
 // Qt
 #include <QDir>
@@ -79,6 +80,9 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
 # ifndef HOOT_HAVE_SERVICES
   ignoreList << "hoot-services";
 # endif
+# ifndef HOOT_HAVE_JOSM
+  ignoreList << "hoot-josm";
+# endif
 
   QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
   for (int i = 0; i < dirs.size(); i++)
@@ -118,6 +122,10 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
   }
   else
   {
+    // We require that all tests use Testing.conf. We want to load it first in order to give each
+    // test a chance to override it when necessary.
+    confs.prepend(ConfPath::search("Testing.conf"));
+
     addTest(new ConflateCaseTest(d, confs));
     _numTests++;
   }

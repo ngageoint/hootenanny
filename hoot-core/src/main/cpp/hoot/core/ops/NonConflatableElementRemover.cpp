@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "NonConflatableElementRemover.h"
@@ -49,8 +49,10 @@ void NonConflatableElementRemover::apply(std::shared_ptr<OsmMap>& map)
 
   RemoveElementsVisitor removeElementsVisitor;
   removeElementsVisitor.setRecursive(true);
+  // RemoveElementsVisitor will auto handle setting the config on this crit.
   removeElementsVisitor.addCriterion(
     std::shared_ptr<NonConflatableCriterion>(new NonConflatableCriterion()));
+  removeElementsVisitor.setConfiguration(conf());
   _map->visitRw(removeElementsVisitor);
 }
 

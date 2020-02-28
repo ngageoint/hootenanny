@@ -117,6 +117,8 @@ public final class HootProperties {
     public static final String HOOTAPI_DB_URL;
     public static final String OSMAPI_DB_URL;
     public static final String CHANGESET_DERIVE_BUFFER;
+    public static final Boolean CHANGESET_APPLY_DEBUG;
+    public static final Boolean CHANGESET_APPLY_SINGLETHREADED;
     public static final String HOOT_LANGUAGE_TRANSLATOR_APP;
     public static final String JOSHUA_CONNECTION_POOL_MAX_SIZE;
     public static final String JOSHUA_CONNECTION_TIMEOUT;
@@ -262,6 +264,8 @@ public final class HootProperties {
         INTERNAL_JOB_THREAD_SIZE = getProperty("internalJobThreadSize");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
         CHANGESET_DERIVE_BUFFER = getProperty("changesetDeriveBufferDegrees");
+        CHANGESET_APPLY_DEBUG = Boolean.valueOf(getProperty("changesetApplyDebug"));
+        CHANGESET_APPLY_SINGLETHREADED = Boolean.valueOf(getProperty("changesetApplySingleThreaded"));
         HOOT_LANGUAGE_TRANSLATOR_APP = getProperty("hootLanguageTranslatorApp");
         JOSHUA_CONNECTION_POOL_MAX_SIZE = getProperty("joshuaConnectionPoolMaxSize");
         JOSHUA_CONNECTION_TIMEOUT = getProperty("joshuaConnectionTimeout");

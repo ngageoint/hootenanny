@@ -50,8 +50,7 @@ namespace hoot
  */
 class ElementCriterion;
 
-class SpatialIndexer : public ElementConstOsmMapVisitor, public ElementCriterionConsumer,
-  public OperationStatusInfo
+class SpatialIndexer : public ElementConstOsmMapVisitor, public ElementCriterionConsumer
 {
 public:
 
@@ -109,6 +108,10 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Indexed " + QString::number(_numAffected) + " elements."; }
+
+  long getSize() const { return _numAffected; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

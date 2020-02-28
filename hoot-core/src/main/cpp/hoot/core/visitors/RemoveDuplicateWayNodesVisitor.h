@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REMOVEDUPLICATEWAYNODESVISITOR_H
@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/elements/Way.h>
 
 namespace hoot
@@ -44,7 +43,7 @@ namespace hoot
  * duplicated nodes appears to be in the conflation routines somewhere and should be found and
  * fixed.  If that happens, this visitor could be removed from the post conflation ops.
  */
-class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OperationStatusInfo
+class RemoveDuplicateWayNodesVisitor : public ElementVisitor
 {
 public:
 
@@ -67,6 +66,13 @@ public:
   { return "Removed " + QString::number(_numAffected) + " duplicate way nodes"; }
 
   virtual QString getDescription() const { return "Removes duplicate way nodes"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCHEMATRANSLATIONVISITOR_H
 #define SCHEMATRANSLATIONVISITOR_H
@@ -32,7 +32,6 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QString>
@@ -45,8 +44,7 @@ class ScriptToOgrSchemaTranslator;
 /**
  * Translates elements that are passed to the visitor.
  */
-class SchemaTranslationVisitor : public ElementVisitor, public Configurable,
-  public OperationStatusInfo
+class SchemaTranslationVisitor : public ElementVisitor, public Configurable
 {
 public:
 
@@ -71,6 +69,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Translated " + QString::number(_numAffected) + " features to a schema"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

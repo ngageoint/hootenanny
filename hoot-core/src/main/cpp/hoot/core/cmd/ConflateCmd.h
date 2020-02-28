@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFLATECMD_H
 #define CONFLATECMD_H
 
 // Hoot
-#include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/cmd/BoundedCommand.h>
 
 // Standard
 #include <fstream>
@@ -43,7 +43,7 @@ namespace hoot
 
 class SingleStat;
 
-class ConflateCmd : public BaseCommand
+class ConflateCmd : public BoundedCommand
 {
 
 public:
@@ -63,16 +63,42 @@ public:
 
   virtual int runSimple(QStringList& args) override;
 
+  void setFilterOps(bool filter) { _filterOps = filter; }
+
 private:
 
   int _numTotalTasks;
+  bool _filterOps;
 
   void _updateConfigOptionsForAttributeConflation();
-  void _updateConfigOptionsForDifferentialConflation();
+  void _disableRoundaboutRemoval();
   void _checkForTagValueTruncationOverride();
+
+  /*
+   * Removes any operators specified in conflate pre/post ops that aren't associated with the
+   * configured matchers
+   */
+  void _removeSuperfluousOps();
+  /*
+   * Returns all ElementCriterion class names associated with the current matcher config
+   */
+  QSet<QString> _getMatchCreatorCrits();
+  /*
+   * Given a matcher configuration determines which operators should be disabled
+   *
+   * @param matcherCrits a list of all ElementCriterion class names associated with the current
+   * matcher config
+   * @param ops a list of operator class names to be filtered
+   * @param removedOps a list of the operators removed
+   * @return the input operator list with unnecessary ops filtered out
+   */
+  QStringList _filterOutUnneededOps(
+    const QSet<QString>& matcherCrits, const QStringList& ops, QSet<QString>& removedOps);
 
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
+
+  friend class TestUtils;
 };
 
 }

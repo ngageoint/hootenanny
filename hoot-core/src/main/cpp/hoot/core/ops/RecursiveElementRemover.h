@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RECURSIVEELEMENTREMOVER_H
 #define RECURSIVEELEMENTREMOVER_H
@@ -32,7 +32,6 @@
 #include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -59,8 +58,7 @@ class OsmMap;
  * This approach is very thorough and effective, but there may be much more efficient approaches on
  * a case by case basis.
  */
-class RecursiveElementRemover : public ConstOsmMapOperation, public ConstElementConsumer,
-  public OperationStatusInfo
+class RecursiveElementRemover : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
 
@@ -93,6 +91,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " elements"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

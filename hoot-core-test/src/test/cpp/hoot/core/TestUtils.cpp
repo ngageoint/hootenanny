@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TestUtils.h"
@@ -41,6 +41,8 @@
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/cmd/ConflateCmd.h>
+#include <hoot/core/util/ConfPath.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -220,6 +222,7 @@ std::string TestUtils::readFile(QString f1)
 void TestUtils::resetBasic()
 {
   LOG_DEBUG("Resetting test environment...");
+
   // provide the most basic configuration.
   OsmMap::resetCounters();
   // make sure the UUIDs are repeatable
@@ -232,20 +235,27 @@ void TestUtils::resetEnvironment(const QStringList confs)
 {
   LOG_DEBUG("Resetting test environment...");
 
-  // provide the most basic configuration.
+  // provide the most basic configuration
+
   OsmMap::resetCounters();
+
   conf().clear();
   ConfigOptions::populateDefaults(conf());
-  //The primary reason for allowing custom configs to be loaded here is in certain situaions to
-  //prevent the ConfigOptions defaults from being loaded, as they may be too bulky when running
-  //many hoot commands at once.
+
+  // We require that all tests use Testing.conf as a starting point and any conf values
+  // specified by it may be overridden when necessary.
+  conf().loadJson(ConfPath::search("Testing.conf"));
+
+  // The primary reason for allowing custom configs to be loaded here is in certain situations to
+  // prevent the ConfigOptions defaults from being loaded, as they may be too bulky when running
+  // many hoot commands at once.
   LOG_VART(confs.size());
   for (int i = 0; i < confs.size(); i++)
   {
     LOG_VART(confs[i]);
     conf().loadJson(confs[i]);
   }
-  //LOG_VART(conf());
+  LOG_VART(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
   // Sometimes we add new projections to the MapProjector, when this happens it may pick a new
@@ -319,6 +329,95 @@ bool TestUtils::mkpath(const QString& path)
   //  Report failure
   CPPUNIT_FAIL(QString("Couldn't create output directory: %1").arg(path).toStdString());
   return false;
+}
+
+QStringList TestUtils::getConflateCmdSnapshotPreOps()
+{
+  QStringList conflatePreOps;
+  conflatePreOps.append("hoot::BuildingOutlineRemoveOp");
+  conflatePreOps.append("hoot::RemoveRoundabouts");
+  conflatePreOps.append("hoot::MapCleaner");
+  conflatePreOps.append("hoot::HighwayCornerSplitter");
+  return conflatePreOps;
+}
+
+QStringList TestUtils::getConflateCmdSnapshotPostOps()
+{
+  QStringList conflatePostOps;
+  conflatePostOps.append("hoot::SuperfluousNodeRemover");
+  conflatePostOps.append("hoot::SmallHighwayMerger");
+  conflatePostOps.append("hoot::ReplaceRoundabouts");
+  conflatePostOps.append("hoot::RemoveMissingElementsVisitor");
+  conflatePostOps.append("hoot::RemoveInvalidReviewRelationsVisitor");
+  conflatePostOps.append("hoot::RemoveDuplicateReviewsOp");
+  conflatePostOps.append("hoot::BuildingOutlineUpdateOp");
+  conflatePostOps.append("hoot::WayJoinerOp");
+  conflatePostOps.append("hoot::RemoveInvalidRelationVisitor");
+  conflatePostOps.append("hoot::RemoveInvalidMultilineStringMembersVisitor");
+  conflatePostOps.append("hoot::SuperfluousWayRemover");
+  conflatePostOps.append("hoot::RemoveDuplicateWayNodesVisitor");
+  conflatePostOps.append("hoot::RemoveEmptyRelationsOp");
+  conflatePostOps.append("hoot::ApiTagTruncateVisitor");
+  conflatePostOps.append("hoot::AddHilbertReviewSortOrderOp");
+  return conflatePostOps;
+}
+
+QStringList TestUtils::getConflateCmdSnapshotCleaningOps()
+{
+  QStringList mapCleanerTransforms;
+  mapCleanerTransforms.append("hoot::ReprojectToPlanarOp");
+  mapCleanerTransforms.append("hoot::DuplicateNodeRemover");
+  mapCleanerTransforms.append("hoot::OneWayRoadStandardizer");
+  mapCleanerTransforms.append("hoot::DuplicateWayRemover");
+  mapCleanerTransforms.append("hoot::SuperfluousWayRemover");
+  mapCleanerTransforms.append("hoot::IntersectionSplitter");
+  mapCleanerTransforms.append("hoot::UnlikelyIntersectionRemover");
+  mapCleanerTransforms.append("hoot::DualHighwaySplitter");
+  mapCleanerTransforms.append("hoot::HighwayImpliedDividedMarker");
+  mapCleanerTransforms.append("hoot::DuplicateNameRemover");
+  mapCleanerTransforms.append("hoot::SmallHighwayMerger");
+  mapCleanerTransforms.append("hoot::RemoveEmptyAreasVisitor");
+  mapCleanerTransforms.append("hoot::RemoveDuplicateRelationMembersVisitor");
+  mapCleanerTransforms.append("hoot::RelationCircularRefRemover");
+  mapCleanerTransforms.append("hoot::RemoveEmptyRelationsOp");
+  mapCleanerTransforms.append("hoot::RemoveDuplicateAreaVisitor");
+  mapCleanerTransforms.append("hoot::NoInformationElementRemover");
+  return mapCleanerTransforms;
+}
+
+void TestUtils::runConflateOpReductionTest(
+  const QStringList& matchCreators, const int expectedPreOpSize, const int expectedPostOpsSize,
+  const int expectedCleaningOpsSize)
+{
+  QStringList actualOps;
+
+  ConflateCmd uut;
+  uut.setFilterOps(true);
+
+  CPPUNIT_ASSERT_EQUAL(4,  TestUtils::getConflateCmdSnapshotPreOps().size());
+  CPPUNIT_ASSERT_EQUAL(15,  TestUtils::getConflateCmdSnapshotPostOps().size());
+  CPPUNIT_ASSERT_EQUAL(17,  TestUtils::getConflateCmdSnapshotCleaningOps().size());
+
+  MatchFactory::getInstance().reset();
+  MatchFactory::_setMatchCreators(matchCreators);
+  // This is a snapshot of the ops in order to avoid any changes made to them result in requiring
+  // this test's results to change over time. Clearly, any newly added ops could be being filtered
+  // incorrectly, and we can update this list periodically if that's deemed important.
+  conf().set(ConfigOptions::getConflatePreOpsKey(), TestUtils::getConflateCmdSnapshotPreOps());
+  conf().set(ConfigOptions::getConflatePostOpsKey(), TestUtils::getConflateCmdSnapshotPostOps());
+  conf().set(
+    ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
+
+  uut._removeSuperfluousOps();
+
+  actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
+  CPPUNIT_ASSERT_EQUAL(expectedPreOpSize, actualOps.size());
+
+  actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
+  CPPUNIT_ASSERT_EQUAL(expectedPostOpsSize, actualOps.size());
+
+  actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
+  CPPUNIT_ASSERT_EQUAL(expectedCleaningOpsSize, actualOps.size());
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "InMemoryElementSorter.h"
 
@@ -49,7 +49,7 @@ InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
     // log that.
     if (source->getElementCount() > 0)
     {
-      LOG_INFO(
+      LOG_STATUS(
         "Sorting " << StringUtils::formatLargeNumber(source->getElementCount()) <<
         " elements in-memory...");
     }

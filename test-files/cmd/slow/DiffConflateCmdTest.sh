@@ -9,25 +9,25 @@ LOG_LEVEL=--warn
 
 # Run differential conflation to produce a map output
 echo "Running diff..."
-hoot conflate -C Testing.conf $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf \
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
  $OUTPUT_DIR/output.osm --differential
 
 # Run changeset w/tags to produce a unified changeset output (geometry and tags)
 echo "Running diff changeset with tags..."
-hoot conflate -C Testing.conf $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf \
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf  \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
  $OUTPUT_DIR/output_unified.osc --differential --include-tags
 
 # Run changeset w/tags to produce a unified map (osm) output
 echo "Running diff with tags..."
-hoot conflate -C Testing.conf $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf \
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
  $OUTPUT_DIR/output_unified.osm --differential --include-tags
 
 # Run changeset w/tags to produce separate outputs for geometry and tags
 echo "Running diff changeset with tags, separate outputs..."
-hoot conflate -C Testing.conf $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf \
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
  $OUTPUT_DIR/output.osc --differential --include-tags --separate-output
 
@@ -70,12 +70,12 @@ hoot diff -C Testing.conf $LOG_LEVEL $OUTPUT_DIR/output_unified.osm $INPUT_DIR/o
 
 # Check to make sure we don't bomb out on empty files
 echo "Checking conflation of empty files..."
-hoot conflate $LOG_LEVEL -C Testing.conf -C DifferentialConflation.conf -C NetworkAlgorithm.conf --warn test-files/Empty.osm test-files/Empty.osm $OUTPUT_DIR/Empty.osm
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf --warn test-files/Empty.osm test-files/Empty.osm $OUTPUT_DIR/Empty.osm
 hoot diff -C Testing.conf test-files/Empty.osm $OUTPUT_DIR/Empty.osm || cat $OUTPUT_DIR/Empty.osm
 
 # Run with the road snapper
 echo "Checking conflation with road snapping..."
-hoot conflate -C Testing.conf $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf \
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
  -D differential.snap.unconnected.roads=true \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
  $OUTPUT_DIR/snapped-output.osm --differential
@@ -84,7 +84,7 @@ hoot diff -C Testing.conf --warn $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapp
 
 # Run with the road snapper and keep the ref data
 echo "Checking conflation with road snapping and keeping ref data..."
-hoot conflate -C Testing.conf $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf \
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
  -D differential.snap.unconnected.roads=true -D differential.remove.reference.data=false \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
  $OUTPUT_DIR/snapped-with-ref-output.osm --differential
@@ -94,7 +94,7 @@ hoot diff -C Testing.conf $LOG_LEVEL $OUTPUT_DIR/snapped-with-ref-output.osm $IN
 # Run differential conflation and keep unconflatable features - The only difference you'll see here between this and the first diff
 # conflate execution is that the retaining wall from the second dataset, which hoot is unable to conflate, will pass through to output.
 echo "Running diff and passing unconflatable data through to output..."
-hoot conflate -C Testing.conf $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf \
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
  -D differential.remove.unconflatable.data=false $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
  $OUTPUT_DIR/output-keep-unconflatable.osm --differential
 hoot diff -C Testing.conf $LOG_LEVEL $OUTPUT_DIR/output-keep-unconflatable.osm $INPUT_DIR/output-keep-unconflatable.osm || \

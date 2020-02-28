@@ -22,19 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TRANSLITERATENAMEVISITOR_H
 #define TRANSLITERATENAMEVISITOR_H
 
 // Hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
-class TransliterateNameVisitor : public ElementVisitor, public OperationStatusInfo
+class TransliterateNameVisitor : public ElementVisitor
 {
 public:
 
@@ -52,6 +51,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Transliterated " + QString::number(_numAffected) + " names"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

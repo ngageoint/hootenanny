@@ -191,6 +191,44 @@ See the User Guide for more details on command usage.
     hoot clean input.osm output.osm
 -----
 
+===== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus JOSM's cleaning capabilities:
+
+-----
+    hoot clean -D map.cleaner.transforms++=hoot::JosmMapCleaner input.osm output.osm
+-----
+
+===== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via exclusion:
+
+-----
+    hoot clean -D map.cleaner.transforms++=hoot::JosmMapCleaner \
+      -D josm.validators.exclude="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
+-----
+
+===== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via inclusion:
+
+-----
+    hoot clean -D map.cleaner.transforms++=hoot::JosmMapCleaner \
+      -D josm.validators.include="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
+-----
+
+===== Run JOSM cleaning only on a map:
+
+-----
+    hoot convert -D convert.ops=hoot::JosmMapCleaner input.osm output.osm
+-----
+
+===== Run JOSM validation on a map:
+
+-----
+    hoot validate input.osm output.osm
+-----
+
+===== List the available JOSM validators:
+
+-----
+    hoot validate --available-validators
+-----
+
 ===== Prepend a cleaning operation to the existing set of cleaning operations:
 
 -----
@@ -527,7 +565,7 @@ See the User Guide for more details on command usage.
 
 -----
     hoot convert -D convert.ops="hoot::RemoveTagsVisitor" \
-      -D remove.tags.visitor.element.criterion="hoot::WayCriterion" \
+      -D tag.filter.element.criterion="hoot::WayCriterion" \
       -D tag.filter.keys="source;error:circular" input.osm output.osm
 -----
 
@@ -542,7 +580,7 @@ See the User Guide for more details on command usage.
 
 -----
     hoot convert -D convert.ops=hoot::RemoveTagsVisitor -D tag.filter.keys="REF1;REF2" \
-      -D remove.tags.visitor.element.criterion=hoot::TagCriterion \
+      -D tag.filter.element.criterion=hoot::TagCriterion \
       -D tag.criterion.kvps="power=line" -D element.criterion.negate=true input.osm output.osm
 -----
 
@@ -551,7 +589,7 @@ See the User Guide for more details on command usage.
 -----
     hoot convert -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.keys=power \
       -D set.tag.value.visitor.values=minor_line \
-      -D set.tag.value.visitor.element.criterion=hoot::TagValueNumericRangeCriterion \
+      -D set.tag.value.visitor.element.criteria="hoot::TagValueNumericRangeCriterion" \
       -D tag.value.numeric.range.criterion.keys=voltage \
       -D tag.value.numeric.range.criterion.min=1 -D tag.value.numeric.range.criterion.max=45000 \
       input.osm output.osm

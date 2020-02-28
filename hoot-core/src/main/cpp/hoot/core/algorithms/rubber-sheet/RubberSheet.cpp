@@ -39,6 +39,8 @@
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -590,6 +592,14 @@ vector<double> RubberSheet::calculateTiePointDistances()
     tiePointDistances.push_back(tiePoint.c1.distance(tiePoint.c2));
   }
   return tiePointDistances;
+}
+
+QStringList RubberSheet::getCriteria() const
+{
+  QStringList criteria;
+  criteria.append(QString::fromStdString(LinearCriterion::className()));
+  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  return criteria;
 }
 
 }

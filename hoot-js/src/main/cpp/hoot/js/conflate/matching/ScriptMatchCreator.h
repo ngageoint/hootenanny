@@ -27,6 +27,7 @@
 #ifndef SCRIPTMATCHCREATOR_H
 #define SCRIPTMATCHCREATOR_H
 
+// Hoot
 #include <hoot/core/conflate/SearchRadiusProvider.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -108,10 +109,16 @@ public:
    */
   virtual QString getName() const override;
 
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
+
 private:
 
   std::shared_ptr<PluginContext> _script;
   QString _scriptPath;
+  CreatorDescription _scriptInfo;
 
   std::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
   std::shared_ptr<MatchThreshold> _matchThreshold;

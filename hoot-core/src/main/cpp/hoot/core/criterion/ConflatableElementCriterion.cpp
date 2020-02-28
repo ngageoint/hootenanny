@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflatableElementCriterion.h"
 
@@ -34,6 +34,7 @@ namespace hoot
 {
 
 QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::_conflatableCriteria;
+QMap<QString, QMap<QString, ElementCriterionPtr>>  ConflatableElementCriterion::_conflatableCriteriaByGeometryType;
 
 QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCriteria()
 {
@@ -44,6 +45,33 @@ QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCr
   }
   LOG_VART(_conflatableCriteria.size());
   return _conflatableCriteria;
+}
+
+QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCriteria(
+  const GeometryType& geometryType)
+{
+  const QString geometryTypeStr = GeometryTypeCriterion::typeToString(geometryType);
+  if (!_conflatableCriteriaByGeometryType[geometryTypeStr].isEmpty())
+  {
+    return _conflatableCriteriaByGeometryType[geometryTypeStr];
+  }
+  else
+  {
+    const QMap<QString, ElementCriterionPtr> conflatableCriteria = getConflatableCriteria();
+
+    for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
+         itr != conflatableCriteria.end(); ++itr)
+    {
+      ElementCriterionPtr crit = itr.value();
+      std::shared_ptr<GeometryTypeCriterion> geometryCrit =
+        std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+      if (geometryCrit && geometryCrit->getGeometryType() == geometryType)
+      {
+        _conflatableCriteriaByGeometryType[geometryTypeStr][itr.key()] = itr.value();
+      }
+    }
+    return _conflatableCriteriaByGeometryType[geometryTypeStr];
+  }
 }
 
 void ConflatableElementCriterion::_createConflatableCriteria()
@@ -65,14 +93,11 @@ void ConflatableElementCriterion::_createConflatableCriteria()
 
 QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(const ConstElementPtr& e)
 {
-  if (_conflatableCriteria.isEmpty())
-  {
-    _createConflatableCriteria();
-  }
+  const QMap<QString, ElementCriterionPtr> conflatableCriteria = getConflatableCriteria();
 
   QStringList conflatableCriteriaForElement;
-  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = _conflatableCriteria.begin();
-       itr != _conflatableCriteria.end(); ++itr)
+  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
+       itr != conflatableCriteria.end(); ++itr)
   {
     LOG_VART(itr.key());
     if (itr.value()->isSatisfied(e))
@@ -85,7 +110,7 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(const 
   return conflatableCriteriaForElement;
 }
 
-QStringList ConflatableElementCriterion::getCriterionClassNamesByType(const GeometryType& type)
+QStringList ConflatableElementCriterion::getCriterionClassNamesByGeometryType(const GeometryType& type)
 {
   QStringList classNamesByType;
   std::vector<std::string> classNames =

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POLYCLUSTERGEOMODIFIERACTION_H
 #define POLYCLUSTERGEOMODIFIERACTION_H
@@ -61,6 +61,7 @@ namespace hoot
 class PolyClusterGeoModifierAction : public GeometryModifierAction
 {
 public:
+
   static const QString DISTANCE_PARAM;
   static const QString ALPHA_PARAM;
   static const QString REMOVE_POLYS_PARAM;
@@ -78,7 +79,10 @@ public:
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
   virtual void processFinalize(OsmMapPtr& pMap) override;
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
+
   const double DEFAULT_DISTANCE = 20;
   const double DEFAULT_ALPHA = 20;
   const bool DEFAULT_REMOVE_POLYS = true;

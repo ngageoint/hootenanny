@@ -50,8 +50,8 @@
 // Qt
 #include <QFileInfo>
 #include <qnumeric.h>
-#include <QElapsedTimer>
 #include <QStringBuilder>
+#include <QElapsedTimer>
 
 // Standard
 #include <deque>
@@ -129,7 +129,7 @@ public:
     //this is meant to have been set externally in a js rules file
     _customSearchRadius =
       getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
-    LOG_VART(_customSearchRadius);
+    LOG_VARD(_customSearchRadius);
 
     Handle<Value> value = plugin->Get(toV8("getSearchRadius"));
     if (value->IsUndefined())
@@ -147,6 +147,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -171,8 +172,8 @@ public:
     LOG_TRACE(
       "Finding neighbors for: " << e->getElementId() << " during conflation: " << _scriptPath <<
       "...");
-    set<ElementId> neighbors =
-      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+    const set<ElementId> neighbors =
+      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, map);
     LOG_VART(neighbors);
     ElementId from = e->getElementId();
 
@@ -283,11 +284,13 @@ public:
       if (_customSearchRadius < 0)
       {
         //base the radius off of the element itself
+        LOG_TRACE("Calculating search radius based off of element...");
         result = e->getCircularError() * _candidateDistanceSigma;
       }
       else
       {
         //base the radius off some predefined radius
+        LOG_TRACE("Calculating search radius based off of custom defined script value...");
         result = _customSearchRadius * _candidateDistanceSigma;
       }
     }
@@ -295,6 +298,7 @@ public:
     {
       if (_searchRadiusCache.contains(e->getElementId()))
       {
+        LOG_TRACE("Retrieving search radius from cache...");
         result = _searchRadiusCache[e->getElementId()];
       }
       else
@@ -318,14 +322,13 @@ public:
       }
     }
 
+    LOG_VART(result);
     return result;
   }
 
   void calculateSearchRadius()
   {
-    /*
-     * This is meant to run one time when the match creator is initialized.
-     */
+    // This is meant to run one time when the match creator is initialized.
 
     LOG_DEBUG("Checking for existence of search radius export for: " << _scriptPath << "...");
 
@@ -348,7 +351,7 @@ public:
       return;
     }
 
-    LOG_DEBUG("Calculating search radius for: " << _scriptPath << "...");
+    LOG_STATUS("Calculating search radius for: " << _scriptPath << "...");
 
     Handle<Function> func = Handle<Function>::Cast(value);
     Handle<Value> jsArgs[1];
@@ -380,7 +383,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating script feature index for: " << _scriptPath << "...");
+      LOG_STATUS("Creating script feature index for: " << _scriptPath << "...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -396,6 +399,7 @@ public:
       // Point/Polygon conflation behaves diferently than all other generic scripts in that it
       // conflates geometries of different types. This class wasn't really originally designed to
       // handle that, so we add a logic path here to accommodate Point/Polygon.
+      long numElementsIndexed = 0;
       if (!_scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME))
       {
         std::function<bool (ConstElementPtr)> f =
@@ -426,6 +430,7 @@ public:
             break;
         }
         v.finalizeIndex();
+        numElementsIndexed = v.getSize();
       }
       else
       {
@@ -438,8 +443,12 @@ public:
         getMap()->visitWaysRo(v);
         getMap()->visitRelationsRo(v);
         v.finalizeIndex();
+        numElementsIndexed = v.getSize();
       }
-      LOG_VART(_indexToEid.size());
+
+      LOG_STATUS(
+        "Script feature index created for: " << _scriptPath << "with " <<
+        StringUtils::formatLargeNumber(numElementsIndexed) << " elements.");
     }
     return _index;
   }
@@ -554,16 +563,14 @@ public:
     //}
 
     _matchCandidateCache[e->getElementId()] = result;
+
     return result;
   }
 
   virtual void visit(const ConstElementPtr& e)
   {
-    //LOG_VART(e->getElementId());
     if (isMatchCandidate(e))
     {
-      //LOG_TRACE("isMatchCandidate: " << e->getElementId());
-
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
@@ -597,6 +604,8 @@ public:
   void setCreatorDescription(const CreatorDescription& description) { _scriptInfo = description; }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
+
+  bool hasCustomSearchRadiusFunction() const { return !_getSearchRadius.IsEmpty(); }
 
 private:
 
@@ -673,6 +682,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   //bit of a hack...see MatchCreator.h...need to refactor
   _description = QString::fromStdString(className()) + "," + args[0];
   _cachedScriptVisitor.reset();
+  _scriptInfo = _getScriptDescription(_scriptPath);
 
   LOG_DEBUG(
     "Set arguments for: " << className() << " - rules: " << QFileInfo(_scriptPath).fileName());
@@ -749,24 +759,43 @@ void ScriptMatchCreator::createMatches(
 
   QElapsedTimer timer;
   timer.start();
-  QFileInfo scriptFileInfo(_scriptPath);
-  LOG_DEBUG(
-    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
-  LOG_VARD(*threshold);
-  const int matchesSizeBefore = matches.size();
 
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
-  const CreatorDescription scriptInfo = _getScriptDescription(_scriptPath);
-  _descriptionCache[_scriptPath] = scriptInfo;
-  v.setCreatorDescription(scriptInfo);
+  _descriptionCache[_scriptPath] = _scriptInfo;
+  v.setCreatorDescription(_scriptInfo);
   v.initSearchRadiusInfo();
   v.calculateSearchRadius();
-  _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
+
+  QFileInfo scriptFileInfo(_scriptPath);
+  // This doesn't work with _candidateDistanceSigma, but right now its set to 1.0 in every script
+  // and has no effect on the search radius.
+  QString searchRadiusStr;
+  const double searchRadius = v.getCustomSearchRadius();
+  if (v.hasCustomSearchRadiusFunction())
+  {
+    searchRadiusStr = "within a function calculated search radius";
+  }
+  else if (searchRadius < 0)
+  {
+    searchRadiusStr = "within a feature dependent search radius";
+  }
+  else
+  {
+    searchRadiusStr =
+      "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
+  }
+  LOG_STATUS(
+    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << " " <<
+     searchRadiusStr << "...");
+  LOG_VARD(*threshold);
+  const int matchesSizeBefore = matches.size();
+
+  _cachedCustomSearchRadii[_scriptPath] = searchRadius;
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
-  LOG_VARD(GeometryTypeCriterion::typeToString(scriptInfo.geometryType));
-  switch (scriptInfo.geometryType)
+  LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.geometryType));
+  switch (_scriptInfo.geometryType)
   {
     case GeometryTypeCriterion::GeometryType::Point:
       map->visitNodesRo(v);
@@ -786,7 +815,7 @@ void ScriptMatchCreator::createMatches(
   }
   const int matchesSizeAfter = matches.size();
 
-  QString matchType = CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType);
+  QString matchType = CreatorDescription::baseFeatureTypeToString(_scriptInfo.baseFeatureType);
   // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
   // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
   if (_scriptPath.contains(POINT_POLYGON_SCRIPT_NAME))
@@ -889,6 +918,8 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
 
 CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
 {
+  LOG_DEBUG("Getting script description...");
+
   CreatorDescription result;
   result.experimental = true;
 
@@ -922,6 +953,24 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   {
     Handle<Value> value = ToLocal(&plugin)->Get(geometryTypeStr);
     result.geometryType = GeometryTypeCriterion::typeFromString(toCpp<QString>(value));
+  }
+  // This controls which feature types a script conflates and is required. It allows for disabling
+  // superfluous conflate ops. It should probably be integrated with isMatchCandidate somehow at
+  // some point, if possible.
+  Handle<String> matchCandidateCriterionStr =
+    String::NewFromUtf8(current, "matchCandidateCriterion");
+  if (ToLocal(&plugin)->Has(matchCandidateCriterionStr))
+  {
+    Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStr);
+    const QString valueStr = toCpp<QString>(value);
+    if (valueStr.contains(";"))
+    {
+      result.matchCandidateCriteria = valueStr.split(";");
+    }
+    else
+    {
+      result.matchCandidateCriteria = QStringList(valueStr);
+    }
   }
 
   QFileInfo fi(path);
@@ -983,6 +1032,11 @@ QString ScriptMatchCreator::getName() const
 {
   QFileInfo scriptFileInfo(_scriptPath);
   return QString::fromStdString(className()) + ";" + scriptFileInfo.fileName();
+}
+
+QStringList ScriptMatchCreator::getCriteria() const
+{
+  return _scriptInfo.matchCandidateCriteria;
 }
 
 }

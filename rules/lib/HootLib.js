@@ -304,10 +304,12 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
 /**
  * Returns true if the feature is conflatable by any geometry non-generic conflation algorithm (so conflatable by everything besides: 
  * Point.js, Line.js, Polygon.js, or PointPolygon.js).
+
+TODO: update
  */
-function isSpecificallyConflatable(map, e)
+function isSpecificallyConflatable(map, e, geometryTypeFilter)
 {
-  return hoot.OsmSchema.isSpecificallyConflatable(map, e);
+  return hoot.OsmSchema.isSpecificallyConflatable(map, e, geometryTypeFilter);
 }
 
 // TODO: All of these is* methods can go away if #3047 is completed.

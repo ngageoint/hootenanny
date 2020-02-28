@@ -8,9 +8,11 @@ mkdir -p $OUTPUT_DIR
 
 DATA_FILES=$HOOT_HOME/test-files/jakarta_raya_coastline.shp
 
-hoot convert -D schema.translation.script=test-files/cmd/quick/tSimple.js $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm
+CONFIG="-C Testing.conf"
 
-hoot convert -D schema.translation.script=translations/BadSyntaxTest.js $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm
+hoot convert $CONFIG -D schema.translation.script=test-files/cmd/quick/tSimple.js $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm
 
-hoot convert -D schema.translation.script=test-files/cmd/quick/BadRequire.js $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm
+hoot convert $CONFIG -D schema.translation.script=translations/BadSyntaxTest.js $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm
+
+hoot convert $CONFIG -D schema.translation.script=test-files/cmd/quick/BadRequire.js $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm
 

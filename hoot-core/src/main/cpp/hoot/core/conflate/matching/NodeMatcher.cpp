@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "NodeMatcher.h"
@@ -39,6 +39,10 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -61,16 +65,22 @@ _delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
 {
 }
 
+QStringList NodeMatcher::getNetworkCriterionClassNames()
+{
+  // TODO: Should LinearCriterion be added here?
+  QStringList critClasses;
+  critClasses.append(QString::fromStdString(HighwayCriterion::className()));
+  critClasses.append(QString::fromStdString(LinearWaterwayCriterion::className()));
+  critClasses.append(QString::fromStdString(PowerLineCriterion::className()));
+  critClasses.append(QString::fromStdString(RailwayCriterion::className()));
+  return critClasses;
+}
+
 bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
 {
   if (_networkFeatureTypeCriteria.isEmpty())
   {
-    QStringList critClasses;
-    critClasses.append("hoot::HighwayCriterion");
-    critClasses.append("hoot::LinearWaterwayCriterion");
-    critClasses.append("hoot::PowerLineCriterion");
-    critClasses.append("hoot::RailwayCriterion");
-
+    const QStringList critClasses = getNetworkCriterionClassNames();
     for (int i = 0; i < critClasses.size(); i++)
     {
       _networkFeatureTypeCriteria.append(

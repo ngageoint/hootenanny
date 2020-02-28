@@ -23,42 +23,6 @@
   <packaging>pom</packaging>
   <version>0.0.1</version>
   <repositories>
-    <!-- can comment out these repos if using artifactory -->
-    <repository>
-      <id>xwiki.org-cache</id>
-      <url>http://maven.xwiki.org/externals</url>
-      <releases>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>deegree-repo</id>
-      <url>http://repo.deegree.org/content/groups/public/</url>
-      <releases>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <!-- uncomment below for artifactory support -->
-    <!-- repository>
-        <id>central</id>
-        <url>http://selma:8081/artifactory/libs-release</url>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-    </repository>
-    <repository>
-        <id>snapshots</id>
-        <url>http://selma:8081/artifactory/libs-snapshot</url>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-    </repository -->
   </repositories>
   <build>
     <defaultGoal>install</defaultGoal>

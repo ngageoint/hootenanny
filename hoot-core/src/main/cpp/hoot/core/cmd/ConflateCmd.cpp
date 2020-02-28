@@ -57,6 +57,12 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/ops/MapCleaner.h>
+
 
 // Standard
 #include <fstream>
@@ -80,7 +86,8 @@ const QString ConflateCmd::JOB_SOURCE = "Conflate";
 HOOT_FACTORY_REGISTER(Command, ConflateCmd)
 
 ConflateCmd::ConflateCmd() :
-_numTotalTasks(0)
+_numTotalTasks(0),
+_filterOps(ConfigOptions().getConflateRemoveSuperfluousOps())
 {
 }
 
@@ -98,6 +105,8 @@ int ConflateCmd::runSimple(QStringList& args)
 {
   Timer totalTime;
   Timer t;
+
+  BoundedCommand::runSimple(args);
 
   QList<SingleStat> stats;
   bool displayStats = false;
@@ -215,10 +224,22 @@ int ConflateCmd::runSimple(QStringList& args)
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
 
-  _updateConfigOptionsForAttributeConflation();
-  if (isDiffConflate)
+  // The highway.merge.tags.only option only gets used with Attribute Conflation for now, so we'll
+  // use it as the sole identifier for it. If that ever changes, then we'll need a different way
+  // to recognize when AC is occurring.
+  if (ConfigOptions().getHighwayMergeTagsOnly())
   {
-    _updateConfigOptionsForDifferentialConflation();
+    _updateConfigOptionsForAttributeConflation();
+  }
+  if (isDiffConflate || ConfigOptions().getHighwayMergeTagsOnly())
+  {
+    _disableRoundaboutRemoval();
+  }
+  if (_filterOps)
+  {
+    // Let's see if we can remove any ops in the configuration that will have no effect on the
+    // feature types we're conflating in order to improve runtime performance.
+    _removeSuperfluousOps();
   }
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
@@ -231,6 +252,7 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     _numTotalTasks++;
   }
+
   // Only add one task for each set of conflate ops, since NamedOp will create its own task step for
   // each op internally.
   if (ConfigOptions().getConflatePreOps().size() > 0)
@@ -481,7 +503,7 @@ int ConflateCmd::runSimple(QStringList& args)
   stats.append(IoSingleStat(IoSingleStat::CancelledWriteBytes));
   stats.append(SingleStat("(Dubious) Bytes Processed per Second", inputBytes / totalElapsed));
 
-  if (isDiffConflate)
+  if (isDiffConflate && displayStats)
   {
     progress.set(
       _getJobPercentComplete(currentTask - 1),
@@ -493,16 +515,15 @@ int ConflateCmd::runSimple(QStringList& args)
 
   if (displayStats)
   {
+    allStats.append(stats);
     if (outputStatsFile.isEmpty())
     {
-      allStats.append(stats);
       QString statsMsg = MapStatsWriter().statsToString(allStats, "\t");
       cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" <<
               statsMsg << endl;
     }
     else
     {
-      allStats.append(stats);
       MapStatsWriter().writeStatsToJson(allStats, outputStatsFile);
       cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " <<
               outputStatsFile << endl;
@@ -530,12 +551,223 @@ float ConflateCmd::_getJobPercentComplete(const int currentTaskNum) const
   return (float)currentTaskNum / (float)_numTotalTasks;
 }
 
-void ConflateCmd::_updateConfigOptionsForDifferentialConflation()
+void ConflateCmd::_removeSuperfluousOps()
 {
+  // get all crits involved in the current matcher configuration
+  const QSet<QString> matcherCrits = _getMatchCreatorCrits();
+
+  QSet<QString> removedOps;
+
+  // for each of the conflate pre/post and map cleaner transforms (if conflate pre/post specifies
+  // MapCleaner) filter out any that aren't associated with the same ElementCriterion as the ones
+  // associated with the matchers
+
+  const QStringList modifiedPreConflateOps =
+    _filterOutUnneededOps(
+      matcherCrits, ConfigOptions().getConflatePreOps(), removedOps);
+  if (modifiedPreConflateOps.size() != ConfigOptions().getConflatePreOps().size())
+  {
+    conf().set(ConfigOptions::getConflatePreOpsKey(), modifiedPreConflateOps);
+  }
+
+  const QStringList modifiedPostConflateOps =
+    _filterOutUnneededOps(
+      matcherCrits, ConfigOptions().getConflatePostOps(), removedOps);
+  if (modifiedPostConflateOps.size() != ConfigOptions().getConflatePostOps().size())
+  {
+    conf().set(ConfigOptions::getConflatePostOpsKey(), modifiedPostConflateOps);
+  }
+
+  const QString mapCleanerName = QString::fromStdString(MapCleaner::className());
+  if (modifiedPreConflateOps.contains(mapCleanerName) ||
+      modifiedPostConflateOps.contains(mapCleanerName))
+  {
+    const QStringList modifiedCleaningOps =
+      _filterOutUnneededOps(
+        matcherCrits, ConfigOptions().getMapCleanerTransforms(), removedOps);
+    if (modifiedCleaningOps.size() != ConfigOptions().getMapCleanerTransforms().size())
+    {
+      conf().set(ConfigOptions::getMapCleanerTransformsKey(), modifiedCleaningOps);
+    }
+  }
+
+  if (removedOps.size() > 0)
+  {
+    QStringList removedOpsList = removedOps.values();
+    qSort(removedOpsList);
+    LOG_INFO(
+      "Removed the following conflate pre/post operations with no relevance to the selected " <<
+      "matchers: " << removedOpsList.join(", "));
+  }
+}
+
+QStringList ConflateCmd::_filterOutUnneededOps(
+  const QSet<QString>& matcherCrits, const QStringList& ops, QSet<QString>& removedOps)
+{
+  LOG_TRACE("ops before: " << ops);
+
+  QStringList modifiedOps;
+
+  for (int i = 0; i < ops.size(); i++)
+  {
+    const QString opName = ops.at(i);
+    LOG_VART(opName);
+
+    // MapCleaner's ops are configured with map.cleaner.transforms, so don't exclude it here.
+    if (opName == QString::fromStdString(MapCleaner::className()))
+    {
+      modifiedOps.append(opName);
+      continue;
+    }
+
+    // All the ops should be map ops or element vis and, thus, support FilteredByCriteria, but
+    // we'll check anyway to be safe.
+    std::shared_ptr<FilteredByCriteria> op;
+    if (Factory::getInstance().hasBase<OsmMapOperation>(opName.toStdString()))
+    {
+      op =
+        std::dynamic_pointer_cast<FilteredByCriteria>(
+          std::shared_ptr<OsmMapOperation>(
+            Factory::getInstance().constructObject<OsmMapOperation>(opName)));
+    }
+    else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
+    {
+      op =
+        std::dynamic_pointer_cast<FilteredByCriteria>(
+          std::shared_ptr<ElementVisitor>(
+            Factory::getInstance().constructObject<ElementVisitor>(opName)));
+    }
+
+    if (op)
+    {
+      // get all the class names of the crits that this op is associated with
+      const QStringList opCrits = op->getCriteria();
+      LOG_VART(opCrits);
+
+      // If the op is not associated with any crit, we assume it should never be disabled based on
+      // the feature type being conflated.
+      if (opCrits.isEmpty())
+      {
+        modifiedOps.append(opName);
+        continue;
+      }
+
+      // If any of the op's crits match with those in the matchers' list, we'll use it. Otherwise,
+      // we disable it.
+      bool opAdded = false;
+      for (int j = 0; j < opCrits.size(); j++)
+      {
+        const QString opCrit = opCrits.at(j);
+        if (matcherCrits.contains(opCrit))
+        {
+          modifiedOps.append(opName);
+          opAdded = true;
+          break;
+        }
+      }
+      if (!opAdded)
+      {
+        removedOps.insert(opName);
+      }
+    }
+    else
+    {
+      removedOps.insert(opName);
+    }
+  }
+
+  LOG_TRACE("ops after: " << modifiedOps);
+  LOG_VART(removedOps);
+  return modifiedOps;
+}
+
+QSet<QString> ConflateCmd::_getMatchCreatorCrits()
+{
+  QSet<QString> matcherCrits;
+
+  // get all of the matchers from our current config
+  std::vector<std::shared_ptr<MatchCreator>> matchCreators =
+      MatchFactory::getInstance().getCreators();
+  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator it = matchCreators.begin();
+       it != matchCreators.end(); ++it)
+  {
+    std::shared_ptr<MatchCreator> matchCreator = *it;
+    std::shared_ptr<FilteredByCriteria> critFilter =
+      std::dynamic_pointer_cast<FilteredByCriteria>(matchCreator);
+    const QStringList crits = critFilter->getCriteria();
+
+    // Technically, not sure we'd have to error out here, but it will be good to know if any
+    // matchers weren't configured with crits to keep conflate bugs from sneaking in over time.
+    if (crits.size() == 0)
+    {
+      throw HootException(
+        "Match creator: " + matchCreator->getName() +
+        " does not specify any associated feature type criteria.");
+    }
+
+    for (int i = 0; i < crits.size(); i++)
+    {
+      const QString critStr = crits.at(i);
+      LOG_VART(critStr);
+      // doublecheck this is a valid crit
+      if (Factory::getInstance().hasBase<ElementCriterion>(critStr.toStdString()))
+      {
+        // add the crit
+        matcherCrits.insert(critStr);
+
+        // also add any generic geometry crits the crit inherits from
+
+        const QStringList pointCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Point);
+        LOG_VART(pointCrits);
+        if (pointCrits.contains(critStr))
+        {
+          matcherCrits.insert(QString::fromStdString(PointCriterion::className()));
+        }
+
+        const QStringList lineCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Line);
+        LOG_VART(lineCrits);
+        if (lineCrits.contains(critStr))
+        {
+          matcherCrits.insert(QString::fromStdString(LinearCriterion::className()));
+        }
+
+        const QStringList polyCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Polygon);
+        LOG_VART(polyCrits);
+        if (polyCrits.contains(critStr))
+        {
+          matcherCrits.insert(QString::fromStdString(PolygonCriterion::className()));
+        }
+      }
+    }
+  }
+
+  LOG_VART(matcherCrits);
+  return matcherCrits;
+}
+
+void ConflateCmd::_disableRoundaboutRemoval()
+{
+  // This applies to both Attribute and Differential Conflation.
+
   // Since Differential throws out all matches, there's no way we can have a bad merge between
   // ref/secondary roundabouts. Therefore, no need to replace/remove them. If there's a match, we'll
-  // end with no secondary roundabout in the diff output and only the ref roundabout when the diff
-  // is applied back to the ref.
+  // end up with no secondary roundabout in the diff output and only the ref roundabout when the
+  // diff is applied back to the ref.
+
+  // Our roundabout handling used with other types of conflation makes no sense for Attribute
+  // Conflation. For the other types of conflation we remove roundabouts b/c hoot isn't very good
+  // at merging them together, so we keep the ref roundabouts and skip conflating them altogether.
+  // Since we always keep the ref geometry in AC, there's no opportunity for bad merging and,
+  // thus, no need to remove them in the first place. So, we'll override that behavior here.
+
+  // If the work for #3442 is done, then we could handle this removal in AttributeConflation.conf
+  // add DifferentialConflation.conf instead of doing it here.
 
   QStringList preConflateOps = ConfigOptions().getConflatePreOps();
   const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
@@ -560,25 +792,19 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
   // There may be a way to eliminate these by adding more custom behavior to the UI.
 
-  // This option only gets used with Attribute Conflation for now, so we'll use it as the sole
-  // identifier for it.  This could change in the future, but hopefully if that happens, by then
-  // we have a better solution for changing these opts in place.
-  if (ConfigOptions().getHighwayMergeTagsOnly())
-  {
-    const QString reviewRelationCritName =
-      QString::fromStdString(ReviewRelationCriterion::className());
+  const QString reviewRelationCritName =
+    QString::fromStdString(ReviewRelationCriterion::className());
 
-    // This swaps the logic that removes all reviews with the logic that removes them based on score
-    // thresholding.
-    if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
-    {
-      QStringList removeElementsCriteria =
-        conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
-      removeElementsCriteria.replaceInStrings(
-        reviewRelationCritName, QString::fromStdString(ReviewScoreCriterion::className()));
-      conf().set(
-        ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
-    }
+  // This swaps the logic that removes all reviews with the logic that removes them based on score
+  // thresholding.
+  if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
+  {
+    QStringList removeElementsCriteria =
+      conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
+    removeElementsCriteria.replaceInStrings(
+      reviewRelationCritName, QString::fromStdString(ReviewScoreCriterion::className()));
+    conf().set(
+      ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
   }
 }
 

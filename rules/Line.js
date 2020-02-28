@@ -7,14 +7,17 @@
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches generic lines";
 exports.experimental = false;
-exports.matchThreshold = parseFloat(hoot.get("generic.line.match.threshold"));
-exports.missThreshold = parseFloat(hoot.get("generic.line.miss.threshold"));
-exports.reviewThreshold = parseFloat(hoot.get("generic.line.review.threshold"));
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
+// If that ever changes, then the generic score threshold configuration options used below should 
+// be replaced with custom score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
 exports.tagThreshold = parseFloat(hoot.get("generic.line.tag.threshold"));
 exports.baseFeatureType = "Line";
 exports.geometryType = "line";
-exports.matchCandidateCriterion = "hoot::LineCriterion"; // See #3047
+exports.matchCandidateCriterion = "hoot::LinearCriterion";
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
@@ -34,7 +37,7 @@ var sublineMatcher = new hoot.MaximalSublineStringMatcher({
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isLinear(e) && !isSpecificallyConflatable(map, e);
+  return isLinear(e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**

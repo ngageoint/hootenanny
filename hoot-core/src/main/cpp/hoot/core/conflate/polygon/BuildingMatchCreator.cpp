@@ -104,6 +104,7 @@ public:
     _numElementsVisited = 0;
     _numMatchCandidatesVisited = 0;
     _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
+    _searchRadius = ConfigOptions().getSearchRadiusBuilding();
   }
 
   ~BuildingMatchVisitor()
@@ -113,6 +114,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -190,8 +192,17 @@ public:
 
   Meters getSearchRadius(const std::shared_ptr<const Element>& e) const
   {
-    LOG_VART(e->getCircularError());
-    return e->getCircularError();
+    Meters searchRadius;
+    if (_searchRadius >= 0)
+    {
+      searchRadius = _searchRadius;
+    }
+    else
+    {
+      searchRadius = e->getCircularError();
+    }
+    LOG_VART(searchRadius);
+    return searchRadius;
   }
 
   virtual void visit(const ConstElementPtr& e)
@@ -232,7 +243,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating building feature index...");
+      LOG_STATUS("Creating building feature index...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -254,6 +265,10 @@ public:
 
       getMap()->visitRo(v);
       v.finalizeIndex();
+
+      LOG_STATUS(
+        "Building feature index created with " << StringUtils::formatLargeNumber(v.getSize()) <<
+        " elements.");
     }
 
     return _index;
@@ -276,6 +291,7 @@ private:
   int _neighborCountSum;
   int _elementsEvaluated;
   size_t _maxGroupSize;
+  Meters _searchRadius;
   /// reject any manipulation with a miss score >= _rejectScore
   double _rejectScore;
 
@@ -413,7 +429,19 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
 {
   QElapsedTimer timer;
   timer.start();
-  LOG_DEBUG("Looking for matches with: " << className() << "...");
+
+  QString searchRadiusStr;
+  const double searchRadius = ConfigOptions().getSearchRadiusBuilding();
+  if (searchRadius < 0)
+  {
+    searchRadiusStr = "within a feature dependent search radius";
+  }
+  else
+  {
+    searchRadiusStr =
+      "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
+  }
+  LOG_STATUS("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
   const int matchesSizeBefore = matches.size();
 

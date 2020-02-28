@@ -35,9 +35,13 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace geos::geom;
 using namespace std;
@@ -72,11 +76,17 @@ void SpatialIndexer::addCriterion(const ElementCriterionPtr& e)
 
 void SpatialIndexer::finalizeIndex()
 {
+  QElapsedTimer timer;
+  timer.start();
+
   LOG_DEBUG("Finalizing index...");
+
   LOG_VARD(_indexToEid.size());
   LOG_VARD(_boxes.size());
   LOG_VARD(_fids.size());
   _index->bulkInsert(_boxes, _fids);
+
+  LOG_DEBUG("Index finalized in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 void SpatialIndexer::visit(const ConstElementPtr& e)
