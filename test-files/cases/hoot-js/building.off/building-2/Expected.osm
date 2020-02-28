@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-0.364892954" minlon="42.54567562958" maxlat="-0.3647451386" maxlon="42.54592270335"/>
+    <node visible="true" id="-2565" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647638719999999" lon="42.5456756299999981"/>
+    <node visible="true" id="-2564" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647465618199999" lon="42.5458896267100002"/>
+    <node visible="true" id="-2563" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648746722499999" lon="42.5459002160599979"/>
+    <node visible="true" id="-2562" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648929540000000" lon="42.5456816649999965"/>
+    <node visible="true" id="-2561" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647624487900000" lon="42.5457003940800007"/>
+    <node visible="true" id="-2560" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647451386100000" lon="42.5459118289699987"/>
+    <node visible="true" id="-2559" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648715411900000" lon="42.5459218490300017"/>
+    <node visible="true" id="-2558" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648909615100000" lon="42.5457104141399967"/>
+    <node visible="true" id="-2557" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648210368600000" lon="42.5458087341999942">
+        <tag k="source:name" v="IDP/City Graphic"/>
+        <tag k="amenity" v="police"/>
+        <tag k="security:non_ic_dissem_ctl" v="limited_distribution"/>
+        <tag k="security:classification" v="unclassified"/>
+        <tag k="building" v="yes"/>
+        <tag k="operational_status" v="operational"/>
+        <tag k="REF2" v="00011f"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2555" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647638722800001" lon="42.5456756295800034"/>
+    <node visible="true" id="-2553" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647451386000000" lon="42.5459149604999993"/>
+    <node visible="true" id="-2551" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648738182599999" lon="42.5459227033500014"/>
+    <node visible="true" id="-2549" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648929535900000" lon="42.5456816645500027"/>
+    <way visible="true" id="-2561" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2565"/>
+        <nd ref="-2564"/>
+        <nd ref="-2563"/>
+        <nd ref="-2562"/>
+        <nd ref="-2565"/>
+        <tag k="building:levels" v="2"/>
+        <tag k="amenity" v="police"/>
+        <tag k="roof:shape" v="flat"/>
+        <tag k="security:non_ic_dissem_ctl" v="limited_distribution"/>
+        <tag k="security:classification" v="unclassified"/>
+        <tag k="source:res_owner" v="USA"/>
+        <tag k="building" v="yes"/>
+        <tag k="height" v="9"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2560" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2561"/>
+        <nd ref="-2560"/>
+        <nd ref="-2559"/>
+        <nd ref="-2558"/>
+        <nd ref="-2561"/>
+        <tag k="building:levels" v="2"/>
+        <tag k="amenity" v="police"/>
+        <tag k="roof:shape" v="flat"/>
+        <tag k="security:non_ic_dissem_ctl" v="limited_distribution"/>
+        <tag k="security:classification" v="unclassified"/>
+        <tag k="source:res_owner" v="USA"/>
+        <tag k="building" v="yes"/>
+        <tag k="height" v="9"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2559" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2555"/>
+        <nd ref="-2553"/>
+        <nd ref="-2551"/>
+        <nd ref="-2549"/>
+        <nd ref="-2555"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="00011f"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-2559" role="reviewee"/>
+        <member type="way" ref="-2560" role="reviewee"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-2559" role="reviewee"/>
+        <member type="way" ref="-2561" role="reviewee"/>
+        <tag k="hoot:review:sort_order" v="1"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+</osm>
