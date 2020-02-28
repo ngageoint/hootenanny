@@ -414,14 +414,25 @@ public class UserResource {
     		
     		Map<String, String> tags = PostgresUtils.postgresObjToHStore(favoritesColumn);
     		
+    		String getFavorites = json.get("members").toString();
+    		
             if ( !tags.containsKey(getName) ) {
-                String getFavorites = json.get("members").toString();
                 tags.put(getName, getFavorites);
                 createQuery().update(users)
                     .where(users.id.eq(userId))
                     .set(users.favoriteOpts, tags)
                     .execute();
             }
+            else {
+            	tags.remove(getName, getFavorites);
+                tags.put(getName, getFavorites);
+                	
+                createQuery().update(users)
+                		.where(users.id.eq(userId))
+                		.set(users.favoriteOpts, tags)
+                		.execute();
+            }
+     
 
     	} catch (Exception e) {
     		Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
