@@ -56,20 +56,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-88654011"/>
     </node>
-    <node visible="true" id="-88654010" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.3746082155999986" lon="-103.1170476980099835">
-        <tag k="hoot:status" v="2"/>
-        <tag k="barrier" v="wall"/>
-        <tag k="note" v="L"/>
-        <tag k="hoot:id" v="-88654010"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-88654009" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.5870237819899984" lon="-106.0056570899999997">
-        <tag k="hoot:status" v="2"/>
-        <tag k="barrier" v="wall"/>
-        <tag k="note" v="J"/>
-        <tag k="hoot:id" v="-88654009"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-88654008" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.4879852247100018" lon="-104.5813629684299997">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-88654008"/>
@@ -189,20 +175,6 @@
     <node visible="true" id="-88652703" timestamp="1970-01-01T00:00:00Z" version="1" lat="34.2756417161000044" lon="-106.6747399173199824">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-88652703"/>
-    </node>
-    <node visible="true" id="-88652701" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1357923542299986" lon="-102.5564800936700038">
-        <tag k="hoot:status" v="1"/>
-        <tag k="barrier" v="wall"/>
-        <tag k="note" v="O"/>
-        <tag k="hoot:id" v="-88652701"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-88652699" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0723066436199957" lon="-106.0385704328199949">
-        <tag k="hoot:status" v="1"/>
-        <tag k="barrier" v="wall"/>
-        <tag k="note" v="M"/>
-        <tag k="hoot:id" v="-88652699"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-88652697" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8814080276699912" lon="-103.1056964715599946">
         <tag k="hoot:status" v="1"/>
@@ -435,11 +407,12 @@
         <nd ref="-88654014"/>
         <nd ref="-88654011"/>
         <tag k="feature_area" v="6.9556775568E9"/>
-        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:matchedBy" v="PointPolygon"/>
         <tag k="barrier" v="wall"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="note" v="P"/>
+        <tag k="note" v="P;O"/>
         <tag k="hoot:id" v="-88652733"/>
         <tag k="width" v="71720.9"/>
         <tag k="angle" v="93.0"/>
@@ -499,11 +472,12 @@
         <nd ref="-88653986"/>
         <nd ref="-88653983"/>
         <tag k="feature_area" v="6.9556775568E9"/>
-        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:matchedBy" v="PointPolygon"/>
         <tag k="barrier" v="wall"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="note" v="N"/>
+        <tag k="note" v="N;M"/>
         <tag k="hoot:id" v="-88652727"/>
         <tag k="width" v="71720.9"/>
         <tag k="length" v="101953.3"/>
@@ -535,11 +509,12 @@
         <nd ref="-88652697"/>
         <nd ref="-88652691"/>
         <tag k="feature_area" v="6.9556775568E9"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:matchedBy" v="PointPolygon"/>
         <tag k="barrier" v="wall"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="note" v="K"/>
+        <tag k="note" v="K;L"/>
         <tag k="hoot:id" v="-88652723"/>
         <tag k="width" v="71720.9"/>
         <tag k="angle" v="93.0"/>
@@ -553,11 +528,12 @@
         <nd ref="-88652689"/>
         <nd ref="-88652683"/>
         <tag k="feature_area" v="6.9556775568E9"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:matchedBy" v="PointPolygon"/>
         <tag k="barrier" v="wall"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="note" v="I"/>
+        <tag k="note" v="I;J"/>
         <tag k="hoot:id" v="-88652722"/>
         <tag k="width" v="71720.9"/>
         <tag k="angle" v="93.0"/>
