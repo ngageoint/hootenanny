@@ -46,7 +46,8 @@ namespace hoot
 class OsmMap;
 
 /**
- * Removes all the nodes from a map that aren't part of a way and have no information in them.
+ * Removes all the nodes from a map that aren't part of a way or a relation and have no information
+ * in them.
  *
  * If the bounds have been set via Boundable's setBounds then only nodes that are both not part
  * of a way and inside the bounds will be removed. This is most useful when performing tile based
