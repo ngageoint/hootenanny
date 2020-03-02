@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -43,7 +43,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/visitors/RemoveDuplicateAreaVisitor.h>
+#include <hoot/core/visitors/RemoveDuplicateAreasVisitor.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -52,15 +52,15 @@ using namespace Tgs;
 namespace hoot
 {
 
-class RemoveDuplicateAreaVisitorTest : public HootTestFixture
+class RemoveDuplicateAreasVisitorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(RemoveDuplicateAreaVisitorTest);
+  CPPUNIT_TEST_SUITE(RemoveDuplicateAreasVisitorTest);
   CPPUNIT_TEST(runToyTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  RemoveDuplicateAreaVisitorTest()
+  RemoveDuplicateAreasVisitorTest()
     : HootTestFixture("test-files/visitors/",
                       UNUSED_PATH)
   {
@@ -73,10 +73,10 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "RemoveDuplicateAreaVisitorTest.osm", map);
+    reader.read(_inputPath + "RemoveDuplicateAreasVisitorTest.osm", map);
     MapProjector::projectToPlanar(map);
 
-    RemoveDuplicateAreaVisitor uut;
+    RemoveDuplicateAreasVisitor uut;
     map->visitRw(uut);
 
     // these "duplicates" should not be removed.
@@ -96,8 +96,7 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveDuplicateAreaVisitorTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveDuplicateAreaVisitorTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveDuplicateAreasVisitorTest, "quick");
 
 }
 

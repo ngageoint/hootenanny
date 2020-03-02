@@ -47,11 +47,16 @@ InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
   {
     // Its possible an empty map was sent back just for obtaining an empty stream...let's not
     // log that.
-    if (source->getElementCount() > 0)
+    const QString msg =
+      "Sorting " + StringUtils::formatLargeNumber(source->getElementCount()) +
+      " elements in-memory...";
+    if (source->getElementCount() > 100000)
     {
-      LOG_STATUS(
-        "Sorting " << StringUtils::formatLargeNumber(source->getElementCount()) <<
-        " elements in-memory...");
+      LOG_STATUS(msg);
+    }
+    else if (source->getElementCount() > 100000)
+    {
+      LOG_DEBUG(msg);
     }
 
     _source = source;

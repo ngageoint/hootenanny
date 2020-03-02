@@ -32,6 +32,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 
 // Standard
@@ -50,13 +51,15 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, SuperfluousNodeRemover)
 
 SuperfluousNodeRemover::SuperfluousNodeRemover() :
-_ignoreInformationTags(false)
+_ignoreInformationTags(false),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
 void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
+  _numProcessed = 0;
   _usedNodes.clear();
 
   const WayMap& ways = map->getWays();
@@ -66,6 +69,14 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     const vector<long>& nodeIds = w->getNodeIds();
     LOG_VART(nodeIds);
     _usedNodes.insert(nodeIds.begin(), nodeIds.end());
+    _numProcessed += nodeIds.size();
+
+    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Recorded " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        " / " << StringUtils::formatLargeNumber(_numProcessed) << " nodes for possible removal.");
+    }
   }
 
   const NodeMap nodes = map->getNodes();
@@ -77,6 +88,14 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
     {
       _usedNodes.insert(n->getId());
+    }
+    _numProcessed++;
+
+    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Recorded " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        " / " << StringUtils::formatLargeNumber(_numProcessed) << " nodes for possible removal.");
     }
   }
   LOG_VART(_usedNodes.size());
@@ -93,6 +112,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     nodesWgs84 = &reprojected->getNodes();
   }
 
+  _numProcessed = 0;
   for (NodeMap::const_iterator it = nodesWgs84->begin(); it != nodesWgs84->end(); ++it)
   {
     const Node* n = it->second.get();
@@ -111,6 +131,22 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         LOG_TRACE("node not in bounds. " << n->getElementId());
         LOG_VART(_bounds);
       }
+    }
+    _numProcessed++;
+
+    if (_numAffected % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Removed " << StringUtils::formatLargeNumber(_numAffected) <<
+        " nodes / " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        " total nodes.");
+    }
+    else if (_numProcessed % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " nodes / " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        " total nodes.");
     }
   }
 }

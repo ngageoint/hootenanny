@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <set>
@@ -61,7 +62,11 @@ public:
   { return "Removing duplicate conflation review relations..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Removed " + QString::number(_numAffected) + " duplicate conflation review relations"; }
+  {
+    return
+      "Removed " + StringUtils::formatLargeNumber(_numAffected) +
+      " duplicate conflation review relations";
+  }
 
   virtual QString getDescription() const override { return "Removes duplicate conflation reviews"; }
 

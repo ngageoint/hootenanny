@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "RemoveDuplicateAreaVisitor.h"
+#include "RemoveDuplicateAreasVisitor.h"
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -56,16 +56,16 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateAreaVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateAreasVisitor)
 
-RemoveDuplicateAreaVisitor::RemoveDuplicateAreaVisitor()
+RemoveDuplicateAreasVisitor::RemoveDuplicateAreasVisitor()
 {
   _diff.reset(
     Factory::getInstance().constructObject<TagDifferencer>(
       ConfigOptions().getRemoveDuplicateAreasDiff()));
 }
 
-std::shared_ptr<Geometry> RemoveDuplicateAreaVisitor::_convertToGeometry(
+std::shared_ptr<Geometry> RemoveDuplicateAreasVisitor::_convertToGeometry(
   const std::shared_ptr<Element>& e1)
 {
   QHash<ElementId, std::shared_ptr<Geometry>>::const_iterator it =
@@ -80,7 +80,7 @@ std::shared_ptr<Geometry> RemoveDuplicateAreaVisitor::_convertToGeometry(
   return g;
 }
 
-bool RemoveDuplicateAreaVisitor::_equals(const std::shared_ptr<Element>& e1,
+bool RemoveDuplicateAreasVisitor::_equals(const std::shared_ptr<Element>& e1,
   const std::shared_ptr<Element>& e2)
 {
   if (e1->getStatus() != e2->getStatus())
@@ -137,7 +137,7 @@ bool RemoveDuplicateAreaVisitor::_equals(const std::shared_ptr<Element>& e1,
   return true;
 }
 
-void RemoveDuplicateAreaVisitor::_removeOne(const std::shared_ptr<Element>& e1,
+void RemoveDuplicateAreasVisitor::_removeOne(const std::shared_ptr<Element>& e1,
                                             const std::shared_ptr<Element>& e2)
 {
   if (e1->getTags().size() > e2->getTags().size())
@@ -159,7 +159,7 @@ void RemoveDuplicateAreaVisitor::_removeOne(const std::shared_ptr<Element>& e1,
   _numAffected++;
 }
 
-void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e)
+void RemoveDuplicateAreasVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (!e.get())
   {
@@ -210,6 +210,8 @@ void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e)
     }
   }
 
+  // TODO: let's give this the PoiPolygonMatchVisitor status update treatment to throttle the
+  // interval down for slower jobs
   _numProcessed++;
   if (_numProcessed % 10000 == 0)
   {
@@ -219,7 +221,7 @@ void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e)
   }
 }
 
-QStringList RemoveDuplicateAreaVisitor::getCriteria() const
+QStringList RemoveDuplicateAreasVisitor::getCriteria() const
 {
   QStringList criteria;
   // need to also add building here for unecessary conflation op removal purposes, since
