@@ -66,6 +66,7 @@ public:
 private:
 
   ConstOsmMapPtr _map;
+  mutable ElementId _currentElementId;
 };
 
 }

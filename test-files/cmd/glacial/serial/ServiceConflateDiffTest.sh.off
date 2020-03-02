@@ -8,7 +8,8 @@ TEST_NAME=ServiceConflateDiffTest
 IN_DIR=/home/vagrant/hoot/tmp/3851
 OUT_DIR=$IN_DIR
 
-CONFIG="--warn -C Testing.conf -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D debug.maps.write=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
+CONFIG="--warn -C Testing.conf -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D debug.maps.write=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
+#CONFIG+="-D log.class.filter=RemoveEmptyAreasVisitor"
 
 rm -f $OUT_DIR/ref.osm
 rm -f $OUT_DIR/sec.osm

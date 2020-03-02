@@ -76,6 +76,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
     _ec->setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
   }
 
+  LOG_VART(e->getElementId());
   //LOG_VART(e);
 
   LOG_VART(AreaCriterion().isSatisfied(e));
