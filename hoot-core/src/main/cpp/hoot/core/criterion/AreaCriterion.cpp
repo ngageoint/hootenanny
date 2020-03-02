@@ -64,13 +64,9 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
     return false;
   }
 
-  // TODO: remove
-  if (_currentElementId == ElementId(ElementType::Way, 496850039))
-  {
-    LOG_VART(BuildingCriterion(_map).isSatisfied(tags, elementType));
-    LOG_VART(tags.isTrue(MetadataTags::BuildingPart()));
-    LOG_VART(tags.isTrue("area"));
-  }
+  LOG_VART(BuildingCriterion(_map).isSatisfied(tags, elementType));
+  LOG_VART(tags.isTrue(MetadataTags::BuildingPart()));
+  LOG_VART(tags.isTrue("area"));
 
   result |= BuildingCriterion(_map).isSatisfied(tags, elementType);
   result |= tags.isTrue(MetadataTags::BuildingPart());
@@ -84,16 +80,12 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(kvp);
     uint16_t g = tv.geometries;
 
-    // TODO: remove
-    if (_currentElementId == ElementId(ElementType::Way, 496850039))
-    {
-      LOG_VART(tv.toString());
-      LOG_VART(g);
-      LOG_VART(g & OsmGeometries::Area);
-      LOG_VART(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay));
-      LOG_VART(g & OsmGeometries::LineString);
-      LOG_VART(g & OsmGeometries::ClosedWay);
-    }
+    LOG_VART(tv.toString());
+    LOG_VART(g);
+    LOG_VART(g & OsmGeometries::Area);
+    LOG_VART(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay));
+    LOG_VART(g & OsmGeometries::LineString);
+    LOG_VART(g & OsmGeometries::ClosedWay);
 
     if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
     {
@@ -103,21 +95,13 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
       {
         msg += "; ID: " + _currentElementId.toString();
       }
-      // TODO: remove
-      if (_currentElementId == ElementId(ElementType::Way, 496850039))
-      {
-        LOG_TRACE(msg);
-      }
+      LOG_TRACE(msg);
       result = true;
       break;
     }
   }
 
-  // TODO: remove
-  if (_currentElementId == ElementId(ElementType::Way, 496850039))
-  {
-    LOG_VART(result);
-  }
+  LOG_VART(result);
   return result;
 }
 
