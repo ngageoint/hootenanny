@@ -59,6 +59,21 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   _numAffected = 0;
   _usedNodes.clear();
 
+  const RelationMap& relations = map->getRelations();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  {
+    ConstRelationPtr relation = it->second;
+    const vector<RelationData::Entry>& members = relation->getMembers();
+    for (size_t i = 0; i < members.size(); i++)
+    {
+      const RelationData::Entry member = members[i];
+      if (member.getElementId().getType() == ElementType::Node)
+      {
+        _usedNodes.insert(member.getElementId().getId());
+      }
+    }
+  }
+
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
