@@ -513,7 +513,7 @@ See the User Guide for more details on command usage.
 ===== Remove all duplicate areas from a map:
 
 -----
-    hoot convert -D convert.ops="hoot::RemoveDuplicateAreaVisitor" input.osm output.osm
+    hoot convert -D convert.ops="hoot::RemoveDuplicateAreasVisitor" input.osm output.osm
 -----
 
 ===== Remove all empty areas from a map:

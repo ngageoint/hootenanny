@@ -2182,7 +2182,7 @@ option. A setting of -1 is useful for tests where you do not have granular enoug
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RelationCircularRefRemover`
 ** `hoot::RemoveEmptyRelationsOp`
-** `hoot::RemoveDuplicateAreaVisitor`
+** `hoot::RemoveDuplicateAreasVisitor`
 ** `hoot::NoInformationElementRemover`
 
 A list of map operations to be applied to a map for cleaning purposes, in order.

@@ -46,6 +46,7 @@
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -59,6 +60,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, SmallHighwayMerger)
 
 SmallHighwayMerger::SmallHighwayMerger(Meters threshold)
+
 {
   ConfigOptions opts = ConfigOptions();
   if (threshold >= 0)
@@ -71,11 +73,13 @@ SmallHighwayMerger::SmallHighwayMerger(Meters threshold)
   }
   _diff.reset(
     Factory::getInstance().constructObject<TagDifferencer>(opts.getSmallHighwayMergerDiff()));
+  _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
 }
 
 void SmallHighwayMerger::apply(std::shared_ptr<OsmMap>& map)
 {
   _map = map;
+  _numProcessed = 0;
 
   // create a map from nodes to ways
   std::shared_ptr<NodeToWayMap> n2wp = _map->getIndex().getNodeToWayMap();
@@ -99,6 +103,13 @@ void SmallHighwayMerger::apply(std::shared_ptr<OsmMap>& map)
       {
         _mergeNeighbors(w);
       }
+    }
+
+    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " ways for possible merging.");
     }
   }
 }

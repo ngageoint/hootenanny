@@ -80,7 +80,7 @@ public class ExternalCommandRunnerImplTest {
                           "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
                           "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
                           "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
-                          "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
+                          "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreasVisitor;" +
                           "hoot::NoInformationElementRemover\"");
 
         // String input1 = "osmapidb://hoot:hoottest@localhost:5432/osmapi test";

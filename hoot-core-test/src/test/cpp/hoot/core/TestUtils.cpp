@@ -380,7 +380,7 @@ QStringList TestUtils::getConflateCmdSnapshotCleaningOps()
   mapCleanerTransforms.append("hoot::RemoveDuplicateRelationMembersVisitor");
   mapCleanerTransforms.append("hoot::RelationCircularRefRemover");
   mapCleanerTransforms.append("hoot::RemoveEmptyRelationsOp");
-  mapCleanerTransforms.append("hoot::RemoveDuplicateAreaVisitor");
+  mapCleanerTransforms.append("hoot::RemoveDuplicateAreasVisitor");
   mapCleanerTransforms.append("hoot::NoInformationElementRemover");
   return mapCleanerTransforms;
 }

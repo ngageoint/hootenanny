@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEDUPLICATEAREAVISITOR_H
-#define REMOVEDUPLICATEAREAVISITOR_H
+#ifndef REMOVEDUPLICATEAREASVISITOR_H
+#define REMOVEDUPLICATEAREASVISITOR_H
 
 // Hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
@@ -52,13 +52,13 @@ class TagDifferencer;
  *
  * RecursiveElementRemover is used to remove the element.
  */
-class RemoveDuplicateAreaVisitor : public ElementOsmMapVisitor
+class RemoveDuplicateAreasVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveDuplicateAreaVisitor"; }
+  static std::string className() { return "hoot::RemoveDuplicateAreasVisitor"; }
 
-  RemoveDuplicateAreaVisitor();
+  RemoveDuplicateAreasVisitor();
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
 
@@ -88,4 +88,4 @@ private:
 
 }
 
-#endif // REMOVEDUPLICATEAREAVISITOR_H
+#endif // REMOVEDUPLICATEAREASVISITOR_H

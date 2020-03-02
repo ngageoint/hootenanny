@@ -297,7 +297,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   vector<pair<ElementId, ElementId>> replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
-    if (i % 10 == 0)
+    if (i % 100 == 0)
     {
       PROGRESS_INFO(
         "Applying merger: " << StringUtils::formatLargeNumber(i + 1) << " / " <<

@@ -29,6 +29,7 @@
 
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -55,7 +56,10 @@ public:
   { return "Removing references to elements that do not exist..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Removed " + QString::number(_numAffected) + " missing element child references"; }
+  {
+    return
+      "Removed " + StringUtils::formatLargeNumber(_numAffected) +
+      " missing element child references"; }
 
   virtual QString getDescription() const
   { return "Removes references to any elements that do not exist"; }

@@ -227,11 +227,13 @@ int ConflateCmd::runSimple(QStringList& args)
   // The highway.merge.tags.only option only gets used with Attribute Conflation for now, so we'll
   // use it as the sole identifier for it. If that ever changes, then we'll need a different way
   // to recognize when AC is occurring.
-  if (ConfigOptions().getHighwayMergeTagsOnly())
+  const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
+
+  if (isAttributeConflate)
   {
     _updateConfigOptionsForAttributeConflation();
   }
-  if (isDiffConflate || ConfigOptions().getHighwayMergeTagsOnly())
+  if (isDiffConflate || isAttributeConflate)
   {
     _disableRoundaboutRemoval();
   }

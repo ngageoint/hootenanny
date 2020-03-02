@@ -96,6 +96,8 @@ protected:
   geos::geom::Envelope _bounds;
   std::set<long> _usedNodes;
   bool _ignoreInformationTags;
+
+  int _taskStatusUpdateInterval;
 };
 
 }

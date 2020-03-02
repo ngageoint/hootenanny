@@ -310,27 +310,11 @@ void OsmSchemaJs::isSpecificallyConflatable(
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
 
   const QString geometryTypeFilterStr = toCpp<QString>(args[2]).trimmed();
-  QStringList geometryTypeFilters;
   if (!geometryTypeFilterStr.isEmpty())
   {
-    geometryTypeFilters = geometryTypeFilterStr.split(";");
-    for (int i = 0; i < geometryTypeFilters.size(); i++)
-    {
-      const GeometryTypeCriterion::GeometryType geometryType =
-        GeometryTypeCriterion::typeFromString(geometryTypeFilters.at(i));
-      crit.setGeometryTypeFilter(geometryType);
-      if (!crit.isSatisfied(e))
-      {
-        isSpecificallyConflatable = false;
-        break;
-      }
-    }
-    isSpecificallyConflatable = true;
+    crit.setGeometryTypeFilter(GeometryTypeCriterion::typeFromString(geometryTypeFilterStr));
   }
-  else
-  {
-    isSpecificallyConflatable = !crit.isSatisfied(e);
-  }
+  isSpecificallyConflatable = !crit.isSatisfied(e);
 
   args.GetReturnValue().Set(Boolean::New(current, isSpecificallyConflatable));
 }
