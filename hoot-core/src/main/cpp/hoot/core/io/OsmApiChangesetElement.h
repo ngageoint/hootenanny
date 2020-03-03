@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_API_CHANGESET_ELEMENT_H
@@ -36,6 +36,7 @@
 #include <QMap>
 #include <QPair>
 #include <QString>
+#include <QTextStream>
 #include <QVector>
 #include <QXmlStreamReader>
 
@@ -85,12 +86,12 @@ public:
    * @brief getTagCount
    * @return Number of tags in this element
    */
-  int getTagCount() { return _tags.size(); }
+  int getTagCount() const { return _tags.size(); }
   /**
    * @brief id Get the element ID
    * @return Element ID
    */
-  long id() { return _id; }
+  long id() const { return _id; }
   /**
    * @brief changeId Change the ID of the element
    * @param id ID to change to
@@ -147,6 +148,32 @@ protected:
    * @return XML ecoded string
    */
   QString& escapeString(QString& value) const;
+  /**
+   * @brief diffElement Compare (diff) two elements, this and element, adding diff output to the
+   *   text streams
+   * @param element Element to compare to this
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for element
+   * @return true if the elements are equivalent
+   */
+  bool diffElement(const ChangesetElement* element, QTextStream& ts1, QTextStream& ts2) const;
+  /**
+   * @brief diffAttributes Compare (diff) the attributes of two elements adding diff output to the
+   *   text streams
+   * @param attributes Set of attributes to compare to this element's attributes
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for attributes
+   * @return true if the element's attributes are equivalent
+   */
+  bool diffAttributes(const ElementAttributes& attributes, QTextStream& ts1, QTextStream& ts2) const;
+  /**
+   * @brief diffTags Compare (diff) the tags of two elements adding diff output to the text streams
+   * @param tags Set of tags to compare to this element's tags
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for tags
+   * @return true if the element's tags are equivalent
+   */
+  bool diffTags(const ElementTags& tags, QTextStream& ts1, QTextStream& ts2) const;
   /** Element type node/way/relation */
   ElementType::Type _type;
   /** Element ID */
@@ -188,6 +215,13 @@ public:
    * @return XML string
    */
   virtual QString toString(long changesetId) const;
+  /**
+   * @brief diff Compare two nodes and build a 'diff' style string
+   * @param node Node to compare this node against
+   * @param diffOutput Output of the diff between the two nodes
+   * @return True if they are equivalent
+   */
+  bool diff(const ChangesetNode& node, QString& diffOutput) const;
 };
 /** Handy typedef for node shared pointer */
 typedef std::shared_ptr<ChangesetNode> ChangesetNodePtr;
@@ -237,6 +271,13 @@ public:
    * @return XML string
    */
   virtual QString toString(long changesetId) const;
+  /**
+   * @brief diff Compare two ways and build a 'diff' style string
+   * @param way Way to compare this way against
+   * @param diffOutput Output of the diff between the two way
+   * @return True if they are equivalent
+   */
+  bool diff(const ChangesetWay& way, QString& diffOutput) const;
 
 private:
   /** Vector of node ID in the way */
@@ -282,6 +323,14 @@ public:
    * @return XML string
    */
   QString toString() const;
+  /**
+   * @brief diff Compare two relation members and build a 'diff' style string in the text streams
+   * @param member Relation member to compare against this
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for member
+   * @return true if the relation members are equivalent
+   */
+  bool diff(const ChangesetRelationMember& member, QTextStream& ts1, QTextStream& ts2) const;
 
 private:
   /** Member type (node/way/relation) */
@@ -340,6 +389,13 @@ public:
    * @return XML string
    */
   virtual QString toString(long changesetId) const;
+  /**
+   * @brief diff Compare two relations and build a 'diff' style string
+   * @param relation Relation to compare this relation against
+   * @param diffOutput Output of the diff between the two relations
+   * @return True if they are equivalent
+   */
+  bool diff(const ChangesetRelation& relation, QString& diffOutput) const;
 
 private:
   /** List of relation members */

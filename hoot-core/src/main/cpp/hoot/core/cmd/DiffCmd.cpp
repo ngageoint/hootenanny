@@ -22,20 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/scoring/MapComparator.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmApiChangeset.h>
+#include <hoot/core/scoring/MapComparator.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/Settings.h>
 
 using namespace std;
+
+#include <QDir>
+#include <QFileInfo>
 
 namespace hoot
 {
@@ -51,36 +55,39 @@ public:
   virtual QString getName() const override { return "diff"; }
 
   virtual QString getDescription() const override
-  { return "Calculates the difference between two maps"; }
+  { return "Calculates the difference between two maps or changesets"; }
 
   virtual int runSimple(QStringList& args) override
   {
-    MapComparator mapCompare;
+    bool ignoreUuid = false;
+    bool useDateTime = false;
+    bool setErrorLimit = false;
+    int errorLimit = -1;
 
     if (args.contains("--ignore-uuid"))
     {
       args.removeAll("--ignore-uuid");
-      mapCompare.setIgnoreUUID();
+      ignoreUuid = true;
     }
 
     if (args.contains("--use-datetime"))
     {
       args.removeAll("--use-datetime");
-      mapCompare.setUseDateTime();
+      useDateTime = true;
     }
 
     if (args.contains("--error-limit"))
     {
       const int errorLimitIndex = args.indexOf("--error-limit");
       bool ok = false;
-      const int errorLimit = args.at(errorLimitIndex + 1).trimmed().toInt(&ok);
+      errorLimit = args.at(errorLimitIndex + 1).trimmed().toInt(&ok);
       if (!ok)
       {
         throw IllegalArgumentException("Invalid error limit: " + args.at(errorLimitIndex + 1));
       }
       args.removeAt(errorLimitIndex + 1);
       args.removeAt(errorLimitIndex);
-      mapCompare.setErrorLimit(errorLimit);
+      setErrorLimit = true;
     }
 
     if (args.size() != 2)
@@ -89,25 +96,62 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    OsmMapPtr map1(new OsmMap());
-    IoUtils::loadMap(map1, args[0], true, Status::Unknown1);
-    //  Some maps that don't have IDs cooked in will fail comparison if the IDs aren't reset
-    OsmMap::resetCounters();
-    OsmMapPtr map2(new OsmMap());
-    IoUtils::loadMap(map2, args[1], true, Status::Unknown1);
+    QString pathname1 = args[0];
+    QString pathname2 = args[1];
 
-    int result;
-
-    if (mapCompare.isMatch(map1, map2))
+    int result = 1;
+    //  Compare changesets differently than all other types
+    if (pathIsChangeset(pathname1) && pathIsChangeset(pathname2))
     {
-      result = 0;
+      XmlChangeset changeset1(pathname1);
+      XmlChangeset changeset2(pathname2);
+
+      if (changeset1.isMatch(changeset2))
+        result = 0;
     }
     else
     {
-      result = 1;
+      MapComparator mapCompare;
+      if (ignoreUuid)
+        mapCompare.setIgnoreUUID();
+      if (useDateTime)
+        mapCompare.setUseDateTime();
+      if (setErrorLimit)
+        mapCompare.setErrorLimit(errorLimit);
+
+      OsmMapPtr map1(new OsmMap());
+      IoUtils::loadMap(map1, pathname1, true, Status::Unknown1);
+      //  Some maps that don't have IDs cooked in will fail comparison if the IDs aren't reset
+      OsmMap::resetCounters();
+      OsmMapPtr map2(new OsmMap());
+      IoUtils::loadMap(map2, pathname2, true, Status::Unknown1);
+
+      if (mapCompare.isMatch(map1, map2))
+        result = 0;
     }
 
     return result;
+  }
+
+  bool pathIsChangeset(const QString& path)
+  {
+    QFileInfo fi(path);
+    //  .osc files
+    if (fi.exists() && path.endsWith(".osc", Qt::CaseInsensitive))
+      return true;
+    //  Directories containing .osc files
+    if (fi.isDir())
+    {
+      QDir dir(path);
+      dir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+      dir.setSorting(QDir::Name | QDir::IgnoreCase);
+      QStringList filters;
+      filters << "*.osc";
+      dir.setNameFilters(filters);
+      //  As long as the directory contains at least one .osc file
+      return dir.entryInfoList().size() > 0;
+    }
+    return false;
   }
 };
 
