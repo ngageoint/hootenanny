@@ -56,17 +56,22 @@ public:
   virtual std::string getClassName() const { return className(); }
 
   virtual QString getDescription() const
-  { return "Removes all POI/Polygon POIs in reviews that are invalid"; }
+  { return "Removes all reviewable POI/Polygon POIs and their reviews that are invalid"; }
 
   virtual QString getInitStatusMessage() const { return "Removing invalid POIs from reviews..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Removed " + QString::number(_numAffected) + " invalid POIs from reviews"; }
+  {
+    return
+      "Removed " + QString::number(_numAffected) + " invalid reviewable POIs and " +
+      QString::number(_numRelationsRemoved) + " reviews";
+  }
 
 protected:
 
   std::set<long> _nodesToRemove;
   std::set<long> _reviewRelationsToRemove;
+  int _numRelationsRemoved;
 
   int _taskStatusUpdateInterval;
 };

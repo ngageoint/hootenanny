@@ -43,6 +43,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, PoiPolygonInvalidReviewNodeRemover)
 
 PoiPolygonInvalidReviewNodeRemover::PoiPolygonInvalidReviewNodeRemover() :
+_numRelationsRemoved(0),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
@@ -51,10 +52,12 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
 {
   _numAffected = 0;     // _numAffected reflects the actual number of nodes removed
   _numProcessed = 0;    // _numProcessed reflects total elements processed
+  _numRelationsRemoved = 0;
   _nodesToRemove.clear();
   _reviewRelationsToRemove.clear();
 
-  const RelationMap& relations = map->getRelations();
+  // make a copy here, since we may be removing some relations later
+  const RelationMap relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ConstRelationPtr relation = it->second;
@@ -105,36 +108,36 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
     return;
   }
 
-  // TODO: this breaks
-//  _numProcessed = 0;
-//  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
-//  {
-//    const Relation* relation = it->second.get();
-//    LOG_VART(relation->getElementId());
-//    const long relationId = relation->getId();
-//    if (_reviewRelationsToRemove.find(relationId) != _reviewRelationsToRemove.end())
-//    {
-//      LOG_TRACE("Removing relation: " << relation->getElementId() << "...");
-//      RemoveRelationByEid::removeRelation(map, relationId);
-//      _numAffected++;
-//    }
-//    _numProcessed++;
+  _numProcessed = 0;
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  {
+    const Relation* relation = it->second.get();
+    LOG_VART(relation->getElementId());
+    const long relationId = relation->getId();
+    if (_reviewRelationsToRemove.find(relationId) != _reviewRelationsToRemove.end())
+    {
+      LOG_TRACE("Removing relation: " << relation->getElementId() << "...");
+      RemoveRelationByEid::removeRelation(map, relationId);
+      _numRelationsRemoved++;
+    }
+    _numProcessed++;
 
-//    if (_numAffected % _taskStatusUpdateInterval == 0)
-//    {
-//      PROGRESS_INFO(
-//        "Removed " << StringUtils::formatLargeNumber(_numAffected) <<
-//        " relation / " << StringUtils::formatLargeNumber(_reviewRelationsToRemove.size()) <<
-//        " total relations to remove.");
-//    }
-//    else if (_numProcessed % _taskStatusUpdateInterval == 0)
-//    {
-//      PROGRESS_INFO(
-//        "Processed " << StringUtils::formatLargeNumber(_numProcessed) <<
-//        " relations / " << StringUtils::formatLargeNumber(relations.size()) << " total relations.");
-//    }
-//  }
+    if (_numRelationsRemoved % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Removed " << StringUtils::formatLargeNumber(_numRelationsRemoved) <<
+        " relation / " << StringUtils::formatLargeNumber(_reviewRelationsToRemove.size()) <<
+        " total relations to remove.");
+    }
+    else if (_numProcessed % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " relations / " << StringUtils::formatLargeNumber(relations.size()) << " total relations.");
+    }
+  }
 
+  // make a copy here, since we may be removing some of these nodes
   const NodeMap nodes = map->getNodes();
   _numProcessed = 0;
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
