@@ -1509,6 +1509,14 @@ relations that were written to the database.
 If set to true then if there is already a map with the specified name then it will be removed before
 a new map is written.
 
+=== hootapi.db.writer.preserve.version.on.insert
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, versions for elements are retained on new writes to the Hootenanny API database. If false,
+versions are reset to an initial version of 1.
+
 === hootapi.db.writer.remap.ids
 
 * Data Type: bool

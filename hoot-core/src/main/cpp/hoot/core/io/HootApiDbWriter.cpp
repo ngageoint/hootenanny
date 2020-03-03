@@ -55,6 +55,7 @@ _relationsWritten(0),
 _remapIds(true),
 _includeIds(false),
 _jobId(-1),
+_preserveVersionOnInsert(false),
 _open(false)
 {
   setConfiguration(conf());
@@ -342,6 +343,7 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setRemap(configOptions.getHootapiDbWriterRemapIds());
   setCopyBulkInsertActivated(configOptions.getHootapiDbWriterCopyBulkInsert());
   setJobId(configOptions.getJobId());
+  setPreserveVersionOnInsert(configOptions.getHootapiDbWriterPreserveVersionOnInsert());
 }
 
 void HootApiDbWriter::_startNewChangeSet()
@@ -428,6 +430,10 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
     {
       _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, tags);
     }
+    else if (_preserveVersionOnInsert && n->getVersion() > 0)
+    {
+      _hootdb.insertNode(nodeId, n->getY(), n->getX(), tags, n->getVersion());
+    }
     else
     {
       _hootdb.insertNode(nodeId, n->getY(), n->getX(), tags);
@@ -436,7 +442,14 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
   else
   {
     LOG_VART(n->getId());
-    _hootdb.insertNode(n->getId(), n->getY(), n->getX(), tags);
+    if (_preserveVersionOnInsert && n->getVersion() > 0)
+    {
+      _hootdb.insertNode(n->getId(), n->getY(), n->getX(), tags, n->getVersion());
+    }
+    else
+    {
+      _hootdb.insertNode(n->getId(), n->getY(), n->getX(), tags);
+    }
   }
 
   LOG_VART(n->getVersion());
@@ -463,6 +476,10 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
     {
       _hootdb.updateWay(wayId, w->getVersion() + 1, tags);
     }
+    else if (_preserveVersionOnInsert && w->getVersion() > 0)
+    {
+      _hootdb.insertWay(wayId, tags, w->getVersion());
+    }
     else
     {
       _hootdb.insertWay(wayId, tags);
@@ -471,7 +488,14 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
   else
   {
     wayId = w->getId();
-    _hootdb.insertWay(w->getId(), tags);
+    if (_preserveVersionOnInsert && w->getVersion() > 0)
+    {
+      _hootdb.insertWay(w->getId(), tags, w->getVersion());
+    }
+    else
+    {
+      _hootdb.insertWay(w->getId(), tags);
+    }
   }
 
   if (_remapIds == true)
@@ -507,6 +531,11 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
     relationId = _getRemappedElementId(r->getElementId());
 
     _hootdb.insertRelation(relationId, tags);
+  }
+  else if (_preserveVersionOnInsert && r->getVersion() > 0)
+  {
+    _hootdb.insertRelation(r->getId(), tags, r->getVersion());
+    relationId = r->getId();
   }
   else
   {
