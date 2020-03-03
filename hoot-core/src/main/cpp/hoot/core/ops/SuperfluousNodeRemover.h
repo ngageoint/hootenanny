@@ -46,7 +46,8 @@ namespace hoot
 class OsmMap;
 
 /**
- * Removes all the nodes from a map that aren't part of a way and have no information in them.
+ * Removes all the nodes from a map that aren't part of a way or a relation and have no information
+ * in them.
  *
  * If the bounds have been set via Boundable's setBounds then only nodes that are both not part
  * of a way and inside the bounds will be removed. This is most useful when performing tile based
@@ -77,7 +78,7 @@ public:
   static long removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
                           const geos::geom::Envelope& e = geos::geom::Envelope());
 
-  virtual void setBounds(const geos::geom::Envelope &bounds);
+  virtual void setBounds(const geos::geom::Envelope& bounds);
 
   void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
 

@@ -42,6 +42,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInvalidReviewNodeRemover.h>
 
 using namespace std;
 
@@ -215,6 +216,13 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
 
   finalBuilding->setTags(finalBuildingTags);
   LOG_VART(finalBuilding);
+
+  // Some cleanup due to a bug that has to be done. See the PoiPolygonInvalidReviewNodeRemover for
+  // more detail.
+  PoiPolygonInvalidReviewNodeRemover reviewCleaner;
+  LOG_INFO("\t" << reviewCleaner.getInitStatusMessage());
+  reviewCleaner.apply(map);
+  LOG_INFO("\t" << reviewCleaner.getCompletedStatusMessage());
 }
 
 Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const

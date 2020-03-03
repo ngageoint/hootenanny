@@ -36,6 +36,12 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["linestring"],
+        "isA": "natural",
+        "name": "natural=tree_row",
+        "objectType": "tag"
+    },
+    {
         "geometries": [
             "node",
             "linestring"
