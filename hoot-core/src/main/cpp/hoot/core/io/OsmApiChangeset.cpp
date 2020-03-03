@@ -32,6 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 //  Standard
 #include <algorithm>
@@ -56,7 +57,19 @@ XmlChangeset::XmlChangeset()
 {
 }
 
-XmlChangeset::XmlChangeset(const QList<QString> &changesets)
+XmlChangeset::XmlChangeset(const QString& changeset)
+  : _nodes(ChangesetType::TypeMax),
+    _ways(ChangesetType::TypeMax),
+    _relations(ChangesetType::TypeMax),
+    _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _sentCount(0),
+    _processedCount(0),
+    _failedCount(0)
+{
+  loadChangeset(changeset);
+}
+
+XmlChangeset::XmlChangeset(const QList<QString>& changesets)
   : _nodes(ChangesetType::TypeMax),
     _ways(ChangesetType::TypeMax),
     _relations(ChangesetType::TypeMax),
@@ -69,10 +82,16 @@ XmlChangeset::XmlChangeset(const QList<QString> &changesets)
     loadChangeset(*it);
 }
 
-void XmlChangeset::loadChangeset(const QString &changeset)
+void XmlChangeset::loadChangeset(const QString& changeset)
 {
-  if (QFile::exists(changeset))
-    loadChangesetFile(changeset);
+  QFileInfo fi(changeset);
+  if (fi.exists())
+  {
+    if (fi.isDir())
+      loadChangesetDirectory(changeset);
+    else
+      loadChangesetFile(changeset);
+  }
   else
     loadChangesetXml(changeset);
 }
@@ -95,7 +114,7 @@ void XmlChangeset::loadChangesetFile(const QString& path)
     loadOsmAsChangeset(reader);
 }
 
-void XmlChangeset::loadChangesetXml(const QString &changesetXml)
+void XmlChangeset::loadChangesetXml(const QString& changesetXml)
 {
   //  Load the XML directly into the reader
   QXmlStreamReader reader(changesetXml);
@@ -103,7 +122,49 @@ void XmlChangeset::loadChangesetXml(const QString &changesetXml)
   loadChangeset(reader);
 }
 
-void XmlChangeset::loadChangeset(QXmlStreamReader &reader)
+void XmlChangeset::loadChangesetDirectory(const QString& changesetDirectory)
+{
+  //  Iterate all of the files in the directory, loading them one by one
+  QDir dir(changesetDirectory);
+  dir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+  dir.setSorting(QDir::Name | QDir::IgnoreCase);
+  QStringList filters;
+  filters << "*.osc";
+  dir.setNameFilters(filters);
+
+  QFileInfoList files = dir.entryInfoList();
+  for (int i = 0; i < files.size(); ++i)
+  {
+    QFileInfo fileInfo = files.at(i);
+    QString filepath = fileInfo.absoluteFilePath();
+    //  Check if this file is in the request/response debug output format (including the error file)
+    if (filepath.contains("-Request--") && filepath.endsWith("000.osc", Qt::CaseInsensitive))
+    {
+      //  Only load the requests that were successful, i.e. response 200
+      QString response = filepath;
+      response.replace("-Request--", "-Response-").replace("000.osc", "200.osc");
+      if (QFile::exists(response))
+        loadChangesetFile(filepath);
+    }
+    else if (filepath.contains("-Response-") && filepath.endsWith("200.osc", Qt::CaseInsensitive))
+    {
+      //  Read in the update for new IDs
+      updateChangeset(FileUtils::readFully(filepath));
+    }
+    else if (filepath.endsWith("-error.osc", Qt::CaseInsensitive))
+    {
+      //  The changeset error file
+      loadChangesetFile(filepath);
+    }
+    else
+    {
+      //  Output the filename to the log
+      LOG_DEBUG("Skipping file in folder: " << filepath);
+    }
+  }
+}
+
+void XmlChangeset::loadChangeset(QXmlStreamReader& reader)
 {
   //  Make sure that the XML provided starts with the <diffResult> tag
   QXmlStreamReader::TokenType type = reader.readNext();
@@ -314,7 +375,18 @@ void XmlChangeset::fixMalformedInput()
   writeErrorFile();
 }
 
-void XmlChangeset::updateChangeset(const QString &changes)
+QString XmlChangeset::getString(ChangesetType type)
+{
+  switch (type)
+  {
+  case ChangesetType::TypeCreate:   return "<create>";
+  case ChangesetType::TypeModify:   return "<modify>";
+  case ChangesetType::TypeDelete:   return "<delete>";
+  default:                          return "";
+  }
+}
+
+void XmlChangeset::updateChangeset(const QString& changes)
 {
   /* <diffResult generator="OpenStreetMap Server" version="0.6">
    *   <node|way|relation old_id="#" new_id="#" new_version="#"/>
@@ -1827,6 +1899,137 @@ bool XmlChangeset::calculateRemainingChangeset(ChangesetInfoPtr &changeset)
   }
   //  Return true if there is anything in the changeset
   return !empty_changeset;
+}
+
+bool XmlChangeset::isMatch(const XmlChangeset& changeset)
+{
+  bool isEqual = true;
+  //  Check counts first
+  if (_allNodes.size() != changeset._allNodes.size())
+  {
+    LOG_WARN("Node count not equal (ref: " << _allNodes.size() << ", test: " << changeset._allNodes.size() << ")");
+    isEqual = false;
+  }
+  if (_allWays.size() != changeset._allWays.size())
+  {
+    LOG_WARN("Way count not equal (ref: " << _allWays.size() << ", test: " << changeset._allWays.size() << ")");
+    isEqual = false;
+  }
+  if (_allRelations.size() != changeset._allRelations.size())
+  {
+    LOG_WARN("Relation count not equal (ref: " << _allRelations.size() << ", test: " << changeset._allRelations.size() << ")");
+    isEqual = false;
+  }
+  //  Now check each type, create, modify, delete
+  for (int changeset_type = ChangesetType::TypeCreate; changeset_type != ChangesetType::TypeMax; ++changeset_type)
+  {
+    //  Iterate all of the nodes of "type" in the changeset
+    QSet<long> missingNodes;
+    for (ChangesetElementMap::iterator it = _nodes[changeset_type].begin(); it != _nodes[changeset_type].end(); ++it)
+    {
+      ChangesetNode* node = dynamic_cast<ChangesetNode*>(it->second.get());
+      ChangesetElementMap::const_iterator found = changeset._nodes[changeset_type].find(node->id());
+      if (found != changeset._nodes[changeset_type].end())
+      {
+        //  Compare the two nodes
+        ChangesetNode* node2 = dynamic_cast<ChangesetNode*>(found->second.get());
+        QString output;
+        if (!node->diff(*node2, output))
+        {
+          //  Display the node diff
+          output.chop(1);
+          LOG_WARN("Node ID " << node->id() << "\n" << output);
+        }
+      }
+      else
+        missingNodes.insert(node->id());
+    }
+    //  Output missing nodes in full
+    if (missingNodes.size() > 0)
+    {
+      QString buffer;
+      QTextStream ts(&buffer);
+      ts.setCodec("UTF-8");
+      for (QSet<long>::iterator it = missingNodes.begin(); it != missingNodes.end(); ++it)
+        ts << _nodes[changeset_type][*it]->toString(0);
+      buffer.chop(1);
+      buffer.replace("\n", "\n>");
+      LOG_WARN("Missing nodes: " << getString(static_cast<ChangesetType>(changeset_type)) <<
+               " - " << missingNodes << "\n>" << buffer);
+      isEqual = false;
+    }
+    //  Iterate all of the ways of "type" in the changeset
+    QSet<long> missingWays;
+    for (ChangesetElementMap::iterator it = _ways[changeset_type].begin(); it != _ways[changeset_type].end(); ++it)
+    {
+      ChangesetWay* way = dynamic_cast<ChangesetWay*>(it->second.get());
+      ChangesetElementMap::const_iterator found = changeset._ways[changeset_type].find(way->id());
+      if (found != changeset._ways[changeset_type].end())
+      {
+        //  Compare the two ways
+        ChangesetWay* way2 = dynamic_cast<ChangesetWay*>(found->second.get());
+        QString output;
+        if (!way->diff(*way2, output))
+        {
+          //  Display the way diff
+          output.chop(1);
+          LOG_WARN("Way ID " << way->id() << "\n" << output);
+        }
+      }
+      else
+        missingWays.insert(way->id());
+    }
+    //  Output missing ways in full
+    if (missingWays.size() > 0)
+    {
+      QString buffer;
+      QTextStream ts(&buffer);
+      ts.setCodec("UTF-8");
+      for (QSet<long>::iterator it = missingWays.begin(); it != missingWays.end(); ++it)
+        ts << _ways[changeset_type][*it]->toString(0);
+      buffer.chop(1);
+      buffer.replace("\n", "\n>");
+      LOG_WARN("Missing ways: " << getString(static_cast<ChangesetType>(changeset_type)) <<
+               " - " << missingWays << "\n>" << buffer);
+      isEqual = false;
+    }
+    //  Iterate all of the relations of "type" in the changeset
+    QSet<long> missingRelations;
+    for (ChangesetElementMap::iterator it = _relations[changeset_type].begin(); it != _relations[changeset_type].end(); ++it)
+    {
+      ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
+      ChangesetElementMap::const_iterator found = changeset._relations[changeset_type].find(relation->id());
+      if (found != changeset._relations[changeset_type].end())
+      {
+        //  Compare the two ways
+        ChangesetRelation* relation2 = dynamic_cast<ChangesetRelation*>(found->second.get());
+        QString output;
+        if (!relation->diff(*relation2, output))
+        {
+          //  Display the relation diff
+          output.chop(1);
+          LOG_WARN("Relation ID " << relation->id() << "\n" << output);
+        }
+      }
+      else
+        missingRelations.insert(relation->id());
+    }
+    //  Output missing relations in full
+    if (missingRelations.size() > 0)
+    {
+      QString buffer;
+      QTextStream ts(&buffer);
+      ts.setCodec("UTF-8");
+      for (QSet<long>::iterator it = missingRelations.begin(); it != missingRelations.end(); ++it)
+        ts << _relations[changeset_type][*it]->toString(0);
+      buffer.chop(1);
+      buffer.replace("\n", "\n>");
+      LOG_WARN("Missing relations: " << getString(static_cast<ChangesetType>(changeset_type)) <<
+               " - " << missingRelations << "\n>" << buffer);
+      isEqual = false;
+    }
+  }
+  return isEqual;
 }
 
 ChangesetInfo::ChangesetInfo()

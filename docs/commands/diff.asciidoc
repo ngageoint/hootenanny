@@ -4,7 +4,8 @@
 === Description
 
 The +diff+ command checks to see if maps are essentially the same. It returns 0 if they are the same or 1 if they differ
-significantly. If they differ significantly, warnings will be printed with more information.
+significantly. If they differ significantly, warnings will be printed with more information.  Can also compare .osc changeset
+files and directories.  Directories will load into on `<osmChange>` file to be compared to the other file/directory.
 
 * +input1+          - Input 1; may be any supported input format (e.g. OSM file).
 * +intpu2+          - Input 2; may be any supported input format (e.g. OSM file).
