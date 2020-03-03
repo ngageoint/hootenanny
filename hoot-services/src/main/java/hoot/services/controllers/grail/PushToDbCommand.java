@@ -49,8 +49,6 @@ class PushToDbCommand extends GrailCommand {
         logger.info("Params: " + params);
 
         List<String> options = new LinkedList<>();
-        options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("hootapi.db.writer.remap.ids=false");
         options.add("job.id=" + jobId);
         options.add("api.db.email=" + params.getUser().getEmail());
 
@@ -64,7 +62,7 @@ class PushToDbCommand extends GrailCommand {
         substitutionMap.put("DB_NAME", dbName);
         substitutionMap.put("INPUT", params.getInput1());
 
-        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${DB_NAME}";
+        String command = "hoot convert --${DEBUG_LEVEL} -C GrailIngest.conf ${HOOT_OPTIONS} ${INPUT} ${DB_NAME}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
