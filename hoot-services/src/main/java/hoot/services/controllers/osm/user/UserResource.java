@@ -256,11 +256,6 @@ public class UserResource {
                             .stream().filter(map -> substitutionMap.get(map).equals("true"))
                             .collect(Collectors.toSet());
 
-                    Map<String, String> favSubstitutionMap = (Map<String, String>) tuple.get(users.favoriteOpts);
-                    Collection<String> filterFavOpts = favSubstitutionMap.keySet()
-                            .stream()
-                            .collect(Collectors.toSet());
-
                     if (activePrivileges.size() == 0 || filterPrivileges.containsAll(activePrivileges) ) {
                         user.setId(tuple.get(users.id));
                         user.setDisplayName(tuple.get(users.displayName));
