@@ -561,7 +561,7 @@ public:
 
   void preserveVersionOnInsertTest()
   {
-    setUpTest("runInsertTest");
+    setUpTest("preserveVersionOnInsertTest");
     // populate the database.
     HootApiDbWriter writer;
     writer.setRemap(false);

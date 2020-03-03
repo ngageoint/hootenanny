@@ -557,7 +557,7 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
     }
 
     _hootdb.insertRelationMember(relationId, relationMemberElementId.getType(),
-                              relationMemberElementId.getId(), e.role, i);
+                                 relationMemberElementId.getId(), e.role, i);
   }
 
   LOG_TRACE("All members added to relation " << QString::number(relationId));
