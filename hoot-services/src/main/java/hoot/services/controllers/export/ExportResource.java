@@ -227,6 +227,12 @@ public class ExportResource {
                 Command zipCommand = new ZIPFileCommand(new File(workDir, params.getOutputName() + ".zip"), workDir, outputName + ".alpha.tiles.geojson", this.getClass());
                 workflow.add(zipCommand);
 
+            } else if (inputType.equalsIgnoreCase("changesets")) {
+                File jobDir = new File(CHANGESETS_FOLDER, params.getInput());
+
+                Command zipCommand = getZIPCommand(workDir, jobDir, params.getInput()); // zip osc files in a changesets folder
+                workflow.add(zipCommand);
+
             } else {
                 // These functions ensure the map + containing folder are either owned by the user -or- public.
                 MapResource.getMapForUser(user, params.getInput(), false, false);
@@ -441,8 +447,12 @@ public class ExportResource {
     }
 
     private Command getZIPCommand(File workDir, String outputName) {
+        return getZIPCommand(workDir, workDir, outputName);
+    }
+
+    private Command getZIPCommand(File workDir, File inputDir, String outputName) {
         File targetZIP = new File(workDir, outputName + ".zip");
-        return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
+        return new ZIPDirectoryContentsCommand(targetZIP, inputDir, this.getClass());
     }
 
     private static File getExportFile(String jobId, String outputName, String fileExt) {
