@@ -200,15 +200,13 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers(@Context HttpServletRequest request,
             @QueryParam("sort") @DefaultValue("") String sort,
-            @QueryParam("privileges") @DefaultValue("") String privileges,
-            @QueryParam("favorite_opts") @DefaultValue("") String favoriteOpts){
+            @QueryParam("privileges") @DefaultValue("") String privileges) {
         Users currentUser = Users.fromRequest(request);
 
         try {
             List<Tuple> userInfo;
             OrderSpecifier<?> sorter;
             Collection<String> activePrivileges = new ArrayList<>();
-            Collection<String> activeFavoriteOpts = new ArrayList<>();
 
             switch (sort) {
                 case "-auth":
@@ -234,11 +232,6 @@ public class UserResource {
                             .collect(Collectors.toList());
                 }
 
-                if (!favoriteOpts.isEmpty()) {
-                    activeFavoriteOpts = Arrays.stream(favoriteOpts.split(","))
-                            .collect(Collectors.toList());
-                }
-
                 userInfo = createQuery()
                         .select(users.id, users.displayName, users.hootservices_last_authorize, users.privileges, users.favoriteOpts)
                         .from(users)
@@ -246,7 +239,7 @@ public class UserResource {
                         .fetch();
             } else {
                 userInfo = createQuery()
-                        .select(users.id, users.displayName)
+                        .select(users.id, users.displayName, users.favoriteOpts)
                         .from(users)
                         .orderBy(sorter)
                         .fetch();
@@ -264,8 +257,8 @@ public class UserResource {
                             .collect(Collectors.toSet());
 
                     Map<String, String> favSubstitutionMap = (Map<String, String>) tuple.get(users.favoriteOpts);
-                    Collection<String> filterFavOpts = substitutionMap.keySet()
-                            .stream().filter(map -> substitutionMap.get(map).equals("true"))
+                    Collection<String> filterFavOpts = favSubstitutionMap.keySet()
+                            .stream()
                             .collect(Collectors.toSet());
 
                     if (activePrivileges.size() == 0 || filterPrivileges.containsAll(activePrivileges) ) {
@@ -273,12 +266,13 @@ public class UserResource {
                         user.setDisplayName(tuple.get(users.displayName));
                         user.setHootservicesLastAuthorize(tuple.get(users.hootservices_last_authorize));
                         user.setPrivileges(tuple.get(users.privileges));
-                        //user.setFavoriteOpts(tuple.get(users.favoriteOpts));
+                        user.setFavoriteOpts(tuple.get(users.favoriteOpts));
                         userList.add(user);
                     }
                 } else {
                     user.setId(tuple.get(users.id));
                     user.setDisplayName(tuple.get(users.displayName));
+                    user.setFavoriteOpts(tuple.get(users.favoriteOpts));
                     userList.add(user);
                 }
             }
