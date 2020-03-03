@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+	<create>
+		<node id="-3" version="0" lat="38.8540541370891077" lon="-104.9024316099691276" timestamp="" changeset="2"/>
+		<node id="-4" version="0" lat="38.8541298962059614" lon="-104.9023065312240703" timestamp="" changeset="2"/>
+		<node id="-5" version="0" lat="38.8543319201230304" lon="-104.9017876860593788" timestamp="" changeset="2"/>
+		<node id="-6" version="0" lat="38.8548207434768855" lon="-104.9008079025564655" timestamp="" changeset="2"/>
+		<node id="-9" version="0" lat="38.8549073243849037" lon="-104.8961823052623856" timestamp="" changeset="2"/>
+		<node id="-10" version="0" lat="38.8549019130812496" lon="-104.8964394115716487" timestamp="" changeset="2"/>
+		<node id="-11" version="0" lat="38.8548604264061623" lon="-104.8968586569948798" timestamp="" changeset="2"/>
+		<node id="-12" version="0" lat="38.8547197322843374" lon="-104.8973219116062410" timestamp="" changeset="2"/>
+		<node id="-13" version="0" lat="38.8546042907457476" lon="-104.8977759011253141" timestamp="" changeset="2"/>
+		<node id="-14" version="0" lat="38.8544293243065937" lon="-104.8980654352573794" timestamp="" changeset="2"/>
+		<node id="-15" version="0" lat="38.8542327120211866" lon="-104.8983109602013855" timestamp="" changeset="2"/>
+		<node id="-16" version="0" lat="38.8541767946664436" lon="-104.8987070428940598" timestamp="" changeset="2"/>
+		<node id="-17" version="0" lat="38.8541335037809361" lon="-104.8988900284655159" timestamp="" changeset="2"/>
+		<node id="-18" version="0" lat="38.8539585361836473" lon="-104.8989155074691695" timestamp="" changeset="2"/>
+		<node id="-19" version="0" lat="38.8537204352567329" lon="-104.8987232568054679" timestamp="" changeset="2"/>
+		<node id="-20" version="0" lat="38.8536194225014810" lon="-104.8987070428940598" timestamp="" changeset="2"/>
+		<node id="-21" version="0" lat="38.8535508780501431" lon="-104.8988321216391171" timestamp="" changeset="2"/>
+		<node id="-22" version="0" lat="38.8535689160700528" lon="-104.8990568001256065" timestamp="" changeset="2"/>
+		<node id="-23" version="0" lat="38.8535166057996975" lon="-104.8992698972467963" timestamp="" changeset="2"/>
+		<node id="-24" version="0" lat="38.8533470481072030" lon="-104.8993671807151884" timestamp="" changeset="2"/>
+	</create>
+</osmChange>

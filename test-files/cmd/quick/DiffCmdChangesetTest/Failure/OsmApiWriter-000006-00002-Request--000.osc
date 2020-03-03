@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+	<create>
+		<way id="-3" version="0" timestamp="" changeset="2">
+			<nd ref="43"/>
+			<nd ref="44"/>
+			<nd ref="45"/>
+			<nd ref="46"/>
+			<nd ref="39"/>
+			<nd ref="41"/>
+			<nd ref="71"/>
+			<nd ref="63"/>
+			<nd ref="72"/>
+			<nd ref="70"/>
+			<nd ref="69"/>
+			<nd ref="68"/>
+			<nd ref="67"/>
+			<nd ref="66"/>
+			<nd ref="62"/>
+			<nd ref="61"/>
+			<nd ref="60"/>
+			<nd ref="59"/>
+			<nd ref="58"/>
+			<nd ref="57"/>
+			<nd ref="56"/>
+			<nd ref="55"/>
+			<nd ref="54"/>
+			<nd ref="53"/>
+			<nd ref="52"/>
+			<nd ref="51"/>
+			<nd ref="50"/>
+			<nd ref="49"/>
+			<nd ref="48"/>
+			<nd ref="47"/>
+			<tag k="note" v="0"/>
+			<tag k="highway" v="road"/>
+		</way>
+	</create>
+</osmChange>

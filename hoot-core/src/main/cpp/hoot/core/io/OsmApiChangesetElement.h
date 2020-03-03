@@ -36,6 +36,7 @@
 #include <QMap>
 #include <QPair>
 #include <QString>
+#include <QTextStream>
 #include <QVector>
 #include <QXmlStreamReader>
 
@@ -85,12 +86,12 @@ public:
    * @brief getTagCount
    * @return Number of tags in this element
    */
-  int getTagCount() { return _tags.size(); }
+  int getTagCount() const { return _tags.size(); }
   /**
    * @brief id Get the element ID
    * @return Element ID
    */
-  long id() { return _id; }
+  long id() const { return _id; }
   /**
    * @brief changeId Change the ID of the element
    * @param id ID to change to
@@ -147,6 +148,12 @@ protected:
    * @return XML ecoded string
    */
   QString& escapeString(QString& value) const;
+
+  bool diffElement(const ChangesetElement* element, QTextStream& ts1, QTextStream& ts2) const;
+
+  bool diffAttributes(const ElementAttributes& attributes, QTextStream& ts1, QTextStream& ts2) const;
+
+  bool diffTags(const ElementTags& tags, QTextStream& ts1, QTextStream& ts2) const;
   /** Element type node/way/relation */
   ElementType::Type _type;
   /** Element ID */
@@ -188,6 +195,13 @@ public:
    * @return XML string
    */
   virtual QString toString(long changesetId) const;
+  /**
+   * @brief diff Compare two nodes and build a 'diff' style string
+   * @param node Node to compare this node against
+   * @param diffOutput Output of the diff between the two nodes
+   * @return True if they are equivalent
+   */
+  bool diff(const ChangesetNode& node, QString& diffOutput) const;
 };
 /** Handy typedef for node shared pointer */
 typedef std::shared_ptr<ChangesetNode> ChangesetNodePtr;
@@ -237,6 +251,13 @@ public:
    * @return XML string
    */
   virtual QString toString(long changesetId) const;
+  /**
+   * @brief diff Compare two ways and build a 'diff' style string
+   * @param way Way to compare this way against
+   * @param diffOutput Output of the diff between the two way
+   * @return True if they are equivalent
+   */
+  bool diff(const ChangesetWay& way, QString& diffOutput) const;
 
 private:
   /** Vector of node ID in the way */
@@ -282,6 +303,14 @@ public:
    * @return XML string
    */
   QString toString() const;
+  /**
+   * @brief diff
+   * @param member
+   * @param ts1
+   * @param ts2
+   * @return
+   */
+  bool diff(const ChangesetRelationMember& member, QTextStream& ts1, QTextStream& ts2) const;
 
 private:
   /** Member type (node/way/relation) */
@@ -340,6 +369,13 @@ public:
    * @return XML string
    */
   virtual QString toString(long changesetId) const;
+  /**
+   * @brief diff Compare two relations and build a 'diff' style string
+   * @param relation Relation to compare this relation against
+   * @param diffOutput Output of the diff between the two relations
+   * @return True if they are equivalent
+   */
+  bool diff(const ChangesetRelation& relation, QString& diffOutput) const;
 
 private:
   /** List of relation members */

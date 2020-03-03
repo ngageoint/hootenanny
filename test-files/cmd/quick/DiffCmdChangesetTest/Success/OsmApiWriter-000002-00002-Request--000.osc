@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+	<create>
+		<node id="-3" version="0" lat="38.8540541370891077" lon="-104.9024316099691276" timestamp="" changeset="2"/>
+		<node id="-4" version="0" lat="38.8541298962059614" lon="-104.9023065312240703" timestamp="" changeset="2"/>
+		<node id="-5" version="0" lat="38.8543319201230304" lon="-104.9017876860593788" timestamp="" changeset="2"/>
+		<node id="-6" version="0" lat="38.8548207434768855" lon="-104.9008079025564655" timestamp="" changeset="2"/>
+		<node id="-9" version="0" lat="38.8549073243849037" lon="-104.8961823052623856" timestamp="" changeset="2"/>
+		<node id="-10" version="0" lat="38.8549019130812496" lon="-104.8964394115716487" timestamp="" changeset="2"/>
+		<node id="-11" version="0" lat="38.8548604264061623" lon="-104.8968586569948798" timestamp="" changeset="2"/>
+		<node id="-12" version="0" lat="38.8547197322843374" lon="-104.8973219116062410" timestamp="" changeset="2"/>
+	</create>
+</osmChange>

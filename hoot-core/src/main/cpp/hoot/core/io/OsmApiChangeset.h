@@ -66,6 +66,7 @@ class XmlChangeset
 public:
   /** Constructors */
   XmlChangeset();
+  explicit XmlChangeset(const QString& changeset);
   explicit XmlChangeset(const QList<QString>& changesets);
   /**  Allow test class to access protected members for white box testing */
   friend class OsmApiChangesetTest;
@@ -115,6 +116,8 @@ public:
     TypeDelete,
     TypeMax
   };
+  /** Convert ChangesetType to string */
+  static QString getString(ChangesetType type);
   /**
    * @brief calculateChangeset Create an atomic subset of this changeset that can be sent independently from others
    * @param changeset - Pointer to a ChangesetInfo object holding IDs for a subset of the changeset
@@ -280,7 +283,6 @@ public:
    * @return true if the file was written successfully
    */
   bool writeErrorFile();
-
   /**
    * @brief calculateRemainingChangeset This function is an error correction case for when a changeset cannot finish
    *  and the upload stalls indefinitely.  Move all remaining elements into a changeset so the job can finish or error out.
@@ -288,6 +290,12 @@ public:
    * @return true if there is anything in the changeset
    */
   bool calculateRemainingChangeset(ChangesetInfoPtr &changeset);
+  /**
+   * @brief isMatch Function to compare two changesets
+   * @param changeset Changeset object to compare this changeset against
+   * @return true if they are equivalent
+   */
+  bool isMatch(const XmlChangeset& changeset);
 
 private:
   /**
@@ -300,6 +308,11 @@ private:
    * @param changesetXml
    */
   void loadChangesetXml(const QString& changesetXml);
+  /**
+   * @brief loadChangesetDirectory Load directory of changeset files, can include request/response changeset files
+   * @param changesetDirectory
+   */
+  void loadChangesetDirectory(const QString& changesetDirectory);
   /**
    * @brief loadChangeset Load a .osc changeset file
    * @param reader

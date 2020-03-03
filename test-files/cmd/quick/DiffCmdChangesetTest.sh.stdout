@@ -1,0 +1,19 @@
+19:13:24.318 WARN   ...ot/core/io/OsmApiChangeset.cpp(1910) Node count not equal (ref: 36, test: 33)
+19:13:24.318 WARN   ...ot/core/io/OsmApiChangeset.cpp(1915) Way count not equal (ref: 4, test: 3)
+19:13:24.318 WARN   ...ot/core/io/OsmApiChangeset.cpp(1957) Missing nodes: <create> - [-35, -30, -34]
+>		<node id="-35" version="0" lat="38.8540851073630833" lon="-104.9014476647277121" timestamp="" changeset="0"/>
+>		<node id="-30" version="0" lat="38.8542618470630714" lon="-104.8997171368440888" timestamp="" changeset="0"/>
+>		<node id="-34" version="0" lat="38.8542471187715179" lon="-104.9010788637033329" timestamp="" changeset="0"/>
+19:13:24.319 WARN   ...ot/core/io/OsmApiChangeset.cpp(1975) Way ID -3
+< nodes = -3 -4 -5 -6 -7 -32 -31 -30 -36 -29 -28 -27 -26 -25 -24 -23 -22 -21 -20 -19 -18 -17 -16 -15 -14 -13 -12 -11 -10 -9 
+--------------------
+> nodes = 43 44 45 46 39 41 71 63 72 70 69 68 67 66 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 
+19:13:24.319 WARN   ...ot/core/io/OsmApiChangeset.cpp(1991) Missing ways: <create> - [-4]
+>		<way id="-4" version="0" timestamp="" changeset="0">
+>			<nd ref="-35"/>
+>			<nd ref="-34"/>
+>			<nd ref="-33"/>
+>			<nd ref="-30"/>
+>			<tag k="note" v="2"/>
+>			<tag k="highway" v="road"/>
+>		</way>

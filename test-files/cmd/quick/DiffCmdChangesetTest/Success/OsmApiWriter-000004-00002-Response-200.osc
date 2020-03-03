@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diffResult version="0.6" generator="CGImap 0.8.0 (32112 localhost.localdomain)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <node old_id="-21" new_id="59" new_version="1"/>
+ <node old_id="-22" new_id="60" new_version="1"/>
+ <node old_id="-23" new_id="61" new_version="1"/>
+ <node old_id="-24" new_id="62" new_version="1"/>
+ <node old_id="-30" new_id="63" new_version="1"/>
+ <node old_id="-34" new_id="64" new_version="1"/>
+ <node old_id="-35" new_id="65" new_version="1"/>
+ <way old_id="-4" new_id="7" new_version="1"/>
+</diffResult>
