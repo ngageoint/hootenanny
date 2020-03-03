@@ -33,6 +33,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
+//#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 
 namespace hoot
@@ -50,6 +52,7 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
   _numAffected = 0;     // _numAffected reflects the actual number of nodes removed
   _numProcessed = 0;    // _numProcessed reflects total elements processed
   _nodesToRemove.clear();
+  _reviewRelationsToRemove.clear();
 
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
@@ -64,13 +67,24 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
       for (size_t i = 0; i < members.size(); i++)
       {
         const RelationData::Entry member = members[i];
-        LOG_VART(member.getElementId().getType());
-        LOG_VART(map->getElement(member.getElementId())->getTags().size());
-        if (member.getElementId().getType() == ElementType::Node &&
-            map->getElement(member.getElementId())->getTags().size() == 0)
+        LOG_VART(member.getElementId());
+        if (member.getElementId().getType() == ElementType::Node)
         {
-          LOG_TRACE("Adding " << member.getElementId() << "...");
-          _nodesToRemove.insert(member.getElementId().getId());
+          ConstElementPtr element = map->getElement(member.getElementId());
+          if (element)
+          {
+            LOG_VART(map->getElement(member.getElementId())->getTags().size());
+            if (map->getElement(member.getElementId())->getTags().size() == 0)
+            {
+              LOG_TRACE("Marking " << member.getElementId() << " for removal...");
+              _nodesToRemove.insert(member.getElementId().getId());
+              if (members.size() <= 2)
+              {
+                LOG_TRACE("Marking " << relation->getElementId() << " for removal...");
+                _reviewRelationsToRemove.insert(relation->getElementId().getId());
+              }
+            }
+          }
         }
       }
     }
@@ -91,6 +105,36 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
     return;
   }
 
+  // TODO: this breaks
+//  _numProcessed = 0;
+//  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+//  {
+//    const Relation* relation = it->second.get();
+//    LOG_VART(relation->getElementId());
+//    const long relationId = relation->getId();
+//    if (_reviewRelationsToRemove.find(relationId) != _reviewRelationsToRemove.end())
+//    {
+//      LOG_TRACE("Removing relation: " << relation->getElementId() << "...");
+//      RemoveRelationByEid::removeRelation(map, relationId);
+//      _numAffected++;
+//    }
+//    _numProcessed++;
+
+//    if (_numAffected % _taskStatusUpdateInterval == 0)
+//    {
+//      PROGRESS_INFO(
+//        "Removed " << StringUtils::formatLargeNumber(_numAffected) <<
+//        " relation / " << StringUtils::formatLargeNumber(_reviewRelationsToRemove.size()) <<
+//        " total relations to remove.");
+//    }
+//    else if (_numProcessed % _taskStatusUpdateInterval == 0)
+//    {
+//      PROGRESS_INFO(
+//        "Processed " << StringUtils::formatLargeNumber(_numProcessed) <<
+//        " relations / " << StringUtils::formatLargeNumber(relations.size()) << " total relations.");
+//    }
+//  }
+
   const NodeMap nodes = map->getNodes();
   _numProcessed = 0;
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
@@ -102,6 +146,7 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
     {
       LOG_TRACE("Removing node: " << n->getElementId() << "...");
       RemoveNodeByEid::removeNodeNoCheck(map, nodeId);
+      //RecursiveElementRemover(n->getElementId()).apply(map);
       _numAffected++;
     }
     _numProcessed++;

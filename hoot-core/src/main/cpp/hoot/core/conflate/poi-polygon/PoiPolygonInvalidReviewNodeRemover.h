@@ -66,6 +66,7 @@ public:
 protected:
 
   std::set<long> _nodesToRemove;
+  std::set<long> _reviewRelationsToRemove;
 
   int _taskStatusUpdateInterval;
 };
