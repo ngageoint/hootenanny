@@ -194,8 +194,8 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
       {
         const vector<RelationData::Entry>& members = r->getMembers();
         from = ElementId::node(_map->getWay(members[0].getElementId())->getFirstNodeId());
-        to = ElementId::node(_map->getWay(members[members.size() - 1].getElementId())->
-          getLastNodeId());
+        to =
+          ElementId::node(_map->getWay(members[members.size() - 1].getElementId())->getLastNodeId());
       }
       // if this is a bad multi-linestring then don't include it in the network.
       else
