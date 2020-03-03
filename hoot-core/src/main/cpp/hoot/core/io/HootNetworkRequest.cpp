@@ -36,6 +36,7 @@
 //  Qt
 #include <QEventLoop>
 #include <QHostAddress>
+#include <QTimer>
 #include <QtNetwork/QSslConfiguration>
 #include <QtNetwork/QSslSocket>
 
@@ -180,10 +181,26 @@ void HootNetworkRequest::_blockOnReply(QNetworkReply* reply)
 {
   if (reply != NULL)
   {
+    QTimer timer;
     //  Qt code to force the use of QNetworkReply to be synchronous
     QEventLoop loop;
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    QObject::connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
+    //  Start a 5 minute timer
+    timer.start(300000);
     loop.exec();
+    //  Cleanup the timer
+    if (timer.isActive())
+    {
+      //  Reply is finished and the timer is still active, stop the timer
+      timer.stop();
+    }
+    else
+    {
+      //  Timer timed-out, disconnect the reply signal and abort
+      QObject::disconnect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+      reply->abort();
+    }
   }
 }
 
