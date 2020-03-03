@@ -66,17 +66,13 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ConstRelationPtr relation = it->second;
-    // I don't *think* we want to consider review relations here.
-    if (relation->getType() != MetadataTags::RelationReview())
+    const vector<RelationData::Entry>& members = relation->getMembers();
+    for (size_t i = 0; i < members.size(); i++)
     {
-      const vector<RelationData::Entry>& members = relation->getMembers();
-      for (size_t i = 0; i < members.size(); i++)
+      const RelationData::Entry member = members[i];
+      if (member.getElementId().getType() == ElementType::Node)
       {
-        const RelationData::Entry member = members[i];
-        if (member.getElementId().getType() == ElementType::Node)
-        {
-          _usedNodes.insert(member.getElementId().getId());
-        }
+        _usedNodes.insert(member.getElementId().getId());
       }
     }
     _numProcessed++;
