@@ -201,7 +201,7 @@ public class UserResource {
     public Response getAllUsers(@Context HttpServletRequest request,
             @QueryParam("sort") @DefaultValue("") String sort,
             @QueryParam("privileges") @DefaultValue("") String privileges,
-    		@QueryParam("favorite_opts") @DefaultValue("") String favoriteOpts){
+            @QueryParam("favorite_opts") @DefaultValue("") String favoriteOpts){
         Users currentUser = Users.fromRequest(request);
 
         try {
@@ -235,8 +235,8 @@ public class UserResource {
                 }
 
                 if (!favoriteOpts.isEmpty()) {
-                	activeFavoriteOpts = Arrays.stream(favoriteOpts.split(","))
-                			.collect(Collectors.toList());
+                    activeFavoriteOpts = Arrays.stream(favoriteOpts.split(","))
+                            .collect(Collectors.toList());
                 }
 
                 userInfo = createQuery()
@@ -385,24 +385,24 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveFavoriteOpts(@Context HttpServletRequest request, String favoriteOpts) {
 
-    	try {
-    		Users user = Users.fromRequest(request);
-    		Long userId = user.getId();
+        try {
+            Users user = Users.fromRequest(request);
+            Long userId = user.getId();
 
-    		JSONParser parser = new JSONParser();
-    		JSONObject json = (JSONObject) parser.parse(favoriteOpts);
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(favoriteOpts);
 
-    		String getName = (String) json.get("name");
+            String getName = (String) json.get("name");
 
-    		Object favoritesColumn = createQuery()
-    				.select(users.favoriteOpts)
-    				.from(users)
-    				.where(users.id.eq(userId))
-    				.fetchOne();
+            Object favoritesColumn = createQuery()
+                    .select(users.favoriteOpts)
+                    .from(users)
+                    .where(users.id.eq(userId))
+                    .fetchOne();
 
-    		Map<String, String> tags = PostgresUtils.postgresObjToHStore(favoritesColumn);
+            Map<String, String> tags = PostgresUtils.postgresObjToHStore(favoritesColumn);
 
-    		String getFavorites = json.get("members").toString();
+            String getFavorites = json.get("members").toString();
 
             if ( !tags.containsKey(getName) ) {
                 tags.put(getName, getFavorites);
@@ -412,18 +412,18 @@ public class UserResource {
                     .execute();
             }
             else {
-            	tags.remove(getName, getFavorites);
+                tags.remove(getName, getFavorites);
                 tags.put(getName, getFavorites);
 
                 createQuery().update(users)
-                		.where(users.id.eq(userId))
-                		.set(users.favoriteOpts, tags)
-                		.execute();
+                        .where(users.id.eq(userId))
+                        .set(users.favoriteOpts, tags)
+                        .execute();
             }
 
 
-    	} catch (Exception e) {
-    		Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
        return Response.ok().build();
    }
@@ -443,11 +443,11 @@ public class UserResource {
         Users user = Users.fromRequest(request);
         Long userId = user.getId();
 
-		Object favoritesColumn = createQuery()
-				.select(users.favoriteOpts)
-				.from(users)
-				.where(users.id.eq(userId))
-				.fetchOne();
+        Object favoritesColumn = createQuery()
+                .select(users.favoriteOpts)
+                .from(users)
+                .where(users.id.eq(userId))
+                .fetchOne();
 
         Map<String, String> json = PostgresUtils.postgresObjToHStore(favoritesColumn);
 
@@ -471,24 +471,24 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteFavOpt(@Context HttpServletRequest request, String favoriteOpts) {
 
-    	try {
-    		Users user = Users.fromRequest(request);
-    		Long userId = user.getId();
+        try {
+            Users user = Users.fromRequest(request);
+            Long userId = user.getId();
 
-    		JSONParser parser = new JSONParser();
-    		JSONObject json = (JSONObject) parser.parse(favoriteOpts);
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(favoriteOpts);
 
-    		String getName = (String) json.get("name");
+            String getName = (String) json.get("name");
 
-    		Object favoritesColumn = createQuery()
-    				.select(users.favoriteOpts)
-    				.from(users)
-    				.where(users.id.eq(userId))
-    				.fetchOne();
+            Object favoritesColumn = createQuery()
+                    .select(users.favoriteOpts)
+                    .from(users)
+                    .where(users.id.eq(userId))
+                    .fetchOne();
 
-    		Map<String, String> tags = PostgresUtils.postgresObjToHStore(favoritesColumn);
+            Map<String, String> tags = PostgresUtils.postgresObjToHStore(favoritesColumn);
 
-    		tags.remove(getName);
+            tags.remove(getName);
 
             if ( !tags.containsKey(getName) ) {
                 createQuery().update(users)
@@ -497,8 +497,8 @@ public class UserResource {
                     .execute();
             }
 
-    	} catch (Exception e) {
-    		Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
        return Response.ok().build();
     }
@@ -520,9 +520,9 @@ public class UserResource {
     }
 
     public static boolean userFavoriteOptsCheck( Users user, String opts) {
-    	if ( user == null) return false;
-    	Map <String, String> favoriteOpts = PostgresUtils.postgresObjToHStore(user.getFavoriteOpts());
-    	return ("true").equals(favoriteOpts.get(opts));
+        if ( user == null) return false;
+        Map <String, String> favoriteOpts = PostgresUtils.postgresObjToHStore(user.getFavoriteOpts());
+        return ("true").equals(favoriteOpts.get(opts));
     }
 
     private static Document writeResponse(User user) throws ParserConfigurationException {
