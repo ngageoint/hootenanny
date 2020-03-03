@@ -58,8 +58,8 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 
 void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 {
-  _numAffected = 0;
-  _numProcessed = 0;
+  _numAffected = 0;     // _numAffected reflects the actual number of nodes removed
+  _numProcessed = 0;    // _numProcessed reflects total elements processed
   _usedNodes.clear();
 
   const RelationMap& relations = map->getRelations();
@@ -75,13 +75,14 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         _usedNodes.insert(member.getElementId().getId());
       }
     }
-    _numProcessed++;
 
+    _numProcessed++;
     if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Recorded " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
-        " / " << StringUtils::formatLargeNumber(_numProcessed) << " nodes for possible removal.");
+        "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        " nodes from removal after processing " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " total elements.");
     }
   }
 
@@ -94,11 +95,13 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     _usedNodes.insert(nodeIds.begin(), nodeIds.end());
     _numProcessed += nodeIds.size();
 
+    _numProcessed++;
     if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Recorded " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
-        " / " << StringUtils::formatLargeNumber(_numProcessed) << " nodes for possible removal.");
+        "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        " nodes from removal after processing " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " total elements.");
     }
   }
 
@@ -117,8 +120,9 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Recorded " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
-        " / " << StringUtils::formatLargeNumber(_numProcessed) << " nodes for possible removal.");
+        "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        " nodes from removal after processing " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " total elements.");
     }
   }
   LOG_VART(_usedNodes.size());
@@ -161,15 +165,13 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     {
       PROGRESS_INFO(
         "Removed " << StringUtils::formatLargeNumber(_numAffected) <<
-        " nodes / " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
-        " total nodes.");
+        " nodes / " << StringUtils::formatLargeNumber(_usedNodes.size()) << " total nodes.");
     }
     else if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numProcessed) <<
-        " nodes / " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
-        " total nodes.");
+        " nodes / " << StringUtils::formatLargeNumber(nodesWgs84->size()) << " total nodes.");
     }
   }
 }

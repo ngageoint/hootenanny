@@ -78,7 +78,7 @@ public:
   static long removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
                           const geos::geom::Envelope& e = geos::geom::Envelope());
 
-  virtual void setBounds(const geos::geom::Envelope &bounds);
+  virtual void setBounds(const geos::geom::Envelope& bounds);
 
   void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
 
