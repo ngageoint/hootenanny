@@ -148,11 +148,31 @@ protected:
    * @return XML ecoded string
    */
   QString& escapeString(QString& value) const;
-
+  /**
+   * @brief diffElement Compare (diff) two elements, this and element, adding diff output to the
+   *   text streams
+   * @param element Element to compare to this
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for element
+   * @return true if the elements are equivalent
+   */
   bool diffElement(const ChangesetElement* element, QTextStream& ts1, QTextStream& ts2) const;
-
+  /**
+   * @brief diffAttributes Compare (diff) the attributes of two elements adding diff output to the
+   *   text streams
+   * @param attributes Set of attributes to compare to this element's attributes
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for attributes
+   * @return true if the element's attributes are equivalent
+   */
   bool diffAttributes(const ElementAttributes& attributes, QTextStream& ts1, QTextStream& ts2) const;
-
+  /**
+   * @brief diffTags Compare (diff) the tags of two elements adding diff output to the text streams
+   * @param tags Set of tags to compare to this element's tags
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for tags
+   * @return true if the element's tags are equivalent
+   */
   bool diffTags(const ElementTags& tags, QTextStream& ts1, QTextStream& ts2) const;
   /** Element type node/way/relation */
   ElementType::Type _type;
@@ -304,11 +324,11 @@ public:
    */
   QString toString() const;
   /**
-   * @brief diff
-   * @param member
-   * @param ts1
-   * @param ts2
-   * @return
+   * @brief diff Compare two relation members and build a 'diff' style string in the text streams
+   * @param member Relation member to compare against this
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for member
+   * @return true if the relation members are equivalent
    */
   bool diff(const ChangesetRelationMember& member, QTextStream& ts1, QTextStream& ts2) const;
 

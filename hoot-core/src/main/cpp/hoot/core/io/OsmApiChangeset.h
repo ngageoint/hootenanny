@@ -310,7 +310,7 @@ private:
   void loadChangesetXml(const QString& changesetXml);
   /**
    * @brief loadChangesetDirectory Load directory of changeset files, can include request/response changeset files
-   * @param changesetDirectory
+   * @param changesetDirectory Full pathname of the directory to load
    */
   void loadChangesetDirectory(const QString& changesetDirectory);
   /**

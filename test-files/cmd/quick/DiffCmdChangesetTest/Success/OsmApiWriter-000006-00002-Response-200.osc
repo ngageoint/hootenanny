@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<diffResult version="0.6" generator="CGImap 0.8.0 (32112 localhost.localdomain)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+<diffResult version="0.6" generator="CGImap 0.8.0" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
  <way old_id="-3" new_id="8" new_version="1"/>
 </diffResult>
