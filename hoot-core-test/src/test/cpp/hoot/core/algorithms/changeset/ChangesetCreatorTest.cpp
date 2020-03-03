@@ -51,8 +51,8 @@ public:
   {
     QString reference = _inputPath + "ChangesetDeriveUpdateVersion_ref.osm";
     QString secondary = _inputPath + "ChangesetDeriveUpdateVersion_sec.osm";
-    QString output = _outputPath + "ChangsetDeriveUpdateVersion_output.osm";
-    QString expected = _inputPath + "ChangesetDeriveUpdateVersion_expected.osm";
+    QString output = _outputPath + "ChangsetDeriveUpdateVersion_output.osc";
+    QString expected = _inputPath + "ChangesetDeriveUpdateVersion_expected.osc";
 
     ChangesetCreator(false, "").create(output, reference, secondary);
 
