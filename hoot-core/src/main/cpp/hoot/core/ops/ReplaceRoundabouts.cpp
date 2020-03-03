@@ -35,6 +35,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
@@ -74,12 +75,25 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
     // This could be very expensive...enable for debugging only.
     //OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabout-" + QString::number(i + 1));
   }
-  OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabouts");
+  OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabouts-1");
+
+  // We may have lost track of some of the connectors b/c of ID changes, so let's do another pass
+  // at removing them.
+  std::vector<long> connectors =
+    ElementIdsVisitor::findElementsByTag(
+      pMap, ElementType::Way, MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
+  LOG_VART(connectors.size());
+  foreach (long id, connectors)
+  {
+    LOG_TRACE("Removing center node: " << id << "...");
+    RemoveWayByEid::removeWayFully(pMap, id);
+  }
+  OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabouts-2");
 
   //  Clean up any roundabout centers that didn't clean themselves up earlier
   std::vector<long> centers =
     ElementIdsVisitor::findElementsByTag(
-      pMap, ElementType::Node, MetadataTags::HootSpecial(), "roundabout_center");
+      pMap, ElementType::Node, MetadataTags::HootSpecial(), MetadataTags::RoundaboutCenter());
   LOG_VART(centers.size());
   foreach (long id, centers)
   {
