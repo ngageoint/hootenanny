@@ -69,23 +69,25 @@ public:
    * @param url URL for the request
    * @param http_op HTTP operation (GET, POST, or PUT), GET is default
    * @param data POST data as a QByteArray
+   * @param timeout Timeout in seconds to block waiting for the reply, default to 5 minutes
    * @return success
    */
   bool networkRequest(const QUrl& url,
     QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
-    const QByteArray& data = QByteArray());
+    const QByteArray& data = QByteArray(), int timeout = 300);
   /**
    * @brief networkRequest Function to make the actual request
    * @param url URL for the request
    * @param headers collection of known headers to set on the request
    * @param http_op HTTP operation (GET, POST, or PUT), GET is default
    * @param data POST data as a QByteArray
+   * @param timeout Timeout in seconds to block waiting for the reply, default to 5 minutes
    * @return success
    */
   bool networkRequest(const QUrl& url,
     const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
     QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
-    const QByteArray& data = QByteArray());
+    const QByteArray& data = QByteArray(), int timeout = 300);
   /**
    * @brief getResponseContent
    * @return HTTP response content
@@ -138,15 +140,17 @@ private:
    * @param headers collection of known headers to set on the request
    * @param http_op HTTP operation (GET, POST, or PUT), GET is default
    * @param data POST data as a QByteArray
+   * @param timeout Timeout in seconds to block waiting for the reply
    * @return success
    */
   bool _networkRequest(const QUrl& url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
-                       QNetworkAccessManager::Operation http_op, const QByteArray& data);
+                       QNetworkAccessManager::Operation http_op, const QByteArray& data, int timeout);
   /**
    * @brief _blockOnReply Function to turn Qt asynchronous networking calls to synchronous
    * @param reply Pointer to the network reply object to wait on
+   * @param timeout Timeout in seconds to block waiting for the reply
    */
-  void _blockOnReply(QNetworkReply* reply);
+  void _blockOnReply(QNetworkReply* reply, int timeout);
   /**
    * @brief _getHttpResponseCode Get the HTTP response code from the response object
    * @param reply Network reply object
