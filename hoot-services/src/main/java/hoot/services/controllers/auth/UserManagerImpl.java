@@ -176,6 +176,9 @@ public class UserManagerImpl implements UserManager {
         } else {
             // look in database for possible existing privileges set
             user.setPrivileges(existingUser.getPrivileges());
+            
+            // look in database for existing user favorite adv. opts
+            user.setFavoriteOpts(existingUser.getFavoriteOpts());
 
             this.update(user);
         }
