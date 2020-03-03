@@ -26,12 +26,9 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/cmd/BoundedCommand.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+    <create>
+        <node id="-1" version="0" lat="42.4762854000000019" lon="-71.4715554999999938" timestamp=""/>
+        <node id="-2" version="0" lat="42.4762847000000008" lon="-71.4714519999999993" timestamp=""/>
+        <node id="-3" version="0" lat="42.4761649000000006" lon="-71.4714538000000061" timestamp=""/>
+        <node id="-4" version="0" lat="42.4761627999999973" lon="-71.4715541000000059" timestamp=""/>
+    </create>
+    <delete>
+        <node id="1" version="1" lat="42.4765293999999969" lon="-71.4715228999999965" timestamp=""/>
+        <node id="2" version="1" lat="42.4762369000000035" lon="-71.4720827999999955" timestamp="">
+            <tag k="name" v="Office of Michael Rosenfeld, Inc., Architects"/>
+            <tag k="shop" v="architect"/>
+        </node>
+        <node id="3" version="1" lat="42.4764004000000028" lon="-71.4730938999999950" timestamp="">
+            <tag k="name" v="New London Style Pizza"/>
+            <tag k="amenity" v="restaurant"/>
+        </node>
+        <node id="5" version="1" lat="42.4763037000000026" lon="-71.4724917000000062" timestamp="">
+            <tag k="name" v="West Acton Mobil"/>
+            <tag k="amenity" v="fuel"/>
+        </node>
+        <node id="6" version="1" lat="42.4763269999999977" lon="-71.4728103000000061" timestamp="">
+            <tag k="shop" v="convenience"/>
+        </node>
+        <node id="35" version="1" lat="42.4764575000000022" lon="-71.4715237000000059" timestamp=""/>
+        <node id="36" version="1" lat="42.4765288999999981" lon="-71.4714352999999960" timestamp=""/>
+        <node id="37" version="1" lat="42.4764569000000023" lon="-71.4714361000000054" timestamp=""/>
+    </delete>
+    <create>
+        <way id="-1" version="0" timestamp="">
+            <nd ref="-4"/>
+            <nd ref="-3"/>
+            <nd ref="-2"/>
+            <nd ref="-1"/>
+            <nd ref="-4"/>
+            <tag k="addr:street" v="Massachusetts Avenue"/>
+            <tag k="addr:state" v="MA"/>
+            <tag k="name" v="Twin Seafood"/>
+            <tag k="length" v="13.6"/>
+            <tag k="building" v="yes"/>
+            <tag k="addr:country" v="US"/>
+            <tag k="feature_area" v="112.5"/>
+            <tag k="width" v="8.5"/>
+            <tag k="addr:housenumber" v="541"/>
+            <tag k="addr:city" v="Acton"/>
+            <tag k="amenity" v="cafe"/>
+            <tag k="angle" v="179.5"/>
+        </way>
+    </create>
+    <modify>
+        <way id="1" version="1" timestamp="">
+            <nd ref="7"/>
+            <nd ref="8"/>
+            <nd ref="9"/>
+            <nd ref="10"/>
+            <nd ref="11"/>
+            <nd ref="7"/>
+            <tag k="name" v="New London Style Pizza"/>
+            <tag k="length" v="25.4"/>
+            <tag k="building" v="yes"/>
+            <tag k="feature_area" v="313.5"/>
+            <tag k="width" v="16.1"/>
+            <tag k="amenity" v="restaurant"/>
+            <tag k="angle" v="163.8"/>
+        </way>
+    </modify>
+    <delete>
+        <way id="5" version="1" timestamp="">
+            <nd ref="35"/>
+            <nd ref="1"/>
+            <nd ref="36"/>
+            <nd ref="37"/>
+            <nd ref="35"/>
+            <tag k="length" v="8.0"/>
+            <tag k="building" v="yes"/>
+            <tag k="feature_area" v="57.4"/>
+            <tag k="width" v="7.2"/>
+            <tag k="angle" v="180.5"/>
+        </way>
+    </delete>
+    <modify>
+        <way id="6" version="1" timestamp="">
+            <nd ref="38"/>
+            <nd ref="39"/>
+            <nd ref="40"/>
+            <nd ref="41"/>
+            <nd ref="38"/>
+            <tag k="addr:street" v="Massachusetts Avenue"/>
+            <tag k="addr:state" v="MA"/>
+            <tag k="name" v="Office of Michael Rosenfeld, Inc., Architects"/>
+            <tag k="length" v="26.5"/>
+            <tag k="shop" v="architect"/>
+            <tag k="building" v="yes"/>
+            <tag k="addr:country" v="US"/>
+            <tag k="feature_area" v="294.6"/>
+            <tag k="width" v="11.7"/>
+            <tag k="addr:housenumber" v="543"/>
+            <tag k="addr:city" v="Acton"/>
+            <tag k="angle" v="271.2"/>
+        </way>
+        <way id="8" version="1" timestamp="">
+            <nd ref="50"/>
+            <nd ref="51"/>
+            <nd ref="52"/>
+            <nd ref="53"/>
+            <nd ref="50"/>
+            <tag k="name" v="West Acton Mobil"/>
+            <tag k="length" v="23.9"/>
+            <tag k="building" v="roof"/>
+            <tag k="feature_area" v="192.4"/>
+            <tag k="width" v="8.1"/>
+            <tag k="amenity" v="fuel"/>
+            <tag k="angle" v="271.8"/>
+        </way>
+        <way id="9" version="1" timestamp="">
+            <nd ref="54"/>
+            <nd ref="55"/>
+            <nd ref="56"/>
+            <nd ref="57"/>
+            <nd ref="58"/>
+            <nd ref="4"/>
+            <nd ref="54"/>
+            <tag k="length" v="16.1"/>
+            <tag k="shop" v="convenience"/>
+            <tag k="building" v="yes"/>
+            <tag k="feature_area" v="124.7"/>
+            <tag k="width" v="8.3"/>
+            <tag k="angle" v="180.9"/>
+        </way>
+    </modify>
+</osmChange>
