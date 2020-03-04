@@ -5609,8 +5609,8 @@
         <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="relation" ref="7387463" role="reviewee"/>
-        <member type="relation" ref="-7" role="reviewee"/>
+        <member type="relation" ref="7387472" role="reviewee"/>
+        <member type="relation" ref="-5" role="reviewee"/>
         <tag k="hoot:review:type" v="Line"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-46"/>
@@ -5619,7 +5619,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="relation" ref="7387472" role="reviewee"/>
+        <member type="relation" ref="7387471" role="reviewee"/>
         <member type="relation" ref="-8" role="reviewee"/>
         <tag k="hoot:review:type" v="Line"/>
         <tag k="hoot:status" v="3"/>
@@ -5629,8 +5629,8 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="relation" ref="7387471" role="reviewee"/>
-        <member type="relation" ref="-5" role="reviewee"/>
+        <member type="relation" ref="7387463" role="reviewee"/>
+        <member type="relation" ref="-7" role="reviewee"/>
         <tag k="hoot:review:type" v="Line"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-44"/>
