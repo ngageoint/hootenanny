@@ -41,6 +41,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/IoUtils.h>
@@ -224,11 +225,20 @@ int ConflateCmd::runSimple(QStringList& args)
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
 
+  // These setting conflict, so let's give them synergy.
+  const QString dupeNodeRemoverClassName = QString::fromStdString(DuplicateNodeRemover::className());
+  if (conf().getList(
+        ConfigOptions::getConflatePreOpsKey()).contains(dupeNodeRemoverClassName) ||
+      conf().getList(
+        ConfigOptions::getConflatePostOpsKey()).contains(dupeNodeRemoverClassName))
+  {
+    conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
+  }
+
   // The highway.merge.tags.only option only gets used with Attribute Conflation for now, so we'll
   // use it as the sole identifier for it. If that ever changes, then we'll need a different way
   // to recognize when AC is occurring.
   const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
-
   if (isAttributeConflate)
   {
     _updateConfigOptionsForAttributeConflation();

@@ -34,6 +34,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -101,6 +102,14 @@ public:
     LOG_VART(inputs.size());
     LOG_VART(inputs);
     LOG_VART(output);  
+
+    // These setting conflict, so let's give them synergy.
+    const QString dupeNodeRemoverClassName =
+      QString::fromStdString(DuplicateNodeRemover::className());
+    if (conf().getList(ConfigOptions::getConvertOpsKey()).contains(dupeNodeRemoverClassName))
+    {
+      conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
+    }
 
     DataConverter converter;
     converter.setConfiguration(conf());

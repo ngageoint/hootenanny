@@ -247,6 +247,7 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out,
       OsmMapReaderFactory::createReader(
         in, ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+    reader->setConfiguration(conf());
     reader->open(in);
 
     // add visitor/criterion operations if any of the convert ops are visitors.
