@@ -1,0 +1,837 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='1' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5463605' lon='-72.3472852' />
+  <node id='2' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5460961' lon='-72.347356' />
+  <node id='3' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5450758' lon='-72.3476199' />
+  <node id='4' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5445435' lon='-72.3477709' />
+  <node id='5' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5463307' lon='-72.3468487' />
+  <node id='6' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5463742' lon='-72.3469943' />
+  <node id='7' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5486997' lon='-72.3468201' />
+  <node id='8' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5473486' lon='-72.3471519' />
+  <node id='9' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5453609' lon='-72.3495523' />
+  <node id='10' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5452999' lon='-72.3490373' />
+  <node id='11' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5453151' lon='-72.3489568' />
+  <node id='12' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5452846' lon='-72.3486886' />
+  <node id='13' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5466424' lon='-72.3473252' />
+  <node id='14' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5466267' lon='-72.3472606' />
+  <node id='15' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5466065' lon='-72.3472295' />
+  <node id='16' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5465657' lon='-72.3471935' />
+  <node id='17' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5465195' lon='-72.3471851' />
+  <node id='18' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5464518' lon='-72.3471876' />
+  <node id='19' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5464158' lon='-72.3472036' />
+  <node id='20' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5463825' lon='-72.3472366' />
+  <node id='21' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.546357' lon='-72.3473332' />
+  <node id='22' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5463772' lon='-72.3473943' />
+  <node id='23' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5464068' lon='-72.3474286' />
+  <node id='24' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.546447' lon='-72.3474513' />
+  <node id='25' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5465072' lon='-72.3474671' />
+  <node id='26' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5466038' lon='-72.3474215' />
+  <node id='27' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5488975' lon='-72.3487493' />
+  <node id='28' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5485583' lon='-72.3486496' />
+  <node id='29' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5483136' lon='-72.3485108' />
+  <node id='30' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5467544' lon='-72.3474721' />
+  <node id='31' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5466248' lon='-72.3473883' />
+  <node id='32' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5488981' lon='-72.3480011' />
+  <node id='33' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5490355' lon='-72.347778' />
+  <node id='34' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5490146' lon='-72.3478599' />
+  <node id='35' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5490173' lon='-72.3479246' />
+  <node id='36' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5487393' lon='-72.3478244' />
+  <node id='37' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5487493' lon='-72.3478124' />
+  <node id='38' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5487417' lon='-72.3477319' />
+  <node id='39' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5486883' lon='-72.3476541' />
+  <node id='40' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5485677' lon='-72.3477299' />
+  <node id='41' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5488968' lon='-72.3475441' />
+  <node id='42' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5487977' lon='-72.3475495' />
+  <node id='43' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5487264' lon='-72.3475468' />
+  <node id='44' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5486222' lon='-72.3476541' />
+  <node id='45' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5485205' lon='-72.3475012' />
+  <node id='46' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5486286' lon='-72.3475237' />
+  <node id='47' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5486769' lon='-72.3475559' />
+  <node id='48' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5490087' lon='-72.348448' />
+  <node id='49' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5489629' lon='-72.3484159' />
+  <node id='50' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5489248' lon='-72.3484051' />
+  <node id='51' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5488917' lon='-72.3484051' />
+  <node id='52' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5488383' lon='-72.3483649' />
+  <node id='53' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5487697' lon='-72.34833' />
+  <node id='54' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.548701' lon='-72.3483086' />
+  <node id='55' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5486747' lon='-72.3481853' />
+  <node id='56' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5488499' lon='-72.348144' />
+  <node id='57' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5489235' lon='-72.3481245' />
+  <node id='58' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.548312' lon='-72.3469142' />
+  <node id='59' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.547645' lon='-72.3437441' />
+  <node id='60' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5488587' lon='-72.3478296' />
+  <node id='61' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5487092' lon='-72.3478702' />
+  <node id='62' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5486084' lon='-72.3478894' />
+  <node id='63' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5461509' lon='-72.3474598' />
+  <node id='64' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5460812' lon='-72.3483208' />
+  <node id='65' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5463806' lon='-72.3483935' />
+  <node id='66' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5466135' lon='-72.3485043' />
+  <node id='67' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5471076' lon='-72.3487725' />
+  <node id='68' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5472448' lon='-72.3488854' />
+  <node id='69' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5473765' lon='-72.3490165' />
+  <node id='70' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5474522' lon='-72.3491155' />
+  <node id='71' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.547554' lon='-72.3492242' />
+  <node id='72' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5476507' lon='-72.3493177' />
+  <node id='73' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5477012' lon='-72.3493754' />
+  <node id='74' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5471022' lon='-72.3412443' />
+  <node id='75' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5459918' lon='-72.3429339' />
+  <node id='76' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5473764' lon='-72.3425907' />
+  <node id='77' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5481618' lon='-72.3460184' />
+  <node id='78' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5462544' lon='-72.3464747' />
+  <node id='79' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5443712' lon='-72.3469414' />
+  <node id='80' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5471399' lon='-72.3414185' />
+  <node id='81' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5451785' lon='-72.3416549' />
+  <node id='82' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5454872' lon='-72.3430368' />
+  <node id='83' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5457571' lon='-72.3441762' />
+  <node id='84' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.544585' lon='-72.3478641' />
+  <node id='85' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5482358' lon='-72.3411718' />
+  <node id='86' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5484755' lon='-72.3423156' />
+  <node id='87' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5487229' lon='-72.3434648' />
+  <node id='88' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5489697' lon='-72.3446455' />
+  <node id='89' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5471024' lon='-72.3477086' />
+  <node id='90' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5472576' lon='-72.3476361' />
+  <node id='91' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5484691' lon='-72.347352' />
+  <node id='92' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5487508' lon='-72.3472803' />
+  <node id='93' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.548442' lon='-72.3473618' />
+  <node id='94' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5484701' lon='-72.3474982' />
+  <node id='95' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5485252' lon='-72.3477657' />
+  <node id='96' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5485525' lon='-72.3478985' />
+  <node id='97' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5486139' lon='-72.3481967' />
+  <node id='98' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.548635' lon='-72.3482991' />
+  <node id='99' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5487047' lon='-72.3487044' />
+  <node id='100' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5460013' lon='-72.3454938' />
+  <node id='101' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.547927' lon='-72.345042' />
+  <node id='102' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5490225' lon='-72.3447801' />
+  <node id='103' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.546546' lon='-72.347462' />
+  <node id='104' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5470577' lon='-72.3478315' />
+  <node id='105' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5482265' lon='-72.3486066' />
+  <node id='106' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5485026' lon='-72.3487513' />
+  <node id='107' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5486417' lon='-72.3488002' />
+  <node id='108' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5486936' lon='-72.3488178' />
+  <node id='109' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5488604' lon='-72.3488608' />
+  <node id='110' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5451003' lon='-72.3477426' />
+  <node id='111' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34664798383' />
+  <node id='112' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34887856037' />
+  <node id='113' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.544216' lon='-72.34593880629' />
+  <node id='114' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34477706498' />
+  <node id='115' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.3472163174' />
+  <node id='116' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.54818334818' lon='-72.340941' />
+  <node id='117' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34484088077' />
+  <node id='118' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.54502765234' lon='-72.340941' />
+  <node id='119' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34096796492' />
+  <node id='120' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34581565294' />
+  <node id='121' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.544216' lon='-72.3469670107' />
+  <node id='122' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.544216' lon='-72.34335362608' />
+  <node id='123' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34218894513' />
+  <node id='124' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.544216' lon='-72.34189321642' />
+  <node id='125' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34841234818' />
+  <node id='126' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34769304974' />
+  <node id='127' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34777716506' />
+  <node id='128' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34798559529' />
+  <node id='129' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34860753931' />
+  <node id='130' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.544216' lon='-72.34458977432' />
+  <node id='131' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34875099834' />
+  <node id='132' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.544216' lon='-72.34797532623' />
+  <node id='133' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.544216' lon='-72.3462816994' />
+  <node id='134' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.54703612881' lon='-72.340941' />
+  <node id='135' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34673787575' />
+  <node id='136' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34460835337' />
+  <node id='137' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.549036' lon='-72.34338724312' />
+  <node id='138' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.544216' lon='-72.34785690613' />
+  <node id='139' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5486805' lon='-72.3467308' />
+  <node id='140' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.548308' lon='-72.3468176' />
+  <node id='141' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5473271' lon='-72.3470497' />
+  <node id='142' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117' lat='18.5465999' lon='-72.3472215' />
+  <way id='1' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='18' />
+    <nd ref='6' />
+    <nd ref='5' />
+    <nd ref='78' />
+    <nd ref='100' />
+    <tag k='alt_name' v='Rue des Casernes' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='tertiary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue Paul VI' />
+    <tag k='oneway' v='yes' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/GIS /DTM;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{bedb912f-331a-4271-8595-0731b4a42bc0}' />
+  </way>
+  <way id='2' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='139' />
+    <nd ref='7' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='service' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='survey; OSM-adjusted Bing;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{19d7e8e8-2ddf-4aaf-ba23-d79480c07ed0}' />
+  </way>
+  <way id='3' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='141' />
+    <nd ref='8' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='service' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='survey; OSM-adjusted Bing;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{80416c3c-d608-4d6a-a59a-346ada5f1e6d}' />
+  </way>
+  <way id='4' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='110' />
+    <nd ref='12' />
+    <nd ref='11' />
+    <nd ref='10' />
+    <nd ref='9' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='geoeye;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{c7acd2eb-accb-4b34-ae66-4463e5c8f664}' />
+  </way>
+  <way id='5' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='89' />
+    <nd ref='104' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary_link' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{4aa747a3-768b-43c2-a7c2-188ce187a200}' />
+  </way>
+  <way id='6' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='31' />
+    <nd ref='26' />
+    <nd ref='103' />
+    <nd ref='25' />
+    <nd ref='24' />
+    <nd ref='23' />
+    <nd ref='22' />
+    <nd ref='21' />
+    <nd ref='1' />
+    <nd ref='20' />
+    <nd ref='19' />
+    <nd ref='18' />
+    <nd ref='17' />
+    <nd ref='16' />
+    <nd ref='142' />
+    <nd ref='15' />
+    <nd ref='14' />
+    <nd ref='13' />
+    <nd ref='31' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='junction' v='roundabout' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='GeoEye;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{6d02aaea-648c-4b09-8acf-8cf0b4fd4124}' />
+  </way>
+  <way id='7' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='32' />
+    <nd ref='35' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='footway' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{83dbfc5a-f894-4fe3-9d14-63fdb4425af6}' />
+  </way>
+  <way id='8' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='95' />
+    <nd ref='40' />
+    <nd ref='44' />
+    <nd ref='39' />
+    <nd ref='38' />
+    <nd ref='37' />
+    <nd ref='36' />
+    <nd ref='61' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='footway' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{1b094678-4e70-4726-9c60-efc6c19f6588}' />
+  </way>
+  <way id='9' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='47' />
+    <nd ref='46' />
+    <nd ref='45' />
+    <nd ref='94' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='footway' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{9095d65f-b9d2-425b-a4e0-fb8b61eada23}' />
+  </way>
+  <way id='10' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='57' />
+    <nd ref='56' />
+    <nd ref='55' />
+    <nd ref='97' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='footway' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{83455e56-898e-4fa5-8e16-7b62ddefa087}' />
+  </way>
+  <way id='11' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='74' />
+    <nd ref='80' />
+    <nd ref='76' />
+    <nd ref='59' />
+    <nd ref='101' />
+    <nd ref='77' />
+    <nd ref='140' />
+    <nd ref='58' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue Pavée' />
+    <tag k='oneway' v='yes' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='heavy_truck_less_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='source:haiti' v='CNIGS and CartONG' />
+    <tag k='surface' v='paved' />
+    <tag k='type:haiti' v='Autre Route' />
+    <tag k='uuid' v='{586bbde5-a2b1-4dc8-85e0-c0ca6892cb25}' />
+  </way>
+  <way id='12' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='96' />
+    <nd ref='62' />
+    <nd ref='61' />
+    <nd ref='60' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='footway' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{fd518d81-26c8-4bbf-8604-3538476bea30}' />
+  </way>
+  <way id='13' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='73' />
+    <nd ref='72' />
+    <nd ref='71' />
+    <nd ref='70' />
+    <nd ref='69' />
+    <nd ref='68' />
+    <nd ref='67' />
+    <nd ref='66' />
+    <nd ref='65' />
+    <nd ref='64' />
+    <nd ref='63' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='service' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{4007d710-d32a-4585-8483-8c2e146ebfdf}' />
+  </way>
+  <way id='14' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='84' />
+    <nd ref='4' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary_link' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/GIS /DTM;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{eafea4a7-3c57-45c7-8ffa-4d82e99dfca8}' />
+  </way>
+  <way id='15' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='108' />
+    <nd ref='99' />
+    <nd ref='98' />
+    <nd ref='97' />
+    <nd ref='96' />
+    <nd ref='95' />
+    <nd ref='94' />
+    <nd ref='93' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue Antonio Macéo' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{3d5251db-486f-4dde-b1ab-46bab5cdeecc}' />
+  </way>
+  <way id='16' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='3' />
+    <nd ref='110' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary_link' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='geoeye;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{cdea7081-4c1c-4220-9bc9-50b3cf92b5d9}' />
+  </way>
+  <way id='17' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='142' />
+    <nd ref='141' />
+    <nd ref='140' />
+    <nd ref='139' />
+    <nd ref='111' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='tertiary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Avenue Marie Jeanne' />
+    <tag k='oneway' v='yes' />
+    <tag k='source' v='survey; OSM-adjusted Bing;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{04371857-9646-4a0a-a3a2-84792edc3095}' />
+  </way>
+  <way id='18' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='112' />
+    <nd ref='109' />
+    <nd ref='108' />
+    <nd ref='107' />
+    <nd ref='106' />
+    <nd ref='105' />
+    <nd ref='104' />
+    <nd ref='103' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='loc_name' v='Bicentenaire' />
+    <tag k='name' v='Boulevard Harry Truman' />
+    <tag k='oneway' v='yes' />
+    <tag k='source' v='GRU/COSMHA;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{f049a1aa-7af3-4d05-9ab6-dd06f0ac1735}' />
+  </way>
+  <way id='19' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='114' />
+    <nd ref='102' />
+    <nd ref='101' />
+    <nd ref='100' />
+    <nd ref='113' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue du Magasin de l&apos;État' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='heavy_truck_less_than_20mt' />
+    <tag k='smoothness' v='bad' />
+    <tag k='source' v='CNIGS/GIS /DTM;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{542f83fc-7015-49f8-b3c0-3266c7dcb0e8}' />
+  </way>
+  <way id='20' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='115' />
+    <nd ref='92' />
+    <nd ref='91' />
+    <nd ref='93' />
+    <nd ref='90' />
+    <nd ref='89' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Avenue Pie XII' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{dc81339f-b308-4492-80e5-c71e2c93ea82}' />
+  </way>
+  <way id='21' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='117' />
+    <nd ref='102' />
+    <nd ref='88' />
+    <nd ref='87' />
+    <nd ref='86' />
+    <nd ref='85' />
+    <nd ref='116' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue des Miracles' />
+    <tag k='oneway' v='yes' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='heavy_truck_less_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{048f14df-927e-46eb-bf4c-5b4a8e9878a0}' />
+  </way>
+  <way id='22' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='100' />
+    <nd ref='83' />
+    <nd ref='82' />
+    <nd ref='81' />
+    <nd ref='118' />
+    <tag k='alt_name' v='Rue des Casernes' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='tertiary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue Paul VI' />
+    <tag k='oneway' v='yes' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/GIS /DTM;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='source:oneway' v='survey' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{aa585538-f526-4588-90bb-1ecb75f6e4c7}' />
+  </way>
+  <way id='23' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='119' />
+    <nd ref='85' />
+    <nd ref='80' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue du Peuple' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='heavy_truck_less_than_20mt' />
+    <tag k='smoothness' v='bad' />
+    <tag k='source' v='hot_iom_cosmha;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{f96525ff-be49-4bbf-a3a1-408d7b62e749}' />
+  </way>
+  <way id='24' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='121' />
+    <nd ref='79' />
+    <nd ref='78' />
+    <nd ref='77' />
+    <nd ref='120' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue du Quai' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='heavy_truck_less_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/GIS /DTM;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{b1f70967-a5f1-4674-8456-98670a0b0151}' />
+  </way>
+  <way id='25' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='123' />
+    <nd ref='86' />
+    <nd ref='76' />
+    <nd ref='75' />
+    <nd ref='82' />
+    <nd ref='122' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='history' v='Retrieved from v20' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue du Centre' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
+    <tag k='source' v='hot_iom_cosmha;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='surface_condition' v='Smooth_greater_than_40kph' />
+    <tag k='uuid' v='{bda03ea6-9749-4b9d-8656-7a75688fd3e0}' />
+  </way>
+  <way id='26' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='124' />
+    <nd ref='81' />
+    <nd ref='74' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue Enterrement' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
+    <tag k='smoothness' v='bad' />
+    <tag k='source' v='CNIGS/GIS /DTM;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{5ad58b3e-9d34-4f27-932d-510055c97ad4}' />
+  </way>
+  <way id='27' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='98' />
+    <nd ref='54' />
+    <nd ref='53' />
+    <nd ref='52' />
+    <nd ref='51' />
+    <nd ref='50' />
+    <nd ref='49' />
+    <nd ref='48' />
+    <nd ref='125' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='footway' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{67d71af3-7f1a-447a-b664-c4a747b7277b}' />
+  </way>
+  <way id='28' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='44' />
+    <nd ref='47' />
+    <nd ref='43' />
+    <nd ref='42' />
+    <nd ref='41' />
+    <nd ref='126' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='footway' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{6a07b25b-60a7-4944-8e1d-361936b2eb89}' />
+  </way>
+  <way id='29' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='128' />
+    <nd ref='35' />
+    <nd ref='34' />
+    <nd ref='33' />
+    <nd ref='127' />
+    <tag k='access' v='no' />
+    <tag k='attribution' v='osm' />
+    <tag k='bicycle' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='foot' v='yes' />
+    <tag k='highway' v='cycleway' />
+    <tag k='horse' v='permissive' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='motor_vehicle' v='permissive' />
+    <tag k='segregated' v='no' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{a81c2324-a892-4bb5-be79-558818935ceb}' />
+  </way>
+  <way id='30' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='129' />
+    <nd ref='48' />
+    <nd ref='57' />
+    <nd ref='32' />
+    <nd ref='60' />
+    <nd ref='42' />
+    <nd ref='92' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='footway' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{0c8279b7-71f3-4f70-be9d-1b40a954cd69}' />
+  </way>
+  <way id='31' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='130' />
+    <nd ref='83' />
+    <nd ref='59' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='primary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='loc_name' v='Grand Rue' />
+    <tag k='name' v='Boulevard Jean-Jacques Dessalines' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
+    <tag k='ref' v='RN 2' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/GIS /DTM;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{72466a5c-1197-4004-80ab-1965beeb6d89}' />
+  </way>
+  <way id='32' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='31' />
+    <nd ref='30' />
+    <nd ref='89' />
+    <nd ref='29' />
+    <nd ref='28' />
+    <nd ref='99' />
+    <nd ref='27' />
+    <nd ref='131' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='loc_name' v='Bicentenaire' />
+    <tag k='name' v='Boulevard Harry Truman' />
+    <tag k='oneway' v='yes' />
+    <tag k='source' v='GRU/COSMHA;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{d0f92e87-96d4-482e-8081-3c0a61e78517}' />
+  </way>
+  <way id='33' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='22' />
+    <nd ref='63' />
+    <nd ref='110' />
+    <nd ref='84' />
+    <nd ref='132' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Boulevard Harry Truman' />
+    <tag k='oneway' v='yes' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/GIS /DTM;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{e2ee93da-504b-403b-8f6b-5d53482020e6}' />
+  </way>
+  <way id='34' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='4' />
+    <nd ref='79' />
+    <nd ref='133' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue du Champ de Mars' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/GIS /DTM;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{c869fdc4-8a7d-45c7-a47a-09611507cf41}' />
+  </way>
+  <way id='35' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='134' />
+    <nd ref='74' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='fixme' v='survey if oneway continues one/both directions' />
+    <tag k='highway' v='secondary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue Pavée' />
+    <tag k='note' v='oneway very possibly continues both(?) directions' />
+    <tag k='oneway' v='yes' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='heavy_truck_less_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='source:haiti' v='CNIGS and CartONG' />
+    <tag k='source:oneway' v='survey' />
+    <tag k='surface' v='paved' />
+    <tag k='type:haiti' v='Autre Route' />
+    <tag k='uuid' v='{287bf291-fb97-4c17-9ebf-0246029b4f53}' />
+  </way>
+  <way id='36' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='135' />
+    <nd ref='7' />
+    <nd ref='58' />
+    <nd ref='8' />
+    <nd ref='13' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='tertiary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Avenue Marie Jeanne' />
+    <tag k='oneway' v='yes' />
+    <tag k='source' v='survey; OSM-adjusted Bing;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{b211a83c-4c16-49e1-82db-f9c74b3aef73}' />
+  </way>
+  <way id='37' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='136' />
+    <nd ref='88' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue Courbe' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{3ba8056c-2b4e-4105-a2ad-5809a6047816}' />
+  </way>
+  <way id='38' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='59' />
+    <nd ref='87' />
+    <nd ref='137' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='primary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='loc_name' v='Grand Rue' />
+    <tag k='name' v='Boulevard Jean-Jacques Dessalines' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
+    <tag k='ref' v='RN 1' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/GIS /DTM;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{9c7f2d0f-e445-447c-b5d3-97a8db294eae}' />
+  </way>
+  <way id='39' timestamp='2017-06-07T15:16:56Z' visible='true' version='1' changeset='117'>
+    <nd ref='138' />
+    <nd ref='4' />
+    <nd ref='3' />
+    <nd ref='2' />
+    <nd ref='1' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Boulevard Harry Truman' />
+    <tag k='oneway' v='yes' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/GIS /DTM;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{7b8fd54a-7dd5-4d7d-8f2a-2d864b49ba7c}' />
+  </way>
+</osm>

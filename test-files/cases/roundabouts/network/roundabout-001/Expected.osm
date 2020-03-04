@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="18.544216" minlon="-72.3495523" maxlat="18.549036" maxlon="-72.340941"/>
-    <node visible="true" id="-36" timestamp="2017-06-07T15:16:55Z" version="1" lat="18.5442160000000023" lon="-72.3478980242130802">
+    <node visible="true" id="-36" timestamp="2017-06-07T15:16:55Z" version="1" lat="18.5442327236992028" lon="-72.3479671644483773">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-36"/>
     </node>
-    <node visible="true" id="-16" timestamp="2017-06-07T15:16:55Z" version="1" lat="18.5443991773701953" lon="-72.3478369650896980">
+    <node visible="true" id="-16" timestamp="2017-06-07T15:16:55Z" version="1" lat="18.5444159010916145" lon="-72.3479061053931645">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-16"/>
     </node>
@@ -834,7 +834,7 @@
         <tag k="attribution" v="osm"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="13" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
+    <way visible="true" id="13" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="73"/>
         <nd ref="72"/>
         <nd ref="71"/>
