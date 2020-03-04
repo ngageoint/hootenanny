@@ -275,6 +275,7 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   //shared_ptr<MatchThreshold> matchThreshold;
   OsmMapPtr conflationCopy(new OsmMap(combinedDataToConflate));
 
+  // TODO: We're not applying pre/post conflate ops here. Should we be?
   UnifyingConflator conflator/*(matchThreshold)*/;
   conflator.setConfiguration(_settings);
   conflator.apply(conflationCopy);

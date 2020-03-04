@@ -34,7 +34,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -103,14 +103,7 @@ public:
     LOG_VART(inputs);
     LOG_VART(output);  
 
-    // These setting conflict, so let's give them synergy, favoring the op. This logic is duplicated
-    // in ConflateCmd, so maybe eventually come up with a single place for it.
-    const QString dupeNodeRemoverClassName =
-      QString::fromStdString(DuplicateNodeRemover::className());
-    if (conf().getList(ConfigOptions::getConvertOpsKey()).contains(dupeNodeRemoverClassName))
-    {
-      conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
-    }
+    ConfigUtils::checkForDuplicateElementCorrectionMismatch(ConfigOptions().getConvertOps());
 
     DataConverter converter;
     converter.setConfiguration(conf());

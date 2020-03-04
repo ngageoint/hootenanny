@@ -153,6 +153,8 @@ ElementInputStreamPtr ElementStreamer::getFilteredInputStream(
     return streamToFilter;
   }
 
+  ConfigUtils::checkForDuplicateElementCorrectionMismatch(ops);
+
   foreach (QString opName, ops)
   {
     LOG_VARD(opName);

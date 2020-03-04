@@ -102,6 +102,9 @@ public:
     }
 
     ConfigUtils::checkForTagValueTruncationOverride();
+    QStringList allOps = ConfigOptions().getConflatePreOps();
+    allOps += ConfigOptions().getConflatePostOps();
+    ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
 
     vector<OsmMapPtr> maps;
     QString output = args.last();
