@@ -225,7 +225,8 @@ int ConflateCmd::runSimple(QStringList& args)
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
 
-  // These setting conflict, so let's give them synergy.
+  // These setting conflict, so let's give them synergy, favoring the op. This logic is duplicated
+  // in ConflateCmd, so maybe eventually come up with a single place for it.
   const QString dupeNodeRemoverClassName = QString::fromStdString(DuplicateNodeRemover::className());
   if (conf().getList(
         ConfigOptions::getConflatePreOpsKey()).contains(dupeNodeRemoverClassName) ||

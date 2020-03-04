@@ -97,7 +97,7 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    // We want to know if there are duplicate nodes during comparison.
+    // We always want to know if there are duplicate nodes during comparison.
     conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
 
     QString pathname1 = args[0];
