@@ -173,14 +173,13 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         switch (type)
         {
           case ElementType::Node:
-            _writeNode(writer, std::dynamic_pointer_cast<const Node>(_change.getElement()));
+            _writeNode(writer, _change.getElement(), _change.getPreviousElement());
             break;
           case ElementType::Way:
-            _writeWay(writer, std::dynamic_pointer_cast<const Way>(_change.getElement()));
+            _writeWay(writer, _change.getElement(), _change.getPreviousElement());
             break;
           case ElementType::Relation:
-            _writeRelation(
-              writer, std::dynamic_pointer_cast<const Relation>(_change.getElement()));
+            _writeRelation(writer, _change.getElement(), _change.getPreviousElement());
             break;
           default:
             throw IllegalArgumentException("Unexpected element type.");
@@ -210,8 +209,10 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   LOG_DEBUG("Changeset written to: " << path << "...");
 }
 
-void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
+void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElementPtr node, ConstElementPtr previous)
 {
+  ConstNodePtr n = dynamic_pointer_cast<const Node>(node);
+  ConstNodePtr pn = dynamic_pointer_cast<const Node>(previous);
   LOG_TRACE("Writing change for " << n << "...");
 
   writer.writeStartElement("node");
@@ -238,6 +239,11 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
       QString("Elements being modified or deleted in an .osc changeset must always have a ") +
       QString("version greater than zero: ") + n->getElementId().toString());
   }
+  else if (pn && pn->getVersion() < n->getVersion())
+  {
+    //  Previous node contains a version from the API and should be preserved
+    version = pn->getVersion();
+  }
   else
     version = n->getVersion();
   LOG_VART(version);
@@ -260,8 +266,10 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   writer.writeEndElement();
 }
 
-void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
+void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElementPtr way, ConstElementPtr previous)
 {
+  ConstWayPtr w = dynamic_pointer_cast<const Way>(way);
+  ConstWayPtr pw = dynamic_pointer_cast<const Way>(previous);
   LOG_TRACE("Writing change for " << w << "...");
 
   writer.writeStartElement("way");
@@ -286,6 +294,11 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
     throw HootException(
       QString("Elements being modified or deleted in an .osc changeset must always have a ") +
       QString("version greater than zero: ")  + w->getElementId().toString());
+  }
+  else if (pw && pw->getVersion() < w->getVersion())
+  {
+    //  Previous way contains a version from the API and should be preserved
+    version = pw->getVersion();
   }
   else
     version = w->getVersion();
@@ -321,8 +334,10 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   writer.writeEndElement();
 }
 
-void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r)
+void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstElementPtr relation, ConstElementPtr previous)
 {
+  ConstRelationPtr r = dynamic_pointer_cast<const Relation>(relation);
+  ConstRelationPtr pr = dynamic_pointer_cast<const Relation>(previous);
   LOG_TRACE("Writing change for " << r << "...");
 
   writer.writeStartElement("relation");
@@ -347,6 +362,11 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
     throw HootException(
       QString("Elements being modified or deleted in an .osc changeset must always have a ") +
       QString("version greater than zero: ") + r->getElementId().toString());
+  }
+  else if (pr && pr->getVersion() < r->getVersion())
+  {
+    //  Previous relation contains a version from the API and should be preserved
+    version = pr->getVersion();
   }
   else
     version = r->getVersion();
