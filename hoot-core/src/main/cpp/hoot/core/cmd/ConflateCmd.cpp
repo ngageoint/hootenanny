@@ -134,6 +134,9 @@ int ConflateCmd::runSimple(QStringList& args)
   LOG_VARD(outputStatsFile);
 
   ConfigUtils::checkForTagValueTruncationOverride();
+  QStringList allOps = ConfigOptions().getConflatePreOps();
+  allOps += ConfigOptions().getConflatePostOps();
+  ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
 
   DiffConflator diffConflator;
 
@@ -228,7 +231,6 @@ int ConflateCmd::runSimple(QStringList& args)
   // use it as the sole identifier for it. If that ever changes, then we'll need a different way
   // to recognize when AC is occurring.
   const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
-
   if (isAttributeConflate)
   {
     _updateConfigOptionsForAttributeConflation();

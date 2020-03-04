@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -102,6 +102,9 @@ public:
     }
 
     ConfigUtils::checkForTagValueTruncationOverride();
+    QStringList allOps = ConfigOptions().getConflatePreOps();
+    allOps += ConfigOptions().getConflatePostOps();
+    ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
 
     vector<OsmMapPtr> maps;
     QString output = args.last();
