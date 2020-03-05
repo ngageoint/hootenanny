@@ -63,7 +63,7 @@ void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
 
 bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 {
-  if (_ignoreElementId && /*_map == 0*/!_map.get())
+  if (_ignoreElementId && !_map.get())
   {
     throw IllegalArgumentException(
       "If ignoring element IDs in ElementComparer a map must be passed in.");
