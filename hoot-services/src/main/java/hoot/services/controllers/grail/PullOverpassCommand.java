@@ -40,9 +40,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -103,6 +100,7 @@ class PullOverpassCommand implements InternalCommand {
             //write to intermediate file
             InputStream is = PullOverpassCommand.getOverpassInputStream(url);
             FileUtils.copyInputStreamToFile(is, outputFile);
+            is.close();
 
         }
         catch (Exception ex) {
@@ -171,18 +169,10 @@ class PullOverpassCommand implements InternalCommand {
 
     static InputStream getOverpassInputStream(String url) throws IOException {
         InputStream inputStream;
-        if ("https://overpass-api.de/api/interpreter".equalsIgnoreCase(PUBLIC_OVERPASS_URL)) {
-            URLConnection conn = new URL(url).openConnection();
-            inputStream = conn.getInputStream();
+        if ("https://overpass-api.de/api/interpreter".equalsIgnoreCase(replaceSensitiveData(PUBLIC_OVERPASS_URL))) {
+            inputStream = new URL(url).openStream();
         } else { // add no cert checker if using a public mirror
-            HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
-            conn.setHostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession sslSession) {
-                    return true;
-                }
-            });
-            inputStream = conn.getInputStream();
+            inputStream = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
         }
         return inputStream;
     }
