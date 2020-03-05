@@ -577,7 +577,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="142"/>
     </node>
-    <way visible="true" id="-1014" timestamp="2017-06-07T15:16:56Z" version="1">
+    <way visible="true" id="-1011" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="134"/>
         <nd ref="74"/>
         <tag k="source:description" v="IKONOS Imagery"/>
@@ -610,10 +610,10 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="hoot:id" v="-1014"/>
+        <tag k="hoot:id" v="-1011"/>
         <tag k="highway" v="secondary"/>
     </way>
-    <way visible="true" id="-1012" timestamp="2017-06-07T15:16:55Z" version="1">
+    <way visible="true" id="-1009" timestamp="2017-06-07T15:16:55Z" version="1">
         <nd ref="84"/>
         <nd ref="4"/>
         <tag k="source:description" v="IKONOS Imagery"/>
@@ -633,10 +633,10 @@
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
         <tag k="location" v="surface"/>
         <tag k="source" v="mgcp"/>
-        <tag k="hoot:id" v="-1012"/>
+        <tag k="hoot:id" v="-1009"/>
         <tag k="highway" v="road"/>
     </way>
-    <way visible="true" id="-1010" timestamp="2017-06-07T15:16:56Z" version="1">
+    <way visible="true" id="-1007" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="4"/>
         <nd ref="79"/>
         <nd ref="133"/>
@@ -664,10 +664,10 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
         <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="hoot:id" v="-1010"/>
+        <tag k="hoot:id" v="-1007"/>
         <tag k="highway" v="unclassified"/>
     </way>
-    <way visible="true" id="-1007" timestamp="2017-06-07T15:16:55Z" version="1">
+    <way visible="true" id="-1004" timestamp="2017-06-07T15:16:55Z" version="1">
         <nd ref="133"/>
         <nd ref="-31"/>
         <tag k="source:description" v="IKONOS Imagery"/>
@@ -687,10 +687,10 @@
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
         <tag k="location" v="surface"/>
         <tag k="source" v="mgcp"/>
-        <tag k="hoot:id" v="-1007"/>
+        <tag k="hoot:id" v="-1004"/>
         <tag k="highway" v="road"/>
     </way>
-    <way visible="true" id="-984" timestamp="2017-06-07T15:16:56Z" version="1">
+    <way visible="true" id="-981" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="22"/>
         <nd ref="63"/>
         <nd ref="110"/>
@@ -721,7 +721,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
         <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="hoot:id" v="-984"/>
+        <tag k="hoot:id" v="-981"/>
         <tag k="highway" v="secondary"/>
     </way>
     <way visible="true" id="-978" timestamp="2017-06-07T15:16:56Z" version="1">
@@ -757,7 +757,7 @@
         <tag k="hoot:id" v="-978"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-972" timestamp="2017-06-07T15:16:56Z" version="1">
+    <way visible="true" id="-969" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="124"/>
         <nd ref="81"/>
         <nd ref="74"/>
@@ -785,10 +785,10 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
         <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="hoot:id" v="-972"/>
+        <tag k="hoot:id" v="-969"/>
         <tag k="highway" v="unclassified"/>
     </way>
-    <way visible="true" id="-965" timestamp="2017-06-07T15:16:56Z" version="1">
+    <way visible="true" id="-962" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="59"/>
         <nd ref="87"/>
         <nd ref="137"/>
@@ -818,7 +818,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
         <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="hoot:id" v="-965"/>
+        <tag k="hoot:id" v="-962"/>
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-929" timestamp="2017-06-07T15:16:56Z" version="1">

@@ -5388,6 +5388,31 @@
         <tag k="lanes" v="2"/>
         <tag k="error:circular" v="15"/>
     </way>
+    <way visible="true" id="-672" timestamp="2020-02-14T16:24:59Z" version="1">
+        <nd ref="6096477548"/>
+        <nd ref="6096477535"/>
+        <nd ref="6096477502"/>
+        <nd ref="6096478720"/>
+        <nd ref="6096477516"/>
+        <nd ref="6096477445"/>
+        <nd ref="6096478842"/>
+        <nd ref="6096477544"/>
+        <nd ref="6096477529"/>
+        <nd ref="6096477466"/>
+        <nd ref="6096477546"/>
+        <nd ref="6096477528"/>
+        <nd ref="6096477540"/>
+        <nd ref="6096477536"/>
+        <nd ref="6096477545"/>
+        <nd ref="6096477504"/>
+        <tag k="oneway" v="no"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="ref" v="A12"/>
+        <tag k="source:datetime" v="2015-11-27T14:48:33.000Z;2018-04-25T09:04:00Z"/>
+        <tag k="surface" v="paved"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
     <way visible="true" id="-666" timestamp="2020-02-14T16:24:59Z" version="1">
         <nd ref="6096477652"/>
         <nd ref="-5077"/>
@@ -5553,31 +5578,6 @@
         <tag k="layer" v="1"/>
         <tag k="ref" v="A12"/>
         <tag k="source:datetime" v="2016-10-03T19:37:03Z"/>
-        <tag k="surface" v="paved"/>
-        <tag k="lanes" v="2"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-623" timestamp="2020-02-14T16:24:59Z" version="1">
-        <nd ref="6096477548"/>
-        <nd ref="6096477535"/>
-        <nd ref="6096477502"/>
-        <nd ref="6096478720"/>
-        <nd ref="6096477516"/>
-        <nd ref="6096477445"/>
-        <nd ref="6096478842"/>
-        <nd ref="6096477544"/>
-        <nd ref="6096477529"/>
-        <nd ref="6096477466"/>
-        <nd ref="6096477546"/>
-        <nd ref="6096477528"/>
-        <nd ref="6096477540"/>
-        <nd ref="6096477536"/>
-        <nd ref="6096477545"/>
-        <nd ref="6096477504"/>
-        <tag k="oneway" v="no"/>
-        <tag k="highway" v="trunk"/>
-        <tag k="ref" v="A12"/>
-        <tag k="source:datetime" v="2015-11-27T14:48:33.000Z;2018-04-25T09:04:00Z"/>
         <tag k="surface" v="paved"/>
         <tag k="lanes" v="2"/>
         <tag k="error:circular" v="15"/>

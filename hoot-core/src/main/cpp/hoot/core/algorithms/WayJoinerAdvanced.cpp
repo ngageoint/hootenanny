@@ -81,7 +81,7 @@ void WayJoinerAdvanced::join(const OsmMapPtr& map)
 
 void WayJoinerAdvanced::_joinParentChild()
 {
-  LOG_TRACE("Joining parents to children...");
+  LOG_INFO("\tJoining parent ways to children...");
 
   WayMap ways = _map->getWays();
   vector<long> ids;
@@ -157,7 +157,7 @@ long WayJoinerAdvanced::_getPid(const ConstWayPtr& way) const
 
 void WayJoinerAdvanced::_joinAtNode()
 {
-  LOG_TRACE("Joining ways at node...");
+  LOG_TRACE("\tJoining ways at node...");
 
   unordered_set<long> ids;
   unordered_set<long>::size_type currentNumSplitParentIds = ids.max_size();
@@ -274,7 +274,7 @@ void WayJoinerAdvanced::_joinAtNode()
 
 void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
 {
-  LOG_TRACE("Rejoining siblings...");
+  LOG_TRACE("\tRejoining siblings...");
   LOG_VART(way_ids);
 
   WayMap ways = _map->getWays();

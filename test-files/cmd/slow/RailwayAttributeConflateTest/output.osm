@@ -1775,6 +1775,43 @@
         <tag k="REF1" v="000097"/>
         <tag k="attribution" v="osm"/>
     </way>
+    <way visible="true" id="-136" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-917"/>
+        <nd ref="-992"/>
+        <nd ref="-993"/>
+        <nd ref="-994"/>
+        <nd ref="-995"/>
+        <nd ref="-996"/>
+        <nd ref="-997"/>
+        <nd ref="-998"/>
+        <nd ref="-192"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="condition" v="functional"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="railway" v="Other"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T19:20:32.000Z"/>
+        <tag k="gauge" v="144"/>
+        <tag k="lanes" v="1"/>
+        <tag k="REF1" v="000095"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="REF2" v="000095"/>
+        <tag k="uuid" v="{969c0372-5ec6-4758-9b81-01ca8fb53d42};{6fb0d35c-1703-4e1d-a883-24bc9c1146fe}"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="GFID" v="F25B1FCB-C0A9-4BC1-BEE3-F34A4C204AB6"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.868Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="note" v="Single"/>
+        <tag k="SHAPE_Leng" v="0.0057478661288199997"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="osm"/>
+        <tag k="gndb_id" v="6183466"/>
+    </way>
     <way visible="true" id="-135" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-379"/>
         <nd ref="-985"/>
@@ -2980,6 +3017,42 @@
         <tag k="source:datetime" v="2014-01-20T23:08:42.000Z"/>
         <tag k="REF1" v="00003a"/>
         <tag k="attribution" v="osm"/>
+    </way>
+    <way visible="true" id="-42" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-273"/>
+        <nd ref="-274"/>
+        <nd ref="-275"/>
+        <nd ref="-276"/>
+        <nd ref="-277"/>
+        <nd ref="-278"/>
+        <nd ref="-279"/>
+        <nd ref="-280"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="condition" v="functional"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="railway" v="Other"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T19:20:31.000Z"/>
+        <tag k="gauge" v="144"/>
+        <tag k="lanes" v="1"/>
+        <tag k="REF1" v="000037"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="REF2" v="000037"/>
+        <tag k="uuid" v="{cec91cec-05c3-49b7-93c6-0b284ff78e05};{82ed14c3-8515-4df7-8064-72751e9471ff}"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="GFID" v="E88AC4FD-9ECB-46E1-8422-D0CD37FF7CE9"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.869Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="note" v="Single"/>
+        <tag k="SHAPE_Leng" v="0.0066840824949699999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="osm"/>
+        <tag k="gndb_id" v="6183466"/>
     </way>
     <way visible="true" id="-41" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-221"/>
@@ -4445,79 +4518,6 @@
         <tag k="location" v="surface"/>
         <tag k="electrified" v="contact_line"/>
         <tag k="SHAPE_Leng" v="0.0133264136906"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source" v="osm"/>
-        <tag k="gndb_id" v="6183466"/>
-    </way>
-    <way visible="true" id="94" timestamp="2018-02-15T20:56:52Z" version="1" changeset="17283">
-        <nd ref="-273"/>
-        <nd ref="-274"/>
-        <nd ref="-275"/>
-        <nd ref="-276"/>
-        <nd ref="-277"/>
-        <nd ref="-278"/>
-        <nd ref="-279"/>
-        <nd ref="-280"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="gndb_id:2" v="6171468"/>
-        <tag k="condition" v="functional"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="name" v="Manp'o-son"/>
-        <tag k="railway" v="Other"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T19:20:31.000Z"/>
-        <tag k="gauge" v="144"/>
-        <tag k="lanes" v="1"/>
-        <tag k="REF1" v="000037"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="REF2" v="000037"/>
-        <tag k="uuid" v="{cec91cec-05c3-49b7-93c6-0b284ff78e05};{82ed14c3-8515-4df7-8064-72751e9471ff}"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="GFID" v="E88AC4FD-9ECB-46E1-8422-D0CD37FF7CE9"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.869Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="note" v="Single"/>
-        <tag k="SHAPE_Leng" v="0.0066840824949699999"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source" v="osm"/>
-        <tag k="gndb_id" v="6183466"/>
-    </way>
-    <way visible="true" id="98" timestamp="2018-02-15T20:56:52Z" version="1" changeset="17283">
-        <nd ref="-917"/>
-        <nd ref="-992"/>
-        <nd ref="-993"/>
-        <nd ref="-994"/>
-        <nd ref="-995"/>
-        <nd ref="-996"/>
-        <nd ref="-997"/>
-        <nd ref="-998"/>
-        <nd ref="-192"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="gndb_id:2" v="6171468"/>
-        <tag k="condition" v="functional"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="name" v="Manp'o-son"/>
-        <tag k="railway" v="Other"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T19:20:32.000Z"/>
-        <tag k="gauge" v="144"/>
-        <tag k="lanes" v="1"/>
-        <tag k="REF1" v="000095"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="REF2" v="000095"/>
-        <tag k="uuid" v="{969c0372-5ec6-4758-9b81-01ca8fb53d42};{6fb0d35c-1703-4e1d-a883-24bc9c1146fe}"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="GFID" v="F25B1FCB-C0A9-4BC1-BEE3-F34A4C204AB6"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.868Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="note" v="Single"/>
-        <tag k="SHAPE_Leng" v="0.0057478661288199997"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm"/>

@@ -69,7 +69,7 @@ void ReplaceElementOp::addElement(const ConstElementPtr& e)
   }
 }
 
-void ReplaceElementOp::apply(const OsmMapPtr &map)
+void ReplaceElementOp::apply(const OsmMapPtr& map)
 {
   if (_from.isNull() || _to.isNull())
   {
