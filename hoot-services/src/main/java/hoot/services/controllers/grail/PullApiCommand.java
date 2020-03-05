@@ -35,7 +35,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.security.KeyStore;
 import java.time.LocalDateTime;
 
@@ -53,7 +52,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
 import hoot.services.geo.BoundingBox;
@@ -119,6 +117,7 @@ class PullApiCommand implements InternalCommand {
                 url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), boundingBox.toServicesString(), "xml", params.getCustomQuery());
 
                 // if cert path and phrase are specified then we assume to use them for the request
+                // this will have a valid cert so no need to support self-signed
                 if (!replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH).equals(PRIVATE_OVERPASS_CERT_PATH)) {
                     try {
                         responseStream = getHttpResponseWithSSL(url);
@@ -134,10 +133,10 @@ class PullApiCommand implements InternalCommand {
             File outputFile = new File(params.getOutput());
 
             if (responseStream == null) {
-                URL requestUrl = new URL(url);
-                FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
-            } else {
                 responseStream = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
+                FileUtils.copyInputStreamToFile(responseStream, outputFile);
+                responseStream.close();
+            } else {
                 FileUtils.copyInputStreamToFile(responseStream, outputFile);
                 responseStream.close();
             }
