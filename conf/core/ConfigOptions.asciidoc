@@ -700,6 +700,7 @@ See also:
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::RemoveDuplicateWayNodesVisitor`
 ** `hoot::DuplicateWayRemover`
+** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`

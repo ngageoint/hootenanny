@@ -5604,8 +5604,6 @@
     </relation>
     <relation visible="true" id="-7" timestamp="2020-02-28T16:47:47Z" version="1">
         <member type="way" ref="-3" role=""/>
-        <member type="way" ref="-3" role=""/>
-        <member type="way" ref="-3" role=""/>
         <tag k="wikipedia" v="en:Delaware Route 30"/>
         <tag k="hoot:status" v="2"/>
         <tag k="wikidata" v="Q798636"/>
@@ -5717,11 +5715,9 @@
     </relation>
     <relation visible="true" id="7387463" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-8" role="north"/>
-        <member type="way" ref="496850140" role="north"/>
-        <member type="way" ref="496850140" role="north"/>
         <member type="way" ref="-12" role="north"/>
+        <member type="way" ref="496850140" role="north"/>
         <member type="way" ref="-25" role="south"/>
-        <member type="way" ref="-2" role="south"/>
         <member type="way" ref="-2" role="south"/>
         <tag k="wikipedia" v="en:Delaware Route 1"/>
         <tag k="hoot:status" v="1"/>
@@ -5735,15 +5731,14 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="7387470" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <member type="way" ref="-4" role="outer"/>
-        <member type="way" ref="-18" role="outer"/>
-        <member type="way" ref="496849545" role="outer"/>
-        <member type="relation" ref="-1" role="outer"/>
+        <member type="way" ref="-17" role="inner"/>
         <member type="way" ref="-13" role="outer"/>
         <member type="way" ref="-5" role="outer"/>
+        <member type="way" ref="-18" role="outer"/>
+        <member type="way" ref="-4" role="outer"/>
+        <member type="way" ref="496849545" role="outer"/>
         <member type="way" ref="496850140" role="outer"/>
-        <member type="way" ref="496850140" role="outer"/>
-        <member type="way" ref="-17" role="inner"/>
+        <member type="relation" ref="-1" role="outer"/>
         <tag k="is_in:iso_3166_2" v="US:DE"/>
         <tag k="tiger:PLACEFP" v="47420"/>
         <tag k="tiger:PCINECTA" v="N"/>
@@ -5778,8 +5773,6 @@
         <tag k="type" v="boundary"/>
     </relation>
     <relation visible="true" id="7387471" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <member type="way" ref="-3" role=""/>
-        <member type="way" ref="-3" role=""/>
         <member type="way" ref="-3" role=""/>
         <tag k="wikipedia" v="en:Delaware Route 30"/>
         <tag k="hoot:status" v="1"/>

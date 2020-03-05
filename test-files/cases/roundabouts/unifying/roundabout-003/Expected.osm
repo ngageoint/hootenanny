@@ -179,10 +179,7 @@
     </node>
     <node visible="true" id="135" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5490360000000045" lon="-72.3467378757499944">
         <tag k="hoot:status" v="1"/>
-<<<<<<< HEAD
         <tag k="hoot:hash" v="sha1sum:9db9af56438b3000563e2672b738150d513a2f56"/>
-=======
->>>>>>> master
         <tag k="hoot:id" v="135"/>
     </node>
     <node visible="true" id="142" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465998999999968" lon="-72.3472215000000034">
@@ -237,23 +234,6 @@
         <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-<<<<<<< HEAD
-=======
-    <way visible="true" id="-97" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="18"/>
-        <nd ref="6"/>
-        <nd ref="5"/>
-        <nd ref="78"/>
-        <nd ref="100"/>
-        <tag k="source" v="Unknown"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="hoot:id" v="-97"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
-        <tag k="error:circular" v="15"/>
-    </way>
->>>>>>> master
     <way visible="true" id="6" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="31"/>
         <nd ref="103"/>
@@ -285,13 +265,10 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="22" timestamp="2017-06-07T15:16:56Z" version="1">
-<<<<<<< HEAD
         <nd ref="18"/>
         <nd ref="6"/>
         <nd ref="5"/>
         <nd ref="78"/>
-=======
->>>>>>> master
         <nd ref="100"/>
         <nd ref="-42785"/>
         <nd ref="83"/>

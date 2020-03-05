@@ -28239,123 +28239,117 @@
         <tag k="type" v="boundary"/>
     </relation>
     <relation visible="true" id="-1" timestamp="2020-02-14T16:18:36Z" version="1">
-        <member type="way" ref="-72" role=""/>
-        <member type="way" ref="-66" role=""/>
-        <member type="way" ref="-71" role=""/>
-        <member type="way" ref="-70" role=""/>
-        <member type="way" ref="-67" role=""/>
-        <member type="way" ref="-68" role=""/>
-        <member type="way" ref="-69" role=""/>
-        <member type="way" ref="-57" role=""/>
-        <member type="way" ref="-93" role=""/>
-        <member type="way" ref="-92" role=""/>
-        <member type="way" ref="-2" role=""/>
-        <member type="way" ref="-204" role=""/>
-        <member type="way" ref="-205" role=""/>
-        <member type="way" ref="-94" role=""/>
-        <member type="way" ref="-215" role=""/>
-        <member type="way" ref="-214" role=""/>
-        <member type="way" ref="-213" role=""/>
-        <member type="way" ref="-212" role=""/>
         <member type="way" ref="-95" role=""/>
-        <member type="way" ref="-91" role=""/>
-        <member type="way" ref="-3" role=""/>
-        <member type="way" ref="-211" role=""/>
-        <member type="way" ref="-210" role=""/>
-        <member type="way" ref="-209" role=""/>
-        <member type="way" ref="-208" role=""/>
-        <member type="way" ref="-207" role=""/>
-        <member type="way" ref="-206" role=""/>
-        <member type="way" ref="-219" role=""/>
-        <member type="way" ref="-218" role=""/>
-        <member type="way" ref="-217" role=""/>
-        <member type="way" ref="-216" role=""/>
-        <member type="way" ref="-62" role=""/>
-        <member type="way" ref="-221" role=""/>
-        <member type="way" ref="-220" role=""/>
-        <member type="way" ref="-202" role=""/>
-        <member type="way" ref="-203" role=""/>
-        <member type="way" ref="-200" role=""/>
-        <member type="way" ref="-201" role=""/>
-        <member type="way" ref="-61" role=""/>
-        <member type="way" ref="-60" role=""/>
-        <member type="way" ref="-63" role=""/>
-        <member type="way" ref="-65" role=""/>
-        <member type="way" ref="-58" role=""/>
-        <member type="way" ref="-56" role=""/>
-        <member type="way" ref="-59" role=""/>
-        <member type="way" ref="-64" role=""/>
-        <member type="way" ref="-52" role=""/>
-        <member type="way" ref="-1" role=""/>
-        <member type="way" ref="-52" role="forward"/>
-        <member type="way" ref="-46" role="forward"/>
-        <member type="way" ref="-50" role=""/>
-        <member type="way" ref="-48" role="backward"/>
-        <member type="way" ref="-4" role=""/>
-        <member type="way" ref="-53" role=""/>
-        <member type="way" ref="-51" role=""/>
-        <member type="way" ref="-49" role=""/>
-        <member type="way" ref="-199" role=""/>
         <member type="way" ref="-198" role=""/>
-        <member type="way" ref="-55" role=""/>
-        <member type="way" ref="-47" role=""/>
-        <member type="way" ref="-54" role=""/>
-        <member type="way" ref="-42" role=""/>
-        <member type="way" ref="-45" role=""/>
-        <member type="way" ref="-43" role=""/>
+        <member type="way" ref="-46" role="forward"/>
+        <member type="way" ref="-11" role="backward"/>
+        <member type="way" ref="-215" role=""/>
+        <member type="way" ref="-18" role=""/>
+        <member type="way" ref="-61" role=""/>
+        <member type="way" ref="-91" role=""/>
+        <member type="way" ref="-228" role=""/>
+        <member type="way" ref="-211" role=""/>
+        <member type="way" ref="-14" role=""/>
         <member type="way" ref="-44" role=""/>
-        <member type="way" ref="-37" role=""/>
-        <member type="way" ref="-39" role=""/>
-        <member type="way" ref="-38" role=""/>
+        <member type="way" ref="-4" role=""/>
+        <member type="way" ref="-224" role=""/>
+        <member type="way" ref="-27" role=""/>
+        <member type="way" ref="-57" role=""/>
+        <member type="way" ref="-40" role=""/>
+        <member type="way" ref="-70" role=""/>
+        <member type="way" ref="-6" role="backward"/>
+        <member type="way" ref="-207" role=""/>
+        <member type="way" ref="649671759" role=""/>
+        <member type="way" ref="-220" role=""/>
+        <member type="way" ref="-23" role=""/>
+        <member type="way" ref="-53" role=""/>
+        <member type="way" ref="-5" role="forward"/>
+        <member type="way" ref="-203" role=""/>
         <member type="way" ref="-36" role=""/>
+        <member type="way" ref="-66" role=""/>
+        <member type="way" ref="-199" role=""/>
+        <member type="way" ref="-216" role=""/>
+        <member type="way" ref="-19" role=""/>
+        <member type="way" ref="-49" role=""/>
+        <member type="way" ref="649671751" role=""/>
+        <member type="way" ref="-62" role=""/>
+        <member type="way" ref="-92" role=""/>
+        <member type="way" ref="-639" role=""/>
+        <member type="way" ref="-9" role=""/>
+        <member type="way" ref="-212" role=""/>
+        <member type="way" ref="-15" role=""/>
+        <member type="way" ref="-45" role=""/>
+        <member type="way" ref="-225" role=""/>
+        <member type="way" ref="-28" role=""/>
+        <member type="way" ref="-58" role=""/>
         <member type="way" ref="-88" role=""/>
         <member type="way" ref="-41" role=""/>
-        <member type="way" ref="-224" role=""/>
-        <member type="way" ref="-223" role=""/>
-        <member type="way" ref="-40" role=""/>
-        <member type="way" ref="-226" role=""/>
-        <member type="way" ref="-225" role=""/>
-        <member type="way" ref="-639" role=""/>
-        <member type="way" ref="-633" role=""/>
-        <member type="way" ref="-641" role=""/>
-        <member type="way" ref="-228" role=""/>
-        <member type="way" ref="-637" role=""/>
-        <member type="way" ref="-633" role=""/>
-        <member type="way" ref="649671757" role=""/>
-        <member type="way" ref="-646" role=""/>
-        <member type="way" ref="-646" role=""/>
         <member type="way" ref="649671760" role=""/>
-        <member type="way" ref="649671760" role=""/>
-        <member type="way" ref="649671760" role=""/>
-        <member type="way" ref="649671760" role=""/>
-        <member type="way" ref="649671759" role=""/>
-        <member type="way" ref="-35" role=""/>
-        <member type="way" ref="-15" role=""/>
-        <member type="way" ref="649671751" role=""/>
-        <member type="way" ref="649671751" role=""/>
+        <member type="way" ref="-71" role=""/>
+        <member type="way" ref="-1" role=""/>
+        <member type="way" ref="-208" role=""/>
+        <member type="way" ref="-52" role="forward"/>
+        <member type="way" ref="-221" role=""/>
         <member type="way" ref="-24" role=""/>
-        <member type="way" ref="-14" role=""/>
-        <member type="way" ref="-29" role=""/>
-        <member type="way" ref="-27" role=""/>
-        <member type="way" ref="-23" role=""/>
+        <member type="way" ref="-54" role=""/>
+        <member type="way" ref="-204" role=""/>
+        <member type="way" ref="-37" role=""/>
+        <member type="way" ref="-67" role=""/>
         <member type="way" ref="-20" role=""/>
-        <member type="way" ref="-19" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-26" role=""/>
-        <member type="way" ref="-18" role=""/>
-        <member type="way" ref="-25" role=""/>
-        <member type="way" ref="-13" role=""/>
-        <member type="way" ref="-12" role=""/>
-        <member type="way" ref="-28" role=""/>
+        <member type="way" ref="-50" role=""/>
+        <member type="way" ref="-217" role=""/>
+        <member type="way" ref="-200" role=""/>
+        <member type="way" ref="-63" role=""/>
+        <member type="way" ref="-93" role=""/>
+        <member type="way" ref="-213" role=""/>
         <member type="way" ref="-16" role=""/>
-        <member type="way" ref="-22" role=""/>
-        <member type="way" ref="-9" role=""/>
-        <member type="way" ref="-5" role="forward"/>
         <member type="way" ref="-10" role="forward"/>
-        <member type="way" ref="-7" role="forward"/>
-        <member type="way" ref="-6" role="backward"/>
-        <member type="way" ref="-11" role="backward"/>
+        <member type="way" ref="-226" role=""/>
+        <member type="way" ref="-29" role=""/>
+        <member type="way" ref="-59" role=""/>
+        <member type="way" ref="-12" role=""/>
+        <member type="way" ref="-42" role=""/>
+        <member type="way" ref="-72" role=""/>
         <member type="way" ref="-8" role="backward"/>
+        <member type="way" ref="-209" role=""/>
+        <member type="way" ref="-2" role=""/>
+        <member type="way" ref="-25" role=""/>
+        <member type="way" ref="-55" role=""/>
+        <member type="way" ref="-7" role="forward"/>
+        <member type="way" ref="-48" role="backward"/>
+        <member type="way" ref="-205" role=""/>
+        <member type="way" ref="-38" role=""/>
+        <member type="way" ref="649671757" role=""/>
+        <member type="way" ref="-68" role=""/>
+        <member type="way" ref="-51" role=""/>
+        <member type="way" ref="-218" role=""/>
+        <member type="way" ref="-641" role=""/>
+        <member type="way" ref="-201" role=""/>
+        <member type="way" ref="-64" role=""/>
+        <member type="way" ref="-94" role=""/>
+        <member type="way" ref="-214" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-47" role=""/>
+        <member type="way" ref="-60" role=""/>
+        <member type="way" ref="-637" role=""/>
+        <member type="way" ref="-210" role=""/>
+        <member type="way" ref="-13" role=""/>
+        <member type="way" ref="-43" role=""/>
+        <member type="way" ref="-3" role=""/>
+        <member type="way" ref="-633" role=""/>
+        <member type="way" ref="-223" role=""/>
+        <member type="way" ref="-26" role=""/>
+        <member type="way" ref="-56" role=""/>
+        <member type="way" ref="-646" role=""/>
+        <member type="way" ref="-206" role=""/>
+        <member type="way" ref="-39" role=""/>
+        <member type="way" ref="-69" role=""/>
+        <member type="way" ref="-22" role=""/>
+        <member type="way" ref="-52" role=""/>
+        <member type="way" ref="-219" role=""/>
+        <member type="way" ref="-202" role=""/>
+        <member type="way" ref="-35" role=""/>
+        <member type="way" ref="-65" role=""/>
         <tag k="hoot:status" v="2"/>
         <tag k="route" v="road"/>
         <tag k="name" v="Trunk Road A12"/>
@@ -28366,9 +28360,6 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="7326624" timestamp="2020-02-14T16:24:59Z" version="1" changeset="39">
-        <member type="way" ref="649671760" role=""/>
-        <member type="way" ref="649671760" role=""/>
-        <member type="way" ref="649671760" role=""/>
         <member type="way" ref="649671760" role=""/>
         <tag k="hoot:status" v="1"/>
         <tag k="route" v="road"/>

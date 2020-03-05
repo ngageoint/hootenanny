@@ -2190,12 +2190,6 @@
     </relation>
     <relation visible="true" id="-4" timestamp="2020-02-28T16:47:47Z" version="1">
         <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
         <tag k="hoot:status" v="2"/>
         <tag k="route" v="bus"/>
         <tag k="name" v="DART 303"/>
@@ -2211,21 +2205,7 @@
     </relation>
     <relation visible="true" id="-3" timestamp="2020-02-28T16:47:47Z" version="1">
         <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
         <member type="way" ref="-29" role="forward"/>
-        <member type="way" ref="-29" role="forward"/>
-        <member type="way" ref="-29" role="forward"/>
-        <member type="way" ref="-29" role="forward"/>
-        <member type="way" ref="-29" role="forward"/>
-        <member type="way" ref="-29" role="forward"/>
-        <member type="way" ref="-29" role="forward"/>
-        <member type="way" ref="-29" role="forward"/>
-        <member type="way" ref="-113" role="forward"/>
         <member type="way" ref="-113" role="forward"/>
         <tag k="wikipedia" v="en:U.S. Route 113"/>
         <tag k="hoot:status" v="2"/>
@@ -2241,21 +2221,9 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="-2" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-23" role=""/>
-        <member type="way" ref="-23" role=""/>
-        <member type="way" ref="-23" role=""/>
-        <member type="way" ref="-23" role=""/>
-        <member type="way" ref="-23" role=""/>
-        <member type="way" ref="-23" role=""/>
-        <member type="way" ref="-23" role=""/>
-        <member type="way" ref="-33" role=""/>
-        <member type="way" ref="-33" role=""/>
-        <member type="way" ref="-33" role=""/>
-        <member type="way" ref="-33" role=""/>
-        <member type="way" ref="-33" role=""/>
-        <member type="way" ref="-33" role=""/>
         <member type="way" ref="-33" role=""/>
         <member type="way" ref="-32" role=""/>
+        <member type="way" ref="-23" role=""/>
         <tag k="wikipedia" v="en:Delaware Route 36"/>
         <tag k="hoot:status" v="2"/>
         <tag k="wikidata" v="Q798659"/>
@@ -2307,10 +2275,7 @@
     </relation>
     <relation visible="true" id="7387465" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-12" role=""/>
-        <member type="way" ref="-12" role=""/>
-        <member type="way" ref="-12" role=""/>
         <member type="way" ref="-114" role=""/>
-        <member type="way" ref="-12" role=""/>
         <tag k="wikipedia" v="en:Delaware Route 36"/>
         <tag k="hoot:status" v="1"/>
         <tag k="symbol" v="http://commons.wikimedia.org/wiki/File:Elongated_circle_36.svg"/>
@@ -2324,12 +2289,11 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="7387466" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <member type="way" ref="-15" role="forward"/>
+        <member type="way" ref="-66" role="forward"/>
+        <member type="way" ref="-65" role="forward"/>
         <member type="way" ref="-15" role="forward"/>
         <member type="way" ref="-14" role="forward"/>
-        <member type="way" ref="-66" role="forward"/>
         <member type="way" ref="-95" role="forward"/>
-        <member type="way" ref="-65" role="forward"/>
         <tag k="wikipedia" v="en:U.S. Route 113"/>
         <tag k="hoot:status" v="1"/>
         <tag k="symbol" v="http://upload.wikimedia.org/wikipedia/commons/f/fc/US_113.svg"/>
