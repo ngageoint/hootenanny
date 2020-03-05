@@ -1,0 +1,40 @@
+{
+    "version": 0.6,
+    "generator": "Overpass API 0.7.55 579b1eec",
+    "osm3s": {
+      "timestamp_osm_base": "2020-03-03T22:00:01Z",
+      "copyright": "The data included in this document is from OpenStreetMap and NOME. The data is made available under ODbL."
+    },
+    "elements": [
+        {
+            "type": "node",
+            "id": 247702741,
+            "lat": 41.8912809,
+            "lon": 12.4910317,
+            "timestamp": "2016-02-02T18:39:44Z",
+            "version": 1,
+            "changeset": 3732,
+            "user": "",
+            "uid": 0,
+            "tags": {
+                "highway": "crossing",
+                "source:datetime": "2013-04-15T13:05:23.000Z"
+            }
+        },
+        {
+            "type": "node",
+            "id": 247702741,
+            "lat": 41.8912809,
+            "lon": 12.4910317,
+            "timestamp": "2016-02-02T18:39:44Z",
+            "version": 1,
+            "changeset": 3732,
+            "user": "",
+            "uid": 0,
+            "tags": {
+            "highway": "crossing",
+                "source:datetime": "2013-04-15T13:05:23.000Z"
+            }
+        }
+    ]
+}

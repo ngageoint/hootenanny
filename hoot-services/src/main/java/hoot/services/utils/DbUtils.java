@@ -36,6 +36,7 @@ import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
 import static hoot.services.models.db.QUsers.users;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -56,7 +57,6 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 
-import com.querydsl.sql.dml.SQLUpdateClause;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -76,6 +76,7 @@ import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
+import com.querydsl.sql.dml.SQLUpdateClause;
 import com.querydsl.sql.namemapping.PreConfiguredNameMapping;
 import com.querydsl.sql.spring.SpringConnectionProvider;
 import com.querydsl.sql.spring.SpringExceptionTranslator;
@@ -869,12 +870,25 @@ NOT EXISTS
         }
     }
 
+    private static final FilenameFilter filter = new FilenameFilter() {
+        @Override
+        public boolean accept(File f, String name) {
+            // We want to find only OsmApiWriter*.osc files
+            return name.startsWith("OsmApiWriter") && name.endsWith(".osc");
+        }
+    };
+
     // Sets the specified upload changeset job to a status detail of CONFLICTS
     // if a diff-error.osc file is present in the parent job workspace
     public static void checkConflicted(String jobId, String parentId) {
         File workDir = new File(CHANGESETS_FOLDER, parentId);
         File diffError = new File(workDir, "diff-error.osc");
-        if (diffError.exists()) {
+        File diffRemaining = new File(workDir, "diff-remaining.osc");
+        File[] diffDebugfiles = workDir.listFiles(filter);
+        if (diffError.exists()
+                || diffRemaining.exists()
+                || diffDebugfiles.length > 0
+                ) {
             // Find the job
             JobStatus job = createQuery()
                     .select(jobStatus)

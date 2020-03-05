@@ -32,8 +32,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +54,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
 
@@ -133,8 +130,7 @@ class PullConnectedWaysCommand implements InternalCommand {
             List<Long> allWayIds = new ArrayList<>();
             for (Long n : nodeIds) {
                 url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/node/" + n + "/ways");
-                URLConnection conn = new URL(url).openConnection();
-                is = conn.getInputStream();
+                is = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
                 List<Long> wayIds = getOsmXpath(is, "/osm/way/@id");
                 is.close();
                 allWayIds.addAll(wayIds);
@@ -146,8 +142,9 @@ class PullConnectedWaysCommand implements InternalCommand {
                 url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/way/" + id + "/full");
 
                 File outputFile = new File(params.getWorkDir(), id + ".osm");
-                URL requestUrl = new URL(url);
-                FileUtils.copyURLToFile(requestUrl, outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
+                is = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
+                FileUtils.copyInputStreamToFile(is, outputFile);
+                is.close();
             }
 
             //delete the crop.osm file

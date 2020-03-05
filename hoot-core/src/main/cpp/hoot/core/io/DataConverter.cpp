@@ -195,8 +195,9 @@ void DataConverter::setTranslation(const QString& translation)
 
 void DataConverter::setConfiguration(const Settings& conf)
 {
-  // The ordering of these setters matter to DataConvertTest.
   ConfigOptions config = ConfigOptions(conf);
+
+  // The ordering of these setters matter to DataConvertTest.
   setConvertOps(config.getConvertOps());
   setOgrFeatureReadLimit(config.getOgrReaderLimit());
   setShapeFileColumns(config.getShapeFileWriterCols());
@@ -644,6 +645,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   {
     reader.setLimit(_ogrFeatureReadLimit);
   }
+  reader.setConfiguration(conf());
   reader.setSchemaTranslationScript(_translation);
 
   // see similar note in _convertToOgr

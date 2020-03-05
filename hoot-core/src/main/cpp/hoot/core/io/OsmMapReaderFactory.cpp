@@ -105,6 +105,8 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& 
     throw HootException("A valid reader could not be found for the URL: " + url);
   }
 
+  reader->setConfiguration(conf());
+
   return reader;
 }
 

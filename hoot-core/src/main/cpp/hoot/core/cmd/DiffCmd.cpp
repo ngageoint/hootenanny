@@ -35,6 +35,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 
 using namespace std;
 
@@ -95,6 +96,9 @@ public:
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
+
+    // We always want to know if there are duplicate nodes during comparison.
+    conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
 
     QString pathname1 = args[0];
     QString pathname2 = args[1];
