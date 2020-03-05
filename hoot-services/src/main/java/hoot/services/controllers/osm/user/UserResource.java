@@ -207,7 +207,7 @@ public class UserResource {
             List<Tuple> userInfo;
             OrderSpecifier<?> sorter;
             Collection<String> activePrivileges = new ArrayList<>();
-
+            
             switch (sort) {
                 case "-auth":
                     sorter = users.hootservices_last_authorize.desc();
@@ -373,10 +373,11 @@ public class UserResource {
     @Path("/saveFavoriteOpts")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveFavoriteOpts(@Context HttpServletRequest request, String favoriteOpts) {
+    	
+        Users user = Users.fromRequest(request);
+        Long userId = user.getId();
 
         try {
-            Users user = Users.fromRequest(request);
-            Long userId = user.getId();
 
             JSONParser parser = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(favoriteOpts);
@@ -393,27 +394,18 @@ public class UserResource {
 
             String getFavorites = json.get("members").toString();
 
-            if ( !tags.containsKey(getName) ) {
-                tags.put(getName, getFavorites);
-                createQuery().update(users)
-                    .where(users.id.eq(userId))
-                    .set(users.favoriteOpts, tags)
-                    .execute();
-            }
-            else {
-                tags.remove(getName, getFavorites);
-                tags.put(getName, getFavorites);
-
-                createQuery().update(users)
-                        .where(users.id.eq(userId))
-                        .set(users.favoriteOpts, tags)
-                        .execute();
-            }
-
+	        tags.put(getName, getFavorites);
+	        
+            createQuery().update(users)
+                .where(users.id.eq(userId))
+                .set(users.favoriteOpts, tags)
+                .execute();
 
         } catch (Exception e) {
             Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
+       userManager.clearCachedUser(userId);
+
        return Response.ok().build();
    }
 
