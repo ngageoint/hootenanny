@@ -5,14 +5,8 @@ to translate feature tags between OSM and supported schemas.
 ************************************************************************/
 var http = require('http');
 var url = require('url');
+var fs = require('fs');
 var serverPort = 8094;
-var availableTrans = {
-    TDSv40: {isavailable: true},
-    TDSv61: {isavailable: true},
-    TDSv70: {isavailable: true},
-    MGCP: {isavailable: true},
-    GGDMv30: {isavailable: true}
-};
 
 var HOOT_HOME = process.env.HOOT_HOME;
 if (typeof hoot === 'undefined') {
@@ -24,12 +18,21 @@ if (typeof hoot === 'undefined') {
     hoot.Settings.set({"ogr.note.extra": "attribute"});
     hoot.Settings.set({"reader.add.source.datetime": "false"});
     hoot.Settings.set({"writer.include.circular.error.tags": "false"});
+    // hoot.Settings.set({"ogr.debug.dumptags": "true"});
 
     //Tests should set hashseedzero to true for consistent results
     if( typeof hashseedzero !== 'undefined' && hashseedzero == true ) hoot.Settings.set({"hash.seed.zero": "true"});
 }
 
 //Getting schema for fcode, geom type
+var availableTrans = {
+    TDSv40: {isavailable: true},
+    TDSv61: {isavailable: true},
+    TDSv70: {isavailable: true},
+    MGCP: {isavailable: true},
+    GGDMv30: {isavailable: true}
+};
+
 var schemaMap = {
     TDSv40: require(HOOT_HOME + '/translations/tds40_full_schema.js'),
     TDSv61: require(HOOT_HOME + '/translations/tds61_full_schema.js'),
@@ -37,8 +40,6 @@ var schemaMap = {
     MGCP: require(HOOT_HOME + '/translations/mgcp_schema.js'),
     GGDMv30: require(HOOT_HOME + '/translations/ggdm30_schema.js')
 };
-
-var availableTranslations = Object.keys(schemaMap);
 
 //Getting osm tags for fcode
 var fcodeLookup = {
@@ -95,6 +96,47 @@ var translationsMap = {
         })
     }
 };
+
+// Check if we have a config file for 'translations-local'
+// If so, add it to the config from above
+
+// The structure of the file is very basic json:
+// {
+// "availableTrans" : {"Smurf": {"isavailable": true}},
+// "schemaMap" : {"Smurf":"/translations-local/Smurf_full_schema.js"},
+// "fcodeLookup" : {"Smurf": "/translations-local/eSmurf_osm.js"},
+// "translationsMap" : {
+//     "toogr": {"Smurf": "/translations-local/Smurf_to_OGR.js" },
+//     "toosm": {"Smurf": "/translations-local/Smurf_to_OSM.js"}
+//     }
+// }
+
+var tLocal = {}
+try {
+    tLocal = require(HOOT_HOME + '/translations-local/translationServerConfig.json');
+
+    Object.keys(tLocal.availableTrans).forEach(k => {availableTrans[k] = tLocal.availableTrans[k]});
+    Object.keys(tLocal.schemaMap).forEach(k => {schemaMap[k] = require(HOOT_HOME + tLocal.schemaMap[k]); });
+    Object.keys(tLocal.fcodeLookup).forEach(k => {fcodeLookup[k] = require(HOOT_HOME + tLocal.fcodeLookup[k])});
+
+    Object.keys(tLocal.translationsMap.toogr).forEach(k => {
+        translationsMap.toogr[k] = new hoot.SchemaTranslationOp({
+                'schema.translation.script': HOOT_HOME + tLocal.translationsMap.toogr[k],
+                'schema.translation.direction': 'toogr'
+            });
+    });
+
+    Object.keys(tLocal.translationsMap.toosm).forEach(k => {
+        translationsMap.toosm[k] = new hoot.SchemaTranslationOp({
+                'schema.translation.script': HOOT_HOME + tLocal.translationsMap.toosm[k],
+                'schema.translation.direction': 'toosm'
+            });
+    });
+} catch (e) {
+    console.log('Skipping translations-local config');
+}
+
+availableTranslations = Object.keys(schemaMap);
 
 if (require.main === module) {
     //I'm a running server
@@ -201,7 +243,6 @@ function TranslationServer(request, response) {
         response.writeHead(status, header);
         response.end(JSON.stringify({error: err.message}));
     }
-
 }
 
 function handleInputs(params) {
@@ -299,7 +340,6 @@ var osm2ogr = function(params) {
     } else if (params.method === 'GET'){
         //Get fields for F_CODE from schema
         var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
-
 
         //geom type may be Vertex for tagged nodes that are members of ways
         var geom = params.geom.split(',').map(function(geom) {

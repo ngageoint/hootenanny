@@ -902,7 +902,9 @@ describe('TranslationServer', function () {
                 method: 'GET',
                 path: '/translations'
             });
-            assert.equal(5, trans.length);
+            // NOTE: This allows the test to pass if/when translations from "translations-local" are added
+            // assert.equal(trans.length,5);
+            assert.ok(trans.length >= 5);
         });
 
         it('should handle /schema GET', function() {
