@@ -68,7 +68,6 @@ public:
    * This only needs to be set if _ignoreElementId = true. The reason a const map isn't used here
    * is for the same reason isSame doesn't take in const elements.
    */
-  //virtual void setOsmMap(OsmMap* map) { _map = map; }
   virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
 private:
@@ -80,7 +79,6 @@ private:
   // enabling this allows for element comparisons to ignore the element ID
   bool _ignoreElementId;
   // a map is needed when comparing child elements if ignoring element IDs
-  //OsmMap* _map;
   OsmMapPtr _map;
 
   bool _compareNode(const std::shared_ptr<const Element>& re,
