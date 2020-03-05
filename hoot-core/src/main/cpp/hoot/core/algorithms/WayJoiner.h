@@ -114,11 +114,6 @@ private:
    *    does nothing if _leavePid is true
    */
   void _resetParents();
-
-  /*
-   * Experimental attempt to retain IDs from ref data
-   */
-  void _updateForMissingParents();
 };
 
 }

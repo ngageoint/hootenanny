@@ -74,11 +74,6 @@ void WayJoiner::join(const OsmMapPtr& map)
   _joinAtNode();
   OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-at-node");
 
-  // EXPERIMENTAL: If any ways were conflated and they have parents that no longer exist, let's
-  // give them the ID of their parent.
-  //_updateForMissingParents();
-  //OsmMapWriterFactory::writeDebugMap(map, "update-for-missing-parents");
-
   //  Clear out any remaining unjoined parent ids
   _resetParents();
 }
@@ -315,65 +310,6 @@ void WayJoiner::_rejoinSiblings(deque<long>& way_ids)
     WayPtr parent = ways[sorted[0]];
     for (size_t i = 1; i < sorted.size(); ++i)
       _joinWays(parent, ways[sorted[i]]);
-  }
-}
-
-void WayJoiner::_updateForMissingParents()
-{
-  LOG_INFO("\tUpdating ways for missing parent IDs...");
-
-  WayMap ways = _map->getWays();
-  vector<long> ids;
-  //  Find all ways that have a split parent id
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    WayPtr way = it->second;
-    if (way->hasPid())
-    {
-      LOG_TRACE(
-        "Adding " << way->getElementId() << " with split parent id: " << way->getPid() << "...");
-      ids.push_back(way->getId());
-    }
-  }
-  //  Sort the ids so that the smallest is first (i.e. largest negative id is the last one allocated)
-  sort(ids.begin(), ids.end());
-  LOG_VART(ids);
-
-  //  Iterate all of the ids
-  for (vector<long>::const_iterator it = ids.begin(); it != ids.end(); ++it)
-  {
-    WayPtr way = ways[*it];
-
-    long parent_id = WayData::PID_EMPTY;
-    if (way)
-    {
-      LOG_VART(way->getElementId());
-      parent_id = way->getPid();
-    }
-    LOG_VART(parent_id);
-    WayPtr parent = ways[parent_id];
-    if (parent_id != WayData::PID_EMPTY)
-    {
-      parent = ways[parent_id];
-    }
-    if (parent)
-    {
-      LOG_VART(parent->getId());
-    }
-
-    // If the parent no longer exists, this way was previously conflated and we have a positive
-    // parent ID association, let's give this way its parent's ID.
-    // TODO: not certain yet about requiring a positive parent ID or the conflated status...fixes
-    // the initial test case, but need to do testing against more data
-    if (!parent && /*parent_id != WayData::PID_EMPTY*/parent_id > 0 && way &&
-        way->getStatus() == Status::Conflated)
-    {
-      LOG_VART(_map->containsElement(ElementId(ElementType::Way, parent_id)));
-      LOG_TRACE(
-        "Setting parent ID: " << parent_id << " for parent that no longer exists on: " <<
-        way->getId());
-      way->setId(parent_id);
-    }
   }
 }
 
