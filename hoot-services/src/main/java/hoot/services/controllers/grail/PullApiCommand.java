@@ -134,12 +134,10 @@ class PullApiCommand implements InternalCommand {
 
             if (responseStream == null) {
                 responseStream = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
-                FileUtils.copyInputStreamToFile(responseStream, outputFile);
-                responseStream.close();
-            } else {
-                FileUtils.copyInputStreamToFile(responseStream, outputFile);
-                responseStream.close();
             }
+
+            FileUtils.copyInputStreamToFile(responseStream, outputFile);
+            responseStream.close();
         }
         catch (IOException ex) {
             String msg = "Failure to pull data from the OSM API [" + url + "]" + ex.getMessage();

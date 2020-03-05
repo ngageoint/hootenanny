@@ -169,9 +169,8 @@ class PullOverpassCommand implements InternalCommand {
 
     static InputStream getOverpassInputStream(String url) throws IOException {
         InputStream inputStream;
-        if ("https://overpass-api.de/api/interpreter".equalsIgnoreCase(PUBLIC_OVERPASS_URL)) {
-            URLConnection conn = new URL(url).openConnection();
-            inputStream = conn.getInputStream();
+        if ("https://overpass-api.de/api/interpreter".equalsIgnoreCase(replaceSensitiveData(PUBLIC_OVERPASS_URL))) {
+            inputStream = new URL(url).openStream();
         } else { // add no cert checker if using a public mirror
             inputStream = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
         }
