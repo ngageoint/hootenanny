@@ -914,24 +914,34 @@ public class GrailResource {
         }
     }
 
-    // Get Capabilities from an OSM API Db
-    private static APICapabilities getCapabilities(String capabilitiesUrl) {
-        APICapabilities params = new APICapabilities();
-
-        try {
-
-            //Used for self-signed SSL certs
-            //still requires import of cert into server java keystore
-            //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
-
-            HttpsURLConnection conn = (HttpsURLConnection) new URL(replaceSensitiveData(capabilitiesUrl)).openConnection();
+    //Used for self-signed SSL certs
+    //still requires import of cert into server java keystore
+    //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
+    public static InputStream getUrlInputStreamWithNullHostnameVerifier(String urlString) throws IOException {
+        InputStream inputStream;
+        URL url = new URL(urlString);
+        if (url.getProtocol().equalsIgnoreCase("http")) {
+            inputStream = url.openStream();
+        } else {
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setHostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession sslSession) {
                     return true;
                 }
             });
-            InputStream inputStream = conn.getInputStream();
+            inputStream = conn.getInputStream();
+        }
+        return inputStream;
+    }
+
+
+    // Get Capabilities from an OSM API Db
+    private static APICapabilities getCapabilities(String capabilitiesUrl) {
+        APICapabilities params = new APICapabilities();
+
+        try {
+            InputStream inputStream = getUrlInputStreamWithNullHostnameVerifier(replaceSensitiveData(capabilitiesUrl));
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();

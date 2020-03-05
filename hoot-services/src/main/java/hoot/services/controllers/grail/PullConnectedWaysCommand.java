@@ -32,14 +32,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
@@ -134,18 +130,7 @@ class PullConnectedWaysCommand implements InternalCommand {
             List<Long> allWayIds = new ArrayList<>();
             for (Long n : nodeIds) {
                 url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/node/" + n + "/ways");
-                //Used for self-signed SSL certs
-                //still requires import of cert into server java keystore
-                //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
-
-                HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
-                conn.setHostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession sslSession) {
-                        return true;
-                    }
-                });
-                is = conn.getInputStream();
+                is = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
                 List<Long> wayIds = getOsmXpath(is, "/osm/way/@id");
                 is.close();
                 allWayIds.addAll(wayIds);
@@ -157,18 +142,7 @@ class PullConnectedWaysCommand implements InternalCommand {
                 url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/way/" + id + "/full");
 
                 File outputFile = new File(params.getWorkDir(), id + ".osm");
-                //Used for self-signed SSL certs
-                //still requires import of cert into server java keystore
-                //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
-
-                HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
-                conn.setHostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession sslSession) {
-                        return true;
-                    }
-                });
-                is = conn.getInputStream();
+                is = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
                 FileUtils.copyInputStreamToFile(is, outputFile);
                 is.close();
             }

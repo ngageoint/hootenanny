@@ -40,9 +40,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -176,14 +173,7 @@ class PullOverpassCommand implements InternalCommand {
             URLConnection conn = new URL(url).openConnection();
             inputStream = conn.getInputStream();
         } else { // add no cert checker if using a public mirror
-            HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
-            conn.setHostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession sslSession) {
-                    return true;
-                }
-            });
-            inputStream = conn.getInputStream();
+            inputStream = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
         }
         return inputStream;
     }
