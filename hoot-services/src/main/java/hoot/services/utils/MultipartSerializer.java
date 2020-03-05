@@ -75,6 +75,7 @@ public final class MultipartSerializer {
 
             try (InputStream fileStream = fileItem.getEntityAs(InputStream.class)) {
                 FileUtils.copyInputStreamToFile(fileStream, uploadedFile);
+                fileStream.close();
             }
             catch (Exception ioe) {
                 throw new RuntimeException("Error saving file to disk: " + uploadedFile, ioe);

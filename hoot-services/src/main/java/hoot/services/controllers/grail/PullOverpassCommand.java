@@ -103,6 +103,7 @@ class PullOverpassCommand implements InternalCommand {
             //write to intermediate file
             InputStream is = PullOverpassCommand.getOverpassInputStream(url);
             FileUtils.copyInputStreamToFile(is, outputFile);
+            is.close();
 
         }
         catch (Exception ex) {

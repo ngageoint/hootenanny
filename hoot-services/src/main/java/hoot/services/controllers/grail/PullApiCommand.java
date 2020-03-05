@@ -39,7 +39,10 @@ import java.net.URL;
 import java.security.KeyStore;
 import java.time.LocalDateTime;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -137,7 +140,20 @@ class PullApiCommand implements InternalCommand {
                 URL requestUrl = new URL(url);
                 FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
             } else {
+                //Used for self-signed SSL certs
+                //still requires import of cert into server java keystore
+                //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
+
+                HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
+                conn.setHostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession sslSession) {
+                        return true;
+                    }
+                });
+                responseStream = conn.getInputStream();
                 FileUtils.copyInputStreamToFile(responseStream, outputFile);
+                responseStream.close();
             }
         }
         catch (IOException ex) {

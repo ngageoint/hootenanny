@@ -33,11 +33,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
@@ -56,7 +58,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
 
@@ -133,7 +134,17 @@ class PullConnectedWaysCommand implements InternalCommand {
             List<Long> allWayIds = new ArrayList<>();
             for (Long n : nodeIds) {
                 url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/node/" + n + "/ways");
-                URLConnection conn = new URL(url).openConnection();
+                //Used for self-signed SSL certs
+                //still requires import of cert into server java keystore
+                //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
+
+                HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
+                conn.setHostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession sslSession) {
+                        return true;
+                    }
+                });
                 is = conn.getInputStream();
                 List<Long> wayIds = getOsmXpath(is, "/osm/way/@id");
                 is.close();
@@ -146,8 +157,20 @@ class PullConnectedWaysCommand implements InternalCommand {
                 url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/way/" + id + "/full");
 
                 File outputFile = new File(params.getWorkDir(), id + ".osm");
-                URL requestUrl = new URL(url);
-                FileUtils.copyURLToFile(requestUrl, outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
+                //Used for self-signed SSL certs
+                //still requires import of cert into server java keystore
+                //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
+
+                HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
+                conn.setHostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession sslSession) {
+                        return true;
+                    }
+                });
+                is = conn.getInputStream();
+                FileUtils.copyInputStreamToFile(is, outputFile);
+                is.close();
             }
 
             //delete the crop.osm file

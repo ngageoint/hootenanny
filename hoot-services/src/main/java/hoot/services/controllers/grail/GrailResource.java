@@ -60,6 +60,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
@@ -882,6 +885,7 @@ public class GrailResource {
         File mergeFile = new File(params.getWorkDir(), "merge.osm");
         mergeOsmParams.setOutput(mergeFile.getAbsolutePath());
         workflow.add(grailCommandFactory.build(jobId, mergeOsmParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+
         // Write the data to the hoot db
         GrailParams pushParams = new GrailParams(params);
         pushParams.setInput1(mergeFile.getAbsolutePath());
@@ -915,10 +919,23 @@ public class GrailResource {
         APICapabilities params = new APICapabilities();
 
         try {
+
+            //Used for self-signed SSL certs
+            //still requires import of cert into server java keystore
+            //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
+
+            HttpsURLConnection conn = (HttpsURLConnection) new URL(replaceSensitiveData(capabilitiesUrl)).openConnection();
+            conn.setHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession sslSession) {
+                    return true;
+                }
+            });
+            InputStream inputStream = conn.getInputStream();
+
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new URL(replaceSensitiveData(capabilitiesUrl)).openStream());
-
+            Document doc = db.parse(inputStream);
             doc.getDocumentElement().normalize();
 
             NodeList nl = doc.getElementsByTagName("api");
