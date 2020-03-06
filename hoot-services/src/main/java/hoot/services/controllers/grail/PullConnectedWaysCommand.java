@@ -129,7 +129,7 @@ class PullConnectedWaysCommand implements InternalCommand {
             //http://localhost:3000/api/0.6/node/6096481776/ways
             List<Long> allWayIds = new ArrayList<>();
             for (Long n : nodeIds) {
-                url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/node/" + n + "/ways");
+                url = replaceSensitiveData(params.getPullUrl()).replace("/api/0.6/map", "/api/0.6/node/" + n + "/ways");
                 is = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
                 List<Long> wayIds = getOsmXpath(is, "/osm/way/@id");
                 is.close();
@@ -139,7 +139,7 @@ class PullConnectedWaysCommand implements InternalCommand {
             //Get the full ways
             //http://localhost:3000/api/0.6/way/649672297/full
             for (Long id : allWayIds) {
-                url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/way/" + id + "/full");
+                url = replaceSensitiveData(params.getPullUrl()).replace("/api/0.6/map", "/api/0.6/way/" + id + "/full");
 
                 File outputFile = new File(params.getWorkDir(), id + ".osm");
                 is = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
@@ -152,6 +152,7 @@ class PullConnectedWaysCommand implements InternalCommand {
         }
         catch (IOException ex) {
             String msg = "Failure to pull connected ways from the API [" + url + "]" + ex.getMessage();
+            logger.error(msg);
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
