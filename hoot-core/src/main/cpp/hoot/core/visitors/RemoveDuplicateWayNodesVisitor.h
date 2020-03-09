@@ -31,19 +31,20 @@
 // Hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * Removes all way nodes that are duplicates, with the exception of start/end node duplicates
- * (closed ways).
+ * Removes all consecutive way nodes that are duplicates.
  *
  * This is kind of a bandaid for the issue discovered in #2066.  The source creating the
- * duplicated nodes appears to be in the conflation routines somewhere and should be found and
- * fixed.  If that happens, this visitor could be removed from the post conflation ops.
+ * duplicated nodes appears to be in the conflation routines somewhere and should eventually be
+ * found and fixed.
  */
-class RemoveDuplicateWayNodesVisitor : public ElementVisitor
+class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OsmMapConsumer
 {
 public:
 
@@ -52,6 +53,11 @@ public:
   RemoveDuplicateWayNodesVisitor();
 
   virtual void visit(const ElementPtr& e);
+
+  /**
+   * @see OsmMapConsumer
+   */
+  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
   /**
    * Removes duplicates nodes from a way
@@ -73,6 +79,10 @@ public:
   virtual QStringList getCriteria() const;
 
   virtual std::string getClassName() const { return className(); }
+
+private:
+
+  OsmMapPtr _map;
 };
 
 }

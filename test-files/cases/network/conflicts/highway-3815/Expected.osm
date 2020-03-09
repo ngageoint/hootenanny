@@ -9,19 +9,19 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-5125"/>
     </node>
-    <node visible="true" id="-5116" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6728211411939302" lon="11.2805241465252699">
+    <node visible="true" id="-5113" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6574981794899397" lon="11.2545604164837751">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-5116"/>
+        <tag k="hoot:id" v="-5113"/>
     </node>
-    <node visible="true" id="-5110" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.5852905223392000" lon="11.2199041532951451">
+    <node visible="true" id="-5107" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.5852905223392000" lon="11.2199041532951451">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-5110"/>
+        <tag k="hoot:id" v="-5107"/>
     </node>
-    <node visible="true" id="-5109" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.5575452680958346" lon="11.1765348851920461">
+    <node visible="true" id="-5106" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.5575452680958346" lon="11.1765348851920461">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-5109"/>
+        <tag k="hoot:id" v="-5106"/>
     </node>
-    <node visible="true" id="-5101" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6574981794899397" lon="11.2545604164837751">
+    <node visible="true" id="-5101" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6728211411939302" lon="11.2805241465252699">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-5101"/>
     </node>
@@ -20709,7 +20709,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="6096478842"/>
     </node>
-    <way visible="true" id="-650" timestamp="2020-02-14T16:24:59Z" version="1">
+    <way visible="true" id="-651" timestamp="2020-02-14T16:24:59Z" version="1">
         <nd ref="6096478192"/>
         <nd ref="6096477860"/>
         <nd ref="6096477862"/>
@@ -20956,12 +20956,12 @@
         <nd ref="6096477554"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="-650"/>
+        <tag k="hoot:id" v="-651"/>
         <tag k="source:datetime" v="2015-11-26T13:31:20.000Z;2017-03-01T14:56:00Z"/>
         <tag k="surface" v="unpaved"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-646" timestamp="2020-02-14T16:24:59Z" version="1">
+    <way visible="true" id="-647" timestamp="2020-02-14T16:24:59Z" version="1">
         <nd ref="6096477468"/>
         <nd ref="-5125"/>
         <nd ref="6096477652"/>
@@ -20971,142 +20971,14 @@
         <tag k="bridge" v="yes"/>
         <tag k="layer" v="1"/>
         <tag k="ref" v="A12"/>
-        <tag k="hoot:id" v="-646"/>
+        <tag k="hoot:id" v="-647"/>
         <tag k="source:datetime" v="2013-11-20T13:03:25.000Z;2018-04-25T09:04:01Z;2016-10-03T19:37:03Z"/>
         <tag k="surface" v="paved"/>
         <tag k="lanes" v="2"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-642" timestamp="2020-02-14T16:24:59Z" version="1">
-        <nd ref="6096478436"/>
-        <nd ref="6096478438"/>
-        <nd ref="6096478440"/>
-        <nd ref="6096478442"/>
-        <nd ref="6096478444"/>
-        <nd ref="6096478446"/>
-        <nd ref="6096478448"/>
-        <nd ref="6096478450"/>
-        <nd ref="6096478452"/>
-        <nd ref="6096478454"/>
-        <nd ref="6096478456"/>
-        <nd ref="6096478458"/>
-        <nd ref="6096478460"/>
-        <nd ref="6096478462"/>
-        <nd ref="6096478464"/>
-        <nd ref="6096478466"/>
-        <nd ref="6096478468"/>
-        <nd ref="6096478470"/>
-        <nd ref="6096478472"/>
-        <nd ref="6096478474"/>
-        <nd ref="6096478476"/>
-        <nd ref="6096478478"/>
-        <nd ref="6096478480"/>
-        <nd ref="6096478482"/>
-        <nd ref="6096478484"/>
-        <nd ref="6096478486"/>
-        <nd ref="6096478489"/>
-        <nd ref="6096478490"/>
-        <nd ref="6096478493"/>
-        <nd ref="6096478495"/>
-        <nd ref="6096478497"/>
-        <nd ref="6096478499"/>
-        <nd ref="6096478500"/>
-        <nd ref="6096478502"/>
-        <nd ref="6096478504"/>
-        <nd ref="6096478506"/>
-        <nd ref="6096478508"/>
-        <nd ref="6096478510"/>
-        <nd ref="6096478512"/>
-        <nd ref="6096478514"/>
-        <nd ref="6096478516"/>
-        <nd ref="6096478518"/>
-        <nd ref="6096478520"/>
-        <nd ref="6096478522"/>
-        <nd ref="6096478524"/>
-        <nd ref="6096478526"/>
-        <nd ref="6096478528"/>
-        <nd ref="6096478530"/>
-        <nd ref="6096478532"/>
-        <nd ref="6096478534"/>
-        <nd ref="6096478536"/>
-        <nd ref="6096478538"/>
-        <nd ref="6096478540"/>
-        <nd ref="6096478542"/>
-        <nd ref="6096478544"/>
-        <nd ref="6096478547"/>
-        <nd ref="6096478549"/>
-        <nd ref="6096478551"/>
-        <nd ref="6096478553"/>
-        <nd ref="6096478555"/>
-        <nd ref="6096478557"/>
-        <nd ref="6096478559"/>
-        <nd ref="6096478561"/>
-        <nd ref="6096478563"/>
-        <nd ref="6096478565"/>
-        <nd ref="6096478567"/>
-        <nd ref="6096478568"/>
-        <nd ref="6096478569"/>
-        <nd ref="6096478570"/>
-        <nd ref="6096478571"/>
-        <nd ref="6096478572"/>
-        <nd ref="6096478573"/>
-        <nd ref="6096478574"/>
-        <nd ref="6096478575"/>
-        <nd ref="6096478576"/>
-        <nd ref="6096478577"/>
-        <nd ref="6096478578"/>
-        <nd ref="6096478579"/>
-        <nd ref="6096478580"/>
-        <nd ref="6096478581"/>
-        <nd ref="6096478582"/>
-        <nd ref="6096478583"/>
-        <nd ref="6096478584"/>
-        <nd ref="6096478585"/>
-        <nd ref="6096478586"/>
-        <nd ref="6096478587"/>
-        <nd ref="6096478588"/>
-        <nd ref="6096478589"/>
-        <nd ref="6096478590"/>
-        <nd ref="6096478591"/>
-        <nd ref="6096478592"/>
-        <nd ref="6096478593"/>
-        <nd ref="6096478594"/>
-        <nd ref="6096478595"/>
-        <nd ref="6096478596"/>
-        <nd ref="6096478597"/>
-        <nd ref="6096478598"/>
-        <nd ref="6096478599"/>
-        <nd ref="6096478600"/>
-        <nd ref="6096478601"/>
-        <nd ref="6096478602"/>
-        <nd ref="6096478607"/>
-        <nd ref="-5116"/>
-        <nd ref="6096478613"/>
-        <nd ref="6096478629"/>
-        <nd ref="6096478643"/>
-        <nd ref="6096478657"/>
-        <nd ref="6096478664"/>
-        <nd ref="6096478676"/>
-        <nd ref="6096478680"/>
-        <nd ref="6096478683"/>
-        <nd ref="6096478688"/>
-        <nd ref="6096478695"/>
-        <nd ref="6096478700"/>
-        <nd ref="6096478707"/>
-        <nd ref="6096478711"/>
-        <nd ref="6096478717"/>
-        <nd ref="6096478719"/>
-        <nd ref="6096478720"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="fixme" v="blurred imagery"/>
-        <tag k="hoot:id" v="-642"/>
-        <tag k="source:datetime" v="2015-11-27T14:31:02.000Z;2017-03-10T08:04:01Z"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-641" timestamp="2020-02-14T16:18:35Z" version="1">
-        <nd ref="-5109"/>
+        <nd ref="-5106"/>
         <nd ref="-3914"/>
         <nd ref="-398"/>
         <nd ref="-308"/>
@@ -21223,7 +21095,7 @@
     <way visible="true" id="-637" timestamp="2020-02-14T16:18:36Z" version="1">
         <nd ref="-559"/>
         <nd ref="-419"/>
-        <nd ref="-5110"/>
+        <nd ref="-5107"/>
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="trunk"/>
         <tag k="ref" v="A12"/>
@@ -21256,7 +21128,7 @@
         <nd ref="6096477562"/>
         <nd ref="6096477566"/>
         <nd ref="6096477646"/>
-        <nd ref="-5109"/>
+        <nd ref="-5106"/>
         <nd ref="6096477500"/>
         <nd ref="6096477460"/>
         <nd ref="6096477440"/>
@@ -21303,7 +21175,7 @@
         <nd ref="6096477604"/>
         <nd ref="6096477508"/>
         <nd ref="6096477605"/>
-        <nd ref="-5110"/>
+        <nd ref="-5107"/>
         <nd ref="6096477575"/>
         <nd ref="6096477570"/>
         <nd ref="6096477594"/>
@@ -21325,7 +21197,135 @@
         <tag k="source:datetime" v="2015-11-26T13:34:33.000Z;2019-05-07T08:54:07Z;2019-05-07T08:54:02Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-276" timestamp="2020-02-14T16:18:36Z" version="1">
+    <way visible="true" id="-629" timestamp="2020-02-14T16:24:59Z" version="1">
+        <nd ref="6096478436"/>
+        <nd ref="6096478438"/>
+        <nd ref="6096478440"/>
+        <nd ref="6096478442"/>
+        <nd ref="6096478444"/>
+        <nd ref="6096478446"/>
+        <nd ref="6096478448"/>
+        <nd ref="6096478450"/>
+        <nd ref="6096478452"/>
+        <nd ref="6096478454"/>
+        <nd ref="6096478456"/>
+        <nd ref="6096478458"/>
+        <nd ref="6096478460"/>
+        <nd ref="6096478462"/>
+        <nd ref="6096478464"/>
+        <nd ref="6096478466"/>
+        <nd ref="6096478468"/>
+        <nd ref="6096478470"/>
+        <nd ref="6096478472"/>
+        <nd ref="6096478474"/>
+        <nd ref="6096478476"/>
+        <nd ref="6096478478"/>
+        <nd ref="6096478480"/>
+        <nd ref="6096478482"/>
+        <nd ref="6096478484"/>
+        <nd ref="6096478486"/>
+        <nd ref="6096478489"/>
+        <nd ref="6096478490"/>
+        <nd ref="6096478493"/>
+        <nd ref="6096478495"/>
+        <nd ref="6096478497"/>
+        <nd ref="6096478499"/>
+        <nd ref="6096478500"/>
+        <nd ref="6096478502"/>
+        <nd ref="6096478504"/>
+        <nd ref="6096478506"/>
+        <nd ref="6096478508"/>
+        <nd ref="6096478510"/>
+        <nd ref="6096478512"/>
+        <nd ref="6096478514"/>
+        <nd ref="6096478516"/>
+        <nd ref="6096478518"/>
+        <nd ref="6096478520"/>
+        <nd ref="6096478522"/>
+        <nd ref="6096478524"/>
+        <nd ref="6096478526"/>
+        <nd ref="6096478528"/>
+        <nd ref="6096478530"/>
+        <nd ref="6096478532"/>
+        <nd ref="6096478534"/>
+        <nd ref="6096478536"/>
+        <nd ref="6096478538"/>
+        <nd ref="6096478540"/>
+        <nd ref="6096478542"/>
+        <nd ref="6096478544"/>
+        <nd ref="6096478547"/>
+        <nd ref="6096478549"/>
+        <nd ref="6096478551"/>
+        <nd ref="6096478553"/>
+        <nd ref="6096478555"/>
+        <nd ref="6096478557"/>
+        <nd ref="6096478559"/>
+        <nd ref="6096478561"/>
+        <nd ref="6096478563"/>
+        <nd ref="6096478565"/>
+        <nd ref="6096478567"/>
+        <nd ref="6096478568"/>
+        <nd ref="6096478569"/>
+        <nd ref="6096478570"/>
+        <nd ref="6096478571"/>
+        <nd ref="6096478572"/>
+        <nd ref="6096478573"/>
+        <nd ref="6096478574"/>
+        <nd ref="6096478575"/>
+        <nd ref="6096478576"/>
+        <nd ref="6096478577"/>
+        <nd ref="6096478578"/>
+        <nd ref="6096478579"/>
+        <nd ref="6096478580"/>
+        <nd ref="6096478581"/>
+        <nd ref="6096478582"/>
+        <nd ref="6096478583"/>
+        <nd ref="6096478584"/>
+        <nd ref="6096478585"/>
+        <nd ref="6096478586"/>
+        <nd ref="6096478587"/>
+        <nd ref="6096478588"/>
+        <nd ref="6096478589"/>
+        <nd ref="6096478590"/>
+        <nd ref="6096478591"/>
+        <nd ref="6096478592"/>
+        <nd ref="6096478593"/>
+        <nd ref="6096478594"/>
+        <nd ref="6096478595"/>
+        <nd ref="6096478596"/>
+        <nd ref="6096478597"/>
+        <nd ref="6096478598"/>
+        <nd ref="6096478599"/>
+        <nd ref="6096478600"/>
+        <nd ref="6096478601"/>
+        <nd ref="6096478602"/>
+        <nd ref="6096478607"/>
+        <nd ref="-5101"/>
+        <nd ref="6096478613"/>
+        <nd ref="6096478629"/>
+        <nd ref="6096478643"/>
+        <nd ref="6096478657"/>
+        <nd ref="6096478664"/>
+        <nd ref="6096478676"/>
+        <nd ref="6096478680"/>
+        <nd ref="6096478683"/>
+        <nd ref="6096478688"/>
+        <nd ref="6096478695"/>
+        <nd ref="6096478700"/>
+        <nd ref="6096478707"/>
+        <nd ref="6096478711"/>
+        <nd ref="6096478717"/>
+        <nd ref="6096478719"/>
+        <nd ref="6096478720"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="fixme" v="blurred imagery"/>
+        <tag k="hoot:id" v="-629"/>
+        <tag k="source:datetime" v="2015-11-27T14:31:02.000Z;2017-03-10T08:04:01Z"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-277" timestamp="2020-02-14T16:18:36Z" version="1">
         <nd ref="-2543"/>
         <nd ref="-2507"/>
         <nd ref="-2508"/>
@@ -21338,11 +21338,11 @@
         <nd ref="-2515"/>
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="-276"/>
+        <tag k="hoot:id" v="-277"/>
         <tag k="source:datetime" v="2017-02-26T18:35:08Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-260" timestamp="2020-02-14T16:18:36Z" version="1">
+    <way visible="true" id="-261" timestamp="2020-02-14T16:18:36Z" version="1">
         <nd ref="-2212"/>
         <nd ref="-2213"/>
         <nd ref="-2214"/>
@@ -21362,17 +21362,17 @@
         <nd ref="-2228"/>
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="-260"/>
+        <tag k="hoot:id" v="-261"/>
         <tag k="source:datetime" v="2017-02-26T18:10:37Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-255" timestamp="2020-02-14T16:18:36Z" version="1">
+    <way visible="true" id="-256" timestamp="2020-02-14T16:18:36Z" version="1">
         <nd ref="-2954"/>
         <nd ref="-2955"/>
         <nd ref="-2956"/>
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="-255"/>
+        <tag k="hoot:id" v="-256"/>
         <tag k="source:datetime" v="2017-02-26T18:53:12Z"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -23174,7 +23174,7 @@
         <nd ref="-3227"/>
         <nd ref="-3217"/>
         <nd ref="-3216"/>
-        <nd ref="-5116"/>
+        <nd ref="-5101"/>
         <nd ref="-3214"/>
         <nd ref="-3213"/>
         <nd ref="-3211"/>
@@ -23900,7 +23900,7 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-146" timestamp="2020-02-14T16:18:36Z" version="1">
-        <nd ref="-5101"/>
+        <nd ref="-5113"/>
         <nd ref="-2622"/>
         <nd ref="-2623"/>
         <nd ref="-2624"/>
@@ -24762,6 +24762,7 @@
         <nd ref="-2131"/>
         <nd ref="-2132"/>
         <nd ref="-2133"/>
+        <nd ref="-2116"/>
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:id" v="-103"/>
@@ -27877,7 +27878,7 @@
         <nd ref="6096477487"/>
         <nd ref="6096477437"/>
         <nd ref="6096477557"/>
-        <nd ref="-5101"/>
+        <nd ref="-5113"/>
         <nd ref="6096477615"/>
         <nd ref="6096477506"/>
         <nd ref="6096477497"/>
@@ -28258,6 +28259,7 @@
         <member type="way" ref="-40" role=""/>
         <member type="way" ref="-70" role=""/>
         <member type="way" ref="-6" role="backward"/>
+        <member type="way" ref="-647" role=""/>
         <member type="way" ref="-207" role=""/>
         <member type="way" ref="649671759" role=""/>
         <member type="way" ref="-220" role=""/>
@@ -28340,7 +28342,6 @@
         <member type="way" ref="-223" role=""/>
         <member type="way" ref="-26" role=""/>
         <member type="way" ref="-56" role=""/>
-        <member type="way" ref="-646" role=""/>
         <member type="way" ref="-206" role=""/>
         <member type="way" ref="-39" role=""/>
         <member type="way" ref="-69" role=""/>

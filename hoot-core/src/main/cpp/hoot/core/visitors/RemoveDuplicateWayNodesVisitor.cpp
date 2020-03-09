@@ -33,6 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
 
 // Qt
 #include <QVector>
@@ -56,41 +57,43 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
-    LOG_TRACE("Looking for duplicate way nodes...");
-
     WayPtr way = std::dynamic_pointer_cast<Way>(e);
     assert(way.get());
+    LOG_TRACE("Looking for duplicate way nodes in: " << way->getElementId() << "...");
     const std::vector<long>& wayNodeIds = way->getNodeIds();
     LOG_VART(wayNodeIds);
 
+    // This is invalid. Not even sure if it would get loaded or if it is being cleaned somewhere
+    // else but removing it anyway.
+    if (wayNodeIds.size() == 2 && way->isSimpleLoop())
+    {
+      RecursiveElementRemover(way->getElementId()).apply(_map);
+      return;
+    }
+
     QVector<long> parsedNodeIds;
     QVector<long> duplicateWayNodeIds;
+    long lastNodeId = 0;
     bool foundDuplicateWayNode = false;
     for (size_t i = 0; i < wayNodeIds.size(); i++)
     {
       const long nodeId = wayNodeIds[i];
-      LOG_VART(nodeId);
-      if (!parsedNodeIds.contains(nodeId))
+      // We're only removing consecutive duplicates. Other duplicate entries could be part of a
+      // valid loop feature.
+      if (nodeId != lastNodeId)
       {
-        // we haven't seen this node ID yet
-        LOG_TRACE("Valid way node: " << nodeId);
-        parsedNodeIds.append(nodeId);
-      }
-      else if (i == wayNodeIds.size() -1 && nodeId == parsedNodeIds.at(0))
-      {
-        // this node ID is duplicated, but its the end node duplicating the start node, which is ok
-        // (closed way)
-        LOG_TRACE("End node matches start node: " << nodeId);
+        LOG_TRACE("Valid way node: " << ElementId(ElementType::Node, nodeId));
         parsedNodeIds.append(nodeId);
       }
       else
       {
         // we've found a duplicate where both nodes aren't start and end nodes...not allowed
-        LOG_TRACE("Found duplicate way node: " << nodeId);
+        LOG_TRACE("Found duplicate way node: " << ElementId(ElementType::Node, nodeId));
         duplicateWayNodeIds.append(nodeId);
         foundDuplicateWayNode = true;
         _numAffected++;
       }
+      lastNodeId = nodeId;
     }
     if (foundDuplicateWayNode)
     {

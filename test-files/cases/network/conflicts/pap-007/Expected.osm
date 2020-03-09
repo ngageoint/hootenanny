@@ -3094,6 +3094,7 @@
         <nd ref="175"/>
         <nd ref="185"/>
         <nd ref="182"/>
+        <nd ref="172"/>
         <tag k="source" v="osm"/>
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="footway"/>
@@ -5028,9 +5029,29 @@
         <tag k="hoot:id" v="160"/>
         <tag k="highway" v="tertiary"/>
     </way>
-    <relation visible="true" id="-308" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-310" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3" role="reviewee"/>
         <member type="way" ref="114" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-310"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-309" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="157" role="reviewee"/>
+        <member type="way" ref="-3" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-309"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-308" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-3" role="reviewee"/>
+        <member type="way" ref="157" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-308"/>
@@ -5039,31 +5060,11 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-307" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="157" role="reviewee"/>
-        <member type="way" ref="-3" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-307"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-306" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-3" role="reviewee"/>
-        <member type="way" ref="157" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-306"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-305" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="114" role="reviewee"/>
         <member type="way" ref="-3" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-305"/>
+        <tag k="hoot:id" v="-307"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="type" v="review"/>

@@ -601,6 +601,8 @@ void DataConverter::_setFromOgrOptions()
     if (!_convertOps.contains(QString::fromStdString(DuplicateNodeRemover::className())))
     {
       _convertOps.append(QString::fromStdString(DuplicateNodeRemover::className()));
+      // also run dupe way node removal
+      _convertOps.append(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className()));
     }
   }
 

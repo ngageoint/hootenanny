@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/io/IoUtils.h>
 
 namespace hoot
 {
@@ -38,13 +39,17 @@ class RemoveDuplicateWayNodesVisitorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(RemoveDuplicateWayNodesVisitorTest);
   CPPUNIT_TEST(runInvalidWayTest1);
   CPPUNIT_TEST(runInvalidWayTest2);
+  CPPUNIT_TEST(runInvalidWayTest3);
   CPPUNIT_TEST(runValidStartAndEndNodeSameTest);
   CPPUNIT_TEST(runValidUnclosedWayTest);
+  CPPUNIT_TEST(runValidLoopTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  RemoveDuplicateWayNodesVisitorTest()
+  RemoveDuplicateWayNodesVisitorTest() :
+  HootTestFixture("test-files/visitors/RemoveDuplicateWayNodesVisitorTest/",
+                  "test-output/visitors/RemoveDuplicateWayNodesVisitorTest/")
   {
     setResetType(ResetBasic);
   }
@@ -70,6 +75,7 @@ public:
     map->addWay(way);
 
     RemoveDuplicateWayNodesVisitor v;
+    v.setOsmMap(map.get());
     map->visitRw(v);
 
     //the third node ref should have been removed from the way, but that node should still be in
@@ -104,6 +110,7 @@ public:
     map->addWay(way);
 
     RemoveDuplicateWayNodesVisitor v;
+    v.setOsmMap(map.get());
     map->visitRw(v);
 
     //the second node ref should have been removed from the way, but that node should still be in
@@ -115,6 +122,30 @@ public:
     CPPUNIT_ASSERT(map->containsNode(1));
     CPPUNIT_ASSERT(map->containsNode(2));
     CPPUNIT_ASSERT(map->containsNode(3));
+  }
+
+  void runInvalidWayTest3()
+  {
+    OsmMapPtr map(new OsmMap());
+
+    NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
+    map->addNode(node1);
+
+    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    std::vector<long> nodeIds;
+    nodeIds.push_back(1);
+    nodeIds.push_back(1); //invalid
+    way->setNodes(nodeIds);
+    map->addWay(way);
+
+    RemoveDuplicateWayNodesVisitor v;
+    v.setOsmMap(map.get());
+    map->visitRw(v);
+
+    // the way and its nodes should be removed from the map completely
+    CPPUNIT_ASSERT(!map->containsWay(1));
+    CPPUNIT_ASSERT(!map->containsNode(1));
+    CPPUNIT_ASSERT_EQUAL((size_t)0, map->size());
   }
 
   void runValidStartAndEndNodeSameTest()
@@ -138,6 +169,7 @@ public:
     map->addWay(way);
 
     RemoveDuplicateWayNodesVisitor v;
+    v.setOsmMap(map.get());
     map->visitRw(v);
 
     //no nodes should be removed from the way or map
@@ -174,6 +206,7 @@ public:
     map->addWay(way);
 
     RemoveDuplicateWayNodesVisitor v;
+    v.setOsmMap(map.get());
     map->visitRw(v);
 
     //no nodes should be removed from the way or map
@@ -188,6 +221,24 @@ public:
     CPPUNIT_ASSERT(map->containsNode(4));
   }
 
+  void runValidLoopTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    IoUtils::loadMap(
+      map, _inputPath + "RemoveDuplicateWayNodesVisitorTest-runValidLoopTest.osm", true);
+
+    RemoveDuplicateWayNodesVisitor v;
+    v.setOsmMap(map.get());
+    map->visitRw(v);
+
+    IoUtils::saveMap(
+      map, _outputPath + "RemoveDuplicateWayNodesVisitorTest-runValidLoopTestOut.osm");
+
+    // no nodes should be removed from the way
+    HOOT_FILE_EQUALS(
+      _inputPath + "RemoveDuplicateWayNodesVisitorTest-runValidLoopTestOut.osm",
+      _outputPath + "RemoveDuplicateWayNodesVisitorTest-runValidLoopTestOut.osm")
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveDuplicateWayNodesVisitorTest, "quick");
