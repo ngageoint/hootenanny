@@ -37,7 +37,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 #include <hoot/core/schema/ExactTagDifferencer.h>
 
 // Qt
@@ -224,11 +223,8 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   }
 
   // Due to how Way::replaceNode is being called, we could end up with some duplicate way nodes, so
-  // let's remove those here.
-  RemoveDuplicateWayNodesVisitor dupeNodesRemover;
-  LOG_INFO("\t" << dupeNodesRemover.getInitStatusMessage());
-  map->visitWaysRw(dupeNodesRemover);
-  LOG_DEBUG("\t" << dupeNodesRemover.getCompletedStatusMessage());
+  // its best to put RemoveDuplicateWayNodesVisitor in the cleaning chain immediately after this
+  // runs.
 }
 
 bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long nodeId2,

@@ -403,7 +403,7 @@ set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOs
 bool OsmUtils::endWayNodeIsCloserToNodeThanStart(const ConstNodePtr& node, const ConstWayPtr& way,
                                                  const ConstOsmMapPtr& map)
 {
-  if (way->isFirstLastNodeIdentical())
+  if (way->isSimpleLoop())
   {
     return false;
   }

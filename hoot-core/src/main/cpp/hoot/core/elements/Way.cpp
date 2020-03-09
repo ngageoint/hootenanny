@@ -294,6 +294,11 @@ bool Way::isOneWay() const
 
 bool Way::isSimpleLoop() const
 {
+  if (getNodeCount() < 2)
+  {
+    return false;
+  }
+
   return (getFirstNodeId() == getLastNodeId());
 }
 
@@ -450,16 +455,6 @@ QString Way::toString() const
   if (hasPid())
     ss << "parent id: (" << getPid() << ")" << endl;
   return QString::fromStdString(ss.str());
-}
-
-bool Way::isFirstLastNodeIdentical() const
-{
-  if (getNodeCount() < 2)
-  {
-    return false;
-  }
-
-  return (getFirstNodeId() == getLastNodeId());
 }
 
 bool Way::isClosedArea() const

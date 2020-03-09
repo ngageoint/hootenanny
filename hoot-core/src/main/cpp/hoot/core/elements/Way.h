@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_WAY_H__
 #define __ELEMENT_WAY_H__
@@ -156,12 +156,6 @@ public:
    * conditions and doesn't look for bow ties, etc.
    */
   bool isValidPolygon() const;
-
-  /**
-   * Returns True if the first and last node in the Way have the same node ID, provided the way
-   * contains two or more nodes. If way has zero or one nodes, returns false
-   */
-  bool isFirstLastNodeIdentical() const;
 
   /**
    * Returns true if there are more than 3 nodes and the first and last nodes in the Way are the
