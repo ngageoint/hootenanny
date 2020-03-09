@@ -207,12 +207,21 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   elementComparer.setOsmMap(map.get());
   if (elementComparer.isSame(e1, e2))
   {
+    ElementPtr keep = e1;
+    ElementPtr remove = e2;
+    //  Favor positive IDs, swap the keeper when e2 has a positive ID and e1 doesn't
+    if (e2->getId() > 0 && e1->getId() < 0)
+    {
+      keep = e2;
+      remove = e1;
+    }
     LOG_TRACE(
-      "Merging identical elements: " << e1->getElementId() << " and " << e2->getElementId() <<
+      "Merging identical elements: " << keep->getElementId() << " and " << remove->getElementId() <<
       "...");
     e1->setStatus(Status::Conflated);
+    keep->setStatus(Status::Conflated);
     // remove the second element and any reviews that contain the element
-    RemoveReviewsByEidOp(eid2, true).apply(result);
+    RemoveReviewsByEidOp(remove->getElementId(), true).apply(result);
 
     return false;
   }
