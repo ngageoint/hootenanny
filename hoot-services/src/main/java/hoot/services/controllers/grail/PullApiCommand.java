@@ -140,8 +140,9 @@ class PullApiCommand implements InternalCommand {
             responseStream.close();
         }
         catch (IOException ex) {
-            String msg = "Failure to pull data from the OSM API [" + url + "]" + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+            String msg = "Failure to pull data from the OSM API [" + url + "] " + ex.getMessage();
+            logger.error(msg);
+            throw new WebApplicationException(ex, Response.serverError().entity(ex.getMessage()).build());
         }
 
     }
