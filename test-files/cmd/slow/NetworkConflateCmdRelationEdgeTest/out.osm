@@ -3590,15 +3590,8 @@
     </relation>
     <relation visible="true" id="-17" timestamp="2016-02-03T11:12:44Z" version="1">
         <member type="way" ref="-2885" role=""/>
+        <member type="way" ref="-17" role=""/>
         <member type="way" ref="535381757" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
         <tag k="source" v="Microsoft Bing orbital imagery"/>
         <tag k="to" v="Kidira"/>
         <tag k="from" v="Pout"/>
@@ -3869,19 +3862,6 @@
     </relation>
     <relation visible="true" id="4828569" timestamp="2019-07-13T01:47:04Z" version="114" changeset="72201144" user="geo_roads" uid="6849512">
         <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
         <tag k="to" v="Kidira"/>
         <tag k="from" v="Pout"/>
         <tag k="route" v="road"/>
@@ -3892,19 +3872,6 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="6134983" timestamp="2019-04-17T01:34:32Z" version="48" changeset="69291497" user="dancingVJL" uid="8392762">
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-17" role=""/>
         <member type="way" ref="-17" role=""/>
         <tag k="int_name" v="TAH 1-SN"/>
         <tag k="is_in:country_code" v="SN"/>

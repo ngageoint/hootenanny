@@ -39,6 +39,7 @@
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmUtils.h>
@@ -89,6 +90,7 @@ _matchedBy(HighwayMatch::MATCH_NAME)
 
 void HighwaySnapMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
+  LOG_TRACE("Applying HighwaySnapMerger...");
   LOG_VART(hoot::toString(_pairs));
   LOG_VART(hoot::toString(replaced));
 
@@ -197,6 +199,33 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   LOG_TRACE("HighwaySnapMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
   LOG_TRACE("HighwaySnapMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
+  // If the two elements being merged are identical, then there's no point of going through
+  // splitting and trying to match sections of them together. Just set the match equal to the
+  // first element.
+  ElementComparer elementComparer;
+  elementComparer.setIgnoreElementId(true);
+  elementComparer.setOsmMap(map.get());
+  if (elementComparer.isSame(e1, e2))
+  {
+    ElementPtr keep = e1;
+    ElementPtr remove = e2;
+    //  Favor positive IDs, swap the keeper when e2 has a positive ID and e1 doesn't
+    if (e2->getId() > 0 && e1->getId() < 0)
+    {
+      keep = e2;
+      remove = e1;
+    }
+    LOG_TRACE(
+      "Merging identical elements: " << keep->getElementId() << " and " << remove->getElementId() <<
+      "...");
+    e1->setStatus(Status::Conflated);
+    keep->setStatus(Status::Conflated);
+    // remove the second element and any reviews that contain the element
+    RemoveReviewsByEidOp(remove->getElementId(), true).apply(result);
+
+    return false;
+  }
+
   // split w2 into sublines
   WaySublineMatchString match;
   try
@@ -274,8 +303,13 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       LOG_VART(wMatch->getId());
 
       const long pid = Way::getPid(w1, w2);
-      wMatch->setPid(pid);
-      LOG_TRACE("Set PID: " << pid << " on: " << wMatch->getElementId() << " (e1Match).");
+      // If the the parent IDs for both matched ways are empty, we won't write the empty ID to the
+      // match portion to possibly avoid overwriting a pre-existing valid parent ID.
+      if (pid != WayData::PID_EMPTY)
+      {
+        wMatch->setPid(pid);
+        LOG_TRACE("Set PID: " << pid << " on: " << wMatch->getElementId() << " (e1Match).");
+      }
 
       //  Keep the original ID from e1 for e1Match
       swapWayIds = true;

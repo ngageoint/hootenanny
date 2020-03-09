@@ -7,3 +7,5 @@ Only one of the divided bridges named Viaducto: Nueva República currently repla
 a review, but unfortunately reviews are currently thrown out with Attribute Conflation.  So, this test needs fixed if possible to where both 
 bridges get merged.
 
+Note: Look at the Northwestern corner of Av. Sucre. There is a two node crossing street present in the first input, not part of Av. Sucre, and not present in the second input. This road gets joined to Av. Sucre during way joining by WayJoinerAdvanced::_joinAtNode. It should not be merged with Av. Sucre.
+
