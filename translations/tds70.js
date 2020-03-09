@@ -756,7 +756,7 @@ tds70 = {
             {
                 for (var val in tds70.rules.fCodeMap[row][1])
                 {
-                    if (llayerName == tds70.rules.fCodeMap[row][1][val])
+                    if (llayerName.match(tds70.rules.fCodeMap[row][1][val]))
                     {
                         attrs.F_CODE = tds70.rules.fCodeMap[row][0];
                         break;
@@ -2079,6 +2079,10 @@ tds70 = {
                 if (tds70.ge4Lookup[attrs[ge4attr[i]]])
                 {
                     attrs[ge4attr[i]] = tds70.ge4Lookup[attrs[ge4attr[i]]];
+                }
+                else if (tds70.ge4Lookup['ge:GENC:3:1-2:' + attrs[ge4attr[i]]])
+                {
+                    attrs[ge4attr[i]] = tds70.ge4Lookup['ge:GENC:3:1-2:' + attrs[ge4attr[i]]];
                 }
                 else
                 {
