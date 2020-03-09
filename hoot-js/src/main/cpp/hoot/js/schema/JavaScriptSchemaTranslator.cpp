@@ -285,10 +285,10 @@ void JavaScriptSchemaTranslator::_init()
   {
     _toOsmFunctionName = "translateAttributes";
   }
-  else
-  {
-    throw HootException("A 'translateToOsm' function must be defined.");
-  }
+//  else
+//  {
+//    throw HootException("A 'translateToOsm' function must be defined.");
+//  }
 
   // Debug Stuff - Dump the object properties
 //  Handle<Object> hoot = tObj->Get(toV8("hoot"))->ToObject();
