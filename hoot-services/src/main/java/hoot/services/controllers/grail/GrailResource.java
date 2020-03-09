@@ -51,8 +51,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -85,6 +87,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -918,20 +921,28 @@ public class GrailResource {
     //still requires import of cert into server java keystore
     //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
     public static InputStream getUrlInputStreamWithNullHostnameVerifier(String urlString) throws IOException {
-        InputStream inputStream;
+        InputStream inputStream = null;
         URL url = new URL(urlString);
-        if (url.getProtocol().equalsIgnoreCase("http")) {
-            inputStream = url.openStream();
-        } else {
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setHostnameVerifier(new HostnameVerifier() {
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        if (url.getProtocol().equalsIgnoreCase("https")) {
+            ((HttpsURLConnection) conn).setHostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession sslSession) {
                     return true;
                 }
             });
-            inputStream = conn.getInputStream();
         }
+
+        try {
+            inputStream = conn.getInputStream();
+        } catch(IOException e) {
+            //read the error response body
+            String err = IOUtils.toString(conn.getErrorStream(), StandardCharsets.UTF_8);
+            logger.error(err);
+            throw new IOException(err);
+        }
+
         return inputStream;
     }
 
