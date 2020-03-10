@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_H
 #define TAGS_H
@@ -356,10 +356,10 @@ public:
   QString getDiffString(const Tags& other) const;
 
   /**
-   * TODO
+   * Determines if another set of tags intersects with this one
    *
-   * @param other
-   * @return
+   * @param other tags to compare against
+   * @return true if the tags being compared against have at least one tag in similar
    */
   bool intersects(const Tags& other) const;
 
