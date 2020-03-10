@@ -719,7 +719,8 @@ tds61 = {
             {
                 for (var val in tds61.rules.fCodeMap[row][1])
                 {
-                    if (llayerName == tds61.rules.fCodeMap[row][1][val])
+                    // if (llayerName == tds61.rules.fCodeMap[row][1][val])
+                    if (llayerName.match(tds61.rules.fCodeMap[row][1][val]))
                     {
                         attrs.F_CODE = tds61.rules.fCodeMap[row][0];
                         break;
@@ -1153,6 +1154,10 @@ tds61 = {
                 if (tds61.rules.ge4List[tags[ge4meta[i]]])
                 {
                     tags[ge4meta[i]] = tds61.rules.ge4List[tags[ge4meta[i]]];
+                }
+                else if (tds61.rules.ge4List['ge:GENC:3:1-2:' + tags[ge4meta[i]]])
+                {
+                    tags[ge4meta[i]] = tds61.rules.ge4List['ge:GENC:3:1-2:' + tags[ge4meta[i]]];
                 }
                 else
                 {

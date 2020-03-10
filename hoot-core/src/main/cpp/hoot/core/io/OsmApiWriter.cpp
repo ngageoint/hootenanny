@@ -349,12 +349,24 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           {
             if (_changesetClosed(info->response))
             {
-              //  The changeset was closed already so set the ID to -1 and reprocess
-              id = -1;
-              //  Push the changeset back on the queue
-              _workQueueMutex.lock();
-              _workQueue.push(workInfo);
-              _workQueueMutex.unlock();
+              if ((int)workInfo->size() > _maxChangesetSize / 2)
+              {
+                //  Split the changeset into half so that it is smaller and won't fail
+                ChangesetInfoPtr split = _changeset.splitChangeset(workInfo);
+                _workQueueMutex.lock();
+                _workQueue.push(workInfo);
+                _workQueue.push(split);
+                _workQueueMutex.unlock();
+              }
+              else
+              {
+                //  The changeset was closed already so set the ID to -1 and reprocess
+                id = -1;
+                //  Push the changeset back on the queue
+                _workQueueMutex.lock();
+                _workQueue.push(workInfo);
+                _workQueueMutex.unlock();
+              }
               //  Loop back around to work on the next changeset
               continue;
             }
