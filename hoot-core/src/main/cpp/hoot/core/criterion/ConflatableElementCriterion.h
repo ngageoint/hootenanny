@@ -57,8 +57,9 @@ public:
    * Determines which criteria consider an element as conflatable
    *
    * @param e the element to determine conflatability of
-   * @param map TODO
-   * @param ignoreGenericConflators TODO
+   * @param map the map containing the input element
+   * @param ignoreGenericConflators if true criterion supporting generic conflation are suppressed
+   * from output
    * @return a list of ConflatableElementCriterion class names that consider the element as
    * conflatable
    */
