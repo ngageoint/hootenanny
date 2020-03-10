@@ -436,4 +436,7 @@
 {"name":"FCODE=ZI031","geometries":["area"],"description":"Dataset","isA":"FCODE","objectType":"tag","aliases":["F_CODE=ZI031"]},
 {"name":"FCODE=ZI039","geometries":["area"],"description":"Entity Collection Metadata","isA":"FCODE","objectType":"tag","aliases":["F_CODE=ZI039"]},
 {"name":"FCODE=ZI040","geometries":["area"],"description":"Spatial Metadata Entity Collection","isA":"FCODE","objectType":"tag","aliases":["F_CODE=ZI040"]},
+{"name":"FCODE=HC100","geometries":["node","area"],"description":"Linguistic Entity","isA":"FCODE","objectType":"tag","aliases":["F_CODE=HC100"]},
+{"name":"FCODE=HG210","geometries":["node","area"],"description":"Belief System","isA":"FCODE","objectType":"tag","aliases":["F_CODE=HG210"]},
+{"name":"FCODE=ZI113","geometries":["node","area"],"description":"Ethnic Group","isA":"FCODE","objectType":"tag","aliases":["F_CODE=ZI113"]},
 {"name":"FCODE=ZI041","geometries":["area"],"description":"Non-spatial Metadata Entity Collection","isA":"FCODE","objectType":"tag","aliases":["F_CODE=ZI041"]}]
