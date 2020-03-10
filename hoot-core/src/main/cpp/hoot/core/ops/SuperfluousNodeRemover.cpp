@@ -52,6 +52,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, SuperfluousNodeRemover)
 
 SuperfluousNodeRemover::SuperfluousNodeRemover() :
 _ignoreInformationTags(false),
+_unallowedOrphanKvps(ConfigOptions().getSuperfluousNodeRemoverUnallowedOrphanKvps()),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
@@ -61,6 +62,8 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   _numAffected = 0;     // _numAffected reflects the actual number of nodes removed
   _numProcessed = 0;    // _numProcessed reflects total elements processed
   _usedNodes.clear();
+
+  // Let's collect the IDs of all the nodes we can't remove first.
 
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
@@ -111,7 +114,17 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     const Node* n = it->second.get();
     LOG_VART(n->getElementId());
     LOG_VART(n->getTags().getNonDebugCount());
-    if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
+
+    // There original reason behind adding this is that there a potential bug in
+    // HighwaySnapMerger::_snapEnds that will leave turning circle nodes orphaned from roads.
+    // Turning circles are always expected to be a road way node. If its an actual bug, it should
+    // eventually be fixed, but this logic will clean them up for the time being. The types we allow
+    // to be orphaned are configurable in case we ever need to add others.
+    if (_usedNodes.find(n->getId()) == _usedNodes.end() &&
+        n->getTags().hasAnyKvp(_unallowedOrphanKvps))
+    {
+    }
+    else if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
     {
       _usedNodes.insert(n->getId());
     }
@@ -138,6 +151,8 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     MapProjector::projectToWgs84(reprojected);
     nodesWgs84 = &reprojected->getNodes();
   }
+
+  // Now, let's remove any that aren't in our do not remove list.
 
   _numProcessed = 0;
   for (NodeMap::const_iterator it = nodesWgs84->begin(); it != nodesWgs84->end(); ++it)
@@ -176,18 +191,6 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-void SuperfluousNodeRemover::readObject(QDataStream& is)
-{
-  bool hasBounds;
-  is >> hasBounds;
-  if (hasBounds)
-  {
-    double minx, miny, maxx, maxy;
-    is >> minx >> miny >> maxx >> maxy;
-    _bounds = Envelope(minx, maxx, miny, maxy);
-  }
-}
-
 long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
                                          const bool ignoreInformationTags,
                                          const geos::geom::Envelope& e)
@@ -207,6 +210,18 @@ long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
 void SuperfluousNodeRemover::setBounds(const Envelope &bounds)
 {
   _bounds = bounds;
+}
+
+void SuperfluousNodeRemover::readObject(QDataStream& is)
+{
+  bool hasBounds;
+  is >> hasBounds;
+  if (hasBounds)
+  {
+    double minx, miny, maxx, maxy;
+    is >> minx >> miny >> maxx >> maxy;
+    _bounds = Envelope(minx, maxx, miny, maxy);
+  }
 }
 
 void SuperfluousNodeRemover::writeObject(QDataStream& os) const

@@ -36,6 +36,7 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/elements/Tags.h>
 
 // Standard
 #include <set>
@@ -96,6 +97,7 @@ protected:
   geos::geom::Envelope _bounds;
   std::set<long> _usedNodes;
   bool _ignoreInformationTags;
+  QStringList _unallowedOrphanKvps;
 
   int _taskStatusUpdateInterval;
 };

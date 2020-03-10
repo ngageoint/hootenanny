@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Tags.h"
@@ -868,6 +868,18 @@ Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
     tags.appendValue(vertex.key, vertex.value);
   }
   return tags;
+}
+
+bool Tags::intersects(const Tags& other) const
+{
+  for (Tags::const_iterator tagItr = other.begin(); tagItr != other.end(); ++tagItr)
+  {
+    if (get(tagItr.key()) == other.get(tagItr.key()))
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 QString Tags::getDiffString(const Tags& other) const

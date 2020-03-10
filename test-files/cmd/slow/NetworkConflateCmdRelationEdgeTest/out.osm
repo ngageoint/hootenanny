@@ -290,10 +290,6 @@
     <node visible="true" id="3668869262" timestamp="2019-06-03T05:49:37Z" version="3" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2793880999999985" lon="-16.5246874000000012"/>
     <node visible="true" id="3668869263" timestamp="2015-07-27T15:26:14Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2808391999999991" lon="-16.5189808999999990"/>
     <node visible="true" id="3668869264" timestamp="2015-07-27T15:26:14Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2794101999999938" lon="-16.5175182000000014"/>
-    <node visible="true" id="3668869265" timestamp="2015-07-27T15:26:14Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2803990999999986" lon="-16.5235944000000003">
-        <tag k="highway" v="turning_circle"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="3668869266" timestamp="2017-10-28T13:41:08Z" version="3" changeset="53318272" user="ibou9" uid="6841193" lat="15.2811835999999985" lon="-16.5187700000000000"/>
     <node visible="true" id="3668869267" timestamp="2015-07-27T15:26:14Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2873114999999977" lon="-16.5176340000000010">
         <tag k="place" v="hamlet"/>
@@ -3556,7 +3552,7 @@
         <tag k="noname" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <relation visible="true" id="-336" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-335" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="relation" ref="6134983" role="reviewee"/>
         <member type="relation" ref="-2" role="reviewee"/>
         <tag k="hoot:review:type" v="Line"/>
@@ -3567,25 +3563,15 @@
         <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-335" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-334" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="281183768" role="reviewee"/>
         <member type="way" ref="-17" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="2"/>
+        <tag k="hoot:review:sort_order" v="1"/>
         <tag k="hoot:review:note" v="Ambiguous intersection match. Possible dogleg? Very short segment? Please verify merge and fix as needed."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:score" v="-1"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-334" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="3668857771" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="1"/>
-        <tag k="hoot:review:note" v="Somewhat similar (0.2m) - very close together, similar POI type"/>
-        <tag k="hoot:review:members" v="1"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-17" timestamp="2016-02-03T11:12:44Z" version="1">

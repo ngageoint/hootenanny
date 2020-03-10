@@ -315,6 +315,8 @@ void OsmSchemaJs::isSpecificallyConflatable(
     crit.setGeometryTypeFilter(GeometryTypeCriterion::typeFromString(geometryTypeFilterStr));
   }
   isSpecificallyConflatable = !crit.isSatisfied(e);
+  LOG_VART(e);
+  LOG_VART(isSpecificallyConflatable);
 
   args.GetReturnValue().Set(Boolean::New(current, isSpecificallyConflatable));
 }
