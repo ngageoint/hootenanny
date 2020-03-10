@@ -290,17 +290,19 @@ function additiveScore(map, e1, e2) {
 
     if (isSuperClose(e1, e2)) 
     {
-      // We may want to rethink this at some point, but adding a list here of things that don't normally have 
-      // names and we want them to have a better chance of matching if they are close together and their types 
-      // match exactly.
-      /*if ((tags1.get("railway") == "level_crossing" && tags2.get("railway") == "level_crossing"))
+      // Adding a list here of things that don't normally have names and we want them to have a better 
+      // chance of matching if they are close together and their types match exactly. Specifically,
+      // choosing to handle railway=level_crossing as a POI rather than as part of railway conflation
+      // as its easier to implement and there are several other railway POI types being used. You *could*
+      // handle it as part of railway conflation, though.
+      if ((tags1.get("railway") == "level_crossing" && tags2.get("railway") == "level_crossing"))
       {
         score += 1.0;
       }
       else
-      {*/ 
+      {
         score += 0.5;
-      //}
+      }
       reason.push("very close together");
     }
 
