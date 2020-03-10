@@ -35,6 +35,7 @@ namespace hoot
 class ConflatableElementCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ConflatableElementCriterionTest);
+  // TODO: need ignoreGenericConflators=true test
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -53,18 +54,18 @@ public:
     // This is a bit maintenance-prone as it will require an updating with each new
     // ConflatableElementCriterion addition/subtraction, but that's a good thing as it will help
     // us keep track of whenever changes are made to the set of ConflatableElementCriterion.
-    CPPUNIT_ASSERT_EQUAL(9, ConflatableElementCriterion::getConflatableCriteria().size());
+    CPPUNIT_ASSERT_EQUAL(12, ConflatableElementCriterion::getConflatableCriteria().size());
 
     const QStringList poiConflatableCriteria =
       ConflatableElementCriterion::getConflatableCriteriaForElement(
-        TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes")));
+        TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes")), map);
     CPPUNIT_ASSERT_EQUAL(2, poiConflatableCriteria.size());
     CPPUNIT_ASSERT(poiConflatableCriteria.contains("hoot::PoiCriterion"));
     CPPUNIT_ASSERT(poiConflatableCriteria.contains("hoot::PoiPolygonPoiCriterion"));
 
     const QStringList buildingConflatableCriteria =
       ConflatableElementCriterion::getConflatableCriteriaForElement(
-        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("building", "yes")));
+        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("building", "yes")), map);
     CPPUNIT_ASSERT_EQUAL(3, buildingConflatableCriteria.size());
     CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::AreaCriterion"));
     CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::BuildingCriterion"));
@@ -73,7 +74,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       0,
       ConflatableElementCriterion::getConflatableCriteriaForElement(
-        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("blah", "blah"))).size());
+        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("blah", "blah")), map)
+      .size());
   }
 };
 

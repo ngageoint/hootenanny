@@ -45,6 +45,7 @@ LinearCriterion::LinearCriterion()
 
 bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e->getElementId());
   bool result = false;
 
   if (e->getElementType() == ElementType::Node)
@@ -63,6 +64,7 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
     if (way->isClosedArea())
     {
+      LOG_TRACE("Way is a closed area, so fails LinearCriterion.");
       return false;
     }
   }
@@ -78,6 +80,7 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
       break;
     }
   }
+  LOG_VART(result);
 
   return result;
 }

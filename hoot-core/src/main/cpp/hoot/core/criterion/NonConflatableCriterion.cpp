@@ -38,14 +38,16 @@ HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 
 NonConflatableCriterion::NonConflatableCriterion() :
 _ignoreChildren(false),
-_geometryTypeFilter(GeometryTypeCriterion::GeometryType::Unknown)
+_geometryTypeFilter(GeometryTypeCriterion::GeometryType::Unknown),
+_ignoreGenericConflators(false)
 {
 }
 
 NonConflatableCriterion::NonConflatableCriterion(ConstOsmMapPtr map) :
 _map(map),
 _ignoreChildren(false),
-_geometryTypeFilter(GeometryTypeCriterion::GeometryType::Unknown)
+_geometryTypeFilter(GeometryTypeCriterion::GeometryType::Unknown),
+_ignoreGenericConflators(false)
 {
 }
 
@@ -71,6 +73,17 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
       if (mapConsumer != 0)
       {
         mapConsumer->setOsmMap(_map.get());
+      }
+    }
+
+    if (_ignoreGenericConflators)
+    {
+      std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+        std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+      assert(conflatableCrit);
+      if (!conflatableCrit->supportsSpecificConflation())
+      {
+        continue;
       }
     }
 

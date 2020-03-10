@@ -27,6 +27,7 @@
 #ifndef POICRITERION_H
 #define POICRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
@@ -55,6 +56,7 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
+  virtual bool supportsSpecificConflation() const { return true; }
 };
 
 }

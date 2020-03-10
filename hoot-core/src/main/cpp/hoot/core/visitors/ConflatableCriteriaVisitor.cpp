@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -42,8 +43,10 @@ ConflatableCriteriaVisitor::ConflatableCriteriaVisitor()
 
 void ConflatableCriteriaVisitor::visit(const std::shared_ptr<Element>& e)
 {
+  LOG_VART(e->getElementId());
+
   const QStringList conflatableCriteria =
-    ConflatableElementCriterion::getConflatableCriteriaForElement(e);
+    ConflatableElementCriterion::getConflatableCriteriaForElement(e, _map);
   LOG_VART(conflatableCriteria.size());
   QString conflatableCriteriaStr;
   for (int i = 0; i < conflatableCriteria.size(); i++)
@@ -52,7 +55,7 @@ void ConflatableCriteriaVisitor::visit(const std::shared_ptr<Element>& e)
   }
   conflatableCriteriaStr.chop(1);
   LOG_VART(conflatableCriteriaStr);
-  e->getTags()[MetadataTags::HootConflatableCriteria()] =  conflatableCriteriaStr;
+  e->getTags()[MetadataTags::HootConflatableCriteria()] = conflatableCriteriaStr;
 }
 
 }

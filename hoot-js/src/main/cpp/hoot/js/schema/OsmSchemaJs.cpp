@@ -306,6 +306,7 @@ void OsmSchemaJs::isSpecificallyConflatable(
 
   OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
   NonConflatableCriterion crit(mapJs->getConstMap());
+  crit.setIgnoreGenericConflators(true);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
 

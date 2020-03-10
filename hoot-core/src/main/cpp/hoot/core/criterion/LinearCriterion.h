@@ -29,7 +29,7 @@
 #define LINEARCRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Identifies linear features
  */
-class LinearCriterion : public GeometryTypeCriterion
+class LinearCriterion : public ConflatableElementCriterion
 {
 public:
 
@@ -56,6 +56,7 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
+  virtual bool supportsSpecificConflation() const { return false; }
 };
 
 }

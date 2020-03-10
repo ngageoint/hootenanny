@@ -9,11 +9,11 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374172"/>
     </node>
-    <node visible="true" id="-374171" timestamp="2019-04-25T16:53:54Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7458592000000070" lon="-17.5225028000000016">
+    <node visible="true" id="-374171" timestamp="2019-04-25T16:53:54Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7458591999999999" lon="-17.5225028000000016">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374171"/>
     </node>
-    <node visible="true" id="-374170" timestamp="2019-04-25T16:53:54Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7457704999999972" lon="-17.5222593000000018">
+    <node visible="true" id="-374170" timestamp="2019-04-25T16:53:54Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7457705000000008" lon="-17.5222593000000018">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374170"/>
     </node>
@@ -33,11 +33,11 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374166"/>
     </node>
-    <node visible="true" id="-374165" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7458140999999987" lon="-17.5225317999999994">
+    <node visible="true" id="-374165" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7458140999999969" lon="-17.5225317999999994">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374165"/>
     </node>
-    <node visible="true" id="-374164" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7456300000000020" lon="-17.5223954999999982">
+    <node visible="true" id="-374164" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7456299999999985" lon="-17.5223954999999982">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374164"/>
     </node>
@@ -45,7 +45,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374163"/>
     </node>
-    <node visible="true" id="-374162" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7456421000000031" lon="-17.5223419999999983">
+    <node visible="true" id="-374162" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7456420999999960" lon="-17.5223419999999983">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374162"/>
     </node>
@@ -53,17 +53,23 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374161"/>
     </node>
-    <node visible="true" id="-374160" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7456666999999921" lon="-17.5224963000000002">
+    <node visible="true" id="-374160" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7456666999999957" lon="-17.5224963000000002">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374160"/>
     </node>
-    <node visible="true" id="-374159" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7456730000000036" lon="-17.5222973000000017">
+    <node visible="true" id="-374159" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7456730000000000" lon="-17.5222973000000017">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374159"/>
     </node>
-    <node visible="true" id="-374158" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7458223000000075" lon="-17.5222717999999986">
+    <node visible="true" id="-374158" timestamp="2019-04-25T16:53:53Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7458223000000039" lon="-17.5222717999999986">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-374158"/>
+    </node>
+    <node visible="true" id="-374108" timestamp="2019-04-25T16:53:31Z" version="3" user="Jean-Marc Liotier" uid="160042" lat="14.7445850000000025" lon="-17.5222892999999971">
+        <tag k="hoot:status" v="2"/>
+        <tag k="barrier" v="gate"/>
+        <tag k="hoot:id" v="-374108"/>
+        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-374024" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7445450000000005" lon="-17.5222855164797657">
         <tag k="hoot:status" v="4"/>

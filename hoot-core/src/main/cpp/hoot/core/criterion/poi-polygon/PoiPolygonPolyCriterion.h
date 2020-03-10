@@ -59,6 +59,8 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
+  virtual bool supportsSpecificConflation() const { return true; }
+
 private:
 
   QStringList _tagIgnoreList;

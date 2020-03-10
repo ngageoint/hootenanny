@@ -29,7 +29,7 @@
 #define POLYGON_CRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Identifies polygon features
  */
-class PolygonCriterion : public GeometryTypeCriterion
+class PolygonCriterion : public ConflatableElementCriterion
 {
 public:
   static std::string className() { return "hoot::PolygonCriterion"; }
@@ -55,6 +55,8 @@ public:
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
+
+  virtual bool supportsSpecificConflation() const { return false; }
 };
 
 }

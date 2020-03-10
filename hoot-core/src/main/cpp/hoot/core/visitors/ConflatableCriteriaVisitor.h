@@ -29,11 +29,13 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class ConflatableCriteriaVisitor : public ElementVisitor
+class ConflatableCriteriaVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 
 public:
@@ -48,6 +50,12 @@ public:
   { return "Marks elements with all criterion classes that consider them conflatable"; }
 
   virtual std::string getClassName() const { return className(); }
+
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+private:
+
+  ConstOsmMapPtr _map;
 };
 
 }

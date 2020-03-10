@@ -48,7 +48,7 @@ _map(map)
 
 bool AreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  //LOG_VART(e->getElementId());
+  LOG_VART(e->getElementId());
   _currentElementId = e->getElementId();
   return isSatisfied(e->getTags(), e->getElementType());
 }

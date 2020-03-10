@@ -64,6 +64,7 @@ public:
       map, "test-files/conflate/unified/AllDataTypesA.osm", false, Status::Unknown1);
 
     ConflatableCriteriaVisitor uut;
+    uut.setOsmMap(map.get());
     map->visitRw(uut);
 
     const QString outFileName = "ConflatableCriteriaVisitorTest-runBasicTest.osm";
