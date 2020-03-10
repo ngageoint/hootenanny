@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTTYPE_H
 #define ELEMENTTYPE_H
@@ -45,7 +45,8 @@ public:
     Node = 0,
     Way = 1,
     Relation = 2,
-    Unknown
+    Unknown = 3,
+    Max = 3
   } Type;
 
   ElementType() : _type(Unknown) { }

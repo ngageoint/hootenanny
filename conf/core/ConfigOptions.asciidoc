@@ -578,7 +578,7 @@ for conflation campaigns
 === changeset.max.size
 
 * Data Type: long
-* Default Value: `50000`
+* Default Value: `10000`
 
 The maximum allowed element size of an OSM changeset that can be written to an OSM API database
 in a single changeset.
