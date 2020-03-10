@@ -870,6 +870,18 @@ Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
   return tags;
 }
 
+bool Tags::intersects(const Tags& other) const
+{
+  for (Tags::const_iterator tagItr = other.begin(); tagItr != other.end(); ++tagItr)
+  {
+    if (get(tagItr.key()) == other.get(tagItr.key()))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 QString Tags::getDiffString(const Tags& other) const
 {
   if (this->operator ==(other))

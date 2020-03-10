@@ -687,6 +687,7 @@ See also:
 
 * Data Type: list
 * Default Value:
+** `hoot::PoiPolygonInvalidReviewNodeRemover`
 ** `hoot::SuperfluousNodeRemover`
 ** `hoot::SmallHighwayMerger`
 ** `hoot::ReplaceRoundabouts`
@@ -4389,6 +4390,16 @@ Adds the specified status to elements.  Valid values are: 'Unknown1', 'Unknown2'
 * Default Value: `${HOOT_HOME}/conf/core/streetTypes`
 
 Flat file containing street types and their abbreviations.
+
+=== superfluous.node.remover.unallowed.orphan.kvps
+
+* Data Type: list
+* Default Value:
+** `highway=turning_circle`
+
+List of node key/value pairs that should never be orphaned from ways. SuperfluousNodeRemover will
+remove these if they are not part of a way or relation. Generally, only add to this list node
+features that conflation is unable to handle. Keep the list alphabetized by key, then value.
 
 === tag.ancestor.differencer.name
 

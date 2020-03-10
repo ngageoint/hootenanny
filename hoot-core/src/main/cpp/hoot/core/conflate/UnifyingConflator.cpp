@@ -47,7 +47,6 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/ElementInIdListCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonInvalidReviewNodeRemover.h>
 
 // standard
 #include <algorithm>
@@ -314,14 +313,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     // WARNING: Enabling this could result in a lot of files being generated.
     //OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
   }
-
-  // Some cleanup due to a bug that has to be done. See the PoiPolygonInvalidReviewNodeRemover for
-  // more detail.
-  PoiPolygonInvalidReviewNodeRemover reviewCleaner;
-  LOG_INFO(reviewCleaner.getInitStatusMessage());
-  reviewCleaner.apply(map);
-  LOG_INFO(reviewCleaner.getCompletedStatusMessage());
-
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 
   LOG_TRACE(SystemInfo::getMemoryUsageString());

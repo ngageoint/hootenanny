@@ -37,7 +37,6 @@
 #include <QStringList>
 
 // Standard
-// needed by some dev environments
 #include <stdint.h>
 #include <string>
 
@@ -355,6 +354,14 @@ public:
    * @return a tag diff string
    */
   QString getDiffString(const Tags& other) const;
+
+  /**
+   * TODO
+   *
+   * @param other
+   * @return
+   */
+  bool intersects(const Tags& other) const;
 
 private:
 

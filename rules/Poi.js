@@ -58,6 +58,7 @@ var distances = [
     {k:'building',  v:'train_station',        match:500,      review:1000},
     {k:'barrier',   v:'toll_booth',           match:25,       review:50},
     {k:'barrier',   v:'border_control',       match:50,       review:100},
+    {k:'highway',   v:'turning_circle',       match:5,        review:15},
     {k:'historic',                            match:100,      review:200},
     {k:'landuse',                             match:500,      review:1000},
     {k:'landuse',   v:'built_up_area',        match:2000,     review:3000},
@@ -73,6 +74,7 @@ var distances = [
     {k:'place',     v:'village',              match:2000,     review:3000},
     {k:'power',                               match:25,       review:50},
     {k:'railway',                             match:250,      review:500},
+    {k:'railway',   v:'level_crossing',       match:25,       review:50},
     {k:'railway',   v:'station',              match:500,      review:1000},
     {k:'shop',                                match:100,      review:200},
     {k:'sport',                               match:50,       review:100},
@@ -283,10 +285,23 @@ function additiveScore(map, e1, e2) {
         }
     }
 
+    var tags1 = e1.getTags();
+    var tags2 = e2.getTags();
 
-    if (isSuperClose(e1, e2)) {
+    if (isSuperClose(e1, e2)) 
+    {
+      // We may want to rethink this at some point, but adding a list here of things that don't normally have 
+      // names and we want them to have a better chance of matching if they are close together and their types 
+      // match exactly.
+      /*if ((tags1.get("railway") == "level_crossing" && tags2.get("railway") == "level_crossing"))
+      {
+        score += 1.0;
+      }
+      else
+      {*/ 
         score += 0.5;
-        reason.push("very close together");
+      //}
+      reason.push("very close together");
     }
 
     var typeScore = 0;
@@ -319,7 +334,6 @@ function additiveScore(map, e1, e2) {
         typeScore += 1;
         reason.push("similar power (electrical) type");
     }
-
 
     // if at least one feature contains a place
     var placeCount = 0;

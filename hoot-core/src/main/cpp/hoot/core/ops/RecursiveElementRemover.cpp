@@ -152,6 +152,7 @@ void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, Elemen
     const WayPtr& w = map->getWay(eid.getId());
 
     std::vector<long> nodes = w->getNodeIds();
+    LOG_VART(nodes);
     w->clear();
     for (size_t i = 0; i < nodes.size(); i++)
     {
