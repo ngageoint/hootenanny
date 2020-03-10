@@ -51,6 +51,7 @@ XmlChangeset::XmlChangeset()
     _ways(ChangesetType::TypeMax),
     _relations(ChangesetType::TypeMax),
     _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
     _sentCount(0),
     _processedCount(0),
     _failedCount(0)
@@ -62,6 +63,7 @@ XmlChangeset::XmlChangeset(const QString& changeset)
     _ways(ChangesetType::TypeMax),
     _relations(ChangesetType::TypeMax),
     _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
     _sentCount(0),
     _processedCount(0),
     _failedCount(0)
@@ -532,6 +534,7 @@ bool XmlChangeset::addNode(ChangesetInfoPtr& changeset, ChangesetType type, Chan
   //  Only add the nodes that are "sendable"
   if (canSend(node))
   {
+    //  No need to getObjectCount() like addWay and addRelation because it is either 0 or 1
     //  Add create nodes if the ID map's ID is negative, modify IDs don't matter
     if ((type == ChangesetType::TypeCreate && _idMap.getId(ElementType::Node, node->id()) < 0) ||
          type != ChangesetType::TypeDelete)
@@ -613,8 +616,14 @@ bool XmlChangeset::addWays(ChangesetInfoPtr& changeset, ChangesetType type)
 
 bool XmlChangeset::addWay(ChangesetInfoPtr& changeset, ChangesetType type, ChangesetWay* way)
 {
+  //  Check if the way is able to be sent
   if (canSend(way))
   {
+    //  The number of elements in this way (fully "hydrated") cannot exceed the max size in a changeset
+    ElementCountSet elements(ElementType::Max);
+    size_t count = getObjectCount(way, elements);
+    if (count + changeset->size() > (size_t)_maxChangesetSize)
+      return false;
     bool sendable = true;
     //  Only creates/modifies require pre-processing
     if (type != ChangesetType::TypeDelete)
@@ -736,7 +745,8 @@ bool XmlChangeset::canMoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& /*dest
   if (type == ChangesetType::TypeDelete)
     return source->size() == 1;
   //  Get the count of nodes and way that make up this "change"
-  size_t count = getObjectCount(source, way);
+  ElementCountSet elements(ElementType::Max);
+  size_t count = getObjectCount(source, way, elements);
   //  Compare that count to the size left in the source changeset
   return source->size() != count;
 }
@@ -757,8 +767,14 @@ bool XmlChangeset::addRelations(ChangesetInfoPtr& changeset, ChangesetType type)
 
 bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, ChangesetRelation* relation)
 {
+  //  Check if the relation is able to be sent
   if (canSend(relation))
   {
+    //  The number of elements in this relation (fully "hydrated") cannot exceed the max size in a changeset
+    ElementCountSet elements(ElementType::Max);
+    size_t count = getObjectCount(relation, elements);
+    if (count + changeset->size() > (size_t)_maxChangesetSize)
+      return false;
     bool sendable = true;
     //  Deletes require no pre-processing
     if (type != ChangesetType::TypeDelete)
@@ -936,43 +952,89 @@ bool XmlChangeset::canMoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& /
   if (type == ChangesetType::TypeDelete)
     return source->size() == 1;
   //  Get the count of nodes, ways, and relations that make up this "change"
-  size_t count = getObjectCount(source, relation);
+  ElementCountSet elements(ElementType::Max);
+  size_t count = getObjectCount(source, relation, elements);
   //  Compare that count to the size left in the source changeset
   return source->size() != count;
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& /*changeset*/, ChangesetNode* node)
+size_t XmlChangeset::getObjectCount(ChangesetNode* node, ElementCountSet& elements)
 {
+  ChangesetInfoPtr empty;
+  return getObjectCount(empty, node, elements);
+}
+
+size_t XmlChangeset::getObjectCount(ChangesetWay* way, ElementCountSet& elements)
+{
+  ChangesetInfoPtr empty;
+  return getObjectCount(empty, way, elements);
+}
+
+size_t XmlChangeset::getObjectCount(ChangesetRelation* relation, ElementCountSet& elements)
+{
+  ChangesetInfoPtr empty;
+  return getObjectCount(empty, relation, elements);
+}
+
+size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& /*changeset*/, ChangesetNode* node, ElementCountSet& elements)
+{
+  //  Cannot count NULL nodes
   if (node == NULL)
     return 0;
+  //  Do not recount nodes already counted
+  if (elements[ElementType::Node].find(node->id()) != elements[ElementType::Node].end())
+    return 0;
+  //  Record the node ID in the node elements set
+  elements[ElementType::Node].insert(node->id());
   //  Nodes count as one object
   return 1;
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* way)
+size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements)
 {
   if (way == NULL)
     return 0;
   //  Get the count of nodes and way that make up this "change"
-  size_t count = 1;
+  size_t count = 0;
+  //  Increment the count if it isn't already found in the element set
+  if (elements[ElementType::Way].find(way->id()) == elements[ElementType::Way].end())
+  {
+    elements[ElementType::Way].insert(way->id());
+    ++count;
+  }
+  //  Iterate all of the nodes
   for (int i = 0; i < way->getNodeCount(); ++i)
   {
     long id = way->getNode(i);
+    //  Look for the node in the list of nodes
     for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
     {
-      if (changeset->contains(ElementType::Node, (ChangesetType)current_type, id))
-        ++count;
+      //  Do not recount this node
+      if (!changeset || changeset->contains(ElementType::Node, (ChangesetType)current_type, id))
+      {
+        ChangesetNode* node = NULL;
+        if (_allNodes.find(id) != _allNodes.end())
+          node = dynamic_cast<ChangesetNode*>(_allNodes[id].get());
+        count += getObjectCount(changeset, node, elements);
+      }
     }
   }
   return count;
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelation* relation)
+size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelation* relation, ElementCountSet& elements)
 {
   if (relation == NULL)
     return 0;
   //  Get the count of nodes, ways, and relations that make up this "change"
-  size_t count = 1;
+  size_t count = 0;
+  //  Increment the count if the relation isn't already found in the element set
+  if (elements[ElementType::Relation].find(relation->id()) == elements[ElementType::Relation].end())
+  {
+    elements[ElementType::Relation].insert(relation->id());
+    ++count;
+  }
+  //  Iterate all of the relation elements
   for (int i = 0; i < relation->getMemberCount(); ++i)
   {
     ChangesetRelationMember& member = relation->getMember(i);
@@ -982,16 +1044,26 @@ size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelati
     {
       for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
       {
-        if (changeset->contains(ElementType::Node, (ChangesetType)current_type, id))
-          count += getObjectCount(changeset, dynamic_cast<ChangesetNode*>(_allNodes[id].get()));
+        if (!changeset || changeset->contains(ElementType::Node, (ChangesetType)current_type, id))
+        {
+          ChangesetNode* node = NULL;
+          if (_allNodes.find(id) != _allNodes.end())
+            node = dynamic_cast<ChangesetNode*>(_allNodes[id].get());
+          count += getObjectCount(changeset, node, elements);
+        }
       }
     }
     else if (member.isWay())
     {
       for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
       {
-        if (changeset->contains(ElementType::Way, (ChangesetType)current_type, id))
-          count += getObjectCount(changeset, dynamic_cast<ChangesetWay*>(_allWays[id].get()));
+        if (!changeset || changeset->contains(ElementType::Way, (ChangesetType)current_type, id))
+        {
+          ChangesetWay* way = NULL;
+          if (_allWays.find(id) != _allWays.end())
+            way = dynamic_cast<ChangesetWay*>(_allWays[id].get());
+          count += getObjectCount(changeset, way, elements);
+        }
       }
     }
     else if (member.isRelation())
@@ -1001,8 +1073,13 @@ size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelati
       {
         for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
         {
-          if (changeset->contains(ElementType::Relation, (ChangesetType)current_type, id))
-            count += getObjectCount(changeset, dynamic_cast<ChangesetRelation*>(_allRelations[id].get()));
+          if (!changeset || changeset->contains(ElementType::Relation, (ChangesetType)current_type, id))
+          {
+            ChangesetRelation* relation = NULL;
+            if (_allRelations.find(id) != _allRelations.end())
+              relation = dynamic_cast<ChangesetRelation*>(_allRelations[id].get());
+            count += getObjectCount(changeset, relation, elements);
+          }
         }
       }
     }

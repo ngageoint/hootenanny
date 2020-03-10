@@ -59,6 +59,7 @@ typedef std::map<long, std::set<long>> NodeIdToWayIdMap;
 typedef std::map<long, std::set<long>> NodeIdToRelationIdMap;
 typedef std::map<long, std::set<long>> WayIdToRelationIdMap;
 typedef std::map<long, std::set<long>> RelationIdToRelationIdMap;
+typedef std::vector<std::set<long>> ElementCountSet;
 
 /** XML Changeset data object */
 class XmlChangeset
@@ -424,11 +425,15 @@ private:
    * @brief getObjectCount Get the number of elements affected by this node/way/relation
    * @param changeset Subset containing the element
    * @param node/way/relation Pointer to the element to count
+   * @param elements Reference to a vector of sets of IDs so that node/way/relation IDs aren't counted twice
    * @return total number of elements within this element
    */
-  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetNode* node);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* way);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelation* relation);
+  size_t getObjectCount(ChangesetNode* node, ElementCountSet& elements);
+  size_t getObjectCount(ChangesetWay* way, ElementCountSet& elements);
+  size_t getObjectCount(ChangesetRelation* relation, ElementCountSet& elements);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetNode* node, ElementCountSet& elements);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelation* relation, ElementCountSet& elements);
   /**
    * @brief isSent Check if this element's status is buffering, sent, or finalized
    * @param element Pointer to the element to check
@@ -499,8 +504,10 @@ private:
   ChangesetTypeMap _relations;
   /** Element ID to ID data structure for checking old ID to new ID and new ID to old ID lookups */
   ElementIdToIdMap _idMap;
-  /** Maximum changeset push size */
+  /** Maximum changeset push size, could be slightly over to get an entire element */
   long _maxPushSize;
+  /** Maximum size of a changeset that cannot be exceeded */
+  long _maxChangesetSize;
   /** Count of elements that have been sent */
   long _sentCount;
   /** Count of elements that have been processed */
