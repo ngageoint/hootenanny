@@ -55,10 +55,13 @@ public:
 
   std::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
 
+  void setRetryOnTooSmallInitialAlpha(bool retry) { _retryOnTooSmallInitialAlpha = retry; }
+
 private:
 
   double _alpha;
   double _buffer;
+  bool _retryOnTooSmallInitialAlpha;
 };
 
 }

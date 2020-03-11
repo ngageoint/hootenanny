@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonAlphaShapeDistanceExtractor.h"
 
@@ -66,8 +66,9 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
     OsmMapPtr polyMap(new OsmMap());
     ElementPtr polyTemp(poly->clone());
     polyMap->addElement(polyTemp);
-    std::shared_ptr<Geometry> polyAlphaShape =
-      AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
+    AlphaShapeGenerator alphaShapeGenerator(1000.0, 0.0);
+    alphaShapeGenerator.setRetryOnTooSmallInitialAlpha(false);
+    std::shared_ptr<Geometry> polyAlphaShape = alphaShapeGenerator.generateGeometry(polyMap);
     // Oddly, even if the area is zero calc'ing the distance can have a positive effect. This may
     // be worth looking into at some point, but going with it for now.
     /*if (polyAlphaShape->getArea() == 0.0)

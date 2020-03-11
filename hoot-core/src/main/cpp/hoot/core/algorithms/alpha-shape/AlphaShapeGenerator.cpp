@@ -34,6 +34,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
+// GEOS
+#include <geos/geom/GeometryFactory.h>
+
 using namespace geos::geom;
 using namespace std;
 
@@ -42,7 +45,8 @@ namespace hoot
 
 AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer) :
 _alpha(alpha),
-_buffer(buffer)
+_buffer(buffer),
+_retryOnTooSmallInitialAlpha(true)
 {
   LOG_VARD(_alpha);
   LOG_VARD(_buffer);
@@ -111,7 +115,7 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
   }
   catch (const IllegalArgumentException& e)
   {
-    if (e.getWhat().startsWith("Longest face edge of size"))
+    if (_retryOnTooSmallInitialAlpha && e.getWhat().startsWith("Longest face edge of size"))
     {
       const double longestFaceEdge = alphaShape.getLongestFaceEdge();
       LOG_INFO(
@@ -122,6 +126,10 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
       AlphaShape alphaShape2(_alpha);
       alphaShape2.insert(points);
       cutterShape = alphaShape2.toGeometry();
+    }
+    else
+    {
+      cutterShape.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     }
   }
   cutterShape.reset(cutterShape->buffer(_buffer));

@@ -363,11 +363,18 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
   // if the result is an empty geometry.
   if (tmp.size() == 0)
   {
-    throw IllegalArgumentException(
-      "Longest face edge of size: " + QString::number(_longestFaceEdge) +
-      " larger than alpha value of: " + QString::number(_alpha) + ". Try an alpha value of " +
-      QString::number(_longestFaceEdge) + " or larger.");
-    //return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    if (_longestFaceEdge > _alpha)
+    {
+      throw IllegalArgumentException(
+        "Longest face edge of size: " + QString::number(_longestFaceEdge) +
+        " larger than alpha value of: " + QString::number(_alpha) + ". Try an alpha value of " +
+        QString::number(_longestFaceEdge) + " or larger.");
+    }
+    else
+    {
+      // don't know how to handle it
+      return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    }
   }
 
   LOG_DEBUG("Joining faces...");
