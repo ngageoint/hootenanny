@@ -298,6 +298,14 @@ public:
   QString toString() const;
 
   /**
+   * Returns true if the tags have the specified kvp
+   *
+   * @param kvp kvp to search for
+   * @return true if tags contain the kvp; false otherwise
+   */
+  bool hasKvp(const QString& kvp) const;
+
+  /**
    * Returns true if the tags have any key=value in the input list
    *
    * @param kvps kvps to search for
@@ -362,6 +370,26 @@ public:
    * @return true if the tags being compared against have at least one tag in similar
    */
   bool intersects(const Tags& other) const;
+
+  /**
+   * Determines if two sets of tags contain a particular key/value pair
+   *
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @param kvp key/value pair to search for
+   * @return true if both sets of tags contain the key/value pair; false otherwise
+   */
+  static bool bothContainKvp(const Tags& tags1, const Tags& tags2, const QString& kvp);
+
+  /**
+   * Determines if either one of two sets of tags contain a particular key/value pair
+   *
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @param kvp key/value pair to search for
+   * @return true if exactly one of the sets of tags contain the key/value pair; false otherwise
+   */
+  static bool onlyOneContainsKvp(const Tags& tags1, const Tags& tags2, const QString& kvp);
 
 private:
 
