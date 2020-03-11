@@ -448,7 +448,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // Cut the secondary data out of the reference data.
 
-  OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap);
+  OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap, geometryType);
 
   // At one point it was necessary to re-number the relations in the sec map, as they could have ID
   // overlap with those in the cookie cut ref map at this point. It seemed that this was due to the
@@ -827,7 +827,8 @@ void ChangesetReplacementCreator::_filterFeatures(
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
 
-OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap)
+OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
+  OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType)
 {
   // could use some refactoring here after the addition of _fullReplacement
 
@@ -904,7 +905,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   else
   {
     // Generate a cutter shape based on the cropped secondary map.
-    LOG_DEBUG("Using cuter map as cutter shape map...");
+    LOG_DEBUG("Using cutter map as cutter shape map...");
     cutterMapToUse = cutterMap;
   }
   LOG_VART(cutterMapToUse->getElementCount());
@@ -912,6 +913,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
 
   LOG_INFO("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
 
+  LOG_VART(cookieCutterAlpha);
+  LOG_VART(cookieCutterAlphaShapeBuffer);
   OsmMapPtr cutterShapeOutlineMap;
   try
   {
@@ -924,8 +927,9 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
     if (e.getWhat().contains("Alpha Shape area is zero"))
     {
       LOG_ERROR(
-        "No cut shape generated from secondary data. Is your secondary data empty or have you " <<
-        "filtered it to be empty? error: " << e.getWhat());
+        "No cut shape generated from secondary data when processing geometry type: " <<
+        GeometryTypeCriterion::typeToString(geometryType) << ". Is your secondary data empty " <<
+        "or have you filtered it to be empty? error: " << e.getWhat());
     }
     // rethrow the original exception
     throw;
