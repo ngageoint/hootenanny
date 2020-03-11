@@ -47,6 +47,7 @@ namespace hoot
 class AlphaShapeGeneratorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AlphaShapeGeneratorTest);
+  // TODO: need test for auto alpha retry when initial value is too small
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runBufferTest);
   CPPUNIT_TEST(runNegativeBufferTest);
@@ -117,6 +118,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeGeneratorTest, "slow");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeGeneratorTest, "current");
 
 }
