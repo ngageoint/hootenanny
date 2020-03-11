@@ -72,6 +72,17 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
+  hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+  if (e1.getTags().get("note"))
+  {
+    hoot.trace("e1 note: " + e1.getTags().get("note"));
+  }
+  hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+  if (e2.getTags().get("note"))
+  {
+    hoot.trace("e2 note: " + e2.getTags().get("note"));
+  }
+
   // Do we need to be looking at tags too, since area is such a broad concept?
 
   var smallerOverlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
@@ -114,6 +125,8 @@ exports.matchScore = function(map, e1, e2)
       result = { match: 1.0, miss: 0.0, review: 0.0 };
     }
   }
+  hoot.trace("featureReview: " + result.review);
+  hoot.trace("featureMatch: " + result.match);
 
   return result;
 };

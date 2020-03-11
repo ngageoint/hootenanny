@@ -73,6 +73,7 @@ public:
 
   void setGeometryTypeFilter(const GeometryTypeCriterion::GeometryType& filter)
   { _geometryTypeFilter = filter; }
+  void setIgnoreGenericConflators(bool ignore) { _ignoreGenericConflators = ignore; }
 
 private:
 
@@ -83,6 +84,8 @@ private:
   // allows for only checking conflatable types that support a specific geometry for optimization
   // purposes
   GeometryTypeCriterion::GeometryType _geometryTypeFilter;
+
+  bool _ignoreGenericConflators;
 };
 
 }

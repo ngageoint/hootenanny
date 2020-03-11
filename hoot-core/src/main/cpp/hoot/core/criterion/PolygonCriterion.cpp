@@ -46,7 +46,7 @@ PolygonCriterion::PolygonCriterion()
 bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-  LOG_VART(e);
+  //LOG_VART(e);
 
   bool result = false;
 

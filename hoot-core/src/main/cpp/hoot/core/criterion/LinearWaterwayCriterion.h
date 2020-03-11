@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LINEAR_WATERWAY_CRITERION_H
@@ -55,6 +55,7 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
+  virtual bool supportsSpecificConflation() const { return true; }
 };
 
 }

@@ -29,12 +29,13 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
 
 QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::_conflatableCriteria;
-QMap<QString, QMap<QString, ElementCriterionPtr>>  ConflatableElementCriterion::_conflatableCriteriaByGeometryType;
+QMap<QString, QMap<QString, ElementCriterionPtr>> ConflatableElementCriterion::_conflatableCriteriaByGeometryType;
 
 QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCriteria()
 {
@@ -91,7 +92,8 @@ void ConflatableElementCriterion::_createConflatableCriteria()
   LOG_VART(_conflatableCriteria.size());
 }
 
-QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(const ConstElementPtr& e)
+QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(
+  const ConstElementPtr& e, ConstOsmMapPtr map, const bool ignoreGenericConflators)
 {
   const QMap<QString, ElementCriterionPtr> conflatableCriteria = getConflatableCriteria();
 
@@ -100,7 +102,26 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(const 
        itr != conflatableCriteria.end(); ++itr)
   {
     LOG_VART(itr.key());
-    if (itr.value()->isSatisfied(e))
+    ElementCriterionPtr crit = itr.value();
+
+    if (ignoreGenericConflators)
+    {
+      std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+        std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+      assert(conflatableCrit);
+      if (!conflatableCrit->supportsSpecificConflation())
+      {
+        continue;
+      }
+    }
+
+    ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(crit.get());
+    if (mapConsumer != 0)
+    {
+      mapConsumer->setOsmMap(map.get());
+    }
+
+    if (crit->isSatisfied(e))
     {
       // It is something we can conflate?
       conflatableCriteriaForElement.append(itr.key());

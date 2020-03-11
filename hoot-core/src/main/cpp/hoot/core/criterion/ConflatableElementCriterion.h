@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -47,13 +48,23 @@ public:
   virtual ~ConflatableElementCriterion() {}
 
   /**
+   * Determines whether the criterion represents an element conflatable by a specific machine
+   * learning or rules based conflation routine or one conflatable by a Generic Conflation routine.
+   */
+  virtual bool supportsSpecificConflation() const = 0;
+
+  /**
    * Determines which criteria consider an element as conflatable
    *
    * @param e the element to determine conflatability of
+   * @param map the map containing the input element
+   * @param ignoreGenericConflators if true criterion supporting generic conflation are suppressed
+   * from output
    * @return a list of ConflatableElementCriterion class names that consider the element as
    * conflatable
    */
-  static QStringList getConflatableCriteriaForElement(const ConstElementPtr& e);
+  static QStringList getConflatableCriteriaForElement(const ConstElementPtr& e, ConstOsmMapPtr map,
+                                                      const bool ignoreGenericConflators = true);
 
   /**
    * Returns instantiations of conflatable criteria index by class name

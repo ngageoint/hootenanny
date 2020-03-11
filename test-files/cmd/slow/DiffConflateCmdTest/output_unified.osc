@@ -309,10 +309,23 @@
         <node id="-299" version="0" lat="8.6151491491599987" lon="28.1785744114799996" timestamp=""/>
         <node id="-300" version="0" lat="8.6176169535400025" lon="28.1766835213299984" timestamp=""/>
         <node id="-301" version="0" lat="8.6197856168199998" lon="28.1744144531499998" timestamp=""/>
-        <node id="-302" version="0" lat="8.6361797629499986" lon="28.1413633341699914" timestamp=""/>
-        <node id="-303" version="0" lat="8.6351058292400005" lon="28.1414032697699987" timestamp=""/>
-        <node id="-304" version="0" lat="8.6351374155700018" lon="28.1399416268099998" timestamp=""/>
-        <node id="-305" version="0" lat="8.6362192457500022" lon="28.1399416268099998" timestamp=""/>
+        <node id="-302" version="0" lat="8.6539229159500017" lon="28.1432522880500002" timestamp=""/>
+        <node id="-303" version="0" lat="8.6539466045100006" lon="28.1426372798099997" timestamp=""/>
+        <node id="-304" version="0" lat="8.6534017671600001" lon="28.1421021427699998" timestamp=""/>
+        <node id="-305" version="0" lat="8.6534886253399979" lon="28.1412714822900014" timestamp=""/>
+        <node id="-306" version="0" lat="8.6530148531899993" lon="28.1407363452500014" timestamp=""/>
+        <node id="-307" version="0" lat="8.6528411365900020" lon="28.1400015302100002" timestamp=""/>
+        <node id="-308" version="0" lat="8.6524463258300024" lon="28.1395622386099973" timestamp=""/>
+        <node id="-309" version="0" lat="8.6522726089699979" lon="28.1389152818900001" timestamp=""/>
+        <node id="-310" version="0" lat="8.6518225239900008" lon="28.1384440418100006" timestamp=""/>
+        <node id="-311" version="0" lat="8.6516961842499960" lon="28.1375335101300017" timestamp=""/>
+        <node id="-312" version="0" lat="8.6512382023399965" lon="28.1367907079700004" timestamp=""/>
+        <node id="-313" version="0" lat="8.6511039661600009" lon="28.1360638800499991" timestamp=""/>
+        <node id="-314" version="0" lat="8.6507091535799994" lon="28.1356245884499963" timestamp=""/>
+        <node id="-315" version="0" lat="8.6361797629499986" lon="28.1413633341699914" timestamp=""/>
+        <node id="-316" version="0" lat="8.6351058292400005" lon="28.1414032697699987" timestamp=""/>
+        <node id="-317" version="0" lat="8.6351374155700018" lon="28.1399416268099998" timestamp=""/>
+        <node id="-318" version="0" lat="8.6362192457500022" lon="28.1399416268099998" timestamp=""/>
         <way id="-1" version="0" timestamp="2018-06-11T16:50:55Z">
             <nd ref="-5"/>
             <nd ref="-4"/>
@@ -779,11 +792,29 @@
             <tag k="operator" v="Polar Express Industries, Ltd."/>
         </way>
         <way id="-22" version="0" timestamp="">
+            <nd ref="-314"/>
+            <nd ref="-313"/>
+            <nd ref="-312"/>
+            <nd ref="-311"/>
+            <nd ref="-310"/>
+            <nd ref="-309"/>
+            <nd ref="-308"/>
+            <nd ref="-307"/>
+            <nd ref="-306"/>
             <nd ref="-305"/>
             <nd ref="-304"/>
             <nd ref="-303"/>
             <nd ref="-302"/>
-            <nd ref="-305"/>
+            <tag k="barrier" v="retaining_wall"/>
+            <tag k="security:classification" v="UNCLASSIFIED"/>
+            <tag k="source:imagery" v="Unknown"/>
+        </way>
+        <way id="-23" version="0" timestamp="">
+            <nd ref="-318"/>
+            <nd ref="-317"/>
+            <nd ref="-316"/>
+            <nd ref="-315"/>
+            <nd ref="-318"/>
             <tag k="amenity" v="parking"/>
             <tag k="name" v="Fred's Parking"/>
             <tag k="security:classification" v="UNCLASSIFIED"/>

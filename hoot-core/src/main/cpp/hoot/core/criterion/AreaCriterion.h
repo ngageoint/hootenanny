@@ -63,6 +63,8 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
+  virtual bool supportsSpecificConflation() const { return true; }
+
 private:
 
   ConstOsmMapPtr _map;

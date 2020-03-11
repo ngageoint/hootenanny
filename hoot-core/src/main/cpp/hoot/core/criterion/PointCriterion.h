@@ -29,7 +29,7 @@
 #define POINT_CRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Identifies point features
  */
-class PointCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
+class PointCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
@@ -62,6 +62,8 @@ public:
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
+
+  virtual bool supportsSpecificConflation() const { return false; }
 
 private:
 
