@@ -44,6 +44,8 @@ AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer
 _alpha(alpha),
 _buffer(buffer)
 {
+  LOG_VARD(_alpha);
+  LOG_VARD(_buffer);
 }
 
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
@@ -51,6 +53,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   OsmMapWriterFactory::writeDebugMap(inputMap, "alpha-shape-input-map");
 
   std::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
+
   if (cutterShape->getArea() == 0.0)
   {
     // would rather this be thrown than a warning logged, as the warning may go unoticed by web
@@ -80,6 +83,8 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 
 std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
 {
+  LOG_INFO("Generating alpha shape geometry...");
+
   MapProjector::projectToPlanar(inputMap);
   LOG_VARD(MapProjector::toWkt(inputMap->getProjection()));
 
@@ -94,15 +99,32 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
     p.second = (it->second)->getY();
     points.push_back(p);
   }
+  LOG_VARD(points.size());
 
   // create a complex geometry representing the alpha shape
   std::shared_ptr<Geometry> cutterShape;
+  AlphaShape alphaShape(_alpha);
+  alphaShape.insert(points);
+  try
   {
-    AlphaShape alphaShape(_alpha);
-    alphaShape.insert(points);
     cutterShape = alphaShape.toGeometry();
-    cutterShape.reset(cutterShape->buffer(_buffer));
   }
+  catch (const IllegalArgumentException& e)
+  {
+    if (e.getWhat().startsWith("Longest face edge of size"))
+    {
+      const double longestFaceEdge = alphaShape.getLongestFaceEdge();
+      LOG_INFO(
+        "Failed to generate alpha shape geometry with alpha value of: " << _alpha <<
+        ". Attempting to generate the shape a second time using the longest face edge size of: " <<
+        longestFaceEdge << " for alpha...");
+      _alpha = longestFaceEdge;
+      AlphaShape alphaShape2(_alpha);
+      alphaShape2.insert(points);
+      cutterShape = alphaShape2.toGeometry();
+    }
+  }
+  cutterShape.reset(cutterShape->buffer(_buffer));
 
   return cutterShape;
 }

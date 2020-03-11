@@ -904,7 +904,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   else
   {
     // Generate a cutter shape based on the cropped secondary map.
-    LOG_DEBUG("Using cuter map as cutter shape map...");
+    LOG_DEBUG("Using cutter map as cutter shape map...");
     cutterMapToUse = cutterMap;
   }
   LOG_VART(cutterMapToUse->getElementCount());
@@ -912,6 +912,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
 
   LOG_INFO("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
 
+  LOG_VART(cookieCutterAlpha);
+  LOG_VART(cookieCutterAlphaShapeBuffer);
   OsmMapPtr cutterShapeOutlineMap;
   try
   {

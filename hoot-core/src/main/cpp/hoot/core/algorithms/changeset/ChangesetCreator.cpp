@@ -55,6 +55,10 @@
 //GEOS
 #include <geos/geom/Envelope.h>
 
+// Qt
+#include <QFileInfo>
+#include <QDir>
+
 namespace hoot
 {
 
@@ -92,6 +96,14 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   LOG_DEBUG(
     "Creating changeset from inputs: " << input1 << " and " << input2 << " to output: " <<
     output << "...");
+
+  QFileInfo outputInfo(output);
+  LOG_VARD(outputInfo.dir().absolutePath());
+  const bool outputDirSuccess = QDir().mkpath(outputInfo.dir().absolutePath());
+  if (!outputDirSuccess)
+  {
+    throw IllegalArgumentException("Unable to create output path for: " + output);
+  }
 
   _singleInput = input2.trimmed().isEmpty();
   LOG_VARD(_singleInput);

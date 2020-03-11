@@ -148,47 +148,19 @@ inline double distance(double x1, double x2, double y1, double y2)
   return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 }
 
-AlphaShape::AlphaShape(double alpha)
+AlphaShape::AlphaShape(double alpha) :
+_alpha(alpha),
+_longestFaceEdge(0.0)
 {
-  _alpha = alpha;
+  LOG_VARD(_alpha);
   _pDelauneyTriangles.reset(new Tgs::DelaunayTriangulation);
-}
-
-WayPtr AlphaShape::_addFaceAsWay(const Face* face, const std::shared_ptr<OsmMap>& map)
-{
-  Edge e = face->getEdge(0);
-  e.getOriginX();
-  NodePtr start(new Node(Status::Unknown1, map->createNextNodeId(), e.getOriginX(), e.getOriginY(),
-    -1));
-  map->addNode(start);
-//  WayPtr way(new Way(Unknown1, map->createNextWayId(), -1));
-    WayPtr way;
-//  way->addNode(start->getId());
-
-  for (int i = 2; i < 6; i+=2)
-  {
-    e = face->getEdge(i);
-    NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), e.getOriginX(),
-      e.getOriginY(), -1));
-    map->addNode(n);
-//    way->addNode(n->getId());
-  }
-//  way->addNode(start->getId());
-//  map->addWay(way);
-
-//  if (_isInside(*face))
-//  {
-//    way->setTag("area", "yes");
-//  }
-
-  return way;
 }
 
 std::shared_ptr<Polygon> AlphaShape::_convertFaceToPolygon(const Face& face) const
 {
   std::shared_ptr<Polygon> result;
-  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
-                           create(4, 2);
+  CoordinateSequence* cs =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(4, 2);
   LinearRing* lr;
 
   Coordinate c;
@@ -209,8 +181,7 @@ std::shared_ptr<Polygon> AlphaShape::_convertFaceToPolygon(const Face& face) con
 
   lr = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
   std::vector<Geometry*>* holes = new std::vector<Geometry*>();
-  result.reset(GeometryFactory::getDefaultInstance()->createPolygon(lr,
-    holes));
+  result.reset(GeometryFactory::getDefaultInstance()->createPolygon(lr, holes));
 
   return result;
 }
@@ -252,12 +223,13 @@ bool AlphaShape::_isInside(const Face& face) const
   bool result = true;
   for (int i = 0; i < 6; i++)
   {
-    if (_isTooLong(face.getEdge(i)))
+    const bool edgeTooLong = _isTooLong(face.getEdge(i));
+    LOG_VART(edgeTooLong);
+    if (edgeTooLong)
     {
       result = false;
     }
   }
-
   return result;
 }
 
@@ -278,13 +250,19 @@ bool AlphaShape::_isOutsideEdge(const Tgs::Edge& e) const
 
 bool AlphaShape::_isTooLong(const Edge& e) const
 {
-  return distance(e.getOriginX(), e.getDestinationX(), e.getOriginY(), e.getDestinationY()) >
-      _alpha;
+  const double edgeDistance =
+    distance(e.getOriginX(), e.getDestinationX(), e.getOriginY(), e.getDestinationY());
+  LOG_VART(edgeDistance);
+  if (edgeDistance > _longestFaceEdge)
+  {
+    _longestFaceEdge = edgeDistance;
+  }
+  return edgeDistance > _alpha;
 }
 
 void AlphaShape::insert(const vector<pair<double, double>>& points)
 {
-  LOG_DEBUG("Inserting points.");
+  LOG_DEBUG("Inserting points...");
 
   double minX = numeric_limits<double>::max();
   double maxX = -minX;
@@ -333,6 +311,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
     _pDelauneyTriangles->insert(randomized[i].first, randomized[i].second);
   }
   LOG_TRACE("Progress: " << randomized.size() - 1 << " of " << randomized.size() - 1 << "          ");
+  LOG_VARD(_pDelauneyTriangles->getFaces().size());
 }
 
 std::shared_ptr<OsmMap> AlphaShape::toOsmMap()
@@ -353,33 +332,46 @@ std::shared_ptr<OsmMap> AlphaShape::toOsmMap()
 
 std::shared_ptr<Geometry> AlphaShape::toGeometry()
 {
-  LOG_DEBUG("Traversing faces");
+  LOG_DEBUG("Traversing faces...");
+
   // create a vector of all faces
   vector<std::shared_ptr<Geometry>> tmp, tmp2;
   Envelope e;
   double preUnionArea = 0.0;
   int i = 0;
-  for (FaceIterator fi = _pDelauneyTriangles->getFaceIterator(); fi != _pDelauneyTriangles->getFaceEnd(); fi++)
+  int numPolys = 0;
+  for (FaceIterator fi = _pDelauneyTriangles->getFaceIterator();
+       fi != _pDelauneyTriangles->getFaceEnd(); fi++)
   {
     const Face& f = *fi;
     i++;
     if (_isInside(f))
     {
       std::shared_ptr<Polygon> p = _convertFaceToPolygon(f);
+      LOG_VART(p->getArea());
       tmp.push_back(p);
       e.expandToInclude(p->getEnvelopeInternal());
       preUnionArea += p->getArea();
+      numPolys++;
     }
   }
+  LOG_VARD(numPolys);
+  LOG_VARD(e);
   LOG_DEBUG("Area: " << (long)preUnionArea);
+  LOG_VARD(tmp.size());
 
   // if the result is an empty geometry.
   if (tmp.size() == 0)
   {
-    return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    throw IllegalArgumentException(
+      "Longest face edge of size: " + QString::number(_longestFaceEdge) +
+      " larger than alpha value of: " + QString::number(_alpha) + ". Try an alpha value of " +
+      QString::number(_longestFaceEdge) + " or larger.");
+    //return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
 
-  LOG_DEBUG("Joining faces");
+  LOG_DEBUG("Joining faces...");
+
   // while there is more than one geometry.
   while (tmp.size() > 1)
   {
@@ -446,7 +438,8 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
 
   std::shared_ptr<Geometry> result;
 
-  LOG_DEBUG("Converting geometry to map.");
+  LOG_DEBUG("Converting geometry to map...");
+
   if (tmp.size() == 1)
   {
     result = tmp[0];
@@ -464,7 +457,8 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("Area after union is inconsistent. GEOS error? pre union: " << (long)preUnionArea <<
+      LOG_WARN(
+        "Area after union is inconsistent. GEOS error? pre union: " << (long)preUnionArea <<
         " post union: " << result->getArea());
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
