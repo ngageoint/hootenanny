@@ -1814,7 +1814,6 @@ double OsmSchema::score(const QString& kvp, const Tags& tags)
     const QString value = tagItr.value().trimmed();
     if (!key.isEmpty() && !value.isEmpty())
     {
-      //QString kvp2 = tagItr.key() + "=" + tagItr.value();
       QString kvp2 = "";
       kvp2.append(key);
       kvp2.append("=");
@@ -1825,7 +1824,6 @@ double OsmSchema::score(const QString& kvp, const Tags& tags)
         maxScore = scoreVal;
       }
     }
-
   }
   return maxScore;
 }

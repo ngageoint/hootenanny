@@ -60,7 +60,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, SmallHighwayMerger)
 
 SmallHighwayMerger::SmallHighwayMerger(Meters threshold)
-
 {
   ConfigOptions opts = ConfigOptions();
   if (threshold >= 0)

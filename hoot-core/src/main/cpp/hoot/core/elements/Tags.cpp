@@ -798,6 +798,11 @@ void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) c
   units = copyStr.replace(sRegExp, QString("")).trimmed();
 }
 
+bool Tags::hasKvp(const QString& kvp) const
+{
+  return hasAnyKvp(QStringList(kvp));
+}
+
 bool Tags::hasAnyKvp(const QStringList& kvps) const
 {
   for (int i = 0; i < kvps.size(); i++)
@@ -880,6 +885,18 @@ bool Tags::intersects(const Tags& other) const
     }
   }
   return false;
+}
+
+bool Tags::bothContainKvp(const Tags& tags1, const Tags& tags2, const QString& kvp)
+{
+  return tags1.hasKvp(kvp) && tags2.hasKvp(kvp);
+}
+
+bool Tags::onlyOneContainsKvp(const Tags& tags1, const Tags& tags2, const QString& kvp)
+{
+  const bool firstHasKvp = tags1.hasKvp(kvp);
+  const bool secondHasKvp = tags2.hasKvp(kvp);
+  return (!firstHasKvp && secondHasKvp) || (firstHasKvp && !secondHasKvp);
 }
 
 QString Tags::getDiffString(const Tags& other) const

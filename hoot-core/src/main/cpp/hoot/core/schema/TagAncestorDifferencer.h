@@ -40,6 +40,7 @@ namespace hoot
 class TagAncestorDifferencer : public TagFilteredDifferencer, public Configurable
 {
 public:
+
   static std::string className() { return "hoot::TagAncestorDifferencer"; }
 
   TagAncestorDifferencer() {}
@@ -50,6 +51,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
 protected:
+
   QString _ancestor;
 
   virtual bool isValidTag(const SchemaVertex& sv) const;

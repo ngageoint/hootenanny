@@ -447,7 +447,7 @@ public:
       }
 
       LOG_STATUS(
-        "Script feature index created for: " << _scriptPath << "with " <<
+        "Script feature index created for: " << _scriptPath << " with " <<
         StringUtils::formatLargeNumber(numElementsIndexed) << " elements.");
     }
     return _index;
@@ -786,8 +786,7 @@ void ScriptMatchCreator::createMatches(
       "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
   }
   LOG_STATUS(
-    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << " " <<
-     searchRadiusStr << "...");
+    "Looking for matches with: " << scriptFileInfo.fileName() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
   const int matchesSizeBefore = matches.size();
 
