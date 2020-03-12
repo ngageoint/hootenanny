@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="18.544216" minlon="-72.34875099833999" maxlat="18.549036" maxlon="-72.340941"/>
-    <node visible="true" id="-41767" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5457684563325884" lon="-72.3442374727948732">
+    <node visible="true" id="-41751" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5457684563325884" lon="-72.3442374727948732">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-41767"/>
+        <tag k="hoot:id" v="-41751"/>
     </node>
     <node visible="true" id="-41715" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5466478874399954" lon="-72.3473433557199854">
         <tag k="hoot:status" v="1"/>
@@ -169,7 +169,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="142"/>
     </node>
-    <way visible="true" id="-110" timestamp="2017-06-07T15:16:56Z" version="1">
+    <way visible="true" id="-71" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="7"/>
         <nd ref="58"/>
         <nd ref="8"/>
@@ -178,11 +178,11 @@
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="hoot:id" v="-110"/>
+        <tag k="hoot:id" v="-71"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-107" timestamp="2017-06-07T15:16:56Z" version="1">
+    <way visible="true" id="-68" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="22"/>
         <nd ref="63"/>
         <nd ref="-40995"/>
@@ -193,11 +193,11 @@
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="hoot:id" v="-107"/>
+        <tag k="hoot:id" v="-68"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-104" timestamp="2017-06-07T15:16:56Z" version="1">
+    <way visible="true" id="-65" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="31"/>
         <nd ref="30"/>
         <nd ref="89"/>
@@ -210,7 +210,7 @@
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="hoot:id" v="-104"/>
+        <tag k="hoot:id" v="-65"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -249,7 +249,7 @@
         <nd ref="5"/>
         <nd ref="78"/>
         <nd ref="100"/>
-        <nd ref="-41767"/>
+        <nd ref="-41751"/>
         <nd ref="83"/>
         <nd ref="82"/>
         <nd ref="81"/>
