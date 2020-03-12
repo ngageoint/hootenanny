@@ -605,15 +605,15 @@ void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
 
   // This will handle removing refs in relation members we've cropped out.
   RemoveMissingElementsVisitor missingElementsRemover;
-  LOG_INFO("\t" << missingElementsRemover.getInitStatusMessage());
+  LOG_STATUS("\t" << missingElementsRemover.getInitStatusMessage());
   map->visitRw(missingElementsRemover);
-  LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
+  LOG_STATUS("\t" << missingElementsRemover.getCompletedStatusMessage());
 
   // This will remove any relations that were already empty or became empty after the previous step.
   RemoveEmptyRelationsOp emptyRelationRemover;
-  LOG_INFO("\t" << emptyRelationRemover.getInitStatusMessage());
+  LOG_STATUS("\t" << emptyRelationRemover.getInitStatusMessage());
   emptyRelationRemover.apply(map);
-  LOG_DEBUG("\t" << emptyRelationRemover.getCompletedStatusMessage());
+  LOG_STATUS("\t" << emptyRelationRemover.getCompletedStatusMessage());
 }
 
 void ChangesetReplacementCreator::_validateInputs(const QString& input1, const QString& input2)
@@ -739,9 +739,9 @@ QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
   LOG_DEBUG("Mapping element IDs to element versions for: " << map->getName() << "...");
 
   ElementIdToVersionMapper idToVersionMapper;
-  LOG_DEBUG(idToVersionMapper.getInitStatusMessage());
+  LOG_STATUS("\t" << idToVersionMapper.getInitStatusMessage());
   idToVersionMapper.apply(map);
-  LOG_DEBUG(idToVersionMapper.getCompletedStatusMessage());
+  LOG_STATUS("\t" << idToVersionMapper.getCompletedStatusMessage());
   const QMap<ElementId, long> idToVersionMappings = idToVersionMapper.getMappings();
   LOG_VART(idToVersionMappings.size());
   return idToVersionMappings;
@@ -756,14 +756,14 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
   // Add the changeset deletion exclusion tag to all connected ways previously tagged upon load.
 
   SetTagValueVisitor addTagVis(MetadataTags::HootChangeExcludeDelete(), "yes");
-  LOG_DEBUG(addTagVis.getInitStatusMessage());
+  LOG_STATUS("\t" << addTagVis.getInitStatusMessage());
   ChainCriterion addTagCrit(
     std::shared_ptr<WayCriterion>(new WayCriterion()),
     std::shared_ptr<TagKeyCriterion>(
       new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds())));
   FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
   map->visitRw(deleteExcludeTagVis);
-  LOG_DEBUG(addTagVis.getCompletedStatusMessage());
+  LOG_STATUS("\t" << addTagVis.getCompletedStatusMessage());
 
   // Add the changeset deletion exclusion tag to all children of those connected ways.
 
@@ -774,9 +774,9 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
         new TagKeyCriterion(MetadataTags::HootChangeExcludeDelete()))));
   RecursiveSetTagValueOp childDeletionExcludeTagOp(
     MetadataTags::HootChangeExcludeDelete(), "yes", childAddTagCrit);
-  LOG_DEBUG(childDeletionExcludeTagOp.getInitStatusMessage());
+  LOG_STATUS("\t" << childDeletionExcludeTagOp.getInitStatusMessage());
   childDeletionExcludeTagOp.apply(map);
-  LOG_DEBUG(childDeletionExcludeTagOp.getCompletedStatusMessage());
+  LOG_STATUS("\t" << childDeletionExcludeTagOp.getCompletedStatusMessage());
 
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclusion-tagging");
 }
@@ -819,9 +819,9 @@ void ChangesetReplacementCreator::_filterFeatures(
   elementPruner.setConfiguration(config);
   elementPruner.setOsmMap(map.get());
   elementPruner.setRecursive(true);
-  LOG_DEBUG(elementPruner.getInitStatusMessage());
+  LOG_STATUS("\t" << elementPruner.getInitStatusMessage());
   map->visitRw(elementPruner);
-  LOG_DEBUG(elementPruner.getCompletedStatusMessage());
+  LOG_STATUS("\t" << elementPruner.getCompletedStatusMessage());
 
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
@@ -897,9 +897,9 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     LOG_DEBUG("Generating cutter shape map from sec map transformation...");
     cutterMapToUse.reset(new OsmMap(cutterMap));
     PointsToPolysConverter pointConverter;
-    LOG_INFO(pointConverter.getInitStatusMessage());
+    LOG_STATUS("\t" << pointConverter.getInitStatusMessage());
     pointConverter.apply(cutterMapToUse);
-    LOG_INFO(pointConverter.getCompletedStatusMessage());
+    LOG_STATUS("\t" << pointConverter.getCompletedStatusMessage());
     MapProjector::projectToWgs84(cutterMapToUse);
   }
   else
@@ -1034,9 +1034,9 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
     QString::fromStdString(WayNodeCriterion::className()));
   lineSnapper.setWayToSnapCriterionClassName(typeCriterionClassName);
   lineSnapper.setWayToSnapToCriterionClassName(typeCriterionClassName);
-  LOG_DEBUG(lineSnapper.getInitStatusMessage());
+  LOG_STATUS("\t" << lineSnapper.getInitStatusMessage());
   lineSnapper.apply(map);
-  LOG_INFO(lineSnapper.getCompletedStatusMessage());
+  LOG_STATUS("\t" << lineSnapper.getCompletedStatusMessage());
 
   MapProjector::projectToWgs84(map);   // snapping works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
@@ -1080,9 +1080,9 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   MapCropper cropper(bounds);
   cropper.setKeepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds);
   cropper.setKeepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds);
-  //LOG_DEBUG(cropper.getInitStatusMessage());
+  LOG_STATUS("\t" << cropper.getInitStatusMessage());
   cropper.apply(map);
-  LOG_DEBUG(cropper.getCompletedStatusMessage());
+  LOG_STATUS("\t" << cropper.getCompletedStatusMessage());
 
   // Clean up straggling nodes in that are the result of cropping. Its ok to ignore info tags when
   // dealing with only linear features, as all nodes in the data being conflated should be way nodes
@@ -1113,9 +1113,9 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
           new TagCriterion(MetadataTags::HootSnapped(), "snapped_way")))));
   removeVis.setChainCriteria(true);
   removeVis.setRecursive(true);
-  //LOG_DEBUG(removeVis.getInitStatusMessage());
+  LOG_STATUS("\t" << removeVis.getInitStatusMessage());
   map->visitRw(removeVis);
-  LOG_DEBUG(removeVis.getCompletedStatusMessage());
+  LOG_STATUS("\t" << removeVis.getCompletedStatusMessage());
 
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-unsnapped-removed");
@@ -1140,9 +1140,9 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
     new ChainCriterion(std::shared_ptr<WayCriterion>(new WayCriterion()), notInBoundsCrit));
 
   RecursiveSetTagValueOp tagSetter(MetadataTags::HootChangeExcludeDelete(), "yes", elementCrit);
-  LOG_DEBUG(tagSetter.getInitStatusMessage());
+  LOG_STATUS("\t" << tagSetter.getInitStatusMessage());
   tagSetter.apply(map);
-  LOG_DEBUG(tagSetter.getCompletedStatusMessage());
+  LOG_STATUS("\t" << tagSetter.getCompletedStatusMessage());
 
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclude-tags");

@@ -250,7 +250,9 @@ public:
 
   bool isMatchCandidate(ConstElementPtr element)
   {
-    if (_filter && !_filter->isSatisfied(element))
+    // special tag is currently only used by roundabout processing to mark temporary features
+    if (element->getTags().contains(MetadataTags::HootSpecial()) ||
+        (_filter && !_filter->isSatisfied(element)))
     {
       return false;
     }
