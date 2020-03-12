@@ -77,32 +77,39 @@ See the User Guide for more details on command usage.
     hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
 -----
 
-===== Create a changeset that replaces all features in a dataset with overlapping features from another dataset within a specified bounds:
+===== Create a changeset that replaces features with only overlapping features from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc
 -----
 
-===== Create a changeset that completely replaces all features in a dataset with features from another dataset within a specified bounds:
+===== Create a changeset that completely replaces features with features from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc --full-replacement
 -----
 
-===== Create a changeset that replaces all buildings in a dataset with overlapping buildings from another dataset within a specified bounds:
+===== Create a changeset that completely replaces features with features from another dataset within a specified bounds and modifies no features outside the bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
-      output.osc -geometry-filters "hoot::BuildingCriterion"
+      output.osc --full-replacement --strict-bounds
 -----
 
-===== Create a changeset that completely replaces all buildings in a dataset with buildings from another dataset within a specified bounds:
+===== Create a changeset that replaces buildings with only overlapping buildings from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
-      output.osc -geometry-filters "hoot::BuildingCriterion" --full-replacement
+      output.osc --geometry-filters "hoot::BuildingCriterion"
+-----
+
+===== Create a changeset that completely replaces all buildings with buildings from another dataset within a specified bounds:
+
+-----
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
+      output.osc --geometry-filters "hoot::BuildingCriterion" --full-replacement
 -----
 
 ==== MetaInfo
