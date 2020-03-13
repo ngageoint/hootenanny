@@ -713,6 +713,7 @@ List of operations to run in the conflate command after data is conflated, but b
 
 * Data Type: list
 * Default Value:
+** `hoot::RemoveMissingElementsVisitor`
 ** `hoot::BuildingOutlineRemoveOp`
 ** `hoot::RemoveRoundabouts`
 ** `hoot::MapCleaner`

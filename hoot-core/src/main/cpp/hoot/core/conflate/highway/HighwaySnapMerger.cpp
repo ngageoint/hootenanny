@@ -235,6 +235,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   catch (const NeedsReviewException& e)
   {
     LOG_VART(e.getWhat());
+    // TODO: could this involve other types of reviews as well? river, railway, etc.
     _markNeedsReview(result, e1, e2, e.getWhat(), HighwayMatch::getHighwayMatchName());
     return true;
   }
@@ -243,6 +244,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   if (!match.isValid())
   {
     LOG_TRACE("Complex conflict causes an empty match");
+    // TODO: could this involve other types of reviews as well? river, railway, etc.
     _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
                      HighwayMatch::getHighwayMatchName());
     return true;
