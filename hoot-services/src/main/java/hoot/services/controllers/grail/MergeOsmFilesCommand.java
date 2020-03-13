@@ -59,21 +59,14 @@ class MergeOsmFilesCommand extends GrailCommand {
 
         List<String> options = Collections.emptyList();
         if (params.getAdvancedOptions() != null) {
-            options = params.getAdvancedOptions().entrySet().stream().map(ent -> {
-                return ent.getKey() + "=" + ent.getValue();
-            }).collect(Collectors.toList());
+            options = params.getAdvancedOptions().entrySet().stream().map(ent -> ent.getKey() + "=" + ent.getValue()).collect(Collectors.toList());
         }
 
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", toHootOptions(options));
         substitutionMap.put("OUTPUT", params.getOutput());
 
-        filter = new FilenameFilter() {
-            @Override
-            public boolean accept(File f, String name) {
-                return name.matches(params.getInput1());
-            }
-        };
+        filter = (File f, String name) -> name.matches(params.getInput1());
     }
 
     @Override
