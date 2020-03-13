@@ -516,17 +516,18 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(result);
     ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(result);
 //    _updateScrapParent(result, e2Match->getId(), scraps2);
-    // TODO: remove
-    //replaced.push_back(std::pair<ElementId, ElementId>(eid2, eid1));
   }
-  // if there is nothing to review against, drop the reviews.
+  // drop the reviews and the element.
   else
   {
     LOG_TRACE("Removing: " << e2Match->getElementId() << " and : " << eid2 << "...");
+
     RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(result);
+
+    // Make the way we're keeping have membership in whatever relations the way we're removing was
+    // in. I *think* this makes sense. This logic may need to be replicated elsewhere.
+    OsmUtils::swapParentRelationRefs(eid2, eid1, map, false);
     RemoveReviewsByEidOp(eid2, true).apply(result);
-    // TODO: remove
-    //replaced.push_back(std::pair<ElementId, ElementId>(eid2, eid1));
   }
 
   if (e1Match)

@@ -316,7 +316,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     }
     else
     {
-      LOG_DEBUG(msg);
+      LOG_TRACE(msg);
     }
 
     _mergers[i]->apply(map, replaced);

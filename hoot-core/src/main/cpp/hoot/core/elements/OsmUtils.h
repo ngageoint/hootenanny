@@ -688,6 +688,20 @@ public:
    */
   static bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
 
+  // TODO: convert these to ops
+
+  /**
+   * TODO
+   *
+   * @param elementIdToRemove
+   * @param elementIdToKeep
+   * @param map
+   * @param includeReviewRelations
+   */
+  static void swapParentRelationRefs(
+    const ElementId& elementIdToRemove, const ElementId& elementIdToKeep, const OsmMapPtr& map,
+    const bool includeReviewRelations = true);
+
 private:
 
   static int _badGeomCount;

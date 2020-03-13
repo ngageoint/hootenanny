@@ -82,7 +82,7 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
       // go through each of the child's direct parents
       for (set<ElementId>::const_iterator jt = parents.begin(); jt != parents.end(); ++jt)
       {
-        LOG_TRACE("Checking parent: " << *jt);
+        LOG_TRACE("Checking parent: " << *jt << " of child: " << *it << "...");
         if (toErase.find(*jt) == toErase.end())
         {
           // remove the child b/c it is owned by an element outside _eid.
@@ -91,6 +91,10 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
           erased = true;
           foundOne = true;
           break;
+        }
+        else
+        {
+          LOG_TRACE("Not removing child: " << *it);
         }
       }
 
@@ -166,6 +170,7 @@ void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, Elemen
     }
 
     RemoveWayByEid::removeWay(map, w->getId());
+    //RemoveWayByEid::removeWayFully(map, w->getId());
     LOG_VART(map->getWay(w->getId()));
     _numAffected++;
   }

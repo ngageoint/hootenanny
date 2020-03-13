@@ -120,7 +120,8 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
     }
   }
 
-  LOG_TRACE("Created " << StringUtils::formatLargeNumber(mergers.size()) <<  "merger(s) for group.");
+  LOG_TRACE(
+    "Created " << StringUtils::formatLargeNumber(mergers.size()) <<  " merger(s) for group.");
   return result;
 }
 
