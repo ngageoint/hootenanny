@@ -54,6 +54,7 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
   _numAffected = 0;
 
   assert(_eid.isNull() == false);
+  LOG_VART(map->containsElement(_eid));
   if (map->containsElement(_eid) == false)
   {
     return;
@@ -81,9 +82,11 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
       // go through each of the child's direct parents
       for (set<ElementId>::const_iterator jt = parents.begin(); jt != parents.end(); ++jt)
       {
+        LOG_TRACE("Checking parent: " << *jt);
         if (toErase.find(*jt) == toErase.end())
         {
           // remove the child b/c it is owned by an element outside _eid.
+          LOG_TRACE("Removing child: " << *it);
           toErase.erase(it++);
           erased = true;
           foundOne = true;
@@ -127,11 +130,13 @@ void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, Elemen
   // if this element isn't being removed
   if (removeSet.find(eid) == removeSet.end() || map->containsElement(eid) == false)
   {
+    LOG_TRACE("Not removing " << eid);
+    LOG_VART(removeSet);
+    LOG_VART(map->containsElement(eid));
     return;
   }
 
   LOG_TRACE("Removing: " << eid << "...");
-
   if (eid.getType() == ElementType::Relation)
   {
     const RelationPtr& r = map->getRelation(eid.getId());
@@ -145,6 +150,7 @@ void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, Elemen
     }
 
     RemoveRelationByEid::removeRelation(map, eid.getId());
+    LOG_VART(map->getRelation(eid.getId()));
     _numAffected++;
   }
   else if (eid.getType() == ElementType::Way)
@@ -160,11 +166,13 @@ void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, Elemen
     }
 
     RemoveWayByEid::removeWay(map, w->getId());
+    LOG_VART(map->getWay(w->getId()));
     _numAffected++;
   }
   else if (eid.getType() == ElementType::Node)
   {
     RemoveNodeByEid::removeNodeNoCheck(map, eid.getId());
+    LOG_VART(map->getNode(eid.getId()));
     _numAffected++;
   }
   else

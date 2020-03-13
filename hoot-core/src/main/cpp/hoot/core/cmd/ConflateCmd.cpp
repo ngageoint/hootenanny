@@ -366,6 +366,7 @@ int ConflateCmd::runSimple(QStringList& args)
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
     // apply any user specified pre-conflate operations
+    LOG_STATUS("Running pre-conflate operations...");
     QElapsedTimer timer;
     timer.start();
     NamedOp preOps(ConfigOptions().getConflatePreOps());
@@ -413,6 +414,7 @@ int ConflateCmd::runSimple(QStringList& args)
   if (ConfigOptions().getConflatePostOps().size() > 0)
   {
     // apply any user specified post-conflate operations
+    LOG_STATUS("Running post-conflate operations...");
     QElapsedTimer timer;
     timer.start();
     NamedOp postOps(ConfigOptions().getConflatePostOps());

@@ -275,13 +275,22 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   // Would it help to sort the matches so the biggest or best ones get merged first?
   // convert all the match sets into mergers - #2912
+  LOG_DEBUG(
+    "Converting " << StringUtils::formatLargeNumber(matchSets.size()) <<
+    " match sets to mergers...");
   for (size_t i = 0; i < matchSets.size(); ++i)
   {
     PROGRESS_INFO(
       "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " / " <<
       StringUtils::formatLargeNumber(matchSets.size()) << " to a merger...");
+
     _mergerFactory->createMergers(map, matchSets[i], _mergers);
+
+    LOG_DEBUG(
+      "Converted match set " << StringUtils::formatLargeNumber(i + 1) << " to " <<
+      StringUtils::formatLargeNumber(_mergers.size()) << " merger(s).")
   }
+  LOG_VART(_mergers.size());
 
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   // don't need the matches any more
@@ -294,17 +303,26 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
+  LOG_DEBUG("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
   vector<pair<ElementId, ElementId>> replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
+    const QString msg =
+      "Applying merger: " + StringUtils::formatLargeNumber(i + 1) + " / " +
+      StringUtils::formatLargeNumber(_mergers.size());
     if (i % 100 == 0)
     {
-      PROGRESS_INFO(
-        "Applying merger: " << StringUtils::formatLargeNumber(i + 1) << " / " <<
-        StringUtils::formatLargeNumber(_mergers.size()));
+      PROGRESS_INFO(msg);
     }
+    else
+    {
+      LOG_DEBUG(msg);
+    }
+
     _mergers[i]->apply(map, replaced);
+
     LOG_VART(replaced);
+    LOG_VART(map->size());
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);

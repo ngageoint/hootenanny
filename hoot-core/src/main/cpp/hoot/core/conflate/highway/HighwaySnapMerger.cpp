@@ -86,6 +86,7 @@ _sublineMatcher(sublineMatcher),
 _matchedBy(HighwayMatch::MATCH_NAME)
 {
   _pairs = pairs;
+  LOG_VART(_pairs);
 }
 
 void HighwaySnapMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
@@ -154,6 +155,13 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Eleme
     }
 
     _mergePair(map, eid1, eid2, replaced);
+
+    // TODO: remove
+    ElementId debugId(ElementType::Way, -98899177);
+    if (eid1 == debugId || eid2 == debugId)
+    {
+      LOG_VART(map->getElement(debugId));
+    }
   }
 }
 
@@ -184,8 +192,12 @@ bool HighwaySnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPt
 bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   vector<pair<ElementId, ElementId>>& replaced)
 {
+  // TODO: This monster method needs to be refactored into smaller parts where possible.
+
   LOG_VART(eid1);
+  LOG_VART(map->getElement(eid1));
   LOG_VART(eid2);
+  LOG_VART(map->getElement(eid2));
 
   if (HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced))
   {
@@ -196,8 +208,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   ElementPtr e1 = result->getElement(eid1);
   ElementPtr e2 = result->getElement(eid2);
-  LOG_TRACE("HighwaySnapMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
-  LOG_TRACE("HighwaySnapMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
+  //LOG_TRACE("HighwaySnapMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
+  //LOG_TRACE("HighwaySnapMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
   // If the two elements being merged are identical, then there's no point of going through
   // splitting and trying to match sections of them together. Just set the match equal to the
@@ -267,10 +279,18 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   {
     LOG_VART(scraps1->getElementId());
   }
+  else
+  {
+    LOG_TRACE("scraps1 null");
+  }
   LOG_VART(e2Match->getElementId());
   if (scraps2)
   {
     LOG_VART(scraps2->getElementId());
+  }
+  else
+  {
+    LOG_TRACE("scraps2 null");
   }
 
   // remove any ways that directly connect from e1Match to e2Match
@@ -282,10 +302,18 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     LOG_VART(e1Match->getElementId());
     //LOG_VART(e1Match);
   }
+  else
+  {
+    LOG_TRACE("e1Match null");
+  }
   if (e2Match)
   {
     LOG_VART(e2Match->getElementId());
     //LOG_VART(e2Match);
+  }
+  else
+  {
+    LOG_TRACE("e2Match null");
   }
 
   // merge the attributes appropriately
@@ -390,20 +418,36 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     LOG_VART(e1Match->getElementId());
     //LOG_VART(e1Match);
   }
+  else
+  {
+    LOG_TRACE("e1Match null");
+  }
   if (scraps1)
   {
     LOG_VART(scraps1->getElementId());
     //LOG_VART(scraps1);
+  }
+  else
+  {
+    LOG_TRACE("scraps1 null");
   }
   if (e2Match)
   {
     LOG_VART(e2Match->getElementId());
     //LOG_VART(e2Match);
   }
+  else
+  {
+    LOG_TRACE("e2Match null");
+  }
   if (scraps2)
   {
     LOG_VART(scraps2->getElementId());
     //LOG_VART(scraps2);
+  }
+  else
+  {
+    LOG_TRACE("scraps2 null");
   }
 
   if (_markAddedMultilineStringRelations)
@@ -451,51 +495,82 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     }
     else if (scraps1)
     {
-      LOG_TRACE("Replacing with scraps1...");
+      LOG_TRACE("Replacing: " << eid1 << " with scraps1: " << scraps1->getElementId() << "...");
       ReplaceElementOp(eid1, scraps1->getElementId(), true).apply(result);
     }
   }
   else
   {
     // remove any reviews that contain this element.
+    LOG_TRACE("Removing: " << eid1 << "...");
     RemoveReviewsByEidOp(eid1, true).apply(result);
   }
 
   // if there is something left to review against
   if (scraps2)
   {
-    LOG_TRACE("Replacing with scraps2...");
+    LOG_TRACE(
+      "Replacing: " << e2Match->getElementId() << " and : " << eid2 << " with scraps2: " <<
+      scraps2->getElementId() << "...");
     map->addElement(scraps2);
     ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(result);
     ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(result);
 //    _updateScrapParent(result, e2Match->getId(), scraps2);
+    // TODO: remove
+    //replaced.push_back(std::pair<ElementId, ElementId>(eid2, eid1));
   }
   // if there is nothing to review against, drop the reviews.
   else
   {
+    LOG_TRACE("Removing: " << e2Match->getElementId() << " and : " << eid2 << "...");
     RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(result);
     RemoveReviewsByEidOp(eid2, true).apply(result);
+    // TODO: remove
+    //replaced.push_back(std::pair<ElementId, ElementId>(eid2, eid1));
   }
 
   if (e1Match)
   {
     LOG_VART(e1Match->getElementId());
   }
+  else
+  {
+    LOG_TRACE("e1Match null");
+  }
   if (scraps1)
   {
     LOG_VART(scraps1->getElementId());
+  }
+  else
+  {
+    LOG_TRACE("scraps1 null");
   }
   if (e2Match)
   {
     LOG_VART(e2Match->getElementId());
   }
+  else
+  {
+    LOG_TRACE("e2Match null");
+  }
   if (scraps2)
   {
     LOG_VART(scraps2->getElementId());
   }
+  else
+  {
+    LOG_TRACE("scraps2 null");
+  }
 
-  LOG_VART(map->getElement(eid1));
-  LOG_VART(map->getElement(eid2));
+  if (!map->getElement(eid1))
+  {
+    LOG_TRACE("eid1 null");
+  }
+  if (!map->getElement(eid2))
+  {
+    LOG_TRACE("eid2 null");
+  }
+  LOG_VART(replaced);
 
   return false;
 }
@@ -731,11 +806,12 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
   match->setTags(splitee->getTags());
   match->setCircularError(splitee->getCircularError());
   match->setStatus(splitee->getStatus());
-  LOG_VART(match);
+  //LOG_VART(match);
 
   if (scrap)
   {
-    LOG_VART(scrap);
+    LOG_VART(scrap->getElementId());
+    //LOG_VART(scrap);
 
     /*
      * In this example we have a foot path that goes on top of a wall (x) that is being matched with
@@ -818,19 +894,22 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
     {
       scrap->getTags().set(MetadataTags::HootMultilineString(), "yes");
     }
-    LOG_VART(scrap);
+    //LOG_VART(scrap);
 
     replaced.push_back(
       std::pair<ElementId, ElementId>(splitee->getElementId(), scrap->getElementId()));
+    LOG_VART(replaced);
   }
 }
 
 void HighwaySnapMerger::_updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap)
 {
-  LOG_TRACE("Updating scrap parent...");
-
   if (!scrap)
     return;
+
+  LOG_TRACE(
+    "Updating scrap parent: " << scrap->getElementId() << " with parent ID: " << id << "...");
+
   if (scrap->getElementType() == ElementType::Way)
     std::dynamic_pointer_cast<Way>(scrap)->setPid(id);
   else if (scrap->getElementType() == ElementType::Relation)

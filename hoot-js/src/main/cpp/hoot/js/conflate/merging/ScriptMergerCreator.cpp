@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/conflate/merging/ScriptMerger.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace std;
 using namespace v8;
@@ -46,7 +47,9 @@ ScriptMergerCreator::ScriptMergerCreator()
 
 bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
-  LOG_TRACE("Creating mergers with " << className() << "...");
+  LOG_TRACE(
+    "Creating merger group with " << className() << " for " <<
+    StringUtils::formatLargeNumber(matches.size()) << " match(es)...");
 
   bool result = false;
   assert(matches.size() > 0);
@@ -61,9 +64,9 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
     ConstMatchPtr m = *it;
-    LOG_VART(m->toString());
+    //LOG_VART(m->toString());
     std::shared_ptr<const ScriptMatch> sm = dynamic_pointer_cast<const ScriptMatch>(m);
-    // check to make sure all the input matches are script matches.
+    // check to make sure all the input matches are script matches
     if (sm == 0)
     {
       // return an empty result
@@ -88,9 +91,10 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
       }
     }
   }
+  LOG_VART(eids);
 
   std::shared_ptr<ScriptMerger> sm(new ScriptMerger(script, plugin, eids));
-  // only add the merge if there are elements to merge.
+  // only add the merger if there are elements to merge.
   if (sm->hasFunction("mergeSets"))
   {
     if (eids.size() >= 1)
@@ -108,6 +112,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
     }
     else if (eids.size() > 1)
     {
+      LOG_TRACE("Overlapping matches: " << eids);
       mergers.push_back(
         MergerPtr(
           new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0)));
@@ -115,7 +120,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
     }
   }
 
-  LOG_VART(result);
+  LOG_TRACE("Created " << StringUtils::formatLargeNumber(mergers.size()) <<  "merger(s) for group.");
   return result;
 }
 

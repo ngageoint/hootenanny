@@ -38,6 +38,9 @@
 namespace hoot
 {
 
+/**
+ * Removes all review relations that an element is involved in and optionally the element itself
+ */
 class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:

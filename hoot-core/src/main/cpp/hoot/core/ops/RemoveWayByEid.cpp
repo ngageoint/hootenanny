@@ -50,12 +50,15 @@ _removeFully(removeFully)
 
 void RemoveWayByEid::_removeWay(OsmMapPtr& map, long wId)
 {
-  LOG_VART(wId);
   if (map->_ways.find(wId) != map->_ways.end())
   {
     LOG_TRACE("Removing way: " << ElementId::way(wId) << "...");
     map->_index->removeWay(map->getWay(wId));
     map->_ways.erase(wId);
+
+    LOG_VART(map->_ways.find(wId) == map->_ways.end());
+    LOG_VART(
+      map->_index->getElementToRelationMap()->getRelationByElement(ElementId::way(wId)).size());
   }
 }
 

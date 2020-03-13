@@ -33,6 +33,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace std;
 
@@ -68,8 +69,6 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
     throw IllegalArgumentException("You must specify a valid element ID.");
   }
 
-  LOG_TRACE("Removing reviews for " << _eid << " from map...");
-
   // if from isn't in the map, there is nothing to do.
   if (map->containsElement(_eid) == false)
   {
@@ -77,9 +76,9 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
     return;
   }
 
+  LOG_TRACE("Removing reviews for " << _eid << " from map...");
   ElementPtr from = map->getElement(_eid);
   set<ReviewMarker::ReviewUid> reviews = ReviewMarker().getReviewUids(map, from);
-
   for (set<ReviewMarker::ReviewUid>::const_iterator it = reviews.begin(); it != reviews.end();
     ++it)
   {
@@ -87,10 +86,13 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
     RemoveElementByEid::removeElement(map, *it);
     _numAffected++;
   }
+  LOG_TRACE(
+    "Removed " << StringUtils::formatLargeNumber(_numAffected) << " reviews for " << _eid << ".");
 
   if (_clearAndRemove)
   {
     // just in case it is still part of an element (e.g. part of another relation)
+    LOG_TRACE("Removing " << _eid << "...");
     from->getTags().clear();
     RecursiveElementRemover(_eid).apply(map);
   }

@@ -176,7 +176,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     }
     _numProcessed++;
 
-    if (_numAffected % _taskStatusUpdateInterval == 0)
+    if (_numAffected > 0 && _numAffected % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Removed " << StringUtils::formatLargeNumber(_numAffected) <<
