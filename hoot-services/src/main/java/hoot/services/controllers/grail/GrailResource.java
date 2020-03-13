@@ -883,15 +883,29 @@ public class GrailResource {
         //remove cropfile
         workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
 
-        // merge reference and ways osm files
-        GrailParams mergeOsmParams = new GrailParams(params);
-        File mergeFile = new File(params.getWorkDir(), "merge.osm");
-        mergeOsmParams.setOutput(mergeFile.getAbsolutePath());
-        workflow.add(grailCommandFactory.build(jobId, mergeOsmParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+        // merge OOB connected ways osm files and add 'hoot:change:exclude:delete' tag to each
+        GrailParams mergeOobWaysParams = new GrailParams(params);
+        File mergeOobWaysFile = new File(params.getWorkDir(), "oobways.osm");
+        mergeOobWaysParams.setOutput(mergeOobWaysFile.getAbsolutePath());
+        Map<String, String> opts = new HashMap<>();
+        opts.put("convert.ops", "hoot::SetTagValueVisitor");
+        opts.put("set.tag.value.visitor.element.criteria", "hoot::WayCriterion");
+        opts.put("set.tag.value.visitor.keys", "hoot:change:exclude:delete");
+        opts.put("set.tag.value.visitor.values", "yes");
+        mergeOobWaysParams.setAdvancedOptions(opts);
+        mergeOobWaysParams.setInput1("\\d+\\.osm"); //this is the file filter
+        workflow.add(grailCommandFactory.build(jobId, mergeOobWaysParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+
+        // merge OOB connected ways merge file and the reference osm file
+        GrailParams mergeRefParams = new GrailParams(params);
+        File mergeRefFile = new File(params.getWorkDir(), "merge.osm");
+        mergeRefParams.setInput1("(" + mergeOobWaysFile.getName() + "|" + referenceOSMFile.getName() + ")"); //this is the file filter
+        mergeRefParams.setOutput(mergeRefFile.getAbsolutePath());
+        workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
 
         // Write the data to the hoot db
         GrailParams pushParams = new GrailParams(params);
-        pushParams.setInput1(mergeFile.getAbsolutePath());
+        pushParams.setInput1(mergeRefFile.getAbsolutePath());
         ExternalCommand importRailsPort = grailCommandFactory.build(jobId, pushParams, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importRailsPort);
 
