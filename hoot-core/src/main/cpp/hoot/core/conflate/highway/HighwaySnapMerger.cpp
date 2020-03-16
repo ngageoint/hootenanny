@@ -155,13 +155,6 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Eleme
     }
 
     _mergePair(map, eid1, eid2, replaced);
-
-    // TODO: remove
-    ElementId debugId(ElementType::Way, -98899177);
-    if (eid1 == debugId || eid2 == debugId)
-    {
-      LOG_VART(map->getElement(debugId));
-    }
   }
 }
 

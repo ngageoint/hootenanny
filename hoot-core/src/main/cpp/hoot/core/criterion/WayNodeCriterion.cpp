@@ -81,7 +81,7 @@ bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   return true;
 }
 
-long WayNodeCriterion::getMatchingWayId(const ConstElementPtr& e)
+long WayNodeCriterion::getFirstOwningWayId(const ConstNodePtr& node)
 {
   long result = 0;
 
@@ -90,20 +90,17 @@ long WayNodeCriterion::getMatchingWayId(const ConstElementPtr& e)
     throw HootException("You must set a map before calling WayNodeCriterion");
   }
 
-  if (e->getElementType() == ElementType::Node)
+  const std::set<long> waysContainingNode =
+    _map->getIndex().getNodeToWayMap()->getWaysByNode(node->getId());
+  for (std::set<long>::const_iterator it = waysContainingNode.begin();
+       it != waysContainingNode.end(); ++it)
   {
-    const std::set<long> waysContainingNode =
-      _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getElementId().getId());
-    for (std::set<long>::const_iterator it = waysContainingNode.begin();
-         it != waysContainingNode.end(); ++it)
+    const long containingWayId = *it;
+    if (_map->containsElement(ElementId(ElementType::Way, containingWayId)) &&
+        (!_parentCriterion || _parentCriterion->isSatisfied(_map->getWay(containingWayId))))
     {
-      const long containingWayId = *it;
-      if (_map->containsElement(ElementId(ElementType::Way, containingWayId)) &&
-          (!_parentCriterion || _parentCriterion->isSatisfied(_map->getWay(containingWayId))))
-      {
-        return containingWayId;
-        break;
-      }
+      return containingWayId;
+      break;
     }
   }
 

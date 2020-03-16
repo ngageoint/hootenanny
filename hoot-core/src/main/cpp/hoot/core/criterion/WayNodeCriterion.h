@@ -58,12 +58,12 @@ public:
   { return QString::fromStdString(className()).remove("hoot::"); }
 
   /**
-   * TODO
+   * Returns the ID of the first way that owns input node
    *
-   * @param e
-   * @return
+   * @param node node to search for
+   * @return the first way ID found that contains the node
    */
-  long getMatchingWayId(const ConstElementPtr& e);
+  long getFirstOwningWayId(const ConstNodePtr& node);
 
 protected:
 
