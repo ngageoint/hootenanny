@@ -50,6 +50,7 @@
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveReviewsByEidOp.h>
+#include <hoot/core/ops/RelationMemberSwapper.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -520,9 +521,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
     // Make the way that we're keeping have membership in whatever relations the way we're removing
     // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
-    // during merging.
-    OsmUtils::swapParentRelationRefs(eid2, eid1, map, false);
-    //OsmUtils::removeParentRelationRefs(eid2, map, false);
+    // during merging. TODO: we may be able to combine the following two removals into a single one
+    RelationMemberSwapper::swap(eid2, eid1, map, false);
     RemoveReviewsByEidOp(eid2, true).apply(result);
   }
 

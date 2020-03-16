@@ -988,39 +988,4 @@ ElementCriterionPtr OsmUtils::_getCrit(const QString& criterionClassName)
   return crit;
 }
 
-void OsmUtils::swapParentRelationRefs(
-  const ElementId& elementIdToRemove, const ElementId& elementIdToKeep, const OsmMapPtr& map,
-  const bool includeReviewRelations)
-{
-  const std::set<long> owningRelationIds =
-    map->getIndex().getElementToRelationMap()->getRelationByElement(elementIdToRemove);
-  for (set<long>::const_iterator it = owningRelationIds.begin(); it != owningRelationIds.end();
-       ++it)
-  {
-    RelationPtr owningRelation = map->getRelation(*it);
-    if (owningRelation &&
-        (!includeReviewRelations || owningRelation->getType() != MetadataTags::RelationReview()))
-    {
-      owningRelation->replaceElement(elementIdToRemove, elementIdToKeep);
-    }
-  }
-}
-
-void OsmUtils::removeParentRelationRefs(
-  const ElementId& elementIdToRemove, const OsmMapPtr& map, const bool includeReviewRelations)
-{
-  const std::set<long> owningRelationIds =
-    map->getIndex().getElementToRelationMap()->getRelationByElement(elementIdToRemove);
-  for (set<long>::const_iterator it = owningRelationIds.begin(); it != owningRelationIds.end();
-       ++it)
-  {
-    RelationPtr owningRelation = map->getRelation(*it);
-    if (owningRelation &&
-        (!includeReviewRelations || owningRelation->getType() != MetadataTags::RelationReview()))
-    {
-      owningRelation->removeElement(elementIdToRemove);
-    }
-  }
-}
-
 }
