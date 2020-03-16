@@ -64,7 +64,7 @@ bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     return false;
   }
-  // is this necessary?
+
   for (std::set<long>::const_iterator it = containingWays.begin(); it != containingWays.end(); ++it)
   {
     const long containingWayId = *it;

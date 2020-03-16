@@ -41,9 +41,8 @@ class BuildingWayNodeCriterionTest : public HootTestFixture
 
 public:
 
-  BuildingWayNodeCriterionTest()
-    : HootTestFixture("test-files/criterion/",
-                      UNUSED_PATH)
+  BuildingWayNodeCriterionTest() :
+  HootTestFixture("test-files/criterion/", UNUSED_PATH)
   {
   }
 
@@ -59,9 +58,9 @@ public:
     HOOT_STR_EQUALS(1, uut.isSatisfied(map->getNode(-20421)));
     HOOT_STR_EQUALS(1, uut.isSatisfied(map->getNode(-74242)));
 
-    HOOT_STR_EQUALS(1, uut.isSatisfied(map->getNode(-271160)));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(map->getNode(-271160)));
     HOOT_STR_EQUALS(0, uut.isSatisfied(map->getNode(-271159)));
-    HOOT_STR_EQUALS(1, uut.isSatisfied(map->getNode(-271173)));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(map->getNode(-271173)));
 
     HOOT_STR_EQUALS(1, uut.isSatisfied(map->getNode(-271161)));
 

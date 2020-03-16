@@ -47,9 +47,7 @@ public:
     QString role;
 
     Entry() {}
-
     Entry(QString r, ElementId eid) : role(r), _eid(eid)  { }
-
     Entry(ElementId eid) : _eid(eid) { }
 
     ElementId getElementId() const { return _eid; }
