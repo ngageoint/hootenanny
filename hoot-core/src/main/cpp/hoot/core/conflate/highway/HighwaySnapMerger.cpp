@@ -480,7 +480,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       LOG_TRACE("Swapping way IDs: " << eid1 << " and " << eidm1 << "...");
       //  Swap the old way ID back into the match element
       IdSwapOp(eid1, eidm1).apply(result);
-      //OsmUtils::swapParentRelationRefs(eid1, eidm1, map, false);
       //  Remove the old way with a new swapped out ID
       RemoveElementByEid(eidm1).apply(result);
       //  Add the scraps element to all the relations that the match is in
@@ -504,7 +503,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   {
     // remove any reviews that contain this element.
     LOG_TRACE("Removing: " << eid1 << "...");
-    //OsmUtils::swapParentRelationRefs(eid1, eid2, map, false);
     RemoveReviewsByEidOp(eid1, true).apply(result);
   }
 
@@ -525,15 +523,13 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   {
     LOG_TRACE("Removing: " << e2Match->getElementId() << " and : " << eid2 << "...");
 
-    //OsmUtils::swapParentRelationRefs(e2Match->getElementId(), eid1, map, false);
     RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(result);
 
-    // remove the way from any non-review relations it is in
-    //OsmUtils::removeParentRelationRefs(eid2, map, false);
-    // another option: Make the way that we're keeping have membership in whatever relations the
-    // way we're removing was in. I *think* this makes sense. This logic may also need to be
-    // replicated elsewhere during merging.
+    // Make the way that we're keeping have membership in whatever relations the way we're removing
+    // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
+    // during merging.
     OsmUtils::swapParentRelationRefs(eid2, eid1, map, false);
+    //OsmUtils::removeParentRelationRefs(eid2, map, false);
     RemoveReviewsByEidOp(eid2, true).apply(result);
   }
 
