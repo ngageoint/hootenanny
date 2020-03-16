@@ -22,47 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAY_NODE_CRITERION_H
-#define HIGHWAY_NODE_CRITERION_H
+#ifndef RAILWAY_WAY_NODE_CRITERION_H
+#define RAILWAY_WAY_NODE_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
 
-class HighwayNodeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
+class RailwayWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::HighwayNodeCriterion"; }
+  static std::string className() { return "hoot::RailwayWayNodeCriterion"; }
 
-  HighwayNodeCriterion();
+  RailwayWayNodeCriterion();
+  RailwayWayNodeCriterion(ConstOsmMapPtr map);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  virtual void setOsmMap(const OsmMap* map) override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HighwayNodeCriterion()); }
+  virtual ElementCriterionPtr clone() override
+  { return ElementCriterionPtr(new RailwayWayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const { return "Identifies highway nodes"; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
-
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Point; }
+  virtual QString getDescription() const override { return "Identifies railway nodes"; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
-
-
-private:
-
-  ConstOsmMapPtr _map;
 };
 
 }
 
-#endif // HIGHWAY_NODE_CRITERION_H
+#endif // RAILWAY_WAY_NODE_CRITERION_H

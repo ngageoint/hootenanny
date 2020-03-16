@@ -42,10 +42,11 @@ public:
   static std::string className() { return "hoot::WayNodeCriterion"; }
 
   WayNodeCriterion();
+  WayNodeCriterion(ConstOsmMapPtr map);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WayNodeCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WayNodeCriterion(_map)); }
 
   virtual QString getDescription() const { return "Identifies way nodes"; }
 
@@ -56,9 +57,18 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
-private:
+  /**
+   * TODO
+   *
+   * @param e
+   * @return
+   */
+  long getMatchingWayId(const ConstElementPtr& e);
+
+protected:
 
   ConstOsmMapPtr _map;
+  ElementCriterionPtr _parentCriterion;
 };
 
 }

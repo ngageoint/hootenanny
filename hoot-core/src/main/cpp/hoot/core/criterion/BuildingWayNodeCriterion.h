@@ -28,9 +28,7 @@
 #define BUILDINGWAYNODECRITERION_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
@@ -38,7 +36,7 @@ namespace hoot
 /**
  * A criterion that keeps nodes belonging to a building way.
  */
-class BuildingWayNodeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
+class BuildingWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
@@ -47,26 +45,15 @@ public:
   BuildingWayNodeCriterion();
   BuildingWayNodeCriterion(ConstOsmMapPtr map);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual void setOsmMap(const OsmMap* map) override;
 
-  virtual void setOsmMap(const OsmMap* map);
+  virtual ElementCriterionPtr clone() override
+  { return ElementCriterionPtr(new BuildingWayNodeCriterion(_map)); }
 
-  virtual ElementCriterionPtr clone();
-
-  virtual QString getDescription() const { return "Identifies way nodes in buildings"; }
-
-  long getMatchingWayId(const ConstElementPtr& e);
-
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Point; }
+  virtual QString getDescription() const override { return "Identifies way nodes in buildings"; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
-
-private:
-
-  ConstOsmMapPtr _map;
-  long _wayId;
 };
 
 }

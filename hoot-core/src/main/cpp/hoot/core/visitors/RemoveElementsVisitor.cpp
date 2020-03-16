@@ -114,6 +114,8 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     }
     else
     {
+      // TODO: explain
+      //RemoveElementByEid::removeUnusedElementsOnly(_map->shared_from_this(), e->getElementId());
       RemoveElementByEid::removeElement(_map->shared_from_this(), e->getElementId());
     }
   }

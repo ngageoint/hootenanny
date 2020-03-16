@@ -113,13 +113,29 @@ public:
    */
   static void removeElementNoCheck(OsmMapPtr map, ElementId eId);
 
+  /**
+   * @brief removeElement Removes an element from a map only if it does not have a prent element.
+   *
+   * If this element contains children (e.g. multipolygon) the children will not be removed from
+   * the map.
+   *
+   * @param map to operate on
+   * @param eId ID of the element to remove
+   */
+  static void removeUnusedElementsOnly(OsmMapPtr map, ElementId eId);
+
   virtual QString getDescription() const override
   { return "Removes a single element by element ID"; }
+
+  void setRemoveNodeFully(bool remove) { _removeNodeFully = remove; }
+  void setRemoveOnlyUnusedNodes(bool remove) { _removeOnlyUnusedNodes = remove; }
 
 private:
 
   ElementId _eIdToRemove;
   bool _doCheck;
+  bool _removeNodeFully;
+  bool _removeOnlyUnusedNodes;
 };
 
 }

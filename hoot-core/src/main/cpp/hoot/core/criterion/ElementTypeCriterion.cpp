@@ -27,7 +27,6 @@
 #include "ElementTypeCriterion.h"
 
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {

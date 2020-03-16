@@ -702,6 +702,17 @@ public:
     const ElementId& elementIdToRemove, const ElementId& elementIdToKeep, const OsmMapPtr& map,
     const bool includeReviewRelations = true);
 
+  /**
+   * TODO
+   *
+   * @param elementIdToRemove
+   * @param map
+   * @param includeReviewRelations
+   */
+  static void removeParentRelationRefs(
+    const ElementId& elementIdToRemove, const OsmMapPtr& map,
+    const bool includeReviewRelations = true);
+
 private:
 
   static int _badGeomCount;

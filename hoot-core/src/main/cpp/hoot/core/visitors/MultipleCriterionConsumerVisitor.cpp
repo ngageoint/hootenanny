@@ -88,6 +88,7 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
          it != _criteria.end(); ++it)
     {
       ElementCriterionPtr crit = *it;
+      LOG_VART(crit->toString());
       if (crit->isSatisfied(e))
       {
         criteriaSatisfied = true;
@@ -110,6 +111,7 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
          it != _criteria.end(); ++it)
     {
       ElementCriterionPtr crit = *it;
+      LOG_VART(crit->toString());
       if (!crit->isSatisfied(e))
       {
         criteriaSatisfied = false;
