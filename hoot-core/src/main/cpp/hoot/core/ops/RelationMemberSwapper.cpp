@@ -52,7 +52,7 @@ _includeReviewRelations(includeReviewRelations)
 {
 }
 
-void RelationMemberSwapper::apply(OsmMapPtr& map)
+void RelationMemberSwapper::apply(const OsmMapPtr& map)
 {
   _numAffected = 0;
 
@@ -72,7 +72,7 @@ void RelationMemberSwapper::apply(OsmMapPtr& map)
 }
 
 void RelationMemberSwapper::swap(
-  const ElementId& idToReplace, const ElementId& idToReplaceWith, OsmMapPtr& map,
+  const ElementId& idToReplace, const ElementId& idToReplaceWith, const OsmMapPtr& map,
   const bool includeReviewRelations)
 {
   RelationMemberSwapper(idToReplace, idToReplaceWith, includeReviewRelations).apply(map);

@@ -50,7 +50,7 @@ _includeReviewRelations(includeReviewRelations)
 {
 }
 
-void RelationMemberRemover::apply(OsmMapPtr& map)
+void RelationMemberRemover::apply(const OsmMapPtr& map)
 {
   _numAffected = 0;
 
@@ -69,7 +69,7 @@ void RelationMemberRemover::apply(OsmMapPtr& map)
   }
 }
 
-void RelationMemberRemover::remove(const ElementId& id, OsmMapPtr& map,
+void RelationMemberRemover::remove(const ElementId& id, const OsmMapPtr& map,
                                    const bool includeReviewRelations)
 {
   RelationMemberRemover(id, includeReviewRelations).apply(map);

@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/ops/ConstOsmMapOperation.h>
 
 namespace hoot
 {
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Swaps all relation members references for one element ID with another
  */
-class RelationMemberSwapper : public OsmMapOperation
+class RelationMemberSwapper : public ConstOsmMapOperation
 {
 public:
 
@@ -51,7 +51,7 @@ public:
   /**
    * @see OsmMapOperation
    */
-  void apply(OsmMapPtr& map);
+  void apply(const OsmMapPtr& map);
 
   /**
    * Swaps all relation members references for one element ID with another
@@ -61,8 +61,8 @@ public:
    * @param map map owning the element being removed
    * @param includeReviewRelations if true, review relations are modified
    */
-  static void swap(const ElementId& idToReplace, const ElementId& idToReplaceWith, OsmMapPtr& map,
-                   const bool includeReviewRelations = true);
+  static void swap(const ElementId& idToReplace, const ElementId& idToReplaceWith,
+                   const OsmMapPtr& map, const bool includeReviewRelations = true);
 
   virtual QString getInitStatusMessage() const
   {

@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/ops/ConstOsmMapOperation.h>
 
 namespace hoot
 {
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Removes all relation members references for an element
  */
-class RelationMemberRemover : public OsmMapOperation
+class RelationMemberRemover : public ConstOsmMapOperation
 {
 public:
 
@@ -50,7 +50,7 @@ public:
   /**
    * @see OsmMapOperation
    */
-  void apply(OsmMapPtr& map);
+  void apply(const OsmMapPtr& map);
 
   /**
    * Removes all relation members references for an element
@@ -59,7 +59,8 @@ public:
    * @param map map owning the element being removed
    * @param includeReviewRelations if true, review relations are modified
    */
-  static void remove(const ElementId& id, OsmMapPtr& map, const bool includeReviewRelations = true);
+  static void remove(const ElementId& id, const OsmMapPtr& map,
+                     const bool includeReviewRelations = true);
 
   virtual QString getInitStatusMessage() const
   {
