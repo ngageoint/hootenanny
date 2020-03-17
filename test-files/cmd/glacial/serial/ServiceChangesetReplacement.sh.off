@@ -32,7 +32,6 @@ set -e
 
 # TODO: 
 # - consolidate the three replacement workflows into a single function
-# - can maybe also ditch the single geometry tests, as they may be redundant with the multiple geometry tests (except for the POI test)
 
 TEST_NAME=$1
 echo "test name: " $TEST_NAME
@@ -282,7 +281,7 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo ""
   hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
   # debug only
-  # hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  # hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
 
   # CHANGESET APPLICATION
 

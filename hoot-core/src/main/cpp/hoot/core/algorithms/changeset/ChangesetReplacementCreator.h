@@ -141,6 +141,7 @@ public:
   void setRetainmentFilterOptions(const QStringList& optionKvps);
   void setWaySnappingEnabled(const bool enabled) { _waySnappingEnabled = enabled; }
   void setConflationEnabled(const bool enabled) { _conflationEnabled = enabled; }
+  void setTagOobConnectedWays(const bool addTag) { _tagOobConnectedWays = addTag; }
 
 private:
 
@@ -188,6 +189,11 @@ private:
 
   // turn on/off conflation of cookie cut data being replaced with replacement data
   bool _conflationEnabled;
+
+  // Tagging out of bounds connected ways allows for preventing deletion of ways outside of the
+  // replacement bounds when lenient bounds interpretation is enabled. If false, the tags should
+  // added manually before performing the replacement.
+  bool _tagOobConnectedWays;
 
   // controls cropping
   BoundsOptions _boundsOpts;
