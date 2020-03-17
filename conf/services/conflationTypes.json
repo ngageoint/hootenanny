@@ -12,7 +12,7 @@
     },
     "Cleaning": {
         "members": {
-            "hoot::DualWaySplitter": "Split divided highways"
+            "hoot::DualHighwaySplitter": "Split divided highways"
         }
     },
     "RubberSheeting": {

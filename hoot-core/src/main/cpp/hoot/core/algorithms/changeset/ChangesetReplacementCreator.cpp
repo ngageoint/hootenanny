@@ -89,7 +89,8 @@ _geometryFiltersSpecified(false),
 _chainReplacementFilters(false),
 _chainRetainmentFilters(false),
 _waySnappingEnabled(true),
-_conflationEnabled(true)
+_conflationEnabled(true),
+_tagOobConnectedWays(false)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, osmApiDbUrl));
   setGeometryFilters(QStringList());
@@ -412,7 +413,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   const QMap<ElementId, long> refIdToVersionMappings = _getIdToVersionMappings(refMap);
   const bool isLinearCrit = !linearFilterClassNames.isEmpty();
   LOG_VART(isLinearCrit);
-  if (_lenientBounds && isLinearCrit)
+  if (_tagOobConnectedWays && _lenientBounds && isLinearCrit)
   {
     // If we have a lenient bounds requirement and linear features, we need to exclude all ways
     // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
@@ -1163,7 +1164,9 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
   // For this being enabled to have any effect,
   // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
-  conf().set(ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
+  conf().set(
+    ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(),
+    _tagOobConnectedWays);
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
   // turn on for testing only

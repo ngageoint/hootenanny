@@ -59,6 +59,8 @@ IDs in the secondary data are not retained and those elements treated as complet
                                    being replaced.
 * +--disable-conflation+         - Disables the conflation of new secondary features with unremoved reference features. See the "Conflation" 
                                    section for more detail.
+* +--disable-oob-way-handling+   - Determines whether Hootenanny automatically handles protecting out of bounds immediately connected reference 
+                                   ways from deletion in the changeset output. See the ""Bounds Handling" section for more detail.
 * +--stats+                      - Displays changeset statistics (only valid for .osc changeset output files)
 * +--write-bounds+               - If the +convert.bounding.box+ configuration option is specified, outputs a file containing the specified 
                                    input bounds. The location of the file is controlled via the +bounds.output.file+ configuration option.
@@ -66,7 +68,7 @@ IDs in the secondary data are not retained and those elements treated as complet
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--full-replacement] [--strict-bounds] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--disable-way-snapping] [--disable-conflation] [--stats] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--full-replacement] [--strict-bounds] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--disable-way-snapping] [--disable-conflation] [--disable-oob-way-handling] [--stats] [--write-bounds]
 --------------------------------------
 
 === Examples
@@ -135,6 +137,19 @@ point features.
 * Linear features either inside or overlapping the specified bounds are completely replaced.
 * Polygon features either inside or overlapping the specified bounds are completely replaced. Polygon features are never split but may be 
   conflated at the specified boundary if conflation is enabled.
+
+==== Out of Bounds Connected Ways
+
+When performing replacement a method is required to protect the reference linear features that fall outside of the replacement bounds from
+deletion in the output changeset. This is only necessary when the +--strict-bounds+ option is omitted. The method to protect the ways is to 
+tag them with the tag, hoot:change:exclude:delete=yes. This can either be done automatically by Hootenanny as part of this command's execution
+or can be done before the call to this command. 
+
+With the +--disable-oob-way-handling+ option omitted, and the +--strict-bounds+ option omitted, Hootenanny will automatically add the 
++hoot:change:exclude:delete=yes+ tag to such reference ways for XML, JSON, OSM API database, and Hootenanny API database inputs only. To do 
+so the reference input must be sufficiently larger than the replacement bounds. If this option is specified and the +--strict-bounds+ option 
+is omitted, Hootenanny will not automatically tag such ways, and the caller of this command is responsible for tagging such reference ways 
+with the hoot:change:exclude:delete=yes+ tag. 
 
 === Filtering
 
