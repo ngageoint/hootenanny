@@ -325,10 +325,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-151"/>
     </node>
-    <node visible="true" id="-146" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9016425999999882" lon="-75.4395320999999939">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-146"/>
-    </node>
     <node visible="true" id="-144" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.8989381000000023" lon="-75.4418902000000031">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-144"/>
@@ -401,29 +397,9 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-66"/>
     </node>
-    <node visible="true" id="-65" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9011709999999837" lon="-75.4397620000000018">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-65"/>
-    </node>
     <node visible="true" id="-63" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9025329999999840" lon="-75.4399310000000014">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-63"/>
-    </node>
-    <node visible="true" id="-61" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9032679999999971" lon="-75.4398869999999988">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-61"/>
-    </node>
-    <node visible="true" id="-60" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9026970000000034" lon="-75.4397079999999960">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-60"/>
-    </node>
-    <node visible="true" id="-59" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9021150000000020" lon="-75.4395880000000005">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-59"/>
-    </node>
-    <node visible="true" id="-58" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.8991749999999925" lon="-75.4394779999999940">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-58"/>
     </node>
     <node visible="true" id="-50" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9018592999999839" lon="-75.4395533000000000">
         <tag k="hoot:status" v="2"/>
@@ -438,18 +414,6 @@
         <tag k="highway" v="traffic_signals"/>
         <tag k="hoot:id" v="-49"/>
         <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-47" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9001188000000013" lon="-75.4408976999999936">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-47"/>
-    </node>
-    <node visible="true" id="-46" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.8998407999999927" lon="-75.4411094000000020">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-46"/>
-    </node>
-    <node visible="true" id="-45" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.8995162999999948" lon="-75.4413769999999886">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-45"/>
     </node>
     <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8984000000000094" lon="-75.4425536931147604">
         <tag k="hoot:status" v="2"/>
@@ -1331,13 +1295,60 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881736195"/>
-        <nd ref="-915"/>
-        <nd ref="-18"/>
+    <way visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-906"/>
+        <tag k="source:hgv:national_network" v="Title 23: Highways Part 658 http://ecfr.gpoaccess.gov/cgi/t/text/text-idx?c=ecfr&amp;rgn=div5&amp;view=text&amp;node=23:1.0.1.7.33&amp;idno=23"/>
+        <tag k="tiger:name_type_2" v="Blvd"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-115"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Dupont Boulevard"/>
+        <tag k="tiger:cfcc" v="A25"/>
+        <tag k="ref" v="US 113"/>
+        <tag k="source:datetime" v="2019-04-03T10:48:51Z"/>
+        <tag k="tiger:name_direction_prefix_2" v="S"/>
+        <tag k="lanes" v="2"/>
+        <tag k="tiger:name_type" v="Blvd"/>
+        <tag k="maxspeed" v="55 mph"/>
+        <tag k="NHS" v="yes"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="name_1" v="S Dupont Blvd"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="hgv" v="designated"/>
+        <tag k="tiger:name_base" v="Dupont"/>
+        <tag k="hgv:national_network" v="yes"/>
+        <tag k="tiger:name_base_1" v="United States Highway 113"/>
+        <tag k="tiger:name_base_2" v="Dupont"/>
+        <tag k="hoot:id" v="-113"/>
+        <tag k="highway" v="trunk"/>
+    </way>
+    <way visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881727996"/>
+        <nd ref="-63"/>
+        <nd ref="-229"/>
+        <tag k="source:hgv:national_network" v="Title 23: Highways Part 658 http://ecfr.gpoaccess.gov/cgi/t/text/text-idx?c=ecfr&amp;rgn=div5&amp;view=text&amp;node=23:1.0.1.7.33&amp;idno=23"/>
+        <tag k="tiger:name_type_2" v="Blvd"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Dupont Boulevard"/>
+        <tag k="tiger:cfcc" v="A25"/>
+        <tag k="ref" v="US 113"/>
+        <tag k="tiger:name_direction_prefix_2" v="S"/>
+        <tag k="source:datetime" v="2020-02-05T04:33:05Z"/>
+        <tag k="lanes" v="2"/>
+        <tag k="tiger:name_type" v="Blvd"/>
+        <tag k="maxspeed" v="55 mph"/>
+        <tag k="NHS" v="yes"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="name_1" v="S Dupont Blvd"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="hgv" v="designated"/>
+        <tag k="tiger:name_base" v="Dupont"/>
+        <tag k="hgv:national_network" v="yes"/>
+        <tag k="tiger:name_base_1" v="United States Highway 113"/>
+        <tag k="tiger:name_base_2" v="Dupont"/>
+        <tag k="hoot:id" v="-112"/>
+        <tag k="highway" v="trunk"/>
     </way>
     <way visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881733241"/>
@@ -1345,6 +1356,41 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-97"/>
         <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881727627"/>
+        <nd ref="4881730743"/>
+        <nd ref="4881727629"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-84"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-229"/>
+        <nd ref="4881728010"/>
+        <tag k="source:hgv:national_network" v="Title 23: Highways Part 658 http://ecfr.gpoaccess.gov/cgi/t/text/text-idx?c=ecfr&amp;rgn=div5&amp;view=text&amp;node=23:1.0.1.7.33&amp;idno=23"/>
+        <tag k="tiger:name_type_2" v="Blvd"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Dupont Boulevard"/>
+        <tag k="tiger:cfcc" v="A25"/>
+        <tag k="ref" v="US 113"/>
+        <tag k="tiger:name_direction_prefix_2" v="S"/>
+        <tag k="source:datetime" v="2020-02-05T04:33:05Z"/>
+        <tag k="lanes" v="2"/>
+        <tag k="tiger:name_type" v="Blvd"/>
+        <tag k="maxspeed" v="55 mph"/>
+        <tag k="NHS" v="yes"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="name_1" v="S Dupont Blvd"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="hgv" v="designated"/>
+        <tag k="tiger:name_base" v="Dupont"/>
+        <tag k="hgv:national_network" v="yes"/>
+        <tag k="tiger:name_base_1" v="United States Highway 113"/>
+        <tag k="tiger:name_base_2" v="Dupont"/>
+        <tag k="hoot:id" v="-78"/>
+        <tag k="highway" v="trunk"/>
     </way>
     <way visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881734494"/>
@@ -1680,22 +1726,6 @@
         <tag k="source:datetime" v="2019-03-29T01:33:26Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-33" timestamp="2020-02-28T16:47:46Z" version="1">
-        <nd ref="-14"/>
-        <nd ref="4881736158"/>
-        <nd ref="-895"/>
-        <nd ref="-45"/>
-        <nd ref="-46"/>
-        <nd ref="-47"/>
-        <nd ref="4881734498"/>
-        <nd ref="-912"/>
-        <nd ref="-910"/>
-        <nd ref="4881734494"/>
-        <nd ref="-922"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-33"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-41"/>
         <nd ref="-14"/>
@@ -1717,42 +1747,6 @@
         <tag k="tiger:name_base_2" v="State Road 36"/>
         <tag k="hoot:id" v="-32"/>
         <tag k="highway" v="secondary"/>
-    </way>
-    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-17"/>
-        <nd ref="4881727651"/>
-        <nd ref="4881727996"/>
-        <nd ref="-63"/>
-        <nd ref="-229"/>
-        <nd ref="4881728010"/>
-        <nd ref="4881734494"/>
-        <nd ref="-65"/>
-        <nd ref="-908"/>
-        <nd ref="4881737567"/>
-        <nd ref="4881733241"/>
-        <tag k="source:hgv:national_network" v="Title 23: Highways Part 658 http://ecfr.gpoaccess.gov/cgi/t/text/text-idx?c=ecfr&amp;rgn=div5&amp;view=text&amp;node=23:1.0.1.7.33&amp;idno=23"/>
-        <tag k="tiger:name_type_2" v="Blvd"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="Dupont Boulevard"/>
-        <tag k="tiger:cfcc" v="A25"/>
-        <tag k="ref" v="US 113"/>
-        <tag k="tiger:name_direction_prefix_2" v="S"/>
-        <tag k="source:datetime" v="2020-02-05T04:33:05Z"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="55 mph"/>
-        <tag k="tiger:name_type" v="Blvd"/>
-        <tag k="NHS" v="yes"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="name_1" v="S Dupont Blvd"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hgv" v="designated"/>
-        <tag k="tiger:name_base" v="Dupont"/>
-        <tag k="hgv:national_network" v="yes"/>
-        <tag k="tiger:name_base_1" v="United States Highway 113"/>
-        <tag k="tiger:name_base_2" v="Dupont"/>
-        <tag k="hoot:id" v="-29"/>
-        <tag k="highway" v="trunk"/>
     </way>
     <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36"/>
@@ -1781,57 +1775,6 @@
         <tag k="hoot:id" v="-24"/>
         <tag k="source:datetime" v="2019-03-29T01:33:24Z"/>
         <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-922"/>
-        <nd ref="4881734508"/>
-        <nd ref="-917"/>
-        <nd ref="4881727627"/>
-        <nd ref="4881730743"/>
-        <nd ref="4881727629"/>
-        <nd ref="4881734505"/>
-        <nd ref="-15"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-23"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-19"/>
-        <nd ref="-58"/>
-        <nd ref="4881726722"/>
-        <nd ref="-906"/>
-        <nd ref="-146"/>
-        <nd ref="4881734508"/>
-        <nd ref="-59"/>
-        <nd ref="-893"/>
-        <nd ref="-60"/>
-        <nd ref="-61"/>
-        <nd ref="4881727640"/>
-        <nd ref="-20"/>
-        <tag k="source:hgv:national_network" v="Title 23: Highways Part 658 http://ecfr.gpoaccess.gov/cgi/t/text/text-idx?c=ecfr&amp;rgn=div5&amp;view=text&amp;node=23:1.0.1.7.33&amp;idno=23"/>
-        <tag k="tiger:name_type_2" v="Blvd"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="Dupont Boulevard"/>
-        <tag k="tiger:cfcc" v="A25"/>
-        <tag k="ref" v="US 113"/>
-        <tag k="tiger:name_direction_prefix_2" v="S"/>
-        <tag k="source:datetime" v="2019-04-03T10:48:51Z"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="55 mph"/>
-        <tag k="tiger:name_type" v="Blvd"/>
-        <tag k="NHS" v="yes"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="name_1" v="S Dupont Blvd"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hgv" v="designated"/>
-        <tag k="tiger:name_base" v="Dupont"/>
-        <tag k="hgv:national_network" v="yes"/>
-        <tag k="tiger:name_base_1" v="United States Highway 113"/>
-        <tag k="tiger:name_base_2" v="Dupont"/>
-        <tag k="hoot:id" v="-17"/>
-        <tag k="highway" v="trunk"/>
     </way>
     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-19"/>
@@ -2190,7 +2133,8 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-4" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-17" role="forward"/>
+        <member type="way" ref="-15" role="forward"/>
+        <member type="way" ref="-113" role="forward"/>
         <tag k="hoot:status" v="2"/>
         <tag k="route" v="bus"/>
         <tag k="name" v="DART 303"/>
@@ -2205,9 +2149,16 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="-3" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-115" role="forward"/>
-        <member type="way" ref="-17" role="forward"/>
-        <member type="way" ref="-29" role="forward"/>
+        <member type="way" ref="-15" role="forward"/>
+        <member type="way" ref="-113" role="forward"/>
+        <member type="way" ref="-14" role="forward"/>
+        <member type="way" ref="-1751" role="forward"/>
+        <member type="way" ref="-112" role="forward"/>
+        <member type="way" ref="-78" role="forward"/>
+        <member type="way" ref="-68" role="forward"/>
+        <member type="way" ref="-72" role="forward"/>
+        <member type="way" ref="-67" role="forward"/>
+        <member type="way" ref="-66" role="forward"/>
         <tag k="wikipedia" v="en:U.S. Route 113"/>
         <tag k="hoot:status" v="2"/>
         <tag k="symbol" v="http://upload.wikimedia.org/wikipedia/commons/f/fc/US_113.svg"/>
@@ -2222,9 +2173,10 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="-2" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-33" role=""/>
+        <member type="way" ref="-12" role=""/>
+        <member type="way" ref="-84" role=""/>
+        <member type="way" ref="-116" role=""/>
         <member type="way" ref="-32" role=""/>
-        <member type="way" ref="-23" role=""/>
         <tag k="wikipedia" v="en:Delaware Route 36"/>
         <tag k="hoot:status" v="2"/>
         <tag k="wikidata" v="Q798659"/>
@@ -2275,8 +2227,8 @@
         <tag k="type" v="boundary"/>
     </relation>
     <relation visible="true" id="7387465" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <member type="way" ref="-116" role=""/>
         <member type="way" ref="-12" role=""/>
+        <member type="way" ref="-116" role=""/>
         <tag k="wikipedia" v="en:Delaware Route 36"/>
         <tag k="hoot:status" v="1"/>
         <tag k="symbol" v="http://commons.wikimedia.org/wiki/File:Elongated_circle_36.svg"/>
@@ -2290,11 +2242,11 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="7387466" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <member type="way" ref="-66" role="forward"/>
-        <member type="way" ref="-97" role="forward"/>
         <member type="way" ref="-15" role="forward"/>
         <member type="way" ref="-14" role="forward"/>
         <member type="way" ref="-67" role="forward"/>
+        <member type="way" ref="-97" role="forward"/>
+        <member type="way" ref="-66" role="forward"/>
         <tag k="wikipedia" v="en:U.S. Route 113"/>
         <tag k="hoot:status" v="1"/>
         <tag k="symbol" v="http://upload.wikimedia.org/wikipedia/commons/f/fc/US_113.svg"/>

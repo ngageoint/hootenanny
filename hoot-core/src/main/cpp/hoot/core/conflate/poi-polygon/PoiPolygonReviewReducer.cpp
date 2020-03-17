@@ -39,6 +39,7 @@
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
+#include <hoot/core/elements/Node.h>
 
 // Std
 #include <float.h>
@@ -372,7 +373,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   //building ways.
   ruleDescription = "#20: building way node";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
-  const long matchingWayId = BuildingWayNodeCriterion(_map).getMatchingWayId(poi);
+  const long matchingWayId =
+    BuildingWayNodeCriterion(_map).getFirstOwningWayId(std::dynamic_pointer_cast<const Node>(poi));
   if (matchingWayId != 0)
   {
     ConstWayPtr matchingWay = _map->getWay(matchingWayId);

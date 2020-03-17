@@ -41,16 +41,70 @@ WayNodeCriterion::WayNodeCriterion()
 {
 }
 
+WayNodeCriterion::WayNodeCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
+
 bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  LOG_VART(_map.get());
-  if (_map.get())
+  if (e->getElementType() != ElementType::Node)
   {
-    LOG_VART(_map->size());
+    return false;
   }
-  return
-    e->getElementType() == ElementType::Node &&
-    _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId()).size() > 0;
+
+  if (!_map)
+  {
+    throw HootException("You must set a map before calling: " + toString());
+  }
+
+  const std::set<long>& containingWays =
+    _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId());
+  if (containingWays.size() == 0)
+  {
+    return false;
+  }
+
+  for (std::set<long>::const_iterator it = containingWays.begin(); it != containingWays.end(); ++it)
+  {
+    const long containingWayId = *it;
+    if (!_map->containsElement(ElementId(ElementType::Way, containingWayId)))
+    {
+      return false;
+    }
+    if (_parentCriterion && !_parentCriterion->isSatisfied(_map->getWay(containingWayId)))
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+long WayNodeCriterion::getFirstOwningWayId(const ConstNodePtr& node)
+{
+  long result = 0;
+
+  if (!_map)
+  {
+    throw HootException("You must set a map before calling WayNodeCriterion");
+  }
+
+  const std::set<long> waysContainingNode =
+    _map->getIndex().getNodeToWayMap()->getWaysByNode(node->getId());
+  for (std::set<long>::const_iterator it = waysContainingNode.begin();
+       it != waysContainingNode.end(); ++it)
+  {
+    const long containingWayId = *it;
+    if (_map->containsElement(ElementId(ElementType::Way, containingWayId)) &&
+        (!_parentCriterion || _parentCriterion->isSatisfied(_map->getWay(containingWayId))))
+    {
+      return containingWayId;
+      break;
+    }
+  }
+
+  return result;
 }
 
 }

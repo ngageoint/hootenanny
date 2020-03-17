@@ -22,40 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "BuildingWayNodeCriterion.h"
+#include "RailwayWayNodeCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-
-using namespace std;
+#include <hoot/core/criterion/RailwayCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, BuildingWayNodeCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, RailwayWayNodeCriterion)
 
-BuildingWayNodeCriterion::BuildingWayNodeCriterion() :
+RailwayWayNodeCriterion::RailwayWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new BuildingCriterion());
+  _parentCriterion.reset(new RailwayCriterion());
 }
 
-BuildingWayNodeCriterion::BuildingWayNodeCriterion(ConstOsmMapPtr map) :
+RailwayWayNodeCriterion::RailwayWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new BuildingCriterion(_map));
+  _parentCriterion.reset(new RailwayCriterion());
 }
 
-void BuildingWayNodeCriterion::setOsmMap(const OsmMap* map)
+void RailwayWayNodeCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();
-  if (_parentCriterion)
-  {
-    _parentCriterion.reset(new BuildingCriterion(_map));
-  }
 }
 
 }

@@ -9,11 +9,6 @@
     <node visible="true" id="-5060" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6115709413203714" lon="11.2383515728419496"/>
     <node visible="true" id="-5058" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.6728476871542082" lon="11.2805143643365309"/>
     <node visible="true" id="-5055" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.5865635846319783" lon="11.2556401815159681"/>
-    <node visible="true" id="-4947" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6632113999999998" lon="11.2540072000000002"/>
-    <node visible="true" id="-4946" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6623709000000009" lon="11.2545328999999992"/>
-    <node visible="true" id="-4945" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6621190000000006" lon="11.2546884999999985"/>
-    <node visible="true" id="-4944" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6615673999999991" lon="11.2549405999999994"/>
-    <node visible="true" id="-4943" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6571073999999992" lon="11.2544202999999996"/>
     <node visible="true" id="-4939" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.5804749000000005" lon="11.2184813999999999"/>
     <node visible="true" id="-4938" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.5801645999999998" lon="11.2184840000000001"/>
     <node visible="true" id="-4937" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.5782708999999997" lon="11.2186906000000004"/>
@@ -1039,13 +1034,6 @@
     <node visible="true" id="-3909" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.5562623000000020" lon="11.1643316000000006"/>
     <node visible="true" id="-3908" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7792861000000002" lon="11.2713181999999996"/>
     <node visible="true" id="-3907" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7685634999999991" lon="11.2710339000000008"/>
-    <node visible="true" id="-3906" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7012627000000009" lon="11.2562066000000005"/>
-    <node visible="true" id="-3905" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6665258999999981" lon="11.2529181999999999"/>
-    <node visible="true" id="-3904" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6655686999999997" lon="11.2529798999999997"/>
-    <node visible="true" id="-3903" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6647864999999999" lon="11.2531677000000006"/>
-    <node visible="true" id="-3902" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6517908000000041" lon="11.2496486000000004"/>
-    <node visible="true" id="-3901" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6415789999999983" lon="11.2488707999999988"/>
-    <node visible="true" id="-3900" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6467446000000017" lon="11.2493026000000000"/>
     <node visible="true" id="-3883" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.5832809000000001" lon="11.2192698999999987"/>
     <node visible="true" id="-3882" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.5823552999999979" lon="11.2189667999999987"/>
     <node visible="true" id="-3881" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.5821019999999990" lon="11.2188796999999987"/>
@@ -1061,9 +1049,6 @@
     <node visible="true" id="-3871" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.5721787000000020" lon="11.2184492000000002"/>
     <node visible="true" id="-3870" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.5720223000000004" lon="11.2184062999999998"/>
     <node visible="true" id="-3869" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.5714784999999996" lon="11.2181514000000000"/>
-    <node visible="true" id="-3864" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6107855000000022" lon="11.2385388999999982"/>
-    <node visible="true" id="-3863" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6103717999999994" lon="11.2385737999999993"/>
-    <node visible="true" id="-3862" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6097937000000009" lon="11.2385657000000005"/>
     <node visible="true" id="-3861" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.8853224999999991" lon="11.3023869000000001"/>
     <node visible="true" id="-3860" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.8847325000000001" lon="11.3022141999999981"/>
     <node visible="true" id="-3859" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.8748650999999992" lon="11.3004978000000005"/>
@@ -1381,21 +1366,6 @@
     <node visible="true" id="-3547" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.8517068999999999" lon="11.2968718999999993"/>
     <node visible="true" id="-3546" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7786579000000007" lon="11.2712646000000003"/>
     <node visible="true" id="-3545" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7790289999999995" lon="11.2713155000000000"/>
-    <node visible="true" id="-3544" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7021642000000003" lon="11.2564024000000007"/>
-    <node visible="true" id="-3543" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6996667999999993" lon="11.2563542999999999"/>
-    <node visible="true" id="-3542" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6626122000000016" lon="11.2543799999999994"/>
-    <node visible="true" id="-3541" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6603317999999998" lon="11.2551229999999993"/>
-    <node visible="true" id="-3540" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6601488000000000" lon="11.2551068999999995"/>
-    <node visible="true" id="-3539" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6599977000000017" lon="11.2550962000000006"/>
-    <node visible="true" id="-3538" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6599339999999998" lon="11.2550773999999993"/>
-    <node visible="true" id="-3537" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6598173999999997" lon="11.2550559999999980"/>
-    <node visible="true" id="-3536" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6596661999999984" lon="11.2550129999999982"/>
-    <node visible="true" id="-3535" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6588495000000005" lon="11.2548788999999996"/>
-    <node visible="true" id="-3534" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6584730000000008" lon="11.2548145999999996"/>
-    <node visible="true" id="-3533" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6582874000000007" lon="11.2547797000000003"/>
-    <node visible="true" id="-3532" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6581521000000006" lon="11.2547609000000008"/>
-    <node visible="true" id="-3531" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6577146000000003" lon="11.2546724000000005"/>
-    <node visible="true" id="-3530" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6579692000000001" lon="11.2547286999999994"/>
     <node visible="true" id="-3529" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.9084313000000002" lon="11.3148978999999983"/>
     <node visible="true" id="-3528" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.9077148000000008" lon="11.3159051999999978"/>
     <node visible="true" id="-3527" timestamp="2020-02-14T16:18:35Z" version="1" lat="7.2377267999999999" lon="9.7299357999999998"/>
@@ -1666,17 +1636,9 @@
     <node visible="true" id="-3262" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6687852000000021" lon="11.2605904999999993"/>
     <node visible="true" id="-3261" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6736205000000002" lon="11.2546131999999979"/>
     <node visible="true" id="-3260" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6742146000000009" lon="11.2547774999999994"/>
-    <node visible="true" id="-3259" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6963592999999992" lon="11.2566875999999993"/>
-    <node visible="true" id="-3258" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7104180999999983" lon="11.2609540999999993"/>
-    <node visible="true" id="-3257" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7094505000000009" lon="11.2608908999999997"/>
-    <node visible="true" id="-3256" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7035912000000000" lon="11.2574585000000003"/>
-    <node visible="true" id="-3255" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7045667000000027" lon="11.2582208000000001"/>
-    <node visible="true" id="-3253" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7010235999999974" lon="11.2562242000000001"/>
-    <node visible="true" id="-3252" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6965250000000012" lon="11.2566708999999978"/>
     <node visible="true" id="-3250" timestamp="2020-02-14T16:18:35Z" version="1" lat="7.8771345000000013" lon="10.7789452999999984"/>
     <node visible="true" id="-3249" timestamp="2020-02-14T16:18:35Z" version="1" lat="7.8791980999999982" lon="10.7690143999999979"/>
     <node visible="true" id="-3248" timestamp="2020-02-14T16:18:35Z" version="1" lat="7.8888175999999994" lon="10.7298387000000002"/>
-    <node visible="true" id="-3247" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7069625999999989" lon="11.2600122000000002"/>
     <node visible="true" id="-3246" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6723228000000017" lon="11.2833982000000006"/>
     <node visible="true" id="-3245" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6927202999999977" lon="11.2570543000000001"/>
     <node visible="true" id="-3244" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6866717999999974" lon="11.2573928999999993"/>
@@ -1709,25 +1671,8 @@
     <node visible="true" id="-3213" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6731306999999997" lon="11.2796614000000002"/>
     <node visible="true" id="-3212" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6733764000000022" lon="11.2789772999999993"/>
     <node visible="true" id="-3211" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6732742000000016" lon="11.2792136000000003"/>
-    <node visible="true" id="-3205" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.6950698000000024" lon="11.2568175000000004"/>
-    <node visible="true" id="-3203" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7033237000000003" lon="11.2572493999999992"/>
-    <node visible="true" id="-3198" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7053665000000002" lon="11.2588127999999994"/>
-    <node visible="true" id="-3197" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7008278000000026" lon="11.2562372999999987"/>
-    <node visible="true" id="-3196" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7062773999999976" lon="11.2594762999999976"/>
-    <node visible="true" id="-3195" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7172280999999998" lon="11.2613985999999997"/>
-    <node visible="true" id="-3194" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7218166000000004" lon="11.2633805000000002"/>
     <node visible="true" id="-3193" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7286234999999994" lon="11.2667172000000004"/>
-    <node visible="true" id="-3192" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7264005999999998" lon="11.2657565999999996"/>
-    <node visible="true" id="-3191" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7120276000000008" lon="11.2610591000000007"/>
-    <node visible="true" id="-3190" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7154918999999982" lon="11.2612851999999979"/>
-    <node visible="true" id="-3188" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7246195000000011" lon="11.2649045000000001"/>
-    <node visible="true" id="-3187" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7200102000000026" lon="11.2623704000000000"/>
-    <node visible="true" id="-3186" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7256040000000006" lon="11.2653664999999990"/>
     <node visible="true" id="-3185" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7293227999999985" lon="11.2667883000000000"/>
-    <node visible="true" id="-3184" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7071272000000004" lon="11.2601408999999997"/>
-    <node visible="true" id="-3183" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7128462000000013" lon="11.2611124999999994"/>
-    <node visible="true" id="-3182" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7152408999999995" lon="11.2612687999999999"/>
-    <node visible="true" id="-3181" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7184209999999993" lon="11.2615838999999998"/>
     <node visible="true" id="-3180" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7293854000000000" lon="11.2667906000000002"/>
     <node visible="true" id="-3179" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7417627000000024" lon="11.2680509999999998"/>
     <node visible="true" id="-3178" timestamp="2020-02-14T16:18:35Z" version="1" lat="8.7549147999999999" lon="11.2695348000000006"/>
@@ -2861,7 +2806,6 @@
     <node visible="true" id="-2048" timestamp="2020-02-14T16:18:34Z" version="1" lat="8.8483644000000012" lon="11.2961215999999993"/>
     <node visible="true" id="-2047" timestamp="2020-02-14T16:18:34Z" version="1" lat="8.8444699999999976" lon="11.2957257000000002"/>
     <node visible="true" id="-2046" timestamp="2020-02-14T16:18:34Z" version="1" lat="8.8323520999999996" lon="11.2916939999999997"/>
-    <node visible="true" id="-2045" timestamp="2020-02-14T16:18:34Z" version="1" lat="8.7047571999999995" lon="11.2583604000000008"/>
     <node visible="true" id="-1924" timestamp="2020-02-14T16:18:34Z" version="1" lat="8.4383207000000020" lon="11.1100445000000008"/>
     <node visible="true" id="-1923" timestamp="2020-02-14T16:18:34Z" version="1" lat="8.5718074000000009" lon="11.2183311999999997"/>
     <node visible="true" id="-1911" timestamp="2020-02-14T16:18:34Z" version="1" lat="8.3793889000000021" lon="11.0526993999999998"/>
@@ -3942,15 +3886,7 @@
     <node visible="true" id="-605" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.4888499999999993" lon="11.1280488000000002"/>
     <node visible="true" id="-604" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.4918336999999990" lon="11.1304833999999992"/>
     <node visible="true" id="-603" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6879939999999998" lon="11.2574821999999983"/>
-    <node visible="true" id="-602" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6644576999999998" lon="11.2532884000000006"/>
-    <node visible="true" id="-601" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6618590999999974" lon="11.2548306999999994"/>
-    <node visible="true" id="-600" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6609125000000002" lon="11.2550881000000000"/>
-    <node visible="true" id="-599" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6412528000000002" lon="11.2487419999999982"/>
     <node visible="true" id="-598" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5723617000000001" lon="11.2185109000000001"/>
-    <node visible="true" id="-597" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6536947000000026" lon="11.2518454000000006"/>
-    <node visible="true" id="-596" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6523422999999990" lon="11.2499195000000007"/>
-    <node visible="true" id="-594" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6526578999999995" lon="11.2501742999999994"/>
-    <node visible="true" id="-593" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6612174000000000" lon="11.2550237999999982"/>
     <node visible="true" id="-592" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5809761000000027" lon="11.2185456999999982"/>
     <node visible="true" id="-591" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5574187000000013" lon="11.1765611000000007"/>
     <node visible="true" id="-590" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5489802000000026" lon="11.1598763999999999"/>
@@ -3961,17 +3897,13 @@
     <node visible="true" id="-585" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5544320999999997" lon="11.1843985000000004"/>
     <node visible="true" id="-584" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5570128999999984" lon="11.1987456999999981"/>
     <node visible="true" id="-583" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5430294000000000" lon="11.1553502000000009"/>
-    <node visible="true" id="-581" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6419157999999996" lon="11.2489620000000006"/>
     <node visible="true" id="-580" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5406952999999977" lon="11.1540198000000004"/>
     <node visible="true" id="-579" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5560526999999968" lon="11.1982011999999997"/>
     <node visible="true" id="-578" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5560487999999975" lon="11.1641048999999999"/>
-    <node visible="true" id="-575" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6528223000000004" lon="11.2504264999999997"/>
-    <node visible="true" id="-574" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6101118999999979" lon="11.2385684000000001"/>
     <node visible="true" id="-573" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5441115999999990" lon="11.1561388000000008"/>
     <node visible="true" id="-571" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5557292000000018" lon="11.1810188999999998"/>
     <node visible="true" id="-569" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5449550999999992" lon="11.1567878999999994"/>
     <node visible="true" id="-566" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5540184000000004" lon="11.1855814000000002"/>
-    <node visible="true" id="-565" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6650834999999997" lon="11.2530844999999982"/>
     <node visible="true" id="-564" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5559147999999983" lon="11.1805254000000005"/>
     <node visible="true" id="-563" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5814800000000009" lon="11.2186851999999995"/>
     <node visible="true" id="-562" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6830712999999999" lon="11.2571496999999994"/>
@@ -3982,16 +3914,12 @@
     <node visible="true" id="-556" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5834823999999994" lon="11.2193342999999999"/>
     <node visible="true" id="-555" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5827981999999992" lon="11.2191089999999978"/>
     <node visible="true" id="-554" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5824639999999999" lon="11.2190016999999997"/>
-    <node visible="true" id="-553" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6675308999999991" lon="11.2529719000000004"/>
-    <node visible="true" id="-549" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6092791999999996" lon="11.2384959999999978"/>
-    <node visible="true" id="-548" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6520241000000002" lon="11.2497317999999993"/>
     <node visible="true" id="-546" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5547425000000015" lon="11.1632574000000009"/>
     <node visible="true" id="-545" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5811723999999998" lon="11.2185912999999999"/>
     <node visible="true" id="-543" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5829625999999983" lon="11.2191625999999989"/>
     <node visible="true" id="-541" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5822120000000020" lon="11.2189186000000003"/>
     <node visible="true" id="-540" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5519920000000003" lon="11.1946607000000000"/>
     <node visible="true" id="-539" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5415174999999994" lon="11.1544865000000009"/>
-    <node visible="true" id="-538" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6669528000000007" lon="11.2528968000000003"/>
     <node visible="true" id="-535" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5567185000000006" lon="11.1985954999999997"/>
     <node visible="true" id="-534" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5587900000000001" lon="11.1710437999999996"/>
     <node visible="true" id="-531" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5412921000000015" lon="11.1543524000000005"/>
@@ -3999,37 +3927,28 @@
     <node visible="true" id="-529" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5827000000000009" lon="11.2190794999999994"/>
     <node visible="true" id="-528" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5520530000000026" lon="11.1950307999999978"/>
     <node visible="true" id="-527" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5587448999999989" lon="11.1721891000000006"/>
-    <node visible="true" id="-523" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6573168999999979" lon="11.2545355999999988"/>
     <node visible="true" id="-520" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5462653999999993" lon="11.1578392999999991"/>
     <node visible="true" id="-519" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5586625999999981" lon="11.1705261000000000"/>
     <node visible="true" id="-518" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8928387999999998" lon="11.3096764999999984"/>
     <node visible="true" id="-517" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7677519000000004" lon="11.2709679999999981"/>
     <node visible="true" id="-516" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6930745000000016" lon="11.2570184999999992"/>
     <node visible="true" id="-514" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8497011999999984" lon="11.2963132999999996"/>
-    <node visible="true" id="-513" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7176500999999984" lon="11.2614260999999978"/>
-    <node visible="true" id="-512" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7237061999999987" lon="11.2644371000000003"/>
-    <node visible="true" id="-511" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7076395000000009" lon="11.2605415000000004"/>
     <node visible="true" id="-510" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7843383000000017" lon="11.2700191000000007"/>
     <node visible="true" id="-509" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7275318999999989" lon="11.2663042000000004"/>
     <node visible="true" id="-508" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8548996999999989" lon="11.2978588000000002"/>
-    <node visible="true" id="-507" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7187710000000020" lon="11.2617098000000002"/>
     <node visible="true" id="-506" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7923858999999993" lon="11.2727053000000002"/>
     <node visible="true" id="-505" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7625623000000008" lon="11.2703991000000006"/>
-    <node visible="true" id="-504" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7193515999999995" lon="11.2620021999999995"/>
     <node visible="true" id="-503" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8865806000000003" lon="11.3031509000000003"/>
     <node visible="true" id="-502" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8517423999999973" lon="11.2968820000000001"/>
     <node visible="true" id="-501" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8488748000000008" lon="11.2961533999999997"/>
     <node visible="true" id="-500" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8596866999999975" lon="11.3002313000000001"/>
     <node visible="true" id="-499" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8862334999999995" lon="11.3028757999999989"/>
-    <node visible="true" id="-498" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7009472999999993" lon="11.2562252999999988"/>
     <node visible="true" id="-497" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8930746000000021" lon="11.3098240000000008"/>
     <node visible="true" id="-496" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7825413000000001" lon="11.2701276999999997"/>
     <node visible="true" id="-495" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7728195000000007" lon="11.2708797999999994"/>
     <node visible="true" id="-494" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8173171000000004" lon="11.2838086000000004"/>
-    <node visible="true" id="-493" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7080093000000005" lon="11.2607365000000001"/>
     <node visible="true" id="-492" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8395022999999995" lon="11.2952113999999995"/>
     <node visible="true" id="-491" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8388150999999979" lon="11.2950386999999992"/>
-    <node visible="true" id="-490" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7182307000000012" lon="11.2615154000000004"/>
     <node visible="true" id="-489" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8633889000000003" lon="11.2989408000000005"/>
     <node visible="true" id="-488" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8227190999999987" lon="11.2866079999999975"/>
     <node visible="true" id="-487" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8645109000000026" lon="11.2987272999999977"/>
@@ -4048,7 +3967,6 @@
     <node visible="true" id="-474" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7727029000000023" lon="11.2708863000000008"/>
     <node visible="true" id="-473" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7834717000000015" lon="11.2699005000000003"/>
     <node visible="true" id="-472" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8382213999999983" lon="11.2947927999999997"/>
-    <node visible="true" id="-471" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7019845000000000" lon="11.2563221000000002"/>
     <node visible="true" id="-470" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7795241999999973" lon="11.2712929000000006"/>
     <node visible="true" id="-469" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8204328000000007" lon="11.2859027999999988"/>
     <node visible="true" id="-468" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8492923000000001" lon="11.2962222000000008"/>
@@ -4103,14 +4021,12 @@
     <node visible="true" id="-417" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5371065000000019" lon="11.1532634000000002"/>
     <node visible="true" id="-416" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7837587999999975" lon="11.2699066999999982"/>
     <node visible="true" id="-415" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.2362294999999985" lon="11.0499490999999974"/>
-    <node visible="true" id="-414" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6591889000000002" lon="11.2549539999999997"/>
     <node visible="true" id="-413" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.2182793000000007" lon="11.0296234999999996"/>
     <node visible="true" id="-412" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.0052764000000014" lon="11.0023944999999994"/>
     <node visible="true" id="-411" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.3604138999999993" lon="11.0498408999999977"/>
     <node visible="true" id="-408" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.9060373999999989" lon="11.3149005000000002"/>
     <node visible="true" id="-407" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.3269973000000004" lon="11.0470941000000007"/>
     <node visible="true" id="-406" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5099253999999984" lon="11.1496425000000006"/>
-    <node visible="true" id="-405" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7014953000000013" lon="11.2562175000000000"/>
     <node visible="true" id="-404" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.3252161999999998" lon="11.0471769999999978"/>
     <node visible="true" id="-403" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.0853386999999994" lon="10.9915873000000008"/>
     <node visible="true" id="-402" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.0067811000000013" lon="11.0034842999999984"/>
@@ -4120,7 +4036,6 @@
     <node visible="true" id="-398" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5568697000000000" lon="11.1780605000000008"/>
     <node visible="true" id="-397" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7799441000000016" lon="11.2712214999999993"/>
     <node visible="true" id="-396" timestamp="2020-02-14T16:18:33Z" version="1" lat="7.9511680999999994" lon="10.9838711999999994"/>
-    <node visible="true" id="-394" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6605597999999997" lon="11.2551123000000004"/>
     <node visible="true" id="-393" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.1564119000000002" lon="10.9847133999999986"/>
     <node visible="true" id="-392" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5399632000000008" lon="11.1536335999999991"/>
     <node visible="true" id="-391" timestamp="2020-02-14T16:18:33Z" version="1" lat="7.9986765999999996" lon="10.9988864999999993"/>
@@ -4141,9 +4056,7 @@
     <node visible="true" id="-373" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8220370999999993" lon="11.2863434999999992"/>
     <node visible="true" id="-372" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.4798880000000008" lon="11.1236893999999999"/>
     <node visible="true" id="-371" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.1814454999999988" lon="11.0060956999999995"/>
-    <node visible="true" id="-370" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6540138000000013" lon="11.2521960999999990"/>
     <node visible="true" id="-369" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.4890702000000005" lon="11.1282356999999976"/>
-    <node visible="true" id="-368" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6660407000000017" lon="11.2529477000000000"/>
     <node visible="true" id="-367" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.4841777000000000" lon="11.1262589999999992"/>
     <node visible="true" id="-366" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5493638000000018" lon="11.1601459999999992"/>
     <node visible="true" id="-365" timestamp="2020-02-14T16:18:33Z" version="1" lat="7.9039281000000017" lon="10.9893771999999998"/>
@@ -4152,7 +4065,6 @@
     <node visible="true" id="-362" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.3773455999999999" lon="11.0509451999999992"/>
     <node visible="true" id="-361" timestamp="2020-02-14T16:18:33Z" version="1" lat="7.8767432999999993" lon="10.9735165000000006"/>
     <node visible="true" id="-360" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8849679999999989" lon="11.3022752000000004"/>
-    <node visible="true" id="-359" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6515283000000043" lon="11.2496164000000007"/>
     <node visible="true" id="-358" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8923723999999993" lon="11.3092500000000005"/>
     <node visible="true" id="-357" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8507575999999979" lon="11.2965920000000004"/>
     <node visible="true" id="-356" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.4933565000000009" lon="11.1317038999999998"/>
@@ -4182,7 +4094,6 @@
     <node visible="true" id="-329" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5166746999999940" lon="11.1512648999999993"/>
     <node visible="true" id="-328" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.2861818999999990" lon="11.0662278999999977"/>
     <node visible="true" id="-326" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5343824000000001" lon="11.1538374000000005"/>
-    <node visible="true" id="-323" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7084455000000016" lon="11.2608253000000005"/>
     <node visible="true" id="-322" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.1570703999999985" lon="10.9852579000000006"/>
     <node visible="true" id="-321" timestamp="2020-02-14T16:18:33Z" version="1" lat="7.8688093999999991" lon="10.9736253999999995"/>
     <node visible="true" id="-320" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5532623999999995" lon="11.1966321000000004"/>
@@ -4206,11 +4117,9 @@
     <node visible="true" id="-300" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5076865999999995" lon="11.1477219999999999"/>
     <node visible="true" id="-299" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.3066037000000001" lon="11.0527792999999992"/>
     <node visible="true" id="-298" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5359633000000006" lon="11.1534887000000005"/>
-    <node visible="true" id="-297" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6534428000000023" lon="11.2515234999999993"/>
     <node visible="true" id="-296" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.0558396000000005" lon="11.0129999999999999"/>
     <node visible="true" id="-295" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5111244999999993" lon="11.1505650999999997"/>
     <node visible="true" id="-293" timestamp="2020-02-14T16:18:33Z" version="1" lat="7.8612052000000014" lon="10.9724125000000008"/>
-    <node visible="true" id="-292" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6423240999999997" lon="11.2490155999999999"/>
     <node visible="true" id="-291" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.2387455000000003" lon="11.0509141000000000"/>
     <node visible="true" id="-289" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7747819000000007" lon="11.2707976999999993"/>
     <node visible="true" id="-288" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.0245019000000006" lon="11.0039032999999993"/>
@@ -4224,15 +4133,12 @@
     <node visible="true" id="-280" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.1162376999999974" lon="10.9850486999999983"/>
     <node visible="true" id="-279" timestamp="2020-02-14T16:18:33Z" version="1" lat="7.8753179000000015" lon="10.9728998999999998"/>
     <node visible="true" id="-278" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.0262203000000003" lon="11.0037503999999995"/>
-    <node visible="true" id="-277" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7024513999999993" lon="11.2565730999999989"/>
     <node visible="true" id="-276" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5564399999999985" lon="11.1645447999999998"/>
     <node visible="true" id="-275" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.9083670000000001" lon="11.3148502999999998"/>
     <node visible="true" id="-274" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.1280857999999991" lon="10.9862581000000006"/>
     <node visible="true" id="-271" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.5561375999999996" lon="11.1799675000000001"/>
-    <node visible="true" id="-270" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6409095000000011" lon="11.2485604000000006"/>
     <node visible="true" id="-269" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.8402581999999992" lon="11.2953126000000008"/>
     <node visible="true" id="-268" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.1942098000000012" lon="11.0225185999999997"/>
-    <node visible="true" id="-267" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.6568475000000014" lon="11.2542647000000002"/>
     <node visible="true" id="-266" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7692618000000024" lon="11.2710413000000003"/>
     <node visible="true" id="-265" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.7288367999999998" lon="11.2667704000000004"/>
     <node visible="true" id="-264" timestamp="2020-02-14T16:18:33Z" version="1" lat="8.4337843000000010" lon="11.1066176999999975"/>
@@ -5559,16 +5465,6 @@
         <tag k="highway" v="trunk"/>
         <tag k="ref" v="A12"/>
         <tag k="source:datetime" v="2019-05-07T08:54:02Z"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-634" timestamp="2020-02-14T16:18:35Z" version="1">
-        <nd ref="-5064"/>
-        <nd ref="-549"/>
-        <nd ref="-3862"/>
-        <nd ref="-574"/>
-        <nd ref="-3863"/>
-        <nd ref="-3864"/>
-        <nd ref="6096477468"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-630" timestamp="2020-02-14T16:18:35Z" version="1">
@@ -11134,61 +11030,6 @@
         <tag k="lanes" v="2"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-32" timestamp="2020-02-14T16:18:35Z" version="1">
-        <nd ref="6096478821"/>
-        <nd ref="-270"/>
-        <nd ref="-599"/>
-        <nd ref="-3901"/>
-        <nd ref="-581"/>
-        <nd ref="-292"/>
-        <nd ref="-3900"/>
-        <nd ref="-359"/>
-        <nd ref="-3902"/>
-        <nd ref="-548"/>
-        <nd ref="-596"/>
-        <nd ref="-594"/>
-        <nd ref="-575"/>
-        <nd ref="-297"/>
-        <nd ref="-597"/>
-        <nd ref="-370"/>
-        <nd ref="-267"/>
-        <nd ref="-4943"/>
-        <nd ref="-523"/>
-        <nd ref="-5074"/>
-        <nd ref="-3531"/>
-        <nd ref="-3530"/>
-        <nd ref="-3532"/>
-        <nd ref="-3533"/>
-        <nd ref="-3534"/>
-        <nd ref="-3535"/>
-        <nd ref="-414"/>
-        <nd ref="-3536"/>
-        <nd ref="-3537"/>
-        <nd ref="-3538"/>
-        <nd ref="-3539"/>
-        <nd ref="-3540"/>
-        <nd ref="-3541"/>
-        <nd ref="-394"/>
-        <nd ref="-600"/>
-        <nd ref="-593"/>
-        <nd ref="-4944"/>
-        <nd ref="-601"/>
-        <nd ref="-4945"/>
-        <nd ref="-4946"/>
-        <nd ref="-3542"/>
-        <nd ref="-4947"/>
-        <nd ref="-602"/>
-        <nd ref="-3903"/>
-        <nd ref="-565"/>
-        <nd ref="-3904"/>
-        <nd ref="-368"/>
-        <nd ref="-3905"/>
-        <nd ref="-538"/>
-        <nd ref="-553"/>
-        <nd ref="6096477619"/>
-        <nd ref="6096477452"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-29" timestamp="2020-02-14T16:18:35Z" version="1">
         <nd ref="-478"/>
         <nd ref="-505"/>
@@ -11332,53 +11173,6 @@
         <tag k="source:datetime" v="2018-04-26T02:38:39Z"/>
         <tag k="surface" v="paved"/>
         <tag k="lanes" v="2"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-21" timestamp="2020-02-14T16:18:35Z" version="1">
-        <nd ref="6096477548"/>
-        <nd ref="-3205"/>
-        <nd ref="-3259"/>
-        <nd ref="-3252"/>
-        <nd ref="-3543"/>
-        <nd ref="-3197"/>
-        <nd ref="-498"/>
-        <nd ref="-3253"/>
-        <nd ref="-3906"/>
-        <nd ref="-405"/>
-        <nd ref="6096478720"/>
-        <nd ref="-471"/>
-        <nd ref="-3544"/>
-        <nd ref="-277"/>
-        <nd ref="-3203"/>
-        <nd ref="-3256"/>
-        <nd ref="-3255"/>
-        <nd ref="-2045"/>
-        <nd ref="-3198"/>
-        <nd ref="-3196"/>
-        <nd ref="-3247"/>
-        <nd ref="-3184"/>
-        <nd ref="-511"/>
-        <nd ref="-493"/>
-        <nd ref="-323"/>
-        <nd ref="-3257"/>
-        <nd ref="-3258"/>
-        <nd ref="-3191"/>
-        <nd ref="-3183"/>
-        <nd ref="-3182"/>
-        <nd ref="-3190"/>
-        <nd ref="-3195"/>
-        <nd ref="-513"/>
-        <nd ref="-490"/>
-        <nd ref="-3181"/>
-        <nd ref="-507"/>
-        <nd ref="-504"/>
-        <nd ref="-3187"/>
-        <nd ref="-3194"/>
-        <nd ref="-512"/>
-        <nd ref="-3188"/>
-        <nd ref="-3186"/>
-        <nd ref="-3192"/>
-        <nd ref="6096477504"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-20" timestamp="2020-02-14T16:18:35Z" version="1">
@@ -12592,114 +12386,112 @@
         <tag k="type" v="boundary"/>
     </relation>
     <relation visible="true" id="-1" timestamp="2020-02-14T16:18:36Z" version="1">
-        <member type="way" ref="-95" role=""/>
-        <member type="way" ref="-198" role=""/>
-        <member type="way" ref="-46" role="forward"/>
-        <member type="way" ref="-11" role="backward"/>
-        <member type="way" ref="-215" role=""/>
-        <member type="way" ref="-18" role=""/>
-        <member type="way" ref="-61" role=""/>
-        <member type="way" ref="-91" role=""/>
-        <member type="way" ref="-228" role=""/>
-        <member type="way" ref="-211" role=""/>
-        <member type="way" ref="-14" role=""/>
-        <member type="way" ref="-44" role=""/>
-        <member type="way" ref="-4" role=""/>
-        <member type="way" ref="-634" role=""/>
-        <member type="way" ref="-224" role=""/>
-        <member type="way" ref="-27" role=""/>
-        <member type="way" ref="-57" role=""/>
-        <member type="way" ref="-40" role=""/>
-        <member type="way" ref="-70" role=""/>
-        <member type="way" ref="-6" role="backward"/>
-        <member type="way" ref="-647" role=""/>
-        <member type="way" ref="-207" role=""/>
-        <member type="way" ref="-630" role=""/>
-        <member type="way" ref="-220" role=""/>
-        <member type="way" ref="-23" role=""/>
-        <member type="way" ref="-53" role=""/>
-        <member type="way" ref="-5" role="forward"/>
-        <member type="way" ref="-203" role=""/>
-        <member type="way" ref="-36" role=""/>
+        <member type="way" ref="-72" role=""/>
         <member type="way" ref="-66" role=""/>
-        <member type="way" ref="-199" role=""/>
-        <member type="way" ref="-216" role=""/>
-        <member type="way" ref="-19" role=""/>
-        <member type="way" ref="-49" role=""/>
-        <member type="way" ref="-32" role=""/>
-        <member type="way" ref="-62" role=""/>
-        <member type="relation" ref="-15" role=""/>
+        <member type="way" ref="-71" role=""/>
+        <member type="way" ref="-70" role=""/>
+        <member type="way" ref="-67" role=""/>
+        <member type="way" ref="-68" role=""/>
+        <member type="way" ref="-69" role=""/>
+        <member type="way" ref="-57" role=""/>
+        <member type="way" ref="-93" role=""/>
         <member type="way" ref="-92" role=""/>
-        <member type="way" ref="-9" role=""/>
+        <member type="way" ref="-2" role=""/>
+        <member type="way" ref="-204" role=""/>
+        <member type="way" ref="-205" role=""/>
+        <member type="way" ref="-94" role=""/>
+        <member type="way" ref="-215" role=""/>
+        <member type="way" ref="-214" role=""/>
+        <member type="way" ref="-213" role=""/>
         <member type="way" ref="-212" role=""/>
-        <member type="way" ref="-15" role=""/>
-        <member type="way" ref="-45" role=""/>
-        <member type="way" ref="-225" role=""/>
-        <member type="way" ref="-28" role=""/>
+        <member type="way" ref="-95" role=""/>
+        <member type="way" ref="-91" role=""/>
+        <member type="way" ref="-3" role=""/>
+        <member type="way" ref="-211" role=""/>
+        <member type="way" ref="-210" role=""/>
+        <member type="way" ref="-209" role=""/>
+        <member type="way" ref="-208" role=""/>
+        <member type="way" ref="-207" role=""/>
+        <member type="way" ref="-206" role=""/>
+        <member type="way" ref="-219" role=""/>
+        <member type="way" ref="-218" role=""/>
+        <member type="way" ref="-217" role=""/>
+        <member type="way" ref="-216" role=""/>
+        <member type="way" ref="-62" role=""/>
+        <member type="way" ref="-221" role=""/>
+        <member type="way" ref="-220" role=""/>
+        <member type="way" ref="-202" role=""/>
+        <member type="way" ref="-203" role=""/>
+        <member type="way" ref="-200" role=""/>
+        <member type="way" ref="-201" role=""/>
+        <member type="way" ref="-61" role=""/>
+        <member type="way" ref="-60" role=""/>
+        <member type="way" ref="-63" role=""/>
+        <member type="way" ref="-65" role=""/>
         <member type="way" ref="-58" role=""/>
+        <member type="way" ref="-56" role=""/>
+        <member type="way" ref="-59" role=""/>
+        <member type="way" ref="-64" role=""/>
+        <member type="way" ref="-52" role=""/>
+        <member type="way" ref="-1" role=""/>
+        <member type="way" ref="-52" role="forward"/>
+        <member type="way" ref="-46" role="forward"/>
+        <member type="way" ref="-50" role=""/>
+        <member type="way" ref="-48" role="backward"/>
+        <member type="way" ref="-4" role=""/>
+        <member type="way" ref="-53" role=""/>
+        <member type="way" ref="-51" role=""/>
+        <member type="way" ref="-49" role=""/>
+        <member type="way" ref="-199" role=""/>
+        <member type="way" ref="-198" role=""/>
+        <member type="way" ref="-55" role=""/>
+        <member type="way" ref="-47" role=""/>
+        <member type="way" ref="-54" role=""/>
+        <member type="way" ref="-42" role=""/>
+        <member type="way" ref="-45" role=""/>
+        <member type="way" ref="-43" role=""/>
+        <member type="way" ref="-44" role=""/>
+        <member type="way" ref="-37" role=""/>
+        <member type="way" ref="-39" role=""/>
+        <member type="way" ref="-38" role=""/>
+        <member type="way" ref="-36" role=""/>
         <member type="way" ref="-88" role=""/>
         <member type="way" ref="-41" role=""/>
-        <member type="way" ref="-71" role=""/>
-        <member type="way" ref="-1" role=""/>
-        <member type="way" ref="-208" role=""/>
-        <member type="way" ref="-52" role="forward"/>
-        <member type="way" ref="-221" role=""/>
-        <member type="way" ref="-24" role=""/>
-        <member type="way" ref="-54" role=""/>
-        <member type="way" ref="-204" role=""/>
-        <member type="way" ref="-37" role=""/>
-        <member type="way" ref="-67" role=""/>
-        <member type="way" ref="-20" role=""/>
-        <member type="way" ref="-50" role=""/>
-        <member type="way" ref="-217" role=""/>
-        <member type="way" ref="-200" role=""/>
-        <member type="way" ref="-63" role=""/>
-        <member type="way" ref="-93" role=""/>
-        <member type="way" ref="-213" role=""/>
-        <member type="way" ref="-16" role=""/>
-        <member type="way" ref="-10" role="forward"/>
-        <member type="way" ref="-226" role=""/>
-        <member type="way" ref="-29" role=""/>
-        <member type="way" ref="-59" role=""/>
-        <member type="way" ref="-12" role=""/>
-        <member type="way" ref="-42" role=""/>
-        <member type="way" ref="-72" role=""/>
-        <member type="way" ref="-8" role="backward"/>
-        <member type="way" ref="-209" role=""/>
-        <member type="way" ref="-2" role=""/>
-        <member type="way" ref="-25" role=""/>
-        <member type="way" ref="-55" role=""/>
-        <member type="way" ref="-7" role="forward"/>
-        <member type="way" ref="-48" role="backward"/>
-        <member type="way" ref="-205" role=""/>
-        <member type="way" ref="-38" role=""/>
-        <member type="way" ref="-68" role=""/>
-        <member type="way" ref="-21" role=""/>
-        <member type="way" ref="-51" role=""/>
-        <member type="way" ref="-218" role=""/>
-        <member type="way" ref="-201" role=""/>
-        <member type="way" ref="-64" role=""/>
-        <member type="way" ref="-94" role=""/>
-        <member type="way" ref="-214" role=""/>
-        <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-47" role=""/>
-        <member type="way" ref="-60" role=""/>
-        <member type="way" ref="-210" role=""/>
-        <member type="way" ref="-13" role=""/>
-        <member type="way" ref="-43" role=""/>
-        <member type="way" ref="-3" role=""/>
+        <member type="way" ref="-224" role=""/>
         <member type="way" ref="-223" role=""/>
-        <member type="way" ref="-26" role=""/>
-        <member type="way" ref="-56" role=""/>
-        <member type="way" ref="-206" role=""/>
-        <member type="way" ref="-39" role=""/>
-        <member type="way" ref="-69" role=""/>
-        <member type="way" ref="-22" role=""/>
-        <member type="way" ref="-52" role=""/>
-        <member type="way" ref="-219" role=""/>
-        <member type="way" ref="-202" role=""/>
+        <member type="way" ref="-40" role=""/>
+        <member type="way" ref="-226" role=""/>
+        <member type="way" ref="-225" role=""/>
+        <member type="relation" ref="-15" role=""/>
+        <member type="way" ref="-228" role=""/>
+        <member type="way" ref="-647" role=""/>
+        <member type="way" ref="-630" role=""/>
+        <member type="way" ref="-255" role=""/>
         <member type="way" ref="-35" role=""/>
-        <member type="way" ref="-65" role=""/>
+        <member type="way" ref="-15" role=""/>
+        <member type="way" ref="-24" role=""/>
+        <member type="way" ref="-14" role=""/>
+        <member type="way" ref="-29" role=""/>
+        <member type="way" ref="-27" role=""/>
+        <member type="way" ref="-23" role=""/>
+        <member type="way" ref="-20" role=""/>
+        <member type="way" ref="-19" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-26" role=""/>
+        <member type="way" ref="-18" role=""/>
+        <member type="way" ref="-25" role=""/>
+        <member type="way" ref="-13" role=""/>
+        <member type="way" ref="-12" role=""/>
+        <member type="way" ref="-28" role=""/>
+        <member type="way" ref="-16" role=""/>
+        <member type="way" ref="-22" role=""/>
+        <member type="way" ref="-9" role=""/>
+        <member type="way" ref="-5" role="forward"/>
+        <member type="way" ref="-10" role="forward"/>
+        <member type="way" ref="-7" role="forward"/>
+        <member type="way" ref="-6" role="backward"/>
+        <member type="way" ref="-11" role="backward"/>
+        <member type="way" ref="-8" role="backward"/>
         <tag k="route" v="road"/>
         <tag k="name" v="Trunk Road A12"/>
         <tag k="ref" v="A12"/>

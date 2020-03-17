@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultipleCriterionConsumerVisitor.h"
 
@@ -88,6 +88,7 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
          it != _criteria.end(); ++it)
     {
       ElementCriterionPtr crit = *it;
+      LOG_VART(crit->toString());
       if (crit->isSatisfied(e))
       {
         criteriaSatisfied = true;
@@ -110,6 +111,7 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
          it != _criteria.end(); ++it)
     {
       ElementCriterionPtr crit = *it;
+      LOG_VART(crit->toString());
       if (!crit->isSatisfied(e))
       {
         criteriaSatisfied = false;

@@ -1308,11 +1308,6 @@
         <tag k="admin_level" v="3"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1381"/>
-        <nd ref="3668939756"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4747826969"/>
         <nd ref="4748830808"/>
@@ -3576,8 +3571,8 @@
     </relation>
     <relation visible="true" id="-17" timestamp="2016-02-03T11:12:44Z" version="1">
         <member type="way" ref="-2885" role=""/>
-        <member type="way" ref="-17" role=""/>
         <member type="way" ref="535381757" role=""/>
+        <member type="way" ref="-17" role=""/>
         <tag k="source" v="Microsoft Bing orbital imagery"/>
         <tag k="to" v="Kidira"/>
         <tag k="from" v="Pout"/>
@@ -3591,7 +3586,7 @@
     </relation>
     <relation visible="true" id="-15" timestamp="2016-02-03T11:10:45Z" version="1">
         <member type="way" ref="-49" role="outer"/>
-        <member type="way" ref="-22" role="outer"/>
+        <member type="way" ref="-13" role="outer"/>
         <tag k="wikipedia" v="en:Thiès Region"/>
         <tag k="source" v="http://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/"/>
         <tag k="name" v="Thiès"/>
@@ -3604,7 +3599,7 @@
     </relation>
     <relation visible="true" id="-10" timestamp="2016-02-03T11:10:45Z" version="1">
         <member type="way" ref="-49" role="outer"/>
-        <member type="way" ref="-22" role="outer"/>
+        <member type="way" ref="-13" role="outer"/>
         <tag k="wikipedia" v="en:Louga Region"/>
         <tag k="source" v="http://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/"/>
         <tag k="name" v="Louga"/>

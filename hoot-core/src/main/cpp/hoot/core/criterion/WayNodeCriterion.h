@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAY_NODE_CRITERION_H
 #define WAY_NODE_CRITERION_H
@@ -42,10 +42,11 @@ public:
   static std::string className() { return "hoot::WayNodeCriterion"; }
 
   WayNodeCriterion();
+  WayNodeCriterion(ConstOsmMapPtr map);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WayNodeCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WayNodeCriterion(_map)); }
 
   virtual QString getDescription() const { return "Identifies way nodes"; }
 
@@ -56,9 +57,18 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
-private:
+  /**
+   * Returns the ID of the first way that owns input node
+   *
+   * @param node node to search for
+   * @return the first way ID found that contains the node
+   */
+  long getFirstOwningWayId(const ConstNodePtr& node);
+
+protected:
 
   ConstOsmMapPtr _map;
+  ElementCriterionPtr _parentCriterion;
 };
 
 }

@@ -82,7 +82,7 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayNodeCriterion");
+    uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayWayNodeCriterion");
     uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
     uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");
     uut.apply(map);

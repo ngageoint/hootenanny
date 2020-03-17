@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchConflicts.h"
 
@@ -41,11 +41,12 @@ namespace hoot
 using namespace std;
 
 MatchConflicts::MatchConflicts(const ConstOsmMapPtr& map) :
-  _map(map)
+_map(map)
 {
 }
 
-MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(const std::vector<ConstMatchPtr>& matches) const
+MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
+  const std::vector<ConstMatchPtr>& matches) const
 {
   LOG_TRACE("Calculating element ID to index map...");
   EidIndexMap eidToMatches;
@@ -72,7 +73,10 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(const std::vect
 void MatchConflicts::calculateMatchConflicts(const std::vector<ConstMatchPtr>& matches,
   ConflictMap& conflicts)
 {
-  LOG_VART(matches.size());
+  LOG_DEBUG(
+    "Calculating match conflicts for " << StringUtils::formatLargeNumber(matches.size()) <<
+    " matches...");
+
   conflicts.clear();
   // go through all the matches and map from eid to the match index.
   EidIndexMap eidToMatches = calculateEidIndexMap(matches);

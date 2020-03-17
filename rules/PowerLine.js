@@ -65,7 +65,6 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isPowerLine(e);
 };
 
@@ -191,7 +190,6 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  hoot.trace("Merging elements.");
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
   return snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);

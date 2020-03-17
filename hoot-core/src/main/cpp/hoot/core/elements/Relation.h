@@ -125,7 +125,7 @@ public:
   { return _relationData->getType() == MetadataTags::RelationRestriction(); }
 
   /**
-   * Remove all members that meet the speicified criteria. If no members meet the criteria then
+   * Remove all members that meet the specified criteria. If no members meet the criteria then
    * no changes are made.
    */
   void removeElement(const QString& role, const std::shared_ptr<const Element>& e);

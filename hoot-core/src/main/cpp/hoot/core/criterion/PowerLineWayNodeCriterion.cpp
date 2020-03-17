@@ -22,45 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "HighwayNodeCriterion.h"
+#include "PowerLineWayNodeCriterion.h"
 
 // hoot
-#include <hoot/core/elements/Node.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, HighwayNodeCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, PowerLineWayNodeCriterion)
 
-HighwayNodeCriterion::HighwayNodeCriterion()
+PowerLineWayNodeCriterion::PowerLineWayNodeCriterion() :
+WayNodeCriterion()
 {
+  _parentCriterion.reset(new PowerLineCriterion());
 }
 
-bool HighwayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
+PowerLineWayNodeCriterion::PowerLineWayNodeCriterion(ConstOsmMapPtr map) :
+WayNodeCriterion(map)
 {
-  HighwayCriterion highwayCrit(_map);
-  if (e->getElementType() == ElementType::Node)
-  {
-    const std::set<long>& containingWays =
-      _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId());
-    for (std::set<long>::const_iterator containingWaysItr = containingWays.begin();
-         containingWaysItr != containingWays.end(); ++containingWaysItr)
-    {
-      const long containingWayId = *containingWaysItr;
-      if (highwayCrit.isSatisfied(_map->getWay(containingWayId)))
-      {
-        //LOG_TRACE("Road node: " << e->getElementId() << " found in way: " << containingWayId);
-        return true;
-      }
-    }
-  }
-  return false;
+  _parentCriterion.reset(new PowerLineCriterion());
+}
+
+void PowerLineWayNodeCriterion::setOsmMap(const OsmMap* map)
+{
+  _map = map->shared_from_this();
 }
 
 }

@@ -713,6 +713,7 @@ List of operations to run in the conflate command after data is conflated, but b
 
 * Data Type: list
 * Default Value:
+** `hoot::RemoveMissingElementsVisitor`
 ** `hoot::BuildingOutlineRemoveOp`
 ** `hoot::RemoveRoundabouts`
 ** `hoot::MapCleaner`
@@ -3773,6 +3774,13 @@ If true supporting map readers will log a warning when an element is encountered
 zero. This is useful to track when deriving changesets where the reference data is expected to be
 pre-existing.
 
+=== relation.criterion.type
+
+* Data Type: string
+* Default Value: ``
+
+Allows for requiring a type tag match when using RelationCriterion.
+
 === relation.with.most.members.op.member.criterion
 
 * Data Type: string
@@ -4278,8 +4286,9 @@ way snapping.
 * Default Value: `hoot::WayNodeCriterion`
 
 Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
-hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
-for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is enabled.
+hoot::HighwayWayNodeCriterion.  If no criterion is specified, then all ways are considered as
+targets for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is
+enabled.
 
 === snap.unconnected.ways.snap.to.way.statuses
 

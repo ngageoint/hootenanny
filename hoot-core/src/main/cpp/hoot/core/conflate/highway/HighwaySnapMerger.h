@@ -38,7 +38,10 @@ namespace hoot
 class WaySublineCollection;
 
 /**
- * Merges road geometries and tags
+ * Merges linear geometries and tags
+ *
+ * Note that this was originally written specifically for roads, but now is used by several linear
+ * script routines, including railway and river.
  */
 class HighwaySnapMerger : public HighwayMergerAbstract
 {
