@@ -887,12 +887,12 @@ public class GrailResource {
         GrailParams mergeOobWaysParams = new GrailParams(params);
         File mergeOobWaysFile = new File(params.getWorkDir(), "oobways.osm");
         mergeOobWaysParams.setOutput(mergeOobWaysFile.getAbsolutePath());
-        Map<String, String> opts = new HashMap<>();
-        opts.put("convert.ops", "hoot::SetTagValueVisitor");
-        opts.put("set.tag.value.visitor.element.criteria", "hoot::WayCriterion");
-        opts.put("set.tag.value.visitor.keys", "hoot:change:exclude:delete");
-        opts.put("set.tag.value.visitor.values", "yes");
-        mergeOobWaysParams.setAdvancedOptions(opts);
+//        Map<String, String> opts = new HashMap<>();
+//        opts.put("convert.ops", "hoot::SetTagValueVisitor");
+//        opts.put("set.tag.value.visitor.element.criteria", "hoot::WayCriterion");
+//        opts.put("set.tag.value.visitor.keys", "hoot:change:exclude:delete");
+//        opts.put("set.tag.value.visitor.values", "yes");
+//        mergeOobWaysParams.setAdvancedOptions(opts);
         mergeOobWaysParams.setInput1("\\d+\\.osm"); //this is the file filter
         workflow.add(grailCommandFactory.build(jobId, mergeOobWaysParams, "info", MergeOsmFilesCommand.class, this.getClass()));
 
