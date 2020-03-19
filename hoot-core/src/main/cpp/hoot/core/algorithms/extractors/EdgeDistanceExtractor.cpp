@@ -51,6 +51,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, EdgeDistanceExtractor)
 
+// TODO: move this to its own file and factory register it
 class DiscretizeWaysVisitor : public ElementConstOsmMapVisitor
 {
 public:

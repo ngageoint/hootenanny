@@ -94,7 +94,8 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
   std::shared_ptr<Geometry> overlap;
   try
   {
-    // This buffer calc is a performance bottleneck for Area Conflation.
+    // This buffer calc is a performance bottleneck for Area Conflation. Attempts to reduce the quad
+    // segments option passed to the buffer operation have had no effect on performance so far.
     g1.reset(g1->buffer(buffer));
     g2.reset(g2->buffer(buffer));
     overlap.reset(g1->intersection(g2.get()));

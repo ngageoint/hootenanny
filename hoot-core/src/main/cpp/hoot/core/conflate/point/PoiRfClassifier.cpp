@@ -44,7 +44,6 @@
 #include <hoot/core/algorithms/extractors/LengthScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/WeightedMetricDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/WeightedShapeDistanceExtractor.h>
-#include <hoot/core/algorithms/extractors/BufferedOverlapExtractor.h>
 #include <hoot/core/algorithms/extractors/CentroidDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/CompactnessExtractor.h>
 #include <hoot/core/algorithms/extractors/EdgeDistanceExtractor.h>
