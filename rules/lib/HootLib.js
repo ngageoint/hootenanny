@@ -46,6 +46,7 @@ function getRelatedTags(relateToKvp, d) {
     var result = [];
     for (var k in d) {
         var kvp = k + '=' + d[k];
+        // TODO: This needs to be updated for features other than POI before its used outside of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.score(relateToKvp, kvp) > 0) {
                 result.push(kvp);
@@ -76,7 +77,8 @@ function getTagsByCategory(category, d) {
     var result = [];
     for (var k in d) {
         var kvp = k + '=' + d[k];
-        // if it is not a generic POI type
+        // if it is not a generic type
+        // TODO: This needs to be updated for features other than POI before its used outside of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.getCategories(kvp).indexOf(category) >= 0) {
                 result.push(kvp);
@@ -152,11 +154,33 @@ function getTagDistance(commonKvp, t1, t2) {
 /**
  * TODO
  */
-function getTypeScore(map, e1, e2)
+function explicitTypeMismatch(e1, e2, minTypeScore)
 {
-  //var differ = new hoot.ComparatorTagDifferencer();
-  //return differ.diff(map, e1, e2);
-  return hoot.OsmSchema.scoreTypes(e1.getTags(), e2.getTags());
+  return hoot.OsmSchema.explicitTypeMismatch(e1, e2, minTypeScore);
+}
+
+/**
+ * Scores the similarity between two feature types
+ */
+function getTypeScore(e1, e2, ignoreGenericTypes)
+{
+  return hoot.OsmSchema.scoreTypes(e1.getTags(), e2.getTags(), ignoreGenericTypes);
+}
+
+/**
+ * TODO
+ */
+function isGeneric(e)
+{
+  return hoot.OsmSchema.isGeneric(e);
+}
+
+/**
+ * TODO
+ */
+function hasType(e)
+{
+  return hoot.OsmSchema.hasType(e);
 }
 
 /**
@@ -302,10 +326,7 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
 }
 
 /**
- * Returns true if the feature is conflatable by any geometry non-generic conflation algorithm (so conflatable by everything besides: 
- * Point.js, Line.js, Polygon.js, or PointPolygon.js).
-
-TODO: update
+ * Returns true if the feature is conflatable by any geometry non-generic conflation algorithm .
  */
 function isSpecificallyConflatable(map, e, geometryTypeFilter)
 {
@@ -328,9 +349,14 @@ function isArea(map, e)
   return hoot.OsmSchema.isArea(map, e);
 }
 
-function isHighway(e)
+function isNonBuildingArea(map, e)
 {
-  return hoot.OsmSchema.isHighway(e);
+  return hoot.OsmSchema.isNonBuildingArea(map, e);
+}
+
+function isHighway(map, e)
+{
+  return hoot.OsmSchema.isHighway(map, e);
 }
 
 /**

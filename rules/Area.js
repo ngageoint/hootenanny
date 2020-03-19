@@ -20,6 +20,11 @@ exports.geometryType = "polygon";
 exports.matchCandidateCriterion = "hoot::AreaCriterion";
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
+var smallerOverlapExtractor = new hoot.SmallerOverlapExtractor();
+var overlapExtractor = new hoot.OverlapExtractor();
+var bufferedOverlapExtractor = new hoot.BufferedOverlapExtractor();
+var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
+var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 
 /*
 This matches areas to areas (area=yes), where an area is a non-building polygon.  
@@ -38,7 +43,7 @@ nodes and polygons or a school polygon which encloses school buildings on the ca
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isArea(map, e) && !isBuilding(map, e);
+  return isNonBuildingArea(map, e);
 };
 
 /**
@@ -83,50 +88,86 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
 
-  // Do we need to be looking at tags too, since area is such a broad concept?
+  // The geometry matching model was derived against only one dataset using Weka, so likely needs 
+  // more refinement. The tag matching was derived manually after the fact outside of Weka and is 
+  // the same that is used with Generic Conflation. The original geometry matching model from Weka 
+  // has been updated to account for the fact that buffered overlap, edge distance, and overlap 
+  // are processing intensive (roughly in order from most to least). You can see the original 
+  // geometry matching model by looking at the revision history for this file.
 
-  var smallerOverlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
-  var overlap = new hoot.OverlapExtractor().extract(map, e1, e2);
-  var bufferedOverlap = new hoot.BufferedOverlapExtractor().extract(map, e1, e2);
-  var edgeDist = new hoot.EdgeDistanceExtractor().extract(map, e1, e2);
-  var angleHist = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
+  // TODO: Should we do anything with names?
 
-  // This geometry matching model was derived against only one dataset using Weka, so may need more refinement.
-
-  if (bufferedOverlap < 0.57)
+  // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
+  // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
+  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, 0.8); // TODO: move val to config
+  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
+  if (!typeScorePassesThreshold)
   {
-    if (overlap >= 0.18 && edgeDist >= 0.99)
-    {
-      result = { match: 1.0, miss: 0.0, review: 0.0 };
-    }
+    return result;
   }
-  else
+  
+  var angleHist = angleHistogramExtractor.extract(map, e1, e2);
+  var edgeDist;
+  var bufferedOverlap;
+  var smallerOverlap;
+  var overlap;
+
+  if (angleHist >= 0.98 || angleHist < 0.4)
   {
+    edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
     if (edgeDist < 0.97)
     {
-      if (angleHist < 0.98)
-      {
-        if (angleHist < 0.4)
-        {
-          result = { match: 1.0, miss: 0.0, review: 0.0 };
-        }
-        else if (smallerOverlap < 0.89)
-        {
-          result = { match: 1.0, miss: 0.0, review: 0.0 };
-        }
-      }
-      else
+      bufferedOverlap = bufferedOverlapExtractor.extract(map, e1, e2);
+      if (bufferedOverlap >= 0.57)
       {
         result = { match: 1.0, miss: 0.0, review: 0.0 };
+        return result;
       }
     }
-    else
+  }
+  else if (angleHist >= 0.4)
+  {
+    smallerOverlap = smallerOverlapExtractor.extract(map, e1, e2);
+    if (smallerOverlap < 0.89)
     {
-      result = { match: 1.0, miss: 0.0, review: 0.0 };
+      edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+      if (edgeDist < 0.97)
+      {
+        bufferedOverlap = bufferedOverlapExtractor.extract(map, e1, e2);
+        if (bufferedOverlap >= 0.57)
+        {
+          result = { match: 1.0, miss: 0.0, review: 0.0 };
+          return result;
+        }
+      }
     }
   }
-  hoot.trace("featureReview: " + result.review);
-  hoot.trace("featureMatch: " + result.match);
+
+  overlap = overlapExtractor.extract(map, e1, e2);
+  if (overlap >= 0.18)
+  {
+    edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+    if (edgeDist >= 0.99)
+    {
+      bufferedOverlap = bufferedOverlapExtractor.extract(map, e1, e2);
+      if (bufferedOverlap < 0.57)
+      {
+        result = { match: 1.0, miss: 0.0, review: 0.0 };
+        return result;
+      }
+    }
+  }
+
+  edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+  if (edgeDist >= 0.97)
+  {
+    bufferedOverlap = bufferedOverlapExtractor.extract(map, e1, e2);
+    if (bufferedOverlap >= 0.57)
+    {
+      result = { match: 1.0, miss: 0.0, review: 0.0 };
+      return result;
+    }
+  }
 
   return result;
 };

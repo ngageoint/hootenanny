@@ -44,7 +44,8 @@ public:
 
   virtual QString toString() const override { return "MeanAggregator"; }
 
-  virtual QString getDescription() const override { return "Aggregates data based on the mean value"; }
+  virtual QString getDescription() const override
+  { return "Aggregates data based on the mean value"; }
 };
 
 }

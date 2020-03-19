@@ -88,7 +88,8 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
   {
     eid = eidj->getElementId();
   }
-  else if (obj->Has(v8::String::NewFromUtf8(current, "id")) && obj->Has(v8::String::NewFromUtf8(current, "type")))
+  else if (obj->Has(v8::String::NewFromUtf8(current, "id")) &&
+           obj->Has(v8::String::NewFromUtf8(current, "type")))
   {
     long id;
     QString type;

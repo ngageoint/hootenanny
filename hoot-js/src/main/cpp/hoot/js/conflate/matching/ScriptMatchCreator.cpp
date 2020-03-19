@@ -90,18 +90,18 @@ public:
     _mt(mt),
     _script(script),
     _filter(filter),
-    _customSearchRadius(-1.0)
+    _customSearchRadius(-1.0),
+    _neighborCountMax(-1),
+    _neighborCountSum(0),
+    _elementsEvaluated(0),
+    _maxGroupSize(0),
+    _numElementsVisited(0),
+    _numMatchCandidatesVisited(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _totalElementsToProcess(0)
   {
-    _neighborCountMax = -1;
-    _neighborCountSum = 0;
-    _elementsEvaluated = 0;
-    _maxGroupSize = 0;
-    _numElementsVisited = 0;
-    _numMatchCandidatesVisited = 0;
-    _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
-
     // Calls to script functions/var are expensive, both memory-wise and processing-wise. Since this
-    // constructor gets called repeatedly by createMatch, keep them out of this constructor.
+    // constructor gets called repeatedly by createMatch, keep those calls out of this constructor.
 
     // Point/Polygon is not meant to conflate any polygons that are conflatable by other conflation
     // routines, hence the use of NonConflatableCriterion.
@@ -109,6 +109,8 @@ public:
       new ChainCriterion(
         ElementCriterionPtr(new PolygonCriterion()),
         ElementCriterionPtr(new NonConflatableCriterion(map))));
+
+    _timer.start();
   }
 
   ~ScriptMatchVisitor()
@@ -582,12 +584,24 @@ public:
           " total elements.");
       }
     }
+
+    // if matching gets slow, throttle the log update interval accordingly.
+    if (_timer.elapsed() > 3000 && _taskStatusUpdateInterval >= 10)
+    {
+      _taskStatusUpdateInterval /= 10;
+    }
+    else if (_timer.elapsed() < 250 && _taskStatusUpdateInterval < 10000)
+    {
+      _taskStatusUpdateInterval *= 10;
+    }
+
     _numElementsVisited++;
-    if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
+    if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
-        StringUtils::formatLargeNumber(getMap()->getElementCount()) << " elements.");
+        StringUtils::formatLargeNumber(_totalElementsToProcess) << " elements.");
+       _timer.restart();
     }
   }
 
@@ -601,7 +615,27 @@ public:
   void setCandidateDistanceSigma(double sigma) { _candidateDistanceSigma = sigma; }
 
   CreatorDescription getCreatorDescription() const { return _scriptInfo; }
-  void setCreatorDescription(const CreatorDescription& description) { _scriptInfo = description; }
+  void setCreatorDescription(const CreatorDescription& description)
+  {
+    _scriptInfo = description;
+
+    switch (_scriptInfo.geometryType)
+    {
+      case GeometryTypeCriterion::GeometryType::Point:
+        _totalElementsToProcess = getMap()->getNodeCount();
+        break;
+      case GeometryTypeCriterion::GeometryType::Line:
+        _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
+        break;
+      case GeometryTypeCriterion::GeometryType::Polygon:
+        _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
+        break;
+      default:
+        // visit all geometry types if the script didn't identify its geometry
+        _totalElementsToProcess = getMap()->size();
+        break;
+    }
+  }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
@@ -612,17 +646,37 @@ private:
   // don't hold on to the map.
   std::weak_ptr<const OsmMap> _map;
   Persistent<Object> _mapJs;
+
   vector<ConstMatchPtr>& _result;
-  set<ElementId> _empty;
+  ConstMatchThresholdPtr _mt;
+
+  std::shared_ptr<PluginContext> _script;
+
+  ElementCriterionPtr _filter;
+
+  //used for automatic search radius calculation; it is expected that this is set from the
+  //Javascript rules file used for the generic conflation
+  double _customSearchRadius;
+
   int _neighborCountMax;
   int _neighborCountSum;
-  long _elementCount;
   int _elementsEvaluated;
   size_t _maxGroupSize;
-  ConstMatchThresholdPtr _mt;
-  std::shared_ptr<PluginContext> _script;
+  long _numElementsVisited;
+  long _numMatchCandidatesVisited;
+
+  int _taskStatusUpdateInterval;
+
+  long _totalElementsToProcess;
+
+  std::shared_ptr<ChainCriterion> _pointPolyCrit;
+
+  QElapsedTimer _timer;
+
+  long _elementCount;
+
   CreatorDescription _scriptInfo;
-  ElementCriterionPtr _filter;
+
   Persistent<Function> _getSearchRadius;
 
   QHash<ElementId, bool> _matchCandidateCache;
@@ -634,16 +688,10 @@ private:
   deque<ElementId> _indexToEid;
 
   double _candidateDistanceSigma;
-  //used for automatic search radius calculation; it is expected that this is set from the
-  //Javascript rules file used for the generic conflation
-  double _customSearchRadius;
+
   QString _scriptPath;
 
-  long _numElementsVisited;
-  long _numMatchCandidatesVisited;
-  int _taskStatusUpdateInterval;
-
-  std::shared_ptr<ChainCriterion> _pointPolyCrit;
+  set<ElementId> _empty;
 };
 
 ScriptMatchCreator::ScriptMatchCreator()

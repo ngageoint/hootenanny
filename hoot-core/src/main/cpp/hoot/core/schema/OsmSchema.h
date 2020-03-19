@@ -398,7 +398,12 @@ public:
   /**
    * Return true if this tag can contain free-form text.
    */
-  bool isTextTag(const QString& key) { return getTagVertex(key).valueType == Text; }
+  bool isTextTag(const QString& key);
+
+  /**
+   * Return true if this tag can contain numeric text.
+   */
+  bool isNumericTag(const QString& key);
 
   /**
    * Loads the default configuration. This should only be used by unit tests.
@@ -418,13 +423,73 @@ public:
   double score(const QString& kvp, const Tags& tags);
 
   /**
+   * TODO
+   *
+   * @return
+   */
+  QSet<QString> getGenericKvps() const;
+
+  /**
+   * TODO
+   *
+   * @param tags
+   * @param allowGeneric
+   * @return
+   */
+  QString getFirstType(const Tags& tags, const bool allowGeneric);
+
+  /**
+   * TODO
+   *
+   * @param tags1
+   * @param tags2
+   * @param minTypeScore
+   * @return
+   */
+  bool explicitTypeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore);
+
+  /**
+   *
+   *
+   * @param kvp
+   * @return
+   */
+  bool isGenericKvp(const QString& kvp);
+
+  /**
+   * TODO
+   *
+   * @param tags
+   * @return
+   */
+  bool isGeneric(const Tags& tags);
+
+  /**
+   * TODO
+   *
+   * @param tags
+   * @return
+   */
+  bool hasType(const Tags& tags);
+
+  /**
+   * TODO
+   *
+   * @param tags
+   * @return
+   */
+  bool hasMoreThanOneType(const Tags& tags);
+
+  /**
    * Scores the type similarity between two sets of tags
    *
    * @param tags1 the first set of tags to score
    * @param tags2 the second set of tags to score
+   * @param ignoreGenericTypes if true, generic types such as 'poi=yes' are ignored during
+   * comparison
    * @return a similarity score from 0.0 to 1.0
    */
-  double scoreTypes(const Tags& tags1, const Tags& tags2);
+  double scoreTypes(const Tags& tags1, const Tags& tags2, const bool ignoreGenericTypes = false);
 
   /**
    * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
@@ -503,6 +568,7 @@ private:
 
   QSet<QString> _allTagKeysCache;
   QSet<QString> _allTypeKeysCache;
+  mutable QSet<QString> _genericKvps;
 };
 
 }

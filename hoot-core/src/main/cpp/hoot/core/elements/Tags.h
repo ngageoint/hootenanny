@@ -330,6 +330,13 @@ public:
   static Tags kvpListToTags(const QStringList& kvps);
 
   /**
+   * TODO
+   *
+   * @return
+   */
+  QStringList toKvps() const;
+
+  /**
    * Converts a collection of schema vertices to tags
    *
    * @param vertices schema vertices to convert

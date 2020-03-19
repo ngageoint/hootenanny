@@ -32,6 +32,8 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 
+#include <QElapsedTimer>
+
 namespace hoot
 {
 
@@ -41,9 +43,28 @@ NonBuildingAreaCriterion::NonBuildingAreaCriterion()
 {
 }
 
+NonBuildingAreaCriterion::NonBuildingAreaCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
+
 bool NonBuildingAreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return AreaCriterion().isSatisfied(e) && !BuildingCriterion().isSatisfied(e);
+  const bool isArea = AreaCriterion(_map).isSatisfied(e);
+  if (!isArea)
+  {
+    return false;
+  }
+
+  const bool isBuilding = BuildingCriterion(_map).isSatisfied(e);
+  if (isBuilding)
+  {
+    return false;
+  }
+
+  LOG_TRACE("is non-building area: " << e);
+
+  return true;
 }
 
 }

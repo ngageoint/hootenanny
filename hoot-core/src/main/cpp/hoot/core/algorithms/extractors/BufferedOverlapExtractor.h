@@ -40,7 +40,7 @@ class Element;
 /**
  * Shamelessly taken from JCS.
  *
- * This is exactly the same as the SymDiffMatcher (in JCS speak) so I've skipped implementing the
+ * This is exactly the same as the SymDiffMatcher (in JCS speak), so I've skipped implementing the
  * SymDiffMatcher.
  *
  * @author RoadMatcher

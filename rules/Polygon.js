@@ -78,14 +78,16 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
 
-  var typeScore = getTypeScore(map, e1, e2);
-  var typeScorePassesThreshold = false;
-  if (typeScore >= exports.tagThreshold)
-  {
-    typeScorePassesThreshold = true;
-  }
-  hoot.trace("typeScore: " + typeScore);
+  // TODO: Should we do anything with names?
+
+  // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
+  // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
+  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.tagThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
+  if (!typeScorePassesThreshold)
+  {
+    return result;
+  }
 
   // These geometry rules were derived by using training data in Weka with the
   // REPTree model w/ maxDepth set to 3. Note: This was taken directly from Building.js.

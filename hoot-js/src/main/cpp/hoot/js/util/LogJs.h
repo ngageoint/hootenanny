@@ -42,9 +42,11 @@ namespace hoot
 class LogJs : public node::ObjectWrap
 {
 public:
+
  static void Init(v8::Handle<v8::Object> target);
 
 private:
+
   LogJs();
   ~LogJs();
 

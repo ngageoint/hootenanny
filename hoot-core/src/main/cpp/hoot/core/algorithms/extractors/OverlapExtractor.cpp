@@ -37,6 +37,8 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/elements/Element.h>
 
+#include <QElapsedTimer>
+
 using namespace geos::geom;
 using namespace std;
 
@@ -52,11 +54,18 @@ OverlapExtractor::OverlapExtractor()
 double OverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
   const ConstElementPtr& candidate) const
 {
+//  QElapsedTimer timer;
+//  timer.start();
+//  const int interval = 2500;
+
   ElementConverter ec(map.shared_from_this());
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  if (g1->isEmpty())
+  {
+    return nullValue();
+  }
   std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
-
-  if (g1->isEmpty() || g2->isEmpty())
+  if (g2->isEmpty())
   {
     return nullValue();
   }
@@ -75,14 +84,22 @@ double OverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& targe
 
   double a1 = g1->getArea();
   double a2 = g2->getArea();
-  double overlapArea = overlap->getArea();
 
   if (a1 + a2 == 0)
   {
     return 0.0;
   }
 
-  return std::min(1.0, (2 * overlapArea) / (a1 + a2));
+  double overlapArea = overlap->getArea();
+
+  const double result = std::min(1.0, (2 * overlapArea) / (a1 + a2));
+
+//  if (timer.elapsed() > interval)
+//  {
+//    LOG_DEBUG("OverlapExtractor: " << timer.elapsed());
+//  }
+
+  return result;
 }
 
 }

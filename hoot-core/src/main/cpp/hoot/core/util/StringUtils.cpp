@@ -195,8 +195,12 @@ void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
 
 bool StringUtils::containsAny(const QStringList& input, const QStringList& toCompare)
 {
+  LOG_VART(input);
+  LOG_VART(toCompare);
   for (int i = 0; i < toCompare.size(); i++)
   {
+    LOG_VART(toCompare.at(i));
+    LOG_VART(input.contains(toCompare.at(i)));
     // may eventually want a case sensitivity option here
     if (input.contains(toCompare.at(i)))
     {
