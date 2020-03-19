@@ -49,6 +49,7 @@
 #include <hoot/core/criterion/IdTagMatchesId.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // Qt
 #include <QDateTime>
@@ -988,4 +989,102 @@ ElementCriterionPtr OsmUtils::_getCrit(const QString& criterionClassName)
   return crit;
 }
 
+bool OsmUtils::isMemberOfRelationType(const ConstOsmMapPtr& map, const ElementId& childId,
+                                      const QString& relationType)
+{
+  LOG_VART(childId);
+  LOG_VART(relationType);
+
+  const set<ElementId> parentIds = map->getParents(childId);
+  for (set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
+  {
+    const ElementId parentId = *it;
+    if (parentId.getType() == ElementType::Relation)
+    {
+      if (relationType.trimmed().isEmpty())
+      {
+        LOG_TRACE(childId << " member of relation: " << parentId);
+        return true;
+      }
+      else
+      {
+        ConstRelationPtr relation =
+          std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
+        if (relation && relation->getType() == relationType)
+        {
+          LOG_TRACE(
+            childId << " member of relation: " << parentId << " with type: " << relationType);
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+bool OsmUtils::isMemberOfRelationInCategory(const ConstOsmMapPtr& map, const ElementId& childId,
+                                            const QString& schemaCategory)
+{
+  LOG_VART(childId);
+  LOG_VART(schemaCategory);
+
+  const set<ElementId> parentIds = map->getParents(childId);
+  for (set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
+  {
+    const ElementId parentId = *it;
+    if (parentId.getType() == ElementType::Relation)
+    {
+      if (schemaCategory.trimmed().isEmpty())
+      {
+        LOG_TRACE(childId << " member of relation: " << parentId);
+        return true;
+      }
+      else
+      {
+        ConstRelationPtr relation =
+          std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
+        if (relation && OsmSchema::getInstance().hasCategory(relation->getTags(), schemaCategory))
+        {
+          LOG_TRACE(
+            childId << " member of relation: " << parentId << " in category: " << schemaCategory);
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+bool OsmUtils::isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const ElementId& childId,
+                                            const QString& tagKey)
+{
+  LOG_VART(childId);
+  LOG_VART(tagKey);
+
+  const set<ElementId> parentIds = map->getParents(childId);
+  for (set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
+  {
+    const ElementId parentId = *it;
+    if (parentId.getType() == ElementType::Relation)
+    {
+      if (tagKey.trimmed().isEmpty())
+      {
+        LOG_TRACE(childId << " member of relation: " << parentId);
+        return true;
+      }
+      else
+      {
+        ConstRelationPtr relation =
+          std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
+        if (relation && relation->getTags().contains(tagKey))
+        {
+          LOG_TRACE(
+            childId << " member of relation: " << parentId << " with tag key: " << tagKey);
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
 }

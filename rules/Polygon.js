@@ -33,6 +33,12 @@ var overlapExtractor =
  */
 exports.isMatchCandidate = function(map, e)
 {
+  // If the poly is generic but part of a building relation we want Building Conflation to handle 
+  // it instead.
+  if (isMemberOfRelationInCategory(map, e.getElementId(), "building"))
+  {
+    return false;
+  }
   return isPolygon(e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 

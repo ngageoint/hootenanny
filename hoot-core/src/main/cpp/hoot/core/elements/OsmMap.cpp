@@ -504,7 +504,6 @@ bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
       return true;
     }
   }
-
   return false;
 }
 

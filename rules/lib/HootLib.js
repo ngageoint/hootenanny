@@ -154,6 +154,32 @@ function getTagDistance(commonKvp, t1, t2) {
 /**
  * TODO
  */
+function isMemberOfRelationType(map, childElementId, relationType)
+{
+  return map.isMemberOfRelationType(childElementId, relationType);
+}
+
+/**
+ * TODO
+ */
+function isMemberOfRelationInCategory(map, childElementId, schemaCategory)
+{
+  return map.isMemberOfRelationInCategory(childElementId, schemaCategory);
+}
+
+/**
+ * TODO
+ */
+function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
+{
+  hoot.debug("childElementId: " + childElementId);
+  hoot.debug("tagKey: " + tagKey);
+  return map.isMemberOfRelationWithTagKey(childElementId, tagKey);
+}
+
+/**
+ * TODO
+ */
 function explicitTypeMismatch(e1, e2, minTypeScore)
 {
   return hoot.OsmSchema.explicitTypeMismatch(e1, e2, minTypeScore);

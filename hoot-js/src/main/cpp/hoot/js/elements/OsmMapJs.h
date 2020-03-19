@@ -65,6 +65,9 @@ private:
   static void removeElement(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void setIdGenerator(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void visit(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationType(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationInCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationWithTagKey(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   OsmMapPtr _map;
   ConstOsmMapPtr _constMap;

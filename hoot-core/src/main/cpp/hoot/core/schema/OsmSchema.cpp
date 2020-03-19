@@ -1449,19 +1449,13 @@ QSet<QString> OsmSchema::getAllTypeKeys()
   if (_allTypeKeysCache.isEmpty())
   {  
     QSet<QString> allTypeKeysCacheTemp = d->getAllTagKeys();
-
-    allTypeKeysCacheTemp.remove(MetadataTags::Ref1());
-    allTypeKeysCacheTemp.remove(MetadataTags::Ref2());
-    allTypeKeysCacheTemp.remove("name");
-    allTypeKeysCacheTemp.remove("ele");
-    allTypeKeysCacheTemp.remove(MetadataTags::ERROR_CIRCULAR);
-    allTypeKeysCacheTemp.remove(MetadataTags::SourceDateTime());
-    allTypeKeysCacheTemp.remove("license");
-
     for (QSet<QString>::const_iterator typeKeyItr = allTypeKeysCacheTemp.constBegin();
          typeKeyItr != allTypeKeysCacheTemp.constEnd(); ++typeKeyItr)
     {
       const QString typeKey = *typeKeyItr;
+      // All we care about for type comparison are tags of schema type "tag". We definitely don't
+      // care about metadata tags, but its possible we may care about some text or numeric tags
+      // at some point.
       if (!isMetaData(typeKey, "") && !isTextTag(typeKey) && !isNumericTag(typeKey))
       {
         _allTypeKeysCache.insert(typeKey);

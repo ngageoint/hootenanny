@@ -688,6 +688,39 @@ public:
    */
   static bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
 
+  /**
+   * TODO
+   *
+   * @param map
+   * @param childId
+   * @param relationType
+   * @return
+   */
+  static bool isMemberOfRelationType(const ConstOsmMapPtr& map, const ElementId& childId,
+                                     const QString& relationType = "");
+
+  /**
+   * TODO
+   *
+   * @param map
+   * @param childId
+   * @param schemaCategory
+   * @return
+   */
+  static bool isMemberOfRelationInCategory(const ConstOsmMapPtr& map, const ElementId& childId,
+                                           const QString& schemaCategory = "");
+
+  /**
+   * TODO
+   *
+   * @param map
+   * @param childId
+   * @param tagKey
+   * @return
+   */
+  static bool isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const ElementId& childId,
+                                           const QString& tagKey = "");
+
 private:
 
   static int _badGeomCount;

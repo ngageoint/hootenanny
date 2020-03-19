@@ -133,7 +133,7 @@ public:
   QString description;
   QString key;
   QString value;
-  double influence;
+  double influence; // What is this used for?
   double childWeight;
 
   /**
