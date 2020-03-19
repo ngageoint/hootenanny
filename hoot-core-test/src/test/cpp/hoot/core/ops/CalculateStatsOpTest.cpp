@@ -335,7 +335,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Average Levels Per Building"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Non-Building Areas"));
+    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Non-Building Areas"));
 
     CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Features with Addresses"));
     CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Total Addresses"));
