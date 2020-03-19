@@ -60,11 +60,12 @@ Users can define their own [custom schema translations](https://github.com/ngage
 
 # Feature Validation and Cleaning
 
-Hootenanny has a variety of map cleaning capabilities to automatically correct erroneous data. In addition to its own built-in cleaning operations,
-Hootenanny is integrated with the feature cleaning capabilities of [JOSM](https://josm.openstreetmap.de/). 
+Hootenanny has a variety of map cleaning capabilities to automatically correct erroneous data. In addition to its own built-in cleaning operations, Hootenanny is integrated with the feature cleaning capabilities of [JOSM](https://josm.openstreetmap.de/). 
 
 For situations in which you want feature
 validation only and no automatic cleaning, JOSM validation may be used by itself. More [information](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc) on Hootenanny validation and cleaning.
+
+**NOTE:** As of 3/19/20 this capability is only available in the Vagrant version of Hootenanny. It will be added to the RPM version of Hootenanny at a later date.
 
 # Feature Filtering
 
