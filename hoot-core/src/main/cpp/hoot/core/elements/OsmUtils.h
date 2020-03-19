@@ -689,34 +689,50 @@ public:
   static bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
 
   /**
-   * TODO
+   * Determines if an element is a member of a relation
    *
-   * @param map
-   * @param childId
-   * @param relationType
-   * @return
+   * @param map map owning the input element
+   * @param childId element ID of the input element
+   * @return true if the element is a member of a relation
+   */
+  static bool isMemberOfRelation(const ConstOsmMapPtr& map, const ElementId& childId);
+
+  /**
+   * Determines if an element is a member of a relation of a given type
+   *
+   * @param map map owning the input element
+   * @param childId element ID of the input element
+   * @param relationType type of relation to search for; if left blank, relation types are not
+   * checked
+   * @return true if the element is a member of a relation of the specified type OR if the element
+   * is simply a member of a relation and the type is not specified; false otherwise
    */
   static bool isMemberOfRelationType(const ConstOsmMapPtr& map, const ElementId& childId,
                                      const QString& relationType = "");
 
   /**
-   * TODO
+   * Determines if an element is a member of a relation that is in a given schema category
    *
-   * @param map
-   * @param childId
-   * @param schemaCategory
-   * @return
+   * @param map map owning the input element
+   * @param childId element ID of the input element
+   * @param schemaCategory schema category to search for relation membership in; if left blank,
+   * category membership for the relations is not checked
+   * @return true if the element is a member of a relation that is in the specified schema category
+   * OR if the element is simply a member of a relation and the category is not specified; false
+   * otherwise
    */
   static bool isMemberOfRelationInCategory(const ConstOsmMapPtr& map, const ElementId& childId,
                                            const QString& schemaCategory = "");
 
   /**
-   * TODO
+   * Determines if an element is a member of a relation that has a given tag key
    *
-   * @param map
-   * @param childId
-   * @param tagKey
-   * @return
+   * @param map map owning the input element
+   * @param childId element ID of the input element
+   * @param tagKey tag key to search relations for; if left blank, tag keys on the relations are not
+   * checked
+   * @return true if the element is a member of a relation with the specified tag key OR if the
+   * element is simply a member of a relation and a tag key is not specified
    */
   static bool isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const ElementId& childId,
                                            const QString& tagKey = "");

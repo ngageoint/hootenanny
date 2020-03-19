@@ -989,11 +989,32 @@ ElementCriterionPtr OsmUtils::_getCrit(const QString& criterionClassName)
   return crit;
 }
 
+bool isMemberOfRelation(const ConstOsmMapPtr& map, const ElementId& childId)
+{
+  const set<ElementId> parentIds = map->getParents(childId);
+  for (set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
+  {
+    const ElementId parentId = *it;
+    if (parentId.getType() == ElementType::Relation)
+    {
+      LOG_TRACE(childId << " member of relation: " << parentId);
+      return true;
+
+    }
+  }
+  return false;
+}
+
 bool OsmUtils::isMemberOfRelationType(const ConstOsmMapPtr& map, const ElementId& childId,
                                       const QString& relationType)
 {
   LOG_VART(childId);
   LOG_VART(relationType);
+
+  if (relationType.trimmed().isEmpty())
+  {
+    return isMemberOfRelation(map, childId);
+  }
 
   const set<ElementId> parentIds = map->getParents(childId);
   for (set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
@@ -1001,21 +1022,13 @@ bool OsmUtils::isMemberOfRelationType(const ConstOsmMapPtr& map, const ElementId
     const ElementId parentId = *it;
     if (parentId.getType() == ElementType::Relation)
     {
-      if (relationType.trimmed().isEmpty())
+      ConstRelationPtr relation =
+        std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
+      if (relation && relation->getType() == relationType)
       {
-        LOG_TRACE(childId << " member of relation: " << parentId);
+        LOG_TRACE(
+          childId << " member of relation: " << parentId << " with type: " << relationType);
         return true;
-      }
-      else
-      {
-        ConstRelationPtr relation =
-          std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
-        if (relation && relation->getType() == relationType)
-        {
-          LOG_TRACE(
-            childId << " member of relation: " << parentId << " with type: " << relationType);
-          return true;
-        }
       }
     }
   }
@@ -1028,27 +1041,24 @@ bool OsmUtils::isMemberOfRelationInCategory(const ConstOsmMapPtr& map, const Ele
   LOG_VART(childId);
   LOG_VART(schemaCategory);
 
+  if (schemaCategory.trimmed().isEmpty())
+  {
+    return isMemberOfRelation(map, childId);
+  }
+
   const set<ElementId> parentIds = map->getParents(childId);
   for (set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
   {
     const ElementId parentId = *it;
     if (parentId.getType() == ElementType::Relation)
     {
-      if (schemaCategory.trimmed().isEmpty())
+      ConstRelationPtr relation =
+        std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
+      if (relation && OsmSchema::getInstance().hasCategory(relation->getTags(), schemaCategory))
       {
-        LOG_TRACE(childId << " member of relation: " << parentId);
+        LOG_TRACE(
+          childId << " member of relation: " << parentId << " in category: " << schemaCategory);
         return true;
-      }
-      else
-      {
-        ConstRelationPtr relation =
-          std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
-        if (relation && OsmSchema::getInstance().hasCategory(relation->getTags(), schemaCategory))
-        {
-          LOG_TRACE(
-            childId << " member of relation: " << parentId << " in category: " << schemaCategory);
-          return true;
-        }
       }
     }
   }
@@ -1061,27 +1071,24 @@ bool OsmUtils::isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const Ele
   LOG_VART(childId);
   LOG_VART(tagKey);
 
+  if (tagKey.trimmed().isEmpty())
+  {
+    return isMemberOfRelation(map, childId);
+  }
+
   const set<ElementId> parentIds = map->getParents(childId);
   for (set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
   {
     const ElementId parentId = *it;
     if (parentId.getType() == ElementType::Relation)
     {
-      if (tagKey.trimmed().isEmpty())
+      ConstRelationPtr relation =
+        std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
+      if (relation && relation->getTags().contains(tagKey))
       {
-        LOG_TRACE(childId << " member of relation: " << parentId);
+        LOG_TRACE(
+          childId << " member of relation: " << parentId << " with tag key: " << tagKey);
         return true;
-      }
-      else
-      {
-        ConstRelationPtr relation =
-          std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
-        if (relation && relation->getTags().contains(tagKey))
-        {
-          LOG_TRACE(
-            childId << " member of relation: " << parentId << " with tag key: " << tagKey);
-          return true;
-        }
       }
     }
   }
