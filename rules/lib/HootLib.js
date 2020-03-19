@@ -152,7 +152,7 @@ function getTagDistance(commonKvp, t1, t2) {
 }
 
 /**
- * TODO
+ * Determines if an element is a member of relation that has a specified type
  */
 function isMemberOfRelationType(map, childElementId, relationType)
 {
@@ -160,7 +160,7 @@ function isMemberOfRelationType(map, childElementId, relationType)
 }
 
 /**
- * TODO
+ * Determines if an element is a member of relation that is in a specified schema category
  */
 function isMemberOfRelationInCategory(map, childElementId, schemaCategory)
 {
@@ -168,17 +168,15 @@ function isMemberOfRelationInCategory(map, childElementId, schemaCategory)
 }
 
 /**
- * TODO
+ * Determines if an element is a member of relation containing a specified tag key
  */
 function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
 {
-  hoot.debug("childElementId: " + childElementId);
-  hoot.debug("tagKey: " + tagKey);
   return map.isMemberOfRelationWithTagKey(childElementId, tagKey);
 }
 
 /**
- * TODO
+ * Determines if two features mismatch on non-generic types
  */
 function explicitTypeMismatch(e1, e2, minTypeScore)
 {
@@ -194,7 +192,7 @@ function getTypeScore(e1, e2, ignoreGenericTypes)
 }
 
 /**
- * TODO
+ * Determines if a feature has a generic type (e.g. has building=yes and no other type tags)
  */
 function isGeneric(e)
 {
@@ -202,7 +200,7 @@ function isGeneric(e)
 }
 
 /**
- * TODO
+ * Determines if a feature has a specific type
  */
 function hasType(e)
 {
@@ -340,7 +338,7 @@ function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
  * the rubber sheeting required to automatically calculate the search radius.
  * @param rubberSheetMinTies The minimum number of tie points that need to be found during rubber
  * sheeting for the automatic search radius calculation to occur.
- * @param matchCandidateCriterion todo
+ * @param matchCandidateCriterion criterion used to filter match candidates
  */
 function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberSheetMinTies, matchCandidateCriterion)
 {

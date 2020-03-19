@@ -269,6 +269,14 @@ Invalid relation members will cause a warning to be logged.  You should enable t
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
 
+=== area.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an area feature is considered to have
+similar tags. This setting is helpful due to the loose definition of Area in Hootenanny.
+
 === arff.writer.precision
 
 * Data Type: int

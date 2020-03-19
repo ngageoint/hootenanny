@@ -423,60 +423,62 @@ public:
   double score(const QString& kvp, const Tags& tags);
 
   /**
-   * TODO
+   * Returns a collection of tag key/value pairs that represent generic feature types
    *
-   * @return
+   * @return a collection of tag key/value pairs
    */
   QSet<QString> getGenericKvps() const;
 
   /**
-   * TODO
+   * Returns the first type key/value pair found in a set of tags
    *
-   * @param tags
-   * @param allowGeneric
-   * @return
+   * @param tags the tags to search
+   * @param allowGeneric if true, kvps associated with generic types are returned
+   * @return a single key/value pair string
    */
   QString getFirstType(const Tags& tags, const bool allowGeneric);
 
   /**
-   * TODO
+   * Determines if two sets of tags have an explicit type mismatch. Empty tags and generic types
+   * are ignored during the comparison
    *
-   * @param tags1
-   * @param tags2
-   * @param minTypeScore
-   * @return
+   * @param tags1 the first set of tags to compare
+   * @param tags2 the second set of tags to compare
+   * @param minTypeScore the minimum similarity score at or above which the two sets of tags must
+   * score in to be considered a match
+   * @return true if the tags explicitly mismatch; false otherwise
    */
   bool explicitTypeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore);
 
   /**
+   * Determines if a key/value pair represents a generic feature type
    *
-   *
-   * @param kvp
-   * @return
+   * @param kvp the key/value pair to examine
+   * @return true if the input key/value pair represents a generic type; false otherwise
    */
   bool isGenericKvp(const QString& kvp);
 
   /**
-   * TODO
+   * Determines whether a set of tags represents a generic feature type
    *
-   * @param tags
-   * @return
+   * @param tags the tags to examine
+   * @return true if the tags contain only a generic feature type; false otherwise
    */
   bool isGeneric(const Tags& tags);
 
   /**
-   * TODO
+   * Determines if a set of tags has a feature type
    *
-   * @param tags
-   * @return
+   * @param tags the tags to examine
+   * @return true if the tags have at least one type tag
    */
   bool hasType(const Tags& tags);
 
   /**
-   * TODO
+   * Determines if a set of tags have more than one feature type
    *
-   * @param tags
-   * @return
+   * @param tags the tags to examine
+   * @return true if the tags have at least two type tags
    */
   bool hasMoreThanOneType(const Tags& tags);
 

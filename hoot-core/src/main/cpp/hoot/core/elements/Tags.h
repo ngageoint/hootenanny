@@ -330,9 +330,9 @@ public:
   static Tags kvpListToTags(const QStringList& kvps);
 
   /**
-   * TODO
+   * Returns the tags as key/value pair strings
    *
-   * @return
+   * @return a list of key/value pairs
    */
   QStringList toKvps() const;
 
