@@ -30,7 +30,6 @@
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
-#include <geos/util/TopologyException.h>
 
 // Hoot
 #include <hoot/core/util/GeometryUtils.h>

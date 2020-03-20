@@ -53,7 +53,7 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
   try
   {
     //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
-    DisableLog dl(Log::Warn);
+    //DisableLog dl(Log::Warn);
 
     ElementConverter elementConverter(map.shared_from_this());
     std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);

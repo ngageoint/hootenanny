@@ -50,6 +50,7 @@
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QDateTime>
@@ -789,6 +790,8 @@ std::shared_ptr<geos::geom::Geometry> OsmUtils::_getGeometry(
   }
   catch (const geos::util::TopologyException& e)
   {
+    // try to clean it
+    newGeom.reset(GeometryUtils::validateGeometry(newGeom.get()));
     if (_badGeomCount <= Log::getWarnMessageLimit())
     {
       LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());

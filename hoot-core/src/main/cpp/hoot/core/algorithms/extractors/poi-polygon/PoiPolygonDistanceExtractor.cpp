@@ -54,23 +54,23 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& /*map*/, const ConstEl
     throw HootException("No cache passed to extractor.");
   }
 
-  try
-  {
+  //try
+  //{
     LOG_VART(poi->getElementId());
     LOG_VART(poly->getElementId());
 
     //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
-    DisableLog dl(Log::Warn);
+    //DisableLog dl(Log::Warn);
 
     return _infoCache->getDistance(poly, poi);
-  }
-  catch (const geos::util::TopologyException& e)
-  {
-    LOG_TRACE(
-      "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
-      "to a geometry: " << poly->toString() << "\n" << poi->toString() << "\n" << e.what());
-    return -1.0;
-  }
+//  }
+//  catch (const geos::util::TopologyException& e)
+//  {
+//    LOG_TRACE(
+//      "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
+//      "to a geometry: " << poly->toString() << "\n" << poi->toString() << "\n" << e.what());
+//    return -1.0;
+//  }
 }
 
 }

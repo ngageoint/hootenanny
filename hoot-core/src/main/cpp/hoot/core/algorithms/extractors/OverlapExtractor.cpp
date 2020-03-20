@@ -54,9 +54,9 @@ OverlapExtractor::OverlapExtractor()
 double OverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
   const ConstElementPtr& candidate) const
 {
-//  QElapsedTimer timer;
-//  timer.start();
-//  const int interval = 2500;
+  LOG_DEBUG(
+    "Calculating overlap for " << target->getElementId() << " and " << candidate->getElementId() <<
+    "...");
 
   ElementConverter ec(map.shared_from_this());
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
@@ -93,11 +93,6 @@ double OverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& targe
   double overlapArea = overlap->getArea();
 
   const double result = std::min(1.0, (2 * overlapArea) / (a1 + a2));
-
-//  if (timer.elapsed() > interval)
-//  {
-//    LOG_DEBUG("OverlapExtractor: " << timer.elapsed());
-//  }
 
   return result;
 }

@@ -31,7 +31,6 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/Point.h>
-#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/util/Factory.h>
