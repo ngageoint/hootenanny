@@ -51,8 +51,7 @@ public:
 
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Polygon; }
+  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion(_map)); }
 

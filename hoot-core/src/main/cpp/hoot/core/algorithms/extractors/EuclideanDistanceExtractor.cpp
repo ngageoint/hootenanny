@@ -27,9 +27,6 @@
  */
 #include "EuclideanDistanceExtractor.h"
 
-// geos
-#include <geos/util/TopologyException.h>
-
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ElementConverter.h>

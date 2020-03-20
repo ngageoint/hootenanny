@@ -44,6 +44,7 @@
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
+#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/js/elements/TagsJs.h>
 
 using namespace v8;
@@ -79,6 +80,12 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, getTagVertex)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isAncestor"),
               FunctionTemplate::New(current, isAncestor)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isGeneric"),
+              FunctionTemplate::New(current, isGeneric)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "hasType"),
+              FunctionTemplate::New(current, hasType)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "explicitTypeMismatch"),
+              FunctionTemplate::New(current, explicitTypeMismatch)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isArea"),
               FunctionTemplate::New(current, isArea)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isPolygon"),
@@ -101,6 +108,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isRailway)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isHighway"),
               FunctionTemplate::New(current, isHighway)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isNonBuildingArea"),
+              FunctionTemplate::New(current, isNonBuildingArea)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "score"),
               FunctionTemplate::New(current, score)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "scoreTypes"),
@@ -177,6 +186,47 @@ void OsmSchemaJs::isAncestor(const FunctionCallbackInfo<Value>& args)
 
   args.GetReturnValue().Set(
     Boolean::New(current, OsmSchema::getInstance().isAncestor(childKvp, parentKvp)));
+}
+
+void OsmSchemaJs::isGeneric(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  const bool isGeneric = OsmSchema::getInstance().isGeneric(e->getTags());
+  LOG_VART(isGeneric);
+
+  args.GetReturnValue().Set(Boolean::New(current, isGeneric));
+}
+
+void OsmSchemaJs::hasType(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  const bool hasType = OsmSchema::getInstance().hasType(e->getTags());
+  LOG_VART(hasType);
+
+  args.GetReturnValue().Set(Boolean::New(current, hasType));
+}
+
+void OsmSchemaJs::explicitTypeMismatch(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+  double minimumScore = toCpp<double>(args[2]);
+
+  const bool hasExplicitTypeMismatch =
+    OsmSchema::getInstance().explicitTypeMismatch(e1->getTags(), e2->getTags(), minimumScore);
+
+  args.GetReturnValue().Set(Boolean::New(current, hasExplicitTypeMismatch));
 }
 
 void OsmSchemaJs::isArea(const FunctionCallbackInfo<Value>& args)
@@ -291,9 +341,23 @@ void OsmSchemaJs::isHighway(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, HighwayCriterion().isSatisfied(e)));
+  args.GetReturnValue().Set(
+    Boolean::New(current, HighwayCriterion(mapJs->getConstMap()).isSatisfied(e)));
+}
+
+void OsmSchemaJs::isNonBuildingArea(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(
+    Boolean::New(current, NonBuildingAreaCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
 void OsmSchemaJs::isSpecificallyConflatable(
@@ -350,9 +414,12 @@ void OsmSchemaJs::scoreTypes(const FunctionCallbackInfo<Value>& args)
 
   Tags tags1 = toCpp<Tags>(args[0]);
   Tags tags2 = toCpp<Tags>(args[1]);
+  const bool ignoreGenericTypes = toCpp<bool>(args[2]);
 
-  args.GetReturnValue().Set(
-    Number::New(current, OsmSchema::getInstance().scoreTypes(tags1, tags2)));
+  const double typeScore = OsmSchema::getInstance().scoreTypes(tags1, tags2, ignoreGenericTypes);
+  LOG_VART(typeScore);
+
+  args.GetReturnValue().Set(Number::New(current, typeScore));
 }
 
 void OsmSchemaJs::scoreOneWay(const FunctionCallbackInfo<Value>& args)

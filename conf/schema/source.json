@@ -52,6 +52,11 @@
         "objectType": "tag"
     },
     {
+        "isA": "source",
+        "name": "source:imagery",
+        "objectType": "tag"
+    },
+    {
         "description": "Catch all sensor match",
         "isA": "source:geometry:sensor",
         "name": "source:geometry:sensor=*",

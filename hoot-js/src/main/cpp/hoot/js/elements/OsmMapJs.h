@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPJS_H
 #define OSMMAPJS_H
@@ -65,6 +65,9 @@ private:
   static void removeElement(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void setIdGenerator(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void visit(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationType(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationInCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationWithTagKey(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   OsmMapPtr _map;
   ConstOsmMapPtr _constMap;

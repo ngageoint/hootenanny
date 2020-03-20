@@ -41,6 +41,7 @@
 
 // Qt
 #include <qnumeric.h>
+#include <QElapsedTimer>
 
 // Standard
 #include <sstream>
@@ -332,6 +333,10 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
 Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> mapObj,
   Handle<Object> plugin)
 {
+//  QElapsedTimer timer;
+//  timer.start();
+//  const int interval = 100;
+
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
@@ -359,6 +364,11 @@ Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> mapOb
   TryCatch trycatch;
   Handle<Value> result = func->Call(plugin, argc, jsArgs);
   HootExceptionJs::checkV8Exception(result, trycatch);
+
+//  if (timer.elapsed() > interval)
+//  {
+//    LOG_DEBUG("match score: " << timer.elapsed());
+//  }
 
   return handleScope.Escape(result);
 }

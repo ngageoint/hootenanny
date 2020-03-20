@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #define BUILDING_NODE_EXTENSION
 
@@ -30,6 +30,7 @@
 
 // hoot
 #include <hoot/core/ops/RemoveElementByEid.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
@@ -86,6 +87,15 @@ void OsmMapJs::Init(Handle<Object> target)
       FunctionTemplate::New(current, visit));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setIdGenerator"),
       FunctionTemplate::New(current, setIdGenerator));
+  tpl->PrototypeTemplate()->Set(
+    String::NewFromUtf8(current, "isMemberOfRelationType"),
+    FunctionTemplate::New(current, isMemberOfRelationType));
+  tpl->PrototypeTemplate()->Set(
+    String::NewFromUtf8(current, "isMemberOfRelationInCategory"),
+    FunctionTemplate::New(current, isMemberOfRelationInCategory));
+  tpl->PrototypeTemplate()->Set(
+    String::NewFromUtf8(current, "isMemberOfRelationWithTagKey"),
+    FunctionTemplate::New(current, isMemberOfRelationWithTagKey));
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                 String::NewFromUtf8(current, OsmMap::className().data()));
 
@@ -274,6 +284,51 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
     LOG_VAR(err.getWhat());
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
   }
+}
+
+void OsmMapJs::isMemberOfRelationType(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+  ElementId childId = toCpp<ElementId>(args[0]);
+  QString relationType = toCpp<QString>(args[1]);
+
+  const bool inRelationOfSpecifiedType =
+    OsmUtils::isMemberOfRelationType(mapJs->getConstMap(), childId, relationType);
+
+  args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedType));
+}
+
+void OsmMapJs::isMemberOfRelationInCategory(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+  ElementId childId = toCpp<ElementId>(args[0]);
+  QString schemaCategory = toCpp<QString>(args[1]);
+
+  const bool inRelationOfSpecifiedCategory =
+    OsmUtils::isMemberOfRelationInCategory(mapJs->getConstMap(), childId, schemaCategory);
+
+  args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedCategory));
+}
+
+void OsmMapJs::isMemberOfRelationWithTagKey(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+  ElementId childId = toCpp<ElementId>(args[0]);
+  QString tagKey = toCpp<QString>(args[1]);
+
+  const bool inRelationWithSpecifiedTagKey =
+    OsmUtils::isMemberOfRelationWithTagKey(mapJs->getConstMap(), childId, tagKey);
+
+  args.GetReturnValue().Set(Boolean::New(current, inRelationWithSpecifiedTagKey));
 }
 
 }

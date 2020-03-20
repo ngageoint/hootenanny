@@ -398,7 +398,12 @@ public:
   /**
    * Return true if this tag can contain free-form text.
    */
-  bool isTextTag(const QString& key) { return getTagVertex(key).valueType == Text; }
+  bool isTextTag(const QString& key);
+
+  /**
+   * Return true if this tag can contain numeric text.
+   */
+  bool isNumericTag(const QString& key);
 
   /**
    * Loads the default configuration. This should only be used by unit tests.
@@ -418,13 +423,75 @@ public:
   double score(const QString& kvp, const Tags& tags);
 
   /**
+   * Returns a collection of tag key/value pairs that represent generic feature types
+   *
+   * @return a collection of tag key/value pairs
+   */
+  QSet<QString> getGenericKvps() const;
+
+  /**
+   * Returns the first type key/value pair found in a set of tags
+   *
+   * @param tags the tags to search
+   * @param allowGeneric if true, kvps associated with generic types are returned
+   * @return a single key/value pair string
+   */
+  QString getFirstType(const Tags& tags, const bool allowGeneric);
+
+  /**
+   * Determines if two sets of tags have an explicit type mismatch. Empty tags and generic types
+   * are ignored during the comparison
+   *
+   * @param tags1 the first set of tags to compare
+   * @param tags2 the second set of tags to compare
+   * @param minTypeScore the minimum similarity score at or above which the two sets of tags must
+   * score in to be considered a match
+   * @return true if the tags explicitly mismatch; false otherwise
+   */
+  bool explicitTypeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore);
+
+  /**
+   * Determines if a key/value pair represents a generic feature type
+   *
+   * @param kvp the key/value pair to examine
+   * @return true if the input key/value pair represents a generic type; false otherwise
+   */
+  bool isGenericKvp(const QString& kvp);
+
+  /**
+   * Determines whether a set of tags represents a generic feature type
+   *
+   * @param tags the tags to examine
+   * @return true if the tags contain only a generic feature type; false otherwise
+   */
+  bool isGeneric(const Tags& tags);
+
+  /**
+   * Determines if a set of tags has a feature type
+   *
+   * @param tags the tags to examine
+   * @return true if the tags have at least one type tag
+   */
+  bool hasType(const Tags& tags);
+
+  /**
+   * Determines if a set of tags have more than one feature type
+   *
+   * @param tags the tags to examine
+   * @return true if the tags have at least two type tags
+   */
+  bool hasMoreThanOneType(const Tags& tags);
+
+  /**
    * Scores the type similarity between two sets of tags
    *
    * @param tags1 the first set of tags to score
    * @param tags2 the second set of tags to score
+   * @param ignoreGenericTypes if true, generic types such as 'poi=yes' are ignored during
+   * comparison
    * @return a similarity score from 0.0 to 1.0
    */
-  double scoreTypes(const Tags& tags1, const Tags& tags2);
+  double scoreTypes(const Tags& tags1, const Tags& tags2, const bool ignoreGenericTypes = false);
 
   /**
    * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
@@ -503,6 +570,7 @@ private:
 
   QSet<QString> _allTagKeysCache;
   QSet<QString> _allTypeKeysCache;
+  mutable QSet<QString> _genericKvps;
 };
 
 }

@@ -35,6 +35,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 
 // Std
@@ -184,6 +185,8 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
   }
   catch (const geos::util::TopologyException& e)
   {
+    // try to clean it
+    newGeom.reset(GeometryUtils::validateGeometry(newGeom.get()));
     if (_badGeomCount <= Log::getWarnMessageLimit())
     {
       LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());
@@ -354,6 +357,10 @@ bool PoiPolygonInfoCache::elementsIntersect(
   if (geom1 && geom2)
   {
     intersects = geom1->intersects(geom2.get());
+
+    LOG_TRACE(
+      "Calculated intersects: " << intersects << " for elements: " <<
+      element1->getElementId() << " and " << element2->getElementId() << ".");
   }
   else
   {

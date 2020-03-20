@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __SCHEMA_VERTEX_H__
 #define __SCHEMA_VERTEX_H__
@@ -133,7 +133,7 @@ public:
   QString description;
   QString key;
   QString value;
-  double influence;
+  double influence; // What is this used for?
   double childWeight;
 
   /**

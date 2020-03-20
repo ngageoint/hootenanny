@@ -22,13 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NONBUILDINGAREACRITERION_H
 #define NONBUILDINGAREACRITERION_H
 
 // hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -39,13 +41,14 @@ namespace hoot
  * Should be able to accomplish the same thing with a not building and is area chain but
  * couldn't.  See comments in train-area/RemoveIrrelevants.js
  */
-class NonBuildingAreaCriterion : public GeometryTypeCriterion
+class NonBuildingAreaCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
 public:
 
   static std::string className() { return "hoot::NonBuildingAreaCriterion"; }
 
   NonBuildingAreaCriterion();
+  NonBuildingAreaCriterion(ConstOsmMapPtr map);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -55,12 +58,16 @@ public:
   virtual QString getDescription() const
   { return "Identifies features that are areas but not buildings"; }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Line; }
+  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+private:
+
+  ConstOsmMapPtr _map;
 };
 
 }

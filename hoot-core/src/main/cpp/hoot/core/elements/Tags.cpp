@@ -775,7 +775,6 @@ QStringList Tags::split(const QString& values)
 QString Tags::toString() const
 {
   QString result;
-
   for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
   {
     result += it.key() + " = " + it.value() + "\n";
@@ -829,6 +828,16 @@ bool Tags::hasAnyKvp(const QStringList& kvps) const
     }
   }
   return false;
+}
+
+QStringList Tags::toKvps() const
+{
+  QStringList kvps;
+  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
+  {
+    kvps.append(it.key() + "=" + it.value());
+  }
+  return kvps;
 }
 
 bool Tags::hasAnyKey(const QStringList& keys)
