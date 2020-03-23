@@ -18,8 +18,8 @@ rm -f $OUT_DIR/ref.osm
 rm -f $OUT_DIR/sec.osm
 rm -f $OUT_DIR/diff.osc.sql
 rm -f $OUT_DIR/diff.osc
-rm -f $OUT_DIR/diff-tags.osc.sql
-rm -f $OUT_DIR/diff-tags.osc
+rm -f $OUT_DIR/diff.tags.osc.sql
+rm -f $OUT_DIR/diff.tags.osc
 rm -f $OUT_DIR/changeset-applied.osm
 
 echo "Creating the OSM API DB..."
@@ -65,13 +65,13 @@ hoot convert $CONFIG "$HOOT_DB_URL/$TEST_NAME-sec" $OUT_DIR/sec.osm
 
 echo "Generating differential changeset w/ tags between ref and sec..."
 hoot conflate $CONFIG -D debug.maps.filename=$IN_DIR/debug-conflate.osm $OSM_API_DB_URL "$HOOT_DB_URL/$TEST_NAME-sec" $OUT_DIR/diff.osc --differential --include-tags --separate-output
-hoot conflate $CONFIG -D debug.maps.filename=$IN_DIR/debug-conflate.osm $OSM_API_DB_URL "$HOOT_DB_URL/$TEST_NAME-sec" $OUT_DIR/diff.osc.sql --differential --include-tags --separate-output
+hoot conflate $CONFIG -D debug.maps.filename=$IN_DIR/debug-conflate-sql.osm $OSM_API_DB_URL "$HOOT_DB_URL/$TEST_NAME-sec" $OUT_DIR/diff.osc.sql $OSM_API_DB_URL --differential --include-tags --separate-output
 
 echo "Applying the geometry changeset to ref..."
 hoot changeset-apply $CONFIG -D debug.maps.filename=$IN_DIR/debug-changeset-application.osm $OUT_DIR/diff.osc.sql $OSM_API_DB_URL
 
 echo "Applying the tags changeset to ref..."
-hoot changeset-apply $CONFIG -D debug.maps.filename=$IN_DIR/debug-changeset-application.osm $OUT_DIR/diff-tags.osc.sql $OSM_API_DB_URL
+hoot changeset-apply $CONFIG -D debug.maps.filename=$IN_DIR/debug-changeset-application-tags.osm $OUT_DIR/diff.tags.osc.sql $OSM_API_DB_URL
 
 echo "Reading out the final map for comparison with expected map..."
 hoot convert $CONFIG -D debug.maps.filename=$IN_DIR/debug-final-map.osm $OSM_API_DB_URL $OUT_DIR/changeset-applied.osm
