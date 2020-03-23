@@ -1,18 +1,18 @@
 #!/bin/bash
 set -e
 
-# TODO: description
+# This test simulates the HG diff as run from the UI.
 
 TEST_NAME=ServiceGrailDiffTest
 IN_DIR=/home/vagrant/hoot/tmp/3923
 OUT_DIR=$IN_DIR
-#CROP_BOUNDS="-94.5395,39.1037,-94.5379,39.1046"
+#CROP_BOUNDS="-94.5466,39.0990,-94.5357,39.1097"
 
 CONFIG="--info -C DifferentialConflation.conf -C NetworkAlgorithm.conf -D differential.snap.unconnected.roads=true -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D debug.maps.write=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 # -C Testing.conf
 #-D reader.keep.status.tag=true -D reader.use.file.status=true -D reader.add.source.datetime=false
 #CONFIG+="-D log.class.filter=RemoveEmptyAreasVisitor"
-#CONFIG+=" -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator"
+CONFIG+=" -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator"
 
 rm -f $OUT_DIR/ref.osm
 rm -f $OUT_DIR/sec.osm
@@ -30,8 +30,8 @@ export PGPASSWORD=$DB_PASSWORD_OSMAPI
 REF_DB_INPUT=$OSM_API_DB_URL
 scripts/database/CleanAndInitializeOsmApiDb.sh
 
-REF_FILE=$IN_DIR/NOME.osm
-REF_FILE_CROPPED=$IN_DIR/NOME-cropped.osm
+REF_FILE=$IN_DIR/NOME-full.osm
+REF_FILE_CROPPED=$IN_DIR/NOME-full-cropped.osm
 
 if [[ "$CROP_BOUNDS" == "" ]]; then
   echo "Skipping cropping the ref..."
@@ -46,8 +46,8 @@ hoot convert $CONFIG -D debug.maps.filename=$IN_DIR/debug-ref-load.osm $REF_FILE
 # pull the ref out for viewing
 hoot convert $CONFIG $OSM_API_DB_URL $OUT_DIR/ref.osm
 
-SEC_FILE=$IN_DIR/OSM.osm 
-SEC_FILE_CROPPED=$IN_DIR/OSM-cropped.osm 
+SEC_FILE=$IN_DIR/OSM-full.osm 
+SEC_FILE_CROPPED=$IN_DIR/OSM-full-cropped.osm 
 
 if [[ "$CROP_BOUNDS" == "" ]]; then
   echo "Skipping cropping the sec..."
@@ -63,8 +63,9 @@ hoot convert $CONFIG -D debug.maps.filename=$IN_DIR/debug-sec-load.osm $SEC_FILE
 # pull the sec out for viewing
 hoot convert $CONFIG "$HOOT_DB_URL/$TEST_NAME-sec" $OUT_DIR/sec.osm
 
-echo "Generating differential changeset w/ tags between ref and sec..."
-hoot conflate $CONFIG -D debug.maps.filename=$IN_DIR/debug-conflate.osm $OSM_API_DB_URL "$HOOT_DB_URL/$TEST_NAME-sec" $OUT_DIR/diff.osc --differential --include-tags --separate-output
+#echo "Generating differential changeset w/ tags between ref and sec (xml)..."
+#hoot conflate $CONFIG -D debug.maps.filename=$IN_DIR/debug-conflate.osm $OSM_API_DB_URL "$HOOT_DB_URL/$TEST_NAME-sec" $OUT_DIR/diff.osc --differential --include-tags --separate-output
+echo "Generating differential changeset w/ tags between ref and sec (sql)..."
 hoot conflate $CONFIG -D debug.maps.filename=$IN_DIR/debug-conflate-sql.osm $OSM_API_DB_URL "$HOOT_DB_URL/$TEST_NAME-sec" $OUT_DIR/diff.osc.sql $OSM_API_DB_URL --differential --include-tags --separate-output
 
 echo "Applying the geometry changeset to ref..."
