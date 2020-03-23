@@ -80,7 +80,7 @@ class MergeOsmFilesCommand extends GrailCommand {
         List<String> filePaths = Arrays.asList(osmfiles).stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
 
-        if (filePaths.size() != 0) {
+        if (filePaths.size() > 0) {
             command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS}";
 
             for (int i=0; i<filePaths.size(); i++) {
