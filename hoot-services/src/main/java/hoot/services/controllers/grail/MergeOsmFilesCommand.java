@@ -96,7 +96,7 @@ class MergeOsmFilesCommand extends GrailCommand {
         } else {
             commandResult = new CommandResult();
             commandResult.setJobId(jobId);
-            commandResult.setCommand("Check for osm files to merge");
+            commandResult.setCommand("No osm files to merge");
             commandResult.setStart(LocalDateTime.now());
             commandResult.setCaller(caller.getName());
             commandResult.setFinish(LocalDateTime.now());
