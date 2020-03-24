@@ -257,11 +257,10 @@ public:
 
       // Instantiate our visitor
       SpatialIndexer v(_index,
-                             _indexToEid,
-                             pCrit,
-                             std::bind(
-                               &BuildingMatchVisitor::getSearchRadius, this, placeholders::_1),
-                             getMap());
+                       _indexToEid,
+                       pCrit,
+                       std::bind(&BuildingMatchVisitor::getSearchRadius, this, placeholders::_1),
+                       getMap());
 
       getMap()->visitRo(v);
       v.finalizeIndex();
