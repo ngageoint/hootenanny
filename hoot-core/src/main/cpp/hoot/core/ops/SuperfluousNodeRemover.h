@@ -37,6 +37,7 @@
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <set>
@@ -90,7 +91,7 @@ public:
   virtual QString getInitStatusMessage() const { return "Removing superfluous nodes..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Removed " + QString::number(_numAffected) + " superfluous nodes"; }
+  { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " superfluous nodes"; }
 
 protected:
 

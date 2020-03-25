@@ -28,6 +28,7 @@ package hoot.services.controllers.grail;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -71,24 +72,36 @@ class MergeOsmFilesCommand extends GrailCommand {
 
     @Override
     public CommandResult execute() {
+        String command;
+        CommandResult commandResult;
         //Get list of osm files in work dir
         File workDir = params.getWorkDir();
         File[] osmfiles = workDir.listFiles(filter);
         List<String> filePaths = Arrays.asList(osmfiles).stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
-        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS}";
 
-        for (int i=0; i<filePaths.size(); i++) {
-            String input = "INPUT" + i;
-            substitutionMap.put(input, filePaths.get(i));
-            command += " ${" + input + "}";
+        if (filePaths.size() > 0) {
+            command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS}";
+
+            for (int i=0; i<filePaths.size(); i++) {
+                String input = "INPUT" + i;
+                substitutionMap.put(input, filePaths.get(i));
+                command += " ${" + input + "}";
+            }
+
+            command += " ${OUTPUT}";
+
+            super.configureCommand(command, substitutionMap, caller);
+            commandResult = super.execute();
+        } else {
+            commandResult = new CommandResult();
+            commandResult.setJobId(jobId);
+            commandResult.setCommand("No osm files to merge");
+            commandResult.setStart(LocalDateTime.now());
+            commandResult.setCaller(caller.getName());
+            commandResult.setFinish(LocalDateTime.now());
+            commandResult.setExitCode(CommandResult.SUCCESS);
         }
-
-        command += " ${OUTPUT}";
-
-        super.configureCommand(command, substitutionMap, caller);
-
-        CommandResult commandResult = super.execute();
 
         return commandResult;
     }
