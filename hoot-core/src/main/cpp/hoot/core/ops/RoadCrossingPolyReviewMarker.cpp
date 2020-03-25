@@ -74,54 +74,50 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
     // for each road
     if (HighwayCriterion(_map).isSatisfied(way))
     {
-      // if we haven't already marked it for review
-      //if (!_markedRoads.contains(way->getElementId()))
-      //{
-        // for each road crossing poly rule
-        for (QList<RoadCrossingPolyRule>::const_iterator rulesItr = _crossingRules.begin();
-             rulesItr != _crossingRules.end(); ++rulesItr)
+      // for each road crossing poly rule
+      for (QList<RoadCrossingPolyRule>::const_iterator rulesItr = _crossingRules.begin();
+           rulesItr != _crossingRules.end(); ++rulesItr)
+      {
+        RoadCrossingPolyRule rule = *rulesItr;
+        // if we haven't already marked this road for review and this road isn't allowed to
+        // cross the type of poly specified by the rule
+        if (!_markedRoads.contains(way->getElementId()) &&
+            (!rule.getAllowedRoadTagFilter() || !rule.getAllowedRoadTagFilter()->isSatisfied(way)))
         {
-          RoadCrossingPolyRule rule = *rulesItr;
-          // if we haven't already marked this road for review and this road isn't allowed to
-          // cross the type of poly specified by the rule
-          if (!_markedRoads.contains(way->getElementId()) &&
-              (!rule.getAllowedRoadTagFilter() || !rule.getAllowedRoadTagFilter()->isSatisfied(way)))
+          std::shared_ptr<geos::geom::Envelope> env(way->getEnvelope(_map));
+          LOG_VART(env);
+          // get all nearby polys to the road that pass our poly filter
+          const std::set<ElementId> neighborIdsSet =
+            SpatialIndexer::findNeighbors(
+                *env, rule.getIndex(), rule.getIndexToEid(), _map, ElementType::Way, false);
+          LOG_VART(neighborIdsSet.size());
+          // for each nearby poly
+          for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIdsSet.begin();
+               neighborIdsItr != neighborIdsSet.end(); ++neighborIdsItr)
           {
-            std::shared_ptr<geos::geom::Envelope> env(way->getEnvelope(_map));
-            LOG_VART(env);
-            // get all nearby polys to the road that pass our poly filter
-            const std::set<ElementId> neighborIdsSet =
-              SpatialIndexer::findNeighbors(
-                  *env, rule.getIndex(), rule.getIndexToEid(), _map, ElementType::Way, false);
-            LOG_VART(neighborIdsSet.size());
-            // for each nearby poly
-            for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIdsSet.begin();
-                 neighborIdsItr != neighborIdsSet.end(); ++neighborIdsItr)
+            const ElementId neighborId = *neighborIdsItr;
+            LOG_VART(neighborId);
+            ConstElementPtr neighbor = _map->getElement(neighborId);
+            // if the road intersects the poly, flag it for review
+            if (neighbor && rule.getPolyFilter()->isSatisfied(neighbor) &&
+                OsmUtils::elementsIntersect(way, neighbor, _map))
             {
-              const ElementId neighborId = *neighborIdsItr;
-              LOG_VART(neighborId);
-              ConstElementPtr neighbor = _map->getElement(neighborId);
-              // if the road intersects the poly, flag it for review
-              if (neighbor && rule.getPolyFilter()->isSatisfied(neighbor) &&
-                  OsmUtils::elementsIntersect(way, neighbor, _map))
-              {
-                LOG_TRACE("Marking " << way->getElementId() << " for review...");
-                LOG_VART(way);
-                LOG_VART(rule.getPolyFilterString());
-                LOG_VART(rule.getAllowedRoadTagFilterString());
+              LOG_TRACE("Marking " << way->getElementId() << " for review...");
+              LOG_VART(way);
+              LOG_VART(rule.getPolyFilterString());
+              LOG_VART(rule.getAllowedRoadTagFilterString());
 
-                reviewMarker.mark(
-                  _map, way,
-                  "Road crossing polygon: " + rule.getPolyFilterString() + "; " +
-                    rule.getAllowedRoadTagFilterString(),
-                  HighwayMatch::getHighwayMatchName(), 1.0);
-                _markedRoads.insert(way->getElementId());
-                _numAffected++;
-              }
+              reviewMarker.mark(
+                _map, way,
+                "Road crossing polygon: " + rule.getPolyFilterString() + "; " +
+                  rule.getAllowedRoadTagFilterString(),
+                HighwayMatch::getHighwayMatchName(), 1.0);
+              _markedRoads.insert(way->getElementId());
+              _numAffected++;
             }
           }
         }
-      //}
+      }
       _numProcessed++;
     }
   }
