@@ -3730,7 +3730,7 @@
     <relation visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-26" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="4"/>
+        <tag k="hoot:review:sort_order" v="3"/>
         <tag k="hoot:review:note" v="Road crossing polygon: poly criteria filter: ; poly tag filter: amenity=parking; allowed road tag filter: highway=service;highway=footway"/>
         <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -3738,21 +3738,23 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-68" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="3"/>
-        <tag k="hoot:review:note" v="Road crossing polygon: poly criteria filter: hoot::BuildingCriterion; poly tag filter: ; allowed road tag filter:"/>
-        <tag k="hoot:review:members" v="1"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="4881726965" role="reviewee"/>
         <member type="node" ref="4881729682" role="reviewee"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:sort_order" v="2"/>
         <tag k="hoot:review:note" v="Somewhat similar (450m) - similar POI type"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-26" role="reviewee"/>
+        <member type="way" ref="-43" role="reviewee"/>
+        <member type="way" ref="-42" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="4"/>
+        <tag k="hoot:review:note" v="Internal Error: Multiple overlapping way matches were found within one set of ways. Please report this to https://github.com/ngageoint/hootenanny."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:score" v="1"/>
