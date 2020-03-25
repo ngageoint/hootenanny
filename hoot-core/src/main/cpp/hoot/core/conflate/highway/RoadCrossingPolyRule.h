@@ -61,12 +61,12 @@ public:
   /**
    * TODO
    *
-   * @param polyTypeFilterStr
+   * @param polyCriteriaFilterStr
    * @param polyTagFilterStr
    * @return
    */
-  static ElementCriterionPtr polyRuleStringsToCrit(
-    const QString& polyTypeFilterStr, const QString& polyTagFilterStr);
+  static ElementCriterionPtr polyRuleFilterStringsToFilter(
+    const QString& polyCriteriaFilterStr, const QString& polyTagFilterStr);
 
   /**
    * TODO

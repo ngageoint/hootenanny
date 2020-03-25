@@ -2,15 +2,13 @@
   "rules":
   [
     {
-      "polyTypeFilter": "hoot::BuildingCriterion"
+      "name": "buildings",
+      "polyCriteriaFilter": "hoot::BuildingCriterion"
     },
     {
+      "name": "parking",
       "polyTagFilter": "amenity=parking",
       "allowedRoadTagFilter": "highway=service;highway=footway"
-    },
-    {
-      "polyTagFilter": "leisure=park",
-      "allowedRoadTagFilter": "highway=footway"
     }
   ]
 }

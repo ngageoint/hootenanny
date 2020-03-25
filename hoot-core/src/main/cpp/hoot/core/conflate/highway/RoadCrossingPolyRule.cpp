@@ -86,19 +86,25 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
     throw HootException("Error parsing JSON " + reason);
   }
 
-  // TODO: parse these as arrays instead
-
   QList<RoadCrossingPolyRule> rules;
   for (boost::property_tree::ptree::value_type& ruleProp : propTree.get_child("rules"))
   {
-    boost::optional<std::string> polyTypeFilterProp =
-      ruleProp.second.get_optional<std::string>("polyTypeFilter");
-    QString polyTypeFilterStr;
-    if (polyTypeFilterProp)
+    const QString ruleName =
+      QString::fromStdString(ruleProp.second.get<std::string>("name", "")).trimmed();
+    LOG_VART(ruleName);
+    if (ruleName.isEmpty())
     {
-      polyTypeFilterStr = QString::fromStdString(polyTypeFilterProp.get()).trimmed();
+      throw IllegalArgumentException("A road crossing rule must have a name.");
     }
-    LOG_VART(polyTypeFilterStr);
+
+    boost::optional<std::string> polyCriteriaFilterProp =
+      ruleProp.second.get_optional<std::string>("polyCriteriaFilter");
+    QString polyCriteriaFilterStr;
+    if (polyCriteriaFilterProp)
+    {
+      polyCriteriaFilterStr = QString::fromStdString(polyCriteriaFilterProp.get()).trimmed();
+    }
+    LOG_VART(polyCriteriaFilterStr);
 
     boost::optional<std::string> polyTagFilterProp =
       ruleProp.second.get_optional<std::string>("polyTagFilter");
@@ -109,11 +115,11 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
     }
     LOG_VART(polyTagFilterStr);
 
-    if (polyTypeFilterStr.isEmpty() && polyTagFilterStr.isEmpty())
+    if (polyCriteriaFilterStr.isEmpty() && polyTagFilterStr.isEmpty())
     {
       throw IllegalArgumentException(
-        "A road crossing rule must specify either a polygon type filter (polyTypeFilter) or a "
-        "polygon tag filter (polyTagFilter).");
+        "A road crossing rule must specify either a polygon criteria filter (polyCriteriaFilter) "
+        "or a polygon tag filter (polyTagFilter).");
     }
 
     boost::optional<std::string> allowedRoadTagFilterProp =
@@ -127,9 +133,9 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
 
     RoadCrossingPolyRule rule(map);
     rule.setPolyFilterString(
-      "poly type filter: " + polyTypeFilterStr + "; poly tag filter: " + polyTagFilterStr);
+      "poly criteria filter: " + polyCriteriaFilterStr + "; poly tag filter: " + polyTagFilterStr);
     rule.setPolyFilter(
-      RoadCrossingPolyRule::polyRuleStringsToCrit(polyTypeFilterStr, polyTagFilterStr));
+      RoadCrossingPolyRule::polyRuleFilterStringsToFilter(polyCriteriaFilterStr, polyTagFilterStr));
     LOG_VART(rule.getPolyFilter());
     rule.setAllowedRoadTagFilterString("allowed road tag filter: " + allowedRoadTagFilterStr);
     rule.setAllowedRoadTagFilter(
@@ -145,34 +151,42 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
   return rules;
 }
 
-ElementCriterionPtr RoadCrossingPolyRule::polyRuleStringsToCrit(
-  const QString& polyTypeFilterStr, const QString& polyTagFilterStr)
+ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
+  const QString& polyCriteriaFilterStr, const QString& polyTagFilterStr)
 {
-  // TODO: pass the inputs in as lists instead
-
-  LOG_VART(polyTypeFilterStr);
+  LOG_VART(polyCriteriaFilterStr);
   LOG_VART(polyTagFilterStr);
 
-  if (polyTypeFilterStr.isEmpty() && polyTagFilterStr.isEmpty())
+  if (polyCriteriaFilterStr.isEmpty() && polyTagFilterStr.isEmpty())
   {
     throw IllegalArgumentException(
-      "A road crossing rule must specify either a polygon type filter (polyTypeFilter) or a "
-      "polygon tag filter (polyTagFilter).");
+      "A road crossing rule must specify either a polygon criteria filter (polyCriteriaFilter) "
+      "or a polygon tag filter (polyTagFilter).");
   }
 
-  ElementCriterionPtr polyTypeFilter;
-  if (!polyTypeFilterStr.isEmpty())
+  std::shared_ptr<OrCriterion> polyCriteriaFilter;
+  if (!polyCriteriaFilterStr.isEmpty())
   {
-    if (!polyTypeFilterStr.toLower().startsWith("hoot::"))
+    polyCriteriaFilter.reset(new OrCriterion());
+
+    const QStringList critStrParts = polyCriteriaFilterStr.split(";");
+    LOG_VART(critStrParts.size());
+    for (int i = 0; i < critStrParts.size(); i++)
     {
-      throw IllegalArgumentException(
-        "A road crossing rule polygon type filter must be a valid Hooteanny ElementCriterion "
-        "class name.");
-    }
-    else
-    {
-      polyTypeFilter.reset(
-        Factory::getInstance().constructObject<ElementCriterion>(polyTypeFilterStr.trimmed()));
+      const QString critPart = critStrParts.at(i);
+      LOG_VART(critPart);
+      if (!critPart.toLower().startsWith("hoot::"))
+      {
+        throw IllegalArgumentException(
+          "A road crossing rule polygon criterion filter must be a valid Hooteanny "
+          "ElementCriterion class name.");
+      }
+      else
+      {
+        polyCriteriaFilter->addCriterion(
+          ElementCriterionPtr(
+            Factory::getInstance().constructObject<ElementCriterion>(critPart.trimmed())));
+      }
     }
   }
 
@@ -191,13 +205,13 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleStringsToCrit(
     }
   }
 
-  if (polyTypeFilter && polyTagFilter)
+  if (polyCriteriaFilter && polyTagFilter)
   {
-    return std::shared_ptr<ChainCriterion>(new ChainCriterion(polyTypeFilter, polyTagFilter));
+    return std::shared_ptr<ChainCriterion>(new ChainCriterion(polyCriteriaFilter, polyTagFilter));
   }
-  else if (polyTypeFilter)
+  else if (polyCriteriaFilter)
   {
-    return polyTypeFilter;
+    return polyCriteriaFilter;
   }
   else
   {
@@ -207,8 +221,6 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleStringsToCrit(
 
 ElementCriterionPtr RoadCrossingPolyRule::kvpRuleStringToTagCrit(const QString& kvpStr)
 {
-  // TODO: pass the inputs in as lists instead
-
   LOG_VART(kvpStr);
   const QString kvpFormatErrMsg =
     "A road crossing rule tag filter must be of the form <key1>=<value1>;<key2>=<value2>...";
@@ -292,21 +304,10 @@ bool RoadCrossingPolyRule::_isMatchCandidate(ConstElementPtr element)
   }
 
   // index polys passing the filter and all roads not allowed to cross over those polys
-//  return
-//    ((!_allowedRoadTagFilter || !_allowedRoadTagFilter->isSatisfied(element)) &&
-//     HighwayCriterion(_map).isSatisfied(element)) ||
-//    _polyFilter->isSatisfied(element);
-  const bool isAllowedRoad = _allowedRoadTagFilter && _allowedRoadTagFilter->isSatisfied(element);
-  LOG_VART(isAllowedRoad);
-  if (isAllowedRoad)
-  {
-    return false;
-  }
-  const bool isHighway = HighwayCriterion(_map).isSatisfied(element);
-  LOG_VART(isHighway);
-  const bool polyPassedFilter = _polyFilter->isSatisfied(element);
-  LOG_VART(polyPassedFilter);
-  return isHighway || polyPassedFilter;
+  return
+    ((!_allowedRoadTagFilter || !_allowedRoadTagFilter->isSatisfied(element)) &&
+     HighwayCriterion(_map).isSatisfied(element)) ||
+    _polyFilter->isSatisfied(element);
 }
 
 }
