@@ -80,6 +80,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
            rulesItr != _crossingRules.end(); ++rulesItr)
       {
         RoadCrossingPolyRule rule = *rulesItr;
+
         // if we haven't already marked this road for review and this road isn't allowed to
         // cross the type of poly specified by the rule
         if (!_markedRoads.contains(way->getElementId()) &&
@@ -87,11 +88,13 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
         {
           std::shared_ptr<geos::geom::Envelope> env(way->getEnvelope(_map));
           LOG_VART(env);
+
           // get all nearby polys to the road that pass our poly filter
           const std::set<ElementId> neighborIdsSet =
             SpatialIndexer::findNeighbors(
                 *env, rule.getIndex(), rule.getIndexToEid(), _map, ElementType::Way, false);
           LOG_VART(neighborIdsSet.size());
+
           // for each nearby poly
           for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIdsSet.begin();
                neighborIdsItr != neighborIdsSet.end(); ++neighborIdsItr)
@@ -99,6 +102,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
             const ElementId neighborId = *neighborIdsItr;
             LOG_VART(neighborId);
             ConstElementPtr neighbor = _map->getElement(neighborId);
+
             // if the road intersects the poly, flag it for review
             if (neighbor && rule.getPolyFilter()->isSatisfied(neighbor) &&
                 OsmUtils::haveGeometricRelationship(
@@ -108,6 +112,15 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
               LOG_VART(way);
               LOG_VART(rule.getPolyFilterString());
               LOG_VART(rule.getAllowedRoadTagFilterString());
+              LOG_VART(
+                OsmUtils::haveGeometricRelationship(
+                  way, neighbor, GeometricRelationship::Crosses, _map));
+              LOG_VART(
+                OsmUtils::haveGeometricRelationship(
+                  way, neighbor, GeometricRelationship::Overlaps, _map));
+              LOG_VART(
+                OsmUtils::haveGeometricRelationship(
+                  way, neighbor, GeometricRelationship::Touches, _map));
 
               reviewMarker.mark(
                 _map, way,

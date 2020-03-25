@@ -898,7 +898,7 @@ bool OsmUtils::haveGeometricRelationship(
   else
   {
     LOG_TRACE(
-      "Unable to geometry relationship: " << relationship.toString() << " for: " <<
+      "Unable to calculate geometric relationship: " << relationship.toString() << " for: " <<
       element1->getElementId() << " and: " << element2->getElementId() << ".");
   }
   return haveRelationship;
