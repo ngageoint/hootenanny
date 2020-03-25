@@ -150,8 +150,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     // many match.
     _markedReviewText =
       "Merging multiple buildings from each data source is error prone and requires a human eye.";
-    reviewMarker.mark(
-      map, combined, _markedReviewText, QString::fromStdString(BuildingMatch::className()), 1.0);
+    reviewMarker.mark(map, combined, _markedReviewText, BuildingMatch::MATCH_NAME, 1.0);
     return;
   }
 
@@ -189,8 +188,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
       "Identified as changed with an IoU score of: " + QString::number(iou) +
       ", which is less than the specified threshold of: " +
       QString::number(_changedReviewIouThreshold);
-    reviewMarker.mark(
-      map, combined, _markedReviewText, QString::fromStdString(BuildingMatch::className()), 1.0);
+    reviewMarker.mark(map, combined, _markedReviewText, BuildingMatch::MATCH_NAME, 1.0);
     return;
   }
 
