@@ -54,11 +54,6 @@ void RoadCrossingPolyReviewMarker::setConfiguration(const Settings& conf)
 
 void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
 {
-  if (_crossingRulesFile.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException("TODO");
-  }
-
   _numAffected = 0;
   _numProcessed = 0;
   _map = map;
