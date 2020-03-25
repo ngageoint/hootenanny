@@ -63,6 +63,7 @@ Vagrant.configure(2) do |config|
     # AWS Provider.  Set enviornment variables for values below to use
     config.vm.provider :aws do |aws, override|
       override.nfs.functional = false
+      aws.subnet_id = ENV['AWS_SUBNET_ID']
       aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'm5.2xlarge')
 
       aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 64 }]
