@@ -65,7 +65,7 @@ public:
   /**
    * Returns true if the element is in at least one review.
    */
-  static bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1);
+  static bool isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1);
 
   /**
    * Determines whether a pair of elements should be returned for review
@@ -74,7 +74,7 @@ public:
    * @param e2 the second element in the element pair being examined
    * @return true if the pair should be reviewed against each other; false otherwise
    */
-  static bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2);
+  static bool isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1, ConstElementPtr e2);
 
   /**
    * Returns true if this element is a review record (not an element that needs to be reviewed, but

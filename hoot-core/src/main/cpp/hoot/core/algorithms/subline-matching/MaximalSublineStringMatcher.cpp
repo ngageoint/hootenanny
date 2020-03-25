@@ -180,8 +180,9 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   }
   catch (const OverlappingMatchesException& /*e*/)
   {
-    throw NeedsReviewException("Internal Error: Multiple overlapping way matches were found within "
-      "one set of ways.  Please report this to https://github.com/ngageoint/hootenanny.");
+    throw NeedsReviewException(
+      "Internal Error: Multiple overlapping way matches were found within one set of ways.  "
+      "Please report this to https://github.com/ngageoint/hootenanny.");
   }
 }
 

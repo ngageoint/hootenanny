@@ -76,9 +76,10 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
       {
         RoadCrossingPolyRule rule = *rulesItr;
 
-        // if we haven't already marked this road for review and this road isn't allowed to
-        // cross the type of poly specified by the rule
+        // if we haven't already marked this road for review, its not in another review, and this
+        // it isn't allowed to cross the type of poly specified by the current rule
         if (!_markedRoads.contains(way->getElementId()) &&
+            !ReviewMarker::isNeedsReview(_map, way) &&
             (!rule.getAllowedRoadTagFilter() || !rule.getAllowedRoadTagFilter()->isSatisfied(way)))
         {
           std::shared_ptr<geos::geom::Envelope> env(way->getEnvelope(_map));
