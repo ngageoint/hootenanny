@@ -36,6 +36,7 @@
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/util/GeometricRelationship.h>
 
 namespace hoot
 {
@@ -100,7 +101,8 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
             ConstElementPtr neighbor = _map->getElement(neighborId);
             // if the road intersects the poly, flag it for review
             if (neighbor && rule.getPolyFilter()->isSatisfied(neighbor) &&
-                OsmUtils::elementsIntersect(way, neighbor, _map))
+                OsmUtils::haveGeometricRelationship(
+                  way, neighbor, GeometricRelationship::Intersects, _map))
             {
               LOG_TRACE("Marking " << way->getElementId() << " for review...");
               LOG_VART(way);
