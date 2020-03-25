@@ -110,8 +110,8 @@ void TagAdvancedCriterion::_parseFilterString(const QString& filterJsonStringOrP
   }
 }
 
-void TagAdvancedCriterion::_loadTagFilters(const QString& tagFilterType,
-                                           const std::shared_ptr<boost::property_tree::ptree>& propTree)
+void TagAdvancedCriterion::_loadTagFilters(
+  const QString& tagFilterType, const std::shared_ptr<boost::property_tree::ptree>& propTree)
 {
   LOG_TRACE("Loading " << tagFilterType << " filters...");
 

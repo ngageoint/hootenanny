@@ -711,7 +711,7 @@ See also:
 ** `hoot::DuplicateWayRemover`
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
-** `hoot::RoadsCrossingPolysReviewMarker`
+** `hoot::RoadCrossingPolyReviewMarker`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
 
@@ -1336,6 +1336,13 @@ Threshold in degrees between the heading of rounded bends in way that constitute
 * Default Value: `55.0`
 
 Threshold in degrees between the heading of two way segments that constitutes a corner.
+
+=== highway.crossing.poly.rules
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/RoadCrossingPolyRules.json`
+
+TODO
 
 === highway.match.threshold
 
@@ -3895,15 +3902,6 @@ with attribute.conflation.allow.reviews.by.score.
 The score threshold below which reviews will not pass the filter.  A value of 0.0 signifies no
 minimum score threshold.  This currently works with Attribute Conflation only and can be enabled
 with attribute.conflation.allow.reviews.by.score.
-
-=== roads.crossing.polys.review.marker.poly.filter
-
-* Data Type: list
-* Default Value:
-** `amenity=parking`
-** `hoot::BuildingCriterion`
-
-TODO
 
 === rubber.sheet.debug
 

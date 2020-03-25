@@ -25,17 +25,15 @@
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef ROADS_CROSSING_POLYS_REVIEW_MARKER_H
-#define ROADS_CROSSING_POLYS_REVIEW_MARKER_H
+#ifndef ROAD_CROSSING_POLY_REVIEW_MARKER_H
+#define ROAD_CROSSING_POLY_REVIEW_MARKER_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/criterion/ElementCriterion.h>
-
-// tgs
-#include <tgs/RStarTree/HilbertRTree.h>
+#include <hoot/core/conflate/highway/RoadCrossingPolyRule.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QSet>
@@ -46,13 +44,13 @@ namespace hoot
 /**
  * TODO
  */
-class RoadsCrossingPolysReviewMarker : public ConstOsmMapOperation, public Configurable
+class RoadCrossingPolyReviewMarker : public ConstOsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::RoadsCrossingPolysReviewMarker"; }
+  static std::string className() { return "hoot::RoadCrossingPolyReviewMarker"; }
 
-  RoadsCrossingPolysReviewMarker();
+  RoadCrossingPolyReviewMarker();
 
   /**
    * @see ConstOsmMapOperation
@@ -65,34 +63,28 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual QString getInitStatusMessage() const
-  { return "TODO..."; }
+  { return "Marking roads crossing polygons for review..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "TODO"; }
+  {
+    return
+      "Marked " + StringUtils::formatLargeNumber(_numAffected) + " / " +
+      StringUtils::formatLargeNumber(_numProcessed) + " roads crossing polygons.";
+  }
 
   virtual QString getDescription() const
-  { return "TODO"; }
+  { return "Marks roads crossing polygons for review during conflation"; }
 
   virtual std::string getClassName() const { return className(); }
 
  private:
 
   OsmMapPtr _map;
-  QStringList _polyFilterList;
-  ElementCriterionPtr _polyFilter;
+  QString _crossingRulesFile;
+  QList<RoadCrossingPolyRule> _crossingRules;
   QSet<ElementId> _markedRoads;
-
-  std::shared_ptr<Tgs::HilbertRTree> _index;
-  std::deque<ElementId> _indexToEid;
-
-  ElementCriterionPtr _kvpStringToTagCrit(const QString& kvpStr);
-  void _createPolyFilter(const QStringList& polyFilterList);
-
-  std::shared_ptr<Tgs::HilbertRTree>& _getIndex();
-  Meters _getSearchRadius(const ConstElementPtr& e) const;
-  bool _isMatchCandidate(ConstElementPtr element);
 };
 
 }
 
-#endif // ROADS_CROSSING_POLYS_REVIEW_MARKER_H
+#endif // ROAD_CROSSING_POLY_REVIEW_MARKER_H

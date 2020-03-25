@@ -1,0 +1,16 @@
+{
+  "rules":
+  [
+    {
+      "polyTypeFilter": "hoot::BuildingCriterion"
+    },
+    {
+      "polyTagFilter": "amenity=parking",
+      "allowedRoadTagFilter": "highway=service;highway=footway"
+    },
+    {
+      "polyTagFilter": "leisure=park",
+      "allowedRoadTagFilter": "highway=footway"
+    }
+  ]
+}
