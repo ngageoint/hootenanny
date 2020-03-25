@@ -57,6 +57,11 @@ _map(map)
 {
 }
 
+bool RoadCrossingPolyRule::operator<(const RoadCrossingPolyRule& other) const
+{
+  return getName() < other.getName();
+}
+
 QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rulesFile,
                                                             ConstOsmMapPtr map)
 { 
@@ -132,6 +137,7 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
     LOG_VART(allowedRoadTagFilterStr);
 
     RoadCrossingPolyRule rule(map);
+    rule.setName(ruleName);
     rule.setPolyFilterString(
       "poly criteria filter: " + polyCriteriaFilterStr + "; poly tag filter: " + polyTagFilterStr);
     rule.setPolyFilter(
@@ -147,6 +153,8 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
     rule.createIndex();
     rules.append(rule);
   }
+  qSort(rules);
+
   LOG_VARD(rules.size());
   return rules;
 }

@@ -105,6 +105,7 @@ public:
   inline static const QString HootReviewSortOrder()     { return "hoot:review:sort_order"; }
   inline static const QString HootReviewType()          { return "hoot:review:type"; }
   inline static const QString HootReviewUuid()          { return "hoot:review:uuid"; }
+  inline static const QString HootReviewRoadCrossingPolygon() { return "road_crossing_polygon"; }
 
   inline static const QString HootScoreMatch()          { return "hoot:score:match"; }
   inline static const QString HootScoreMiss()           { return "hoot:score:miss"; }

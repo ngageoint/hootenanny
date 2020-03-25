@@ -114,6 +114,9 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
               LOG_VART(rule.getAllowedRoadTagFilterString());
               LOG_VART(
                 OsmUtils::haveGeometricRelationship(
+                  way, neighbor, GeometricRelationship::Overlaps, _map));
+              LOG_VART(
+                OsmUtils::haveGeometricRelationship(
                   way, neighbor, GeometricRelationship::Crosses, _map));
               LOG_VART(
                 OsmUtils::haveGeometricRelationship(
@@ -126,7 +129,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
                 _map, way,
                 "Road crossing polygon: " + rule.getPolyFilterString() + "; " +
                   rule.getAllowedRoadTagFilterString(),
-                HighwayMatch::getHighwayMatchName(), 1.0);
+                MetadataTags::HootReviewRoadCrossingPolygon(), 1.0);
               _markedRoads.insert(way->getElementId());
               _numAffected++;
             }

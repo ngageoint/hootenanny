@@ -81,6 +81,11 @@ public:
    */
   void createIndex();
 
+  bool operator<(const RoadCrossingPolyRule& other) const;
+
+  QString getName() const { return _name; }
+  void setName(const QString& name) { _name = name; }
+
   QString getPolyFilterString() const { return _polyFilterStr; }
   void setPolyFilterString(const QString& filterStr) { _polyFilterStr = filterStr; }
   ElementCriterionPtr getPolyFilter() const { return _polyFilter; }
@@ -103,6 +108,7 @@ public:
 
   ConstOsmMapPtr _map;
 
+  QString _name;
   QString _polyFilterStr;
   ElementCriterionPtr _polyFilter;
   QString _allowedRoadTagFilterStr;
