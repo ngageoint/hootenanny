@@ -142,7 +142,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
     if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "\Marked " << StringUtils::formatLargeNumber(_numAffected) << " crossing roads for " <<
+        "\tMarked " << StringUtils::formatLargeNumber(_numAffected) << " crossing roads for " <<
         "review out of " << StringUtils::formatLargeNumber(_numRoads) << " total roads and " <<
         StringUtils::formatLargeNumber(_numProcessed)  << " total ways.");
     }

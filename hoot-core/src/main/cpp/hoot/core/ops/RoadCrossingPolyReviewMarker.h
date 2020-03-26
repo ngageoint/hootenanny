@@ -69,8 +69,8 @@ public:
   virtual QString getCompletedStatusMessage() const
   {
     return
-      "Marked " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-      StringUtils::formatLargeNumber(_numProcessed) + " roads crossing polygons.";
+      "Marked " + StringUtils::formatLargeNumber(_numAffected) + " crossing polygons out of " +
+      StringUtils::formatLargeNumber(_numRoads) + " total roads .";
   }
 
   virtual QString getDescription() const
@@ -81,9 +81,14 @@ public:
  private:
 
   OsmMapPtr _map;
+
   QString _crossingRulesFile;
   QList<RoadCrossingPolyRule> _crossingRules;
+
   QSet<ElementId> _markedRoads;
+  int _numRoads;
+
+  int _taskStatusUpdateInterval;
 };
 
 }

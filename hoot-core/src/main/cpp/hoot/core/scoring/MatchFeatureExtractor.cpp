@@ -311,8 +311,9 @@ void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
       if (matchCount % 10 == 0)
       {
         PROGRESS_INFO(
-          "Processed " << matchCount << " / " << matches.size() <<
-          " matches; samples collected: " << _samples.size());
+          "Processed " << StringUtils::formatLargeNumber(matchCount) << " / " <<
+          StringUtils::formatLargeNumber(matches.size()) << " matches; samples collected: " <<
+          StringUtils::formatLargeNumber(_samples.size()));
       }
     }
   }
