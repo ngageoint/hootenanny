@@ -11,15 +11,6 @@ that found the error.
 
 "list validators example":https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-the-available-josm-validators
 
-[[FeatureCleaning]]
-== Feature Cleaning
-
-Hootenanny allows for cleaning features which fail JOSM validation tests or Hootenanny identifies as requiring cleaning.
-
-"cleaning examples":https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#clean-erroneous-data-from-two-maps
-
-"list cleaners example:https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-available-cleaning-operations
-
 === Crossing Roads
 
 Hootenanny will attempt to detect roads that incorrectly cross polygons automatically after conflation (this is not part of the +validate+ 
@@ -65,4 +56,13 @@ At least one of "polyCriteriaFilter" and "polyTagFilter" must be specified. Both
 more highway tag key/value pairs that are logically OR'd together to create a tag filter used to determine which 
 types of polygons are checked for crossing roads using tag checks of the form: <key1=value1>;<key2=value2>...; e.g. 
 "highway=service;highway=footway"
+
+[[FeatureCleaning]]
+== Feature Cleaning
+
+Hootenanny allows for cleaning features which fail JOSM validation tests or Hootenanny internally identifies as requiring cleaning.
+
+"cleaning examples":https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#clean-erroneous-data-from-two-maps
+
+"list cleaners example:https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-available-cleaning-operations
 
