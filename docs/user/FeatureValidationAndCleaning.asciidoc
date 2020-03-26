@@ -20,7 +20,6 @@ Hootenanny allows for cleaning features which fail JOSM validation tests or Hoot
 
 "list cleaners example:https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-available-cleaning-operations
 
-[[CrossingRoads]]
 === Crossing Roads
 
 Hootenanny will attempt to detect roads that incorrectly cross polygons automatically after conflation (this is not part of the +validate+ 

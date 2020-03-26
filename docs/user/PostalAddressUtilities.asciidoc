@@ -1,5 +1,5 @@
 
-[[Postal Address Utilities]]
+[[PostalAddressUtilities]]
 == Postal Address Utilities
 
 Hootenanny has useful utilities for handling map postal address data provided by
@@ -7,17 +7,17 @@ Hootenanny has useful utilities for handling map postal address data provided by
 
 Examples:
 
-===== Normalize all the element address tags in a map:
+=== Normalize all the element address tags in a map:
 -----
     hoot convert -D convert.ops="hoot::NormalizeAddressesVisitor" input.osm output.osm
 -----
 
-===== Count the number of elements with valid address tags in a map:
+=== Count the number of elements with valid address tags in a map:
 -----
     hoot count input.osm hoot::HasAddressCriterion
 -----
 
-===== Count the total number of valid address tags in a map:
+=== Count the total number of valid address tags in a map:
 -----
     hoot stat input.osm hoot::AddressCountVisitor
 -----
