@@ -296,7 +296,7 @@ ElementCriterionPtr RoadCrossingPolyRule::tagRuleStringToFilter(const QString& k
 
 void RoadCrossingPolyRule::createIndex()
 {
-  LOG_STATUS("Creating roads crossing polys index for rule: " << _name << "...");
+  LOG_STATUS("\tCreating roads crossing polys index for rule: " << _name << "...");
 
   // create an index for all roads and all polys that satisfy our crit within the default
   // search radius
@@ -318,7 +318,7 @@ void RoadCrossingPolyRule::createIndex()
   v.finalizeIndex();
 
   LOG_STATUS(
-    "Roads crossing polys feature index for rule: " << _name << " created with " <<
+    "\tRoads crossing polys feature index for rule: " << _name << " created with " <<
     StringUtils::formatLargeNumber(v.getSize()) << " elements.");
 }
 

@@ -23,10 +23,11 @@ Hootenanny allows for cleaning features which fail JOSM validation tests or Hoot
 === Crossing Roads
 
 Hootenanny will attempt to detect roads that incorrectly cross polygons automatically after conflation (this is not part of the +validate+ 
-command). A rules file, specified by the +highway.crossing.poly.rules+ configuration option, controls which polygons are search for roads
-over them and which roads are allowed to cross certain polygons (if any). For example, there are any instances where we would want to see a
-road crossing though a building but we allow a service road to pass through a parking lot. The rules file will require maintenance over time as
-more road crossing data scenarios are encountered.
+command). This is primarily helpful when a newer dataset is conflated with an older one where you want to keep provenance in the older data
+while brining in as many of the features from the new dataset as possible. A rules file, specified by the +highway.crossing.poly.rules+ 
+configuration option, controls which polygons are search for roads over them and which roads are allowed to cross certain polygons (if any). 
+For example, there are any instances where we would want to see a road crossing though a building but we allow a service road to pass through 
+a parking lot. The rules file will require maintenance over time as more road crossing data scenarios are encountered.
 
 File format example:
 
