@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TagAdvancedCriterion.h"
@@ -110,8 +110,8 @@ void TagAdvancedCriterion::_parseFilterString(const QString& filterJsonStringOrP
   }
 }
 
-void TagAdvancedCriterion::_loadTagFilters(const QString& tagFilterType,
-                                           const std::shared_ptr<boost::property_tree::ptree>& propTree)
+void TagAdvancedCriterion::_loadTagFilters(
+  const QString& tagFilterType, const std::shared_ptr<boost::property_tree::ptree>& propTree)
 {
   LOG_TRACE("Loading " << tagFilterType << " filters...");
 

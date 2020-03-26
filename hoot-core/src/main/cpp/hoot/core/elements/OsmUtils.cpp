@@ -819,43 +819,6 @@ std::shared_ptr<geos::geom::Geometry> OsmUtils::_getGeometry(
   return newGeom;
 }
 
-bool OsmUtils::elementContains(const ConstElementPtr& containingElement,
-                               const ConstElementPtr& containedElement, ConstOsmMapPtr map)
-{
-  if (!containingElement || !containedElement)
-  {
-    throw IllegalArgumentException("One of the input elements is null.");
-  }
-  if (containingElement->getElementType() != ElementType::Way &&
-      containingElement->getElementType() != ElementType::Relation)
-  {
-    throw IllegalArgumentException("One of the input elements is of the wrong type.");
-  }
-  LOG_VART(containedElement->getElementId());
-  LOG_VART(containingElement->getElementId());
-
-  std::shared_ptr<geos::geom::Geometry> containingElementGeom =
-    _getGeometry(containingElement, map);
-  std::shared_ptr<geos::geom::Geometry> containedElementGeom = _getGeometry(containedElement, map);
-  bool contains = false;
-  if (containingElementGeom && containedElementGeom)
-  {
-    contains = containingElementGeom->contains(containedElementGeom.get());
-    LOG_TRACE(
-      "Calculated contains: " << contains << " for containing element: " <<
-      containingElement->getElementId() <<
-      " and contained element: " << containedElement->getElementId() << ".");
-  }
-  else
-  {
-    LOG_TRACE(
-      "Unable to calculate contains for containing element: " <<
-      containingElement->getElementId() << " and contained element: " <<
-      containedElement->getElementId() << ".");
-  }
-  return contains;
-}
-
 bool OsmUtils::containsMember(const ConstElementPtr& parent, const ElementId& memberId)
 {
   if (!parent ||
@@ -888,8 +851,9 @@ bool OsmUtils::containsMember(const ConstElementPtr& parent, const ElementId& me
   return containsMember;
 }
 
-bool OsmUtils::elementsIntersect(const ConstElementPtr& element1, const ConstElementPtr& element2,
-                                 ConstOsmMapPtr map)
+bool OsmUtils::haveGeometricRelationship(
+  const ConstElementPtr& element1, const ConstElementPtr& element2,
+  const GeometricRelationship& relationship, ConstOsmMapPtr map)
 {
   if (!element1 || !element2)
   {
@@ -898,18 +862,46 @@ bool OsmUtils::elementsIntersect(const ConstElementPtr& element1, const ConstEle
 
   std::shared_ptr<geos::geom::Geometry> geom1 = _getGeometry(element1, map);
   std::shared_ptr<geos::geom::Geometry> geom2 = _getGeometry(element2, map);
-  bool intersects = false;
+  bool haveRelationship = false;
   if (geom1 && geom2)
   {
-    intersects = geom1->intersects(geom2.get());
+    switch (relationship.getEnum())
+    {
+      case GeometricRelationship::Contains:
+        haveRelationship = geom1->contains(geom2.get());
+        break;
+      case GeometricRelationship::Covers:
+        haveRelationship = geom1->covers(geom2.get());
+        break;
+      case GeometricRelationship::Crosses:
+        haveRelationship = geom1->crosses(geom2.get());
+        break;
+      case GeometricRelationship::DisjointWith:
+        haveRelationship = geom1->disjoint(geom2.get());
+        break;
+      case GeometricRelationship::Intersects:
+        haveRelationship = geom1->intersects(geom2.get());
+        break;
+      case GeometricRelationship::IsWithin:
+        haveRelationship = geom1->within(geom2.get());
+        break;
+      case GeometricRelationship::Overlaps:
+        haveRelationship = geom1->overlaps(geom2.get());
+        break;
+      case GeometricRelationship::Touches:
+        haveRelationship = geom1->touches(geom2.get());
+        break;
+      default:
+        throw IllegalArgumentException("Unsupported geometry relationship type.");
+    }
   }
   else
   {
     LOG_TRACE(
-      "Unable to calculate intersects for: " << element1->getElementId() <<
-      " and: " << element2->getElementId() << ".");
+      "Unable to calculate geometric relationship: " << relationship.toString() << " for: " <<
+      element1->getElementId() << " and: " << element2->getElementId() << ".");
   }
-  return intersects;
+  return haveRelationship;
 }
 
 double OsmUtils::getDistance(const ConstElementPtr& element1, const ConstElementPtr& element2,

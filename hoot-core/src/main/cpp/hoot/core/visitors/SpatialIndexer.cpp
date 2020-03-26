@@ -35,7 +35,6 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/util/StringUtils.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>

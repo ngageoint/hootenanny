@@ -1,0 +1,1607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.9057" minlon="-75.437" maxlat="38.9128" maxlon="-75.4273"/>
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4365809379746821"/>
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9105670377093134" lon="-75.4273000000000025"/>
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4302204347825977"/>
+    <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4303246999999573"/>
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4323745617433445"/>
+    <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4277938889633788"/>
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4361795650537630"/>
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4365385346740425"/>
+    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4353368705882161"/>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4343221315789521"/>
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9094651288919309" lon="-75.4273000000000025"/>
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9073375487077797" lon="-75.4273000000000025"/>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9083877096774202" lon="-75.4369999999999976"/>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9068888384755027" lon="-75.4369999999999976"/>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9112813114186551" lon="-75.4273000000000025"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4276505319516417"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9113884989665166" lon="-75.4273000000000025"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9113009331923863" lon="-75.4369999999999976"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9097597475728136" lon="-75.4369999999999976"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4342225323741076"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4293472653316570"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9089616410256411" lon="-75.4369999999999976"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9073092592592573" lon="-75.4369999999999976"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4278257476635474"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4368862394197919"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4329927826086930"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4335547949777236"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4303197844630660"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4302096460643412"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4283670794440866"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4280676724822712"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9105608160693635" lon="-75.4369999999999976"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124485243862424" lon="-75.4369999999999976"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124591980112839" lon="-75.4273000000000025"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4302806165324284"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4308472613065248"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4284700993175363"/>
+    <node visible="true" id="4881724719" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127200000000002" lon="-75.4302188999999998"/>
+    <node visible="true" id="4881724722" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127504000000002" lon="-75.4303201999999970"/>
+    <node visible="true" id="4881724748" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124527000000029" lon="-75.4363744999999994"/>
+    <node visible="true" id="4881724749" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124572999999998" lon="-75.4359448999999955"/>
+    <node visible="true" id="4881724758" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124224999999981" lon="-75.4364623999999964"/>
+    <node visible="true" id="4881724763" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124479999999977" lon="-75.4369994000000048"/>
+    <node visible="true" id="4881724766" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123853999999980" lon="-75.4368070000000017"/>
+    <node visible="true" id="4881724767" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123737000000034" lon="-75.4369262999999961"/>
+    <node visible="true" id="4881724769" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123749000000032" lon="-75.4367771000000005"/>
+    <node visible="true" id="4881724770" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123853999999980" lon="-75.4369530999999967"/>
+    <node visible="true" id="4881724774" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123732999999987" lon="-75.4322051999999985"/>
+    <node visible="true" id="4881724776" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123690999999994" lon="-75.4368666000000019"/>
+    <node visible="true" id="4881724778" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123749000000032" lon="-75.4322916999999933"/>
+    <node visible="true" id="4881724784" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126382000000035" lon="-75.4283834999999954"/>
+    <node visible="true" id="4881724787" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126272000000029" lon="-75.4282055999999983"/>
+    <node visible="true" id="4881724791" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124839999999992" lon="-75.4360776999999985"/>
+    <node visible="true" id="4881724793" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125058999999993" lon="-75.4302811000000020"/>
+    <node visible="true" id="4881724794" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125116000000020" lon="-75.4303907999999979"/>
+    <node visible="true" id="4881724917" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9108540000000005" lon="-75.4361068000000046"/>
+    <node visible="true" id="4881724918" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9110640000000032" lon="-75.4344004000000012"/>
+    <node visible="true" id="4881724921" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9109951000000009" lon="-75.4344257000000056"/>
+    <node visible="true" id="4881724922" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9110902999999979" lon="-75.4345375000000047"/>
+    <node visible="true" id="4881724924" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105437999999992" lon="-75.4355793999999946"/>
+    <node visible="true" id="4881724925" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105502999999970" lon="-75.4330357000000049"/>
+    <node visible="true" id="4881724927" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105716999999984" lon="-75.4363998999999978"/>
+    <node visible="true" id="4881724928" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9108540000000005" lon="-75.4360139000000061"/>
+    <node visible="true" id="4881724930" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9108868000000001" lon="-75.4344277999999946"/>
+    <node visible="true" id="4881724932" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104403999999988" lon="-75.4348159000000038"/>
+    <node visible="true" id="4881724934" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104929000000013" lon="-75.4367584999999963"/>
+    <node visible="true" id="4881724935" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105027000000021" lon="-75.4348602000000028"/>
+    <node visible="true" id="4881724936" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105059999999980" lon="-75.4350457999999975"/>
+    <node visible="true" id="4881724937" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105093000000011" lon="-75.4368491999999975"/>
+    <node visible="true" id="4881724938" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105174999999974" lon="-75.4365222999999929"/>
+    <node visible="true" id="4881724939" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105192000000031" lon="-75.4349550999999963"/>
+    <node visible="true" id="4881724940" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9108342999999977" lon="-75.4359189999999984"/>
+    <node visible="true" id="4881724942" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9103682000000006" lon="-75.4353136999999947"/>
+    <node visible="true" id="4881724943" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9108195000000023" lon="-75.4345943999999946"/>
+    <node visible="true" id="4881724944" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104091999999966" lon="-75.4348391000000049"/>
+    <node visible="true" id="4881724945" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9103665000000021" lon="-75.4354043999999959"/>
+    <node visible="true" id="4881724946" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104929000000013" lon="-75.4366657000000060"/>
+    <node visible="true" id="4881724947" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9103944000000013" lon="-75.4352271999999999"/>
+    <node visible="true" id="4881724948" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9107669999999999" lon="-75.4357523999999984"/>
+    <node visible="true" id="4881724949" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9107734999999977" lon="-75.4345480000000066"/>
+    <node visible="true" id="4881724950" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9107752000000033" lon="-75.4345057999999966"/>
+    <node visible="true" id="4881724951" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9107867000000027" lon="-75.4345839000000069"/>
+    <node visible="true" id="4881724952" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9107883000000001" lon="-75.4344679000000014"/>
+    <node visible="true" id="4881724953" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9108031000000025" lon="-75.4361720999999932"/>
+    <node visible="true" id="4881724954" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9108178999999978" lon="-75.4344447000000002"/>
+    <node visible="true" id="4881724959" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9106505000000027" lon="-75.4363070999999934"/>
+    <node visible="true" id="4881724964" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9101827000000000" lon="-75.4351786999999945"/>
+    <node visible="true" id="4881724966" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9103435000000033" lon="-75.4350879999999933"/>
+    <node visible="true" id="4881724967" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9101482000000019" lon="-75.4351786999999945"/>
+    <node visible="true" id="4881724969" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9102499999999978" lon="-75.4351575999999966"/>
+    <node visible="true" id="4881724996" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9092399999999969" lon="-75.4368159999999932"/>
+    <node visible="true" id="4881725222" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127524000000022" lon="-75.4280724999999990"/>
+    <node visible="true" id="4881725224" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127597000000023" lon="-75.4281921999999980"/>
+    <node visible="true" id="4881725242" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9081079999999986" lon="-75.4366789999999980"/>
+    <node visible="true" id="4881725255" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083490000000012" lon="-75.4360970000000037">
+        <tag k="highway" v="turning_circle"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:10.000Z"/>
+    </node>
+    <node visible="true" id="4881725317" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098129999999998" lon="-75.4305209999999988"/>
+    <node visible="true" id="4881725477" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121419000000017" lon="-75.4284939000000065"/>
+    <node visible="true" id="4881725480" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098842000000005" lon="-75.4286637000000013"/>
+    <node visible="true" id="4881725481" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116020000000020" lon="-75.4283929999999998"/>
+    <node visible="true" id="4881726044" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127379999999974" lon="-75.4352286000000021"/>
+    <node visible="true" id="4881726046" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125457999999966" lon="-75.4352856000000003"/>
+    <node visible="true" id="4881726094" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072736999999975" lon="-75.4273407000000020"/>
+    <node visible="true" id="4881726353" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115279999999970" lon="-75.4283870000000007"/>
+    <node visible="true" id="4881726355" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115249999999975" lon="-75.4282060000000030"/>
+    <node visible="true" id="4881726363" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115068999999991" lon="-75.4280107000000015"/>
+    <node visible="true" id="4881726686" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104949999999974" lon="-75.4299639999999982"/>
+    <node visible="true" id="4881726688" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9106049999999968" lon="-75.4306049999999999"/>
+    <node visible="true" id="4881726689" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9106049999999968" lon="-75.4299769999999938"/>
+    <node visible="true" id="4881726965" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079610000000002" lon="-75.4289650000000051">
+        <tag k="error:circular" v="15"/>
+        <tag k="railway" v="level_crossing"/>
+        <tag k="source:datetime" v="2014-10-01T04:16:48.000Z"/>
+    </node>
+    <node visible="true" id="4881726968" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9078730000000022" lon="-75.4289770000000033"/>
+    <node visible="true" id="4881726970" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9058479999999989" lon="-75.4293229999999966"/>
+    <node visible="true" id="4881727099" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125536000000025" lon="-75.4290174000000064"/>
+    <node visible="true" id="4881727145" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124359999999996" lon="-75.4285320000000041"/>
+    <node visible="true" id="4881727146" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124430000000032" lon="-75.4285310000000067"/>
+    <node visible="true" id="4881727157" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124580000000009" lon="-75.4285280000000000"/>
+    <node visible="true" id="4881727158" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125143999999992" lon="-75.4285193999999990"/>
+    <node visible="true" id="4881727159" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124529999999993" lon="-75.4285299999999950"/>
+    <node visible="true" id="4881727340" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104564000000011" lon="-75.4274158000000057"/>
+    <node visible="true" id="4881727342" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098158999999981" lon="-75.4280801000000025"/>
+    <node visible="true" id="4881727352" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105091999999999" lon="-75.4278634000000068"/>
+    <node visible="true" id="4881727385" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127640000000028" lon="-75.4343080000000015"/>
+    <node visible="true" id="4881727394" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079400000000035" lon="-75.4336610000000007"/>
+    <node visible="true" id="4881727793" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9096289000000013" lon="-75.4287032000000011"/>
+    <node visible="true" id="4881727795" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9094923999999978" lon="-75.4275585000000035"/>
+    <node visible="true" id="4881727823" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9069700000000012" lon="-75.4318009999999930"/>
+    <node visible="true" id="4881727825" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9062695000000005" lon="-75.4304467999999986">
+        <tag k="highway" v="turning_circle"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-04-27T15:16:35.000Z"/>
+    </node>
+    <node visible="true" id="4881727865" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104335000000034" lon="-75.4280009000000007"/>
+    <node visible="true" id="4881728037" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122479999999982" lon="-75.4340609999999998"/>
+    <node visible="true" id="4881728042" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124380000000016" lon="-75.4341809999999953"/>
+    <node visible="true" id="4881728043" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9120890000000017" lon="-75.4338920000000002"/>
+    <node visible="true" id="4881728056" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116709999999983" lon="-75.4332990000000052"/>
+    <node visible="true" id="4881729070" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127812999999989" lon="-75.4302095999999977"/>
+    <node visible="true" id="4881729086" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121667000000002" lon="-75.4308120999999971"/>
+    <node visible="true" id="4881729621" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121027999999995" lon="-75.4308012999999988"/>
+    <node visible="true" id="4881729663" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112962999999965" lon="-75.4329479999999961"/>
+    <node visible="true" id="4881729665" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9119699999999966" lon="-75.4341570999999931"/>
+    <node visible="true" id="4881729666" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098534000000029" lon="-75.4311004999999994"/>
+    <node visible="true" id="4881729668" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113891000000010" lon="-75.4330807000000050"/>
+    <node visible="true" id="4881729676" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9059260000000009" lon="-75.4278869999999984"/>
+    <node visible="true" id="4881729677" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9069588999999993" lon="-75.4283003999999977"/>
+    <node visible="true" id="4881729678" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083646999999999" lon="-75.4293511000000052"/>
+    <node visible="true" id="4881729682" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9109600999999969" lon="-75.4325089000000020">
+        <tag k="error:circular" v="15"/>
+        <tag k="railway" v="level_crossing"/>
+        <tag k="source:datetime" v="2013-04-20T20:53:27.000Z"/>
+    </node>
+    <node visible="true" id="4881729687" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126818000000014" lon="-75.4328962000000018"/>
+    <node visible="true" id="4881729698" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126203000000004" lon="-75.4328514000000041"/>
+    <node visible="true" id="4881729699" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125367999999980" lon="-75.4337239000000039"/>
+    <node visible="true" id="4881729702" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127468000000007" lon="-75.4329737000000051"/>
+    <node visible="true" id="4881729703" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124601999999982" lon="-75.4326798999999966"/>
+    <node visible="true" id="4881729706" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124206999999984" lon="-75.4340993999999938"/>
+    <node visible="true" id="4881729707" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124984999999981" lon="-75.4337984999999946"/>
+    <node visible="true" id="4881729708" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125366000000028" lon="-75.4359718999999984"/>
+    <node visible="true" id="4881729715" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122060999999988" lon="-75.4347587000000033"/>
+    <node visible="true" id="4881729716" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122234000000020" lon="-75.4346993000000055"/>
+    <node visible="true" id="4881729717" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122436999999977" lon="-75.4346747000000022"/>
+    <node visible="true" id="4881729718" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123692000000005" lon="-75.4342627999999991"/>
+    <node visible="true" id="4881729742" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127950000000027" lon="-75.4302811999999960"/>
+    <node visible="true" id="4881729759" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9080269999999970" lon="-75.4366380000000021"/>
+    <node visible="true" id="4881729760" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9082009999999983" lon="-75.4367430000000070"/>
+    <node visible="true" id="4881729761" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075920000000011" lon="-75.4365939999999995"/>
+    <node visible="true" id="4881729762" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9077699999999993" lon="-75.4365939999999995"/>
+    <node visible="true" id="4881729764" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074090000000012" lon="-75.4366480000000053"/>
+    <node visible="true" id="4881729772" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072000000000031" lon="-75.4367749999999972"/>
+    <node visible="true" id="4881729789" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122235999999972" lon="-75.4308154000000002"/>
+    <node visible="true" id="4881729790" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083430000000021" lon="-75.4369120000000066"/>
+    <node visible="true" id="4881729880" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125048000000007" lon="-75.4278309000000036"/>
+    <node visible="true" id="4881729893" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125510000000006" lon="-75.4283704999999998"/>
+    <node visible="true" id="4881730482" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074889999999982" lon="-75.4300149999999974"/>
+    <node visible="true" id="4881730483" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9070350000000005" lon="-75.4291079999999994"/>
+    <node visible="true" id="4881730533" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079580000000007" lon="-75.4309590000000014"/>
+    <node visible="true" id="4881730539" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097259999999991" lon="-75.4366839999999996"/>
+    <node visible="true" id="4881730541" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9093639999999965" lon="-75.4337969999999984"/>
+    <node visible="true" id="4881730543" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9091980000000035" lon="-75.4334860000000020"/>
+    <node visible="true" id="4881730547" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9089030000000022" lon="-75.4328739999999982"/>
+    <node visible="true" id="4881731148" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9061280000000025" lon="-75.4301459999999935"/>
+    <node visible="true" id="4881731155" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9067130000000034" lon="-75.4300439999999952"/>
+    <node visible="true" id="4881731157" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9081710000000029" lon="-75.4294909999999987"/>
+    <node visible="true" id="4881731158" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072620000000029" lon="-75.4299550000000067"/>
+    <node visible="true" id="4881731171" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9100620000000035" lon="-75.4311220000000020"/>
+    <node visible="true" id="4881731172" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9102770000000007" lon="-75.4313870000000009"/>
+    <node visible="true" id="4881731173" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098320000000015" lon="-75.4307397999999978"/>
+    <node visible="true" id="4881731174" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9099059999999994" lon="-75.4308860000000010"/>
+    <node visible="true" id="4881731185" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9109249999999989" lon="-75.4320879999999931"/>
+    <node visible="true" id="4881731993" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097560000000016" lon="-75.4349023999999986"/>
+    <node visible="true" id="4881731995" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9099971999999994" lon="-75.4350225999999964"/>
+    <node visible="true" id="4881731996" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097510000000000" lon="-75.4337486000000013"/>
+    <node visible="true" id="4881731997" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097839000000008" lon="-75.4349318999999952"/>
+    <node visible="true" id="4881731999" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9100743999999992" lon="-75.4334364999999991"/>
+    <node visible="true" id="4881732000" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9101154000000022" lon="-75.4351534000000044"/>
+    <node visible="true" id="4881732001" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9096311999999998" lon="-75.4338963000000007"/>
+    <node visible="true" id="4881732003" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9096247000000020" lon="-75.4339870000000019"/>
+    <node visible="true" id="4881732005" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097346000000002" lon="-75.4348643999999950"/>
+    <node visible="true" id="4881732007" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9096969000000001" lon="-75.4347252000000026"/>
+    <node visible="true" id="4881732010" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122210999999965" lon="-75.4309149999999988"/>
+    <node visible="true" id="4881732019" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122137000000023" lon="-75.4316098999999980"/>
+    <node visible="true" id="4881732024" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122367000000011" lon="-75.4305753999999951"/>
+    <node visible="true" id="4881732025" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121615999999975" lon="-75.4324330000000032"/>
+    <node visible="true" id="4881732028" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121505000000028" lon="-75.4306839999999994"/>
+    <node visible="true" id="4881732029" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121661000000003" lon="-75.4315150000000045"/>
+    <node visible="true" id="4881732032" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121825000000001" lon="-75.4310193999999967"/>
+    <node visible="true" id="4881732033" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121258999999995" lon="-75.4309034000000054"/>
+    <node visible="true" id="4881732034" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123403999999979" lon="-75.4319521000000037"/>
+    <node visible="true" id="4881732039" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121415999999982" lon="-75.4347352999999998"/>
+    <node visible="true" id="4881732040" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121488999999983" lon="-75.4313822000000016"/>
+    <node visible="true" id="4881732041" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123330999999979" lon="-75.4366444000000058"/>
+    <node visible="true" id="4881732042" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123060000000009" lon="-75.4323823999999945"/>
+    <node visible="true" id="4881732043" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123005000000006" lon="-75.4325075999999939"/>
+    <node visible="true" id="4881732045" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123389000000017" lon="-75.4367443000000009"/>
+    <node visible="true" id="4881732046" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123403999999979" lon="-75.4316948000000025"/>
+    <node visible="true" id="4881732050" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122796999999991" lon="-75.4325448000000023"/>
+    <node visible="true" id="4881732052" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122769000000019" lon="-75.4316689999999994"/>
+    <node visible="true" id="4881732056" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122896000000011" lon="-75.4321525000000008"/>
+    <node visible="true" id="4881732060" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122588999999977" lon="-75.4307050999999973"/>
+    <node visible="true" id="4881732061" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122764000000032" lon="-75.4320280000000025"/>
+    <node visible="true" id="4881732063" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122735999999989" lon="-75.4306777000000039"/>
+    <node visible="true" id="4881732065" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9117271000000002" lon="-75.4338498999999985"/>
+    <node visible="true" id="4881732067" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9117255000000029" lon="-75.4338963000000007"/>
+    <node visible="true" id="4881732070" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9118746999999985" lon="-75.4342551000000014"/>
+    <node visible="true" id="4881732073" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116779000000008" lon="-75.4340566000000052"/>
+    <node visible="true" id="4881732074" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9089680000000016" lon="-75.4314710000000019"/>
+    <node visible="true" id="4881732075" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9117024999999970" lon="-75.4340248999999972"/>
+    <node visible="true" id="4881732076" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9117107000000004" lon="-75.4337675999999959"/>
+    <node visible="true" id="4881732077" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9117205000000013" lon="-75.4338055999999995"/>
+    <node visible="true" id="4881732079" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9117140000000035" lon="-75.4339848999999987"/>
+    <node visible="true" id="4881732081" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115351000000018" lon="-75.4343498000000068"/>
+    <node visible="true" id="4881732084" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115297000000027" lon="-75.4329139000000026"/>
+    <node visible="true" id="4881732085" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116106000000030" lon="-75.4340923999999973"/>
+    <node visible="true" id="4881732087" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116843999999986" lon="-75.4326697999999993"/>
+    <node visible="true" id="4881732088" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9094049999999996" lon="-75.4311359999999951"/>
+    <node visible="true" id="4881732089" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9078319999999991" lon="-75.4325850000000031"/>
+    <node visible="true" id="4881732091" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9076909999999998" lon="-75.4327030000000036"/>
+    <node visible="true" id="4881732097" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9084339999999997" lon="-75.4319220000000001"/>
+    <node visible="true" id="4881732101" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079320000000024" lon="-75.4324440000000038"/>
+    <node visible="true" id="4881732104" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9120626999999999" lon="-75.4312725000000057"/>
+    <node visible="true" id="4881732106" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9119651999999974" lon="-75.4343370999999934"/>
+    <node visible="true" id="4881732107" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9120187999999985" lon="-75.4325891000000013"/>
+    <node visible="true" id="4881732108" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9119945999999999" lon="-75.4324567999999971"/>
+    <node visible="true" id="4881732112" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9120356999999970" lon="-75.4315033999999969"/>
+    <node visible="true" id="4881732114" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9119215999999994" lon="-75.4325189999999992"/>
+    <node visible="true" id="4881732115" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9119141999999982" lon="-75.4342790000000036"/>
+    <node visible="true" id="4881732116" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075940000000031" lon="-75.4329089999999951"/>
+    <node visible="true" id="4881732121" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113516000000033" lon="-75.4330953000000051"/>
+    <node visible="true" id="4881732124" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113496000000012" lon="-75.4331264000000061"/>
+    <node visible="true" id="4881732129" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112610000000032" lon="-75.4343034000000046"/>
+    <node visible="true" id="4881732131" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112815000000012" lon="-75.4329893999999967"/>
+    <node visible="true" id="4881732132" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113023000000027" lon="-75.4331401000000028"/>
+    <node visible="true" id="4881732139" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112577000000002" lon="-75.4329934999999949"/>
+    <node visible="true" id="4881732149" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112298000000010" lon="-75.4343223000000052"/>
+    <node visible="true" id="4881732151" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112402000000017" lon="-75.4330386999999973"/>
+    <node visible="true" id="4881732152" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112249000000006" lon="-75.4329407999999972"/>
+    <node visible="true" id="4881732153" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114685999999992" lon="-75.4327784999999977"/>
+    <node visible="true" id="4881732168" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114447999999982" lon="-75.4341387999999995"/>
+    <node visible="true" id="4881732172" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113889999999998" lon="-75.4328849999999989"/>
+    <node visible="true" id="4881732173" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114050000000020" lon="-75.4330393999999984"/>
+    <node visible="true" id="4881732189" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9111592000000002" lon="-75.4343412999999998"/>
+    <node visible="true" id="4881732200" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9110985000000014" lon="-75.4343834999999956"/>
+    <node visible="true" id="4881732960" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097539999999995" lon="-75.4275228999999996"/>
+    <node visible="true" id="4881732962" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072786999999991" lon="-75.4279226000000023"/>
+    <node visible="true" id="4881732963" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079589999999982" lon="-75.4277859999999976"/>
+    <node visible="true" id="4881732964" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9066460000000021" lon="-75.4279290000000060"/>
+    <node visible="true" id="4881732965" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9068230000000028" lon="-75.4279559999999947"/>
+    <node visible="true" id="4881732967" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9058009999999967" lon="-75.4276760000000053"/>
+    <node visible="true" id="4881732999" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105792000000008" lon="-75.4274005999999986"/>
+    <node visible="true" id="4881733083" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9073887999999997" lon="-75.4314456999999976"/>
+    <node visible="true" id="4881733094" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114784000000000" lon="-75.4329835000000060"/>
+    <node visible="true" id="4881733148" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113837000000018" lon="-75.4328225999999944"/>
+    <node visible="true" id="4881733165" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114349000000033" lon="-75.4329122999999981"/>
+    <node visible="true" id="4881733423" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9100570000000019" lon="-75.4319449999999989"/>
+    <node visible="true" id="4881733435" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079729999999984" lon="-75.4291970000000020"/>
+    <node visible="true" id="4881733436" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9087850000000017" lon="-75.4302799999999962"/>
+    <node visible="true" id="4881733488" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072529999999972" lon="-75.4354270000000042"/>
+    <node visible="true" id="4881733499" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083789999999965" lon="-75.4345650000000063"/>
+    <node visible="true" id="4881734217" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126419999999982" lon="-75.4278161000000011"/>
+    <node visible="true" id="4881734226" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127816000000024" lon="-75.4277960999999948"/>
+    <node visible="true" id="4881734357" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115800000000007" lon="-75.4333797999999973"/>
+    <node visible="true" id="4881734369" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121785999999972" lon="-75.4346828000000045"/>
+    <node visible="true" id="4881734370" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127628999999970" lon="-75.4367773000000028"/>
+    <node visible="true" id="4881734703" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9069732999999971" lon="-75.4305403999999982"/>
+    <node visible="true" id="4881734719" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9071300000000022" lon="-75.4316670000000045"/>
+    <node visible="true" id="4881734728" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9058950000000010" lon="-75.4327430000000021"/>
+    <node visible="true" id="4881735239" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127527999999998" lon="-75.4363606999999945"/>
+    <node visible="true" id="4881735242" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127600999999999" lon="-75.4362828000000007"/>
+    <node visible="true" id="4881735243" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125141000000028" lon="-75.4352487999999965"/>
+    <node visible="true" id="4881735246" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127936000000005" lon="-75.4352963999999986"/>
+    <node visible="true" id="4881735251" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127701999999971" lon="-75.4361906999999974"/>
+    <node visible="true" id="4881735267" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126898999999966" lon="-75.4352540999999945"/>
+    <node visible="true" id="4881735296" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124539000000027" lon="-75.4349681000000061"/>
+    <node visible="true" id="4881735865" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9073282000000020" lon="-75.4273016000000069"/>
+    <node visible="true" id="4881735866" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072442000000009" lon="-75.4274128999999931"/>
+    <node visible="true" id="4881735886" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072412000000014" lon="-75.4275061999999963"/>
+    <node visible="true" id="4881735985" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9111249999999984" lon="-75.4323700000000059"/>
+    <node visible="true" id="4881735994" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105300000000014" lon="-75.4328160000000025"/>
+    <node visible="true" id="4881735996" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116399999999985" lon="-75.4307230000000004"/>
+    <node visible="true" id="4881735998" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112900000000010" lon="-75.4321529999999996"/>
+    <node visible="true" id="4881735999" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113339999999965" lon="-75.4320290000000000"/>
+    <node visible="true" id="4881736041" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9068120000000022" lon="-75.4345579999999956"/>
+    <node visible="true" id="4881736053" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097420000000014" lon="-75.4321829999999949"/>
+    <node visible="true" id="4881736054" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083070000000006" lon="-75.4333610000000050"/>
+    <node visible="true" id="4881736055" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9084270000000032" lon="-75.4332639999999941"/>
+    <node visible="true" id="4881736189" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9100577000000030" lon="-75.4305544000000054"/>
+    <node visible="true" id="4881736376" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115488999999997" lon="-75.4328169000000059"/>
+    <node visible="true" id="4881736380" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112650000000002" lon="-75.4330958999999979"/>
+    <node visible="true" id="4881736393" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9117826000000022" lon="-75.4327095999999955"/>
+    <node visible="true" id="4881736394" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9120331000000022" lon="-75.4324735999999945"/>
+    <node visible="true" id="4881736395" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121165000000033" lon="-75.4315723999999932"/>
+    <node visible="true" id="4881736396" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121181000000007" lon="-75.4322793999999988"/>
+    <node visible="true" id="4881736398" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9120998000000000" lon="-75.4312075999999934"/>
+    <node visible="true" id="4881736400" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121833000000024" lon="-75.4307141000000030"/>
+    <node visible="true" id="4881736402" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125672999999992" lon="-75.4303064000000063"/>
+    <node visible="true" id="4881736413" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124004000000028" lon="-75.4304779999999937"/>
+    <node visible="true" id="4881736707" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9065143999999989" lon="-75.4280818999999951"/>
+    <node visible="true" id="4881736719" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075454999999977" lon="-75.4286388999999957"/>
+    <node visible="true" id="4881736722" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9089230000000015" lon="-75.4300180000000040"/>
+    <node visible="true" id="4881736844" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9108310000000017" lon="-75.4357760000000042">
+        <tag k="attribution" v="USGS 2001 County Boundary"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source" v="county_import_v0.1"/>
+    </node>
+    <node visible="true" id="4881737312" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075559999999996" lon="-75.4284679999999952"/>
+    <node visible="true" id="4881737314" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074880000000007" lon="-75.4283479999999997"/>
+    <node visible="true" id="4881737315" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074600000000004" lon="-75.4278910000000025"/>
+    <node visible="true" id="4881737326" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9081260000000029" lon="-75.4289430000000038"/>
+    <node visible="true" id="4881737431" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075100000000020" lon="-75.4359070000000003"/>
+    <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-37"/>
+        <nd ref="4881733488"/>
+        <tag k="tiger:name_type_1" v="Rd"/>
+        <tag k="name" v="Shawnee Road"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base_1" v="Shawnee"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2014-10-01T07:34:03.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36"/>
+        <nd ref="4881732999"/>
+        <tag k="name" v="Southeast 3rd Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-20T14:58:04.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="3rd"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="SE"/>
+    </way>
+    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881731157"/>
+        <nd ref="4881730482"/>
+        <nd ref="4881731158"/>
+        <nd ref="4881731155"/>
+        <nd ref="4881731148"/>
+        <nd ref="-35"/>
+        <tag k="name" v="Plum Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-20T14:57:17.000Z"/>
+        <tag k="tiger:name_base" v="Plum"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881729742"/>
+        <nd ref="-34"/>
+        <tag k="name" v="Front Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-20T14:32:39.000Z"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tiger:name_base" v="Front"/>
+        <tag k="tiger:county" v="Kent, DE"/>
+        <tag k="layer" v="1"/>
+    </way>
+    <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-33"/>
+        <nd ref="4881734728"/>
+        <nd ref="4881736041"/>
+        <nd ref="4881733488"/>
+        <nd ref="4881737431"/>
+        <tag k="name" v="West Clarke Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T15:01:35.000Z"/>
+        <tag k="tiger:name_base" v="Clarke"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="W"/>
+    </way>
+    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-32"/>
+        <nd ref="4881734226"/>
+        <nd ref="4881734217"/>
+        <nd ref="4881729880"/>
+        <nd ref="4881726363"/>
+        <tag k="name" v="Pearl Alley"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Aly"/>
+        <tag k="source:datetime" v="2015-04-27T15:16:25.000Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tiger:name_base" v="Pearl"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-30"/>
+        <nd ref="4881735239"/>
+        <nd ref="4881735242"/>
+        <nd ref="4881735251"/>
+        <nd ref="-31"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-04-27T15:16:29.000Z"/>
+    </way>
+    <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-29"/>
+        <nd ref="4881735246"/>
+        <nd ref="4881726044"/>
+        <nd ref="4881735267"/>
+        <nd ref="4881726046"/>
+        <nd ref="4881735243"/>
+        <nd ref="4881735296"/>
+        <tag k="name" v="Lakeview Apts"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-04-27T15:16:24.000Z"/>
+    </way>
+    <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881733094"/>
+        <nd ref="4881728056"/>
+        <nd ref="4881728043"/>
+        <nd ref="4881728037"/>
+        <nd ref="4881728042"/>
+        <nd ref="4881727385"/>
+        <nd ref="-28"/>
+        <tag k="name" v="Maple Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-21T11:00:18.000Z"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:county" v="Kent, DE"/>
+    </way>
+    <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-27"/>
+        <nd ref="4881727795"/>
+        <tag k="name" v="Southeast 4th Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-20T14:52:13.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="4th"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="SE"/>
+    </way>
+    <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881732962"/>
+        <nd ref="4881735886"/>
+        <nd ref="4881735866"/>
+        <nd ref="4881726094"/>
+        <nd ref="4881735865"/>
+        <nd ref="-26"/>
+        <tag k="tiger:name_type_1" v="Aly"/>
+        <tag k="name" v="Ball Park Lane"/>
+        <tag k="service" v="alley"/>
+        <tag k="highway" v="service"/>
+        <tag k="tiger:name_base_1" v="Buzzard"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ln"/>
+        <tag k="source:datetime" v="2015-04-27T15:16:22.000Z"/>
+        <tag k="name_1" v="Buzzard Alley"/>
+        <tag k="tiger:name_base" v="Ball Park"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-24"/>
+        <nd ref="4881729772"/>
+        <nd ref="4881729764"/>
+        <nd ref="4881729761"/>
+        <nd ref="4881729762"/>
+        <nd ref="4881729759"/>
+        <nd ref="4881725242"/>
+        <nd ref="4881729760"/>
+        <nd ref="4881729790"/>
+        <nd ref="-25"/>
+        <tag k="name" v="Lakelawn Drive"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Dr"/>
+        <tag k="source:datetime" v="2013-04-20T14:49:10.000Z"/>
+        <tag k="tiger:name_base" v="Lakelawn"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-22"/>
+        <nd ref="4881732967"/>
+        <nd ref="4881732964"/>
+        <nd ref="4881732965"/>
+        <nd ref="4881732962"/>
+        <nd ref="4881737315"/>
+        <nd ref="4881732963"/>
+        <nd ref="4881727795"/>
+        <nd ref="4881732960"/>
+        <nd ref="4881727340"/>
+        <nd ref="4881732999"/>
+        <nd ref="-23"/>
+        <tag k="name" v="South Washington Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-20T14:49:32.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Washington"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+    </way>
+    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21"/>
+        <nd ref="4881726363"/>
+        <nd ref="4881726355"/>
+        <nd ref="4881726353"/>
+        <tag k="name" v="Southeast 2nd Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-20T14:46:58.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="2nd"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="SE"/>
+    </way>
+    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20"/>
+        <nd ref="4881736844"/>
+        <nd ref="4881736380"/>
+        <tag k="attribution" v="USGS 2001 County Boundary"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="admin_level" v="6"/>
+        <tag k="border_type" v="county"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="source" v="county_import_v0.1_20080508235458"/>
+        <tag k="source:datetime" v="2014-02-12T09:54:39.000Z"/>
+    </way>
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881730541"/>
+        <nd ref="4881730539"/>
+        <nd ref="-19"/>
+        <tag k="name" v="Kings Highway"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Hwy"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:17.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Kings"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18"/>
+        <nd ref="4881727385"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2007-12-19T13:32:19.000Z"/>
+        <tag k="tiger:county" v="Kent, DE"/>
+    </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-17"/>
+        <nd ref="4881726970"/>
+        <nd ref="4881730483"/>
+        <nd ref="4881726968"/>
+        <nd ref="4881726965"/>
+        <nd ref="4881737326"/>
+        <nd ref="4881727793"/>
+        <nd ref="4881725480"/>
+        <nd ref="4881726353"/>
+        <nd ref="4881725481"/>
+        <nd ref="4881725477"/>
+        <tag k="name" v="South Walnut Street"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="ref" v="CR 213"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2014-04-23T00:12:33.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="name_1" v="County Road 213"/>
+        <tag k="tiger:name_base" v="Walnut"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+    </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-16"/>
+        <nd ref="4881724996"/>
+        <nd ref="4881730539"/>
+        <tag k="name" v="Regent Road"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Rd"/>
+        <tag k="source:datetime" v="2013-04-20T14:53:43.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Regent"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881729772"/>
+        <nd ref="-15"/>
+        <tag k="name" v="Caulk Road"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Rd"/>
+        <tag k="source:datetime" v="2013-04-20T14:52:29.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Caulk"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-14"/>
+        <nd ref="4881729676"/>
+        <nd ref="4881736707"/>
+        <nd ref="4881729677"/>
+        <nd ref="4881736719"/>
+        <nd ref="4881726965"/>
+        <nd ref="4881729678"/>
+        <nd ref="4881736722"/>
+        <nd ref="4881729666"/>
+        <nd ref="4881729682"/>
+        <nd ref="4881729663"/>
+        <tag k="name" v="Indian River Secondary"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="B11:B21"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="railway" v="rail"/>
+        <tag k="usage" v="branch"/>
+        <tag k="source:datetime" v="2015-11-24T20:07:42.000Z"/>
+        <tag k="old_railway_operator" v="PRR"/>
+        <tag k="operator" v="NS"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="electrified" v="no"/>
+        <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
+        <tag k="tiger:county" v="Kent, DE:Sussex, DE"/>
+        <tag k="gauge" v="1435"/>
+    </way>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881729715"/>
+        <nd ref="4881729708"/>
+        <nd ref="4881734370"/>
+        <nd ref="-13"/>
+        <tag k="name" v="Indian River Secondary"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="B11:B21"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="railway" v="rail"/>
+        <tag k="usage" v="branch"/>
+        <tag k="source:datetime" v="2015-07-17T14:03:35.000Z"/>
+        <tag k="old_railway_operator" v="PRR"/>
+        <tag k="operator" v="NS"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="electrified" v="no"/>
+        <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
+        <tag k="tiger:county" v="Kent, DE:Sussex, DE"/>
+        <tag k="gauge" v="1435"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12"/>
+        <nd ref="4881729702"/>
+        <nd ref="4881729687"/>
+        <nd ref="4881729698"/>
+        <nd ref="4881729703"/>
+        <nd ref="4881732043"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881729706"/>
+        <nd ref="4881729707"/>
+        <nd ref="4881729699"/>
+        <nd ref="-11"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="4881724719"/>
+        <nd ref="4881724793"/>
+        <nd ref="4881732024"/>
+        <nd ref="4881732028"/>
+        <nd ref="4881732033"/>
+        <nd ref="4881732104"/>
+        <nd ref="4881732112"/>
+        <nd ref="4881732108"/>
+        <nd ref="4881732114"/>
+        <nd ref="4881732087"/>
+        <nd ref="4881732153"/>
+        <nd ref="4881732172"/>
+        <nd ref="4881732131"/>
+        <nd ref="4881732139"/>
+        <nd ref="4881732151"/>
+        <nd ref="4881736380"/>
+        <nd ref="4881732132"/>
+        <nd ref="4881732124"/>
+        <nd ref="4881732121"/>
+        <nd ref="4881732173"/>
+        <nd ref="4881732084"/>
+        <nd ref="4881732107"/>
+        <nd ref="4881732025"/>
+        <nd ref="4881732050"/>
+        <nd ref="4881732043"/>
+        <nd ref="4881732042"/>
+        <nd ref="4881724778"/>
+        <nd ref="4881724774"/>
+        <nd ref="4881732056"/>
+        <nd ref="4881732061"/>
+        <nd ref="4881732034"/>
+        <nd ref="4881732046"/>
+        <nd ref="4881732052"/>
+        <nd ref="4881732019"/>
+        <nd ref="4881732029"/>
+        <nd ref="4881732040"/>
+        <nd ref="4881732032"/>
+        <nd ref="4881732010"/>
+        <nd ref="4881732060"/>
+        <nd ref="4881732063"/>
+        <nd ref="4881724794"/>
+        <nd ref="4881724722"/>
+        <nd ref="-10"/>
+        <nd ref="-9"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2014-10-01T03:34:58.000Z"/>
+        <tag k="waterway" v="riverbank"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7"/>
+        <nd ref="4881725222"/>
+        <nd ref="4881725224"/>
+        <nd ref="4881724787"/>
+        <nd ref="4881724784"/>
+        <nd ref="-8"/>
+        <nd ref="-7"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2014-10-01T03:34:57.000Z"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="4881724763"/>
+        <nd ref="4881724770"/>
+        <nd ref="4881724767"/>
+        <nd ref="4881724776"/>
+        <nd ref="4881724766"/>
+        <nd ref="4881724769"/>
+        <nd ref="4881732045"/>
+        <nd ref="4881732041"/>
+        <nd ref="4881724758"/>
+        <nd ref="4881724748"/>
+        <nd ref="4881724791"/>
+        <nd ref="4881724749"/>
+        <nd ref="4881732039"/>
+        <nd ref="4881732106"/>
+        <nd ref="4881732115"/>
+        <nd ref="4881732070"/>
+        <nd ref="4881732081"/>
+        <nd ref="4881724922"/>
+        <nd ref="4881724943"/>
+        <nd ref="4881724951"/>
+        <nd ref="4881724949"/>
+        <nd ref="4881724950"/>
+        <nd ref="4881724952"/>
+        <nd ref="4881724954"/>
+        <nd ref="4881724930"/>
+        <nd ref="4881724921"/>
+        <nd ref="4881724918"/>
+        <nd ref="4881732200"/>
+        <nd ref="4881732189"/>
+        <nd ref="4881732149"/>
+        <nd ref="4881732129"/>
+        <nd ref="4881732168"/>
+        <nd ref="4881732085"/>
+        <nd ref="4881732073"/>
+        <nd ref="4881732075"/>
+        <nd ref="4881732079"/>
+        <nd ref="4881732067"/>
+        <nd ref="4881732065"/>
+        <nd ref="4881732077"/>
+        <nd ref="4881732076"/>
+        <nd ref="4881732124"/>
+        <nd ref="4881732132"/>
+        <nd ref="4881736380"/>
+        <nd ref="4881732151"/>
+        <nd ref="4881732139"/>
+        <nd ref="4881732152"/>
+        <nd ref="4881724925"/>
+        <nd ref="4881731999"/>
+        <nd ref="4881731996"/>
+        <nd ref="4881732001"/>
+        <nd ref="4881732003"/>
+        <nd ref="4881732007"/>
+        <nd ref="4881732005"/>
+        <nd ref="4881731993"/>
+        <nd ref="4881731997"/>
+        <nd ref="4881731995"/>
+        <nd ref="4881732000"/>
+        <nd ref="4881724967"/>
+        <nd ref="4881724964"/>
+        <nd ref="4881724969"/>
+        <nd ref="4881724966"/>
+        <nd ref="4881724944"/>
+        <nd ref="4881724932"/>
+        <nd ref="4881724935"/>
+        <nd ref="4881724939"/>
+        <nd ref="4881724936"/>
+        <nd ref="4881724947"/>
+        <nd ref="4881724942"/>
+        <nd ref="4881724945"/>
+        <nd ref="4881724924"/>
+        <nd ref="4881724948"/>
+        <nd ref="4881724940"/>
+        <nd ref="4881724928"/>
+        <nd ref="4881724917"/>
+        <nd ref="4881724953"/>
+        <nd ref="4881724959"/>
+        <nd ref="4881724927"/>
+        <nd ref="4881724938"/>
+        <nd ref="4881724946"/>
+        <nd ref="4881724934"/>
+        <nd ref="4881724937"/>
+        <nd ref="-6"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2020-02-28T16:41:52Z"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="4881729880"/>
+        <nd ref="4881729893"/>
+        <nd ref="4881727158"/>
+        <tag k="name" v="Southeast Front Street"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2015-04-27T15:16:27.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="E Front"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881736380"/>
+        <nd ref="4881736376"/>
+        <nd ref="4881736393"/>
+        <nd ref="4881736394"/>
+        <nd ref="4881736396"/>
+        <nd ref="4881736395"/>
+        <nd ref="4881736398"/>
+        <nd ref="4881736400"/>
+        <nd ref="4881736413"/>
+        <nd ref="4881736402"/>
+        <nd ref="-3"/>
+        <tag k="name" v="Mispillion River"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="admin_level" v="6"/>
+        <tag k="border_type" v="county"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2014-10-01T04:16:46.000Z"/>
+        <tag k="waterway" v="river"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2"/>
+        <nd ref="4881729789"/>
+        <tag k="name" v="North Church Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2014-04-28T23:37:13.000Z"/>
+        <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:county" v="Kent, DE"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881727158"/>
+        <nd ref="-1"/>
+        <tag k="name" v="North Walnut Street"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-22T15:49:25.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="name_1" v="County Road 213"/>
+        <tag k="tiger:name_base" v="Walnut"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+    </way>
+    <way visible="true" id="496849264" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881727342"/>
+        <nd ref="4881727865"/>
+        <nd ref="4881727352"/>
+        <nd ref="4881727340"/>
+        <tag k="highway" v="service"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2012-11-23T22:14:16.000Z"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496849570" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881729718"/>
+        <nd ref="4881729706"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2014-10-01T04:16:43.000Z"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="tunnel" v="culvert"/>
+        <tag k="layer" v="-1"/>
+    </way>
+    <way visible="true" id="496849574" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881729663"/>
+        <nd ref="4881729668"/>
+        <tag k="name" v="Indian River Secondary"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="B11:B21"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="railway" v="rail"/>
+        <tag k="usage" v="branch"/>
+        <tag k="source:datetime" v="2015-07-17T14:03:33.000Z"/>
+        <tag k="old_railway_operator" v="PRR"/>
+        <tag k="operator" v="NS"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="electrified" v="no"/>
+        <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
+        <tag k="tiger:county" v="Kent, DE:Sussex, DE"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="layer" v="1"/>
+    </way>
+    <way visible="true" id="496849575" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881732039"/>
+        <nd ref="4881729716"/>
+        <nd ref="4881729717"/>
+        <nd ref="4881729718"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2014-10-01T04:16:43.000Z"/>
+        <tag k="waterway" v="stream"/>
+    </way>
+    <way visible="true" id="496849576" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881734369"/>
+        <nd ref="4881729715"/>
+        <tag k="name" v="Indian River Secondary"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="railway" v="rail"/>
+        <tag k="usage" v="branch"/>
+        <tag k="source:datetime" v="2015-07-17T14:03:34.000Z"/>
+        <tag k="old_railway_operator" v="PRR"/>
+        <tag k="operator" v="NS"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="electrified" v="no"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="layer" v="1"/>
+    </way>
+    <way visible="true" id="496849577" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881729668"/>
+        <nd ref="4881734357"/>
+        <nd ref="4881729665"/>
+        <nd ref="4881734369"/>
+        <tag k="name" v="Indian River Secondary"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="B11:B21"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="railway" v="rail"/>
+        <tag k="usage" v="branch"/>
+        <tag k="source:datetime" v="2015-07-17T14:03:34.000Z"/>
+        <tag k="old_railway_operator" v="PRR"/>
+        <tag k="operator" v="NS"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="electrified" v="no"/>
+        <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
+        <tag k="tiger:county" v="Kent, DE:Sussex, DE"/>
+        <tag k="gauge" v="1435"/>
+    </way>
+    <way visible="true" id="496849585" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881735994"/>
+        <nd ref="4881729682"/>
+        <nd ref="4881735985"/>
+        <nd ref="4881735998"/>
+        <nd ref="4881735999"/>
+        <nd ref="4881735996"/>
+        <tag k="name" v="Causey Avenue"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T20:52:40.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Causey"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496849616" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881727793"/>
+        <nd ref="4881725317"/>
+        <tag k="name" v="South Maple Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T14:53:15.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+    </way>
+    <way visible="true" id="496849617" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881735985"/>
+        <nd ref="4881733148"/>
+        <tag k="name" v="South Maple Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T14:53:15.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+    </way>
+    <way visible="true" id="496849653" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881727158"/>
+        <nd ref="4881727099"/>
+        <nd ref="4881729070"/>
+        <tag k="name" v="Front Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-20T14:54:50.000Z"/>
+        <tag k="tiger:name_base" v="Front"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496849655" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881725477"/>
+        <nd ref="4881727145"/>
+        <nd ref="4881727146"/>
+        <nd ref="4881727159"/>
+        <nd ref="4881727157"/>
+        <nd ref="4881727158"/>
+        <tag k="name" v="North Walnut Street"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2014-12-20T06:02:00.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Walnut"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+    </way>
+    <way visible="true" id="496849682" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881727825"/>
+        <nd ref="4881727823"/>
+        <tag k="name" v="Sussex Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T14:55:31.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Sussex"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496849685" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881732116"/>
+        <nd ref="4881727394"/>
+        <nd ref="4881733499"/>
+        <tag k="name" v="Sussex Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T14:55:32.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Sussex"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496849690" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881726688"/>
+        <nd ref="4881726689"/>
+        <nd ref="4881726686"/>
+        <tag k="name" v="Pri Drive"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Dr"/>
+        <tag k="source:datetime" v="2013-04-20T14:54:24.000Z"/>
+        <tag k="tiger:name_base" v="Pri"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496849767" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881730483"/>
+        <nd ref="4881730482"/>
+        <nd ref="4881730533"/>
+        <nd ref="4881732097"/>
+        <nd ref="4881730547"/>
+        <nd ref="4881730543"/>
+        <nd ref="4881730541"/>
+        <tag k="name" v="Kings Highway"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Hwy"/>
+        <tag k="source:datetime" v="2013-04-20T14:48:37.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Kings"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496849786" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881733488"/>
+        <nd ref="4881733499"/>
+        <nd ref="4881730541"/>
+        <tag k="name" v="Lakeview Avenue"/>
+        <tag k="tiger:zip_left_1" v="19963"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Lakeview"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496849840" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881732116"/>
+        <nd ref="4881732091"/>
+        <nd ref="4881732089"/>
+        <nd ref="4881732101"/>
+        <nd ref="4881732097"/>
+        <nd ref="4881732074"/>
+        <nd ref="4881732088"/>
+        <tag k="name" v="Foster Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-20T14:46:30.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Foster"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496849849" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881725242"/>
+        <nd ref="4881725255"/>
+        <tag k="name" v="Grier Lane"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ln"/>
+        <tag k="source:datetime" v="2013-04-20T14:46:16.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Grier"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496849852" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881737315"/>
+        <nd ref="4881737314"/>
+        <nd ref="4881737312"/>
+        <nd ref="4881737326"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2007-12-19T16:06:37.000Z"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496849856" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881729621"/>
+        <nd ref="4881729086"/>
+        <tag k="name" v="South Church Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-21T11:00:17.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="layer" v="1"/>
+    </way>
+    <way visible="true" id="496849877" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881733148"/>
+        <nd ref="4881733165"/>
+        <tag k="name" v="South Maple Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-21T11:00:19.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="layer" v="1"/>
+    </way>
+    <way visible="true" id="496849917" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881729070"/>
+        <nd ref="4881729742"/>
+        <tag k="name" v="Front Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-21T11:00:17.000Z"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tiger:name_base" v="Front"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="layer" v="1"/>
+    </way>
+    <way visible="true" id="496850009" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881733165"/>
+        <nd ref="4881733094"/>
+        <tag k="name" v="Maple Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T14:33:51.000Z"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:county" v="Kent, DE"/>
+        <tag k="layer" v="1"/>
+    </way>
+    <way visible="true" id="496850206" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881732960"/>
+        <nd ref="4881727342"/>
+        <nd ref="4881725480"/>
+        <tag k="name" v="Barker Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-20T15:00:54.000Z"/>
+        <tag k="tiger:name_base" v="Barker"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496850207" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881736041"/>
+        <nd ref="4881727394"/>
+        <nd ref="4881736054"/>
+        <nd ref="4881736055"/>
+        <nd ref="4881730547"/>
+        <nd ref="4881736053"/>
+        <nd ref="4881733423"/>
+        <tag k="name" v="Williams Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-20T15:01:22.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Williams"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496850208" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881725317"/>
+        <nd ref="4881736189"/>
+        <nd ref="4881726688"/>
+        <nd ref="4881735996"/>
+        <nd ref="4881729621"/>
+        <tag k="name" v="South Church Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T15:01:21.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+    </way>
+    <way visible="true" id="496850237" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881731155"/>
+        <nd ref="4881734703"/>
+        <nd ref="4881733083"/>
+        <tag k="name" v="Cherry Alley"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Aly"/>
+        <tag k="source:datetime" v="2015-07-08T21:29:23.000Z"/>
+        <tag k="tiger:name_base" v="Cherry"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496850238" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881734728"/>
+        <nd ref="4881727823"/>
+        <nd ref="4881734719"/>
+        <nd ref="4881733083"/>
+        <nd ref="4881730533"/>
+        <nd ref="4881733436"/>
+        <tag k="name" v="Polk Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2015-07-08T21:29:23.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Polk"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496850273" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881735996"/>
+        <nd ref="4881725477"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="tiger:name_base_1" v="Causey"/>
+        <tag k="tiger:name_base_2" v="Shawnee"/>
+        <tag k="source:datetime" v="2014-12-20T08:06:40.000Z"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="name_1" v="Shawnee Rd"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Causey Avenue"/>
+        <tag k="tiger:name_type_1" v="Ave"/>
+        <tag k="tiger:name_type_2" v="Rd"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:zip_left_1" v="19963"/>
+        <tag k="tiger:zip_right_1" v="19963"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_right_2" v="19963"/>
+        <tag k="tiger:zip_left_2" v="19963"/>
+    </way>
+    <way visible="true" id="496850274" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881725317"/>
+        <nd ref="4881731173"/>
+        <nd ref="4881731174"/>
+        <nd ref="4881731171"/>
+        <nd ref="4881731172"/>
+        <nd ref="4881731185"/>
+        <nd ref="4881735985"/>
+        <tag k="tiger:name_type_1" v="Rd"/>
+        <tag k="name" v="Shawnee Road"/>
+        <tag k="tiger:name_type_2" v="Ave"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:name_direction_prefix_2" v="S"/>
+        <tag k="tiger:name_base_1" v="Shawnee"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_base_2" v="Maple"/>
+        <tag k="source:datetime" v="2014-10-01T07:34:03.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="name_1" v="S Maple Ave"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496850292" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881729086"/>
+        <nd ref="4881729789"/>
+        <tag k="name" v="North Church Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T14:30:10.000Z"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:county" v="Kent, DE"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="layer" v="1"/>
+    </way>
+    <way visible="true" id="496850334" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881730541"/>
+        <nd ref="4881735994"/>
+        <tag k="tiger:name_type_1" v="Ave"/>
+        <tag k="name" v="Lakeview Avenue"/>
+        <tag k="tiger:name_type_2" v="Rd"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base_1" v="Lakeview"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_base_2" v="Shawnee"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:30.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="name_1" v="Shawnee Rd"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <way visible="true" id="496850356" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881726968"/>
+        <nd ref="4881733435"/>
+        <nd ref="4881731157"/>
+        <nd ref="4881733436"/>
+        <nd ref="4881732088"/>
+        <nd ref="4881733423"/>
+        <nd ref="4881735994"/>
+        <tag k="name" v="Jefferson Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T14:58:25.000Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_base" v="Jefferson"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+    </way>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-8" role=""/>
+        <member type="way" ref="-9" role=""/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2014-10-01T04:16:43.000Z"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="type" v="multilinestring"/>
+    </relation>
+    <relation visible="true" id="7387460" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <member type="way" ref="-11" role=""/>
+        <member type="way" ref="496849574" role=""/>
+        <member type="way" ref="496849577" role=""/>
+        <member type="way" ref="496849576" role=""/>
+        <member type="way" ref="-10" role=""/>
+        <tag k="name" v="Indian River Secondary"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2014-10-01T04:16:44.000Z"/>
+        <tag k="operator" v="NS"/>
+        <tag k="route" v="railway"/>
+        <tag k="type" v="route"/>
+    </relation>
+    <relation visible="true" id="7387461" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <member type="way" ref="-3" role="outer"/>
+        <member type="way" ref="-17" role="outer"/>
+        <tag k="name" v="Kent County"/>
+        <tag k="feature_area" v="4.97903906E8"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="admin_level" v="6"/>
+        <tag k="nist:fips_code" v="10001"/>
+        <tag k="border_type" v="county"/>
+        <tag k="length" v="166229.5"/>
+        <tag k="nist:state_fips" v="10"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="source:datetime" v="2014-05-04T21:01:03.000Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="wikipedia" v="en:Kent County, Delaware"/>
+        <tag k="type" v="boundary"/>
+    </relation>
+    <relation visible="true" id="7387462" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <member type="way" ref="-17" role="outer"/>
+        <member type="way" ref="-3" role="outer"/>
+        <tag k="name" v="Sussex County"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="admin_level" v="6"/>
+        <tag k="nist:fips_code" v="10005"/>
+        <tag k="border_type" v="county"/>
+        <tag k="nist:state_fips" v="10"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="source:datetime" v="2014-10-27T00:23:55.000Z"/>
+        <tag k="wikipedia" v="en:Sussex County, Delaware"/>
+        <tag k="type" v="boundary"/>
+    </relation>
+    <relation visible="true" id="7387465" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <member type="way" ref="-4" role=""/>
+        <member type="way" ref="496849655" role=""/>
+        <member type="way" ref="496850273" role=""/>
+        <member type="way" ref="496849585" role=""/>
+        <member type="way" ref="496850334" role=""/>
+        <member type="way" ref="496849786" role=""/>
+        <member type="way" ref="-31" role=""/>
+        <tag k="FIXME" v="verify east end"/>
+        <tag k="ref" v="36"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-01-20T08:41:26.000Z"/>
+        <tag k="network" v="US:DE"/>
+        <tag k="symbol" v="http://commons.wikimedia.org/wiki/File:Elongated_circle_36.svg"/>
+        <tag k="route" v="road"/>
+        <tag k="wikipedia" v="en:Delaware Route 36"/>
+        <tag k="type" v="route"/>
+    </relation>
+    <relation visible="true" id="7387469" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <member type="way" ref="-5" role="outer"/>
+        <tag k="name" v="Silver Lake"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2014-10-01T03:34:58.000Z"/>
+        <tag k="natural" v="water"/>
+        <tag k="type" v="multipolygon"/>
+    </relation>
+</osm>

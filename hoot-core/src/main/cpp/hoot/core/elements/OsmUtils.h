@@ -34,6 +34,7 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/GeometricRelationship.h>
 
 // GEOS
 #include <geos/geom/Geometry.h>
@@ -646,28 +647,19 @@ public:
   static double getArea(const ConstElementPtr& element, ConstOsmMapPtr map);
 
   /**
-   * Determines if an element contains another element geographically
-   *
-   * @param containingElement the element to check for containing containedElement
-   * @param containedElement the element to check if contained by containingElement
-   * @param map map owning the input elements
-   * @return true if containingElement contains the containedElement geographicaly; false otherwise
-   * or if the containment could not be calculated
-   */
-  static bool elementContains(const ConstElementPtr& containingElement,
-                              const ConstElementPtr& containedElement, ConstOsmMapPtr map);
-
-  /**
-   * Determines if an element intersects another element; backed by a cache
+   * Determines two elements have a geometric relationship
    *
    * @param element1 the first element to examine
    * @param element2 the second element to examine
+   * @param relationship the geometric relationship to check for between the two elements
    * @param map map owning the input elements
-   * @return true if the two elements intersect; false otherwise or if the intersection could not
-   * be calculated
+   * @return true if the two elements have the specified geometric relationship; false otherwise or
+   * if the relationship could not be calculated
+   * @todo should eventually back this with a cache, as is done in PoiPolygonInfoCache
    */
-  static bool elementsIntersect(const ConstElementPtr& element1, const ConstElementPtr& element2,
-                                ConstOsmMapPtr map);
+  static bool haveGeometricRelationship(
+    const ConstElementPtr& element1, const ConstElementPtr& element2,
+    const GeometricRelationship& relationship, ConstOsmMapPtr map);
 
   /**
    * Determines if an element has a given criterion; backed by a cache

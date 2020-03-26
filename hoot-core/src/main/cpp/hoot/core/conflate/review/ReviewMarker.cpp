@@ -192,7 +192,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
 }
 
 void ReviewMarker::mark(
-  const OsmMapPtr &map, const std::vector<ElementId>& ids, const QString& note,
+  const OsmMapPtr& map, const std::vector<ElementId>& ids, const QString& note,
   const QString& reviewType, double score, vector<QString> choices)
 {
   if (note.isEmpty())
