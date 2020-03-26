@@ -5,15 +5,15 @@ set -e
 # there are no more create/delete statements generated than what there should be.
 
 TEST_NAME=ServiceConflateDiffTest
-#IN_DIR=/home/vagrant/hoot/tmp/3851
-IN_DIR=/home/vagrant/hoot/tmp/3895
+IN_DIR=/home/vagrant/hoot/tmp/3851
+#IN_DIR=/home/vagrant/hoot/tmp/3895
 OUT_DIR=$IN_DIR
-CROP_BOUNDS="-94.5395,39.1037,-94.5379,39.1046"
+#CROP_BOUNDS="-94.5395,39.1037,-94.5379,39.1046"
 
 CONFIG="--info -C ReferenceConflation.conf -C UnifyingAlgorithm.conf -C Testing.conf -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D debug.maps.write=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 #-D reader.keep.status.tag=true -D reader.use.file.status=true -D reader.add.source.datetime=false
 #CONFIG+="-D log.class.filter=RemoveEmptyAreasVisitor"
-CONFIG+=" -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator"
+#CONFIG+=" -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator"
 
 rm -f $OUT_DIR/ref.osm
 rm -f $OUT_DIR/sec.osm
@@ -30,10 +30,10 @@ export PGPASSWORD=$DB_PASSWORD_OSMAPI
 REF_DB_INPUT=$OSM_API_DB_URL
 scripts/database/CleanAndInitializeOsmApiDb.sh
 
-#REF_FILE=$IN_DIR/NOME_40429e.osm
-#REF_FILE_CROPPED=$IN_DIR/NOME_40429e-cropped.osm
-REF_FILE=$IN_DIR/NOME.osm
-REF_FILE_CROPPED=$IN_DIR/NOME-cropped.osm
+REF_FILE=$IN_DIR/NOME_40429e.osm
+REF_FILE_CROPPED=$IN_DIR/NOME_40429e-cropped.osm
+#REF_FILE=$IN_DIR/NOME.osm
+#REF_FILE_CROPPED=$IN_DIR/NOME-cropped.osm
 
 if [[ "$CROP_BOUNDS" == "" ]]; then
   echo "Skipping cropping the ref..."
@@ -48,10 +48,10 @@ hoot convert $CONFIG -D debug.maps.filename=$IN_DIR/debug-ref-load.osm $REF_FILE
 # pull the ref out for viewing
 hoot convert $CONFIG $OSM_API_DB_URL $OUT_DIR/ref.osm
 
-#SEC_FILE=$IN_DIR/OSM_40429e.osm 
-#SEC_FILE_CROPPED=$IN_DIR/OSM_40429e-cropped.osm 
-SEC_FILE=$IN_DIR/OSM.osm 
-SEC_FILE_CROPPED=$IN_DIR/OSM-cropped.osm 
+SEC_FILE=$IN_DIR/OSM_40429e.osm 
+SEC_FILE_CROPPED=$IN_DIR/OSM_40429e-cropped.osm 
+#SEC_FILE=$IN_DIR/OSM.osm 
+#SEC_FILE_CROPPED=$IN_DIR/OSM-cropped.osm 
 
 if [[ "$CROP_BOUNDS" == "" ]]; then
   echo "Skipping cropping the sec..."

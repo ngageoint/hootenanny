@@ -107,8 +107,8 @@ void SmallHighwayMerger::apply(std::shared_ptr<OsmMap>& map)
     if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(_numProcessed) <<
-        " ways for possible merging.");
+        "\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " highways for possible merging.");
     }
   }
 }

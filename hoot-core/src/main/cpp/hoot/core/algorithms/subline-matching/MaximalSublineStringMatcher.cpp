@@ -157,12 +157,12 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
 
   if ((ways1.size() > 4 && ways2.size() > 4) || (ways1.size() + ways2.size() > 7))
   {
-    throw NeedsReviewException("Elements contain too many ways and the computational complexity "
-                               "is unreasonable.");
+    throw NeedsReviewException(
+      "Elements contain too many ways and the computational complexity is unreasonable.");
   }
 
   // Try with all combinations of forward and reversed ways. This is very expensive for
-  // multilinestrings with lots of ways in them. Though those shouldn't be common.
+  // multilinestrings with lots of ways in them. However, those shouldn't be common.
   vector<bool> reversed1(ways1.size(), false), reversed2(ways2.size(), false);
   LOG_TRACE("Finding best match...");
   ScoredMatch scoredResult =
@@ -180,8 +180,9 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   }
   catch (const OverlappingMatchesException& /*e*/)
   {
-    throw NeedsReviewException("Internal Error: Multiple overlapping way matches were found within "
-      "one set of ways.  Please report this to https://github.com/ngageoint/hootenanny.");
+    throw NeedsReviewException(
+      "Internal Error: Multiple overlapping way matches were found within one set of ways.  "
+      "Please report this to https://github.com/ngageoint/hootenanny.");
   }
 }
 
