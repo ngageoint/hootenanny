@@ -43,7 +43,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RoadCrossingPolyReviewMarker)
 
-RoadCrossingPolyReviewMarker::RoadCrossingPolyReviewMarker()
+RoadCrossingPolyReviewMarker::RoadCrossingPolyReviewMarker() :
+_numRoads(0),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -56,6 +58,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
 {
   _numAffected = 0;
   _numProcessed = 0;
+  _numRoads = 0;
   _map = map;
   _markedRoads.clear();
   _crossingRules = RoadCrossingPolyRule::readRules(_crossingRulesFile, _map);
@@ -132,7 +135,16 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
           }
         }
       }
-      _numProcessed++;
+      _numRoads++;
+    }
+
+    _numProcessed++;
+    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "\Marked " << StringUtils::formatLargeNumber(_numAffected) << " crossing roads for " <<
+        "review out of " << StringUtils::formatLargeNumber(_numRoads) << " total roads and " <<
+        StringUtils::formatLargeNumber(_numProcessed)  << " total ways.");
     }
   }
 }
