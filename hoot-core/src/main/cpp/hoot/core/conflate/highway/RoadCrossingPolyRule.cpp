@@ -296,7 +296,7 @@ ElementCriterionPtr RoadCrossingPolyRule::tagRuleStringToFilter(const QString& k
 
 void RoadCrossingPolyRule::createIndex()
 {
-  LOG_STATUS("Creating roads crossing polys index...");
+  LOG_STATUS("Creating roads crossing polys index for rule: " << _name << "...");
 
   // create an index for all roads and all polys that satisfy our crit within the default
   // search radius
@@ -306,7 +306,7 @@ void RoadCrossingPolyRule::createIndex()
   std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
   _index.reset(new Tgs::HilbertRTree(mps, 2));
 
-  // Only index elements satisfy isMatchCandidate(e)
+  // Only index elements satisfy isMatchCandidate
   std::function<bool (ConstElementPtr e)> f =
     std::bind(&RoadCrossingPolyRule::_isMatchCandidate, this, std::placeholders::_1);
   std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
@@ -318,7 +318,7 @@ void RoadCrossingPolyRule::createIndex()
   v.finalizeIndex();
 
   LOG_STATUS(
-    "Roads crossing polys feature index created with " <<
+    "Roads crossing polys feature index for rule: " << _name << " created with " <<
     StringUtils::formatLargeNumber(v.getSize()) << " elements.");
 }
 

@@ -108,18 +108,18 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
               LOG_VART(way);
               LOG_VART(rule.getPolyFilterString());
               LOG_VART(rule.getAllowedRoadTagFilterString());
-              LOG_VART(
-                OsmUtils::haveGeometricRelationship(
-                  way, neighbor, GeometricRelationship::Overlaps, _map));
-              LOG_VART(
-                OsmUtils::haveGeometricRelationship(
-                  way, neighbor, GeometricRelationship::Crosses, _map));
-              LOG_VART(
-                OsmUtils::haveGeometricRelationship(
-                  way, neighbor, GeometricRelationship::Overlaps, _map));
-              LOG_VART(
-                OsmUtils::haveGeometricRelationship(
-                  way, neighbor, GeometricRelationship::Touches, _map));
+//              LOG_VART(
+//                OsmUtils::haveGeometricRelationship(
+//                  way, neighbor, GeometricRelationship::Overlaps, _map));
+//              LOG_VART(
+//                OsmUtils::haveGeometricRelationship(
+//                  way, neighbor, GeometricRelationship::Crosses, _map));
+//              LOG_VART(
+//                OsmUtils::haveGeometricRelationship(
+//                  way, neighbor, GeometricRelationship::Overlaps, _map));
+//              LOG_VART(
+//                OsmUtils::haveGeometricRelationship(
+//                  way, neighbor, GeometricRelationship::Touches, _map));
 
               reviewMarker.mark(
                 _map, way,
