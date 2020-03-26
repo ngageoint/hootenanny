@@ -102,7 +102,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
             // if the road intersects the poly, flag it for review
             if (neighbor && rule.getPolyFilter()->isSatisfied(neighbor) &&
                 OsmUtils::haveGeometricRelationship(
-                  way, neighbor, /*GeometricRelationship::Intersects*/GeometricRelationship::Crosses, _map))
+                  way, neighbor, GeometricRelationship::Crosses, _map))
             {
               LOG_TRACE("Marking " << way->getElementId() << " for review...");
               LOG_VART(way);

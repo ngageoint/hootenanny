@@ -1342,7 +1342,9 @@ Threshold in degrees between the heading of two way segments that constitutes a 
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/RoadCrossingPolyRules.json`
 
-TODO
+Rules for which types of polygon features to check for roads crossing over them to flag as reviews
+by RoadCrossingPolyReviewMarker. See the "Crossing Roads" section in the "Feature Validation"
+documentation for detail on the rule file format.
 
 === highway.match.threshold
 

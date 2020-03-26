@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Enumeration mirroring the types of geometric comparisons availabe from geos::geom::Geometry
  */
 class GeometricRelationship
 {

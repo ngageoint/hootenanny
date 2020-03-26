@@ -42,7 +42,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Marks roads for review in instances where the cross over polygons and is governed by a set of
+ * rules (see RoadCrossingPolyRule).
  */
 class RoadCrossingPolyReviewMarker : public ConstOsmMapOperation, public Configurable
 {

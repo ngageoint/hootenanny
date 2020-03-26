@@ -102,6 +102,9 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
       throw IllegalArgumentException("A road crossing rule must have a name.");
     }
 
+    // each rule must have at least one criteria or tag filter and may have both; they define the
+    // polygons we search for around roads
+
     boost::optional<std::string> polyCriteriaFilterProp =
       ruleProp.second.get_optional<std::string>("polyCriteriaFilter");
     QString polyCriteriaFilterStr;
@@ -127,6 +130,9 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
         "or a polygon tag filter (polyTagFilter).");
     }
 
+    // allowed road tag filters are optional, and they define which roads we skip indexing per rule
+    // (exempt from being flagged for review)
+
     boost::optional<std::string> allowedRoadTagFilterProp =
       ruleProp.second.get_optional<std::string>("allowedRoadTagFilter");
     QString allowedRoadTagFilterStr;
@@ -138,14 +144,16 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
 
     RoadCrossingPolyRule rule(map);
     rule.setName(ruleName);
+    // store the raw poly filter string for review display purposes
     rule.setPolyFilterString(
       "poly criteria filter: " + polyCriteriaFilterStr + "; poly tag filter: " + polyTagFilterStr);
     rule.setPolyFilter(
       RoadCrossingPolyRule::polyRuleFilterStringsToFilter(polyCriteriaFilterStr, polyTagFilterStr));
     LOG_VART(rule.getPolyFilter());
+    // store the raw tag filter string for review display purposes
     rule.setAllowedRoadTagFilterString("allowed road tag filter: " + allowedRoadTagFilterStr);
     rule.setAllowedRoadTagFilter(
-      RoadCrossingPolyRule::kvpRuleStringToTagCrit(allowedRoadTagFilterStr));
+      RoadCrossingPolyRule::tagRuleStringToFilter(allowedRoadTagFilterStr, QStringList("highway")));
     if (rule.getAllowedRoadTagFilter())
     {
       LOG_VART(rule.getAllowedRoadTagFilter());
@@ -171,6 +179,8 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
       "A road crossing rule must specify either a polygon criteria filter (polyCriteriaFilter) "
       "or a polygon tag filter (polyTagFilter).");
   }
+
+  // logically OR each type criteria filter together
 
   std::shared_ptr<OrCriterion> polyCriteriaFilter;
   if (!polyCriteriaFilterStr.isEmpty())
@@ -198,6 +208,8 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
     }
   }
 
+  // logically OR each tag filter together
+
   ElementCriterionPtr polyTagFilter;
   if (!polyTagFilterStr.isEmpty())
   {
@@ -209,12 +221,13 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
     }
     else
     {
-      polyTagFilter = kvpRuleStringToTagCrit(polyTagFilterStr);
+      polyTagFilter = tagRuleStringToFilter(polyTagFilterStr);
     }
   }
 
   if (polyCriteriaFilter && polyTagFilter)
   {
+    // logically AND the type and tag filters together to get the final poly filter
     return std::shared_ptr<ChainCriterion>(new ChainCriterion(polyCriteriaFilter, polyTagFilter));
   }
   else if (polyCriteriaFilter)
@@ -227,13 +240,15 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
   }
 }
 
-ElementCriterionPtr RoadCrossingPolyRule::kvpRuleStringToTagCrit(const QString& kvpStr)
+ElementCriterionPtr RoadCrossingPolyRule::tagRuleStringToFilter(const QString& kvpStr,
+                                                                const QStringList& allowedKeys)
 {
   LOG_VART(kvpStr);
   const QString kvpFormatErrMsg =
     "A road crossing rule tag filter must be of the form <key1>=<value1>;<key2>=<value2>...";
   if (kvpStr.trimmed().isEmpty())
   {
+    // empty crit is the same as no filter
     return ElementCriterionPtr();
   }
   else if (!kvpStr.contains("="))
@@ -254,14 +269,25 @@ ElementCriterionPtr RoadCrossingPolyRule::kvpRuleStringToTagCrit(const QString& 
     {
       throw IllegalArgumentException(kvpFormatErrMsg);
     }
-    if (filterStrParts[1] == "*")
+
+    const QString key = filterStrParts[0].trimmed();
+    const QString val = filterStrParts[1].trimmed();
+
+    if (!key.isEmpty() && !allowedKeys.isEmpty() && !allowedKeys.contains(key))
     {
-      crit->addCriterion(std::shared_ptr<ElementCriterion>(new TagKeyCriterion(filterStrParts[0])));
+      throw IllegalArgumentException(
+        "Specified tag rule: " + key + "=" + val + " must have one of the following keys: " +
+        allowedKeys.join(";"));
+    }
+
+    if (val == "*")
+    {
+      // this allows for wildcard values (not keys)
+      crit->addCriterion(std::shared_ptr<ElementCriterion>(new TagKeyCriterion(key)));
     }
     else
     {
-      crit->addCriterion(
-        std::shared_ptr<ElementCriterion>(new TagCriterion(filterStrParts[0], filterStrParts[1])));
+      crit->addCriterion(std::shared_ptr<ElementCriterion>(new TagCriterion(key, val)));
     }
   }
 
