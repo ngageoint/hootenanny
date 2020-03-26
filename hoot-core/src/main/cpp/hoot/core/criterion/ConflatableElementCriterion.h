@@ -54,17 +54,17 @@ public:
   virtual bool supportsSpecificConflation() const = 0;
 
   /**
-   * Determines which criteria consider an element as conflatable
+   * Determines which criteria consider an element as conflatable.
+   *
+   * Adds only specific conflate criteria, if the element supports it. Otherwise, attempts to add
+   * non-specific (generic) conflate criteria.
    *
    * @param e the element to determine conflatability of
    * @param map the map containing the input element
-   * @param ignoreGenericConflators if true criterion supporting generic conflation are suppressed
-   * from output
    * @return a list of ConflatableElementCriterion class names that consider the element as
    * conflatable
    */
-  static QStringList getConflatableCriteriaForElement(const ConstElementPtr& e, ConstOsmMapPtr map,
-                                                      const bool ignoreGenericConflators = true);
+  static QStringList getConflatableCriteriaForElement(const ConstElementPtr& e, ConstOsmMapPtr map);
 
   /**
    * Returns instantiations of conflatable criteria index by class name

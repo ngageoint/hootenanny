@@ -284,6 +284,12 @@ See the User Guide for more details on command usage.
     hoot sort input.osm output.osm
 -----
 
+===== Tag features with a conflate matcher capable of matching them (useful in debugging):
+
+-----
+    hoot convert -D convert.ops="hoot::ConflatableCriteriaVisitor" input.osm output.osm
+-----
+
 ==== Comparison
 
 ===== Calculate the difference between two maps:

@@ -70,7 +70,7 @@ vector<ConstMatchPtr> GreedyConstrainedMatches::calculateSubset()
   }
 
   // figure out all the pairs of matches that conflict.
-  LOG_INFO("Calculating match conflicts using a greedy algorithm...");
+  LOG_INFO("\tCalculating match conflicts using a greedy algorithm...");
   _calculateMatchConflicts();
 
   // if there are no conflicts, then there is nothing to solve.
