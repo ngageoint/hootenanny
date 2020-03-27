@@ -12,8 +12,11 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("power.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("power.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("power.line.review.threshold"));
-exports.matchCandidateCriterion = "hoot::PowerLineCriterion";
 exports.geometryType = "line";
+
+// This is needed for disabling superfluous conflate ops. In the future, it may also
+// be used to replace exports.isMatchCandidate (see #3047).
+exports.matchCandidateCriterion = "hoot::PowerLineCriterion";
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
@@ -57,11 +60,6 @@ exports.calculateSearchRadius = function(map)
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
- *
- * exports.matchCandidateCriterion takes precedence over this function and must
- * be commented out before using it.
- * 
- * @todo This must be left enabled for now despite exports.matchCandidateCriterion being enabled.  See #3047.
  */
 exports.isMatchCandidate = function(map, e)
 {

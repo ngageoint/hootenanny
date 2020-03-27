@@ -39,6 +39,7 @@
 #include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/visitors/JsFunctionVisitor.h>
+#include <hoot/core/conflate/merging/AdminBoundsRelationMerger.h>
 
 using namespace v8;
 
@@ -96,6 +97,9 @@ void OsmMapJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(
     String::NewFromUtf8(current, "isMemberOfRelationWithTagKey"),
     FunctionTemplate::New(current, isMemberOfRelationWithTagKey));
+  tpl->PrototypeTemplate()->Set(
+    String::NewFromUtf8(current, "mergeAdminBoundsRelations"),
+    FunctionTemplate::New(current, mergeAdminBoundsRelations));
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                 String::NewFromUtf8(current, OsmMap::className().data()));
 
@@ -329,6 +333,22 @@ void OsmMapJs::isMemberOfRelationWithTagKey(const FunctionCallbackInfo<Value>& a
     OsmUtils::isMemberOfRelationWithTagKey(mapJs->getConstMap(), childId, tagKey);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationWithSpecifiedTagKey));
+}
+
+void OsmMapJs::mergeAdminBoundsRelations(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+  ElementId elementId1 = toCpp<ElementId>(args[0]);
+  ElementId elementId2 = toCpp<ElementId>(args[1]);
+
+  AdminBoundsRelationMerger merger;
+  merger.setOsmMap(mapJs->getMap().get());
+  merger.merge(elementId1, elementId2);
+
+  args.GetReturnValue().SetUndefined();
 }
 
 }

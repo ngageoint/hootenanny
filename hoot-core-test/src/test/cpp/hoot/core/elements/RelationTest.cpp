@@ -48,6 +48,8 @@ class RelationTest : public HootTestFixture
   CPPUNIT_TEST(runCircularVisitRw2Test);
   CPPUNIT_TEST(runReplaceTest1);
   CPPUNIT_TEST(runReplaceTest2);
+  CPPUNIT_TEST(runIndexOfTest);
+  CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -200,6 +202,16 @@ public:
     writer.write(map);
     writer.close();
     HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
+  }
+
+  void runIndexOfTest()
+  {
+    // TODO
+  }
+
+  void runInsertTest()
+  {
+    // TODO
   }
 };
 

@@ -122,7 +122,6 @@ void Relation::clear()
 bool Relation::contains(ElementId eid) const
 {
   const vector<RelationData::Entry>& members = getMembers();
-
   for (size_t i = 0; i < members.size(); i++)
   {
     if (members[i].getElementId() == eid)
@@ -131,6 +130,26 @@ bool Relation::contains(ElementId eid) const
     }
   }
   return false;
+}
+
+size_t Relation::indexOf(ElementId eid) const
+{
+  const vector<RelationData::Entry>& members = getMembers();
+  for (size_t i = 0; i < members.size(); i++)
+  {
+    if (members[i].getElementId() == eid)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
+void Relation::insert(const RelationData::Entry& member, size_t pos)
+{
+  vector<RelationData::Entry> members = getMembers();
+  members.insert(members.begin() + pos, member);
+  setMembers(members);
 }
 
 int Relation::numElementsByRole(const QString& role) const

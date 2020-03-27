@@ -45,6 +45,7 @@
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
+#include <hoot/core/criterion/AdministrativeBoundaryCriterion.h>
 #include <hoot/js/elements/TagsJs.h>
 
 using namespace v8;
@@ -110,6 +111,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isHighway)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isNonBuildingArea"),
               FunctionTemplate::New(current, isNonBuildingArea)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isAdministrativeBoundary"),
+              FunctionTemplate::New(current, isAdministrativeBoundary)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "score"),
               FunctionTemplate::New(current, score)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "scoreTypes"),
@@ -360,6 +363,17 @@ void OsmSchemaJs::isNonBuildingArea(const FunctionCallbackInfo<Value>& args)
     Boolean::New(current, NonBuildingAreaCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
+
+void OsmSchemaJs::isAdministrativeBoundary(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(
+    Boolean::New(current, AdministrativeBoundaryCriterion().isSatisfied(e)));
+}
 void OsmSchemaJs::isSpecificallyConflatable(
   const FunctionCallbackInfo<Value>& args)
 {

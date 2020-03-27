@@ -83,6 +83,22 @@ public:
   bool contains(ElementId eid) const;
 
   /**
+   * TODO
+   *
+   * @param eid
+   * @return
+   */
+  size_t indexOf(ElementId eid) const;
+
+  /**
+   * TODO
+   *
+   * @param member
+   * @param pos
+   */
+  void insert(const RelationData::Entry& member, size_t pos);
+
+  /**
    * Returns the number of member elements with the given relation role
    *
    * @param role role by which to examine elements

@@ -167,6 +167,14 @@ is enabled, POI/Polygon conflation will use additional to English language trans
 address normalization.  Disable this only if libpostal's language translation is not adequate for
 your language translation needs.
 
+=== administrative.boundary.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an administrative boundary relation feature
+is considered to have similar tags.
+
 === angle.histogram.extractor.bins
 
 * Data Type: int
@@ -2250,6 +2258,7 @@ into Hootenanny.
 ** `hoot::ScriptMatchCreator,Area.js`
 ** `hoot::ScriptMatchCreator,Railway.js`
 ** `hoot::ScriptMatchCreator,PowerLine.js`
+** `hoot::ScriptMatchCreator,AdminBoundary.js`
 ** `hoot::ScriptMatchCreator,Point.js`
 ** `hoot::ScriptMatchCreator,Line.js`
 ** `hoot::ScriptMatchCreator,Polygon.js`
@@ -2345,6 +2354,7 @@ matching ways.  Larger values may increase runtime performance but decrease conf
 ** `hoot::HighwayMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::PoiPolygonMergerCreator`
+** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`

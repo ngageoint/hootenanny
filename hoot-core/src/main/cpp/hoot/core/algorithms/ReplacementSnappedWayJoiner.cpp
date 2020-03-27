@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot

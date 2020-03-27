@@ -1089,4 +1089,5 @@ bool OsmUtils::isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const Ele
   }
   return false;
 }
+
 }

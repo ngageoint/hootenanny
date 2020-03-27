@@ -60,6 +60,8 @@ public:
       return getElementId() == other.getElementId() && getRole() == other.getRole();
     }
 
+    bool isNull() const { return _eid.isNull(); }
+
     QString toString() const
     {
       return QString("Entry: role: %1, eid: %2").arg(role).arg(_eid.toString());

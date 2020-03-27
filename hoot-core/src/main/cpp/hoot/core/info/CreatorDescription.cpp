@@ -40,6 +40,7 @@
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/AdministrativeBoundaryCriterion.h>
 
 namespace hoot
 {
@@ -92,6 +93,8 @@ QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
       return "Point";
     case Line:
       return "Line";
+    case AdministrativeBoundary:
+      return "Administrative Boundary";
     default:
       return "Unknown";
   }
@@ -122,6 +125,8 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
     return Point;
   else if (0 == s.compare("line"))
     return Line;
+  else if (0 == s.compare("administrativeboundary"))
+    return AdministrativeBoundary;
   else
     return Unknown;
 }
@@ -152,6 +157,8 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseF
       return CalcTypeNone;
     case Line:
       return CalcTypeLength;
+    case AdministrativeBoundary:
+      return CalcTypeArea;
     default:
       return CalcTypeNone;
   }
@@ -174,15 +181,17 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
     case Polygon:
       return ElementCriterionPtr(new PoiPolygonPolyCriterion());
     case Area:
-      return ElementCriterionPtr(new NonBuildingAreaCriterion());
+      return ElementCriterionPtr(new NonBuildingAreaCriterion(map));
     case Railway:
       return ElementCriterionPtr(new RailwayCriterion());
     case PowerLine:
       return ElementCriterionPtr(new PowerLineCriterion());
     case Point:
-      return ElementCriterionPtr(new PointCriterion());
+      return ElementCriterionPtr(new PointCriterion(map));
     case Line:
       return ElementCriterionPtr(new LinearCriterion());
+    case AdministrativeBoundary:
+      return ElementCriterionPtr(new AdministrativeBoundaryCriterion());
     default:
       return ElementCriterionPtr();
   }

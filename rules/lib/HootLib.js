@@ -321,6 +321,14 @@ function removeElement(map, e)
 }
 
 /**
+ * TODO
+ */
+function mergeAdminBoundsRelations(map, elementId1, elementId1)
+{
+  return map.mergeAdminBoundsRelations(elementId1, elementId2);
+}
+
+/**
  * Snaps the ways in the second input to the first input. The replaced array will
  * be updated appropriately to reflect the elements that were replaced.
  */
@@ -376,6 +384,11 @@ function isArea(map, e)
 function isNonBuildingArea(map, e)
 {
   return hoot.OsmSchema.isNonBuildingArea(map, e);
+}
+
+function isAdministrativeBoundary(e)
+{
+  return hoot.OsmSchema.isAdministrativeBoundary(e);
 }
 
 function isHighway(map, e)

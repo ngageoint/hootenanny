@@ -987,7 +987,7 @@ Requires language translation server installation.  See the Hootenanny Install G
 ===== List all extractors used to score feature properties:
 
 -----
-    hoot info --feature-extractors:
+    hoot info --feature-extractors
 -----
 
 ===== List all input formats that support reading by geospatial bounds:

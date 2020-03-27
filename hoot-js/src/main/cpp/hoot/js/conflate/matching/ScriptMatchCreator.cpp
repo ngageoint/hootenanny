@@ -509,60 +509,30 @@ public:
 
     bool result = false;
 
-    // Prioritize exports.matchCandidateCriterion over the isMatchCandidate function
-    // TODO: this is crashing; see #3047
-//    Handle<String> matchCandidateCriterionStrHandle =
-//      String::NewFromUtf8(current, "matchCandidateCriterion");
-//    QString matchCandidateCriterionStr;
-//    if (ToLocal(&plugin)->Has(matchCandidateCriterionStrHandle))
-//    {
-//      Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStrHandle);
-//      matchCandidateCriterionStr = toCpp<QString>(value);
-//    }
-//    matchCandidateCriterionStr = matchCandidateCriterionStr.trimmed();
-//    LOG_VART(matchCandidateCriterionStr);
+    // TODO: Prioritize exports.matchCandidateCriterion over the isMatchCandidate function and use
+    // the crit instead of the function; doing so causes this to crash; see #3047 and the history
+    // of this file for the failing code that needs to be re-enabled
 
-//    if (!matchCandidateCriterionStr.isEmpty())
-//    {
-//      std::shared_ptr<ElementCriterion> matchCandidateCriterion;
-//      if (_matchCandidateCriterionCache.contains(matchCandidateCriterionStr))
-//      {
-//        LOG_TRACE("Getting " << matchCandidateCriterionStr << " from cache...");
-//        matchCandidateCriterion = _matchCandidateCriterionCache[matchCandidateCriterionStr];
-//      }
-//      else
-//      {
-//        LOG_TRACE("Creating " << matchCandidateCriterionStr << "...");
-//        matchCandidateCriterion.reset(
-//          Factory::getInstance().constructObject<ElementCriterion>(matchCandidateCriterionStr));
-//        _matchCandidateCriterionCache[matchCandidateCriterionStr] = matchCandidateCriterion;
-//      }
-//      result = matchCandidateCriterion->isSatisfied(e);
-//      LOG_VART(result);
-//    }
-//    else
-//    {
-      Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
-      if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
-      {
-        throw HootException("Error finding 'isMatchCandidate' function.");
-      }
-      Handle<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
-      if (value->IsFunction() == false)
-      {
-        throw HootException("isMatchCandidate is not a function.");
-      }
-      Handle<Function> func = Handle<Function>::Cast(value);
-      Handle<Value> jsArgs[2];
+    Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
+    if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
+    {
+      throw HootException("Error finding 'isMatchCandidate' function.");
+    }
+    Handle<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
+    if (value->IsFunction() == false)
+    {
+      throw HootException("isMatchCandidate is not a function.");
+    }
+    Handle<Function> func = Handle<Function>::Cast(value);
+    Handle<Value> jsArgs[2];
 
-      int argc = 0;
-      jsArgs[argc++] = getOsmMapJs();
-      jsArgs[argc++] = ElementJs::New(e);
+    int argc = 0;
+    jsArgs[argc++] = getOsmMapJs();
+    jsArgs[argc++] = ElementJs::New(e);
 
-      Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
+    Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
 
-      result = f->BooleanValue();
-    //}
+    result = f->BooleanValue();
 
     _matchCandidateCache[e->getElementId()] = result;
 
