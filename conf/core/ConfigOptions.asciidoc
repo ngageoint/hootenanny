@@ -1173,6 +1173,14 @@ all ElementCriterionConsumers. Since this configuration option is shared across 
 ElementCriterionConsumers, there may be undesirable effects in invocations involving multiple
 ElementCriterionConsumers.
 
+=== element.id.criterion.ids
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
+
 === element.sorter.element.buffer.size
 
 * Data Type: long
@@ -3863,7 +3871,7 @@ E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
 * Data Type: bool
 * Default Value: `true`
 
-Should the element remover remove the elements recursively?
+Should RemoveElementsVisitor remove elements recursively?
 
 === tag.filter.keys
 

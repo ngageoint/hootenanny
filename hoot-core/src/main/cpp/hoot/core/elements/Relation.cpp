@@ -145,25 +145,36 @@ size_t Relation::indexOf(ElementId eid) const
   return -1;
 }
 
-void Relation::insert(const RelationData::Entry& member, size_t pos)
+void Relation::insertElement(const QString& role, const ElementId& elementId, size_t pos)
 {
+  _preGeometryChange();
+  _makeWritable();
+
   vector<RelationData::Entry> members = getMembers();
-  members.insert(members.begin() + pos, member);
+  RelationData::Entry newMember(role, elementId);
+  members.insert(members.begin() + pos, newMember);
   setMembers(members);
+
+  _postGeometryChange();
 }
 
-int Relation::numElementsByRole(const QString& role) const
+int Relation::numElementsByRole(const QString& role)
+{
+  return getElementsByRole(role).size();
+}
+
+const std::vector<RelationData::Entry> Relation::getElementsByRole(const QString& role)
 {
   const vector<RelationData::Entry>& members = getMembers();
-  int roleCtr = 0;
+  std::vector<RelationData::Entry> membersByRole;
   for (size_t i = 0; i < members.size(); i++)
   {
     if (members[i].getRole() == role)
     {
-      roleCtr++;
+      membersByRole.push_back(members[i]);
     }
   }
-  return roleCtr;
+  return membersByRole;
 }
 
 std::set<ElementId> Relation::getWayMemberIds() const

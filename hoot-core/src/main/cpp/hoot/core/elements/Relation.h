@@ -93,10 +93,11 @@ public:
   /**
    * TODO
    *
-   * @param member
+   * @param role
+   * @param elementId
    * @param pos
    */
-  void insert(const RelationData::Entry& member, size_t pos);
+  void insertElement(const QString& role, const ElementId& elementId, size_t pos);
 
   /**
    * Returns the number of member elements with the given relation role
@@ -104,7 +105,15 @@ public:
    * @param role role by which to examine elements
    * @return the number of member elements with the specified role
    */
-  int numElementsByRole(const QString& role) const;
+  int numElementsByRole(const QString& role);
+
+  /**
+   * TODO
+   *
+   * @param role
+   * @return
+   */
+  const std::vector<RelationData::Entry> getElementsByRole(const QString& role);
 
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }

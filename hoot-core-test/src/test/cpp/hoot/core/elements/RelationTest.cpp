@@ -206,12 +206,45 @@ public:
 
   void runIndexOfTest()
   {
-    // TODO
+    OsmMapPtr map(new OsmMap());
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
+    WayPtr w1(new Way(Status::Unknown1, 1, 15));
+    WayPtr w2(new Way(Status::Unknown1, 2, 15));
+    WayPtr w3(new Way(Status::Unknown1, 3, 15));
+    map->addElement(r1);
+    map->addElement(w1);
+    map->addElement(w2);
+    map->addElement(w3);
+
+    r1->addElement("foo", w1->getElementId());
+    r1->addElement("bar", w2->getElementId());
+    r1->addElement("lucky", w3->getElementId());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)0, r1->indexOf(w1->getElementId()));
+    CPPUNIT_ASSERT_EQUAL((size_t)1, r1->indexOf(w2->getElementId()));
+    CPPUNIT_ASSERT_EQUAL((size_t)2, r1->indexOf(w3->getElementId()));
   }
 
   void runInsertTest()
   {
-    // TODO
+    OsmMapPtr map(new OsmMap());
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
+    WayPtr w1(new Way(Status::Unknown1, 1, 15));
+    WayPtr w2(new Way(Status::Unknown1, 2, 15));
+    map->addElement(r1);
+    map->addElement(w1);
+    map->addElement(w2);
+
+    r1->addElement("foo", w1->getElementId());
+    r1->addElement("bar", w2->getElementId());
+
+    WayPtr w3(new Way(Status::Unknown1, 3, 15));
+    map->addElement(w3);
+    r1->insertElement("lucky", w3->getElementId(), 1);
+
+    CPPUNIT_ASSERT_EQUAL((size_t)0, r1->indexOf(w1->getElementId()));
+    CPPUNIT_ASSERT_EQUAL((size_t)1, r1->indexOf(w3->getElementId()));
+    CPPUNIT_ASSERT_EQUAL((size_t)2, r1->indexOf(w2->getElementId()));
   }
 };
 

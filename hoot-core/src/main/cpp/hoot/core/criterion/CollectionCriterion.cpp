@@ -50,6 +50,7 @@ bool CollectionCriterion::isSatisfied(const ConstElementPtr& e) const
     ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
 
     // This list could get HUGE.
+    // TODO: should admin boundaries get added here?
     if (r->getType() == MetadataTags::RelationWaterway() ||
         r->getType() == MetadataTags::RelationNetwork() ||
         r->getType() == MetadataTags::RelationRouteMaster() ||

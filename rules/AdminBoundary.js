@@ -98,11 +98,11 @@ exports.matchScore = function(map, e1, e2)
   }
 
   // other possible tags to look at: border_type, name, place
-  if (tags1.get("admin_level") !=  tags2.get("admin_level")
+  if (tags1.get("admin_level") !=  tags2.get("admin_level"))
   {
     return result;
   }
-  if (tags1.get("type") !=  tags2.get("type")
+  if (tags1.get("type") != tags2.get("type"))
   {
     return result;
   }

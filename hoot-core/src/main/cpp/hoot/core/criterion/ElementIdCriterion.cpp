@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -40,14 +40,38 @@ ElementIdCriterion::ElementIdCriterion()
 {
 }
 
-ElementIdCriterion::ElementIdCriterion(const ElementId& id) :
-_id(id)
+ElementIdCriterion::ElementIdCriterion(const ElementId& id)
 {
+  _ids.insert(id);
+}
+
+ElementIdCriterion::ElementIdCriterion(const std::set<ElementId>& ids) :
+_ids(ids)
+{
+}
+
+ElementIdCriterion::ElementIdCriterion(const ElementType& elementType, const std::set<long>& ids)
+{
+  for (std::set<long>::const_iterator it = ids.begin(); it != ids.end(); ++it)
+  {
+    _ids.insert(ElementId(elementType, *it));
+  }
+}
+
+void ElementIdCriterion::setConfiguration(const Settings& conf)
+{
+  ConfigOptions configOpts(conf);
+  _ids.clear();
+  const QStringList idStrs = configOpts.getElementIdCriterionIds();
+  for (int i = 0; i < idStrs.size(); i++)
+  {
+    _ids.insert(ElementId(idStrs.at(i)));
+  }
 }
 
 bool ElementIdCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return e->getElementId() == _id;
+  return _ids.find(e->getElementId()) != _ids.end();
 }
 
 }

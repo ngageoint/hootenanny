@@ -27,12 +27,11 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/TestUtils.h>
-//#include <hoot/core/io/OsmXmlReader.h>
-//#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
-//#include <hoot/core/util/MapProjector.h>
-//#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/merging/AdminBoundsRelationMerger.h>
 
 // CPP Unit
@@ -52,16 +51,26 @@ class AdminBoundsRelationMergerTest : public HootTestFixture
 
 public:
 
-  AdminBoundsRelationMergerTest()
-    //: HootTestFixture("test-files/conflate/",
-                      //"test-output/conflate/")
+  AdminBoundsRelationMergerTest() :
+  HootTestFixture(
+    "test-files/conflate/merging/AdminBoundsRelationMergerTest/",
+    "test-output/conflate/merging/AdminBoundsRelationMergerTest/")
   {
-    //setResetType(ResetAll);
   }
 
   void runTest()
   {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "runTestInput.osm", true);
 
+    AdminBoundsRelationMerger uut;
+    uut.setOsmMap(map.get());
+    uut.merge(ElementId(ElementType::Relation, 7387470), ElementId(ElementType::Relation, -1));
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runTestOutput.osm");
+
+    HOOT_FILE_EQUALS(_inputPath + "runTestOutput.osm", _outputPath + "runTestOutput.osm");
   }
 };
 
