@@ -62,6 +62,7 @@ private:
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void replaceElement(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getType(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   ConstRelationPtr _constRelation;
   RelationPtr _relation;

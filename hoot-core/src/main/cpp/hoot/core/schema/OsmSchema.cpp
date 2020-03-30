@@ -1875,8 +1875,8 @@ bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
 {
   // TODO: We may need to take category into account here as well.
 
-  LOG_VARD(tags1);
-  LOG_VARD(tags2);
+  LOG_VART(tags1);
+  LOG_VART(tags2);
 
   bool featuresHaveExplicitTypeMismatch = false;
 
@@ -1896,13 +1896,13 @@ bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
           if (typeScore < minTypeScore)
           {
             featuresHaveExplicitTypeMismatch = true;
-            LOG_DEBUG(
+            LOG_TRACE(
               "explicit type mismatch: " << getFirstType(tags1, false) << " and " <<
               getFirstType(tags2, false));
           }
           else
           {
-            LOG_DEBUG(
+            LOG_TRACE(
               "explicit type match: " << getFirstType(tags1, false) << " and " <<
               getFirstType(tags2, false));
           }
@@ -1911,7 +1911,7 @@ bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
     }
   }
 
-  LOG_VARD(featuresHaveExplicitTypeMismatch);
+  LOG_VART(featuresHaveExplicitTypeMismatch);
   return featuresHaveExplicitTypeMismatch;
 }
 

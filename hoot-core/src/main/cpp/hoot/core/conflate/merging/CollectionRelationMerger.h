@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Merges collection relations e.g. routes, administrative boundaries, etc.
  */
 class CollectionRelationMerger : public OsmMapConsumer
 {
@@ -44,10 +44,10 @@ public:
   CollectionRelationMerger();
 
   /**
-   * TODO
+   * Merges two collection relations
    *
-   * @param elementId1
-   * @param elementId2
+   * @param elementId1 ID of the first relation to merger
+   * @param elementId2 ID of the second relation to merger
    */
   void merge(const ElementId& elementId1, const ElementId& elementId2);
 

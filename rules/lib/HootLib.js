@@ -321,7 +321,7 @@ function removeElement(map, e)
 }
 
 /**
- * TODO
+ * Merges two collection relations (e.g. route, admin boundary, etc.)
  */
 function mergeCollectionRelations(map, elementId1, elementId2)
 {
@@ -386,9 +386,9 @@ function isNonBuildingArea(map, e)
   return hoot.OsmSchema.isNonBuildingArea(map, e);
 }
 
-function isAdministrativeBoundary(e)
+function isCollectionRelation(e)
 {
-  return hoot.OsmSchema.isAdministrativeBoundary(e);
+  return hoot.OsmSchema.isCollectionRelation(e);
 }
 
 function isHighway(map, e)

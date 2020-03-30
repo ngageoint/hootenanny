@@ -14,7 +14,7 @@ exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default")
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
-exports.searchRadius = parseFloat(hoot.get("search.radius.administrative.boundary"));
+exports.searchRadius = parseFloat(hoot.get("search.radius.collection.relation"));
 exports.tagThreshold = parseFloat(hoot.get("collection.relation.tag.threshold"));
 exports.experimental = false;
 exports.baseFeatureType = "CollectionRelation";
@@ -41,6 +41,27 @@ var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var sampledAngleHistogramExtractor = new hoot.SampledAngleHistogramExtractor();
 
 var nameExtractor = new hoot.NameExtractor();
+
+var smallerOverlapMin = 999999;
+var smallerOverlapMax = 0;
+var overlapMin = 999999;
+var overlapMax = 0;
+var bufferedOverlapMin = 999999;
+var bufferedOverlapMax = 0;
+var edgeDistMin = 999999;
+var edgeDistMax = 0;
+var weightedShapeDistMin = 999999;
+var weightedShapeDistMax = 0;
+var distMin = 999999;
+var distMax = 0;
+var lengthMin = 999999;
+var lengthMax = 0;
+var weightedMetricDistMin = 999999;
+var weightedMetricDistMax = 0;
+var hausdorffDistMin = 999999;
+var hausdorffDistMax = 0;
+var parallelMin = 999999;
+var parallelMax = 0;
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -97,10 +118,13 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + tags2.get("note"));
   }
 
-  var type1 = tags1.get("type");
-  var type2 = tags2.get("type");
+  var type1 = e1.getType();
+  hoot.trace("type1: " + type1);
+  var type2 = e2.getType();
+  hoot.trace("type2: " + type2);
   if (type1 != type2)
-  {
+  {    
+    hoot.trace("type mismatch");
     return result;
   }
   // other possible tags to look at for admin bounds: border_type, name, place; or just do a 
@@ -109,27 +133,14 @@ exports.matchScore = function(map, e1, e2)
       tags2.get("boundary") == "administrative" && 
       tags1.get("admin_level") != tags2.get("admin_level"))
   {
+    hoot.trace("admin_level mismatch");
     return result;
   }
   if (type1 == "multipolygon" && explicitTypeMismatch(e1, e2, exports.tagThreshold))
   {
+    hoot.trace("multipoly type mismatch");
     return result;
   }
-
-  var smallerOverlap = smallerOverlapExtractor.extract(map, e1, e2);
-  var overlap = overlapExtractor.extract(map, e1, e2);
-  var bufferedOverlap = bufferedOverlapExtractor.extract(map, e1, e2);
-
-  var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
-  var weightedShapDist = weightedShapeDistanceExtractor.extract(map, e1, e2);
-  var dist = distanceScoreExtractor.extract(map, e1, e2);
-  var length = lengthScoreExtractor.extract(map, e1, e2);
-  var weightedMetricDist = weightedMetricDistanceExtractor.extract(map, e1, e2);
-  var hausdorffDist = hausdorffDistanceExtractor.extract(map, e1, e2);
-
-  var parallel = parallelScoreExtractor.extract(map, e1, e2);
-  var angleHist = angleHistogramExtractor.extract(map, e1, e2);
-  var sampledAngleHist = sampledAngleHistogramExtractor.extract(map, e1, e2);
 
   var name = nameExtractor.extract(map, e1, e2);
 
@@ -139,23 +150,140 @@ exports.matchScore = function(map, e1, e2)
     powerDistance = getTagDistance("power", t1, t2);
   }*/
 
-  hoot.trace("smallerOverlap: " + smallerOverlap);
-  hoot.trace("overlap: " + overlap);
-  hoot.trace("bufferedOverlap: " + bufferedOverlap);
-  hoot.trace("edgeDist: " + edgeDist);
-  hoot.trace("weightedShapDist: " + weightedShapDist);
-  hoot.trace("dist: " + dist);
-  hoot.trace("length: " + length);
-  hoot.trace("weightedMetricDist: " + weightedMetricDist);
-  hoot.trace("hausdorffDist: " + hausdorffDist);
-  hoot.trace("parallel: " + parallel);
-  hoot.trace("angleHist: " + angleHist);
-  hoot.trace("sampledAngleHist: " + sampledAngleHist);
   hoot.trace("name: " + name);
 
   if (name == 1.0)
   {
     result = { match: 1.0, miss: 0.0, review: 0.0 };
+
+  var smallerOverlap = smallerOverlapExtractor.extract(map, e1, e2);
+  var overlap = overlapExtractor.extract(map, e1, e2);
+  var bufferedOverlap = bufferedOverlapExtractor.extract(map, e1, e2);
+
+  var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+  var weightedShapeDist = weightedShapeDistanceExtractor.extract(map, e1, e2);
+  var dist = distanceScoreExtractor.extract(map, e1, e2);
+  var length = lengthScoreExtractor.extract(map, e1, e2);
+  var weightedMetricDist = weightedMetricDistanceExtractor.extract(map, e1, e2);
+  var hausdorffDist = hausdorffDistanceExtractor.extract(map, e1, e2);
+
+  var parallel = parallelScoreExtractor.extract(map, e1, e2);
+  //var angleHist = angleHistogramExtractor.extract(map, e1, e2);
+  //var sampledAngleHist = sampledAngleHistogramExtractor.extract(map, e1, e2);
+
+  hoot.debug("smallerOverlap: " + smallerOverlap);
+  hoot.debug("overlap: " + overlap);
+  hoot.debug("bufferedOverlap: " + bufferedOverlap);
+  hoot.debug("edgeDist: " + edgeDist);
+  hoot.debug("weightedShapeDist: " + weightedShapeDist);
+  hoot.debug("dist: " + dist);
+  hoot.debug("length: " + length);
+  hoot.debug("weightedMetricDist: " + weightedMetricDist);
+  hoot.debug("hausdorffDist: " + hausdorffDist);
+  hoot.debug("parallel: " + parallel);
+  //hoot.debug("angleHist: " + angleHist);
+  //hoot.debug("sampledAngleHist: " + sampledAngleHist);
+
+  if (smallerOverlap != null && smallerOverlap < smallerOverlapMin)
+  {
+    smallerOverlapMin = smallerOverlap;
+  }
+  if (smallerOverlap != null && smallerOverlap > smallerOverlapMax)
+  {
+    smallerOverlapMax = smallerOverlap;
+  }
+  hoot.debug("smallerOverlapMin: " + smallerOverlapMin);
+  hoot.debug("smallerOverlapMax: " + smallerOverlapMax);
+  if (overlap != null && overlap < overlapMin)
+  {
+    overlapMin = overlap;
+  }
+  if (overlap != null && overlap > overlapMax)
+  {
+    overlapMax = overlap;
+  }
+  hoot.debug("overlapMin: " + overlapMin);
+  hoot.debug("overlapMax: " + overlapMax);
+  if (bufferedOverlap != null && bufferedOverlap < bufferedOverlapMin)
+  {
+    bufferedOverlapMin = bufferedOverlap;
+  }
+  if (bufferedOverlap != null && bufferedOverlap > bufferedOverlapMax)
+  {
+    bufferedOverlapMax = bufferedOverlap;
+  }
+  hoot.debug("bufferedOverlapMin: " + bufferedOverlapMin);
+  hoot.debug("bufferedOverlapMax: " + bufferedOverlapMax);
+  if (edgeDist != null && edgeDist < edgeDistMin)
+  {
+    edgeDistMin = edgeDist;
+  }
+  if (edgeDist != null && edgeDist > edgeDistMax)
+  {
+    edgeDistMax = edgeDist;
+  }
+  hoot.debug("edgeDistMin: " + edgeDistMin);
+  hoot.debug("edgeDistMax: " + edgeDistMax);
+  if (weightedShapeDist != null && weightedShapeDist < weightedShapeDistMin)
+  {
+    weightedShapeDistMin = weightedShapeDist;
+  }
+  if (weightedShapeDist != null && weightedShapeDist > weightedShapeDistMax)
+  {
+    weightedShapeDistMax = weightedShapeDist;
+  }
+  hoot.debug("weightedShapeDistMin: " + weightedShapeDistMin);
+  hoot.debug("weightedShapeDistMax: " + weightedShapeDistMax);
+  if (dist != null && dist < distMin)
+  {
+    distMin = dist;
+  }
+  if (dist != null && dist > distMax)
+  {
+    distMax = dist;
+  }
+  hoot.debug("distMin: " + distMin);
+  hoot.debug("distMax: " + distMax);
+  if (length != null && length < lengthMin)
+  {
+    lengthMin = length;
+  }
+  if (length != null && length > lengthMax)
+  {
+    lengthMax = length;
+  }
+  hoot.debug("lengthMin: " + lengthMin);
+  hoot.debug("lengthMax: " + lengthMax);
+  if (weightedMetricDist != null && weightedMetricDist < weightedMetricDistMin)
+  {
+    weightedMetricDistMin = weightedMetricDist;
+  }
+  if (weightedMetricDist != null && weightedMetricDist > weightedMetricDistMax)
+  {
+    weightedMetricDistMax = weightedMetricDist;
+  }
+  hoot.debug("weightedMetricDistMin: " + weightedMetricDistMin);
+  hoot.debug("weightedMetricDistMax: " + weightedMetricDistMax);
+  if (hausdorffDist != null && hausdorffDist < hausdorffDistMin)
+  {
+    hausdorffDistMin = hausdorffDist;
+  }
+  if (hausdorffDist != null && hausdorffDist > hausdorffDistMax)
+  {
+    hausdorffDistMax = hausdorffDist;
+  }
+  hoot.debug("hausdorffDistMin: " + hausdorffDistMin);
+  hoot.debug("hausdorffDistMax: " + hausdorffDistMax);
+  if (parallel != null && parallel < parallelMin)
+  {
+    parallelMin = parallel;
+  }
+  if (parallel != null && parallel > parallelMax)
+  {
+    parallelMax = parallel;
+  }
+  hoot.debug("parallelMin: " + parallelMin);
+  hoot.debug("paralleMax: " + parallelMax);
   }
 
   return result;
@@ -168,7 +296,7 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergePair = function(map, e1, e2)
 {
-  mergeCollectionRelations(map, e1, e2);
+  mergeCollectionRelations(map, e1.getElementId(), e2.getElementId());
 
   e1.setStatusString("conflated");
   if (exports.writeMatchedBy == "true")

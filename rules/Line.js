@@ -79,15 +79,15 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  hoot.debug("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+  hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
   if (e1.getTags().get("note"))
   {
-    hoot.debug("e1 note: " + e1.getTags().get("note"));
+    hoot.trace("e1 note: " + e1.getTags().get("note"));
   }
-  hoot.debug("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+  hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
   if (e2.getTags().get("note"))
   {
-    hoot.debug("e2 note: " + e2.getTags().get("note"));
+    hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
 
   // TODO: Should we do anything with names?
@@ -95,7 +95,7 @@ exports.matchScore = function(map, e1, e2)
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
   var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.tagThreshold);
-  hoot.debug("typeScorePassesThreshold: " + typeScorePassesThreshold);
+  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
   {
     return result;
@@ -125,14 +125,14 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("distanceScore: " + distanceScore);
   hoot.trace("weightShapeDistanceScore: " + weightShapeDistanceScore);
   hoot.trace("lengthScore: " + lengthScore);
-  hoot.debug("geometryMatch: " + geometryMatch);
+  hoot.trace("geometryMatch: " + geometryMatch);
 
   var featureMatch = typeScorePassesThreshold && geometryMatch;
   if (featureMatch)
   {
     result = { match: 1.0 };
   }
-  hoot.debug("featureMatch: " + featureMatch);
+  hoot.trace("featureMatch: " + featureMatch);
 
   return result;
 };

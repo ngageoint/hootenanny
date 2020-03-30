@@ -100,7 +100,7 @@ bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 
 bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr poly)
 {
-  LOG_DEBUG("Checking review reduction rules...");
+  LOG_TRACE("Checking review reduction rules...");
   _triggeredRuleDescription = "";
   //QElapsedTimer timer;
   //const int timingThreshold = 1000000;  //nanosec

@@ -83,19 +83,19 @@ public:
   bool contains(ElementId eid) const;
 
   /**
-   * TODO
+   * Finds the index of a member
    *
-   * @param eid
-   * @return
+   * @param eid ID of the relation member
+   * @return a numerical index
    */
   size_t indexOf(ElementId eid) const;
 
   /**
-   * TODO
+   * Inserts a relation member
    *
-   * @param role
-   * @param elementId
-   * @param pos
+   * @param role role of the member
+   * @param elementId ID of the member
+   * @param pos position in the relation to insert the member
    */
   void insertElement(const QString& role, const ElementId& elementId, size_t pos);
 
@@ -108,10 +108,10 @@ public:
   int numElementsByRole(const QString& role);
 
   /**
-   * TODO
+   * Retrieves all members with a particular role
    *
-   * @param role
-   * @return
+   * @param role role to search for
+   * @return a collection of members
    */
   const std::vector<RelationData::Entry> getElementsByRole(const QString& role);
 

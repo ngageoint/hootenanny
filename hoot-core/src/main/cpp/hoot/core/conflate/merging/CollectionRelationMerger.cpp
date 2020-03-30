@@ -43,12 +43,14 @@ void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementI
   if (elementId1.getType() != ElementType::Relation ||
       elementId2.getType() != ElementType::Relation)
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException(
+      "Element types other than relation were passed to CollectionRelationMerger.");
   }
 
   RelationPtr relation1 = _map->getRelation(elementId1.getId());
   RelationPtr relation2 = _map->getRelation(elementId2.getId());
 
+  LOG_TRACE("Merging tags...");
   Tags newTags =
     TagMergerFactory::mergeTags(relation1->getTags(), relation2->getTags(), ElementType::Relation);
   relation1->setTags(newTags);
@@ -56,14 +58,18 @@ void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementI
   // copy relation 2's members into 1
   _mergeMembers(relation1, relation2);
 
+  LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
   ReplaceElementOp(elementId2, elementId1, true).apply(_map);
 
+  LOG_TRACE("Removing " << elementId2 << "...");
   RemoveRelationByEid(elementId2.getId()).apply(_map);
 }
 
 void CollectionRelationMerger::_mergeMembers(
   RelationPtr replacingRelation, RelationPtr relationBeingReplaced)
 {
+  LOG_TRACE("Merging members...");
+
   const std::vector<RelationData::Entry> replacingRelationMembers = replacingRelation->getMembers();
   const std::vector<RelationData::Entry> relationBeingReplacedMembers =
     relationBeingReplaced->getMembers();
@@ -74,6 +80,7 @@ void CollectionRelationMerger::_mergeMembers(
   for (size_t i = 0; i < relationBeingReplacedMembers.size(); i++)
   {
     const RelationData::Entry currentMemberFromReplaced = relationBeingReplacedMembers[i];
+    LOG_VART(currentMemberFromReplaced);
 
     // skip copying members our replacing relation already has
     if (replacingRelationMembersList.contains(currentMemberFromReplaced))
@@ -94,14 +101,19 @@ void CollectionRelationMerger::_mergeMembers(
       afterMemberFromReplaced = relationBeingReplacedMembers[i + 1];
     }
 
+    // use the relation size as the null value for size_t, since it can't be negative like the
+    // not found index coming back from QList will be
     size_t matchingFromReplacingBeforeIndex = relationBeingReplacedMembers.size();
     if (!beforeMemberFromReplaced.isNull())
     {
       // if there was a member directly preceding our current member in the relation being replaced,
       // see if it exists in the replacing relation; if so record that member's index from the
       // replacing relation
-      matchingFromReplacingBeforeIndex =
-        replacingRelationMembersList.indexOf(beforeMemberFromReplaced);
+      const int index = replacingRelationMembersList.indexOf(beforeMemberFromReplaced);
+      if (index != -1)
+      {
+        matchingFromReplacingBeforeIndex = index;
+      }
     }
     size_t matchingFromReplacingAfterIndex = relationBeingReplacedMembers.size();
     if (!afterMemberFromReplaced.isNull())
@@ -109,9 +121,14 @@ void CollectionRelationMerger::_mergeMembers(
       // if there was a member directly following our current member in the relation being replaced,
       // see if it exists in the replacing relation; if so record that member's index from the
       // replacing relation
-      matchingFromReplacingAfterIndex =
-        replacingRelationMembersList.indexOf(afterMemberFromReplaced);
+      const int index = replacingRelationMembersList.indexOf(afterMemberFromReplaced);
+      if (index != -1)
+      {
+        matchingFromReplacingAfterIndex = index;
+      }
     }
+    LOG_VART(matchingFromReplacingBeforeIndex);
+    LOG_VART(matchingFromReplacingAfterIndex);
 
     if (matchingFromReplacingBeforeIndex != relationBeingReplacedMembers.size() &&
         matchingFromReplacingAfterIndex != relationBeingReplacedMembers.size())
@@ -158,6 +175,7 @@ void CollectionRelationMerger::_mergeMembers(
       replacingRelationMembersList.append(currentMemberFromReplaced);
     }
   }
+  LOG_VART(replacingRelationMembersList);
   replacingRelation->setMembers(replacingRelationMembersList.toVector().toStdVector());
 }
 

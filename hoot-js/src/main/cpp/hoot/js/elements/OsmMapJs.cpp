@@ -285,7 +285,7 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
   }
   catch (const HootException& err)
   {
-    LOG_VAR(err.getWhat());
+    LOG_VARE(err.getWhat());
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
   }
 }
@@ -346,9 +346,17 @@ void OsmMapJs::mergeCollectionRelations(const FunctionCallbackInfo<Value>& args)
 
   CollectionRelationMerger merger;
   merger.setOsmMap(mapJs->getMap().get());
-  merger.merge(elementId1, elementId2);
+  try
+  {
+    merger.merge(elementId1, elementId2);
 
-  args.GetReturnValue().SetUndefined();
+    args.GetReturnValue().SetUndefined();
+  }
+  catch (const HootException& err)
+  {
+    LOG_VARE(err.getWhat());
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
+  }
 }
 
 }

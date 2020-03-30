@@ -1179,7 +1179,7 @@ ElementCriterionConsumers.
 * Default Value:
 ** ``
 
-TODO
+A list of element IDs to pass to ElementIdCriterion.
 
 === element.sorter.element.buffer.size
 
@@ -4103,6 +4103,14 @@ The search radius, in meters, to use when conflating buildings. See `search.radi
 Element criterion class which determines which input features are used for search radius
 calculation.  An empty value specifies that all input features are to be used.  Conflation routines
 making use of automatic search radius calculation should set this value appropriately.
+
+=== search.radius.collection.relation
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius, in meters, to use when conflating collection relations. See
+`search.radius.default`.
 
 === search.radius.default
 

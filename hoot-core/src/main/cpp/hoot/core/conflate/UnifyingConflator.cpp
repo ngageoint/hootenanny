@@ -167,7 +167,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   {
     _matchFactory.createMatches(map, _matches, _bounds);
   }
-  LOG_DEBUG("Match count: " << _matches.size());
+  LOG_DEBUG("Match count: " << StringUtils::formatLargeNumber(_matches.size()));
   LOG_VART(_matches);
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
@@ -183,15 +183,17 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // add review tags to all matches that have some review component
   _addReviewTags(map, allMatches);
 
-  LOG_DEBUG("Pre-constraining match count: " << allMatches.size());
+  LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(allMatches.size()));
   _stats.append(SingleStat("Number of Matches Before Whole Groups", _matches.size()));
-  LOG_DEBUG("Number of Matches Before Whole Groups: " << _matches.size());
+  LOG_DEBUG(
+    "Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
   _removeWholeGroups(_matches, matchSets, map);
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
-  LOG_DEBUG("Number of Whole Groups: " << matchSets.size());
-  LOG_DEBUG("Number of Matches After Whole Groups: " << _matches.size());
+  LOG_DEBUG("Number of Whole Groups: " << StringUtils::formatLargeNumber(matchSets.size()));
+  LOG_DEBUG(
+    "Number of Matches After Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
   LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(map, "after-whole-group-removal");
 
@@ -285,7 +287,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
     _mergerFactory->createMergers(map, matchSets[i], _mergers);
 
-    LOG_DEBUG(
+    LOG_TRACE(
       "Converted match set " << StringUtils::formatLargeNumber(i + 1) << " to " <<
       StringUtils::formatLargeNumber(_mergers.size()) << " merger(s).")
   }
