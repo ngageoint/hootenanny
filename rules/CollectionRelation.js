@@ -97,13 +97,21 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + tags2.get("note"));
   }
 
-  if (tags1.get("type") != tags2.get("type"))
+  var type1 = tags1.get("type");
+  var type2 = tags2.get("type");
+  if (type1 != type2)
   {
     return result;
   }
   // other possible tags to look at for admin bounds: border_type, name, place; or just do a 
   // tag distance comp
-  if (tags1.get("admin_level") != tags2.get("admin_level"))
+  if (type1 == "boundary" && tags1.get("boundary") == "administrative" && 
+      tags2.get("boundary") == "administrative" && 
+      tags1.get("admin_level") != tags2.get("admin_level"))
+  {
+    return result;
+  }
+  if (type1 == "multipolygon" && explicitTypeMismatch(e1, e2, exports.tagThreshold))
   {
     return result;
   }

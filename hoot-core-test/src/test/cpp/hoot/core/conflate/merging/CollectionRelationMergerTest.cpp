@@ -51,7 +51,7 @@ class CollectionRelationMergerTest : public HootTestFixture
 
 public:
 
-  AdminBoundsRelationMergerTest() :
+  CollectionRelationMergerTest() :
   HootTestFixture(
     "test-files/conflate/merging/CollectionRelationMergerTest/",
     "test-output/conflate/merging/CollectionRelationMergerTest/")
