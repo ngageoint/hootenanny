@@ -630,6 +630,14 @@ purposes.
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
 
+=== collection.relation.name.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+Name similarity threshold (0.0 to 1.0) at or above which an collection relation feature is
+considered to have a name match.
+
 === collection.relation.tag.threshold
 
 * Data Type: double

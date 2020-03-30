@@ -589,21 +589,28 @@ public:
   {
     _scriptInfo = description;
 
-    switch (_scriptInfo.geometryType)
+    if (_scriptPath.toLower().contains("relation")) // hack
     {
-      case GeometryTypeCriterion::GeometryType::Point:
-        _totalElementsToProcess = getMap()->getNodeCount();
-        break;
-      case GeometryTypeCriterion::GeometryType::Line:
-        _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
-        break;
-      case GeometryTypeCriterion::GeometryType::Polygon:
-        _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
-        break;
-      default:
-        // visit all geometry types if the script didn't identify its geometry
-        _totalElementsToProcess = getMap()->size();
-        break;
+      _totalElementsToProcess = getMap()->getRelationCount();
+    }
+    else
+    {
+      switch (_scriptInfo.geometryType)
+      {
+        case GeometryTypeCriterion::GeometryType::Point:
+          _totalElementsToProcess = getMap()->getNodeCount();
+          break;
+        case GeometryTypeCriterion::GeometryType::Line:
+          _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
+          break;
+        case GeometryTypeCriterion::GeometryType::Polygon:
+          _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
+          break;
+        default:
+          // visit all geometry types if the script didn't identify its geometry
+          _totalElementsToProcess = getMap()->size();
+          break;
+      }
     }
   }
 
@@ -812,24 +819,32 @@ void ScriptMatchCreator::createMatches(
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
   LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.geometryType));
-  switch (_scriptInfo.geometryType)
+  if (scriptFileInfo.fileName().toLower().contains("relation")) // hack
   {
-    case GeometryTypeCriterion::GeometryType::Point:
-      map->visitNodesRo(v);
-      break;
-    case GeometryTypeCriterion::GeometryType::Line:
-      map->visitWaysRo(v);
-      map->visitRelationsRo(v);
-      break;
-    case GeometryTypeCriterion::GeometryType::Polygon:
-      map->visitWaysRo(v);
-      map->visitRelationsRo(v);
-      break;
-    default:
-      // visit all geometry types if the script didn't identify its geometry
-      map->visitRo(v);
-      break;
+    map->visitRelationsRo(v);
   }
+  else
+  {
+    switch (_scriptInfo.geometryType)
+    {
+      case GeometryTypeCriterion::GeometryType::Point:
+        map->visitNodesRo(v);
+        break;
+      case GeometryTypeCriterion::GeometryType::Line:
+        map->visitWaysRo(v);
+        map->visitRelationsRo(v);
+        break;
+      case GeometryTypeCriterion::GeometryType::Polygon:
+        map->visitWaysRo(v);
+        map->visitRelationsRo(v);
+        break;
+      default:
+        // visit all geometry types if the script didn't identify its geometry
+        map->visitRo(v);
+        break;
+    }
+  }
+
   const int matchesSizeAfter = matches.size();
 
   QString matchType = CreatorDescription::baseFeatureTypeToString(_scriptInfo.baseFeatureType);

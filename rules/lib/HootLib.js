@@ -152,6 +152,21 @@ function getTagDistance(commonKvp, t1, t2) {
 }
 
 /**
+ * Determines if both features have a populated name
+ */
+function bothElementsHaveName(e1, e2)
+{
+  var name1 = String(e1.getTags().get("name")).trim();
+  var name2 = String(e2.getTags().get("name")).trim();
+  var bothHaveName = false;
+  if (name1 !== 'undefined' && name1 !== null && name1 !== '' && name2 !== 'undefined' && name2 !== null && name2 !== '')
+  {
+    bothHaveName = true;
+  }
+  return bothHaveName;
+}
+
+/**
  * Determines if an element is a member of relation that has a specified type
  */
 function isMemberOfRelationType(map, childElementId, relationType)

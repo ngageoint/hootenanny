@@ -118,10 +118,10 @@ exports.matchScore = function(map, e1, e2)
     var weightedMetricDistanceExtractor1Val = weightedMetricDistanceExtractor1.extract(m, m1, m2);
     var weightedShapeDistanceExtractor7Val = weightedShapeDistanceExtractor7.extract(m, m1, m2);
 
-    /*hoot.trace("centroidDistanceExtractorVal: " + centroidDistanceExtractorVal);
+    hoot.trace("centroidDistanceExtractorVal: " + centroidDistanceExtractorVal);
     hoot.trace("edgeDistanceExtractor1Val: " + edgeDistanceExtractor1Val);
     hoot.trace("weightedMetricDistanceExtractor1Val: " + weightedMetricDistanceExtractor1Val);
-    hoot.trace("weightedShapeDistanceExtractor7Val: " + weightedShapeDistanceExtractor7Val);*/
+    hoot.trace("weightedShapeDistanceExtractor7Val: " + weightedShapeDistanceExtractor7Val);
 
     if ((centroidDistanceExtractorVal > 0.61 && weightedMetricDistanceExtractor1Val < 1.4) || 
          (edgeDistanceExtractor1Val > 0.997 && weightedShapeDistanceExtractor7Val == 0.0))
