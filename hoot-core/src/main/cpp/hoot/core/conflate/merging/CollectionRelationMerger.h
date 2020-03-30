@@ -24,28 +24,45 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "AdministrativeBoundaryCriterion.h"
+#ifndef COLLECTION_RELATION_MERGER_H
+#define COLLECTION_RELATION_MERGER_H
 
 // hoot
-//#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Factory.h>
-//#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, AdministrativeBoundaryCriterion)
-
-AdministrativeBoundaryCriterion::AdministrativeBoundaryCriterion()
+/**
+ * TODO
+ */
+class CollectionRelationMerger : public OsmMapConsumer
 {
+public:
+
+  CollectionRelationMerger();
+
+  /**
+   * TODO
+   *
+   * @param elementId1
+   * @param elementId2
+   */
+  void merge(const ElementId& elementId1, const ElementId& elementId2);
+
+  /**
+   * @see OsmMapConsumer
+   */
+  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
+
+private:
+
+  OsmMapPtr _map;
+
+  void _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
+};
+
 }
 
-
-bool AdministrativeBoundaryCriterion::isSatisfied(const ConstElementPtr& e) const
-{
-  return
-    e->getElementType() == ElementType::Relation &&
-    e->getTags().get("boundary") == "administrative";
-}
-
-}
+#endif // COLLECTION_RELATION_MERGER_H

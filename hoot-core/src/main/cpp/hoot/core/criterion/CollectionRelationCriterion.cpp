@@ -22,9 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "CollectionCriterion.h"
+#include "CollectionRelationCriterion.h"
 
 // hoot
 #include <hoot/core/schema/MetadataTags.h>
@@ -35,13 +35,13 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, CollectionCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, CollectionRelationCriterion)
 
-CollectionCriterion::CollectionCriterion()
+CollectionRelationCriterion::CollectionRelationCriterion()
 {
 }
 
-bool CollectionCriterion::isSatisfied(const ConstElementPtr& e) const
+bool CollectionRelationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 
@@ -55,7 +55,8 @@ bool CollectionCriterion::isSatisfied(const ConstElementPtr& e) const
         r->getType() == MetadataTags::RelationNetwork() ||
         r->getType() == MetadataTags::RelationRouteMaster() ||
         r->getType() == MetadataTags::RelationSuperRoute() ||
-        r->getType() == MetadataTags::RelationRoute())
+        r->getType() == MetadataTags::RelationRoute() ||
+        r->getType() == MetadataTags::RelationBoundary())
     {
       result = true;
     }

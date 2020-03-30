@@ -40,7 +40,7 @@
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/AdministrativeBoundaryCriterion.h>
+#include <hoot/core/criterion/CollectionRelationCriterion.h>
 
 namespace hoot
 {
@@ -93,8 +93,8 @@ QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
       return "Point";
     case Line:
       return "Line";
-    case AdministrativeBoundary:
-      return "Administrative Boundary";
+    case CollectionRelation:
+      return "Collection Relation";
     default:
       return "Unknown";
   }
@@ -125,8 +125,8 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
     return Point;
   else if (0 == s.compare("line"))
     return Line;
-  else if (0 == s.compare("administrativeboundary"))
-    return AdministrativeBoundary;
+  else if (0 == s.compare("collectionrelation"))
+    return CollectionRelation;
   else
     return Unknown;
 }
@@ -157,7 +157,7 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseF
       return CalcTypeNone;
     case Line:
       return CalcTypeLength;
-    case AdministrativeBoundary:
+    case CollectionRelation:
       return CalcTypeArea;
     default:
       return CalcTypeNone;
@@ -190,8 +190,8 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
       return ElementCriterionPtr(new PointCriterion(map));
     case Line:
       return ElementCriterionPtr(new LinearCriterion());
-    case AdministrativeBoundary:
-      return ElementCriterionPtr(new AdministrativeBoundaryCriterion());
+    case CollectionRelation:
+      return ElementCriterionPtr(new CollectionRelationCriterion());
     default:
       return ElementCriterionPtr();
   }

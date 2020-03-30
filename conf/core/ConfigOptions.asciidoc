@@ -167,14 +167,6 @@ is enabled, POI/Polygon conflation will use additional to English language trans
 address normalization.  Disable this only if libpostal's language translation is not adequate for
 your language translation needs.
 
-=== administrative.boundary.tag.threshold
-
-* Data Type: double
-* Default Value: `0.8`
-
-Tag similarity threshold (0.0 to 1.0) at or above which an administrative boundary relation feature
-is considered to have similar tags.
-
 === angle.histogram.extractor.bins
 
 * Data Type: int
@@ -637,6 +629,14 @@ purposes.
 
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
+
+=== collection.relation.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an collection relation feature is considered
+to have similar tags.
 
 === config.options.file
 
@@ -2266,11 +2266,11 @@ into Hootenanny.
 ** `hoot::ScriptMatchCreator,Area.js`
 ** `hoot::ScriptMatchCreator,Railway.js`
 ** `hoot::ScriptMatchCreator,PowerLine.js`
-** `hoot::ScriptMatchCreator,AdminBoundary.js`
 ** `hoot::ScriptMatchCreator,Point.js`
 ** `hoot::ScriptMatchCreator,Line.js`
 ** `hoot::ScriptMatchCreator,Polygon.js`
 ** `hoot::ScriptMatchCreator,PointPolygon.js`
+** `hoot::ScriptMatchCreator,CollectionRelation.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.

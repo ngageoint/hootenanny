@@ -32,7 +32,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/merging/AdminBoundsRelationMerger.h>
+#include <hoot/core/conflate/merging/CollectionRelationMerger.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -43,9 +43,9 @@
 namespace hoot
 {
 
-class AdminBoundsRelationMergerTest : public HootTestFixture
+class CollectionRelationMergerTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(AdminBoundsRelationMergerTest);
+  CPPUNIT_TEST_SUITE(CollectionRelationMergerTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -63,7 +63,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "runTestInput.osm", true);
 
-    AdminBoundsRelationMerger uut;
+    CollectionRelationMerger uut;
     uut.setOsmMap(map.get());
     uut.merge(ElementId(ElementType::Relation, 7387470), ElementId(ElementType::Relation, -1));
 
@@ -74,6 +74,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AdminBoundsRelationMergerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CollectionRelationMergerTest, "quick");
 
 }

@@ -68,7 +68,7 @@ private:
   static void isMemberOfRelationType(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationInCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationWithTagKey(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void mergeAdminBoundsRelations(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void mergeCollectionRelations(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   OsmMapPtr _map;
   ConstOsmMapPtr _constMap;

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "AdminBoundsRelationMerger.h"
+#include "CollectionRelationMerger.h"
 
 // hoot
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -34,11 +34,11 @@
 namespace hoot
 {
 
-AdminBoundsRelationMerger::AdminBoundsRelationMerger()
+CollectionRelationMerger::CollectionRelationMerger()
 {
 }
 
-void AdminBoundsRelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
+void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
 {
   if (elementId1.getType() != ElementType::Relation ||
       elementId2.getType() != ElementType::Relation)
@@ -61,7 +61,7 @@ void AdminBoundsRelationMerger::merge(const ElementId& elementId1, const Element
   RemoveRelationByEid(elementId2.getId()).apply(_map);
 }
 
-void AdminBoundsRelationMerger::_mergeMembers(
+void CollectionRelationMerger::_mergeMembers(
   RelationPtr replacingRelation, RelationPtr relationBeingReplaced)
 {
   const std::vector<RelationData::Entry> replacingRelationMembers = replacingRelation->getMembers();

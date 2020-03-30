@@ -1,11 +1,11 @@
 /**
- * This script conflates administrative boundary relations.
+ * This script conflates collection relations (e.g route or administrative boundary relations).
  */
 
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.description = "Matches administrative boundaries";
+exports.description = "Matches collection relations";
 
 // This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
 // If that ever changes, then the generic score threshold configuration options used below should 
@@ -15,15 +15,15 @@ exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
 exports.searchRadius = parseFloat(hoot.get("search.radius.administrative.boundary"));
-exports.tagThreshold = parseFloat(hoot.get("administrative.boundary.tag.threshold"));
+exports.tagThreshold = parseFloat(hoot.get("collection.relation.tag.threshold"));
 exports.experimental = false;
-exports.baseFeatureType = "AdministrativeBoundary";
+exports.baseFeatureType = "CollectionRelation";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "polygon";
 
 // This is needed for disabling superfluous conflate ops. In the future, it may also
 // be used to replace exports.isMatchCandidate (see #3047).
-exports.matchCandidateCriterion = "hoot::AdministrativeBoundaryCriterion";
+exports.matchCandidateCriterion = "hoot::CollectionRelationCriterion";
 
 var smallerOverlapExtractor = new hoot.SmallerOverlapExtractor();
 var overlapExtractor = new hoot.OverlapExtractor();
@@ -49,7 +49,7 @@ var nameExtractor = new hoot.NameExtractor();
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isAdministrativeBoundary(e);
+  return isCollectionRelation(e);
 };
 
 /**
@@ -97,12 +97,13 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + tags2.get("note"));
   }
 
-  // other possible tags to look at: border_type, name, place
-  if (tags1.get("admin_level") !=  tags2.get("admin_level"))
+  if (tags1.get("type") != tags2.get("type"))
   {
     return result;
   }
-  if (tags1.get("type") != tags2.get("type"))
+  // other possible tags to look at for admin bounds: border_type, name, place; or just do a 
+  // tag distance comp
+  if (tags1.get("admin_level") != tags2.get("admin_level"))
   {
     return result;
   }
@@ -123,6 +124,12 @@ exports.matchScore = function(map, e1, e2)
   var sampledAngleHist = sampledAngleHistogramExtractor.extract(map, e1, e2);
 
   var name = nameExtractor.extract(map, e1, e2);
+
+  /*var powerDistance = 1.0;
+  if (!ignoreType)
+  {
+    powerDistance = getTagDistance("power", t1, t2);
+  }*/
 
   hoot.trace("smallerOverlap: " + smallerOverlap);
   hoot.trace("overlap: " + overlap);
@@ -153,7 +160,7 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergePair = function(map, e1, e2)
 {
-  mergeAdminBoundsRelations(map, e1, e2);
+  mergeCollectionRelations(map, e1, e2);
 
   e1.setStatusString("conflated");
   if (exports.writeMatchedBy == "true")

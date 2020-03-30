@@ -22,47 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ADMIN_BOUNDS_RELATION_MERGER_H
-#define ADMIN_BOUNDS_RELATION_MERGER_H
+#ifndef COLLECTION_RELATION_CRITERION_H
+#define COLLECTION_RELATION_CRITERION_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmMapConsumer.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
 
 /**
- * TODO
+ * Identifies collection relations
  */
-class AdminBoundsRelationMerger : public OsmMapConsumer
+class CollectionRelationCriterion : public ConflatableElementCriterion
 {
 public:
 
-  AdminBoundsRelationMerger();
+  static std::string className() { return "hoot::CollectionRelationCriterion"; }
 
-  /**
-   * TODO
-   *
-   * @param elementId1
-   * @param elementId2
-   */
-  void merge(const ElementId& elementId1, const ElementId& elementId2);
+  CollectionRelationCriterion();
 
-  /**
-   * @see OsmMapConsumer
-   */
-  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-private:
+  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
 
-  OsmMapPtr _map;
+  virtual bool supportsSpecificConflation() const { return true; }
 
-  void _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new CollectionRelationCriterion()); }
+
+  virtual QString getDescription() const { return "Identifies collection relations"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
 }
 
-#endif // ADMIN_BOUNDS_RELATION_MERGER_H
+#endif // COLLECTION_RELATION_CRITERION_H

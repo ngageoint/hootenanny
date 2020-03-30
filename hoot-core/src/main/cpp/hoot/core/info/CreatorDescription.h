@@ -64,7 +64,7 @@ public:
     PowerLine = 8,
     Point = 9,
     Line = 10,
-    AdministrativeBoundary = 11,
+    CollectionRelation = 11,
     Unknown = 12 // Unknown must always be last
   };
 

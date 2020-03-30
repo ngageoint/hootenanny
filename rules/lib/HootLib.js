@@ -323,9 +323,9 @@ function removeElement(map, e)
 /**
  * TODO
  */
-function mergeAdminBoundsRelations(map, elementId1, elementId2)
+function mergeCollectionRelations(map, elementId1, elementId2)
 {
-  return map.mergeAdminBoundsRelations(elementId1, elementId2);
+  return map.mergeCollectionRelations(elementId1, elementId2);
 }
 
 /**
