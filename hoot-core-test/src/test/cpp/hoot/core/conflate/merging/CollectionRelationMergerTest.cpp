@@ -53,8 +53,8 @@ public:
 
   AdminBoundsRelationMergerTest() :
   HootTestFixture(
-    "test-files/conflate/merging/AdminBoundsRelationMergerTest/",
-    "test-output/conflate/merging/AdminBoundsRelationMergerTest/")
+    "test-files/conflate/merging/CollectionRelationMergerTest/",
+    "test-output/conflate/merging/CollectionRelationMergerTest/")
   {
   }
 
