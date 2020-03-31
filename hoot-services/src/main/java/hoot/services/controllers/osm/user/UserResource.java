@@ -207,7 +207,7 @@ public class UserResource {
             List<Tuple> userInfo;
             OrderSpecifier<?> sorter;
             Collection<String> activePrivileges = new ArrayList<>();
-            
+
             switch (sort) {
                 case "-auth":
                     sorter = users.hootservices_last_authorize.desc();
@@ -373,16 +373,12 @@ public class UserResource {
     @Path("/saveFavoriteOpts")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveFavoriteOpts(@Context HttpServletRequest request, String favoriteOpts) {
-    	
         Users user = Users.fromRequest(request);
         Long userId = user.getId();
 
         try {
-
             JSONParser parser = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(favoriteOpts);
-
-            String getName = (String) json.get("name");
 
             Object favoritesColumn = createQuery()
                     .select(users.favoriteOpts)
@@ -392,10 +388,10 @@ public class UserResource {
 
             Map<String, String> tags = PostgresUtils.postgresObjToHStore(favoritesColumn);
 
+            String getName = (String) json.get("name");
             String getFavorites = json.get("members").toString();
-
 	        tags.put(getName, getFavorites);
-	        
+
             createQuery().update(users)
                 .where(users.id.eq(userId))
                 .set(users.favoriteOpts, tags)
@@ -404,9 +400,10 @@ public class UserResource {
         } catch (Exception e) {
             Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
-       userManager.clearCachedUser(userId);
 
-       return Response.ok().build();
+        userManager.clearCachedUser(userId);
+
+        return Response.ok().build();
    }
 
     /**
@@ -462,26 +459,24 @@ public class UserResource {
             String getName = (String) json.get("name");
 
             Object favoritesColumn = createQuery()
-                    .select(users.favoriteOpts)
-                    .from(users)
-                    .where(users.id.eq(userId))
-                    .fetchOne();
+                .select(users.favoriteOpts)
+                .from(users)
+                .where(users.id.eq(userId))
+                .fetchOne();
 
             Map<String, String> tags = PostgresUtils.postgresObjToHStore(favoritesColumn);
 
             tags.remove(getName);
 
-            if ( !tags.containsKey(getName) ) {
-                createQuery().update(users)
-                    .where(users.id.eq(userId))
-                    .set(users.favoriteOpts, tags)
-                    .execute();
-            }
+            createQuery().update(users)
+                .where(users.id.eq(userId))
+                .set(users.favoriteOpts, tags)
+                .execute();
 
         } catch (Exception e) {
             Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
-       return Response.ok().build();
+        return Response.ok().build();
     }
 
     /**
@@ -498,12 +493,6 @@ public class UserResource {
         if (user == null) return false;
         Map<String, String> privileges = PostgresUtils.postgresObjToHStore(user.getPrivileges());
         return ("true").equals(privileges.get(priv));
-    }
-
-    public static boolean userFavoriteOptsCheck( Users user, String opts) {
-        if ( user == null) return false;
-        Map <String, String> favoriteOpts = PostgresUtils.postgresObjToHStore(user.getFavoriteOpts());
-        return ("true").equals(favoriteOpts.get(opts));
     }
 
     private static Document writeResponse(User user) throws ParserConfigurationException {

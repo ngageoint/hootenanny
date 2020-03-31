@@ -29,7 +29,6 @@ package hoot.services.models.db;
 import java.sql.Timestamp;
 import java.util.Date;
 
-
 import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 
