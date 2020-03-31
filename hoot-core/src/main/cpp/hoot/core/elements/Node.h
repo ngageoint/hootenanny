@@ -104,7 +104,7 @@ public:
   std::shared_ptr<Node> cloneSp() const;
 
   virtual geos::geom::Envelope* getEnvelope(
-      const std::shared_ptr<const ElementProvider>& ep) const override;
+    const std::shared_ptr<const ElementProvider>& ep) const override;
 
   virtual const geos::geom::Envelope& getEnvelopeInternal(
     const std::shared_ptr<const ElementProvider>& ep) const override;

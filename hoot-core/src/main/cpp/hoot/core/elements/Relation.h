@@ -119,11 +119,12 @@ public:
   { return _relationData->getElements(); }
 
   /**
-   * Returns the IDs of all way members
+   * Returns the IDs of members
    *
+   * @param elementType optional element type of element Ids to return
    * @return a collection of element IDs
    */
-  std::set<ElementId> getWayMemberIds() const;
+  std::set<ElementId> getMemberIds(const ElementType& elementType = ElementType::Unknown) const;
 
   virtual geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;

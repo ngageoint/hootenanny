@@ -177,19 +177,19 @@ const std::vector<RelationData::Entry> Relation::getElementsByRole(const QString
   return membersByRole;
 }
 
-std::set<ElementId> Relation::getWayMemberIds() const
+std::set<ElementId> Relation::getMemberIds(const ElementType& elementType) const
 {
-  std::set<ElementId> wayMemberIds;
+  std::set<ElementId> memberIds;
   const vector<RelationData::Entry>& members = getMembers();
   for (size_t i = 0; i < members.size(); i++)
   {
     RelationData::Entry member = members[i];
-    if (member.getElementId().getType() == ElementType::Way)
+    if (elementType == ElementType::Unknown || member.getElementId().getType() == elementType)
     {
-      wayMemberIds.insert(member.getElementId());
+      memberIds.insert(member.getElementId());
     }
   }
-  return wayMemberIds;
+  return memberIds;
 }
 
 Envelope* Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const

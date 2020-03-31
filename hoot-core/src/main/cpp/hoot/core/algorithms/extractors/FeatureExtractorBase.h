@@ -34,8 +34,7 @@ namespace hoot
 {
 
 /**
- * Similar to Shape Distance as described in [1].
- * 1. Savary & Zeitouni, 2005
+ * TODO
  */
 class FeatureExtractorBase : public FeatureExtractor, public ApiEntityInfo
 {

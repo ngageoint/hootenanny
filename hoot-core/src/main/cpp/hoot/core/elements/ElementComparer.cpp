@@ -69,8 +69,8 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
       "If ignoring element IDs in ElementComparer a map must be passed in.");
   }
 
-  LOG_VART(e1->getElementId());
-  LOG_VART(e2->getElementId());
+  //LOG_VART(e1->getElementId());
+  //LOG_VART(e2->getElementId());
 
   if (e1->getElementType() != e2->getElementType())
   {
@@ -90,10 +90,11 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
       hashVis.visit(e2);
     }
   }
-  //only nodes have been converted over to use hash comparisons so far
+  // only nodes have been converted over to use hash comparisons so far
   else
   {
-    //create modified copies of the tags for comparing, as we don't care if some tags are identical
+    // create modified separate copies of the tags for comparing, as we don't care if some tags
+    // are identical
     Tags tags1 = e1->getTags();
     _removeTagsNotImportantForComparison(tags1);
     Tags tags2 = e2->getTags();
@@ -102,6 +103,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
     // not checking status here b/c if only the status changed on the element and no other tags or
     // geometries, there's no point in detecting a change
     if ((!_ignoreElementId && e1->getElementId() != e2->getElementId()) ||
+        // TODO: implement != for Tags
         !(tags1 == tags2) ||
         (e1->getVersion() != e2->getVersion()) ||
         fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
@@ -171,6 +173,7 @@ bool ElementComparer::_compareNode(const std::shared_ptr<const Element>& re,
   bool same = false;
   if (re->getTags()[MetadataTags::HootHash()] == e->getTags()[MetadataTags::HootHash()])
   {
+    //LOG_TRACE("Nodes " << re->getElementId() << " and " << e->getElementId() << " are the same.");
     same = true;
   }
   else
@@ -227,6 +230,7 @@ bool ElementComparer::_compareWay(const std::shared_ptr<const Element>& re,
     }
   }
 
+  LOG_TRACE("Ways " << re->getElementId() << " and " << e->getElementId() << " are the same.");
   return true;
 }
 
@@ -251,7 +255,8 @@ bool ElementComparer::_compareRelation(const std::shared_ptr<const Element>& re,
     }
   }
 
-    return true;
+  LOG_TRACE("Relations " << re->getElementId() << " and " << e->getElementId() << " are the same.");
+  return true;
 }
 
 }

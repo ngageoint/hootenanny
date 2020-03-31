@@ -50,6 +50,8 @@ public:
 
   const std::vector<double>& getAllBins() const { return _bins; }
 
+  size_t numBins() const { return _bins.size(); }
+
   void addAngle(Radians theta, double length);
 
   size_t getBin(Radians theta);

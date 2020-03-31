@@ -55,16 +55,22 @@ WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, const ConstWayPtr& way
   // Go through all the nodes
   double l = 0;
   const std::vector<long>& nodeIds = _way->getNodeIds();
+  LOG_VART(nodeIds.size());
   if (nodeIds.size() == 0)
   {
     throw IllegalArgumentException("Empty way passed to WayDiscretizer.");
   }
   ConstNodePtr lastNode = _map->getNode(nodeIds[0]);
+  LOG_VART(lastNode.get());
+  LOG_VART(lastNode->getElementId());
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     // calculate the distance from the last node to this node.
     ConstNodePtr n = _map->getNode(nodeIds[i]);
+    LOG_VART(n.get());
+    LOG_VART(n->getElementId());
     double d = Distance::euclidean(*lastNode, *n);
+    LOG_VART(d);
 
     // add the distance to a running total
     l += d;
@@ -72,17 +78,20 @@ WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, const ConstWayPtr& way
     _lengthNodes.push_back(l);
     lastNode = n;
   }
+  LOG_VART(_lengthNodes.size());
 }
 
 void WayDiscretizer::discretize(double spacing, vector<Coordinate>& result)
 {
+  if (spacing <= 0.0)
+  {
+    throw IllegalArgumentException("Way discretization spacing must be greater than zero.");
+  }
+
   LOG_TRACE("Discretizing way with spacing: " << spacing << "...");
 
   double length = _lengthNodes.back();
   double d = 0.0;
-
-  assert(spacing != 0.0);
-
   do
   {
     result.push_back(interpolate(d));
@@ -92,17 +101,29 @@ void WayDiscretizer::discretize(double spacing, vector<Coordinate>& result)
 
 void WayDiscretizer::discretize(double spacing, vector<WayLocation>& result)
 {
+  if (spacing <= 0.0)
+  {
+    throw IllegalArgumentException("Way discretization spacing must be greater than zero.");
+  }
+
+  LOG_TRACE("Discretizing way with spacing: " << spacing << "...");
+
   Meters wayLength = ElementConverter(_map).convertToLineString(_way)->getLength();
+  LOG_VART(wayLength);
 
   int count = ceil(wayLength / spacing);
+  LOG_VART(count);
   spacing = wayLength / double(count);
+  LOG_VART(spacing);
 
   result.resize(count + 1);
+  LOG_VART(result.size());
 
   for (int i = 0; i <= count; i++)
   {
     result[i] = WayLocation(_map, _way, double(i) * spacing);
   }
+  LOG_VART(result.size());
 }
 
 geos::geom::Coordinate WayDiscretizer::interpolate(double d)
