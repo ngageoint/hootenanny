@@ -55,6 +55,7 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runRetryConflictsTest);
   CPPUNIT_TEST(runVersionConflictResolutionTest);
   CPPUNIT_TEST(runChangesetOutputTest);
+  CPPUNIT_TEST(runChangesetCreateFailureTest);
 #endif
   /* These tests are for local testing and require additional resources to complete */
 #ifdef RUN_LOCAL_OSM_API_SERVER
@@ -81,6 +82,7 @@ public:
   const int PORT_CONFLICTS =    9802;
   const int PORT_VERSION =      9803;
   const int PORT_DEBUG_OUTPUT = 9804;
+  const int PORT_CREATE_FAIL =  9805;
 
   OsmApiWriterTest()
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
@@ -425,6 +427,46 @@ public:
                      _outputPath + "OsmApiWriter-000002-00001-Request--000.osc");
     HOOT_FILE_EQUALS( _inputPath + "ChangesetOutput-Response-2.osc",
                      _outputPath + "OsmApiWriter-000002-00001-Response-200.osc");
+#endif
+  }
+
+  void runChangesetCreateFailureTest()
+  {
+#ifdef RUN_LOCAL_TEST_SERVER
+    //  Suppress the OsmApiWriter errors by temporarily changing the log level
+    //  when the log level is Info or above because we expect the all of the errors.
+    //  Below Info is Debug and Trace, those are set because we want to see everything
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Fatal);
+
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_CREATE_FAIL));
+    osm.setUserInfo(TEST_USER_INFO);
+
+    //  Kick off the changeset create failure test server
+    ChangesetCreateFailureTestServer server(PORT_CREATE_FAIL);
+    server.start();
+
+    OsmApiWriter writer(osm, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_REQUEST);
+
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 2);
+    writer.setConfiguration(s);
+    writer.apply();
+
+    //  Wait for the test server to finish
+    server.shutdown();
+
+    Log::getInstance().setLevel(logLevel);
+
+    //  Make sure that the changes failed
+    CPPUNIT_ASSERT(writer.containsFailed());
+
+    //  Check the stats, 4 ways, 4 modifies, 4 errors
+    checkStats(writer.getStats(), 0, 4, 0, 0, 4, 0, 4);
 #endif
   }
 

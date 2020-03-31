@@ -192,8 +192,11 @@ void ProcessThread::processJobs(JobQueue* queue)
               if (_proc->bytesAvailable() < 1)
                 _proc->waitForReadyRead(READ_TIMEOUT);
               next = QString(_proc->readLine()).trimmed();
-              if (next != HOOT_TEST_FINISHED)
+              if (next != HOOT_TEST_FINISHED && !next.isEmpty())
                 line.append(next.append("\n"));
+              //  If the process ends here before writing HOOT_TEST_FINISH, break out of the loop
+              if (_proc->state() != QProcess::Running)
+                break;
             }
           }
           output.append(line);

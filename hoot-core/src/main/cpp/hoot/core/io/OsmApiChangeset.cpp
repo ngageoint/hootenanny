@@ -2109,6 +2109,31 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
   return isEqual;
 }
 
+void XmlChangeset::failRemainingChangeset()
+{
+  //  Fail all remaining nodes
+  failRemainingElements(_allNodes);
+  //  Fail all remaining ways
+  failRemainingElements(_allWays);
+  //  Fail all remaining relations
+  failRemainingElements(_allRelations);
+}
+
+void XmlChangeset::failRemainingElements(const ChangesetElementMap& elements)
+{
+  //  Iterate all elements
+  for (ChangesetElementMap::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  {
+    ChangesetElementPtr element = it->second;
+    //  Anything that isn't finalized is now failed
+    if (element->getStatus() != ChangesetElement::Finalized)
+    {
+      element->setStatus(ChangesetElement::Failed);
+      ++_failedCount;
+    }
+  }
+}
+
 ChangesetInfo::ChangesetInfo()
   : _attemptedResolveChangesetIssues(false),
     _numRetries(0),
