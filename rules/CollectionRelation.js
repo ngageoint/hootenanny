@@ -141,32 +141,32 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("match failed on angle hist");
     return result;
-  }
-  var weightedShapeDist = weightedShapeDistanceExtractor.extract(map, e1, e2);
+  }*/
+  /*var weightedShapeDist = weightedShapeDistanceExtractor.extract(map, e1, e2);
   if (weightedShapeDist < 0.99)
   {
     hoot.trace("match failed weighted shape dist");
     return result;
-  }
-  var dist = distanceScoreExtractor.extract(map, e1, e2);
+  }*/
+  /*var dist = distanceScoreExtractor.extract(map, e1, e2);
   if (dist < 0.96)
   {
     hoot.trace("match failed on dist");
     return result;
-  }
-  var length = lengthScoreExtractor.extract(map, e1, e2);
+  }*/
+  /*var length = lengthScoreExtractor.extract(map, e1, e2);
   if (length < 0.81 || length > 0.97)
   {
     hoot.trace("match failed on length");
     return result;
-  }
-  var weightedMetricDist = weightedMetricDistanceExtractor.extract(map, e1, e2);
+  }*/
+  /*var weightedMetricDist = weightedMetricDistanceExtractor.extract(map, e1, e2);
   if (weightedMetricDist > 0.04)
   {
     hoot.trace("match failed weighted metric dist");
     return result;
-  }
-  var parallel = parallelScoreExtractor.extract(map, e1, e2);
+  }*/
+  /*var parallel = parallelScoreExtractor.extract(map, e1, e2);
   if (parallel < 0.99)
   {
     hoot.trace("match failed on parallel");
@@ -189,7 +189,7 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }*/
 
-  /*var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
+  var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
   if (memberSim < memberSimMin)
   {
     memberSimMin = memberSim;
@@ -199,7 +199,7 @@ exports.matchScore = function(map, e1, e2)
   {
     memberSimMax = memberSim;
   }
-  hoot.debug("memberSimMax: " + memberSimMax);*/
+  hoot.debug("memberSimMax: " + memberSimMax);
 
   result = { match: 1.0, miss: 0.0, review: 0.0 };
 

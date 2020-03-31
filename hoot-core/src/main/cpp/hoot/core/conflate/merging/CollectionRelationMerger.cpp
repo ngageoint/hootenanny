@@ -34,7 +34,8 @@
 namespace hoot
 {
 
-CollectionRelationMerger::CollectionRelationMerger()
+CollectionRelationMerger::CollectionRelationMerger() :
+_ignoreIds(false)
 {
 }
 
@@ -56,13 +57,26 @@ void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementI
   relation1->setTags(newTags);
 
   // copy relation 2's members into 1
-  _mergeMembers(relation1, relation2);
+  if (!_ignoreIds)
+  {
+    _mergeMembers(relation1, relation2);
+  }
+  else
+  {
+    _mergeMembersIgnoreIds(relation1, relation2);
+  }
 
   LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
   ReplaceElementOp(elementId2, elementId1, true).apply(_map);
 
   LOG_TRACE("Removing " << elementId2 << "...");
   RemoveRelationByEid(elementId2.getId()).apply(_map);
+}
+
+void CollectionRelationMerger::_mergeMembersIgnoreIds(
+  RelationPtr replacingRelation, RelationPtr relationBeingReplaced)
+{
+  // TODO: finish
 }
 
 void CollectionRelationMerger::_mergeMembers(

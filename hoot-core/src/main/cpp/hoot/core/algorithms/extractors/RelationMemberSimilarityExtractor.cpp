@@ -51,29 +51,26 @@ double RelationMemberSimilarityExtractor::extract(
     return 0.0;
   }
 
-  // Doing this with element IDs only for now. A more robust, and likely less performant,
-  // implementation could use ElementComparer.
-
   const ConstRelationPtr targetRelation = std::dynamic_pointer_cast<const Relation>(target);
   const ConstRelationPtr candidateRelation =
     std::dynamic_pointer_cast<const Relation>(candidate);
   if (targetRelation && candidateRelation)
   {
-    LOG_VARD(targetRelation->getTags().get("name"));
-    LOG_VARD(candidateRelation->getTags().get("name"));
-    LOG_VARD(targetRelation->getType());
-    LOG_VARD(candidateRelation->getType());
+    LOG_VART(targetRelation->getTags().get("name"));
+    LOG_VART(candidateRelation->getTags().get("name"));
+    LOG_VART(targetRelation->getType());
+    LOG_VART(candidateRelation->getType());
 
     QSet<ElementId> targetMemberIds =
       CollectionUtils::stdSetToQSet(targetRelation->getMemberIds());
-    LOG_VARD(targetMemberIds.size());
+    LOG_VART(targetMemberIds.size());
     //LOG_VARD(targetMemberIds);
     QSet<ElementId> candidateMemberIds =
       CollectionUtils::stdSetToQSet(candidateRelation->getMemberIds());
-    LOG_VARD(candidateMemberIds.size());
+    LOG_VART(candidateMemberIds.size());
     //LOG_VARD(candidateMemberIds);
     const int totalMembers = targetMemberIds.size() + candidateMemberIds.size();
-    LOG_VARD(totalMembers);
+    LOG_VART(totalMembers);
 
     if (targetMemberIds.size() == 0 || candidateMemberIds.size() == 0)
     {
@@ -84,7 +81,7 @@ double RelationMemberSimilarityExtractor::extract(
     if (!_ignoreIds)
     {
       const QSet<ElementId> intersection = targetMemberIds.intersect(candidateMemberIds);
-      LOG_VARD(intersection)
+      LOG_VART(intersection)
       numSharedMembers = intersection.size();
     }
     else
@@ -100,7 +97,7 @@ double RelationMemberSimilarityExtractor::extract(
           targetMemberComps.insert(RelationMemberComparison(memberElement2, map));
         }
       }
-      LOG_VARD(targetMemberComps.size());
+      LOG_VART(targetMemberComps.size());
 
       QSet<RelationMemberComparison> candidateMemberComps;
       const std::vector<RelationData::Entry> candidateMembers = candidateRelation->getMembers();
@@ -113,11 +110,11 @@ double RelationMemberSimilarityExtractor::extract(
           candidateMemberComps.insert(RelationMemberComparison(memberElement2, map));
         }
       }
-      LOG_VARD(candidateMemberComps.size());
+      LOG_VART(candidateMemberComps.size());
 
       QSet<RelationMemberComparison> intersection =
         targetMemberComps.intersect(candidateMemberComps);
-      LOG_VARD(intersection);
+      LOG_VART(intersection);
       numSharedMembers = intersection.size();
       //if (numSharedMembers > 0)
       //{
@@ -127,7 +124,7 @@ double RelationMemberSimilarityExtractor::extract(
       //}
     }
 
-    LOG_VARD(numSharedMembers);
+    LOG_VART(numSharedMembers);
     //if (numSharedMembers > 0)
     //{
       //LOG_INFO(numSharedMembers);
@@ -135,9 +132,10 @@ double RelationMemberSimilarityExtractor::extract(
       //LOG_INFO(candidateMemberIds);
     //}
     //LOG_VARD(intersection);
+
     // calculate Jaccard
     const double similarity = (double)numSharedMembers / (double)totalMembers;
-    LOG_VARD(similarity);
+    LOG_VART(similarity);
     return similarity;
   }
 

@@ -56,11 +56,17 @@ public:
    */
   virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
+  void setIgnoreIds(bool ignore) { _ignoreIds = ignore; }
+
 private:
 
   OsmMapPtr _map;
 
+  // TODO: make configurable
+  bool _ignoreIds;
+
   void _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
+  void _mergeMembersIgnoreIds(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
 };
 
 }
