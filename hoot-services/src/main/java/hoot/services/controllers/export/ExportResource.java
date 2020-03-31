@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -225,6 +225,12 @@ public class ExportResource {
                 Command sedSourceCommand = new SedSourceCommand(jobId, params, this.getClass());
                 workflow.add(sedSourceCommand);
                 Command zipCommand = new ZIPFileCommand(new File(workDir, params.getOutputName() + ".zip"), workDir, outputName + ".alpha.tiles.geojson", this.getClass());
+                workflow.add(zipCommand);
+
+            } else if (inputType.equalsIgnoreCase("changesets")) {
+                File jobDir = new File(CHANGESETS_FOLDER, params.getInput());
+
+                Command zipCommand = getZIPCommand(workDir, jobDir, params.getInput()); // zip osc files in a changesets folder
                 workflow.add(zipCommand);
 
             } else {
@@ -441,8 +447,12 @@ public class ExportResource {
     }
 
     private Command getZIPCommand(File workDir, String outputName) {
+        return getZIPCommand(workDir, workDir, outputName);
+    }
+
+    private Command getZIPCommand(File workDir, File inputDir, String outputName) {
         File targetZIP = new File(workDir, outputName + ".zip");
-        return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
+        return new ZIPDirectoryContentsCommand(targetZIP, inputDir, this.getClass());
     }
 
     private static File getExportFile(String jobId, String outputName, String fileExt) {

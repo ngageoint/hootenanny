@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //  Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/WayJoinerAdvanced.h>
 #include <hoot/core/algorithms/WayJoinerBasic.h>
-#include <hoot/core/algorithms/splitter/CornerSplitter.h>
+#include <hoot/core/algorithms/splitter/HighwayCornerSplitter.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/io/OsmXmlReader.h>
@@ -85,7 +85,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "WayJoinerCornerSplitterInput.osm", map);
 
-    CornerSplitter::splitCorners(map);
+    HighwayCornerSplitter::splitCorners(map);
 
     WayJoinerBasic::joinWays(map);
 

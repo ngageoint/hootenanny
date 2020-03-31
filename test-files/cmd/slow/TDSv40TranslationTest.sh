@@ -12,7 +12,7 @@ mkdir -p $outputDir
 rm -f $outputDir/*
 
 # Normal Hoot options
-HOOT_OPT="--warn"
+HOOT_OPT="--warn  -C Testing.conf"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
@@ -29,11 +29,11 @@ hoot convert $HOOT_OPT -D schema.translation.script=$TRANS $inputDir/*.shp $outp
 #cp $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm
 
 # compareFiles. Test taken from MGCP test
-hoot diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm || diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm
+hoot diff -C Testing.conf $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm || diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm
 
 # Make shapefiles
 # NOTE: These are thematic.
-hoot convert --debug -D schema.translation.script=$TRANS $outputDir/new_TDSv40.osm $outputDir".shp" # > tmp/TDSv40_toTDSv40.txt
+hoot convert --debug -C Testing.conf -D schema.translation.script=$TRANS $outputDir/new_TDSv40.osm $outputDir".shp" # > tmp/TDSv40_toTDSv40.txt
 
 ##################
 # More testing required to get this section of tests to work. In particular, createing two features from one is a problem

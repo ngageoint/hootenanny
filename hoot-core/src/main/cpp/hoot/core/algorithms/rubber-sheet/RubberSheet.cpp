@@ -39,6 +39,8 @@
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -143,11 +145,18 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
   if (_maxAllowedWays != -1 && map->getWayCount() > _maxAllowedWays)
   {
     LOG_WARN(
-      "Skipping rubber sheeting with map having " <<
-      StringUtils::formatLargeNumber(map->getWayCount()) << " ways and the "
-      "maximum allowed to rubber sheet by configuration is: " <<
-      StringUtils::formatLargeNumber(_maxAllowedWays) << ".");
+      "Skipping rubber sheeting of map having " <<
+      StringUtils::formatLargeNumber(map->getWayCount()) << " ways out of a " <<
+      StringUtils::formatLargeNumber(_maxAllowedWays) <<
+      " maximum allowed for rubber sheeting.");
     return;
+  }
+  else
+  {
+    LOG_INFO(
+      "Proceeding to rubber sheet map having " <<
+      StringUtils::formatLargeNumber(map->getWayCount()) << " ways out of a " <<
+      StringUtils::formatLargeNumber(_maxAllowedWays) << " maximum allowed for rubber sheeting.");
   }
 
   std::shared_ptr<OGRSpatialReference> oldSrs = _projection;
@@ -590,6 +599,14 @@ vector<double> RubberSheet::calculateTiePointDistances()
     tiePointDistances.push_back(tiePoint.c1.distance(tiePoint.c2));
   }
   return tiePointDistances;
+}
+
+QStringList RubberSheet::getCriteria() const
+{
+  QStringList criteria;
+  criteria.append(QString::fromStdString(LinearCriterion::className()));
+  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  return criteria;
 }
 
 }

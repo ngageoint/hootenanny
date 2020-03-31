@@ -150,7 +150,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     // many match.
     _markedReviewText =
       "Merging multiple buildings from each data source is error prone and requires a human eye.";
-    reviewMarker.mark(map, combined, _markedReviewText, "Building", 1.0);
+    reviewMarker.mark(map, combined, _markedReviewText, BuildingMatch::MATCH_NAME, 1.0);
     return;
   }
 
@@ -188,7 +188,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
       "Identified as changed with an IoU score of: " + QString::number(iou) +
       ", which is less than the specified threshold of: " +
       QString::number(_changedReviewIouThreshold);
-    reviewMarker.mark(map, combined, _markedReviewText, "Building", 1.0);
+    reviewMarker.mark(map, combined, _markedReviewText, BuildingMatch::MATCH_NAME, 1.0);
     return;
   }
 
@@ -254,7 +254,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     IdSwapOp swapOp(oldScrapId, oldKeeperId);
     swapOp.apply(map);
     // Now swap the pointers so that the wrong one isn't deleted
-    if (swapOp.getNumAffected() > 0)
+    if (swapOp.getNumFeaturesAffected() > 0)
     {
       scrap = map->getElement(oldKeeperId);
       keeper = map->getElement(oldScrapId);

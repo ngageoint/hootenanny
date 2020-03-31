@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LOGJS_H
 #define LOGJS_H
@@ -42,9 +42,11 @@ namespace hoot
 class LogJs : public node::ObjectWrap
 {
 public:
+
  static void Init(v8::Handle<v8::Object> target);
 
 private:
+
   LogJs();
   ~LogJs();
 

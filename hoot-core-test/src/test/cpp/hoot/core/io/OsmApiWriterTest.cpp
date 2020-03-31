@@ -29,8 +29,9 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/HootNetworkUtils.h>
+#include <hoot/core/util/Log.h>
 
 #include "OsmApiWriterTestServer.h"
 
@@ -125,7 +126,7 @@ public:
     HootNetworkRequestPtr request(new HootNetworkRequest());
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.queryCapabilities(request));
-    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
+    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), HttpResponseCode::HTTP_OK);
     HOOT_STR_EQUALS(writer._capabilities.getVersion(), QString("0.6"));
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getTracepoints(), static_cast<long>(5000));
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getWayNodes(), static_cast<long>(2000));
@@ -161,7 +162,7 @@ public:
     HootNetworkRequestPtr request(new HootNetworkRequest());
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.validatePermissions(request));
-    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
+    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), HttpResponseCode::HTTP_OK);
 #ifdef RUN_LOCAL_TEST_SERVER
     server.shutdown();
 #endif
@@ -311,8 +312,7 @@ public:
     HOOT_STR_EQUALS(
           FileUtils::readFully(_inputPath + "ToyTestAConflicts.osc")
             .replace("timestamp=\"\"", "timestamp=\"\" changeset=\"0\"")
-            .replace("    ", "\t")
-            .replace("<delete>", "<delete if-unused=\"true\">"),
+            .replace("    ", "\t"),
       writer.getFailedChangeset());
     //  Check the stats
     checkStats(writer.getStats(), 3, 2, 0, 2, 1, 2, 5);
@@ -407,7 +407,6 @@ public:
     s.set(ConfigOptions::getChangesetApidbWriterDebugOutputKey(), true);
     s.set(ConfigOptions::getChangesetApidbWriterDebugOutputPathKey(), _outputPath);
     writer.setConfiguration(s);
-
     writer.apply();
 
     //  Wait for the test server to finish

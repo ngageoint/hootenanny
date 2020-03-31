@@ -46,7 +46,6 @@
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Standard
@@ -119,11 +118,12 @@ public:
 
   ~HighwayMatchVisitor()
   {
-    LOG_DEBUG("neighbor counts, max: " << _neighborCountMax << " mean: " <<
-             (double)_neighborCountSum / (double)_elementsEvaluated);
+    LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
+              (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -172,19 +172,37 @@ public:
     std::shared_ptr<HighwayMatch> result;
 
     HighwayCriterion highwayCrit(map);
-    if (e1 && e2 &&
-        e1->getStatus() != e2->getStatus() && e2->isUnknown() &&
-        highwayCrit.isSatisfied(e1) && highwayCrit.isSatisfied(e2) &&
-        tagAncestorDiff->diff(map, e1, e2) <= ConfigOptions().getHighwayMaxEnumDiff())
+    if (e1 && e2 && e1->getStatus() != e2->getStatus() && e2->isUnknown() &&
+        highwayCrit.isSatisfied(e1) && highwayCrit.isSatisfied(e2))
     {
-      // score each candidate and push it on the result vector
-      result.reset(
-        new HighwayMatch(
-          classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold));
-      // if we're confident this is a miss
-      if (result->getType() == MatchType::Miss)
+      double maxEnumDiff = ConfigOptions().getHighwayMaxEnumDiff();
+
+      // Don't want sidewalks matching with roads. Tried very hard to make this work in the schema
+      // instead of adding this but could not due to the many interrelations between road types.
+      // There should be a way to do it in the schema, though, and will try again later. Until then,
+      // we may find other minor highway types that will be proven to need this treatment as well.
+      if (Tags::onlyOneContainsKvp(e1->getTags(), e2->getTags(), "footway=sidewalk"))
       {
-        result.reset();
+        // This value still may need some tweaking after testing against additional datasets. Basing
+        // this off of the default diff value rather than giving it its own config opt, since we've
+        // never made a change to the default opt value to date.
+        maxEnumDiff -= 0.2;
+      }
+
+      LOG_TRACE(
+        "Tag diff between: " << e1->getElementId() << " and " << e2->getElementId() << ": " <<
+        tagAncestorDiff->diff(map, e1, e2) << "; max diff: " << maxEnumDiff);
+      if (tagAncestorDiff->diff(map, e1, e2) <= maxEnumDiff)
+      {
+        // score each candidate and push it on the result vector
+        result.reset(
+          new HighwayMatch(
+            classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold));
+        // if we're confident this is a miss
+        if (result->getType() == MatchType::Miss)
+        {
+          result.reset();
+        }
       }
     }
 
@@ -232,7 +250,9 @@ public:
 
   bool isMatchCandidate(ConstElementPtr element)
   {
-    if (_filter && !_filter->isSatisfied(element))
+    // special tag is currently only used by roundabout processing to mark temporary features
+    if (element->getTags().contains(MetadataTags::HootSpecial()) ||
+        (_filter && !_filter->isSatisfied(element)))
     {
       return false;
     }
@@ -243,7 +263,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating highway feature index...");
+      LOG_STATUS("Creating highway feature index...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -262,6 +282,10 @@ public:
 
       getMap()->visitRo(v);
       v.finalizeIndex();
+
+      LOG_STATUS(
+        "Highway feature index created with " << StringUtils::formatLargeNumber(v.getSize()) <<
+        " elements.");
     }
 
     return _index;

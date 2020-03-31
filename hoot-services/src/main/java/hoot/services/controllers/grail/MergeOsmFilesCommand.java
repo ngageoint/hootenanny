@@ -28,7 +28,9 @@ package hoot.services.controllers.grail;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,14 +50,7 @@ class MergeOsmFilesCommand extends GrailCommand {
 
     private final Map<String, Object> substitutionMap = new HashMap<>();
     private final Class<?> caller;
-
-    private static final FilenameFilter filter = new FilenameFilter() {
-        @Override
-        public boolean accept(File f, String name) {
-            // We want to find only .osm files
-            return name.endsWith(".osm");
-        }
-    };
+    private final FilenameFilter filter;
 
     MergeOsmFilesCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
@@ -63,30 +58,50 @@ class MergeOsmFilesCommand extends GrailCommand {
 
         this.caller = caller;
 
+        List<String> options = Collections.emptyList();
+        if (params.getAdvancedOptions() != null) {
+            options = params.getAdvancedOptions().entrySet().stream().map(ent -> ent.getKey() + "=" + ent.getValue()).collect(Collectors.toList());
+        }
+
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", toHootOptions(options));
         substitutionMap.put("OUTPUT", params.getOutput());
+
+        filter = (File f, String name) -> name.matches(params.getInput1());
     }
 
     @Override
     public CommandResult execute() {
+        String command;
+        CommandResult commandResult;
         //Get list of osm files in work dir
         File workDir = params.getWorkDir();
         File[] osmfiles = workDir.listFiles(filter);
         List<String> filePaths = Arrays.asList(osmfiles).stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
-        String command = "hoot convert --${DEBUG_LEVEL}";
 
-        for (int i=0; i<filePaths.size(); i++) {
-            String input = "INPUT" + i;
-            substitutionMap.put(input, filePaths.get(i));
-            command += " ${" + input + "}";
+        if (filePaths.size() > 0) {
+            command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS}";
+
+            for (int i=0; i<filePaths.size(); i++) {
+                String input = "INPUT" + i;
+                substitutionMap.put(input, filePaths.get(i));
+                command += " ${" + input + "}";
+            }
+
+            command += " ${OUTPUT}";
+
+            super.configureCommand(command, substitutionMap, caller);
+            commandResult = super.execute();
+        } else {
+            commandResult = new CommandResult();
+            commandResult.setJobId(jobId);
+            commandResult.setCommand("No osm files to merge");
+            commandResult.setStart(LocalDateTime.now());
+            commandResult.setCaller(caller.getName());
+            commandResult.setFinish(LocalDateTime.now());
+            commandResult.setExitCode(CommandResult.SUCCESS);
         }
-
-        command += " ${OUTPUT}";
-
-        super.configureCommand(command, substitutionMap, caller);
-
-        CommandResult commandResult = super.execute();
 
         return commandResult;
     }

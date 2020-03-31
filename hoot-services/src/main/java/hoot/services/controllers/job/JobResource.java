@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.job;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -168,6 +169,9 @@ public class JobResource {
         List<String> errors;
         try {
             errors = jobStatusManager.getJobErrors(jobId, user.getId());
+            if (errors.size() == 0) {
+                errors = Collections.singletonList(jobStatusManager.getJobStatusObj(jobId, user.getId()).getStatusDetail());
+            }
         }
         catch (Exception e) {
             logger.error("job error", e);

@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIONPOLYGONSVISITOR_H
 #define UNIONPOLYGONSVISITOR_H
 
 // Hoot
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -43,7 +42,7 @@ namespace hoot
  * @optimize This could be made more efficient by sacrificing a bit of RAM. See
  * AlphaShape::toGeometry() for an example implementation.
  */
-class UnionPolygonsVisitor : public ElementConstOsmMapVisitor, public OperationStatusInfo
+class UnionPolygonsVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
@@ -63,6 +62,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Combined " + QString::number(_numAffected) + " areas"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -27,7 +27,7 @@
 #include "FindIntersectionsOp.h"
 
 // Hoot
-#include <hoot/core/algorithms/splitter/DualWaySplitter.h>
+#include <hoot/core/algorithms/splitter/DualHighwaySplitter.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementInIdListCriterion.h>
@@ -76,8 +76,8 @@ void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 
   DuplicateWayRemover::removeDuplicates(map);
   SuperfluousWayRemover::removeWays(map);
-  // split ways up on intersections. This must come before DualWaySplitter. The DualWaySplitter
-  // assumes that all intersections are on end nodes.
+  // split ways up on intersections. This must come before DualHighwaySplitter. The
+  // DualHighwaySplitter assumes that all intersections are on end nodes.
   IntersectionSplitter::splitIntersections(map);
   UnlikelyIntersectionRemover::removeIntersections(map);
   LOG_INFO("Assuming drives on right.");

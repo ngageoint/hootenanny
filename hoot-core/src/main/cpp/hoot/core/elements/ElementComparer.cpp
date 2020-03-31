@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementComparer.h"
 
@@ -38,7 +38,8 @@ namespace hoot
 {
 
 ElementComparer::ElementComparer(Meters threshold) :
-_threshold(threshold)
+_threshold(threshold),
+_ignoreElementId(false)
 {
 }
 
@@ -62,6 +63,12 @@ void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
 
 bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 {
+  if (_ignoreElementId && !_map.get())
+  {
+    throw IllegalArgumentException(
+      "If ignoring element IDs in ElementComparer a map must be passed in.");
+  }
+
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
 
@@ -94,14 +101,18 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 
     // not checking status here b/c if only the status changed on the element and no other tags or
     // geometries, there's no point in detecting a change
-    if (e1->getElementId() != e2->getElementId() ||
+    if ((!_ignoreElementId && e1->getElementId() != e2->getElementId()) ||
         !(tags1 == tags2) ||
         (e1->getVersion() != e2->getVersion()) ||
         fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
     {
       if (Log::getInstance().getLevel() == Log::Trace)
       {
-        if (!(tags1 == tags2))
+        if ( e1->getElementId() != e2->getElementId())
+        {
+          LOG_TRACE("compare failed on IDs");
+        }
+        else if (!(tags1 == tags2))
         {
           LOG_TRACE("compare failed on tags");
         }
@@ -116,6 +127,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
           LOG_VART(_threshold);
         }
 
+        LOG_TRACE("elements failed comparison:");
         LOG_VART(tags1);
         LOG_VART(tags2);
       }
@@ -179,13 +191,39 @@ bool ElementComparer::_compareWay(const std::shared_ptr<const Element>& re,
 
   if (rw->getNodeIds().size() != w->getNodeIds().size())
   {
+    LOG_TRACE(
+      "Ways " << rw->getElementId() << " and " << w->getElementId() <<
+      " failed comparison on way node count: " << rw->getNodeIds().size() << " and " <<
+      w->getNodeIds().size());
     return false;
   }
-  for (size_t i = 0; i < rw->getNodeIds().size(); ++i)
+
+  if (!_ignoreElementId)
   {
-    if (rw->getNodeIds()[i] != w->getNodeIds()[i])
+    for (size_t i = 0; i < rw->getNodeIds().size(); ++i)
     {
-      return false;
+      if (rw->getNodeIds()[i] != w->getNodeIds()[i])
+      {
+        LOG_TRACE(
+          "Ways " << rw->getElementId() << " and " << w->getElementId() <<
+          " failed comparison on way nodes: " << rw->getNodeIds() << " and " << w->getNodeIds());
+        return false;
+      }
+    }
+  }
+  else
+  {
+    for (size_t i = 0; i < rw->getNodeIds().size(); ++i)
+    {
+      NodePtr nodeRw = _map->getNode(ElementId(ElementType::Node, rw->getNodeIds()[i]));
+      NodePtr nodeW = _map->getNode(ElementId(ElementType::Node, w->getNodeIds()[i]));
+      if (!nodeRw || !nodeW || !isSame(nodeRw, nodeW))
+      {
+        LOG_TRACE(
+          "Ways " << rw->getElementId() << " and " << w->getElementId() <<
+          " failed comparison on way nodes: " << rw->getNodeIds() << " and " << w->getNodeIds());
+        return false;
+      }
     }
   }
 

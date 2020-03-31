@@ -782,14 +782,16 @@ long HootApiDb::insertMap(QString displayName)
   return mapId;
 }
 
-bool HootApiDb::insertNode(const double lat, const double lon, const Tags& tags, long& assignedId)
+bool HootApiDb::insertNode(const double lat, const double lon, const Tags& tags, long& assignedId,
+                           long version)
 {
   assignedId = _getNextNodeId();
 
-  return insertNode(assignedId, lat, lon, tags);
+  return insertNode(assignedId, lat, lon, tags, version);
 }
 
-bool HootApiDb::insertNode(const long id, const double lat, const double lon, const Tags &tags)
+bool HootApiDb::insertNode(const long id, const double lat, const double lon, const Tags &tags,
+                           long version)
 {
   LOG_TRACE("Inserting node: " << id << "...");
 
@@ -804,7 +806,8 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
     columns << "id" << "latitude" << "longitude" << "changeset_id" << "timestamp" <<
                "tile" << "version" << "tags";
 
-    _nodeBulkInsert.reset(new SqlBulkInsert(_db, getCurrentNodesTableName(mapId), columns, _ignoreInsertConflicts));
+    _nodeBulkInsert.reset(
+      new SqlBulkInsert(_db, getCurrentNodesTableName(mapId), columns, _ignoreInsertConflicts));
   }
 
   QList<QVariant> v;
@@ -814,7 +817,14 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   v.append((qlonglong)_currChangesetId);
   v.append(OsmUtils::currentTimeAsString());
   v.append(tileForPoint(lat, lon));
-  v.append((qlonglong)1);
+  if (version == 0)
+  {
+    v.append((qlonglong)1);
+  }
+  else
+  {
+    v.append((qlonglong)version);
+  }
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
@@ -842,9 +852,9 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   return true;
 }
 
-bool HootApiDb::insertNode(ConstNodePtr node)
+bool HootApiDb::insertNode(ConstNodePtr node, long version)
 {
-  return insertNode(node->getId(), node->getY(), node->getX(), node->getTags());
+  return insertNode(node->getId(), node->getY(), node->getX(), node->getTags(), version);
 }
 
 void HootApiDb::updateNode(ConstNodePtr node)
@@ -881,14 +891,14 @@ void HootApiDb::deleteNode(ConstNodePtr node)
   LOG_TRACE("Deleted node: " << ElementId(ElementType::Node, node->getId()));
 }
 
-bool HootApiDb::insertRelation(const Tags &tags, long& assignedId)
+bool HootApiDb::insertRelation(const Tags &tags, long& assignedId, long version)
 {
   assignedId = _getNextRelationId();
 
-  return insertRelation(assignedId, tags);
+  return insertRelation(assignedId, tags, version);
 }
 
-bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
+bool HootApiDb::insertRelation(const long relationId, const Tags &tags, long version)
 {
   LOG_TRACE("Inserting relation: " << relationId << "...");
 
@@ -900,14 +910,22 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
     QStringList columns;
     columns << "id" << "changeset_id" << "timestamp" << "version" << "tags";
 
-    _relationBulkInsert.reset(new SqlBulkInsert(_db, getCurrentRelationsTableName(mapId), columns, _ignoreInsertConflicts));
+    _relationBulkInsert.reset(
+      new SqlBulkInsert(_db, getCurrentRelationsTableName(mapId), columns, _ignoreInsertConflicts));
   }
 
   QList<QVariant> v;
   v.append((qlonglong)relationId);
   v.append((qlonglong)_currChangesetId);
   v.append(OsmUtils::currentTimeAsString());
-  v.append((qlonglong)1);
+  if (version == 0)
+  {
+    v.append((qlonglong)1);
+  }
+  else
+  {
+    v.append((qlonglong)version);
+  }
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
@@ -2229,14 +2247,14 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
   LOG_TRACE("Updated way: " << ElementId(ElementType::Way, id));
 }
 
-bool HootApiDb::insertWay(const Tags &tags, long &assignedId)
+bool HootApiDb::insertWay(const Tags &tags, long &assignedId, long version)
 {
   assignedId = _getNextWayId();
 
-  return insertWay(assignedId, tags);
+  return insertWay(assignedId, tags, version);
 }
 
-bool HootApiDb::insertWay(const long wayId, const Tags &tags)
+bool HootApiDb::insertWay(const long wayId, const Tags &tags, long version)
 {
   LOG_TRACE("Inserting way: " << wayId << "...");
 
@@ -2251,14 +2269,22 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
     QStringList columns;
     columns << "id" << "changeset_id" << "timestamp" << "version" << "tags";
 
-    _wayBulkInsert.reset(new SqlBulkInsert(_db, getCurrentWaysTableName(mapId), columns, _ignoreInsertConflicts));
+    _wayBulkInsert.reset(
+      new SqlBulkInsert(_db, getCurrentWaysTableName(mapId), columns, _ignoreInsertConflicts));
   }
 
   QList<QVariant> v;
   v.append((qlonglong)wayId);
   v.append((qlonglong)_currChangesetId);
   v.append(OsmUtils::currentTimeAsString());
-  v.append((qlonglong)1);
+  if (version == 0)
+  {
+    v.append((qlonglong)1);
+  }
+  else
+  {
+    v.append((qlonglong)version);
+  }
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.

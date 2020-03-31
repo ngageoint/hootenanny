@@ -106,6 +106,10 @@ grailMaxFeatureCount=1000000
 grailRailsLabel=Reference
 grailOverpassLabel=Secondary
 
+# Apply changeset options
+changesetApplyDebug=false
+changesetApplySingleThreaded=false
+
 # Grail pull overpass query file
 grailOverpassQueryPath=conf/services/grailOverpassQuery.oql
 

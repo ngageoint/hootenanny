@@ -32,6 +32,7 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 // Qt
 #include <QList>
@@ -70,11 +71,21 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
+  void setGeometryTypeFilter(const GeometryTypeCriterion::GeometryType& filter)
+  { _geometryTypeFilter = filter; }
+  void setIgnoreGenericConflators(bool ignore) { _ignoreGenericConflators = ignore; }
+
 private:
 
   ConstOsmMapPtr _map;
 
   bool _ignoreChildren;
+
+  // allows for only checking conflatable types that support a specific geometry for optimization
+  // purposes
+  GeometryTypeCriterion::GeometryType _geometryTypeFilter;
+
+  bool _ignoreGenericConflators;
 };
 
 }

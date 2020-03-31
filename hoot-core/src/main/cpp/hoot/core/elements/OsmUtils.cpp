@@ -49,6 +49,8 @@
 #include <hoot/core/criterion/IdTagMatchesId.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QDateTime>
@@ -403,7 +405,7 @@ set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOs
 bool OsmUtils::endWayNodeIsCloserToNodeThanStart(const ConstNodePtr& node, const ConstWayPtr& way,
                                                  const ConstOsmMapPtr& map)
 {
-  if (way->isFirstLastNodeIdentical())
+  if (way->isSimpleLoop())
   {
     return false;
   }
@@ -788,6 +790,8 @@ std::shared_ptr<geos::geom::Geometry> OsmUtils::_getGeometry(
   }
   catch (const geos::util::TopologyException& e)
   {
+    // try to clean it
+    newGeom.reset(GeometryUtils::validateGeometry(newGeom.get()));
     if (_badGeomCount <= Log::getWarnMessageLimit())
     {
       LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());
@@ -813,43 +817,6 @@ std::shared_ptr<geos::geom::Geometry> OsmUtils::_getGeometry(
     newGeom.reset();
   }
   return newGeom;
-}
-
-bool OsmUtils::elementContains(const ConstElementPtr& containingElement,
-                               const ConstElementPtr& containedElement, ConstOsmMapPtr map)
-{
-  if (!containingElement || !containedElement)
-  {
-    throw IllegalArgumentException("One of the input elements is null.");
-  }
-  if (containingElement->getElementType() != ElementType::Way &&
-      containingElement->getElementType() != ElementType::Relation)
-  {
-    throw IllegalArgumentException("One of the input elements is of the wrong type.");
-  }
-  LOG_VART(containedElement->getElementId());
-  LOG_VART(containingElement->getElementId());
-
-  std::shared_ptr<geos::geom::Geometry> containingElementGeom =
-    _getGeometry(containingElement, map);
-  std::shared_ptr<geos::geom::Geometry> containedElementGeom = _getGeometry(containedElement, map);
-  bool contains = false;
-  if (containingElementGeom && containedElementGeom)
-  {
-    contains = containingElementGeom->contains(containedElementGeom.get());
-    LOG_TRACE(
-      "Calculated contains: " << contains << " for containing element: " <<
-      containingElement->getElementId() <<
-      " and contained element: " << containedElement->getElementId() << ".");
-  }
-  else
-  {
-    LOG_TRACE(
-      "Unable to calculate contains for containing element: " <<
-      containingElement->getElementId() << " and contained element: " <<
-      containedElement->getElementId() << ".");
-  }
-  return contains;
 }
 
 bool OsmUtils::containsMember(const ConstElementPtr& parent, const ElementId& memberId)
@@ -884,8 +851,9 @@ bool OsmUtils::containsMember(const ConstElementPtr& parent, const ElementId& me
   return containsMember;
 }
 
-bool OsmUtils::elementsIntersect(const ConstElementPtr& element1, const ConstElementPtr& element2,
-                                 ConstOsmMapPtr map)
+bool OsmUtils::haveGeometricRelationship(
+  const ConstElementPtr& element1, const ConstElementPtr& element2,
+  const GeometricRelationship& relationship, ConstOsmMapPtr map)
 {
   if (!element1 || !element2)
   {
@@ -894,18 +862,46 @@ bool OsmUtils::elementsIntersect(const ConstElementPtr& element1, const ConstEle
 
   std::shared_ptr<geos::geom::Geometry> geom1 = _getGeometry(element1, map);
   std::shared_ptr<geos::geom::Geometry> geom2 = _getGeometry(element2, map);
-  bool intersects = false;
+  bool haveRelationship = false;
   if (geom1 && geom2)
   {
-    intersects = geom1->intersects(geom2.get());
+    switch (relationship.getEnum())
+    {
+      case GeometricRelationship::Contains:
+        haveRelationship = geom1->contains(geom2.get());
+        break;
+      case GeometricRelationship::Covers:
+        haveRelationship = geom1->covers(geom2.get());
+        break;
+      case GeometricRelationship::Crosses:
+        haveRelationship = geom1->crosses(geom2.get());
+        break;
+      case GeometricRelationship::DisjointWith:
+        haveRelationship = geom1->disjoint(geom2.get());
+        break;
+      case GeometricRelationship::Intersects:
+        haveRelationship = geom1->intersects(geom2.get());
+        break;
+      case GeometricRelationship::IsWithin:
+        haveRelationship = geom1->within(geom2.get());
+        break;
+      case GeometricRelationship::Overlaps:
+        haveRelationship = geom1->overlaps(geom2.get());
+        break;
+      case GeometricRelationship::Touches:
+        haveRelationship = geom1->touches(geom2.get());
+        break;
+      default:
+        throw IllegalArgumentException("Unsupported geometry relationship type.");
+    }
   }
   else
   {
     LOG_TRACE(
-      "Unable to calculate intersects for: " << element1->getElementId() <<
-      " and: " << element2->getElementId() << ".");
+      "Unable to calculate geometric relationship: " << relationship.toString() << " for: " <<
+      element1->getElementId() << " and: " << element2->getElementId() << ".");
   }
-  return intersects;
+  return haveRelationship;
 }
 
 double OsmUtils::getDistance(const ConstElementPtr& element1, const ConstElementPtr& element2,
@@ -988,4 +984,109 @@ ElementCriterionPtr OsmUtils::_getCrit(const QString& criterionClassName)
   return crit;
 }
 
+bool isMemberOfRelation(const ConstOsmMapPtr& map, const ElementId& childId)
+{
+  const set<ElementId> parentIds = map->getParents(childId);
+  for (set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
+  {
+    const ElementId parentId = *it;
+    if (parentId.getType() == ElementType::Relation)
+    {
+      LOG_TRACE(childId << " member of relation: " << parentId);
+      return true;
+
+    }
+  }
+  return false;
+}
+
+bool OsmUtils::isMemberOfRelationType(const ConstOsmMapPtr& map, const ElementId& childId,
+                                      const QString& relationType)
+{
+  LOG_VART(childId);
+  LOG_VART(relationType);
+
+  if (relationType.trimmed().isEmpty())
+  {
+    return isMemberOfRelation(map, childId);
+  }
+
+  const set<ElementId> parentIds = map->getParents(childId);
+  for (set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
+  {
+    const ElementId parentId = *it;
+    if (parentId.getType() == ElementType::Relation)
+    {
+      ConstRelationPtr relation =
+        std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
+      if (relation && relation->getType() == relationType)
+      {
+        LOG_TRACE(
+          childId << " member of relation: " << parentId << " with type: " << relationType);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool OsmUtils::isMemberOfRelationInCategory(const ConstOsmMapPtr& map, const ElementId& childId,
+                                            const QString& schemaCategory)
+{
+  LOG_VART(childId);
+  LOG_VART(schemaCategory);
+
+  if (schemaCategory.trimmed().isEmpty())
+  {
+    return isMemberOfRelation(map, childId);
+  }
+
+  const set<ElementId> parentIds = map->getParents(childId);
+  for (set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
+  {
+    const ElementId parentId = *it;
+    if (parentId.getType() == ElementType::Relation)
+    {
+      ConstRelationPtr relation =
+        std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
+      if (relation && OsmSchema::getInstance().hasCategory(relation->getTags(), schemaCategory))
+      {
+        LOG_TRACE(
+          childId << " member of relation: " << parentId << " in category: " << schemaCategory);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool OsmUtils::isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const ElementId& childId,
+                                            const QString& tagKey)
+{
+  LOG_VART(childId);
+  LOG_VART(tagKey);
+
+  if (tagKey.trimmed().isEmpty())
+  {
+    return isMemberOfRelation(map, childId);
+  }
+
+  const set<ElementId> parentIds = map->getParents(childId);
+  for (set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
+  {
+    const ElementId parentId = *it;
+    if (parentId.getType() == ElementType::Relation)
+    {
+      ConstRelationPtr relation =
+        std::dynamic_pointer_cast<const Relation>(map->getElement(parentId));
+      if (relation && relation->getTags().contains(tagKey))
+      {
+        LOG_TRACE(
+          childId << " member of relation: " << parentId << " with tag key: " << tagKey);
+        return true;
+      }
+    }
+  }
+  return false;
+}
 }

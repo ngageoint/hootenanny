@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -64,6 +64,7 @@ public:
       map, "test-files/conflate/unified/AllDataTypesA.osm", false, Status::Unknown1);
 
     ConflatableCriteriaVisitor uut;
+    uut.setOsmMap(map.get());
     map->visitRw(uut);
 
     const QString outFileName = "ConflatableCriteriaVisitorTest-runBasicTest.osm";

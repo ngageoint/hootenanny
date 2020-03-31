@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef INTERSECTIONSPLITTER_H
@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
@@ -50,7 +49,7 @@ class Way;
  * example, if two ways make a four way intesection the intersection splitter will convert that
  * into four ways that meet at a four way intersection. No nodes are modified in this process.
  */
-class IntersectionSplitter : public OsmMapOperation, public OperationStatusInfo
+class IntersectionSplitter : public OsmMapOperation
 {
 public:
 
@@ -73,6 +72,13 @@ public:
 
   virtual QString getDescription() const override
   { return "Makes all road intersections contain only way end nodes"; }
+
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

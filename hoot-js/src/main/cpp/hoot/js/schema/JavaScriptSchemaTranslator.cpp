@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "JavaScriptSchemaTranslator.h"
@@ -285,10 +285,10 @@ void JavaScriptSchemaTranslator::_init()
   {
     _toOsmFunctionName = "translateAttributes";
   }
-  else
-  {
-    throw HootException("A 'translateToOsm' function must be defined.");
-  }
+//  else
+//  {
+//    throw HootException("A 'translateToOsm' function must be defined.");
+//  }
 
   // Debug Stuff - Dump the object properties
 //  Handle<Object> hoot = tObj->Get(toV8("hoot"))->ToObject();
@@ -685,7 +685,7 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
   }
   else
   {
-    throw HootException("Unexpected column type: " + type);
+    throw HootException("Unexpected column type: " + type + " for " + map["name"].toString());
   }
 
   if (map.contains("name") == false)

@@ -78,9 +78,9 @@ public class ExternalCommandRunnerImplTest {
         hootOptions.add("\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
                           "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
                           "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
-                          "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
-                          "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
-                          "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
+                          "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
+                          "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
+                          "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreasVisitor;" +
                           "hoot::NoInformationElementRemover\"");
 
         // String input1 = "osmapidb://hoot:hoottest@localhost:5432/osmapi test";

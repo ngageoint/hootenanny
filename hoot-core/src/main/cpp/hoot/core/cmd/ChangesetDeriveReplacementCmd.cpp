@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -165,6 +165,13 @@ public:
       args.removeAll("--disable-conflation");
     }
     LOG_VARD(enableConflation);
+    bool tagOobConnectedWays = true;
+    if (args.contains("--disable-oob-way-handling"))
+    {
+      tagOobConnectedWays = false;
+      args.removeAll("--disable-oob-way-handling");
+    }
+    LOG_VARD(tagOobConnectedWays);
 
     LOG_VARD(args.size());
     LOG_VARD(args);
@@ -213,6 +220,7 @@ public:
     changesetCreator.setRetainmentFilterOptions(retainmentFilterOptions);
     changesetCreator.setWaySnappingEnabled(enableWaySnapping);
     changesetCreator.setConflationEnabled(enableConflation);
+    changesetCreator.setTagOobConnectedWays(tagOobConnectedWays);
     changesetCreator.create(input1, input2, bounds, output);
 
     return 0;

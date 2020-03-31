@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MEMBERS_PER_RELATION_VISITOR_H
@@ -31,14 +31,12 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 
 namespace hoot
 {
 
-class MembersPerRelationVisitor : public ConstElementVisitor, public NumericStatistic,
-  public OperationStatusInfo
+class MembersPerRelationVisitor : public ConstElementVisitor, public NumericStatistic
 {
 public:
 
@@ -65,6 +63,8 @@ public:
     const double average = _numAffected == 0 ? 0.0 : _totalMembers / _numAffected;
     return average;
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

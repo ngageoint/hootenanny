@@ -114,6 +114,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -242,7 +243,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating building feature index...");
+      LOG_STATUS("Creating building feature index...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -256,14 +257,17 @@ public:
 
       // Instantiate our visitor
       SpatialIndexer v(_index,
-                             _indexToEid,
-                             pCrit,
-                             std::bind(
-                               &BuildingMatchVisitor::getSearchRadius, this, placeholders::_1),
-                             getMap());
+                       _indexToEid,
+                       pCrit,
+                       std::bind(&BuildingMatchVisitor::getSearchRadius, this, placeholders::_1),
+                       getMap());
 
       getMap()->visitRo(v);
       v.finalizeIndex();
+
+      LOG_STATUS(
+        "Building feature index created with " << StringUtils::formatLargeNumber(v.getSize()) <<
+        " elements.");
     }
 
     return _index;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ChangesetCreator.h"
 
@@ -54,6 +54,10 @@
 
 //GEOS
 #include <geos/geom/Envelope.h>
+
+// Qt
+#include <QFileInfo>
+#include <QDir>
 
 namespace hoot
 {
@@ -92,6 +96,14 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   LOG_DEBUG(
     "Creating changeset from inputs: " << input1 << " and " << input2 << " to output: " <<
     output << "...");
+
+  QFileInfo outputInfo(output);
+  LOG_VARD(outputInfo.dir().absolutePath());
+  const bool outputDirSuccess = QDir().mkpath(outputInfo.dir().absolutePath());
+  if (!outputDirSuccess)
+  {
+    throw IllegalArgumentException("Unable to create output path for: " + output);
+  }
 
   _singleInput = input2.trimmed().isEmpty();
   LOG_VARD(_singleInput);
@@ -226,19 +238,14 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
   for (int i = 0; i < map1Inputs.size(); i++)
   {
     OsmMapPtr map1 = map1Inputs.at(i);
+    // If map2 is empty, we'll end up deleting features from map1 in the resultant changeset.
     OsmMapPtr map2 = map2Inputs.at(i);
-    if (map2->isEmpty())
-    {
-      // An empty map2 makes no sense, b/c you would just have an empty changeset.
-      LOG_INFO(
-        "Second map is empty. Skipping changeset generation for maps at index: " << i + 1 << "...");
-      continue;
-    }
     LOG_DEBUG(
-      "Creating changeset from inputs: " << map1->getName() << " and " << map2->getName() <<
-      " to output: " << output << "...");
-    OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation");
-    OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation");
+      "Creating changeset from inputs: " << map1->getName() << " of size: " << map1->size() <<
+      " and " << map2->getName() << " of size: " << map2->size() << " to output: " <<
+      output.right(25) << "...");
+    OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation-" + map1->getName());
+    OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation-" + map2->getName());
 
     // don't want to include review relations - may need to remove this depending on what happens
     // with #3361
@@ -673,14 +680,17 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     _numModifyChanges += changesetDeriver->getNumModifyChanges();
     _numDeleteChanges += changesetDeriver->getNumDeleteChanges();
 
-    LOG_VARD(changesetDeriver->getNumCreateChanges());
-    LOG_VARD(changesetDeriver->getNumModifyChanges());
-    LOG_VARD(changesetDeriver->getNumDeleteChanges());
-    LOG_VARD(changesetDeriver->getNumFromElementsParsed());
-    LOG_VARD(changesetDeriver->getNumToElementsParsed());
+    LOG_VART(changesetDeriver->getNumFromElementsParsed());
+    LOG_VART(changesetDeriver->getNumToElementsParsed());
     if (changesetDeriver->getNumChanges() == 0)
     {
-      LOG_WARN("No changes written to changeset.");
+      LOG_DEBUG("No changes written to changeset.");
+    }
+    else
+    {
+      LOG_VARD(changesetDeriver->getNumCreateChanges());
+      LOG_VARD(changesetDeriver->getNumModifyChanges());
+      LOG_VARD(changesetDeriver->getNumDeleteChanges());
     }
 
     // close the output stream
@@ -702,16 +712,16 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     input2->close();
   }
 
-  LOG_VARD(_printDetailedStats);
+  LOG_VART(_printDetailedStats);
   if (_printDetailedStats && !detailedStats.isEmpty())
   {
     LOG_STATUS("Changeset Stats:\n" << detailedStats);
   }
   else
   {
-    LOG_VARD(_numCreateChanges);
-    LOG_VARD(_numModifyChanges);
-    LOG_VARD(_numDeleteChanges);
+    LOG_DEBUG("Total create changes: " << _numCreateChanges);
+    LOG_DEBUG("Total modify changes: " << _numModifyChanges);
+    LOG_DEBUG("Total delete changes: " <<_numDeleteChanges);
   }
 }
 

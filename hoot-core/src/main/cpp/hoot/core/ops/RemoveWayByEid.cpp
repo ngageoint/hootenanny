@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveWayByEid.h"
 
@@ -50,12 +50,15 @@ _removeFully(removeFully)
 
 void RemoveWayByEid::_removeWay(OsmMapPtr& map, long wId)
 {
-  LOG_VART(wId);
   if (map->_ways.find(wId) != map->_ways.end())
   {
     LOG_TRACE("Removing way: " << ElementId::way(wId) << "...");
     map->_index->removeWay(map->getWay(wId));
     map->_ways.erase(wId);
+
+    LOG_VART(map->_ways.find(wId) == map->_ways.end());
+    LOG_VART(
+      map->_index->getElementToRelationMap()->getRelationByElement(ElementId::way(wId)).size());
   }
 }
 

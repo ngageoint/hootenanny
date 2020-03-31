@@ -13,7 +13,7 @@ LOG_LEVEL=--warn
 
 # Run changeset w/tags to produce separate outputs for geometry and tags
 echo "Running diff changeset with tags, separate outputs..."
-hoot conflate -C Testing.conf $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf \
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
  $INPUT_DIR/Input1.osm $INPUT_DIR/Input2.osm \
  $OUTPUT_DIR/output.osc --differential --include-tags --separate-output
 

@@ -18,7 +18,7 @@ exports.tagThreshold = parseFloat(hoot.get("generic.point.tag.threshold"));
 exports.baseFeatureType = "Point";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "point";
-exports.matchCandidateCriterion = "hoot::PointCriterion"; // See #3047
+exports.matchCandidateCriterion = "hoot::PointCriterion";
 
 function distance(e1, e2) 
 {
@@ -36,7 +36,7 @@ function distance(e1, e2)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPoint(map, e) && !isSpecificallyConflatable(map, e);
+  return isPoint(map, e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**
@@ -82,14 +82,16 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
 
-  var typeScore = getTypeScore(map, e1, e2);
-  var typeScorePassesThreshold = false;
-  if (typeScore >= exports.tagThreshold)
-  {
-    typeScorePassesThreshold = true;
-  }
-  hoot.trace("typeScore: " + typeScore);
+  // TODO: Should we do anything with names?
+
+  // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
+  // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
+  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.tagThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
+  if (!typeScorePassesThreshold)
+  {
+    return result;
+  }
 
   var error1 = e1.getCircularError();
   var error2 = e2.getCircularError();

@@ -813,7 +813,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-18"/>
     </node>
-    <way visible="true" id="-55" timestamp="2019-01-17T19:50:06Z" version="1">
+    <way visible="true" id="-56" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-88"/>
         <nd ref="-89"/>
         <nd ref="-87"/>
@@ -826,7 +826,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Caracas"/>
         <tag k="uuid" v="{c3ebab6b-1ff5-4824-98c7-e1cb35e68b6e}"/>
-        <tag k="hoot:id" v="-55"/>
+        <tag k="hoot:id" v="-56"/>
         <tag k="source:datetime" v="2015-06-03T13:47:09.000Z;2019-01-17T19:50:06Z"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="lanes" v="3"/>

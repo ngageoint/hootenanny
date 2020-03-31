@@ -22,18 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLATABLE_CRITERIA_VISITOR_H
 #define CONFLATABLE_CRITERIA_VISITOR_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class ConflatableCriteriaVisitor : public ElementVisitor
+class ConflatableCriteriaVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 
 public:
@@ -46,6 +48,14 @@ public:
 
   virtual QString getDescription() const
   { return "Marks elements with all criterion classes that consider them conflatable"; }
+
+  virtual std::string getClassName() const { return className(); }
+
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+private:
+
+  ConstOsmMapPtr _map;
 };
 
 }

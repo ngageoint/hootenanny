@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LONGESTTAGVISITOR_H
 #define LONGESTTAGVISITOR_H
@@ -49,6 +49,8 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Identifies the tag with the largest text size"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

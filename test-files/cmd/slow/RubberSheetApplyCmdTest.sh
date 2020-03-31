@@ -3,8 +3,10 @@ set -e
 
 mkdir -p $HOOT_HOME/test-output/cmd/slow/RubberSheetApplyCmdTest
 
+CONFIG="-C Testing.conf"
+
 # First we derive a rubber sheet
-hoot rubber-sheet -C Testing.conf --error --derive \
+hoot rubber-sheet --error $CONFIG --derive \
   --ref $HOOT_HOME/test-files/DcGisRoads.osm \
         $HOOT_HOME/test-files/DcTigerRoads.osm \
         $HOOT_HOME/test-output/cmd/slow/RubberSheetApplyCmdTest/DcTigerToDcGis.rs 
@@ -22,11 +24,11 @@ testfile=$HOOT_HOME/test-output/cmd/slow/RubberSheetApplyCmdTest/DcTigerToDcGis.
 #fi
 
 # Now we apply the rubber sheet
-hoot rubber-sheet -C Testing.conf --error --apply \
+hoot rubber-sheet --error $CONFIG --apply \
   $HOOT_HOME/test-output/cmd/slow/RubberSheetApplyCmdTest/DcTigerToDcGis.rs \
   $HOOT_HOME/test-files/DcTigerRoads.osm \
   $HOOT_HOME/test-output/cmd/slow/RubberSheetApplyCmdTest/DcTigerToDcGis.osm 
 
 goodfile=$HOOT_HOME/test-files/cmd/slow/RubberSheetApplyCmdTest/DcTigerToDcGis.osm
 testfile=$HOOT_HOME/test-output/cmd/slow/RubberSheetApplyCmdTest/DcTigerToDcGis.osm
-hoot diff $goodfile $testfile || diff $goodfile $testfile
+hoot diff $CONFIG $goodfile $testfile || diff $goodfile $testfile

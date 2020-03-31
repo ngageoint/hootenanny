@@ -84,7 +84,7 @@
         "description": "Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not conflate",
         "name": "Corner Splitter Rounded Split",
         "defaultvalue": "true",
-        "hoot_key": "corner.splitter.rounded.split"
+        "hoot_key": "highway.corner.splitter.rounded.split"
       },
       {
         "id": "duplicate_name_preserve_original_name",

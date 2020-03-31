@@ -63,6 +63,7 @@ class ServiceHootApiDbWriterTest : public HootTestFixture
   CPPUNIT_TEST(twoMapsSameNameSameUserOverwriteDisabledTest);
   CPPUNIT_TEST(twoMapsSameNameSameUserOverwriteEnabledTest);
   CPPUNIT_TEST(jobIdTest);
+  CPPUNIT_TEST(preserveVersionOnInsertTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -108,6 +109,7 @@ public:
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
+    writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
     OsmMapPtr map(new OsmMap());
@@ -143,6 +145,7 @@ public:
     writer.setRemap(false);
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
+    writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
     OsmMapPtr map(new OsmMap());
@@ -255,6 +258,7 @@ public:
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
+    writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
     OsmMapPtr map(new OsmMap());
@@ -356,6 +360,7 @@ public:
     writer.setRemap(false);
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
+    writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
@@ -381,6 +386,7 @@ public:
     writer2.setRemap(false);
     writer2.setIncludeDebug(true);
     writer2.setUserEmail(differentUserEmail);
+    writer2.setPreserveVersionOnInsert(false);
     LOG_DEBUG("Attempting to open db for writing second map...");
     writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     // This should not fail, since we allow different users to write maps with the same name (just
@@ -407,6 +413,7 @@ public:
     writer.setRemap(false);
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
+    writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer.write(map1);
     const long mapId = writer.getMapId();
@@ -424,6 +431,7 @@ public:
     writer2.setIncludeDebug(true);
     writer2.setUserEmail(userEmail());
     writer2.setOverwriteMap(false);
+    writer2.setPreserveVersionOnInsert(false);
     writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer2.write(map2);
     writer2.close();
@@ -453,6 +461,7 @@ public:
     writer.setRemap(false);
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
+    writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer.write(map);
     const long firstMapId = writer.getMapId();
@@ -470,6 +479,7 @@ public:
     writer2.setRemap(false);
     writer2.setIncludeDebug(true);
     writer2.setUserEmail(userEmail());
+    writer2.setPreserveVersionOnInsert(false);
     writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer2.write(map2);
     const long secondMapId = writer2.getMapId();
@@ -513,6 +523,7 @@ public:
     writer.setRemap(false);
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
+    writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer.write(map);
     const long firstMapId = writer.getMapId();
@@ -525,6 +536,7 @@ public:
     writer2.setRemap(false);
     writer2.setUserEmail(userEmail());
     writer2.setIncludeDebug(true);
+    writer2.setPreserveVersionOnInsert(false);
     writer2.open(ServicesDbTestUtils::getDbModifyUrl(_testName + "2").toString());
     writer2.write(map);
     const long secondMapId = writer2.getMapId();
@@ -545,6 +557,97 @@ public:
     db.deleteMap(secondMapId);
     db._deleteJob(jobId);
     db.close();
+  }
+
+  void preserveVersionOnInsertTest()
+  {
+    setUpTest("preserveVersionOnInsertTest");
+    // populate the database.
+    HootApiDbWriter writer;
+    writer.setRemap(false);
+    writer.setUserEmail(userEmail());
+    writer.setIncludeDebug(true);
+    writer.setPreserveVersionOnInsert(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+
+    OsmMapPtr map(new OsmMap());
+
+    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    n1->setTag("note", "n1");
+    NodePtr n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
+    n2->setTag("note", "n2");
+    n2->setVersion(2);
+    NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
+    n3->setTag("note", "n3");
+    n3->setVersion(1);
+    map->addNode(n1);
+    map->addNode(n2);
+    map->addNode(n3);
+
+    WayPtr w1(new Way(Status::Unknown1, 1, 13.0));
+    w1->addNode(1);
+    w1->addNode(2);
+    w1->setTag("note", "w1");
+    w1->setVersion(3);
+    WayPtr w2(new Way(Status::Unknown2, 2, 14.0));
+    w2->addNode(2);
+    w2->addNode(3);
+    w2->setTag("note", "w2");
+    map->addWay(w1);
+    map->addWay(w2);
+
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15.0, MetadataTags::RelationCollection()));
+    r1->addElement("n1", n1->getElementId());
+    r1->addElement("w1", w1->getElementId());
+    r1->setTag("note", "r1");
+    r1->setVersion(2);
+    map->addRelation(r1);
+
+    writer.write(map);
+
+    _mapId = writer.getMapId();
+    writer.close();
+
+    ServicesDbTestUtils::compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
+                                        HootApiDb::getCurrentNodesTableName(_mapId) +
+                                        " ORDER BY longitude",
+                                        "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" +
+                                          MetadataTags::HootId() + "\"=>\"1\", \"" +
+                                          MetadataTags::HootStatus() + "\"=>\"1\", \"" +
+                                          MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                                        "0;0.1;true;3221225992;2;\"note\"=>\"n2\", \"" +
+                                          MetadataTags::HootId() + "\"=>\"2\", \"" +
+                                          MetadataTags::HootStatus() + "\"=>\"2\", \"" +
+                                          MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
+                                        "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"" +
+                                          MetadataTags::HootId() + "\"=>\"3\", \"" +
+                                          MetadataTags::HootStatus() + "\"=>\"3\", \"" +
+                                          MetadataTags::ErrorCircular() + "\"=>\"12\"",
+                                        _testName,
+                                        (qlonglong)_mapId);
+
+    ServicesDbTestUtils::compareRecords("SELECT id, visible, version, tags FROM " +
+                                        HootApiDb::getCurrentWaysTableName(_mapId) +
+                                        " ORDER BY id",
+                                        "1;true;3;\"note\"=>\"w1\", \"" + MetadataTags::HootId() +
+                                          "\"=>\"1\", \"" + MetadataTags::HootStatus() +
+                                          "\"=>\"1\", \"" + MetadataTags::ErrorCircular() +
+                                          "\"=>\"13\"\n"
+                                        "2;true;1;\"note\"=>\"w2\", \"" + MetadataTags::HootId() +
+                                          "\"=>\"2\", \"" + MetadataTags::HootStatus() +
+                                          "\"=>\"2\", \"" + MetadataTags::ErrorCircular() +
+                                          "\"=>\"14\"",
+                                        _testName,
+                                        (qlonglong)_mapId);
+
+    ServicesDbTestUtils::compareRecords("SELECT id, visible, version, tags FROM " +
+                                        HootApiDb::getCurrentRelationsTableName(_mapId),
+                                        "1;true;2;\"note\"=>\"r1\", \"type\"=>\"collection\", \"" +
+                                          MetadataTags::HootId() + "\"=>\"1\", \"" +
+                                          MetadataTags::HootStatus() + "\"=>\"1\", \"" +
+                                          MetadataTags::ErrorCircular() + "\"=>\"15\"",
+                                        _testName,
+                                        (qlonglong)_mapId);
   }
 
 private:

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_ID_JS_H__
 #define __ELEMENT_ID_JS_H__
@@ -88,7 +88,8 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
   {
     eid = eidj->getElementId();
   }
-  else if (obj->Has(v8::String::NewFromUtf8(current, "id")) && obj->Has(v8::String::NewFromUtf8(current, "type")))
+  else if (obj->Has(v8::String::NewFromUtf8(current, "id")) &&
+           obj->Has(v8::String::NewFromUtf8(current, "type")))
   {
     long id;
     QString type;

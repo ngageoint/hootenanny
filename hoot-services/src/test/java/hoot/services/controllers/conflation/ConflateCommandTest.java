@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -67,9 +67,9 @@ public class ConflateCommandTest {
         advancedOptions.add("\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
                 "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
                 "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
-                "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
-                "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
-                "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
+                "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
+                "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
+                "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreasVisitor;" +
                 "hoot::NoInformationElementRemover\"");
 
         conflateParams.setAdvancedOptions(advancedOptions.stream().collect(Collectors.joining(" ")));
@@ -99,9 +99,9 @@ public class ConflateCommandTest {
         assertTrue(command.endsWith("-D, \"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
                                     "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
                                     "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
-                                    "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
-                                    "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
-                                    "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
+                                    "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
+                                    "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
+                                    "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreasVisitor;" +
                                     "hoot::NoInformationElementRemover\"]"));
         assertTrue(command.contains("-D, job.id="));
 
@@ -260,10 +260,10 @@ public class ConflateCommandTest {
         assertTrue(options.contains("\"highway.merge.tags.only=true\""));
 
         // handles cleaning options...
-        conflateParams.setCleaningOpts(Arrays.asList("DualWaySplitter"));
+        conflateParams.setCleaningOpts(Arrays.asList("DualHighwaySplitter"));
         conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
         options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
-        assertTrue(options.contains("\"map.cleaner.transforms-=hoot::DualWaySplitter\""));
+        assertTrue(options.contains("\"map.cleaner.transforms-=hoot::DualHighwaySplitter\""));
 
     }
 

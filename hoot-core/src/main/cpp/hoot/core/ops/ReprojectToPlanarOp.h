@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __REPROJECT_TO_PLANAR_OP_H__
@@ -31,7 +31,6 @@
 // hoot
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -42,7 +41,7 @@ namespace hoot
  *
  * This is compatible with fourpass.
  */
-class ReprojectToPlanarOp : public OsmMapOperation, public Serializable, public OperationStatusInfo
+class ReprojectToPlanarOp : public OsmMapOperation, public Serializable
 {
 public:
 

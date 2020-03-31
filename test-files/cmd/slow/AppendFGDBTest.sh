@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-HOOT_OPT="--error"
+HOOT_OPT="--error -C Testing.conf"
 
 INPUT_OSM=test-files/elements/OsmMapTest/OsmMapAppendTest.osm
 

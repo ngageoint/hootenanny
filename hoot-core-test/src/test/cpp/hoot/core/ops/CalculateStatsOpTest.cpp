@@ -80,7 +80,7 @@ public:
   void runStatsNumTest()
   {
     std::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types.osm");
-    CPPUNIT_ASSERT_EQUAL(193, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(196, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
@@ -335,7 +335,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Average Levels Per Building"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Non-Building Areas"));
+    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Non-Building Areas"));
 
     CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Features with Addresses"));
     CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Total Addresses"));

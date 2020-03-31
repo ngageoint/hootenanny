@@ -49,7 +49,9 @@ LogJs::LogJs()
 {
 }
 
-LogJs::~LogJs() {}
+LogJs::~LogJs()
+{
+}
 
 void LogJs::Init(Handle<Object> exports)
 {

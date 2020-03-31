@@ -51,8 +51,7 @@ public:
 
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Polygon; }
+  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion(_map)); }
 
@@ -63,9 +62,12 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
+  virtual bool supportsSpecificConflation() const { return true; }
+
 private:
 
   ConstOsmMapPtr _map;
+  mutable ElementId _currentElementId;
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NORMALIZE_PHONE_NUMBERS_VISITOR_H
@@ -32,7 +32,6 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/conflate/phone/PhoneNumberNormalizer.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -40,8 +39,7 @@ namespace hoot
 /**
  * Normalizes element phone numbers
  */
-class NormalizePhoneNumbersVisitor : public ElementVisitor, public Configurable,
-  public OperationStatusInfo
+class NormalizePhoneNumbersVisitor : public ElementVisitor, public Configurable
 {
 public:
 
@@ -63,6 +61,8 @@ public:
       "Normalized " + QString::number(_phoneNumberNormalizer.getNumNormalized()) +
       " phone numbers";
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -34,6 +34,7 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/GeometricRelationship.h>
 
 // GEOS
 #include <geos/geom/Geometry.h>
@@ -646,28 +647,19 @@ public:
   static double getArea(const ConstElementPtr& element, ConstOsmMapPtr map);
 
   /**
-   * Determines if an element contains another element geographically
-   *
-   * @param containingElement the element to check for containing containedElement
-   * @param containedElement the element to check if contained by containingElement
-   * @param map map owning the input elements
-   * @return true if containingElement contains the containedElement geographicaly; false otherwise
-   * or if the containment could not be calculated
-   */
-  static bool elementContains(const ConstElementPtr& containingElement,
-                              const ConstElementPtr& containedElement, ConstOsmMapPtr map);
-
-  /**
-   * Determines if an element intersects another element; backed by a cache
+   * Determines two elements have a geometric relationship
    *
    * @param element1 the first element to examine
    * @param element2 the second element to examine
+   * @param relationship the geometric relationship to check for between the two elements
    * @param map map owning the input elements
-   * @return true if the two elements intersect; false otherwise or if the intersection could not
-   * be calculated
+   * @return true if the two elements have the specified geometric relationship; false otherwise or
+   * if the relationship could not be calculated
+   * @todo should eventually back this with a cache, as is done in PoiPolygonInfoCache
    */
-  static bool elementsIntersect(const ConstElementPtr& element1, const ConstElementPtr& element2,
-                                ConstOsmMapPtr map);
+  static bool haveGeometricRelationship(
+    const ConstElementPtr& element1, const ConstElementPtr& element2,
+    const GeometricRelationship& relationship, ConstOsmMapPtr map);
 
   /**
    * Determines if an element has a given criterion; backed by a cache
@@ -687,6 +679,55 @@ public:
    * @return true if parent has the element with memberId as a child; false otherwise
    */
   static bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
+
+  /**
+   * Determines if an element is a member of a relation
+   *
+   * @param map map owning the input element
+   * @param childId element ID of the input element
+   * @return true if the element is a member of a relation
+   */
+  static bool isMemberOfRelation(const ConstOsmMapPtr& map, const ElementId& childId);
+
+  /**
+   * Determines if an element is a member of a relation of a given type
+   *
+   * @param map map owning the input element
+   * @param childId element ID of the input element
+   * @param relationType type of relation to search for; if left blank, relation types are not
+   * checked
+   * @return true if the element is a member of a relation of the specified type OR if the element
+   * is simply a member of a relation and the type is not specified; false otherwise
+   */
+  static bool isMemberOfRelationType(const ConstOsmMapPtr& map, const ElementId& childId,
+                                     const QString& relationType = "");
+
+  /**
+   * Determines if an element is a member of a relation that is in a given schema category
+   *
+   * @param map map owning the input element
+   * @param childId element ID of the input element
+   * @param schemaCategory schema category to search for relation membership in; if left blank,
+   * category membership for the relations is not checked
+   * @return true if the element is a member of a relation that is in the specified schema category
+   * OR if the element is simply a member of a relation and the category is not specified; false
+   * otherwise
+   */
+  static bool isMemberOfRelationInCategory(const ConstOsmMapPtr& map, const ElementId& childId,
+                                           const QString& schemaCategory = "");
+
+  /**
+   * Determines if an element is a member of a relation that has a given tag key
+   *
+   * @param map map owning the input element
+   * @param childId element ID of the input element
+   * @param tagKey tag key to search relations for; if left blank, tag keys on the relations are not
+   * checked
+   * @return true if the element is a member of a relation with the specified tag key OR if the
+   * element is simply a member of a relation and a tag key is not specified
+   */
+  static bool isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const ElementId& childId,
+                                           const QString& tagKey = "");
 
 private:
 

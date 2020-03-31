@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __ALPHASHAPE_H__
@@ -80,14 +80,16 @@ public:
 
   std::shared_ptr<OsmMap> toOsmMap();
 
+  double getLongestFaceEdge() const { return _longestFaceEdge; }
+
 private:
 
   double _alpha;
 
+  mutable double _longestFaceEdge;
+
   std::shared_ptr<Tgs::DelaunayTriangulation> _pDelauneyTriangles;
   std::set<std::pair<double, double>> _outsidePoint;
-
-  std::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face* face, const std::shared_ptr<OsmMap>& map);
 
   std::shared_ptr<geos::geom::Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
 
@@ -112,7 +114,8 @@ private:
 
   bool _isTooLong(const Tgs::Edge& e) const;
 
-  std::shared_ptr<geos::geom::Geometry> _validateGeometry(const std::shared_ptr<geos::geom::Geometry>& g);
+  std::shared_ptr<geos::geom::Geometry> _validateGeometry(
+    const std::shared_ptr<geos::geom::Geometry>& g);
 };
 
 }

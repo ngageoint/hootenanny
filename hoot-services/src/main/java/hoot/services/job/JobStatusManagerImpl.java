@@ -154,7 +154,6 @@ public class JobStatusManagerImpl implements JobStatusManager {
 
     @Override
     public void setFailed(String jobId, String statusDetail) {
-        logger.error("Job with ID: {} failed: {}", jobId, statusDetail);
         try {
             this.updateJob(jobId, FAILED, statusDetail, null);
         }

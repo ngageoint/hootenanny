@@ -1,0 +1,9 @@
+[
+    {
+        "dataType": "real",
+        "influence": 1,
+        "name": "accuracy",
+        "isA": "metadata",
+        "objectType": "tag"
+    }
+]

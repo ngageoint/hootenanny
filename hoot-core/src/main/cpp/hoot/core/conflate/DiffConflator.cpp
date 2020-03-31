@@ -69,6 +69,9 @@
 #include <tgs/System/Time.h>
 #include <tgs/System/Timer.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace std;
 using namespace Tgs;
 
@@ -161,7 +164,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   }
   LOG_STATUS(
     "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
-    " Differential Conflation matches.");
+    " Differential Conflation match conflicts to be removed.");
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
   _stats.append(SingleStat("Number of Matches Found", _matches.size()));
@@ -171,11 +174,14 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   currentStep++;
 
-  // Use matches to calculate and store tag diff. We must do this before we create the map diff,
-  // because that operation deletes all of the info needed for calculating the tag diff.
-  _updateProgress(currentStep - 1, "Storing tag differentials...");
-  _calcAndStoreTagChanges();
-  currentStep++;
+  if (_conflateTags)
+  {
+    // Use matches to calculate and store tag diff. We must do this before we create the map diff,
+    // because that operation deletes all of the info needed for calculating the tag diff.
+    _updateProgress(currentStep - 1, "Storing tag differentials...");
+    _calcAndStoreTagChanges();
+    currentStep++;
+  }
 
   QString message = "Dropping match conflicts";
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
@@ -227,7 +233,7 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   roadSnapper.apply(_pMap);
   LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
-  return roadSnapper.getNumAffected();
+  return roadSnapper.getNumFeaturesAffected();
 }
 
 void DiffConflator::_removeMatches(const Status& status)
@@ -376,7 +382,9 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
 
 void DiffConflator::_calcAndStoreTagChanges()
 {
-  LOG_INFO("Storing tag changes...");
+  QElapsedTimer timer;
+  timer.start();
+  LOG_DEBUG("Storing tag changes...");
 
   MapProjector::projectToWgs84(_pMap);
 
@@ -460,6 +468,9 @@ void DiffConflator::_calcAndStoreTagChanges()
             StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
     }
   }
+  LOG_STATUS(
+    "Stored tag changes for " << StringUtils::formatLargeNumber(numMatchesProcessed) <<
+    " matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
 }
@@ -533,10 +544,11 @@ std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, Os
 {
   // Conflation requires all data to be in memory, so no point in adding support for the
   // ExternalMergeElementSorter here.
-
   InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
   InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
   std::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
+  //  Deriving changesets for differential shouldn't include any deletes, create and modify only
+  delta->setAllowDeletingReferenceFeatures(false);
   return delta;
 }
 

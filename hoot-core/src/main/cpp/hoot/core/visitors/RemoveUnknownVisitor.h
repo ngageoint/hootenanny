@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVE_UNKNOWN_VISITOR_H
 #define REMOVE_UNKNOWN_VISITOR_H
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -37,7 +36,7 @@ namespace hoot
 /**
  * Removes all elements of a given status.
  */
-class RemoveUnknownVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class RemoveUnknownVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -46,11 +45,6 @@ public:
   void set(Status status) { _status = status; }
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
-
-  virtual QString getDescription() const
-  { return "Removes all elements of Unknown1 or Unknown2 status"; }
-
-  virtual QString getInitStatusMessage() const { return "Removing elements..."; }
 
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " elements."; }
@@ -77,8 +71,12 @@ public:
 
   RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
 
+  virtual QString getInitStatusMessage() const { return "Removing unknown1 elements..."; }
+
   virtual QString getDescription() const override
   { return "Removes all elements with a status of Unknown1"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 /**
@@ -92,8 +90,12 @@ public:
 
   RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
 
+  virtual QString getInitStatusMessage() const { return "Removing unknown2 elements..."; }
+
   virtual QString getDescription() const override
   { return "Removes all elements with a status of Unknown2"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

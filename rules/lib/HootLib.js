@@ -46,6 +46,7 @@ function getRelatedTags(relateToKvp, d) {
     var result = [];
     for (var k in d) {
         var kvp = k + '=' + d[k];
+        // TODO: This needs to be updated for features other than POI before its used outside of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.score(relateToKvp, kvp) > 0) {
                 result.push(kvp);
@@ -76,7 +77,8 @@ function getTagsByCategory(category, d) {
     var result = [];
     for (var k in d) {
         var kvp = k + '=' + d[k];
-        // if it is not a generic POI type
+        // if it is not a generic type
+        // TODO: This needs to be updated for features other than POI before its used outside of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.getCategories(kvp).indexOf(category) >= 0) {
                 result.push(kvp);
@@ -150,13 +152,59 @@ function getTagDistance(commonKvp, t1, t2) {
 }
 
 /**
- * TODO
+ * Determines if an element is a member of relation that has a specified type
  */
-function getTypeScore(map, e1, e2)
+function isMemberOfRelationType(map, childElementId, relationType)
 {
-  //var differ = new hoot.ComparatorTagDifferencer();
-  //return differ.diff(map, e1, e2);
-  return hoot.OsmSchema.scoreTypes(e1.getTags(), e2.getTags());
+  return map.isMemberOfRelationType(childElementId, relationType);
+}
+
+/**
+ * Determines if an element is a member of relation that is in a specified schema category
+ */
+function isMemberOfRelationInCategory(map, childElementId, schemaCategory)
+{
+  return map.isMemberOfRelationInCategory(childElementId, schemaCategory);
+}
+
+/**
+ * Determines if an element is a member of relation containing a specified tag key
+ */
+function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
+{
+  return map.isMemberOfRelationWithTagKey(childElementId, tagKey);
+}
+
+/**
+ * Determines if two features mismatch on non-generic types
+ */
+function explicitTypeMismatch(e1, e2, minTypeScore)
+{
+  return hoot.OsmSchema.explicitTypeMismatch(e1, e2, minTypeScore);
+}
+
+/**
+ * Scores the similarity between two feature types
+ */
+function getTypeScore(e1, e2, ignoreGenericTypes)
+{
+  return hoot.OsmSchema.scoreTypes(e1.getTags(), e2.getTags(), ignoreGenericTypes);
+}
+
+/**
+ * Determines if a feature has a generic type (e.g. has building=yes and no other type tags)
+ */
+function isGeneric(e)
+{
+  return hoot.OsmSchema.isGeneric(e);
+}
+
+/**
+ * Determines if a feature has a specific type
+ */
+function hasType(e)
+{
+  return hoot.OsmSchema.hasType(e);
 }
 
 /**
@@ -290,7 +338,7 @@ function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
  * the rubber sheeting required to automatically calculate the search radius.
  * @param rubberSheetMinTies The minimum number of tie points that need to be found during rubber
  * sheeting for the automatic search radius calculation to occur.
- * @param matchCandidateCriterion todo
+ * @param matchCandidateCriterion criterion used to filter match candidates
  */
 function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberSheetMinTies, matchCandidateCriterion)
 {
@@ -302,12 +350,11 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
 }
 
 /**
- * Returns true if the feature is conflatable by any geometry non-generic conflation algorithm (so conflatable by everything besides: 
- * Point.js, Line.js, Polygon.js, or PointPolygon.js).
+ * Returns true if the feature is conflatable by any geometry non-generic conflation algorithm .
  */
-function isSpecificallyConflatable(map, e)
+function isSpecificallyConflatable(map, e, geometryTypeFilter)
 {
-  return hoot.OsmSchema.isSpecificallyConflatable(map, e);
+  return hoot.OsmSchema.isSpecificallyConflatable(map, e, geometryTypeFilter);
 }
 
 // TODO: All of these is* methods can go away if #3047 is completed.
@@ -326,9 +373,14 @@ function isArea(map, e)
   return hoot.OsmSchema.isArea(map, e);
 }
 
-function isHighway(e)
+function isNonBuildingArea(map, e)
 {
-  return hoot.OsmSchema.isHighway(e);
+  return hoot.OsmSchema.isNonBuildingArea(map, e);
+}
+
+function isHighway(map, e)
+{
+  return hoot.OsmSchema.isHighway(map, e);
 }
 
 /**

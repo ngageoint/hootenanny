@@ -65,6 +65,8 @@ public:
 
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   std::set<ElementId> _eids;

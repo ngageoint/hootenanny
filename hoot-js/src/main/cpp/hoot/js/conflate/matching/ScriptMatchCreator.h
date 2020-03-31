@@ -109,10 +109,16 @@ public:
    */
   virtual QString getName() const override;
 
+  /**
+   * @see FilteredByCriteria
+   */
+  virtual QStringList getCriteria() const;
+
 private:
 
   std::shared_ptr<PluginContext> _script;
   QString _scriptPath;
+  CreatorDescription _scriptInfo;
 
   std::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
   std::shared_ptr<MatchThreshold> _matchThreshold;

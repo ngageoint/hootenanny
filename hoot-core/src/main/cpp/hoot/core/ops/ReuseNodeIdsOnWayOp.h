@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REUSE_NODE_IDS_ON_WAY_OP_H
 #define REUSE_NODE_IDS_ON_WAY_OP_H
@@ -55,6 +55,8 @@ public:
   virtual void addElement(const ConstElementPtr& e) override;
 
   virtual QString getDescription() const { return "Reuses the node IDs from one way in another."; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -1,0 +1,20 @@
+{
+   "version":0.6,
+   "generator":"Hootenanny",
+   "elements":[
+      {
+         "type":"node",
+         "id":247702741,
+         "timestamp":"1970-01-01T00:00:00Z",
+         "version":1,
+         "changeset":3732,
+         "lat":41.8912809,
+         "lon":12.4910317,
+         "tags":{
+            "highway":"crossing",
+            "source:datetime":"2013-04-15T13:05:23.000Z",
+            "error:circular":"15"
+         }
+      }
+   ]
+}

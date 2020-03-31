@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementStreamer.h"
 
@@ -153,6 +153,8 @@ ElementInputStreamPtr ElementStreamer::getFilteredInputStream(
     return streamToFilter;
   }
 
+  ConfigUtils::checkForDuplicateElementCorrectionMismatch(ops);
+
   foreach (QString opName, ops)
   {
     LOG_VARD(opName);
@@ -247,6 +249,7 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out,
       OsmMapReaderFactory::createReader(
         in, ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+    reader->setConfiguration(conf());
     reader->open(in);
 
     // add visitor/criterion operations if any of the convert ops are visitors.

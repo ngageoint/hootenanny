@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __WAY_SPLITTER_OP_H__
@@ -33,7 +33,6 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QString>
@@ -48,8 +47,7 @@ namespace hoot
  *
  * If way.splitter.max.length is not specified then it defaults to 5km.
  */
-class WaySplitterOp : public OsmMapOperation, public Serializable, public Configurable,
-  public OperationStatusInfo
+class WaySplitterOp : public OsmMapOperation, public Serializable, public Configurable
 {
 public:
 

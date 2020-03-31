@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_CREATOR_H
 #define CHANGESET_REPLACEMENT_CREATOR_H
@@ -141,6 +141,7 @@ public:
   void setRetainmentFilterOptions(const QStringList& optionKvps);
   void setWaySnappingEnabled(const bool enabled) { _waySnappingEnabled = enabled; }
   void setConflationEnabled(const bool enabled) { _conflationEnabled = enabled; }
+  void setTagOobConnectedWays(const bool addTag) { _tagOobConnectedWays = addTag; }
 
 private:
 
@@ -189,6 +190,11 @@ private:
   // turn on/off conflation of cookie cut data being replaced with replacement data
   bool _conflationEnabled;
 
+  // Tagging out of bounds connected ways allows for preventing deletion of ways outside of the
+  // replacement bounds when lenient bounds interpretation is enabled. If false, the tags should
+  // added manually before performing the replacement.
+  bool _tagOobConnectedWays;
+
   // controls cropping
   BoundsOptions _boundsOpts;
 
@@ -234,7 +240,8 @@ private:
    */
   void _addChangesetDeleteExclusionTags(OsmMapPtr& map);
 
-  OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap);
+  OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
+                             const GeometryTypeCriterion::GeometryType& geometryType);
 
   /*
    * Copies all ways that are tagged with MetadataTags::HootConnectedWayOutsideBounds() out of a map
@@ -283,6 +290,8 @@ private:
     const ElementCriterionPtr& secFeatureFilter,
     const GeometryTypeCriterion::GeometryType& geometryType,
     const QStringList& linearFilterClassNames = QStringList());
+
+  void _cleanupMissingElements(OsmMapPtr& map);
 };
 
 }

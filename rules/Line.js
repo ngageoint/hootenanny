@@ -17,7 +17,7 @@ exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
 exports.tagThreshold = parseFloat(hoot.get("generic.line.tag.threshold"));
 exports.baseFeatureType = "Line";
 exports.geometryType = "line";
-exports.matchCandidateCriterion = "hoot::LineCriterion"; // See #3047
+exports.matchCandidateCriterion = "hoot::LinearCriterion";
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
@@ -37,7 +37,13 @@ var sublineMatcher = new hoot.MaximalSublineStringMatcher({
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isLinear(e) && !isSpecificallyConflatable(map, e);
+  // Even though a route relation passes the linear crit, we want only highway or rail
+  // conflation to conflate it.
+  if (e.getElementId().getType() == "Relation" && e.getTags().contains("route"))
+  {
+    return false;
+  }
+  return isLinear(e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**
@@ -71,25 +77,27 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+  hoot.debug("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
   if (e1.getTags().get("note"))
   {
-    hoot.trace("e1 note: " + e1.getTags().get("note"));
+    hoot.debug("e1 note: " + e1.getTags().get("note"));
   }
-  hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+  hoot.debug("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
   if (e2.getTags().get("note"))
   {
-    hoot.trace("e2 note: " + e2.getTags().get("note"));
+    hoot.debug("e2 note: " + e2.getTags().get("note"));
   }
 
-  var typeScore = getTypeScore(map, e1, e2);
-  var typeScorePassesThreshold = false;
-  if (typeScore >= exports.tagThreshold)
+  // TODO: Should we do anything with names?
+
+  // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
+  // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
+  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.tagThreshold);
+  hoot.debug("typeScorePassesThreshold: " + typeScorePassesThreshold);
+  if (!typeScorePassesThreshold)
   {
-    typeScorePassesThreshold = true;
+    return result;
   }
-  hoot.trace("typeScore: " + typeScore);
-  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
 
   // extract the sublines needed for matching - Note that this was taken directly from Highway.js.
   var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
@@ -115,14 +123,14 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("distanceScore: " + distanceScore);
   hoot.trace("weightShapeDistanceScore: " + weightShapeDistanceScore);
   hoot.trace("lengthScore: " + lengthScore);
-  hoot.trace("geometryMatch: " + geometryMatch);
+  hoot.debug("geometryMatch: " + geometryMatch);
 
   var featureMatch = typeScorePassesThreshold && geometryMatch;
   if (featureMatch)
   {
     result = { match: 1.0 };
   }
-  hoot.trace("featureMatch: " + featureMatch);
+  hoot.debug("featureMatch: " + featureMatch);
 
   return result;
 };

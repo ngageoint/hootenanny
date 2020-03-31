@@ -210,7 +210,8 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
     "HighwayTagOnlyMerger: keeper element\n" <<
     OsmUtils::getElementDetailString(elementWithTagsToKeep, map));
 
-  map->getIdSwap()->add(elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId());
+  map->getIdSwap()->add(
+    elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId());
   // mark element for replacement
   // TODO: The multilinestring relations marked for replacement aren't being removed.
   if (removeSecondaryElement)

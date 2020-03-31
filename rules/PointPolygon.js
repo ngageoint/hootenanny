@@ -16,11 +16,11 @@ exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point.polygon"));
 exports.tagThreshold = parseFloat(hoot.get("generic.point.polygon.tag.threshold"));
 exports.writeDebugTags = hoot.get("writer.include.debug.tags");
+// The baseFeatureType and geometryType vars don't work for Point/Polygon with stats due to it conflating different geometry types.
+// Logic has been added to ScriptMatchCreator to handle this, so they can remain empty.
 //exports.baseFeatureType = ""; // 
 //exports.geometryType = "";
-//exports.matchCandidateCriterion = "";
-// The baseFeatureType and geometryType vars don't work for Point/Polygon due to it conflating different geometry types.
-// Logic has been added to ScriptMatchCreator to handle this, so they can remain empty.
+exports.matchCandidateCriterion = "hoot::PointCriterion;hoot::PolygonCriterion";
 
 var distanceExtractor = 
   new hoot.EuclideanDistanceExtractor({ "convert.require.area.for.polygon": "false" });
@@ -36,8 +36,9 @@ var distanceExtractor =
 exports.isMatchCandidate = function(map, e)
 {
   // We follow the same convention as POI/Polygon conflation here where all the match candidates are just points (not polys) and
-  // we find polygon neighbors to match with inside of ScriptMatchCreator.
-  return isPoint(map, e)  && !isSpecificallyConflatable(map, e);
+  // we find polygon neighbors to match with inside of ScriptMatchCreator. We're not getting the geometry type from 
+  // exports.geometryType for the reason described above.
+  return isPoint(map, e) && !isSpecificallyConflatable(map, e, "point");
 };
 
 /**
@@ -83,14 +84,16 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
 
-  var typeScore = getTypeScore(map, e1, e2);
-  var typeScorePassesThreshold = false;
-  if (typeScore >= exports.tagThreshold)
-  {
-    typeScorePassesThreshold = true;
-  }
-  hoot.trace("typeScore: " + typeScore);
+  // TODO: Should we do anything with names?
+
+  // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
+  // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
+  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.tagThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
+  if (!typeScorePassesThreshold)
+  {
+    return result;
+  }
 
   // This is a simple check to see if the two features are within the worst CE of each other.
   var error1 = e1.getCircularError();

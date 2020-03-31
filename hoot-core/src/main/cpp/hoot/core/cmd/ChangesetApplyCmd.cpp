@@ -77,7 +77,7 @@ public:
     {
       cout << getHelp() << endl << endl;
       throw HootException(
-        QString("%1 takes at least two parameters and was given %2 parameters")
+        QString("%1 takes at least 2 parameters and was given %2 parameters")
           .arg(getName())
           .arg(args.size()));
     }

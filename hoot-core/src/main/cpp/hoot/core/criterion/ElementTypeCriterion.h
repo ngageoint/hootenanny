@@ -22,13 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTTYPECRITERION_H
 #define ELEMENTTYPECRITERION_H
 
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementType.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -90,18 +92,47 @@ public:
   { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
-class RelationCriterion : public ElementTypeCriterion
+class RelationCriterion : public ElementTypeCriterion, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::RelationCriterion"; }
 
   RelationCriterion() : ElementTypeCriterion(ElementType::Relation) {}
+  RelationCriterion(const QString& type) :
+    ElementTypeCriterion(ElementType::Relation), _type(type.trimmed()) {}
+
+  virtual bool isSatisfied(const ConstElementPtr& e) const override
+  {
+    const bool typeMatch = ElementTypeCriterion::isSatisfied(e);
+    if (typeMatch)
+    {
+      if (_type.isEmpty())
+      {
+        return true;
+      }
+      else
+      {
+        //ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
+        return std::dynamic_pointer_cast<const Relation>(e)->getType() == _type;
+      }
+    }
+    return false;
+  }
 
   virtual QString getDescription() const { return "Identifies relations"; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
+
+  virtual void setConfiguration(const Settings& conf)
+  {
+    _type = ConfigOptions(conf).getRelationCriterionType();
+  }
+
+private:
+
+  QString _type;
 };
 
 }

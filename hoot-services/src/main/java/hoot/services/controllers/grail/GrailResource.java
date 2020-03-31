@@ -51,8 +51,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -60,6 +62,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
@@ -82,6 +87,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -413,6 +419,7 @@ public class GrailResource {
         json.put("jobid", jobId);
         String jobDir = reqParams.getParentId();
         File workDir = new File(CHANGESETS_FOLDER, jobDir);
+        params.setWorkDir(workDir);
 
         if (!workDir.exists()) {
             logger.error("ApplyChangeset: jobDir {} does not exist.", workDir.getAbsolutePath());
@@ -876,14 +883,29 @@ public class GrailResource {
         //remove cropfile
         workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
 
-        // merge reference and ways osm files
-        GrailParams mergeOsmParams = new GrailParams(params);
-        File mergeFile = new File(params.getWorkDir(), "merge.osm");
-        mergeOsmParams.setOutput(mergeFile.getAbsolutePath());
-        workflow.add(grailCommandFactory.build(jobId, mergeOsmParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+        // merge OOB connected ways osm files and add 'hoot:change:exclude:delete' tag to each
+        GrailParams mergeOobWaysParams = new GrailParams(params);
+        File mergeOobWaysFile = new File(params.getWorkDir(), "oobways.osm");
+        mergeOobWaysParams.setOutput(mergeOobWaysFile.getAbsolutePath());
+        // Map<String, String> opts = new HashMap<>();
+        // opts.put("convert.ops", "hoot::SetTagValueVisitor");
+        // opts.put("set.tag.value.visitor.element.criteria", "hoot::WayCriterion");
+        // opts.put("set.tag.value.visitor.keys", "hoot:change:exclude:delete");
+        // opts.put("set.tag.value.visitor.values", "yes");
+        // mergeOobWaysParams.setAdvancedOptions(opts);
+        mergeOobWaysParams.setInput1("\\d+\\.osm"); //this is the file filter
+        workflow.add(grailCommandFactory.build(jobId, mergeOobWaysParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+
+        // merge OOB connected ways merge file and the reference osm file
+        GrailParams mergeRefParams = new GrailParams(params);
+        File mergeRefFile = new File(params.getWorkDir(), "merge.osm");
+        mergeRefParams.setInput1("(" + mergeOobWaysFile.getName() + "|" + referenceOSMFile.getName() + ")"); //this is the file filter
+        mergeRefParams.setOutput(mergeRefFile.getAbsolutePath());
+        workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+
         // Write the data to the hoot db
         GrailParams pushParams = new GrailParams(params);
-        pushParams.setInput1(mergeFile.getAbsolutePath());
+        pushParams.setInput1(mergeRefFile.getAbsolutePath());
         ExternalCommand importRailsPort = grailCommandFactory.build(jobId, pushParams, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importRailsPort);
 
@@ -909,15 +931,46 @@ public class GrailResource {
         }
     }
 
+    //Used for self-signed SSL certs
+    //still requires import of cert into server java keystore
+    //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
+    public static InputStream getUrlInputStreamWithNullHostnameVerifier(String urlString) throws IOException {
+        InputStream inputStream = null;
+        URL url = new URL(urlString);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        if (url.getProtocol().equalsIgnoreCase("https")) {
+            ((HttpsURLConnection) conn).setHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession sslSession) {
+                    return true;
+                }
+            });
+        }
+
+        try {
+            inputStream = conn.getInputStream();
+        } catch(IOException e) {
+            //read the error response body
+            String err = IOUtils.toString(conn.getErrorStream(), StandardCharsets.UTF_8);
+            logger.error(err);
+            throw new IOException(err);
+        }
+
+        return inputStream;
+    }
+
+
     // Get Capabilities from an OSM API Db
     private static APICapabilities getCapabilities(String capabilitiesUrl) {
         APICapabilities params = new APICapabilities();
 
         try {
+            InputStream inputStream = getUrlInputStreamWithNullHostnameVerifier(replaceSensitiveData(capabilitiesUrl));
+
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new URL(replaceSensitiveData(capabilitiesUrl)).openStream());
-
+            Document doc = db.parse(inputStream);
             doc.getDocumentElement().normalize();
 
             NodeList nl = doc.getElementsByTagName("api");

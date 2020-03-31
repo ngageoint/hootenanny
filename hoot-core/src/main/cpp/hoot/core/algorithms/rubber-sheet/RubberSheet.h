@@ -133,6 +133,13 @@ public:
 
    virtual QString getDescription() const override { return "Applies rubber sheeting to a map"; }
 
+   /**
+    * @see FilteredByCriteria
+    */
+   virtual QStringList getCriteria() const;
+
+   virtual std::string getClassName() const { return className(); }
+
 private:
 
   typedef std::map<long, std::list<Match>> MatchList;

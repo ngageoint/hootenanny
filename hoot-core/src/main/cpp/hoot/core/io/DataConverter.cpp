@@ -195,8 +195,9 @@ void DataConverter::setTranslation(const QString& translation)
 
 void DataConverter::setConfiguration(const Settings& conf)
 {
-  // The ordering of these setters matter to DataConvertTest.
   ConfigOptions config = ConfigOptions(conf);
+
+  // The ordering of these setters matter to DataConvertTest.
   setConvertOps(config.getConvertOps());
   setOgrFeatureReadLimit(config.getOgrReaderLimit());
   setShapeFileColumns(config.getShapeFileWriterCols());
@@ -600,6 +601,8 @@ void DataConverter::_setFromOgrOptions()
     if (!_convertOps.contains(QString::fromStdString(DuplicateNodeRemover::className())))
     {
       _convertOps.append(QString::fromStdString(DuplicateNodeRemover::className()));
+      // also run dupe way node removal
+      _convertOps.append(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className()));
     }
   }
 
@@ -644,6 +647,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   {
     reader.setLimit(_ogrFeatureReadLimit);
   }
+  reader.setConfiguration(conf());
   reader.setSchemaTranslationScript(_translation);
 
   // see similar note in _convertToOgr

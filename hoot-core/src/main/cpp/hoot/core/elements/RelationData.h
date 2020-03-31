@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATIONDATA_H
 #define RELATIONDATA_H
@@ -47,9 +47,7 @@ public:
     QString role;
 
     Entry() {}
-
     Entry(QString r, ElementId eid) : role(r), _eid(eid)  { }
-
     Entry(ElementId eid) : _eid(eid) { }
 
     ElementId getElementId() const { return _eid; }

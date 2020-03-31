@@ -269,6 +269,14 @@ Invalid relation members will cause a warning to be logged.  You should enable t
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
 
+=== area.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an area feature is considered to have
+similar tags. This setting is helpful due to the loose definition of Area in Hootenanny.
+
 === arff.writer.precision
 
 * Data Type: int
@@ -578,7 +586,7 @@ for conflation campaigns
 === changeset.max.size
 
 * Data Type: long
-* Default Value: `50000`
+* Default Value: `10000`
 
 The maximum allowed element size of an OSM changeset that can be written to an OSM API database
 in a single changeset.
@@ -613,7 +621,6 @@ The user ID used by certain changeset writers when writing to an OSM API databas
 If true, XML changesets will add the 'timestamp' attribute to the element tags.  If false, the
 timestamp attribute will not be added.  This generally should only be set to false for testing
 purposes.
-
 
 === circular.error.default.value
 
@@ -688,8 +695,9 @@ See also:
 
 * Data Type: list
 * Default Value:
+** `hoot::PoiPolygonInvalidReviewNodeRemover`
 ** `hoot::SuperfluousNodeRemover`
-** `hoot::SmallWayMerger`
+** `hoot::SmallHighwayMerger`
 ** `hoot::ReplaceRoundabouts`
 ** `hoot::RemoveMissingElementsVisitor`
 ** `hoot::RemoveInvalidReviewRelationsVisitor`
@@ -700,7 +708,10 @@ See also:
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::RemoveDuplicateWayNodesVisitor`
+** `hoot::DuplicateWayRemover`
+** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
+** `hoot::RoadCrossingPolyReviewMarker`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
 
@@ -711,15 +722,30 @@ List of operations to run in the conflate command after data is conflated, but b
 
 * Data Type: list
 * Default Value:
+** `hoot::RemoveMissingElementsVisitor`
 ** `hoot::BuildingOutlineRemoveOp`
 ** `hoot::RemoveRoundabouts`
 ** `hoot::MapCleaner`
-** `hoot::CornerSplitter`
+** `hoot::HighwayCornerSplitter`
 
 Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
 about the available operations.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
+
+=== conflate.remove.superfluous.ops
+
+* Data Type: bool
+* Default Value: `true`
+
+Enabling this option allows Hootenanny to remove any operators defined in `conflate.pre.ops`,
+`conflate.post.ops`, or `map.cleaner.transforms` before running conflation that are not associated
+with the feature types being conflated as specified in the `match.creators` option. Doing so can
+increase runtime performance for some inputs. e.g. If you're only conflating buildings, then any
+operators used strictly for road data cleaning will be automatically disabled. This is primarily
+used for debugging purposes and should normally be left enabled. See the `FilteredByCriteria`
+interface for information about determining which feature types are associated with conflate
+operators.
 
 === conflate.review.threshold.default
 
@@ -908,37 +934,6 @@ The buffer to add to the alpha shape before cutting by the cookie cutter map ope
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (see CookieCutterOp).
 
-=== corner.splitter.rounded.max.node.count
-
-* Data Type: int
-* Default Value: `6`
-
-Maximum number of nodes in a row to consider for a bend in a way to determine if the way
-is a rounded corner that should be split.  The higher the number, the more heading calculations
-are required.  The lower the number, the less accurate it will be.
-
-=== corner.splitter.rounded.split
-
-* Data Type: bool
-* Default Value: `false`
-
-Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not
-conflate.
-
-=== corner.splitter.rounded.threshold
-
-* Data Type: double
-* Default Value: `55.0`
-
-Threshold in degrees between the heading of rounded bends in way that constitutes a corner.
-
-=== corner.splitter.threshold
-
-* Data Type: double
-* Default Value: `55.0`
-
-Threshold in degrees between the heading of two way segments that constitutes a corner.
-
 === create.bogus.review.tags
 
 * Data Type: bool
@@ -1076,7 +1071,7 @@ searching for nodes.
 Distance in meters that the DistanceNodeCriterion should search for nodes out from a center
 specified by 'distance.node.criterion.center'.
 
-=== dual.way.splitter.driving.side
+=== dual.highway.splitter.driving.side
 
 * Data Type: string
 * Default Value: `right`
@@ -1085,13 +1080,13 @@ When splitting divided highways, do we assume the drivers are on the right or le
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
-=== dual.way.splitter.split.size
+=== dual.highway.splitter.split.size
 
 * Data Type: double
 * Default Value: `12.5`
 
 By default how much space should be put between two divided roads when they're divided by the
-DividedHighwaySplitter. Units are in meters.
+DualHighwaySplitter. Units are in meters.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
@@ -1311,6 +1306,46 @@ The maximum number of graph comparator threads that can be launched by the Compa
 Sets the Qt hash seed to 0 for consistent hash values and hash based container content order. This
 is required for unit tests, but shouldn't be used in normal operation.
 
+=== highway.corner.splitter.rounded.max.node.count
+
+* Data Type: int
+* Default Value: `6`
+
+Maximum number of nodes in a row to consider for a bend in a way to determine if the way
+is a rounded corner that should be split.  The higher the number, the more heading calculations
+are required.  The lower the number, the less accurate it will be.
+
+=== highway.corner.splitter.rounded.split
+
+* Data Type: bool
+* Default Value: `false`
+
+Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not
+conflate.
+
+=== highway.corner.splitter.rounded.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of rounded bends in way that constitutes a corner.
+
+=== highway.corner.splitter.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of two way segments that constitutes a corner.
+
+=== highway.crossing.poly.rules
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/RoadCrossingPolyRules.json`
+
+Rules for which types of polygon features to check for roads crossing over them to flag as reviews
+by RoadCrossingPolyReviewMarker. See the "Crossing Roads" section in the "Feature Validation"
+documentation for detail on the rule file format.
+
 === highway.match.threshold
 
 * Data Type: double
@@ -1494,6 +1529,14 @@ relations that were written to the database.
 
 If set to true then if there is already a map with the specified name then it will be removed before
 a new map is written.
+
+=== hootapi.db.writer.preserve.version.on.insert
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, versions for elements are retained on new writes to the Hootenanny API database. If false,
+versions are reset to an initial version of 1.
 
 === hootapi.db.writer.remap.ids
 
@@ -1749,7 +1792,7 @@ interacts with Hootenany and JOSM Java code via JNI.
 === jni.initial.memory
 
 * Data Type: string
-* Default Value: `2g`
+* Default Value: `256m`
 
 JVM -Xms setting to use with hoot-josm JNI to configure the initial amount of memory available to
 the JVM.
@@ -1757,7 +1800,7 @@ the JVM.
 === jni.max.memory
 
 * Data Type: string
-* Default Value: `8g`
+* Default Value: `2g`
 
 JVM -Xmx setting to use with hoot-josm JNI to configure the maximum amount of memory available to
 the JVM.
@@ -2155,20 +2198,21 @@ option. A setting of -1 is useful for tests where you do not have granular enoug
 * Default Value:
 ** `hoot::ReprojectToPlanarOp`
 ** `hoot::DuplicateNodeRemover`
+** `hoot::RemoveDuplicateWayNodesVisitor`
 ** `hoot::OneWayRoadStandardizer`
 ** `hoot::DuplicateWayRemover`
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::IntersectionSplitter`
 ** `hoot::UnlikelyIntersectionRemover`
-** `hoot::DualWaySplitter`
-** `hoot::ImpliedDividedMarker`
+** `hoot::DualHighwaySplitter`
+** `hoot::HighwayImpliedDividedMarker`
 ** `hoot::DuplicateNameRemover`
-** `hoot::SmallWayMerger`
+** `hoot::SmallHighwayMerger`
 ** `hoot::RemoveEmptyAreasVisitor`
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RelationCircularRefRemover`
 ** `hoot::RemoveEmptyRelationsOp`
-** `hoot::RemoveDuplicateAreaVisitor`
+** `hoot::RemoveDuplicateAreasVisitor`
 ** `hoot::NoInformationElementRemover`
 
 A list of map operations to be applied to a map for cleaning purposes, in order.
@@ -3180,7 +3224,7 @@ long as those being compared have a populated name field.
 === poi.polygon.additional.search.distance
 
 * Data Type: double
-* Default Value: `125.0`
+* Default Value: `50.0`
 
 The maximum distance, in meters, added to the circular error of the features being compared, the
 total of which allows the features to be considered for match or review based on distance criteria
@@ -3216,6 +3260,15 @@ a merge between all features involved in the Building and POI to Polygon conflat
 If true, instances where multiple POIs were matched to a single polygon will result in all of those
 POIs being automatically merged into the polygon.  If false, then each matched POI will generate a
 review against the polygon instead.
+
+=== poi.polygon.max.size.per.cache
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum number of elements to cache information for when using POI/Polygon Conflation. This
+maximum size is repeated across multiple internal element information caches. To disable caching,
+specify a value less than one.
 
 === poi.polygon.disable.same.source.conflation
 
@@ -3739,6 +3792,13 @@ If true supporting map readers will log a warning when an element is encountered
 zero. This is useful to track when deriving changesets where the reference data is expected to be
 pre-existing.
 
+=== relation.criterion.type
+
+* Data Type: string
+* Default Value: ``
+
+Allows for requiring a type tag match when using RelationCriterion.
+
 === relation.with.most.members.op.member.criterion
 
 * Data Type: string
@@ -4171,7 +4231,7 @@ shape file and cannot be used in combination with a translation.  If this option
 then the list of columns will be automatically determined based on the most frequently populated
 tags.
 
-=== small.way.merger.diff
+=== small.highway.merger.diff
 
 * Data Type: string
 * Default Value: `hoot::ExactTagDifferencer`
@@ -4179,7 +4239,7 @@ tags.
 Use this class for calculating the difference between element tags. If the difference is exactly 0
 then they'll be a candidate for merging.
 
-=== small.way.merger.threshold
+=== small.highway.merger.threshold
 
 * Data Type: double
 * Default Value: `15`
@@ -4244,8 +4304,9 @@ way snapping.
 * Default Value: `hoot::WayNodeCriterion`
 
 Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
-hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
-for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is enabled.
+hoot::HighwayWayNodeCriterion.  If no criterion is specified, then all ways are considered as
+targets for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is
+enabled.
 
 === snap.unconnected.ways.snap.to.way.statuses
 
@@ -4356,6 +4417,16 @@ Adds the specified status to elements.  Valid values are: 'Unknown1', 'Unknown2'
 * Default Value: `${HOOT_HOME}/conf/core/streetTypes`
 
 Flat file containing street types and their abbreviations.
+
+=== superfluous.node.remover.unallowed.orphan.kvps
+
+* Data Type: list
+* Default Value:
+** `highway=turning_circle`
+
+List of node key/value pairs that should never be orphaned from ways. SuperfluousNodeRemover will
+remove these if they are not part of a way or relation. Generally, only add to this list node
+features that conflation is unable to handle. Keep the list alphabetized by key, then value.
 
 === tag.ancestor.differencer.name
 
@@ -4618,7 +4689,7 @@ Path to the translation script when using the tag differencer, `hoot::Translated
 This tag differencer is most useful when deciding how difference between two sets of tags should be
 calculated. It can be used with:
 
-* `small.way.merger.diff`
+* `small.highway.merger.diff`
 * `remove.duplicate.areas.diff`
 
 === transliteration.max.cache.size
@@ -4884,7 +4955,10 @@ NoInformationElementRemover cleaning operation.
 * Data Type: bool
 * Default Value: `true`
 
-When true, writers will include circular error information. Not honored by all writers.
+When true, writers will include circular error information. Not necessarily honored by all writers.
+This should be left enabled by default to prevent custom accuracy tags from being dropped by writers
+in intermediary steps during a conflation workflow. Disable the option only on the final write for
+a dataset.
 
 === writer.include.conflate.review.detail.tags
 

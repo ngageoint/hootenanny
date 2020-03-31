@@ -12,7 +12,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("power.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("power.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("power.line.review.threshold"));
-exports.matchCandidateCriterion = "hoot::PowerLineCriterion"; // See #3047
+exports.matchCandidateCriterion = "hoot::PowerLineCriterion";
 exports.geometryType = "line";
 
 var sublineMatcher =
@@ -65,7 +65,6 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isPowerLine(e);
 };
 
@@ -191,7 +190,6 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  hoot.trace("Merging elements.");
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
   return snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);

@@ -3518,6 +3518,7 @@
         <nd ref="-1040"/>
         <nd ref="-91864"/>
         <nd ref="-91868"/>
+        <nd ref="-1040"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="error:circular" v="5"/>
@@ -5071,6 +5072,7 @@
         <nd ref="-38607"/>
         <nd ref="-36955"/>
         <nd ref="-38608"/>
+        <nd ref="-36955"/>
         <nd ref="-5029"/>
         <nd ref="-38609"/>
         <nd ref="-38610"/>

@@ -126,7 +126,7 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
     return Unknown;
 }
 
-CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType (BaseFeatureType t)
+CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseFeatureType t)
 {
   switch (t)
   {

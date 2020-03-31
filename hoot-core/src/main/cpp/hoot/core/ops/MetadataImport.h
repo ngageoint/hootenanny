@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef METADATAIMPORT_H
@@ -70,6 +70,8 @@ public:
 
   // OsmMapOperation
   virtual QString getDescription() const override { return "Imports metadata"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

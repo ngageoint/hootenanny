@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MANUAL_MATCH_VALIDATOR_H
 #define MANUAL_MATCH_VALIDATOR_H
@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/ElementIdToTagValueMapper.h>
 
 namespace hoot
@@ -50,7 +49,7 @@ namespace hoot
  * with score-matches, etc.), then you can change the validator to only log warnings, which allows
  * score-matches to proceed with missing ref1's by setting _requireRef1=false;
  */
-class ManualMatchValidator : public ConstOsmMapOperation, public OperationStatusInfo
+class ManualMatchValidator : public ConstOsmMapOperation
 {
 public:
 
@@ -104,6 +103,8 @@ public:
   void setRequireRef1(bool require) { _requireRef1 = require; }
   void setAllowUuidManualMatchIds(bool allow) { _allowUuidManualMatchIds = allow; }
   void setFullDebugOutput(bool fullDebugOutput) { _fullDebugOutput = fullDebugOutput; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

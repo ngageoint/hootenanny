@@ -22,18 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
+
+#include "OsmApiReaderTestServer.h"
 
 //  hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/FileUtils.h>
-
-#include "OsmApiReaderTestServer.h"
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/OsmApiUtils.h>
 
 //  Run tests against a local test server
 #define RUN_LOCAL_TEST_SERVER
@@ -80,7 +81,7 @@ public:
     OsmApiReader reader;
     //  Set the bounds to be smaller than 0.25 degrees by 0.25 degrees so that there is no splitting
     reader.setBounds(geos::geom::Envelope(-111.3914, -111.1942, 40.5557, 40.7577));
-    reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + "/api/0.6/map");
+    reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + OsmApiEndpoints::API_PATH_MAP);
     reader.read(map);
 
     server.shutdown();
@@ -107,7 +108,7 @@ public:
     reader.setConfiguration(s);
     //  Set the bounds to be larger than 0.25 degrees by 0.25 degrees to cause a geographic split
     reader.setBounds(geos::geom::Envelope(-111.3914, -111.1142, 40.4557, 40.7577));
-    reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_GEO) + "/api/0.6/map");
+    reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_GEO) + OsmApiEndpoints::API_PATH_MAP);
     reader.read(map);
 
     server.shutdown();
@@ -134,7 +135,7 @@ public:
     reader.setConfiguration(s);
     //  Set the bounds to be smaller than 0.25 degrees by 0.25 degrees so that it is split by elements on the server
     reader.setBounds(geos::geom::Envelope(-111.3914, -111.1942, 40.5557, 40.7577));
-    reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_ELEMENTS) + "/api/0.6/map");
+    reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_ELEMENTS) + OsmApiEndpoints::API_PATH_MAP);
     reader.read(map);
 
     server.shutdown();
@@ -157,7 +158,8 @@ public:
       OsmApiReader reader;
       //  Set the bounds to be larger than 1 degree by 1 degree so that it will fail
       reader.setBounds(geos::geom::Envelope(-111.3914, -110.2914, 40.5557, 41.7557));
-      reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + "/api/0.6/map");
+      //  Can reuse PORT_SIMPLE here because it isn't actually used before the test fails
+      reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + OsmApiEndpoints::API_PATH_MAP);
       reader.read(map);
     }
     catch (const UnsupportedException& e)

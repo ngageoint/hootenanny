@@ -3818,25 +3818,27 @@
         <nd ref="-595"/>
         <nd ref="-563"/>
         <nd ref="-564"/>
+        <nd ref="-611"/>
+        <nd ref="-4344"/>
         <tag k="alt_name" v="Av. Urdaneta"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
         <tag k="layer" v="1"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Puente: Llaguno"/>
-        <tag k="source:datetime" v="2015-06-12T14:47:38.000Z;2015-06-12T14:47:34.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:datetime" v="2015-06-12T14:47:38.000Z;2015-06-12T14:47:34.000Z;2019-01-17T19:50:06Z;2015-06-12T14:47:40.000Z"/>
         <tag k="bicycle" v="yes"/>
         <tag k="way_area" v="-999999"/>
         <tag k="lanes" v="3"/>
         <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{781d71a3-4c17-4f7d-baf4-87a70049cb08};{739e9fb0-22ec-4f89-977d-7dd397f89fd0}"/>
+        <tag k="uuid" v="{781d71a3-4c17-4f7d-baf4-87a70049cb08};{739e9fb0-22ec-4f89-977d-7dd397f89fd0};{89d3f564-9ee7-483b-8618-a571d9a2c921}"/>
         <tag k="bridge" v="yes"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
         <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.664Z;2019-01-17T19:50:05.668Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.664Z;2019-01-17T19:50:05.668Z;2019-01-17T19:50:05.663Z"/>
         <tag k="sidewalk" v="right"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="osm_id" v="-999999"/>
@@ -3876,68 +3878,6 @@
         <tag k="hoot:id" v="-7843"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-7842" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-564"/>
-        <nd ref="-611"/>
-        <nd ref="-4344"/>
-        <tag k="alt_name" v="Av. Urdaneta"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="layer" v="1"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Puente: Llaguno"/>
-        <tag k="source:datetime" v="2015-06-12T14:47:38.000Z;2015-06-12T14:47:40.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{89d3f564-9ee7-483b-8618-a571d9a2c921}"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.663Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="motor_vehicle" v="yes"/>
-        <tag k="hoot:id" v="-7842"/>
-        <tag k="highway" v="primary"/>
-    </way>
-    <way visible="true" id="-7832" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-596"/>
-        <nd ref="-606"/>
-        <nd ref="-4339"/>
-        <tag k="alt_name" v="Av. Urdaneta"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="layer" v="1"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Puente: Llaguno"/>
-        <tag k="source:datetime" v="2014-04-28T19:27:05.000Z;2014-12-26T14:05:25.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{7b7843fb-5c2c-4397-b0ae-87d592f04b7f}"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.664Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="motor_vehicle" v="yes"/>
-        <tag k="hoot:id" v="-7832"/>
-        <tag k="highway" v="primary"/>
-    </way>
     <way visible="true" id="-7829" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-617"/>
         <nd ref="-616"/>
@@ -3967,36 +3907,38 @@
         <tag k="hoot:id" v="-7829"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-7828" timestamp="2019-01-17T19:50:06Z" version="1">
+    <way visible="true" id="-7822" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-4337"/>
         <nd ref="-615"/>
         <nd ref="-607"/>
         <nd ref="-596"/>
+        <nd ref="-606"/>
+        <nd ref="-4339"/>
         <tag k="alt_name" v="Av. Urdaneta"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
         <tag k="layer" v="1"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Puente: Llaguno"/>
-        <tag k="source:datetime" v="2014-04-28T19:27:05.000Z;2015-06-12T14:47:32.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:datetime" v="2014-04-28T19:27:05.000Z;2019-01-17T19:50:06Z;2015-06-12T14:47:32.000Z;2014-12-26T14:05:25.000Z"/>
         <tag k="bicycle" v="yes"/>
         <tag k="way_area" v="-999999"/>
         <tag k="lanes" v="3"/>
         <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{6d8e0da5-9629-4040-a4d3-a8f3e0c1e784};{58dcbcff-fbf6-4501-b66a-ab5f0e880694}"/>
+        <tag k="uuid" v="{58dcbcff-fbf6-4501-b66a-ab5f0e880694};{6d8e0da5-9629-4040-a4d3-a8f3e0c1e784};{7b7843fb-5c2c-4397-b0ae-87d592f04b7f}"/>
         <tag k="bridge" v="yes"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
         <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.663Z;2019-01-17T19:50:05.664Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.664Z;2019-01-17T19:50:05.663Z"/>
         <tag k="sidewalk" v="right"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
         <tag k="motor_vehicle" v="yes"/>
-        <tag k="hoot:id" v="-7828"/>
+        <tag k="hoot:id" v="-7822"/>
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-7818" timestamp="2019-01-17T19:50:06Z" version="1">
@@ -4139,6 +4081,7 @@
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-7812" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-122"/>
         <nd ref="-105"/>
         <nd ref="-787"/>
         <nd ref="-786"/>
@@ -4172,7 +4115,7 @@
         <tag k="way_area" v="-999999"/>
         <tag k="lanes" v="3"/>
         <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{74701b58-570f-40d1-9230-e682fd5f7454}"/>
+        <tag k="uuid" v="{74701b58-570f-40d1-9230-e682fd5f7454};{73768fac-23de-4ae6-b24f-a14cae4ab15b}"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
         <tag k="cycleway" v="no"/>
@@ -4296,22 +4239,37 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-147" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-105"/>
-        <nd ref="-122"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{73768fac-23de-4ae6-b24f-a14cae4ab15b}"/>
-        <tag k="hoot:id" v="-147"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+    <way visible="true" id="-151" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-203"/>
+        <nd ref="-212"/>
+        <nd ref="-213"/>
+        <nd ref="-214"/>
+        <nd ref="-215"/>
+        <nd ref="-216"/>
+        <nd ref="-211"/>
+        <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Av. Universidad"/>
+        <tag k="source:datetime" v="2013-12-19T16:34:21.000Z;2014-09-04T14:24:37.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="lanes" v="1"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="uuid" v="{fb707a34-dd57-41b3-b236-7d7c6de3cd29}"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.677Z"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="old_name" v="Avenida Este 4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="hoot:id" v="-151"/>
+        <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-144" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-649"/>
@@ -6403,38 +6361,6 @@
         <tag k="source" v="osm:line"/>
         <tag k="motor_vehicle" v="yes"/>
         <tag k="hoot:id" v="218"/>
-        <tag k="highway" v="primary"/>
-    </way>
-    <way visible="true" id="223" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-203"/>
-        <nd ref="-212"/>
-        <nd ref="-213"/>
-        <nd ref="-214"/>
-        <nd ref="-215"/>
-        <nd ref="-216"/>
-        <nd ref="-211"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Universidad"/>
-        <tag k="source:datetime" v="2013-12-19T16:34:21.000Z;2014-09-04T14:24:37.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="1"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{fb707a34-dd57-41b3-b236-7d7c6de3cd29}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.677Z"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="old_name" v="Avenida Este 4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="223"/>
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="224" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">

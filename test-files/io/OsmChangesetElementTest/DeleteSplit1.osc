@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osmChange version="0.6" generator="hootenanny">
-	<delete if-unused="true">
+	<delete>
 		<way id="1" version="1" timestamp="" changeset="1">
 			<nd ref="1"/>
 			<nd ref="2"/>

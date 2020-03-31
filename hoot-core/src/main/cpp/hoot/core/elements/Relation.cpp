@@ -33,7 +33,6 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Polygon.h>
-#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
