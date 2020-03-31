@@ -59,7 +59,7 @@ class ExtractAttributesCommand extends ExternalCommand {
 
         //Technically this command now works for all data source, not just OGR, so we could move this class and associated classes out of the
         //hoot.services.controllers.ogr namespace.
-        String command = "hoot tag-info --${DEBUG_LEVEL} --tag-values-limit 30 ${INPUT_FILES}";
+        String command = "hoot.bin tag-info --${DEBUG_LEVEL} --tag-values-limit 30 ${INPUT_FILES}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

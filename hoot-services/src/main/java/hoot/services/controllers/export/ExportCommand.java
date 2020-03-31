@@ -75,7 +75,7 @@ class ExportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_PATH", this.getInput());
         substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
-        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
+        String command = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

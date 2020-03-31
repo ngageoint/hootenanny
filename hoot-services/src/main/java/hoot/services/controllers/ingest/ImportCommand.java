@@ -110,7 +110,7 @@ class ImportCommand extends ExternalCommand {
             substitutionMap.put("INPUTS", inputs);
         }
 
-        String command = "hoot convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String command = "hoot.bin convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

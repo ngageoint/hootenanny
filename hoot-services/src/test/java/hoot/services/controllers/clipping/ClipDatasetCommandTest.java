@@ -72,7 +72,7 @@ public class ClipDatasetCommandTest {
         assertNotNull(clipDatasetCommand.getWorkDir());
         assertNotNull(clipDatasetCommand.getCommand());
 
-        String expectedCommand = "hoot crop --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT} ${BOUNDS}";
+        String expectedCommand = "hoot.bin crop --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT} ${BOUNDS}";
         assertEquals(expectedCommand, clipDatasetCommand.getCommand());
 
         assertTrue(clipDatasetCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));

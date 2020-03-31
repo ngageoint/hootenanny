@@ -33,7 +33,7 @@ import hoot.services.command.ExternalCommand;
 class HootVersionCommand extends ExternalCommand {
 
     HootVersionCommand(boolean withDetails, Class<?> caller) {
-        String command = withDetails ? "hoot version --debug" : "hoot version";
+        String command = withDetails ? "hoot.bin version --debug" : "hoot.bin version";
         super.configureCommand(command, caller, false);
     }
 }
