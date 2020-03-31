@@ -106,9 +106,7 @@ mgcp.rules = {
     ['F_CODE','AL200','ruins','yes'], // Ruins
     ['F_CODE','AL241','man_made','mast'], // MGCP does not have AT011 (Aerial)
     ['F_CODE','AL260','barrier','city_wall'], // Wall
-    // ['F_CODE','AP050','highway','footway'],
-    // ['F_CODE','AP050','highway','bridleway'],
-    // ['F_CODE','AP050','highway','cycleway'],
+    ['F_CODE','AP020',undefined,undefined], // Road Interchange -Not valid MGCP
     // ['F_CODE','AP030','highway','living_street'],
     ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
     ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
@@ -126,6 +124,9 @@ mgcp.rules = {
     ['F_CODE','AP030','highway','construction'], // Lifecycle
     // ['F_CODE','AP030','highway','pedestrian'], // It is still a road
     ['F_CODE','AP030','highway','yes'], // Just in case...
+    // ['F_CODE','AP050','highway','footway'],
+    // ['F_CODE','AP050','highway','bridleway'],
+    // ['F_CODE','AP050','highway','cycleway'],
     ['F_CODE','AQ125','amenity','bus_station'],
     ['F_CODE','AT050','landuse','facility'],
     ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
@@ -1416,7 +1417,7 @@ mgcp.rules = {
     ['FUC','9','use','correctional'],  // Prison?
     ['FUC','23','use','healthcare'], // Dont know if hospital, clinic etc
     ['FUC','26','use','education'], // Don't know if school, college, university
-    
+
     // FTI -  Fence Type
     // ['FTI','0','fence:type','unknown'],
     ['FTI','0',undefined,undefined],
