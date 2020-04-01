@@ -56,7 +56,7 @@ class DeriveChangesetCommand extends GrailCommand {
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
 
-        String command = "hoot changeset-derive --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OSC_FILE} --stats";
+        String command = "hoot.bin changeset-derive --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OSC_FILE} --stats";
 
         super.configureCommand(command, substitutionMap, caller);
     }

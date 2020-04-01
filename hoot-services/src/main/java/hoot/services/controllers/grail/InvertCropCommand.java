@@ -61,7 +61,7 @@ class InvertCropCommand extends GrailCommand {
         substitutionMap.put("INPUT", params.getInput1());
         substitutionMap.put("OUTPUT", params.getOutput());
 
-        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT}";
+        String command = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

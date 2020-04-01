@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
@@ -33,7 +33,7 @@ import hoot.services.command.ExternalCommand;
 class HootVersionCommand extends ExternalCommand {
 
     HootVersionCommand(boolean withDetails, Class<?> caller) {
-        String command = withDetails ? "hoot version --debug" : "hoot version";
+        String command = withDetails ? "hoot.bin version --debug" : "hoot.bin version";
         super.configureCommand(command, caller, false);
     }
 }

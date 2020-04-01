@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -243,7 +243,7 @@ class ConflateCommand extends ExternalCommand {
 
         String command = null;
         if (params.getHoot2() == null) { // hoot1
-            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+            command = "hoot.bin ${CONFLATION_COMMAND} --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         } else {
 
             if (conflationType != null) {
@@ -273,7 +273,7 @@ class ConflateCommand extends ExternalCommand {
                 substitutionMap.put("CONFLATION_ALGORITHM", conflationAlgorithm + "Algorithm.conf");
             }
 
-            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL}"
+            command = "hoot.bin ${CONFLATION_COMMAND} --${DEBUG_LEVEL}"
                     + (conflationType != null ? " -C ${CONFLATION_TYPE}" : "")
                     + (conflationAlgorithm != null ? " -C ${CONFLATION_ALGORITHM}" : "")
                     + " ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
