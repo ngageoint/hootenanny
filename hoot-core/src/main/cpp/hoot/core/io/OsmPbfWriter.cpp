@@ -238,7 +238,8 @@ void OsmPbfWriter::_open(const QString& url)
 void OsmPbfWriter::open(const QString& url)
 {
   _open(url);
-  initializePartial();
+  //  OsmPbfWriter::open() shouldn't call OsmPbfWriter::initializePartial()
+  //  or it will cause duplicate headers
 }
 
 void OsmPbfWriter::close()
