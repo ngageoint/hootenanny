@@ -711,6 +711,7 @@ See also:
 
 * Data Type: list
 * Default Value:
+** `hoot::RemoveMissingElementsVisitor`
 ** `hoot::PoiPolygonInvalidReviewNodeRemover`
 ** `hoot::SuperfluousNodeRemover`
 ** `hoot::SmallHighwayMerger`
