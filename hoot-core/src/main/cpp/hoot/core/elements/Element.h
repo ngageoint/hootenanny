@@ -153,6 +153,13 @@ public:
   virtual QString toString() const = 0;
 
   /**
+   * TODO
+   *
+   * @return
+   */
+  virtual QString nonIdHash() const = 0;
+
+  /**
    * Applies a read only visitor to this element and all child elements. The visitor will be called
    * at least once for each element in the tree. For instance if the Element is a Way it may be
    * called twice for a Node if that node appears twice in the way.

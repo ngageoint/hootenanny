@@ -24,56 +24,45 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef COLLECTION_RELATION_MERGER_H
-#define COLLECTION_RELATION_MERGER_H
+#ifndef ELEMENT_COMPARISON_H
+#define ELEMENT_COMPARISON_H
 
-// hoot
+// Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/util/Configurable.h>
+#include <hoot/core/elements/ElementComparer.h>
 
 namespace hoot
 {
 
 /**
- * Merges collection relations e.g. routes, administrative boundaries, etc.
+ * TODO
  */
-class CollectionRelationMerger : public OsmMapConsumer, public Configurable
+class ElementComparison
 {
 public:
 
-  CollectionRelationMerger();
+  ElementComparison();
+  ElementComparison(ElementPtr element, const OsmMap& sourceMap);
 
-  /**
-   * Merges two collection relations
-   *
-   * @param elementId1 ID of the first relation to merger
-   * @param elementId2 ID of the second relation to merger
-   */
-  void merge(const ElementId& elementId1, const ElementId& elementId2);
+  ElementPtr getElement() const { return _element; }
 
-  /**
-   * @see OsmMapConsumer
-   */
-  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
+  virtual bool operator==(const ElementComparison& elementComp) const;
 
-  void setIgnoreIds(bool ignore) { _ignoreIds = ignore; }
+  virtual QString toString() const;
 
-  /**
-   * @see Configurable
-   */
-  virtual void setConfiguration(const Settings& conf);
+  bool isNull() const { return !_element.get(); }
 
-private:
+protected:
 
-  OsmMapPtr _map;
-
-  bool _ignoreIds;
-
-  void _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
-  void _mergeMembersIgnoreIds(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
+  ElementPtr _element;
+  ElementComparer _elementComparer;
 };
+
+inline uint qHash(const ElementComparison& elementComp)
+{
+  return qHash(elementComp.getElement()->nonIdHash());
+}
 
 }
 
-#endif // COLLECTION_RELATION_MERGER_H
+#endif // ELEMENT_COMPARISON_H

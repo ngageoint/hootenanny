@@ -136,6 +136,11 @@ public:
    */
   bool coordsMatch(const Node& other) const;
 
+  /**
+   * @see Element
+   */
+  virtual QString nonIdHash() const;
+
 protected:
 
   friend class SharedPtrPool<Node>;

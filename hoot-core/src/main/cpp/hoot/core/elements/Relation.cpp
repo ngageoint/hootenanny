@@ -330,6 +330,20 @@ QString Relation::toString() const
   return QString::fromUtf8(ss.str().data());
 }
 
+QString Relation::nonIdHash() const
+{
+  std::stringstream ss(std::stringstream::out);
+  ss << getType();
+  std::vector<RelationData::Entry> members = getMembers();
+  for (size_t i = 0; i < members.size(); i++)
+  {
+    RelationData::Entry member = members[i];
+    ss << " " << member.getRole() << " " << member.getElementId().getType() << ",";
+  }
+  ss << " " << getTags().toString();
+  return QString::fromUtf8(ss.str().data());
+}
+
 void Relation::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const
 {
   QList<long> visitedRelations;

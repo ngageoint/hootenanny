@@ -32,93 +32,10 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementComparer.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
-
-class RelationMemberComparison
-{
-public:
-
-  RelationMemberComparison(ElementPtr element, const OsmMap& sourceMap) :
-  _element(element)
-  {
-    _elementComparer.setIgnoreElementId(true);
-    OsmMap* map = const_cast<OsmMap*>(&sourceMap);
-    _elementComparer.setOsmMap(map);
-  }
-
-  ElementPtr getElement() const { return _element; }
-
-  bool operator==(const RelationMemberComparison& memberComp) const
-  {
-    const bool equals = _elementComparer.isSame(this->_element, memberComp.getElement());
-    if (equals)
-    {
-      LOG_TRACE(
-        "Elements equal: " << this->_element->getElementId() << " and " <<
-        memberComp.getElement()->getElementId())
-    }
-    return equals;
-  }
-
-  QString toString() const { return _element->getElementId().toString(); }
-
-private:
-
-  ElementPtr _element;
-  ElementComparer _elementComparer;
-};
-
-inline uint qHash(const RelationMemberComparison& memberComp)
-{
-  QString elementStr;
-  std::stringstream ss(std::stringstream::out);
-
-  NodePtr node;
-  WayPtr way;
-  RelationPtr relation;
-  std::vector<RelationData::Entry> members;
-  ElementPtr element = memberComp.getElement();
-  switch (element->getElementType().getEnum())
-  {
-    case ElementType::Node:
-
-      node = std::dynamic_pointer_cast<Node>(element);
-      ss << QString::number(node->getX(), 'f', ConfigOptions().getWriterPrecision())
-         << " " << QString::number(node->getY(), 'f', ConfigOptions().getWriterPrecision());
-
-      break;
-
-    case ElementType::Way:
-
-      way = std::dynamic_pointer_cast<Way>(element);
-      // TODO: this may not be unique enough along with tags
-      ss << way->getNodeIds().size();
-
-      break;
-
-    case ElementType::Relation:
-
-      relation = std::dynamic_pointer_cast<Relation>(element);
-      ss << relation->getType();
-      members = relation->getMembers();
-      for (size_t i = 0; i < members.size(); i++)
-      {
-        RelationData::Entry member = members[i];
-        ss << " " << member.getRole() << " " << member.getElementId().getType() << ",";
-      }
-
-      break;
-
-    default:
-      throw IllegalArgumentException("Unexpected element type.");
-  }
-  ss << " " << element->getTags().toString();
-
-  elementStr = QString::fromUtf8(ss.str().data());
-  return qHash(elementStr);
-}
 
 /**
  * TODO
@@ -126,7 +43,7 @@ inline uint qHash(const RelationMemberComparison& memberComp)
  * https://en.wikipedia.org/wiki/Jaccard_index
  * https://www.statisticshowto.datasciencecentral.com/jaccard-index/
  */
-class RelationMemberSimilarityExtractor : public FeatureExtractorBase
+class RelationMemberSimilarityExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
@@ -140,6 +57,11 @@ public:
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;
 
+  /**
+   * @see Configurable
+   */
+  virtual void setConfiguration(const Settings& conf);
+
   virtual QString getDescription() const
   { return "TODO"; }
 
@@ -147,7 +69,6 @@ public:
 
 private:
 
-  // TODO: make configurable
   bool _ignoreIds;
 };
 

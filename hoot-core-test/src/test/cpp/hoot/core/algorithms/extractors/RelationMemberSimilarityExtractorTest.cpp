@@ -77,7 +77,8 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, _inputPath + "runIgnoreIdsTestInput.osm", true);
+      map, "test-files/conflate/merging/CollectionRelationMergerTest/runIgnoreIdsTestInput.osm",
+      true);
 
     RelationMemberSimilarityExtractor uut;
     uut.setIgnoreIds(true);

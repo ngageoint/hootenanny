@@ -30,6 +30,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/elements/RelationMemberComparison.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -39,6 +41,13 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, RelationMemberSimilarityExtractor)
 RelationMemberSimilarityExtractor::RelationMemberSimilarityExtractor() :
 _ignoreIds(true)
 {
+  setConfiguration(conf());
+}
+
+void RelationMemberSimilarityExtractor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions configOpts(conf);
+  _ignoreIds = configOpts.getCollectionRelationIgnoreElementIds();
 }
 
 double RelationMemberSimilarityExtractor::extract(
@@ -90,11 +99,12 @@ double RelationMemberSimilarityExtractor::extract(
       const std::vector<RelationData::Entry> targetMembers = targetRelation->getMembers();
       for (size_t i = 0; i < targetMembers.size(); i++)
       {
-        ConstElementPtr memberElement = map.getElement(targetMembers[i].getElementId());
+        const RelationData::Entry member = targetMembers[i];
+        ConstElementPtr memberElement = map.getElement(member.getElementId());
         if (memberElement)
         {
           ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
-          targetMemberComps.insert(RelationMemberComparison(memberElement2, map));
+          targetMemberComps.insert(RelationMemberComparison(memberElement2, map, member.getRole()));
         }
       }
       LOG_VART(targetMemberComps.size());
@@ -103,11 +113,13 @@ double RelationMemberSimilarityExtractor::extract(
       const std::vector<RelationData::Entry> candidateMembers = candidateRelation->getMembers();
       for (size_t i = 0; i < candidateMembers.size(); i++)
       {
-        ConstElementPtr memberElement = map.getElement(candidateMembers[i].getElementId());
+        const RelationData::Entry member = candidateMembers[i];
+        ConstElementPtr memberElement = map.getElement(member.getElementId());
         if (memberElement)
         {
           ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
-          candidateMemberComps.insert(RelationMemberComparison(memberElement2, map));
+          candidateMemberComps.insert(
+            RelationMemberComparison(memberElement2, map, member.getRole()));
         }
       }
       LOG_VART(candidateMemberComps.size());

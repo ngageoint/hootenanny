@@ -123,6 +123,16 @@ QString Node::toString() const
   return QString::fromUtf8(ss.str().data());
 }
 
+QString Node::nonIdHash() const
+{
+  // TODO: can probably use the hash vis for this
+  std::stringstream ss(std::stringstream::out);
+  ss << QString::number(getX(), 'f', ConfigOptions().getWriterPrecision())
+     << " " << QString::number(getY(), 'f', ConfigOptions().getWriterPrecision());
+  ss << " " << getTags().toString();
+  return QString::fromUtf8(ss.str().data());
+}
+
 void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const
 {
   filter.visit(map.getNode(getId()));

@@ -24,56 +24,41 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef COLLECTION_RELATION_MERGER_H
-#define COLLECTION_RELATION_MERGER_H
+#ifndef RELATION_MEMBER_COMPARISON_H
+#define RELATION_MEMBER_COMPARISON_H
 
-// hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/util/Configurable.h>
+// Hoot
+#include <hoot/core/elements/ElementComparison.h>
 
 namespace hoot
 {
 
 /**
- * Merges collection relations e.g. routes, administrative boundaries, etc.
+ * TODO
  */
-class CollectionRelationMerger : public OsmMapConsumer, public Configurable
+class RelationMemberComparison : public ElementComparison
 {
 public:
 
-  CollectionRelationMerger();
+  RelationMemberComparison();
+  RelationMemberComparison(ElementPtr element, const OsmMap& sourceMap, const QString& role);
 
-  /**
-   * Merges two collection relations
-   *
-   * @param elementId1 ID of the first relation to merger
-   * @param elementId2 ID of the second relation to merger
-   */
-  void merge(const ElementId& elementId1, const ElementId& elementId2);
+  virtual bool operator==(const RelationMemberComparison& memberComp) const;
 
-  /**
-   * @see OsmMapConsumer
-   */
-  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
+  virtual QString toString() const;
 
-  void setIgnoreIds(bool ignore) { _ignoreIds = ignore; }
-
-  /**
-   * @see Configurable
-   */
-  virtual void setConfiguration(const Settings& conf);
+  QString getRole() const { return _role; }
 
 private:
 
-  OsmMapPtr _map;
-
-  bool _ignoreIds;
-
-  void _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
-  void _mergeMembersIgnoreIds(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
+  QString _role;
 };
+
+inline uint qHash(const RelationMemberComparison& memberComp)
+{
+  return qHash(memberComp.getRole() + " " + memberComp.getElement()->nonIdHash());
+}
 
 }
 
-#endif // COLLECTION_RELATION_MERGER_H
+#endif // RELATION_MEMBER_COMPARISON_H
