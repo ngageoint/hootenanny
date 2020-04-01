@@ -27,9 +27,6 @@
 
 #include "RelationMemberComparison.h"
 
-// Hoot
-
-
 namespace hoot
 {
 
@@ -53,7 +50,7 @@ bool RelationMemberComparison::operator==(const RelationMemberComparison& member
   if (equals)
   {
     LOG_TRACE(
-      "Members equal: " << this->_element->getElementId() << " and " <<
+      "Roles and members equal: " << this->_element->getElementId() << " and " <<
       memberComp.getElement()->getElementId())
   }
   return equals;

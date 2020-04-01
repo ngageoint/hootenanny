@@ -31,7 +31,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/elements/RelationMemberComparison.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -39,15 +38,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(FeatureExtractor, RelationMemberSimilarityExtractor)
 
 RelationMemberSimilarityExtractor::RelationMemberSimilarityExtractor() :
-_ignoreIds(true)
 {
-  setConfiguration(conf());
-}
-
-void RelationMemberSimilarityExtractor::setConfiguration(const Settings& conf)
-{
-  ConfigOptions configOpts(conf);
-  _ignoreIds = configOpts.getCollectionRelationIgnoreElementIds();
 }
 
 double RelationMemberSimilarityExtractor::extract(
@@ -87,71 +78,61 @@ double RelationMemberSimilarityExtractor::extract(
     }
 
     int numSharedMembers = 0;
-    if (!_ignoreIds)
+
+    QSet<RelationMemberComparison> targetMemberComps;
+    const std::vector<RelationData::Entry> targetMembers = targetRelation->getMembers();
+    for (size_t i = 0; i < targetMembers.size(); i++)
     {
-      const QSet<ElementId> intersection = targetMemberIds.intersect(candidateMemberIds);
-      LOG_VART(intersection)
-      numSharedMembers = intersection.size();
+      const RelationData::Entry member = targetMembers[i];
+      ConstElementPtr memberElement = map.getElement(member.getElementId());
+      if (memberElement)
+      {
+        ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
+        targetMemberComps.insert(RelationMemberComparison(memberElement2, map, member.getRole()));
+      }
     }
-    else
+    LOG_VART(targetMemberComps.size());
+
+    QSet<RelationMemberComparison> candidateMemberComps;
+    const std::vector<RelationData::Entry> candidateMembers = candidateRelation->getMembers();
+    for (size_t i = 0; i < candidateMembers.size(); i++)
     {
-      QSet<RelationMemberComparison> targetMemberComps;
-      const std::vector<RelationData::Entry> targetMembers = targetRelation->getMembers();
-      for (size_t i = 0; i < targetMembers.size(); i++)
+      const RelationData::Entry member = candidateMembers[i];
+      ConstElementPtr memberElement = map.getElement(member.getElementId());
+      if (memberElement)
       {
-        const RelationData::Entry member = targetMembers[i];
-        ConstElementPtr memberElement = map.getElement(member.getElementId());
-        if (memberElement)
-        {
-          ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
-          targetMemberComps.insert(RelationMemberComparison(memberElement2, map, member.getRole()));
-        }
+        ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
+        candidateMemberComps.insert(
+          RelationMemberComparison(memberElement2, map, member.getRole()));
       }
-      LOG_VART(targetMemberComps.size());
-
-      QSet<RelationMemberComparison> candidateMemberComps;
-      const std::vector<RelationData::Entry> candidateMembers = candidateRelation->getMembers();
-      for (size_t i = 0; i < candidateMembers.size(); i++)
-      {
-        const RelationData::Entry member = candidateMembers[i];
-        ConstElementPtr memberElement = map.getElement(member.getElementId());
-        if (memberElement)
-        {
-          ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
-          candidateMemberComps.insert(
-            RelationMemberComparison(memberElement2, map, member.getRole()));
-        }
-      }
-      LOG_VART(candidateMemberComps.size());
-
-      QSet<RelationMemberComparison> intersection =
-        targetMemberComps.intersect(candidateMemberComps);
-      LOG_VART(intersection);
-      numSharedMembers = intersection.size();
-      //if (numSharedMembers > 0)
-      //{
-        //LOG_VAR(targetMemberComps);
-        //LOG_VAR(candidateMemberComps);
-        //LOG_VAR(intersection);
-      //}
     }
+    LOG_VART(candidateMemberComps.size());
 
-    LOG_VART(numSharedMembers);
+    QSet<RelationMemberComparison> intersection =
+      targetMemberComps.intersect(candidateMemberComps);
+    LOG_VART(intersection);
+    numSharedMembers = intersection.size();
     //if (numSharedMembers > 0)
     //{
-      //LOG_INFO(numSharedMembers);
-      //LOG_INFO(targetMemberIds);
-      //LOG_INFO(candidateMemberIds);
+      //LOG_VAR(targetMemberComps);
+      //LOG_VAR(candidateMemberComps);
+      //LOG_VAR(intersection);
     //}
-    //LOG_VARD(intersection);
-
-    // calculate Jaccard
-    const double similarity = (double)numSharedMembers / (double)totalMembers;
-    LOG_VART(similarity);
-    return similarity;
   }
 
-  return 0.0;
+  LOG_VART(numSharedMembers);
+  //if (numSharedMembers > 0)
+  //{
+    //LOG_INFO(numSharedMembers);
+    //LOG_INFO(targetMemberIds);
+    //LOG_INFO(candidateMemberIds);
+  //}
+  //LOG_VARD(intersection);
+
+  // calculate Jaccard
+  const double similarity = (double)numSharedMembers / (double)totalMembers;
+  LOG_VART(similarity);
+  return similarity;
 }
 
 }

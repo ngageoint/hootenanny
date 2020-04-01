@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -38,7 +37,7 @@ namespace hoot
 /**
  * Merges collection relations e.g. routes, administrative boundaries, etc.
  */
-class CollectionRelationMerger : public OsmMapConsumer, public Configurable
+class CollectionRelationMerger : public OsmMapConsumer
 {
 public:
 
@@ -57,8 +56,6 @@ public:
    */
   virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
-  void setIgnoreIds(bool ignore) { _ignoreIds = ignore; }
-
   /**
    * @see Configurable
    */
@@ -68,10 +65,7 @@ private:
 
   OsmMapPtr _map;
 
-  bool _ignoreIds;
-
   void _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
-  void _mergeMembersIgnoreIds(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
 };
 
 }

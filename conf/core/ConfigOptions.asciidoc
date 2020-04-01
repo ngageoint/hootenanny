@@ -630,13 +630,6 @@ purposes.
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
 
-=== collection.relation.ignore.element.ids
-
-* Data Type: bool
-* Default Value: `true`
-
-TODO
-
 === collection.relation.name.threshold
 
 * Data Type: double

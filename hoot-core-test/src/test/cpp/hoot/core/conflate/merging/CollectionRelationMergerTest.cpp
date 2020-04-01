@@ -47,7 +47,6 @@ class CollectionRelationMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(CollectionRelationMergerTest);
   CPPUNIT_TEST(runTest);
-  CPPUNIT_TEST(runIgnoreIdsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -57,39 +56,27 @@ public:
     "test-files/conflate/merging/CollectionRelationMergerTest/",
     "test-output/conflate/merging/CollectionRelationMergerTest/")
   {
+    // If uncommenting out the writer include debug tags calls in the tests below, also uncomment
+    // this line.
+    //setResetType(ResetAll);
   }
 
   void runTest()
   {
+    LOG_DEBUG("runTest");
+
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "runTestInput.osm", true);
 
     CollectionRelationMerger uut;
     uut.setOsmMap(map.get());
-    uut.setIgnoreIds(false);
     uut.merge(ElementId(ElementType::Relation, 7387470), ElementId(ElementType::Relation, -1));
 
     MapProjector::projectToWgs84(map);
+    //conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
     OsmMapWriterFactory::write(map, _outputPath + "runTestOutput.osm");
 
     HOOT_FILE_EQUALS(_inputPath + "runTestOutput.osm", _outputPath + "runTestOutput.osm");
-  }
-
-  void runIgnoreIdsTest()
-  {
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, _inputPath + "runIgnoreIdsTestInput.osm", true);
-
-    CollectionRelationMerger uut;
-    uut.setOsmMap(map.get());
-    uut.setIgnoreIds(true);
-    uut.merge(ElementId(ElementType::Relation, 7387470), ElementId(ElementType::Relation, -1));
-
-    MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::write(map, _outputPath + "runIgnoreIdsTestOutput.osm");
-
-    HOOT_FILE_EQUALS(
-      _inputPath + "runIgnoreIdsTestOutput.osm", _outputPath + "runIgnoreIdsTestOutput.osm");
   }
 };
 

@@ -32,7 +32,6 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementComparer.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -43,7 +42,7 @@ namespace hoot
  * https://en.wikipedia.org/wiki/Jaccard_index
  * https://www.statisticshowto.datasciencecentral.com/jaccard-index/
  */
-class RelationMemberSimilarityExtractor : public FeatureExtractorBase, public Configurable
+class RelationMemberSimilarityExtractor : public FeatureExtractorBase
 {
 public:
 
@@ -57,19 +56,8 @@ public:
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;
 
-  /**
-   * @see Configurable
-   */
-  virtual void setConfiguration(const Settings& conf);
-
   virtual QString getDescription() const
   { return "TODO"; }
-
-  void setIgnoreIds(bool ignore) { _ignoreIds = ignore; }
-
-private:
-
-  bool _ignoreIds;
 };
 
 }

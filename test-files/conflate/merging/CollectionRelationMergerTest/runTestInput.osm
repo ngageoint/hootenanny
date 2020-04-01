@@ -2569,6 +2569,9 @@
     <node visible="true" id="4881732781" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.8934404000000029" lon="-75.3918929000000020">
         <tag k="hoot:status" v="1"/>
     </node>
+    <node visible="true" id="4881732782" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.8934404000000029" lon="-75.3918929000000020">
+        <tag k="hoot:status" v="1"/>
+    </node>
     <node visible="true" id="4881734408" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9423780000000122" lon="-75.4272229999999979">
         <tag k="hoot:status" v="1"/>
     </node>
@@ -6429,6 +6432,14 @@
         <tag k="source:datetime" v="2020-02-28T16:40:48Z"/>
         <tag k="source" v="TIGER/Line® 2008 Place Shapefiles (http://www.census.gov/geo/www/tiger/)"/>
     </way>
+    <way visible="true" id="496849205" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881732770"/>
+        <nd ref="4881732782"/>
+        <nd ref="4881725755"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="source:datetime" v="2020-02-28T16:48:04Z"/>
+    </way>
     <way visible="true" id="496849204" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881732770"/>
         <nd ref="4881732781"/>
@@ -7493,7 +7504,7 @@
         <tag k="type" v="boundary"/>
     </relation>
     <relation visible="true" id="7387470" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <member type="way" ref="496849204" role="outer"/>
+        <member type="way" ref="496849205" role="outer"/>
         <member type="way" ref="496849451" role="outer"/>
         <member type="way" ref="496850101" role="outer"/>
         <member type="way" ref="496849545" role="outer"/>

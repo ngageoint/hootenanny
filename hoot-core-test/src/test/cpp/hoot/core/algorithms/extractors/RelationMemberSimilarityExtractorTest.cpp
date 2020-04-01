@@ -45,7 +45,6 @@ class RelationMemberSimilarityExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RelationMemberSimilarityExtractorTest);
   CPPUNIT_TEST(runTest);
-  CPPUNIT_TEST(runIgnoreIdsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -65,23 +64,6 @@ public:
 
     RelationMemberSimilarityExtractor uut;
     uut.setIgnoreIds(false);
-    const double score =
-      uut.extract(
-        *map, map->getElement(ElementId(ElementType::Relation, 7387470)),
-        map->getElement(ElementId(ElementType::Relation, -1)));
-
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.2, score, 1e-3);
-  }
-
-  void runIgnoreIdsTest()
-  {
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/merging/CollectionRelationMergerTest/runIgnoreIdsTestInput.osm",
-      true);
-
-    RelationMemberSimilarityExtractor uut;
-    uut.setIgnoreIds(true);
     const double score =
       uut.extract(
         *map, map->getElement(ElementId(ElementType::Relation, 7387470)),
