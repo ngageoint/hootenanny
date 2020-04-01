@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-CollectionRelationMerger::CollectionRelationMerger() :
+CollectionRelationMerger::CollectionRelationMerger()
 {
 }
 
@@ -88,7 +88,7 @@ void CollectionRelationMerger::_mergeMembers(
     {
       ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
       replacingRelationMemberComps.append(
-        RelationMemberComparison(memberElement2, *_map, member.getRole()));
+        RelationMemberComparison(memberElement2, *_map, member.getRole(), true));
     }
   }
   LOG_VART(replacingRelationMemberComps.size());
@@ -102,7 +102,7 @@ void CollectionRelationMerger::_mergeMembers(
     {
       ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
       relationBeingReplacedMemberComps.append(
-        RelationMemberComparison(memberElement2, *_map, member.getRole()));
+        RelationMemberComparison(memberElement2, *_map, member.getRole(), true));
     }
   }
   LOG_VART(relationBeingReplacedMemberComps.size());

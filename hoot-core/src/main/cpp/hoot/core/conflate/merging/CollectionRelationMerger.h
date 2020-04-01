@@ -36,6 +36,9 @@ namespace hoot
 
 /**
  * Merges collection relations e.g. routes, administrative boundaries, etc.
+ *
+ * Since relations may have similar members with different element IDs between reference and
+ * secondary layers, the comparisons ignore element IDs and look at the member elements directly.
  */
 class CollectionRelationMerger : public OsmMapConsumer
 {

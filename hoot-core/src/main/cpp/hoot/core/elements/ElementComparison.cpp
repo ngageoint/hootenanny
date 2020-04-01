@@ -37,10 +37,11 @@ ElementComparison::ElementComparison()
 {
 }
 
-ElementComparison::ElementComparison(ElementPtr element, const OsmMap& sourceMap) :
+ElementComparison::ElementComparison(ElementPtr element, const OsmMap& sourceMap,
+                                     const bool ignoreElementId) :
 _element(element)
 {
-  _elementComparer.setIgnoreElementId(true);
+  _elementComparer.setIgnoreElementId(ignoreElementId);
   OsmMap* map = const_cast<OsmMap*>(&sourceMap);
   _elementComparer.setOsmMap(map);
 }

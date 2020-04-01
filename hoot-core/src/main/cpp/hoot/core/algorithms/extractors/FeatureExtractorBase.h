@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Base class for feature extractors, which compare two feature and provide a metric score
  */
 class FeatureExtractorBase : public FeatureExtractor, public ApiEntityInfo
 {

@@ -46,7 +46,7 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  // TODO: this could also be linear
+  // TODO: should this be linear instead?
   virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
 
   virtual bool supportsSpecificConflation() const { return true; }

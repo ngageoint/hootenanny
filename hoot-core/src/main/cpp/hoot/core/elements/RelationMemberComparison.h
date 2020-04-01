@@ -34,14 +34,18 @@ namespace hoot
 {
 
 /**
- * TODO
+ * This is an abstraction for dealing with relation member element comparisons inside of
+ * collections.
+ *
+ * @see ElementComparison
  */
 class RelationMemberComparison : public ElementComparison
 {
 public:
 
   RelationMemberComparison();
-  RelationMemberComparison(ElementPtr element, const OsmMap& sourceMap, const QString& role);
+  RelationMemberComparison(ElementPtr element, const OsmMap& sourceMap, const QString& role,
+                           const bool ignoreElementId = false);
 
   virtual bool operator==(const RelationMemberComparison& memberComp) const;
 

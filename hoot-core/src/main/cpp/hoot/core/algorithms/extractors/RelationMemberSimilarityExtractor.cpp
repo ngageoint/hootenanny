@@ -37,7 +37,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, RelationMemberSimilarityExtractor)
 
-RelationMemberSimilarityExtractor::RelationMemberSimilarityExtractor() :
+RelationMemberSimilarityExtractor::RelationMemberSimilarityExtractor()
 {
 }
 
@@ -88,7 +88,8 @@ double RelationMemberSimilarityExtractor::extract(
       if (memberElement)
       {
         ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
-        targetMemberComps.insert(RelationMemberComparison(memberElement2, map, member.getRole()));
+        targetMemberComps.insert(
+          RelationMemberComparison(memberElement2, map, member.getRole(), true));
       }
     }
     LOG_VART(targetMemberComps.size());
@@ -103,7 +104,7 @@ double RelationMemberSimilarityExtractor::extract(
       {
         ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
         candidateMemberComps.insert(
-          RelationMemberComparison(memberElement2, map, member.getRole()));
+          RelationMemberComparison(memberElement2, map, member.getRole(), true));
       }
     }
     LOG_VART(candidateMemberComps.size());
@@ -118,21 +119,23 @@ double RelationMemberSimilarityExtractor::extract(
       //LOG_VAR(candidateMemberComps);
       //LOG_VAR(intersection);
     //}
+
+    LOG_VART(numSharedMembers);
+    //if (numSharedMembers > 0)
+    //{
+      //LOG_INFO(numSharedMembers);
+      //LOG_INFO(targetMemberIds);
+      //LOG_INFO(candidateMemberIds);
+    //}
+    //LOG_VARD(intersection);
+
+    // calculate Jaccard
+    const double similarity = (double)numSharedMembers / (double)totalMembers;
+    LOG_VART(similarity);
+    return similarity;
   }
 
-  LOG_VART(numSharedMembers);
-  //if (numSharedMembers > 0)
-  //{
-    //LOG_INFO(numSharedMembers);
-    //LOG_INFO(targetMemberIds);
-    //LOG_INFO(candidateMemberIds);
-  //}
-  //LOG_VARD(intersection);
-
-  // calculate Jaccard
-  const double similarity = (double)numSharedMembers / (double)totalMembers;
-  LOG_VART(similarity);
-  return similarity;
+  return 0.0;
 }
 
 }

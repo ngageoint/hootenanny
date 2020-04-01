@@ -36,8 +36,8 @@ ElementComparison()
 }
 
 RelationMemberComparison::RelationMemberComparison(ElementPtr element, const OsmMap& sourceMap,
-                                                   const QString& role) :
-ElementComparison(element, sourceMap),
+                                                   const QString& role, const bool ignoreElementId) :
+ElementComparison(element, sourceMap, ignoreElementId),
 _role(role)
 {
 }

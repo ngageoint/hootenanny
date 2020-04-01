@@ -35,14 +35,20 @@ namespace hoot
 {
 
 /**
- * TODO
+ * This is an abstraction for dealing with element comparisons inside of collections.
+ *
+ * This is useful because ElementComparer has evolved as the way to compare elements vs using ==
+ * operators. Additionally, there is also a hash visitor available for nodes only. At some point we
+ * may want to look into consolidating all of this behavior into the Element == operators, if
+ * possible.
  */
 class ElementComparison
 {
 public:
 
   ElementComparison();
-  ElementComparison(ElementPtr element, const OsmMap& sourceMap);
+  ElementComparison(ElementPtr element, const OsmMap& sourceMap,
+                    const bool ignoreElementId = false);
 
   ElementPtr getElement() const { return _element; }
 

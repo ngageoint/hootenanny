@@ -37,7 +37,10 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Uses a Jaccard index to determine how similar the members of two relations are.
+ *
+ * Since relations may have similar members with different element IDs between reference and
+ * secondary layers, the comparisons ignore element IDs and look at the member elements directly.
  *
  * https://en.wikipedia.org/wiki/Jaccard_index
  * https://www.statisticshowto.datasciencecentral.com/jaccard-index/
@@ -57,7 +60,7 @@ public:
     const std::shared_ptr<const Element>& candidate) const;
 
   virtual QString getDescription() const
-  { return "TODO"; }
+  { return "Scores the similarity between two sets of relation members"; }
 };
 
 }

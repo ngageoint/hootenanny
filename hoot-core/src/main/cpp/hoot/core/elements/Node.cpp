@@ -125,7 +125,7 @@ QString Node::toString() const
 
 QString Node::nonIdHash() const
 {
-  // TODO: can probably use the hash vis for this
+  // can probably eventually use the hash vis for this; also see note in ElementComparison
   std::stringstream ss(std::stringstream::out);
   ss << QString::number(getX(), 'f', ConfigOptions().getWriterPrecision())
      << " " << QString::number(getY(), 'f', ConfigOptions().getWriterPrecision());
