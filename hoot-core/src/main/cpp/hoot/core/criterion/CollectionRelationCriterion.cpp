@@ -58,8 +58,8 @@ bool CollectionRelationCriterion::isSatisfied(const ConstElementPtr& e) const
         r->getType() == MetadataTags::RelationBoundary() ||
         r->getType() == MetadataTags::RelationRestriction() ||
         // not sure about these yet
-        r->getType() == MetadataTags::RelationMultiPolygon() /*||
-        r->getType() == MetadataTags::RelationMultilineString()*/)
+        r->getType() == MetadataTags::RelationMultiPolygon() ||
+        r->getType() == MetadataTags::RelationMultilineString())
     {
       result = true;
     }
