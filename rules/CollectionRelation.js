@@ -89,39 +89,44 @@ exports.matchScore = function(map, e1, e2)
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
 
-  hoot.debug("e1: " + e1.getId() + ", " + tags1.get("name"));
+  hoot.trace("e1: " + e1.getId() + ", " + tags1.get("name"));
   if (tags1.get("note"))
   {
-    hoot.debug("e1 note: " + tags1.get("note"));
+    hoot.trace("e1 note: " + tags1.get("note"));
   }
-  hoot.debug("e2: " + e2.getId() + ", " + tags2.get("name"));
+  hoot.trace("e2: " + e2.getId() + ", " + tags2.get("name"));
   if (tags2.get("note"))
   {
-    hoot.debug("e2 note: " + tags2.get("note"));
+    hoot.trace("e2 note: " + tags2.get("note"));
   }
 
   var type1 = e1.getType();
-  hoot.debug("type1: " + type1);
+  hoot.trace("type1: " + type1);
   var type2 = e2.getType();
-  hoot.debug("type2: " + type2);
+  hoot.trace("type2: " + type2);
   if (type1 != type2)
   {    
-    hoot.debug("type mismatch");
+    hoot.trace("type mismatch");
     return result;
   }
   else if (type1 == "boundary" && tags1.get("boundary") == "administrative" && tags2.get("boundary") == "administrative" && tags1.get("admin_level") != tags2.get("admin_level"))
   {
-    hoot.debug("admin_level mismatch");
+    hoot.trace("admin_level mismatch");
     return result;
   }
   else if ((type1 == "multipolygon" || type1 == "multilineString") && explicitTypeMismatch(e1, e2, exports.tagThreshold))
   {
-    hoot.debug("multipoly/multilinestring type mismatch");
+    hoot.trace("multipoly/multilinestring type mismatch");
     return result;
   }
   else if (type1 == "restriction" && tags1.get("restriction") != tags2.get("restriction"))
   {
-    hoot.debug("restriction mismatch");
+    hoot.trace("restriction mismatch");
+    return result;
+  }
+  else if (type1 == "route" && tags1.get("route") != tags2.get("route"))
+  {
+    hoot.trace("route mismatch");
     return result;
   }
 
@@ -135,18 +140,18 @@ exports.matchScore = function(map, e1, e2)
   {
     var ref1 = tags1.get("ref");
     var ref2 = tags2.get("ref");
-    hoot.debug("ref 1:" + ref1);
-    hoot.debug("ref 2:" + ref2);
+    hoot.trace("ref 1:" + ref1);
+    hoot.trace("ref 2:" + ref2);
     if (ref1 != ref2)
     {
-      hoot.debug("highway ref mismatch");
+      hoot.trace("highway ref mismatch");
       name = 0.0;
     }
   }
   else if (bothElementsHaveName(e1, e2))
   {
     // only score the name if both have one
-    hoot.debug("both elements have name");
+    hoot.trace("both elements have name");
     name = nameExtractor.extract(map, e1, e2);
   }
   if (name < exports.nameThreshold)
@@ -157,72 +162,72 @@ exports.matchScore = function(map, e1, e2)
   /*var angleHist = angleHistExtractor.extract(map, e1, e2);
   if (angleHist < 0.072)
   {
-    hoot.debug("match failed on angle hist");
+    hoot.trace("match failed on angle hist");
     return result;
   }*/
   /*var weightedShapeDist = weightedShapeDistanceExtractor.extract(map, e1, e2);
   if (weightedShapeDist < 0.99)
   {
-    hoot.debug("match failed weighted shape dist");
+    hoot.trace("match failed weighted shape dist");
     return result;
   }*/
   /*var dist = distanceScoreExtractor.extract(map, e1, e2);
   if (dist < 0.96)
   {
-    hoot.debug("match failed on dist");
+    hoot.trace("match failed on dist");
     return result;
   }*/
   /*var length = lengthScoreExtractor.extract(map, e1, e2);
   if (length < 0.81 || length > 0.97)
   {
-    hoot.debug("match failed on length");
+    hoot.trace("match failed on length");
     return result;
   }*/
   /*var weightedMetricDist = weightedMetricDistanceExtractor.extract(map, e1, e2);
   if (weightedMetricDist > 0.04)
   {
-    hoot.debug("match failed weighted metric dist");
+    hoot.trace("match failed weighted metric dist");
     return result;
   }*/
   /*var parallel = parallelScoreExtractor.extract(map, e1, e2);
   if (parallel < 0.99)
   {
-    hoot.debug("match failed on parallel");
+    hoot.trace("match failed on parallel");
     return result;
   }*/
   // This is a fairly expensive check against these relations.
   var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
-  hoot.debug("edgeDist: " + edgeDist);
+  hoot.trace("edgeDist: " + edgeDist);
   if (edgeDist < 0.97)
   { 
-    hoot.debug("match failed on edge distance");
+    hoot.trace("match failed on edge distance");
     return result;
   }
   // Seeing if we can get by w/o this for now.
   /*var hausdorffDist = hausdorffDistanceExtractor.extract(map, e1, e2);
-  hoot.debug("hausdorffDist: " + hausdorffDist);
+  hoot.trace("hausdorffDist: " + hausdorffDist);
   if (hausdorffDist < 0.21)
   {
-    hoot.debug("match failed on hausdorff");
+    hoot.trace("match failed on hausdorff");
     return result;
   }*/
 
   /*var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
-  hoot.debug("memberSim: " + memberSim);
+  hoot.trace("memberSim: " + memberSim);
   if (memberSim < memberSimMin)
   {
     memberSimMin = memberSim;
   }
-  hoot.debug("memberSimMin: " + memberSimMin);
+  hoot.trace("memberSimMin: " + memberSimMin);
   if (memberSim > memberSimMax)
   {
     memberSimMax = memberSim;
   }
-  hoot.debug("memberSimMax: " + memberSimMax);*/
+  hoot.trace("memberSimMax: " + memberSimMax);*/
 
   result = { match: 1.0, miss: 0.0, review: 0.0 };
 
-  hoot.debug("match found");
+  hoot.trace("match found");
   return result;
 };
 

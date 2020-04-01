@@ -112,17 +112,9 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
     }
     else if (eids.size() > 1)
     { 
-      // I *think* skipping the collection relation reviews is ok, since they contain other features
-      // that we match.
-      const bool justInvolvesCollectionRelation =
-        matchType.size() == 1 && matchType.contains("CollectionRelation");
-      if (!justInvolvesCollectionRelation)
-      {
-        LOG_TRACE("Overlapping matches: " << eids);
-        mergers.push_back(
-          MergerPtr(
-            new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0)));
-      }
+      LOG_TRACE("Overlapping matches:\n" << eids << "\nmatch types: " << matchType.join(";"));
+      mergers.push_back(
+        MergerPtr(new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0)));
       result = true;
     }
   }
