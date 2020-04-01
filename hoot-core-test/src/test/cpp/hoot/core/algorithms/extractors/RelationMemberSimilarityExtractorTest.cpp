@@ -63,7 +63,6 @@ public:
       map, "test-files/conflate/merging/CollectionRelationMergerTest/runTestInput.osm", true);
 
     RelationMemberSimilarityExtractor uut;
-    uut.setIgnoreIds(false);
     const double score =
       uut.extract(
         *map, map->getElement(ElementId(ElementType::Relation, 7387470)),
