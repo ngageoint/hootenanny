@@ -422,6 +422,7 @@ public class MapResource {
 
     @POST
     @Path("/nodescount")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTileNodesCounts(@Context HttpServletRequest request, String params) {
         // Forward declarations
