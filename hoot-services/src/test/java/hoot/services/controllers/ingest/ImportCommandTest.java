@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -76,7 +76,7 @@ public class ImportCommandTest {
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                                       etlName, isNoneTranslation, debugLevel, SHP, caller, null);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootConvertCommand = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -131,7 +131,7 @@ public class ImportCommandTest {
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                 etlName, isNoneTranslation, debugLevel, FGDB, caller, null);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootConvertCommand = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -185,7 +185,7 @@ public class ImportCommandTest {
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                 etlName, isNoneTranslation, debugLevel, ZIP, caller, null);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootConvertCommand = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -243,7 +243,7 @@ public class ImportCommandTest {
         options.add("convert.ops=hoot::SchemaTranslationVisitor");
         options.add("schema.translation.script=" + "/" + translation);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootConvertCommand = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                                           etlName, isNoneTranslation, debugLevel, OSM, caller, null);
@@ -289,7 +289,7 @@ public class ImportCommandTest {
         options.add("convert.ops=hoot::SchemaTranslationVisitor");
         options.add("schema.translation.script=" + HOME_FOLDER + "/" + translation);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootConvertCommand = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                 etlName, isNoneTranslation, debugLevel, OSM, caller, null);

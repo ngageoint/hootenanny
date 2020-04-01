@@ -81,7 +81,7 @@ class MergeOsmFilesCommand extends GrailCommand {
 
 
         if (filePaths.size() > 0) {
-            command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS}";
+            command = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS}";
 
             for (int i=0; i<filePaths.size(); i++) {
                 String input = "INPUT" + i;

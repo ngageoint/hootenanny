@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ogr;
 
@@ -68,7 +68,7 @@ public class ExtractAttributesCommandTest {
         assertNotNull(extractAttributesCommand.getWorkDir());
         assertNotNull(extractAttributesCommand.getCommand());
 
-        String expectedCommand = "hoot tag-info --${DEBUG_LEVEL} --tag-values-limit 30 ${INPUT_FILES}";
+        String expectedCommand = "hoot.bin tag-info --${DEBUG_LEVEL} --tag-values-limit 30 ${INPUT_FILES}";
         assertEquals(expectedCommand, extractAttributesCommand.getCommand());
 
         assertTrue(extractAttributesCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));

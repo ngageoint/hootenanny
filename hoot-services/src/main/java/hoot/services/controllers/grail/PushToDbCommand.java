@@ -62,7 +62,7 @@ class PushToDbCommand extends GrailCommand {
         substitutionMap.put("DB_NAME", dbName);
         substitutionMap.put("INPUT", params.getInput1());
 
-        String command = "hoot convert --${DEBUG_LEVEL} -C GrailIngest.conf ${HOOT_OPTIONS} ${INPUT} ${DB_NAME}";
+        String command = "hoot.bin convert --${DEBUG_LEVEL} -C GrailIngest.conf ${HOOT_OPTIONS} ${INPUT} ${DB_NAME}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
