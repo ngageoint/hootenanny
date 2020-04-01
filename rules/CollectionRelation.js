@@ -189,7 +189,7 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }*/
 
-  var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
+  /*var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
   if (memberSim < memberSimMin)
   {
     memberSimMin = memberSim;
@@ -199,7 +199,7 @@ exports.matchScore = function(map, e1, e2)
   {
     memberSimMax = memberSim;
   }
-  hoot.debug("memberSimMax: " + memberSimMax);
+  hoot.debug("memberSimMax: " + memberSimMax);*/
 
   result = { match: 1.0, miss: 0.0, review: 0.0 };
 
