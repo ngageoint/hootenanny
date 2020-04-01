@@ -59,11 +59,6 @@ public:
    */
   virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
-  /**
-   * @see Configurable
-   */
-  virtual void setConfiguration(const Settings& conf);
-
 private:
 
   OsmMapPtr _map;
