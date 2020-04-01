@@ -27,14 +27,6 @@ exports.geometryType = "polygon";
 exports.matchCandidateCriterion = "hoot::CollectionRelationCriterion";
 
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
-//var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
-var angleHistExtractor = new hoot.SampledAngleHistogramExtractor();
-
-var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
-var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
-var lengthScoreExtractor = new hoot.LengthScoreExtractor();
-var weightedMetricDistanceExtractor = new hoot.WeightedMetricDistanceExtractor();
-var parallelScoreExtractor = new hoot.ParallelScoreExtractor();
 
 var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
 
@@ -140,8 +132,8 @@ exports.matchScore = function(map, e1, e2)
   {
     var ref1 = tags1.get("ref");
     var ref2 = tags2.get("ref");
-    hoot.trace("ref 1:" + ref1);
-    hoot.trace("ref 2:" + ref2);
+    hoot.trace("ref 1: " + ref1);
+    hoot.trace("ref 2: " + ref2);
     if (ref1 != ref2)
     {
       hoot.trace("highway ref mismatch");
@@ -159,43 +151,8 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  /*var angleHist = angleHistExtractor.extract(map, e1, e2);
-  if (angleHist < 0.072)
-  {
-    hoot.trace("match failed on angle hist");
-    return result;
-  }*/
-  /*var weightedShapeDist = weightedShapeDistanceExtractor.extract(map, e1, e2);
-  if (weightedShapeDist < 0.99)
-  {
-    hoot.trace("match failed weighted shape dist");
-    return result;
-  }*/
-  /*var dist = distanceScoreExtractor.extract(map, e1, e2);
-  if (dist < 0.96)
-  {
-    hoot.trace("match failed on dist");
-    return result;
-  }*/
-  /*var length = lengthScoreExtractor.extract(map, e1, e2);
-  if (length < 0.81 || length > 0.97)
-  {
-    hoot.trace("match failed on length");
-    return result;
-  }*/
-  /*var weightedMetricDist = weightedMetricDistanceExtractor.extract(map, e1, e2);
-  if (weightedMetricDist > 0.04)
-  {
-    hoot.trace("match failed weighted metric dist");
-    return result;
-  }*/
-  /*var parallel = parallelScoreExtractor.extract(map, e1, e2);
-  if (parallel < 0.99)
-  {
-    hoot.trace("match failed on parallel");
-    return result;
-  }*/
-  // This is a fairly expensive check against these relations.
+  // This can become a fairly expensive check against the collection relations if their types
+  // aren't filtered properly beforehand.
   var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
   hoot.trace("edgeDist: " + edgeDist);
   if (edgeDist < 0.97)
@@ -203,27 +160,19 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("match failed on edge distance");
     return result;
   }
-  // Seeing if we can get by w/o this for now.
-  /*var hausdorffDist = hausdorffDistanceExtractor.extract(map, e1, e2);
-  hoot.trace("hausdorffDist: " + hausdorffDist);
-  if (hausdorffDist < 0.21)
-  {
-    hoot.trace("match failed on hausdorff");
-    return result;
-  }*/
 
   /*var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
-  hoot.trace("memberSim: " + memberSim);
+  hoot.debug("memberSim: " + memberSim);
   if (memberSim < memberSimMin)
   {
     memberSimMin = memberSim;
   }
-  hoot.trace("memberSimMin: " + memberSimMin);
+  hoot.debug("memberSimMin: " + memberSimMin);
   if (memberSim > memberSimMax)
   {
     memberSimMax = memberSim;
   }
-  hoot.trace("memberSimMax: " + memberSimMax);*/
+  hoot.debug("memberSimMax: " + memberSimMax);*/
 
   result = { match: 1.0, miss: 0.0, review: 0.0 };
 
