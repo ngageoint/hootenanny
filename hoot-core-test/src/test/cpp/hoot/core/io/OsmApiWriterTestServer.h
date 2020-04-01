@@ -41,7 +41,7 @@ public:
 
 protected:
   /** respond() function that responds once to the OSM API Capabilities request */
-  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  bool respond(HttpConnection::HttpConnectionPtr& connection) override;
 };
 
 class PermissionsTestServer : public HttpTestServer
@@ -52,7 +52,7 @@ public:
 
 protected:
   /** respond() function that responds once to the OSM API Permissions request */
-  virtual bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 };
 
 class RetryConflictsTestServer : public HttpTestServer
@@ -71,7 +71,7 @@ protected:
    *   - Changeset Upload - responding with an HTTP 405 error for the test
    *   - Changeset Close
    */
-  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  bool respond(HttpConnection::HttpConnectionPtr& connection) override;
 };
 
 class RetryVersionTestServer : public HttpTestServer
@@ -92,7 +92,7 @@ protected:
    *  - Changeset 1 Upload - respond with updated version
    *  - Changeset Close
    */
-  virtual bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 
 private:
   /** Flag set to false until the first changeset has failed once */
@@ -107,7 +107,7 @@ public:
 
 protected:
   /** respond() function that responds to a series of OSM API requests
-   *  to simulate a
+   *  to simulate a changeset upload.
    *  Requests, in order:
    *   - Capabilities
    *   - Permissions
@@ -116,7 +116,24 @@ protected:
    *   - Changeset Upload - responds with HTTP 200
    *   - Changeset Close
    */
-  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+};
+
+class ChangesetCreateFailureTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  ChangesetCreateFailureTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate a changeset create failure over and over.
+   *  Requests, in order:
+   *   - Capabilities
+   *   - Permissions
+   *   - Changeset Create Failure x6
+   */
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 };
 
 class OsmApiSampleRequestResponse
