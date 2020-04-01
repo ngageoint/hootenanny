@@ -130,7 +130,20 @@ exports.matchScore = function(map, e1, e2)
   // add support for them.
 
   var name = 1.0;
-  if (bothElementsHaveName(e1, e2))
+  // This may be too restrictive.
+  if (type1 == "route" && tags1.get("route") == "road" && tags2.get("route") == "road")
+  {
+    var ref1 = tags1.get("ref");
+    var ref2 = tags2.get("ref");
+    hoot.debug("ref 1:" + ref1);
+    hoot.debug("ref 2:" + ref2);
+    if (ref1 != ref2)
+    {
+      hoot.debug("highway ref mismatch");
+      name = 0.0;
+    }
+  }
+  else if (bothElementsHaveName(e1, e2))
   {
     // only score the name if both have one
     hoot.debug("both elements have name");
