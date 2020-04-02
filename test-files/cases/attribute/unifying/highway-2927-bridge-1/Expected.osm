@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="10.5015" minlon="-66.92259999999999" maxlat="10.5099" maxlon="-66.9147"/>
-    <node visible="true" id="-4346" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5082301450004501" lon="-66.9167206087748383">
+    <node visible="true" id="-4360" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5082301450004501" lon="-66.9167206087748383">
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-4346"/>
+        <tag k="hoot:id" v="-4360"/>
     </node>
-    <node visible="true" id="-4344" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5084235274567863" lon="-66.9177535677229969">
+    <node visible="true" id="-4358" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5084235274567863" lon="-66.9177535677229969">
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-4358"/>
+    </node>
+    <node visible="true" id="-4353" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5081656432906207" lon="-66.9167200335213863">
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-4353"/>
+    </node>
+    <node visible="true" id="-4351" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5083481288326226" lon="-66.9177703591333710">
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-4351"/>
+    </node>
+    <node visible="true" id="-4345" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5071969938525136" lon="-66.9219602198050580">
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-4345"/>
+    </node>
+    <node visible="true" id="-4344" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5060175046317461" lon="-66.9218696482961519">
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-4344"/>
     </node>
-    <node visible="true" id="-4339" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5081656432906207" lon="-66.9167200335213863">
+    <node visible="true" id="-4341" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5062662208783522" lon="-66.9201004705132050">
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-4339"/>
+        <tag k="hoot:id" v="-4341"/>
     </node>
-    <node visible="true" id="-4337" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5083481288326226" lon="-66.9177703591333710">
+    <node visible="true" id="-4340" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5081641872141720" lon="-66.9207106564285397">
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-4337"/>
-    </node>
-    <node visible="true" id="-4331" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5071969938525136" lon="-66.9219602198050580">
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-4331"/>
-    </node>
-    <node visible="true" id="-4330" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5060175046317461" lon="-66.9218696482961519">
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-4330"/>
-    </node>
-    <node visible="true" id="-4327" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5062662208783522" lon="-66.9201004705132050">
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-4327"/>
-    </node>
-    <node visible="true" id="-4326" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5081641872141720" lon="-66.9207106564285397">
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-4326"/>
+        <tag k="hoot:id" v="-4340"/>
     </node>
     <node visible="true" id="-999" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5067652497099981" lon="-66.9161491526400027">
         <tag k="hoot:status" v="1"/>
@@ -3813,42 +3813,8 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-55"/>
     </node>
-    <way visible="true" id="-7846" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-4346"/>
-        <nd ref="-595"/>
-        <nd ref="-563"/>
-        <nd ref="-564"/>
-        <nd ref="-611"/>
-        <nd ref="-4344"/>
-        <tag k="alt_name" v="Av. Urdaneta"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="layer" v="1"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Puente: Llaguno"/>
-        <tag k="source:datetime" v="2015-06-12T14:47:38.000Z;2015-06-12T14:47:34.000Z;2019-01-17T19:50:06Z;2015-06-12T14:47:40.000Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{781d71a3-4c17-4f7d-baf4-87a70049cb08};{739e9fb0-22ec-4f89-977d-7dd397f89fd0};{89d3f564-9ee7-483b-8618-a571d9a2c921}"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.664Z;2019-01-17T19:50:05.668Z;2019-01-17T19:50:05.663Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="motor_vehicle" v="yes"/>
-        <tag k="hoot:id" v="-7846"/>
-        <tag k="highway" v="primary"/>
-    </way>
-    <way visible="true" id="-7843" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-4344"/>
+    <way visible="true" id="-7912" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-4358"/>
         <nd ref="-612"/>
         <nd ref="-647"/>
         <nd ref="-648"/>
@@ -3875,13 +3841,47 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
         <tag k="motor_vehicle" v="yes"/>
-        <tag k="hoot:id" v="-7843"/>
+        <tag k="hoot:id" v="-7912"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-7829" timestamp="2019-01-17T19:50:06Z" version="1">
+    <way visible="true" id="-7905" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-4360"/>
+        <nd ref="-595"/>
+        <nd ref="-563"/>
+        <nd ref="-564"/>
+        <nd ref="-611"/>
+        <nd ref="-4358"/>
+        <tag k="alt_name" v="Av. Urdaneta"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="layer" v="1"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Puente: Llaguno"/>
+        <tag k="source:datetime" v="2015-06-12T14:47:38.000Z;2019-01-17T19:50:06Z;2015-06-12T14:47:34.000Z;2015-06-12T14:47:40.000Z"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="lanes" v="3"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="uuid" v="{739e9fb0-22ec-4f89-977d-7dd397f89fd0};{781d71a3-4c17-4f7d-baf4-87a70049cb08};{89d3f564-9ee7-483b-8618-a571d9a2c921}"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.668Z;2019-01-17T19:50:05.664Z;2019-01-17T19:50:05.663Z"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="motor_vehicle" v="yes"/>
+        <tag k="hoot:id" v="-7905"/>
+        <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="-7898" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-617"/>
         <nd ref="-616"/>
-        <nd ref="-4337"/>
+        <nd ref="-4351"/>
         <tag k="z_order" v="-999999"/>
         <tag k="surface" v="asphalt"/>
         <tag k="layer" v="-1"/>
@@ -3904,16 +3904,16 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
         <tag k="motor_vehicle" v="yes"/>
-        <tag k="hoot:id" v="-7829"/>
+        <tag k="hoot:id" v="-7898"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-7822" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-4337"/>
+    <way visible="true" id="-7891" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-4351"/>
         <nd ref="-615"/>
         <nd ref="-607"/>
         <nd ref="-596"/>
         <nd ref="-606"/>
-        <nd ref="-4339"/>
+        <nd ref="-4353"/>
         <tag k="alt_name" v="Av. Urdaneta"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
@@ -3938,11 +3938,11 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
         <tag k="motor_vehicle" v="yes"/>
-        <tag k="hoot:id" v="-7822"/>
+        <tag k="hoot:id" v="-7891"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-7818" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-4331"/>
+    <way visible="true" id="-7887" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-4345"/>
         <nd ref="-840"/>
         <nd ref="-841"/>
         <nd ref="-842"/>
@@ -3959,7 +3959,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Oeste 4"/>
         <tag k="uuid" v="{83a0d5bc-776b-49a6-b6ad-023eea7b8490}"/>
-        <tag k="hoot:id" v="-7818"/>
+        <tag k="hoot:id" v="-7887"/>
         <tag k="source:datetime" v="2015-04-23T16:51:25.000Z;2015-08-17T18:05:50.000Z;2015-04-23T16:51:23.000Z;2019-01-17T19:50:06Z"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="lanes" v="2"/>
@@ -3968,7 +3968,7 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-7817" timestamp="2019-01-17T19:50:06Z" version="1">
+    <way visible="true" id="-7886" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-753"/>
         <nd ref="-788"/>
         <nd ref="-789"/>
@@ -4019,7 +4019,7 @@
         <nd ref="-834"/>
         <nd ref="-835"/>
         <nd ref="-836"/>
-        <nd ref="-4330"/>
+        <nd ref="-4344"/>
         <tag k="source" v="osm:line"/>
         <tag k="oneway" v="yes"/>
         <tag k="hoot:status" v="3"/>
@@ -4028,7 +4028,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Oeste 4"/>
         <tag k="uuid" v="{83a0d5bc-776b-49a6-b6ad-023eea7b8490}"/>
-        <tag k="hoot:id" v="-7817"/>
+        <tag k="hoot:id" v="-7886"/>
         <tag k="source:datetime" v="2015-04-23T16:51:25.000Z;2015-08-17T18:05:50.000Z;2015-04-23T16:51:23.000Z;2019-01-17T19:50:06Z"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="lanes" v="2"/>
@@ -4037,8 +4037,8 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-7813" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-4327"/>
+    <way visible="true" id="-7882" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-4341"/>
         <nd ref="-754"/>
         <nd ref="-753"/>
         <nd ref="-304"/>
@@ -4077,10 +4077,10 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
         <tag k="motor_vehicle" v="permissive"/>
-        <tag k="hoot:id" v="-7813"/>
+        <tag k="hoot:id" v="-7882"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-7812" timestamp="2019-01-17T19:50:06Z" version="1">
+    <way visible="true" id="-7881" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-122"/>
         <nd ref="-105"/>
         <nd ref="-787"/>
@@ -4105,7 +4105,7 @@
         <nd ref="-768"/>
         <nd ref="-767"/>
         <nd ref="-766"/>
-        <nd ref="-4326"/>
+        <nd ref="-4340"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
         <tag k="hoot:status" v="3"/>
@@ -4127,65 +4127,8 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
         <tag k="motor_vehicle" v="permissive"/>
-        <tag k="hoot:id" v="-7812"/>
+        <tag k="hoot:id" v="-7881"/>
         <tag k="highway" v="primary"/>
-    </way>
-    <way visible="true" id="-194" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-347"/>
-        <nd ref="-423"/>
-        <nd ref="-422"/>
-        <nd ref="-421"/>
-        <nd ref="-420"/>
-        <nd ref="-419"/>
-        <nd ref="-418"/>
-        <nd ref="-417"/>
-        <nd ref="-416"/>
-        <nd ref="-415"/>
-        <nd ref="-414"/>
-        <nd ref="-413"/>
-        <nd ref="-412"/>
-        <nd ref="-411"/>
-        <nd ref="-410"/>
-        <nd ref="-409"/>
-        <nd ref="-408"/>
-        <nd ref="-407"/>
-        <nd ref="-406"/>
-        <nd ref="-405"/>
-        <nd ref="-404"/>
-        <nd ref="-403"/>
-        <nd ref="-402"/>
-        <nd ref="-401"/>
-        <nd ref="-400"/>
-        <nd ref="-399"/>
-        <nd ref="-398"/>
-        <nd ref="-397"/>
-        <nd ref="-396"/>
-        <nd ref="-395"/>
-        <nd ref="-394"/>
-        <nd ref="-393"/>
-        <nd ref="-392"/>
-        <nd ref="-391"/>
-        <nd ref="-390"/>
-        <nd ref="-389"/>
-        <nd ref="-388"/>
-        <nd ref="-387"/>
-        <nd ref="-386"/>
-        <nd ref="-86"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.670Z"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="name" v="El Calvario"/>
-        <tag k="uuid" v="{028399af-be6d-43cb-b3c3-3a32f9dae08c}"/>
-        <tag k="hoot:id" v="-194"/>
-        <tag k="source:datetime" v="2015-09-15T22:49:24.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-91"/>
@@ -4902,6 +4845,45 @@
         <nd ref="-425"/>
         <nd ref="-424"/>
         <nd ref="-347"/>
+        <nd ref="-423"/>
+        <nd ref="-422"/>
+        <nd ref="-421"/>
+        <nd ref="-420"/>
+        <nd ref="-419"/>
+        <nd ref="-418"/>
+        <nd ref="-417"/>
+        <nd ref="-416"/>
+        <nd ref="-415"/>
+        <nd ref="-414"/>
+        <nd ref="-413"/>
+        <nd ref="-412"/>
+        <nd ref="-411"/>
+        <nd ref="-410"/>
+        <nd ref="-409"/>
+        <nd ref="-408"/>
+        <nd ref="-407"/>
+        <nd ref="-406"/>
+        <nd ref="-405"/>
+        <nd ref="-404"/>
+        <nd ref="-403"/>
+        <nd ref="-402"/>
+        <nd ref="-401"/>
+        <nd ref="-400"/>
+        <nd ref="-399"/>
+        <nd ref="-398"/>
+        <nd ref="-397"/>
+        <nd ref="-396"/>
+        <nd ref="-395"/>
+        <nd ref="-394"/>
+        <nd ref="-393"/>
+        <nd ref="-392"/>
+        <nd ref="-391"/>
+        <nd ref="-390"/>
+        <nd ref="-389"/>
+        <nd ref="-388"/>
+        <nd ref="-387"/>
+        <nd ref="-386"/>
+        <nd ref="-86"/>
         <tag k="source" v="osm:line"/>
         <tag k="oneway" v="no"/>
         <tag k="hoot:status" v="3"/>
@@ -5025,162 +5007,6 @@
         <tag k="hoot:id" v="-72"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-168"/>
-        <nd ref="-970"/>
-        <nd ref="-969"/>
-        <nd ref="-968"/>
-        <nd ref="-967"/>
-        <nd ref="-966"/>
-        <nd ref="-965"/>
-        <nd ref="-964"/>
-        <nd ref="-963"/>
-        <nd ref="-962"/>
-        <nd ref="-961"/>
-        <nd ref="-960"/>
-        <nd ref="-959"/>
-        <nd ref="-958"/>
-        <nd ref="-957"/>
-        <nd ref="-956"/>
-        <nd ref="-955"/>
-        <nd ref="-954"/>
-        <nd ref="-73"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.660Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{52f3c8c5-203c-4ec0-b9cd-70b2a0826c2f}"/>
-        <tag k="hoot:id" v="-66"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:55:34Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="z_order" v="-999999"/>
-    </way>
-    <way visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-72"/>
-        <nd ref="-953"/>
-        <nd ref="-952"/>
-        <nd ref="-951"/>
-        <nd ref="-950"/>
-        <nd ref="-949"/>
-        <nd ref="-948"/>
-        <nd ref="-947"/>
-        <nd ref="-946"/>
-        <nd ref="-945"/>
-        <nd ref="-944"/>
-        <nd ref="-943"/>
-        <nd ref="-942"/>
-        <nd ref="-941"/>
-        <nd ref="-940"/>
-        <nd ref="-939"/>
-        <nd ref="-938"/>
-        <nd ref="-937"/>
-        <nd ref="-936"/>
-        <nd ref="-935"/>
-        <nd ref="-934"/>
-        <nd ref="-933"/>
-        <nd ref="-932"/>
-        <nd ref="-931"/>
-        <nd ref="-930"/>
-        <nd ref="-929"/>
-        <nd ref="-928"/>
-        <nd ref="-927"/>
-        <nd ref="-926"/>
-        <nd ref="-925"/>
-        <nd ref="-924"/>
-        <nd ref="-923"/>
-        <nd ref="-922"/>
-        <nd ref="-921"/>
-        <nd ref="-920"/>
-        <nd ref="-919"/>
-        <nd ref="-918"/>
-        <nd ref="-917"/>
-        <nd ref="-916"/>
-        <nd ref="-915"/>
-        <nd ref="-914"/>
-        <nd ref="-913"/>
-        <nd ref="-912"/>
-        <nd ref="-911"/>
-        <nd ref="-910"/>
-        <nd ref="-909"/>
-        <nd ref="-908"/>
-        <nd ref="-907"/>
-        <nd ref="-906"/>
-        <nd ref="-905"/>
-        <nd ref="-904"/>
-        <nd ref="-903"/>
-        <nd ref="-902"/>
-        <nd ref="-901"/>
-        <nd ref="-900"/>
-        <nd ref="-899"/>
-        <nd ref="-898"/>
-        <nd ref="-897"/>
-        <nd ref="-896"/>
-        <nd ref="-895"/>
-        <nd ref="-894"/>
-        <nd ref="-893"/>
-        <nd ref="-892"/>
-        <nd ref="-891"/>
-        <nd ref="-890"/>
-        <nd ref="-889"/>
-        <nd ref="-888"/>
-        <nd ref="-887"/>
-        <nd ref="-886"/>
-        <nd ref="-885"/>
-        <nd ref="-884"/>
-        <nd ref="-883"/>
-        <nd ref="-882"/>
-        <nd ref="-881"/>
-        <nd ref="-880"/>
-        <nd ref="-879"/>
-        <nd ref="-878"/>
-        <nd ref="-877"/>
-        <nd ref="-876"/>
-        <nd ref="-875"/>
-        <nd ref="-874"/>
-        <nd ref="-873"/>
-        <nd ref="-872"/>
-        <nd ref="-871"/>
-        <nd ref="-870"/>
-        <nd ref="-869"/>
-        <nd ref="-868"/>
-        <nd ref="-867"/>
-        <nd ref="-866"/>
-        <nd ref="-865"/>
-        <nd ref="-864"/>
-        <nd ref="-863"/>
-        <nd ref="-862"/>
-        <nd ref="-861"/>
-        <nd ref="-860"/>
-        <nd ref="-859"/>
-        <nd ref="-858"/>
-        <nd ref="-857"/>
-        <nd ref="-856"/>
-        <nd ref="-855"/>
-        <nd ref="-854"/>
-        <nd ref="-853"/>
-        <nd ref="-852"/>
-        <nd ref="-851"/>
-        <nd ref="-850"/>
-        <nd ref="-849"/>
-        <nd ref="-71"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.660Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{52f3c8c5-203c-4ec0-b9cd-70b2a0826c2f}"/>
-        <tag k="hoot:id" v="-65"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:55:34Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="z_order" v="-999999"/>
-    </way>
     <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-133"/>
         <nd ref="-66"/>
@@ -5240,14 +5066,16 @@
         <nd ref="-139"/>
         <nd ref="-60"/>
         <tag k="source" v="osm:line"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.708Z"/>
-        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.660Z;2019-01-17T19:50:05.708Z"/>
+        <tag k="highway" v="unclassified"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{35d24223-a8cf-4cfa-af6e-3b1f52a93d89}"/>
+        <tag k="name" v="El Calvario"/>
+        <tag k="uuid" v="{52f3c8c5-203c-4ec0-b9cd-70b2a0826c2f};{35d24223-a8cf-4cfa-af6e-3b1f52a93d89}"/>
         <tag k="hoot:id" v="-55"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="source:datetime" v="2015-09-15T22:49:24.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:55:34Z\\"/>
         <tag k="way_area" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="osm_id" v="-999999"/>
@@ -5287,7 +5115,7 @@
     <way visible="true" id="-51" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-274"/>
         <nd ref="-594"/>
-        <nd ref="-4346"/>
+        <nd ref="-4360"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
         <tag k="hoot:status" v="3"/>
@@ -5628,6 +5456,166 @@
         <tag k="hoot:id" v="-38"/>
         <tag k="highway" v="secondary"/>
     </way>
+    <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-72"/>
+        <nd ref="-953"/>
+        <nd ref="-952"/>
+        <nd ref="-951"/>
+        <nd ref="-950"/>
+        <nd ref="-949"/>
+        <nd ref="-948"/>
+        <nd ref="-947"/>
+        <nd ref="-946"/>
+        <nd ref="-945"/>
+        <nd ref="-944"/>
+        <nd ref="-943"/>
+        <nd ref="-942"/>
+        <nd ref="-941"/>
+        <nd ref="-940"/>
+        <nd ref="-939"/>
+        <nd ref="-938"/>
+        <nd ref="-937"/>
+        <nd ref="-936"/>
+        <nd ref="-935"/>
+        <nd ref="-934"/>
+        <nd ref="-933"/>
+        <nd ref="-932"/>
+        <nd ref="-931"/>
+        <nd ref="-930"/>
+        <nd ref="-929"/>
+        <nd ref="-928"/>
+        <nd ref="-927"/>
+        <nd ref="-926"/>
+        <nd ref="-925"/>
+        <nd ref="-924"/>
+        <nd ref="-923"/>
+        <nd ref="-922"/>
+        <nd ref="-921"/>
+        <nd ref="-920"/>
+        <nd ref="-919"/>
+        <nd ref="-918"/>
+        <nd ref="-917"/>
+        <nd ref="-916"/>
+        <nd ref="-915"/>
+        <nd ref="-914"/>
+        <nd ref="-913"/>
+        <nd ref="-912"/>
+        <nd ref="-911"/>
+        <nd ref="-910"/>
+        <nd ref="-909"/>
+        <nd ref="-908"/>
+        <nd ref="-907"/>
+        <nd ref="-906"/>
+        <nd ref="-905"/>
+        <nd ref="-904"/>
+        <nd ref="-903"/>
+        <nd ref="-902"/>
+        <nd ref="-901"/>
+        <nd ref="-900"/>
+        <nd ref="-899"/>
+        <nd ref="-898"/>
+        <nd ref="-897"/>
+        <nd ref="-896"/>
+        <nd ref="-895"/>
+        <nd ref="-894"/>
+        <nd ref="-893"/>
+        <nd ref="-892"/>
+        <nd ref="-891"/>
+        <nd ref="-890"/>
+        <nd ref="-889"/>
+        <nd ref="-888"/>
+        <nd ref="-887"/>
+        <nd ref="-886"/>
+        <nd ref="-885"/>
+        <nd ref="-884"/>
+        <nd ref="-883"/>
+        <nd ref="-882"/>
+        <nd ref="-881"/>
+        <nd ref="-880"/>
+        <nd ref="-879"/>
+        <nd ref="-878"/>
+        <nd ref="-877"/>
+        <nd ref="-876"/>
+        <nd ref="-875"/>
+        <nd ref="-874"/>
+        <nd ref="-873"/>
+        <nd ref="-872"/>
+        <nd ref="-871"/>
+        <nd ref="-870"/>
+        <nd ref="-869"/>
+        <nd ref="-868"/>
+        <nd ref="-867"/>
+        <nd ref="-866"/>
+        <nd ref="-865"/>
+        <nd ref="-864"/>
+        <nd ref="-863"/>
+        <nd ref="-862"/>
+        <nd ref="-861"/>
+        <nd ref="-860"/>
+        <nd ref="-859"/>
+        <nd ref="-858"/>
+        <nd ref="-857"/>
+        <nd ref="-856"/>
+        <nd ref="-855"/>
+        <nd ref="-854"/>
+        <nd ref="-853"/>
+        <nd ref="-852"/>
+        <nd ref="-851"/>
+        <nd ref="-850"/>
+        <nd ref="-849"/>
+        <nd ref="-71"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.660Z"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="El Calvario"/>
+        <tag k="uuid" v="{52f3c8c5-203c-4ec0-b9cd-70b2a0826c2f}"/>
+        <tag k="hoot:id" v="-37"/>
+        <tag k="source:datetime" v="2015-09-15T22:49:24.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:55:34Z\\"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="z_order" v="-999999"/>
+    </way>
+    <way visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-168"/>
+        <nd ref="-970"/>
+        <nd ref="-969"/>
+        <nd ref="-968"/>
+        <nd ref="-967"/>
+        <nd ref="-966"/>
+        <nd ref="-965"/>
+        <nd ref="-964"/>
+        <nd ref="-963"/>
+        <nd ref="-962"/>
+        <nd ref="-961"/>
+        <nd ref="-960"/>
+        <nd ref="-959"/>
+        <nd ref="-958"/>
+        <nd ref="-957"/>
+        <nd ref="-956"/>
+        <nd ref="-955"/>
+        <nd ref="-954"/>
+        <nd ref="-73"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.660Z"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="El Calvario"/>
+        <tag k="uuid" v="{52f3c8c5-203c-4ec0-b9cd-70b2a0826c2f}"/>
+        <tag k="hoot:id" v="-36"/>
+        <tag k="source:datetime" v="2015-09-15T22:49:24.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:55:34Z\\"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="z_order" v="-999999"/>
+    </way>
     <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-193"/>
         <nd ref="-999"/>
@@ -5707,7 +5695,7 @@
         <tag k="highway" v="tertiary"/>
     </way>
     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4339"/>
+        <nd ref="-4353"/>
         <nd ref="-605"/>
         <nd ref="-604"/>
         <nd ref="-603"/>
@@ -6445,7 +6433,7 @@
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="299" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-4326"/>
+        <nd ref="-4340"/>
         <nd ref="-765"/>
         <nd ref="-764"/>
         <nd ref="-763"/>
@@ -6457,7 +6445,7 @@
         <nd ref="-757"/>
         <nd ref="-756"/>
         <nd ref="-755"/>
-        <nd ref="-4327"/>
+        <nd ref="-4341"/>
         <tag k="alt_name" v="Av. Sucre"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
@@ -7071,11 +7059,11 @@
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="613" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-4330"/>
+        <nd ref="-4344"/>
         <nd ref="-837"/>
         <nd ref="-838"/>
         <nd ref="-839"/>
-        <nd ref="-4331"/>
+        <nd ref="-4345"/>
         <tag k="alt_name" v="Av. Oeste 4"/>
         <tag k="z_order" v="-999999"/>
         <tag k="layer" v="1"/>
