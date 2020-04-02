@@ -54,6 +54,99 @@ exports.isWholeGroup = function()
   return true;
 };
 
+function typeMismatch(e1, e2)
+{
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
+  var type1 = e1.getType();
+  var type2 = e2.getType();
+  
+  hoot.trace("type1: " + type1);
+  hoot.trace("type2: " + type2);
+  hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
+  hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
+
+  if (type1 != type2)
+  {    
+    hoot.trace("type mismatch");
+    return true;
+  }
+  else if (type1 == "boundary" && tags1.get("boundary") == "administrative" && tags2.get("boundary") == "administrative" && tags1.get("admin_level") != tags2.get("admin_level"))
+  {
+    hoot.trace("admin_level mismatch");
+    return true;
+  }
+  else if ((type1 == "multipolygon" || type1 == "multilineString") && explicitTypeMismatch(e1, e2, exports.tagThreshold))
+  {
+    hoot.trace("multipoly/multilinestring type mismatch");
+    return true;
+  }
+  else if (type1 == "restriction" && tags1.get("restriction") != tags2.get("restriction"))
+  {
+    hoot.trace("restriction mismatch");
+    return true;
+  }
+  else if (type1 == "route" && tags1.get("route") != tags2.get("route"))
+  {
+    hoot.trace("route mismatch");
+    return true;
+  }
+  return false;
+}
+
+function nameMismatch(map, e1, e2)
+{
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
+  var type1 = e1.getType();
+  var type2 = e2.getType();
+
+  var name = 1.0;
+  // This may be too restrictive.
+  if (type1 == "route" && tags1.get("route") == "road" && tags2.get("route") == "road")
+  {
+    var ref1 = tags1.get("ref");
+    var ref2 = tags2.get("ref");
+    hoot.trace("ref 1: " + ref1);
+    hoot.trace("ref 2: " + ref2);
+    if (ref1 != ref2)
+    {
+      hoot.trace("highway ref mismatch");
+      name = 0.0;
+    }
+  }
+  // only score the name if both have one
+  else if (bothElementsHaveName(e1, e2))
+  {
+    hoot.trace("both elements have name");
+    name = nameExtractor.extract(map, e1, e2);
+  }
+
+  if (name < exports.nameThreshold)
+  {
+    return true;
+  }
+  return false;
+}
+
+function geometryMismatch(map, e1, e2)
+{
+  // This can become a fairly expensive check against the collection relations if to many of
+  // them are encountered because they aren't filtered out properly by type beforehand.
+  var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+  hoot.trace("edgeDist: " + edgeDist);
+  if (edgeDist < 0.97)
+  { 
+    hoot.trace("match failed on edge distance");
+    return true;
+  }
+
+  // This hasn't panned out as being usable yet.
+  //var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
+
+  return false;
+}
+
 /**
  * Returns the match score for the three class relationships.
  * - match
@@ -87,84 +180,24 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + tags2.get("note"));
   }
   
-  // TODO: move some of this stuff to other methods
-
-  var type1 = e1.getType();
-  hoot.trace("type1: " + type1);
-  var type2 = e2.getType();
-  hoot.trace("type2: " + type2);
-  hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
-  hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
-  if (type1 != type2)
-  {    
-    hoot.trace("type mismatch");
-    return result;
-  }
-  else if (type1 == "boundary" && tags1.get("boundary") == "administrative" && tags2.get("boundary") == "administrative" && tags1.get("admin_level") != tags2.get("admin_level"))
-  {
-    hoot.trace("admin_level mismatch");
-    return result;
-  }
-  else if ((type1 == "multipolygon" || type1 == "multilineString") && explicitTypeMismatch(e1, e2, exports.tagThreshold))
-  {
-    hoot.trace("multipoly/multilinestring type mismatch");
-    return result;
-  }
-  else if (type1 == "restriction" && tags1.get("restriction") != tags2.get("restriction"))
-  {
-    hoot.trace("restriction mismatch");
-    return result;
-  }
-  else if (type1 == "route" && tags1.get("route") != tags2.get("route"))
-  {
-    hoot.trace("route mismatch");
-    return result;
-  }
-
   // These were determined with a very small sample of test data and may need refinement. Also,
   // not all of the feature extractors support relations and, where possible, we may want to 
   // add support for them.
 
-  var name = 1.0;
-  // This may be too restrictive.
-  if (type1 == "route" && tags1.get("route") == "road" && tags2.get("route") == "road")
-  {
-    var ref1 = tags1.get("ref");
-    var ref2 = tags2.get("ref");
-    hoot.trace("ref 1: " + ref1);
-    hoot.trace("ref 2: " + ref2);
-    if (ref1 != ref2)
-    {
-      hoot.trace("highway ref mismatch");
-      name = 0.0;
-    }
-  }
-  else if (bothElementsHaveName(e1, e2))
-  {
-    // only score the name if both have one
-    hoot.trace("both elements have name");
-    name = nameExtractor.extract(map, e1, e2);
-  }
-  if (name < exports.nameThreshold)
+  if (typeMismatch(e1, e2))
   {
     return result;
   }
-
-  // This can become a fairly expensive check against the collection relations if to many of
-  // them are encountered because they aren't filtered out properly by type beforehand.
-  var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
-  hoot.trace("edgeDist: " + edgeDist);
-  if (edgeDist < 0.97)
-  { 
-    hoot.trace("match failed on edge distance");
+  else if (nameMismatch(map, e1, e2))
+  {
     return result;
   }
-
-  // This hasn't panned out as being usable yet.
-  //var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
+  else if (geometryMismatch(map, e1, e2))
+  {
+    return result;
+  }
 
   result = { match: 1.0, miss: 0.0, review: 0.0 };
-
   hoot.trace("match found");
   return result;
 };

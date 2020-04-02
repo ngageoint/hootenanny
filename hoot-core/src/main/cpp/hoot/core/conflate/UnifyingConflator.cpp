@@ -332,9 +332,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     LOG_VART(merger->getImpactedElementIds());
 
     // WARNING: Enabling this could result in a lot of files being generated.
-    // TODO: change this back
-    OsmMapWriterFactory::writeDebugMap(
-      map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+    //OsmMapWriterFactory::writeDebugMap(
+      //map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
   }
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 

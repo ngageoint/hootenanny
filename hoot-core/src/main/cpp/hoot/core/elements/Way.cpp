@@ -460,7 +460,7 @@ QString Way::toString() const
 QString Way::nonIdHash() const
 {
   std::stringstream ss(std::stringstream::out);
-  // TODO: this may not be unique enough along with tags
+  // this may not be unique enough along with just tags
   ss << getNodeIds().size();
   ss << " " << getTags().toString();
   return QString::fromUtf8(ss.str().data());
