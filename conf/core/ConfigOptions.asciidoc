@@ -2236,6 +2236,7 @@ option. A setting of -1 is useful for tests where you do not have granular enoug
 ** `hoot::RemoveEmptyAreasVisitor`
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RelationCircularRefRemover`
+** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::RemoveDuplicateAreasVisitor`
 ** `hoot::NoInformationElementRemover`

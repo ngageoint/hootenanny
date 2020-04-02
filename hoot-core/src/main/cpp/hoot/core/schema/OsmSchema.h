@@ -487,6 +487,7 @@ public:
    *
    * @param tags the tags to search
    * @return a single key/value pair string
+   * @todo handle multiple types without inheritance
    */
   QString mostSpecificType(const Tags& tags);
 

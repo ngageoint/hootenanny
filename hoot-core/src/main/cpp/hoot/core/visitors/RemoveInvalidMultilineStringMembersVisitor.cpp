@@ -68,7 +68,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
 
       const double expansion = r->getCircularError() / 2.0;
       OsmMapPtr map(_map->shared_from_this());
-      // Multiline strings that are a part of a review relation are what we are targetting for
+      // Multiline strings that are a part of a review relation are what we are targeting for
       // replacement
       set<ElementId> parents = map->getParents(r->getElementId());
       for (set<ElementId>::iterator it = parents.begin(); it != parents.end(); ++it)
