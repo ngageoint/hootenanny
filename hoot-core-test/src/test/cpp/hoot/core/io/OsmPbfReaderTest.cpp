@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -439,7 +439,7 @@ public:
     OsmPbfReader reader(false);
     const int chunkSize = 40;
     reader.setMaxElementsPerMap(chunkSize);
-    reader.open("test-files/ToyTestCombined.pbf");
+    reader.open("test-files/ToyTestCombined.osm.pbf");
     reader.initializePartial();
 
     OsmXmlWriter writer;
