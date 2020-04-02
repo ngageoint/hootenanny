@@ -57,7 +57,7 @@ public:
 
   DiscretizeWaysVisitor(double spacing, vector<Coordinate>& v) : _spacing(spacing), _result(v) {}
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Way)
     {
@@ -66,8 +66,8 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  QString getDescription() const override { return ""; }
+  std::string getClassName() const override { return ""; }
 
 private:
 
@@ -81,7 +81,7 @@ public:
 
   LinesWaysVisitor(vector<Geometry*>& lines) : _lines(lines) {}
 
-  virtual void visit(const std::shared_ptr<const Element>& e)
+  void visit(const std::shared_ptr<const Element>& e) override
   {
     if (e->getElementType() == ElementType::Way)
     {
@@ -91,8 +91,8 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  QString getDescription() const override { return ""; }
+  std::string getClassName() const override { return ""; }
 
 private:
 
