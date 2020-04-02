@@ -85,6 +85,8 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("e2 note: " + tags2.get("note"));
   }
+  
+  // TODO: move some of this stuff to other methods
 
   var type1 = e1.getType();
   hoot.trace("type1: " + type1);
