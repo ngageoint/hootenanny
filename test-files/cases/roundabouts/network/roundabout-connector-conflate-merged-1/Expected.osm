@@ -1549,10 +1549,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-328"/>
     </node>
-    <node visible="true" id="-327" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.8934342535237079" lon="-75.3918937858724831">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-327"/>
-    </node>
     <node visible="true" id="-325" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.8873527000000010" lon="-75.3980434000000059">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-325"/>
@@ -2252,10 +2248,6 @@
     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8829764775314146" lon="-75.4039880369719953">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-34"/>
-    </node>
-    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921854950699952" lon="-75.3898973799562526">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-33"/>
     </node>
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920815225958663" lon="-75.3898999999999972">
         <tag k="hoot:status" v="1"/>
@@ -3175,7 +3167,18 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="4881737777"/>
     </node>
-    <way visible="true" id="-1116" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1122" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="4881732781"/>
+        <nd ref="4881725755"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="hoot:id" v="-1122"/>
+        <tag k="source:datetime" v="2015-12-23T16:54:03.000Z;2015-12-23T16:54:03Z"/>
+        <tag k="admin_level" v="8"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1118" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881726693"/>
         <nd ref="4881726690"/>
         <nd ref="-1068"/>
@@ -3193,7 +3196,7 @@
         <tag k="highway" v="residential"/>
         <tag k="name" v="Lexington Drive"/>
         <tag k="tiger:zip_left" v="19963"/>
-        <tag k="hoot:id" v="-1116"/>
+        <tag k="hoot:id" v="-1118"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2013-04-20T14:54:24.000Z;2018-03-18T01:52:03Z"/>
         <tag k="tiger:zip_right" v="19963"/>
@@ -3203,7 +3206,7 @@
         <tag k="tiger:name_base" v="Lexington"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1114" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1116" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="-786"/>
         <nd ref="4881730846"/>
         <nd ref="-1055"/>
@@ -3212,11 +3215,11 @@
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Homestead Boulevard"/>
-        <tag k="hoot:id" v="-1114"/>
+        <tag k="hoot:id" v="-1116"/>
         <tag k="source:datetime" v="2015-01-20T16:33:51.000Z;2016-04-12T16:48:08Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1110" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1112" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729183"/>
         <nd ref="-1025"/>
         <nd ref="4881735208"/>
@@ -3226,7 +3229,7 @@
         <tag k="name_1" v="Road 206"/>
         <tag k="name" v="Wilkins Road"/>
         <tag k="ref" v="(206)"/>
-        <tag k="hoot:id" v="-1110"/>
+        <tag k="hoot:id" v="-1112"/>
         <tag k="tiger:name_type" v="Rd"/>
         <tag k="source:datetime" v="2012-12-22T09:18:57.000Z;2018-03-18T02:45:46Z;2012-12-22T09:19:01Z"/>
         <tag k="tiger:cfcc" v="A31"/>
@@ -3235,7 +3238,7 @@
         <tag k="tiger:name_base" v="Wilkins"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1106" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1108" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729188"/>
         <nd ref="-1010"/>
         <nd ref="4881730427"/>
@@ -3251,11 +3254,11 @@
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Clearview Drive"/>
-        <tag k="hoot:id" v="-1106"/>
+        <tag k="hoot:id" v="-1108"/>
         <tag k="source:datetime" v="2011-04-13T17:05:08.000Z;2018-03-18T02:33:12Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1104" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1106" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21"/>
         <nd ref="4881732435"/>
         <nd ref="-986"/>
@@ -3269,7 +3272,7 @@
         <tag k="name_1" v="Road 211"/>
         <tag k="name" v="Elks Lodge Road"/>
         <tag k="ref" v="(211)"/>
-        <tag k="hoot:id" v="-1104"/>
+        <tag k="hoot:id" v="-1106"/>
         <tag k="tiger:name_type" v="Rd"/>
         <tag k="source:datetime" v="2014-12-20T07:51:18.000Z;2019-04-02T14:44:26Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -3278,7 +3281,7 @@
         <tag k="tiger:name_base" v="Elks Lodge"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1100" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1102" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28"/>
         <nd ref="4881737764"/>
         <nd ref="4881737765"/>
@@ -3301,7 +3304,7 @@
         <tag k="name_1" v="Road 206"/>
         <tag k="name" v="Wilkins Road"/>
         <tag k="ref" v="(206)"/>
-        <tag k="hoot:id" v="-1100"/>
+        <tag k="hoot:id" v="-1102"/>
         <tag k="tiger:name_type" v="Rd"/>
         <tag k="source:datetime" v="2012-12-22T09:18:57.000Z;2018-03-18T02:45:46Z"/>
         <tag k="tiger:cfcc" v="A31"/>
@@ -3310,7 +3313,7 @@
         <tag k="tiger:name_base" v="Wilkins"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1096" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1098" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881726693"/>
         <nd ref="-972"/>
         <nd ref="4881737446"/>
@@ -3321,7 +3324,7 @@
         <tag k="highway" v="residential"/>
         <tag k="name" v="Valley Forge Drive"/>
         <tag k="tiger:zip_left" v="19963"/>
-        <tag k="hoot:id" v="-1096"/>
+        <tag k="hoot:id" v="-1098"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2012-12-22T09:18:56.000Z;2018-03-18T01:52:03Z"/>
         <tag k="tiger:zip_right" v="19963"/>
@@ -4626,7 +4629,7 @@
     </way>
     <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-40"/>
-        <nd ref="-787"/>
+        <nd ref="4881725755"/>
         <tag k="tiger:name_base_1" v="State Highway 1"/>
         <tag k="maxspeed" v="55 mph"/>
         <tag k="oneway" v="yes"/>
@@ -4661,17 +4664,6 @@
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-33"/>
-        <nd ref="-327"/>
-        <nd ref="-787"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="boundary" v="administrative"/>
-        <tag k="hoot:id" v="-26"/>
-        <tag k="source:datetime" v="2015-12-23T16:54:03Z"/>
-        <tag k="admin_level" v="8"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -4986,10 +4978,7 @@
         <nd ref="4881732781"/>
         <nd ref="4881725755"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="boundary" v="administrative"/>
         <tag k="hoot:id" v="-4"/>
-        <tag k="source:datetime" v="2015-12-23T16:54:03.000Z"/>
-        <tag k="admin_level" v="8"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -5438,9 +5427,9 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="-4" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-26" role="outer"/>
+        <member type="way" ref="-4" role="outer"/>
         <member type="way" ref="-18" role="outer"/>
-        <member type="way" ref="-1110" role="outer"/>
+        <member type="way" ref="-1112" role="outer"/>
         <member type="way" ref="496849545" role="outer"/>
         <member type="relation" ref="-3" role="outer"/>
         <member type="way" ref="-51" role="outer"/>

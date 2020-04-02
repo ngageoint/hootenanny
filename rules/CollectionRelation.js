@@ -1,5 +1,5 @@
 /**
- * This script conflates collection relations (e.g route or administrative boundary relations).
+ * This script conflates collection relations (e.g route, administrative boundary relations, etc.).
  */
 
 "use strict";
@@ -20,6 +20,7 @@ exports.nameThreshold = parseFloat(hoot.get("collection.relation.name.threshold"
 exports.experimental = false;
 exports.baseFeatureType = "CollectionRelation";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
+// TODO: should this be line?
 exports.geometryType = "polygon";
 
 // This is needed for disabling superfluous conflate ops. In the future, it may also
@@ -27,15 +28,8 @@ exports.geometryType = "polygon";
 exports.matchCandidateCriterion = "hoot::CollectionRelationCriterion";
 
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
-
 var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
-
 var nameExtractor = new hoot.NameExtractor();
-
-/////////////////////
-
-var memberSimMin = 99999;
-var memberSimMax = 0;
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -161,18 +155,8 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  /*var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
-  hoot.debug("memberSim: " + memberSim);
-  if (memberSim < memberSimMin)
-  {
-    memberSimMin = memberSim;
-  }
-  hoot.debug("memberSimMin: " + memberSimMin);
-  if (memberSim > memberSimMax)
-  {
-    memberSimMax = memberSim;
-  }
-  hoot.debug("memberSimMax: " + memberSimMax);*/
+  // This hasn't panned out as being usable yet.
+  //var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
 
   result = { match: 1.0, miss: 0.0, review: 0.0 };
 

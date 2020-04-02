@@ -64,11 +64,11 @@ double RelationMemberSimilarityExtractor::extract(
     QSet<ElementId> targetMemberIds =
       CollectionUtils::stdSetToQSet(targetRelation->getMemberIds());
     LOG_VART(targetMemberIds.size());
-    //LOG_VARD(targetMemberIds);
+    //LOG_VART(targetMemberIds);
     QSet<ElementId> candidateMemberIds =
       CollectionUtils::stdSetToQSet(candidateRelation->getMemberIds());
     LOG_VART(candidateMemberIds.size());
-    //LOG_VARD(candidateMemberIds);
+    //LOG_VART(candidateMemberIds);
     const int totalMembers = targetMemberIds.size() + candidateMemberIds.size();
     LOG_VART(totalMembers);
 
@@ -113,21 +113,7 @@ double RelationMemberSimilarityExtractor::extract(
       targetMemberComps.intersect(candidateMemberComps);
     LOG_VART(intersection);
     numSharedMembers = intersection.size();
-    //if (numSharedMembers > 0)
-    //{
-      //LOG_VAR(targetMemberComps);
-      //LOG_VAR(candidateMemberComps);
-      //LOG_VAR(intersection);
-    //}
-
     LOG_VART(numSharedMembers);
-    //if (numSharedMembers > 0)
-    //{
-      //LOG_INFO(numSharedMembers);
-      //LOG_INFO(targetMemberIds);
-      //LOG_INFO(candidateMemberIds);
-    //}
-    //LOG_VARD(intersection);
 
     // calculate Jaccard
     const double similarity = (double)numSharedMembers / (double)totalMembers;
