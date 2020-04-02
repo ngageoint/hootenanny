@@ -19,7 +19,7 @@ Feature: Import Export Delete OSM Dataset
         When I click on the "Datasets" option in the "settingsSidebar"
         And I press "Import Single Dataset"
         And I select the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
-        And I select "/test-files/ToyTestCombined.pbf" dataset
+        And I select "/test-files/ToyTestCombined.osm.pbf" dataset
         Then I should see element "[id='importDatasetLayerName']" with value "ToyTestCombined"
         Then I type "ToyTestCombined_Cucumber" in input "importDatasetLayerName"
         When I press "big.loud" span with text "Import"

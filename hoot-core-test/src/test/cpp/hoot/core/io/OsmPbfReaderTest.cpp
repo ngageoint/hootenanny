@@ -439,7 +439,7 @@ public:
     OsmPbfReader reader(false);
     const int chunkSize = 40;
     reader.setMaxElementsPerMap(chunkSize);
-    reader.open("test-files/ToyTestCombined.pbf");
+    reader.open("test-files/ToyTestCombined.osm.pbf");
     reader.initializePartial();
 
     OsmXmlWriter writer;
