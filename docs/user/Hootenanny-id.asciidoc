@@ -401,6 +401,7 @@ The advanced parameters are accessed by clicking on the triangle next the Type h
 image::images/id/hoot_advanced_conflate.png[scaledwidth="50%"]
 
 [[HootiD-FavoriteAdvOpts]]
+==== Save Favorite Advanced Options
 
 To make it easier for users to useful advanced conflation options, hootenanny now allow for the saving, updating and deleting of desired advanced conflation options.
 
