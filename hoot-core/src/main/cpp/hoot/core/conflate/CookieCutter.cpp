@@ -96,16 +96,10 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   cropper.setKeepEntireFeaturesCrossingBounds(_keepEntireFeaturesCrossingBounds);
   cropper.setKeepOnlyFeaturesInsideBounds(_keepOnlyFeaturesInsideBounds);
   cropper.setInvert(!_crop);
+  cropper.setRemoveSuperflousFeatures(true);
   cropper.apply(doughMap);
-  OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-dough-crop");
 
   OsmMapPtr cookieCutMap = doughMap;
-
-  // clean up any ugly bits left over
-  // TODO: This can be removed now, since its already happening in MapCropper, right?
-  SuperfluousWayRemover::removeWays(cookieCutMap);
-  SuperfluousNodeRemover::removeNodes(cookieCutMap);
-
   LOG_VARD(cookieCutMap->getNodes().size());
   LOG_VARD(MapProjector::toWkt(cookieCutMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cutter-cookie-cut-map");
