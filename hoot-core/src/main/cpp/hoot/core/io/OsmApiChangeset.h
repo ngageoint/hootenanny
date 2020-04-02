@@ -297,6 +297,10 @@ public:
    * @return true if they are equivalent
    */
   bool isMatch(const XmlChangeset& changeset);
+  /**
+   * @brief failRemainingChangeset Set all remaining elements to the failed state
+   */
+  void failRemainingChangeset();
 
 private:
   /**
@@ -489,6 +493,11 @@ private:
   void writeRelations(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
   void writeElements(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id,
                      ElementType::Type elementType, const ChangesetElementMap& elements);
+  /**
+   * @brief failRemainingElements Fail all non-finalized elements
+   * @param elements Map of elements to fail
+   */
+  void failRemainingElements(const ChangesetElementMap& elements);
 
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   ChangesetElementMap _allNodes;

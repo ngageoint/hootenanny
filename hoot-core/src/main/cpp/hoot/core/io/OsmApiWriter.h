@@ -259,7 +259,7 @@ private:
    * @param response String response from the server to help in the splitting process
    * @return True if the changeset was split
    */
-  bool _splitChangeset(const ChangesetInfoPtr& workInfo, const QString& response);
+  bool _splitChangeset(const ChangesetInfoPtr& workInfo, const QString& response = "");
   /**
    * @brief _writeDebugFile Write out the request or response file for debugging uploads
    * @param type "request" or "response" output file
@@ -274,8 +274,24 @@ private:
    * @return next ID
    */
   int _getNextApiId();
+  /**
+   * @brief _allThreadsFailed Check if all threads are in the failed state
+   * @return true if all threads are in the failed state
+   */
+  bool _allThreadsFailed();
+  /**
+   * @brief _hasFailedThread Check if any thread is in a failed state
+   * @return true if any thread is in a failed state
+   */
+  bool _hasFailedThread();
   /** Changeset processing thread pool */
   std::vector<std::thread> _threadPool;
+  /**
+   * @brief _pushChangesets Push one or more changesets on to the work queue
+   * @param changeset Required changeset info object
+   * @param changeset2 Optional changeset info object
+   */
+  void _pushChangesets(ChangesetInfoPtr changeset, ChangesetInfoPtr changeset2 = ChangesetInfoPtr());
   /** Queue for producer/consumer work model */
   std::queue<ChangesetInfoPtr> _workQueue;
   /** Mutex protecting work queue */
@@ -288,8 +304,15 @@ private:
   enum ThreadStatus
   {
     Idle,
-    Working
+    Working,
+    Failed
   };
+  /**
+   * @brief _updateThreadStatus Update the thread status
+   * @param thread_index Index of calling thread in _threadStatus vector
+   * @param status Status to update to
+   */
+  void _updateThreadStatus(int thread_index, ThreadStatus status);
   /** Vector of statuses for each running thread */
   std::vector<ThreadStatus> _threadStatus;
   /** Mutex protecting status vector */

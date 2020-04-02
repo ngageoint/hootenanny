@@ -202,6 +202,37 @@ bool ChangesetOutputTestServer::respond(HttpConnection::HttpConnectionPtr& conne
   return continue_processing && !get_interupt();
 }
 
+bool ChangesetCreateFailureTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+{
+  //  Stop processing by setting this to false
+  bool continue_processing = true;
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
+  //  Determine the response message's HTTP header
+  HttpResponsePtr response;
+  if (headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+  {
+    static int count = 0;
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_UNAUTHORIZED, "User is not authorized"));
+    if (++count >= 3)
+      continue_processing = false;
+  }
+  else
+  {
+    //  Error out here
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
+    continue_processing = false;
+  }
+  //  Write out the response
+  write_response(connection, response->to_string());
+  //  Return true if we should continue listening and processing requests
+  return continue_processing && !get_interupt();
+}
+
 const char* OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE =
     "<?xml version='1.0' encoding='UTF-8'?>\n"
     "<osm version='0.6' generator='OpenStreetMap server'>\n"
