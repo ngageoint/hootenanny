@@ -1929,6 +1929,25 @@ bool OsmSchema::hasType(const Tags& tags)
   return false;
 }
 
+QString OsmSchema::mostSpecificType(const Tags& tags)
+{
+  QString mostSpecificType;
+  for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
+  {
+    const QString key = tagsItr.key();
+    const QString val = tagsItr.value();
+    const QString kvp = toKvp(key, val);
+    LOG_VART(kvp);
+    LOG_VART(isTypeKey(tagsItr.key()));
+
+    if (isTypeKey(key) && (mostSpecificType.isEmpty() || !isAncestor(kvp, mostSpecificType)))
+    {
+      mostSpecificType = kvp;
+    }
+  }
+  return mostSpecificType;
+}
+
 bool OsmSchema::hasMoreThanOneType(const Tags& tags)
 {
   int count = 0;

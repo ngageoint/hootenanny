@@ -57,6 +57,7 @@ private:
   static void isGeneric(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void hasType(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void explicitTypeMismatch(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void mostSpecificType(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void score(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void scoreTypes(const v8::FunctionCallbackInfo<v8::Value>& args);

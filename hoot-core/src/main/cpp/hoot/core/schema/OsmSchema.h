@@ -483,6 +483,14 @@ public:
   bool hasMoreThanOneType(const Tags& tags);
 
   /**
+   * Returns the most specific type in a set of tags according to the schema
+   *
+   * @param tags the tags to search
+   * @return a single key/value pair string
+   */
+  QString mostSpecificType(const Tags& tags);
+
+  /**
    * Scores the type similarity between two sets of tags
    *
    * @param tags1 the first set of tags to score

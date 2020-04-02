@@ -87,6 +87,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, hasType)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "explicitTypeMismatch"),
               FunctionTemplate::New(current, explicitTypeMismatch)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "mostSpecificType"),
+              FunctionTemplate::New(current, mostSpecificType)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isArea"),
               FunctionTemplate::New(current, isArea)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isPolygon"),
@@ -363,7 +365,6 @@ void OsmSchemaJs::isNonBuildingArea(const FunctionCallbackInfo<Value>& args)
     Boolean::New(current, NonBuildingAreaCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
-
 void OsmSchemaJs::isCollectionRelation(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -445,6 +446,17 @@ void OsmSchemaJs::scoreOneWay(const FunctionCallbackInfo<Value>& args)
   QString kvp2 = toCpp<QString>(args[1]);
 
   args.GetReturnValue().Set(Number::New(current, OsmSchema::getInstance().scoreOneWay(kvp1, kvp2)));
+}
+
+void OsmSchemaJs::mostSpecificType(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr element = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  const Tags tags(OsmSchema::getInstance().mostSpecificType(element->getTags()));
+
+  args.GetReturnValue().Set(TagsJs::New(tags));
 }
 
 }

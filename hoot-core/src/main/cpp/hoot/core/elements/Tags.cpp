@@ -56,6 +56,21 @@ QHash<QString, QString>()
   set(key, value);
 }
 
+Tags::Tags(const QString& kvp)
+{
+  if (!kvp.contains("="))
+  {
+    throw IllegalArgumentException("TODO");
+  }
+  const QStringList kvpParts = kvp.split("=");
+  if (kvpParts.size() != 2)
+  {
+    throw IllegalArgumentException("TODO");
+  }
+
+  set(kvpParts[0], kvpParts[1]);
+}
+
 void Tags::add(const Tags& t)
 {
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)

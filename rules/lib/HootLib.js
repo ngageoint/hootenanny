@@ -198,6 +198,11 @@ function explicitTypeMismatch(e1, e2, minTypeScore)
   return hoot.OsmSchema.explicitTypeMismatch(e1, e2, minTypeScore);
 }
 
+function mostSpecificType(e)
+{
+  return hoot.OsmSchema.mostSpecificType(e);
+}
+
 /**
  * Scores the similarity between two feature types
  */

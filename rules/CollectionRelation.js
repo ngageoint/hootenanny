@@ -75,6 +75,7 @@ exports.matchScore = function(map, e1, e2)
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
 
+  hoot.trace("**********************************");
   hoot.trace("e1: " + e1.getId() + ", " + tags1.get("name"));
   if (tags1.get("note"))
   {
@@ -92,6 +93,8 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("type1: " + type1);
   var type2 = e2.getType();
   hoot.trace("type2: " + type2);
+  hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
+  hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
   if (type1 != type2)
   {    
     hoot.trace("type mismatch");
@@ -147,8 +150,8 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  // This can become a fairly expensive check against the collection relations if their types
-  // aren't filtered properly beforehand.
+  // This can become a fairly expensive check against the collection relations if to many of
+  // them are encountered because they aren't filtered out properly by type beforehand.
   var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
   hoot.trace("edgeDist: " + edgeDist);
   if (edgeDist < 0.97)
