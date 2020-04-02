@@ -63,6 +63,8 @@ public:
 
   virtual QString getDescription() const { return "Merges both road geometries and tags"; }
 
+  virtual QString getName() const { return QString::fromStdString(className()); }
+
 protected:
 
   // When roads are split and the pieces stored in multilinestring relations, this decides if the

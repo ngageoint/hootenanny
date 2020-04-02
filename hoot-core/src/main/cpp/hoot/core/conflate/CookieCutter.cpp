@@ -97,6 +97,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   cropper.setKeepOnlyFeaturesInsideBounds(_keepOnlyFeaturesInsideBounds);
   cropper.setInvert(!_crop);
   cropper.apply(doughMap);
+  OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-dough-crop");
 
   OsmMapPtr cookieCutMap = doughMap;
 

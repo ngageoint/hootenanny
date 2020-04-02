@@ -74,6 +74,8 @@ public:
   virtual QString getDescription() const
   { return "Marks elements as needing review before merging"; }
 
+  virtual QString getName() const { return QString::fromStdString(className()); }
+
 private:
 
   std::set<ElementId> _eids;

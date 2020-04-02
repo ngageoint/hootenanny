@@ -97,6 +97,8 @@ public:
 
   virtual QString getDescription() const { return "Merges buildings"; }
 
+  virtual QString getName() const { return QString::fromStdString(className()); }
+
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)
   { _keepMoreComplexGeometryWhenAutoMerging = keepMoreComplex; }
   void setMergeManyToManyMatches(bool merge) { _mergeManyToManyMatches = merge; }

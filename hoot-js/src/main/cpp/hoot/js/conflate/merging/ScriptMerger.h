@@ -61,6 +61,8 @@ public:
   virtual QString getDescription() const
   { return "Merges elements matched with Generic Conflation"; }
 
+  virtual QString getName() const { return QString::fromStdString(className()); }
+
 protected:
 
   PairsSet _pairs;

@@ -82,6 +82,13 @@ public:
    * @see ApiEntityInfo
    */
   virtual QString getDescription() const = 0;
+
+  /**
+   * Returns the name of this merger
+   *
+   * @return a name string
+   */
+  virtual QString getName() const = 0;
 };
 
 typedef std::shared_ptr<Merger> MergerPtr;

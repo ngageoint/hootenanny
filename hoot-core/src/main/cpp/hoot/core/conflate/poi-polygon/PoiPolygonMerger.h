@@ -82,6 +82,8 @@ public:
 
   void setTagMergerClass(const QString& className) { _tagMergerClass = className; }
 
+  virtual QString getName() const { return QString::fromStdString(className()); }
+
 protected:
 
   virtual PairsSet& _getPairs() override { return _pairs; }

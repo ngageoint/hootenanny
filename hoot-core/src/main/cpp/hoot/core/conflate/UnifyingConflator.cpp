@@ -308,10 +308,11 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   vector<pair<ElementId, ElementId>> replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
+    MergerPtr merger = _mergers[i];
     const QString msg =
-      "Applying merger: " + StringUtils::formatLargeNumber(i + 1) + " / " +
-      StringUtils::formatLargeNumber(_mergers.size());
-    if (i % 100 == 0)
+      "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
+      " / " + StringUtils::formatLargeNumber(_mergers.size());
+    if (i != 0 && i % 100 == 0)
     {
       PROGRESS_INFO(msg);
     }
@@ -320,7 +321,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
       LOG_TRACE(msg);
     }
 
-    _mergers[i]->apply(map, replaced);
+    merger->apply(map, replaced);
 
     LOG_VART(replaced);
     LOG_VART(map->size());
@@ -328,9 +329,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
     replaced.clear();
+    LOG_VART(merger->getImpactedElementIds());
 
     // WARNING: Enabling this could result in a lot of files being generated.
-    //OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
+    // TODO: change this back
+    OsmMapWriterFactory::writeDebugMap(
+      map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
   }
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 
