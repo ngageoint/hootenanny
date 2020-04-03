@@ -61,7 +61,7 @@ void MergerFactory::reset()
 void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
   vector<MergerPtr>& result) const
 {
-  LOG_DEBUG(
+  LOG_TRACE(
     "Creating merger group for " <<
     StringUtils::formatLargeNumber(matches.size()) << " matches...");
   for (size_t i = 0; i < _creators.size(); i++)

@@ -33,6 +33,9 @@
         "import": "barrier.json"
     },
     {
+        "import": "boundary.json"
+    },
+    {
         "import": "brand.json"
     },
     {

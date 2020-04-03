@@ -38,14 +38,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, NameExtractor)
 
-NameExtractor::NameExtractor():
+NameExtractor::NameExtractor() :
 _d(new LevenshteinDistance()),
 _namesProcessed(0),
 _matchAttemptMade(false)
 {
 }
 
-NameExtractor::NameExtractor(StringDistancePtr d):
+NameExtractor::NameExtractor(StringDistancePtr d) :
 _d(d),
 _namesProcessed(0),
 _matchAttemptMade(false)

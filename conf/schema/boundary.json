@@ -1,0 +1,16 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "linestring"
+        ],
+        "influence": 1,
+        "name": "boundary",
+        "objectType": "tag"
+    },
+    {
+        "isA": "boundary",
+        "name": "boundary=administrative",
+        "objectType": "tag"
+    }
+]

@@ -46,6 +46,7 @@ LinearCriterion::LinearCriterion()
 bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
+  //LOG_VART(e);
   bool result = false;
 
   if (e->getElementType() == ElementType::Node)
@@ -74,6 +75,10 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
     uint16_t g = tv.geometries;
+
+    LOG_VART(g & OsmGeometries::LineString);
+    LOG_VART(g & OsmGeometries::Area);
+
     if (g & OsmGeometries::LineString && !(g & OsmGeometries::Area))
     {
       result = true;

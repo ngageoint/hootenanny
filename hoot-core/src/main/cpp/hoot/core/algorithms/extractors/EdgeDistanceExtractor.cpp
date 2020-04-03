@@ -148,7 +148,7 @@ double EdgeDistanceExtractor::_oneDistance(const OsmMap& map,
 
   std::shared_ptr<Geometry> g = _toLines(map, e2);
 
-  // This aggregation pre is a performance bottleneck for Area Conflation.
+  // This pre-aggregation step is a performance bottleneck for Area Conflation.
   vector<double> distances;
   distances.reserve(points.size());
   for (size_t i = 0; i < points.size(); i++)

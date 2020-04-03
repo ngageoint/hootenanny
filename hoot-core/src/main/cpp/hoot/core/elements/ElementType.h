@@ -100,7 +100,7 @@ public:
     }
     else
     {
-      throw HootException("Invalid element type string: " + typeString);
+      throw IllegalArgumentException("Invalid element type string: " + typeString);
     }
   }
 

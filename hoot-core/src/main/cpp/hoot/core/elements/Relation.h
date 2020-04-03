@@ -83,22 +83,48 @@ public:
   bool contains(ElementId eid) const;
 
   /**
+   * Finds the index of a member
+   *
+   * @param eid ID of the relation member
+   * @return a numerical index
+   */
+  size_t indexOf(ElementId eid) const;
+
+  /**
+   * Inserts a relation member
+   *
+   * @param role role of the member
+   * @param elementId ID of the member
+   * @param pos position in the relation to insert the member
+   */
+  void insertElement(const QString& role, const ElementId& elementId, size_t pos);
+
+  /**
    * Returns the number of member elements with the given relation role
    *
    * @param role role by which to examine elements
    * @return the number of member elements with the specified role
    */
-  int numElementsByRole(const QString& role) const;
+  int numElementsByRole(const QString& role);
+
+  /**
+   * Retrieves all members with a particular role
+   *
+   * @param role role to search for
+   * @return a collection of members
+   */
+  const std::vector<RelationData::Entry> getElementsByRole(const QString& role);
 
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
 
   /**
-   * Returns the IDs of all way members
+   * Returns the IDs of members
    *
+   * @param elementType optional element type of element Ids to return
    * @return a collection of element IDs
    */
-  std::set<ElementId> getWayMemberIds() const;
+  std::set<ElementId> getMemberIds(const ElementType& elementType = ElementType::Unknown) const;
 
   virtual geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
@@ -166,6 +192,11 @@ public:
   void setType(const QString& type);
 
   QString toString() const;
+
+  /**
+   * @see Element
+   */
+  virtual QString nonIdHash() const;
 
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);

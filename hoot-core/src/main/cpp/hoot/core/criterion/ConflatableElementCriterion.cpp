@@ -93,27 +93,20 @@ void ConflatableElementCriterion::_createConflatableCriteria()
 }
 
 QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(
-  const ConstElementPtr& e, ConstOsmMapPtr map, const bool ignoreGenericConflators)
+  const ConstElementPtr& e, ConstOsmMapPtr map)
 {
   const QMap<QString, ElementCriterionPtr> conflatableCriteria = getConflatableCriteria();
 
   QStringList conflatableCriteriaForElement;
+  QMap<QString, std::shared_ptr<ConflatableElementCriterion>> genericConflatableCriteria;
+
+  // first go through and mark only with those crits that support specific conflation
+
   for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
        itr != conflatableCriteria.end(); ++itr)
   {
     LOG_VART(itr.key());
     ElementCriterionPtr crit = itr.value();
-
-    if (ignoreGenericConflators)
-    {
-      std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
-        std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
-      assert(conflatableCrit);
-      if (!conflatableCrit->supportsSpecificConflation())
-      {
-        continue;
-      }
-    }
 
     ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(crit.get());
     if (mapConsumer != 0)
@@ -121,17 +114,47 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(
       mapConsumer->setOsmMap(map.get());
     }
 
+    std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+      std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+    assert(conflatableCrit);
+    if (!conflatableCrit->supportsSpecificConflation())
+    {
+      genericConflatableCriteria[itr.key()] = conflatableCrit;
+      continue;
+    }
+
     if (crit->isSatisfied(e))
     {
-      // It is something we can conflate?
       conflatableCriteriaForElement.append(itr.key());
     }
   }
   LOG_VART(conflatableCriteriaForElement);
+
+  // if no specific conflate crit was available, then try to add a generic one
+
+  if (conflatableCriteriaForElement.size() == 0)
+  {
+    for (QMap<QString, std::shared_ptr<ConflatableElementCriterion>>::const_iterator itr =
+           genericConflatableCriteria.begin();
+         itr != genericConflatableCriteria.end(); ++itr)
+    {
+      LOG_VART(itr.key());
+      std::shared_ptr<ConflatableElementCriterion> crit = itr.value();
+
+      if (crit->isSatisfied(e))
+      {
+        // It is something we can conflate?
+        conflatableCriteriaForElement.append(itr.key());
+      }
+    }
+    LOG_VART(conflatableCriteriaForElement);
+  }
+
   return conflatableCriteriaForElement;
 }
 
-QStringList ConflatableElementCriterion::getCriterionClassNamesByGeometryType(const GeometryType& type)
+QStringList ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
+  const GeometryType& type)
 {
   QStringList classNamesByType;
   std::vector<std::string> classNames =

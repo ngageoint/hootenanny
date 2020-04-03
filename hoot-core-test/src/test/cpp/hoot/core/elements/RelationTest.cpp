@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -48,6 +48,8 @@ class RelationTest : public HootTestFixture
   CPPUNIT_TEST(runCircularVisitRw2Test);
   CPPUNIT_TEST(runReplaceTest1);
   CPPUNIT_TEST(runReplaceTest2);
+  CPPUNIT_TEST(runIndexOfTest);
+  CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -200,6 +202,49 @@ public:
     writer.write(map);
     writer.close();
     HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
+  }
+
+  void runIndexOfTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
+    WayPtr w1(new Way(Status::Unknown1, 1, 15));
+    WayPtr w2(new Way(Status::Unknown1, 2, 15));
+    WayPtr w3(new Way(Status::Unknown1, 3, 15));
+    map->addElement(r1);
+    map->addElement(w1);
+    map->addElement(w2);
+    map->addElement(w3);
+
+    r1->addElement("foo", w1->getElementId());
+    r1->addElement("bar", w2->getElementId());
+    r1->addElement("lucky", w3->getElementId());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)0, r1->indexOf(w1->getElementId()));
+    CPPUNIT_ASSERT_EQUAL((size_t)1, r1->indexOf(w2->getElementId()));
+    CPPUNIT_ASSERT_EQUAL((size_t)2, r1->indexOf(w3->getElementId()));
+  }
+
+  void runInsertTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
+    WayPtr w1(new Way(Status::Unknown1, 1, 15));
+    WayPtr w2(new Way(Status::Unknown1, 2, 15));
+    map->addElement(r1);
+    map->addElement(w1);
+    map->addElement(w2);
+
+    r1->addElement("foo", w1->getElementId());
+    r1->addElement("bar", w2->getElementId());
+
+    WayPtr w3(new Way(Status::Unknown1, 3, 15));
+    map->addElement(w3);
+    r1->insertElement("lucky", w3->getElementId(), 1);
+
+    CPPUNIT_ASSERT_EQUAL((size_t)0, r1->indexOf(w1->getElementId()));
+    CPPUNIT_ASSERT_EQUAL((size_t)1, r1->indexOf(w3->getElementId()));
+    CPPUNIT_ASSERT_EQUAL((size_t)2, r1->indexOf(w2->getElementId()));
   }
 };
 

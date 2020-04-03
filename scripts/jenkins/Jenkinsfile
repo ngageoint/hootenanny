@@ -9,7 +9,7 @@ pipeline {
         SYS_URL = 'UNKOWN'
         SYS_VER = 'UNKOWN'
         BUILD_VERBOSE = 'no'
-        BUILD_DEBUG = 'yes'
+        BUILD_DEBUG = 'no'
     }
 
     triggers {

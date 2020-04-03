@@ -45,7 +45,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/criterion/ElementInIdListCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 
 // standard
@@ -168,7 +167,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   {
     _matchFactory.createMatches(map, _matches, _bounds);
   }
-  LOG_DEBUG("Match count: " << _matches.size());
+  LOG_DEBUG("Match count: " << StringUtils::formatLargeNumber(_matches.size()));
   LOG_VART(_matches);
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
@@ -184,15 +183,17 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // add review tags to all matches that have some review component
   _addReviewTags(map, allMatches);
 
-  LOG_DEBUG("Pre-constraining match count: " << allMatches.size());
+  LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(allMatches.size()));
   _stats.append(SingleStat("Number of Matches Before Whole Groups", _matches.size()));
-  LOG_DEBUG("Number of Matches Before Whole Groups: " << _matches.size());
+  LOG_DEBUG(
+    "Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
   _removeWholeGroups(_matches, matchSets, map);
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
-  LOG_DEBUG("Number of Whole Groups: " << matchSets.size());
-  LOG_DEBUG("Number of Matches After Whole Groups: " << _matches.size());
+  LOG_DEBUG("Number of Whole Groups: " << StringUtils::formatLargeNumber(matchSets.size()));
+  LOG_DEBUG(
+    "Number of Matches After Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
   LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(map, "after-whole-group-removal");
 
@@ -286,7 +287,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
     _mergerFactory->createMergers(map, matchSets[i], _mergers);
 
-    LOG_DEBUG(
+    LOG_TRACE(
       "Converted match set " << StringUtils::formatLargeNumber(i + 1) << " to " <<
       StringUtils::formatLargeNumber(_mergers.size()) << " merger(s).")
   }
@@ -307,10 +308,11 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   vector<pair<ElementId, ElementId>> replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
+    MergerPtr merger = _mergers[i];
     const QString msg =
-      "Applying merger: " + StringUtils::formatLargeNumber(i + 1) + " / " +
-      StringUtils::formatLargeNumber(_mergers.size());
-    if (i % 100 == 0)
+      "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
+      " / " + StringUtils::formatLargeNumber(_mergers.size());
+    if (i != 0 && i % 100 == 0)
     {
       PROGRESS_INFO(msg);
     }
@@ -319,7 +321,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
       LOG_TRACE(msg);
     }
 
-    _mergers[i]->apply(map, replaced);
+    merger->apply(map, replaced);
 
     LOG_VART(replaced);
     LOG_VART(map->size());
@@ -327,9 +329,11 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
     replaced.clear();
+    LOG_VART(merger->getImpactedElementIds());
 
     // WARNING: Enabling this could result in a lot of files being generated.
-    //OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
+    //OsmMapWriterFactory::writeDebugMap(
+      //map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
   }
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 

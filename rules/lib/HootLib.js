@@ -152,6 +152,21 @@ function getTagDistance(commonKvp, t1, t2) {
 }
 
 /**
+ * Determines if both features have a populated name
+ */
+function bothElementsHaveName(e1, e2)
+{
+  var name1 = String(e1.getTags().get("name")).trim();
+  var name2 = String(e2.getTags().get("name")).trim();
+  var bothHaveName = false;
+  if (name1 !== 'undefined' && name1 !== null && name1 !== '' && name2 !== 'undefined' && name2 !== null && name2 !== '')
+  {
+    bothHaveName = true;
+  }
+  return bothHaveName;
+}
+
+/**
  * Determines if an element is a member of relation that has a specified type
  */
 function isMemberOfRelationType(map, childElementId, relationType)
@@ -181,6 +196,11 @@ function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
 function explicitTypeMismatch(e1, e2, minTypeScore)
 {
   return hoot.OsmSchema.explicitTypeMismatch(e1, e2, minTypeScore);
+}
+
+function mostSpecificType(e)
+{
+  return hoot.OsmSchema.mostSpecificType(e);
 }
 
 /**
@@ -321,6 +341,14 @@ function removeElement(map, e)
 }
 
 /**
+ * Merges two collection relations (e.g. route, admin boundary, etc.)
+ */
+function mergeCollectionRelations(map, elementId1, elementId2)
+{
+  return map.mergeCollectionRelations(elementId1, elementId2);
+}
+
+/**
  * Snaps the ways in the second input to the first input. The replaced array will
  * be updated appropriately to reflect the elements that were replaced.
  */
@@ -376,6 +404,11 @@ function isArea(map, e)
 function isNonBuildingArea(map, e)
 {
   return hoot.OsmSchema.isNonBuildingArea(map, e);
+}
+
+function isCollectionRelation(e)
+{
+  return hoot.OsmSchema.isCollectionRelation(e);
 }
 
 function isHighway(map, e)

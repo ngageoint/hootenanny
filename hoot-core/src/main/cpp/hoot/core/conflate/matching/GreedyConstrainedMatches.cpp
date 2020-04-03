@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "GreedyConstrainedMatches.h"
 
@@ -70,7 +70,7 @@ vector<ConstMatchPtr> GreedyConstrainedMatches::calculateSubset()
   }
 
   // figure out all the pairs of matches that conflict.
-  LOG_INFO("Calculating match conflicts using a greedy algorithm...");
+  LOG_INFO("\tCalculating match conflicts using a greedy algorithm...");
   _calculateMatchConflicts();
 
   // if there are no conflicts, then there is nothing to solve.

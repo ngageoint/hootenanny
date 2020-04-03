@@ -111,11 +111,10 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
       result = true;
     }
     else if (eids.size() > 1)
-    {
-      LOG_TRACE("Overlapping matches: " << eids);
+    { 
+      LOG_TRACE("Overlapping matches:\n" << eids << "\nmatch types: " << matchType.join(";"));
       mergers.push_back(
-        MergerPtr(
-          new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0)));
+        MergerPtr(new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0)));
       result = true;
     }
   }

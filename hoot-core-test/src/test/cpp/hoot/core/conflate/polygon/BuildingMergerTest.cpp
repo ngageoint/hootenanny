@@ -57,7 +57,6 @@
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>

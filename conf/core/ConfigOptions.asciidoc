@@ -630,6 +630,22 @@ purposes.
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
 
+=== collection.relation.name.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+Name similarity threshold (0.0 to 1.0) at or above which an collection relation feature is
+considered to have a name match.
+
+=== collection.relation.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an collection relation feature is considered
+to have similar tags.
+
 === config.options.file
 
 * Data Type: string
@@ -695,6 +711,7 @@ See also:
 
 * Data Type: list
 * Default Value:
+** `hoot::RemoveMissingElementsVisitor`
 ** `hoot::PoiPolygonInvalidReviewNodeRemover`
 ** `hoot::SuperfluousNodeRemover`
 ** `hoot::SmallHighwayMerger`
@@ -1164,6 +1181,14 @@ If true, element criterion passed to an ElementCriterionConsumer will be negated
 all ElementCriterionConsumers. Since this configuration option is shared across all
 ElementCriterionConsumers, there may be undesirable effects in invocations involving multiple
 ElementCriterionConsumers.
+
+=== element.id.criterion.ids
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of element IDs to pass to ElementIdCriterion.
 
 === element.sorter.element.buffer.size
 
@@ -2211,6 +2236,7 @@ option. A setting of -1 is useful for tests where you do not have granular enoug
 ** `hoot::RemoveEmptyAreasVisitor`
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RelationCircularRefRemover`
+** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::RemoveDuplicateAreasVisitor`
 ** `hoot::NoInformationElementRemover`
@@ -2254,6 +2280,7 @@ into Hootenanny.
 ** `hoot::ScriptMatchCreator,Line.js`
 ** `hoot::ScriptMatchCreator,Polygon.js`
 ** `hoot::ScriptMatchCreator,PointPolygon.js`
+** `hoot::ScriptMatchCreator,CollectionRelation.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
@@ -2345,6 +2372,7 @@ matching ways.  Larger values may increase runtime performance but decrease conf
 ** `hoot::HighwayMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::PoiPolygonMergerCreator`
+** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
@@ -3853,7 +3881,7 @@ E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
 * Data Type: bool
 * Default Value: `true`
 
-Should the element remover remove the elements recursively?
+Should RemoveElementsVisitor remove elements recursively?
 
 === tag.filter.keys
 
@@ -4085,6 +4113,14 @@ The search radius, in meters, to use when conflating buildings. See `search.radi
 Element criterion class which determines which input features are used for search radius
 calculation.  An empty value specifies that all input features are to be used.  Conflation routines
 making use of automatic search radius calculation should set this value appropriately.
+
+=== search.radius.collection.relation
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius, in meters, to use when conflating collection relations. See
+`search.radius.default`.
 
 === search.radius.default
 

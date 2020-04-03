@@ -509,60 +509,30 @@ public:
 
     bool result = false;
 
-    // Prioritize exports.matchCandidateCriterion over the isMatchCandidate function
-    // TODO: this is crashing; see #3047
-//    Handle<String> matchCandidateCriterionStrHandle =
-//      String::NewFromUtf8(current, "matchCandidateCriterion");
-//    QString matchCandidateCriterionStr;
-//    if (ToLocal(&plugin)->Has(matchCandidateCriterionStrHandle))
-//    {
-//      Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStrHandle);
-//      matchCandidateCriterionStr = toCpp<QString>(value);
-//    }
-//    matchCandidateCriterionStr = matchCandidateCriterionStr.trimmed();
-//    LOG_VART(matchCandidateCriterionStr);
+    // TODO: Prioritize exports.matchCandidateCriterion over the isMatchCandidate function and use
+    // the crit instead of the function; doing so causes this to crash; see #3047 and the history
+    // of this file for the failing code that needs to be re-enabled
 
-//    if (!matchCandidateCriterionStr.isEmpty())
-//    {
-//      std::shared_ptr<ElementCriterion> matchCandidateCriterion;
-//      if (_matchCandidateCriterionCache.contains(matchCandidateCriterionStr))
-//      {
-//        LOG_TRACE("Getting " << matchCandidateCriterionStr << " from cache...");
-//        matchCandidateCriterion = _matchCandidateCriterionCache[matchCandidateCriterionStr];
-//      }
-//      else
-//      {
-//        LOG_TRACE("Creating " << matchCandidateCriterionStr << "...");
-//        matchCandidateCriterion.reset(
-//          Factory::getInstance().constructObject<ElementCriterion>(matchCandidateCriterionStr));
-//        _matchCandidateCriterionCache[matchCandidateCriterionStr] = matchCandidateCriterion;
-//      }
-//      result = matchCandidateCriterion->isSatisfied(e);
-//      LOG_VART(result);
-//    }
-//    else
-//    {
-      Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
-      if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
-      {
-        throw HootException("Error finding 'isMatchCandidate' function.");
-      }
-      Handle<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
-      if (value->IsFunction() == false)
-      {
-        throw HootException("isMatchCandidate is not a function.");
-      }
-      Handle<Function> func = Handle<Function>::Cast(value);
-      Handle<Value> jsArgs[2];
+    Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
+    if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
+    {
+      throw HootException("Error finding 'isMatchCandidate' function.");
+    }
+    Handle<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
+    if (value->IsFunction() == false)
+    {
+      throw HootException("isMatchCandidate is not a function.");
+    }
+    Handle<Function> func = Handle<Function>::Cast(value);
+    Handle<Value> jsArgs[2];
 
-      int argc = 0;
-      jsArgs[argc++] = getOsmMapJs();
-      jsArgs[argc++] = ElementJs::New(e);
+    int argc = 0;
+    jsArgs[argc++] = getOsmMapJs();
+    jsArgs[argc++] = ElementJs::New(e);
 
-      Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
+    Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
 
-      result = f->BooleanValue();
-    //}
+    result = f->BooleanValue();
 
     _matchCandidateCache[e->getElementId()] = result;
 
@@ -619,21 +589,28 @@ public:
   {
     _scriptInfo = description;
 
-    switch (_scriptInfo.geometryType)
+    if (_scriptPath.toLower().contains("relation")) // hack
     {
-      case GeometryTypeCriterion::GeometryType::Point:
-        _totalElementsToProcess = getMap()->getNodeCount();
-        break;
-      case GeometryTypeCriterion::GeometryType::Line:
-        _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
-        break;
-      case GeometryTypeCriterion::GeometryType::Polygon:
-        _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
-        break;
-      default:
-        // visit all geometry types if the script didn't identify its geometry
-        _totalElementsToProcess = getMap()->size();
-        break;
+      _totalElementsToProcess = getMap()->getRelationCount();
+    }
+    else
+    {
+      switch (_scriptInfo.geometryType)
+      {
+        case GeometryTypeCriterion::GeometryType::Point:
+          _totalElementsToProcess = getMap()->getNodeCount();
+          break;
+        case GeometryTypeCriterion::GeometryType::Line:
+          _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
+          break;
+        case GeometryTypeCriterion::GeometryType::Polygon:
+          _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
+          break;
+        default:
+          // visit all geometry types if the script didn't identify its geometry
+          _totalElementsToProcess = getMap()->size();
+          break;
+      }
     }
   }
 
@@ -842,24 +819,32 @@ void ScriptMatchCreator::createMatches(
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
   LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.geometryType));
-  switch (_scriptInfo.geometryType)
+  if (scriptFileInfo.fileName().toLower().contains("relation")) // hack
   {
-    case GeometryTypeCriterion::GeometryType::Point:
-      map->visitNodesRo(v);
-      break;
-    case GeometryTypeCriterion::GeometryType::Line:
-      map->visitWaysRo(v);
-      map->visitRelationsRo(v);
-      break;
-    case GeometryTypeCriterion::GeometryType::Polygon:
-      map->visitWaysRo(v);
-      map->visitRelationsRo(v);
-      break;
-    default:
-      // visit all geometry types if the script didn't identify its geometry
-      map->visitRo(v);
-      break;
+    map->visitRelationsRo(v);
   }
+  else
+  {
+    switch (_scriptInfo.geometryType)
+    {
+      case GeometryTypeCriterion::GeometryType::Point:
+        map->visitNodesRo(v);
+        break;
+      case GeometryTypeCriterion::GeometryType::Line:
+        map->visitWaysRo(v);
+        map->visitRelationsRo(v);
+        break;
+      case GeometryTypeCriterion::GeometryType::Polygon:
+        map->visitWaysRo(v);
+        map->visitRelationsRo(v);
+        break;
+      default:
+        // visit all geometry types if the script didn't identify its geometry
+        map->visitRo(v);
+        break;
+    }
+  }
+
   const int matchesSizeAfter = matches.size();
 
   QString matchType = CreatorDescription::baseFeatureTypeToString(_scriptInfo.baseFeatureType);
