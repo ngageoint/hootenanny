@@ -33,6 +33,11 @@
 namespace hoot
 {
 
+/**
+ * Removes invalid multiline string relation members
+ *
+ * These are sometimes produced as an artifact from cropping or conflation
+ */
 class RemoveInvalidMultilineStringMembersVisitor : public ElementOsmMapVisitor
 {
 public:

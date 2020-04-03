@@ -1875,8 +1875,8 @@ bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
 {
   // TODO: We may need to take category into account here as well.
 
-  LOG_VARD(tags1);
-  LOG_VARD(tags2);
+  LOG_VART(tags1);
+  LOG_VART(tags2);
 
   bool featuresHaveExplicitTypeMismatch = false;
 
@@ -1896,13 +1896,13 @@ bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
           if (typeScore < minTypeScore)
           {
             featuresHaveExplicitTypeMismatch = true;
-            LOG_DEBUG(
+            LOG_TRACE(
               "explicit type mismatch: " << getFirstType(tags1, false) << " and " <<
               getFirstType(tags2, false));
           }
           else
           {
-            LOG_DEBUG(
+            LOG_TRACE(
               "explicit type match: " << getFirstType(tags1, false) << " and " <<
               getFirstType(tags2, false));
           }
@@ -1911,7 +1911,7 @@ bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
     }
   }
 
-  LOG_VARD(featuresHaveExplicitTypeMismatch);
+  LOG_VART(featuresHaveExplicitTypeMismatch);
   return featuresHaveExplicitTypeMismatch;
 }
 
@@ -1927,6 +1927,25 @@ bool OsmSchema::hasType(const Tags& tags)
     }
   }
   return false;
+}
+
+QString OsmSchema::mostSpecificType(const Tags& tags)
+{
+  QString mostSpecificType;
+  for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
+  {
+    const QString key = tagsItr.key();
+    const QString val = tagsItr.value();
+    const QString kvp = toKvp(key, val);
+    LOG_VART(kvp);
+    LOG_VART(isTypeKey(tagsItr.key()));
+
+    if (isTypeKey(key) && (mostSpecificType.isEmpty() || !isAncestor(kvp, mostSpecificType)))
+    {
+      mostSpecificType = kvp;
+    }
+  }
+  return mostSpecificType;
 }
 
 bool OsmSchema::hasMoreThanOneType(const Tags& tags)

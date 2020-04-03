@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CookieCutter.h"
@@ -96,15 +96,10 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   cropper.setKeepEntireFeaturesCrossingBounds(_keepEntireFeaturesCrossingBounds);
   cropper.setKeepOnlyFeaturesInsideBounds(_keepOnlyFeaturesInsideBounds);
   cropper.setInvert(!_crop);
+  cropper.setRemoveSuperflousFeatures(true);
   cropper.apply(doughMap);
 
   OsmMapPtr cookieCutMap = doughMap;
-
-  // clean up any ugly bits left over
-  // TODO: This can be removed now, since its already happening in MapCropper, right?
-  SuperfluousWayRemover::removeWays(cookieCutMap);
-  SuperfluousNodeRemover::removeNodes(cookieCutMap);
-
   LOG_VARD(cookieCutMap->getNodes().size());
   LOG_VARD(MapProjector::toWkt(cookieCutMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cutter-cookie-cut-map");

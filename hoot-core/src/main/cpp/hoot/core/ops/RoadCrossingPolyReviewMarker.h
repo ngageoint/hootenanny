@@ -69,8 +69,8 @@ public:
   virtual QString getCompletedStatusMessage() const
   {
     return
-      "Marked " + StringUtils::formatLargeNumber(_numAffected) + " crossing polygons out of " +
-      StringUtils::formatLargeNumber(_numRoads) + " total roads .";
+      "Marked " + StringUtils::formatLargeNumber(_numAffected) + " roads crossing polygons " +
+      "out of " + StringUtils::formatLargeNumber(_numRoads) + " total roads .";
   }
 
   virtual QString getDescription() const

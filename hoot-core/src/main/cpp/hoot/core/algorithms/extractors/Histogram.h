@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
@@ -49,6 +49,8 @@ public:
   Histogram(int bins);
 
   const std::vector<double>& getAllBins() const { return _bins; }
+
+  size_t numBins() const { return _bins.size(); }
 
   void addAngle(Radians theta, double length);
 

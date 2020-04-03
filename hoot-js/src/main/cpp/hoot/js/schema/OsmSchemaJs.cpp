@@ -45,6 +45,7 @@
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
+#include <hoot/core/criterion/CollectionRelationCriterion.h>
 #include <hoot/js/elements/TagsJs.h>
 
 using namespace v8;
@@ -86,6 +87,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, hasType)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "explicitTypeMismatch"),
               FunctionTemplate::New(current, explicitTypeMismatch)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "mostSpecificType"),
+              FunctionTemplate::New(current, mostSpecificType)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isArea"),
               FunctionTemplate::New(current, isArea)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isPolygon"),
@@ -110,6 +113,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isHighway)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isNonBuildingArea"),
               FunctionTemplate::New(current, isNonBuildingArea)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isCollectionRelation"),
+              FunctionTemplate::New(current, isCollectionRelation)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "score"),
               FunctionTemplate::New(current, score)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "scoreTypes"),
@@ -360,6 +365,16 @@ void OsmSchemaJs::isNonBuildingArea(const FunctionCallbackInfo<Value>& args)
     Boolean::New(current, NonBuildingAreaCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
+void OsmSchemaJs::isCollectionRelation(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(
+    Boolean::New(current, CollectionRelationCriterion().isSatisfied(e)));
+}
 void OsmSchemaJs::isSpecificallyConflatable(
   const FunctionCallbackInfo<Value>& args)
 {
@@ -431,6 +446,22 @@ void OsmSchemaJs::scoreOneWay(const FunctionCallbackInfo<Value>& args)
   QString kvp2 = toCpp<QString>(args[1]);
 
   args.GetReturnValue().Set(Number::New(current, OsmSchema::getInstance().scoreOneWay(kvp1, kvp2)));
+}
+
+void OsmSchemaJs::mostSpecificType(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr element = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  const QString kvp = OsmSchema::getInstance().mostSpecificType(element->getTags());
+  Tags tags;
+  if (!kvp.trimmed().isEmpty())
+  {
+    tags.appendValue(kvp);
+  }
+
+  args.GetReturnValue().Set(TagsJs::New(tags));
 }
 
 }

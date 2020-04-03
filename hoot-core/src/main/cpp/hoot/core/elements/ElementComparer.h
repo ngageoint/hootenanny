@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Compares two elements of the same type for similarity
  *
- * Note that if element IDs are ignore, the comparison may be a little more expensive
+ * Note that if element IDs are ignored, the comparison may be a little more expensive
  */
 class ElementComparer : public OsmMapConsumer
 {

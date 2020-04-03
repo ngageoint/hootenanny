@@ -457,6 +457,15 @@ QString Way::toString() const
   return QString::fromStdString(ss.str());
 }
 
+QString Way::nonIdHash() const
+{
+  std::stringstream ss(std::stringstream::out);
+  // this may not be unique enough along with just tags
+  ss << getNodeIds().size();
+  ss << " " << getTags().toString();
+  return QString::fromUtf8(ss.str().data());
+}
+
 bool Way::isClosedArea() const
 {
   return getNodeCount() > 3 && getFirstNodeId() == getLastNodeId();

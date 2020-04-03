@@ -415,7 +415,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   LOG_VART(foundReviewIfMatchedType);
 
   unsigned int evidence = _calculateEvidence(_poi, _poly);
-  LOG_VARD(evidence);
+  LOG_VART(evidence);
 
   bool runReviewReduction = _enableReviewReduction;
   if (// No point in trying to reduce reviews if we're still at a miss here. Also, if the review
@@ -448,7 +448,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     }
     numReviewReductions++;
   }
-  LOG_VARD(evidence);
+  LOG_VART(evidence);
 
   if (evidence >= _matchEvidenceThreshold)
   {
@@ -522,7 +522,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     _explainText = "";
   }
 
-  LOG_DEBUG("eid1: " << eid1 << ", eid2: " << eid2 << ", class: " << _class);
+  LOG_TRACE("eid1: " << eid1 << ", eid2: " << eid2 << ", class: " << _class);
   LOG_TRACE("**************************");
 }
 
@@ -533,7 +533,7 @@ MatchType PoiPolygonMatch::getType() const
 
 unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  LOG_DEBUG("Retrieving distance evidence...");
+  LOG_TRACE("Retrieving distance evidence...");
 
   _distance = PoiPolygonDistanceExtractor(_infoCache).extract(*_map, poi, poly);
   if (_distance == -1.0)
@@ -583,7 +583,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
                                                              ConstElementPtr poly)
 {
-  LOG_DEBUG("Retrieving convex poly distance evidence...");
+  LOG_TRACE("Retrieving convex poly distance evidence...");
 
   //don't really need to put a distance == -1.0 check here for now, since we're assuming
   //PoiPolygonDistanceExtractor will always be run before this one
@@ -600,7 +600,7 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
 
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  LOG_DEBUG("Retrieving type evidence...");
+  LOG_TRACE("Retrieving type evidence...");
 
   _typeScorer->setFeatureDistance(_distance);
   _typeScorer->setTypeScoreThreshold(_typeScoreThreshold);
@@ -642,7 +642,7 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  LOG_DEBUG("Retrieving name evidence...");
+  LOG_TRACE("Retrieving name evidence...");
 
   _nameScorer.setNameScoreThreshold(_nameScoreThreshold);
   _nameScore = _nameScorer.extract(*_map, poi, poly);
@@ -662,7 +662,7 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  LOG_DEBUG("Retrieving address evidence...");
+  LOG_TRACE("Retrieving address evidence...");
 
   _addressScore = _addressScorer.extract(*_map, poi, poly);
   const bool addressMatch = _addressScore == 1.0;
@@ -681,7 +681,7 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
 
 unsigned int PoiPolygonMatch::_getPhoneNumberEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  LOG_DEBUG("Retrieving phone number evidence...");
+  LOG_TRACE("Retrieving phone number evidence...");
 
   _phoneNumberScore = _phoneNumberScorer.extract(*_map, poi, poly);
   const bool phoneNumberMatch = _phoneNumberScore == 1.0;

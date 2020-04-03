@@ -54,7 +54,7 @@ public:
     // This is a bit maintenance-prone as it will require an updating with each new
     // ConflatableElementCriterion addition/subtraction, but that's a good thing as it will help
     // us keep track of whenever changes are made to the set of ConflatableElementCriterion.
-    CPPUNIT_ASSERT_EQUAL(12, ConflatableElementCriterion::getConflatableCriteria().size());
+    CPPUNIT_ASSERT_EQUAL(13, ConflatableElementCriterion::getConflatableCriteria().size());
 
     const QStringList poiConflatableCriteria =
       ConflatableElementCriterion::getConflatableCriteriaForElement(

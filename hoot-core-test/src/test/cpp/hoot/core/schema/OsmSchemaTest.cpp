@@ -69,6 +69,7 @@ class OsmSchemaTest : public HootTestFixture
   CPPUNIT_TEST(hasMoreThanOneTypeTest);
   CPPUNIT_TEST(getFirstTypeTest);
   CPPUNIT_TEST(explicitTypeMismatchTest);
+  CPPUNIT_TEST(mostSpecificTypeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -540,6 +541,26 @@ public:
     tags2.clear();
     tags2["amenity"] = "ambulance_station";
     CPPUNIT_ASSERT(!uut.explicitTypeMismatch(tags1, tags2, 0.8));
+  }
+
+  void mostSpecificTypeTest()
+  {
+    OsmSchema& uut = OsmSchema::getInstance();
+    Tags tags;
+
+    tags.clear();
+    tags["building"] = "yes";
+    HOOT_STR_EQUALS("building=yes", uut.mostSpecificType(tags));
+
+    tags.clear();
+    tags["building"] = "yes";
+    tags["building"] = "fort";
+    HOOT_STR_EQUALS("building=fort", uut.mostSpecificType(tags));
+
+    tags.clear();
+    tags["building"] = "yes";
+    tags["name"] = "fort";
+    HOOT_STR_EQUALS("building=yes", uut.mostSpecificType(tags));
   }
 };
 

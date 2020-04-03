@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTID_H
 #define ELEMENTID_H
@@ -55,6 +55,26 @@ public:
   ElementId() : _type(ElementType::Unknown), _id(-std::numeric_limits<int>::max()) {}
 
   ElementId(ElementType type, long id) : _type(type), _id(id) {}
+
+  ElementId(const QString& str)
+  {
+    // way:1
+
+    const QStringList strParts = str.split(":");
+    if (strParts.size() != 2)
+    {
+      throw IllegalArgumentException("Invalid element ID string: " + str);
+    }
+
+    _type = ElementType::fromString(strParts[0].toLower().trimmed());
+
+    bool ok;
+    _id = strParts[1].toLong(&ok);
+    if (!ok)
+    {
+      throw IllegalArgumentException("Invalid element ID value: " + strParts[1]);
+    }
+  }
 
   long getId() const { return _id; }
 

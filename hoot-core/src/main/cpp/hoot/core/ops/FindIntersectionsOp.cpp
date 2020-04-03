@@ -30,7 +30,7 @@
 #include <hoot/core/algorithms/splitter/DualHighwaySplitter.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/ElementInIdListCriterion.h>
+#include <hoot/core/criterion/ElementIdCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
@@ -93,11 +93,13 @@ void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
   VisitorOp(removeWaysVis).apply(map);
 
   // remove anything that is not a node and in the list of intersections found
+  std::vector<long> intersectionIds = v->getIntersections();
+  std::set<long> intersectionIdsSet(intersectionIds.begin(), intersectionIds.end());
   std::shared_ptr<NotCriterion> intersectionCrit(
     new NotCriterion(
       new ChainCriterion(
-        std::shared_ptr<ElementInIdListCriterion>(
-          new ElementInIdListCriterion(ElementType::Node, v->getIntersections())),
+        std::shared_ptr<ElementIdCriterion>(
+          new ElementIdCriterion(ElementType::Node, intersectionIdsSet)),
         std::shared_ptr<NodeCriterion>(new NodeCriterion()))));
   std::shared_ptr<RemoveElementsVisitor> removeIntersectionsVis(new RemoveElementsVisitor());
   removeIntersectionsVis->addCriterion(intersectionCrit);

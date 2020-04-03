@@ -54,7 +54,7 @@ OverlapExtractor::OverlapExtractor()
 double OverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
   const ConstElementPtr& candidate) const
 {
-  LOG_DEBUG(
+  LOG_TRACE(
     "Calculating overlap for " << target->getElementId() << " and " << candidate->getElementId() <<
     "...");
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PARTIALNETWORKMERGER_H
 #define PARTIALNETWORKMERGER_H
@@ -68,6 +68,8 @@ public:
   virtual QString toString() const;
 
   virtual QString getDescription() const { return "Merges roads matched by the Network Algorithm"; }
+
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   bool getNeedsReview() const { return _needsReview; }
 

@@ -284,6 +284,12 @@ See the User Guide for more details on command usage.
     hoot sort input.osm output.osm
 -----
 
+===== Tag features with a conflate matcher capable of matching them (useful in debugging):
+
+-----
+    hoot convert -D convert.ops="hoot::ConflatableCriteriaVisitor" input.osm output.osm
+-----
+
 ==== Comparison
 
 ===== Calculate the difference between two maps:
@@ -494,6 +500,15 @@ See the User Guide for more details on command usage.
 -----
     hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
       -D remove.elements.visitor.element.criteria="hoot::RelationCriterion" input.osm output.osm
+-----
+
+===== Remove all but two specific relations:
+
+-----
+    hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
+    -D remove.elements.visitor.element.criteria="hoot::ElementIdCriterion" 
+    -D element.id.criterion.ids="Relation:-1;Relation:7387470" 
+    -D element.criterion.negate=true input.osm output.osm
 -----
 
 ===== Remove relations and ways from a map:
@@ -981,7 +996,7 @@ Requires language translation server installation.  See the Hootenanny Install G
 ===== List all extractors used to score feature properties:
 
 -----
-    hoot info --feature-extractors:
+    hoot info --feature-extractors
 -----
 
 ===== List all input formats that support reading by geospatial bounds:

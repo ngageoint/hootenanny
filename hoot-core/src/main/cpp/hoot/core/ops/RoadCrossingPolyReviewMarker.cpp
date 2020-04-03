@@ -56,9 +56,9 @@ void RoadCrossingPolyReviewMarker::setConfiguration(const Settings& conf)
 
 void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
 {
-  _numAffected = 0;
-  _numProcessed = 0;
-  _numRoads = 0;
+  _numAffected = 0; // roads we mark for review
+  _numProcessed = 0; // all ways
+  _numRoads = 0; // all roads
   _map = map;
   _markedRoads.clear();
   _crossingRules = RoadCrossingPolyRule::readRules(_crossingRulesFile, _map);
@@ -111,18 +111,6 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
               LOG_VART(way);
               LOG_VART(rule.getPolyFilterString());
               LOG_VART(rule.getAllowedRoadTagFilterString());
-//              LOG_VART(
-//                OsmUtils::haveGeometricRelationship(
-//                  way, neighbor, GeometricRelationship::Overlaps, _map));
-//              LOG_VART(
-//                OsmUtils::haveGeometricRelationship(
-//                  way, neighbor, GeometricRelationship::Crosses, _map));
-//              LOG_VART(
-//                OsmUtils::haveGeometricRelationship(
-//                  way, neighbor, GeometricRelationship::Overlaps, _map));
-//              LOG_VART(
-//                OsmUtils::haveGeometricRelationship(
-//                  way, neighbor, GeometricRelationship::Touches, _map));
 
               reviewMarker.mark(
                 _map, way,
@@ -139,12 +127,12 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
     }
 
     _numProcessed++;
-    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    if (_numProcessed % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tMarked " << StringUtils::formatLargeNumber(_numAffected) << " crossing roads for " <<
         "review out of " << StringUtils::formatLargeNumber(_numRoads) << " total roads and " <<
-        StringUtils::formatLargeNumber(_numProcessed)  << " total ways.");
+        StringUtils::formatLargeNumber(ways.size())  << " total ways.");
     }
   }
 }

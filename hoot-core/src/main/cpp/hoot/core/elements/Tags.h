@@ -68,6 +68,7 @@ public:
 
   Tags();
   Tags(const QString& key, const QString& value);
+  Tags(const QString& kvp);
 
   void addNote(const QString& note);
 

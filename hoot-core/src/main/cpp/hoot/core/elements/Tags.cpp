@@ -56,6 +56,28 @@ QHash<QString, QString>()
   set(key, value);
 }
 
+Tags::Tags(const QString& kvp)
+{
+  const QString errorMsg = "Invalid key/value pair passed to Tags: " + kvp;
+  if (!kvp.contains("="))
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+  const QStringList kvpParts = kvp.split("=");
+  if (kvpParts.size() != 2)
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+  const QString key = kvpParts[0];
+  const QString val = kvpParts[1];
+  if (key.trimmed().isEmpty() || val.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+
+  set(key, val);
+}
+
 void Tags::add(const Tags& t)
 {
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)

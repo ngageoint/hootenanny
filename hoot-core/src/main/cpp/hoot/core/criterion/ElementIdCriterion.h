@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ELEMENT_ID_CRITERION_H
@@ -30,6 +30,7 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -37,7 +38,7 @@ namespace hoot
 /**
  * Identifies elements by type and ID
  */
-class ElementIdCriterion : public ElementCriterion
+class ElementIdCriterion : public ElementCriterion, public Configurable
 {
 public:
 
@@ -45,8 +46,18 @@ public:
 
   ElementIdCriterion();
   ElementIdCriterion(const ElementId& id);
+  ElementIdCriterion(const std::set<ElementId>& ids);
+  ElementIdCriterion(const ElementType& elementType, const std::set<long>& ids);
 
+  /**
+   * @see ElementCriterion
+   */
   virtual bool isSatisfied(const ConstElementPtr& e) const;
+
+  /**
+   * @see Configurable
+   */
+  virtual void setConfiguration(const Settings& conf);
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ElementIdCriterion()); }
 
@@ -57,7 +68,7 @@ public:
 
 private:
 
-  ElementId _id;
+  std::set<ElementId> _ids;
 };
 
 }

@@ -153,6 +153,15 @@ public:
   virtual QString toString() const = 0;
 
   /**
+   * Returns a simplified string description with no mention of the ID, useful in hashing
+   *
+   * @return a string
+   * @todo There is a hash visitor for Node, so possibly we can adapt some of that code to do this
+   * instead and repeat for the other element types.
+   */
+  virtual QString nonIdHash() const = 0;
+
+  /**
    * Applies a read only visitor to this element and all child elements. The visitor will be called
    * at least once for each element in the tree. For instance if the Element is a Way it may be
    * called twice for a Node if that node appears twice in the way.

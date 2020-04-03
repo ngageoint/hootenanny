@@ -57,6 +57,7 @@ private:
   static void isGeneric(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void hasType(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void explicitTypeMismatch(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void mostSpecificType(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void score(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void scoreTypes(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -78,6 +79,7 @@ private:
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isNonBuildingArea(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isCollectionRelation(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   /**
    * See description in rules/HootLib.js isSpecificallyConflatable method

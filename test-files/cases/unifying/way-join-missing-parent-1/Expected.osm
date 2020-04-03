@@ -59,6 +59,7 @@
     </node>
     <node visible="true" id="-229" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9022423999999987" lon="-75.4398761000000064">
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:hash" v="sha1sum:5921f9132e0fa05ef032fa4e0865a1027bd61434"/>
         <tag k="hoot:id" v="-229"/>
     </node>
     <node visible="true" id="-228" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9020511999999954" lon="-75.4400621999999998">
@@ -399,12 +400,14 @@
     </node>
     <node visible="true" id="-63" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9025329999999840" lon="-75.4399310000000014">
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:hash" v="sha1sum:e7f3005a8d1ba950d9ce75a8b74294def5467a45"/>
         <tag k="hoot:id" v="-63"/>
     </node>
     <node visible="true" id="-50" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9018592999999839" lon="-75.4395533000000000">
         <tag k="hoot:status" v="2"/>
         <tag k="traffic_signals" v="signal"/>
         <tag k="highway" v="traffic_signals"/>
+        <tag k="hoot:hash" v="sha1sum:fc0e5d184be94525f70d5eb18e127c6f9bc2d0b8"/>
         <tag k="hoot:id" v="-50"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -412,6 +415,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="traffic_signals" v="signal"/>
         <tag k="highway" v="traffic_signals"/>
+        <tag k="hoot:hash" v="sha1sum:660c7933f6081268fce262cd88c560438731ec1d"/>
         <tag k="hoot:id" v="-49"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -449,6 +453,7 @@
     </node>
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9037000000000077" lon="-75.4403459943299026">
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:hash" v="sha1sum:068cf6ed092ae158f616fdb99da926fc3fde2cc5"/>
         <tag k="hoot:id" v="-17"/>
     </node>
     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9017936972234466" lon="-75.4459999999999980">
@@ -462,6 +467,7 @@
     </node>
     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8984000000000094" lon="-75.4425222126922250">
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:hash" v="sha1sum:d7f0a7c3f98372a6dc3f05700b9bfeba2795fb40"/>
         <tag k="hoot:id" v="-14"/>
     </node>
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8984000000000094" lon="-75.4424942042889484">
@@ -805,6 +811,7 @@
     </node>
     <node visible="true" id="4881733241" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.8997312999999991" lon="-75.4397412000000003">
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:hash" v="sha1sum:72d7d7cadba00ac4c8d07751905b76f6adb5e881"/>
         <tag k="hoot:id" v="4881733241"/>
     </node>
     <node visible="true" id="4881733242" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.8988060000000075" lon="-75.4413870000000060">
@@ -848,6 +855,7 @@
     </node>
     <node visible="true" id="4881734508" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9018789999999939" lon="-75.4395209999999992">
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:hash" v="sha1sum:e39451c631018e5c2b2951ba480dda34168d59be"/>
         <tag k="hoot:id" v="4881734508"/>
     </node>
     <node visible="true" id="4881735269" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9022499999999951" lon="-75.4416899999999799">
@@ -2155,92 +2163,19 @@
         <tag k="error:circular" v="15"/>
         <tag k="type" v="route"/>
     </relation>
-    <relation visible="true" id="-3" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-15" role="forward"/>
-        <member type="way" ref="-113" role="forward"/>
-        <member type="way" ref="-14" role="forward"/>
-        <member type="way" ref="-1748" role="forward"/>
-        <member type="way" ref="-112" role="forward"/>
-        <member type="way" ref="-78" role="forward"/>
-        <member type="way" ref="-68" role="forward"/>
-        <member type="way" ref="-72" role="forward"/>
-        <member type="way" ref="-67" role="forward"/>
-        <tag k="wikipedia" v="en:U.S. Route 113"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="symbol" v="http://upload.wikimedia.org/wikipedia/commons/f/fc/US_113.svg"/>
-        <tag k="route" v="road"/>
-        <tag k="name" v="US 113 (DE)"/>
-        <tag k="ref" v="113"/>
-        <tag k="hoot:id" v="-3"/>
-        <tag k="source:datetime" v="2019-05-04T03:09:17Z"/>
-        <tag k="network" v="US:US"/>
-        <tag k="is_in:state" v="DE"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="type" v="route"/>
-    </relation>
-    <relation visible="true" id="-2" timestamp="2020-02-28T16:47:47Z" version="1">
+    <relation visible="true" id="7387465" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-12" role=""/>
         <member type="way" ref="-84" role=""/>
         <member type="way" ref="-87" role=""/>
         <member type="way" ref="-32" role=""/>
         <tag k="wikipedia" v="en:Delaware Route 36"/>
-        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="wikidata" v="Q798659"/>
         <tag k="symbol" v="http://commons.wikimedia.org/wiki/File:Elongated_circle_36.svg"/>
         <tag k="route" v="road"/>
         <tag k="ref" v="36"/>
-        <tag k="hoot:id" v="-2"/>
-        <tag k="source:datetime" v="2019-09-17T00:22:50Z"/>
-        <tag k="network" v="US:DE"/>
-        <tag k="FIXME" v="verify east end"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="type" v="route"/>
-    </relation>
-    <relation visible="true" id="-1" timestamp="2020-02-28T16:47:47Z" version="1">
-        <member type="way" ref="-28" role="outer"/>
-        <tag k="tiger:PLACEFP" v="47420"/>
-        <tag k="is_in:iso_3166_2" v="US:DE"/>
-        <tag k="wikidata" v="Q755600"/>
-        <tag k="tiger:PLCIDFP" v="1047420"/>
-        <tag k="tiger:PCINECTA" v="N"/>
-        <tag k="boundary" v="administrative"/>
-        <tag k="tiger:CLASSFP" v="C1"/>
-        <tag k="is_in:country" v="USA"/>
-        <tag k="is_in:state_code" v="DE"/>
-        <tag k="tiger:MTFCC" v="G4110"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="tiger:PCICBSA" v="N"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="Milford"/>
-        <tag k="source:datetime" v="2019-05-19T11:42:49Z"/>
-        <tag k="tiger:STATEFP" v="10"/>
-        <tag k="wikipedia" v="en:Milford, Delaware"/>
-        <tag k="tiger:NAMELSAD" v="Milford city"/>
-        <tag k="tiger:CPI" v="Y"/>
-        <tag k="admin_level" v="8"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="is_in:state" v="Delaware"/>
-        <tag k="place" v="city"/>
-        <tag k="tiger:NAME" v="Milford"/>
-        <tag k="border_type" v="city"/>
-        <tag k="tiger:LSAD" v="25"/>
-        <tag k="tiger:FUNCSTAT" v="A"/>
-        <tag k="tiger:PLACENS" v="02390617"/>
-        <tag k="is_in:country_code" v="US"/>
-        <tag k="is_in" v="USA, Delaware"/>
-        <tag k="source" v="TIGER/Line® 2008 Place Shapefiles (http://www.census.gov/geo/www/tiger/)"/>
-        <tag k="hoot:id" v="-1"/>
-        <tag k="type" v="boundary"/>
-    </relation>
-    <relation visible="true" id="7387465" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <member type="way" ref="-12" role=""/>
-        <tag k="wikipedia" v="en:Delaware Route 36"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="symbol" v="http://commons.wikimedia.org/wiki/File:Elongated_circle_36.svg"/>
-        <tag k="route" v="road"/>
-        <tag k="ref" v="36"/>
         <tag k="hoot:id" v="7387465"/>
-        <tag k="source:datetime" v="2015-01-20T08:41:26.000Z"/>
+        <tag k="source:datetime" v="2015-01-20T08:41:26.000Z;2019-09-17T00:22:50Z"/>
         <tag k="FIXME" v="verify east end"/>
         <tag k="network" v="US:DE"/>
         <tag k="error:circular" v="15"/>
@@ -2251,14 +2186,20 @@
         <member type="way" ref="-14" role="forward"/>
         <member type="way" ref="-67" role="forward"/>
         <member type="way" ref="-97" role="forward"/>
+        <member type="way" ref="-113" role="forward"/>
+        <member type="way" ref="-1748" role="forward"/>
+        <member type="way" ref="-112" role="forward"/>
+        <member type="way" ref="-78" role="forward"/>
+        <member type="way" ref="-68" role="forward"/>
+        <member type="way" ref="-72" role="forward"/>
         <tag k="wikipedia" v="en:U.S. Route 113"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="symbol" v="http://upload.wikimedia.org/wikipedia/commons/f/fc/US_113.svg"/>
         <tag k="route" v="road"/>
         <tag k="name" v="US 113 (DE)"/>
         <tag k="ref" v="113"/>
         <tag k="hoot:id" v="7387466"/>
-        <tag k="source:datetime" v="2015-09-14T14:51:06.000Z"/>
+        <tag k="source:datetime" v="2015-09-14T14:51:06.000Z;2019-05-04T03:09:17Z"/>
         <tag k="network" v="US:US"/>
         <tag k="is_in:state" v="DE"/>
         <tag k="error:circular" v="15"/>
@@ -2266,24 +2207,26 @@
     </relation>
     <relation visible="true" id="7387470" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-8" role="outer"/>
+        <member type="way" ref="-28" role="outer"/>
         <tag k="tiger:PLACEFP" v="47420"/>
         <tag k="is_in:iso_3166_2" v="US:DE"/>
-        <tag k="tiger:PLCIDFP" v="1047420"/>
+        <tag k="wikidata" v="Q755600"/>
         <tag k="tiger:PCINECTA" v="N"/>
+        <tag k="tiger:PLCIDFP" v="1047420"/>
         <tag k="boundary" v="administrative"/>
         <tag k="tiger:CLASSFP" v="C1"/>
         <tag k="is_in:country" v="USA"/>
         <tag k="is_in:state_code" v="DE"/>
         <tag k="tiger:MTFCC" v="G4110"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="tiger:PCICBSA" v="N"/>
         <tag k="error:circular" v="15"/>
         <tag k="name" v="Milford"/>
-        <tag k="source:datetime" v="2015-12-23T16:54:04.000Z"/>
+        <tag k="source:datetime" v="2015-12-23T16:54:04.000Z;2019-05-19T11:42:49Z"/>
         <tag k="tiger:STATEFP" v="10"/>
+        <tag k="wikipedia" v="en:Milford, Delaware"/>
         <tag k="tiger:NAMELSAD" v="Milford city"/>
         <tag k="tiger:CPI" v="Y"/>
-        <tag k="wikipedia" v="en:Milford, Delaware"/>
         <tag k="admin_level" v="8"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="is_in:state" v="Delaware"/>
@@ -2291,8 +2234,8 @@
         <tag k="tiger:NAME" v="Milford"/>
         <tag k="border_type" v="city"/>
         <tag k="tiger:LSAD" v="25"/>
-        <tag k="tiger:FUNCSTAT" v="A"/>
         <tag k="is_in:country_code" v="US"/>
+        <tag k="tiger:FUNCSTAT" v="A"/>
         <tag k="tiger:PLACENS" v="02390617"/>
         <tag k="is_in" v="USA, Delaware"/>
         <tag k="source" v="TIGER/Line® 2008 Place Shapefiles (http://www.census.gov/geo/www/tiger/)"/>
