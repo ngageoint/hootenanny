@@ -99,21 +99,23 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   // MergerFactory to not throw an exception when a merger cannot be found for a set of match pairs.
   if (!mapContainsElement1 || !mapContainsElement2)
   {
+    // Changing these from warning to debug, as they can happen from time to time and not be a huge
+    // problem but mess up test output.
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("Attempting to merge one or more elements that do not exist: ");
+      LOG_DEBUG("Attempting to merge one or more elements that do not exist: ");
       if (!mapContainsElement1)
       {
-        LOG_WARN(_eid1);
+        LOG_DEBUG(_eid1);
       }
       if (!mapContainsElement2)
       {
-        LOG_WARN(_eid2);
+        LOG_DEBUG(_eid2);
       }
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      LOG_DEBUG(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
     logWarnCount++;
     return;
@@ -122,11 +124,11 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("Attempting to merge empty element pairs.");
+      LOG_DEBUG("Attempting to merge empty element pairs.");
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      LOG_DEBUG(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
     logWarnCount++;
     return;
