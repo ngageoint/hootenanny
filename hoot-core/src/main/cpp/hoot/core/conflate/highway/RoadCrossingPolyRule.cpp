@@ -78,7 +78,7 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
   {
     boost::property_tree::read_json(rulesFile.toStdString(), propTree);
   }
-  catch (boost::property_tree::json_parser::json_parser_error& e)
+  catch (const boost::property_tree::json_parser::json_parser_error& e)
   {
     throw HootException(
       QString("Error parsing JSON: %1 (line %2)")
