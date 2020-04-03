@@ -59,6 +59,11 @@ public:
   { return "Removes invalid multiline string relation members"; }
 
   virtual std::string getClassName() const { return className(); }
+
+private:
+
+  int _numMultilineStringRelations;
+  int _taskStatusUpdateInterval;
 };
 
 }

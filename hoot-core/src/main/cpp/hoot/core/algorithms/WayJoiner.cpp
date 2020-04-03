@@ -50,7 +50,9 @@ namespace hoot
 
 WayJoiner::WayJoiner() :
 _leavePid(false),
-_numJoined(0)
+_numJoined(0),
+_numProcessed(0),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -113,8 +115,7 @@ void WayJoiner::_joinSiblings()
   // Get a list of ways that still have a parent
   map<long, deque<long>> w;
   //  Find all ways that have a split parent id
-  int numWaysProcessed = 0;
-  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
+  //int numWaysProcessed = 0;
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
@@ -124,17 +125,17 @@ void WayJoiner::_joinSiblings()
       w[parent_id].push_back(way->getId());
     }
 
-    numWaysProcessed++;
-    if (numWaysProcessed % (taskStatusUpdateInterval * 10) == 0)
-    {
-      PROGRESS_INFO(
-        "\tParsed " << StringUtils::formatLargeNumber(numWaysProcessed) << " / " <<
-            StringUtils::formatLargeNumber(ways.size()) << " way IDs.");
-    }
+//    numWaysProcessed++;
+//    if (numWaysProcessed % (_taskStatusUpdateInterval * 10) == 0)
+//    {
+//      PROGRESS_INFO(
+//        "\tParsed " << StringUtils::formatLargeNumber(numWaysProcessed) << " / " <<
+//            StringUtils::formatLargeNumber(ways.size()) << " way IDs.");
+//    }
   }
 
   //  Rejoin any sibling ways where the parent id no longer exists
-  numWaysProcessed = 0;
+  //numWaysProcessed = 0;
   for (map<long, deque<long>>::iterator map_it = w.begin(); map_it != w.end(); ++map_it)
   {
     deque<long>& way_ids = map_it->second;
@@ -142,13 +143,13 @@ void WayJoiner::_joinSiblings()
     while (way_ids.size() > 1)
       _rejoinSiblings(way_ids);
 
-    numWaysProcessed++;
-    if (numWaysProcessed % (taskStatusUpdateInterval * 10) == 0)
-    {
-      PROGRESS_INFO(
-        "\tRejoined " << StringUtils::formatLargeNumber(numWaysProcessed) << " / " <<
-            StringUtils::formatLargeNumber(w.size()) << " ways.");
-    }
+//    numWaysProcessed++;
+//    if (numWaysProcessed % (_taskStatusUpdateInterval * 10) == 0)
+//    {
+//      PROGRESS_INFO(
+//        "\tRejoined " << StringUtils::formatLargeNumber(numWaysProcessed) << " / " <<
+//            StringUtils::formatLargeNumber(w.size()) << " ways.");
+//    }
   }
 }
 
@@ -309,12 +310,22 @@ void WayJoiner::_rejoinSiblings(deque<long>& way_ids)
   {
     WayPtr parent = ways[sorted[0]];
     for (size_t i = 1; i < sorted.size(); ++i)
+    {
       _joinWays(parent, ways[sorted[i]]);
+    }
   }
 }
 
-bool WayJoiner::_joinWays(const WayPtr &parent, const WayPtr &child)
+bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
 {
+  _numProcessed++;
+  if (_numProcessed % (_taskStatusUpdateInterval * 10) == 0)
+  {
+    PROGRESS_INFO(
+      "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " / " <<
+          StringUtils::formatLargeNumber(_map->getWayCount()) << " ways.");
+  }
+
   if (!parent || !child)
     return false;
 

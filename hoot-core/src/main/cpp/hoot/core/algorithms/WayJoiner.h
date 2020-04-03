@@ -100,6 +100,9 @@ protected:
   /** Pointer to the map to work on */
   OsmMapPtr _map;
   int _numJoined;
+  int _numProcessed;
+
+  int _taskStatusUpdateInterval;
 
 private:
 
