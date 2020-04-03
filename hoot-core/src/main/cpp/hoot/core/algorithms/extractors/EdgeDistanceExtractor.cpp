@@ -81,7 +81,7 @@ public:
 
   LinesWaysVisitor(vector<Geometry*>& lines) : _lines(lines) {}
 
-  void visit(const std::shared_ptr<const Element>& e) override
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Way)
     {

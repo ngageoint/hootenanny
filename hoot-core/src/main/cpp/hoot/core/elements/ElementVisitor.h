@@ -66,22 +66,22 @@ public:
   /**
    * @see OperationStatusInfo
    */
-  virtual long getNumFeaturesAffected() const { return _numAffected; }
+  long getNumFeaturesAffected() const override { return _numAffected; }
 
   /**
    * @see OperationStatusInfo
    */
-  virtual long getNumFeaturesProcessed() const { return _numProcessed; }
+  long getNumFeaturesProcessed() const override { return _numProcessed; }
 
   /**
    * @see OperationStatusInfo
    */
-  virtual QString getInitStatusMessage() const { return ""; }
+  QString getInitStatusMessage() const override { return ""; }
 
   /**
    * @see OperationStatusInfo
    */
-  virtual QString getCompletedStatusMessage() const { return ""; }
+  QString getCompletedStatusMessage() const override { return ""; }
 
   /**
    * @see FilteredByCriteria
@@ -91,7 +91,7 @@ public:
    * they are run against during conflation should populate this list. The list is treated in a
    * logical OR fashion.
    */
-  virtual QStringList getCriteria() const { return QStringList(); }
+  QStringList getCriteria() const override { return QStringList(); }
 
   /**
    * Returns the visitor's class name

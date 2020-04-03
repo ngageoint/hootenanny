@@ -47,9 +47,7 @@ public:
   ElementConstOsmMapVisitor() {}
   virtual ~ElementConstOsmMapVisitor() {}
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
-  virtual void visit(const std::shared_ptr<const Element>& e) = 0;
+  void setOsmMap(const OsmMap* map) override { _map = map; }
 
 protected:
 
