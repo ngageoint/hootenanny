@@ -228,6 +228,7 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out,
     std::dynamic_pointer_cast<ElementOutputStream>(writer);
   std::shared_ptr<PartialOsmMapWriter> partialWriter =
     std::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+  partialWriter->initializePartial();
 
   for (int i = 0; i < inputs.size(); i++)
   {

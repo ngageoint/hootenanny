@@ -1126,6 +1126,7 @@ void OsmPbfReader::parse(istream* strm, const OsmMapPtr& map)
     // if we don't recognize the type
     else
     {
+      LOG_WARN("Skipping PBF blob type " << _d->blobHeader.type());
       // skip ahead to the next blob
       strm->seekg(_d->blobHeader.datasize(), ios_base::cur);
     }
