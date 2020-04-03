@@ -64,6 +64,8 @@ public:
    */
   void basicTest()
   {
+    conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
+
     QString testJsonStr =
       "{                                      \n"
       " 'elements': [                         \n"
