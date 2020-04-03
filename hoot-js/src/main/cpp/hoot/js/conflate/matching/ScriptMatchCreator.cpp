@@ -550,7 +550,7 @@ public:
       {
         PROGRESS_DEBUG(
           "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
-          " match candidates / " << StringUtils::formatLargeNumber(getMap()->getElementCount()) <<
+          " match candidates / " << StringUtils::formatLargeNumber(_totalElementsToProcess) <<
           " total elements.");
       }
     }

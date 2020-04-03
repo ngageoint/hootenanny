@@ -331,6 +331,8 @@ public:
   void appendSource(const QString& url);
   void replaceSource(const QString& url);
 
+  void setEnableProgressLogging(bool enable) { _enableProgressLogging = enable; }
+
 protected:
 
   mutable std::shared_ptr<IdGenerator> _idGen;
@@ -371,6 +373,10 @@ protected:
   int _numNodesSkippedForAppending;
   int _numWaysSkippedForAppending;
   int _numRelationsSkippedForAppending;
+
+  // If we're making recursive calls to the visit methods in another class doing its own progress
+  // logging, its helpful to be able to turn loging here off.
+  bool _enableProgressLogging;
 
   // for use with ElementIterator
   ElementId _currentElementId;

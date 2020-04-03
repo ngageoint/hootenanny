@@ -104,6 +104,7 @@ void SmallHighwayMerger::apply(std::shared_ptr<OsmMap>& map)
       }
     }
 
+    _numProcessed++;
     if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(

@@ -28,11 +28,9 @@
 #include "RemoveInvalidMultilineStringMembersVisitor.h"
 
 //  hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/util/StringUtils.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -43,7 +41,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidMultilineStringMembersVisitor)
 
 RemoveInvalidMultilineStringMembersVisitor::RemoveInvalidMultilineStringMembersVisitor() :
-_numMultilineStringRelations(0),
+//_numMultilineStringRelations(0),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
@@ -156,17 +154,16 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
       _numAffected++;
     }
 
-    _numMultilineStringRelations++;
+    //_numMultilineStringRelations++;
   }
 
   _numProcessed++;
   if (_numProcessed % (_taskStatusUpdateInterval * 10) == 0)
   {
     PROGRESS_INFO(
-      "\Removed " << StringUtils::formatLargeNumber(_numAffected) << " invalid multilinestring " <<
-      "relations out of " << StringUtils::formatLargeNumber(_numMultilineStringRelations) <<
-      " total multilinestring relations and " <<
-      StringUtils::formatLargeNumber(_map->getRelationCount())  << " total relations.");
+      "\tRemoved " << StringUtils::formatLargeNumber(_numAffected) << " invalid " <<
+      "relations / " << StringUtils::formatLargeNumber(_map->getRelationCount()) <<
+      " total relations.");
   }
 }
 

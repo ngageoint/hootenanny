@@ -52,6 +52,7 @@ WayJoiner::WayJoiner() :
 _leavePid(false),
 _numJoined(0),
 _numProcessed(0),
+_numOriginalWays(0),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
@@ -85,6 +86,7 @@ void WayJoiner::_joinParentChild()
   LOG_INFO("\tJoining parent ways to children...");
 
   WayMap ways = _map->getWays();
+  _numOriginalWays = ways.size();
   vector<long> ids;
   //  Find all ways that have a split parent id
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
@@ -319,11 +321,12 @@ void WayJoiner::_rejoinSiblings(deque<long>& way_ids)
 bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
 {
   _numProcessed++;
-  if (_numProcessed % (_taskStatusUpdateInterval * 10) == 0)
+  if (_numProcessed % (_taskStatusUpdateInterval / 10) == 0)
   {
     PROGRESS_INFO(
-      "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " / " <<
-          StringUtils::formatLargeNumber(_map->getWayCount()) << " ways.");
+      "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
+      StringUtils::formatLargeNumber(_numOriginalWays) << " starting ways. " <<
+      StringUtils::formatLargeNumber(_numOriginalWays) << " toal ways remaining.");
   }
 
   if (!parent || !child)
@@ -376,7 +379,9 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   child->getTags().clear();
   //  Update any ways that have the child's ID as their parent to the parent's ID
   UpdateWayParentVisitor visitor(child->getId(), parent->getId());
+  _map->setEnableProgressLogging(false);
   _map->visitWaysRw(visitor);
+  _map->setEnableProgressLogging(true);
   //  Delete the child
   RecursiveElementRemover(child->getElementId()).apply(_map);
 

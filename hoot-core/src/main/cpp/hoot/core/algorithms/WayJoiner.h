@@ -101,6 +101,7 @@ protected:
   OsmMapPtr _map;
   int _numJoined;
   int _numProcessed;
+  int _numOriginalWays;
 
   int _taskStatusUpdateInterval;
 
