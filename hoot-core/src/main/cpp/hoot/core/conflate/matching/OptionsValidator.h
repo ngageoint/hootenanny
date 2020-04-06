@@ -34,21 +34,29 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Validates some of matcher related configuration options
  */
 class OptionsValidator
 {
 public:
 
   /**
-   * TODO
-   */
-  static void fixDefaults();
-
-  /**
-   * TODO
+   * Does basic validation of the configured matchers/mergers
    */
   static void validateMatchers();
+
+  /**
+   * This automatically fixes some erroneous matcher configurations.
+   */
+  static void fixGenericMatcherOrdering();
+
+  /**
+   * This is intended primarily as a temporary method to fix the subline matcher, classifier, etc.
+   * configurations to ensure consistent conflation results between the command line and the UI
+   * via services. It can be disabled via the configuration option, autocorrect.options. See
+   * details in method.
+   */
+  static void fixMisc();
 
 private:
 

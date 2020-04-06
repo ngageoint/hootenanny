@@ -168,8 +168,6 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
   }
 }
 
-
-
 void MatchFactory::setConfiguration(const Settings& s)
 {
   _tagFilter = ConfigOptions(s).getConflateTagFilter();
@@ -177,20 +175,22 @@ void MatchFactory::setConfiguration(const Settings& s)
 
 MatchFactory& MatchFactory::getInstance()
 {
-  /* TODO: remove this hack after the following UI issues are fixed:
-   *
-   * https://github.com/ngageoint/hootenanny-ui/issues/969
-   * https://github.com/ngageoint/hootenanny-ui/issues/970
-   * https://github.com/ngageoint/hootenanny-ui/issues/971
-   * https://github.com/ngageoint/hootenanny-ui/issues/972
-   * https://github.com/ngageoint/hootenanny-ui/issues/1764
-   *
-   * UPDATE: 4/3/20 - Initially thought the above issues should all have been fixed in v2 version of
-   * the UI but apparently not. So, keep this in for now.
-   * */
   if (ConfigOptions().getAutocorrectOptions())
   {
-    OptionsValidator::fixDefaults();
+    OptionsValidator::fixMatcherOrdering();
+
+    /* TODO: remove this hack after the following UI issues are fixed:
+     *
+     * https://github.com/ngageoint/hootenanny-ui/issues/969
+     * https://github.com/ngageoint/hootenanny-ui/issues/970
+     * https://github.com/ngageoint/hootenanny-ui/issues/971
+     * https://github.com/ngageoint/hootenanny-ui/issues/972
+     * https://github.com/ngageoint/hootenanny-ui/issues/1764
+     *
+     * UPDATE: 4/3/20 - Initially thought the above issues should all have been fixed in v2 version
+     * of the UI but apparently not. So, keep this in for now.
+     * */
+    OptionsValidator::fixMisc();
   }
 
   // keep this outside of _tempFixDefaults, since it can happen from the command line as well
@@ -204,7 +204,7 @@ MatchFactory& MatchFactory::getInstance()
   if (_theInstance->_creators.size() == 0)
   {
     //only get the match creators that are specified in the config
-    _setMatchCreators(matchCreators);
+    _setMatchCreators(ConfigOptions().getMatchCreators());
   }
   return *_theInstance;
 }

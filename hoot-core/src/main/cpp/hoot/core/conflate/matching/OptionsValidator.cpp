@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {
@@ -58,7 +58,7 @@ bool OptionsValidator::_containsGenericMatcher(const QStringList& matchers)
   return false;
 }
 
-void OptionsValidator::fixDefaults()
+void OptionsValidator::fixMisc()
 {
   QStringList matchCreators = ConfigOptions().getMatchCreators();
   QStringList mergerCreators = ConfigOptions().getMergerCreators();
@@ -70,42 +70,6 @@ void OptionsValidator::fixDefaults()
     LOG_WARN("Match or merger creators empty.  Setting to defaults.");
     matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();
     mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue();
-  }
-
-  // fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972,
-  // https://github.com/ngageoint/hootenanny-ui/issues/1764
-
-  // At this time we always want the generic matchers at the end, just before CollectionRelation.js,
-  // if they're present. So, don't even check to see if they're in the right order...just move them
-  // anyway. There overall order will be maintained, but they'll just be towards the end. We'll
-  // assume the corresponding merger for each is in the correct order and move it as well.
-  if (_containsGenericMatcher(matchCreators))
-  {
-    QStringList fixedMatchCreators = matchCreators;
-    QStringList fixedMergerCreators = mergerCreators;
-    for (int i = 0; i < matchCreators.size(); i++)
-    {
-      const QString matchCreator = matchCreators.at(i);
-      if (_isGenericMatcher(matchCreator))
-      {
-        fixedMatchCreators.move(i, fixedMatchCreators.size() - 1);
-        fixedMergerCreators.move(i, fixedMergerCreators.size() - 1);
-      }
-    }
-    conf().set("match.creators", fixedMatchCreators.join(";"));
-    conf().set("merger.creators", fixedMergerCreators.join(";"));
-    matchCreators = ConfigOptions().getMatchCreators();
-    mergerCreators = ConfigOptions().getMergerCreators();
-  }
-  // now move CollectionRelation.js
-  const QString collectionRelationScript = "CollectionRelation.js";
-  if (StringUtils::containsAny(matchCreators, collectionRelationScript))
-  {
-    const int collectionRelationIndex = matchCreators.indexOf(collectionRelationScript);
-    matchCreators.move(collectionRelationIndex, matchCreators.size() - 1);
-    mergerCreators.move(collectionRelationIndex, mergerCreators.size() - 1);
-    matchCreators = ConfigOptions().getMatchCreators();
-    mergerCreators = ConfigOptions().getMergerCreators();
   }
 
   if (matchCreators.size() != mergerCreators.size())
@@ -136,10 +100,8 @@ void OptionsValidator::fixDefaults()
         fixedMergerCreators.append("hoot::PoiPolygonMergerCreator");
       }
     }
-    LOG_TRACE("Temp fixing merger.creators...");
     conf().set("merger.creators", fixedMergerCreators.join(";"));
   }
-  LOG_VART(mergerCreators);
 
   //fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
@@ -172,6 +134,47 @@ void OptionsValidator::fixDefaults()
     conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
   }
   LOG_VART(ConfigOptions().getConflateMatchHighwayClassifier());
+}
+
+void OptionsValidator::fixGenericMatcherOrdering()
+{
+  // fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972,
+  // https://github.com/ngageoint/hootenanny-ui/issues/1764
+
+  // At this time we always want the generic matchers at the end, just before CollectionRelation.js,
+  // if they're present. So, don't even check to see if they're in the right order...just move them
+  // anyway. There overall order will be maintained, but they'll just be towards the end. We'll
+  // assume the corresponding merger for each is in the correct order and move it as well.
+  if (_containsGenericMatcher(matchCreators))
+  {
+    QStringList fixedMatchCreators = matchCreators;
+    QStringList fixedMergerCreators = mergerCreators;
+    for (int i = 0; i < matchCreators.size(); i++)
+    {
+      const QString matchCreator = matchCreators.at(i);
+      if (_isGenericMatcher(matchCreator))
+      {
+        fixedMatchCreators.move(i, fixedMatchCreators.size() - 1);
+        fixedMergerCreators.move(i, fixedMergerCreators.size() - 1);
+      }
+    }
+    conf().set("match.creators", fixedMatchCreators.join(";"));
+    conf().set("merger.creators", fixedMergerCreators.join(";"));
+    matchCreators = ConfigOptions().getMatchCreators();
+    mergerCreators = ConfigOptions().getMergerCreators();
+  }
+  // now move CollectionRelation.js
+  const QString collectionRelationScript = "CollectionRelation.js";
+  if (StringUtils::containsAny(matchCreators, QStringList(collectionRelationScript)))
+  {
+    const int collectionRelationIndex = matchCreators.indexOf(collectionRelationScript);
+    matchCreators.move(collectionRelationIndex, matchCreators.size() - 1);
+    mergerCreators.move(collectionRelationIndex, mergerCreators.size() - 1);
+    matchCreators = ConfigOptions().getMatchCreators();
+    mergerCreators = ConfigOptions().getMergerCreators();
+  }
+
+  LOG_VART(mergerCreators);
 }
 
 void OptionsValidator::validateMatchers()
