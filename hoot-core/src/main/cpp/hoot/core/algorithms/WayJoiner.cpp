@@ -112,7 +112,7 @@ void WayJoiner::_joinParentChild()
     {
       PROGRESS_INFO(
         "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
-        StringUtils::formatLargeNumber(_totalWays));
+        StringUtils::formatLargeNumber(_totalWays) << " total ways.");
     }
   }
 }
@@ -147,7 +147,7 @@ void WayJoiner::_joinSiblings()
     {
       PROGRESS_INFO(
         "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
-        StringUtils::formatLargeNumber(_totalWays));
+        StringUtils::formatLargeNumber(_totalWays) << " total ways.");
     }
   }
 }
@@ -205,7 +205,7 @@ void WayJoiner::_joinAtNode()
     {
       PROGRESS_INFO(
         "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
-        StringUtils::formatLargeNumber(_totalWays));
+        StringUtils::formatLargeNumber(_totalWays) << " total ways.");
     }
   }
 }
