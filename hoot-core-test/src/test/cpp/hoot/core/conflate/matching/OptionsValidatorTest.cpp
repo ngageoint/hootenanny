@@ -40,7 +40,12 @@ namespace hoot
 {
 
 /*
- * Parts of this test should eventually be removed. See notes in OptionsValidator.
+ * Parts of this test should eventually be removed including:
+ *
+ * runAutoCorrectSublineMatcherTest
+ * runAutoCorrectClassifierTest
+ *
+ * See notes in OptionsValidator.
  *
  * Not adding a test for empty matcher inputs, which resets them to defaults, as the output would
  * change every time additions are made to the matchers.
@@ -116,6 +121,8 @@ public:
 
   void runAutoCorrectGenericTest()
   {
+    conf().set("autocorrect.options", "true");
+
     QStringList matchers;
     matchers.append("hoot::ScriptMatchCreator,Point.js");
     matchers.append("hoot::ScriptMatchCreator,Area.js");
@@ -145,6 +152,8 @@ public:
 
   void runAutoCorrectCollectionRelationTest()
   {
+    conf().set("autocorrect.options", "true");
+
     QStringList matchers;
     matchers.append("hoot::ScriptMatchCreator,Area.js");
     matchers.append("hoot::ScriptMatchCreator,CollectionRelations.js");
@@ -170,6 +179,8 @@ public:
 
   void runAutoCorrectMatcherOrderingTest()
   {
+    conf().set("autocorrect.options", "true");
+
     QStringList matchers;
     matchers.append("hoot::ScriptMatchCreator,Area.js");
     matchers.append("hoot::HighwayMatchCreator");
@@ -195,6 +206,8 @@ public:
 
   void runAutoCorrectSublineMatcherTest()
   {
+    conf().set("autocorrect.options", "true");
+
     QStringList matchers;
     matchers.append("hoot::NetworkMatchCreator");
     QStringList mergers;
@@ -250,7 +263,43 @@ public:
 
   void runAutoCorrectClassifierTest()
   {
+    conf().set("autocorrect.options", "true");
 
+    QStringList matchers;
+    matchers.append("hoot::NetworkMatchCreator");
+    QStringList mergers;
+    mergers.append("hoot::NetworkMergerCreator");
+    conf().set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
+    OptionsValidator::fixMisc();
+    HOOT_STR_EQUALS(
+      "hoot::HighwayExpertClassifier", conf().get("conflate.match.highway.classifier"));
+
+    matchers.clear();
+    matchers.append("hoot::NetworkMatchCreator");
+    mergers.clear();
+    mergers.append("hoot::NetworkMergerCreator");
+    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
+    OptionsValidator::fixMisc();
+    HOOT_STR_EQUALS(
+      "hoot::HighwayExpertClassifier", conf().get("conflate.match.highway.classifier"));
+
+    matchers.clear();
+    matchers.append("hoot::HighwayMatchCreator");
+    mergers.clear();
+    mergers.append("hoot::HighwayMergerCreator");
+    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
+    OptionsValidator::fixMisc();
+    HOOT_STR_EQUALS(
+      "hoot::HighwayRfClassifier", conf().get("conflate.match.highway.classifier"));
+
+    matchers.clear();
+    matchers.append("hoot::HighwayMatchCreator");
+    mergers.clear();
+    mergers.append("hoot::HighwayMergerCreator");
+    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
+    OptionsValidator::fixMisc();
+    HOOT_STR_EQUALS(
+      "hoot::HighwayRfClassifier", conf().get("conflate.match.highway.classifier"));
   }
 };
 
