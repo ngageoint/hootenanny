@@ -33,6 +33,7 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/TagAdvancedCriterion.h>
+#include <hoot/core/conflate/matching/OptionsValidator.h>
 
 //Qt
 #include <QString>
@@ -167,87 +168,6 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
   }
 }
 
-void MatchFactory::_tempFixDefaults()
-{
-  QStringList matchCreators = ConfigOptions().getMatchCreators();
-  QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VART(matchCreators);
-  LOG_VART(mergerCreators);
-
-  if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
-  {
-    LOG_WARN("Match or merger creators empty.  Setting to defaults.");
-    matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();
-    mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue();
-  }
-
-  //fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972
-  if (matchCreators.size() != mergerCreators.size())
-  {
-    //going to make the mergers match whatever the matchers are
-    QStringList fixedMergerCreators;
-    for (int i = 0; i < matchCreators.size(); i++)
-    {
-      const QString matchCreator = matchCreators.at(i);
-      if (matchCreator == "hoot::BuildingMatchCreator")
-      {
-        fixedMergerCreators.append("hoot::BuildingMergerCreator");
-      }
-      else if (matchCreator.contains("hoot::ScriptMatchCreator"))
-      {
-        fixedMergerCreators.append("hoot::ScriptMergerCreator");
-      }
-      else if (matchCreator == "hoot::HighwayMatchCreator")
-      {
-        fixedMergerCreators.append("hoot::HighwayMergerCreator");
-      }
-      else if (matchCreator == "hoot::NetworkMatchCreator")
-      {
-        fixedMergerCreators.append("hoot::NetworkMergerCreator");
-      }
-      else if (matchCreator == "hoot::PoiPolygonMatchCreator")
-      {
-        fixedMergerCreators.append("hoot::PoiPolygonMergerCreator");
-      }
-    }
-    LOG_TRACE("Temp fixing merger.creators...");
-    conf().set("merger.creators", fixedMergerCreators.join(";"));
-  }
-  LOG_VART(mergerCreators);
-
-  //fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
-  if (matchCreators.contains("hoot::NetworkMatchCreator") &&
-      ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
-      ConfigOptions().getWaySublineMatcher() != "hoot::MaximalSublineMatcher")
-  {
-    LOG_TRACE("Temp fixing way.subline.matcher...");
-    conf().set("way.subline.matcher", "hoot::MaximalSublineMatcher");
-  }
-  else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
-           ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
-           ConfigOptions().getWaySublineMatcher() != "hoot::MaximalNearestSublineMatcher")
-  {
-    LOG_TRACE("Temp fixing way.subline.matcher...");
-    conf().set("way.subline.matcher", "hoot::MaximalNearestSublineMatcher");
-  }
-  LOG_VART(ConfigOptions().getWaySublineMatcher());
-
-  //fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
-  if (matchCreators.contains("hoot::NetworkMatchCreator") &&
-      ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayExpertClassifier")
-  {
-    LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
-  }
-  else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
-           ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayRfClassifier")
-  {
-    LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
-  }
-  LOG_VART(ConfigOptions().getConflateMatchHighwayClassifier());
-}
-
 void MatchFactory::setConfiguration(const Settings& s)
 {
   _tagFilter = ConfigOptions(s).getConflateTagFilter();
@@ -255,49 +175,22 @@ void MatchFactory::setConfiguration(const Settings& s)
 
 MatchFactory& MatchFactory::getInstance()
 {
-  /* TODO: remove this hack after the following UI issues are fixed:
-   *
-   * https://github.com/ngageoint/hootenanny-ui/issues/969
-   * https://github.com/ngageoint/hootenanny-ui/issues/970
-   * https://github.com/ngageoint/hootenanny-ui/issues/971
-   * https://github.com/ngageoint/hootenanny-ui/issues/972
-   *
-   * UPDATE: 8/21/19 - Believe the above issues should all have been fixed in v2 version of the UI.
-   * So, maybe replace these fixes with error checking and throw exceptions when bad inputs come in.
-   * */
   if (ConfigOptions().getAutocorrectOptions())
   {
-    MatchFactory::_tempFixDefaults();
+    /* TODO: remove this hack after UI issues are fixed; see OptionsValidator
+     *
+     * UPDATE: 4/3/20 - Initially thought the above issues should all have been fixed in v2 version
+     * of the UI but apparently not. So, keep this in for now.
+     * */
+    OptionsValidator::fixMisc();
+
+    // Think we may either want to keep this around or throw exceptions with the checks instead.
+    OptionsValidator::fixGenericMatcherOrdering();
   }
 
-  const QStringList matchCreators = ConfigOptions().getMatchCreators();
-  const QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VART(matchCreators);
-  LOG_VART(mergerCreators);
-
-  if (matchCreators.size() != mergerCreators.size())
-  {
-    throw HootException(
-      "The number of configured match creators (" + QString::number(matchCreators.size()) +
-      ") does not equal the number of configured merger creators (" +
-      QString::number(mergerCreators.size()) + ")");
-  }
-
-  for (int i = 0; i < matchCreators.size(); i++)
-  {
-    const QString matchCreator = matchCreators.at(i);
-    const QString mergerCreator = mergerCreators.at(i);
-    //Currently, there is only one kind of ScriptMergerCreator, so this check is useful for finding
-    //misuses of the generic conflation engine.  If we add any more script merger creators, we'll
-    //need a better check.
-    if (matchCreator.startsWith("hoot::ScriptMatchCreator") &&
-        mergerCreator != "hoot::ScriptMergerCreator")
-    {
-      throw HootException(
-        "Attempted to use a ScriptMatchCreator without a ScriptMergerCreator.  Match creator: " +
-        matchCreator + QString(" Merger creator: ")  + mergerCreator);
-    }
-  }
+  // keep this outside of _tempFixDefaults, since it needs to be checked from the command line as
+  // well
+  OptionsValidator::validateMatchers();
 
   if (!_theInstance.get())
   {
@@ -307,7 +200,7 @@ MatchFactory& MatchFactory::getInstance()
   if (_theInstance->_creators.size() == 0)
   {
     //only get the match creators that are specified in the config
-    _setMatchCreators(matchCreators);
+    _setMatchCreators(ConfigOptions().getMatchCreators());
   }
   return *_theInstance;
 }
