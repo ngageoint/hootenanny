@@ -132,6 +132,7 @@ bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
   //  Upload changeset 1
   else if (headers.find(QString(OsmApiEndpoints::API_PATH_UPLOAD_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
+    std::lock_guard<std::mutex> lock(_errorMutex);
     //  The first time through, the 'version' of element 1 should fail.
     if (!_has_error)
     {
@@ -216,9 +217,9 @@ bool ChangesetCreateFailureTestServer::respond(HttpConnection::HttpConnectionPtr
     response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
   else if (headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
   {
-    static int count = 0;
+    std::lock_guard<std::mutex> lock(_responseMutex);
     response.reset(new HttpResponse(HttpResponseCode::HTTP_UNAUTHORIZED, "User is not authorized"));
-    if (++count >= 3)
+    if (++_responseCount >= 3)
       continue_processing = false;
   }
   else

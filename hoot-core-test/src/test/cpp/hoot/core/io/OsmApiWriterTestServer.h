@@ -30,6 +30,8 @@
 
 #include <hoot/core/util/HttpTestServer.h>
 
+#include <mutex>
+
 namespace hoot
 {
 
@@ -97,6 +99,7 @@ protected:
 private:
   /** Flag set to false until the first changeset has failed once */
   bool _has_error;
+  std::mutex _errorMutex;
 };
 
 class ChangesetOutputTestServer : public HttpTestServer
@@ -134,6 +137,10 @@ protected:
    *   - Changeset Create Failure x6
    */
   bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+private:
+  /** Number of invalid changeset create responses sent */
+  int _responseCount = 0;
+  std::mutex _responseMutex;
 };
 
 class OsmApiSampleRequestResponse

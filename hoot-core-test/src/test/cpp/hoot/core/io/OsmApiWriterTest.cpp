@@ -453,7 +453,6 @@ public:
 
     Settings s;
     s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
-    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 2);
     writer.setConfiguration(s);
     writer.apply();
 
