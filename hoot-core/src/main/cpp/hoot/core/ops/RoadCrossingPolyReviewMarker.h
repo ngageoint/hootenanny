@@ -56,7 +56,7 @@ public:
   /**
    * @see ConstOsmMapOperation
    */
-  void apply(const OsmMapPtr& map);
+  void apply(const OsmMapPtr& map) override;
 
   /**
    * @see Configurable
