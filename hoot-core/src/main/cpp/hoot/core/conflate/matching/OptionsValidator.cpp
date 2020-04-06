@@ -36,14 +36,14 @@ namespace hoot
 
 bool OptionsValidator::_isGenericMatcher(const QString& matcher)
 {
-  // obviously this isn't extensible, but we'll just have to deal with that for now...probably not
-  // going to change for awhile, though
+  // obviously this isn't extensible, but we'll just have to deal with that for now...the list may
+  // never change, though
   QStringList genericMatchScripts;
-  genericMatchScripts.append("Line.js");
   genericMatchScripts.append("Point.js");
+  genericMatchScripts.append("Line.js");
   genericMatchScripts.append("Polygon.js");
   genericMatchScripts.append("PointPolygon.js");
-  return StringUtils::containsAny(genericMatchScripts, QStringList(matcher));
+  return StringUtils::containsSubstrings(QStringList(matcher), genericMatchScripts);
 }
 
 bool OptionsValidator::_containsGenericMatcher(const QStringList& matchers)
@@ -60,6 +60,8 @@ bool OptionsValidator::_containsGenericMatcher(const QStringList& matchers)
 
 void OptionsValidator::fixMisc()
 {
+  LOG_DEBUG("Fixing miscellaneous...");
+
   QStringList matchCreators = ConfigOptions().getMatchCreators();
   QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VART(matchCreators);
@@ -72,6 +74,8 @@ void OptionsValidator::fixMisc()
     mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue();
   }
 
+  // We could also do something here even when the sizes are equal but not doing that yet, since
+  // the issue should be fixed in the UI soon.
   if (matchCreators.size() != mergerCreators.size())
   {
     //going to make the mergers match whatever the matchers are
@@ -102,6 +106,8 @@ void OptionsValidator::fixMisc()
     }
     conf().set("merger.creators", fixedMergerCreators.join(";"));
   }
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
 
   //fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
@@ -138,6 +144,14 @@ void OptionsValidator::fixMisc()
 
 void OptionsValidator::fixGenericMatcherOrdering()
 {
+  LOG_DEBUG("Fixing generic matcher ordering...");
+
+  QStringList matchCreators = ConfigOptions().getMatchCreators();
+  QStringList mergerCreators = ConfigOptions().getMergerCreators();
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
+  assert(matchCreators.size() == mergerCreators.size());
+
   // fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972,
   // https://github.com/ngageoint/hootenanny-ui/issues/1764
 
@@ -149,43 +163,69 @@ void OptionsValidator::fixGenericMatcherOrdering()
   {
     QStringList fixedMatchCreators = matchCreators;
     QStringList fixedMergerCreators = mergerCreators;
+    LOG_VART(fixedMatchCreators);
+    LOG_VART(fixedMergerCreators);
     for (int i = 0; i < matchCreators.size(); i++)
     {
       const QString matchCreator = matchCreators.at(i);
+      LOG_VART(matchCreator);
       if (_isGenericMatcher(matchCreator))
       {
-        fixedMatchCreators.move(i, fixedMatchCreators.size() - 1);
-        fixedMergerCreators.move(i, fixedMergerCreators.size() - 1);
-      }
+        LOG_VART(i);
+        const int fixedCreatorIndex = fixedMatchCreators.indexOf(matchCreator);
+        LOG_VART(fixedCreatorIndex);
+        fixedMatchCreators.move(fixedCreatorIndex, fixedMatchCreators.size() - 1);
+        fixedMergerCreators.move(fixedCreatorIndex, fixedMergerCreators.size() - 1);
+        LOG_VART(fixedMatchCreators);
+        LOG_VART(fixedMergerCreators);
+      }  
     }
     conf().set("match.creators", fixedMatchCreators.join(";"));
     conf().set("merger.creators", fixedMergerCreators.join(";"));
     matchCreators = ConfigOptions().getMatchCreators();
-    mergerCreators = ConfigOptions().getMergerCreators();
+    mergerCreators = ConfigOptions().getMergerCreators();  
   }
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
+
   // now move CollectionRelation.js
   const QString collectionRelationScript = "CollectionRelation.js";
-  if (StringUtils::containsAny(matchCreators, QStringList(collectionRelationScript)))
+  if (StringUtils::containsSubstring(matchCreators, collectionRelationScript))
   {
-    const int collectionRelationIndex = matchCreators.indexOf(collectionRelationScript);
-    matchCreators.move(collectionRelationIndex, matchCreators.size() - 1);
-    mergerCreators.move(collectionRelationIndex, mergerCreators.size() - 1);
-    matchCreators = ConfigOptions().getMatchCreators();
-    mergerCreators = ConfigOptions().getMergerCreators();
+    const int collectionRelationIndex =
+      StringUtils::indexOfSubstring(matchCreators, collectionRelationScript);
+    LOG_VART(collectionRelationIndex);
+    if (collectionRelationIndex < (matchCreators.size() - 1))
+    {
+      matchCreators.move(collectionRelationIndex, matchCreators.size() - 1);
+      mergerCreators.move(collectionRelationIndex, mergerCreators.size() - 1);
+      conf().set("match.creators", matchCreators.join(";"));
+      conf().set("merger.creators", mergerCreators.join(";"));
+      LOG_VART(matchCreators);
+      LOG_VART(mergerCreators);
+    }
   }
-
+  LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
 }
 
 void OptionsValidator::validateMatchers()
 {
+  LOG_DEBUG("Validating matchers...");
+
   const QStringList matchCreators = ConfigOptions().getMatchCreators();
   const QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
 
-  if (matchCreators.size() != mergerCreators.size())
+  if (matchCreators.isEmpty() || mergerCreators.isEmpty())
   {
+    // This gets temp fixed in fixMisc, if needed.
+    throw IllegalArgumentException("Empty matcher or merger list specified.");
+  }
+  else if (matchCreators.size() != mergerCreators.size())
+  {
+    // This gets temp fixed in fixMisc, if needed.
     throw HootException(
       "The number of configured match creators (" + QString::number(matchCreators.size()) +
       ") does not equal the number of configured merger creators (" +

@@ -185,6 +185,30 @@ bool StringUtils::containsSubstring(const QStringList& input, const QString& sub
   return input.filter(substring, Qt::CaseInsensitive).size() > 0;
 }
 
+bool StringUtils::containsSubstrings(const QStringList& input, const QStringList& substrings)
+{
+  for (int i = 0; i < substrings.size(); i++)
+  {
+    if (input.filter(substrings.at(i), Qt::CaseInsensitive).size() > 0)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+int StringUtils::indexOfSubstring(const QStringList& input, const QString& substring)
+{
+  for (int i = 0; i < input.size(); i++)
+  {
+    if (input.at(i).contains(substring))
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
 void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
 {
   for (int i = 0; i < toRemove.size(); i++)

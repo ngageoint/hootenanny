@@ -147,6 +147,25 @@ public:
   static bool containsSubstring(const QStringList& input, const QString& substring);
 
   /**
+   * Determines whether any string in a list of strings contains a substring
+   *
+   * @param input a list of strings to examine
+   * @param substrings a list of substrings to search for
+   * @return true if any string in the input list contains any string in the given substrings;
+   * false otherwise
+   */
+  static bool containsSubstrings(const QStringList& input, const QStringList& substrings);
+
+  /**
+   * Returns the first index of a substring in a collection of input strings
+   *
+   * @param input a list of strings to examine
+   * @param substring the substring to search for
+   * @return an index if the substring in the input list is found; -1 otherwise
+   */
+  static int indexOfSubstring(const QStringList& input, const QString& substring);
+
+  /**
    * Removes all strings in a specified list from another string list
    *
    * @param input the list to remove strings from
