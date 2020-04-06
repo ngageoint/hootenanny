@@ -67,7 +67,6 @@ public:
 
 private:
 
-  //int _numMultilineStringRelations;
   int _taskStatusUpdateInterval;
 };
 

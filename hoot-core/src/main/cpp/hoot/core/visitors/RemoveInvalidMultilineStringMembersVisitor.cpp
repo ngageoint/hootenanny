@@ -41,7 +41,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidMultilineStringMembersVisitor)
 
 RemoveInvalidMultilineStringMembersVisitor::RemoveInvalidMultilineStringMembersVisitor() :
-//_numMultilineStringRelations(0),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
@@ -153,8 +152,6 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
       RemoveRelationByEid::removeRelation(map, r->getId());
       _numAffected++;
     }
-
-    //_numMultilineStringRelations++;
   }
 
   _numProcessed++;
