@@ -197,7 +197,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
       PROGRESS_DEBUG(
         "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
         " match candidates / " << StringUtils::formatLargeNumber(_map->getNodeCount()) <<
-        " total nodes.");
+        " nodes.");
     }
   }
 

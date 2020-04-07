@@ -74,18 +74,21 @@ _idSwap(new IdSwap())
   _index.reset(new OsmMapIndex(*this));
   _srs = _wgs84;
   _initCounters();
+  _enableProgressLogging = true;
 }
 
 OsmMap::OsmMap(const ConstOsmMapPtr& map)
 {
   _copy(map);
   _initCounters();
+  _enableProgressLogging = true;
 }
 
 OsmMap::OsmMap(const OsmMapPtr& map)
 {
   _copy(map);
   _initCounters();
+  _enableProgressLogging = true;
 }
 
 OsmMap::OsmMap(const std::shared_ptr<OGRSpatialReference>& srs) :
@@ -95,6 +98,7 @@ _idSwap(new IdSwap())
   _index.reset(new OsmMapIndex(*this));
   _srs = srs;
   _initCounters();
+  _enableProgressLogging = true;
 }
 
 OsmMap::OsmMap(const ConstOsmMapPtr& map, const std::shared_ptr<OGRSpatialReference>& srs)
@@ -102,6 +106,7 @@ OsmMap::OsmMap(const ConstOsmMapPtr& map, const std::shared_ptr<OGRSpatialRefere
   _copy(map);
   _srs = srs;
   _initCounters();
+  _enableProgressLogging = true;
 }
 
 OsmMap::~OsmMap()
@@ -747,7 +752,7 @@ void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -776,7 +781,7 @@ void OsmMap::visitWaysRo(ConstElementVisitor& visitor) const
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -805,7 +810,7 @@ void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -834,7 +839,7 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -853,7 +858,7 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -872,7 +877,7 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -901,7 +906,7 @@ void OsmMap::visitRw(ElementVisitor& visitor)
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -920,7 +925,7 @@ void OsmMap::visitRw(ElementVisitor& visitor)
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -939,7 +944,7 @@ void OsmMap::visitRw(ElementVisitor& visitor)
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -968,7 +973,7 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -997,7 +1002,7 @@ void OsmMap::visitWaysRw(ElementVisitor& visitor)
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -1026,7 +1031,7 @@ void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
@@ -1055,7 +1060,7 @@ void OsmMap::visitRelationsRw(ElementVisitor& visitor)
     }
 
     numVisited++;
-    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<

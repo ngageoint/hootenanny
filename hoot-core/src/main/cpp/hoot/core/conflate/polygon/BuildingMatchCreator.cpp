@@ -216,8 +216,9 @@ public:
       {
         PROGRESS_DEBUG(
           "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
-          " match candidates / " << StringUtils::formatLargeNumber(_map->getElementCount()) <<
-          " total elements.");
+          " match candidates / " <<
+          StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
+          " elements.");
       }
     }
 
@@ -226,7 +227,8 @@ public:
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
-        StringUtils::formatLargeNumber(_map->getElementCount()) << " elements.");
+        StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
+        " elements.");
     }
   }
 

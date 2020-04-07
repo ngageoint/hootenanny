@@ -32,6 +32,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/WayJoiner.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -58,7 +59,7 @@ public:
   { return "Rejoining ways split during conflation..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Rejoined " + QString::number(_numAffected) + " ways"; }
+  { return "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " ways"; }
 
   /**
    * @see FilteredByCriteria

@@ -234,17 +234,20 @@ public:
       if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
       {
         PROGRESS_DEBUG(
-          "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
-          _map->getElementCount() << " total elements.");
+          "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+          " match candidates / " <<
+          StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
+          " elements.");
       }
     }
 
     _numElementsVisited++;
-    if (_numElementsVisited % (_taskStatusUpdateInterval * 10) == 0)
+    if (_numElementsVisited % (_taskStatusUpdateInterval /* 10*/) == 0)
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
-        StringUtils::formatLargeNumber(_map->getElementCount()) << " elements.");
+        StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
+        " elements.");
     }
   }
 

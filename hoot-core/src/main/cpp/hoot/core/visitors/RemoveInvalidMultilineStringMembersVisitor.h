@@ -28,7 +28,9 @@
 #define REMOVEINVALIDMULTILINESTRINGMEMBERSVISITOR_H
 
 //  hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -53,12 +55,19 @@ public:
 
   // finish; wasn't obvious how to count the total affected - #2933
   virtual QString getCompletedStatusMessage() const
-  { return ""; }
+  {
+    return
+      "\tRemoved " + StringUtils::formatLargeNumber(_numAffected) + " invalid relations / " +
+      StringUtils::formatLargeNumber(_map->getRelationCount()) + " total relations."; }
 
   virtual QString getDescription() const
   { return "Removes invalid multiline string relation members"; }
 
   virtual std::string getClassName() const { return className(); }
+
+private:
+
+  int _taskStatusUpdateInterval;
 };
 
 }
