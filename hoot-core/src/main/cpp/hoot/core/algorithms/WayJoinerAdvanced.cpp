@@ -43,6 +43,7 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/StringUtils.h>
 
 #include <unordered_set>
 #include <vector>
@@ -84,6 +85,7 @@ void WayJoinerAdvanced::_joinParentChild()
   LOG_INFO("\tJoining parent ways to children...");
 
   WayMap ways = _map->getWays();
+  _totalWays = ways.size();
   vector<long> ids;
   //  Find all ways that have a split parent id
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
@@ -141,6 +143,13 @@ void WayJoinerAdvanced::_joinParentChild()
       //  Join this way to the parent
       _callingMethod = "_joinParentChild";
       _joinWays(parent, way);
+    }
+
+    if (_numProcessed % (_taskStatusUpdateInterval / 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
+        StringUtils::formatLargeNumber(_totalWays) << " total ways.");
     }
   }
 }
@@ -264,6 +273,13 @@ void WayJoinerAdvanced::_joinAtNode()
             }
           }
         }
+      }
+
+      if (_numProcessed % (_taskStatusUpdateInterval / 10) == 0)
+      {
+        PROGRESS_INFO(
+          "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
+          StringUtils::formatLargeNumber(_totalWays) << " total ways.");
       }
     }
     numIterations++;
@@ -423,6 +439,8 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
 
 bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
 {
+  _numProcessed++;
+
   if (!parent || !child)
     return false;
 
@@ -673,6 +691,13 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
           }
         }
       }
+    }
+
+    if (_numProcessed % (_taskStatusUpdateInterval / 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
+        StringUtils::formatLargeNumber(_totalWays) << " total ways.");
     }
   }
   LOG_TRACE(
