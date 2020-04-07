@@ -44,6 +44,7 @@
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/RoundaboutCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
@@ -130,18 +131,18 @@ void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterCl
       else
       {
         _geometryTypeFilters[filter->getGeometryType()] =
-          std::shared_ptr<OrCriterion>(new OrCriterion(currentFilter, filter));
+          OrCriterionPtr(new OrCriterion(currentFilter, filter));
       }
 
       if (filter->getGeometryType() == GeometryTypeCriterion::GeometryType::Line)
       {
         _linearFilterClassNames.append(filterClassName);
-      }
-    }
+      } 
+    } 
   }
 
-  // TODO: have to call this method to keep filtering from erroring...shouldn't have to...should
-  // init itself internally when no geometry filters are specified
+  // have to call this method to keep filtering from erroring...shouldn't have to...should just init
+  // itself internally when no geometry filters are specified
   LOG_VART(_geometryTypeFilters.size());
   if (_geometryTypeFilters.isEmpty())
   {
@@ -601,9 +602,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
 void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
 {
-  //SuperfluousWayRemover::removeWays(map);
-  //SuperfluousNodeRemover::removeNodes(map);
-
   // This will handle removing refs in relation members we've cropped out.
   RemoveMissingElementsVisitor missingElementsRemover;
   LOG_STATUS("\t" << missingElementsRemover.getInitStatusMessage());
@@ -671,32 +669,128 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   return featureFilters;
 }
 
+bool ChangesetReplacementCreator::_roadFilterExists() const
+{
+  ElementCriterionPtr lineFilter = _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line];
+  if (lineFilter)
+  {
+    return
+      lineFilter->toString()
+        .contains(QString::fromStdString(HighwayCriterion::className()).remove("hoot::"));
+  }
+  return false;
+}
+
 QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   ChangesetReplacementCreator::_getCombinedFilters(
     std::shared_ptr<ChainCriterion> nonGeometryFilter)
 {
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> combinedFilters;
   LOG_VART(nonGeometryFilter.get());
+  // TODO: may be able to consolidate this duplicated filter handling code inside the if/else
   if (nonGeometryFilter)
   {
     for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
          _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
     {
-      combinedFilters[itr.key()] =
-        std::shared_ptr<ChainCriterion>(new ChainCriterion(itr.value(), nonGeometryFilter));
-      LOG_TRACE("New combined filter: " << combinedFilters[itr.key()]->toString());
+      GeometryTypeCriterion::GeometryType geomType = itr.key();
+      LOG_VART(GeometryTypeCriterion::typeToString(geomType));
+      ElementCriterionPtr geometryCrit = itr.value();
+
+      // Roundabouts are classified in hoot as a poly type due to being closed ways. We want to
+      // make sure they get procesed with the linear features, however, and not with the polys. If
+      // they don't, they won't get snapped back to other roads in the output. So if roads were part
+      // of the specified geometry filter, we'll move roundabouts from the poly to the linear
+      // filter. If no roads were specified in the geometry filter, then roads have been explicitly
+      // excluded and we do nothing here. So far this is the only instance where a geometry
+      // re-classification for a feature is necessary. If other instances of this occur things could
+      // get messy really quick, but we'll only worry about that if it actually happens.
+
+      ElementCriterionPtr updatedGeometryCrit;
+      LOG_VART(_roadFilterExists());
+      if (_roadFilterExists())
+      {
+        if (geomType == GeometryTypeCriterion::GeometryType::Line)
+        {
+          LOG_TRACE("Adding roundabouts to line filter due to presence of road filter...");
+          updatedGeometryCrit.reset(
+            new OrCriterion(
+              geometryCrit, std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())));
+        }
+        else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
+        {
+          LOG_TRACE("Removing roundabouts from polygon filter due to presence of road filter...");
+          updatedGeometryCrit.reset(
+            new ChainCriterion(
+              geometryCrit,
+              NotCriterionPtr(
+                new NotCriterion(
+                  std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())))));
+        }
+      }
+      else
+      {
+        updatedGeometryCrit = geometryCrit;
+      }
+      LOG_VART(updatedGeometryCrit->toString());
+
+      combinedFilters[geomType] =
+        ChainCriterionPtr(new ChainCriterion(updatedGeometryCrit, nonGeometryFilter));
+      LOG_TRACE("New combined filter: " << combinedFilters[geomType]->toString());
     }
   }
   else
   {
+    LOG_VART(_geometryTypeFilters.size());
     if (_geometryTypeFilters.isEmpty())
     {
       _geometryTypeFilters = _getDefaultGeometryFilters();
+      // It should be ok that the roundabout filter doesn't get added here, since this list is only
+      // for by unconnected way snapping and roundabouts don't fall into that category.
       _linearFilterClassNames =
         ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
           GeometryTypeCriterion::GeometryType::Line);
     }
-    combinedFilters = _geometryTypeFilters;
+
+    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
+         _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
+    {
+      GeometryTypeCriterion::GeometryType geomType = itr.key();
+      LOG_VART(GeometryTypeCriterion::typeToString(geomType));
+      ElementCriterionPtr geometryCrit = itr.value();
+
+      // See roundabouts handling not in the preceding if statement for more detail. Here we're
+      // doing the same thing, except we don't care if a road filter was specified or not since this
+      // block of code only gets executed if no geometry filters were specified at all and we're
+      // using the defaults.
+
+      ElementCriterionPtr updatedGeometryCrit;
+      if (geomType == GeometryTypeCriterion::GeometryType::Line)
+      {
+        LOG_TRACE("Adding roundabouts to line filter...");
+        updatedGeometryCrit.reset(
+          new OrCriterion(
+            geometryCrit, std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())));
+      }
+      else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
+      {
+        LOG_TRACE("Removing roundabouts from polygon filter...");
+        updatedGeometryCrit.reset(
+          new ChainCriterion(
+            geometryCrit,
+            NotCriterionPtr(
+              new NotCriterion(
+                std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())))));
+      }
+      else
+      {
+        updatedGeometryCrit = geometryCrit;
+      }
+      LOG_VART(updatedGeometryCrit->toString());
+
+      combinedFilters[geomType] = updatedGeometryCrit;
+      LOG_TRACE("New combined filter: " << combinedFilters[geomType]->toString());
+    }
   }
   LOG_VART(combinedFilters.size());
   return combinedFilters;
@@ -1000,6 +1094,8 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
     conf().set(ConfigOptions::getWayJoinerKey(), WayJoinerBasic::className());
   }
   conf().set(ConfigOptions::getWayJoinerAdvancedStrictNameMatchKey(), !_isNetworkConflate());
+
+  // TODO: filter out ops here based on the geometry type being processed - #3954
 
   NamedOp preOps(ConfigOptions().getConflatePreOps());
   preOps.apply(map);
