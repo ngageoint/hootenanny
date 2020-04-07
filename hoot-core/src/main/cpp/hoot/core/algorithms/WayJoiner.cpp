@@ -329,10 +329,6 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (!parent || !child)
     return false;
 
-  //  Don't join area ways
-  AreaCriterion areaCrit;
-  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
-    return false;
   //  Check if the two ways are able to be joined back up
   vector<long> child_nodes = child->getNodeIds();
   vector<long> parent_nodes = parent->getNodeIds();
@@ -346,6 +342,11 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   else if (child_nodes[child_nodes.size() - 1] == parent_nodes[0])
     parentFirst = false;
   else
+    return false;
+  // Don't join area ways; moved this to here, as its a little more expensive than the calcs done
+  // above
+  AreaCriterion areaCrit;
+  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
     return false;
   //  Remove the split parent id
   child->resetPid();
