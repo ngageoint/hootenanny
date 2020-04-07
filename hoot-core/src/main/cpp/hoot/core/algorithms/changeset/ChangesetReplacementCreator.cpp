@@ -759,7 +759,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
       LOG_VART(GeometryTypeCriterion::typeToString(geomType));
       ElementCriterionPtr geometryCrit = itr.value();
 
-      // See roundabouts handling not in the preceding if statement for more detail. Here we're
+      // See roundabouts handling note in the preceding if statement for more detail. Here we're
       // doing the same thing, except we don't care if a road filter was specified or not since this
       // block of code only gets executed if no geometry filters were specified at all and we're
       // using the defaults.
