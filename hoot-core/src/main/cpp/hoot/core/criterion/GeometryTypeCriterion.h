@@ -82,6 +82,8 @@ public:
   static GeometryType typeFromString(const QString& geometryTypeStr);
 };
 
+typedef std::shared_ptr<GeometryTypeCriterion> GeometryTypeCriterionPtr;
+
 }
 
 #endif // GEOMETRY_TYPE_CRITERION_H

@@ -48,12 +48,12 @@ You can create your own custom conflation routines for additional feature types 
 # [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) Workflows
 
 A conflation workflow defines the manner in which two maps are merged together. Hootenanny has the following workflows:
-* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** **(default)** - _Keep the best of both_ - Conflate the best geometry and tag parts of map B into map A, favoring map A's data. Use this type of conflation when you want conflated output based on the best state of both input datasets.
+* **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to geometries_ - Conflate map A with B where only tags are transferred from B to matching features in A and no changes are made to A's geometries. Use this type of conflation when the first dataset's geometry is superior to a second dataset, but the attributes of the second dataset are superior to that of the first dataset.
+* **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Add new features_ - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A. Use this type of conflation when you want to fill holes in your dataset with data from another source without modifying any of the data in the first dataset.
+* **[Differential Conflation With Tags](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Add new features and new attributes to existing features_ - This workflow is the same as Differential Conflation with the added step of transferring tags to existing features in map A from matching features in map B. Use this type of conflation when you want to fill holes in your dataset with data from another source without modifying geometries in your original data but possibly modifying its tags.
 * **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - _Replace a section_ - Either 1) Define a region in map A and replace data in that region with data in the same region from map B OR 2) Define a region in map A to preserve and replace data outside of it with data outside of the region from map B. Use this type of conflation if you have a specific region of your dataset that you would like to replace with data from another dataset or you would like to surround your dataset
 with new data.
-* **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Add new features_ - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A. Use this type of conflation when you want to fill holes in your dataset with data from another source without modifying any of the data in the first dataset.
-* **[Differential Conflation With Tags](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Add new features and new tags to existing features_ - This workflow is the same as Differential Conflation with the added step of transferring tags to existing features in map A from matching features in map B. Use this type of conflation when you want to fill holes in your dataset with data from another source without modifying geometries in your original data but possibly modifying its tags.
-* **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to geometries_ - Conflate map A with B where only tags are transferred from B to matching features in A and no changes are made to A's geometries. Use this type of conflation when the first dataset's geometry is superior to a second dataset, but the attributes of the second dataset are superior to that of the first dataset.
+* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** **(default)** - _Keep the best of both_ - Conflate the best geometry and tag parts of map B into map A, favoring map A's data. Use this type of conflation when you want conflated output based on the best state of both input datasets.
 
 # [Conflation Algorithms](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)
 
@@ -69,12 +69,12 @@ Users can define their own [custom schema translations](https://github.com/ngage
 
 # Feature Validation and Cleaning
 
-Hootenanny has a variety of map cleaning capabilities to automatically correct erroneous data (some of these are automatically during a conflation job). In addition to its own built-in cleaning operations, Hootenanny is also integrated with the feature cleaning capabilities of [JOSM](https://josm.openstreetmap.de/). 
+Hootenanny has a variety of map cleaning capabilities to automatically correct erroneous data (some of these are automatically invoked during a conflation job). In addition to its own built-in cleaning operations, Hootenanny is also integrated with the feature cleaning capabilities of [JOSM](https://josm.openstreetmap.de/). 
 
 For situations in which you want feature
-validation only and no cleaning of data, JOSM validation may be used by itself (Hootenanny does no validation). More [information](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc) on Hootenanny validation and cleaning.
+validation only and no cleaning of data, JOSM validation alone may be used within Hootenanny (Hootenanny does no validation itself). More [information](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc) on Hootenanny validation and cleaning.
 
-**NOTE:** As of 3/19/20 the integration with JOSM is only available in the Vagrant version of Hootenanny. It will be added to the RPM version of Hootenanny at a later date.
+**NOTE:** As of 3/19/20 the cleaning/validation integration with JOSM is only available in the Vagrant version of Hootenanny. It will be added to the RPM version of Hootenanny at a later date.
 
 # Feature Filtering
 
@@ -159,7 +159,7 @@ In addition to running conflation jobs with map data, Hootenanny also provides f
 * [Simplify ways](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#simplify-ways-in-a-map-by-removing-unnecessary-nodes-from-them) by removing unnecessary nodes
 * [Snap unconnected ways](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SnapUnconnectedWays.asciidoc) to neighboring ways by type
 * [Process map postal address data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/PostalAddressUtilities.asciidoc)
-* [Replace OpenStreetMap data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive-replacment.asciidoc) completely within a bounding box
+* [Replace data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive-replacment.asciidoc) completely within a bounding box
 * [Sort map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc)
 * [Translate feature tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny#tag-schemas)
 * [Translate feature tags to English](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc)
