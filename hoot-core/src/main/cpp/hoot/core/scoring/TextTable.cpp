@@ -36,6 +36,10 @@
 // Standard
 #include <algorithm>
 
+// Boost
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
 namespace hoot
 {
 using namespace std;
@@ -106,6 +110,35 @@ QString TextTable::toWikiString()
   }
 
   return result;
+}
+
+QString TextTable::toJsonString()
+{
+  const QStringList rows = _calculateRows();
+  const QStringList cols = _calculateColumns();
+
+  boost::property_tree::ptree result;
+
+  for (int i = 0; i < rows.size(); i++)
+  {
+    LOG_VART(rows[i]);
+
+    boost::property_tree::ptree children;
+    for (int j = 0; j < cols.size(); j++)
+    {
+      LOG_VART(cols[j]);
+      LOG_VART(_data[rows[i]][cols[j]].toString());
+
+      boost::property_tree::ptree child;
+      child.put(cols[j].toStdString(), _data[rows[i]][cols[j]].toString().toStdString());
+      children.push_back(std::make_pair("", child));
+    }
+    result.add_child(rows[i].toStdString(), children);
+  }
+
+  std::stringstream stringStrm;
+  boost::property_tree::json_parser::write_json(stringStrm, result);
+  return QString::fromStdString(stringStrm.str());
 }
 
 }

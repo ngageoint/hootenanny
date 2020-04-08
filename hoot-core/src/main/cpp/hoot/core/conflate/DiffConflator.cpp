@@ -57,9 +57,9 @@
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
-#include <hoot/core/io/OsmChangesetFileWriter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
 
 // standard
 #include <algorithm>
@@ -125,6 +125,9 @@ void DiffConflator::apply(OsmMapPtr& map)
   _reset();
   int currentStep = 1;  // tracks the current job task step for progress reporting
   _numSnappedWays = 0;
+  _geometryChangesetStats = "";
+  _tagChangesetStats = "";
+  _unifiedChangesetStats = "";
 
   // Store the map - we might need it for tag diff later.
   _pMap = map;
@@ -364,9 +367,9 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
     else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
     {
       // Diff conflation w/ tags doesn't handle relations. Changed this to log that the relations
-      // are being skipped for now. #3449 was created to deal with adding relation support and then
-      // closed since we lack a use case currently that requires it. If we ever get one, then we
-      // can re-open that issue.
+      // are being skipped for now. #3449 was originally created to deal with adding relation
+      // support and then closed since we lack a use case currently that requires it. If we ever
+      // get one, then we can re-open that issue.
 
       LOG_DEBUG("Relation handling not implemented with differential conflation: " << c);
       if (Log::getInstance().getLevel() <= Log::Trace)
@@ -571,8 +574,9 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
   }
 }
 
-void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput,
-                                   const QString& osmApiDbUrl)
+void DiffConflator::writeChangeset(
+  OsmMapPtr pResultMap, QString& output, bool separateOutput,
+  const ChangesetStatsFormat& statsFormat, const QString& osmApiDbUrl)
 {
   if (output.endsWith(".osc.sql") && osmApiDbUrl.trimmed().isEmpty())
   {
@@ -606,12 +610,20 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
     // only one changeset to write
     LOG_DEBUG("Writing single changeset...");
     writer->write(output, pGeoChanges);
+    if (statsFormat != ChangesetStatsFormat::Unknown)
+    {
+      _geometryChangesetStats = writer->getStatsTable(statsFormat);
+    }
   }
   else if (separateOutput)
   {
     // write two changesets
     LOG_DEBUG("Writing separate changesets...");
     writer->write(output, pGeoChanges);
+    if (statsFormat != ChangesetStatsFormat::Unknown)
+    {
+      _geometryChangesetStats = writer->getStatsTable(statsFormat);
+    }
 
     QString outFileName = output;
     if (outFileName.endsWith(".osc"))
@@ -627,6 +639,10 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
     }
     LOG_VARD(outFileName);
     writer->write(outFileName, _pTagChanges);
+    if (statsFormat != ChangesetStatsFormat::Unknown)
+    {
+      _tagChangesetStats = writer->getStatsTable(statsFormat);
+    }
   }
   else
   {
@@ -637,6 +653,10 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
     pChanges->addChangesetProvider(pGeoChanges);
     pChanges->addChangesetProvider(_pTagChanges);
     writer->write(output, pChanges);
+    if (statsFormat != ChangesetStatsFormat::Unknown)
+    {
+      _unifiedChangesetStats = writer->getStatsTable(statsFormat);
+    }
   }
 }
 

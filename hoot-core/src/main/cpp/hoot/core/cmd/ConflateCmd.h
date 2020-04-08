@@ -43,6 +43,12 @@ namespace hoot
 
 class SingleStat;
 
+/**
+ * Executes conflate
+ *
+ * @todo move the input parsing to a separate method and assign the parsed inputs to member
+ * variables
+ */
 class ConflateCmd : public BoundedCommand
 {
 

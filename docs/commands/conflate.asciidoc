@@ -16,9 +16,13 @@ changeset will be written, instead of an OSM map.
                         not conflict with any elements in input1.
 * +--include-tags+    - Include a check for modified tags when doing differential conflation. The output will include unmodified geometries
                         from Input1, with new/updated tags from Input2 applied, using an overwrite-merge. Valid only when the 
-                        +--differential++ is used.
-* +--stats+           - Hootenanny map statistics such as node and way count; must be the last option entered and may be optionally followed
-                        by an output JSON file name
+                        +--differential++ option is used.
+* +--separate-output+ - Write separate output files for geometry and tag changes. Valid only when the +--differential++ and +--include-tags++ 
+                        options are used.
+* +--stats+           - Displays map statistics and may be optionally followed by an output JSON file name
+* +--changeset-stats+ - Displays changeset statistics and may be optionally followed by an output JSON file name. Valid only if the 
+                        +--differential+ option is specified and the output format is .osc. If the +--include-tags++ option is specified, tag
+                        changeset statistics are also output.
 * +--write-bounds+    - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
                         The location of the file is controlled via the `bounds.output.file` configuration option.
 
@@ -31,7 +35,7 @@ section of the Hootenanny User Guide.
 === Usage
 
 --------------------------------------
-conflate (input1) (input2) (output) [--differential] [--include-tags] [--stats filename]
+conflate (input1) (input2) (output) [--differential] [--include-tags] [--separate-output] [--stats filename] [--changeset-stats geometry-stats-filename tags-stats-filename]
 --------------------------------------
 
 ==== Examples
@@ -46,6 +50,8 @@ hoot conflate input1.osm input2.osm output.osm --differential
 hoot conflate input1.osm input2.osm output.osc --differential
 
 hoot conflate input1.osm input2.osm output.osc --differential --stats
+
+hoot conflate input1.osm input2.osm output.osc --differential --stats myStats.json
 
 hoot conflate input1.osm input2.osm output.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName --differential
 

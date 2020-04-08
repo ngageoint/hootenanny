@@ -40,6 +40,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ProgressReporter.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -178,15 +179,22 @@ public:
    * @param pResultMap the input map
    * @param output the output changeset path
    * @param separateOutput if true, separates geometry and tag changeset output
+   * @param statsFormat TODO
    * @param osmApiDbUrl specifies the target OSM API database, if SQL changeset output is specified
    */
-  void writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput,
-                      const QString& osmApiDbUrl = "");
+  void writeChangeset(
+    OsmMapPtr pResultMap, QString& output, bool separateOutput,
+    const ChangesetStatsFormat& statsFormat = ChangesetStatsFormat(ChangesetStatsFormat::Unknown),
+    const QString& osmApiDbUrl = "");
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 
   virtual void setProgress(Progress progress) { _progress = progress; }
   virtual unsigned int getNumSteps() const { return 3; }
+
+  QString getGeometryChangesetStats() const { return _geometryChangesetStats; }
+  QString getTagChangesetStats() const { return _tagChangesetStats; }
+  QString getUnifiedChangesetStats() const { return _unifiedChangesetStats; }
 
 private:
 
@@ -218,6 +226,11 @@ private:
   int _taskStatusUpdateInterval;
 
   long _numSnappedWays;
+
+  // TODO
+  QString _geometryChangesetStats;
+  QString _tagChangesetStats;
+  QString _unifiedChangesetStats;
 
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that

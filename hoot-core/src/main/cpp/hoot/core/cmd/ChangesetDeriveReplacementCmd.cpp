@@ -33,12 +33,19 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
 
 /**
  * Derives a set of replacement changes given two map inputs
+ *
+ * @todo move the input parsing to a separate method and assign the parsed inputs to member
+ * variables
  */
 class ChangesetDeriveReplacementCmd : public BoundedCommand
 {
@@ -68,6 +75,7 @@ public:
       args.removeAll("--full-replacement");
     }
     LOG_VARD(fullReplacement);
+
     QStringList geometryFilters;
     if (args.contains("--geometry-filters"))
     {
@@ -79,6 +87,7 @@ public:
       args.removeAt(optionNameIndex);
     }
     LOG_VARD(geometryFilters);
+
     QStringList replacementFilters;
     if (args.contains("--replacement-filters"))
     {
@@ -90,6 +99,7 @@ public:
       args.removeAt(optionNameIndex);
     }
     LOG_VARD(replacementFilters);
+
     bool chainReplacementFilters = false;
     if (args.contains("--chain-replacement-filters"))
     {
@@ -97,6 +107,7 @@ public:
       args.removeAll("--chain-replacement-filters");
     }
     LOG_VARD(chainReplacementFilters);
+
     QStringList replacementFilterOptions;
     if (args.contains("--replacement-filter-options"))
     {
@@ -108,6 +119,7 @@ public:
       args.removeAt(optionNameIndex);
     }
     LOG_VARD(replacementFilterOptions);
+
     QStringList retainmentFilters;
     if (args.contains("--retainment-filters"))
     {
@@ -119,6 +131,7 @@ public:
       args.removeAt(optionNameIndex);
     }
     LOG_VARD(retainmentFilters);
+
     bool chainRetainmentFilters = false;
     if (args.contains("--chain-retainment-filters"))
     {
@@ -126,6 +139,7 @@ public:
       args.removeAll("--chain-retainment-filters");
     }
     LOG_VARD(chainRetainmentFilters);
+
     QStringList retainmentFilterOptions;
     if (args.contains("--retainment-filter-options"))
     {
@@ -137,6 +151,7 @@ public:
       args.removeAt(optionNameIndex);
     }
     LOG_VARD(retainmentFilterOptions);
+
     bool lenientBounds = true;
     if (args.contains("--strict-bounds"))
     {
@@ -144,13 +159,30 @@ public:
       args.removeAll("--strict-bounds");
     }
     LOG_VARD(lenientBounds);
+
     bool printStats = false;
+    QString outputStatsFile;
     if (args.contains("--stats"))
     {
       printStats = true;
+      const int statsIndex = args.indexOf("--stats");
+      if (!args[statsIndex + 1].startsWith("--"))
+      {
+        outputStatsFile = args[statsIndex + 1];
+
+        QFileInfo statsFileInfo(outputStatsFile);
+        if (!statsFileInfo.completeSuffix().isEmpty())
+        {
+          /*ChangesetStatsFormat format =*/
+            ChangesetStatsFormat::fromString(statsFileInfo.completeSuffix());
+        }
+        args.removeAll(outputStatsFile);
+      }
       args.removeAll("--stats");
     }
     LOG_VARD(printStats);
+    LOG_VARD(outputStatsFile);
+
     bool enableWaySnapping = true;
     if (args.contains("--disable-way-snapping"))
     {
@@ -158,6 +190,7 @@ public:
       args.removeAll("--disable-way-snapping");
     }
     LOG_VARD(enableWaySnapping);
+
     bool enableConflation = true;
     if (args.contains("--disable-conflation"))
     {
@@ -165,6 +198,7 @@ public:
       args.removeAll("--disable-conflation");
     }
     LOG_VARD(enableConflation);
+
     bool tagOobConnectedWays = true;
     if (args.contains("--disable-oob-way-handling"))
     {
@@ -207,7 +241,7 @@ public:
       osmApiDbUrl = args[4].trimmed();
     }
 
-    ChangesetReplacementCreator changesetCreator(printStats, osmApiDbUrl);
+    ChangesetReplacementCreator changesetCreator(printStats, outputStatsFile, osmApiDbUrl);
     changesetCreator.setFullReplacement(fullReplacement);
     changesetCreator.setLenientBounds(lenientBounds);
     changesetCreator.setGeometryFilters(geometryFilters);

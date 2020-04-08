@@ -136,7 +136,11 @@ public:
     _labelCols = labelCols;
   }
 
+  TextTable toTextTable() const;
+
   QString toTableString() const;
+
+  QString toJsonString() const;
 
 private:
 
@@ -324,7 +328,7 @@ _type ScoreMatrix<_type>::sumCells() const
 }
 
 template<typename _type>
-QString ScoreMatrix<_type>::toTableString() const
+TextTable ScoreMatrix<_type>::toTextTable() const
 {
   TextTable::Data d;
   for (size_t i = 0; i < getWidth(); i++)
@@ -341,7 +345,19 @@ QString ScoreMatrix<_type>::toTableString() const
     }
   }
 
-  return TextTable(d).toWikiString();
+  return TextTable(d);
+}
+
+template<typename _type>
+QString ScoreMatrix<_type>::toTableString() const
+{
+  return toTextTable().toWikiString();
+}
+
+template<typename _type>
+QString ScoreMatrix<_type>::toJsonString() const
+{
+  return toTextTable().toJsonString();
 }
 
 }

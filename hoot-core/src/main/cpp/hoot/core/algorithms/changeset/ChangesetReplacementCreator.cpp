@@ -81,8 +81,8 @@
 namespace hoot
 {
 
-ChangesetReplacementCreator::ChangesetReplacementCreator(const bool printStats,
-                                                         const QString osmApiDbUrl) :
+ChangesetReplacementCreator::ChangesetReplacementCreator(
+  const bool printStats, const QString& outputStatsFile, const QString osmApiDbUrl) :
 _fullReplacement(false),
 _lenientBounds(true),
 _geometryFiltersSpecified(false),
@@ -92,7 +92,7 @@ _waySnappingEnabled(true),
 _conflationEnabled(true),
 _tagOobConnectedWays(false)
 {
-  _changesetCreator.reset(new ChangesetCreator(printStats, osmApiDbUrl));
+  _changesetCreator.reset(new ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl));
   setGeometryFilters(QStringList());
 }
 

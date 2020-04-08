@@ -209,7 +209,8 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   LOG_DEBUG("Changeset written to: " << path << "...");
 }
 
-void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElementPtr node, ConstElementPtr previous)
+void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElementPtr node,
+                                           ConstElementPtr previous)
 {
   ConstNodePtr n = dynamic_pointer_cast<const Node>(node);
   ConstNodePtr pn = dynamic_pointer_cast<const Node>(previous);
@@ -266,7 +267,8 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElemen
   writer.writeEndElement();
 }
 
-void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElementPtr way, ConstElementPtr previous)
+void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElementPtr way,
+                                          ConstElementPtr previous)
 {
   ConstWayPtr w = dynamic_pointer_cast<const Way>(way);
   ConstWayPtr pw = dynamic_pointer_cast<const Way>(previous);
@@ -334,7 +336,8 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElement
   writer.writeEndElement();
 }
 
-void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstElementPtr relation, ConstElementPtr previous)
+void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstElementPtr relation,
+                                               ConstElementPtr previous)
 {
   ConstRelationPtr r = dynamic_pointer_cast<const Relation>(relation);
   ConstRelationPtr pr = dynamic_pointer_cast<const Relation>(previous);
@@ -473,6 +476,20 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
     writer.writeAttribute("k", MetadataTags::ErrorCircular());
     writer.writeAttribute("v", QString("%1").arg(element->getCircularError()));
     writer.writeEndElement();
+  }
+}
+
+QString OsmXmlChangesetFileWriter::getStatsTable(const ChangesetStatsFormat& format) const
+{
+  switch (format.getEnum())
+  {
+    case ChangesetStatsFormat::Text:
+      return _stats.toTableString();
+    case ChangesetStatsFormat::Json:
+      return _stats.toJsonString();
+      break;
+    default:
+      return "";
   }
 }
 

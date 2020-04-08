@@ -29,6 +29,10 @@
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 #include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
@@ -54,12 +58,27 @@ public:
     BoundedCommand::runSimple(args);
 
     bool printStats = false;
+    QString outputStatsFile;
     if (args.contains("--stats"))
     {
       printStats = true;
+      const int statsIndex = args.indexOf("--stats");
+      if (!args[statsIndex + 1].startsWith("--"))
+      {
+        outputStatsFile = args[statsIndex + 1];
+
+        QFileInfo statsFileInfo(outputStatsFile);
+        if (!statsFileInfo.completeSuffix().isEmpty())
+        {
+          /*ChangesetStatsFormat format =*/
+            ChangesetStatsFormat::fromString(statsFileInfo.completeSuffix());
+        }
+        args.removeAll(outputStatsFile);
+      }
       args.removeAll("--stats");
     }
     LOG_VARD(printStats);
+    LOG_VARD(outputStatsFile);
 
     if (args.size() < 3 || args.size() > 4)
     {
@@ -88,7 +107,7 @@ public:
         QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
     }
 
-    ChangesetCreator(printStats, osmApiDbUrl).create(output, input1, input2);
+    ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl).create(output, input1, input2);
 
     return 0;
   }
