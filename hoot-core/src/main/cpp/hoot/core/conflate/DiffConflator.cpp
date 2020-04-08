@@ -576,7 +576,7 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
 
 void DiffConflator::writeChangeset(
   OsmMapPtr pResultMap, QString& output, bool separateOutput,
-  const ChangesetStatsFormat& statsFormat, const QString& osmApiDbUrl)
+  const ChangesetStatsFormat& changesetStatsFormat, const QString& osmApiDbUrl)
 {
   if (output.endsWith(".osc.sql") && osmApiDbUrl.trimmed().isEmpty())
   {
@@ -610,9 +610,9 @@ void DiffConflator::writeChangeset(
     // only one changeset to write
     LOG_DEBUG("Writing single changeset...");
     writer->write(output, pGeoChanges);
-    if (statsFormat != ChangesetStatsFormat::Unknown)
+    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
     {
-      _geometryChangesetStats = writer->getStatsTable(statsFormat);
+      _geometryChangesetStats = writer->getStatsTable(changesetStatsFormat);
     }
   }
   else if (separateOutput)
@@ -620,9 +620,9 @@ void DiffConflator::writeChangeset(
     // write two changesets
     LOG_DEBUG("Writing separate changesets...");
     writer->write(output, pGeoChanges);
-    if (statsFormat != ChangesetStatsFormat::Unknown)
+    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
     {
-      _geometryChangesetStats = writer->getStatsTable(statsFormat);
+      _geometryChangesetStats = writer->getStatsTable(changesetStatsFormat);
     }
 
     QString outFileName = output;
@@ -639,9 +639,9 @@ void DiffConflator::writeChangeset(
     }
     LOG_VARD(outFileName);
     writer->write(outFileName, _pTagChanges);
-    if (statsFormat != ChangesetStatsFormat::Unknown)
+    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
     {
-      _tagChangesetStats = writer->getStatsTable(statsFormat);
+      _tagChangesetStats = writer->getStatsTable(changesetStatsFormat);
     }
   }
   else
@@ -653,9 +653,9 @@ void DiffConflator::writeChangeset(
     pChanges->addChangesetProvider(pGeoChanges);
     pChanges->addChangesetProvider(_pTagChanges);
     writer->write(output, pChanges);
-    if (statsFormat != ChangesetStatsFormat::Unknown)
+    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
     {
-      _unifiedChangesetStats = writer->getStatsTable(statsFormat);
+      _unifiedChangesetStats = writer->getStatsTable(changesetStatsFormat);
     }
   }
 }

@@ -137,7 +137,7 @@ public:
   }
 
   /**
-   * TODO
+   * Clears the underlying data from the matrix
    */
   void clear()
   {
@@ -147,23 +147,23 @@ public:
   }
 
   /**
-   * TODO
+   * Returns a text table representation of the matrix
    *
-   * @return
+   * @return a text table
    */
   TextTable toTextTable() const;
 
   /**
-   * TODO
+   * Returns a text table string representation of the matrix
    *
-   * @return
+   * @return a string
    */
   QString toTableString() const;
 
   /**
-   * TODO
+   * Returns a text table JSON string representation of the matrix
    *
-   * @return
+   * @return a JSON string
    */
   QString toJsonString() const;
 

@@ -65,13 +65,13 @@ namespace hoot
 
 const QString ChangesetCreator::JOB_SOURCE = "Derive Changeset";
 
-ChangesetCreator::ChangesetCreator(const bool printDetailedStats, const QString& outputStatsFile,
-                                   const QString osmApiDbUrl) :
+ChangesetCreator::ChangesetCreator(
+  const bool printDetailedStats, const QString& statsOutputFile, const QString osmApiDbUrl) :
 _osmApiDbUrl(osmApiDbUrl),
 _numTotalTasks(0),
 _currentTaskNum(0),
 _printDetailedStats(printDetailedStats),
-_outputStatsFile(outputStatsFile),
+_statsOutputFile(statsOutputFile),
 _singleInput(false),
 _numCreateChanges(0),
 _numModifyChanges(0),
@@ -665,9 +665,9 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     if (output.endsWith(".osc")) // detailed stats currently only implemented for xml output
     {
       ChangesetStatsFormat statsFormat;
-      if (!_outputStatsFile.isEmpty())
+      if (!_statsOutputFile.isEmpty())
       {
-        QFileInfo statsFileInfo(_outputStatsFile);
+        QFileInfo statsFileInfo(_statsOutputFile);
         statsFormat.setFormat(ChangesetStatsFormat::fromString(statsFileInfo.completeSuffix()));
       }
       else
@@ -728,13 +728,13 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   LOG_VART(_printDetailedStats);
   if (_printDetailedStats && !detailedStats.isEmpty())
   {
-    if (_outputStatsFile.isEmpty())
+    if (_statsOutputFile.isEmpty())
     {
       LOG_STATUS("Changeset Stats:\n" << detailedStats);
     }
     else
     {
-      FileUtils::writeFully(_outputStatsFile, detailedStats);
+      FileUtils::writeFully(_statsOutputFile, detailedStats);
     }
   }
   else

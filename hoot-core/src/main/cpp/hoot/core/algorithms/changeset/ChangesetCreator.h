@@ -71,12 +71,13 @@ public:
    * Constructor
    *
    * @param printStats prints statistics for the output changeset
-   * @param outputStatsFile TODO
+   * @param statsOutputFile optional file to output the changeset statistics to
    * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
    * the output changeset is of type .osc.sql.
    */
-  ChangesetCreator(const bool printDetailedStats = false, const QString& outputStatsFile = "",
-                   const QString osmApiDbUrl = "");
+  ChangesetCreator(
+    const bool printDetailedStats = false, const QString& statsOutputFile = "",
+    const QString osmApiDbUrl = "");
 
   /**
    * Writes a changeset between one or two inputs to an output file. If only one input is
@@ -122,7 +123,7 @@ private:
   int _currentTaskNum;
 
   bool _printDetailedStats;
-  QString _outputStatsFile;
+  QString _statsOutputFile;
 
   // If true, we are generating a changeset that will be made up of everything in the single input
   // provided.

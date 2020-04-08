@@ -82,7 +82,7 @@ namespace hoot
 {
 
 ChangesetReplacementCreator::ChangesetReplacementCreator(
-  const bool printStats, const QString& outputStatsFile, const QString osmApiDbUrl) :
+  const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl) :
 _fullReplacement(false),
 _lenientBounds(true),
 _geometryFiltersSpecified(false),
@@ -92,7 +92,7 @@ _waySnappingEnabled(true),
 _conflationEnabled(true),
 _tagOobConnectedWays(false)
 {
-  _changesetCreator.reset(new ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl));
+  _changesetCreator.reset(new ChangesetCreator(printStats, statsOutputFile, osmApiDbUrl));
   setGeometryFilters(QStringList());
 }
 

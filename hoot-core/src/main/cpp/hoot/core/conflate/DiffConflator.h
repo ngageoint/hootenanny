@@ -179,12 +179,13 @@ public:
    * @param pResultMap the input map
    * @param output the output changeset path
    * @param separateOutput if true, separates geometry and tag changeset output
-   * @param statsFormat TODO
+   * @param changesetStatsFormat changeset statistics format
    * @param osmApiDbUrl specifies the target OSM API database, if SQL changeset output is specified
    */
   void writeChangeset(
     OsmMapPtr pResultMap, QString& output, bool separateOutput,
-    const ChangesetStatsFormat& statsFormat = ChangesetStatsFormat(ChangesetStatsFormat::Unknown),
+    const ChangesetStatsFormat& changesetStatsFormat =
+      ChangesetStatsFormat(ChangesetStatsFormat::Unknown),
     const QString& osmApiDbUrl = "");
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
@@ -227,7 +228,6 @@ private:
 
   long _numSnappedWays;
 
-  // TODO
   QString _geometryChangesetStats;
   QString _tagChangesetStats;
   QString _unifiedChangesetStats;
