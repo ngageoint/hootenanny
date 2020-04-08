@@ -136,10 +136,35 @@ public:
     _labelCols = labelCols;
   }
 
+  /**
+   * TODO
+   */
+  void clear()
+  {
+    _v.clear();
+    _labelCols.clear();
+    _labelRows.clear();
+  }
+
+  /**
+   * TODO
+   *
+   * @return
+   */
   TextTable toTextTable() const;
 
+  /**
+   * TODO
+   *
+   * @return
+   */
   QString toTableString() const;
 
+  /**
+   * TODO
+   *
+   * @return
+   */
   QString toJsonString() const;
 
 private:
@@ -171,7 +196,6 @@ private:
   std::vector<std::vector<_type>> _v;
   std::vector<QString> _labelRows;
   std::vector<QString> _labelCols;
-
 };
 
 template<typename _type>

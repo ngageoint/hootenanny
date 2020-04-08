@@ -39,6 +39,8 @@ namespace hoot
 
 /**
  * Derives a set of changes given one or two map inputs
+ *
+ * @todo command needs some input error handling tests
  */
 class ChangesetDeriveCmd : public BoundedCommand
 {

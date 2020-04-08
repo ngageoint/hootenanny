@@ -46,6 +46,7 @@ namespace hoot
  *
  * @todo move the input parsing to a separate method and assign the parsed inputs to member
  * variables
+ * @todo command needs some input error handling tests
  */
 class ChangesetDeriveReplacementCmd : public BoundedCommand
 {

@@ -109,6 +109,7 @@ private:
   void _writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element);
 
   void _initIdCounters();
+  void _initStats();
 };
 
 }

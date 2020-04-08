@@ -52,6 +52,11 @@ _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
 _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
 _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
+}
+
+void OsmXmlChangesetFileWriter::_initStats()
+{
+  _stats.clear();
   _stats.resize(Change::Unknown, ElementType::Unknown);
   vector<QString> rows({"Create", "Modify", "Delete"});
   vector<QString> columns({"Node", "Way", "Relation"});
@@ -87,6 +92,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   QString filepath = path;
 
   _initIdCounters();
+  _initStats();
   _parsedChanges.clear();
 
   long changesetProgress = 1;

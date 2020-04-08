@@ -149,6 +149,7 @@ int ConflateCmd::runSimple(QStringList& args)
     }
   }
   LOG_VARD(isDiffConflate);
+  LOG_VARD(diffConflator.conflatingTags());
 
   // Check for separate output files (for geometry & tags)
   bool separateOutput = false;
@@ -164,6 +165,7 @@ int ConflateCmd::runSimple(QStringList& args)
     separateOutput = true;
     args.removeAt(args.indexOf("--separate-output"));
   }
+  LOG_VARD(separateOutput);
 
   bool displayChangesetStats = false;
   QString outputChangesetStatsFile;
@@ -178,11 +180,12 @@ int ConflateCmd::runSimple(QStringList& args)
     {
       displayChangesetStats = true;
       const int statsIndex = args.indexOf("--changeset-stats");
+      LOG_VARD(statsIndex);
       // If the input immediately after the changeset stats arg isn't a valid changeset stats file
       // output format, we'll just silently skip it and assume we're outputting stats to the display
       // only. This mimics how the map stats args and stats args in other commands are parsed. We
       // may want to eventually return an error or warning here instead.
-      if (statsIndex != -1 && !statsIndex == args.size() - 1 &&
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
           !args[statsIndex + 1].startsWith("--"))
       {
         outputChangesetStatsFile = args[statsIndex + 1];
@@ -202,6 +205,7 @@ int ConflateCmd::runSimple(QStringList& args)
   LOG_VARD(displayChangesetStats);
   LOG_VARD(outputChangesetStatsFile);
 
+  LOG_VARD(args.size() );
   if (args.size() < 3 || args.size() > 4)
   {
     cout << getHelp() << endl << endl;
