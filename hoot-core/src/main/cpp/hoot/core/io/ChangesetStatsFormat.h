@@ -36,6 +36,9 @@
 namespace hoot
 {
 
+/**
+ * Enum class representing the possible changeset statistics output formats
+ */
 class ChangesetStatsFormat
 {
 public:
@@ -60,7 +63,8 @@ public:
   static bool isValidFileOutputFormat(const QString& extension)
   {
     // Obviously this could change in the future but for now, the commands calling this expect to
-    // output table text to the display only and the only file output format is JSON.
+    // either output table text to the display or output a JSON file (only other format supported
+    // currently).
     return fromString(extension) == Format::Json;
   }
 
@@ -93,10 +97,6 @@ public:
       return Unknown;
     }
     return Unknown;
-//    else
-//    {
-//      throw IllegalArgumentException("Invalid changeset statistics format string: " + str);
-//    }
   }
 
 private:

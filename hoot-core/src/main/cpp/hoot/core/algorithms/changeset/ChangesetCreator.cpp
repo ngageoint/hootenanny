@@ -664,6 +664,8 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   {
     if (output.endsWith(".osc")) // detailed stats currently only implemented for xml output
     {
+      // Get the stats output format from the file extension, or if no extension is there assume a
+      // text table output to the display.
       ChangesetStatsFormat statsFormat;
       if (!_statsOutputFile.isEmpty())
       {

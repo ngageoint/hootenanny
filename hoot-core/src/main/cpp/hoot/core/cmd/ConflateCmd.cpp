@@ -109,7 +109,8 @@ int ConflateCmd::runSimple(QStringList& args)
 
   BoundedCommand::runSimple(args);
 
-  // This is map stats. Changeset stats for differential are processed further down below.
+  // This parsing is for map stats. Changeset stats args for differential are processed further down
+  // below.
   QList<SingleStat> stats;
   bool displayStats = false;
   QString outputStatsFile;
@@ -501,6 +502,8 @@ int ConflateCmd::runSimple(QStringList& args)
     "Writing conflated output: ..." + output.right(maxFilePrintLength) + "...");
   if (isDiffConflate && (output.endsWith(".osc") || output.endsWith(".osc.sql")))
   {
+    // Get the changeset stats output format from the changeset stats file extension, or if no
+    // extension is there assume a text table output to the display.
     ChangesetStatsFormat statsFormat;
     if (displayChangesetStats)
     {
@@ -605,6 +608,7 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     if (outputChangesetStatsFile.isEmpty())
     {
+      // output to display
       LOG_STATUS("Changeset Geometry Stats:\n" << diffConflator.getGeometryChangesetStats());
       if (diffConflator.conflatingTags())
       {
@@ -613,8 +617,10 @@ int ConflateCmd::runSimple(QStringList& args)
     }
     else
     {
+      // output to file
       if (separateOutput)
       {
+        // output separate files for geometry and tag change stats
         FileUtils::writeFully(outputChangesetStatsFile, diffConflator.getGeometryChangesetStats());
         if (diffConflator.conflatingTags())
         {
@@ -625,6 +631,7 @@ int ConflateCmd::runSimple(QStringList& args)
       }
       else
       {
+        // output a single stats file with both geometry and tags change stats
         FileUtils::writeFully(outputChangesetStatsFile, diffConflator.getUnifiedChangesetStats());
       }
     }

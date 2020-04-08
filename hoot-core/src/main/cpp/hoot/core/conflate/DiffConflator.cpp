@@ -610,6 +610,8 @@ void DiffConflator::writeChangeset(
     // only one changeset to write
     LOG_DEBUG("Writing single changeset...");
     writer->write(output, pGeoChanges);
+    // ChangesetStatsFormat::Unknown is the default format setting, and we'll assume no stats are
+    // to be output if that's the requested format.
     if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
     {
       _geometryChangesetStats = writer->getStatsTable(changesetStatsFormat);

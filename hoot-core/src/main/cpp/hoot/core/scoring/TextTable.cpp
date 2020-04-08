@@ -130,6 +130,8 @@ QString TextTable::toJsonString()
       LOG_VART(_data[rows[i]][cols[j]].toString());
 
       boost::property_tree::ptree child;
+      // Unfortunately, don't think the boost prop writer supports numerical values, so outputting
+      // everything as a string, even if it should be a JSON numerical value.
       child.put(cols[j].toStdString(), _data[rows[i]][cols[j]].toString().toStdString());
       children.push_back(std::make_pair("", child));
     }
