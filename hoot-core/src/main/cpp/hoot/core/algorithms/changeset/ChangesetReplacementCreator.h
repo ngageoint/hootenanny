@@ -208,8 +208,14 @@ private:
 
   void _validateInputs(const QString& input1, const QString& input2);
 
+  /*
+   * Returns the default geometry filters (point, line, poly) to use when no other geometry filters
+   * are specified
+   */
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     _getDefaultGeometryFilters() const;
+
+  bool _roadFilterExists() const;
 
   void _setInputFilter(
     std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
@@ -217,7 +223,9 @@ private:
 
   void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
 
-  // Combines filters in _geometryTypeFilters with _replacementFilter.
+  /*
+   * Combines filters in _geometryTypeFilters with _replacementFilter.
+   */
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
     std::shared_ptr<ChainCriterion> nonGeometryFilter);
 

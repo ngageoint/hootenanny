@@ -37,10 +37,8 @@ namespace hoot
 {
 
 /**
- * An experimental way joiner implemented to work with Attribute Conflation and a possible
- * replacement for WayJoinerBasic.
- *
- * @todo update progress logging
+ * An way joiner with extended features implemented to work with Attribute Conflation. Eventually
+ * some of the logic could be moved up to WayJoinerBasic.
  */
 class WayJoinerAdvanced : public WayJoiner
 {
