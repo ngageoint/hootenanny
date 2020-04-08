@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCOREMATRIX_H
 #define SCOREMATRIX_H
@@ -136,7 +136,36 @@ public:
     _labelCols = labelCols;
   }
 
+  /**
+   * Clears the underlying data from the matrix
+   */
+  void clear()
+  {
+    _v.clear();
+    _labelCols.clear();
+    _labelRows.clear();
+  }
+
+  /**
+   * Returns a text table representation of the matrix
+   *
+   * @return a text table
+   */
+  TextTable toTextTable() const;
+
+  /**
+   * Returns a text table string representation of the matrix
+   *
+   * @return a string
+   */
   QString toTableString() const;
+
+  /**
+   * Returns a text table JSON string representation of the matrix
+   *
+   * @return a JSON string
+   */
+  QString toJsonString() const;
 
 private:
 
@@ -167,7 +196,6 @@ private:
   std::vector<std::vector<_type>> _v;
   std::vector<QString> _labelRows;
   std::vector<QString> _labelCols;
-
 };
 
 template<typename _type>
@@ -324,7 +352,7 @@ _type ScoreMatrix<_type>::sumCells() const
 }
 
 template<typename _type>
-QString ScoreMatrix<_type>::toTableString() const
+TextTable ScoreMatrix<_type>::toTextTable() const
 {
   TextTable::Data d;
   for (size_t i = 0; i < getWidth(); i++)
@@ -341,7 +369,19 @@ QString ScoreMatrix<_type>::toTableString() const
     }
   }
 
-  return TextTable(d).toWikiString();
+  return TextTable(d);
+}
+
+template<typename _type>
+QString ScoreMatrix<_type>::toTableString() const
+{
+  return toTextTable().toWikiString();
+}
+
+template<typename _type>
+QString ScoreMatrix<_type>::toJsonString() const
+{
+  return toTextTable().toJsonString();
 }
 
 }

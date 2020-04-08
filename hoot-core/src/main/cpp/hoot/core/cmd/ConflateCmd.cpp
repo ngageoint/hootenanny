@@ -62,7 +62,8 @@
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/ops/MapCleaner.h>
-
+#include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Standard
 #include <fstream>
@@ -108,27 +109,22 @@ int ConflateCmd::runSimple(QStringList& args)
 
   BoundedCommand::runSimple(args);
 
+  // This parsing is for map stats. Changeset stats args for differential are processed further down
+  // below.
   QList<SingleStat> stats;
   bool displayStats = false;
-  //force stats to always be the last optional param so it can be followed by an optional
-  //output file
   QString outputStatsFile;
   if (args.contains("--stats"))
   {
-    if (args.endsWith("--stats"))
+    displayStats = true;
+    const int statsIndex = args.indexOf("--stats");
+    if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+        args[statsIndex + 1].toLower().endsWith(".json"))
     {
-      displayStats = true;
-      //remove "--stats" from args list
-      args.pop_back();
+      outputStatsFile = args[statsIndex + 1];
+      args.removeAll(outputStatsFile);
     }
-    else if (args[args.size() - 2] == "--stats")
-    {
-      displayStats = true;
-      outputStatsFile = args[args.size() - 1];
-      //remove "--stats" and stats output file name from args list
-      args.pop_back();
-      args.pop_back();
-    }
+    args.removeAll("--stats");
   }
   LOG_VARD(displayStats);
   LOG_VARD(outputStatsFile);
@@ -154,15 +150,63 @@ int ConflateCmd::runSimple(QStringList& args)
     }
   }
   LOG_VARD(isDiffConflate);
+  LOG_VARD(diffConflator.conflatingTags());
 
   // Check for separate output files (for geometry & tags)
   bool separateOutput = false;
   if (args.contains("--separate-output"))
   {
+    const QString errorMsg =
+      QString("--separate-output is only valid when combiend with the --differential and ") +
+      QString("--include-tags options.");
+    if (!isDiffConflate || !diffConflator.conflatingTags())
+    {
+      throw IllegalArgumentException(errorMsg);
+    }
     separateOutput = true;
     args.removeAt(args.indexOf("--separate-output"));
   }
+  LOG_VARD(separateOutput);
 
+  bool displayChangesetStats = false;
+  QString outputChangesetStatsFile;
+  if (args.contains("--changeset-stats"))
+  {
+    if (!isDiffConflate)
+    {
+      throw IllegalArgumentException(
+        "--changeset-stats is only valid when combined with the --differential option.");
+    }
+    else
+    {
+      displayChangesetStats = true;
+      const int statsIndex = args.indexOf("--changeset-stats");
+      LOG_VARD(statsIndex);
+      // If the input immediately after the changeset stats arg isn't a valid changeset stats file
+      // output format, we'll just silently skip it and assume we're outputting stats to the display
+      // only. This mimics how the map stats args and stats args in other commands are parsed. We
+      // may want to eventually return an error or warning here instead.
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+          !args[statsIndex + 1].startsWith("--"))
+      {
+        outputChangesetStatsFile = args[statsIndex + 1];
+        QFileInfo changesetStatsInfo(outputChangesetStatsFile);
+        if (!ChangesetStatsFormat::isValidFileOutputFormat(changesetStatsInfo.completeSuffix()))
+        {
+          outputChangesetStatsFile = "";
+        }
+        else
+        {
+          args.removeAll(outputChangesetStatsFile);
+        }
+      }
+      args.removeAll("--changeset-stats");
+    }
+  }
+  LOG_VARD(displayChangesetStats);
+  LOG_VARD(outputChangesetStatsFile);
+
+  LOG_VARD(args.size() );
   if (args.size() < 3 || args.size() > 4)
   {
     cout << getHelp() << endl << endl;
@@ -193,6 +237,12 @@ int ConflateCmd::runSimple(QStringList& args)
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
         QString("%1 with SQL changeset output takes four parameters.").arg(getName()));
+    }
+    else if (displayChangesetStats)
+    {
+      throw IllegalArgumentException(
+        QString("Changeset statistics (--changeset-stats) may only be calculated with an XML ") +
+        QString("changeset output (.osc)."));
     }
     osmApiDbUrl = args[3];
   }
@@ -314,7 +364,8 @@ int ConflateCmd::runSimple(QStringList& args)
 
       // Store original IDs for tag diff
       progress.set(
-        _getJobPercentComplete(currentTask - 1), "Storing original features for tag differential...");
+        _getJobPercentComplete(currentTask - 1),
+       "Storing original features for tag differential...");
       diffConflator.storeOriginalMap(map);
       diffConflator.markInputElements(map);
       currentTask++;
@@ -327,7 +378,8 @@ int ConflateCmd::runSimple(QStringList& args)
       map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
   }
-  LOG_STATUS("Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
+  LOG_STATUS(
+    "Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
@@ -450,7 +502,23 @@ int ConflateCmd::runSimple(QStringList& args)
     "Writing conflated output: ..." + output.right(maxFilePrintLength) + "...");
   if (isDiffConflate && (output.endsWith(".osc") || output.endsWith(".osc.sql")))
   {
-    diffConflator.writeChangeset(result, output, separateOutput, osmApiDbUrl);
+    // Get the changeset stats output format from the changeset stats file extension, or if no
+    // extension is there assume a text table output to the display.
+    ChangesetStatsFormat statsFormat;
+    if (displayChangesetStats)
+    {
+      if (!outputChangesetStatsFile.isEmpty())
+      {
+        QFileInfo changesetStatsFileInfo(outputChangesetStatsFile);
+        statsFormat.setFormat(
+          ChangesetStatsFormat::fromString(changesetStatsFileInfo.completeSuffix()));
+      }
+      else
+      {
+        statsFormat.setFormat(ChangesetStatsFormat::Text);
+      }
+    }
+    diffConflator.writeChangeset(result, output, separateOutput, statsFormat, osmApiDbUrl);
   }
   else
   {
@@ -533,6 +601,39 @@ int ConflateCmd::runSimple(QStringList& args)
       MapStatsWriter().writeStatsToJson(allStats, outputStatsFile);
       cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " <<
               outputStatsFile << endl;
+    }
+  }
+
+  if (displayChangesetStats)
+  {
+    if (outputChangesetStatsFile.isEmpty())
+    {
+      // output to display
+      LOG_STATUS("Changeset Geometry Stats:\n" << diffConflator.getGeometryChangesetStats());
+      if (diffConflator.conflatingTags())
+      {
+        LOG_STATUS("\nChangeset Tag Stats:\n" << diffConflator.getTagChangesetStats() << "\n");
+      }
+    }
+    else
+    {
+      // output to file
+      if (separateOutput)
+      {
+        // output separate files for geometry and tag change stats
+        FileUtils::writeFully(outputChangesetStatsFile, diffConflator.getGeometryChangesetStats());
+        if (diffConflator.conflatingTags())
+        {
+          QString tagsOutFile = outputChangesetStatsFile.replace(".json", "");
+          tagsOutFile.append(".tags.json");
+          FileUtils::writeFully(tagsOutFile, diffConflator.getTagChangesetStats());
+        }
+      }
+      else
+      {
+        // output a single stats file with both geometry and tags change stats
+        FileUtils::writeFully(outputChangesetStatsFile, diffConflator.getUnifiedChangesetStats());
+      }
     }
   }
 

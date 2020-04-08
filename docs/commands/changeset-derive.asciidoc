@@ -18,15 +18,15 @@ dataset and the second should be the newer dataset.
 * +osmApiDatabaseUrl+ - Target OSM API database the derived changeset is to be applied, used to maintain element ID continuity. Required only 
                         if the changeset output format is .osc.sql. 
                         Used to maintain element ID continuity with the database target for a derived changeset. 
-* +--stats+           - Stats flag, when turned on a table of create, modify, delete for each of the types
-                        node, way, relation (only valid for .osc output files)
+* +--stats+           - Displays changeset statistics and may be optionally followed by an output JSON file name to write the statistics to. 
+                        Valid when writing the .osc changeset output format only.
 * +--write-bounds+    - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
                         The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Usage
 
 --------------------------------------
-changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--stats] [--write-bounds]
+changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--stats filename] [--write-bounds]
 --------------------------------------
 
 === Examples
@@ -37,6 +37,8 @@ hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc
 hoot changeset-derive -D convert.ops="op1;op2" inputData1.osm inputData2.osm outputChangeset.osc
 
 hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc --stats
+
+hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc --stats myStats.json
 
 hoot changeset-derive inputData.osm "" outputChangeset.osc
 

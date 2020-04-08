@@ -61,14 +61,15 @@ IDs in the secondary data are not retained and those elements treated as complet
                                    section for more detail.
 * +--disable-oob-way-handling+   - Determines whether Hootenanny automatically handles protecting out of bounds immediately connected reference 
                                    ways from deletion in the changeset output. See the ""Bounds Handling" section for more detail.
-* +--stats+                      - Displays changeset statistics (only valid for .osc changeset output files)
+* +--stats+                      - Displays changeset statistics and may be optionally followed by an output JSON file name to write the 
+                                   statistics to.
 * +--write-bounds+               - If the +convert.bounding.box+ configuration option is specified, outputs a file containing the specified 
                                    input bounds. The location of the file is controlled via the +bounds.output.file+ configuration option.
 
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--full-replacement] [--strict-bounds] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--disable-way-snapping] [--disable-conflation] [--disable-oob-way-handling] [--stats] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--full-replacement] [--strict-bounds] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--disable-way-snapping] [--disable-conflation] [--disable-oob-way-handling] [--stats filename] [--write-bounds]
 --------------------------------------
 
 === Examples

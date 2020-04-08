@@ -51,6 +51,7 @@
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
+#include <hoot/core/util/FileUtils.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -64,11 +65,13 @@ namespace hoot
 
 const QString ChangesetCreator::JOB_SOURCE = "Derive Changeset";
 
-ChangesetCreator::ChangesetCreator(const bool printDetailedStats, const QString osmApiDbUrl) :
+ChangesetCreator::ChangesetCreator(
+  const bool printDetailedStats, const QString& statsOutputFile, const QString osmApiDbUrl) :
 _osmApiDbUrl(osmApiDbUrl),
 _numTotalTasks(0),
 _currentTaskNum(0),
 _printDetailedStats(printDetailedStats),
+_statsOutputFile(statsOutputFile),
 _singleInput(false),
 _numCreateChanges(0),
 _numModifyChanges(0),
@@ -661,7 +664,19 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   {
     if (output.endsWith(".osc")) // detailed stats currently only implemented for xml output
     {
-      detailedStats = writer->getStatsTable();
+      // Get the stats output format from the file extension, or if no extension is there assume a
+      // text table output to the display.
+      ChangesetStatsFormat statsFormat;
+      if (!_statsOutputFile.isEmpty())
+      {
+        QFileInfo statsFileInfo(_statsOutputFile);
+        statsFormat.setFormat(ChangesetStatsFormat::fromString(statsFileInfo.completeSuffix()));
+      }
+      else
+      {
+        statsFormat.setFormat(ChangesetStatsFormat::Text);
+      }
+      detailedStats = writer->getStatsTable(statsFormat);
     }
     else
     {
@@ -715,7 +730,14 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   LOG_VART(_printDetailedStats);
   if (_printDetailedStats && !detailedStats.isEmpty())
   {
-    LOG_STATUS("Changeset Stats:\n" << detailedStats);
+    if (_statsOutputFile.isEmpty())
+    {
+      LOG_STATUS("Changeset Stats:\n" << detailedStats);
+    }
+    else
+    {
+      FileUtils::writeFully(_statsOutputFile, detailedStats);
+    }
   }
   else
   {

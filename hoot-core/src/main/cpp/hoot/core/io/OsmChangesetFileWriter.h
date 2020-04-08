@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSM_CHANGESET_FILE_WRITER_H
 #define OSM_CHANGESET_FILE_WRITER_H
@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
 
 namespace hoot
 {
@@ -41,6 +42,7 @@ namespace hoot
  */
 class OsmChangesetFileWriter : public Configurable
 {
+
 public:
 
   static std::string className() { return "hoot::OsmChangesetFileWriter"; }
@@ -61,14 +63,17 @@ public:
    * @param path Pathname for the output file(s)
    * @param changesetProviders changeset providers to stream the changes from
    */
-  virtual void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders) = 0;
+  virtual void write(const QString& path,
+                     const QList<ChangesetProviderPtr>& changesetProviders) = 0;
 
   /**
    * Returns a changeset statistics as a table string
    *
+   * @param format statistics format
    * @return a changeset statistics string
    */
-  virtual QString getStatsTable() const = 0;
+  virtual QString getStatsTable(
+    const ChangesetStatsFormat& format = ChangesetStatsFormat::Text) const = 0;
 
   /**
    * Determines if the output location is supported by this writer

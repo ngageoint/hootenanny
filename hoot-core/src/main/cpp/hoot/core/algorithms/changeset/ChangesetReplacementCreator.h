@@ -110,10 +110,13 @@ public:
    * Constructor
    *
    * @param printStats prints statistics for the output changeset
+   * @param outputStatsFile optional file to output the changeset statistics to
    * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
    * the output changeset is of type .osc.sql.
    */
-  ChangesetReplacementCreator(const bool printStats = false, const QString osmApiDbUrl = "");
+  ChangesetReplacementCreator(
+    const bool printStats = false, const QString& statsOutputFile = "",
+    const QString osmApiDbUrl = "");
 
   /**
    * Creates a changeset that replaces features in the first input with features from the second

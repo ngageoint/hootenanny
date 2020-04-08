@@ -21,7 +21,11 @@ echo "Running diff changeset with tags..."
 echo ""
 hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf  \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
- $OUTPUT_DIR/output_unified.osc --differential --include-tags
+ $OUTPUT_DIR/output_unified.osc --differential --include-tags --changeset-stats $OUTPUT_DIR/output_unified_changeset_stats.json
+# Check command line display of stats
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf  \
+ $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
+ $OUTPUT_DIR/output_unified.osc --differential --include-tags --changeset-stats
 
 # Run changeset w/tags to produce a unified map (osm) output
 echo ""
@@ -37,7 +41,11 @@ echo "Running diff changeset with tags, separate outputs..."
 echo ""
 hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
- $OUTPUT_DIR/output.osc --differential --include-tags --separate-output
+ $OUTPUT_DIR/output.osc --differential --include-tags --changeset-stats $OUTPUT_DIR/output_changeset_stats.json --separate-output
+# Check command line display of stats
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
+ $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
+ $OUTPUT_DIR/output.osc --differential --include-tags --changeset-stats --separate-output
 
 # Check differential output
 echo ""
@@ -97,6 +105,36 @@ echo "Checking unified geometry+tag diff osm..."
 echo ""
 hoot diff -C Testing.conf $LOG_LEVEL $OUTPUT_DIR/output_unified.osm $INPUT_DIR/output_unified.osm || \
      diff $OUTPUT_DIR/output_unified.osm $INPUT_DIR/output_unified.osm
+
+# Check unified changeset stats output
+echo ""
+echo "Checking Unified Changeset Stats..."
+echo ""
+if diff $OUTPUT_DIR/output_unified_changeset_stats.json $INPUT_DIR/output_unified_changeset_stats.json >/dev/null ; then
+  echo ""
+  echo "Changeset Stats Files Match"
+  echo ""
+else
+  echo ""
+  echo "Changeset Stats Files Don't Match"
+  echo ""
+  diff $OUTPUT_DIR/output_unified_changeset_stats.json t$INPUT_DIR/output_unified_changeset_stats.json
+fi
+
+# Check changeset stats output
+echo ""
+echo "Checking Changeset Stats..."
+echo ""
+if diff $OUTPUT_DIR/output_changeset_stats.json $INPUT_DIR/output_changeset_stats.json >/dev/null ; then
+  echo ""
+  echo "Changeset Stats Files Match"
+  echo ""
+else
+  echo ""
+  echo "Changeset Stats Files Don't Match"
+  echo ""
+  diff $OUTPUT_DIR/output_changeset_stats.json t$INPUT_DIR/output_changeset_stats.json
+fi
 
 # Check to make sure we don't bomb out on empty files
 echo ""

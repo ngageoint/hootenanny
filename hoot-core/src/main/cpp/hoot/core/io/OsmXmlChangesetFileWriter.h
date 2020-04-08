@@ -45,9 +45,9 @@ namespace hoot
 /**
  * Writes an OSM changeset to an XML file.
  *
- * Before writing this changeset to an OSM API database, the corresponding changeset
- * would have to be created using the API.  Optionally, after writing this the changeset
- * can be closed via the API.
+ * Before writing this changeset to an OSM API database, the corresponding changeset would have to
+ * be created using the API.  Optionally, after writing this the changeset can be closed via the
+ * API.
  */
 class OsmXmlChangesetFileWriter : public OsmChangesetFileWriter
 {
@@ -71,7 +71,8 @@ public:
   /**
    * @see ChangesetFileWriter
    */
-  virtual QString getStatsTable() const { return _stats.toTableString(); }
+  virtual QString getStatsTable(
+    const ChangesetStatsFormat& format = ChangesetStatsFormat::Text) const;
 
   /**
    * @see ChangesetFileWriter
@@ -108,6 +109,7 @@ private:
   void _writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element);
 
   void _initIdCounters();
+  void _initStats();
 };
 
 }

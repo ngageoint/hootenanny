@@ -29,12 +29,18 @@
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 #include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
 
 /**
  * Derives a set of changes given one or two map inputs
+ *
+ * @todo command needs some input error handling tests
  */
 class ChangesetDeriveCmd : public BoundedCommand
 {
@@ -54,12 +60,33 @@ public:
     BoundedCommand::runSimple(args);
 
     bool printStats = false;
+    QString outputStatsFile;
     if (args.contains("--stats"))
     {
       printStats = true;
+      const int statsIndex = args.indexOf("--stats");
+      LOG_VARD(statsIndex);
+      // See similar note in ConflateCmd's parsing of --changeset-stats.
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+          !args[statsIndex + 1].startsWith("--"))
+      {
+        outputStatsFile = args[statsIndex + 1];
+        LOG_VARD(outputStatsFile);
+        QFileInfo statsInfo(outputStatsFile);
+        LOG_VARD(statsInfo.completeSuffix());
+        if (!ChangesetStatsFormat::isValidFileOutputFormat(statsInfo.completeSuffix()))
+        {
+          outputStatsFile = "";
+        }
+        else
+        {
+          args.removeAll(outputStatsFile);
+        }
+      }
       args.removeAll("--stats");
     }
     LOG_VARD(printStats);
+    LOG_VARD(outputStatsFile);
 
     if (args.size() < 3 || args.size() > 4)
     {
@@ -88,7 +115,7 @@ public:
         QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
     }
 
-    ChangesetCreator(printStats, osmApiDbUrl).create(output, input1, input2);
+    ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl).create(output, input1, input2);
 
     return 0;
   }
