@@ -63,17 +63,23 @@ public:
     {
       printStats = true;
       const int statsIndex = args.indexOf("--stats");
-      if (!args[statsIndex + 1].startsWith("--"))
+      LOG_VARD(statsIndex);
+      // See similar note in ConflateCmd's parsing of --changeset-stats.
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+          !args[statsIndex + 1].startsWith("--"))
       {
         outputStatsFile = args[statsIndex + 1];
-
-        QFileInfo statsFileInfo(outputStatsFile);
-        if (!statsFileInfo.completeSuffix().isEmpty())
+        LOG_VARD(outputStatsFile);
+        QFileInfo statsInfo(outputStatsFile);
+        LOG_VARD(statsInfo.completeSuffix());
+        if (!ChangesetStatsFormat::isValidFileOutputFormat(statsInfo.completeSuffix()))
         {
-          /*ChangesetStatsFormat format =*/
-            ChangesetStatsFormat::fromString(statsFileInfo.completeSuffix());
+          outputStatsFile = "";
         }
-        args.removeAll(outputStatsFile);
+        else
+        {
+          args.removeAll(outputStatsFile);
+        }
       }
       args.removeAll("--stats");
     }

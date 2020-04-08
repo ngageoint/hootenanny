@@ -166,17 +166,20 @@ public:
     {
       printStats = true;
       const int statsIndex = args.indexOf("--stats");
-      if (!args[statsIndex + 1].startsWith("--"))
+      // See similar note in ChangesetDeriveCmd.
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+          !args[statsIndex + 1].startsWith("--"))
       {
         outputStatsFile = args[statsIndex + 1];
-
-        QFileInfo statsFileInfo(outputStatsFile);
-        if (!statsFileInfo.completeSuffix().isEmpty())
+        QFileInfo statsInfo(outputStatsFile);
+        if (!ChangesetStatsFormat::isValidFileOutputFormat(statsInfo.completeSuffix()))
         {
-          /*ChangesetStatsFormat format =*/
-            ChangesetStatsFormat::fromString(statsFileInfo.completeSuffix());
+          outputStatsFile = "";
         }
-        args.removeAll(outputStatsFile);
+        else
+        {
+          args.removeAll(outputStatsFile);
+        }
       }
       args.removeAll("--stats");
     }

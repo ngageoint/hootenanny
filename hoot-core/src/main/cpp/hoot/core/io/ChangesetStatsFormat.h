@@ -57,6 +57,13 @@ public:
 
   Format getEnum() const { return _format; }
 
+  static bool isValidFileOutputFormat(const QString& extension)
+  {
+    // Obviously this could change in the future but for now, the commands calling this expect to
+    // output table text to the display only and the only file output format is JSON.
+    return fromString(extension) == Format::Json;
+  }
+
   QString toString() const
   {
     switch (_format)
@@ -81,14 +88,15 @@ public:
     {
       return Json;
     }
-    else if (str == "unknown")
+    else if (str == "unknown" || str.trimmed().isEmpty())
     {
       return Unknown;
     }
-    else
-    {
-      throw IllegalArgumentException("Invalid changeset statistics format string: " + str);
-    }
+    return Unknown;
+//    else
+//    {
+//      throw IllegalArgumentException("Invalid changeset statistics format string: " + str);
+//    }
   }
 
 private:

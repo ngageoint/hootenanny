@@ -109,6 +109,7 @@ int ConflateCmd::runSimple(QStringList& args)
 
   BoundedCommand::runSimple(args);
 
+  // This is map stats. Changeset stats for differential are processed further down below.
   QList<SingleStat> stats;
   bool displayStats = false;
   QString outputStatsFile;
@@ -116,14 +117,13 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     displayStats = true;
     const int statsIndex = args.indexOf("--stats");
-    // TODO: add a format verification here, rather than just silently skipping the file if its
-    // not json
-    if (args[statsIndex + 1].toLower().endsWith(".json"))
+    if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+        args[statsIndex + 1].toLower().endsWith(".json"))
     {
       outputStatsFile = args[statsIndex + 1];
+      args.removeAll(outputStatsFile);
     }
     args.removeAll("--stats");
-    args.removeAll(outputStatsFile);
   }
   LOG_VARD(displayStats);
   LOG_VARD(outputStatsFile);
@@ -178,17 +178,23 @@ int ConflateCmd::runSimple(QStringList& args)
     {
       displayChangesetStats = true;
       const int statsIndex = args.indexOf("--changeset-stats");
-      if (!args[statsIndex + 1].startsWith("--"))
+      // If the input immediately after the changeset stats arg isn't a valid changeset stats file
+      // output format, we'll just silently skip it and assume we're outputting stats to the display
+      // only. This mimics how the map stats args and stats args in other commands are parsed. We
+      // may want to eventually return an error or warning here instead.
+      if (statsIndex != -1 && !statsIndex == args.size() - 1 &&
+          !args[statsIndex + 1].startsWith("--"))
       {
         outputChangesetStatsFile = args[statsIndex + 1];
-
-        QFileInfo changesetStatsFileInfo(outputChangesetStatsFile);
-        if (!changesetStatsFileInfo.completeSuffix().isEmpty())
+        QFileInfo changesetStatsInfo(outputChangesetStatsFile);
+        if (!ChangesetStatsFormat::isValidFileOutputFormat(changesetStatsInfo.completeSuffix()))
         {
-          /*ChangesetStatsFormat format =*/
-            ChangesetStatsFormat::fromString(changesetStatsFileInfo.completeSuffix());
+          outputChangesetStatsFile = "";
         }
-        args.removeAll(outputChangesetStatsFile);
+        else
+        {
+          args.removeAll(outputChangesetStatsFile);
+        }
       }
       args.removeAll("--changeset-stats");
     }
