@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "SuperfluousConflateOpsRemover.h"
+#include "SuperfluousConflateOpRemover.h"
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
@@ -40,9 +40,9 @@
 namespace hoot
 {
 
-QSet<QString> SuperfluousConflateOpsRemover::_geometryTypeClassNameCache;
+QSet<QString> SuperfluousConflateOpRemover::_geometryTypeClassNameCache;
 
-void SuperfluousConflateOpsRemover::removeSuperfluousOps()
+void SuperfluousConflateOpRemover::removeSuperfluousOps()
 {
   // get all crits involved in the current matcher configuration
   const QSet<QString> matcherCrits = _getMatchCreatorGeometryTypeCrits();
@@ -92,7 +92,7 @@ void SuperfluousConflateOpsRemover::removeSuperfluousOps()
   }
 }
 
-QStringList SuperfluousConflateOpsRemover::_filterOutUnneededOps(
+QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
   const QSet<QString>& geometryTypeCrits, const QStringList& ops, QSet<QString>& removedOps)
 {
   LOG_TRACE("ops before: " << ops);
@@ -185,7 +185,7 @@ QStringList SuperfluousConflateOpsRemover::_filterOutUnneededOps(
   return modifiedOps;
 }
 
-QSet<QString> SuperfluousConflateOpsRemover::_getMatchCreatorGeometryTypeCrits()
+QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
 {
   QSet<QString> matcherCrits;
 
@@ -265,7 +265,7 @@ QSet<QString> SuperfluousConflateOpsRemover::_getMatchCreatorGeometryTypeCrits()
   return matcherCrits;
 }
 
-bool SuperfluousConflateOpsRemover::_isGeometryTypeCrit(const QString& className)
+bool SuperfluousConflateOpRemover::_isGeometryTypeCrit(const QString& className)
 {
   if (_geometryTypeClassNameCache.contains(className))
   {

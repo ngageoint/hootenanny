@@ -34,7 +34,7 @@
 
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/conflate/network/NetworkMatchCreator.h>
-#include <hoot/core/conflate/SuperfluousConflateOpsRemover.h>
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
@@ -1105,7 +1105,7 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
 
   if (ConfigOptions().getConflateRemoveSuperfluousOps())
   {
-    SuperfluousConflateOpsRemover::removeSuperfluousOps();
+    SuperfluousConflateOpRemover::removeSuperfluousOps();
   }
 
   NamedOp preOps(ConfigOptions().getConflatePreOps());

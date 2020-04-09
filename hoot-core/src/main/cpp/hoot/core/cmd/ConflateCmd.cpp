@@ -64,7 +64,7 @@
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/conflate/SuperfluousConflateOpsRemover.h>
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 
 // Standard
 #include <fstream>
@@ -294,7 +294,7 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     // Let's see if we can remove any ops in the configuration that will have no effect on the
     // feature types we're conflating in order to improve runtime performance.
-    SuperfluousConflateOpsRemover::removeSuperfluousOps();
+    SuperfluousConflateOpRemover::removeSuperfluousOps();
   }
 
   // The number of steps here must be updated as you add/remove job steps in the logic.

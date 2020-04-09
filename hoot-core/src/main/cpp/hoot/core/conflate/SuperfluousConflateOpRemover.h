@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SUPERFLUOUS_CONFLATE_OPS_REMOVER_H
-#define SUPERFLUOUS_CONFLATE_OPS_REMOVER_H
+#ifndef SUPERFLUOUS_CONFLATE_OP_REMOVER_H
+#define SUPERFLUOUS_CONFLATE_OP_REMOVER_H
 
 // Qt
 #include <QStringList>
@@ -41,7 +41,7 @@ namespace hoot
  * Only GeometryTypeCriterion are checked via FilteredByGeometryTypeCriteria. Not sure if this can
  * be extended to check supported matchers for given other types of criteria.
  */
-class SuperfluousConflateOpsRemover
+class SuperfluousConflateOpRemover
 {
 public:
 
@@ -81,5 +81,5 @@ private:
 
 }
 
-#endif // SUPERFLUOUS_CONFLATE_OPS_REMOVER_H
+#endif // SUPERFLUOUS_CONFLATE_OP_REMOVER_H
 

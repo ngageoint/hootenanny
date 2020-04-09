@@ -39,9 +39,9 @@
 namespace hoot
 {
 
-class ConflateCmdOpFilteringJsTest : public HootTestFixture
+class SuperfluousConflateOpRemoverJsTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(ConflateCmdOpFilteringJsTest);
+  CPPUNIT_TEST_SUITE(SuperfluousConflateOpRemoverJsTest);
   CPPUNIT_TEST(runOpFilter1Test);
   CPPUNIT_TEST(runOpFilter2Test);
   CPPUNIT_TEST(runOpFilter3Test);
@@ -56,7 +56,7 @@ class ConflateCmdOpFilteringJsTest : public HootTestFixture
 
 public:
 
-  ConflateCmdOpFilteringJsTest()
+  SuperfluousConflateOpRemoverJsTest()
   {
     setResetType(ResetAll);
 
@@ -138,7 +138,6 @@ private:
   QString scriptMatchCreatorName;
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateCmdOpFilteringJsTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateCmdOpFilteringJsTest, "serial");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SuperfluousConflateOpRemoverJsTest, "quick");
 
 }
