@@ -120,9 +120,6 @@
         "import": "fixme.json"
     },
     {
-        "import": "FlowDir.json"
-    },
-    {
         "import": "frequency.json"
     },
     {
@@ -247,12 +244,6 @@
         "import": "religion.json"
     },
     {
-        "import": "river_flow.json"
-    },
-    {
-        "import": "river_type.json"
-    },
-    {
         "import": "roof.json"
     },
     {
@@ -296,9 +287,6 @@
     },
     {
         "import": "tunnel.json"
-    },
-    {
-        "import": "type.json"
     },
     {
         "import": "url.json"
