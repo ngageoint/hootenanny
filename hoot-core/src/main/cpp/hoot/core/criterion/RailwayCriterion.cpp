@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RailwayCriterion.h"
@@ -42,6 +42,8 @@ RailwayCriterion::RailwayCriterion()
 
 bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  // TODO: Should we throw LinearCriterion in here as a requirement, like we did for
+  // LinearWaterwayCriterion, since railway conflation really only handles linear railways anyway?
   if (e->getElementType() == ElementType::Way || e->getElementType() == ElementType::Relation)
   {
     const Tags& tags = e->getTags();

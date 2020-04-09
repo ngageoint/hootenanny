@@ -48,8 +48,8 @@ _alpha(alpha),
 _buffer(buffer),
 _retryOnTooSmallInitialAlpha(true)
 {
-  LOG_VARD(_alpha);
-  LOG_VARD(_buffer);
+  LOG_VART(_alpha);
+  LOG_VART(_buffer);
 }
 
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
@@ -79,7 +79,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
     r->setTag("area", "yes");
   }
 
-  LOG_VARD(MapProjector::toWkt(result->getProjection()));
+  LOG_VART(MapProjector::toWkt(result->getProjection()));
   OsmMapWriterFactory::writeDebugMap(result, "alpha-shape-result-map");
 
   return result;
@@ -87,10 +87,10 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 
 std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
 {
-  LOG_INFO("Generating alpha shape geometry...");
+  LOG_TRACE("Generating alpha shape geometry...");
 
   MapProjector::projectToPlanar(inputMap);
-  LOG_VARD(MapProjector::toWkt(inputMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(inputMap->getProjection()));
 
   // put all the nodes into a vector of points.
   std::vector<std::pair<double, double>> points;
@@ -103,7 +103,7 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
     p.second = (it->second)->getY();
     points.push_back(p);
   }
-  LOG_VARD(points.size());
+  LOG_VART(points.size());
 
   // create a complex geometry representing the alpha shape
   std::shared_ptr<Geometry> cutterShape;
