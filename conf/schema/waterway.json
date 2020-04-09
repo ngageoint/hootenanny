@@ -1,11 +1,6 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "linestring",
-            "area"
-        ],
         "influence": 1,
         "name": "waterway",
         "objectType": "tag"
@@ -14,13 +9,9 @@
         "categories": [
             "poi"
         ],
-        "isA": "waterway=watercourse",
-        "name": "waterway=anabranch",
-        "objectType": "tag"
-    },
-    {
-        "categories": [
-            "poi"
+        "geometries": [
+            "node",
+            "area"
         ],
         "isA": "waterway",
         "name": "waterway=boatyard",
@@ -30,6 +21,9 @@
         "categories": [
             "poi"
         ],
+        "geometries": [
+            "linestring"
+        ],
         "isA": "waterway",
         "name": "waterway=canal",
         "objectType": "tag"
@@ -38,11 +32,18 @@
         "categories": [
             "poi"
         ],
+        "geometries": [
+            "linestring",
+            "area"
+        ],
         "isA": "waterway",
         "name": "waterway=dam",
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "linestring"
+        ],
         "isA": "waterway",
         "name": "waterway=ditch",
         "objectType": "tag"
@@ -50,6 +51,10 @@
     {
         "categories": [
             "poi"
+        ],
+        "geometries": [
+            "node",
+            "area"
         ],
         "isA": "waterway",
         "name": "waterway=dock",
@@ -67,7 +72,17 @@
         "categories": [
             "poi"
         ],
-        "isA": "waterway=watercourse",
+        "aliases": [
+            "type=river",
+            "type=stream",
+            "river_type=*",
+            "river_flow=*",
+            "FlowDir=*"  
+        ],
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "waterway",
         "name": "waterway=river",
         "objectType": "tag"
     },
@@ -83,21 +98,27 @@
         "categories": [
             "poi"
         ],
-        "isA": "waterway=watercourse",
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "waterway",
         "name": "waterway=stream",
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "linestring"
+        ],
         "isA": "waterway",
         "name": "waterway=wadi",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
+        "geometries": [
+            "linestring"
         ],
         "isA": "waterway",
-        "name": "waterway=watercourse",
+        "name": "waterway=drain",
         "objectType": "tag"
     }
 ]

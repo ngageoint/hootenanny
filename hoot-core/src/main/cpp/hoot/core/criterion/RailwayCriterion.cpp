@@ -42,6 +42,8 @@ RailwayCriterion::RailwayCriterion()
 
 bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  // TODO: Should we throw LinearCriterion in here as a requirement, like we did for
+  // LinearWaterwayCriterion, since railway conflation really only handles linear railways anyway?
   if (e->getElementType() == ElementType::Way || e->getElementType() == ElementType::Relation)
   {
     const Tags& tags = e->getTags();

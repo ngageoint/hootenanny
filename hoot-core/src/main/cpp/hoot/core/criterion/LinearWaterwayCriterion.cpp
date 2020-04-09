@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 
 namespace hoot
 {
@@ -38,19 +39,27 @@ HOOT_FACTORY_REGISTER(ElementCriterion, LinearWaterwayCriterion)
 
 bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e->getElementType() == ElementType::Way || e->getElementType() == ElementType::Relation)
+  LOG_VART(e->getElementId());
+  //LOG_VART(e);
+
+  if (!LinearCriterion().isSatisfied(e))
   {
-    const Tags& tags = e->getTags();
-    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+    LOG_TRACE("failed linear crit");
+    return false;
+  }
+
+  const Tags& tags = e->getTags();
+  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  {
+    if (it.key() == "waterway" || OsmSchema::getInstance().isAncestor(it.key(), "waterway") ||
+        (it.key() == "type" &&
+         OsmSchema::getInstance().isAncestor("waterway=" + it.value(), "waterway")))
     {
-      if (it.key() == "waterway" || OsmSchema::getInstance().isAncestor(it.key(), "waterway") ||
-          (it.key() == "type" &&
-           OsmSchema::getInstance().isAncestor("waterway=" + it.value(), "waterway")))
-      {
-        return true;
-      }
+      LOG_TRACE("passed crit");
+      return true;
     }
   }
+
   return false;
 }
 
