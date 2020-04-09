@@ -120,5 +120,14 @@
         "isA": "waterway",
         "name": "waterway=drain",
         "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node",
+            "linestring"
+        ],
+        "isA": "waterway",
+        "name": "waterway=weir",
+        "objectType": "tag"
     }
 ]

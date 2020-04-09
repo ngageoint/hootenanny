@@ -1,7 +1,0 @@
-#!/bin/bash
-set -e
-
-# 
-
-test-files/cmd/glacial/serial/ServiceChangesetReplacement.sh.off "ServiceChangesetReplacementRiverbankTest" "/home/vagrant/hoot/tmp/3959/NOME_Reference_WaterwayEx.osm" "/home/vagrant/hoot/tmp/3959/OSM_Secondary_WaterwayEx.osm" "130.3124,33.2522,130.3162,33.2574" "130.3124,33.2522,130.3162,33.2574" "true" "true" "" "" "false" "" "" "false" "" "xml" "5.0" "0.5" "true"
-#test-files/cmd/glacial/serial/ServiceChangesetReplacement.sh.off "ServiceChangesetReplacementRiverbankTest" "/home/vagrant/hoot/tmp/3959/NOME_Reference_WaterwayEx.osm" "/home/vagrant/hoot/tmp/3959/OSM_Secondary_WaterwayEx.osm" "-180,-90,180,90" "-180,-90,180,90" "true" "true" "" "" "false" "" "" "false" "" "xml" "5.0" "0.5" "true"
