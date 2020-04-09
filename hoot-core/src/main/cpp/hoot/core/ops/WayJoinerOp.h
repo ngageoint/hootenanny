@@ -62,7 +62,7 @@ public:
   { return "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " ways"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const;
 

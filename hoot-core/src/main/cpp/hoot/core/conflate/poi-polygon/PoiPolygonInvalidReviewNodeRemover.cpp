@@ -34,8 +34,9 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
-//#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 namespace hoot
 {
@@ -168,6 +169,14 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
         " nodes / " << StringUtils::formatLargeNumber(nodes.size()) << " total nodes.");
     }
   }
+}
+
+QStringList PoiPolygonInvalidReviewNodeRemover::getCriteria() const
+{
+  QStringList criteria;
+  criteria.append(QString::fromStdString(PoiCriterion::className()));
+  criteria.append(QString::fromStdString(BuildingCriterion::className()));
+  return criteria;
 }
 
 }

@@ -32,6 +32,11 @@
 namespace hoot
 {
 
+QStringList GeometryTypeCriterion::getCriterionClassNames()
+{
+  return getCriterionClassNamesByGeometryType(GeometryType::Unknown);
+}
+
 QStringList GeometryTypeCriterion::getCriterionClassNamesByGeometryType(const GeometryType& type)
 {
   QStringList classNamesByType;
@@ -45,7 +50,9 @@ QStringList GeometryTypeCriterion::getCriterionClassNamesByGeometryType(const Ge
       Factory::getInstance().constructObject<ElementCriterion>(className));
     std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit =
       std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
-    if (geometryTypeCrit && geometryTypeCrit->getGeometryType() == type)
+    if (geometryTypeCrit &&
+       (geometryTypeCrit->getGeometryType() == type ||
+        (geometryTypeCrit->getGeometryType() == GeometryType::Unknown)))
     {
       classNamesByType.append(QString::fromStdString(className));
     }

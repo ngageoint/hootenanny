@@ -67,7 +67,7 @@ public:
   virtual QString getDescription() const override { return "Removes the outline around buildings"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(BuildingCriterion::className())); }

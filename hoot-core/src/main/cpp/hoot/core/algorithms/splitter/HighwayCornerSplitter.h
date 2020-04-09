@@ -77,7 +77,7 @@ public:
   { return "Split " + QString::number(_numAffected) + " road corners"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }

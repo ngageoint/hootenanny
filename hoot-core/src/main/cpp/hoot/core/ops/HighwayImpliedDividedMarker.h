@@ -79,7 +79,7 @@ public:
   { return "Marks road sections that implicitly appear to be divided highways"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    *
    * This isn't actually using HighwayCriterion in the filtering, but for the purposes of reducing
    * unnecessary conflate ops we don't need to run it unless we're running road conflation.

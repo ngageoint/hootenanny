@@ -203,6 +203,23 @@ public:
     }
     LOG_VARD(enableConflation);
 
+    bool enableCleaning = true;
+    if (args.contains("--disable-cleaning"))
+    {
+      if (!enableConflation)
+      {
+        enableCleaning = false;
+      }
+      else
+      {
+        LOG_WARN(
+          "Cleaning cannot be disabled unless conflation is disabled for changeset replacement " <<
+          "derivation.");
+      }
+      args.removeAll("--disable-cleaning");
+    }
+    LOG_VARD(enableConflation);
+
     bool tagOobConnectedWays = true;
     if (args.contains("--disable-oob-way-handling"))
     {
@@ -258,6 +275,7 @@ public:
     changesetCreator.setRetainmentFilterOptions(retainmentFilterOptions);
     changesetCreator.setWaySnappingEnabled(enableWaySnapping);
     changesetCreator.setConflationEnabled(enableConflation);
+    changesetCreator.setCleaningEnabled(enableCleaning);
     changesetCreator.setTagOobConnectedWays(tagOobConnectedWays);
     changesetCreator.create(input1, input2, bounds, output);
 

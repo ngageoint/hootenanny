@@ -78,6 +78,11 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const;
+
  private:
 
   OsmMapPtr _map;

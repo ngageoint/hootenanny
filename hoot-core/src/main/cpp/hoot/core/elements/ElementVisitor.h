@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/info/ApiEntityInfo.h>
-#include <hoot/core/criterion/FilteredByCriteria.h>
+#include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
@@ -47,7 +47,7 @@ namespace hoot
  * @todo We could eventually remove the default empty string implementations of OperationStatusInfo
  * methods and require them to be implemented in children.
  */
-class ElementVisitor : public ApiEntityInfo, public FilteredByCriteria, public OperationStatusInfo
+class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria, public OperationStatusInfo
 {
 public:
 
@@ -84,7 +84,7 @@ public:
   virtual QString getCompletedStatusMessage() const { return ""; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    *
    * An empty list returned here means that the visitor is associated no specific criteria and
    * can be run against any feature type. Any visitors that want to control which feature types

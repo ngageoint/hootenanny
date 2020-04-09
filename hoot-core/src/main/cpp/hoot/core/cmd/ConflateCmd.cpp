@@ -64,6 +64,7 @@
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/conflate/SuperfluousConflateOpsRemover.h>
 
 // Standard
 #include <fstream>
@@ -293,7 +294,7 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     // Let's see if we can remove any ops in the configuration that will have no effect on the
     // feature types we're conflating in order to improve runtime performance.
-    _removeSuperfluousOps();
+    SuperfluousConflateOpsRemover::removeSuperfluousOps();
   }
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
@@ -656,206 +657,6 @@ float ConflateCmd::_getTaskWeight() const
 float ConflateCmd::_getJobPercentComplete(const int currentTaskNum) const
 {
   return (float)currentTaskNum / (float)_numTotalTasks;
-}
-
-void ConflateCmd::_removeSuperfluousOps()
-{
-  // get all crits involved in the current matcher configuration
-  const QSet<QString> matcherCrits = _getMatchCreatorCrits();
-
-  QSet<QString> removedOps;
-
-  // for each of the conflate pre/post and map cleaner transforms (if conflate pre/post specifies
-  // MapCleaner) filter out any that aren't associated with the same ElementCriterion as the ones
-  // associated with the matchers
-
-  const QStringList modifiedPreConflateOps =
-    _filterOutUnneededOps(
-      matcherCrits, ConfigOptions().getConflatePreOps(), removedOps);
-  if (modifiedPreConflateOps.size() != ConfigOptions().getConflatePreOps().size())
-  {
-    conf().set(ConfigOptions::getConflatePreOpsKey(), modifiedPreConflateOps);
-  }
-
-  const QStringList modifiedPostConflateOps =
-    _filterOutUnneededOps(
-      matcherCrits, ConfigOptions().getConflatePostOps(), removedOps);
-  if (modifiedPostConflateOps.size() != ConfigOptions().getConflatePostOps().size())
-  {
-    conf().set(ConfigOptions::getConflatePostOpsKey(), modifiedPostConflateOps);
-  }
-
-  const QString mapCleanerName = QString::fromStdString(MapCleaner::className());
-  if (modifiedPreConflateOps.contains(mapCleanerName) ||
-      modifiedPostConflateOps.contains(mapCleanerName))
-  {
-    const QStringList modifiedCleaningOps =
-      _filterOutUnneededOps(
-        matcherCrits, ConfigOptions().getMapCleanerTransforms(), removedOps);
-    if (modifiedCleaningOps.size() != ConfigOptions().getMapCleanerTransforms().size())
-    {
-      conf().set(ConfigOptions::getMapCleanerTransformsKey(), modifiedCleaningOps);
-    }
-  }
-
-  if (removedOps.size() > 0)
-  {
-    QStringList removedOpsList = removedOps.values();
-    qSort(removedOpsList);
-    LOG_INFO(
-      "Removed the following conflate pre/post operations with no relevance to the selected " <<
-      "matchers: " << removedOpsList.join(", "));
-  }
-}
-
-QStringList ConflateCmd::_filterOutUnneededOps(
-  const QSet<QString>& matcherCrits, const QStringList& ops, QSet<QString>& removedOps)
-{
-  LOG_TRACE("ops before: " << ops);
-
-  QStringList modifiedOps;
-
-  for (int i = 0; i < ops.size(); i++)
-  {
-    const QString opName = ops.at(i);
-    LOG_VART(opName);
-
-    // MapCleaner's ops are configured with map.cleaner.transforms, so don't exclude it here.
-    if (opName == QString::fromStdString(MapCleaner::className()))
-    {
-      modifiedOps.append(opName);
-      continue;
-    }
-
-    // All the ops should be map ops or element vis and, thus, support FilteredByCriteria, but
-    // we'll check anyway to be safe.
-    std::shared_ptr<FilteredByCriteria> op;
-    if (Factory::getInstance().hasBase<OsmMapOperation>(opName.toStdString()))
-    {
-      op =
-        std::dynamic_pointer_cast<FilteredByCriteria>(
-          std::shared_ptr<OsmMapOperation>(
-            Factory::getInstance().constructObject<OsmMapOperation>(opName)));
-    }
-    else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
-    {
-      op =
-        std::dynamic_pointer_cast<FilteredByCriteria>(
-          std::shared_ptr<ElementVisitor>(
-            Factory::getInstance().constructObject<ElementVisitor>(opName)));
-    }
-
-    if (op)
-    {
-      // get all the class names of the crits that this op is associated with
-      const QStringList opCrits = op->getCriteria();
-      LOG_VART(opCrits);
-
-      // If the op is not associated with any crit, we assume it should never be disabled based on
-      // the feature type being conflated.
-      if (opCrits.isEmpty())
-      {
-        modifiedOps.append(opName);
-        continue;
-      }
-
-      // If any of the op's crits match with those in the matchers' list, we'll use it. Otherwise,
-      // we disable it.
-      bool opAdded = false;
-      for (int j = 0; j < opCrits.size(); j++)
-      {
-        const QString opCrit = opCrits.at(j);
-        if (matcherCrits.contains(opCrit))
-        {
-          modifiedOps.append(opName);
-          opAdded = true;
-          break;
-        }
-      }
-      if (!opAdded)
-      {
-        removedOps.insert(opName);
-      }
-    }
-    else
-    {
-      removedOps.insert(opName);
-    }
-  }
-
-  LOG_TRACE("ops after: " << modifiedOps);
-  LOG_VART(removedOps);
-  return modifiedOps;
-}
-
-QSet<QString> ConflateCmd::_getMatchCreatorCrits()
-{
-  QSet<QString> matcherCrits;
-
-  // get all of the matchers from our current config
-  std::vector<std::shared_ptr<MatchCreator>> matchCreators =
-      MatchFactory::getInstance().getCreators();
-  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator it = matchCreators.begin();
-       it != matchCreators.end(); ++it)
-  {
-    std::shared_ptr<MatchCreator> matchCreator = *it;
-    std::shared_ptr<FilteredByCriteria> critFilter =
-      std::dynamic_pointer_cast<FilteredByCriteria>(matchCreator);
-    const QStringList crits = critFilter->getCriteria();
-
-    // Technically, not sure we'd have to error out here, but it will be good to know if any
-    // matchers weren't configured with crits to keep conflate bugs from sneaking in over time.
-    if (crits.size() == 0)
-    {
-      throw HootException(
-        "Match creator: " + matchCreator->getName() +
-        " does not specify any associated feature type criteria.");
-    }
-
-    for (int i = 0; i < crits.size(); i++)
-    {
-      const QString critStr = crits.at(i);
-      LOG_VART(critStr);
-      // doublecheck this is a valid crit
-      if (Factory::getInstance().hasBase<ElementCriterion>(critStr.toStdString()))
-      {
-        // add the crit
-        matcherCrits.insert(critStr);
-
-        // also add any generic geometry crits the crit inherits from
-
-        const QStringList pointCrits =
-          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-            GeometryTypeCriterion::GeometryType::Point);
-        LOG_VART(pointCrits);
-        if (pointCrits.contains(critStr))
-        {
-          matcherCrits.insert(QString::fromStdString(PointCriterion::className()));
-        }
-
-        const QStringList lineCrits =
-          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-            GeometryTypeCriterion::GeometryType::Line);
-        LOG_VART(lineCrits);
-        if (lineCrits.contains(critStr))
-        {
-          matcherCrits.insert(QString::fromStdString(LinearCriterion::className()));
-        }
-
-        const QStringList polyCrits =
-          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-            GeometryTypeCriterion::GeometryType::Polygon);
-        LOG_VART(polyCrits);
-        if (polyCrits.contains(critStr))
-        {
-          matcherCrits.insert(QString::fromStdString(PolygonCriterion::className()));
-        }
-      }
-    }
-  }
-
-  LOG_VART(matcherCrits);
-  return matcherCrits;
 }
 
 void ConflateCmd::_disableRoundaboutRemoval()

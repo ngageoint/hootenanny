@@ -59,6 +59,8 @@ IDs in the secondary data are not retained and those elements treated as complet
                                    being replaced.
 * +--disable-conflation+         - Disables the conflation of new secondary features with unremoved reference features. See the "Conflation" 
                                    section for more detail.
+* +--disable-cleaning+           - Disables cleaning of data. Cleaning must be run before conflation, so this option is ignored unless 
+                                   +--disable-conflation+ is also enabled. See the "Conflation" section for more detail.
 * +--disable-oob-way-handling+   - Determines whether Hootenanny automatically handles protecting out of bounds immediately connected reference 
                                    ways from deletion in the changeset output. See the ""Bounds Handling" section for more detail.
 * +--stats+                      - Displays changeset statistics and may be optionally followed by an output JSON file name to write the 
@@ -214,6 +216,10 @@ conflation use the +--disable-conflation+ option.
 Both reference and secondary map inputs are processed separately for each geometry type they contain (point/line/polygon), therefore cross 
 geometry conflation algorithms, such as POI to Polygon conflation, will have no effect on the conflated output. Cross geometry conflation 
 algorithms must be run on the map data outside of the usage of this command. 
+
+Hootenanny always runs cleaning operations on input data before conflating them in order to get the best conflated output result. If you opt
+not to run conflation with +--disable-conflation+, you may also opt out of the cleaning operations by using the +--disable-cleaning+ option. If
+conflation is enabled by omitting +--disable-conflation+ cleaning may not be disabled and +--disable-cleaning+ is ignored.
 
 === See Also
 
