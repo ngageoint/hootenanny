@@ -29,9 +29,11 @@ package hoot.services.controllers.conflation;
 import static hoot.services.HootProperties.CONFLATION_TYPES_PATH;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.NETWORK_CONFLATION_PATH;
 import static hoot.services.HootProperties.RPT_STORE_PATH;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -46,6 +48,9 @@ import org.apache.commons.io.FileUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
@@ -78,14 +83,6 @@ class ConflateCommand extends ExternalCommand {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static Map<String, Map<String, String>> getConfigOptions() {
-        return configOptions;
-    }
-
-    public static Map<String, Map<String, Object>> getConflationFeatures() {
-        return conflationFeatures;
     }
 
 
@@ -167,7 +164,7 @@ class ConflateCommand extends ExternalCommand {
             Arrays.stream(toOptionsList(params.getAdvancedOptions())).forEach((option) -> {
                 if (!option.isEmpty()) {
                     options.add(option.trim());
-                };
+                }
             });
         }
 
@@ -183,7 +180,6 @@ class ConflateCommand extends ExternalCommand {
 
             if (disabledFeatures != null && !disabledFeatures.isEmpty()) {
                 List<String> matchers = new ArrayList<>();
-                List<String> mergers = new ArrayList<>();
 
                 String roadType = "Network".equals(conflationAlgorithm) ? "Roads" : "RoadsNetwork";
                 for (String feature: conflationFeatures.keySet()) {
@@ -193,13 +189,54 @@ class ConflateCommand extends ExternalCommand {
                     Map<String, Object> conflationFeature = conflationFeatures.get(feature);
                     String conflationMatcher = (String) conflationFeature.get("matcher");
                     String conflationMerger = (String) conflationFeature.get("merger");
-                    if (conflationMatcher != null && conflationMerger != null && !disabledFeatures.contains(feature)) {
+                    if (conflationMatcher != null && !conflationMatcher.isEmpty()
+                            && conflationMerger != null && !conflationMerger.isEmpty()
+                            && !disabledFeatures.contains(feature)) {
                         matchers.add(conflationMatcher);
-                        mergers.add(conflationMerger);
                     }
                 }
-                options.add("match.creators=" + String.join(";", matchers));
-                options.add("merger.creators=" + String.join(";", mergers));
+
+                // These 2 lists will be in the proper order so we will us this to sort our matchers and mergers list
+                List<String> matchCreators;
+                List<String> mergerCreators;
+
+                // SPECIAL CASE: if network order networkAlgorithm.conf
+                if (conflationType.equals("Network")) {
+                    JSONParser parser = new JSONParser();
+                    try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, NETWORK_CONFLATION_PATH))) {
+                        JSONObject networkConfigJson = (JSONObject) parser.parse(fileReader);
+                        matchCreators = new ArrayList<>(Arrays.asList(networkConfigJson.get("match.creators").toString().split(";")));
+                        mergerCreators = new ArrayList<>(Arrays.asList(networkConfigJson.get("merger.creators").toString().split(";")));
+                    }
+                    catch (IOException | ParseException ioe) {
+                        throw new RuntimeException("Error reading NetworkAlgorithm.conf file", ioe);
+                    }
+                } else {
+                    // These 2 lists are in the proper order so we will us this to sort our matchers and mergers list
+                    matchCreators = new ArrayList<>(Arrays.asList(configOptions.get("MatchCreators").get("default").split(";")));
+                    mergerCreators = new ArrayList<>(Arrays.asList(configOptions.get("MergerCreators").get("default").split(";")));
+                }
+
+                List<String> sortedMatchers = new ArrayList<>();
+                List<String> sortedMergers = new ArrayList<>();
+                // since we are looping through the configOptions matchers list, we can check if our 'matchers' list we added items to contains the same strings.
+                // if it does, we just add those items from the configOptions matchers, along with the respective index item from configOptions mergers, to maintain proper order.
+                for (int i = 0; i < matchCreators.size(); i++) {
+                    String current = matchCreators.get(i);
+
+                    // Special case for network
+                    if (current.equals("hoot::NetworkMatchCreator") && matchers.contains("hoot::HighwayMatchCreator")) {
+                        sortedMatchers.add("hoot::NetworkMatchCreator");
+                        sortedMergers.add("hoot::NetworkMergerCreator");
+                    }
+                    else if (matchers.contains(current)) {
+                        sortedMatchers.add(current);
+                        sortedMergers.add(mergerCreators.get(i));
+                    }
+                }
+
+                options.add("match.creators=" + String.join(";", sortedMatchers));
+                options.add("merger.creators=" + String.join(";", sortedMergers));
             }
 
             Map<String, String> hoot2AdvOptions = params.getHoot2AdvOptions();
@@ -241,7 +278,7 @@ class ConflateCommand extends ExternalCommand {
         substitutionMap.put("DIFF_TAGS", diffTags);
         substitutionMap.put("STATS", stats);
 
-        String command = null;
+        String command;
         if (params.getHoot2() == null) { // hoot1
             command = "hoot.bin ${CONFLATION_COMMAND} --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         } else {
