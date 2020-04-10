@@ -67,6 +67,11 @@ public:
       QString::number(_numRelationsRemoved) + " reviews";
   }
 
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const;
+
 protected:
 
   std::set<long> _nodesToRemove;

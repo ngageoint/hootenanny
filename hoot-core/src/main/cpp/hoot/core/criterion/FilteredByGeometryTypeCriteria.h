@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FILTERED_BY_CRITERIA_H
-#define FILTERED_BY_CRITERIA_H
+#ifndef FILTERED_BY_GEOMETRY_TYPE_CRITERIA_H
+#define FILTERED_BY_GEOMETRY_TYPE_CRITERIA_H
 
 // Qt
 #include <QStringList>
@@ -34,19 +34,20 @@ namespace hoot
 {
 
 /**
- * This interface allows for identifying feature types associated with a hoot operator. This is
- * currently used by ConflateCmd to weed out unnecessary conflate ops specified in the
- * configuration.
- *
- * At some point we may want the ops to call this to create the actual filtering criteria they use
- * in their logic, but for now they don't.
+ * This interface allows for identifying feature geometry types associated with a hoot operator.
+ * This is used during conflation to weed out unnecessary conflate ops specified in the
+ * configuration. A list of class names is returned instead of instantiated criterion classes for
+ * performance reasons. Callers are responsible for verifying that the classes are valid
+ * GeometryTypeCriterion classes.
  */
-class FilteredByCriteria
+class FilteredByGeometryTypeCriteria
 {
 public:
 
   /**
-   * Returns all associated ElementCriterion class names
+   * Returns all associated GeometryTypeCriterion class names. The criteria are logically OR'd
+   * together. If a class that doesn't inherit from GeometryTypeCriterion is returned by an
+   * implementer, an exception will be thrown.
    *
    * @return a list of class names
    */
@@ -55,4 +56,4 @@ public:
 
 }
 
-#endif // FILTERED_BY_CRITERIA_H
+#endif // FILTERED_BY_GEOMETRY_TYPE_CRITERIA_H

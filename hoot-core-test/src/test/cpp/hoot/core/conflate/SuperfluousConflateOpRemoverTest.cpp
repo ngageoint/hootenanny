@@ -42,9 +42,9 @@
 namespace hoot
 {
 
-class ConflateCmdOpFilteringTest : public HootTestFixture
+class SuperfluousConflateOpRemoverTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(ConflateCmdOpFilteringTest);
+  CPPUNIT_TEST_SUITE(SuperfluousConflateOpRemoverTest);
   CPPUNIT_TEST(runOpFilter1Test);
   CPPUNIT_TEST(runOpFilter2Test);
   CPPUNIT_TEST(runOpFilter3Test);
@@ -54,7 +54,7 @@ class ConflateCmdOpFilteringTest : public HootTestFixture
 
 public:
 
-  ConflateCmdOpFilteringTest()
+  SuperfluousConflateOpRemoverTest()
   {
     setResetType(ResetAll);
   }
@@ -95,7 +95,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateCmdOpFilteringTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateCmdOpFilteringTest, "serial");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SuperfluousConflateOpRemoverTest, "quick");
 
 }

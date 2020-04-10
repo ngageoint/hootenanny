@@ -70,7 +70,7 @@ public:
   virtual QString getDescription() const { return "Removes duplicate areas"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const;
 

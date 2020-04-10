@@ -90,7 +90,7 @@ public:
   { return "Replaces road roundabouts with simple intersections"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }

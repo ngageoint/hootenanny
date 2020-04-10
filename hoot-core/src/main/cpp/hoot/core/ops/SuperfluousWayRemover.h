@@ -78,13 +78,13 @@ public:
   { return "Removes ways not in relations or containing zero or all identical nodes"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const;
 
   virtual std::string getClassName() const { return className(); }
 
-protected:
+private:
 
   std::shared_ptr<OsmMap> _inputMap;
 };

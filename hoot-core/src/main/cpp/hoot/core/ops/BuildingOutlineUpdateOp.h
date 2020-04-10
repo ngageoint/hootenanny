@@ -73,7 +73,7 @@ public:
   { return "Updates multi-part building outlines"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(BuildingCriterion::className())); }

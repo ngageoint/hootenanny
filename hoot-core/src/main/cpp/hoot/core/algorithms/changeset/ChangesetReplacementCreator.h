@@ -144,6 +144,7 @@ public:
   void setRetainmentFilterOptions(const QStringList& optionKvps);
   void setWaySnappingEnabled(const bool enabled) { _waySnappingEnabled = enabled; }
   void setConflationEnabled(const bool enabled) { _conflationEnabled = enabled; }
+  void setCleaningEnabled(const bool enabled) { _cleaningEnabled = enabled; }
   void setTagOobConnectedWays(const bool addTag) { _tagOobConnectedWays = addTag; }
 
 private:
@@ -192,6 +193,9 @@ private:
 
   // turn on/off conflation of cookie cut data being replaced with replacement data
   bool _conflationEnabled;
+
+  // turn on/off cleaning of input data; cannot be disabled if conflation is enabled
+  bool _cleaningEnabled;
 
   // Tagging out of bounds connected ways allows for preventing deletion of ways outside of the
   // replacement bounds when lenient bounds interpretation is enabled. If false, the tags should
@@ -277,6 +281,8 @@ private:
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 
   void _conflate(OsmMapPtr& map, const bool lenientBounds);
+
+  void _clean(OsmMapPtr& map);
 
   void _snapUnconnectedWays(
     OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,

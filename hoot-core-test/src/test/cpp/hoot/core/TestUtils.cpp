@@ -41,7 +41,7 @@
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
-#include <hoot/core/cmd/ConflateCmd.h>
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/util/ConfPath.h>
 
 //  tgs
@@ -391,9 +391,6 @@ void TestUtils::runConflateOpReductionTest(
 {
   QStringList actualOps;
 
-  ConflateCmd uut;
-  uut.setFilterOps(true);
-
   CPPUNIT_ASSERT_EQUAL(4,  TestUtils::getConflateCmdSnapshotPreOps().size());
   CPPUNIT_ASSERT_EQUAL(15,  TestUtils::getConflateCmdSnapshotPostOps().size());
   CPPUNIT_ASSERT_EQUAL(17,  TestUtils::getConflateCmdSnapshotCleaningOps().size());
@@ -408,7 +405,7 @@ void TestUtils::runConflateOpReductionTest(
   conf().set(
     ConfigOptions::getMapCleanerTransformsKey(), TestUtils::getConflateCmdSnapshotCleaningOps());
 
-  uut._removeSuperfluousOps();
+  SuperfluousConflateOpRemover::removeSuperfluousOps();
 
   actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
   CPPUNIT_ASSERT_EQUAL(expectedPreOpSize, actualOps.size());

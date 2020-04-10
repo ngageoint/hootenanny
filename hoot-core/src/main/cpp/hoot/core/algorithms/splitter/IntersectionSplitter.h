@@ -74,7 +74,7 @@ public:
   { return "Makes all road intersections contain only way end nodes"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const;
 

@@ -54,6 +54,9 @@ class OsmMap;
  * If the bounds have been set via Boundable's setBounds then only nodes that are both not part
  * of a way and inside the bounds will be removed. This is most useful when performing tile based
  * operations such as the FourPassDriver.
+ *
+ * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map with no
+ * nodes.
  */
 class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable
 {
