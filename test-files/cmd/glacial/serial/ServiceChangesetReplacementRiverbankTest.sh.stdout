@@ -53,5 +53,3 @@ Relation(s) Deleted: 0
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementRiverbankTest-xml-replaced.osm for verification...
 
-15:55:58.190 WARN   ...core/scoring/MapComparator.cpp( 379) Number of nodes does not match (1: 4372; 2: 4351)
-15:55:58.196 WARN   ...core/scoring/MapComparator.cpp( 345) 	Nodes in map 1 and not in map 2 (limit 5): [4726, 4727, 4728, 4729, 4730]
