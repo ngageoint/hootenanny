@@ -35,6 +35,7 @@
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
@@ -188,6 +189,9 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 {
   // TODO: This monster method needs to be refactored into smaller parts where possible.
 
+  // ENABLE THE OsmMapWriterFactory::writeDebugMap CALLS FOR SMALL DATASET DEBUGGING ONLY. writes a
+  // map file for road merge
+
   LOG_VART(eid1);
   LOG_VART(map->getElement(eid1));
   LOG_VART(eid2);
@@ -229,6 +233,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     // remove the second element and any reviews that contain the element
     RemoveReviewsByEidOp(remove->getElementId(), true).apply(result);
 
+    //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-merged-identical-elements");
+
     return false;
   }
 
@@ -264,9 +270,11 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // split the first element and don't reverse any of the geometries.
   _splitElement(map, match.getSublineString1(), match.getReverseVector1(), replaced, e1, e1Match,
                 scraps1);
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-1");
   // split the second element and reverse any geometries to make the matches work.
   _splitElement(map, match.getSublineString2(), match.getReverseVector2(), replaced, e2, e2Match,
                 scraps2);
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-2");
 
   LOG_VART(e1Match->getElementId());
   if (scraps1)
@@ -289,7 +297,9 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   // remove any ways that directly connect from e1Match to e2Match
   _removeSpans(result, e1Match, e2Match);
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-remove-spans");
   _snapEnds(map, e2Match, e1Match);
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-snap-ends");
 
   if (e1Match)
   {
@@ -323,6 +333,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   LOG_VART(e1Match->getElementType());
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-tag-merging");
 
   bool swapWayIds = false;
 
@@ -510,13 +521,16 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     map->addElement(scraps2);
     ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(result);
     ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(result);
-//    _updateScrapParent(result, e2Match->getId(), scraps2);
   }
   // Otherwise, drop the reviews and the element.
   else
   {
     LOG_TRACE("Removing: " << e2Match->getElementId() << " and : " << eid2 << "...");
 
+    // add any informational nodes from the way being replaced to the merged output before deleting
+    // it
+    _copyInformationalNodesFromReplaced(
+      e2Match->getElementId(), /*e1Match->getElementId()*/eid1, map);
     RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(result);
 
     // Make the way that we're keeping have membership in whatever relations the way we're removing
@@ -525,6 +539,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     RelationMemberSwapper::swap(eid2, eid1, map, false);
     RemoveReviewsByEidOp(eid2, true).apply(result);
   }
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-old-way-removal");
 
   if (e1Match)
   {
@@ -570,6 +585,87 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   LOG_VART(replaced);
 
   return false;
+}
+
+void HighwaySnapMerger::_copyInformationalNodesFromReplaced(
+  const ElementId& toReplaceWayId, const ElementId& replacingWayId, const OsmMapPtr& map)
+{
+  WayPtr toReplaceWay = map->getWay(toReplaceWayId);
+  WayPtr replacingWay = map->getWay(replacingWayId);
+  if (toReplaceWay && replacingWay)
+  {
+    LOG_VART(toReplaceWay->getElementId());
+    LOG_VART(toReplaceWay->getNodeCount());
+    LOG_VART(replacingWay->getElementId());
+    LOG_VART(replacingWay->getNodeCount());
+
+    for (size_t i = 0; i < toReplaceWay->getNodeCount(); i++)
+    {
+      NodePtr nodeToBeRemoved = map->getNode(toReplaceWay->getNodeId(i));
+      LOG_VART(nodeToBeRemoved->getElementId());
+
+      // for each informational node in the way being replaced
+      if (nodeToBeRemoved->getTags().getInformationCount() > 0)
+      {
+        WayLocation closestBeingReplacedLocToInfoNode =
+          LocationOfPoint::locate(map, toReplaceWay, nodeToBeRemoved->toCoordinate());
+        LOG_VART(closestBeingReplacedLocToInfoNode);
+        if (closestBeingReplacedLocToInfoNode.isValid())
+        {
+          // If there is no node at the exact same location along the way (within a tolerance), add
+          // the node at the same location on the replacement way.
+          WayLocation closestReplacementLocToInfoNode =
+            LocationOfPoint::locate(map, replacingWay, nodeToBeRemoved->toCoordinate());
+          LOG_VART(closestReplacementLocToInfoNode);
+          const double tolerance = 0.01;
+          LOG_VART(closestReplacementLocToInfoNode.isNode(tolerance));
+          if (!closestReplacementLocToInfoNode.isNode(tolerance))
+          {
+            geos::geom::Coordinate closestCoord = closestReplacementLocToInfoNode.getCoordinate();
+            LOG_VART(closestCoord);
+            NodePtr nodeToAdd = nodeToBeRemoved->cloneSp();
+            nodeToAdd->setId(nodeToBeRemoved->getId());
+            nodeToAdd->setX(closestCoord.x);
+            nodeToAdd->setY(closestCoord.y);
+            LOG_TRACE(
+              "Adding " << nodeToAdd->getElementId() << " to " << replacingWay->getElementId() <<
+              "...");
+            replacingWay->addNode(nodeToAdd);
+            LOG_VART(replacingWay->getNodeCount());
+          }
+          else
+          {
+            // If there is a node at the exact same location along the way (within a tolerance), and
+            // the two nodes have identical tags, skip adding it.
+            ConstNodePtr closestNode = closestReplacementLocToInfoNode.getNode(tolerance);
+            LOG_VART(closestNode->getElementId());
+            LOG_VART(ElementComparer::tagsAreSame(nodeToBeRemoved, closestNode));
+            if (ElementComparer::tagsAreSame(nodeToBeRemoved, closestNode))
+            {
+              LOG_TRACE(
+                "Nodes " << nodeToAdd->getElementId() << " and " << closestNode->getElementId() <<
+                " are identical, so skipping add.");
+              continue;
+            }
+            else
+            {
+              // If there is a node at the exact same location along the way (within a tolerance),
+              // and the two nodes do not have identical tags, merge the tags in from the way being
+              // replaced.
+              Tags newTags =
+                TagMergerFactory::mergeTags(
+                  closestNode->getTags(), nodeToBeRemoved->getTags(), ElementType::Node);
+              LOG_VART(newTags);
+              closestNode->setTags(newTags);
+              LOG_TRACE(
+                "Updating tags on " << closestNode->getElementId() << " with tags from " <<
+                nodeToBeRemoved->getElementId() << " ...");
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const ElementPtr& e1,
@@ -656,7 +752,7 @@ void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const WayPtr& w1, const WayP
 
 void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee, ElementPtr snapTo) const
 {
-  // TODO: get rid of this?
+  // TODO: get rid of this and replace with visitors/WaysVisitor
   class WaysVisitor : public ElementOsmMapVisitor
   {
   public:
@@ -757,14 +853,14 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
   set<ConstWayPtr, WayPtrCompare> ways;
   ways.insert(waysV.begin(), waysV.end());
 
-  // remove all the ways that are part of the subline. This leaves us with a list of ways that
+  // Remove all the ways that are part of the subline. This leaves us with a list of ways that
   // aren't going to be modified.
   for (size_t i = 0; i < s.getSublines().size(); i++)
   {
     ways.erase(s.getSublines()[i].getWay());
   }
 
-  // the subline string split should always result in a match section.
+  // The subline string split should always result in a match section.
   assert(match);
 
   // if there are ways that aren't part of the way subline string
@@ -881,7 +977,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       multiLineStringAdded = true;
     }
 
-    // make sure the tags are still legit on the scrap.
+    // Make sure the tags are still legit on the scrap.
     scrap->setTags(splitee->getTags());
     // With the merging switching between split ways and relations, it gets a little hard to keep
     // track of where this tags is needed, so one final check here to make sure it gets added

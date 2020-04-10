@@ -33,9 +33,9 @@ namespace hoot
 {
 
 /**
- * Enumeration for use with matches and mappings that contain two ways.  There is a lot of duplication
- * of functions (i.e. getWayString1() and getWayString2() below) that can be accessed more generically
- * by using WayNumber enum as a parameter in said functions
+ * Enumeration for use with matches and mappings that contain two ways.  There is a lot of
+ * duplication of functions (i.e. getWayString1() and getWayString2() below) that can be accessed
+ * more generically by using WayNumber enum as a parameter in said functions
  */
 enum WayNumber
 {

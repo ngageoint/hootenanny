@@ -105,9 +105,9 @@ void HighwayCornerSplitter::splitCorners()
       bool split = false;
       for (size_t nodeIdx = 1; nodeIdx < nodeCount - 1 && !split; nodeIdx++)
       {
-        WayLocation prev(_map, pWay, nodeIdx-1, 0.0);
+        WayLocation prev(_map, pWay, nodeIdx - 1, 0.0);
         WayLocation current(_map, pWay, nodeIdx, 0.0);
-        WayLocation next(_map, pWay, nodeIdx+1, 0.0);
+        WayLocation next(_map, pWay, nodeIdx + 1, 0.0);
 
         // Calculate headings
         const double twopi = M_PI*2.0;

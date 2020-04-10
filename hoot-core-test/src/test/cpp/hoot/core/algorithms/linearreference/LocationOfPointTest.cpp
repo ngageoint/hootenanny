@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -61,9 +61,11 @@ public:
     std::shared_ptr<OsmMap> map(new OsmMap());
 
     geos::geom::Coordinate c[] =
-    { geos::geom::Coordinate(0.0, 0.0), geos::geom::Coordinate(100.0, 0.0),
+    {
+      geos::geom::Coordinate(0.0, 0.0), geos::geom::Coordinate(100.0, 0.0),
       geos::geom::Coordinate(100.0, 10.0), geos::geom::Coordinate(0.0, 10.0),
-      geos::geom::Coordinate::getNull() };
+      geos::geom::Coordinate::getNull()
+    };
     WayPtr w = TestUtils::createWay(map, Status::Unknown1, c, 1, "");
     WayLocation wl(map, w, 0, 0);
 

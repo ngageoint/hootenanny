@@ -28,7 +28,6 @@
 #define HIGHWAYSNAPMERGER_H
 
 // Hoot
-#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/conflate/highway/HighwayMergerAbstract.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
@@ -82,8 +81,6 @@ private:
 
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
-  ReviewMarker _reviewMarker;
-
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;
 
@@ -115,6 +112,12 @@ private:
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
 
   void _updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap);
+
+  /*
+   * TODO
+   */
+  void _copyInformationalNodesFromReplaced(
+    const ElementId& toReplaceWayId, const ElementId& replacingWayId, const OsmMapPtr& map);
 
   // for white box testing.
   friend class HighwaySnapMergerTest;
