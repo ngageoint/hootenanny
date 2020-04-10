@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NAIVEWAYMATCHSTRINGMAPPING_H
 #define NAIVEWAYMATCHSTRINGMAPPING_H
@@ -41,15 +41,12 @@ public:
   NaiveWayMatchStringMapping(WayStringPtr str1, WayStringPtr str2);
 
   virtual WayStringPtr getWayString1() { return _ws1; }
-
   virtual WayStringPtr getWayString2() { return _ws2; }
 
   virtual WayLocation map1To2(WayLocation l1, ElementId preferredEid) override;
-
   virtual WayLocation map2To1(WayLocation l2, ElementId preferredEid) override;
 
   virtual void setWayString1(const WayStringPtr& ws1) { _ws1 = ws1; }
-
   virtual void setWayString2(const WayStringPtr& ws2) { _ws2 = ws2; }
 
 private:

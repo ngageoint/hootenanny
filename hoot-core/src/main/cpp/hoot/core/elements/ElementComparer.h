@@ -60,6 +60,15 @@ public:
    */
   bool isSame(ElementPtr e1, ElementPtr e2) const;
 
+  /**
+   * TODO
+   *
+   * @param e1
+   * @param e2
+   * @return
+   */
+  static bool tagsAreSame(ElementPtr e1, ElementPtr e2);
+
   void setIgnoreElementId(bool ignore) { _ignoreElementId = ignore; }
 
   /**
@@ -88,7 +97,7 @@ private:
   bool _compareRelation(const std::shared_ptr<const Element>& re,
                         const std::shared_ptr<const Element>& e) const;
 
-  void _removeTagsNotImportantForComparison(Tags& tags) const;
+  static void _removeTagsNotImportantForComparison(Tags& tags);
 };
 
 }
