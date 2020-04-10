@@ -489,6 +489,12 @@ long OsmUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPt
   return closestWayNodeId;
 }
 
+long OsmUtils::closestWayNodeIndexToNode(
+  const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map)
+{
+  return way->getNodeIndex(OsmUtils::closestWayNodeIdToNode(node, way, map));
+}
+
 bool OsmUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long nodeId2,
                                              const ConstOsmMapPtr& map)
 {
