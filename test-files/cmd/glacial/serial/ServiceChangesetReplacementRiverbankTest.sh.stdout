@@ -40,16 +40,18 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementRiverbankTest/ServiceChangesetReplacementRiverbankTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=33.2521999, max_lat=33.2587, min_lon=130.3116, max_lon=130.3162, num_changes=5489
-Node(s) Created: 4372
+Changeset Details: min_lat=33.2521999, max_lat=33.2587, min_lon=130.3116, max_lon=130.3162, num_changes=5473
+Node(s) Created: 4351
 Node(s) Modified: 0
 Node(s) Deleted: 374
-Way(s) Created: 679
+Way(s) Created: 685
 Way(s) Modified: 0
 Way(s) Deleted: 60
-Relation(s) Created: 4
+Relation(s) Created: 3
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementRiverbankTest-xml-replaced.osm for verification...
 
+15:55:58.190 WARN   ...core/scoring/MapComparator.cpp( 379) Number of nodes does not match (1: 4372; 2: 4351)
+15:55:58.196 WARN   ...core/scoring/MapComparator.cpp( 345) 	Nodes in map 1 and not in map 2 (limit 5): [4726, 4727, 4728, 4729, 4730]
