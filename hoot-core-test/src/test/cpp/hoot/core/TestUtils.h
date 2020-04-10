@@ -213,7 +213,8 @@ public:
 
   /**
    * Runs a conflate op reduction test which tests for which superfluous conflate pre/post/cleaning
-   * ops are removed by ConflateCmd
+   * ops are removed by SuperfluousConflateOpRemover. This is in TestUtils b/c it is shared by
+   * SuperfluousConflateOpRemoveTest in hoot-core and SuperfluousConflateOpRemoveJsTest in hoot-js.
    *
    * @param matchCreators the match creator class names involved in the conflation job
    * @param expectedPreOpSize the expected number of conflation pre ops after op reduction

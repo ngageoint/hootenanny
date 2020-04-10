@@ -74,7 +74,7 @@ public:
   virtual QString getDescription() const { return "Removes duplicate way nodes"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const;
 

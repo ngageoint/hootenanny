@@ -81,7 +81,7 @@ public:
   virtual QString getDescription() const { return "Removes duplicate ways from a map"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const;
 

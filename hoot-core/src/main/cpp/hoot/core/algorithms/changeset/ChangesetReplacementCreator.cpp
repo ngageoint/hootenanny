@@ -33,8 +33,9 @@
 #include <hoot/core/algorithms/WayJoinerBasic.h>
 
 #include <hoot/core/conflate/CookieCutter.h>
-#include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/conflate/network/NetworkMatchCreator.h>
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
+#include <hoot/core/conflate/UnifyingConflator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
@@ -50,13 +51,14 @@
 #include <hoot/core/criterion/WayNodeCriterion.h>
 
 #include <hoot/core/elements/OsmUtils.h>
+
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
-#include <hoot/core/ops/UnconnectedWaySnapper.h>
-
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/PointsToPolysConverter.h>
@@ -64,13 +66,13 @@
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/ops/WayJoinerOp.h>
 
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/MapProjector.h>
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
@@ -91,6 +93,7 @@ _chainReplacementFilters(false),
 _chainRetainmentFilters(false),
 _waySnappingEnabled(true),
 _conflationEnabled(true),
+_cleaningEnabled(true),
 _tagOobConnectedWays(false)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, statsOutputFile, osmApiDbUrl));
@@ -470,12 +473,23 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Conflate the cookie cut ref map with the sec map.
 
   conflatedMap = cookieCutRefMap;
-  if (_conflationEnabled && secMapSize > 0)
+  if (secMapSize > 0)
   {
-    // TODO: do something with reviews - #3361
-    _conflate(conflatedMap, _lenientBounds);
+    if (_conflationEnabled)
+    {
+      // TODO: do something with reviews - #3361
+      // conflation cleans beforehand
+      _conflate(conflatedMap, _lenientBounds);
+      conflatedMap->setName("conflated");
+    }
+    // This is a little misleading to only clean when the sec map has elements, however a test fails
+    // if we don't. May need further investigation.
+    else if (_cleaningEnabled)
+    {
+      _clean(conflatedMap);
+      conflatedMap->setName("cleaned");
+    }
   }
-  conflatedMap->setName("conflated");
 
   if (isLinearCrit && _waySnappingEnabled)
   {
@@ -1095,7 +1109,10 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
   }
   conf().set(ConfigOptions::getWayJoinerAdvancedStrictNameMatchKey(), !_isNetworkConflate());
 
-  // TODO: filter out ops here based on the geometry type being processed - #3954
+  if (ConfigOptions().getConflateRemoveSuperfluousOps())
+  {
+    SuperfluousConflateOpRemover::removeSuperfluousOps();
+  }
 
   NamedOp preOps(ConfigOptions().getConflatePreOps());
   preOps.apply(map);
@@ -1109,6 +1126,20 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, "conflated");
   LOG_DEBUG("Conflated map size: " << map->size());
+}
+
+void ChangesetReplacementCreator::_clean(OsmMapPtr& map)
+{
+  map->setName("cleaned");
+  LOG_INFO(
+    "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
+
+  MapCleaner().apply(map);
+
+  MapProjector::projectToWgs84(map);  // cleaning works in planar
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(map, "cleaned");
+  LOG_DEBUG("Cleaned map size: " << map->size());
 }
 
 void ChangesetReplacementCreator::_snapUnconnectedWays(
@@ -1277,6 +1308,11 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
 void ChangesetReplacementCreator::_parseConfigOpts(
   const bool lenientBounds, const GeometryTypeCriterion::GeometryType& geometryType)
 {
+  if (!_cleaningEnabled && _conflationEnabled)
+  {
+    throw IllegalArgumentException("If conflation is enabled, cleaning cannot be disabled.");
+  }
+
   // These settings have been are customized for each geometry type and bounds handling preference.
   // They were derived from small test cases, so we may need to do some tweaking as we encounter
   // real world data.

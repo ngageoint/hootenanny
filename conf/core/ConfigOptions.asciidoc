@@ -760,7 +760,7 @@ Enabling this option allows Hootenanny to remove any operators defined in `confl
 with the feature types being conflated as specified in the `match.creators` option. Doing so can
 increase runtime performance for some inputs. e.g. If you're only conflating buildings, then any
 operators used strictly for road data cleaning will be automatically disabled. This is primarily
-used for debugging purposes and should normally be left enabled. See the `FilteredByCriteria`
+used for debugging purposes and should normally be left enabled. See the `FilteredByGeometryTypeCriteria`
 interface for information about determining which feature types are associated with conflate
 operators.
 

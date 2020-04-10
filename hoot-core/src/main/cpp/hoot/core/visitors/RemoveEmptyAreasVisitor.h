@@ -60,7 +60,7 @@ public:
   virtual QString getDescription() const { return "Removes empty areas"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const;
 

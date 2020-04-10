@@ -82,7 +82,7 @@ public:
   virtual QString getDescription() const { return "Merges very small roads"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }

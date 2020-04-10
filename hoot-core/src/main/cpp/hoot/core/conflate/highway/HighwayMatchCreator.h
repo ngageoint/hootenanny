@@ -75,7 +75,7 @@ public:
   virtual QString getName() const { return QString::fromStdString(className()); }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }

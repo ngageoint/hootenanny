@@ -59,7 +59,7 @@ public:
   { return "Replaces all reversed one way roads with regular one way roads"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(HighwayCriterion::className())); }

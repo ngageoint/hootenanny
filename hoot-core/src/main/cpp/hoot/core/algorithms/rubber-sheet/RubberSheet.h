@@ -134,7 +134,7 @@ public:
    virtual QString getDescription() const override { return "Applies rubber sheeting to a map"; }
 
    /**
-    * @see FilteredByCriteria
+    * @see FilteredByGeometryTypeCriteria
     */
    virtual QStringList getCriteria() const;
 

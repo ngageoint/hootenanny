@@ -137,4 +137,11 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
   }
 }
 
+QStringList RoadCrossingPolyReviewMarker::getCriteria() const
+{
+  QStringList criteria;
+  criteria.append(QString::fromStdString(HighwayCriterion::className()));
+  return criteria;
+}
+
 }

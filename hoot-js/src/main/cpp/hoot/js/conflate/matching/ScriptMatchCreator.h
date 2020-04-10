@@ -110,7 +110,7 @@ public:
   virtual QString getName() const override;
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const;
 

@@ -75,7 +75,7 @@ public:
   { return "Removes road intersections that are likely mistakes"; }
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const
   { return QStringList(QString::fromStdString(LinearCriterion::className())); }

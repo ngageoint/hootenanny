@@ -48,6 +48,9 @@ namespace hoot
  *
  * This class works with four pass as long as distance is less than the four pass buffer. The input
  * map can be in either a planar or geographic projection.
+ *
+ * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map with no
+ * nodes.
  */
 class DuplicateNodeRemover : public OsmMapOperation, public Serializable, public Boundable
 {

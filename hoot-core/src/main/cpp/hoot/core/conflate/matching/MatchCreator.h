@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/info/CreatorDescription.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/criterion/FilteredByCriteria.h>
+#include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
 
 // Standard
 #include <string>
@@ -44,7 +44,7 @@
 namespace hoot
 {
 
-class MatchCreator : public FilteredByCriteria
+class MatchCreator : public FilteredByGeometryTypeCriteria
 {
 public:
 
@@ -106,7 +106,7 @@ public:
   virtual QString getName() const = 0;
 
   /**
-   * @see FilteredByCriteria
+   * @see FilteredByGeometryTypeCriteria
    */
   virtual QStringList getCriteria() const = 0;
 
