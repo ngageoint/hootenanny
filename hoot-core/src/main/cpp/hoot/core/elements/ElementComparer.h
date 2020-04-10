@@ -67,7 +67,7 @@ public:
    * @param e2
    * @return
    */
-  static bool tagsAreSame(ElementPtr e1, ElementPtr e2);
+  static bool tagsAreSame(ConstElementPtr e1, ConstElementPtr e2);
 
   void setIgnoreElementId(bool ignore) { _ignoreElementId = ignore; }
 

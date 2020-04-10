@@ -624,42 +624,49 @@ void HighwaySnapMerger::_copyInformationalNodesFromReplaced(
             geos::geom::Coordinate closestCoord = closestReplacementLocToInfoNode.getCoordinate();
             LOG_VART(closestCoord);
             NodePtr nodeToAdd = nodeToBeRemoved->cloneSp();
-            nodeToAdd->setId(nodeToBeRemoved->getId());
+            // TODO: anyway to retain sec node id here, and do we want to?
+            //nodeToAdd->setId(nodeToBeRemoved->getId());
             nodeToAdd->setX(closestCoord.x);
             nodeToAdd->setY(closestCoord.y);
+            map->addNode(nodeToAdd);
             LOG_TRACE(
               "Adding " << nodeToAdd->getElementId() << " to " << replacingWay->getElementId() <<
               "...");
-            replacingWay->addNode(nodeToAdd);
+            replacingWay->addNode(nodeToAdd->getId());
             LOG_VART(replacingWay->getNodeCount());
           }
           else
           {
-            // If there is a node at the exact same location along the way (within a tolerance), and
+            // If there is a node at the exact same location along the way (within a tolerance),
+            // and...
+
             // the two nodes have identical tags, skip adding it.
-            ConstNodePtr closestNode = closestReplacementLocToInfoNode.getNode(tolerance);
-            LOG_VART(closestNode->getElementId());
-            LOG_VART(ElementComparer::tagsAreSame(nodeToBeRemoved, closestNode));
-            if (ElementComparer::tagsAreSame(nodeToBeRemoved, closestNode))
+            ConstNodePtr closestReplacementNode =
+              closestReplacementLocToInfoNode.getNode(tolerance);
+            LOG_VART(closestReplacementNode->getElementId());
+            LOG_VART(ElementComparer::tagsAreSame(nodeToBeRemoved, closestReplacementNode));
+            if (ElementComparer::tagsAreSame(nodeToBeRemoved, closestReplacementNode))
             {
               LOG_TRACE(
-                "Nodes " << nodeToAdd->getElementId() << " and " << closestNode->getElementId() <<
-                " are identical, so skipping add.");
+                "Nodes " << nodeToBeRemoved->getElementId() << " and " <<
+                closestReplacementNode->getElementId() << " are identical, so skipping add.");
               continue;
             }
             else
             {
-              // If there is a node at the exact same location along the way (within a tolerance),
-              // and the two nodes do not have identical tags, merge the tags in from the way being
-              // replaced.
+              // the two nodes do not have identical tags, merge the tags in from the way being
+              // replaced
               Tags newTags =
                 TagMergerFactory::mergeTags(
-                  closestNode->getTags(), nodeToBeRemoved->getTags(), ElementType::Node);
+                  closestReplacementNode->getTags(), nodeToBeRemoved->getTags(), ElementType::Node);
               LOG_VART(newTags);
-              closestNode->setTags(newTags);
+              // not sure how to get around this..
+              NodePtr closestReplacementNode2 =
+                std::const_pointer_cast<Node>(closestReplacementNode);
+              closestReplacementNode2->setTags(newTags);
               LOG_TRACE(
-                "Updating tags on " << closestNode->getElementId() << " with tags from " <<
-                nodeToBeRemoved->getElementId() << " ...");
+                "Updating tags on " << closestReplacementNode2->getElementId() << " with tags " <<
+                "from " << nodeToBeRemoved->getElementId() << " ...");
             }
           }
         }
