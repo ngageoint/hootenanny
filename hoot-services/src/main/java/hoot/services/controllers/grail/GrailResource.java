@@ -83,18 +83,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.xpath.XPathAPI;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +105,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
@@ -120,7 +117,6 @@ import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.XmlDocumentBuilder;
 
 
 @Controller
@@ -260,6 +256,7 @@ public class GrailResource {
         // Run the differential conflate command.
         GrailParams params = new GrailParams(reqParams);
         params.setUser(user);
+        params.setWorkDir(workDir);
         params.setInput1(referenceOSMFile.getAbsolutePath());
         params.setInput2(secondaryOSMFile.getAbsolutePath());
 
@@ -313,34 +310,41 @@ public class GrailResource {
 
         String fileDirectory = CHANGESETS_FOLDER + "/" + jobDir;
         File workDir = new File(fileDirectory);
+        if (!workDir.exists()) {
+            logger.error("changesetStats: jobDir {} does not exist.", workDir.getAbsolutePath());
+            return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
+        }
 
         try {
             IOFileFilter fileFilter;
-            if(includeTags) {
-                fileFilter = new WildcardFileFilter("*.osc");
+            if (includeTags) {
+                fileFilter = new WildcardFileFilter("*.json");
             } else {
-                fileFilter = new RegexFileFilter("^(?!.*\\.tags\\.).*osc$");
+                fileFilter = new RegexFileFilter("^(?!.*\\.tags\\.).*json$");
             }
 
-            List<File> oscFilesList = (List<File>) FileUtils.listFiles(workDir, fileFilter, null);
+            List<File> statFilesList = (List<File>) FileUtils.listFiles(workDir, fileFilter, null);
 
-            for(File currentOsc : oscFilesList) {
-                String xmlData = FileUtils.readFileToString(currentOsc, "UTF-8");
-                Document changesetDoc = XmlDocumentBuilder.parse(xmlData);
-                logger.debug("Parsing changeset XML: {}", StringUtils.abbreviate(xmlData, 1000));
+            // loop through each stats file based on the fileFilter. Should at most be 2 files, normals stats and if requested the tags stats.
+            for (File currentOsc : statFilesList) {
+                JSONParser parser = new JSONParser();
+                String jsonDoc = FileUtils.readFileToString(currentOsc, "UTF-8");
+                JSONObject statsJson = (JSONObject) parser.parse(jsonDoc);
 
-                for (DbUtils.EntityChangeType entityChangeType : DbUtils.EntityChangeType.values()) {
-                    String changeTypeName = entityChangeType.toString().toLowerCase();
+                // loop for the change type name
+                for (Object changeTypeKey: statsJson.keySet()) {
+                    String changeTypeName = changeTypeKey.toString();
+                    JSONArray valuesArray = (JSONArray) statsJson.get(changeTypeKey);
 
-                    for (DbUtils.nwr_enum elementType : DbUtils.nwr_enum.values()) {
-                        String elementTypeName = elementType.toString();
+                    // loop for the element types
+                    for (Object obj: valuesArray) {
+                        JSONObject valueObject = (JSONObject) obj;
+                        // will always be an object with single key -> value
+                        String elementTypeName = valueObject.keySet().iterator().next().toString();
+                        int elementTypeCount = Integer.parseInt(valueObject.values().iterator().next().toString());
 
-                        NodeList elementXmlNodes = XPathAPI.selectNodeList(changesetDoc,
-                                "//osmChange/" + changeTypeName +"/" + elementTypeName);
-
-                        String key = changeTypeName + "-" + elementTypeName;
-                        int count = jobInfo.get(key) == null ? elementXmlNodes.getLength() :
-                                (int) jobInfo.get(key) + elementXmlNodes.getLength();
+                        String key = changeTypeName.toLowerCase() + "-" + elementTypeName.toLowerCase();
+                        int count = jobInfo.get(key) == null ? elementTypeCount : (int) jobInfo.get(key) + elementTypeCount;
 
                         jobInfo.put(key, count);
                     }
@@ -350,22 +354,12 @@ public class GrailResource {
             File tagDiffFile = new File(workDir, "diff.tags.osc");
             jobInfo.put("hasTags", tagDiffFile.exists());
         }
-        catch (IllegalArgumentException e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Changeset file not found.").build());
+        catch (IOException exc) {
+            throw new WebApplicationException(exc, Response.serverError().entity("Changeset file not found.").build());
         }
-        catch (IOException e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Changeset file not found.").build());
+        catch (ParseException exc) {
+            throw new WebApplicationException(exc, Response.serverError().entity("Changeset file is malformed.").build());
         }
-        catch (ParserConfigurationException e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Changeset file is malformed.").build());
-        }
-        catch (SAXException e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Changeset file is malformed.").build());
-        }
-        catch (TransformerException e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Changeset file is malformed.").build());
-        }
-
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
@@ -534,6 +528,7 @@ public class GrailResource {
 
         GrailParams params = new GrailParams(reqParams);
         params.setUser(user);
+        params.setWorkDir(workDir);
 
         try {
             params.setInput1(HOOTAPI_DB_URL + "/" + input1);
