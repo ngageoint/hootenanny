@@ -44,6 +44,8 @@ namespace hoot
 /**
  * Marks roads for review in instances where the cross over polygons and is governed by a set of
  * rules (see RoadCrossingPolyRule).
+ *
+ * @todo We could extend this to other linear types, like rivers, once we see a need.
  */
 class RoadCrossingPolyReviewMarker : public ConstOsmMapOperation, public Configurable
 {

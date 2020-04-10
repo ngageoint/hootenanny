@@ -473,17 +473,23 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Conflate the cookie cut ref map with the sec map.
 
   conflatedMap = cookieCutRefMap;
-  if (_conflationEnabled && secMapSize > 0)
+  if (secMapSize > 0)
   {
-    // TODO: do something with reviews - #3361
-    // conflation cleans beforehand
-    _conflate(conflatedMap, _lenientBounds);
+    if (_conflationEnabled)
+    {
+      // TODO: do something with reviews - #3361
+      // conflation cleans beforehand
+      _conflate(conflatedMap, _lenientBounds);
+      conflatedMap->setName("conflated");
+    }
+    // This is a little misleading to only clean when the sec map has elements, however a test fails
+    // if we don't. May need further investigation.
+    else if (_cleaningEnabled)
+    {
+      _clean(conflatedMap);
+      conflatedMap->setName("cleaned");
+    }
   }
-  else if (_cleaningEnabled)
-  {
-    _clean(conflatedMap);
-  }
-  conflatedMap->setName("conflated");
 
   if (isLinearCrit && _waySnappingEnabled)
   {
