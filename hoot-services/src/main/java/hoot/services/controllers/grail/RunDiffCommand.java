@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.grail;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -72,8 +73,9 @@ class RunDiffCommand extends GrailCommand {
         substitutionMap.put("INPUT2", params.getInput2());
         substitutionMap.put("OUTPUT", params.getOutput());
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("STATS_FILE", new File(params.getWorkDir(), "stats.json").getPath());
 
-        String command = "hoot.bin conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf -C NetworkAlgorithm.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --include-tags --separate-output";
+        String command = "hoot.bin conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf -C NetworkAlgorithm.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --changeset-stats ${STATS_FILE} --include-tags --separate-output";
 
         super.configureCommand(command, substitutionMap, caller);
     }
