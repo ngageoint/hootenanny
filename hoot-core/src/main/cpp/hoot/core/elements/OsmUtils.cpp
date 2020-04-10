@@ -490,9 +490,32 @@ long OsmUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPt
 }
 
 long OsmUtils::closestWayNodeIndexToNode(
-  const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map)
+  const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map,
+  const bool returnExtremes)
 {
-  return way->getNodeIndex(OsmUtils::closestWayNodeIdToNode(node, way, map));
+  LOG_VART(returnExtremes);
+  LOG_VART(way->getNodeCount());
+
+  const long nodeId = OsmUtils::closestWayNodeIdToNode(node, way, map);
+  LOG_VART(nodeId);
+  const long index = way->getNodeIndex(nodeId);
+  LOG_VART(index);
+  if (returnExtremes || !way->isExtremeIndex(index))
+  {
+    return index;
+  }
+  else
+  {
+    if (index == 0)
+    {
+      return 1;
+    }
+    else
+    {
+      return way->getNodeCount() - 1;
+    }
+  }
+  return -1;
 }
 
 bool OsmUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long nodeId2,

@@ -482,7 +482,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     if (swapWayIds)
     {
       ElementId eidm1 = e1Match->getElementId();
-      LOG_TRACE("Swapping way IDs: " << eid1 << " and " << eidm1 << "...");
+      LOG_TRACE("Swapping way ID " << eidm1 << " with " << eid1 << "...");
       //  Swap the old way ID back into the match element
       IdSwapOp(eid1, eidm1).apply(result);
       //  Remove the old way with a new swapped out ID
@@ -525,7 +525,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // Otherwise, drop the reviews and the element.
   else
   {
-    LOG_TRACE("Removing: " << e2Match->getElementId() << " and : " << eid2 << "...");
+    LOG_TRACE("Removing: " << e2Match->getElementId() << " and " << eid2 << "...");
 
     // add any informational nodes from the way being replaced to the merged output before deleting
     // it
@@ -590,7 +590,9 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 void HighwaySnapMerger::_copyInformationalNodesFromReplaced(
   const ElementId& toReplaceWayId, const ElementId& replacingWayId, const OsmMapPtr& map)
 {
-  WayPtr toReplaceWay = map->getWay(toReplaceWayId);
+  // TODO: move to its own class, WayNodeCopier and take a ElementCriterion as input
+
+  ConstWayPtr toReplaceWay = map->getWay(toReplaceWayId);
   WayPtr replacingWay = map->getWay(replacingWayId);
   if (toReplaceWay && replacingWay)
   {
@@ -601,50 +603,50 @@ void HighwaySnapMerger::_copyInformationalNodesFromReplaced(
 
     for (size_t i = 0; i < toReplaceWay->getNodeCount(); i++)
     {
-      NodePtr nodeToBeRemoved = map->getNode(toReplaceWay->getNodeId(i));
+      ConstNodePtr nodeToBeRemoved = map->getNode(toReplaceWay->getNodeId(i));
       LOG_VART(nodeToBeRemoved->getElementId());
 
       // for each informational node in the way being replaced
       if (nodeToBeRemoved->getTags().getInformationCount() > 0)
       {
-        WayLocation closestBeingReplacedLocToInfoNode =
+        const WayLocation closestBeingReplacedLocToInfoNode =
           LocationOfPoint::locate(map, toReplaceWay, nodeToBeRemoved->toCoordinate());
         LOG_VART(closestBeingReplacedLocToInfoNode);
+        // if there is no node at the same location along the way,
         if (closestBeingReplacedLocToInfoNode.isValid())
         {
-          // If there is no node at the same location along the way (within a tolerance), add the
-          // node at the same location on the replacement way.
-          WayLocation closestReplacementLocToInfoNode =
+          // add the node at that location on the replacement way
+          const WayLocation closestReplacementLocToInfoNode =
             LocationOfPoint::locate(map, replacingWay, nodeToBeRemoved->toCoordinate());
           LOG_VART(closestReplacementLocToInfoNode);
           const double tolerance = 0.01;
           LOG_VART(closestReplacementLocToInfoNode.isNode(tolerance));
           if (!closestReplacementLocToInfoNode.isNode(tolerance))
           {
-            geos::geom::Coordinate closestCoord = closestReplacementLocToInfoNode.getCoordinate();
-            LOG_VART(closestCoord);
-            NodePtr nodeToAdd = nodeToBeRemoved->cloneSp();
-            // TODO: anyway to retain sec node id here, and do we want to?
-            //nodeToAdd->setId(nodeToBeRemoved->getId());
-            nodeToAdd->setX(closestCoord.x);
-            nodeToAdd->setY(closestCoord.y);
-            map->addNode(nodeToAdd);
-            const long index = OsmUtils::closestWayNodeIndexToNode(nodeToAdd, replacingWay, map);
+            const long index =
+              OsmUtils::closestWayNodeIndexToNode(nodeToBeRemoved, replacingWay, map, false);
             LOG_VART(index);
             if (index != -1)
             {
+              const geos::geom::Coordinate closestCoord =
+                closestReplacementLocToInfoNode.getCoordinate();
+              LOG_VART(closestCoord);
+              NodePtr nodeToAdd = nodeToBeRemoved->cloneSp();
+              // by cloning the node being removed, we'll keep its id in the new node (?)
+              nodeToAdd->setX(closestCoord.x);
+              nodeToAdd->setY(closestCoord.y);
+              map->addNode(nodeToAdd);
               LOG_TRACE(
-                "Adding " << nodeToAdd->getElementId() << " to " << replacingWay->getElementId() <<
-                " at index: " << index << "...");
+                "Inserting " << nodeToAdd->getElementId() << " in " <<
+                replacingWay->getElementId() << " at index: " << index << "...");
               replacingWay->insertNode(index, nodeToAdd->getId());
               LOG_VART(replacingWay->getNodeCount());
             }
           }
+          // If there is a node at the same location along the way, and...
           else
           {
-            // If there is a node at the same location along the way (within a tolerance), and...
-
-            // the two nodes have identical tags, skip adding it.
+            // the two nodes have identical tags, skip adding anything
             ConstNodePtr closestReplacementNode =
               closestReplacementLocToInfoNode.getNode(tolerance);
             LOG_VART(closestReplacementNode->getElementId());
@@ -653,24 +655,26 @@ void HighwaySnapMerger::_copyInformationalNodesFromReplaced(
             {
               LOG_TRACE(
                 "Nodes " << nodeToBeRemoved->getElementId() << " and " <<
-                closestReplacementNode->getElementId() << " are identical, so skipping add.");
+                closestReplacementNode->getElementId() << " are identical, so skipping " <<
+                "insertion of node to " << replacingWay->getElementId());
               continue;
             }
             else
             {
-              // the two nodes do not have identical tags, merge the tags in from the way being
+              // the two nodes do not have identical tags, then merge the tags in from the way being
               // replaced
-              Tags newTags =
-                TagMergerFactory::mergeTags(
-                  closestReplacementNode->getTags(), nodeToBeRemoved->getTags(), ElementType::Node);
-              LOG_VART(newTags);
               // not sure how to get around this cast..
               NodePtr closestReplacementNode2 =
                 std::const_pointer_cast<Node>(closestReplacementNode);
-              closestReplacementNode2->setTags(newTags);
+              closestReplacementNode2->setTags(
+                TagMergerFactory::mergeTags(
+                  closestReplacementNode->getTags(), nodeToBeRemoved->getTags(),
+                  ElementType::Node));
+              LOG_VART(closestReplacementNode2->getTags());
               LOG_TRACE(
                 "Updating tags on " << closestReplacementNode2->getElementId() << " with tags " <<
-                "from " << nodeToBeRemoved->getElementId() << " ...");
+                "from " << nodeToBeRemoved->getElementId() << " for " <<
+                replacingWay->getElementId() << "...");
             }
           }
         }
