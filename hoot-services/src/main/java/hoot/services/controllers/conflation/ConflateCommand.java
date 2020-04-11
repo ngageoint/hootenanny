@@ -201,7 +201,7 @@ class ConflateCommand extends ExternalCommand {
                 List<String> mergerCreators;
 
                 // SPECIAL CASE: if network order networkAlgorithm.conf
-                if (conflationType.equals("Network")) {
+                if ("Network".equals(conflationType)) {
                     JSONParser parser = new JSONParser();
                     try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, NETWORK_CONFLATION_PATH))) {
                         JSONObject networkConfigJson = (JSONObject) parser.parse(fileReader);
