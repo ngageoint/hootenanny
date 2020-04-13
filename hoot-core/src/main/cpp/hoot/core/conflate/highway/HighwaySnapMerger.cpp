@@ -61,6 +61,8 @@
 #include <hoot/core/conflate/merging/WayNodeCopier.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/NoInformationCriterion.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QSet>
@@ -192,7 +194,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // TODO: This monster method needs to be refactored into smaller parts where possible.
 
   // ENABLE THE OsmMapWriterFactory::writeDebugMap CALLS FOR SMALL DATASET DEBUGGING ONLY. writes a
-  // map file for road merge
+  // map file for each road merge
 
   LOG_VART(eid1);
   //LOG_VART(map->getElement(eid1));
@@ -512,7 +514,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     LOG_TRACE("Removing e1: " << eid1 << "...");
     RemoveReviewsByEidOp(eid1, true).apply(result);
   }
-  OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-old-way-removal-1");
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-old-way-removal-1");
 
   // If there is something left to review against,
   if (scraps2)
@@ -525,16 +527,17 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(result);
     ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(result);
   }
-  // Otherwise, drop the reviews and the element.
+  // Otherwise, drop the element and any reviews its in.
   else
   {
     LOG_TRACE("Removing e2 match: " << e2Match->getElementId() << " and e2: " << eid2 << "...");
 
-    // add any informational nodes from the way being replaced to the merged output before deleting
-    // it
+    // add any informational nodes from the ways being replaced to the merged output before deleting
+    // them
     WayNodeCopier nodeCopier;
     nodeCopier.setOsmMap(map.get());
     nodeCopier.addCriterion(NotCriterionPtr(new NotCriterion(new NoInformationCriterion())));
+    //nodeCopier.setConfiguration(conf());
     LOG_TRACE(
       "Copying information nodes from e2 match: " << e2Match->getElementId() << " to e1: " <<
       eid1 << "...");
@@ -544,6 +547,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       e1Match->getElementId() << "...");
     nodeCopier.copy(e2Match->getElementId(), e1Match->getElementId());
 
+    // remove reviews e2Match is involved in
     RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(result);
 
     // Make the way that we're keeping have membership in whatever relations the way we're removing
@@ -551,9 +555,10 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     // during merging. TODO: we may be able to combine the following two removals into a single one
     RelationMemberSwapper::swap(eid2, eid1, map, false);
 
+    // remove reviews e2 is involved in
     RemoveReviewsByEidOp(eid2, true).apply(result);
   }
-  OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-old-way-removal-2");
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-old-way-removal-2");
 
   if (e1Match)
   {

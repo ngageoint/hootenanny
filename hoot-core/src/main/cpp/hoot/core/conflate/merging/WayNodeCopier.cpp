@@ -36,13 +36,20 @@
 namespace hoot
 {
 
-WayNodeCopier::WayNodeCopier()
+WayNodeCopier::WayNodeCopier() :
+_duplicateNodeTolerance(0.05)
 {
+  setConfiguration(conf());
 }
 
 void WayNodeCopier::addCriterion(const ElementCriterionPtr& e)
 {
   _crit = e;
+}
+
+void WayNodeCopier::setConfiguration(const Settings& conf)
+{
+  _duplicateNodeTolerance = ConfigOptions(conf).getWayNodeCopierDuplicateNodeTolerance();
 }
 
 void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& replacingWayId)
@@ -87,11 +94,10 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
           const WayLocation closestReplacementLocToInfoNode =
             LocationOfPoint::locate(_map, replacingWay, nodeToBeRemoved->toCoordinate());
           LOG_VART(closestReplacementLocToInfoNode);
-          const double tolerance = 0.01;
-          LOG_VART(closestReplacementLocToInfoNode.isNode(tolerance));
+          LOG_VART(closestReplacementLocToInfoNode.isNode(_duplicateNodeTolerance));
 
           // if there is no node at the same location in the way we're copying to,
-          if (!closestReplacementLocToInfoNode.isNode(tolerance))
+          if (!closestReplacementLocToInfoNode.isNode(_duplicateNodeTolerance))
           {
             // find the closest way node index at the location of the node being copied to the way
             // we're copying to
@@ -127,7 +133,7 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
           else
           {
             ConstNodePtr closestReplacementNode =
-              closestReplacementLocToInfoNode.getNode(tolerance);
+              closestReplacementLocToInfoNode.getNode(_duplicateNodeTolerance);
             LOG_VART(closestReplacementNode->getElementId());
             LOG_VART(ElementComparer::tagsAreSame(nodeToBeRemoved, closestReplacementNode));
 
@@ -166,8 +172,8 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
           {
             LOG_VART(replacingWay->getNodeIds());
             // Turn on for debugging only; could be very expensive
-            OsmMapWriterFactory::writeDebugMap(
-              _map, "WayNodeCopier-" + nodeToBeRemoved->getElementId().toString());
+            //OsmMapWriterFactory::writeDebugMap(
+              //_map, "WayNodeCopier-" + nodeToBeRemoved->getElementId().toString());
           }
         }
       }

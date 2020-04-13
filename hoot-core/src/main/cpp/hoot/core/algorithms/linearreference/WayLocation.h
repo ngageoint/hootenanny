@@ -137,8 +137,7 @@ public:
   /**
    * If this is effectively on a node.
    */
-  bool isNode(double epsilon = 0.0) const
-  { return _segmentFraction <= epsilon || _segmentFraction >= 1.0 - epsilon; }
+  bool isNode(double epsilon = 0.0) const;
 
   bool isValid() const { return _segmentIndex != -1; }
 
