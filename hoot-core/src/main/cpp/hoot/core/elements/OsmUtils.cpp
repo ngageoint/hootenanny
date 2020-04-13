@@ -543,7 +543,6 @@ long OsmUtils::closestWayNodeInsertIndex(
   {
     // otherwise, if the closest index way location is before the node's way location we want to
     // insert after the index, so return the index + 1
-    // TODO: does this need to be range checked?
     return closestWayNodeIndex + 1;
   }
 }
