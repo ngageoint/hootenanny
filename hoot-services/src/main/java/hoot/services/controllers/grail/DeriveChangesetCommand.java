@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.grail;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,8 +56,9 @@ class DeriveChangesetCommand extends GrailCommand {
         substitutionMap.put("OSC_FILE", params.getOutput());
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("STATS_FILE", new File(params.getWorkDir(), "stats.json").getPath());
 
-        String command = "hoot.bin changeset-derive --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OSC_FILE} --stats";
+        String command = "hoot.bin changeset-derive --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OSC_FILE} --stats ${STATS_FILE}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
