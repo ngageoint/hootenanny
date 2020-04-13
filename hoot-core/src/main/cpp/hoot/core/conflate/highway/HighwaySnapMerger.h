@@ -113,12 +113,6 @@ private:
 
   void _updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap);
 
-  /*
-   * TODO
-   */
-  void _copyInformationalNodesFromReplaced(
-    const ElementId& toReplaceWayId, const ElementId& replacingWayId, const OsmMapPtr& map);
-
   // for white box testing.
   friend class HighwaySnapMergerTest;
 };
