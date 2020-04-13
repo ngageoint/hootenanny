@@ -61,11 +61,11 @@ public:
   bool isSame(ElementPtr e1, ElementPtr e2) const;
 
   /**
-   * TODO
+   * Determines if the tags for two elements are the same
    *
-   * @param e1
-   * @param e2
-   * @return
+   * @param e1 the element owning the first set of tags to compare
+   * @param e2 the element owning the second set of tags to compare
+   * @return true if they are the same; false otherwise
    */
   static bool tagsAreSame(ConstElementPtr e1, ConstElementPtr e2);
 

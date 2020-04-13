@@ -51,6 +51,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 
 // Qt
 #include <QDateTime>
@@ -378,7 +379,7 @@ set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOs
   {
     const long containingWayId = *containingWaysItr;
     LOG_VART(containingWayId);
-    LOG_VART(map->getWay(containingWayId));
+    //LOG_VART(map->getWay(containingWayId));
 
     if (wayCriterion)
     {
@@ -490,32 +491,60 @@ long OsmUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPt
 }
 
 long OsmUtils::closestWayNodeIndexToNode(
-  const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map,
-  const bool returnExtremes)
+  const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map)
 {
-  LOG_VART(returnExtremes);
   LOG_VART(way->getNodeCount());
 
   const long nodeId = OsmUtils::closestWayNodeIdToNode(node, way, map);
   LOG_VART(nodeId);
   const long index = way->getNodeIndex(nodeId);
   LOG_VART(index);
-  if (returnExtremes || !way->isExtremeIndex(index))
+  return index;
+}
+
+long OsmUtils::closestWayNodeInsertIndex(
+  const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map)
+{
+  // get the way location of the node
+  const WayLocation nodeLoc = LocationOfPoint::locate(map, way, node->toCoordinate());
+  if (!nodeLoc.isValid())
   {
-    return index;
+    return -1;
+  }
+
+  // get the closest way node index to it and get its way location
+  const long closestWayNodeIndex = closestWayNodeIndexToNode(node, way, map);
+  LOG_VART(closestWayNodeIndex);
+  if (closestWayNodeIndex == -1)
+  {
+    return -1;
+  }
+  ConstNodePtr closestWayNode = map->getNode(way->getNodeId(closestWayNodeIndex));
+  LOG_VART(closestWayNode->getElementId());
+  if (!closestWayNode)
+  {
+    return -1;
+  }
+  const WayLocation closestNodeLoc =
+    LocationOfPoint::locate(map, way, closestWayNode->toCoordinate());
+  if (!closestNodeLoc.isValid())
+  {
+    return -1;
+  }
+
+  // if the closest index way location is after the node's way location we want to insert before
+  // the index, so return the index
+  LOG_VART(closestNodeLoc >= nodeLoc);
+  if (closestNodeLoc >= nodeLoc)
+  {
+    return closestWayNodeIndex;
   }
   else
   {
-    if (index == 0)
-    {
-      return 1;
-    }
-    else
-    {
-      return way->getNodeCount() - 1;
-    }
+    // otherwise, if the closest index way location is before the node's way location we want to
+    // insert after the index, so return the index + 1
+    return closestWayNodeIndex + 1;
   }
-  return -1;
 }
 
 bool OsmUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long nodeId2,

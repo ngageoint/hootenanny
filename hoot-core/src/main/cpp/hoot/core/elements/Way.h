@@ -125,10 +125,10 @@ public:
   long getLastNodeId() const { return getNodeId(getNodeCount() - 1); }
 
   /**
-   * TODO
+   * Determines if an index is the first or las
    *
-   * @param index
-   * @return
+   * @param index index to examine
+   * @return true if the index is extreme; false otherwise
    */
   bool isExtremeIndex(const int index) const
   { return index == 0 || index == (int)getNodeCount() - 1; }

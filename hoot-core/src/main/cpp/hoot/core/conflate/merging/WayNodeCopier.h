@@ -31,24 +31,26 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
 /**
- * TODO
+ * Performs way node copying from one way to another
  */
-class WayNodeCopier : public OsmMapConsumer, public ElementCriterionConsumer
+class WayNodeCopier : public OsmMapConsumer, public ElementCriterionConsumer, public Configurable
 {
 public:
 
   WayNodeCopier();
 
   /**
-   * TODO
+   * Copies all nodes from one way to another based on an optional filtering criterion set
+   * beforehand
    *
-   * @param toReplaceWayId
-   * @param replacingWayId
+   * @param toReplaceWayId ID of the way to be replaced
+   * @param replacingWayId ID of the replacing way
    */
   void copy(const ElementId& toReplaceWayId, const ElementId& replacingWayId);
 
@@ -62,10 +64,18 @@ public:
    */
   virtual void addCriterion(const ElementCriterionPtr& e);
 
+  /**
+   * @see Configurable
+   */
+  virtual void setConfiguration(const Settings& conf);
+
 private:
 
   OsmMapPtr _map;
+  // optional filtering criterion
   ElementCriterionPtr _crit;
+  // allows for some leeway in what's considered a duplicate node
+  double _duplicateNodeTolerance;
 };
 
 }

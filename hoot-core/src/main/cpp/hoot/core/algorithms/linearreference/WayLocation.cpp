@@ -422,4 +422,11 @@ QString WayLocation::toString() const
   }
 }
 
+bool WayLocation::isNode(double epsilon) const
+{
+  LOG_VART(epsilon);
+  LOG_VART(_segmentFraction);
+  return _segmentFraction <= epsilon || _segmentFraction >= 1.0 - epsilon;
+}
+
 }
