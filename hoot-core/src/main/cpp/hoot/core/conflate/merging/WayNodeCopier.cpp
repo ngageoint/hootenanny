@@ -31,6 +31,7 @@
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/ElementComparer.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
 {
@@ -51,6 +52,8 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
     throw IllegalArgumentException("No map set on WayNodeCopier.");
   }
 
+  bool elementsModified = false;
+
   LOG_VART(toReplaceWayId);
   LOG_VART(replacingWayId);
   ConstWayPtr toReplaceWay = _map->getWay(toReplaceWayId);
@@ -61,36 +64,46 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
   {
     LOG_VART(toReplaceWay->getElementId());
     LOG_VART(toReplaceWay->getNodeCount());
+    LOG_VART(toReplaceWay->getNodeIds());
     LOG_VART(replacingWay->getElementId());
     LOG_VART(replacingWay->getNodeCount());
+    LOG_VART(replacingWay->getNodeIds());
 
     for (size_t i = 0; i < toReplaceWay->getNodeCount(); i++)
     {
       ConstNodePtr nodeToBeRemoved = _map->getNode(toReplaceWay->getNodeId(i));
       LOG_VART(nodeToBeRemoved->getElementId());
 
-      // for each informational node in the way being replaced
+      // for each node satisfying the specifying criteria (if there is one)
       if (!_crit || _crit->isSatisfied(nodeToBeRemoved))
       {
+        // get the location of the node top copy on the way being replaced
         const WayLocation closestBeingReplacedLocToInfoNode =
           LocationOfPoint::locate(_map, toReplaceWay, nodeToBeRemoved->toCoordinate());
         LOG_VART(closestBeingReplacedLocToInfoNode);
-        // if there is no node at the same location along the way,
         if (closestBeingReplacedLocToInfoNode.isValid())
         {
-          // add the node at that location on the replacement way
+          // get the same location of the node to be copied on the way we're copying the node to
           const WayLocation closestReplacementLocToInfoNode =
             LocationOfPoint::locate(_map, replacingWay, nodeToBeRemoved->toCoordinate());
           LOG_VART(closestReplacementLocToInfoNode);
           const double tolerance = 0.01;
           LOG_VART(closestReplacementLocToInfoNode.isNode(tolerance));
+
+          // if there is no node at the same location in the way we're copying to,
           if (!closestReplacementLocToInfoNode.isNode(tolerance))
           {
+            // find the closest way node index at the location of the node being copied to the way
+            // we're copying to
+            //const long index =
+              //OsmUtils::closestWayNodeIndexToNode(nodeToBeRemoved, replacingWay, _map, false);
             const long index =
-              OsmUtils::closestWayNodeIndexToNode(nodeToBeRemoved, replacingWay, _map, false);
+              OsmUtils::closestWayNodeInsertIndex(nodeToBeRemoved, replacingWay, _map);
             LOG_VART(index);
             if (index != -1)
             {
+              // copy the node from the way being replaced
+
               const geos::geom::Coordinate closestCoord =
                 closestReplacementLocToInfoNode.getCoordinate();
               LOG_VART(closestCoord);
@@ -99,23 +112,29 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
               nodeToAdd->setX(closestCoord.x);
               nodeToAdd->setY(closestCoord.y);
               _map->addNode(nodeToAdd);
+
+              // add the node at the calculated position on the replacement way
+
               LOG_TRACE(
                 "Inserting " << nodeToAdd->getElementId() << " in " <<
                 replacingWay->getElementId() << " at index: " << index << "...");
               replacingWay->insertNode(index, nodeToAdd->getId());
               LOG_VART(replacingWay->getNodeCount());
+              elementsModified = true;
             }
           }
-          // If there is a node at the same location along the way, and...
+          // if there is a node at the same location along the way, and...
           else
           {
-            // the two nodes have identical tags, skip adding anything
             ConstNodePtr closestReplacementNode =
               closestReplacementLocToInfoNode.getNode(tolerance);
             LOG_VART(closestReplacementNode->getElementId());
             LOG_VART(ElementComparer::tagsAreSame(nodeToBeRemoved, closestReplacementNode));
+
             if (ElementComparer::tagsAreSame(nodeToBeRemoved, closestReplacementNode))
             {
+              // the two nodes have identical tags, don't make any changes
+
               LOG_TRACE(
                 "Nodes " << nodeToBeRemoved->getElementId() << " and " <<
                 closestReplacementNode->getElementId() << " are identical, so skipping " <<
@@ -124,9 +143,10 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
             }
             else
             {
-              // the two nodes do not have identical tags, then merge the tags in from the way being
-              // replaced
-              // not sure how to get around this cast..
+              // the two nodes do not have identical tags, then merge the tags in from the way node
+              // being replaced
+
+              // not sure how to get around this const cast...
               NodePtr closestReplacementNode2 =
                 std::const_pointer_cast<Node>(closestReplacementNode);
               closestReplacementNode2->setTags(
@@ -138,12 +158,21 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
                 "Updating tags on " << closestReplacementNode2->getElementId() << " with tags " <<
                 "from " << nodeToBeRemoved->getElementId() << " for " <<
                 replacingWay->getElementId() << "...");
+              elementsModified = true;
             }
+          }
+
+          if (elementsModified)
+          {
+            LOG_VART(replacingWay->getNodeIds());
+            // Turn on for debugging only; could be very expensive
+            OsmMapWriterFactory::writeDebugMap(
+              _map, "WayNodeCopier-" + nodeToBeRemoved->getElementId().toString());
           }
         }
       }
     }
-  }
+  } 
 }
 
 }

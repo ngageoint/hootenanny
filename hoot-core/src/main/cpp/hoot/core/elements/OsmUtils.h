@@ -399,12 +399,21 @@ public:
    * @param node
    * @param way
    * @param map
-   * @param returnExtremes
    * @return
    */
   static long closestWayNodeIndexToNode(
-    const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map,
-    const bool returnExtremes = true);
+    const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param node
+   * @param way
+   * @param map
+   * @return
+   */
+  static long closestWayNodeInsertIndex(const ConstNodePtr& node, const ConstWayPtr& way,
+                                        const ConstOsmMapPtr& map);
 
   /**
    * Determines whether the start or end of a way is closer to a specified node
