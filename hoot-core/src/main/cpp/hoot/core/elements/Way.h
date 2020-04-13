@@ -104,7 +104,8 @@ public:
   /**
    * Returns the same result as getEnvelopeInternal, but copied so the caller gets ownership.
    */
-  virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const override
+  virtual geos::geom::Envelope* getEnvelope(
+    const std::shared_ptr<const ElementProvider>& ep) const override
   { return new geos::geom::Envelope(getEnvelopeInternal(ep)); }
 
   /**
@@ -121,8 +122,16 @@ public:
   int getNodeIndex(long nodeId) const;
 
   long getFirstNodeId() const { return getNodeId(0); }
-
   long getLastNodeId() const { return getNodeId(getNodeCount() - 1); }
+
+  /**
+   * TODO
+   *
+   * @param index
+   * @return
+   */
+  bool isExtremeIndex(const int index) const
+  { return index == 0 || index == (int)getNodeCount() - 1; }
 
   size_t getNodeCount() const { return _wayData->getNodeIds().size(); }
 

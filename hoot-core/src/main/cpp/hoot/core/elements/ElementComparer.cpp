@@ -61,7 +61,7 @@ void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags)
   tags.remove(MetadataTags::SourceDateTime());
 }
 
-bool ElementComparer::tagsAreSame(ElementPtr e1, ElementPtr e2)
+bool ElementComparer::tagsAreSame(ConstElementPtr e1, ConstElementPtr e2)
 {
   // create modified separate copies of the tags for comparing, as we don't care if some tags
   // are identical
@@ -69,6 +69,8 @@ bool ElementComparer::tagsAreSame(ElementPtr e1, ElementPtr e2)
   _removeTagsNotImportantForComparison(tags1);
   Tags tags2 = e2->getTags();
   _removeTagsNotImportantForComparison(tags2);
+  LOG_VART(tags1);
+  LOG_VART(tags2);
 
   const bool result = tags1 == tags2;
   if (!result && Log::getInstance().getLevel() == Log::Trace)
@@ -134,8 +136,6 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
         }
 
         LOG_TRACE("elements failed comparison:");
-        LOG_VART(tags1);
-        LOG_VART(tags2);
       }
 
       return false;

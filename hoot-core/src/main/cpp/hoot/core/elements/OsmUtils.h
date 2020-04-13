@@ -51,6 +51,9 @@ class Status;
 
 /**
   Utilities for use with the OSM data model
+
+  @todo Parts of this class could be split out into, perhaps: TagUtils, RelationUtils,
+        GeometryUtils, WayNodeUtils, MapUtils
   */
 class OsmUtils
 {
@@ -389,6 +392,19 @@ public:
    */
   static long closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPtr& way,
                                      const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param node
+   * @param way
+   * @param map
+   * @param returnExtremes
+   * @return
+   */
+  static long closestWayNodeIndexToNode(
+    const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map,
+    const bool returnExtremes = true);
 
   /**
    * Determines whether the start or end of a way is closer to a specified node
