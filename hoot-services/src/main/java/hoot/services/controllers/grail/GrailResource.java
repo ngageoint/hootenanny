@@ -210,6 +210,7 @@ public class GrailResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createDifferentialChangeset(@Context HttpServletRequest request,
+            @QueryParam("taskInfo") String taskInfo,
             GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
@@ -276,7 +277,13 @@ public class GrailResource {
         ExternalCommand makeDiff = grailCommandFactory.build(jobId, params, debugLevel, RunDiffCommand.class, this.getClass());
         workflow.add(makeDiff);
 
-        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET));
+        Map<String, Object> jobStatusTags = new HashMap<>();
+        jobStatusTags.put("bbox", reqParams.getBounds());
+        if (taskInfo != null) {
+            jobStatusTags.put("taskInfo", taskInfo);
+        }
+
+        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
@@ -594,6 +601,7 @@ public class GrailResource {
     @Path("/pulloverpasstodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullOverpassToDb(@Context HttpServletRequest request,
+            @QueryParam("taskInfo") String taskInfo,
             @QueryParam("folderId") Long folderId,
             GrailParams reqParams) {
 
@@ -620,26 +628,11 @@ public class GrailResource {
         params.setUser(user);
         params.setPullUrl(PUBLIC_OVERPASS_URL);
 
-        String url;
-        try {
-            String customQuery = reqParams.getCustomQuery();
-            if (customQuery == null || customQuery.equals("")) {
-                url = "'" + PullOverpassCommand.getOverpassUrl(bbox) + "'";
-            } else {
-                url = "'" + PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), bbox, "xml", customQuery) + "'";
-            }
-
-        } catch(IllegalArgumentException exc) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(exc.getMessage()).build();
-        }
-
-
         File overpassOSMFile = new File(workDir, SECONDARY + ".osm");
         GrailParams getOverpassParams = new GrailParams(params);
         getOverpassParams.setOutput(overpassOSMFile.getAbsolutePath());
         if (overpassOSMFile.exists()) overpassOSMFile.delete();
         workflow.add(getPublicOverpassCommand(jobId, getOverpassParams));
-
 
         params.setInput1(overpassOSMFile.getAbsolutePath());
         params.setOutput(layerName);
@@ -658,6 +651,9 @@ public class GrailResource {
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", bbox);
+        if (taskInfo != null) {
+            jobStatusTags.put("taskInfo", taskInfo);
+        }
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
 
@@ -811,6 +807,7 @@ public class GrailResource {
     @Path("/pullrailsporttodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullRailsPortToDb(@Context HttpServletRequest request,
+            @QueryParam("taskInfo") String taskInfo,
             @QueryParam("folderId") Long folderId,
             GrailParams reqParams) {
 
@@ -840,6 +837,9 @@ public class GrailResource {
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", reqParams.getBounds());
+        if (taskInfo != null) {
+            jobStatusTags.put("taskInfo", taskInfo);
+        }
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
 
