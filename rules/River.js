@@ -63,7 +63,6 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isLinearWaterway(e);
 };
 

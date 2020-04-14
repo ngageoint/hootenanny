@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * A criterion that will keep railways.
+ * A criterion that will match linear railways.
  */
 class RailwayCriterion : public ConflatableElementCriterion
 {
@@ -53,7 +53,7 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RailwayCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies railways"; }
+  virtual QString getDescription() const { return "Identifies linear railways"; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }

@@ -42,25 +42,41 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(e->getElementId());
   //LOG_VART(e);
 
-  if (!LinearCriterion().isSatisfied(e))
+  if (e->getElementType() == ElementType::Node)
+  {
+    return false;
+  }
+
+  bool passedTagFilter = false;
+
+  const Tags& tags = e->getTags();
+  if (tags.contains("waterway"))
+  {
+    passedTagFilter = true;
+  }
+  else
+  {
+    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+    {
+      const QString key = it.key();
+      const QString val = it.value();
+      if (OsmSchema::getInstance().isAncestor(key, "waterway") ||
+          (key == "type" && OsmSchema::getInstance().isAncestor("waterway=" + val, "waterway")))
+      {
+        LOG_TRACE("passed crit");
+        passedTagFilter = true;
+        break;
+      }
+    }
+  }
+
+  if (passedTagFilter && !LinearCriterion().isSatisfied(e))
   {
     LOG_TRACE("failed linear crit");
     return false;
   }
 
-  const Tags& tags = e->getTags();
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
-  {
-    if (it.key() == "waterway" || OsmSchema::getInstance().isAncestor(it.key(), "waterway") ||
-        (it.key() == "type" &&
-         OsmSchema::getInstance().isAncestor("waterway=" + it.value(), "waterway")))
-    {
-      LOG_TRACE("passed crit");
-      return true;
-    }
-  }
-
-  return false;
+  return passedTagFilter;
 }
 
 }
