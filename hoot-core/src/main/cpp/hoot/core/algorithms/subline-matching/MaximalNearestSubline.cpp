@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MaximalNearestSubline.h"
@@ -212,10 +212,8 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
 const vector<WayLocation>& MaximalNearestSubline::_getInterval()
 {
   /**
-   * The basic strategy is to pick test points on B
-   * and find their nearest point on A.
-   * The interval containing these nearest points
-   * is approximately the MaximalNeareastSubline of A.
+   * The basic strategy is to pick test points on B and find their nearest point on A.
+   * The interval containing these nearest points is approximately the MaximalNeareastSubline of A.
    */
 
   // Heuristic #1: use every vertex of B as a test point
@@ -244,8 +242,7 @@ const vector<WayLocation>& MaximalNearestSubline::_getInterval()
   /**
    * Heuristic #2:
    *
-   * find the nearest point on B to all vertices of A
-   * and use those points of B as test points.
+   * find the nearest point on B to all vertices of A and use those points of B as test points.
    * For efficiency use only vertices of A outside current max interval.
    */
   LocationOfPoint bPtLocator(_map, _b);

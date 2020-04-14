@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayLocation.h"
@@ -420,6 +420,13 @@ QString WayLocation::toString() const
   {
     return QString("way: <null> index: %1 fraction: %2").arg(_segmentIndex).arg(_segmentFraction);
   }
+}
+
+bool WayLocation::isNode(double epsilon) const
+{
+  LOG_VART(epsilon);
+  LOG_VART(_segmentFraction);
+  return _segmentFraction <= epsilon || _segmentFraction >= 1.0 - epsilon;
 }
 
 }

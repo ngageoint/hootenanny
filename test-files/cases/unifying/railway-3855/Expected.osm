@@ -141,8 +141,21 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-98866596" timestamp="2017-02-09T19:14:38Z" version="1" user="zermes" uid="2678365" lat="38.9639973999999967" lon="-9.2074656000000008"/>
+    <node visible="true" id="-98866594" timestamp="2018-04-04T00:25:15Z" version="3" user="Josef K" uid="47097" lat="38.9162268264913038" lon="-9.2830326493440261">
+        <tag k="wikipedia" v="pt:Apeadeiro de Alcainça-Moinhos"/>
+        <tag k="abandoned:public_transport" v="stop_position"/>
+        <tag k="wikidata" v="Q8202323"/>
+        <tag k="name" v="Alcainça-Moinhos"/>
+        <tag k="abandoned:railway" v="stop"/>
+        <tag k="train" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-98866592" timestamp="2017-02-09T19:14:38Z" version="1" user="zermes" uid="2678365" lat="38.8966798000000011" lon="-9.2927333000000001"/>
     <node visible="true" id="-98866591" timestamp="2017-02-09T19:14:38Z" version="1" user="zermes" uid="2678365" lat="38.8970848000000089" lon="-9.2921654000000000"/>
+    <node visible="true" id="-98866590" timestamp="2017-02-09T19:14:37Z" version="1" user="zermes" uid="2678365" lat="38.8976744199494888" lon="-9.2908453478751571">
+        <tag k="railway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-98866589" timestamp="2017-02-09T19:14:37Z" version="1" user="zermes" uid="2678365" lat="38.8698204999999959" lon="-9.2955487999999988"/>
     <node visible="true" id="-98866588" timestamp="2017-02-09T19:14:37Z" version="1" user="zermes" uid="2678365" lat="38.8683280999999923" lon="-9.2957122999999999"/>
     <node visible="true" id="-98866587" timestamp="2017-02-09T09:57:24Z" version="1" user="zermes" uid="2678365" lat="39.0333981000000065" lon="-9.1816057999999980"/>
@@ -1194,6 +1207,10 @@
     </node>
     <node visible="true" id="-98865998" timestamp="2012-02-11T22:45:18Z" version="1" user="victorferreira" uid="162435" lat="39.0833262000000019" lon="-9.2356645999999980"/>
     <node visible="true" id="-98865997" timestamp="2017-02-08T22:29:10Z" version="3" user="zermes" uid="2678365" lat="39.1078467000000103" lon="-9.2541659999999997">
+        <tag k="railway" v="level_crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-98865996" timestamp="2019-05-05T15:50:33Z" version="3" user="mapman44" uid="2888253" lat="38.9514241833480952" lon="-9.2232360747320001">
         <tag k="railway" v="level_crossing"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -2442,6 +2459,18 @@
     <node visible="true" id="-98864993" timestamp="2017-02-09T19:14:56Z" version="2" user="zermes" uid="2678365" lat="38.9644561999999937" lon="-9.2052765000000001"/>
     <node visible="true" id="-98864992" timestamp="2017-02-09T19:14:56Z" version="2" user="zermes" uid="2678365" lat="38.9643208000000030" lon="-9.2057062999999975"/>
     <node visible="true" id="-98864991" timestamp="2017-02-09T19:14:56Z" version="2" user="zermes" uid="2678365" lat="38.9641936999999956" lon="-9.2062641999999997"/>
+    <node visible="true" id="-98864967" timestamp="2017-02-09T19:14:56Z" version="2" user="zermes" uid="2678365" lat="38.9529579432205395" lon="-9.2162990753707561">
+        <tag k="railway" v="level_crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-98864961" timestamp="2019-05-05T15:50:33Z" version="3" user="mapman44" uid="2888253" lat="38.9497327726493481" lon="-9.2335023765841253">
+        <tag k="railway" v="level_crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-98864943" timestamp="2019-05-05T15:50:33Z" version="3" user="mapman44" uid="2888253" lat="38.9443361207800862" lon="-9.2399609935489693">
+        <tag k="railway" v="level_crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-98864914" timestamp="2019-12-20T15:08:29Z" version="3" user="luisforte" uid="3305165" lat="38.9286763000000064" lon="-9.2580244000000000">
         <tag k="wikipedia" v="pt:Estação Ferroviária de Malveira"/>
         <tag k="wikidata" v="Q8841005"/>
@@ -2453,6 +2482,11 @@
     <node visible="true" id="-98864911" timestamp="2017-02-09T19:14:55Z" version="3" user="zermes" uid="2678365" lat="38.9291316999999992" lon="-9.2554412999999975"/>
     <node visible="true" id="-98864910" timestamp="2017-02-09T19:14:55Z" version="2" user="zermes" uid="2678365" lat="38.9290217999999939" lon="-9.2558556999999997"/>
     <node visible="true" id="-98864909" timestamp="2017-02-09T19:14:55Z" version="3" user="zermes" uid="2678365" lat="38.9289036000000053" lon="-9.2565112999999997"/>
+    <node visible="true" id="-98864880" timestamp="2017-04-19T10:16:34Z" version="4" user="Reino Baptista" uid="2820801" lat="38.9192114025647982" lon="-9.2771257538729408">
+        <tag k="barrier" v="lift_gate"/>
+        <tag k="railway" v="level_crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-98864834" timestamp="2017-02-09T19:14:54Z" version="3" user="zermes" uid="2678365" lat="38.8972803999999996" lon="-9.2917780000000008"/>
     <node visible="true" id="-98864833" timestamp="2017-02-09T19:14:54Z" version="3" user="zermes" uid="2678365" lat="38.8969797000000028" lon="-9.2923393999999995"/>
     <node visible="true" id="-98864832" timestamp="2017-02-09T19:14:54Z" version="3" user="zermes" uid="2678365" lat="38.8968283999999969" lon="-9.2925567999999998"/>
@@ -2815,6 +2849,7 @@
     <node visible="true" id="-98855738" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9117854000000065" lon="-9.2856089999999991"/>
     <node visible="true" id="-98855736" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9114896000000030" lon="-9.2860060999999980">
         <tag k="highway" v="crossing"/>
+        <tag k="railway" v="level_crossing"/>
         <tag k="source:datetime" v="2013-10-01T15:18:37.000Z"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -2896,6 +2931,7 @@
     </way>
     <way visible="true" id="-98863360" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-98866912"/>
+        <nd ref="-98866594"/>
         <nd ref="-98855724"/>
         <nd ref="-98855730"/>
         <nd ref="-98855717"/>
@@ -2914,6 +2950,7 @@
         <nd ref="-98855884"/>
         <nd ref="-98855879"/>
         <nd ref="-98855878"/>
+        <nd ref="-98864880"/>
         <nd ref="-98855888"/>
         <nd ref="-98855887"/>
         <nd ref="-98855869"/>
@@ -2966,6 +3003,7 @@
     </way>
     <way visible="true" id="-98863353" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-98855676"/>
+        <nd ref="-98866590"/>
         <nd ref="-98862157"/>
         <nd ref="-98855671"/>
         <nd ref="-98855680"/>
@@ -8311,6 +8349,7 @@
         <nd ref="-98863963"/>
         <nd ref="-98863966"/>
         <nd ref="-98863896"/>
+        <nd ref="-98864943"/>
         <nd ref="-98863895"/>
         <nd ref="-98863908"/>
         <nd ref="-98863911"/>
@@ -8332,12 +8371,15 @@
         <nd ref="-98864416"/>
         <nd ref="-98864354"/>
         <nd ref="-98864382"/>
+        <nd ref="-98864961"/>
         <nd ref="-98866905"/>
+        <nd ref="-98865996"/>
         <nd ref="-98864294"/>
         <nd ref="-98864314"/>
         <nd ref="-98864309"/>
         <nd ref="-98864348"/>
         <nd ref="-98864340"/>
+        <nd ref="-98864967"/>
         <nd ref="-98864268"/>
         <nd ref="-98864281"/>
         <nd ref="-98864286"/>

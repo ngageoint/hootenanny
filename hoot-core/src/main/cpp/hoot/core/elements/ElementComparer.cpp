@@ -43,7 +43,7 @@ _ignoreElementId(false)
 {
 }
 
-void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
+void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags)
 {
   LOG_TRACE("Removing tags...");
 
@@ -59,6 +59,25 @@ void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
   // not sure where "status" is coming from...should be "hoot:status"...bug somewhere?
   tags.remove("status");
   tags.remove(MetadataTags::SourceDateTime());
+}
+
+bool ElementComparer::tagsAreSame(ConstElementPtr e1, ConstElementPtr e2)
+{
+  // create modified separate copies of the tags for comparing, as we don't care if some tags
+  // are identical
+  Tags tags1 = e1->getTags();
+  _removeTagsNotImportantForComparison(tags1);
+  Tags tags2 = e2->getTags();
+  _removeTagsNotImportantForComparison(tags2);
+  LOG_VART(tags1);
+  LOG_VART(tags2);
+
+  const bool result = tags1 == tags2;
+  if (!result && Log::getInstance().getLevel() == Log::Trace)
+  {
+    LOG_TRACE("compare failed on tags");
+  }
+  return result;
 }
 
 bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
@@ -93,19 +112,10 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
   // only nodes have been converted over to use hash comparisons so far
   else
   {
-    // create modified separate copies of the tags for comparing, as we don't care if some tags
-    // are identical
-    Tags tags1 = e1->getTags();
-    _removeTagsNotImportantForComparison(tags1);
-    Tags tags2 = e2->getTags();
-    _removeTagsNotImportantForComparison(tags2);
-
     // not checking status here b/c if only the status changed on the element and no other tags or
     // geometries, there's no point in detecting a change
     if ((!_ignoreElementId && e1->getElementId() != e2->getElementId()) ||
-        // TODO: implement != for Tags
-        !(tags1 == tags2) ||
-        (e1->getVersion() != e2->getVersion()) ||
+        !tagsAreSame(e1, e2) || (e1->getVersion() != e2->getVersion()) ||
         fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
     {
       if (Log::getInstance().getLevel() == Log::Trace)
@@ -113,10 +123,6 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
         if ( e1->getElementId() != e2->getElementId())
         {
           LOG_TRACE("compare failed on IDs");
-        }
-        else if (!(tags1 == tags2))
-        {
-          LOG_TRACE("compare failed on tags");
         }
         else if (e1->getVersion() != e2->getVersion())
         {
@@ -130,8 +136,6 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
         }
 
         LOG_TRACE("elements failed comparison:");
-        LOG_VART(tags1);
-        LOG_VART(tags2);
       }
 
       return false;

@@ -4914,12 +4914,19 @@ databases are capped at 2000 nodes per way.
 
 The minimum size that a way should be split into for merging. Units in meters.
 
+=== way.node.copier.duplicate.node.tolerance
+
+* Data Type: double
+* Default Value: `0.05`
+
+Distance tolerance allowed for WayNodeCopier to consider two nodes duplicates and not copy them.
+
 === way.splitter.max.length
 
 * Data Type: double
 * Default Value: `5000`
 
-This configuration option is used by hoot::WaySplitterOp. If a way is longer than this length
+This configuration option is used by WaySplitterOp. If a way is longer than this length
 (in meters) then it will be split into smaller ways.
 
 === way.subline.matcher

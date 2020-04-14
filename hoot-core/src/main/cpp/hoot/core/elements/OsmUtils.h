@@ -51,6 +51,9 @@ class Status;
 
 /**
   Utilities for use with the OSM data model
+
+  @todo Parts of this class could be split out into, perhaps: TagUtils, RelationUtils,
+        GeometryUtils, WayNodeUtils, MapUtils
   */
 class OsmUtils
 {
@@ -389,6 +392,29 @@ public:
    */
   static long closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPtr& way,
                                      const ConstOsmMapPtr& map);
+
+  /**
+   * Finds the closest way node index in a way to a specified node
+   *
+   * @param node node used for location comparison
+   * @param way way to search for closest index
+   * @param map map owning the node and way
+   * @return closest index on the way to node or -1 if no index is found
+   */
+  static long closestWayNodeIndexToNode(
+    const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
+
+  /**
+   * Finds the closest way node insert index in a way to a specified node. The index can be used
+   * directly in a call to Way::insertNode to insert a new node between two others
+   *
+   * @param node node used for location comparison
+   * @param way way to search for closest index
+   * @param map map owning the node and way
+   * @return closest insert index on the way to node or -1 if no index is found
+   */
+  static long closestWayNodeInsertIndex(const ConstNodePtr& node, const ConstWayPtr& way,
+                                        const ConstOsmMapPtr& map);
 
   /**
    * Determines whether the start or end of a way is closer to a specified node

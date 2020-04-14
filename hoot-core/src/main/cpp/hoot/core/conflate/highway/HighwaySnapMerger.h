@@ -28,7 +28,6 @@
 #define HIGHWAYSNAPMERGER_H
 
 // Hoot
-#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/conflate/highway/HighwayMergerAbstract.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
@@ -81,8 +80,6 @@ protected:
 private:
 
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
-
-  ReviewMarker _reviewMarker;
 
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;

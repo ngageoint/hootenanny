@@ -309,8 +309,8 @@ private:
     for (std::vector<MatchPtr>::iterator it = matches.begin(); it != matches.end(); ++it)
     {
       MatchPtr match = *it;
-      //Not proud of this, but not sure what else to do at this point w/o having to change the
-      //Match interface.
+      // Not proud of this, but not sure what else to do at this point w/o having to change the
+      // Match interface.
       MatchClassification& matchClass =
         const_cast<MatchClassification&>(match->getClassification());
       matchClass.setReview();

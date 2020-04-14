@@ -60,6 +60,15 @@ public:
    */
   bool isSame(ElementPtr e1, ElementPtr e2) const;
 
+  /**
+   * Determines if the tags for two elements are the same
+   *
+   * @param e1 the element owning the first set of tags to compare
+   * @param e2 the element owning the second set of tags to compare
+   * @return true if they are the same; false otherwise
+   */
+  static bool tagsAreSame(ConstElementPtr e1, ConstElementPtr e2);
+
   void setIgnoreElementId(bool ignore) { _ignoreElementId = ignore; }
 
   /**
@@ -88,7 +97,7 @@ private:
   bool _compareRelation(const std::shared_ptr<const Element>& re,
                         const std::shared_ptr<const Element>& e) const;
 
-  void _removeTagsNotImportantForComparison(Tags& tags) const;
+  static void _removeTagsNotImportantForComparison(Tags& tags);
 };
 
 }

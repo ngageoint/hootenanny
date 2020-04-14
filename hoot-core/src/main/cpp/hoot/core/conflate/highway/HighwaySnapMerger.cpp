@@ -58,6 +58,11 @@
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/WaysVisitor.h>
+#include <hoot/core/conflate/merging/WayNodeCopier.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/NoInformationCriterion.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QSet>
@@ -188,10 +193,13 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 {
   // TODO: This monster method needs to be refactored into smaller parts where possible.
 
+  // ENABLE THE OsmMapWriterFactory::writeDebugMap CALLS FOR SMALL DATASET DEBUGGING ONLY. writes a
+  // map file for each road merge
+
   LOG_VART(eid1);
-  LOG_VART(map->getElement(eid1));
+  //LOG_VART(map->getElement(eid1));
   LOG_VART(eid2);
-  LOG_VART(map->getElement(eid2));
+  //LOG_VART(map->getElement(eid2));
 
   if (HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced))
   {
@@ -229,6 +237,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     // remove the second element and any reviews that contain the element
     RemoveReviewsByEidOp(remove->getElementId(), true).apply(result);
 
+    //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-merged-identical-elements");
+
     return false;
   }
 
@@ -264,9 +274,11 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // split the first element and don't reverse any of the geometries.
   _splitElement(map, match.getSublineString1(), match.getReverseVector1(), replaced, e1, e1Match,
                 scraps1);
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-1");
   // split the second element and reverse any geometries to make the matches work.
   _splitElement(map, match.getSublineString2(), match.getReverseVector2(), replaced, e2, e2Match,
                 scraps2);
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-2");
 
   LOG_VART(e1Match->getElementId());
   if (scraps1)
@@ -289,7 +301,9 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   // remove any ways that directly connect from e1Match to e2Match
   _removeSpans(result, e1Match, e2Match);
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-remove-spans");
   _snapEnds(map, e2Match, e1Match);
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-snap-ends");
 
   if (e1Match)
   {
@@ -323,6 +337,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   LOG_VART(e1Match->getElementType());
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-tag-merging");
 
   bool swapWayIds = false;
 
@@ -471,7 +486,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     if (swapWayIds)
     {
       ElementId eidm1 = e1Match->getElementId();
-      LOG_TRACE("Swapping way IDs: " << eid1 << " and " << eidm1 << "...");
+      LOG_TRACE("Swapping e1 match ID: " << eidm1 << " with e1 ID: " << eid1 << "...");
       //  Swap the old way ID back into the match element
       IdSwapOp(eid1, eidm1).apply(result);
       //  Remove the old way with a new swapped out ID
@@ -489,42 +504,61 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     }
     else if (scraps1)
     {
-      LOG_TRACE("Replacing: " << eid1 << " with scraps1: " << scraps1->getElementId() << "...");
+      LOG_TRACE("Replacing e1: " << eid1 << " with scraps1: " << scraps1->getElementId() << "...");
       ReplaceElementOp(eid1, scraps1->getElementId(), true).apply(result);
     }
   }
   else
   {
     // remove any reviews that contain this element.
-    LOG_TRACE("Removing: " << eid1 << "...");
+    LOG_TRACE("Removing e1: " << eid1 << "...");
     RemoveReviewsByEidOp(eid1, true).apply(result);
   }
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-old-way-removal-1");
 
   // If there is something left to review against,
   if (scraps2)
   {
     // swap the elements with the scraps.
     LOG_TRACE(
-      "Replacing: " << e2Match->getElementId() << " and : " << eid2 << " with scraps2: " <<
-      scraps2->getElementId() << "...");
+      "Replacing e2 match: " << e2Match->getElementId() << " and e2: " << eid2 <<
+      " with scraps2: " << scraps2->getElementId() << "...");
     map->addElement(scraps2);
     ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(result);
     ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(result);
-//    _updateScrapParent(result, e2Match->getId(), scraps2);
   }
-  // Otherwise, drop the reviews and the element.
+  // Otherwise, drop the element and any reviews its in.
   else
   {
-    LOG_TRACE("Removing: " << e2Match->getElementId() << " and : " << eid2 << "...");
+    LOG_TRACE("Removing e2 match: " << e2Match->getElementId() << " and e2: " << eid2 << "...");
 
+    // add any informational nodes from the ways being replaced to the merged output before deleting
+    // them
+    WayNodeCopier nodeCopier;
+    nodeCopier.setOsmMap(map.get());
+    nodeCopier.addCriterion(NotCriterionPtr(new NotCriterion(new NoInformationCriterion())));
+    //nodeCopier.setConfiguration(conf());
+    LOG_TRACE(
+      "Copying information nodes from e2 match: " << e2Match->getElementId() << " to e1: " <<
+      eid1 << "...");
+    nodeCopier.copy(e2Match->getElementId(), eid1);
+    LOG_TRACE(
+      "Copying information nodes from e2 match: " << e2Match->getElementId() << " to e1 match: " <<
+      e1Match->getElementId() << "...");
+    nodeCopier.copy(e2Match->getElementId(), e1Match->getElementId());
+
+    // remove reviews e2Match is involved in
     RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(result);
 
     // Make the way that we're keeping have membership in whatever relations the way we're removing
     // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
     // during merging. TODO: we may be able to combine the following two removals into a single one
     RelationMemberSwapper::swap(eid2, eid1, map, false);
+
+    // remove reviews e2 is involved in
     RemoveReviewsByEidOp(eid2, true).apply(result);
   }
+  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-old-way-removal-2");
 
   if (e1Match)
   {
@@ -656,7 +690,7 @@ void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const WayPtr& w1, const WayP
 
 void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee, ElementPtr snapTo) const
 {
-  // TODO: get rid of this?
+  // TODO: get rid of this and replace with visitors/WaysVisitor
   class WaysVisitor : public ElementOsmMapVisitor
   {
   public:
@@ -757,14 +791,14 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
   set<ConstWayPtr, WayPtrCompare> ways;
   ways.insert(waysV.begin(), waysV.end());
 
-  // remove all the ways that are part of the subline. This leaves us with a list of ways that
+  // Remove all the ways that are part of the subline. This leaves us with a list of ways that
   // aren't going to be modified.
   for (size_t i = 0; i < s.getSublines().size(); i++)
   {
     ways.erase(s.getSublines()[i].getWay());
   }
 
-  // the subline string split should always result in a match section.
+  // The subline string split should always result in a match section.
   assert(match);
 
   // if there are ways that aren't part of the way subline string
@@ -881,7 +915,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       multiLineStringAdded = true;
     }
 
-    // make sure the tags are still legit on the scrap.
+    // Make sure the tags are still legit on the scrap.
     scrap->setTags(splitee->getTags());
     // With the merging switching between split ways and relations, it gets a little hard to keep
     // track of where this tags is needed, so one final check here to make sure it gets added
