@@ -30,48 +30,48 @@
 //
 
 // For the OSM+ to NFDD translation
-hoot.require('tds40')
-hoot.require('tds40_schema')
-hoot.require('tds40_rules')
-hoot.require('fcode_common')
+hoot.require('tds40');
+hoot.require('tds40_schema');
+hoot.require('tds40_rules');
+hoot.require('fcode_common');
 
 // The main translation functions
-hoot.require('etds40')
-hoot.require('etds40_rules')
+hoot.require('etds40');
+hoot.require('etds40_rules');
 
-hoot.require('config')
-hoot.require('translate')
+hoot.require('config');
+hoot.require('translate');
 
 // Create the output Schema - This is not used here. We _do_ use it in the etds functions but
 // we don't need to expose it to the main Hoot program
 function getDbSchema()
 {
-     return tds40.getDbSchema();
+  return tds40.getDbSchema();
 }
 
 // Get raw schema directly from translations/schema
 function getRawDbSchema()
 {
-     return tds40.schema.getDbSchema();
+  return tds40.schema.getDbSchema();
 }
 
 
 function initialize()
 {
-    // Turn off the TDS structure so we just get the raw feature
-    hoot.Settings.set({"ogr.thematic.structure":"false"});
+  // Turn off the TDS structure so we just get the raw feature
+  hoot.Settings.set({'ogr.thematic.structure':'false'});
 
-    // Turn off the tds extra function
-    hoot.Settings.set({"ogr.note.extra":"none"});
+  // Turn off the tds extra function
+  hoot.Settings.set({'ogr.note.extra':'none'});
 
-    // Turn off the ESRI FCSUBTYPE
-    hoot.Settings.set({"ogr.esri.fcsubtype":"false"});
+  // Turn off the ESRI FCSUBTYPE
+  hoot.Settings.set({'ogr.esri.fcsubtype':'false'});
 
-    // Throw errors instead of returning partial translations/o2s_X features
-    hoot.Settings.set({"ogr.throw.error":"true"});
+  // Throw errors instead of returning partial translations/o2s_X features
+  hoot.Settings.set({'ogr.throw.error':'true'});
 
-    // Set the schema type for the export
-    hoot.Settings.set({"osm.map.writer.schema":"TDSv40"});
+  // Set the schema type for the export
+  hoot.Settings.set({'osm.map.writer.schema':'TDSv40'});
 }
 
 
@@ -85,18 +85,18 @@ function initialize()
 //
 function translateAttributes(attrs, layerName, geometryType)
 {
-    // We use the temp var because etds.toEnglish returns "attrs" and "tableName"
-    var output = etds40.toEnglish(attrs,layerName,geometryType);
+  // We use the temp var because etds.toEnglish returns "attrs" and "tableName"
+  var output = etds40.toEnglish(attrs,layerName,geometryType);
 
-    // Make sure the returned value isn't NULL. This does occur
-    if (output)
-    {
-        return output.attrs;
-    }
-    else
-    {
-        return null;
-    }
+  // Make sure the returned value isn't NULL. This does occur
+  if (output)
+  {
+    return output.attrs;
+  }
+  else
+  {
+    return null;
+  }
 } // End of Translate Attributes
 
 
@@ -105,5 +105,5 @@ function translateAttributes(attrs, layerName, geometryType)
 //    This version converts OSM+ tags to NFDD "English" attributes
 function translateToOgr(tags, elementType, geometryType)
 {
-        return etds40.toEnglish(tags, elementType, geometryType)
+  return etds40.toEnglish(tags, elementType, geometryType);
 } // End of translateToOgr

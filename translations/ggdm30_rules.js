@@ -32,17 +32,17 @@
 */
 
 ggdm30.rules = {
-    // ##### Start of One2One Rules #####
+  // ##### Start of One2One Rules #####
 
-    // FCODE rules for Import
-    // This is where anything "unique" to GGDM goes.
-    fcodeOne2oneIn : [
+  // FCODE rules for Import
+  // This is where anything "unique" to GGDM goes.
+  fcodeOne2oneIn : [
     // ['F_CODE','AP030','highway','road'], // Road
-    ], // End fcodeOne2oneIn
+  ], // End fcodeOne2oneIn
 
-    // These are for finding an FCODE for export.
-    // Note: These get swapped around before being used
-    fcodeOne2oneOut : [
+  // These are for finding an FCODE for export.
+  // Note: These get swapped around before being used
+  fcodeOne2oneOut : [
     // ['F_CODE','AN060','railway','yes'], // Rail yards
     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
     // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
@@ -114,10 +114,10 @@ ggdm30.rules = {
     ['F_CODE','ZD040','natural','hill'], // From GeoNames
     ['F_CODE','ZD040','natural','peak'], // From OSM
     ['F_CODE','ZD040','natural','valley'], // From GeoNames
-    ], // End fcodeOne2oneOut
+  ], // End fcodeOne2oneOut
 
-    // One2one rules for Text Fields
-    txtBiased : {
+  // One2one rules for Text Fields
+  txtBiased : {
     'ADR':'addr:full', // Address
     'AQN':'aquifer_name', // Aquifer Name
     // 'BA000_VDR':'source:datum:sounding:name', // Water Line : Sounding Datum Name - ZHDP_VDR
@@ -214,10 +214,10 @@ ggdm30.rules = {
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction : Security <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction : Security <resource non-intelligence community markings>
     'ZSAX_RX4':'security:resource_owner', // Restriction : Security <resource owner-producer>
-    }, // End txtBiased
+  }, // End txtBiased
 
-    // One2one ruled for Number fields
-    numBiased : {
+  // One2one ruled for Number fields
+  numBiased : {
     'ADUR':'water_supply_duration', // Average Water Supply Duration
     'AHA':'source:accuracy:horizontal', // Absolute Horizontal Accuracy (90%)
     'ANFL':'annual_flow_rate', // Annual Flow Rate
@@ -311,7 +311,7 @@ ggdm30.rules = {
     'EQS':'density_equivalent_scale', // Density Equivalent Scale
     'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
     'FCL':'ferry:crossing_distance', // Ferry Crossing Distance
-//    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
+    //    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
     'FDI':'geological:dip', // Geologic Dip
     'FEO':'feature_orientation', // Feature Element Orientation
     'GB052_TRHH':'aeroway:runway_highend:true_heading', // Runway Direction (high end) : Runway True Heading (high)
@@ -476,12 +476,12 @@ ggdm30.rules = {
     'ZVA':'ele', // Aerodrome Elevation
     'ZVH':'ele:max', // Highest Elevation
     'ZVH_AVA':'source:accuracy:highest_elevation', // Highest Elevation <absolute vertical accuracy>
-    }, // End numBiased
+  }, // End numBiased
 
 
-    // Common one2one rules. Used for both import and export
-    // taken from the GGDM30 spec
-    one2one : [
+  // Common one2one rules. Used for both import and export
+  // taken from the GGDM30 spec
+  one2one : [
 
     // ACH - Anchorage Type
     // ['ACH','-999999',undefined,undefined], // No Information
@@ -6152,16 +6152,16 @@ ggdm30.rules = {
 
     // ZVH_VDT - Highest Elevation <vertical datum> - See VDT
 
-    ], // End one2one
+  ], // End one2one
 
-    // Input Translation Rules:
-    // These are only used for IMPORT and get added to the standard one2one rules
-    one2oneIn : [
-    ], // End one2oneIn
+  // Input Translation Rules:
+  // These are only used for IMPORT and get added to the standard one2one rules
+  one2oneIn : [
+  ], // End one2oneIn
 
-    // One2one translation table for converting "Other" OSM attributes to GGDM
-    // This is for Export only. The values are swapped before use
-    one2oneOut : [
+  // One2one translation table for converting "Other" OSM attributes to GGDM
+  // This is for Export only. The values are swapped before use
+  one2oneOut : [
     // OTH Filler.  These are to build OTH values
     ['RTY','999','highway','other'],
     ['FFN','999','amenity','other'],
@@ -6246,10 +6246,10 @@ ggdm30.rules = {
     ['FFN','843','amenity','jail'], // Imprisonment
     ['FFN','980','building','cemetery_building'], // Death care services
     ['ZI014_PPO','-999999','product','unknown'], // Unknown
-//     [undefined,undefined,'amenity','school'], //  converted in pre processing
-//     [undefined,undefined,'amenity','hospital'], //  converted in pre processing
-//     [undefined,undefined,'amenity','university'], //  converted in pre processing
-//     [undefined,undefined,'amenity','college'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','school'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','hospital'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','university'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','college'], //  converted in pre processing
     [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
     ['IWT','4','water','reservoir'], // Reservoir
@@ -6302,13 +6302,13 @@ ggdm30.rules = {
     ['FFN','640','shop','bureau_de_change'], // Financial Services
     ['FFN','760','amenity','office'], // Business and Personal Support Services
     ['FFN','815','building','palace'], // Palace
-   ], // End one2oneOut
+  ], // End one2oneOut
 
-    // ##### End of One2One Rules #####
+  // ##### End of One2One Rules #####
 
-    // ##### Start of fuzzyTable #####
-    // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
-    fuzzyTable : [
+  // ##### Start of fuzzyTable #####
+  // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
+  fuzzyTable : [
     ['ZI016_ROC','1',schemaTools.simple('surface=ground',1)], // Unimproved
     ['ZI016_ROC','2',schemaTools.simple('surface=compacted',1)], // Stabilized earth
     ['ZI016_ROC','3',schemaTools.isA('surface=unpaved', 0.8)], // Flexible Pavement
@@ -6319,7 +6319,7 @@ ggdm30.rules = {
     ['ZI016_ROC','8',schemaTools.simple('surface=concrete',1)], // Concrete
     ['ZI016_ROC','9',schemaTools.simple('surface=asphalt',1)], // Asphalt
     ['ZI016_ROC','10',schemaTools.simple('surface=asphalt_over_concrete',1)], // Asphalt over Concrete
-    ['ZI016_ROC','11',"surface=cobblestone",schemaTools.isA('surface=cobblestone',1),schemaTools.simple('surface=sett')], // Cobble-stone
+    ['ZI016_ROC','11','surface=cobblestone',schemaTools.isA('surface=cobblestone',1),schemaTools.simple('surface=sett')], // Cobble-stone
     ['ZI016_ROC','12',schemaTools.simple('surface=brick',1)], // Brick
     ['ZI016_ROC','13',schemaTools.simple('surface=metal',1)], // Metal
     ['ZI016_ROC','14',schemaTools.simple('surface=wood',1)], // Wood
@@ -6328,12 +6328,12 @@ ggdm30.rules = {
     ['ZI016_ROC','17',schemaTools.simple('surface=ice',1)], // Ice
     ['ZI016_ROC','18',schemaTools.simple('surface=snow',1)], // Snow
     ['ZI016_ROC','999',schemaTools.simple('surface=other',1)], // Other
-    ],
-    // ##### End of fuzzyTable #####
+  ],
+  // ##### End of fuzzyTable #####
 
-    // ##### Start of txtLength #####
-    // This list is for validateing the lengths of text attributes prior to export
-    txtLength : {
+  // ##### Start of txtLength #####
+  // This list is for validateing the lengths of text attributes prior to export
+  txtLength : {
     'BA000_VDR':80, 'BC040_COL':254, 'BC040_MLR':254, 'BEN':15, 'BER':254, 'BRN':24, 'BRR':14, 'CID':20, 'CNCP':20,
     'COL':80, 'DIA':14, 'ETZ':24, 'FUFI':254, 'F_CODE':5, 'GA032_NSX':80, 'GB001_AID':14, 'GB052_RIDH':14,
     'GB052_RIDL':14, 'HSE':14, 'IKO':14, 'LASZ':254, 'MCA':80, 'MDE':20, 'MLR':254, 'NA8':80, 'PRVR':254,
@@ -6343,25 +6343,25 @@ ggdm30.rules = {
     'ZI005_FNAA':200, 'ZI005_FNAB':200, 'ZI005_NFN':18, 'ZI005_NFN2':18, 'ZI005_NFN3':18, 'ZI005_NFNA':18,
     'ZI005_NFNB':18, 'ZI012_VDR':80, 'ZI020_FI2A':14, 'ZI020_FI2B':14, 'ZI020_IC4':200, 'ZI031S_URI':254,
     'ZI039S_UFI':254, 'ZI103_MVD':20, 'ZSAX_RX0':254, 'ZSAX_RX3':254, 'ZSAX_RX4':254
-    },
-    // ##### End of txtLength #####
+  },
+  // ##### End of txtLength #####
 
-    // ##### Start of intList #####
-    // This list is for validateing the integer attributes prior to export
-    intList : [
+  // ##### Start of intList #####
+  // This list is for validateing the integer attributes prior to export
+  intList : [
     'ADUR','BC034_BRF','BC034_BRF2','BC040_LCN','BC040_LVN','BNF','BRF','BRF2','DEV','DF1','DF2','DF3',
     'DF4','DMF','DZC','EQS','HSC','LC1','LC2','LC3','LC4','LCN','LSA','LSI','LST','LTN','LVN',
     'NOR','NOS','NPL','PPL','STAF','STNB','VEC','WPST','ZI005_GNR','ZI005_GNR2','ZI005_GNR3',
     'ZI015_GCUL','ZI015_GCUU','ZI018_BRF','ZI026_CTUL','ZI026_CTUU'
-    ],
-    // ##### End of intList #####
+  ],
+  // ##### End of intList #####
 
-    // ##### Start of swapListIn #####
-    // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
-    // but renamed in different features. We swap these so that there is only one
-    // set of rules needed in the One2One section.
-    // These get converted back on output - if we need to.
-    swapListIn : {
+  // ##### Start of swapListIn #####
+  // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
+  // but renamed in different features. We swap these so that there is only one
+  // set of rules needed in the One2One section.
+  // These get converted back on output - if we need to.
+  swapListIn : {
     'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
     'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
     'BA000_VDC':'ZHDP_VDC',
@@ -6431,12 +6431,12 @@ ggdm30.rules = {
     'ZI032_PYM':'PYM',
     'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
     'ZVH_VDT':'VDT'
-    },
-    // ##### End of swapListIn #####
+  },
+  // ##### End of swapListIn #####
 
-    // ##### Start of swapListOut #####
-    // Format is: <FCODE>:[<from>:<to>]
-    swapListOut : {
+  // ##### Start of swapListOut #####
+  // Format is: <FCODE>:[<from>:<to>]
+  swapListOut : {
     'AA010':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
     'AA020':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
     'AA040':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
@@ -6461,28 +6461,28 @@ ggdm30.rules = {
     'AQ116':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2','ZI014_PPO3':'PPO3'},
     'AT005':{'WLE':'ZI025_WLE'},
     'AT042':{'GUG':'ZI032_GUG','PYC':'ZI032_PYC','PYM':'ZI032_PYM',
-     'TOS':'ZI032_TOS','CAB':'AT005_CAB'},
+      'TOS':'ZI032_TOS','CAB':'AT005_CAB'},
     'BA010':{'ZHDP_VDR':'BA000_VDR','ZHDP_VDC':'BA000_VDC'},
     'BA030':{'ZHDP_VDR':'BA000_VDR','ZHDP_VDC':'BA000_VDC'},
     'BB010':{'ZI025_HDP':'HDP'},
     'BB155':{'BC034_BRF':'ZI018_BRF'},
     'BC034':{'BC034_BRF':'BRF','BC034_BRF2':'BRF2','BC010_REF':'REF',
-     'BC010_TZP':'TZP','BC034_MRT':'MRT'},
+      'BC010_TZP':'TZP','BC034_MRT':'MRT'},
     'BC040':{'BC040_EOL':'EOL','BC010_REF':'REF','BC040_COL':'COL',
-     'BC040_MLR':'MLR','BC010_TZP':'TZP'},
+      'BC040_MLR':'MLR','BC010_TZP':'TZP'},
     'BC060':{'BC040_COL':'COL','CAA':'BC040_CAA'},
     'BC080':{'ZHDP_VDR':'ZHBH_VDR','ZHDP_DKC':'ZHBH_DKC','ZHDP_DKC2':'ZHBH_DKC2',
-     'ZHDP_DKC3':'ZHBH_DKC3','ZHDP_DCR':'ZHBH_DCR','ZHDP_VDC':'ZHBH_VDC',
-     'ZHDP_SVC':'ZHBH_SVC','ZHDP_TEC':'ZHBH_TEC','ZHDP_TEC2':'ZHBH_TEC2',
-     'ZHDP_TEC3':'ZHBH_TEC3'},
+      'ZHDP_DKC3':'ZHBH_DKC3','ZHDP_DCR':'ZHBH_DCR','ZHDP_VDC':'ZHBH_VDC',
+      'ZHDP_SVC':'ZHBH_SVC','ZHDP_TEC':'ZHBH_TEC','ZHDP_TEC2':'ZHBH_TEC2',
+      'ZHDP_TEC3':'ZHBH_TEC3'},
     'BD020':{'ZHDP_TEC':'ZHBH_TEC','ZHDP_TEC2':'ZHBH_TEC2','ZHDP_TEC3':'ZHBH_TEC3'},
     'BD100':{'WLE':'ZI025_WLE'},
     'BD115':{'MAN':'ZI025_MAN'},
     'BD130':{'ZHDP_TEC':'ZHBH_TEC','ZHDP_TEC2':'ZHBH_TEC2','ZHDP_TEC3':'ZHBH_TEC3'},
     'BE010':{'ZHDP_VDR':'ZI012_VDR','ZHDP_DKC':'ZI012_DKC','ZHDP_DKC2':'ZI012_DKC2',
-     'ZHDP_DKC3':'ZI012_DKC3','ZHDP_DCR':'ZI012_DCR',
-     'ZHDP_VDC':'ZI012_VDC','ZHDP_SVC':'ZI012_SVC',
-     'ZHDP_TEC':'ZI012_TEC','ZHDP_TEC2':'ZI012_TEC2','ZHDP_TEC3':'ZI012_TEC3'},
+      'ZHDP_DKC3':'ZI012_DKC3','ZHDP_DCR':'ZI012_DCR',
+      'ZHDP_VDC':'ZI012_VDC','ZHDP_SVC':'ZI012_SVC',
+      'ZHDP_TEC':'ZI012_TEC','ZHDP_TEC2':'ZI012_TEC2','ZHDP_TEC3':'ZI012_TEC3'},
     'BE020':{'ZI025_HDP':'HDP'},
     'BG010':{'ZI025_HDP':'HDP'},
     'BH012':{'CAA':'BH010_CAA'},
@@ -6504,15 +6504,15 @@ ggdm30.rules = {
     'GB045':{'ZI019_ASU':'ASU','ZI019_ASU2':'ASU2','ZI019_ASU3':'ASU3'},
     'NM020':{'ZI025_HDP':'HDP'},
     'ZD070':{'ZI024_WTBB':'WTBB','ZI024_WTCA':'WTCA','ZI024_WTFE':'WTFE',
-     'ZI024_WTKK':'WTKK','ZI024_WTMN':'WTMN','ZI024_WTNA':'WTNA',
-     'ZI024_WTNO':'WTNO','ZI024_WTPO':'WTPO','ZI024_WTSI':'WTSI'},
+      'ZI024_WTKK':'WTKK','ZI024_WTMN':'WTMN','ZI024_WTNA':'WTNA',
+      'ZI024_WTNO':'WTNO','ZI024_WTPO':'WTPO','ZI024_WTSI':'WTSI'},
     'ZI031':{'ZI006_MEM':'MEM','ZI004_RCG':'RCG'},
     'ZI026':{'ZI026_SUR':'SUR'}
-    },
-    // ##### End of swapListOut #####
+  },
+  // ##### End of swapListOut #####
 
-    // ##### Start of closureList #####
-    closureList : {
+  // ##### Start of closureList #####
+  closureList : {
     'AQTC':['AQTL','AQTU'],
     'AYRC':['AYRL','AYRU'],
     'BPWHAC':['BPWHAL','BPWHAU'],
@@ -6534,12 +6534,12 @@ ggdm30.rules = {
     'TSCC':['TSCL','TSCU'],
     'WDAC':['WDAL','WDAU'],
     'ZI026_CTUC':['ZI026_CTUL','ZI026_CTUU']
-    },
-    // ##### End of closureList #####
+  },
+  // ##### End of closureList #####
 
-    // ##### Start of fCodeMap #####
-    // This is a map of FCODE's and filenames
-    fCodeMap : [
+  // ##### Start of fCodeMap #####
+  // This is a map of FCODE's and filenames
+  fCodeMap : [
     ['AF010', ['af010','smokestack_p']], // Smokestack
     ['AH025', ['ah025','engineered_earthwork_s','engineered_earthwork_p']], // Engineered Earthwork
     ['AH060', ['ah060','underground_bunker_s','underground_bunker_p']], // Underground Bunker
@@ -6595,12 +6595,12 @@ ggdm30.rules = {
     ['GB050', ['gb050','aircraft_revetment_c']], // Aircraft Revetment
     ['ZD040', ['zd040','named_location_s','named_location_c','named_location_p']], // Named Location
     ['ZD045', ['zd045','annotated_location_s','annotated_location_c','annotated_location_p']], // Named Location
-    ],
-    // ##### End of fCodeMap #####
+  ],
+  // ##### End of fCodeMap #####
 
-    // ##### Start of ge4List #####
-    // This list is for validateing the XXX_GE4XX values
-    ge4List : {
+  // ##### Start of ge4List #####
+  // This list is for validateing the XXX_GE4XX values
+  ge4List : {
     'ge:GENC:3:1-2:ABW':'AW', // ARUBA AS OF 2013-06-30
     'ge:GENC:3:1-2:AFG':'AF', // AFGHANISTAN AS OF 2013-06-30
     'ge:GENC:3:1-2:AGO':'AO', // ANGOLA AS OF 2013-06-30
@@ -6885,11 +6885,11 @@ ggdm30.rules = {
     'ge:ISO1:3:VI-15:TKM':'TM', // TURKMENISTAN AS OF 2013-05-10
     'ge:ISO1:3:VI-15:TUV':'TV', // TUVALU AS OF 2013-05-10
     'other':'other', // Other
-    },
-    // ##### End of ge4List #####
+  },
+  // ##### End of ge4List #####
 
-    // ##### Start of Thematic Group Rules #####
-    thematicGroupList : {
+  // ##### Start of Thematic Group Rules #####
+  thematicGroupList : {
     'AAA010':'IndustrySrf',  // EXTRACTION_MINE_S
     'AAA020':'IndustrySrf',  // MINE_SHAFT_SUPERSTRUCTURE_S
     'AAA040':'IndustrySrf',  // RIG_S
@@ -7510,11 +7510,11 @@ ggdm30.rules = {
     'PZD040':'InformationPnt',  // NAMED_LOCATION_P
     'PZD045':'InformationPnt',  // ANNOTATED_LOCATION_P
     'PZD070':'HydrographyPnt',  // WATER_MEASUREMENT_LOCATION_P
-    }, // End of thematicGroupList
-    // ##### End of Thematic Group Rules #####
+  }, // End of thematicGroupList
+  // ##### End of Thematic Group Rules #####
 
-    // ##### Start of ESRI FCSubtype Rules #####
-    subtypeList : {
+  // ##### Start of ESRI FCSubtype Rules #####
+  subtypeList : {
     'AA010':'100001', // EXTRACTION_MINE
     'AA011':'100002', // SHEAR_WALL
     'AA020':'100003', // MINE_SHAFT_SUPERSTRUCTURE
@@ -7919,7 +7919,7 @@ ggdm30.rules = {
     'ZD070':'164755', // WATER_MEASUREMENT_LOCATION
     'ZI031':'121591', // DATASET
     'ZI039':'132721', // ENTITY_COLLECTION_METADATA
-    }, // End of subtypeList
-    // ##### End of ESRI FCSubtype Rules #####
+  }, // End of subtypeList
+  // ##### End of ESRI FCSubtype Rules #####
 
-} // End of ggdm30.rules
+}; // End of ggdm30.rules

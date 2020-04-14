@@ -39,22 +39,22 @@ hoot.require('fcode_common');
 
 function initialize()
 {
-    // Set the schema type for the export
-    hoot.Settings.set({"osm.map.writer.schema":"TDSv70"});
+  // Set the schema type for the export
+  hoot.Settings.set({'osm.map.writer.schema':'TDSv70'});
 }
 
 // Layer name filter - Filter out all layers that match this regexp
 function layerNameFilter()
 {
-    // Drop all of the "SRC_*", "o2s_*" and "extra_*" layers
-    return "^(?!SRC_|extra_)";
+  // Drop all of the "SRC_*", "o2s_*" and "extra_*" layers
+  return '^(?!SRC_|extra_)';
 }
 
 
 // Create the output Schema
 function getDbSchema()
 {
-    return tds70.getDbSchema();
+  return tds70.getDbSchema();
 }
 
 
@@ -63,7 +63,7 @@ function getDbSchema()
 // function translateAttributes(attrs, layerName, geometryType)
 function translateToOsm(attrs, layerName, geometryType)
 {
-    return tds70.toOsm(attrs, layerName, geometryType);
+  return tds70.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 
@@ -72,7 +72,7 @@ function translateToOsm(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 function translateToOgr(tags, elementType, geometryType)
 {
-    return tds70.toTds(tags, elementType, geometryType)
+  return tds70.toTds(tags, elementType, geometryType);
 
 } // End of translateToOgr
 
