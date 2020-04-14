@@ -598,11 +598,15 @@ QStringList OsmApiDb::_getTables()
 
 void OsmApiDb::disableConstraints()
 {
+  LOG_DEBUG("Disabling OSMAPI database constraints...");
+
   _modifyConstraints(_getTables(), true);
 }
 
 void OsmApiDb::enableConstraints()
 {
+  LOG_DEBUG("Enabling OSMAPI database constraints...");
+
   _modifyConstraints(_getTables(), false);
 }
 
@@ -623,6 +627,8 @@ void OsmApiDb::_modifyConstraints(const QStringList& tableNames, bool disable)
 
 void OsmApiDb::dropIndexes()
 {
+  LOG_DEBUG("Dropping OSMAPI database indexes...");
+
   //changesets
   DbUtils::execNoPrepare(
     getDB(), QString("DROP INDEX %1_bbox_idx").arg(ApiDb::getChangesetsTableName()));
@@ -688,6 +694,8 @@ void OsmApiDb::dropIndexes()
 
 void OsmApiDb::createIndexes()
 {
+  LOG_INFO("Creating OSMAPI database indexes...");
+
   //changesets
   DbUtils::execNoPrepare(
     getDB(),
