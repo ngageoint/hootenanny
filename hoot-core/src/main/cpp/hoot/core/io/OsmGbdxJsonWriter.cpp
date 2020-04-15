@@ -32,7 +32,6 @@
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>

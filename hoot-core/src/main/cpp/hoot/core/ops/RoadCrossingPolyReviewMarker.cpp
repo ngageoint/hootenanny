@@ -32,7 +32,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/elements/Way.h>
@@ -104,7 +104,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
 
             // if the road intersects the poly, flag it for review
             if (neighbor && rule.getPolyFilter()->isSatisfied(neighbor) &&
-                OsmUtils::haveGeometricRelationship(
+                ElementGeometryUtils::haveGeometricRelationship(
                   way, neighbor, GeometricRelationship::Crosses, _map))
             {
               LOG_TRACE("Marking " << way->getElementId() << " for review...");

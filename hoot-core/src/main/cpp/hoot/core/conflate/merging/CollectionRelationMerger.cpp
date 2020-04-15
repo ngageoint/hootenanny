@@ -48,6 +48,8 @@ void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementI
       "Element types other than relation were passed to CollectionRelationMerger.");
   }
 
+  LOG_TRACE("Merging relations " << elementId1 << " and " << elementId2 << "...");
+
   RelationPtr relation1 = _map->getRelation(elementId1.getId());
   RelationPtr relation2 = _map->getRelation(elementId2.getId());
 
@@ -64,6 +66,8 @@ void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementI
 
   LOG_TRACE("Removing " << elementId2 << "...");
   RemoveRelationByEid(elementId2.getId()).apply(_map);
+
+  LOG_TRACE("Merged relations " << elementId1 << " and " << elementId2);
 }
 
 void CollectionRelationMerger::_mergeMembers(

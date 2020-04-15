@@ -537,7 +537,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     WayNodeCopier nodeCopier;
     nodeCopier.setOsmMap(map.get());
     nodeCopier.addCriterion(NotCriterionPtr(new NotCriterion(new NoInformationCriterion())));
-    //nodeCopier.setConfiguration(conf());
     LOG_TRACE(
       "Copying information nodes from e2 match: " << e2Match->getElementId() << " to e1: " <<
       eid1 << "...");

@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>

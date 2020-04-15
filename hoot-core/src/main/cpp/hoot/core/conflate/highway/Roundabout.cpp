@@ -37,6 +37,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/NodeUtils.h>
+#include <hoot/core/elements/WayNodeUtils.h>
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -113,7 +115,7 @@ RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr& pMap, WayPtr pWay)
   LOG_VART(rnd->getCenter());
 
   LOG_TRACE("Created roundabout: " << rnd->toDetailedString(pMap));
-  LOG_VART(OsmUtils::getWayNodesDetailedString(rnd->getRoundaboutWay(), pMap));
+  LOG_VART(WayNodeUtils::getWayNodesDetailedString(rnd->getRoundaboutWay(), pMap));
   return rnd;
 }
 
@@ -283,7 +285,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
 
   // Remove roundabout way & extra nodes
   LOG_TRACE("Removing roundabout way: " << _roundaboutWay->getId() << "...");
-  LOG_VART(OsmUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
+  LOG_VART(WayNodeUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
   RemoveWayByEid::removeWayFully(pMap, _roundaboutWay->getId());
   for (std::set<long>::iterator it = extraNodeIDs.begin(); it != extraNodeIDs.end(); ++it)
   {
@@ -312,7 +314,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
 
     pMap->addWay(pWay);
     LOG_TRACE("Adding temp way: " << pWay->getId());
-    LOG_VART(OsmUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
+    LOG_VART(WayNodeUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
     _tempWays.push_back(pWay);
   }
   LOG_VART(_tempWays.size());
@@ -394,7 +396,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
 //    OsmUtils::logElementDetail(
 //      pRoundabout, pMap, Log::Trace,
 //      "Roundabout::replaceRoundabout: roundabout after updating nodes");
-    LOG_VART(OsmUtils::getWayNodesDetailedString(pRoundabout, pMap));
+    LOG_VART(WayNodeUtils::getWayNodesDetailedString(pRoundabout, pMap));
 
     //  Convert the roundabout to a geometry for distance checking later
     ElementConverter converter(pMap);
@@ -513,7 +515,7 @@ QString Roundabout::toDetailedString(OsmMapPtr map) const
 
   bool nodeIdsMatch = false;
   const std::vector<ConstNodePtr> originalNodes = _roundaboutNodes;
-  const std::vector<long> originalNodeIds = OsmUtils::nodesToNodeIds(originalNodes);
+  const std::vector<long> originalNodeIds = NodeUtils::nodesToNodeIds(originalNodes);
   if (_roundaboutWay)
   {
     nodeIdsMatch = (originalNodeIds == _roundaboutWay->getNodeIds());
@@ -532,8 +534,8 @@ QString Roundabout::toDetailedString(OsmMapPtr map) const
   if (nodeIdsMatch)
   {
     const std::vector<ConstNodePtr> currentNodes =
-      OsmUtils::nodeIdsToNodes(_roundaboutWay->getNodeIds(), map);
-    if (OsmUtils::nodeCoordsMatch(originalNodes, currentNodes))
+      NodeUtils::nodeIdsToNodes(_roundaboutWay->getNodeIds(), map);
+    if (NodeUtils::nodeCoordsMatch(originalNodes, currentNodes))
     {
       str += ", original and current node coordinates match.";
     }
@@ -541,8 +543,8 @@ QString Roundabout::toDetailedString(OsmMapPtr map) const
     {
       str +=
         ", original and current node coordinates do not match. original node coords: " +
-        OsmUtils::nodeCoordsToString(originalNodes) + ", current node coords: " +
-        OsmUtils::nodeCoordsToString(currentNodes);
+        NodeUtils::nodeCoordsToString(originalNodes) + ", current node coords: " +
+        NodeUtils::nodeCoordsToString(currentNodes);
     }
   }
 
