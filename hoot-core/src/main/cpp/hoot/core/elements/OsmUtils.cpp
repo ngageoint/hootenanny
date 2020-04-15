@@ -1148,4 +1148,84 @@ bool OsmUtils::isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const Ele
   return false;
 }
 
+QSet<long> OsmUtils::getSharedWayNodes(const ConstWayPtr& way1, const ConstWayPtr& way2)
+{
+  QSet<long> nodeIdsSet1 =
+    QList<long>::fromVector(QVector<long>::fromStdVector(way1->getNodeIds())).toSet();
+  const QSet<long> nodeIdsSet2 =
+    QList<long>::fromVector(QVector<long>::fromStdVector(way2->getNodeIds())).toSet();
+  return nodeIdsSet1.intersect(nodeIdsSet2);
+}
+
+bool OsmUtils::waysShareNode(const ConstWayPtr& way1, const ConstWayPtr& way2)
+{
+  return getSharedWayNodes(way1, way2).size() > 0;
+}
+
+bool OsmUtils::waysShareEndNode(const ConstWayPtr& way1, const ConstWayPtr& way2,
+                                const bool sameDirection)
+{
+  LOG_VART(way1->getElementId());
+  LOG_VART(way2->getElementId());
+  const QSet<long> sharedNodes = getSharedWayNodes(way1, way2);
+  LOG_VART(sharedNodes.size());
+  for (QSet<long>::const_iterator it = sharedNodes.begin(); it != sharedNodes.end(); ++it)
+  {
+    const long nodeId = *it;
+    if (sameDirection)
+    {
+      if ((way1->getFirstNodeId() == nodeId && way2->getLastNodeId()) ||
+          (way2->getFirstNodeId() == nodeId && way1->getLastNodeId()))
+      {
+        LOG_TRACE("Found same direction shared node: " << nodeId);
+        return true;
+      }
+    }
+    else
+    {
+      if ((way1->getLastNodeId() == nodeId && way2->getLastNodeId()) ||
+          (way2->getFirstNodeId() == nodeId && way1->getFirstNodeId()))
+      {
+        LOG_TRACE("Found different direction shared node: " << nodeId);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool OsmUtils::relationsHaveConnectedWayMembers(
+  const ConstOsmMapPtr& map, const ConstRelationPtr& relation1, const ConstRelationPtr& relation2)
+{
+  if (relation1 && relation2)
+  {
+    std::set<ElementId> relation1WayMembers = relation1->getMemberIds(ElementType::Way);
+    std::set<ElementId> relation2WayMembers = relation2->getMemberIds(ElementType::Way);
+    for (std::set<ElementId>::const_iterator it = relation1WayMembers.begin();
+         it != relation1WayMembers.end(); ++it)
+    {
+      const ElementId elementId1 = *it;
+      for (std::set<ElementId>::const_iterator it2 = relation2WayMembers.begin();
+           it2 != relation2WayMembers.end(); ++it2)
+      {
+        const ElementId elementId2 = *it2;
+        if (elementId1 != elementId2)
+        {
+          ConstWayPtr way1 = map->getWay(elementId1);
+          ConstWayPtr way2 = map->getWay(elementId1);
+          if (way1 && way2)
+          {
+            if (waysShareEndNode(way1, way2, true))
+            {
+              LOG_TRACE("Found shared end node.");
+              return true;
+            }
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
 }

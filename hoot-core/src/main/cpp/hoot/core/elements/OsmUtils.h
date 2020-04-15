@@ -755,6 +755,47 @@ public:
   static bool isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const ElementId& childId,
                                            const QString& tagKey = "");
 
+  /**
+   * TODO
+   *
+   * @param map
+   * @param relation1
+   * @param relation2
+   * @return
+   */
+  static bool relationsHaveConnectedWayMembers(
+    const ConstOsmMapPtr& map, const ConstRelationPtr& relation1,
+    const ConstRelationPtr& relation2);
+
+  /**
+   * TODO
+   *
+   * @param way1
+   * @param way2
+   * @return
+   */
+  static QSet<long> getSharedWayNodes(const ConstWayPtr& way1, const ConstWayPtr& way2);
+
+  /**
+   * TODO
+   *
+   * @param way1
+   * @param way2
+   * @return
+   */
+  static bool waysShareNode(const ConstWayPtr& way1, const ConstWayPtr& way2);
+
+  /**
+   * TODO
+   *
+   * @param way1
+   * @param way2
+   * @param sameDirection
+   * @return
+   */
+  static bool waysShareEndNode(
+    const ConstWayPtr& way1, const ConstWayPtr& way2, const bool sameDirection = true);
+
 private:
 
   static int _badGeomCount;

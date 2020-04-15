@@ -28,8 +28,11 @@ exports.geometryType = "polygon";
 exports.matchCandidateCriterion = "hoot::CollectionRelationCriterion";
 
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
-var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
+var angleHistExtractor = new hoot.AngleHistogramExtractor();
+
 var nameExtractor = new hoot.NameExtractor();
+
+var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -60,15 +63,15 @@ function typeMismatch(e1, e2)
   var tags2 = e2.getTags();
   var type1 = e1.getType();
   var type2 = e2.getType();
-  
-  hoot.trace("type1: " + type1);
-  hoot.trace("type2: " + type2);
-  hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
-  hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
+
+  // If the collection relations aren't filtered out properly by type beforehand the
+  // checks afterward can become very expensive.
 
   if (type1 != type2)
   {    
-    hoot.trace("type mismatch");
+    hoot.trace("type mismatch; type1: " + type1 + "; type2: " + type2);
+    hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
+    hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
     return true;
   }
   else if (type1 == "boundary" && tags1.get("boundary") == "administrative" && tags2.get("boundary") == "administrative" && tags1.get("admin_level") != tags2.get("admin_level"))
@@ -91,6 +94,7 @@ function typeMismatch(e1, e2)
     hoot.trace("route mismatch");
     return true;
   }
+
   return false;
 }
 
@@ -107,11 +111,9 @@ function nameMismatch(map, e1, e2)
   {
     var ref1 = tags1.get("ref");
     var ref2 = tags2.get("ref");
-    hoot.trace("ref 1: " + ref1);
-    hoot.trace("ref 2: " + ref2);
     if (ref1 != ref2)
     {
-      hoot.trace("highway ref mismatch");
+      hoot.trace("highway ref mismatch; ref1: " + ref1 + "; ref2: " + ref2);
       name = 0.0;
     }
   }
@@ -124,6 +126,7 @@ function nameMismatch(map, e1, e2)
 
   if (name < exports.nameThreshold)
   {
+    hoot.trace("name mismatch");
     return true;
   }
   return false;
@@ -131,19 +134,49 @@ function nameMismatch(map, e1, e2)
 
 function geometryMismatch(map, e1, e2)
 {
-  // This can become a fairly expensive check against the collection relations if to many of
-  // them are encountered because they aren't filtered out properly by type beforehand.
-  var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
-  hoot.trace("edgeDist: " + edgeDist);
-  if (edgeDist < 0.97)
-  { 
-    hoot.trace("match failed on edge distance");
+  var numRelationMemberNodes = getNumRelationMemberNodes(map, e1.getElementId()) + getNumRelationMemberNodes(map, e2.getElementId());
+  if (numRelationMemberNodes < 2000)
+  {
+    // This can become a fairly expensive check for relations with a lot of total nodes.
+    var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+    if (edgeDist < 0.97)
+    { 
+      hoot.trace("match failed on edgeDist: " + edgeDist);
+      return true;
+    }
+  }
+  else
+  {
+    hoot.trace("numRelationMemberNodes: " + numRelationMemberNodes);
+    var angleHist = angleHistExtractor.extract(map, e1, e2);
+    if (angleHist < 0.73)
+    { 
+      if (relationsHaveConnectedWayMembers(map, e1.getElementId(), e2.getElementId()))
+      {
+        hoot.trace("match failed on angleHist: " + angleHist + " but there are connected ways.");
+      }
+      else
+      {
+        hoot.trace("match failed on angleHist: " + angleHist);
+        return true;
+      }  
+    }
+  }
+  return false;
+}
+
+function memberSimilarityMismatch(map, e1, e2)
+{
+  // This hasn't panned out as being useful yet. This meant to recognize relations with almost identical 
+  // members. We do encounter those, but the other checks (name, geometry) usually help identify them first 
+  // and makes this unnecessary.
+
+  var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
+  if (memberSim < 0.75)
+  {
+    hoot.trace("match failed on memberSim: " + memberSim);
     return true;
   }
-
-  // This hasn't panned out as being usable yet.
-  //var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
-
   return false;
 }
 
@@ -188,17 +221,16 @@ exports.matchScore = function(map, e1, e2)
   {
     return result;
   }
-  else if (nameMismatch(map, e1, e2))
+  if (nameMismatch(map, e1, e2))
   {
     return result;
   }
-  else if (geometryMismatch(map, e1, e2))
+  if (geometryMismatch(map, e1, e2))
   {
     return result;
   }
 
   result = { match: 1.0, miss: 0.0, review: 0.0 };
-  hoot.trace("match found");
   return result;
 };
 

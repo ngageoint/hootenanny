@@ -29,9 +29,12 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(FeatureExtractor, IntersectionOverUnionExtractor)
 
 double IntersectionOverUnionExtractor::extract(
   const OsmMap& map, const ConstElementPtr& target, const ConstElementPtr& candidate) const

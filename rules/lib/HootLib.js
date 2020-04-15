@@ -349,6 +349,22 @@ function mergeCollectionRelations(map, elementId1, elementId2)
 }
 
 /**
+ * TODO
+ */
+function getNumRelationMemberNodes(map, relationId)
+{
+  return map.getNumRelationMemberNodes(relationId);
+}
+
+/**
+ * TODO
+ */
+function relationsHaveConnectedWayMembers(map, relationId1, relationId2)
+{
+  return map.relationsHaveConnectedWayMembers(relationId1, relationId2);
+}
+
+/**
  * Snaps the ways in the second input to the first input. The replaced array will
  * be updated appropriately to reflect the elements that were replaced.
  */
