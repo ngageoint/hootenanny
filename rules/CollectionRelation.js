@@ -65,7 +65,7 @@ function typeMismatch(e1, e2)
   var type2 = e2.getType();
 
   // If the collection relations aren't filtered out properly by type beforehand the
-  // checks afterward can become very expensive.
+  // geometry checks afterward can become very expensive.
 
   if (type1 != type2)
   {    
@@ -105,35 +105,43 @@ function nameMismatch(map, e1, e2)
   var type1 = e1.getType();
   var type2 = e2.getType();
 
-  var name = 1.0;
-  // This may be too restrictive.
+  var nameScore = 1.0;
+
+  // This may end up being too restrictive...
   if (type1 == "route" && tags1.get("route") == "road" && tags2.get("route") == "road")
   {
     var ref1 = tags1.get("ref");
     var ref2 = tags2.get("ref");
     if (ref1 != ref2)
     {
-      hoot.trace("highway ref mismatch; ref1: " + ref1 + "; ref2: " + ref2);
-      name = 0.0;
+      hoot.trace("highway ref mismatch; ref1: " + ref1 + ", ref2: " + ref2);
+      nameScore = 0.0;
     }
   }
   // only score the name if both have one
   else if (bothElementsHaveName(e1, e2))
   {
-    hoot.trace("both elements have name");
-    name = nameExtractor.extract(map, e1, e2);
+    nameScore = nameExtractor.extract(map, e1, e2);
   }
 
-  if (name < exports.nameThreshold)
+  if (nameScore < exports.nameThreshold)
   {
-    hoot.trace("name mismatch");
+    hoot.trace("name mismatch; score: " + nameScore);
     return true;
   }
+
   return false;
 }
 
 function geometryMismatch(map, e1, e2)
 {
+  // This is a little convoluted and may need further adjustment. Edge distance is pretty accurate 
+  // for this but gets expensive as the relations get larger. Angle hist is a little less accurate
+  // overall but runs faster and seems to be working ok for the largeer relations. For matching
+  // of disjointed relations (relations with different but connecting ways) a further check is
+  // needed (which also has the potential to be very expensive O(n^2)) and is only done for the
+  // larger relations when the geometry check fails.
+
   var numRelationMemberNodes = getNumRelationMemberNodes(map, e1.getElementId()) + getNumRelationMemberNodes(map, e2.getElementId());
   if (numRelationMemberNodes < 2000)
   {
@@ -147,7 +155,7 @@ function geometryMismatch(map, e1, e2)
   }
   else
   {
-    hoot.trace("numRelationMemberNodes: " + numRelationMemberNodes);
+    //hoot.trace("numRelationMemberNodes: " + numRelationMemberNodes);
     var angleHist = angleHistExtractor.extract(map, e1, e2);
     if (angleHist < 0.73)
     { 
@@ -167,9 +175,9 @@ function geometryMismatch(map, e1, e2)
 
 function memberSimilarityMismatch(map, e1, e2)
 {
-  // This hasn't panned out as being useful yet. This meant to recognize relations with almost identical 
-  // members. We do encounter those, but the other checks (name, geometry) usually help identify them first 
-  // and makes this unnecessary.
+  // This hasn't panned out as being useful yet. This is meant to recognize relations with almost 
+  // identical members. We do encounter those, but the other checks (name, geometry) usually help 
+  // identify them beforehand and makes this check unnecessary.
 
   var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
   if (memberSim < 0.75)
@@ -213,9 +221,8 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + tags2.get("note"));
   }
   
-  // These were determined with a very small sample of test data and may need refinement. Also,
-  // not all of the feature extractors support relations and, where possible, we may want to 
-  // add support for them.
+  // These checks were determined with a very small sample of test data and no model was used, so 
+  // may need further refinement.
 
   if (typeMismatch(e1, e2))
   {
