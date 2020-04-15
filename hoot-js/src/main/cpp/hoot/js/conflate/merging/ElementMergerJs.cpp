@@ -39,7 +39,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
@@ -226,29 +226,30 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
 
   MergeType mergeType;
 
-  const bool containsPolys = OsmUtils::contains<PoiPolygonPolyCriterion>(map);
+  const bool containsPolys = CriterionUtils::contains<PoiPolygonPolyCriterion>(map);
   LOG_VART(containsPolys);
-  const bool containsAreas = OsmUtils::contains<NonBuildingAreaCriterion>(map); //non-building areas
+  //non-building areas
+  const bool containsAreas = CriterionUtils::contains<NonBuildingAreaCriterion>(map);
   LOG_VART(containsAreas);
-  const bool containsBuildings = OsmUtils::contains<BuildingCriterion>(map);
+  const bool containsBuildings = CriterionUtils::contains<BuildingCriterion>(map);
   LOG_VART(containsBuildings);
-  const bool containsPois = OsmUtils::contains<PoiCriterion>(map); //general poi definition
+  const bool containsPois = CriterionUtils::contains<PoiCriterion>(map); //general poi definition
   LOG_VART(containsPois);
-  if (OsmUtils::contains<PoiPolygonPoiCriterion>(map, 1, true) &&
-      OsmUtils::contains<PoiPolygonPolyCriterion>(map, 1, true))
+  if (CriterionUtils::contains<PoiPolygonPoiCriterion>(map, 1, true) &&
+      CriterionUtils::contains<PoiPolygonPolyCriterion>(map, 1, true))
   {
     mergeType = MergeType::PoiToPolygon;
   }
-  else if (OsmUtils::contains<PoiCriterion>(map, 2) && !containsPolys && !containsAreas &&
+  else if (CriterionUtils::contains<PoiCriterion>(map, 2) && !containsPolys && !containsAreas &&
            !containsBuildings)
   {
     mergeType = MergeType::PoiToPoi;
   }
-  else if (OsmUtils::contains<BuildingCriterion>(map, 2) && !containsAreas && !containsPois)
+  else if (CriterionUtils::contains<BuildingCriterion>(map, 2) && !containsAreas && !containsPois)
   {
     mergeType = MergeType::BuildingToBuilding;
   }
-  else if (OsmUtils::contains<NonBuildingAreaCriterion>(map, 2) && !containsBuildings &&
+  else if (CriterionUtils::contains<NonBuildingAreaCriterion>(map, 2) && !containsBuildings &&
            !containsPois)
   {
     mergeType = MergeType::AreaToArea;

@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 
 namespace hoot
 {
@@ -112,7 +112,7 @@ bool AttributeValueCriterion::isSatisfied(const ConstElementPtr& e) const
     case ElementAttributeType::Changeset:
       return _satisfiesComparison(QVariant((qlonglong)e->getChangeset()));
     case ElementAttributeType::Timestamp:
-      return _satisfiesComparison(QVariant(OsmUtils::toTimeString(e->getTimestamp())));
+      return _satisfiesComparison(QVariant(DateTimeUtils::toTimeString(e->getTimestamp())));
     case ElementAttributeType::User:
       return _satisfiesComparison(QVariant(e->getUser()));
     case ElementAttributeType::Uid:

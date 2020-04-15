@@ -27,7 +27,7 @@
 
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
@@ -92,20 +92,20 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     Tags tags;
-    QString value = OsmUtils::toTimeString(0);
+    QString value = DateTimeUtils::toTimeString(0);
 
     tags.insert(MetadataTags::SourceDateTime(), value);
     tags[MetadataTags::SourceDateTime()] = value;
     tags["note"] = "node1";
     TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
-    tags.appendValue(MetadataTags::SourceDateTime(), OsmUtils::toTimeString(0));
+    tags.appendValue(MetadataTags::SourceDateTime(), DateTimeUtils::toTimeString(0));
     tags["note"] = "node2";
     TestUtils::createNode(map, Status::Unknown1, 0.0, 1.0, 15.0, tags);
 
     QStringList dates;
     for (int i = 0; i < 30; ++i)
-      dates.append(OsmUtils::toTimeString(0));
+      dates.append(DateTimeUtils::toTimeString(0));
     tags.appendValue(MetadataTags::SourceIngestDateTime(), dates);
     tags["note"] = "node3";
     TestUtils::createNode(map, Status::Unknown1, 0.0, 2.0, 15.0, tags);

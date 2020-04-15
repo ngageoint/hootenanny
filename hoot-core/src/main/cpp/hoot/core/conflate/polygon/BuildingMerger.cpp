@@ -35,6 +35,8 @@
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/ElementIdUtils.h>
+#include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/IdSwapOp.h>
@@ -581,12 +583,12 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   threeDBuildingKeys.append(MetadataTags::BuildingLevels());
   threeDBuildingKeys.append(MetadataTags::BuildingHeight());
   const bool allAreBuildingParts =
-    OsmUtils::allElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings);
+    TagUtils::allElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings);
   LOG_VART(allAreBuildingParts);
   // Here, we're skipping a building relation and doing a multipoly if only some of the buildings
   // have height tags. This behavior is debatable...
   if (!allAreBuildingParts &&
-      OsmUtils::anyElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings))
+      TagUtils::anyElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings))
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
@@ -595,7 +597,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
       LOG_DEBUG(
         "Merging building group where some buildings have 3D tags and others do not. A " <<
         "multipolygon relation will be created instead of a building relation. Buildings: " <<
-        OsmUtils::elementsToElementIds(constituentBuildings));
+        ElementIdUtils::elementsToElementIds(constituentBuildings));
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {

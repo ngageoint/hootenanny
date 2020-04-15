@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/perty/PertyTestRunResult.h>
 #include <hoot/core/algorithms/perty/PertyMatchScorer.h>

@@ -31,7 +31,7 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
@@ -178,7 +178,7 @@ void OsmJsonWriter::_writeMetadata(const Element& element)
 {
   if (_includeCompatibilityTags)
   {
-    _writeKvp("timestamp", OsmUtils::toTimeString(element.getTimestamp())); _write(",");
+    _writeKvp("timestamp", DateTimeUtils::toTimeString(element.getTimestamp())); _write(",");
     long version = element.getVersion();
     if (version == ElementData::VERSION_EMPTY)
     {
@@ -190,7 +190,7 @@ void OsmJsonWriter::_writeMetadata(const Element& element)
   {
     if (element.getTimestamp() != ElementData::TIMESTAMP_EMPTY)
     {
-      _writeKvp("timestamp", OsmUtils::toTimeString(element.getTimestamp())); _write(",");
+      _writeKvp("timestamp", DateTimeUtils::toTimeString(element.getTimestamp())); _write(",");
     }
     if (element.getVersion() != ElementData::VERSION_EMPTY)
     {

@@ -33,7 +33,6 @@
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>

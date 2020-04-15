@@ -31,7 +31,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementAttributeType.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 
 namespace hoot
 {
@@ -114,7 +114,7 @@ void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
       case ElementAttributeType::Timestamp:
         if (!_addOnlyIfEmpty || e->getTimestamp() == ElementData::TIMESTAMP_EMPTY)
         {
-          e->setTimestamp(OsmUtils::fromTimeString(attributeValue));
+          e->setTimestamp(DateTimeUtils::fromTimeString(attributeValue));
           LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
           _numAffected++;
         }

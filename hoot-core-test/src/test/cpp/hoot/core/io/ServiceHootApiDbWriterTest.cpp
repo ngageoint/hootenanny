@@ -38,7 +38,7 @@
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Settings.h>
 
 // Standard
@@ -244,7 +244,7 @@ public:
                          (qlonglong)_mapId).split("\n");
       for (int j = 0; j < results.length(); j++)
       {
-        CPPUNIT_ASSERT(OsmUtils::fromTimeString(results[j]) != ElementData::TIMESTAMP_EMPTY);
+        CPPUNIT_ASSERT(DateTimeUtils::fromTimeString(results[j]) != ElementData::TIMESTAMP_EMPTY);
       }
     }
 

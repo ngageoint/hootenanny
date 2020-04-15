@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -124,7 +125,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   std::vector<ConstElementPtr> elements;
   elements.push_back(e1);
   elements.push_back(e2);
-  const bool onlyOneIsABridge = OsmUtils::isSatisfied<BridgeCriterion>(elements, 1, true);
+  const bool onlyOneIsABridge = CriterionUtils::isSatisfied<BridgeCriterion>(elements, 1, true);
   if (onlyOneIsABridge)
   {
     LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");

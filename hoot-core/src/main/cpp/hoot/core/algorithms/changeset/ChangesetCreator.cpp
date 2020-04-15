@@ -152,8 +152,8 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   //sortedElements2 is the newer state of the data
   ElementInputStreamPtr sortedElements2;
 
-  // TODO: We could use OsmUtils::checkVersionLessThanOneCountAndLogWarning() somewhere in here like
-  // we do with ChangesetDeriveReplacementCommand and ConflateCmd.
+  // TODO: We could use VersionUtils::checkVersionLessThanOneCountAndLogWarning() somewhere in here
+  // like we do with ChangesetDeriveReplacementCommand and ConflateCmd.
 
   // If we have two inputs, we'll determine the difference between them as the changeset.
   // Otherwise, we're passing all the input data through to the output changeset, so put it in

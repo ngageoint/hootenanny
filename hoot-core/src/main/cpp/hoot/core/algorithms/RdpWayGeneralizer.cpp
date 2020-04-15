@@ -36,10 +36,10 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/NodeUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/WayNodeUtils.h>
 
 using namespace std;
 
@@ -90,9 +90,9 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
 
   //get the generalized points
   const QList<std::shared_ptr<const Node>>& generalizedPoints =
-    _getGeneralizedPoints(OsmUtils::nodeIdsToNodes(wayNodeIdsAfterFiltering, _map));
-  OsmUtils::printNodes("generalizedPoints", generalizedPoints);
-  QList<long> wayNodeIdsAfterGeneralization = OsmUtils::nodesToNodeIds(generalizedPoints);
+    _getGeneralizedPoints(NodeUtils::nodeIdsToNodes(wayNodeIdsAfterFiltering, _map));
+  NodeUtils::printNodes("generalizedPoints", generalizedPoints);
+  QList<long> wayNodeIdsAfterGeneralization = NodeUtils::nodesToNodeIds(generalizedPoints);
 
   // The nodes we're going to remove is the difference between the node ids before and after
   // generalization.
@@ -108,8 +108,8 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
     const long nodeId = *it;
     LOG_VART(nodeId);
     LOG_VART(_removeNodesSharedByWays);
-    LOG_VART(OsmUtils::nodeContainedByMoreThanOneWay(nodeId, _map));
-    if (_removeNodesSharedByWays || !OsmUtils::nodeContainedByMoreThanOneWay(nodeId, _map))
+    LOG_VART(WayNodeUtils::nodeContainedByMoreThanOneWay(nodeId, _map));
+    if (_removeNodesSharedByWays || !WayNodeUtils::nodeContainedByMoreThanOneWay(nodeId, _map))
     {
       modifiedNodeIdsToRemove.insert(nodeId);
     }
@@ -270,23 +270,23 @@ QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(
     //split the curve into two parts and recursively reduce the two lines
     const QList<std::shared_ptr<const Node>> splitLine1 =
       wayPoints.mid(0, indexOfLargestPerpendicularDistance + 1);
-    OsmUtils::printNodes("splitLine1", splitLine1);
+    NodeUtils::printNodes("splitLine1", splitLine1);
     const QList<std::shared_ptr<const Node>> splitLine2 =
       wayPoints.mid(indexOfLargestPerpendicularDistance);
-    OsmUtils::printNodes("splitLine2", splitLine2);
+    NodeUtils::printNodes("splitLine2", splitLine2);
 
     const QList<std::shared_ptr<const Node>> recursivelySplitLine1 =
       _getGeneralizedPoints(splitLine1);
-    OsmUtils::printNodes("recursivelySplitLine1", recursivelySplitLine1);
+    NodeUtils::printNodes("recursivelySplitLine1", recursivelySplitLine1);
     const QList<std::shared_ptr<const Node>> recursivelySplitLine2 =
       _getGeneralizedPoints(splitLine2);
-    OsmUtils::printNodes("recursivelySplitLine2", recursivelySplitLine2);
+    NodeUtils::printNodes("recursivelySplitLine2", recursivelySplitLine2);
 
     //concat r2 to r1 minus the end/start point that will be the same
     QList<std::shared_ptr<const Node>> combinedReducedLines =
       recursivelySplitLine1.mid(0, recursivelySplitLine1.size() - 1);
     combinedReducedLines.append(recursivelySplitLine2);
-    OsmUtils::printNodes("combinedReducedLines", combinedReducedLines);
+    NodeUtils::printNodes("combinedReducedLines", combinedReducedLines);
     return combinedReducedLines;
   }
   else
@@ -295,7 +295,7 @@ QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(
     QList<std::shared_ptr<const Node>> reducedLine;
     reducedLine.append(firstPoint);
     reducedLine.append(lastPoint);
-    OsmUtils::printNodes("reducedLine", reducedLine);
+    NodeUtils::printNodes("reducedLine", reducedLine);
     return reducedLine;
   }
 }

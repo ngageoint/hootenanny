@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/ops/RemoveElementByEid.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
@@ -41,6 +41,7 @@
 #include <hoot/js/visitors/JsFunctionVisitor.h>
 #include <hoot/core/conflate/merging/CollectionRelationMerger.h>
 #include <hoot/core/elements/RelationMemberNodeCounter.h>
+#include <hoot/core/elements/ConnectedRelationMemberFinder.h>
 
 using namespace v8;
 
@@ -303,7 +304,7 @@ void OsmMapJs::isMemberOfRelationType(const FunctionCallbackInfo<Value>& args)
   QString relationType = toCpp<QString>(args[1]);
 
   const bool inRelationOfSpecifiedType =
-    OsmUtils::isMemberOfRelationType(mapJs->getConstMap(), childId, relationType);
+    RelationMemberUtils::isMemberOfRelationType(mapJs->getConstMap(), childId, relationType);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedType));
 }
@@ -318,7 +319,8 @@ void OsmMapJs::isMemberOfRelationInCategory(const FunctionCallbackInfo<Value>& a
   QString schemaCategory = toCpp<QString>(args[1]);
 
   const bool inRelationOfSpecifiedCategory =
-    OsmUtils::isMemberOfRelationInCategory(mapJs->getConstMap(), childId, schemaCategory);
+    RelationMemberUtils::isMemberOfRelationInCategory(
+      mapJs->getConstMap(), childId, schemaCategory);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedCategory));
 }
@@ -333,7 +335,7 @@ void OsmMapJs::isMemberOfRelationWithTagKey(const FunctionCallbackInfo<Value>& a
   QString tagKey = toCpp<QString>(args[1]);
 
   const bool inRelationWithSpecifiedTagKey =
-    OsmUtils::isMemberOfRelationWithTagKey(mapJs->getConstMap(), childId, tagKey);
+    RelationMemberUtils::isMemberOfRelationWithTagKey(mapJs->getConstMap(), childId, tagKey);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationWithSpecifiedTagKey));
 }
@@ -399,7 +401,8 @@ void OsmMapJs::relationsHaveConnectedWayMembers(const FunctionCallbackInfo<Value
   ConstRelationPtr relation1 = map->getRelation(relationId1.getId());
   ConstRelationPtr relation2 = map->getRelation(relationId2.getId());
 
-  const bool result = OsmUtils::relationsHaveConnectedWayMembers(map, relation1, relation2);
+  const bool result =
+    ConnectedRelationMemberFinder::relationsHaveConnectedWayMembers(map, relation1, relation2);
   LOG_VART(result);
 
   args.GetReturnValue().Set(Boolean::New(current, result));
