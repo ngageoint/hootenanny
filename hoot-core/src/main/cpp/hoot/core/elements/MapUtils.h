@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Various utilities for working with maps that should be kept out of OsmMap to avoid circular
+ * dependencies
  */
 class MapUtils
 {
@@ -57,6 +58,7 @@ public:
    *
    * @param map the map to examine
    * @return true if the map is made up of non-way node points only; false otherwise
+   * @todo probably duplicating CriterionUtils::constainSatisfyingElements
    */
   static bool mapIsPointsOnly(const OsmMapPtr& map);
 };

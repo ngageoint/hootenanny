@@ -30,29 +30,39 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
 
 /**
- * TODO
+ * Finds instances where way members across different relations are connected
  */
-class ConnectedRelationMemberFinder
+class ConnectedRelationMemberFinder : public ConstOsmMapConsumer
 {
 
 public:
 
+  ConnectedRelationMemberFinder();
+
   /**
-   * TODO
+   * Determines if any way from one relation is connected to a way in another relation
    *
-   * @param map
-   * @param relation1
-   * @param relation2
-   * @return
+   * @param relation1 first relation to examine
+   * @param relation2 second relation to examine
+   * @return true if connected ways are found; false otherwise
    */
-  static bool relationsHaveConnectedWayMembers(
-    const ConstOsmMapPtr& map, const ConstRelationPtr& relation1,
-    const ConstRelationPtr& relation2);
+  bool haveConnectedWayMembers(
+    const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const;
+
+  /**
+   * @see ConstOsmMapConsumer
+   */
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+private:
+
+  ConstOsmMapPtr _map;
 };
 
 }

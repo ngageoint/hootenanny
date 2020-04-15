@@ -349,7 +349,7 @@ function mergeCollectionRelations(map, elementId1, elementId2)
 }
 
 /**
- * TODO
+ * Recursively returns the total number of nodes contained with a relation
  */
 function getNumRelationMemberNodes(map, relationId)
 {
@@ -357,7 +357,7 @@ function getNumRelationMemberNodes(map, relationId)
 }
 
 /**
- * TODO
+ * Determines if two relations have at least one connected way member
  */
 function relationsHaveConnectedWayMembers(map, relationId1, relationId2)
 {

@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Utilities for use with way nodes
  */
 class WayNodeUtils
 {

@@ -35,8 +35,12 @@
 namespace hoot
 {
 
-bool ConnectedRelationMemberFinder::relationsHaveConnectedWayMembers(
-  const ConstOsmMapPtr& map, const ConstRelationPtr& relation1, const ConstRelationPtr& relation2)
+ConnectedRelationMemberFinder::ConnectedRelationMemberFinder()
+{
+}
+
+bool ConnectedRelationMemberFinder::haveConnectedWayMembers(
+  const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const
 {
   if (relation1 && relation2)
   {
@@ -52,8 +56,8 @@ bool ConnectedRelationMemberFinder::relationsHaveConnectedWayMembers(
         const ElementId elementId2 = *it2;
         if (elementId1 != elementId2)
         {
-          ConstWayPtr way1 = map->getWay(elementId1);
-          ConstWayPtr way2 = map->getWay(elementId1);
+          ConstWayPtr way1 = _map->getWay(elementId1);
+          ConstWayPtr way2 = _map->getWay(elementId1);
           if (way1 && way2)
           {
             if (SharedWayNodeFinder::waysShareEndNode(way1, way2, true))

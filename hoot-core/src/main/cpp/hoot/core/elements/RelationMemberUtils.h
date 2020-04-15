@@ -35,7 +35,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Various utilities useful when working with relation members but kept out of the Relation class
+ * to avoid circular dependencies
  */
 class RelationMemberUtils
 {

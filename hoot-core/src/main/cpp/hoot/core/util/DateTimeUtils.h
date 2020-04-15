@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Utilities for date/time manipulation
  */
 class DateTimeUtils
 {

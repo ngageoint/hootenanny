@@ -398,14 +398,14 @@ void OsmMapJs::relationsHaveConnectedWayMembers(const FunctionCallbackInfo<Value
       "Passed non-relation ID to relationsHaveConnectedWayMembers.");
   }
   ConstOsmMapPtr map = mapJs->getConstMap();
-  ConstRelationPtr relation1 = map->getRelation(relationId1.getId());
-  ConstRelationPtr relation2 = map->getRelation(relationId2.getId());
 
-  const bool result =
-    ConnectedRelationMemberFinder::relationsHaveConnectedWayMembers(map, relation1, relation2);
-  LOG_VART(result);
-
-  args.GetReturnValue().Set(Boolean::New(current, result));
+  ConnectedRelationMemberFinder finder;
+  finder.setOsmMap(map.get());
+  args.GetReturnValue().Set(
+    Boolean::New(
+      current,
+        finder.haveConnectedWayMembers(
+          map->getRelation(relationId1.getId()), map->getRelation(relationId2.getId()))));
 }
 
 }

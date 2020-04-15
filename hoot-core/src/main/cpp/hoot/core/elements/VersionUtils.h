@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Various utilities to be used when examining an element's version
  */
 class VersionUtils
 {
@@ -65,7 +65,6 @@ public:
    * @return a set of element IDs
    */
   static std::set<ElementId> getIdsOfElementsWithVersionLessThanOne(const OsmMapPtr& map);
-  
 };
 
 }

@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Various utilities useful when working with nodes but kept out of the Node class to avoid
+ * circular dependencies
  */
 class NodeUtils
 {

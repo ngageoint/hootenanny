@@ -530,7 +530,8 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   std::vector<ConstElementPtr> elements;
   elements.push_back(wayWithTagsToKeep);
   elements.push_back(wayWithTagsToLose);
-  const bool onlyOneIsABridge = CriterionUtils::isSatisfied<BridgeCriterion>(elements, 1, true);
+  const bool onlyOneIsABridge =
+    CriterionUtils::constainSatisfyingElements<BridgeCriterion>(elements, 1, true);
   if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
       onlyOneIsABridge)
   {

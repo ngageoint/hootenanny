@@ -39,7 +39,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Helper function for using ElementCriterion with elements
  */
 class CriterionUtils
 {
@@ -56,8 +56,8 @@ public:
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the map meets the specified criteria; false otherwise
    */
-  template<class C> static bool contains(const ConstOsmMapPtr& map, int minCount = 1,
-                                         bool exactCount = false)
+  template<class C> static bool constainSatisfyingElements(
+    const ConstOsmMapPtr& map, int minCount = 1, bool exactCount = false)
   {
     if (!std::is_base_of<ElementCriterion,C>::value) return false;
 
@@ -79,8 +79,8 @@ public:
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the elements meet the specified criterion the specified number of times
    */
-  template<class C> static bool isSatisfied(const std::vector<ConstElementPtr>& elements,
-                                            int minCount = 1, bool exactCount = false)
+  template<class C> static bool constainSatisfyingElements(
+    const std::vector<ConstElementPtr>& elements, int minCount = 1, bool exactCount = false)
   {
     if (!std::is_base_of<ElementCriterion,C>::value) return false;
 
@@ -100,12 +100,13 @@ public:
   }
 
   /**
-   * Determines if an element has a given criterion; backed by a cache
+   * Determines if an element has a given criterion
    *
    * @param element the element to examine
    * @param criterionClassName class name of the ElementCriterion to determine membership of
    * @return true if the element has the criterion; false otherwise
    * @throws if the criterion class name is invalid
+   * @todo merge this with isSatisifed
    */
   static bool hasCriterion(const ConstElementPtr& element, const QString& criterionClassName);
 

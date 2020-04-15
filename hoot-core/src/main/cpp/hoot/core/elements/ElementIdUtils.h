@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Various utilities for working with element IDs
  */
 class ElementIdUtils
 {

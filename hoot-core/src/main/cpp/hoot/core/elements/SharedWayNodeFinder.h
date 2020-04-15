@@ -38,7 +38,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Finds shared nodes in ways
  */
 class SharedWayNodeFinder
 {
@@ -46,29 +46,31 @@ class SharedWayNodeFinder
 public:
 
   /**
-   * TODO
+   * Returns shared node IDs among two ways
    *
-   * @param way1
-   * @param way2
-   * @return
+   * @param way1 first way to examine
+   * @param way2 second way to examine
+   * @return the IDs of all nodes shared by the input ways or an empty collection if no nodes are
+   * shared
    */
   static QSet<long> getSharedWayNodes(const ConstWayPtr& way1, const ConstWayPtr& way2);
 
   /**
-   * TODO
+   * Determines if two ways share at least one node
    *
-   * @param way1
-   * @param way2
-   * @return
+   * @param way1 first way to examine
+   * @param way2 second way to examine
+   * @return true if the input ways share at least on node; false otherwise
    */
   static bool waysShareNode(const ConstWayPtr& way1, const ConstWayPtr& way2);
 
   /**
-   * TODO
+   * Determines if two ways share at least one node at their ends
    *
-   * @param way1
-   * @param way2
-   * @param sameDirection
+   * @param way1 first way to examine
+   * @param way2 second way to examine
+   * @param sameDirection if true, the input ways are assumed to point in the same direction; if
+   * false they are assumed to point in opposite directions
    * @return
    */
   static bool waysShareEndNode(

@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Various utilities for querying tags on elements
  */
 class TagUtils
 {

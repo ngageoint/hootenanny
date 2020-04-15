@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Counts total nodes contained by all members in a relation
  */
 class RelationMemberNodeCounter : public ConstOsmMapConsumer
 {
@@ -45,10 +45,10 @@ public:
   RelationMemberNodeCounter();
 
   /**
-   * TODO
+   * Returns the total recursive count of all nodes contained in a relation
    *
-   * @param relation
-   * @return
+   * @param relation relation to count nodes in
+   * @return a count
    */
   int numNodes(const ConstRelationPtr& relation) const;
 
