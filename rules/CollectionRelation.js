@@ -143,7 +143,7 @@ function geometryMismatch(map, e1, e2)
   // larger relations when the geometry check fails.
 
   var numRelationMemberNodes = getNumRelationMemberNodes(map, e1.getElementId()) + getNumRelationMemberNodes(map, e2.getElementId());
-  if (numRelationMemberNodes < 2000)
+  if (numRelationMemberNodes < 2000) // Threshold determined off of one dataset...may need tweaking.
   {
     // This can become a fairly expensive check for relations with a lot of total nodes.
     var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);

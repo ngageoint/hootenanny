@@ -50,11 +50,8 @@ class Node;
 class Status;
 
 /**
-  Utilities for use with the OSM data model
-
-  @todo Parts of this class could be split out into, perhaps: TagUtils, RelationUtils,
-        GeometryUtils, WayNodeUtils, MapUtils
-  */
+ * Utilities for use with the OSM data model
+ */
 class OsmUtils
 {
 public:
@@ -206,8 +203,8 @@ public:
 
   /**
    * Determines whether a map contains a minimum or a fixed amount of elements matching the
-   * criterion type
-   * Only objects of type ElementCriterion are allowed, all others will return false
+   * criterion type. Only objects of type ElementCriterion are allowed, all others will return
+   * false.
    *
    * @param map the map to examine
    * @param minCount the minmal count of elements required (if exactCount == false)
@@ -230,8 +227,7 @@ public:
 
   /**
    * Determines whether a collection of elements meet a criterion a minimum or a fixed amount of
-   * times
-   * Only objects of type ElementCriterion are allowed, all others will return false
+   * times. Only objects of type ElementCriterion are allowed, all others will return false
    *
    * @param element the element to examine
    * @param minCount the minmal count of elements required (if exactCount == false)
