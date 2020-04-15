@@ -63,12 +63,7 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    const QString boundsStr = args[2].trimmed();
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
-    BoundedCommand::runSimple(args);
-
     // process optional params
-
     bool fullReplacement = false;
     if (args.contains("--full-replacement"))
     {
@@ -231,16 +226,18 @@ public:
     LOG_VARD(args.size());
     LOG_VARD(args);
 
-    // param error checking
-
-    if (args.size() < 4 || args.size() > 5)
+    QString boundsStr = "";
+    if (args.size() >= 3)
     {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four or five parameters.").arg(getName()));
+      boundsStr = args[2].trimmed();
+      conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
+      BoundedCommand::runSimple(args);
     }
 
-    // process non-optional params
+    // param error checking
+    checkParameterCount(args.size());
 
+    // process non-optional params
     const QString input1 = args[0].trimmed();
     LOG_VARD(input1);
     const QString input2 = args[1].trimmed();
@@ -280,6 +277,15 @@ public:
     changesetCreator.create(input1, input2, bounds, output);
 
     return 0;
+  }
+
+  void checkParameterCount(int count)
+  {
+    if (count != 4 && count != 5)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(QString("%1 takes four or five parameters.").arg(getName()));
+    }
   }
 };
 
