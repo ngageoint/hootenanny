@@ -35,7 +35,11 @@ namespace hoot
 {
 
 /**
- * Utilities for use with the OSM data model
+ * Utilities for use with the OSM data.
+ *
+ * Put any Element related utilities here that either don't fit into any of the existing OSM related
+ * utils classes, would clutter up any of the core Element classes, or are isolated enough not to
+ * warrant making a new utils class for them yet.
  */
 class OsmUtils
 {
