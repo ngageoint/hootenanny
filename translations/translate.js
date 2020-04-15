@@ -253,7 +253,7 @@ translate = {
 
 
   // Apply one to one translations and don't report errors: missing columns etc
-  applyOne2OneQuiet : function(inList, outList, lookup)
+  applyOne2OneQuiet : function(inList, outList, lookup, transMap)
   {
     var row = [];
 
@@ -1033,7 +1033,7 @@ translate = {
       {
         attrs[i] = tags[rules[i]];
         // Debug
-        // print('Txt Bwd: i=' + i + ' rules=' + rules[i] + ' attrs=' + tags[rules[i]]);
+        // print('Txt Bwd: i=' + i + ' rules=' + rules[i] + ' attrs=' + tags[rules[i]] + ' tMap:' + transMap + ':');
         // print('UsedTxt: ' + rules[i]);
         transMap[i] = ['',rules[i],tags[rules[i]]];
         delete tags[rules[i]];

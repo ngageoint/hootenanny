@@ -46,7 +46,7 @@ function translateToOsm(attrs, layerName, geometryType)
   translate.txtToOsm(attrs, tags, wpi.txtRules);
 
   // NOTE: The one2one rules have been converted to JSON
-  translate.applyOne2OneQuiet(attrs, tags, wpi.one2one);
+  translate.applyOne2OneQuiet(attrs, tags, wpi.one2one,{'k':'v'});
 
   tags.port = 'yes';
   tags.source = 'worldportindex';

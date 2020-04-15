@@ -216,6 +216,7 @@ dnc = {
       translate.txtToOgr(newFeatures[i]['attrs'], notUsedTags, dnc.rules.txtBiased,transMap);
 
       // one 2 one
+    print('manyFeatures applyOne2One');
       translate.applyOne2One(notUsedTags, newFeatures[i]['attrs'], dnc.lookup, dnc.fcodeLookup,transMap);
 
       // post processing
@@ -1400,11 +1401,12 @@ dnc = {
 
     // apply the simple number and text biased rules
     // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
-    translate.applySimpleNumBiased(notUsedAttrs, tags, dnc.rules.numBiased, 'forward',[]);
-    translate.applySimpleTxtBiased(notUsedAttrs, tags, dnc.rules.txtBiased, 'forward');
+    translate.numToOSM(notUsedAttrs, tags, dnc.rules.numBiased);
+    translate.txtToOSM(notUsedAttrs, tags, dnc.rules.txtBiased);
 
     // one 2 one
-    translate.applyOne2One(notUsedAttrs, tags, dnc.lookup, {'k':'v'}, dnc.ignoreList,[]);
+    // translate.applyOne2One(notUsedAttrs, tags, dnc.lookup, {'k':'v'}, dnc.ignoreList,{'k':'v'});
+    translate.applyOne2One(notUsedAttrs, tags, dnc.lookup,{'k':'v'},{'k':'v'});
 
     // post processing
     dnc.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
@@ -1512,12 +1514,13 @@ dnc = {
     // NOTE: These use the transMap option. This will migrate to the other translations soon
     // NOTE: These delete tags as they are used
 
-    dnc.applyNumToOgr(attrs, notUsedTags, dnc.rules.numBiased, dnc.rules.intList, transMap);
-    dnc.applyTxtToOgr(attrs, notUsedTags, dnc.rules.txtBiased, transMap);
+    translate.numToOgr(attrs, notUsedTags, dnc.rules.numBiased, dnc.rules.intList, transMap);
+    translate.txtToOgr(attrs, notUsedTags, dnc.rules.txtBiased, transMap);
 
     // Apply one2one rules
     // NOTE: This is a local function updates a structure of what got translated so we can undo it if needed
     // dnc.applyOne2OneModified(notUsedTags, attrs, dnc.lookup, transMap);
+    print('toOgr applyOne2One');
     translate.applyOne2One(notUsedTags, attrs, dnc.lookup, dnc.fcodeLookup,transMap);
 
     // Translate the XXX:2, XXX2, XXX:3 etc attributes
@@ -1565,7 +1568,7 @@ dnc = {
     {
       // Check if we need to make more features
       // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
-      returnData = dnc.manyFeatures(geometryType,tags,attrs);
+      returnData = dnc.manyFeatures(geometryType,tags,attrs,transMap);
 
       // Debug: Add the first feature
       //returnData.push({attrs: attrs, tableName: ''});

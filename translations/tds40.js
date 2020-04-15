@@ -2322,7 +2322,7 @@ tds40 = {
 
     // one 2 one
     //translate.applyOne2One(notUsedAttrs, tags, tds40.lookup, {'k':'v'});
-    translate.applyOne2OneQuiet(notUsedAttrs, tags, tds40.lookup);
+    translate.applyOne2OneQuiet(notUsedAttrs, tags, tds40.lookup,{'k':'v'});
 
     // Translate the XXX2, XXX3 etc attributes
     translate.fix23Attr(notUsedAttrs, tags, tds40.lookup);

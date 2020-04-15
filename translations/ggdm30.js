@@ -2157,7 +2157,7 @@ ggdm30 = {
 
     // one 2 one
     //translate.applyOne2One(notUsedAttrs, tags, ggdm30.lookup, {'k':'v'});
-    translate.applyOne2OneQuiet(notUsedAttrs, tags, ggdm30.lookup);
+    translate.applyOne2OneQuiet(notUsedAttrs, tags, ggdm30.lookup,{'k':'v'});
 
     // Translate the XXX2, XXX3 etc attributes
     translate.fix23Attr(notUsedAttrs, tags, ggdm30.lookup);
@@ -2299,7 +2299,7 @@ ggdm30 = {
 
     // Apply the fuzzy rules
     // NOTE: This deletes tags as they are used
-    translate.applyOne2OneQuiet(notUsedTags, attrs, ggdm30.fuzzy);
+    translate.applyOne2OneQuiet(notUsedTags, attrs, ggdm30.fuzzy,{'k':'v'});
 
     // Translate the XXX:2, XXX2, XXX:3 etc attributes
     // Note: This deletes tags as they are used

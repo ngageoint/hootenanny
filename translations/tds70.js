@@ -2260,7 +2260,7 @@ tds70 = {
 
     // one 2 one
     //translate.applyOne2One(notUsedAttrs, tags, tds70.lookup, {'k':'v'});
-    translate.applyOne2OneQuiet(notUsedAttrs, tags, tds70.lookup);
+    translate.applyOne2OneQuiet(notUsedAttrs, tags, tds70.lookup,{'k':'v'});
 
     // Translate the XXX2, XXX3 etc attributes
     translate.fix23Attr(notUsedAttrs, tags, tds70.lookup);
@@ -2401,7 +2401,7 @@ tds70 = {
 
     // Apply the fuzzy rules
     // NOTE: This deletes tags as they are used
-    translate.applyOne2OneQuiet(notUsedTags, attrs, tds70.fuzzy);
+    translate.applyOne2OneQuiet(notUsedTags, attrs, tds70.fuzzy,{'k':'v'});
 
     // Translate the XXX:2, XXX2, XXX:3 etc attributes
     // Note: This deletes tags as they are used

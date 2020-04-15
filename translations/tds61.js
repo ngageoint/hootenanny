@@ -2434,7 +2434,7 @@ tds61 = {
 
     // one 2 one
     //translate.applyOne2One(notUsedAttrs, tags, tds61.lookup, {'k':'v'});
-    translate.applyOne2OneQuiet(notUsedAttrs, tags, tds61.lookup);
+    translate.applyOne2OneQuiet(notUsedAttrs, tags, tds61.lookup,{'k':'v'});
 
     // Translate the XXX2, XXX3 etc attributes
     translate.fix23Attr(notUsedAttrs, tags, tds61.lookup);
@@ -2577,7 +2577,7 @@ tds61 = {
 
     // Apply the fuzzy rules
     // NOTE: This deletes tags as they are used
-    translate.applyOne2OneQuiet(notUsedTags, attrs, tds61.fuzzy);
+    translate.applyOne2OneQuiet(notUsedTags, attrs, tds61.fuzzy,{'k':'v'});
 
     // Translate the XXX:2, XXX2, XXX:3 etc attributes
     // Note: This deletes tags as they are used

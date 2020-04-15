@@ -3724,7 +3724,7 @@ function translateToOsm(attrs, layerName, geometryType)
   translate.txtToOSM(notUsedAttrs, tags, ufd.txtBiased);
 
   // one 2 one
-  translate.applyOne2OneQuiet(notUsedAttrs, tags, ufd.lookup);
+  translate.applyOne2OneQuiet(notUsedAttrs, tags, ufd.lookup,{'k':'v'});
 
   // post processing
   ufd.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
