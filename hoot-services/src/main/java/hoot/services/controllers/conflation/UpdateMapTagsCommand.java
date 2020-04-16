@@ -67,6 +67,7 @@ class UpdateMapTagsCommand implements InternalCommand {
         tags.put("input2", params.getInput2());
         tags.put("bbox", params.getBounds());
         tags.put("grailMerged", String.valueOf(DbUtils.grailEligible(Long.parseLong(params.getInput1()))));
+        tags.put("taskInfo", params.getTaskInfo());
 
         // Need to reformat the list of hoot command options to json properties
         tags.put("params", JsonUtils.escapeJson(JsonUtils.pojoToJSON(params)));

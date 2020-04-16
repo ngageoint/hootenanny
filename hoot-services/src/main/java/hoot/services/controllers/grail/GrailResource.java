@@ -210,7 +210,6 @@ public class GrailResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createDifferentialChangeset(@Context HttpServletRequest request,
-            @QueryParam("taskInfo") String taskInfo,
             GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
@@ -279,9 +278,7 @@ public class GrailResource {
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", reqParams.getBounds());
-        if (taskInfo != null) {
-            jobStatusTags.put("taskInfo", taskInfo);
-        }
+        jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
 
@@ -466,6 +463,7 @@ public class GrailResource {
             Map<String, Object> jobStatusTags = new HashMap<>();
             jobStatusTags.put("bbox", reqParams.getBounds());
             jobStatusTags.put("parentId", reqParams.getParentId());
+            jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET, jobStatusTags));
         }
@@ -509,6 +507,7 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deriveChangeset(@Context HttpServletRequest request,
             GrailParams reqParams,
+            @QueryParam("deriveType") String deriveType,
             @QueryParam("replacement") @DefaultValue("false") Boolean replacement,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
@@ -561,6 +560,8 @@ public class GrailResource {
             jobStatusTags.put("input1", input1);
             jobStatusTags.put("input2", input2);
             jobStatusTags.put("parentId", reqParams.getParentId());
+            jobStatusTags.put("deriveType", deriveType);
+            jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
             jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
         }
@@ -601,7 +602,6 @@ public class GrailResource {
     @Path("/pulloverpasstodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullOverpassToDb(@Context HttpServletRequest request,
-            @QueryParam("taskInfo") String taskInfo,
             @QueryParam("folderId") Long folderId,
             GrailParams reqParams) {
 
@@ -642,6 +642,7 @@ public class GrailResource {
         // Set map tags marking dataset as eligible for derive changeset
         Map<String, String> tags = new HashMap<>();
         tags.put("bbox", params.getBounds());
+        if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
 
@@ -651,9 +652,7 @@ public class GrailResource {
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", bbox);
-        if (taskInfo != null) {
-            jobStatusTags.put("taskInfo", taskInfo);
-        }
+        jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
 
@@ -807,7 +806,6 @@ public class GrailResource {
     @Path("/pullrailsporttodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullRailsPortToDb(@Context HttpServletRequest request,
-            @QueryParam("taskInfo") String taskInfo,
             @QueryParam("folderId") Long folderId,
             GrailParams reqParams) {
 
@@ -837,9 +835,7 @@ public class GrailResource {
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", reqParams.getBounds());
-        if (taskInfo != null) {
-            jobStatusTags.put("taskInfo", taskInfo);
-        }
+        jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
 
@@ -872,10 +868,7 @@ public class GrailResource {
         // Do an invert crop of this data to get nodes outside bounds
         workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", InvertCropCommand.class, this.getClass()));
 
-        //read node ids
-        //pull connected ways
-        //pull entire ways
-        //remove cropfile
+        //read node ids, pull connected ways, pull entire ways, remove cropfile
         workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
 
         // merge OOB connected ways osm files and add 'hoot:change:exclude:delete' tag to each
@@ -908,6 +901,7 @@ public class GrailResource {
         Map<String, String> tags = new HashMap<>();
         tags.put("grailReference", "true");
         tags.put("bbox", params.getBounds());
+        if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
 

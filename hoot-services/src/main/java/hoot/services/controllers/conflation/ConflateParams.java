@@ -86,6 +86,9 @@ public class ConflateParams {
     @JsonProperty("CLEANING_OPTIONS")
     private List<String> cleaningOpts;
 
+    @JsonProperty("taskInfo")
+    private String taskInfo;
+
     public String getInputType1() {
         return inputType1;
     }
@@ -220,6 +223,14 @@ public class ConflateParams {
 
     public void setCleaningOpts(List<String> cleaningOpts) {
         this.cleaningOpts = cleaningOpts;
+    }
+
+    public void setTaskInfo(String taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public String getTaskInfo() {
+        return taskInfo;
     }
 
     @Override

@@ -104,8 +104,9 @@ public class ConflateResource {
     @Path("/execute")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response conflate(ConflateParams params, @Context HttpServletRequest request,
-                             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response conflate(@Context HttpServletRequest request,
+            ConflateParams params,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         Users user = Users.fromRequest(request);
 
         String jobId = UUID.randomUUID().toString();
@@ -121,6 +122,7 @@ public class ConflateResource {
             jobStatusTags.put("bbox", params.getBounds());
             jobStatusTags.put("input1", params.getInput1());
             jobStatusTags.put("input2", params.getInput2());
+            jobStatusTags.put("taskInfo", params.getTaskInfo());
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.CONFLATE, jobStatusTags));
         }
