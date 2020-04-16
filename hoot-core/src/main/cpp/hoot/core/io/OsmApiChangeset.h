@@ -132,19 +132,19 @@ public:
    * @param splitHint - Text hint possibly indicating which record is failing
    * @return pointer to half of the subset to be sent back to the OSM API
    */
-  ChangesetInfoPtr splitChangeset(ChangesetInfoPtr changeset, const QString& splitHint = "");
+  ChangesetInfoPtr splitChangeset(const ChangesetInfoPtr& changeset, const QString& splitHint = "");
   /**
    * @brief updateFailedChangeset Update the changeset to mark elements as failed if the ChangesetInfo object has been "fixed"
    * @param changeset - Pointer to changeset info object with one element that has failed
    */
-  void updateFailedChangeset(ChangesetInfoPtr changeset, bool forceFailure = false);
+  void updateFailedChangeset(const ChangesetInfoPtr& changeset, bool forceFailure = false);
   /**
    * @brief getChangesetString Get the .OSC formatted string for this subset of the changeset with the changeset ID in it
    * @param changeset - Subset of the changeset to render
    * @param changeset_id - ID of the changeset from the OSM API to upload to
    * @return XML string in .OSC format
    */
-  QString getChangesetString(ChangesetInfoPtr changeset, long changeset_id);
+  QString getChangesetString(const ChangesetInfoPtr& changeset, long changeset_id);
   /**
    * @brief getFailedChangesetString Get the .OSC formatted string for all of the failed elements in this changeset
    * @return XML string in .OSC format with the changeset ID set to 0
@@ -290,7 +290,7 @@ public:
    * @param changeset Reference to the changeset info for changeset creation
    * @return true if there is anything in the changeset
    */
-  bool calculateRemainingChangeset(ChangesetInfoPtr &changeset);
+  bool calculateRemainingChangeset(ChangesetInfoPtr& changeset);
   /**
    * @brief isMatch Function to compare two changesets
    * @param changeset Changeset object to compare this changeset against
@@ -360,16 +360,16 @@ private:
    * @param type Type of operation (create/modify/delete)
    * @return XML string for a particular
    */
-  QString getChangeset(ChangesetInfoPtr changeset, long changeset_id, ChangesetType type);
+  QString getChangeset(const ChangesetInfoPtr& changeset, long changeset_id, ChangesetType type);
   /**
    * @brief addNodes/Ways/Relations Add nodes/ways/relations of a type to the subset
    * @param changeset Subset of the changeset to add to
    * @param type Type of operation (create/modify/delete)
    * @return success
    */
-  bool addNodes(ChangesetInfoPtr& changeset, ChangesetType type);
-  bool addWays(ChangesetInfoPtr& changeset, ChangesetType type);
-  bool addRelations(ChangesetInfoPtr& changeset, ChangesetType type);
+  bool addNodes(const ChangesetInfoPtr& changeset, ChangesetType type);
+  bool addWays(const ChangesetInfoPtr& changeset, ChangesetType type);
+  bool addRelations(const ChangesetInfoPtr& changeset, ChangesetType type);
   /**
    * @brief addNode/Way/Relation Add single node/way/relation of a type to the subset
    * @param changeset Subset of the changeset to add to
@@ -377,9 +377,9 @@ private:
    * @param node/way/relation Pointer to the element that is being added
    * @return success
    */
-  bool addNode(ChangesetInfoPtr& changeset, ChangesetType type, ChangesetNode* node);
-  bool addWay(ChangesetInfoPtr& changeset, ChangesetType type, ChangesetWay* way);
-  bool addRelation(ChangesetInfoPtr& changeset, ChangesetType type, ChangesetRelation* relation);
+  bool addNode(const ChangesetInfoPtr& changeset, ChangesetType type, ChangesetNode* node);
+  bool addWay(const ChangesetInfoPtr& changeset, ChangesetType type, ChangesetWay* way);
+  bool addRelation(const ChangesetInfoPtr& changeset, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief addParentWays/Relations Add any parents (ways, relations) to the changeset if needed
    *  by a modify or delete operation.  For example, to delete a node, any way or relation parent
@@ -389,8 +389,8 @@ private:
    * @param way_ids/relation_ids Set of IDs to check against if the parent is able to be added
    * @return False if adding the element is blocked by the parents that are passed in
    */
-  bool addParentWays(ChangesetInfoPtr& changeset, const std::set<long>& way_ids);
-  bool addParentRelations(ChangesetInfoPtr& changeset, const std::set<long>& relation_ids);
+  bool addParentWays(const ChangesetInfoPtr& changeset, const std::set<long>& way_ids);
+  bool addParentRelations(const ChangesetInfoPtr& changeset, const std::set<long>& relation_ids);
   /**
    * @brief moveNode/Way/Relation Move an element from one subset to another, used by the splitting action
    * @param source Subset containing the element
@@ -399,9 +399,9 @@ private:
    * @param node/way/relation Pointer to the element to be moved
    * @return
    */
-  bool moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
-  bool moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
-  bool moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
+  bool moveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
+  bool moveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
+  bool moveRelation(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief moveOrRemoveNode/Way/Relation Move an element from one subset to another, or if all related elements aren't
    *   able to be moved, the element is removed from the subset and returned to the `available` state
@@ -410,9 +410,9 @@ private:
    * @param type Type of operation (create/modify/delete)
    * @param node/way/relation Pointer to the element to be moved
    */
-  void moveOrRemoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
-  void moveOrRemoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
-  void moveOrRemoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
+  void moveOrRemoveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
+  void moveOrRemoveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
+  void moveOrRemoveRelation(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief canMoveNode/Way/Relation Query if a node/way/relation can be moved.  This checks downstream relations, ways,
    *  and nodes to see if they can also be moved.
@@ -422,9 +422,9 @@ private:
    * @param node/way/relation Pointer to the element to be checked
    * @return
    */
-  bool canMoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
-  bool canMoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
-  bool canMoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
+  bool canMoveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
+  bool canMoveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
+  bool canMoveRelation(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief getObjectCount Get the number of elements affected by this node/way/relation
    * @param changeset Subset containing the element
@@ -435,9 +435,9 @@ private:
   size_t getObjectCount(ChangesetNode* node, ElementCountSet& elements);
   size_t getObjectCount(ChangesetWay* way, ElementCountSet& elements);
   size_t getObjectCount(ChangesetRelation* relation, ElementCountSet& elements);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetNode* node, ElementCountSet& elements);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelation* relation, ElementCountSet& elements);
+  size_t getObjectCount(const ChangesetInfoPtr& changeset, ChangesetNode* node, ElementCountSet& elements);
+  size_t getObjectCount(const ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements);
+  size_t getObjectCount(const ChangesetInfoPtr& changeset, ChangesetRelation* relation, ElementCountSet& elements);
   /**
    * @brief isSent Check if this element's status is buffering, sent, or finalized
    * @param element Pointer to the element to check
