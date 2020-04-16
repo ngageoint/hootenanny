@@ -91,12 +91,12 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
 
-  // The geometry matching model was derived against only one dataset using Weka, so likely needs 
-  // more refinement. The tag matching was derived manually after the fact outside of Weka and is 
-  // the same that is used with Generic Conflation. The original geometry matching model from Weka 
-  // has been updated to account for the fact that buffered overlap, edge distance, and overlap 
-  // are processing intensive (roughly in order from most to least). You can see the original 
-  // geometry matching model by looking at the revision history for this file.
+  // The geometry matching model was derived against only one training dataset using Weka and 
+  // another without using Weka (review generation logic portion), so likely still needs more refinement. 
+  // The tag matching was derived manually after the fact outside of Weka and is the same that is used 
+  // with Generic Conflation. The original geometry matching model from Weka has been updated to account 
+  // for the fact that buffered overlap, edge distance, and overlap are processing intensive (roughly 
+  // in order from most to least).
 
   // TODO: Should we do anything with names?
 
@@ -200,7 +200,8 @@ exports.matchScore = function(map, e1, e2)
       smallerOverlap = smallerOverlapExtractor.extract(map, e1, e2);
       hoot.trace("smallerOverlap: " + smallerOverlap);
     }
-    if (smallerOverlap > 0.959)
+    //if (smallerOverlap > 0.959)
+    if (smallerOverlap > 0.835)
     {
       hoot.trace("review");
       result = { match: 0.0, miss: 0.0, review: 1.0 };
