@@ -200,7 +200,6 @@ exports.matchScore = function(map, e1, e2)
       smallerOverlap = smallerOverlapExtractor.extract(map, e1, e2);
       hoot.trace("smallerOverlap: " + smallerOverlap);
     }
-    //if (smallerOverlap > 0.959)
     if (smallerOverlap > 0.835)
     {
       hoot.trace("review");
