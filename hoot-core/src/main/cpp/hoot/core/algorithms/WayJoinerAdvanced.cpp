@@ -35,6 +35,7 @@
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -529,7 +530,8 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   std::vector<ConstElementPtr> elements;
   elements.push_back(wayWithTagsToKeep);
   elements.push_back(wayWithTagsToLose);
-  const bool onlyOneIsABridge = OsmUtils::isSatisfied<BridgeCriterion>(elements, 1, true);
+  const bool onlyOneIsABridge =
+    CriterionUtils::constainSatisfyingElements<BridgeCriterion>(elements, 1, true);
   if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
       onlyOneIsABridge)
   {

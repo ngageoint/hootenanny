@@ -43,6 +43,8 @@ CollectionRelationCriterion::CollectionRelationCriterion()
 
 bool CollectionRelationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e->getElementId());
+
   bool result = false;
 
   if (e->getElementType() == ElementType::Relation)

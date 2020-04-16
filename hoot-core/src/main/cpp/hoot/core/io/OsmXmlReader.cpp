@@ -31,7 +31,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/IoUtils.h>
@@ -164,7 +164,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
   unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
   if (attributes.value("timestamp") != "")
   {
-    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+    timestamp = DateTimeUtils::fromTimeString(attributes.value("timestamp"));
   }
   QString user = ElementData::USER_EMPTY;
   if (attributes.value("user") != "")
@@ -246,7 +246,7 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
   unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
   if (attributes.value("timestamp") != "")
   {
-    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+    timestamp = DateTimeUtils::fromTimeString(attributes.value("timestamp"));
   }
   QString user = ElementData::USER_EMPTY;
   if (attributes.value("user") != "")
@@ -315,7 +315,7 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
   unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
   if (attributes.value("timestamp") != "")
   {
-    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+    timestamp = DateTimeUtils::fromTimeString(attributes.value("timestamp"));
   }
   QString user = ElementData::USER_EMPTY;
   if (attributes.value("user") != "")

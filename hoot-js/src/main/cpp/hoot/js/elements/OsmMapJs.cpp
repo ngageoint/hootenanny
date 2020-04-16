@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/ops/RemoveElementByEid.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
@@ -40,6 +40,8 @@
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/visitors/JsFunctionVisitor.h>
 #include <hoot/core/conflate/merging/CollectionRelationMerger.h>
+#include <hoot/core/elements/RelationMemberNodeCounter.h>
+#include <hoot/core/elements/ConnectedRelationMemberFinder.h>
 
 using namespace v8;
 
@@ -100,6 +102,12 @@ void OsmMapJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(
     String::NewFromUtf8(current, "mergeCollectionRelations"),
     FunctionTemplate::New(current, mergeCollectionRelations));
+  tpl->PrototypeTemplate()->Set(
+    String::NewFromUtf8(current, "getNumRelationMemberNodes"),
+    FunctionTemplate::New(current, getNumRelationMemberNodes));
+  tpl->PrototypeTemplate()->Set(
+    String::NewFromUtf8(current, "relationsHaveConnectedWayMembers"),
+    FunctionTemplate::New(current, relationsHaveConnectedWayMembers));
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                 String::NewFromUtf8(current, OsmMap::className().data()));
 
@@ -125,9 +133,7 @@ void OsmMapJs::setIdGenerator(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-
   std::shared_ptr<IdGenerator> idGen =  toCpp<std::shared_ptr<IdGenerator>>(args[0]);
-
   if (obj->getMap())
   {
     obj->getMap()->setIdGenerator(idGen);
@@ -231,7 +237,6 @@ void OsmMapJs::getParents(const FunctionCallbackInfo<Value>& args)
   try
   {
     OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-
     ElementId eid = toCpp<ElementId>(args[0]->ToObject());
 
     args.GetReturnValue().Set(toV8(obj->getConstMap()->getParents(eid)));
@@ -248,7 +253,6 @@ void OsmMapJs::removeElement(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-
   ElementId eid = toCpp<ElementId>(args[0]);
 
   RemoveElementByEid::removeElement(obj->getMap(), eid);
@@ -300,7 +304,7 @@ void OsmMapJs::isMemberOfRelationType(const FunctionCallbackInfo<Value>& args)
   QString relationType = toCpp<QString>(args[1]);
 
   const bool inRelationOfSpecifiedType =
-    OsmUtils::isMemberOfRelationType(mapJs->getConstMap(), childId, relationType);
+    RelationMemberUtils::isMemberOfRelationType(mapJs->getConstMap(), childId, relationType);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedType));
 }
@@ -315,7 +319,8 @@ void OsmMapJs::isMemberOfRelationInCategory(const FunctionCallbackInfo<Value>& a
   QString schemaCategory = toCpp<QString>(args[1]);
 
   const bool inRelationOfSpecifiedCategory =
-    OsmUtils::isMemberOfRelationInCategory(mapJs->getConstMap(), childId, schemaCategory);
+    RelationMemberUtils::isMemberOfRelationInCategory(
+      mapJs->getConstMap(), childId, schemaCategory);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedCategory));
 }
@@ -330,7 +335,7 @@ void OsmMapJs::isMemberOfRelationWithTagKey(const FunctionCallbackInfo<Value>& a
   QString tagKey = toCpp<QString>(args[1]);
 
   const bool inRelationWithSpecifiedTagKey =
-    OsmUtils::isMemberOfRelationWithTagKey(mapJs->getConstMap(), childId, tagKey);
+    RelationMemberUtils::isMemberOfRelationWithTagKey(mapJs->getConstMap(), childId, tagKey);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationWithSpecifiedTagKey));
 }
@@ -357,6 +362,50 @@ void OsmMapJs::mergeCollectionRelations(const FunctionCallbackInfo<Value>& args)
     LOG_VARE(err.getWhat());
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
   }
+}
+
+void OsmMapJs::getNumRelationMemberNodes(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+  ConstOsmMapPtr map = obj->getConstMap();
+  ElementId relationId = toCpp<ElementId>(args[0]);
+  ConstRelationPtr relation = map->getRelation(relationId.getId());
+  int numNodes = -1;
+  if (relation)
+  {
+    RelationMemberNodeCounter counter;
+    counter.setOsmMap(map.get());
+    numNodes = counter.numNodes(relation);
+  }
+  args.GetReturnValue().Set(Number::New(current, numNodes));
+}
+
+void OsmMapJs::relationsHaveConnectedWayMembers(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+  ElementId relationId1 = toCpp<ElementId>(args[0]);
+  ElementId relationId2 = toCpp<ElementId>(args[1]);
+  if (relationId1.getType() != ElementType::Relation ||
+      relationId2.getType() != ElementType::Relation)
+  {
+    throw IllegalArgumentException(
+      "Passed non-relation ID to relationsHaveConnectedWayMembers.");
+  }
+  ConstOsmMapPtr map = mapJs->getConstMap();
+
+  ConnectedRelationMemberFinder finder;
+  finder.setOsmMap(map.get());
+  args.GetReturnValue().Set(
+    Boolean::New(
+      current,
+        finder.haveConnectedWayMembers(
+          map->getRelation(relationId1.getId()), map->getRelation(relationId2.getId()))));
 }
 
 }

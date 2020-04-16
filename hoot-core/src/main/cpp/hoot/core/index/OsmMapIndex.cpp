@@ -482,7 +482,7 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
       LOG_INFO("Child element: " << eid);
       LOG_INFO("Missing relation: " << *it);
       LOG_INFO("Child element: " << _map.getElement(eid)->toString());
-      // TODO: throw exception here or continue to next iteration?
+      continue;
     }
     // the map should contain all the relations returned by the index.
     assert(_map.containsRelation(*it));

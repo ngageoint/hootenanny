@@ -70,8 +70,9 @@ typedef std::shared_ptr<PoiPolygonInfoCache> PoiPolygonInfoCachePtr;
  * the caching config from the best runtime, but it still may need to be tweaked.
  *
  * Some of the geometry comparisons in this class could be abstracted out beyond poi/poly geoms and
- * moved into a class like OsmUtils if we ever need them to be used with other conflation algs. If
- * that's done there will be some work to make any caching being performed work across unit tests.
+ * moved into a class like OsmGeometryUtils if we ever need them to be used with other conflation
+ * algs. If that's done there will be some work to make any caching being performed work across unit
+ * tests.
  */
 class PoiPolygonInfoCache : public Configurable
 {

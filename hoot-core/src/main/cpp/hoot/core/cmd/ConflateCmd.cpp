@@ -54,7 +54,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/VersionUtils.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
 #include <hoot/core/criterion/PointCriterion.h>
@@ -360,7 +360,7 @@ int ConflateCmd::runSimple(QStringList& args)
     {
       if (output.endsWith(".osc") || output.endsWith(".osc.sql"))
       {
-        OsmUtils::checkVersionLessThanOneCountAndLogWarning(map);
+        VersionUtils::checkVersionLessThanOneCountAndLogWarning(map);
       }
 
       // Store original IDs for tag diff
