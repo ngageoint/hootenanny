@@ -397,11 +397,12 @@ private:
    * @param destination Subset to move to
    * @param type Type of operation (create/modify/delete)
    * @param node/way/relation Pointer to the element to be moved
-   * @return
+   * @param failing Set to true if the element is getting set to failed state, it is more selective about moves
+   * @return false if the element cannot be moved successfully
    */
-  bool moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
-  bool moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
-  bool moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
+  bool moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node, bool failing = false);
+  bool moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way, bool failing = false);
+  bool moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation, bool failing = false);
   /**
    * @brief moveOrRemoveNode/Way/Relation Move an element from one subset to another, or if all related elements aren't
    *   able to be moved, the element is removed from the subset and returned to the `available` state
@@ -473,6 +474,11 @@ private:
   void replaceNodeId(long old_id, long new_id);
   void replaceWayId(long old_id, long new_id);
   void replaceRelationId(long old_id, long new_id);
+  /**
+   * @brief failChangeset Set all elements' status to failed that are in the changeset
+   * @param changeset ChangesetInfo pointer of elements that all failed
+   */
+  void failChangeset(const ChangesetInfoPtr& changeset);
   /**
    * @brief failNode/Way/Relation Set element's status to failed and up the failed count
    * @param id ID of the node/way/relation to fail
@@ -616,6 +622,10 @@ public:
   /** Set/get _last member for final error checking */
   void setLast() { _last = true; }
   bool getLast() { return _last; }
+  /** Set/get _isError member */
+  void setError() { _isError = true; }
+  bool getError() { return _isError; }
+
 private:
   /** 3x3 array of containers for elements in this subset */
   std::array<std::array<container, XmlChangeset::TypeMax>, ElementType::Unknown> _changeset;
@@ -626,6 +636,11 @@ private:
   const int MAX_RETRIES = 5;
   /** Flag set when this is the last changeset because of error */
   bool _last;
+  /** When `true` this entire changeset consists of elements that cannot be pushed without an error.
+   *  For example: A way cannot be added because it references a node that doesn't exists, this changeset
+   *  would contain the new way and any new nodes that shouldn't be added by themselves.
+   */
+  bool _isError;
 };
 
 }

@@ -479,7 +479,8 @@ inline const ConstWayPtr OsmMap::getWay(long id) const
 
 inline const ConstWayPtr OsmMap::getWay(ElementId eid) const
 {
-  assert(eid.getType() == ElementType::Way);
+  if (eid.getType() != ElementType::Way)
+    return _nullWay;
   return getWay(eid.getId());
 }
 
@@ -498,7 +499,8 @@ inline const WayPtr OsmMap::getWay(long id)
 
 inline const WayPtr OsmMap::getWay(ElementId eid)
 {
-  assert(eid.getType() == ElementType::Way);
+  if (eid.getType() != ElementType::Way)
+    return _nullWay;
   return getWay(eid.getId());
 }
 
