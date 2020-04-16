@@ -272,6 +272,7 @@ translate = {
           if (row[0])
           {
             outList[row[0]] = row[1];
+            transMap[row[0]] = [row[1],key,value];
             // Debug
             // print('Fuzzy: ' + key);
             delete inList[key];
@@ -290,7 +291,7 @@ translate = {
 
   // Apply one to one translations - For TDS export
   // This version populates the OTH field for values that are not in the rules
-  applyTdsOne2One : function(inList, outList, lookup, fCodeList)
+  applyTdsOne2One : function(inList, outList, lookup, fCodeList,transmap)
   {
     var endChar = '',
       tAttrib = '',
@@ -304,8 +305,13 @@ translate = {
       var key = kList[i];
       var value = inList[key];
 
+      // Debug
+      // print('key: ' + key + '  value: ' + value);
+
       if (key in lookup)
       {
+        //Debug
+        // print('key in Lookup');
         if (value in lookup[key])
         {
           var row = lookup[key][value];
@@ -364,7 +370,7 @@ translate = {
           if ((key in fCodeList) && (value in fCodeList[key]))
           {
             // Debug
-            //print('UsedFCode:' + key + ' = ' + inList[key]);
+            // print('UsedFCode:' + key + ' = ' + inList[key]);
             delete inList[key];
             continue;
           }
@@ -387,7 +393,7 @@ translate = {
             outList[otherVal[0]] = otherVal[1];
 
             // Debug
-            //print('UsedOTH:' + key + ' = ' + inList[key]);
+            // print('UsedOTH:' + key + ' = ' + inList[key]);
             delete inList[key];
 
           } // End if otherVal
@@ -403,7 +409,7 @@ translate = {
         if ((key in fCodeList) && (value in fCodeList[key]))
         {
           // Debug
-          //print('UsedX:' + key + ' = ' + inList[key]);
+          // print('UsedX:' + key + ' = ' + inList[key]);
           delete inList[key];
         }
         else
@@ -673,7 +679,7 @@ translate = {
     for (var i in othList)
     {
       // Debug:
-      // print('i: ' + i + '  atr= :' + attrs[i] + ':');
+      // print('processOTH i: ' + i + '  atr= :' + attrs[i] + ':');
 
       if (attrs[i])
       {

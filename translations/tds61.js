@@ -233,8 +233,8 @@ tds61 = {
 
   // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
   //                feature, checking values and populateing the OTH field.
-  validateAttrs: function(geometryType,attrs) {
-
+  validateAttrs: function(geometryType,attrs,notUsed,transMap)
+  {
     // First, use the lookup table to quickly drop all attributes that are not part of the feature.
     // This is quicker than going through the Schema due to the way the Schema is arranged
     var attrList = tds61.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
@@ -260,7 +260,14 @@ tds61 = {
             delete othList[val];
           }
 
-          hoot.logDebug('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
+          if (val in transMap)
+          {
+            notUsed[transMap[val][1]] = transMap[val][2];
+            // Debug:
+            // print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+          }
+
+          hoot.logDebug('Validate: Dropping ' + val + ' = ' + attrs[val] + ' from ' + attrs.F_CODE);
           delete attrs[val];
 
           // Since we deleted the attribute, Skip the text check
@@ -518,7 +525,7 @@ tds61 = {
       translate.txtToOgr(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds61.rules.txtBiased,transMap);
 
       // one 2 one - we call the version that knows about OTH fields
-      translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup);
+      translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup,transMap);
 
       // post processing
       tds61.applyToTdsPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
@@ -2585,7 +2592,7 @@ tds61 = {
 
     // one 2 one - we call the version that knows about the OTH field
     // NOTE: This deletes tags as they are used
-    translate.applyTdsOne2One(notUsedTags, attrs, tds61.lookup, tds61.fcodeLookup);
+    translate.applyTdsOne2One(notUsedTags, attrs, tds61.lookup, tds61.fcodeLookup,transMap);
 
     // Post Processing
     // We send the original list of tags and the list of tags we haven't used yet
@@ -2624,7 +2631,7 @@ tds61 = {
         if (tds61.AttrLookup[gFcode.toUpperCase()])
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
-          tds61.validateAttrs(geometryType,returnData[i]['attrs']);
+          tds61.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
 
           // Now set the FCSubtype
           // NOTE: If we export to shapefile, GAIT _will_ complain about this
