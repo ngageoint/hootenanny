@@ -74,7 +74,8 @@ private:
   OsmMapPtr _map;
   // optional filtering criterion
   ElementCriterionPtr _crit;
-  // allows for some leeway in what's considered a duplicate node
+  // allows for some leeway in what's considered a duplicate node; passed into WayLocation; 0.0 to
+  // 1.0; a higher value makes duplicates more likely
   double _duplicateNodeTolerance;
 };
 

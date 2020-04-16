@@ -29,6 +29,7 @@
 
 //  Hoot
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -60,7 +61,11 @@ public:
   { return "Truncating tag key/value pairs for OSM API..."; }
 
   virtual QString getCompletedStatusMessage() const override
-  { return "Truncated tag key/value pairs for " + QString::number(_numAffected) + " elements"; }
+  {
+    return
+      "Truncated tag key/value pairs for " + StringUtils::formatLargeNumber(_numAffected) +
+      " elements";
+  }
 
   /**
    * @brief truncateTags Iterates all tags calling truncateTag one by one

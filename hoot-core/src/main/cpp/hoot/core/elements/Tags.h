@@ -399,6 +399,24 @@ public:
    */
   static bool onlyOneContainsKvp(const Tags& tags1, const Tags& tags2, const QString& kvp);
 
+  /**
+   * TODO
+   *
+   * @param tags1
+   * @param tags2
+   * @return
+   */
+  static bool bothHaveInformation(const Tags& tags1, const Tags& tags2);
+
+  /**
+   * TODO
+   *
+   * @param tags1
+   * @param tags2
+   * @return
+   */
+  static bool onlyOneHasInformation(const Tags& tags1, const Tags& tags2);
+
 private:
 
   void _valueRegexParser(const QString& str, QString& num, QString& units) const;

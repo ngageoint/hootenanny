@@ -114,7 +114,7 @@ public:
   static void removeElementNoCheck(OsmMapPtr map, ElementId eId);
 
   /**
-   * @brief removeElement Removes an element from a map only if it does not have a prent element.
+   * @brief removeElement Removes an element from a map only if it does not have a parent element.
    *
    * If this element contains children (e.g. multipolygon) the children will not be removed from
    * the map.
