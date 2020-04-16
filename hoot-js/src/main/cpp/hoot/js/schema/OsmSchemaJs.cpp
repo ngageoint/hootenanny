@@ -455,12 +455,6 @@ void OsmSchemaJs::mostSpecificType(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr element = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
   const QString kvp = OsmSchema::getInstance().mostSpecificType(element->getTags());
-//  Tags tags;
-//  if (!kvp.trimmed().isEmpty())
-//  {
-//    tags.appendValue(kvp);
-//  }
-//  args.GetReturnValue().Set(TagsJs::New(tags));
   args.GetReturnValue().Set(String::NewFromUtf8(current, kvp.toUtf8().data()));
 }
 
