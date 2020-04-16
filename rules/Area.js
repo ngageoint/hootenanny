@@ -91,12 +91,12 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
 
-  // The geometry matching model was derived against only one dataset using Weka, so likely needs 
-  // more refinement. The tag matching was derived manually after the fact outside of Weka and is 
-  // the same that is used with Generic Conflation. The original geometry matching model from Weka 
-  // has been updated to account for the fact that buffered overlap, edge distance, and overlap 
-  // are processing intensive (roughly in order from most to least). You can see the original 
-  // geometry matching model by looking at the revision history for this file.
+  // The geometry matching model was derived against only one training dataset using Weka and 
+  // another without using Weka (review generation logic portion), so likely still needs more refinement. 
+  // The tag matching was derived manually after the fact outside of Weka and is the same that is used 
+  // with Generic Conflation. The original geometry matching model from Weka has been updated to account 
+  // for the fact that buffered overlap, edge distance, and overlap are processing intensive (roughly 
+  // in order from most to least).
 
   // TODO: Should we do anything with names?
 
@@ -110,19 +110,23 @@ exports.matchScore = function(map, e1, e2)
   }
   
   var angleHist = angleHistogramExtractor.extract(map, e1, e2);
-  var edgeDist;
-  var bufferedOverlap;
-  var smallerOverlap;
-  var overlap;
+  hoot.trace("angleHist: " + angleHist);
+  var edgeDist = -1;
+  var bufferedOverlap = -1;
+  var smallerOverlap = -1;
+  var overlap = -1;
 
   if (angleHist >= 0.98 || angleHist < 0.4)
   {
     edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+    hoot.trace("edgeDist: " + edgeDist);
     if (edgeDist < 0.97)
     {
       bufferedOverlap = bufferedOverlapExtractor.extract(map, e1, e2);
+      hoot.trace("bufferedOverlap: " + bufferedOverlap);
       if (bufferedOverlap >= 0.57)
       {
+        hoot.trace("match");
         result = { match: 1.0, miss: 0.0, review: 0.0 };
         return result;
       }
@@ -131,14 +135,18 @@ exports.matchScore = function(map, e1, e2)
   else if (angleHist >= 0.4)
   {
     smallerOverlap = smallerOverlapExtractor.extract(map, e1, e2);
+    hoot.trace("smallerOverlap: " + smallerOverlap);
     if (smallerOverlap < 0.89)
     {
       edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+      hoot.trace("edgeDist: " + edgeDist);
       if (edgeDist < 0.97)
       {
         bufferedOverlap = bufferedOverlapExtractor.extract(map, e1, e2);
+        hoot.trace("bufferedOverlap: " + bufferedOverlap);
         if (bufferedOverlap >= 0.57)
         {
+          hoot.trace("match");
           result = { match: 1.0, miss: 0.0, review: 0.0 };
           return result;
         }
@@ -147,14 +155,18 @@ exports.matchScore = function(map, e1, e2)
   }
 
   overlap = overlapExtractor.extract(map, e1, e2);
+  hoot.trace("overlap: " + overlap);
   if (overlap >= 0.18)
   {
     edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+    hoot.trace("edgeDist: " + edgeDist);
     if (edgeDist >= 0.99)
     {
       bufferedOverlap = bufferedOverlapExtractor.extract(map, e1, e2);
+      hoot.trace("bufferedOverlap: " + bufferedOverlap);
       if (bufferedOverlap < 0.57)
       {
+        hoot.trace("match");
         result = { match: 1.0, miss: 0.0, review: 0.0 };
         return result;
       }
@@ -162,12 +174,36 @@ exports.matchScore = function(map, e1, e2)
   }
 
   edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+  hoot.trace("edgeDist: " + edgeDist);
   if (edgeDist >= 0.97)
   {
     bufferedOverlap = bufferedOverlapExtractor.extract(map, e1, e2);
+    hoot.trace("bufferedOverlap: " + bufferedOverlap);
     if (bufferedOverlap >= 0.57)
     {
+      hoot.trace("match");
       result = { match: 1.0, miss: 0.0, review: 0.0 };
+      return result;
+    }
+  }
+
+  // Here, we're attempting to handle the many to one scenario for diff conflate and will mark 
+  // this as a review which will cause these features to drop out of the diff in the default 
+  // config. Keeping the type matching strict for this until there is a reason to do otherwie. 
+  // The original test scenario for this involved only landuse=residential.
+  hoot.trace("mostSpecificType(e1): " + mostSpecificType(e1));
+  hoot.trace("mostSpecificType(e2): " + mostSpecificType(e2));
+  if (mostSpecificType(e1) == mostSpecificType(e2))
+  {
+    if (smallerOverlap == -1) // don't calc it if it already has been
+    {
+      smallerOverlap = smallerOverlapExtractor.extract(map, e1, e2);
+      hoot.trace("smallerOverlap: " + smallerOverlap);
+    }
+    if (smallerOverlap > 0.835)
+    {
+      hoot.trace("review");
+      result = { match: 0.0, miss: 0.0, review: 1.0 };
       return result;
     }
   }
