@@ -4458,13 +4458,18 @@ Flat file containing street types and their abbreviations.
 
 * Data Type: list
 * Default Value:
-** `highway=turning_circle`
 ** `highway=crossing`
+** `highway=traffic_signals`
+** `highway=turning_circle`
+** `power=pole`
+** `power=tower`
+** `public_transport=stop_position`
 
 List of node key/value pairs that should never be orphaned from ways. SuperfluousNodeRemover will
 remove these if they are not part of a way or relation. Generally, only add to this list node
-features that conflation is unable to handle. Keep the list alphabetized by key, then value (we may
-want to eventually move it to its own config file).
+features that conflation is unable to merge correctly. Fixing their handling during conflation is
+preferred to adding them to this list. Keep the list alphabetized by key, then value (we may want to
+eventually move it to its own config file).
 
 === tag.ancestor.differencer.name
 
