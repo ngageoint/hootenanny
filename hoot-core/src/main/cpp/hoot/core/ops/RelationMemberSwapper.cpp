@@ -54,6 +54,10 @@ _includeReviewRelations(includeReviewRelations)
 
 void RelationMemberSwapper::apply(const OsmMapPtr& map)
 {
+  LOG_TRACE(
+    "Adding " << _idToReplaceWith << " to all relations " << _idToReplace << " was a member of " <<
+    "and removing " << _idToReplace << " from them...")
+
   _numAffected = 0;
 
   const std::set<long> owningRelationIds =

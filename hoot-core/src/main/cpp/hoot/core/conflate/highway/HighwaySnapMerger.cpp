@@ -795,6 +795,7 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr mi
       TagMergerFactory::mergeTags(
         replacementNode->getTags(), replacedNode->getTags(), ElementType::Node));
   }
+  // Let's also preserve relation membership.
   RelationMemberSwapper::swap(
     ElementId(ElementType::Node, middle->getNodeId(0)),
     ElementId(ElementType::Node, snapTo->getNodeId(0)), map, false);
