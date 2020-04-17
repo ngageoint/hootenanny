@@ -304,7 +304,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
-  LOG_DEBUG("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
+  LOG_INFO("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
   vector<pair<ElementId, ElementId>> replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
@@ -331,9 +331,13 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     replaced.clear();
     LOG_VART(merger->getImpactedElementIds());
 
+    // TODO: disable
     // WARNING: Enabling this could result in a lot of files being generated.
-    //OsmMapWriterFactory::writeDebugMap(
-      //map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+    if (i % 20 == 0)
+    {
+      OsmMapWriterFactory::writeDebugMap(
+        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+    }
   }
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 

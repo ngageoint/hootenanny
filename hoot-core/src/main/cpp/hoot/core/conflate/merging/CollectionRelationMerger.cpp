@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/elements/RelationMemberComparison.h>
 
@@ -68,6 +69,9 @@ void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementI
   RemoveRelationByEid(elementId2.getId()).apply(_map);
 
   LOG_TRACE("Merged relations " << elementId1 << " and " << elementId2);
+  // ONLY ENABLE THIS DURING DEBUGGING
+  //OsmMapWriterFactory::writeDebugMap(
+    //_map, "CollectionRelationMerger-" + elementId1.toString() + "-" + elementId2.toString());
 }
 
 void CollectionRelationMerger::_mergeMembers(
