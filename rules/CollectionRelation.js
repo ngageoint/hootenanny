@@ -1,5 +1,6 @@
 /**
- * This script conflates collection relations (e.g route, administrative boundary relations, etc.).
+ * This script conflates collection relations (e.g route, administrative boundary relations, etc.). 
+ * It is meant to be run after all other matchers.
  */
 
 "use strict";

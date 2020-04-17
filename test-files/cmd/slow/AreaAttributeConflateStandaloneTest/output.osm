@@ -2627,18 +2627,6 @@
         <tag k="REF1" v="003858"/>
         <tag k="addr:housenumber" v="600"/>
     </node>
-    <node visible="true" id="-7046" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651872000000068" lon="-122.4195885999999973">
-        <tag k="subway" v="yes"/>
-        <tag k="public_transport" v="stop_position"/>
-        <tag k="name" v="16th Street Mission"/>
-        <tag k="REF1" v="00013c"/>
-    </node>
-    <node visible="true" id="-7045" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649443999999974" lon="-122.4195655999999843">
-        <tag k="subway" v="yes"/>
-        <tag k="public_transport" v="stop_position"/>
-        <tag k="name" v="16th Street Mission"/>
-        <tag k="REF1" v="00013a"/>
-    </node>
     <node visible="true" id="-7044" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7637603999999953" lon="-122.4213970999999930"/>
     <node visible="true" id="-7043" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7636809999999912" lon="-122.4213903000000130"/>
     <node visible="true" id="-7042" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7636660999999947" lon="-122.4216638999999986"/>
@@ -5447,10 +5435,6 @@
         <tag k="REF1" v="000024"/>
         <tag k="addr:housenumber" v="22883"/>
     </node>
-    <node visible="true" id="-5375" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7642316999999963" lon="-122.4331016000000005">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="000739"/>
-    </node>
     <node visible="true" id="-5374" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7646952000000056" lon="-122.4194989999999876"/>
     <node visible="true" id="-5373" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7647157999999905" lon="-122.4191390999999953"/>
     <node visible="true" id="-5372" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649862999999897" lon="-122.4191637999999926"/>
@@ -6381,22 +6365,6 @@
         <tag k="REF1" v="003a49"/>
         <tag k="addr:housenumber" v="494"/>
     </node>
-    <node visible="true" id="-5114" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7647868000000031" lon="-122.4241466999999801">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003a31"/>
-    </node>
-    <node visible="true" id="-5113" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7664017000000030" lon="-122.4243096999999949">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003a30"/>
-    </node>
-    <node visible="true" id="-5112" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7680109000000002" lon="-122.4244642999999968">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003a2f"/>
-    </node>
-    <node visible="true" id="-5111" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697391999999894" lon="-122.4246366999999793">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003a2e"/>
-    </node>
     <node visible="true" id="-5110" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7645849999999896" lon="-122.4243388999999951">
         <tag k="created_by" v="Potlatch 0.10b"/>
         <tag k="amenity" v="fuel"/>
@@ -6497,15 +6465,6 @@
     </node>
     <node visible="true" id="-5080" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697239999999965" lon="-122.4267273999999901"/>
     <node visible="true" id="-5079" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7696472999999955" lon="-122.4281569999999988"/>
-    <node visible="true" id="-5078" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697860000000034" lon="-122.4176908999999966">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="001f78"/>
-    </node>
-    <node visible="true" id="-5077" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695618999999922" lon="-122.4155833999999885">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="001f2e"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-    </node>
     <node visible="true" id="-5076" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656074000000004" lon="-122.4125593999999921"/>
     <node visible="true" id="-5075" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661298000000016" lon="-122.4126022999999890"/>
     <node visible="true" id="-5074" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661162999999860" lon="-122.4127996999999937"/>
@@ -6679,46 +6638,6 @@
     <node visible="true" id="-4948" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7609268000000071" lon="-122.4263310000000047"/>
     <node visible="true" id="-4947" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7608723000000097" lon="-122.4271839999999969"/>
     <node visible="true" id="-4946" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7611953999999912" lon="-122.4272169999999988"/>
-    <node visible="true" id="-4945" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7619366999999855" lon="-122.4071399999999983">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00386e"/>
-    </node>
-    <node visible="true" id="-4944" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7615705999999918" lon="-122.4237432999999982">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed9"/>
-    </node>
-    <node visible="true" id="-4943" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7631679999999932" lon="-122.4239100000000064">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed8"/>
-    </node>
-    <node visible="true" id="-4942" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7647935999999902" lon="-122.4240522000000055">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed7"/>
-    </node>
-    <node visible="true" id="-4941" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7664084000000031" lon="-122.4242153000000002">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed6"/>
-    </node>
-    <node visible="true" id="-4940" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7680172999999968" lon="-122.4243563999999793">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed5"/>
-    </node>
-    <node visible="true" id="-4939" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697447999999980" lon="-122.4245422000000048">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed4"/>
-    </node>
-    <node visible="true" id="-4938" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7614312999999981" lon="-122.4260164000000088">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003eca"/>
-    </node>
-    <node visible="true" id="-4937" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7630289000000019" lon="-122.4261699999999848">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ec9"/>
-    </node>
-    <node visible="true" id="-4936" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7646471999999918" lon="-122.4263255000000044">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ec8"/>
-    </node>
     <node visible="true" id="-4935" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7613739000000024" lon="-122.4262230999999872"/>
     <node visible="true" id="-4934" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7612499999999969" lon="-122.4282972999999970"/>
     <node visible="true" id="-4933" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7684682000000009" lon="-122.4202679999999788">
@@ -6732,160 +6651,11 @@
     <node visible="true" id="-4931" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7684819999999988" lon="-122.4214867000000027"/>
     <node visible="true" id="-4930" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7687215999999992" lon="-122.4215108999999870"/>
     <node visible="true" id="-4929" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7686856000000049" lon="-122.4221466000000191"/>
-    <node visible="true" id="-4928" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7692103999999915" lon="-122.4083341999999845">
-        <tag k="source" v="Yahoo"/>
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003482"/>
-    </node>
-    <node visible="true" id="-4927" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7650497999999928" lon="-122.4196888999999828">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00338e"/>
-    </node>
     <node visible="true" id="-4926" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697790999999938" lon="-122.4342429999999950">
         <tag k="highway" v="steps"/>
         <tag k="ramp" v="yes"/>
         <tag k="REF1" v="0032a1"/>
         <tag k="ramp:wheelchair" v="yes"/>
-    </node>
-    <node visible="true" id="-4925" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651816999999923" lon="-122.4175082000000003">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00327c"/>
-    </node>
-    <node visible="true" id="-4924" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7665399999999991" lon="-122.4220439999999996">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030cf"/>
-    </node>
-    <node visible="true" id="-4923" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649169999999827" lon="-122.4218859999999864">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030ce"/>
-    </node>
-    <node visible="true" id="-4922" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7617009999999951" lon="-122.4215779999999967">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030cd"/>
-    </node>
-    <node visible="true" id="-4921" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7615637999999976" lon="-122.4238377000000071">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030b3"/>
-    </node>
-    <node visible="true" id="-4920" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7612811999999991" lon="-122.4283910999999847">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030aa"/>
-    </node>
-    <node visible="true" id="-4919" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7645057999999949" lon="-122.4286799999999857">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030a9"/>
-    </node>
-    <node visible="true" id="-4918" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7622297000000060" lon="-122.4128320999999886">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003099"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-    </node>
-    <node visible="true" id="-4917" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7670679999999948" lon="-122.4132922999999948">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003098"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-    </node>
-    <node visible="true" id="-4916" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695079000000007" lon="-122.4133564999999919">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003097"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-    </node>
-    <node visible="true" id="-4915" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7620977999999994" lon="-122.4150189000000211">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00308b"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-    </node>
-    <node visible="true" id="-4914" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653139000000024" lon="-122.4153263000000038">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00308a"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-    </node>
-    <node visible="true" id="-4913" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7669359000000000" lon="-122.4154812999999962">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003089"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-    </node>
-    <node visible="true" id="-4912" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7628967999999929" lon="-122.4285270999999824">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003081"/>
-    </node>
-    <node visible="true" id="-4911" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7631625000000000" lon="-122.4240074999999877">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003080"/>
-    </node>
-    <node visible="true" id="-4910" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7632999999999939" lon="-122.4217319999999916">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00307f"/>
-    </node>
-    <node visible="true" id="-4909" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7635707000000025" lon="-122.4173538999999806">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00307e"/>
-    </node>
-    <node visible="true" id="-4908" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7636959999999959" lon="-122.4151716999999877">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00307d"/>
-    </node>
-    <node visible="true" id="-4907" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7641083999999907" lon="-122.4130105999999927">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00307c"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-    </node>
-    <node visible="true" id="-4906" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7681455000000028" lon="-122.4221994999999907">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fca"/>
-    </node>
-    <node visible="true" id="-4905" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7682770999999917" lon="-122.4199976999999819">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fc9"/>
-    </node>
-    <node visible="true" id="-4904" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7685356999999868" lon="-122.4156341999999995">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fc8"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-    </node>
-    <node visible="true" id="-4903" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7686665999999960" lon="-122.4134251999999918">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fc7"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-    </node>
-    <node visible="true" id="-4902" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7644870999999895" lon="-122.4074415000000187">
-        <tag k="source" v="Yahoo"/>
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fb3"/>
-    </node>
-    <node visible="true" id="-4901" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7692416999999949" lon="-122.4078880999999797">
-        <tag k="source" v="Yahoo"/>
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fb2"/>
-    </node>
-    <node visible="true" id="-4900" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7619278000000023" lon="-122.4072578999999905">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fad"/>
-    </node>
-    <node visible="true" id="-4899" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654459999999972" lon="-122.4131378999999811">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002e52"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-    </node>
-    <node visible="true" id="-4898" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7614217999999937" lon="-122.4261651999999856">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002e0f"/>
-    </node>
-    <node visible="true" id="-4897" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7630206999999913" lon="-122.4263190000000066">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002e0e"/>
-    </node>
-    <node visible="true" id="-4896" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7646385999999907" lon="-122.4264747000000000">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002e0d"/>
-    </node>
-    <node visible="true" id="-4895" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7606523999999837" lon="-122.4071358999999859">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002e00"/>
-    </node>
-    <node visible="true" id="-4894" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7693936999999949" lon="-122.4109152999999850">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002da0"/>
     </node>
     <node visible="true" id="-4893" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7696157999999969" lon="-122.4153945000000050">
         <tag k="exit_to:right" v="Duboce Avenue"/>
