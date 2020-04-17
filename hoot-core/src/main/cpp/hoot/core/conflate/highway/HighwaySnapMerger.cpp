@@ -553,7 +553,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     // remove reviews e2Match is involved in
     RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(result);
 
-    // Make the way that we're keeping have membership in whatever relations the way we're removing
+    // Make the way that we're keeping has membership in whatever relations the way we're removing
     // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
     // during merging. TODO: we may be able to combine the following two removals into a single one
     RelationMemberSwapper::swap(eid2, eid1, map, false);
@@ -795,6 +795,9 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr mi
       TagMergerFactory::mergeTags(
         replacementNode->getTags(), replacedNode->getTags(), ElementType::Node));
   }
+  RelationMemberSwapper::swap(
+    ElementId(ElementType::Node, middle->getNodeId(0)),
+    ElementId(ElementType::Node, snapTo->getNodeId(0)), map, false);
 
   LOG_TRACE(
     "Replacing " << middle->getLastNodeId() << " with " << snapTo->getLastNodeId() << " on " <<
@@ -809,6 +812,9 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr mi
       TagMergerFactory::mergeTags(
         replacementNode->getTags(), replacedNode->getTags(), ElementType::Node));
   }
+  RelationMemberSwapper::swap(
+    ElementId(ElementType::Node, middle->getLastNodeId()),
+    ElementId(ElementType::Node, snapTo->getLastNodeId()), map, false);
 }
 
 void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineCollection& s,
