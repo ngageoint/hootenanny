@@ -792,7 +792,10 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& /*map*/, WayPtr snapee, WayPt
     "Replacing " << middle->getNodeId(0) << " with " << snapTo->getNodeId(0) << " on " <<
     snapee->getElementId() << "...");
   snapee->replaceNode(middle->getNodeId(0), snapTo->getNodeId(0));
-  // TODO: This is causing big problems with CollectionRelationMergeTest
+
+  // TODO: This attempt to retain secondary information nodes is causing big problems with roads in
+  // CollectionRelationMergeTest. Will try to make it work as part of #3901.
+
   // If the node we just replaced has info and the one we're replacing it with does not, let's copy
   // that info over to the replacement.
 //  NodePtr replacedNode = map->getNode(middle->getNodeId(0));
