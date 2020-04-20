@@ -58,6 +58,12 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
   {
     throw IllegalArgumentException("No map set on WayNodeCopier.");
   }
+  if (toReplaceWayId.getType() != ElementType::Way || replacingWayId.getType() != ElementType::Way)
+  {
+    throw IllegalArgumentException(
+      "WayNodeCopier only processes ways. Input IDs: " + toReplaceWayId.toString() + ", " +
+      replacingWayId.toString());
+  }
 
   bool elementsModified = false;
 

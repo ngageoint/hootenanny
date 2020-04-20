@@ -4458,11 +4458,19 @@ Flat file containing street types and their abbreviations.
 
 * Data Type: list
 * Default Value:
+** `highway=crossing`
+** `highway=traffic_signals`
 ** `highway=turning_circle`
+** `power=pole`
+** `power=tower`
+** `public_transport=stop_position`
+** `railway=level_crossing`
 
 List of node key/value pairs that should never be orphaned from ways. SuperfluousNodeRemover will
 remove these if they are not part of a way or relation. Generally, only add to this list node
-features that conflation is unable to handle. Keep the list alphabetized by key, then value.
+features that conflation is unable to merge correctly. Fixing their handling during conflation is
+preferred to adding them to this list. Keep the list alphabetized by key, then value (we may want to
+eventually move it to its own config file).
 
 === tag.ancestor.differencer.name
 
@@ -4919,7 +4927,9 @@ The minimum size that a way should be split into for merging. Units in meters.
 * Data Type: double
 * Default Value: `0.05`
 
-Distance tolerance allowed for WayNodeCopier to consider two nodes duplicates and not copy them.
+Distance tolerance, in the range of 0.0 to 1.0, allowed for WayNodeCopier to consider two nodes
+duplicates and not copy them. The higher the value, the more likely two nearby nodes would be
+considered to be duplicates.
 
 === way.splitter.max.length
 
