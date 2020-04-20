@@ -233,6 +233,46 @@ bool ChangesetCreateFailureTestServer::respond(HttpConnection::HttpConnectionPtr
   return continue_processing && !get_interupt();
 }
 
+bool CreateWaysFailNodesTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+{
+  //  Stop processing by setting this to false
+  bool continue_processing = true;
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
+  //  Determine the response message's HTTP header
+  HttpResponsePtr response;
+  if (headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, "1"));
+  else if (headers.find("POST") != std::string::npos)
+  {
+    //  Read the HTTP request body to figure out which response to send back
+    std::string body = read_request_body(headers, connection);
+    if (body.find("way id=\"-1\"") != std::string::npos)
+      response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SUCCESS_1_RESPONSE));
+    else
+      response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SUCCESS_2_RESPONSE));
+  }
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
+  {
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK));
+    continue_processing = false;
+  }
+  else
+  {
+    //  Error out here
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
+    continue_processing = false;
+  }
+  //  Write out the response
+  write_response(connection, response->to_string());
+  //  Return true if we should continue listening and processing requests
+  return continue_processing && !get_interupt();
+}
+
 const char* OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE =
     "<?xml version='1.0' encoding='UTF-8'?>\n"
     "<osm version='0.6' generator='OpenStreetMap server'>\n"

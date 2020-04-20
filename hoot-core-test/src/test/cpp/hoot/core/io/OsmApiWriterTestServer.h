@@ -136,6 +136,26 @@ protected:
   bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 };
 
+class CreateWaysFailNodesTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  CreateWaysFailNodesTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate a changeset create failure over and over.
+   *  Requests, in order:
+   *   - Capabilities
+   *   - Permissions
+   *   - Changeset Create
+   *   - Changeset Upload Failure - responds with HTTP
+   *   - Changeset Upload - responds with HTTP 200
+   *   - Changeset Close
+   */
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+};
+
 class OsmApiSampleRequestResponse
 {
 public:
