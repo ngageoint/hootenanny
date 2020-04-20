@@ -4928,7 +4928,8 @@ The minimum size that a way should be split into for merging. Units in meters.
 * Default Value: `0.05`
 
 Distance tolerance, in the range of 0.0 to 1.0, allowed for WayNodeCopier to consider two nodes
-duplicates and not copy them. The higher the value, the more two nodes are considered duplicates.
+duplicates and not copy them. The higher the value, the more likely two nearby nodes would be
+considered to be duplicates.
 
 === way.splitter.max.length
 
