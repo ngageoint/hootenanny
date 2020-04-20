@@ -239,7 +239,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     RemoveReviewsByEidOp(remove->getElementId(), true).apply(result);
 
     //OsmMapWriterFactory::writeDebugMap(
-      //map, "HighwaySnapMerger-merged-identical-elements" + eidLogString);
+     //map, "HighwaySnapMerger-merged-identical-elements" + eidLogString);
 
     return false;
   }
@@ -540,14 +540,23 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     WayNodeCopier nodeCopier;
     nodeCopier.setOsmMap(map.get());
     nodeCopier.addCriterion(NotCriterionPtr(new NotCriterion(new NoInformationCriterion())));
-    LOG_TRACE(
-      "Copying information nodes from e2 match: " << e2Match->getElementId() << " to e1: " <<
-      eid1 << "...");
-    nodeCopier.copy(e2Match->getElementId(), eid1);
-    LOG_TRACE(
-      "Copying information nodes from e2 match: " << e2Match->getElementId() << " to e1 match: " <<
-      e1Match->getElementId() << "...");
-    nodeCopier.copy(e2Match->getElementId(), e1Match->getElementId());
+
+    if (e2Match->getElementId().getType() == ElementType::Way && eid1.getType() == ElementType::Way)
+    {
+      LOG_TRACE(
+        "Copying information nodes from e2 match: " << e2Match->getElementId() << " to e1: " <<
+        eid1 << "...");
+      nodeCopier.copy(e2Match->getElementId(), eid1);;
+    }
+
+    if (e2Match->getElementId().getType() == ElementType::Way &&
+        e1Match->getElementId().getType() == ElementType::Way)
+    {
+      LOG_TRACE(
+        "Copying information nodes from e2 match: " << e2Match->getElementId() << " to e1 match: " <<
+        e1Match->getElementId() << "...");
+      nodeCopier.copy(e2Match->getElementId(), e1Match->getElementId());
+    }
 
     // remove reviews e2Match is involved in
     RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(result);
@@ -776,45 +785,46 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee, Eleme
   //LOG_VART(snapTo);
 }
 
-void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr middle,
+void HighwaySnapMerger::_snapEnds(const OsmMapPtr& /*map*/, WayPtr snapee, WayPtr middle,
                                   WayPtr snapTo) const
 {
   LOG_TRACE(
     "Replacing " << middle->getNodeId(0) << " with " << snapTo->getNodeId(0) << " on " <<
     snapee->getElementId() << "...");
   snapee->replaceNode(middle->getNodeId(0), snapTo->getNodeId(0));
+  // TODO: This is causing big problems with CollectionRelationMergeTest
   // If the node we just replaced has info and the one we're replacing it with does not, let's copy
   // that info over to the replacement.
-  NodePtr replacedNode = map->getNode(middle->getNodeId(0));
-  NodePtr replacementNode = map->getNode(snapTo->getNodeId(0));
-  if (replacedNode->getTags().hasInformationTag() &&
-      !replacementNode->getTags().hasInformationTag())
-  {
-    replacementNode->setTags(
-      TagMergerFactory::mergeTags(
-        replacementNode->getTags(), replacedNode->getTags(), ElementType::Node));
-  }
-  // Let's also preserve relation membership.
-  RelationMemberSwapper::swap(
-    ElementId(ElementType::Node, middle->getNodeId(0)),
-    ElementId(ElementType::Node, snapTo->getNodeId(0)), map, false);
+//  NodePtr replacedNode = map->getNode(middle->getNodeId(0));
+//  NodePtr replacementNode = map->getNode(snapTo->getNodeId(0));
+//  if (replacedNode->getTags().hasInformationTag() &&
+//      !replacementNode->getTags().hasInformationTag())
+//  {
+//    replacementNode->setTags(
+//      TagMergerFactory::mergeTags(
+//        replacementNode->getTags(), replacedNode->getTags(), ElementType::Node));
+//  }
+//  // Let's also preserve relation membership.
+//  RelationMemberSwapper::swap(
+//    ElementId(ElementType::Node, middle->getNodeId(0)),
+//    ElementId(ElementType::Node, snapTo->getNodeId(0)), map, false);
 
   LOG_TRACE(
     "Replacing " << middle->getLastNodeId() << " with " << snapTo->getLastNodeId() << " on " <<
     snapee->getElementId() << "...");
   snapee->replaceNode(middle->getLastNodeId(), snapTo->getLastNodeId());
-  replacedNode = map->getNode(middle->getLastNodeId());
-  replacementNode = map->getNode(snapTo->getLastNodeId());
-  if (replacedNode->getTags().hasInformationTag() &&
-      !replacementNode->getTags().hasInformationTag())
-  {
-    replacementNode->setTags(
-      TagMergerFactory::mergeTags(
-        replacementNode->getTags(), replacedNode->getTags(), ElementType::Node));
-  }
-  RelationMemberSwapper::swap(
-    ElementId(ElementType::Node, middle->getLastNodeId()),
-    ElementId(ElementType::Node, snapTo->getLastNodeId()), map, false);
+//  replacedNode = map->getNode(middle->getLastNodeId());
+//  replacementNode = map->getNode(snapTo->getLastNodeId());
+//  if (replacedNode->getTags().hasInformationTag() &&
+//      !replacementNode->getTags().hasInformationTag())
+//  {
+//    replacementNode->setTags(
+//      TagMergerFactory::mergeTags(
+//        replacementNode->getTags(), replacedNode->getTags(), ElementType::Node));
+//  }
+//  RelationMemberSwapper::swap(
+//    ElementId(ElementType::Node, middle->getLastNodeId()),
+//    ElementId(ElementType::Node, snapTo->getLastNodeId()), map, false);
 }
 
 void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineCollection& s,

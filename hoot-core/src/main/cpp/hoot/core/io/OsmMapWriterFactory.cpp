@@ -179,7 +179,7 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     {
       debugMapFileName = debugMapFileName.replace(".osm", "-" + fileNumberStr + ".osm");
     }
-    LOG_INFO("Writing debug output to: " << debugMapFileName.right(30));
+    LOG_INFO("Writing debug output to: ..." << debugMapFileName.right(30));
     OsmMapPtr copy(new OsmMap(map));
 
     if (matcher)
