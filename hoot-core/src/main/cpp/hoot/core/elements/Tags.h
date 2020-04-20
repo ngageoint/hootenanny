@@ -400,20 +400,20 @@ public:
   static bool onlyOneContainsKvp(const Tags& tags1, const Tags& tags2, const QString& kvp);
 
   /**
-   * TODO
+   * Determines if two sets of tags contain non-metadata information
    *
-   * @param tags1
-   * @param tags2
-   * @return
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @return true if both sets of tags contain non-metadata information; false otherwise
    */
   static bool bothHaveInformation(const Tags& tags1, const Tags& tags2);
 
   /**
-   * TODO
+   * Determines if one of two sets of tags contain non-metadata information
    *
-   * @param tags1
-   * @param tags2
-   * @return
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @return true if exactly one of sets of tags contain non-metadata information; false otherwise
    */
   static bool onlyOneHasInformation(const Tags& tags1, const Tags& tags2);
 

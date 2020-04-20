@@ -238,24 +238,7 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  // TODO: remove
-  hoot.debug("**********************************");
-  hoot.debug("e1: " + e1.getElementId() + ", " + tags1.get("name"));
-  if (tags1.get("note"))
-  {
-    hoot.debug("e1 note: " + tags1.get("note"));
-  }
-  hoot.debug("e2: " + e2.getElementId() + ", " + tags2.get("name"));
-  if (tags2.get("note"))
-  {
-    hoot.debug("e2 note: " + tags2.get("note"));
-  }
-  hoot.debug("type: " + e1.getType());
-  hoot.debug("type: " + e1.getType());
-  hoot.debug("mostSpecificType 1: " + mostSpecificType(e1));
-  hoot.debug("mostSpecificType 2: " + mostSpecificType(e2));
-
-  hoot.debug("match");
+  hoot.trace("match");
   result = { match: 1.0, miss: 0.0, review: 0.0 };
   return result;
 };

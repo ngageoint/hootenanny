@@ -200,7 +200,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   //LOG_VART(map->getElement(eid1));
   LOG_VART(eid2);
   //LOG_VART(map->getElement(eid2));
-  const QString eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
+  //const QString eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
 
   if (HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced))
   {
