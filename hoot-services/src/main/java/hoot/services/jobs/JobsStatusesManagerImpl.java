@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.jobs;
 
@@ -58,7 +58,7 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
 
 
     @Override
-    public JobHistory getJobsHistory(Users user, String sort, long offset, long limit, String type, String status) throws IllegalArgumentException {
+    public JobHistory getJobsHistory(Users user, String sort, long offset, long limit, String type, String status, String groupJobId) throws IllegalArgumentException {
         OrderSpecifier<?> sorter = jobStatus.start.desc();
         List<Integer> types = new ArrayList<>();
         List<Integer> statuses = new ArrayList<>();
@@ -137,7 +137,20 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
                 .limit(limit)
                 .fetch();
 
-        List<JobStatusResponse> jobs = jobsHistory.stream().map(j -> {
+        List<String> familyIds = new ArrayList<>();
+        if (!groupJobId.equals("")) {
+            findJobsFamily(familyIds, groupJobId);
+        }
+
+        List<JobStatusResponse> jobs = jobsHistory.stream()
+            .filter(j -> {
+                if (!familyIds.isEmpty()) {
+                    return familyIds.contains(j.getJobId());
+                }
+
+                return true;
+            })
+            .map(j -> {
             JobStatusResponse response = new JobStatusResponse();
             response.setJobId(j.getJobId());
             response.setJobType(JobType.fromInteger(
@@ -161,6 +174,20 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
 
         //format jobs history
         return new JobHistory(total, jobs);
+    }
+
+    public void findJobsFamily(List<String> familyIds, String currentId) {
+        familyIds.add(currentId);
+
+        List<String> childrenIds = createQuery()
+                .select(jobStatus.jobId)
+                .from(jobStatus)
+                .where(Expressions.booleanTemplate(String.format("tags->'parentId'='%s'", currentId)))
+                .fetch();
+
+        for(String jobId : childrenIds) {
+            findJobsFamily(familyIds, jobId);
+        }
     }
 
     @Override
