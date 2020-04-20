@@ -4464,6 +4464,7 @@ Flat file containing street types and their abbreviations.
 ** `power=pole`
 ** `power=tower`
 ** `public_transport=stop_position`
+** `railway=level_crossing`
 
 List of node key/value pairs that should never be orphaned from ways. SuperfluousNodeRemover will
 remove these if they are not part of a way or relation. Generally, only add to this list node

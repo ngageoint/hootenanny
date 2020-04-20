@@ -682,12 +682,7 @@
         <tag k="hoot:hash" v="sha1sum:579ed4e6f44fc900c4b517d66ca815f879fc8dba"/>
     </node>
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4277938889633788"/>
-    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4361795650537630">
-        <tag k="traffic_signals" v="signal"/>
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="hoot:hash" v="sha1sum:d8db6a30ee4ab613ae4eba004e252de668eaf20a"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4361795650537630"/>
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4365385346740425">
         <tag k="hoot:hash" v="sha1sum:9b85438a994641f2ef546a302b0224da3acad05d"/>
     </node>
