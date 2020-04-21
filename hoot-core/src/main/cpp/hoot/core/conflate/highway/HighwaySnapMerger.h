@@ -96,8 +96,8 @@ private:
   /**
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.
    */
-  void _snapEnds(const OsmMapPtr &map, ElementPtr snapee, ElementPtr snapTo) const;
-  void _snapEnds(WayPtr snapee, WayPtr middle, WayPtr snapTo) const;
+  void _snapEnds(const OsmMapPtr& map, ElementPtr snapee, ElementPtr snapTo) const;
+  void _snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr middle, WayPtr snapTo) const;
 
   /**
    * Splits the splitee up into a match element and a scrap element. All the tags are assigned

@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="39.10359999999999" minlon="-94.53959999999999" maxlat="39.1048" maxlon="-94.53789999999999"/>
-    <node visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1040936369806218" lon="-94.5389427097763928"/>
+    <node visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1040936369806218" lon="-94.5389427097763928">
+        <tag k="highway" v="crossing"/>
+        <tag k="hoot:hash" v="sha1sum:34ffd4a5f79d1ea3fd674ea5893c8d06358dc1df"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1045445403752652" lon="-94.5388187680206329"/>
-    <node visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1041546228033638" lon="-94.5388386970869732"/>
-    <node visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1040402187479543" lon="-94.5388445287447468"/>
+    <node visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1041546228033638" lon="-94.5388386970869732">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1040402187479543" lon="-94.5388445287447468">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-38" timestamp="2019-07-14T10:29:53Z" version="1" user="sannkc" uid="1561092" lat="39.1040565999999998" lon="-94.5389935000000037">
         <tag k="water_source" v="main"/>
         <tag k="emergency" v="fire_hydrant"/>
@@ -13,34 +23,16 @@
     </node>
     <node visible="true" id="-37" timestamp="2018-05-20T10:53:34Z" version="1" user="sannkc" uid="1561092" lat="39.1041543999999988" lon="-94.5387824000000023"/>
     <node visible="true" id="-36" timestamp="2018-05-20T10:53:34Z" version="1" user="sannkc" uid="1561092" lat="39.1041543999999988" lon="-94.5388183999999967"/>
-    <node visible="true" id="-35" timestamp="2018-05-20T10:53:34Z" version="1" user="sannkc" uid="1561092" lat="39.1041553000000022" lon="-94.5388606999999865">
-        <tag k="highway" v="crossing"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-34" timestamp="2018-05-20T10:53:34Z" version="1" user="sannkc" uid="1561092" lat="39.1041572999999971" lon="-94.5389394000000038"/>
     <node visible="true" id="-33" timestamp="2018-05-20T10:53:34Z" version="1" user="sannkc" uid="1561092" lat="39.1045470999999978" lon="-94.5389176999999989"/>
     <node visible="true" id="-32" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1045429999999925" lon="-94.5387630999999971"/>
     <node visible="true" id="-31" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1041315000000012" lon="-94.5387834999999797"/>
-    <node visible="true" id="-30" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040879999999973" lon="-94.5387857999999994">
-        <tag k="highway" v="crossing"/>
-        <tag k="hoot:hash" v="sha1sum:8c4ef4f187dc8c9cdc64f3dca7794497c815be1b"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-29" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040556000000024" lon="-94.5387874999999980"/>
     <node visible="true" id="-28" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1041387999999941" lon="-94.5389404000000013"/>
-    <node visible="true" id="-27" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040937999999940" lon="-94.5389426999999927">
-        <tag k="highway" v="crossing"/>
-        <tag k="hoot:hash" v="sha1sum:34ffd4a5f79d1ea3fd674ea5893c8d06358dc1df"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-26" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040617999999895" lon="-94.5389444000000054"/>
     <node visible="true" id="-25" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040427999999949" lon="-94.5389456999999993"/>
     <node visible="true" id="-24" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040399999999977" lon="-94.5387887999999919"/>
     <node visible="true" id="-23" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040400000000048" lon="-94.5388236999999805"/>
-    <node visible="true" id="-22" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040409000000011" lon="-94.5388667999999939">
-        <tag k="highway" v="crossing"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-21" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040419999999855" lon="-94.5389215999999948"/>
     <node visible="true" id="-20" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1041564999999878" lon="-94.5389162999999968"/>
     <node visible="true" id="-18" timestamp="2017-06-08T08:56:32Z" version="1" user="sannkc" uid="1561092" lat="39.1045572000000021" lon="-94.5393298999999985"/>
@@ -59,7 +51,9 @@
         <tag k="hoot:hash" v="sha1sum:f9359d7cdf58b9acc146a73d15f65d3fae0c0a07"/>
     </node>
     <node visible="true" id="191091793" timestamp="2016-02-02T18:28:17Z" version="1" changeset="2773" lat="39.1040899999999922" lon="-94.5388420000000025">
-        <tag k="hoot:hash" v="sha1sum:92f2a5159a07585f56aaa0cafc47d473db5da26e"/>
+        <tag k="highway" v="crossing"/>
+        <tag k="hoot:hash" v="sha1sum:92f2a5159a07585f56aaa0cafc47d473db5da26e;sha1sum:8c4ef4f187dc8c9cdc64f3dca7794497c815be1b"/>
+        <tag k="error:circular" v="15"/>
     </node>
     <way visible="true" id="-17" timestamp="2018-05-20T10:53:39Z" version="1">
         <nd ref="-20"/>

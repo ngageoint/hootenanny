@@ -403,22 +403,6 @@
         <tag k="hoot:hash" v="sha1sum:e7f3005a8d1ba950d9ce75a8b74294def5467a45"/>
         <tag k="hoot:id" v="-63"/>
     </node>
-    <node visible="true" id="-50" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9018592999999839" lon="-75.4395533000000000">
-        <tag k="hoot:status" v="2"/>
-        <tag k="traffic_signals" v="signal"/>
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="hoot:hash" v="sha1sum:fc0e5d184be94525f70d5eb18e127c6f9bc2d0b8"/>
-        <tag k="hoot:id" v="-50"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-49" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9015678000000023" lon="-75.4397866000000050">
-        <tag k="hoot:status" v="2"/>
-        <tag k="traffic_signals" v="signal"/>
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="hoot:hash" v="sha1sum:660c7933f6081268fce262cd88c560438731ec1d"/>
-        <tag k="hoot:id" v="-49"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8984000000000094" lon="-75.4425536931147604">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-41"/>
@@ -836,8 +820,11 @@
     </node>
     <node visible="true" id="4881734494" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9015470000000008" lon="-75.4397879999999788">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:hash" v="sha1sum:8e9a29b1936df940483c7dfd78baea990afecd53"/>
+        <tag k="traffic_signals" v="signal"/>
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="hoot:hash" v="sha1sum:8e9a29b1936df940483c7dfd78baea990afecd53;sha1sum:660c7933f6081268fce262cd88c560438731ec1d"/>
         <tag k="hoot:id" v="4881734494"/>
+        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881734496" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9014560000000031" lon="-75.4398549999999943">
         <tag k="hoot:status" v="1"/>
@@ -855,8 +842,11 @@
     </node>
     <node visible="true" id="4881734508" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9018789999999939" lon="-75.4395209999999992">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:hash" v="sha1sum:e39451c631018e5c2b2951ba480dda34168d59be"/>
+        <tag k="traffic_signals" v="signal"/>
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="hoot:hash" v="sha1sum:e39451c631018e5c2b2951ba480dda34168d59be;sha1sum:fc0e5d184be94525f70d5eb18e127c6f9bc2d0b8"/>
         <tag k="hoot:id" v="4881734508"/>
+        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881735269" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9022499999999951" lon="-75.4416899999999799">
         <tag k="hoot:status" v="1"/>
