@@ -1,5 +1,6 @@
 /**
- * This script conflates collection relations (e.g route, administrative boundary relations, etc.).
+ * This script conflates collection relations (e.g route, administrative boundary relations, etc.). 
+ * It is meant to be run after all other matchers.
  */
 
 "use strict";
@@ -237,6 +238,7 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
+  hoot.trace("match");
   result = { match: 1.0, miss: 0.0, review: 0.0 };
   return result;
 };

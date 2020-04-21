@@ -251,7 +251,10 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     std::cout << getHelp() << std::endl << std::endl;
     throw IllegalArgumentException(
-      QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
+      QString("%1 with output: " + output + " takes three parameters. You provided %2: %3")
+        .arg(getName())
+        .arg(args.size())
+        .arg(args.join(",")));
   }
 
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
