@@ -131,7 +131,7 @@ WaySubline WaySubline::reverse(const ConstWayPtr& reversedWay) const
   // sanity check to make sure they're actually reversed, this isn't conclusive but should help
   // if there is a major goof.
   assert(reversedWay->getNodeCount() == getWay()->getNodeCount());
-  assert(reversedWay->getNodeId(0) == getWay()->getLastNodeId());
+  //assert(reversedWay->getNodeId(0) == getWay()->getLastNodeId());
 
   double l = ElementConverter(getMap()).convertToLineString(getWay())->getLength();
 
