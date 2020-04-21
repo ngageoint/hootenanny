@@ -139,7 +139,8 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
 
         List<String> familyIds = new ArrayList<>();
         if (!groupJobId.equals("")) {
-            findJobsFamily(familyIds, groupJobId);
+            List<String> processedIds = new ArrayList<>();
+            findJobsFamily(familyIds, processedIds, groupJobId);
         }
 
         List<JobStatusResponse> jobs = jobsHistory.stream()
@@ -176,17 +177,30 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
         return new JobHistory(total, jobs);
     }
 
-    public void findJobsFamily(List<String> familyIds, String currentId) {
+    public void findJobsFamily(List<String> familyIds, List<String> processedIds, String currentId) {
         familyIds.add(currentId);
+        processedIds.add(currentId);
 
+        // Get the 'parent' job
+        List<String> ids = createQuery()
+                .select(Expressions.stringTemplate("tags->'parentId'"))
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(currentId))
+                .fetch();
+
+        // get the 'child' jobs
         List<String> childrenIds = createQuery()
                 .select(jobStatus.jobId)
                 .from(jobStatus)
                 .where(Expressions.booleanTemplate(String.format("tags->'parentId'='%s'", currentId)))
                 .fetch();
 
-        for(String jobId : childrenIds) {
-            findJobsFamily(familyIds, jobId);
+        ids.addAll(childrenIds);
+
+        for(String jobId : ids) {
+            if (!processedIds.contains(jobId) && jobId != null) {
+                findJobsFamily(familyIds, processedIds, jobId);
+            }
         }
     }
 
