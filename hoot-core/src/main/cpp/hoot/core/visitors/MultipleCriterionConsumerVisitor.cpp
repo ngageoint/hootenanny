@@ -68,7 +68,7 @@ void MultipleCriterionConsumerVisitor::_addCriteria(
       const QString critName = criteriaClassNames.at(i);
       if (!critName.trimmed().isEmpty())
       {
-        LOG_VARD(critName);
+        LOG_VART(critName);
         ElementCriterionPtr crit =
           std::shared_ptr<ElementCriterion>(
             Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));

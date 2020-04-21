@@ -152,7 +152,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
 void OsmApiDbSqlChangesetFileWriter::_updateChangeset(const int numChanges)
 {
   //update the changeset's bounds
-  LOG_DEBUG("Updating changeset: " << _changesetBounds.toString());
+  LOG_DEBUG("Updating changeset's bounds: " << _changesetBounds.toString());
   LOG_VARD(numChanges);
   _outputSql.write(
     QString("UPDATE %1 SET min_lat=%2, max_lat=%3, min_lon=%4, max_lon=%5, num_changes=%6 WHERE id=%7;\n")
