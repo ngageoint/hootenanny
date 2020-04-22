@@ -29,7 +29,7 @@
 // Hoot
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
@@ -257,7 +257,7 @@ void OsmXmlWriter::_writeMetadata(const Element* e)
 {
   if (_includeCompatibilityTags)
   {
-    _writer->writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
+    _writer->writeAttribute("timestamp", DateTimeUtils::toTimeString(e->getTimestamp()));
     long version = e->getVersion();
     if (version == ElementData::VERSION_EMPTY)
     {
@@ -271,7 +271,7 @@ void OsmXmlWriter::_writeMetadata(const Element* e)
     //ElementData::TIMESTAMP_EMPTY.  See RemoveAttributesVisitor
     if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
     {
-      _writer->writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
+      _writer->writeAttribute("timestamp", DateTimeUtils::toTimeString(e->getTimestamp()));
     }
     if (e->getVersion() != ElementData::VERSION_EMPTY)
     {

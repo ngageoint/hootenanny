@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ElementIdsVisitor.h"
@@ -75,7 +75,7 @@ vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
   return v.getIds();
 }
 
-// TODO: Some of these may be redundant with related methods in OsmUtils.
+// TODO: Some of these may be redundant with related methods in WayNodeUtils.
 
 vector<long> ElementIdsVisitor::_findCloseNodes(const ConstOsmMapPtr& map,
                                                 const Coordinate& refCoord, Meters maxDistance)

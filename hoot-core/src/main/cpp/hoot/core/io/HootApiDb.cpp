@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/io/InternalIdReserver.h>
 #include <hoot/core/io/SqlBulkDelete.h>
@@ -815,7 +815,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   v.append(lat);
   v.append(lon);
   v.append((qlonglong)_currChangesetId);
-  v.append(OsmUtils::currentTimeAsString());
+  v.append(DateTimeUtils::currentTimeAsString());
   v.append(tileForPoint(lat, lon));
   if (version == 0)
   {
@@ -917,7 +917,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags, long ver
   QList<QVariant> v;
   v.append((qlonglong)relationId);
   v.append((qlonglong)_currChangesetId);
-  v.append(OsmUtils::currentTimeAsString());
+  v.append(DateTimeUtils::currentTimeAsString());
   if (version == 0)
   {
     v.append((qlonglong)1);
@@ -2163,7 +2163,7 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   _updateNode->bindValue(":latitude", lat);
   _updateNode->bindValue(":longitude", lon);
   _updateNode->bindValue(":changeset_id", (qlonglong)_currChangesetId);
-  _updateNode->bindValue(":timestamp", OsmUtils::currentTimeAsString());
+  _updateNode->bindValue(":timestamp", DateTimeUtils::currentTimeAsString());
   _updateNode->bindValue(":tile", (qlonglong)tileForPoint(lat, lon));
   _updateNode->bindValue(":version", (qlonglong)version);
 
@@ -2198,7 +2198,7 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
 
   _updateRelation->bindValue(":id", (qlonglong)id);
   _updateRelation->bindValue(":changeset_id", (qlonglong)_currChangesetId);
-  _updateRelation->bindValue(":timestamp", OsmUtils::currentTimeAsString());
+  _updateRelation->bindValue(":timestamp", DateTimeUtils::currentTimeAsString());
   _updateRelation->bindValue(":version", (qlonglong)version);
 
   if (_updateRelation->exec() == false)
@@ -2232,7 +2232,7 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
 
   _updateWay->bindValue(":id", (qlonglong)id);
   _updateWay->bindValue(":changeset_id", (qlonglong)_currChangesetId);
-  _updateWay->bindValue(":timestamp", OsmUtils::currentTimeAsString());
+  _updateWay->bindValue(":timestamp", DateTimeUtils::currentTimeAsString());
   _updateWay->bindValue(":version", (qlonglong)version);
 
   if (_updateWay->exec() == false)
@@ -2276,7 +2276,7 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags, long version)
   QList<QVariant> v;
   v.append((qlonglong)wayId);
   v.append((qlonglong)_currChangesetId);
-  v.append(OsmUtils::currentTimeAsString());
+  v.append(DateTimeUtils::currentTimeAsString());
   if (version == 0)
   {
     v.append((qlonglong)1);

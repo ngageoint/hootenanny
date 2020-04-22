@@ -28,7 +28,6 @@
 #define HIGHWAYSNAPMERGER_H
 
 // Hoot
-#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/conflate/highway/HighwayMergerAbstract.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
@@ -82,8 +81,6 @@ private:
 
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
-  ReviewMarker _reviewMarker;
-
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;
 
@@ -99,8 +96,8 @@ private:
   /**
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.
    */
-  void _snapEnds(const OsmMapPtr &map, ElementPtr snapee, ElementPtr snapTo) const;
-  void _snapEnds(WayPtr snapee, WayPtr middle, WayPtr snapTo) const;
+  void _snapEnds(const OsmMapPtr& map, ElementPtr snapee, ElementPtr snapTo) const;
+  void _snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr middle, WayPtr snapTo) const;
 
   /**
    * Splits the splitee up into a match element and a scrap element. All the tags are assigned

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmApiDbBulkInserter.h"
@@ -599,7 +599,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
             //care that much right now, since the changeset count is far outnumbered by the
             //size of the rest of the data
             PROGRESS_INFO(
-              "Parsed " << StringUtils::formatLargeNumber(recordCtr) << "/" <<
+              "Parsed " << StringUtils::formatLargeNumber(recordCtr) << " / " <<
               StringUtils::formatLargeNumber(
                 _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
               " SQL file lines.");
@@ -836,7 +836,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
     _checkUnresolvedReferences(node, nodeDbId);
   }
 
-  if (_writeStats.nodesWritten % _statusUpdateInterval == 0)
+  if (_writeStats.nodesWritten % (_statusUpdateInterval * 100) == 0)
   {
     PROGRESS_INFO(
       "Parsed " << StringUtils::formatLargeNumber(_writeStats.nodesWritten) <<
@@ -886,7 +886,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
     _checkUnresolvedReferences(way, wayDbId);
   }
 
-  if (_writeStats.waysWritten % _statusUpdateInterval == 0)
+  if (_writeStats.waysWritten % (_statusUpdateInterval * 10) == 0)
   {
     PROGRESS_INFO(
       "Parsed " << StringUtils::formatLargeNumber(_writeStats.waysWritten) <<
@@ -935,7 +935,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
     _checkUnresolvedReferences(relation, relationDbId);
   }
 
-  if (_writeStats.relationsWritten % _statusUpdateInterval == 0)
+  if (_writeStats.relationsWritten % (_statusUpdateInterval * 10) == 0)
   {
     PROGRESS_INFO(
       "Parsed " << StringUtils::formatLargeNumber(_writeStats.relationsWritten) <<

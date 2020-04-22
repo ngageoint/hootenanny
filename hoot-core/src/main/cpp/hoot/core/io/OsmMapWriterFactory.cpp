@@ -36,6 +36,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -178,7 +179,7 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     {
       debugMapFileName = debugMapFileName.replace(".osm", "-" + fileNumberStr + ".osm");
     }
-    LOG_DEBUG("Writing debug output to: " << debugMapFileName);
+    LOG_INFO("Writing debug output to: ..." << debugMapFileName.right(30));
     OsmMapPtr copy(new OsmMap(map));
 
     if (matcher)
@@ -188,6 +189,9 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     }
 
     MapProjector::projectToWgs84(copy);
+    // You can end up with a map unreadable in JOSM if you don't remove missing elements here.
+    RemoveMissingElementsVisitor missingElementsRemover;
+    copy->visitRw(missingElementsRemover);
     write(copy, debugMapFileName, true, true);
     _debugMapCount++;
   }

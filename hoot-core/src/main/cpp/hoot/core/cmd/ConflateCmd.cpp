@@ -54,7 +54,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/VersionUtils.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
 #include <hoot/core/criterion/PointCriterion.h>
@@ -251,7 +251,10 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     std::cout << getHelp() << std::endl << std::endl;
     throw IllegalArgumentException(
-      QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
+      QString("%1 with output: " + output + " takes three parameters. You provided %2: %3")
+        .arg(getName())
+        .arg(args.size())
+        .arg(args.join(",")));
   }
 
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
@@ -360,7 +363,7 @@ int ConflateCmd::runSimple(QStringList& args)
     {
       if (output.endsWith(".osc") || output.endsWith(".osc.sql"))
       {
-        OsmUtils::checkVersionLessThanOneCountAndLogWarning(map);
+        VersionUtils::checkVersionLessThanOneCountAndLogWarning(map);
       }
 
       // Store original IDs for tag diff

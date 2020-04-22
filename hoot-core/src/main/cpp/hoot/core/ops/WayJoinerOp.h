@@ -59,7 +59,10 @@ public:
   { return "Rejoining ways split during conflation..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " ways"; }
+  {
+    return
+      "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " pairs of ways";
+  }
 
   /**
    * @see FilteredByGeometryTypeCriteria

@@ -482,12 +482,21 @@ See the User Guide for more details on command usage.
     hoot convert -D changeset.user.id=1 \
       -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true \
       -D osmapidb.bulk.inserter.disable.database.indexes.during.write=true \
+      input.osm.pbf osmapidb://username:password@localhost:5432/database
+-----
+
+===== Bulk write a map to an offline OSM API database specifying starting element IDs:
+
+-----
+    hoot convert -D changeset.user.id=1 \
+      -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true \
+      -D osmapidb.bulk.inserter.disable.database.indexes.during.write=true \
       -D apidb.bulk.inserter.starting.node.id=10 \
       -D apidb.bulk.inserter.starting.way.id=10 -D apidb.bulk.inserter.starting.relation.id=10 \
       input.osm.pbf osmapidb://username:password@localhost:5432/database
 -----
 
-===== Bulk write a map to an online OSM API database:
+===== Bulk write a map to an online OSM API database (element IDs managed automatically):
 
 -----
     hoot convert -D changeset.user.id=1 \

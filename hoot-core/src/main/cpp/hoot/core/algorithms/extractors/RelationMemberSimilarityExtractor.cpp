@@ -87,6 +87,7 @@ double RelationMemberSimilarityExtractor::extract(
       ConstElementPtr memberElement = map.getElement(member.getElementId());
       if (memberElement)
       {
+        // not sure how to get around this const cast...
         ElementPtr memberElement2 = std::const_pointer_cast<Element>(memberElement);
         targetMemberComps.insert(
           RelationMemberComparison(memberElement2, map, member.getRole(), true));

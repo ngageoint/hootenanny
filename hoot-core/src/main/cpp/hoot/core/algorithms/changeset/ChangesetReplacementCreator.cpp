@@ -50,7 +50,7 @@
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
 
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/MapUtils.h>
 
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
@@ -983,7 +983,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapPtr cutterMapToUse;
   LOG_VART(cutterMap->getElementCount());
   ConfigOptions opts(conf());
-  LOG_VART(OsmUtils::mapIsPointsOnly(cutterMap));
+  LOG_VART(MapUtils::mapIsPointsOnly(cutterMap));
   const double cookieCutterAlpha = opts.getCookieCutterAlpha();
   double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
   LOG_VART(_fullReplacement);
@@ -995,7 +995,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     cutterMapToUse = doughMap;
     cookieCutterAlphaShapeBuffer = 10.0;
   }
-  else if (cutterMap->getElementCount() < 3 && OsmUtils::mapIsPointsOnly(cutterMap))
+  else if (cutterMap->getElementCount() < 3 && MapUtils::mapIsPointsOnly(cutterMap))
   {
     // Generate a cutter shape based on a transformation of the cropped secondary map.
 
@@ -1185,7 +1185,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
       std::shared_ptr<WayCriterion>(new WayCriterion()),
       std::shared_ptr<TagKeyCriterion>(
         new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
-  OsmMapPtr connectedWays = OsmUtils::getMapSubset(map, copyCrit);
+  OsmMapPtr connectedWays = MapUtils::getMapSubset(map, copyCrit);
   connectedWays->setName(outputMapName);
   LOG_VART(MapProjector::toWkt(connectedWays->getProjection()));
   OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways");

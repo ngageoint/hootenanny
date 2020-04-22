@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-471755' action='modify' visible='true' lat='39.1060134' lon='-94.5418408' />
+  <node id='-471756' action='modify' visible='true' lat='39.105106' lon='-94.5418832' />
+  <node id='-471757' action='modify' visible='true' lat='39.1042016' lon='-94.5419325' />
+  <node id='-471758' action='modify' visible='true' lat='39.1031916' lon='-94.5419776' />
+  <node id='-471759' action='modify' visible='true' lat='39.1021875' lon='-94.5420268' />
+  <way id='-471754' action='modify' visible='true'>
+    <nd ref='-471755' />
+    <nd ref='-471756' />
+    <nd ref='-471757' />
+    <nd ref='-471758' />
+    <nd ref='-471759' />
+    <tag k='highway' v='residential' />
+    <tag k='name' v='Indiana Avenue' />
+    <tag k='source:datetime' v='2013-04-21T00:23:00.000Z' />
+    <tag k='tiger:cfcc' v='A41' />
+    <tag k='tiger:county' v='Jackson, MO' />
+    <tag k='tiger:name_base' v='Indiana' />
+    <tag k='tiger:name_type' v='Ave' />
+    <tag k='tiger:reviewed' v='no' />
+    <tag k='tiger:zip_left' v='64124' />
+    <tag k='tiger:zip_right' v='64124' />
+  </way>
+</osm>
