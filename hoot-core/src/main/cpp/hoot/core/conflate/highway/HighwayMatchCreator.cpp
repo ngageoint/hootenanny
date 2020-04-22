@@ -179,8 +179,8 @@ public:
 
       // Don't want sidewalks matching with roads. Tried very hard to make this work in the schema
       // instead of adding this but could not due to the many interrelations between road types.
-      // There should be a way to do it in the schema, though, and will try again later. Until then,
-      // we may find other minor highway types that will be proven to need this treatment as well.
+      // There should be a way to do it in the schema, however. Until that can be figured out, we
+      // may find other minor highway types that will be proven to need this treatment as well.
       if (Tags::onlyOneContainsKvp(e1->getTags(), e2->getTags(), "footway=sidewalk"))
       {
         // This value still may need some tweaking after testing against additional datasets. Basing

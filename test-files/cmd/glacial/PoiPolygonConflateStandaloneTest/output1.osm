@@ -508,194 +508,11 @@
         <tag k="REF1" v="002c75"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-4536" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7693936999999949" lon="-122.4109152999999850">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002da0"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4535" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7606523999999837" lon="-122.4071358999999859">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002e00"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4534" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7646385999999907" lon="-122.4264747000000000">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002e0d"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4533" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7630206999999913" lon="-122.4263190000000066">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002e0e"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4532" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7614217999999937" lon="-122.4261651999999856">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002e0f"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4531" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654459999999972" lon="-122.4131378999999811">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002e52"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4530" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7619278000000023" lon="-122.4072578999999905">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fad"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4529" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7692416999999949" lon="-122.4078880999999797">
-        <tag k="source" v="Yahoo"/>
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fb2"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4528" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7644870999999895" lon="-122.4074415000000187">
-        <tag k="source" v="Yahoo"/>
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fb3"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4527" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7686665999999960" lon="-122.4134251999999918">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fc7"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4526" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7685356999999868" lon="-122.4156341999999995">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fc8"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4525" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7682770999999917" lon="-122.4199976999999819">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fc9"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4524" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7681455000000028" lon="-122.4221994999999907">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="002fca"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4523" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7641083999999907" lon="-122.4130105999999927">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00307c"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4522" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7636959999999959" lon="-122.4151716999999877">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00307d"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4521" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7635707000000025" lon="-122.4173538999999806">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00307e"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4520" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7632999999999939" lon="-122.4217319999999916">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00307f"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4519" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7631625000000000" lon="-122.4240074999999877">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003080"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4518" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7628967999999929" lon="-122.4285270999999824">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003081"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4517" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7669359000000000" lon="-122.4154812999999962">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003089"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4516" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653139000000024" lon="-122.4153263000000038">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00308a"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4515" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7620977999999994" lon="-122.4150189000000211">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00308b"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4514" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695079000000007" lon="-122.4133564999999919">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003097"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4513" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7670679999999948" lon="-122.4132922999999948">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003098"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4512" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7622297000000060" lon="-122.4128320999999886">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003099"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4511" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7645057999999949" lon="-122.4286799999999857">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030a9"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4510" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7612811999999991" lon="-122.4283910999999847">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030aa"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4509" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7615637999999976" lon="-122.4238377000000071">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030b3"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4508" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7617009999999951" lon="-122.4215779999999967">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030cd"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4507" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649169999999827" lon="-122.4218859999999864">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030ce"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4506" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7665399999999991" lon="-122.4220439999999996">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="0030cf"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4505" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651816999999923" lon="-122.4175082000000003">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00327c"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-4504" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697790999999938" lon="-122.4342429999999950">
         <tag k="highway" v="steps"/>
         <tag k="ramp" v="yes"/>
         <tag k="REF1" v="0032a1"/>
         <tag k="ramp:wheelchair" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4503" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7650497999999928" lon="-122.4196888999999828">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00338e"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4502" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7692103999999915" lon="-122.4083341999999845">
-        <tag k="source" v="Yahoo"/>
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003482"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-4501" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7686856000000049" lon="-122.4221466000000191"/>
@@ -712,56 +529,6 @@
     </node>
     <node visible="true" id="-4496" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7612499999999969" lon="-122.4282972999999970"/>
     <node visible="true" id="-4495" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7613739000000024" lon="-122.4262230999999872"/>
-    <node visible="true" id="-4494" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7646471999999918" lon="-122.4263255000000044">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ec8"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4493" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7630289000000019" lon="-122.4261699999999848">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ec9"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4492" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7614312999999981" lon="-122.4260164000000088">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003eca"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4491" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697447999999980" lon="-122.4245422000000048">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed4"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4490" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7680172999999968" lon="-122.4243563999999793">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed5"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4489" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7664084000000031" lon="-122.4242153000000002">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed6"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4488" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7647935999999902" lon="-122.4240522000000055">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed7"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4487" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7631679999999932" lon="-122.4239100000000064">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed8"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4486" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7615705999999918" lon="-122.4237432999999982">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003ed9"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4485" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7619366999999855" lon="-122.4071399999999983">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="00386e"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-4484" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7611953999999912" lon="-122.4272169999999988"/>
     <node visible="true" id="-4483" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7608723000000097" lon="-122.4271839999999969"/>
     <node visible="true" id="-4482" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7609268000000071" lon="-122.4263310000000047"/>
@@ -943,17 +710,6 @@
     <node visible="true" id="-4356" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661162999999860" lon="-122.4127996999999937"/>
     <node visible="true" id="-4355" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661298000000016" lon="-122.4126022999999890"/>
     <node visible="true" id="-4354" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656074000000004" lon="-122.4125593999999921"/>
-    <node visible="true" id="-4353" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695618999999922" lon="-122.4155833999999885">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="001f2e"/>
-        <tag k="traffic_signals:sound" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4352" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697860000000034" lon="-122.4176908999999966">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="001f78"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-4351" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7696472999999955" lon="-122.4281569999999988"/>
     <node visible="true" id="-4350" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697239999999965" lon="-122.4267273999999901"/>
     <node visible="true" id="-4349" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7681497999999962" lon="-122.4240961999999939">
@@ -1065,26 +821,6 @@
         <tag k="name" v="Shell"/>
         <tag k="operator" v="Shell"/>
         <tag k="REF1" v="003a2c"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4319" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7697391999999894" lon="-122.4246366999999793">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003a2e"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4318" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7680109000000002" lon="-122.4244642999999968">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003a2f"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4317" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7664017000000030" lon="-122.4243096999999949">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003a30"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4316" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7647868000000031" lon="-122.4241466999999801">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="003a31"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-4315" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7681576999999962" lon="-122.4237521999999814">
@@ -2107,11 +1843,6 @@
     <node visible="true" id="-4058" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649862999999897" lon="-122.4191637999999926"/>
     <node visible="true" id="-4057" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7647157999999905" lon="-122.4191390999999953"/>
     <node visible="true" id="-4056" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7646952000000056" lon="-122.4194989999999876"/>
-    <node visible="true" id="-4055" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7642316999999963" lon="-122.4331016000000005">
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="REF1" v="000739"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-4054" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7645279999999985" lon="-122.4324069999999836">
         <tag k="wheelchair" v="yes"/>
         <tag k="addr:street" v="Market/Noe"/>
@@ -4981,20 +4712,6 @@
     <node visible="true" id="-2388" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7636660999999947" lon="-122.4216638999999986"/>
     <node visible="true" id="-2387" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7636809999999912" lon="-122.4213903000000130"/>
     <node visible="true" id="-2386" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7637603999999953" lon="-122.4213970999999930"/>
-    <node visible="true" id="-2385" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649443999999974" lon="-122.4195655999999843">
-        <tag k="subway" v="yes"/>
-        <tag k="public_transport" v="stop_position"/>
-        <tag k="name" v="16th Street Mission"/>
-        <tag k="REF1" v="00013a"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2384" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651872000000068" lon="-122.4195885999999973">
-        <tag k="subway" v="yes"/>
-        <tag k="public_transport" v="stop_position"/>
-        <tag k="name" v="16th Street Mission"/>
-        <tag k="REF1" v="00013c"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-2383" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7614552000000074" lon="-122.4239452000000057">
         <tag k="addr:street" v="Guerrero Street"/>
         <tag k="opening_hours" v="Mo 08:00-19:00; Tu-Fr 07:30-19:00; Sa 08:00-20:00; Su 09:00-20:00"/>

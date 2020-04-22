@@ -955,4 +955,14 @@ QString Tags::getDiffString(const Tags& other) const
   return diffStr.trimmed();
 }
 
+bool Tags::bothHaveInformation(const Tags& tags1, const Tags& tags2)
+{
+  return tags1.hasInformationTag() && tags2.hasInformationTag();
+}
+
+bool Tags::onlyOneHasInformation(const Tags& tags1, const Tags& tags2)
+{
+  return tags1.hasInformationTag() || tags2.hasInformationTag();
+}
+
 }

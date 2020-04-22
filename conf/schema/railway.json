@@ -186,6 +186,14 @@
             "node"
         ],
         "isA": "railway",
+        "name": "railway=level_crossing",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "railway",
         "name": "railway=tram_stop",
         "objectType": "tag",
         "similarTo": [

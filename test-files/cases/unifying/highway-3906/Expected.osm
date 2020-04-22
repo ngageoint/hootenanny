@@ -636,18 +636,6 @@
         <tag k="gnis:import_uuid" v="57871b70-0100-4405-bb30-88b2e001a944"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-161" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9125293000000028" lon="-75.4285392000000030">
-        <tag k="traffic_signals" v="signal"/>
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="hoot:hash" v="sha1sum:d8db6a30ee4ab613ae4eba004e252de668eaf20a"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-159" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9121438000000026" lon="-75.4285078999999996">
-        <tag k="traffic_signals" v="signal"/>
-        <tag k="highway" v="traffic_signals"/>
-        <tag k="hoot:hash" v="sha1sum:a36a29c23621e6a050d58d1456265a458c510872"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-119" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9084471000000036" lon="-75.4361413999999968">
         <tag k="source" v="Bing"/>
         <tag k="highway" v="turning_circle"/>
@@ -737,7 +725,10 @@
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4368862394197919">
         <tag k="hoot:hash" v="sha1sum:49ef11470322ec9bdb556663c89e87c8bc8046fe"/>
     </node>
-    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4329927826086930"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4329927826086930">
+        <tag k="ford" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4335547949777236">
         <tag k="hoot:hash" v="sha1sum:ec7359a55d22c15434e3afca6136a0cb8a546d95"/>
     </node>
@@ -819,7 +810,12 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881725317" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098129999999998" lon="-75.4305209999999988"/>
-    <node visible="true" id="4881725477" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121419000000017" lon="-75.4284938999999923"/>
+    <node visible="true" id="4881725477" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121419000000017" lon="-75.4284938999999923">
+        <tag k="traffic_signals" v="signal"/>
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="hoot:hash" v="sha1sum:a36a29c23621e6a050d58d1456265a458c510872"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="4881725480" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098842000000005" lon="-75.4286637000000013">
         <tag k="hoot:hash" v="sha1sum:7856cde7889b1fe666996d7979fef303ab56a9da"/>
     </node>
@@ -854,7 +850,10 @@
     <node visible="true" id="4881727146" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124430000000032" lon="-75.4285310000000067"/>
     <node visible="true" id="4881727157" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124580000000009" lon="-75.4285280000000000"/>
     <node visible="true" id="4881727158" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125143999999921" lon="-75.4285193999999990">
-        <tag k="hoot:hash" v="sha1sum:a92176f8b84310512b8a70671ed89fdd7bdedcab"/>
+        <tag k="traffic_signals" v="signal"/>
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="hoot:hash" v="sha1sum:d8db6a30ee4ab613ae4eba004e252de668eaf20a"/>
+        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881727159" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124529999999993" lon="-75.4285299999999950"/>
     <node visible="true" id="4881727340" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104564000000011" lon="-75.4274158000000057">
