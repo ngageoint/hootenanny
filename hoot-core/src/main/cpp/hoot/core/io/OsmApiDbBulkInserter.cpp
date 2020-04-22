@@ -639,7 +639,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     StringUtils::millisecondsToDhms(_timer->elapsed()));
   LOG_DEBUG("Parsed " << StringUtils::formatLargeNumber(recordCtr) << " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
-  LOG_VART(Tgs::SystemInfo::humanReadable(outputInfo.size()));
+  LOG_VART(Tgs::SystemInfo::humanReadableStorageSize(outputInfo.size()));
 }
 
 void OsmApiDbBulkInserter::_updateRecordLineWithIdOffset(const QString& tableName,

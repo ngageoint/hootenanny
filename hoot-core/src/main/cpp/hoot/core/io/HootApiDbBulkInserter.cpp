@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootApiDbBulkInserter.h"
@@ -362,7 +362,7 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
     StringUtils::millisecondsToDhms(_timer->elapsed()));
   LOG_DEBUG("Parsed " << StringUtils::formatLargeNumber(recordCtr) << " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
-  LOG_VART(Tgs::SystemInfo::humanReadable(outputInfo.size()));
+  LOG_VART(Tgs::SystemInfo::humanReadableStorageSize(outputInfo.size()));
 }
 
 unsigned long HootApiDbBulkInserter::_getTotalFeaturesWritten() const
