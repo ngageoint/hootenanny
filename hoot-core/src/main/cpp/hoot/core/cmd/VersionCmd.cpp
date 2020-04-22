@@ -148,7 +148,7 @@ public:
 #   endif
     LOG_DEBUG("Proj4 Version:\t" << pj_release);
     //  Finish with the memory usage
-    LOG_DEBUG(Tgs::SystemInfo::getMemoryUsageString());
+    LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
     return 0;
   }
 };

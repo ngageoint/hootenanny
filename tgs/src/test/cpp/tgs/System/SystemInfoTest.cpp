@@ -49,14 +49,28 @@ namespace Tgs
     CPPUNIT_TEST_SUITE(SystemInfoTest);
     CPPUNIT_TEST(test1);
     CPPUNIT_TEST_SUITE_END();
+
   public:
 
     void test1()
     {
       long vm, rss;
-      SystemInfo::getMemoryUsage(vm, rss);
+      SystemInfo::_getCurrentProcessMemoryUsage(vm, rss);
       CPPUNIT_ASSERT(vm > 0);
       CPPUNIT_ASSERT(rss > 0);
+
+      CPPUNIT_ASSERT(SystemInfo::getTotalSystemVirtualMemory() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getSystemVirtualMemoryUsed() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getCurrentProcessVirtualMemoryUsage() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getVirtualMemoryAvailable() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getPercentageOfVirtualMemoryUsed() > 0);
+
+      CPPUNIT_ASSERT(SystemInfo::getTotalSystemPhysicalMemory() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getSystemPhysicalMemoryUsed() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getCurrentProcessPhysicalMemoryUsage() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getPhysicalMemoryAvailable() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getPercentageOfPhysicalMemoryUsed() > 0);
+
       CPPUNIT_ASSERT(SystemInfo::getNumberOfProcessors() >= 1);
     }
   };
