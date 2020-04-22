@@ -57,6 +57,8 @@ public:
   { return QString::fromStdString(className()).remove("hoot::"); }
 
   virtual bool supportsSpecificConflation() const { return false; }
+
+  static bool isLinearRelation(const ConstRelationPtr& r);
 };
 
 }
