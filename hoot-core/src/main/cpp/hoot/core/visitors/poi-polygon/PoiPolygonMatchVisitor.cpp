@@ -36,6 +36,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -78,6 +79,7 @@ _infoCache(infoCache)
   ConfigOptions opts = ConfigOptions();
   _reviewDistanceThreshold = opts.getPoiPolygonAdditionalSearchDistance();
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
+  _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   LOG_VART(_infoCache.get());
   _timer.start();
 }
@@ -219,6 +221,10 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
       "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
       StringUtils::formatLargeNumber(_map->getNodeCount()) << " nodes.");
     _timer.restart();
+  }
+  if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
+  {
+    MemoryUsageChecker::getInstance()->check();
   }
 }
 

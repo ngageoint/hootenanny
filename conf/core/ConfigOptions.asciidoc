@@ -2362,6 +2362,29 @@ RAM usage of applications in a shared server environment.
 Spacing in meters used by the MaximalSublineMatcher during point discretization performed between
 matching ways.  Larger values may increase runtime performance but decrease conflation quality.
 
+=== memory.usage.checker.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+Determines whether memory usage checking is enabled.
+
+=== memory.usage.checker.interval
+
+* Data Type: int
+* Default Value: `100000`
+
+If memory usage checking is run in an element processing loop, use this to control how often a
+memory usage check is made.
+
+=== memory.usage.checker.threshold
+
+* Data Type: int
+* Default Value: `95`
+
+Percentage value (1 to 100) of used system memory above which memory usage checking logs a
+notification. The same threshold value is used separately for both used physical and virtual memory.
+
 [[merger.creators]]
 === merger.creators
 

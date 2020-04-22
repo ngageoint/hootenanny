@@ -27,10 +27,11 @@
 #include "CollectionRelationCriterion.h"
 
 // hoot
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Relation.h>
 
 namespace hoot
 {
@@ -50,15 +51,11 @@ bool CollectionRelationCriterion::isSatisfied(const ConstElementPtr& e) const
   if (e->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-
+    LinearCriterion linear;
     // This list could get HUGE.
-    if (r->getType() == MetadataTags::RelationWaterway() ||
+    if (LinearCriterion::isLinearRelation(r) ||
+        r->getType() == MetadataTags::RelationWaterway() ||
         r->getType() == MetadataTags::RelationNetwork() ||
-        r->getType() == MetadataTags::RelationRouteMaster() ||
-        r->getType() == MetadataTags::RelationSuperRoute() ||
-        r->getType() == MetadataTags::RelationRoute() ||
-        r->getType() == MetadataTags::RelationBoundary() ||
-        r->getType() == MetadataTags::RelationRestriction() ||
         // not sure about these yet
         r->getType() == MetadataTags::RelationMultiPolygon() ||
         r->getType() == MetadataTags::RelationMultilineString())

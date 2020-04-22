@@ -38,6 +38,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -150,6 +151,8 @@ void NamedOp::apply(OsmMapPtr& map)
     {
       throw HootException("Unexpected operation: " + s);
     }
+
+    MemoryUsageChecker::getInstance()->check();
 
     LOG_DEBUG(
       "\tElement count after operation " << s << ": " <<

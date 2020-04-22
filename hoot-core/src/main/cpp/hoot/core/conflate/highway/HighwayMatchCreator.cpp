@@ -47,6 +47,7 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // Standard
 #include <fstream>
@@ -114,6 +115,7 @@ public:
     _numElementsVisited = 0;
     _numMatchCandidatesVisited = 0;
     _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
+    _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   }
 
   ~HighwayMatchVisitor()
@@ -249,6 +251,10 @@ public:
         StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
         " elements.");
     }
+    if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
+    {
+      MemoryUsageChecker::getInstance()->check();
+    }
   }
 
   bool isMatchCandidate(ConstElementPtr element)
@@ -323,6 +329,7 @@ private:
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
+  int _memoryCheckUpdateInterval;
 };
 
 HighwayMatchCreator::HighwayMatchCreator()
@@ -345,8 +352,10 @@ HighwayMatchCreator::HighwayMatchCreator()
 
 MatchPtr HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
-  return HighwayMatchVisitor::createMatch(map, _classifier, _sublineMatcher, getMatchThreshold(),
-    _tagAncestorDiff, map->getElement(eid1), map->getElement(eid2));
+  return
+    HighwayMatchVisitor::createMatch(
+      map, _classifier, _sublineMatcher, getMatchThreshold(), _tagAncestorDiff,
+      map->getElement(eid1), map->getElement(eid2));
 }
 
 void HighwayMatchCreator::createMatches(
