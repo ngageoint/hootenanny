@@ -181,18 +181,23 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
         familyIds.add(currentId);
         processedIds.add(currentId);
 
+        List<String> ids;
+
         // Get the 'parent' job
-        List<String> ids = createQuery()
+        String parentId = createQuery()
                 .select(Expressions.stringTemplate("tags->'parentId'"))
                 .from(jobStatus)
                 .where(jobStatus.jobId.eq(currentId))
-                .fetch();
+                .fetchOne();
+
+        // Conflate job will have 2 parent ids, 1 for each input, and will be separated by comma
+        ids = parentId != null ? new ArrayList<>(Arrays.asList(parentId.split(","))) : new ArrayList<>();
 
         // get the 'child' jobs
         List<String> childrenIds = createQuery()
                 .select(jobStatus.jobId)
                 .from(jobStatus)
-                .where(Expressions.booleanTemplate(String.format("tags->'parentId'='%s'", currentId)))
+                .where(Expressions.booleanTemplate("tags->'parentId' like '%" + currentId + "%'"))
                 .fetch();
 
         ids.addAll(childrenIds);
