@@ -2362,6 +2362,29 @@ RAM usage of applications in a shared server environment.
 Spacing in meters used by the MaximalSublineMatcher during point discretization performed between
 matching ways.  Larger values may increase runtime performance but decrease conflation quality.
 
+=== memory.usage.checker.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+Determines whether memory usage checking is enabled.
+
+=== memory.usage.checker.interval
+
+* Data Type: int
+* Default Value: `100000`
+
+If memory usage checking is run in an element processing loop, use this to control how often a
+memory usage check is made.
+
+=== memory.usage.checker.threshold
+
+* Data Type: int
+* Default Value: `95`
+
+Percentage value (1 to 100) of used system memory above which memory usage checking logs a
+notification. The same threshold value is used separately for both used physical and virtual memory.
+
 [[merger.creators]]
 === merger.creators
 
@@ -4458,11 +4481,19 @@ Flat file containing street types and their abbreviations.
 
 * Data Type: list
 * Default Value:
+** `highway=crossing`
+** `highway=traffic_signals`
 ** `highway=turning_circle`
+** `power=pole`
+** `power=tower`
+** `public_transport=stop_position`
+** `railway=level_crossing`
 
 List of node key/value pairs that should never be orphaned from ways. SuperfluousNodeRemover will
 remove these if they are not part of a way or relation. Generally, only add to this list node
-features that conflation is unable to handle. Keep the list alphabetized by key, then value.
+features that conflation is unable to merge correctly. Fixing their handling during conflation is
+preferred to adding them to this list. Keep the list alphabetized by key, then value (we may want to
+eventually move it to its own config file).
 
 === tag.ancestor.differencer.name
 
@@ -4919,7 +4950,9 @@ The minimum size that a way should be split into for merging. Units in meters.
 * Data Type: double
 * Default Value: `0.05`
 
-Distance tolerance allowed for WayNodeCopier to consider two nodes duplicates and not copy them.
+Distance tolerance, in the range of 0.0 to 1.0, allowed for WayNodeCopier to consider two nodes
+duplicates and not copy them. The higher the value, the more likely two nearby nodes would be
+considered to be duplicates.
 
 === way.splitter.max.length
 

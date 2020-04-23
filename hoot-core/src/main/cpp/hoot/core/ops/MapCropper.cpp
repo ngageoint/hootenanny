@@ -55,7 +55,8 @@
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
@@ -216,7 +217,7 @@ void MapCropper::apply(OsmMapPtr& map)
 
   LOG_DEBUG("Cropping ways...");
   LOG_VARD(map->size());
-  LOG_VART(OsmUtils::allElementIdsPositive(map));
+  LOG_VART(ElementIdUtils::allElementIdsPositive(map));
 
   _numProcessed = 0;
   _numAffected = 0;
@@ -351,10 +352,10 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_VART(_explicitlyIncludedWayIds.size());
     if (_explicitlyIncludedWayIds.size() > 0)
     {
-      LOG_VART(OsmUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
+      LOG_VART(WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
     }
     if (_inclusionCrit && _explicitlyIncludedWayIds.size() > 0 &&
-        OsmUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
+        WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
     {
       LOG_TRACE(
         "Skipping delete for: " << node->getElementId() <<
@@ -462,7 +463,7 @@ void MapCropper::apply(OsmMapPtr& map)
 
   LOG_VARD(_numAffected);
   LOG_VARD(map->size());
-  LOG_VART(OsmUtils::allElementIdsPositive(map));
+  LOG_VART(ElementIdUtils::allElementIdsPositive(map));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysInBounds));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysOutOfBounds));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysCrossingThreshold));

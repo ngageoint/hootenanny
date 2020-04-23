@@ -31,12 +31,15 @@
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/conflate/highway/HighwayUtils.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/elements/TagUtils.h>
 
 namespace hoot
 {
@@ -124,7 +127,8 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   std::vector<ConstElementPtr> elements;
   elements.push_back(e1);
   elements.push_back(e2);
-  const bool onlyOneIsABridge = OsmUtils::isSatisfied<BridgeCriterion>(elements, 1, true);
+  const bool onlyOneIsABridge =
+    CriterionUtils::constainSatisfyingElements<BridgeCriterion>(elements, 1, true);
   if (onlyOneIsABridge)
   {
     LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
@@ -188,6 +192,9 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
   _handleOneWayStreetReversal(elementWithTagsToKeep, elementWithTagsToRemove, map);
 
   // TODO: This is ignoring the contents of multilinestring relations.
+  // TODO: I think we need to bring information nodes from secondary ways here like we do in ref
+  // with HighwaySnapMerger...not exactly sure why the call in _mergePair to HighwaySnapMerger
+  // doesn't already do this.
 
   // merge the tags
   Tags mergedTags =
@@ -272,7 +279,7 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
 bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep,
                                            ConstElementPtr elementWithTagsToRemove) const
 {
-  if (OsmUtils::nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+  if (TagUtils::nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
     LOG_TRACE("Conflicting name tags.  Skipping merge.");
     return true;
@@ -280,14 +287,14 @@ bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep
 
   // don't try to merge streets with conflicting one way info
   // TODO: This is ignoring the contents of multilinestring relations.
-  if (OsmUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+  if (HighwayUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
     LOG_TRACE("Conflicting one way street tags.  Skipping merge.");
     return true;
   }
 
   // If two roads disagree in highway type and aren't generic, don't merge.
-  if (OsmUtils::nonGenericHighwayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+  if (HighwayUtils::nonGenericHighwayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
     LOG_TRACE("Conflicting highway type tags.  Skipping join.")
     return true;

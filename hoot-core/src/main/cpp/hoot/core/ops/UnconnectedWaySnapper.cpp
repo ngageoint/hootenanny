@@ -33,7 +33,7 @@
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/MetadataTags.h>
@@ -486,9 +486,9 @@ std::set<long> UnconnectedWaySnapper::_getUnconnectedEndNodeIds(
 
   // filter all the ways containing each endpoint down by the feature crit
   const std::set<long> filteredWaysContainingFirstEndNode =
-    OsmUtils::getContainingWayIdsByNodeId(firstEndNodeId, _map, wayCrit);
+    WayUtils::getContainingWayIdsByNodeId(firstEndNodeId, _map, wayCrit);
   const std::set<long> filteredWaysContainingSecondEndNode =
-    OsmUtils::getContainingWayIdsByNodeId(secondEndNodeId, _map, wayCrit);
+    WayUtils::getContainingWayIdsByNodeId(secondEndNodeId, _map, wayCrit);
   LOG_VART(filteredWaysContainingFirstEndNode);
   LOG_VART(filteredWaysContainingSecondEndNode);
 
@@ -560,7 +560,7 @@ int UnconnectedWaySnapper::_getNodeToSnapWayInsertIndex(const NodePtr& nodeToSna
   // find the closest way node on snap target way to our node being snapped
   const std::vector<long>& wayToSnapToNodeIds = wayToSnapTo->getNodeIds();
   const int indexOfClosestWayNodeId =
-    wayToSnapTo->getNodeIndex(OsmUtils::closestWayNodeIdToNode(nodeToSnap, wayToSnapTo, _map));
+    wayToSnapTo->getNodeIndex(WayUtils::closestWayNodeIdToNode(nodeToSnap, wayToSnapTo, _map));
   LOG_VART(wayToSnapToNodeIds);
   LOG_VART(indexOfClosestWayNodeId);
 
@@ -658,7 +658,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
       // Compare all the ways that a contain the neighbor and all the ways that contain our input
       // node.  If there's overlap, then we pass b/c we don't want to try to snap the input way
       // node to a way its already on.
-      if (!OsmUtils::nodesAreContainedInTheSameWay(wayNodeToSnapToId, nodeToSnap->getId(), _map) /*&&
+      if (!WayUtils::nodesAreContainedInTheSameWay(wayNodeToSnapToId, nodeToSnap->getId(), _map) /*&&
           // I don't think this distance check is necessary...leaving here disabled for the time
           // being just in case. See similar check in _snapUnconnectedNodeToWay
           Distance::euclidean(wayNodeToSnapTo->toCoordinate(), nodeToSnap->toCoordinate()) <=
@@ -680,7 +680,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         if (_markSnappedWays)
         {
           std::set<long> owningWayIds =
-            OsmUtils::getContainingWayIdsByNodeId(nodeToSnap->getId(), _map);
+            WayUtils::getContainingWayIdsByNodeId(nodeToSnap->getId(), _map);
           // assert(wayIds.size() == 1);
           const long owningWayId = *owningWayIds.begin();
           _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), "snapped_way");
@@ -812,7 +812,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
     // find the closest coord on the neighboring way to our input node
     double shortestDistanceFromNodeToSnapToWayCoord = DBL_MAX;
     const geos::geom::Coordinate closestWayToSnapToCoord =
-      OsmUtils::closestWayCoordToNode(nodeToSnap, wayToSnapTo,
+      WayUtils::closestWayCoordToNode(nodeToSnap, wayToSnapTo,
         shortestDistanceFromNodeToSnapToWayCoord, _snapToWayDiscretizationSpacing, _map);
 
     // This check of the calculated distance being less than the allowed snap distance should not
@@ -853,7 +853,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
       if (_markSnappedWays)
       {
         std::set<long> owningWayIds =
-          OsmUtils::getContainingWayIdsByNodeId(nodeToSnap->getId(), _map);
+          WayUtils::getContainingWayIdsByNodeId(nodeToSnap->getId(), _map);
         // assert(wayIds.size() == 1);
         const long owningWayId = *owningWayIds.begin();
         _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), "snapped_way");

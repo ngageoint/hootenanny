@@ -46,6 +46,7 @@
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // Qt
 #include <QFileInfo>
@@ -98,6 +99,7 @@ public:
     _numElementsVisited(0),
     _numMatchCandidatesVisited(0),
     _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _memoryCheckUpdateInterval(ConfigOptions().getMemoryUsageCheckerInterval()),
     _totalElementsToProcess(0)
   {
     // Calls to script functions/var are expensive, both memory-wise and processing-wise. Since this
@@ -573,6 +575,10 @@ public:
         StringUtils::formatLargeNumber(_totalElementsToProcess) << " elements.");
        _timer.restart();
     }
+    if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
+    {
+      MemoryUsageChecker::getInstance()->check();
+    }
   }
 
   void setScriptPath(QString path) { _scriptPath = path; }
@@ -643,6 +649,7 @@ private:
   long _numMatchCandidatesVisited;
 
   int _taskStatusUpdateInterval;
+  int _memoryCheckUpdateInterval;
 
   long _totalElementsToProcess;
 

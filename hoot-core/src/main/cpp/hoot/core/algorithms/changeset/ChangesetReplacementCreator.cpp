@@ -50,7 +50,7 @@
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
 
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/MapUtils.h>
 
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
@@ -74,6 +74,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -434,6 +435,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Load the sec dataset and crop to the specified aoi.
 
   OsmMapPtr secMap = _loadSecMap(input2);
+
+  MemoryUsageChecker::getInstance()->check();
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.
@@ -850,6 +853,7 @@ QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
   ElementIdToVersionMapper idToVersionMapper;
   LOG_STATUS("\t" << idToVersionMapper.getInitStatusMessage());
   idToVersionMapper.apply(map);
+  MemoryUsageChecker::getInstance()->check();
   LOG_STATUS("\t" << idToVersionMapper.getCompletedStatusMessage());
   const QMap<ElementId, long> idToVersionMappings = idToVersionMapper.getMappings();
   LOG_VART(idToVersionMappings.size());
@@ -887,6 +891,7 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
   childDeletionExcludeTagOp.apply(map);
   LOG_STATUS("\t" << childDeletionExcludeTagOp.getCompletedStatusMessage());
 
+  MemoryUsageChecker::getInstance()->check();
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclusion-tagging");
 }
 
@@ -983,7 +988,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapPtr cutterMapToUse;
   LOG_VART(cutterMap->getElementCount());
   ConfigOptions opts(conf());
-  LOG_VART(OsmUtils::mapIsPointsOnly(cutterMap));
+  LOG_VART(MapUtils::mapIsPointsOnly(cutterMap));
   const double cookieCutterAlpha = opts.getCookieCutterAlpha();
   double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
   LOG_VART(_fullReplacement);
@@ -995,7 +1000,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     cutterMapToUse = doughMap;
     cookieCutterAlphaShapeBuffer = 10.0;
   }
-  else if (cutterMap->getElementCount() < 3 && OsmUtils::mapIsPointsOnly(cutterMap))
+  else if (cutterMap->getElementCount() < 3 && MapUtils::mapIsPointsOnly(cutterMap))
   {
     // Generate a cutter shape based on a transformation of the cropped secondary map.
 
@@ -1061,6 +1066,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   MapProjector::projectToWgs84(doughMap);
   LOG_VART(doughMap->getElementCount());
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
+  MemoryUsageChecker::getInstance()->check();
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
 
   return cookieCutMap;
@@ -1088,6 +1094,7 @@ void ChangesetReplacementCreator::_combineMaps(OsmMapPtr& map1, OsmMapPtr& map2,
   LOG_VART(MapProjector::toWkt(map1->getProjection()));
   LOG_DEBUG("Combined map size: " << map1->size());
 
+  MemoryUsageChecker::getInstance()->check();
   OsmMapWriterFactory::writeDebugMap(map1, debugFileName);
 }
 
@@ -1168,7 +1175,7 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
 
   MapProjector::projectToWgs84(map);   // snapping works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
-
+  MemoryUsageChecker::getInstance()->check();
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
 
@@ -1185,9 +1192,10 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
       std::shared_ptr<WayCriterion>(new WayCriterion()),
       std::shared_ptr<TagKeyCriterion>(
         new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
-  OsmMapPtr connectedWays = OsmUtils::getMapSubset(map, copyCrit);
+  OsmMapPtr connectedWays = MapUtils::getMapSubset(map, copyCrit);
   connectedWays->setName(outputMapName);
   LOG_VART(MapProjector::toWkt(connectedWays->getProjection()));
+  MemoryUsageChecker::getInstance()->check();
   OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways");
   return connectedWays;
 }
@@ -1218,6 +1226,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   // TODO: This can be removed now, since its already happening in MapCropper, right?
   SuperfluousNodeRemover::removeNodes(map, isLinearMap);
 
+  MemoryUsageChecker::getInstance()->check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
   LOG_DEBUG("Cropped map: " << map->getName() << " size: " << map->size());
@@ -1245,6 +1254,7 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
   map->visitRw(removeVis);
   LOG_STATUS("\t" << removeVis.getCompletedStatusMessage());
 
+  MemoryUsageChecker::getInstance()->check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-unsnapped-removed");
 }
@@ -1272,6 +1282,7 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
   tagSetter.apply(map);
   LOG_STATUS("\t" << tagSetter.getCompletedStatusMessage());
 
+  MemoryUsageChecker::getInstance()->check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclude-tags");
 }

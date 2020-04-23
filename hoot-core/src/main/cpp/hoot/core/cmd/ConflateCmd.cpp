@@ -54,7 +54,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/VersionUtils.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
 #include <hoot/core/criterion/PointCriterion.h>
@@ -65,6 +65,7 @@
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // Standard
 #include <fstream>
@@ -251,7 +252,10 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     std::cout << getHelp() << std::endl << std::endl;
     throw IllegalArgumentException(
-      QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
+      QString("%1 with output: " + output + " takes three parameters. You provided %2: %3")
+        .arg(getName())
+        .arg(args.size())
+        .arg(args.join(",")));
   }
 
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
@@ -360,7 +364,7 @@ int ConflateCmd::runSimple(QStringList& args)
     {
       if (output.endsWith(".osc") || output.endsWith(".osc.sql"))
       {
-        OsmUtils::checkVersionLessThanOneCountAndLogWarning(map);
+        VersionUtils::checkVersionLessThanOneCountAndLogWarning(map);
       }
 
       // Store original IDs for tag diff
@@ -379,6 +383,7 @@ int ConflateCmd::runSimple(QStringList& args)
       map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
   }
+  MemoryUsageChecker::getInstance()->check();
   LOG_STATUS(
     "Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
 
@@ -411,6 +416,7 @@ int ConflateCmd::runSimple(QStringList& args)
     stats.append(SingleStat("Calculate Stats for Input 2 Time (sec)", t.getElapsedAndRestart()));
     currentTask++;
   }
+  MemoryUsageChecker::getInstance()->check();
 
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));

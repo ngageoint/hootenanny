@@ -44,6 +44,7 @@
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // Standard
 #include <fstream>
@@ -103,8 +104,10 @@ public:
     _maxGroupSize = 0;
     _numElementsVisited = 0;
     _numMatchCandidatesVisited = 0;
-    _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
-    _searchRadius = ConfigOptions().getSearchRadiusBuilding();
+    ConfigOptions opts;
+    _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
+    _searchRadius = opts.getSearchRadiusBuilding();
+    _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   }
 
   ~BuildingMatchVisitor()
@@ -230,6 +233,10 @@ public:
         StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
         " elements.");
     }
+    if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
+    {
+      MemoryUsageChecker::getInstance()->check();
+    }
   }
 
   bool isMatchCandidate(ConstElementPtr element)
@@ -303,6 +310,7 @@ private:
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
+  int _memoryCheckUpdateInterval;
 
   void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches)
   {      
