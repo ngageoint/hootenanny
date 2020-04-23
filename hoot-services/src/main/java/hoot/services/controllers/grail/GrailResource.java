@@ -211,6 +211,7 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createDifferentialChangeset(@Context HttpServletRequest request,
             GrailParams reqParams,
+            @QueryParam("deriveType") String deriveType,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
@@ -279,6 +280,7 @@ public class GrailResource {
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", reqParams.getBounds());
         jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
+        jobStatusTags.put("deriveType", deriveType);
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
 

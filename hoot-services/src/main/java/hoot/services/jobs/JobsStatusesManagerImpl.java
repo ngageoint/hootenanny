@@ -152,20 +152,20 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
                 return true;
             })
             .map(j -> {
-            JobStatusResponse response = new JobStatusResponse();
-            response.setJobId(j.getJobId());
-            response.setJobType(JobType.fromInteger(
-                    (j.getJobType() != null) ? j.getJobType() : JobType.UNKNOWN.ordinal()
-                ).toString());
-            response.setMapId(j.getResourceId());
-            response.setStart(j.getStart().getTime());
-            response.setEnd(j.getEnd().getTime());
-            response.setStatus(hoot.services.job.JobStatus.fromInteger(j.getStatus()).toString());
-            response.setStatusDetail(j.getStatusDetail());
-            response.setTags(PostgresUtils.postgresObjToHStore(j.getTags()));
+                JobStatusResponse response = new JobStatusResponse();
+                response.setJobId(j.getJobId());
+                response.setJobType(JobType.fromInteger(
+                        (j.getJobType() != null) ? j.getJobType() : JobType.UNKNOWN.ordinal()
+                    ).toString());
+                response.setMapId(j.getResourceId());
+                response.setStart(j.getStart().getTime());
+                response.setEnd(j.getEnd().getTime());
+                response.setStatus(hoot.services.job.JobStatus.fromInteger(j.getStatus()).toString());
+                response.setStatusDetail(j.getStatusDetail());
+                response.setTags(PostgresUtils.postgresObjToHStore(j.getTags()));
 
-            return response;
-        }).collect(Collectors.toList());
+                return response;
+            }).collect(Collectors.toList());
 
         Long total = createQuery()
                 .select(jobStatus)

@@ -123,6 +123,7 @@ public class ConflateResource {
             jobStatusTags.put("input1", params.getInput1());
             jobStatusTags.put("input2", params.getInput2());
             jobStatusTags.put("taskInfo", params.getTaskInfo());
+            jobStatusTags.put("conflationType", params.getConflationType());
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.CONFLATE, jobStatusTags));
         }
