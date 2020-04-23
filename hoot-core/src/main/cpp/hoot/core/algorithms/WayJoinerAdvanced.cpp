@@ -128,7 +128,7 @@ void WayJoinerAdvanced::_joinParentChild()
 
     // don't try to join if there are explicitly conflicting names; fix for #2888
     Tags wayTags = way->getTags();
-    // TODO: use OsmUtils::nameConflictExists here instead
+    // TODO: use TagUtils::nameConflictExists here instead
     const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
     if (parent && parentTags.hasName() && wayTags.hasName() &&
         !Tags::haveMatchingName(parentTags, wayTags, strictNameMatch))
@@ -255,7 +255,7 @@ void WayJoinerAdvanced::_joinAtNode()
             // don't try to join if there are explicitly conflicting names; fix for #2888
             const bool parentHasName = pTags.hasName();
             const bool childHasName = cTags.hasName();
-            // TODO: use OsmUtils::nameConflictExists here instead
+            // TODO: use TagUtils::nameConflictExists here instead
             const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
             if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
                 Tags::haveMatchingName(pTags, cTags, strictNameMatch))
@@ -415,7 +415,7 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
       }
       const Tags parentTags = parent->getTags();
       const bool parentHasName = parentTags.hasName();
-      // TODO: use OsmUtils::nameConflictExists here instead
+      // TODO: use TagUtils::nameConflictExists here instead
       const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
       if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
           Tags::haveMatchingName(parentTags, childTags, strictNameMatch))

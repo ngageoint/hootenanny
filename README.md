@@ -135,9 +135,9 @@ new hoot.UnifyingConflator().apply(map)
 hoot.saveMap(map, "output.osm");
 ```
 
-# Additional Features
+# Feature Summary
 
-In addition to running conflation jobs with map data, Hootenanny also provides finer-grained capabilities:
+In addition to conflating map data, Hootenanny also provides these capabilities:
 * [Add missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features based on their name
 * [Align two maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/rubber-sheet.asciidoc) more closely with each other
 * [Apply data transformation operations](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc#conversion-operations) to a map

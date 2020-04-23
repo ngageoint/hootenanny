@@ -35,11 +35,13 @@ namespace hoot
 {
 
 /**
- * Utilities for use with the OSM data.
+ * General, non-specific utilities for use with the OSM data.
  *
  * Put any Element related utilities here that either don't fit into any of the existing OSM related
  * utils classes, would clutter up any of the core Element classes, or are isolated enough not to
  * warrant making a new utils class for them yet.
+ *
+ * @todo would like to move out the road related methods to somewhere else...just not sure where yet
  */
 class OsmUtils
 {
@@ -91,15 +93,6 @@ public:
    * otherwise
    */
   static bool explicitlyNotAOneWayStreet(const ConstElementPtr& element);
-
-  /**
-   * Determines if two elements have conflicting name tags
-   *
-   * @param element1 the first element to examine
-   * @param element2 the second element to examine
-   * @return true if their name tags conflict; false otherwise
-   */
-  static bool nameConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
    * Determines if there are specific highway type conflicts between elements

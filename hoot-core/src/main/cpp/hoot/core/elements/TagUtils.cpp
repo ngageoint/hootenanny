@@ -176,4 +176,11 @@ bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
   return anyElementsHaveAnyKvp(kvps, elements);
 }
 
+bool TagUtils::nameConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)
+{
+  return
+    element1->getTags().hasName() && element2->getTags().hasName() &&
+      !Tags::haveMatchingName(element1->getTags(), element2->getTags());
+}
+
 }

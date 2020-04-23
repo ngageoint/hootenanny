@@ -92,13 +92,6 @@ bool OsmUtils::explicitlyNotAOneWayStreet(const ConstElementPtr& element)
   return element->getTags().get("oneway") == "no";
 }
 
-bool OsmUtils::nameConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)
-{
-  return
-    element1->getTags().hasName() && element2->getTags().hasName() &&
-      !Tags::haveMatchingName(element1->getTags(), element2->getTags());
-}
-
 bool OsmUtils::nonGenericHighwayConflictExists(const ConstElementPtr& element1,
                                                const ConstElementPtr& element2)
 {

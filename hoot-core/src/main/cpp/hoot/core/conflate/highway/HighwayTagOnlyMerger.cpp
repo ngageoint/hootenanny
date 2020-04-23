@@ -38,6 +38,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/elements/TagUtils.h>
 
 namespace hoot
 {
@@ -277,7 +278,7 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
 bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep,
                                            ConstElementPtr elementWithTagsToRemove) const
 {
-  if (OsmUtils::nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+  if (TagUtils::nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
     LOG_TRACE("Conflicting name tags.  Skipping merge.");
     return true;

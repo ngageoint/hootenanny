@@ -200,7 +200,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   //LOG_VART(map->getElement(eid1));
   LOG_VART(eid2);
   //LOG_VART(map->getElement(eid2));
-  //const QString eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
+  const QString eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
 
   if (HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced))
   {
@@ -238,8 +238,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     // remove the second element and any reviews that contain the element
     RemoveReviewsByEidOp(remove->getElementId(), true).apply(result);
 
-    //OsmMapWriterFactory::writeDebugMap(
-     //map, "HighwaySnapMerger-merged-identical-elements" + eidLogString);
+    OsmMapWriterFactory::writeDebugMap(
+     map, "HighwaySnapMerger-merged-identical-elements" + eidLogString);
 
     return false;
   }
@@ -276,11 +276,11 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // split the first element and don't reverse any of the geometries.
   _splitElement(map, match.getSublineString1(), match.getReverseVector1(), replaced, e1, e1Match,
                 scraps1);
-  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-1" + eidLogString);
+  OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-1" + eidLogString);
   // split the second element and reverse any geometries to make the matches work.
   _splitElement(map, match.getSublineString2(), match.getReverseVector2(), replaced, e2, e2Match,
                 scraps2);
-  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-2" + eidLogString);
+  OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-2" + eidLogString);
 
   LOG_VART(e1Match->getElementId());
   if (scraps1)
@@ -303,9 +303,9 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   // remove any ways that directly connect from e1Match to e2Match
   _removeSpans(result, e1Match, e2Match);
-  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-remove-spans" + eidLogString);
+  OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-remove-spans" + eidLogString);
   _snapEnds(map, e2Match, e1Match);
-  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-snap-ends" + eidLogString);
+  OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-snap-ends" + eidLogString);
 
   if (e1Match)
   {
@@ -339,7 +339,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   LOG_VART(e1Match->getElementType());
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
-  //OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-tag-merging" + eidLogString);
+  OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-tag-merging" + eidLogString);
 
   bool swapWayIds = false;
 
@@ -516,8 +516,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     LOG_TRACE("Removing e1: " << eid1 << "...");
     RemoveReviewsByEidOp(eid1, true).apply(result);
   }
-  //OsmMapWriterFactory::writeDebugMap(
-    //map, "HighwaySnapMerger-after-old-way-removal-1" + eidLogString);
+  OsmMapWriterFactory::writeDebugMap(
+    map, "HighwaySnapMerger-after-old-way-removal-1" + eidLogString);
 
   // If there is something left to review against,
   if (scraps2)
@@ -569,8 +569,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     // remove reviews e2 is involved in
     RemoveReviewsByEidOp(eid2, true).apply(result);
   }
-  //OsmMapWriterFactory::writeDebugMap(
-    //map, "HighwaySnapMerger-after-old-way-removal-2" + eidLogString);
+  OsmMapWriterFactory::writeDebugMap(
+    map, "HighwaySnapMerger-after-old-way-removal-2" + eidLogString);
 
   if (e1Match)
   {
@@ -788,18 +788,22 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee, Eleme
 void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr middle,
                                   WayPtr snapTo) const
 {
-  LOG_TRACE(
-    "Replacing " << middle->getNodeId(0) << " with " << snapTo->getNodeId(0) << " on " <<
-    snapee->getElementId() << "...");
-  snapee->replaceNode(middle->getNodeId(0), snapTo->getNodeId(0));
-  // If the node we just replaced has info and the one we're replacing it with does not, let's copy
-  // that info over to the replacement.
-  NodePtr replacedNode = map->getNode(middle->getNodeId(0));
-  NodePtr replacementNode = map->getNode(snapTo->getNodeId(0));
   // TODO: This is a hack for now, as one single test (highway-search-radius-1) has highway=road
   // which makes no sense on a node. Want to think about it a little more before deciding to modify
   // the test's input data.
-  QStringList nodeKvpExcludeList("highway=road");
+   const QStringList nodeKvpExcludeList("highway=road");
+   NodePtr replacedNode;
+   NodePtr replacementNode;
+
+  replacedNode = map->getNode(middle->getNodeId(0));
+  replacementNode = map->getNode(snapTo->getNodeId(0));
+  LOG_TRACE(
+    "Replacing " << replacedNode->getElementId() << " with " << replacementNode->getElementId() <<
+    " on " << snapee->getElementId() << "...");
+  // replace the node
+  snapee->replaceNode(middle->getNodeId(0), snapTo->getNodeId(0));
+  // If the node we just replaced has info and the one we're replacing it with does not, let's copy
+  // that info over to the replacement.
   if (replacedNode->getTags().hasInformationTag() &&
       !replacementNode->getTags().hasInformationTag() &&
       !replacedNode->getTags().hasAnyKvp(nodeKvpExcludeList))
@@ -812,12 +816,12 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr mi
   RelationMemberSwapper::swap(
     replacedNode->getElementId(), replacementNode->getElementId(), map, false);
 
-  LOG_TRACE(
-    "Replacing " << middle->getLastNodeId() << " with " << snapTo->getLastNodeId() << " on " <<
-    snapee->getElementId() << "...");
-  snapee->replaceNode(middle->getLastNodeId(), snapTo->getLastNodeId());
   replacedNode = map->getNode(middle->getLastNodeId());
   replacementNode = map->getNode(snapTo->getLastNodeId());
+  LOG_TRACE(
+    "Replacing " << replacedNode->getElementId() << " with " << replacementNode->getElementId() <<
+    " on " << snapee->getElementId() << "...");
+  snapee->replaceNode(middle->getLastNodeId(), snapTo->getLastNodeId());
   if (replacedNode->getTags().hasInformationTag() &&
       !replacementNode->getTags().hasInformationTag() &&
       !replacedNode->getTags().hasAnyKvp(nodeKvpExcludeList))

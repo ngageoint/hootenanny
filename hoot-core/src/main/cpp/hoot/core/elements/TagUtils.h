@@ -141,6 +141,15 @@ public:
    */
   static bool anyElementsHaveAnyKvp(const QStringList& kvps,
                                     const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * Determines if two elements have conflicting name tags
+   *
+   * @param element1 the first element to examine
+   * @param element2 the second element to examine
+   * @return true if their name tags conflict; false otherwise
+   */
+  static bool nameConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
 };
 
 }
