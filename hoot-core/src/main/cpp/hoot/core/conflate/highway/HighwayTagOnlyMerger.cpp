@@ -190,6 +190,9 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
   _handleOneWayStreetReversal(elementWithTagsToKeep, elementWithTagsToRemove, map);
 
   // TODO: This is ignoring the contents of multilinestring relations.
+  // TODO: I think we need to bring information nodes from secondary ways here like we do in ref
+  // with HighwaySnapMerger...not exactly sure why the call in _mergePair to HighwaySnapMerger
+  // doesn't already do this.
 
   // merge the tags
   Tags mergedTags =
