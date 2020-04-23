@@ -624,7 +624,7 @@ void MapProjector::projectToPlanar(const std::shared_ptr<OsmMap>& map)
   {
     LOG_DEBUG("Projecting to planar...");
     OGREnvelope env = CalculateMapBoundsVisitor::getBounds(map);
-    LOG_VARD(GeometryUtils::toEnvelope(env));
+    LOG_VART(GeometryUtils::toEnvelope(env));
     projectToPlanar(map, env);
   }
 }

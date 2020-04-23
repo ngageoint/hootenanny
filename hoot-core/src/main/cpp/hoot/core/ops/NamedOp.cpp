@@ -196,7 +196,7 @@ QString NamedOp::_getInitMessage(const QString& message,
   {
     initMessage += message + "...";
   }
-  LOG_VARD(initMessage);
+  LOG_VART(initMessage);
   return initMessage;
 }
 
