@@ -40,8 +40,6 @@ namespace hoot
  * Put any Element related utilities here that either don't fit into any of the existing OSM related
  * utils classes, would clutter up any of the core Element classes, or are isolated enough not to
  * warrant making a new utils class for them yet.
- *
- * @todo would like to move out the road related methods to somewhere else...just not sure where yet
  */
 class OsmUtils
 {
@@ -75,35 +73,6 @@ public:
    */
   static QString getElementsDetailString(const std::vector<ElementPtr>& elements,
                                          const ConstOsmMapPtr& map);
-
-  /**
-   * Determines if two elements have conflicting one way street tags
-   *
-   * @param element1 the first element to examine
-   * @param element2 the second element to examine
-   * @return true if their one way tags conflict; false otherwise
-   */
-  static bool oneWayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
-
-  /**
-   * Determines if a way has an explicitly negative one way tag (oneway=no, etc.)
-   *
-   * @param element the element to examine
-   * @return true if the element contains a tag indicating it is not a one way street; false
-   * otherwise
-   */
-  static bool explicitlyNotAOneWayStreet(const ConstElementPtr& element);
-
-  /**
-   * Determines if there are specific highway type conflicts between elements
-   *
-   * @param element1 the first element to examine
-   * @param element2 the second element to examine
-   * @return true if both have specific highway tags (other than highway=road) and they disagree;
-   * false otherwise
-   */
-  static bool nonGenericHighwayConflictExists(const ConstElementPtr& element1,
-                                              const ConstElementPtr& element2);
 
   /**
    * Determines if one element a child of another; e.g. way node or relation memeber

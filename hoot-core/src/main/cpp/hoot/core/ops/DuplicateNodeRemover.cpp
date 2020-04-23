@@ -36,7 +36,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/elements/WayNodeUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/schema/ExactTagDifferencer.h>
 
@@ -238,7 +238,7 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long 
   kvps.append("OBJECTID=76174");
 
   std::set<ElementId> wayIdsOwning1;
-  const std::set<long> waysOwning1 = WayNodeUtils::getContainingWayIdsByNodeId(nodeId1, map);
+  const std::set<long> waysOwning1 = WayUtils::getContainingWayIdsByNodeId(nodeId1, map);
   for (std::set<long>::const_iterator it = waysOwning1.begin(); it != waysOwning1.end(); ++it)
   {
     wayIdsOwning1.insert(ElementId(ElementType::Way, *it));
@@ -249,7 +249,7 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long 
   }
 
   std::set<ElementId> wayIdsOwning2;
-  const std::set<long> waysOwning2 = WayNodeUtils::getContainingWayIdsByNodeId(nodeId2, map);
+  const std::set<long> waysOwning2 = WayUtils::getContainingWayIdsByNodeId(nodeId2, map);
   for (std::set<long>::const_iterator it = waysOwning2.begin(); it != waysOwning2.end(); ++it)
   {
     wayIdsOwning2.insert(ElementId(ElementType::Way, *it));
@@ -284,11 +284,11 @@ void DuplicateNodeRemover::_logMergeResult(const long nodeId1, const long nodeId
     LOG_TRACE(msg);
     LOG_TRACE(
       "Node " << nodeId1 << " belongs to ways: " <<
-      WayNodeUtils::getContainingWayIdsByNodeId(nodeId1, map));
+      WayUtils::getContainingWayIdsByNodeId(nodeId1, map));
     LOG_TRACE(
       "Node " << nodeId2 << " belongs to ways: " <<
-      WayNodeUtils::getContainingWayIdsByNodeId(nodeId2, map));
-    LOG_VART(WayNodeUtils::nodesAreContainedInTheSameWay(nodeId1, nodeId2, map));
+      WayUtils::getContainingWayIdsByNodeId(nodeId2, map));
+    LOG_VART(WayUtils::nodesAreContainedInTheSameWay(nodeId1, nodeId2, map));
   }
 }
 

@@ -55,7 +55,7 @@
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/WayNodeUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
@@ -352,10 +352,10 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_VART(_explicitlyIncludedWayIds.size());
     if (_explicitlyIncludedWayIds.size() > 0)
     {
-      LOG_VART(WayNodeUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
+      LOG_VART(WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
     }
     if (_inclusionCrit && _explicitlyIncludedWayIds.size() > 0 &&
-        WayNodeUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
+        WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
     {
       LOG_TRACE(
         "Skipping delete for: " << node->getElementId() <<

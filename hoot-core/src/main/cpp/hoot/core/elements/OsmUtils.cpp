@@ -29,9 +29,8 @@
 
 // Hoot
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
-#include <hoot/core/elements/WayNodeUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -53,7 +52,7 @@ QString OsmUtils::getElementDetailString(const ConstElementPtr& element, const C
   if (element->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
-    str += WayNodeUtils::getWayNodesDetailedString(way, map) + "\n";
+    str += WayUtils::getWayNodesDetailedString(way, map) + "\n";
   }
   else if (element->getElementType() == ElementType::Relation)
   {
@@ -74,34 +73,6 @@ QString OsmUtils::getElementsDetailString(const std::vector<ElementPtr>& element
   return str;
 }
 
-bool OsmUtils::oneWayConflictExists(const ConstElementPtr& element1,
-                                    const ConstElementPtr& element2)
-{
-  // Technically, this should also take into account reverse one ways and check direction.  Since
-  // we have a map pre-op standardizing all the ways to not be reversed, not worrying about it for
-  // now.
-  OneWayCriterion isAOneWayStreet;
-  return
-    (isAOneWayStreet.isSatisfied(element1) && explicitlyNotAOneWayStreet(element2)) ||
-    (isAOneWayStreet.isSatisfied(element2) && explicitlyNotAOneWayStreet(element1));
-}
-
-bool OsmUtils::explicitlyNotAOneWayStreet(const ConstElementPtr& element)
-{
-  // TODO: use Tags::isFalse here instead
-  return element->getTags().get("oneway") == "no";
-}
-
-bool OsmUtils::nonGenericHighwayConflictExists(const ConstElementPtr& element1,
-                                               const ConstElementPtr& element2)
-{
-  const QString element1HighwayVal = element1->getTags().get("highway");
-  const QString element2HighwayVal = element2->getTags().get("highway");
-  return
-    element1HighwayVal != "road" && element2HighwayVal != "road" &&
-    element1HighwayVal != element2HighwayVal;
-}
-
 bool OsmUtils::isChild(const ElementId& elementId, const ConstOsmMapPtr& map)
 {
   if (RelationMemberUtils::elementContainedByAnyRelation(elementId, map))
@@ -109,7 +80,7 @@ bool OsmUtils::isChild(const ElementId& elementId, const ConstOsmMapPtr& map)
     return true;
   }
   if (elementId.getType() == ElementType::Node &&
-      WayNodeUtils::nodeContainedByAnyWay(elementId.getId(), map))
+      WayUtils::nodeContainedByAnyWay(elementId.getId(), map))
   {
     return true;
   }

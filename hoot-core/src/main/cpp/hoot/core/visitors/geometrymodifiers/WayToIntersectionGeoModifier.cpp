@@ -87,7 +87,8 @@ bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, Os
         CoordinateExt interP1(pMap->getNode(i1Id)->toCoordinate());
         CoordinateExt interP2(pMap->getNode(i2Id)->toCoordinate());
 
-        std::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(myP1, myP2, interP1, interP2);
+        std::shared_ptr<CoordinateExt> pIntersectionPoint =
+          CoordinateExt::lineSegementsIntersect(myP1, myP2, interP1, interP2);
 
         if (pIntersectionPoint)
         {

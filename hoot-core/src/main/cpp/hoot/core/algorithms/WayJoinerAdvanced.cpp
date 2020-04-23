@@ -34,7 +34,7 @@
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/conflate/highway/HighwayUtils.h>
 #include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -542,7 +542,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
 
   // don't try to join streets with conflicting one way info
-  if (OsmUtils::oneWayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
+  if (HighwayUtils::oneWayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_TRACE(
       "Conflicting one way street tags between " << wayWithIdToKeep->getElementId() << " and " <<
@@ -553,7 +553,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   // If two roads disagree in highway type and aren't generic, don't join back up.
   HighwayCriterion highwayCrit(_map);
   if (highwayCrit.isSatisfied(wayWithTagsToKeep) && highwayCrit.isSatisfied(wayWithTagsToLose) &&
-      OsmUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
+      HighwayUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_TRACE(
       "Conflicting highway type tags between " << wayWithIdToKeep->getElementId() << " and " <<

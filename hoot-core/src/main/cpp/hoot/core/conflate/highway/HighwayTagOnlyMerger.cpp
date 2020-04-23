@@ -33,6 +33,7 @@
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/conflate/highway/HighwayUtils.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
@@ -286,14 +287,14 @@ bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep
 
   // don't try to merge streets with conflicting one way info
   // TODO: This is ignoring the contents of multilinestring relations.
-  if (OsmUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+  if (HighwayUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
     LOG_TRACE("Conflicting one way street tags.  Skipping merge.");
     return true;
   }
 
   // If two roads disagree in highway type and aren't generic, don't merge.
-  if (OsmUtils::nonGenericHighwayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+  if (HighwayUtils::nonGenericHighwayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
     LOG_TRACE("Conflicting highway type tags.  Skipping join.")
     return true;

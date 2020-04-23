@@ -484,9 +484,21 @@ long Way::getPid(long p, long c)
   else                                  return WayData::PID_EMPTY;
 }
 
-bool Way::hasSameNodeIds(const Way& other) const
+bool Way::hasSameNodes(const Way& other) const
 {
   return getNodeIds() == other.getNodeIds();
+}
+
+QSet<long> Way::sharedNodeIds(const Way& other) const
+{
+  QSet<long> nodes = QVector<long>::fromStdVector(getNodeIds()).toList().toSet();
+  QSet<long> otherNodes = QVector<long>::fromStdVector(other.getNodeIds()).toList().toSet();
+  return nodes.intersect(otherNodes);
+}
+
+bool Way::hasSharedNode(const Way& other) const
+{
+  return sharedNodeIds(other).size() > 0;
 }
 
 }
