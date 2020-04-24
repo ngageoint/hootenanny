@@ -97,6 +97,32 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
+  hoot.debug("**********************************");
+  hoot.debug("e1: " + e1.getId() + ", " + tags1.get("name"));
+  if (tags1.get("note"))
+  {
+    hoot.debug("e1 note: " + tags1.get("note"));
+  }
+  hoot.debug("e2: " + e2.getId() + ", " + tags2.get("name"));
+  if (tags2.get("note"))
+  {
+    hoot.debug("e2 note: " + tags2.get("note"));
+  }  
+  hoot.debug("mostSpecificType 1: " + mostSpecificType(e1));
+  hoot.debug("mostSpecificType 2: " + mostSpecificType(e2));
+  if (e1.getElementId().getType() == "Way")
+  {
+    hoot.debug("node count 1: " + e1.getNodeCount());
+  }
+  if (e2.getElementId().getType() == "Way")
+  {
+    hoot.debug("node count 2: " + e2.getNodeCount());
+  }
+
+  // TODO: Should we update the river schema to make type matching more granular? e.g. river vs stream
+
   // extract the sublines needed for matching
   var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   if (sublines)
@@ -106,17 +132,23 @@ exports.matchScore = function(map, e1, e2)
     var m2 = sublines.match2;
 
     var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
-
-    if (sampledAngleHistogramValue == 0 && weightedShapeDistanceValue > 0.861844)
+    hoot.debug("sampledAngleHistogramValue: " + sampledAngleHistogramValue);
+    if (sampledAngleHistogramValue == 0)
     {
-      hoot.trace("Found Match!");
-      result = { match: 1.0, explain:"match" };
+      var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
+      hoot.debug("weightedShapeDistanceValue: " + weightedShapeDistanceValue);
+      if (weightedShapeDistanceValue > 0.861844)
+      {
+        hoot.debug("Found Match!");
+        result = { match: 1.0, explain:"match" };
+        return result;
+      }
     }
-    else if (sampledAngleHistogramValue > 0)
+    if (sampledAngleHistogramValue > 0)
     {
-      hoot.trace("Found Match!");
+      hoot.debug("Found Match!");
       result = { match: 1.0, explain:"match" };
+      return result;
     }
   }
 

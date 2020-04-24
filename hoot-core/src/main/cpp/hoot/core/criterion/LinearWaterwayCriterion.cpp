@@ -42,7 +42,8 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(e->getElementId());
   //LOG_VART(e);
 
-  if (e->getElementType() == ElementType::Node)
+  //if (e->getElementType() == ElementType::Node)
+  if (e->getElementType() != ElementType::Way)
   {
     return false;
   }

@@ -53,12 +53,12 @@ public:
 
   static std::string className() { return "hoot::SampledAngleHistogramExtractor"; }
 
-  virtual std::string getClassName() const override { return SampledAngleHistogramExtractor::className(); }
+  virtual std::string getClassName() const override
+  { return SampledAngleHistogramExtractor::className(); }
 
   virtual void setConfiguration(const Settings& conf) override;
 
   void setSampleDistance(double sampleDistance) { _sampleDistance = sampleDistance; }
-
   void setHeadingDelta(double headingDelta) { _headingDelta = headingDelta; }
 
   virtual QString getDescription() const override

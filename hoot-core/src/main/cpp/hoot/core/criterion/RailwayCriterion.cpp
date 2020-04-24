@@ -43,7 +43,8 @@ RailwayCriterion::RailwayCriterion()
 
 bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e->getElementType() == ElementType::Node)
+  //if (e->getElementType() == ElementType::Node)
+  if (e->getElementType() != ElementType::Way)
   {
     return false;
   }

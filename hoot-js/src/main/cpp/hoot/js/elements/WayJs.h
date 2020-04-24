@@ -61,6 +61,7 @@ private:
   ~WayJs();
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getNodeCount(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   ConstWayPtr _constWay;
   WayPtr _way;

@@ -69,6 +69,8 @@ void WayJs::Init(Handle<Object> target)
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   ElementJs::_addBaseFunctions(tpl);
+  tpl->PrototypeTemplate()->Set(
+    String::NewFromUtf8(current, "getNodeCount"), FunctionTemplate::New(current, getNodeCount));
 
   _constructor.Reset(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, "Way"), ToLocal(&_constructor));
@@ -110,5 +112,13 @@ void WayJs::New(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(args.This());
 }
 
+void WayJs::getNodeCount(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstWayPtr way = ObjectWrap::Unwrap<WayJs>(args.This())->getConstWay();
+  args.GetReturnValue().Set(Number::New(current, way->getNodeCount()));
 }
 
+}
