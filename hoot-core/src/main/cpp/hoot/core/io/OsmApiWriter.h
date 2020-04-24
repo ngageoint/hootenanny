@@ -321,8 +321,15 @@ private:
     Idle,
     Working,
     Completed,
-    Failed
+    Failed,
+    Unknown
   };
+  /**
+   * @brief _getThreadStatus Safely get the status of the thread
+   * @param thread_index Index of calling thread in _threadStatus vector
+   * @return  Status of the thread
+   */
+  ThreadStatus _getThreadStatus(int thread_index);
   /**
    * @brief _updateThreadStatus Update the thread status
    * @param thread_index Index of calling thread in _threadStatus vector

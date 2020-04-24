@@ -445,6 +445,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           LOG_ERROR("Changeset upload responded with HTTP status response: " << request->getHttpStatus());
           //  Fall through
         case HttpResponseCode::HTTP_METHOD_NOT_ALLOWED:
+        case HttpResponseCode::HTTP_UNAUTHORIZED:
           //  This shouldn't ever happen, push back on the queue, only process a certain amount of times
           workInfo->retry();
           if (workInfo->canRetry())
@@ -499,8 +500,10 @@ void OsmApiWriter::_changesetThreadFunc(int index)
   //  Close the changeset if one is still open
   if (id != -1)
     _closeChangeset(request, id);
-  //  Update the thread to complete
-  _updateThreadStatus(index, ThreadStatus::Completed);
+  //  Update the thread to complete if it didn't fail
+  ThreadStatus status = _getThreadStatus(index);
+  if (status != ThreadStatus::Failed && status != ThreadStatus::Unknown)
+    _updateThreadStatus(index, ThreadStatus::Completed);
 }
 
 void OsmApiWriter::setConfiguration(const Settings& conf)
@@ -1025,6 +1028,17 @@ void OsmApiWriter::_waitForStart()
   std::unique_lock<std::mutex> lock(_startMutex);
   _start.wait(lock, [this]{ return _startFlag; });
 }
+
+OsmApiWriter::ThreadStatus OsmApiWriter::_getThreadStatus(int thread_index)
+{
+  //  Validate the index
+  if (thread_index < 0 || thread_index >= (int)_threadStatus.size())
+    return ThreadStatus::Unknown;
+  //  Lock the mutex and return the status
+  std::lock_guard<std::mutex> lock(_threadStatusMutex);
+  return _threadStatus[thread_index];
+}
+
 
 void OsmApiWriter::_updateThreadStatus(int thread_index, ThreadStatus status)
 {
