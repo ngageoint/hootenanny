@@ -178,6 +178,9 @@ public:
   /** Sample Changeset upload response bodies from '/api/0.6/changeset/1/upload' divided into two responses */
   static const char* SAMPLE_CHANGESET_SUCCESS_1_RESPONSE;
   static const char* SAMPLE_CHANGESET_SUCCESS_2_RESPONSE;
+  /** Sample Changeset upload response bodies for a failed response to '/api/0.6/changeset/1/upload' */
+  static const char* SAMPLE_CHANGESET_FAILURE_RESPONSE_1;
+  static const char* SAMPLE_CHANGESET_FAILURE_RESPONSE_2;
 };
 
 }

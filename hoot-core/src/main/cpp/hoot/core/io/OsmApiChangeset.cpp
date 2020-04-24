@@ -1317,24 +1317,26 @@ bool XmlChangeset::matchesRelationFailure(const QString& hint, long& element_id,
   return false;
 }
 
-bool XmlChangeset::matchesMultiRelationFailure(const QString& hint,
-                                               long& element_id,
-                                               std::vector<long>& member_ids,
-                                               ElementType::Type& member_type)
+bool XmlChangeset::matchesMultiElementFailure(const QString& hint,
+                                              long& element_id,
+                                              ElementType::Type& element_type,
+                                              std::vector<long>& member_ids,
+                                              ElementType::Type& member_type)
 {
   //  Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible.
-  QRegularExpression reg("Relation (-?[0-9]+) requires the (nodes|ways|relations) with id in ((-?[0-9]+,)+) (.*)", //-?[0-9]+,).*", //+ which either do not exist, or are not visible.",
+  QRegularExpression reg("(Relation|Way) (-?[0-9]+) requires the (nodes|ways|relations) with id in ((-?[0-9]+,)+) (.*)", //-?[0-9]+,).*", //+ which either do not exist, or are not visible.",
                          QRegularExpression::CaseInsensitiveOption);
   QRegularExpressionMatch match = reg.match(hint);
   if (match.hasMatch())
   {
-    QString error = match.captured(1);
+    element_type = ElementType::fromString(match.captured(1));
+    QString error = match.captured(2);
     if (error != "")
       element_id = error.toLong();
     //  Get the node/way/relation type (remove the 's') and id that failed
-    member_type = ElementType::fromString(match.captured(2).left(match.captured(2).length() - 1));
+    member_type = ElementType::fromString(match.captured(3).left(match.captured(3).length() - 1));
     bool success = false;
-    QStringList ids = match.captured(3).split(",", QString::SkipEmptyParts);
+    QStringList ids = match.captured(4).split(",", QString::SkipEmptyParts);
     for (int i = 0; i < ids.size(); ++i)
     {
       long id = ids[i].toLong(&success);
@@ -1346,9 +1348,10 @@ bool XmlChangeset::matchesMultiRelationFailure(const QString& hint,
   return false;
 }
 
-bool XmlChangeset::matchesChangesetPreconditionFailure(const QString& hint,
-                                                       long& member_id, ElementType::Type& member_type,
-                                                       long& element_id, ElementType::Type& element_type)
+bool XmlChangeset::matchesChangesetDeletePreconditionFailure(
+    const QString& hint,
+    long& member_id, ElementType::Type& member_type,
+    long& element_id, ElementType::Type& element_type)
 {
   //  Precondition failed: Node 55 is still used by ways 123
   QRegularExpression reg(
@@ -1519,24 +1522,44 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
     }
     //  See if the hint is something like:
     //   Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible.
-    else if (matchesMultiRelationFailure(splitHint, element_id, member_ids, member_type))
+    else if (matchesMultiElementFailure(splitHint, element_id, element_type, member_ids, member_type))
     {
       //  If there is a relation id, move just that relation to the split
       for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
       {
-        if (changeset->contains(ElementType::Relation, (ChangesetType)current_type, element_id))
+        if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
         {
-          ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
-          //  Add the relation to the split and remove from the changeset
-          split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
-          changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
-          return split;
+          if (element_type == ElementType::Way)
+          {
+            ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[element_id].get());
+            //  Add the way to the split and remove from the changeset
+            if (current_type == ChangesetType::TypeCreate)
+            {
+              moveWay(changeset, split, (ChangesetType)current_type, way, true);
+              split->setError();
+            }
+            else
+            {
+              split->add(element_type, (ChangesetType)current_type, way->id());
+              changeset->remove(element_type, (ChangesetType)current_type, way->id());
+            }
+            return split;
+          }
+          else if (element_type == ElementType::Relation)
+          {
+            ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
+            //  Add the relation to the split and remove from the changeset
+            split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
+            changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
+            split->setError();
+            return split;
+          }
         }
       }
     }
     //  See if the hint is something like:
     //   Changeset precondition failed: Precondition failed: Node 5 is still used by ways 67
-    else if (matchesChangesetPreconditionFailure(splitHint, member_id, member_type, element_id, element_type))
+    else if (matchesChangesetDeletePreconditionFailure(splitHint, member_id, member_type, element_id, element_type))
     {
       //  In this case the node 5 cannot be deleted because way 67 is still using it.  Way 67 must be modified or deleted first
       //  here we figure out how to make that happen
@@ -1902,6 +1925,8 @@ void XmlChangeset::failChangeset(const ChangesetInfoPtr& changeset)
       failRelation(*it);
     }
   }
+  //  Write out any failed elements
+  writeErrorFile();
 }
 
 void XmlChangeset::failNode(long id, bool beforeSend)
@@ -2030,14 +2055,17 @@ bool XmlChangeset::calculateRemainingChangeset(ChangesetInfoPtr &changeset)
   //  Output the remaining changeset to a file to inform the user where the issues lie
   if (!empty_changeset && !_errorPathname.isEmpty())
   {
-    //  Replace error with remaining in the error pathname
-    QString pathname = _errorPathname;
-    pathname.replace("error", "remaining");
     //  Write the file with changeset ID of zero
-    FileUtils::writeFully(pathname, this->getChangesetString(changeset, 0));
+    FileUtils::writeFully(getRemainingFilename(), this->getChangesetString(changeset, 0));
   }
   //  Return true if there is anything in the changeset
   return !empty_changeset;
+}
+
+void XmlChangeset::updateRemainingChangeset()
+{
+  //  Remove the "remaining" file once it comes back successfully
+  QFile::remove(getRemainingFilename());
 }
 
 bool XmlChangeset::isMatch(const XmlChangeset& changeset)
@@ -2194,6 +2222,14 @@ void XmlChangeset::failRemainingElements(const ChangesetElementMap& elements)
       ++_failedCount;
     }
   }
+}
+
+QString XmlChangeset::getRemainingFilename()
+{
+  //  Replace error with remaining in the error pathname
+  QString pathname = _errorPathname;
+  pathname.replace("error", "remaining");
+  return pathname;
 }
 
 ChangesetInfo::ChangesetInfo()
