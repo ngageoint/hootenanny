@@ -284,7 +284,9 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
     echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to an xml file: $SEC_XML_INPUT (contains features to replace with)..."
   fi
   echo ""
-  hoot convert $LOG_LEVEL $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm $SOURCE_FILE_2 $SEC_XML_INPUT
+  hoot convert $LOG_LEVEL $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_XML_INPUT
+  # To get a test more accurate to the production environment, use this instead of the line above.
+  #hoot convert $LOG_LEVEL $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm $SOURCE_FILE_2 $SEC_XML_INPUT
 
   # CHANGESET DERIVATION
 
