@@ -133,14 +133,15 @@ QString ChangesetElement::toString(const ElementAttributes& attributes, long cha
   return ts.readAll();
 }
 
-QString& ChangesetElement::escapeString(QString& value) const
+QString ChangesetElement::escapeString(const QString& value) const
 {
   //  Simple XML encoding of some problematic characters
-  return value.replace("&", "&amp;")
-              .replace("\"", "&quot;")
-              .replace("\n", "&#10;")
-              .replace(">", "&gt;")
-              .replace("<", "&lt;");
+  QString escape = value;
+  return escape.replace("&", "&amp;")
+               .replace("\"", "&quot;")
+               .replace("\n", "&#10;")
+               .replace(">", "&gt;")
+               .replace("<", "&lt;");
 }
 
 QString ChangesetElement::toTagString(const ElementTag& tag) const
@@ -148,17 +149,17 @@ QString ChangesetElement::toTagString(const ElementTag& tag) const
   QString buffer;
   QTextStream ts(&buffer);
   ts.setCodec("UTF-8");
-  QString key(tag.first);
-  QString value(tag.second);
+  QString key(escapeString(tag.first));
+  QString value(escapeString(tag.second));
   //  Tag values of length 255 need to be truncated
   QString newValue(ApiTagTruncateVisitor::truncateTag(key, value));
 
   //  Make sure to XML encode the value
   ts << "\t\t\t<tag k=\"" << key << "\" v=\"";
   if (newValue != "")
-    ts << escapeString(newValue);
+    ts << newValue;
   else
-    ts << escapeString(value);
+    ts << value;
   ts << "\"/>\n";
   return ts.readAll();
 }
