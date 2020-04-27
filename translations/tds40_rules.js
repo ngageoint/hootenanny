@@ -96,6 +96,12 @@ tds40.rules = {
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
+    ['F_CODE','DB090','embankment','mound'], // Embankment
+    ['F_CODE','DB090','embankment','berm'],
+    ['F_CODE','DB090','man_made','dyke'],
+    ['F_CODE','DB090','embankment','fill'],
+    ['F_CODE','DB090','embankment','levee'],
+    ['F_CODE','DB090','embankment','divider'],
     ['F_CODE','EB070','natural','heath'], // Brush
     ['F_CODE','ED010','natural','wetland'], // Marsh
     ['F_CODE','ED010','wetland','reedbed'], // Marsh
@@ -1453,12 +1459,12 @@ tds40.rules = {
 
     // FIC - Embankment Type
     // ['FIC','-999999',undefined,undefined], // No Information
-    ['FIC','1','embankment:type','mound'], // Mound
-    ['FIC','2','embankment:type','fill'], // Fill
-    ['FIC','3','embankment:type','dyke'], // Dyke
-    ['FIC','5','embankment:type','levee'], // Levee
-    ['FIC','6','embankment:type','divider'], // Divider
-    ['FIC','999','embankment:type','other'], // Other
+    ['FIC','1','embankment','mound'], // Mound
+    ['FIC','2','embankment','fill'], // Fill
+    ['FIC','3','man-made','dyke'], // Dyke
+    ['FIC','5','embankment','levee'], // Levee
+    ['FIC','6','embankment','divider'], // Divider
+    ['FIC','999','embankment','other'], // Other
 
     // FLO - Floating
     // ['FLO','-999999',undefined,undefined], // No Information
@@ -4255,6 +4261,16 @@ tds40.rules = {
     ['FFN','999','shop','other'],
     ['FFN','999','social_facility','other'],
     ['FFN','999','tourism','other'],
+
+    ['FIC','1','embankment:type','mound'], // Mound
+    ['FIC','1','embankment:type','berm'],
+    ['FIC','1','embankment','berm'], // Dyke
+    ['FIC','2','embankment:type','fill'], // Fill
+    ['FIC','3','embankment','dyke'], // Dyke
+    ['FIC','3','embankment:type','dyke'], // Dyke
+    ['FIC','5','embankment:type','levee'], // Levee
+    ['FIC','6','embankment:type','divider'], // Divider
+    ['FIC','999','embankment:type','other'], // Other
 
     // Fix up the building/use tags from FFN
     [undefined,undefined,'building','industrial'], // Industrial
