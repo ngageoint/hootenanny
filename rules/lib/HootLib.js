@@ -520,5 +520,5 @@ function isPowerLine(e)
  */
 function getLength(map, e)
 {
-  return hoot.ElementConverter.getLength(map, e);
+  return hoot.ElementConverter.calculateLength(map, e);
 }

@@ -87,6 +87,7 @@ private:
   class ScoredMatch
   {
   public:
+
     ScoredMatch() : score(0.0) {}
     ScoredMatch(double s, const std::vector<WaySublineMatch>& m) : score(s), matches(m) {}
 
