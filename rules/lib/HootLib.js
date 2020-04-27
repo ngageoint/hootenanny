@@ -198,6 +198,9 @@ function explicitTypeMismatch(e1, e2, minTypeScore)
   return hoot.OsmSchema.explicitTypeMismatch(e1, e2, minTypeScore);
 }
 
+/**
+ * TODO
+ */
 function mostSpecificType(e)
 {
   return hoot.OsmSchema.mostSpecificType(e);
@@ -510,4 +513,12 @@ function isRailway(e)
 function isPowerLine(e)
 {
   return hoot.OsmSchema.isPowerLine(e);
+}
+
+/*
+ * TODO
+ */
+function getLength(map, e)
+{
+  return hoot.ElementConverter.getLength(map, e);
 }

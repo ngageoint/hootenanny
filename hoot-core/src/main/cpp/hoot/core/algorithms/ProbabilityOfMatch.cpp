@@ -144,7 +144,7 @@ ProbabilityOfMatch& ProbabilityOfMatch::getInstance()
   return *_theInstance;
 }
 
-double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
+double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
   const ConstWayPtr &w2)
 {
   Meters l1 = ElementConverter(map).convertToLineString(w1)->getLength();
@@ -184,8 +184,7 @@ double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const Co
   return ds * ps * as * zs * ls;
 }
 
-double ProbabilityOfMatch::zipperScore(const ConstWayPtr& w1,
-                                       const ConstWayPtr& w2)
+double ProbabilityOfMatch::zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2)
 {
   double result = 1.0;
 

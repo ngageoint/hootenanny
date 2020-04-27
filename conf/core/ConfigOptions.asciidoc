@@ -4830,6 +4830,14 @@ The distance around a point on a waterway to look when calculating the heading. 
 
 Sets that maximum angle that is still considered a waterway match. Units in degrees.
 
+=== waterway.name.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+Name similarity threshold (0.0 to 1.0) at or above which a linear watereay feature is considered to
+have a name match.
+
 === waterway.rubber.sheet.minimum.ties
 
 * Data Type: int

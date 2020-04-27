@@ -17,6 +17,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+exports.nameThreshold = parseFloat(hoot.get("waterway.name.threshold"));
 
 // This is needed for disabling superfluous conflate ops. In the future, it may also
 // be used to replace exports.isMatchCandidate (see #3047). 
@@ -31,6 +32,29 @@ var sampledAngleHistogramExtractor =
     { "way.angle.sample.distance" : hoot.get("waterway.angle.sample.distance"),
       "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta") });
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
+var angleHistExtractor = new hoot.AngleHistogramExtractor();
+
+/*var nameExtractor = new hoot.NameExtractor(
+    new hoot.MaxWordSetDistance(
+        {"token.separator": "[\\s-,';]+"},
+        new hoot.ToEnglishTranslateStringDistance(
+            // runs just a little faster w/ tokenize off
+            {"translate.string.distance.tokenize": "false"},
+            new hoot.LevenshteinDistance(
+                {"levenshtein.distance.alpha": 1.15}))));*/
+var nameExtractor = new hoot.NameExtractor(
+  new hoot.MaxWordSetDistance(
+    {"token.separator": "[\\s-,';]+"},
+    // runs just a little faster w/ tokenize off
+    {"translate.string.distance.tokenize": "false"},
+    new hoot.LevenshteinDistance(
+      {"levenshtein.distance.alpha": 1.15})));
+
+var angleHistMin = 999999;
+var angleHistMax = 0;
+var angleHistAvg = 0;
+var angleHistTot = 0;
+var numAngleHist = 0;
 
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
@@ -79,6 +103,97 @@ exports.isWholeGroup = function()
   return false;
 };
 
+function explicitTypeMismatch(e1, e2)
+{
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
+
+  // This isn't foolproof as there could be other untranslated river identifying tags involved.
+  var waterway1 = tags1.get("waterway");
+  var waterway2 = tags2.get("waterway");
+  if (waterway1 != 'undefined' && waterway1 != null && waterway1 != '' && 
+      waterway2 != 'undefined' && waterway2 != null && waterway2 != '' && 
+      waterway1 != waterway2)
+  {
+    return true;
+  }
+
+  return false;
+}
+
+function nameMismatch(map, e1, e2)
+{
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
+
+  var nameScore = 1.0;
+
+  // only score the name if both have one
+  if (bothElementsHaveName(e1, e2))
+  {
+    nameScore = nameExtractor.extract(map, e1, e2);
+  }
+
+  if (nameScore < exports.nameThreshold)
+  {
+    return true;
+  }
+
+  return false;
+}
+
+function stats(map, m1, m2)
+{
+  var angleHist = angleHistExtractor.extract(map, m1, m2);
+  numAngleHist++;
+  hoot.debug("angleHist: " + angleHist);
+  angleHistTot += angleHist;
+  if (angleHist < angleHistMin)
+  {
+    angleHistMin = angleHist;
+  }
+  hoot.debug("angleHistMin: " + angleHistMin);
+  if (angleHist > angleHistMax)
+  {
+    angleHistMax = angleHist;
+  }
+  hoot.debug("angleHistMax: " + angleHistMax);
+  angleHistAvg = angleHistTot / numAngleHist;
+  hoot.debug("angleHistAvg: " + angleHistAvg);
+}
+
+function geometryMismatch(map, e1, e2)
+{
+  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  //hoot.debug("extracted sublines");
+  if (sublines)
+  {
+    var m = sublines.map;
+    var m1 = sublines.match1;
+    var m2 = sublines.match2;
+
+    var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
+    //hoot.trace("sampledAngleHistogramValue: " + sampledAngleHistogramValue);
+    if (sampledAngleHistogramValue == 0)
+    {
+      var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
+      //hoot.trace("weightedShapeDistanceValue: " + weightedShapeDistanceValue);
+      if (weightedShapeDistanceValue > 0.861844)
+      {
+        //stats(m, m1, m2);
+        return false;
+      }
+    }
+    if (sampledAngleHistogramValue > 0)
+    {
+      //stats(m, m1, m2);
+      return false;
+    }
+  }
+
+  return true;
+}
+
 /**
  * Returns the match score for the three class relationships.
  * - match
@@ -99,59 +214,46 @@ exports.matchScore = function(map, e1, e2)
 
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
-  hoot.debug("**********************************");
-  hoot.debug("e1: " + e1.getId() + ", " + tags1.get("name"));
+  hoot.trace("**********************************");
+  hoot.trace("e1: " + e1.getId() + ", " + tags1.get("name"));
   if (tags1.get("note"))
   {
-    hoot.debug("e1 note: " + tags1.get("note"));
+    hoot.trace("e1 note: " + tags1.get("note"));
   }
-  hoot.debug("e2: " + e2.getId() + ", " + tags2.get("name"));
+  hoot.trace("e2: " + e2.getId() + ", " + tags2.get("name"));
   if (tags2.get("note"))
   {
-    hoot.debug("e2 note: " + tags2.get("note"));
+    hoot.trace("e2 note: " + tags2.get("note"));
   }  
-  hoot.debug("mostSpecificType 1: " + mostSpecificType(e1));
-  hoot.debug("mostSpecificType 2: " + mostSpecificType(e2));
+  hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
+  hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
   if (e1.getElementId().getType() == "Way")
   {
-    hoot.debug("node count 1: " + e1.getNodeCount());
+    hoot.trace("node count 1: " + e1.getNodeCount());
   }
   if (e2.getElementId().getType() == "Way")
   {
-    hoot.debug("node count 2: " + e2.getNodeCount());
+    hoot.trace("node count 2: " + e2.getNodeCount());
   }
-
-  // TODO: Should we update the river schema to make type matching more granular? e.g. river vs stream
-
-  // extract the sublines needed for matching
-  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
-  if (sublines)
+  
+  // This type and name checks are mostly here to help cull down the potential matches and avoid 
+  // costly geometric comparisons for long features.er The geometric comparison itself is fairly
+  // accurate.
+  if (explicitTypeMismatch(e1, e2))
   {
-    var m = sublines.map;
-    var m1 = sublines.match1;
-    var m2 = sublines.match2;
-
-    var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    hoot.debug("sampledAngleHistogramValue: " + sampledAngleHistogramValue);
-    if (sampledAngleHistogramValue == 0)
-    {
-      var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
-      hoot.debug("weightedShapeDistanceValue: " + weightedShapeDistanceValue);
-      if (weightedShapeDistanceValue > 0.861844)
-      {
-        hoot.debug("Found Match!");
-        result = { match: 1.0, explain:"match" };
-        return result;
-      }
-    }
-    if (sampledAngleHistogramValue > 0)
-    {
-      hoot.debug("Found Match!");
-      result = { match: 1.0, explain:"match" };
-      return result;
-    }
+    return result;
+  }
+  if (nameMismatch(map, e1, e2))
+  {
+    return result;
+  }
+  if (geometryMismatch(map, e1, e2))
+  {
+    return result;
   }
 
+  hoot.trace("match");
+  result = { match: 1.0, miss: 0.0, review: 0.0 };
   return result;
 };
 
