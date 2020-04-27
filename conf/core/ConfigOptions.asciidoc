@@ -4815,6 +4815,13 @@ Automatically calculates the search radius to be used during conflation of water
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
 
+=== waterway.long.way.threshold
+
+* Data Type: int
+* Default Value: `150000`
+
+TODO
+
 === waterway.matcher.heading.delta
 
 * Data Type: double

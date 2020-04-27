@@ -156,6 +156,7 @@
         "matcher": "hoot::ScriptMatchCreator,River.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
+            "waterway.long.way.threshold": "TODO",
             "waterway.name.threshold": "Name match threshold; 0.0 to 1.0",
             "search.radius.waterway": "Search radius (m); -1 for default"
         }

@@ -23,11 +23,14 @@ exports.nameThreshold = parseFloat(hoot.get("waterway.name.threshold"));
 // be used to replace exports.isMatchCandidate (see #3047). 
 exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 
-var sublineMatcher =
+// used during subline matching
+exports.longWayThreshold = parseInt(hoot.get("waterway.long.way.threshold"));
+
+var maximalSublineMatcher =
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
       "way.subline.matcher": hoot.get("waterway.subline.matcher") });
-var sublineMatcher2 =
+var frechetSublineMatcher =
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
       "way.subline.matcher": "hoot::FrechetSublineMatcher" });
@@ -35,9 +38,7 @@ var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
     { "way.angle.sample.distance" : hoot.get("waterway.angle.sample.distance"),
       "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta") });
-var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
-//var angleHistExtractor = new hoot.AngleHistogramExtractor();
-//var sampledAngleHistogramExtractor2 = new hoot.SampledAngleHistogramExtractor();
+var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();;
 
 var nameExtractor = new hoot.NameExtractor(
   new hoot.MaxWordSetDistance(
@@ -46,12 +47,6 @@ var nameExtractor = new hoot.NameExtractor(
     {"translate.string.distance.tokenize": "false"},
     new hoot.LevenshteinDistance(
       {"levenshtein.distance.alpha": 1.15})));
-
-/*var angleHistMin = 999999;
-var angleHistMax = 0;
-var angleHistAvg = 0;
-var angleHistTot = 0;
-var numAngleHist = 0;*/
 
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
@@ -139,114 +134,40 @@ function nameMismatch(map, e1, e2)
   return false;
 }
 
-/*function stats(map, m1, m2)
-{
-  var angleHist = angleHistExtractor.extract(map, m1, m2);
-  numAngleHist++;
-  hoot.debug("angleHist: " + angleHist);
-  angleHistTot += angleHist;
-  if (angleHist < angleHistMin)
-  {
-    angleHistMin = angleHist;
-  }
-  hoot.debug("angleHistMin: " + angleHistMin);
-  if (angleHist > angleHistMax)
-  {
-    angleHistMax = angleHist;
-  }
-  hoot.debug("angleHistMax: " + angleHistMax);
-  angleHistAvg = angleHistTot / numAngleHist;
-  hoot.debug("angleHistAvg: " + angleHistAvg);
-}*/
-
 function geometryMismatch(map, e1, e2)
 {
-  /*var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
-  if (sublines)
-  {
-    var m = sublines.map;
-    var m1 = sublines.match1;
-    var m2 = sublines.match2;
-
-    //var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
-
-    var longWays = false;
-    var lengthMax = 150000;
-    var length1 = getLength(map, e1);
-    if (length1 > lengthMax)
-    {
-      longWays = true;
-    }
-    else
-    {
-      var length2 = getLength(map, e2);
-      if (length2 > lengthMax)
-      {
-        longWays = true;
-      }
-    }
-    
-    if (!longWays)
-    {
-      var angleHistValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
-      //hoot.trace("angleHistValue: " + angleHistValue);
-      if (angleHistValue == 0)
-      {
-        var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
-        //hoot.trace("weightedShapeDistanceValue: " + weightedShapeDistanceValue);
-        if (weightedShapeDistanceValue > 0.861844)
-        {
-          //stats(m, m1, m2);
-          return false;
-        }
-      }
-      if (angleHistValue > 0)
-      {
-        //stats(m, m1, m2);
-        return false;
-      }
-    }
-    else
-    {
-      hoot.debug("Processing longer ways of length: " + length1 + ", " + length2);
-      //var angleHistValue = sampledAngleHistogramExtractor2.extract(m, m1, m2);
-      var angleHistValue = angleHistExtractor.extract(m, m1, m2);
-      if (angleHistValue >= 0.93)
-      {
-        hoot.debug("long ways match");
-        return false;
-      }
-    }
-  }*/
-
-  var sublines;
-
+  // Longer ways are can be very computationally expensive in maximal subline matching (river 
+  // default). Frechet subline matching is a little less accurate but much faster, so we'll
+  // switch over to it for longer ways.
   var longWays = false;
-  var lengthMax = 150000;
   var length1 = getLength(map, e1);
-  var length2 = 0;
-  if (length1 > lengthMax)
+  var length2 = -1;
+  if (length1 > exports.longWayThreshold)
   {
     longWays = true;
   }
   else
   {
     length2 = getLength(map, e2);
-    if (length2 > lengthMax)
+    if (length2 > exports.longWayThreshold)
     {
       longWays = true;
     }
   }
 
+  var sublines;
   if (!longWays)
   {
-    sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+    sublines = maximalSublineMatcher.extractMatchingSublines(map, e1, e2);
   }
   else
   {
-   
     hoot.debug("Processing longer ways of length: " + length1 + ", " + length2 + "...");
-    sublines = sublineMatcher2.extractMatchingSublines(map, e1, e2);
+    sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
+    if (!sublines)
+    {
+      sublines = maximalSublineMatcher.extractMatchingSublines(map, e1, e2);
+    }
   }
 
   if (sublines)
@@ -255,11 +176,12 @@ function geometryMismatch(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
-    var angleHistValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    if (angleHistValue == 0)
+    var weightedShapeDist = -1;
+    var angleHist = sampledAngleHistogramExtractor.extract(m, m1, m2);
+    if (angleHist == 0)
     {
-      var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
-      if (weightedShapeDistanceValue > 0.861844)
+      weightedShapeDist = weightedShapeDistanceExtractor.extract(m, m1, m2);
+      if (weightedShapeDist > 0.861844)
       {
         if (longWays)
         {
@@ -268,7 +190,7 @@ function geometryMismatch(map, e1, e2)
         return false;
       }
     }
-    if (angleHistValue > 0)
+    if (angleHist > 0)
     {
       if (longWays)
       {
@@ -278,6 +200,20 @@ function geometryMismatch(map, e1, e2)
     }
   }
 
+  if (longWays)
+  {
+    hoot.debug("long ways mismatch");
+    if (sublines)
+    {
+      hoot.debug("angleHist: " + angleHist);
+      hoot.debug("weightedShapeDist: " + weightedShapeDist);
+    }
+    else
+    {
+      hoot.debug("no sublines");
+    }
+  }
+  
   return true;
 }
 
