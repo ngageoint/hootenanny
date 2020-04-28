@@ -170,7 +170,8 @@ public:
   inline static const QString HootMultiPolyRole()       { return "hoot:multi_poly:role"; }
 
   inline static const QString Length()                  { return "length"; }
-  // TODO
+  // This is an internal, metadata only calc of length used during conflation. Its possible it
+  // may be eventually ok to just use "length" instead.
   inline static const QString HootLength()              { return "hoot:length"; }
 
   inline static const QString Source()                  { return "source"; }

@@ -199,7 +199,8 @@ function explicitTypeMismatch(e1, e2, minTypeScore)
 }
 
 /**
- * TODO
+ * Returns the most specific type tag found as determined by the hoot schema. 
+   If the element has more than one specific type, only the first will be returned.
  */
 function mostSpecificType(e)
 {
@@ -516,7 +517,7 @@ function isPowerLine(e)
 }
 
 /*
- * TODO
+ * Returns the length of the feature in meters
  */
 function getLength(map, e)
 {

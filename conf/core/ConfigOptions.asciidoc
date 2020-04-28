@@ -4820,7 +4820,8 @@ pre-conflation operation on the input data to be conflated.
 * Data Type: int
 * Default Value: `150000`
 
-TODO
+Way length threshold, in meters, at or above which River Conflation will switch from the configured
+subline matcher to Frechet subline matching to increase runtime performance.
 
 === waterway.matcher.heading.delta
 
