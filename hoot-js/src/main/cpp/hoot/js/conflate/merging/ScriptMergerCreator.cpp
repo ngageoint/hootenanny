@@ -137,8 +137,8 @@ vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
   return result;
 }
 
-bool ScriptMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
-  ConstMatchPtr m2) const
+bool ScriptMergerCreator::isConflicting(
+  const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const
 {
   const ScriptMatch* sm1 = dynamic_cast<const ScriptMatch*>(m1.get());
   const ScriptMatch* sm2 = dynamic_cast<const ScriptMatch*>(m2.get());

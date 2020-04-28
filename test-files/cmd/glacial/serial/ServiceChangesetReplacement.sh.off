@@ -197,8 +197,9 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   fi
   echo ""
   scripts/database/CleanAndInitializeOsmApiDb.sh
-  # Note that we're only throwing out source ids for this ref b/c they happen to be negative and we want them to be positive to better resemble
-  # OSM API data. Generally, you'd want reader.use.data.source.ids=true here. Same applies to the other workflows below.
+  # Note that we're only throwing out source ids here b/c we have some ref data in the tests that happens to have negative IDs and we want 
+  # them to be positive to better resemble OSM API data. Generally, you'd want reader.use.data.source.ids=true here. Same applies to the 
+  # other workflows below.
   hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-db.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT 
   # needed for debugging only:
   #hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=true $REF_DB_INPUT $OUT_DIR/ref-original-tmp.osm
@@ -268,6 +269,8 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo ""
   scripts/database/CleanAndInitializeOsmApiDb.sh
   hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
+  # To get a test more accurate to the production environment, use this instead of the line above.
+  #hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm $SOURCE_FILE_1 $REF_DB_INPUT
   # Don't remove missing elements for these file conversions (even if you need to view them in JOSM), since they are the input data and we 
   # want to see any errors caused by them having missing elements.
   echo ""
@@ -282,6 +285,8 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   fi
   echo ""
   hoot convert $LOG_LEVEL $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_XML_INPUT
+  # To get a test more accurate to the production environment, use this instead of the line above.
+  #hoot convert $LOG_LEVEL $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm $SOURCE_FILE_2 $SEC_XML_INPUT
 
   # CHANGESET DERIVATION
 
