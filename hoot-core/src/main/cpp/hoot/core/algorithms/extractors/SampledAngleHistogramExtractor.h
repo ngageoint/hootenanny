@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
 #define SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
@@ -62,7 +62,10 @@ public:
   void setHeadingDelta(double headingDelta) { _headingDelta = headingDelta; }
 
   virtual QString getDescription() const override
-  { return "Calculates the angle of each line segment in a sampled fashion and adds it to a histogram"; }
+  {
+    return
+      "Calculates the angle of each line segment in a sampled fashion and adds it to a histogram";
+  }
 
 protected:
 
