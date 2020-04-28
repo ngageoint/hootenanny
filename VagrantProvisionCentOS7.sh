@@ -255,7 +255,7 @@ $HOOT_HOME/scripts/chrome/driver-install.sh
 echo "### Configuring PostgreSQL..."
 $HOOT_HOME/scripts/database/ConfigurePostgresql.sh
 
-echo "### Createing databases..."
+echo "### Creating databases..."
 $HOOT_HOME/scripts/database/SetupHootDb.sh
 
 if ! mocha --version &>/dev/null; then

@@ -231,18 +231,19 @@ public:
   static bool matchesRelationFailure(const QString& hint, long& element_id,
                                      long& member_id, ElementType::Type& member_type);
   /**
-   * @brief matchesMultiRelationFailure Checks the return from the API to see if it is similar to the following error message:
+   * @brief matchesMultiElementFailure Checks the return from the API to see if it is similar to the following error message:
    *        "Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible."
    * @param hint Error message from OSM API
    * @param element_id ID of the element that failed
+   * @param element_type Type of the element that failed
    * @param member_ids IDs of the member elements that caused the element to fail
-   * @param member_type Type of the member element that caused the element to fail
+   * @param member_type Type of the member elements that caused the element to fail
    * @return True if the message matches and was parsed
    */
-  static bool matchesMultiRelationFailure(const QString& hint, long& element_id,
-                                          std::vector<long>& member_ids, ElementType::Type& member_type);
+  static bool matchesMultiElementFailure(const QString& hint, long& element_id, ElementType::Type& element_type,
+                                         std::vector<long>& member_ids, ElementType::Type& member_type);
   /**
-   * @brief matchesChangesetPreconditionFailure Checks the return from the API to see if it is similar to the following error message:
+   * @brief matchesChangesetDeletePreconditionFailure Checks the return from the API to see if it is similar to the following error message:
    *        "Precondition failed: Node 55 is still used by ways 123"
    * @param hint Error message from OSM API
    * @param member_id ID of the member element that caused the element to fail
@@ -251,9 +252,9 @@ public:
    * @param element_type Type of the element that failed
    * @return True if the message matches and was parsed
    */
-  static bool matchesChangesetPreconditionFailure(const QString& hint,
-                                                  long& member_id, ElementType::Type& member_type,
-                                                  long& element_id, ElementType::Type& element_type);
+  static bool matchesChangesetDeletePreconditionFailure(const QString& hint,
+                                                        long& member_id, ElementType::Type& member_type,
+                                                        long& element_id, ElementType::Type& element_type);
   /**
    * @brief matchesChangesetConflictVersionMismatchFailure Checks the return from the API to see if it is similar to the following error message:
    *        "Changeset conflict: Version mismatch: Provided 2, server had: 1 of Node 4869875616"
@@ -292,6 +293,10 @@ public:
    */
   bool calculateRemainingChangeset(ChangesetInfoPtr &changeset);
   /**
+   * @brief updateRemainingChangeset
+   */
+  void updateRemainingChangeset();
+  /**
    * @brief isMatch Function to compare two changesets
    * @param changeset Changeset object to compare this changeset against
    * @return true if they are equivalent
@@ -301,6 +306,11 @@ public:
    * @brief failRemainingChangeset Set all remaining elements to the failed state
    */
   void failRemainingChangeset();
+  /**
+   * @brief failChangeset Set all elements' status to failed that are in the changeset
+   * @param changeset ChangesetInfo pointer of elements that all failed
+   */
+  void failChangeset(const ChangesetInfoPtr& changeset);
 
 private:
   /**
@@ -397,11 +407,12 @@ private:
    * @param destination Subset to move to
    * @param type Type of operation (create/modify/delete)
    * @param node/way/relation Pointer to the element to be moved
-   * @return
+   * @param failing Set to true if the element is getting set to failed state, it is more selective about moves
+   * @return false if the element cannot be moved successfully
    */
-  bool moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
-  bool moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
-  bool moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
+  bool moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node, bool failing = false);
+  bool moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way, bool failing = false);
+  bool moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation, bool failing = false);
   /**
    * @brief moveOrRemoveNode/Way/Relation Move an element from one subset to another, or if all related elements aren't
    *   able to be moved, the element is removed from the subset and returned to the `available` state
@@ -498,6 +509,11 @@ private:
    * @param elements Map of elements to fail
    */
   void failRemainingElements(const ChangesetElementMap& elements);
+  /**
+   * @brief getRemainingFilename Get the filename for the "remaining" elements
+   * @return _errorPathname with "error" replaced by "remaining"
+   */
+  QString getRemainingFilename();
 
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   ChangesetElementMap _allNodes;
@@ -616,6 +632,10 @@ public:
   /** Set/get _last member for final error checking */
   void setLast() { _last = true; }
   bool getLast() { return _last; }
+  /** Set/get _isError member */
+  void setError() { _isError = true; }
+  bool getError() { return _isError; }
+
 private:
   /** 3x3 array of containers for elements in this subset */
   std::array<std::array<container, XmlChangeset::TypeMax>, ElementType::Unknown> _changeset;
@@ -626,6 +646,11 @@ private:
   const int MAX_RETRIES = 5;
   /** Flag set when this is the last changeset because of error */
   bool _last;
+  /** When `true` this entire changeset consists of elements that cannot be pushed without an error.
+   *  For example: A way cannot be added because it references a node that doesn't exists, this changeset
+   *  would contain the new way and any new nodes that shouldn't be added by themselves.
+   */
+  bool _isError;
 };
 
 }
