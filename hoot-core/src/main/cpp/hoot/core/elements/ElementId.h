@@ -27,6 +27,7 @@
 #ifndef ELEMENTID_H
 #define ELEMENTID_H
 
+// Hoot
 #include <hoot/core/elements/ElementType.h>
 
 // Standard
@@ -52,72 +53,22 @@ public:
 
   static std::string className() { return "ElementId"; }
 
-  ElementId() : _type(ElementType::Unknown), _id(-std::numeric_limits<int>::max()) {}
-
-  ElementId(ElementType type, long id) : _type(type), _id(id) {}
-
-  ElementId(const QString& str)
-  {
-    // way:1
-
-    const QStringList strParts = str.split(":");
-    if (strParts.size() != 2)
-    {
-      throw IllegalArgumentException("Invalid element ID string: " + str);
-    }
-
-    _type = ElementType::fromString(strParts[0].toLower().trimmed());
-
-    bool ok;
-    _id = strParts[1].toLong(&ok);
-    if (!ok)
-    {
-      throw IllegalArgumentException("Invalid element ID value: " + strParts[1]);
-    }
-  }
+  ElementId();
+  ElementId(ElementType type, long id);
+  ElementId(const QString& str);
 
   long getId() const { return _id; }
 
   ElementType getType() const { return _type; }
 
-  bool isNull() const { return _type == ElementType::Unknown; }
+  bool isNull() const;
 
-  bool operator!=(const ElementId& other) const { return !(*this == other); }
-  bool operator==(const ElementId& other) const
-  {
-    return getType() == other.getType() && getId() == other.getId();
-  }
+  bool operator!=(const ElementId& other) const;
+  bool operator==(const ElementId& other) const;
+  bool operator<(const ElementId& other) const;
 
-  bool operator<(const ElementId& other) const
-  {
-    if (getType().getEnum() < other.getType().getEnum())
-    {
-      return true;
-    }
-    else if (getType().getEnum() > other.getType().getEnum())
-    {
-      return false;
-    }
-    else
-    {
-      return getId() < other.getId();
-    }
-  }
-
-  QString toString() const
-  {
-    // Now printing element ids as "(id)" rather than ":id" as they used to be. This makes it easier
-    // to trace the events of a single feature when searching through log output w/o having to look
-    // at features that you don't want. e.g. Searching through text for "Way:-1" in the past would
-    // give you "Way:-1", "Way:-12".  Now, you can search for "Way(-1)" instead and not return
-    // results for "Way(-12)".
-    return getType().toString() + "(" + QString::number(getId()) + ")";
-  }
-
-  QString toString()
-  {
-    return const_cast<const ElementId*>(this)->toString();
-  }
+  QString toString() const;
+  QString toString();
 
   /**
    * Shorthand for ElementId(ElementType::Node, nid)

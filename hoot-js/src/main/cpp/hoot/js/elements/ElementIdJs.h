@@ -47,6 +47,7 @@ namespace hoot
 class ElementIdJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   ElementId& getElementId() { return _eid; }
@@ -54,6 +55,7 @@ public:
   static v8::Handle<v8::Object> New(ElementId eid);
 
 private:
+
   ElementIdJs();
   ~ElementIdJs();
 

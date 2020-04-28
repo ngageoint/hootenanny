@@ -74,7 +74,7 @@ void ElementConverterJs::calculateLength(const FunctionCallbackInfo<Value>& args
 
     args.GetReturnValue().Set(toV8(ElementConverter(m).calculateLength(e)));
   }
-  catch ( const HootException& err )
+  catch (const HootException& err)
   {
     LOG_VAR(err.getWhat());
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));

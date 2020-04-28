@@ -202,7 +202,16 @@ void OsmMapJs::getElement(const FunctionCallbackInfo<Value>& args)
   {
     OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
-    ElementId eid = toCpp<ElementId>(args[0]);
+    ElementId eid;
+    try
+    {
+      eid = toCpp<ElementId>(args[0]);
+    }
+    catch (const IllegalArgumentException&)
+    {
+      const QString elementIdStr = toCpp<QString>(args[0]);
+      eid = ElementId(elementIdStr);
+    }
 
     if (obj->isConst())
     {

@@ -170,6 +170,8 @@ public:
   inline static const QString HootMultiPolyRole()       { return "hoot:multi_poly:role"; }
 
   inline static const QString Length()                  { return "length"; }
+  // TODO
+  inline static const QString HootLength()              { return "hoot:length"; }
 
   inline static const QString Source()                  { return "source"; }
   inline static const QString OsmApiDbScheme()          { return "osmapidb"; }

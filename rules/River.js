@@ -26,7 +26,7 @@ exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 // used during subline matching
 exports.longWayThreshold = parseInt(hoot.get("waterway.long.way.threshold"));
 
-var maximalSublineMatcher =
+var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
       "way.subline.matcher": hoot.get("waterway.subline.matcher") });
@@ -136,11 +136,9 @@ function nameMismatch(map, e1, e2)
 
 function geometryMismatch(map, e1, e2)
 {
-  // Longer ways are can be very computationally expensive in maximal subline matching (river 
-  // default). Frechet subline matching is a little less accurate but much faster, so we'll
-  // switch over to it for longer ways.
   var longWays = false;
   var length1 = getLength(map, e1);
+  e1.getTags().set("hoot:length", length1);
   var length2 = -1;
   if (length1 > exports.longWayThreshold)
   {
@@ -149,6 +147,7 @@ function geometryMismatch(map, e1, e2)
   else
   {
     length2 = getLength(map, e2);
+    e1.getTags().set("hoot:length", length2);
     if (length2 > exports.longWayThreshold)
     {
       longWays = true;
@@ -158,15 +157,20 @@ function geometryMismatch(map, e1, e2)
   var sublines;
   if (!longWays)
   {
-    sublines = maximalSublineMatcher.extractMatchingSublines(map, e1, e2);
+    sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   }
   else
   {
-    hoot.debug("Processing longer ways of length: " + length1 + ", " + length2 + "...");
+    // Longer ways are can be very computationally expensive with the default subline matching. 
+    // Frechet subline matching is a little less accurate but much faster, so we'll
+    // switch over to it for longer ways. If for some reason Frechet can't return any sublines,
+    // we'll go ahead and do maximal subline matching...this *shouldn't* happen too often so
+    // won't penalize runtime performance much.
+    hoot.trace("Processing longer ways of length: " + length1 + ", " + length2 + "...");
     sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
     if (!sublines)
     {
-      sublines = maximalSublineMatcher.extractMatchingSublines(map, e1, e2);
+      sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
     }
   }
 
@@ -183,34 +187,12 @@ function geometryMismatch(map, e1, e2)
       weightedShapeDist = weightedShapeDistanceExtractor.extract(m, m1, m2);
       if (weightedShapeDist > 0.861844)
       {
-        if (longWays)
-        {
-          hoot.debug("long ways match");
-        }
         return false;
       }
     }
     if (angleHist > 0)
     {
-      if (longWays)
-      {
-        hoot.debug("long ways match");
-      }
       return false;
-    }
-  }
-
-  if (longWays)
-  {
-    hoot.debug("long ways mismatch");
-    if (sublines)
-    {
-      hoot.debug("angleHist: " + angleHist);
-      hoot.debug("weightedShapeDist: " + weightedShapeDist);
-    }
-    else
-    {
-      hoot.debug("no sublines");
     }
   }
   
@@ -252,7 +234,7 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
   
   // This type and name checks are mostly here to help cull down the potential matches and avoid 
-  // costly geometric comparisons for long features.er The geometric comparison itself is fairly
+  // costly geometric comparisons for long features. The geometric comparison itself is fairly
   // accurate.
   if (explicitTypeMismatch(e1, e2))
   {
@@ -272,6 +254,40 @@ exports.matchScore = function(map, e1, e2)
   return result;
 };
 
+function hasLargeWay(map, pairs)
+{
+  hoot.debug("pairs.length: " + pairs.length);
+  for (var i = 0; i < pairs.length; i++)
+  { 
+    var elementsStr = String(pairs[i]);
+    var elementsStrParts = elementsStr.split(",");
+    hoot.debug("elementsStrParts.length: " + elementsStrParts.length);
+    for (var j = 0; j < elementsStrParts.length; j++)
+    {
+      var elementIdStr = String(elementsStrParts[j]);
+      hoot.debug("elementIdStr: " + elementIdStr);
+      var element = map.getElement(elementIdStr);
+      var length = 0;
+      if (element)
+      {
+        if (element.getTags().contains("hoot:length"))
+        {
+          length = parseInt(element.getTags().get("hoot:length"));
+        }
+        else
+        {
+          length = getLength(map, element);
+        }
+        if (length > exports.longWayThreshold)
+        {
+          return true;
+        }
+      }
+    }
+  } 
+  return false;
+}
+
 /**
  * The internals of geometry merging can become quite complex. Typically this
  * method will simply call another hoot method to perform the appropriate merging
@@ -289,9 +305,15 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  // snap the ways in the second input to the first input. Use the default tag
-  // merge method.
-  return snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
+  // Snap the ways in the second input to the first input. Use the default tag
+  // merge method. Pass the appropriate subline matcher used during matching based
+  // on way size.
+  var snapSublineMatcher = sublineMatcher;
+  if (hasLargeWay(map, pairs))
+  {
+    snapSublineMatcher = frechetSublineMatcher
+  }
+  return snapWays(snapSublineMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

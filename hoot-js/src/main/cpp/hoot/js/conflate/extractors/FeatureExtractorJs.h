@@ -48,11 +48,13 @@ class OsmMapOperation;
 class FeatureExtractorJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   FeatureExtractorPtr getFeatureExtractor() { return _fe; }
 
 private:
+
   FeatureExtractorJs(FeatureExtractorPtr fe);
   ~FeatureExtractorJs();
 
