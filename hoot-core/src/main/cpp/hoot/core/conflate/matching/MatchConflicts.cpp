@@ -32,6 +32,9 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/StringUtils.h>
 
+// Qt
+#include <QElapsedTimer>
+
 // Standard
 #include <map>
 #include <set>
@@ -73,6 +76,8 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
 void MatchConflicts::calculateMatchConflicts(const std::vector<ConstMatchPtr>& matches,
   ConflictMap& conflicts)
 {
+  QElapsedTimer timer;
+  timer.start();
   LOG_DEBUG(
     "Calculating match conflicts for " << StringUtils::formatLargeNumber(matches.size()) <<
     " matches...");
@@ -101,7 +106,7 @@ void MatchConflicts::calculateMatchConflicts(const std::vector<ConstMatchPtr>& m
     lastEid = it->first;
 
     eidToMatchCount++;
-    if (eidToMatchCount % 100 == 0)
+    if (eidToMatchCount % 10 == 0)
     {
       PROGRESS_INFO(
         "Processed matches for " << StringUtils::formatLargeNumber(eidToMatchCount) << " / " <<
@@ -109,9 +114,12 @@ void MatchConflicts::calculateMatchConflicts(const std::vector<ConstMatchPtr>& m
         StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts.");
     }
   }
-  LOG_DEBUG("Found " << StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts.");
 
   calculateSubsetConflicts(matches, conflicts, matchSet);
+
+  LOG_INFO(
+    "Found " << StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts in " <<
+    StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 void MatchConflicts::calculateSubsetConflicts(const std::vector<ConstMatchPtr>& matches,

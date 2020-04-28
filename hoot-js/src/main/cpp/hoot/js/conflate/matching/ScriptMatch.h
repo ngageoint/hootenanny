@@ -111,7 +111,6 @@ private:
   bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
     ElementId other1, ElementId other2) const;
   v8::Handle<v8::Value> _callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const;
-
 };
 
 }

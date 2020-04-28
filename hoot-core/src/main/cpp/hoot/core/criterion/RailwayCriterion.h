@@ -36,6 +36,8 @@ namespace hoot
 
 /**
  * A criterion that will match linear railways.
+ *
+ * @todo rename to LinearRailwayCriterion?
  */
 class RailwayCriterion : public ConflatableElementCriterion
 {

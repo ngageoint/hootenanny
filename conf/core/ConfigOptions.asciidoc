@@ -4815,6 +4815,14 @@ Automatically calculates the search radius to be used during conflation of water
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
 
+=== waterway.long.way.threshold
+
+* Data Type: int
+* Default Value: `150000`
+
+Way length threshold, in meters, at or above which River Conflation will switch from the configured
+subline matcher to Frechet subline matching to increase runtime performance.
+
 === waterway.matcher.heading.delta
 
 * Data Type: double
@@ -4829,6 +4837,14 @@ The distance around a point on a waterway to look when calculating the heading. 
 * Default Value: `90.0`
 
 Sets that maximum angle that is still considered a waterway match. Units in degrees.
+
+=== waterway.name.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+Name similarity threshold (0.0 to 1.0) at or above which a linear watereay feature is considered to
+have a name match.
 
 === waterway.rubber.sheet.minimum.ties
 
