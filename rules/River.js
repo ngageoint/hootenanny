@@ -138,6 +138,7 @@ function geometryMismatch(map, e1, e2)
 {
   var longWays = false;
   var length1 = getLength(map, e1);
+  // Let's cache this tag as metadata so we can use it during merging.
   e1.getTags().set("hoot:length", length1);
   var length2 = -1;
   if (length1 > exports.longWayThreshold)
@@ -256,20 +257,18 @@ exports.matchScore = function(map, e1, e2)
 
 function hasLargeWay(map, pairs)
 {
-  hoot.debug("pairs.length: " + pairs.length);
   for (var i = 0; i < pairs.length; i++)
   { 
-    var elementsStr = String(pairs[i]);
+    var elementsStr = String(pairs[i]); // Way(-1),Way(-2)...
     var elementsStrParts = elementsStr.split(",");
-    hoot.debug("elementsStrParts.length: " + elementsStrParts.length);
     for (var j = 0; j < elementsStrParts.length; j++)
     {
-      var elementIdStr = String(elementsStrParts[j]);
-      hoot.debug("elementIdStr: " + elementIdStr);
+      var elementIdStr = String(elementsStrParts[j]); // Way(-1)
       var element = map.getElement(elementIdStr);
       var length = 0;
       if (element)
       {
+        // Look for the cached tag first to avoid recalculating length.
         if (element.getTags().contains("hoot:length"))
         {
           length = parseInt(element.getTags().get("hoot:length"));
@@ -307,7 +306,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // Snap the ways in the second input to the first input. Use the default tag
   // merge method. Pass the appropriate subline matcher used during matching based
-  // on way size.
+  // on way size, similar to how we did during matching.
   var snapSublineMatcher = sublineMatcher;
   if (hasLargeWay(map, pairs))
   {
