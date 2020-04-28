@@ -24,12 +24,13 @@ exports.nameThreshold = parseFloat(hoot.get("waterway.name.threshold"));
 exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 
 // used during subline matching
-exports.longWayThreshold = parseInt(hoot.get("waterway.long.way.threshold"));
+var longWayThreshold = parseInt(hoot.get("waterway.long.way.threshold"));
+var sublineMatcherName = hoot.get("waterway.subline.matcher");
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": hoot.get("waterway.subline.matcher") });
+      "way.subline.matcher": sublineMatcherName });
 var frechetSublineMatcher =
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
@@ -139,7 +140,7 @@ function geometryMismatch(map, e1, e2)
   var longWays = false;
   var length1 = getLength(map, e1);
   // Let's cache this tag as metadata so we can use it during merging.
-  e1.getTags().set("hoot:length", length1);
+  
   var length2 = -1;
   if (length1 > exports.longWayThreshold)
   {
@@ -148,7 +149,6 @@ function geometryMismatch(map, e1, e2)
   else
   {
     length2 = getLength(map, e2);
-    e1.getTags().set("hoot:length", length2);
     if (length2 > exports.longWayThreshold)
     {
       longWays = true;
@@ -156,6 +156,7 @@ function geometryMismatch(map, e1, e2)
   }
 
   var sublines;
+  var sublineMatcherUsed =sublineMatcherName;
   if (!longWays)
   {
     sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
@@ -173,6 +174,10 @@ function geometryMismatch(map, e1, e2)
     {
       sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
     }
+    else
+    {
+      sublineMatcherUsed = "hoot::FrechetSublineMatcher";
+    }
   }
 
   if (sublines)
@@ -188,11 +193,15 @@ function geometryMismatch(map, e1, e2)
       weightedShapeDist = weightedShapeDistanceExtractor.extract(m, m1, m2);
       if (weightedShapeDist > 0.861844)
       {
+        //e1.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
+        //e2.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
         return false;
       }
     }
     if (angleHist > 0)
     {
+      //e1.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
+      //e2.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
       return false;
     }
   }
@@ -255,7 +264,7 @@ exports.matchScore = function(map, e1, e2)
   return result;
 };
 
-function hasLargeWay(map, pairs)
+function getSublineMatcherUsed(map, pairs)
 {
   for (var i = 0; i < pairs.length; i++)
   { 
@@ -268,23 +277,15 @@ function hasLargeWay(map, pairs)
       var length = 0;
       if (element)
       {
-        // Look for the cached tag first to avoid recalculating length.
-        if (element.getTags().contains("hoot:length"))
+        var sublineMatcherUsed = element.getTags().get("hoot:subline:matcher:used");
+        if (sublineMatcherUsed != '' && sublineMatcherUsed != null && sublineMatcherUsed != 'undefined')
         {
-          length = parseInt(element.getTags().get("hoot:length"));
-        }
-        else
-        {
-          length = getLength(map, element);
-        }
-        if (length > exports.longWayThreshold)
-        {
-          return true;
+          return sublineMatcherUsed;
         }
       }
     }
   } 
-  return false;
+  return "";
 }
 
 /**
@@ -305,13 +306,15 @@ function hasLargeWay(map, pairs)
 exports.mergeSets = function(map, pairs, replaced)
 {
   // Snap the ways in the second input to the first input. Use the default tag
-  // merge method. Pass the appropriate subline matcher used during matching based
-  // on way size, similar to how we did during matching.
+  // merge method.
   var snapSublineMatcher = sublineMatcher;
-  if (hasLargeWay(map, pairs))
+  // Pass the appropriate subline matcher based on what was used during matching.
+  // TODO: Unfortunately this is crashing CollectionRelationMergeTest for an yet 
+  // undetermined reason. Oddly, when only a river matcher is configured it doesn't crash.
+  /*if (getSublineMatcherUsed(map, pairs) == "hoot::FrechetSublineMatcher")
   {
     snapSublineMatcher = frechetSublineMatcher
-  }
+  }*/
   return snapWays(snapSublineMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 

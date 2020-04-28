@@ -55,7 +55,7 @@ public:
 
   ElementId();
   ElementId(ElementType type, long id);
-  ElementId(const QString& str);
+  ElementId(QString str);
 
   long getId() const { return _id; }
 

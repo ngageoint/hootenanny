@@ -90,6 +90,7 @@ public:
   inline static const QString HootMatchP()              { return "hoot:match:p"; }
   inline static const QString HootMatchScore()          { return "hoot:match:score"; }
   inline static const QString HootMatchedBy()           { return "hoot:matchedBy"; }
+  inline static const QString HootSublineMatcherUsed()  { return "hoot:subline:matcher:used"; }
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
 
@@ -170,9 +171,6 @@ public:
   inline static const QString HootMultiPolyRole()       { return "hoot:multi_poly:role"; }
 
   inline static const QString Length()                  { return "length"; }
-  // This is an internal, metadata only calc of length used during conflation. Its possible it
-  // may be eventually ok to just use "length" instead.
-  inline static const QString HootLength()              { return "hoot:length"; }
 
   inline static const QString Source()                  { return "source"; }
   inline static const QString OsmApiDbScheme()          { return "osmapidb"; }

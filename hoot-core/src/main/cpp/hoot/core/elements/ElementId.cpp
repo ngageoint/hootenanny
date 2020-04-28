@@ -44,46 +44,51 @@ _type(type), _id(id)
 {
 }
 
-ElementId::ElementId(const QString& str)
+ElementId::ElementId(QString str)
 {
-  // Way(1)
-  if (str.contains("("))
+  str = str.trimmed();
+  const QString errorMsg = "Invalid element ID string: " + str;
+  if (str.endsWith(")"))
   {
-    const QStringList strParts = str.split("(");
+    // Way(1)
+
+    const QStringList strParts = str.trimmed().split("(");
     if (strParts.size() != 2)
     {
-      throw IllegalArgumentException("Invalid element ID string: " + str);
+      throw IllegalArgumentException(errorMsg);
     }
 
     _type = ElementType::fromString(strParts[0].toLower().trimmed());
-    LOG_VARD(_type);
 
-    bool ok;
-    _id = strParts[1].split(")")[0].toLong(&ok);
-    LOG_VARD(_id);
+    bool ok = false;
+    _id = strParts[1].split(")")[0].trimmed().toLong(&ok);
     if (!ok)
     {
-      throw IllegalArgumentException("Invalid element ID value: " + strParts[1]);
+      throw IllegalArgumentException(errorMsg);
+    }
+  }
+  else if (!str.isEmpty())
+  {
+    // way:1
+
+    const QStringList strParts = str.trimmed().split(":");
+    if (strParts.size() != 2)
+    {
+      throw IllegalArgumentException(errorMsg);
+    }
+
+    _type = ElementType::fromString(strParts[0].toLower().trimmed());
+
+    bool ok = false;
+    _id = strParts[1].trimmed().toLong(&ok);
+    if (!ok)
+    {
+      throw IllegalArgumentException(errorMsg);
     }
   }
   else
   {
-    // way:1
-
-    const QStringList strParts = str.split(":");
-    if (strParts.size() != 2)
-    {
-      throw IllegalArgumentException("Invalid element ID string: " + str);
-    }
-
-    _type = ElementType::fromString(strParts[0].toLower().trimmed());
-
-    bool ok;
-    _id = strParts[1].toLong(&ok);
-    if (!ok)
-    {
-      throw IllegalArgumentException("Invalid element ID value: " + strParts[1]);
-    }
+    throw IllegalArgumentException(errorMsg);
   }
 }
 
