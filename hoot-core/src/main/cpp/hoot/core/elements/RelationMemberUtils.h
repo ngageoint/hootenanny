@@ -34,6 +34,8 @@
 namespace hoot
 {
 
+class ElementCriterion;
+
 /**
  * Various utilities useful when working with relation members but kept out of the Relation class
  * to avoid circular dependencies
@@ -119,6 +121,28 @@ public:
    * @return true if any relation in the map contains the element; false otherwise
    */
   static bool elementContainedByAnyRelation(const ElementId& elementId, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param relation
+   * @param criterion
+   * @param map
+   * @return
+   */
+  static bool containsMemberWithCriterion(
+    const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param relation
+   * @param criterion
+   * @param map
+   * @return
+   */
+  static bool containsOnlyMembersWithCriterion(
+    const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
 };
 
 }

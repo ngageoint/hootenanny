@@ -22,43 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef POLYGON_CRITERION_H
-#define POLYGON_CRITERION_H
+#include "RelationWithPolygonMembersCriterion.h"
 
-// Hoot
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+// hoot
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-/**
- * Identifies polygon features
- */
-class PolygonCriterion : public ConflatableElementCriterion
+HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithPolygonMembersCriterion)
+
+RelationWithPolygonMembersCriterion::RelationWithPolygonMembersCriterion() :
+RelationWithGeometryMembersCriterion()
 {
-public:
+}
 
-  static std::string className() { return "hoot::PolygonCriterion"; }
-
-  PolygonCriterion();
-
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PolygonCriterion()); }
-
-  virtual QString getDescription() const { return "Identifies polygon features"; }
-
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Polygon; }
-
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
-
-  virtual bool supportsSpecificConflation() const { return false; }
-};
+RelationWithPolygonMembersCriterion::RelationWithPolygonMembersCriterion(ConstOsmMapPtr map) :
+RelationWithGeometryMembersCriterion(map)
+{
+}
 
 }
-#endif // POLYGON_CRITERION_H
+

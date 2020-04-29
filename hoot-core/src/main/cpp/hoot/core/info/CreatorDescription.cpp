@@ -34,13 +34,14 @@
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
-#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+//#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/CollectionRelationCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 namespace hoot
 {
@@ -179,7 +180,7 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
     case PoiPolygonPOI:
       return ElementCriterionPtr(new PoiPolygonPoiCriterion());
     case Polygon:
-      return ElementCriterionPtr(new PoiPolygonPolyCriterion());
+      return ElementCriterionPtr(new /*PoiPolygonPolyCriterion()*/PolygonCriterion());
     case Area:
       return ElementCriterionPtr(new NonBuildingAreaCriterion(map));
     case Railway:

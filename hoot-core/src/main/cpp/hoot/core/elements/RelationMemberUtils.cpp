@@ -32,6 +32,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -58,7 +59,8 @@ QString RelationMemberUtils::getRelationMembersDetailedString(const ConstRelatio
   return str;
 }
 
-long RelationMemberUtils::getFirstWayIdFromRelation(const ConstRelationPtr& relation, const OsmMapPtr& map)
+long RelationMemberUtils::getFirstWayIdFromRelation(
+  const ConstRelationPtr& relation, const OsmMapPtr& map)
 {
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   QSet<long> wayMemberIds;
@@ -98,8 +100,8 @@ bool RelationMemberUtils::isMemberOfRelation(const ConstOsmMapPtr& map, const El
   return false;
 }
 
-bool RelationMemberUtils::isMemberOfRelationType(const ConstOsmMapPtr& map, const ElementId& childId,
-                                                 const QString& relationType)
+bool RelationMemberUtils::isMemberOfRelationType(
+  const ConstOsmMapPtr& map, const ElementId& childId, const QString& relationType)
 {
   LOG_VART(childId);
   LOG_VART(relationType);
@@ -128,9 +130,8 @@ bool RelationMemberUtils::isMemberOfRelationType(const ConstOsmMapPtr& map, cons
   return false;
 }
 
-bool RelationMemberUtils::isMemberOfRelationInCategory(const ConstOsmMapPtr& map,
-                                                       const ElementId& childId,
-                                                       const QString& schemaCategory)
+bool RelationMemberUtils::isMemberOfRelationInCategory(
+  const ConstOsmMapPtr& map, const ElementId& childId, const QString& schemaCategory)
 {
   LOG_VART(childId);
   LOG_VART(schemaCategory);
@@ -159,9 +160,8 @@ bool RelationMemberUtils::isMemberOfRelationInCategory(const ConstOsmMapPtr& map
   return false;
 }
 
-bool RelationMemberUtils::isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map,
-                                                       const ElementId& childId,
-                                                       const QString& tagKey)
+bool RelationMemberUtils::isMemberOfRelationWithTagKey(
+  const ConstOsmMapPtr& map, const ElementId& childId, const QString& tagKey)
 {
   LOG_VART(childId);
   LOG_VART(tagKey);
@@ -194,6 +194,46 @@ bool RelationMemberUtils::elementContainedByAnyRelation(const ElementId& element
                                                         const ConstOsmMapPtr& map)
 {
   return map->getIndex().getElementToRelationMap()->getRelationByElement(elementId).size() > 0;
+}
+
+bool RelationMemberUtils::containsMemberWithCriterion(
+  const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map)
+{
+  if (!map)
+  {
+    throw IllegalArgumentException("Invalid map specified.");
+  }
+
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (criterion.isSatisfied(member))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool RelationMemberUtils::containsOnlyMembersWithCriterion(
+  const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map)
+{
+  if (!map)
+  {
+    throw IllegalArgumentException("Invalid map specified.");
+  }
+
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (!criterion.isSatisfied(member))
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 }

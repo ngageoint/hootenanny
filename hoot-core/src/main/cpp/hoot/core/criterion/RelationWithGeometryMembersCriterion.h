@@ -22,43 +22,56 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef POLYGON_CRITERION_H
-#define POLYGON_CRITERION_H
+#ifndef RELATION_WITH_GEOMETRY_MEMBERS_CRITERION_H
+#define RELATION_WITH_GEOMETRY_MEMBERS_CRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * Identifies polygon features
+ * TODO
  */
-class PolygonCriterion : public ConflatableElementCriterion
+class RelationWithGeometryMembersCriterion : public GeometryTypeCriterion,
+  public ConstOsmMapConsumer
 {
 public:
 
-  static std::string className() { return "hoot::PolygonCriterion"; }
+  static std::string className() { return "hoot::RelationWithGeometryMembersCriterion"; }
 
-  PolygonCriterion();
+  RelationWithGeometryMembersCriterion();
+  RelationWithGeometryMembersCriterion(ConstOsmMapPtr map);
+
+  virtual ~RelationWithGeometryMembersCriterion() {}
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PolygonCriterion()); }
+  virtual QString getCriterion() const = 0;
 
-  virtual QString getDescription() const { return "Identifies polygon features"; }
+  virtual void setOsmMap(const OsmMap* map);
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Polygon; }
+  void setAllowMixedChildren(bool allow) { _allowMixedChildren = allow; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+protected:
 
-  virtual bool supportsSpecificConflation() const { return false; }
+  ConstOsmMapPtr _map;
+
+private:
+
+  // TODO
+  bool _allowMixedChildren;
+
+  mutable ElementCriterionPtr _crit;
+
+  void _initCrit() const;
 };
 
 }
-#endif // POLYGON_CRITERION_H
+#endif // RELATION_WITH_GEOMETRY_MEMBERS_CRITERION_H

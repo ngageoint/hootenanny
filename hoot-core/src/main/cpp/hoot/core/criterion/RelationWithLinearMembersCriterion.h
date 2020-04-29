@@ -22,43 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef POLYGON_CRITERION_H
-#define POLYGON_CRITERION_H
+#ifndef RELATION_WITH_LINEAR_MEMBERS_CRITERION_H
+#define RELATION_WITH_LINEAR_MEMBERS_CRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/RelationWithGeometryMembersCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * Identifies polygon features
+ * TODO
  */
-class PolygonCriterion : public ConflatableElementCriterion
+class RelationWithLinearMembersCriterion : public RelationWithGeometryMembersCriterion
 {
 public:
 
-  static std::string className() { return "hoot::PolygonCriterion"; }
+  static std::string className() { return "hoot::RelationWithLinearMembersCriterion"; }
 
-  PolygonCriterion();
+  RelationWithLinearMembersCriterion();
+  RelationWithLinearMembersCriterion(ConstOsmMapPtr map);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new RelationWithLinearMembersCriterion(_map)); }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PolygonCriterion()); }
+  virtual QString getCriterion() const override { return "hoot::LinearCriterion"; }
 
-  virtual QString getDescription() const { return "Identifies polygon features"; }
+  virtual QString getDescription() const { return "TODO"; }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Polygon; }
+  virtual GeometryType getGeometryType() const { return GeometryType::Line; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
-
-  virtual bool supportsSpecificConflation() const { return false; }
 };
 
 }
-#endif // POLYGON_CRITERION_H
+#endif // RELATION_WITH_LINEAR_MEMBERS_CRITERION_H
