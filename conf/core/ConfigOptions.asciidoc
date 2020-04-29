@@ -4815,13 +4815,21 @@ Automatically calculates the search radius to be used during conflation of water
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
 
-=== waterway.long.way.threshold
+=== waterway.long.way.length.threshold
 
 * Data Type: int
 * Default Value: `150000`
 
 Way length threshold, in meters, at or above which River Conflation will switch from the configured
 subline matcher to Frechet subline matching to increase runtime performance.
+
+=== waterway.long.way.node.count.threshold
+
+* Data Type: int
+* Default Value: `750`
+
+Way node count threshold at or above which River Conflation will switch from the configured subline
+matcher to Frechet subline matching to increase runtime performance.
 
 === waterway.matcher.heading.delta
 

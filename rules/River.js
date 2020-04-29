@@ -24,22 +24,23 @@ exports.nameThreshold = parseFloat(hoot.get("waterway.name.threshold"));
 exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 
 // used during subline matching
-var longWayThreshold = parseInt(hoot.get("waterway.long.way.threshold"));
 var sublineMatcherName = hoot.get("waterway.subline.matcher");
+var longWayLengthThreshold = parseInt(hoot.get("waterway.long.way.length.threshold"));
+var longWayNodeCountThreshold = parseInt(hoot.get("waterway.long.way.node.count.threshold"));
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": sublineMatcherName });
+      "way.subline.matcher": sublineMatcherName }); // default subline matcher
 var frechetSublineMatcher =
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": "hoot::FrechetSublineMatcher" });
+      "way.subline.matcher": "hoot::FrechetSublineMatcher" }); // we'll switch over to this one in certain situations
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
     { "way.angle.sample.distance" : hoot.get("waterway.angle.sample.distance"),
       "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta") });
-var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();;
+var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 
 var nameExtractor = new hoot.NameExtractor(
   new hoot.MaxWordSetDistance(
@@ -101,6 +102,8 @@ function explicitTypeMismatch(e1, e2)
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
 
+  hoot.trace("Checking types...");
+
   // This isn't foolproof as there could be other untranslated river identifying tags involved.
   var waterway1 = tags1.get("waterway");
   var waterway2 = tags2.get("waterway");
@@ -108,6 +111,7 @@ function explicitTypeMismatch(e1, e2)
       waterway2 != 'undefined' && waterway2 != null && waterway2 != '' && 
       waterway1 != waterway2)
   {
+    hoot.trace("Explict type mismatch: " + waterway1 + ", " + waterway2);
     return true;
   }
 
@@ -124,11 +128,13 @@ function nameMismatch(map, e1, e2)
   // only score the name if both have one
   if (bothElementsHaveName(e1, e2))
   {
+    hoot.trace("Checking names...");
     nameScore = nameExtractor.extract(map, e1, e2);
   }
 
   if (nameScore < exports.nameThreshold)
   {
+    hoot.trace("Explict name mismatch: " + e1.getTags().get("name") + ", " + e2.getTags().get("name"));
     return true;
   }
 
@@ -138,46 +144,50 @@ function nameMismatch(map, e1, e2)
 function geometryMismatch(map, e1, e2)
 {
   var longWays = false;
-  var length1 = getLength(map, e1);
-  // Let's cache this tag as metadata so we can use it during merging.
-  
-  var length2 = -1;
-  if (length1 > exports.longWayThreshold)
+
+  var length1 = 0;
+  var length2 = 0;
+  // TODO: Why would anything but ways be here? Saw some non-ways during match conflict resolution.
+  if (e1.getElementId().getType() == "Way")
   {
-    longWays = true;
+    length1 = getLength(map, e1);
   }
-  else
+  if (e2.getElementId().getType() == "Way")
   {
     length2 = getLength(map, e2);
-    if (length2 > exports.longWayThreshold)
-    {
-      longWays = true;
-    }
   }
+  hoot.trace("Processing ways of length: " + length1 + ", " + length2 + "...");
+
+  var nodeCount1 = 0;
+  var nodeCount2 = 0;
+  if (e1.getElementId().getType() == "Way")
+  {
+    nodeCount1 = e1.getNodeCount();
+  }
+  if (e2.getElementId().getType() == "Way")
+  {
+    nodeCount2 = e2.getNodeCount();
+  }
+  hoot.trace("Processing ways with node count: " + nodeCount1 + ", " + nodeCount2 + "...");
+
+  longWays = (length1 + length2) > longWayLengthThreshold || (nodeCount1 + nodeCount2) > longWayNodeCountThreshold;
 
   var sublines;
-  var sublineMatcherUsed =sublineMatcherName;
+  var sublineMatcherUsed = sublineMatcherName;
   if (!longWays)
   {
+    hoot.trace("Extracting sublines with default...");
     sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   }
   else
   {
     // Longer ways are can be very computationally expensive with the default subline matching. 
-    // Frechet subline matching is a little less accurate but much faster, so we'll
-    // switch over to it for longer ways. If for some reason Frechet can't return any sublines,
-    // we'll go ahead and do maximal subline matching...this *shouldn't* happen too often so
-    // won't penalize runtime performance much.
-    hoot.trace("Processing longer ways of length: " + length1 + ", " + length2 + "...");
+    // Frechet subline matching is a little less accurate but much faster, so we'll switch over 
+    // to it for longer ways. Tried tweaking the configuration of MaximalSublineMatcher for 
+    // performance, but it didn't help.
+    hoot.trace("Extracting sublines with Frechet...");
     sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
-    if (!sublines)
-    {
-      sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
-    }
-    else
-    {
-      sublineMatcherUsed = "hoot::FrechetSublineMatcher";
-    }
+    //sublineMatcherUsed = "hoot::FrechetSublineMatcher";
   }
 
   if (sublines)
@@ -187,14 +197,20 @@ function geometryMismatch(map, e1, e2)
     var m2 = sublines.match2;
 
     var weightedShapeDist = -1;
+    hoot.debug("Getting angleHist...");
     var angleHist = sampledAngleHistogramExtractor.extract(m, m1, m2);
+    hoot.debug("angleHist: " + angleHist);
     if (angleHist == 0)
     {
+      hoot.trace("Getting weightedShapeDist...");
       weightedShapeDist = weightedShapeDistanceExtractor.extract(m, m1, m2);
+      hoot.trace("weightedShapeDist: " + weightedShapeDist);
       if (weightedShapeDist > 0.861844)
       {
+        // Let's cache this tag as metadata so we can use it during merging.
         //e1.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
         //e2.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
+        hoot.trace("geometry match");
         return false;
       }
     }
@@ -202,10 +218,12 @@ function geometryMismatch(map, e1, e2)
     {
       //e1.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
       //e2.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
+      hoot.trace("geometry match");
       return false;
     }
   }
   
+  hoot.trace("geometry mismatch");
   return true;
 }
 
