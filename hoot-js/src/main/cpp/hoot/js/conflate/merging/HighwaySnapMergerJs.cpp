@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/highway/HighwayTagOnlyMerger.h>
+#include <hoot/core/conflate/river/RiverSnapMerger.h>
 
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -106,6 +107,8 @@ void HighwaySnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
 
 void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
 {
+  LOG_DEBUG("test35");
+
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
@@ -115,6 +118,15 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   vector<pair<ElementId, ElementId>> replaced =
       toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
   const QString matchedBy = toCpp<QString>(args[4]);
+  SublineStringMatcherPtr sublineMatcher2;
+  if (args.Length() > 5)
+  {
+    if (matchedBy != "Waterway")
+    {
+      throw IllegalArgumentException("TODO");
+    }
+    sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
+  }
 
   // see explanation in ConflateCmd as to why we use this option to identify Attribute Conflation
   const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
@@ -124,12 +136,20 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
     // HighwayTagOnlyMerger inherits from HighwaySnapMerger, so this works.
     snapMerger.reset(new HighwayTagOnlyMerger(pairs, sublineMatcher));
   }
+  else if (matchedBy == "Waterway")
+  {
+    snapMerger.reset(new RiverSnapMerger(pairs, sublineMatcher, sublineMatcher2));
+    LOG_DEBUG("test36");
+  }
   else
   {
     snapMerger.reset(new HighwaySnapMerger(pairs, sublineMatcher));
   }
+  LOG_DEBUG("test37");
   snapMerger->setMatchedBy(matchedBy);
   snapMerger->apply(map, replaced);
+
+  LOG_DEBUG("test38");
 
   // modify the parameter that was passed in
   Handle<Array> newArr = Handle<Array>::Cast(toV8(replaced));

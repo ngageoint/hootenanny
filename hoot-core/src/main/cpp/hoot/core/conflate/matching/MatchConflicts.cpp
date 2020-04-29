@@ -115,7 +115,11 @@ void MatchConflicts::calculateMatchConflicts(const std::vector<ConstMatchPtr>& m
     }
   }
 
+  LOG_DEBUG("test21");
+
   calculateSubsetConflicts(matches, conflicts, matchSet);
+
+  LOG_DEBUG("test22");
 
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts in " <<

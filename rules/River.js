@@ -25,8 +25,8 @@ exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 
 // used during subline matching
 var sublineMatcherName = hoot.get("waterway.subline.matcher");
-var longWayLengthThreshold = parseInt(hoot.get("waterway.long.way.length.threshold"));
-var longWayNodeCountThreshold = parseInt(hoot.get("waterway.long.way.node.count.threshold"));
+//var longWayLengthThreshold = parseInt(hoot.get("waterway.long.way.length.threshold"));
+//var longWayNodeCountThreshold = parseInt(hoot.get("waterway.long.way.node.count.threshold"));
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
@@ -102,7 +102,7 @@ function explicitTypeMismatch(e1, e2)
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
 
-  hoot.trace("Checking types...");
+  hoot.debug("Checking types...");
 
   // This isn't foolproof as there could be other untranslated river identifying tags involved.
   var waterway1 = tags1.get("waterway");
@@ -111,7 +111,7 @@ function explicitTypeMismatch(e1, e2)
       waterway2 != 'undefined' && waterway2 != null && waterway2 != '' && 
       waterway1 != waterway2)
   {
-    hoot.trace("Explict type mismatch: " + waterway1 + ", " + waterway2);
+    hoot.debug("Explict type mismatch: " + waterway1 + ", " + waterway2);
     return true;
   }
 
@@ -128,26 +128,25 @@ function nameMismatch(map, e1, e2)
   // only score the name if both have one
   if (bothElementsHaveName(e1, e2))
   {
-    hoot.trace("Checking names...");
+    hoot.debug("Checking names...");
     nameScore = nameExtractor.extract(map, e1, e2);
   }
 
   if (nameScore < exports.nameThreshold)
   {
-    hoot.trace("Explict name mismatch: " + e1.getTags().get("name") + ", " + e2.getTags().get("name"));
+    hoot.debug("Explict name mismatch: " + e1.getTags().get("name") + ", " + e2.getTags().get("name"));
     return true;
   }
 
   return false;
 }
 
-function geometryMismatch(map, e1, e2)
+/*function areLongWays(map, e1, e2) // TODO: move
 {
-  var longWays = false;
-
   var length1 = 0;
   var length2 = 0;
-  // TODO: Why would anything but ways be here? Saw some non-ways during match conflict resolution.
+  // TODO: Why would anything but ways be here based on the fact LinearWaterwayCriterion only accepts ways? 
+  // Saw some non-ways during match conflict resolution.
   if (e1.getElementId().getType() == "Way")
   {
     length1 = getLength(map, e1);
@@ -156,7 +155,7 @@ function geometryMismatch(map, e1, e2)
   {
     length2 = getLength(map, e2);
   }
-  hoot.trace("Processing ways of length: " + length1 + ", " + length2 + "...");
+  hoot.debug("Processing ways of length: " + length1 + ", " + length2 + "...");
 
   var nodeCount1 = 0;
   var nodeCount2 = 0;
@@ -168,15 +167,21 @@ function geometryMismatch(map, e1, e2)
   {
     nodeCount2 = e2.getNodeCount();
   }
-  hoot.trace("Processing ways with node count: " + nodeCount1 + ", " + nodeCount2 + "...");
+  hoot.debug("Processing ways with node count: " + nodeCount1 + ", " + nodeCount2 + "...");
 
-  longWays = (length1 + length2) > longWayLengthThreshold || (nodeCount1 + nodeCount2) > longWayNodeCountThreshold;
+  return (length1 + length2) > longWayLengthThreshold || (nodeCount1 + nodeCount2) > longWayNodeCountThreshold;
+}*/
+
+function geometryMismatch(map, e1, e2)
+{
+  var longRivers = isLongRiverPair(map, e1, e2);
+  hoot.debug("longRivers: " + longRivers);
 
   var sublines;
   var sublineMatcherUsed = sublineMatcherName;
-  if (!longWays)
+  if (!longRivers)
   {
-    hoot.trace("Extracting sublines with default...");
+    hoot.debug("Extracting sublines with default...");
     sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   }
   else
@@ -185,7 +190,7 @@ function geometryMismatch(map, e1, e2)
     // Frechet subline matching is a little less accurate but much faster, so we'll switch over 
     // to it for longer ways. Tried tweaking the configuration of MaximalSublineMatcher for 
     // performance, but it didn't help.
-    hoot.trace("Extracting sublines with Frechet...");
+    hoot.debug("Extracting sublines with Frechet...");
     sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
     //sublineMatcherUsed = "hoot::FrechetSublineMatcher";
   }
@@ -202,28 +207,23 @@ function geometryMismatch(map, e1, e2)
     hoot.debug("angleHist: " + angleHist);
     if (angleHist == 0)
     {
-      hoot.trace("Getting weightedShapeDist...");
+      hoot.debug("Getting weightedShapeDist...");
       weightedShapeDist = weightedShapeDistanceExtractor.extract(m, m1, m2);
-      hoot.trace("weightedShapeDist: " + weightedShapeDist);
+      hoot.debug("weightedShapeDist: " + weightedShapeDist);
       if (weightedShapeDist > 0.861844)
       {
-        // Let's cache this tag as metadata so we can use it during merging.
-        //e1.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
-        //e2.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
-        hoot.trace("geometry match");
+        hoot.debug("geometry match");
         return false;
       }
     }
     if (angleHist > 0)
     {
-      //e1.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
-      //e2.getTags().set("hoot:subline:matcher:used", sublineMatcherUsed);
-      hoot.trace("geometry match");
+      hoot.debug("geometry match");
       return false;
     }
   }
   
-  hoot.trace("geometry mismatch");
+  hoot.debug("geometry mismatch");
   return true;
 }
 
@@ -245,21 +245,30 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
+  // TODO: should not have to call this
+  /*if (!isLinearWaterway(e1) && !isLinearWaterway(e2))
+  {
+    hoot.debug("one is not a river:");
+    hoot.debug("e1: " + e1.getElementId() + ", " + tags1.get("name"));
+    hoot.debug("e2: " + e2.getElementId() + ", " + tags2.get("name"));
+    return result;
+  }*/
+
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
-  hoot.trace("**********************************");
-  hoot.trace("e1: " + e1.getId() + ", " + tags1.get("name"));
+  hoot.debug("**********************************");
+  hoot.debug("e1: " + e1.getElementId() + ", " + tags1.get("name"));
   if (tags1.get("note"))
   {
-    hoot.trace("e1 note: " + tags1.get("note"));
+    hoot.debug("e1 note: " + tags1.get("note"));
   }
-  hoot.trace("e2: " + e2.getId() + ", " + tags2.get("name"));
+  hoot.debug("e2: " + e2.getElementId() + ", " + tags2.get("name"));
   if (tags2.get("note"))
   {
-    hoot.trace("e2 note: " + tags2.get("note"));
+    hoot.debug("e2 note: " + tags2.get("note"));
   }  
-  hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
-  hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
+  hoot.debug("mostSpecificType 1: " + mostSpecificType(e1));
+  hoot.debug("mostSpecificType 2: " + mostSpecificType(e2));
   
   // This type and name checks are mostly here to help cull down the potential matches and avoid 
   // costly geometric comparisons for long features. The geometric comparison itself is fairly
@@ -277,12 +286,12 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  hoot.trace("match");
+  hoot.debug("match");
   result = { match: 1.0, miss: 0.0, review: 0.0 };
   return result;
 };
 
-function getSublineMatcherUsed(map, pairs)
+/*function getSublineMatcherUsed(map, pairs)
 {
   for (var i = 0; i < pairs.length; i++)
   { 
@@ -304,7 +313,7 @@ function getSublineMatcherUsed(map, pairs)
     }
   } 
   return "";
-}
+}*/
 
 /**
  * The internals of geometry merging can become quite complex. Typically this
@@ -323,17 +332,10 @@ function getSublineMatcherUsed(map, pairs)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
+  hoot.debug("Merging...");
   // Snap the ways in the second input to the first input. Use the default tag
-  // merge method.
-  var snapSublineMatcher = sublineMatcher;
-  // Pass the appropriate subline matcher based on what was used during matching.
-  // TODO: Unfortunately this is crashing CollectionRelationMergeTest for an yet 
-  // undetermined reason. Oddly, when only a river matcher is configured it doesn't crash.
-  /*if (getSublineMatcherUsed(map, pairs) == "hoot::FrechetSublineMatcher")
-  {
-    snapSublineMatcher = frechetSublineMatcher
-  }*/
-  return snapWays(snapSublineMatcher, map, pairs, replaced, exports.baseFeatureType);
+  // merge method. Pass the appropriate subline matcher based on what was used during matching.
+  return snapRivers(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

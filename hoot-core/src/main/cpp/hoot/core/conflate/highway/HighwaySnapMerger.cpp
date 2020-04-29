@@ -189,6 +189,11 @@ bool HighwaySnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPt
     (w->getNodeId(0) == node2 && w->getLastNodeId() == node1);
 }
 
+WaySublineMatchString HighwaySnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2)
+{
+  return _sublineMatcher->findMatch(map, e1, e2);
+}
+
 bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   vector<pair<ElementId, ElementId>>& replaced)
 {
@@ -249,7 +254,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   WaySublineMatchString match;
   try
   {
-    match = _sublineMatcher->findMatch(result, e1, e2);
+    match = _matchSubline(result, e1, e2);
   }
   catch (const NeedsReviewException& e)
   {

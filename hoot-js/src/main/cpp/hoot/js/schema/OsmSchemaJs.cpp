@@ -28,10 +28,6 @@
 
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/js/JsRegistrar.h>
-#include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/io/DataConvertJs.h>
-#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
@@ -46,7 +42,13 @@
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/CollectionRelationCriterion.h>
+#include <hoot/core/conflate/river/RiverSnapMerger.h>
+
 #include <hoot/js/elements/TagsJs.h>
+#include <hoot/js/JsRegistrar.h>
+#include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 
 using namespace v8;
 
@@ -125,6 +127,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, hasName)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isSpecificallyConflatable"),
               FunctionTemplate::New(current, isSpecificallyConflatable)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isLongRiverPair"),
+              FunctionTemplate::New(current, isLongRiverPair)->GetFunction());
 }
 
 void OsmSchemaJs::getAllTags(const FunctionCallbackInfo<Value>& args)
@@ -456,6 +460,27 @@ void OsmSchemaJs::mostSpecificType(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr element = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
   const QString kvp = OsmSchema::getInstance().mostSpecificType(element->getTags());
   args.GetReturnValue().Set(String::NewFromUtf8(current, kvp.toUtf8().data()));
+}
+
+void OsmSchemaJs::isLongRiverPair(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+  ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject())->getConstElement();
+
+  bool isLongPair = false;
+  if (e1->getElementType() == ElementType::Way && e2->getElementType() == ElementType::Way)
+  {
+    isLongPair =
+      RiverSnapMerger().isLongWayPair(
+        mapJs->getConstMap(), std::dynamic_pointer_cast<const Way>(e1),
+        std::dynamic_pointer_cast<const Way>(e2));
+  }
+
+  args.GetReturnValue().Set(Boolean::New(current, isLongPair));
 }
 
 }

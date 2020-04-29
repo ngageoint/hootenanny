@@ -378,6 +378,22 @@ function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
 }
 
 /**
+ * TODO
+ */
+function snapRivers(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2)
+{
+  return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2);
+}
+
+/**
+ * TODO
+ */
+function isLongRiverPair(map, e1, e2)
+{
+  return hoot.OsmSchema.isLongRiverPair(map, e1, e2);
+}
+
+/**
  * Uses the SearchRadiusCalculator to automatically calculate a search radius based on tie points found
  * in the two input datasets.
  *

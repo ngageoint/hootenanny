@@ -74,12 +74,17 @@ protected:
   // This is useful for getting rid of them later, if necessary.
   bool _markAddedMultilineStringRelations;
 
+  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);
 
-private:
+  /*
+   * TODO
+   */
+  virtual WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2);
 
-  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+private:
 
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;

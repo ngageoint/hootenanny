@@ -56,6 +56,9 @@
 #include <tgs/System/Time.h>
 #include <tgs/System/Timer.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace std;
 using namespace Tgs;
 
@@ -310,6 +313,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
+  QElapsedTimer mergersTimer;
+  mergersTimer.start();
+
   LOG_INFO("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
   vector<pair<ElementId, ElementId>> replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
@@ -356,6 +362,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
+
+  LOG_INFO(
+    "Applied " << StringUtils::formatLargeNumber(mergerCount) << " mergers in " <<
+    StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
 
   currentStep++;
 }
