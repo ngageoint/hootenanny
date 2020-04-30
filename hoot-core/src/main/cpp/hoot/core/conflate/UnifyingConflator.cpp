@@ -318,7 +318,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     const QString msg =
       "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
       " / " + StringUtils::formatLargeNumber(_mergers.size());
-    if (i != 0 && i % 100 == 0)
+    if (i != 0 && i % 10 == 0)
     {
       PROGRESS_INFO(msg);
     }

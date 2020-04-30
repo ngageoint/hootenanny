@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SublineStringMatcherJs.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -43,9 +44,11 @@
 #include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/elements/ElementConverter.h>
 
 // Qt
 #include <QStringList>
+#include <QElapsedTimer>
 
 using namespace std;
 using namespace v8;
@@ -57,7 +60,8 @@ int SublineStringMatcherJs::logWarnCount = 0;
 
 HOOT_JS_REGISTER(SublineStringMatcherJs)
 
-SublineStringMatcherJs::SublineStringMatcherJs(SublineStringMatcherPtr sm) : _sm(sm)
+SublineStringMatcherJs::SublineStringMatcherJs(SublineStringMatcherPtr sm)
+: _sm(sm)
 {
 }
 
@@ -67,6 +71,8 @@ SublineStringMatcherJs::~SublineStringMatcherJs()
 
 void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<Value>& args)
 {
+  //QElapsedTimer timer;
+
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
@@ -84,7 +90,28 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 
   try
   {
+    //timer.restart();
+
     WaySublineMatchString match = sm->findMatch(m, e1, e2);
+
+//    if (timer.elapsed() > 5000)
+//    {
+//      LOG_DEBUG("Found match in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+//      LOG_VARD(e1->getElementId());
+//      LOG_VARD(ElementConverter(m).calculateLength(e1));
+//      if (e1->getElementType() == ElementType::Way)
+//      {
+//        ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e1);
+//        LOG_VARD(way->getNodeCount());
+//      }
+//      LOG_VARD(e2->getElementId());
+//      LOG_VARD(ElementConverter(m).calculateLength(e2));
+//      if (e2->getElementType() == ElementType::Way)
+//      {
+//        ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e2);
+//        LOG_VARD(way->getNodeCount());
+//      }
+//    }
 
     if (match.isEmpty())
     {
@@ -99,6 +126,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     eids.insert(e2->getElementId());
     OsmMapPtr copiedMap(new OsmMap(m->getProjection()));
     CopyMapSubsetOp(m, eids).apply(copiedMap);
+    LOG_VART(copiedMap->size());
     WaySublineMatchString copiedMatch(match, copiedMap);
 
     // split the shared line based on the matching subline

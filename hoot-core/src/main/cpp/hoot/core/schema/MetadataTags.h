@@ -90,6 +90,7 @@ public:
   inline static const QString HootMatchP()              { return "hoot:match:p"; }
   inline static const QString HootMatchScore()          { return "hoot:match:score"; }
   inline static const QString HootMatchedBy()           { return "hoot:matchedBy"; }
+  inline static const QString HootSublineMatcherUsed()  { return "hoot:subline:matcher:used"; }
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
 
