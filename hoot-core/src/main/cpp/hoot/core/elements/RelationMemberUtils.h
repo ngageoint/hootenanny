@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -143,6 +144,31 @@ public:
    */
   static bool containsOnlyMembersWithCriterion(
     const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param relation
+   * @param map
+   * @param geometryType
+   * @return
+   */
+  static bool membersHaveHomogenousGeometryType(
+    const ConstRelationPtr& relation, const ConstOsmMapPtr& map,
+    const GeometryTypeCriterion::GeometryType& geometryType =
+      GeometryTypeCriterion::GeometryType::Unknown);
+
+  /**
+   * TODO
+   *
+   * @param relation
+   * @param map
+   * @param geometryType
+   * @return
+   */
+  static bool hasMemberWithGeometryType(
+    const ConstRelationPtr& relation, const ConstOsmMapPtr& map,
+    const GeometryTypeCriterion::GeometryType& geometryType);
 };
 
 }

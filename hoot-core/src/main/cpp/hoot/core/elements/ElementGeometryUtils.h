@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/GeometricRelationship.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 // GEOS
 #include <geos/geom/Geometry.h>
@@ -39,7 +40,8 @@ namespace hoot
 {
 
 /**
- * Utility methods for using Element with GEOS geometry based functions
+ * Utility methods for using Element with GEOS geometry based functions and hoot's more generic
+ * GeometryType concept.
  */
 class ElementGeometryUtils
 {
@@ -81,6 +83,16 @@ public:
   static bool haveGeometricRelationship(
     const ConstElementPtr& element1, const ConstElementPtr& element2,
     const GeometricRelationship& relationship, ConstOsmMapPtr map);
+
+  /**
+   * TODO
+   *
+   * @param element
+   * @param map
+   * @return
+   */
+  static GeometryTypeCriterion::GeometryType geometryTypeForElement(
+    const ConstElementPtr& element, ConstOsmMapPtr map = OsmMapPtr());
 
 private:
 

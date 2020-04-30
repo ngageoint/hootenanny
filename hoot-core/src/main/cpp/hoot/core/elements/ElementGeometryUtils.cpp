@@ -32,6 +32,10 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
+#include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
+#include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
 
 // GEOS
 #include <geos/util/TopologyException.h>
@@ -189,6 +193,55 @@ std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
     newGeom.reset();
   }
   return newGeom;
+}
+
+GeometryTypeCriterion::GeometryType geometryTypeForElement(
+  const ConstElementPtr& element, ConstOsmMapPtr map)
+{
+  const ElementType type = element->getElementType();
+  if (type == ElementType::Node)
+  {
+    return GeometryTypeCriterion::GeometryType::Point;
+  }
+  else if (type == ElementType::Way)
+  {
+    if (PolygonCriterion().isSatisfied(element))
+    {
+      return GeometryTypeCriterion::GeometryType::Polygon;
+    }
+    else
+    {
+      return GeometryTypeCriterion::GeometryType::Line;
+    }
+  }
+  else if (type == ElementType::Relation)
+  {
+    if (!map)
+    {
+      throw IllegalArgumentException("TODO");
+    }
+    // using the strict definition only here
+    if (RelationWithLinearMembersCriterion(map).isSatisfied(element))
+    {
+      return GeometryTypeCriterion::GeometryType::Point;
+    }
+    else if (RelationWithPolygonMembersCriterion(map).isSatisfied(element))
+    {
+      return GeometryTypeCriterion::GeometryType::Polygon;
+    }
+    else if (RelationWithLinearMembersCriterion(map).isSatisfied(element))
+    {
+      return GeometryTypeCriterion::GeometryType::Line;
+    }
+    else
+    {
+      return GeometryTypeCriterion::GeometryType::Unknown;
+    }
+  }
+  else
+  {
+    throw IllegalArgumentException("TODO");
+  }
 }
 
 }

@@ -39,7 +39,9 @@ namespace hoot
 {
 
 /**
- * Creates a hash with the explicit purpose of finding points which are within a predefined distance.
+ * Creates a hash with the explicit purpose of finding points which are within a predefined
+ * distance.
+ *
  * This is re-entrant, but not thread safe.
  */
 class ClosePointHash
@@ -57,7 +59,8 @@ public:
   void addPoint(double x, double y, long id);
 
   /**
-   * Returns the ids of the current match during iteration. This may have more ids than actually match.
+   * Returns the ids of the current match during iteration. This may have more ids than actually
+   * match.
    */
   const std::vector<long>& getMatch();
 

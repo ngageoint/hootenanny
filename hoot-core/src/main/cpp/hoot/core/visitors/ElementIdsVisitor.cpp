@@ -74,6 +74,7 @@ vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
   {
     map->visitRelationsRo(v);
   }
+  LOG_TRACE(v.getIds());
   return v.getIds();
 }
 

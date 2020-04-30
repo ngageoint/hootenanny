@@ -211,6 +211,10 @@ private:
   // controls cropping
   BoundsOptions _boundsOpts;
 
+  // TODO
+  OsmMapPtr _unmodifiedRefMap;
+  OsmMapPtr _unmodifiedSecMap;
+
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
 
@@ -240,6 +244,12 @@ private:
     std::shared_ptr<ChainCriterion> nonGeometryFilter);
 
   QSet<long> _getRelationIds(const ConstOsmMapPtr& map) const;
+
+  /*
+   * TODO
+   */
+  //void _preprocessRelations(
+    //OsmMapPtr& map, const GeometryTypeCriterion::GeometryType& geometryType);
 
   void _filterFeatures(
     OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
