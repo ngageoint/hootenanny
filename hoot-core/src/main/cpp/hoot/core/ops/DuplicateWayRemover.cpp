@@ -66,7 +66,7 @@ DuplicateWayRemover::DuplicateWayRemover()
 
 void DuplicateWayRemover::apply(OsmMapPtr& map)
 {
-  _numAffected = 0;
+  _numAffected = 0; // TODO: This isn't being updated.
   _map = map;
 
   // create a map from nodes to ways
@@ -154,10 +154,11 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
 
 bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
 {
-  // is this a linear way
-  return (LinearCriterion().isSatisfied(w) &&
-      // if this is not part of a relation
-      _map->getIndex().getParents(w->getElementId()).size() == 0);
+  return
+    // is this a linear way
+    (LinearCriterion().isSatisfied(w) &&
+    // if this is not part of a relation
+    _map->getIndex().getParents(w->getElementId()).size() == 0);
 }
 
 void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, bool rev2)

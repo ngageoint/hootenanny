@@ -43,6 +43,7 @@ public:
 
   static std::string className() { return "hoot::ElementIdsVisitor"; }
 
+  ElementIdsVisitor(const ElementType& elementType);
   ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
 
   void visit(const std::shared_ptr<const Element>& e) override;
@@ -50,6 +51,12 @@ public:
   // Get matching IDs
   std::vector<long> getIds() { return _elementIds; }
 
+  // TODO: Some of these methods may be redundant with related methods in WayUtils. Regardless, they
+  // should all be moved to other util classes that call ElementIdsVisitor.
+
+  static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType);
+
+  // Convenience method for finding elements that match the given criterion
   static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType,
                                         ElementCriterion* pCrit);
 
@@ -64,6 +71,7 @@ public:
                                              const ElementType& elementType, const QString& key,
                                              const QString& value);
 
+  // Convenience method for finding ways that contain the given node
   static std::vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
 
   virtual QString getDescription() const { return "Collects the element IDs visited"; }
@@ -72,6 +80,8 @@ public:
 
 private:
 
+  // This maybe should be a set, b/c there shouldn't be any dupe element IDs for the same element
+  // type in a map.
   std::vector<long> _elementIds;
   ElementType _elementType;
   ElementCriterion* _pCrit;

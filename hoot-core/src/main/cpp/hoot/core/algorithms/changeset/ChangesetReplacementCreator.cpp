@@ -38,6 +38,7 @@
 #include <hoot/core/conflate/UnifyingConflator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/ElementIdCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
@@ -45,6 +46,9 @@
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
+#include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
+#include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
 #include <hoot/core/criterion/RoundaboutCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
@@ -70,6 +74,7 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 
 #include <hoot/core/util/Boundable.h>
+#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -77,6 +82,7 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
@@ -337,9 +343,58 @@ void ChangesetReplacementCreator::create(
     {
       linearFilterClassNames = _linearFilterClassNames;
     }
+
+    ElementCriterionPtr refFilter = itr.value();
+    LOG_VARD(refFilter->toString());
+//    // TODO: explain
+//    LOG_VARD(_retainedRefRelations.size());
+//    if (!_retainedRefRelations.isEmpty())
+//    {
+//      NotCriterionPtr elementIdExcludeCrit(
+//        new NotCriterion(
+//          std::shared_ptr<ElementIdCriterion>(
+//            new ElementIdCriterion(
+//              ElementType::Relation, CollectionUtils::qSetToStdSet(_retainedRefRelations)))));
+//      refFilter.reset(new ChainCriterion(refFilter->clone(), elementIdExcludeCrit));
+//      LOG_VARD(refFilter->toString());
+//    }
+//    LOG_VARD(_retainedRefElements.size());
+//    if (!_retainedRefElements.isEmpty())
+//    {
+//      NotCriterionPtr elementIdExcludeCrit(
+//        new NotCriterion(
+//          std::shared_ptr<ElementIdCriterion>(
+//            new ElementIdCriterion(CollectionUtils::qSetToStdSet(_retainedRefElements)))));
+//      refFilter.reset(new ChainCriterion(refFilter->clone(), elementIdExcludeCrit));
+//      LOG_VARD(refFilter->toString());
+//    }
+    ElementCriterionPtr secFilter = secFilters[itr.key()];
+    LOG_VARD(secFilter->toString());
+//    LOG_VARD(_retainedSecRelations.size());
+//    if (!_retainedSecRelations.isEmpty())
+//    {
+//      NotCriterionPtr elementIdExcludeCrit(
+//        new NotCriterion(
+//          std::shared_ptr<ElementIdCriterion>(
+//            new ElementIdCriterion(
+//              ElementType::Relation, CollectionUtils::qSetToStdSet(_retainedSecRelations)))));
+//      secFilter.reset(new ChainCriterion(secFilter->clone(), elementIdExcludeCrit));
+//      LOG_VARD(secFilter->toString());
+//    }
+//    LOG_VARD(_retainedSecElements.size());
+//    if (!_retainedSecElements.isEmpty())
+//    {
+//      NotCriterionPtr elementIdExcludeCrit(
+//        new NotCriterion(
+//          std::shared_ptr<ElementIdCriterion>(
+//            new ElementIdCriterion(CollectionUtils::qSetToStdSet(_retainedSecElements)))));
+//      secFilter.reset(new ChainCriterion(secFilter->clone(), elementIdExcludeCrit));
+//      LOG_VARD(secFilter->toString());
+//    }
+
     _getMapsForGeometryType(
-      refMap, conflatedMap, input1, input2, boundsStr, itr.value(), secFilters[itr.key()],
-      itr.key(), linearFilterClassNames);
+      refMap, conflatedMap, input1, input2, boundsStr, refFilter, secFilter, itr.key(),
+      linearFilterClassNames);
 
     if (!refMap)
     {
@@ -431,6 +486,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   _filterFeatures(
     refMap, refFeatureFilter, conf(),
     "ref-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
+  //_retainedRefRelations = _retainedRefRelations.unite(_getRelationIds(refMap));
+  //LOG_VARD(_retainedRefRelations.size());
+  //_retainedRefElements = _retainedRefElements.unite(refMap->getElementIds());
+  //LOG_VARD(_retainedRefElements.size());
 
   // Load the sec dataset and crop to the specified aoi.
 
@@ -444,6 +503,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   _filterFeatures(
     secMap, secFeatureFilter, _replacementFilterOptions,
     "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
+  //_retainedSecRelations = _retainedSecRelations.unite(_getRelationIds(secMap));
+  //LOG_VARD(_retainedSecRelations.size());
+  //_retainedSecElements = _retainedSecElements.unite(secMap->getElementIds());
+  //LOG_VARD(_retainedSecElements.size());
 
   const int refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a
@@ -677,12 +740,32 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   ChangesetReplacementCreator::_getDefaultGeometryFilters() const
 {
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> featureFilters;
-  featureFilters[GeometryTypeCriterion::GeometryType::Point] =
-    std::shared_ptr<ElementCriterion>(new PointCriterion());
-  featureFilters[GeometryTypeCriterion::GeometryType::Line] =
-    std::shared_ptr<ElementCriterion>(new LinearCriterion());
-  featureFilters[GeometryTypeCriterion::GeometryType::Polygon] =
-    std::shared_ptr<ElementCriterion>(new PolygonCriterion());
+
+  // TODO: explain
+
+  // The map will get set on this point crit by the RemoveElementsVisitor later on, right before its
+  // needed.
+  ElementCriterionPtr pointCrit(new PointCriterion());
+  std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
+    new RelationWithPointMembersCriterion());
+  relationPointCrit->setAllowMixedChildren(false);
+  OrCriterionPtr pointOr(new OrCriterion(pointCrit, relationPointCrit));
+  featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointOr;
+
+  ElementCriterionPtr lineCrit(new LinearCriterion());
+  std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit(
+    new RelationWithLinearMembersCriterion());
+  relationLinearCrit->setAllowMixedChildren(true);
+  OrCriterionPtr lineOr(new OrCriterion(lineCrit, relationLinearCrit));
+  featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineOr;
+
+  ElementCriterionPtr polyCrit(new PolygonCriterion());
+  std::shared_ptr<RelationWithPolygonMembersCriterion> relationPolyCrit(
+    new RelationWithPolygonMembersCriterion());
+  relationPolyCrit->setAllowMixedChildren(false);
+  OrCriterionPtr polyOr(new OrCriterion(polyCrit, relationPolyCrit));
+  featureFilters[GeometryTypeCriterion::GeometryType::Polygon] = polyOr;
+
   return featureFilters;
 }
 
@@ -835,6 +918,8 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
 
   OsmMapPtr refMap(new OsmMap());
   refMap->setName("ref");
+  // TODO: for this and the sec map can we cache cropped maps that used the same input params across
+  // the separated geometry processing loops?
   IoUtils::loadMap(refMap, input, true, Status::Unknown1);
 
   conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), false);
@@ -926,12 +1011,14 @@ void ChangesetReplacementCreator::_filterFeatures(
     "Filtering features for: " << map->getName() << " based on input filter: " +
     featureFilter->toString() << "...");
 
+  // Negate the input filter, since we're removing everything not passing the input filter.
   RemoveElementsVisitor elementPruner(true);
   // The criteria must be added before the config or map is set. We may want to change
   // MultipleCriterionConsumerVisitor and RemoveElementsVisitor to make this behavior less brittle.
   elementPruner.addCriterion(featureFilter);
   elementPruner.setConfiguration(config);
   elementPruner.setOsmMap(map.get());
+  // TODO: explain
   elementPruner.setRecursive(true);
   LOG_STATUS("\t" << elementPruner.getInitStatusMessage());
   map->visitRw(elementPruner);
@@ -939,6 +1026,14 @@ void ChangesetReplacementCreator::_filterFeatures(
 
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
+}
+
+QSet<long> ChangesetReplacementCreator::_getRelationIds(const ConstOsmMapPtr& map) const
+{
+  return
+    QSet<long>::fromList(
+      QList<long>::fromVector(
+        QVector<long>::fromStdVector(ElementIdsVisitor::findElements(map, ElementType::Relation))));
 }
 
 OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
@@ -1072,9 +1167,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   return cookieCutMap;
 }
 
-void ChangesetReplacementCreator::_combineMaps(OsmMapPtr& map1, OsmMapPtr& map2,
-                                               const bool throwOutDupes,
-                                               const QString& debugFileName)
+void ChangesetReplacementCreator::_combineMaps(
+  OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes, const QString& debugFileName)
 {
   LOG_VART(map1.get());
   LOG_VART(map2.get());
@@ -1141,6 +1235,8 @@ void ChangesetReplacementCreator::_clean(OsmMapPtr& map)
   LOG_INFO(
     "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
 
+  // TODO: since we're never conflating when we call clean, should we remove cleaning ops like
+  // IntersectionSplitter?
   MapCleaner().apply(map);
 
   MapProjector::projectToWgs84(map);  // cleaning works in planar
@@ -1259,8 +1355,8 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-unsnapped-removed");
 }
 
-void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& map,
-                                                                        const QString& boundsStr)
+void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(
+  OsmMapPtr& map, const QString& boundsStr)
 {
   if (map->size() == 0)
   {

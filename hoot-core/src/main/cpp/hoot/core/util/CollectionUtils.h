@@ -91,6 +91,18 @@ public:
     return qSet;
   }
 
+  template<typename T>
+  static std::set<T> qSetToStdSet(const QSet<T>& set)
+  {
+    // There's probably a more efficient way to do this...
+    std::set<T> stdSet;
+    for (typename QSet<T>::const_iterator itr = set.begin(); itr != set.end(); ++itr)
+    {
+      stdSet.insert(*itr);
+    }
+    return stdSet;
+  }
+
 private:
 
   template<typename A, typename B>
