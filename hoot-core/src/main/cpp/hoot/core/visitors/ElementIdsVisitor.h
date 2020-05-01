@@ -36,6 +36,9 @@ namespace hoot
 
 /**
  * Used to get a collection of IDs for the elements that satisfy the specified criterion
+ *
+ * @todo Some of the utility methods may be redundant with related methods in WayUtils and TagUtils.
+ * Regardless, they should all be moved to other util classes that then call into this class.
  */
 class ElementIdsVisitor : public ConstElementVisitor
 {
@@ -48,30 +51,75 @@ public:
 
   void visit(const std::shared_ptr<const Element>& e) override;
 
-  // Get matching IDs
   std::vector<long> getIds() { return _elementIds; }
 
-  // TODO: Some of these methods may be redundant with related methods in WayUtils. Regardless, they
-  // should all be moved to other util classes that call ElementIdsVisitor.
-
+  /**
+   * Retrieves the IDs of all elements of a given type
+   *
+   * @param map map owning the elements
+   * @param elementType type of element to retrieve
+   * @return a collection of numerical element IDs
+   */
   static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType);
 
-  // Convenience method for finding elements that match the given criterion
+  /**
+   * Retrieves the IDs of all elements of a given type passing specified criteria
+   *
+   * @param map map owning the elements
+   * @param elementType type of element to retrieve
+   * @param pCrit criteria to satisfy
+   * @return a collection of numerical element IDs
+   */
   static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType,
                                         ElementCriterion* pCrit);
 
+  /**
+   * Retrieves the IDs of nodes satifying specified criteria and within a radius of a specified
+   * location
+   *
+   * @param map map owning the elements
+   * @param pCrit criteria to satisfy
+   * @param refCoord the point out from which to search
+   * @param maxDistance the furthest distance away from the source point to search
+   * @return a collection of numerical node IDs
+   */
   static std::vector<long> findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
                                      const geos::geom::Coordinate& refCoord, Meters maxDistance);
 
+  /**
+   * Retrieves the IDs of ways satifying specified criteria and within a radius of a specified
+   * location
+   *
+   * @param map map owning the elements
+   * @param pCrit criteria to satisfy
+   * @param refCoord the point out from which to search
+   * @param maxDistance the furthest distance away from the source point to search
+   * @param addError adds element circular error to the search radius
+   * @return a collection of numerical way IDs
+   */
   static std::vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
                                     ConstWayPtr refWay, Meters maxDistance, bool addError);
 
-  // Convenience method for finding elements that contain the given tag
+  /**
+   * Retrieves the IDs of elements of a given type having a specified tag
+   *
+   * @param map map owning the elements
+   * @param elementType ype of element to retrieve
+   * @param key tag key
+   * @param value tag value
+   * @return a collection of numerical element IDs
+   */
   static std::vector<long> findElementsByTag(const ConstOsmMapPtr& map,
                                              const ElementType& elementType, const QString& key,
                                              const QString& value);
 
-  // Convenience method for finding ways that contain the given node
+  /**
+   * Retrieves the IDs of all ways owning a specified node
+   *
+   * @param map map owning the elements
+   * @param nodeId node ID to search for
+   * @return a collection of numerical way IDs
+   */
   static std::vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
 
   virtual QString getDescription() const { return "Collects the element IDs visited"; }
@@ -80,8 +128,8 @@ public:
 
 private:
 
-  // This maybe should be a set, b/c there shouldn't be any dupe element IDs for the same element
-  // type in a map.
+  // matching IDs; This should probably be a set, b/c there shouldn't be any dupe element IDs for
+  // the same element type in a map.
   std::vector<long> _elementIds;
   ElementType _elementType;
   ElementCriterion* _pCrit;
