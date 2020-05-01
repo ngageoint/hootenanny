@@ -69,7 +69,17 @@ public:
    * @param unknown1Map the map to output with Unknown1 status
    * @param unknown2Map the map to output with Unknown2 status
    */
-  static void splitMapByStatus(OsmMapPtr& sourceMap, OsmMapPtr& unknown1Map, OsmMapPtr& unknown2Map);
+  static void splitMapByStatus(OsmMapPtr& sourceMap, OsmMapPtr& unknown1Map,
+                               OsmMapPtr& unknown2Map);
+
+  /**
+   * Combines multiple maps into one map
+   *
+   * @param maps the maps to combine
+   * @param throwOutDupes if true duplicate elements are removed
+   * @return a single combined map
+   */
+  static OsmMapPtr combineMaps(const QList<OsmMapPtr>& maps, const bool throwOutDupes = false);
 };
 
 }

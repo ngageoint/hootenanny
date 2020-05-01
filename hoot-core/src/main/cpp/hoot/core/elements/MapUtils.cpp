@@ -53,8 +53,8 @@ bool MapUtils::mapIsPointsOnly(const OsmMapPtr& map)
   pointCrit->setOsmMap(map.get());
   return
     (int)FilteredVisitor::getStat(
-      pointCrit, ElementVisitorPtr(new ElementCountVisitor()), map) ==
-    (int)map->getElementCount();
+      pointCrit,
+      ElementVisitorPtr(new ElementCountVisitor()), map) == (int)map->getElementCount();
 }
 
 void MapUtils::splitMapByStatus(
@@ -66,6 +66,12 @@ void MapUtils::splitMapByStatus(
   unknown1Map->visitRw(remove2Vis);
   unknown2Map.reset(new OsmMap(sourceMap));
   unknown2Map->visitRw(remove1Vis);
+}
+
+OsmMapPtr MapUtils::combineMaps(const QList<OsmMapPtr>& /*maps*/, const bool /*throwOutDupes*/)
+{
+  // TODO: finish
+  return OsmMapPtr();
 }
 
 }
