@@ -212,8 +212,8 @@ private:
   BoundsOptions _boundsOpts;
 
   // TODO
-  OsmMapPtr _unmodifiedRefMap;
-  OsmMapPtr _unmodifiedSecMap;
+  //OsmMapPtr _unmodifiedRefMap;
+  //OsmMapPtr _unmodifiedSecMap;
 
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
@@ -245,9 +245,6 @@ private:
 
   //QSet<long> _getRelationIds(const ConstOsmMapPtr& map) const;
 
-  /*
-   * TODO
-   */
   //void _preprocessRelations(
     //OsmMapPtr& map, const GeometryTypeCriterion::GeometryType& geometryType);
 

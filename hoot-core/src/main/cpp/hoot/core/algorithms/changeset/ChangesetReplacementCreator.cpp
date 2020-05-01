@@ -445,27 +445,27 @@ void ChangesetReplacementCreator::create(
   }
   assert(refMaps.size() == conflatedMaps.size());
 
-  // TODO: test this
-//  OsmMapPtr combinedRefMap = refMaps.at(0);
-//  for (int i = 1; i < refMaps.size(); i++)
-//  {
-//    OsmMapPtr map = refMaps.at(i);
-//    _combineMaps(combinedRefMap, map, true, "ref-combined-before-changeset");
-//  }
-//  OsmMapPtr combinedConflatedMap = conflatedMaps.at(0);
-//  for (int i = 1; i < conflatedMaps.size(); i++)
-//  {
-//    OsmMapPtr map = conflatedMaps.at(i);
-//    _combineMaps(combinedConflatedMap, map, true, "conflated-combined-before-changeset");
-//  }
+  // TODO
+  OsmMapPtr combinedRefMap = refMaps.at(0);
+  for (int i = 1; i < refMaps.size(); i++)
+  {
+    OsmMapPtr map = refMaps.at(i);
+    _combineMaps(combinedRefMap, map, true, "ref-combined-before-changeset");
+  }
+  OsmMapPtr combinedConflatedMap = conflatedMaps.at(0);
+  for (int i = 1; i < conflatedMaps.size(); i++)
+  {
+    OsmMapPtr map = conflatedMaps.at(i);
+    _combineMaps(combinedConflatedMap, map, true, "conflated-combined-before-changeset");
+  }
 
   // CHANGESET GENERATION
 
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
 
-  _changesetCreator->create(refMaps, conflatedMaps, output);
-  //_changesetCreator->create(combinedRefMap, combinedConflatedMap, output);
+  //_changesetCreator->create(refMaps, conflatedMaps, output);
+  _changesetCreator->create(combinedRefMap, combinedConflatedMap, output);
 
   LOG_INFO("Derived replacement changeset: ..." << output.right(maxFilePrintLength));
 }

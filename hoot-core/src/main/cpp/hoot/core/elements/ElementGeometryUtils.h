@@ -85,11 +85,11 @@ public:
     const GeometricRelationship& relationship, ConstOsmMapPtr map);
 
   /**
-   * TODO
+   * Determines an elements hoot geometry type (used by GeometryTypeCriterion)
    *
-   * @param element
-   * @param map
-   * @return
+   * @param element the element to inspect
+   * @param map the map owning the element being inspected
+   * @return a valid geometry type or GeometryType::Unknown if one cannot be determined
    */
   static GeometryTypeCriterion::GeometryType geometryTypeForElement(
     const ConstElementPtr& element, ConstOsmMapPtr map = OsmMapPtr());

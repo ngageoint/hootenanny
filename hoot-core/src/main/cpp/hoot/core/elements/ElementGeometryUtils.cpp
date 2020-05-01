@@ -218,7 +218,8 @@ GeometryTypeCriterion::GeometryType geometryTypeForElement(
   {
     if (!map)
     {
-      throw IllegalArgumentException("TODO");
+      throw IllegalArgumentException(
+        "A map must be set when determining the geometry type of relations.");
     }
     // using the strict definition only here
     if (RelationWithLinearMembersCriterion(map).isSatisfied(element))
@@ -240,7 +241,7 @@ GeometryTypeCriterion::GeometryType geometryTypeForElement(
   }
   else
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("Invalid element type.");
   }
 }
 

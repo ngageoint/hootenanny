@@ -70,14 +70,14 @@ void RelationWithGeometryMembersCriterion::setOsmMap(const OsmMap* map)
 bool RelationWithGeometryMembersCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-  //LOG_VARD(e);
+  //LOG_VART(e);
 
   bool result = false;
   if (e->getElementType() == ElementType::Relation)
   {
     if (!_map)
     {
-      throw IllegalArgumentException("TODO 1");
+      throw IllegalArgumentException("No map set on RelationWithGeometryMembersCriterion.");
     }
     if (!_crit)
     {

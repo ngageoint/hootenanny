@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Abstract class for identifying relations based on the geometry types of their children
  */
 class RelationWithGeometryMembersCriterion : public GeometryTypeCriterion,
   public ConstOsmMapConsumer
@@ -65,7 +65,8 @@ protected:
 
 private:
 
-  // TODO
+  // If true, this crit will pass if there is only one geometry of the specified type. If false,
+  // all children must have the specified geomertry type.
   bool _allowMixedChildren;
 
   mutable ElementCriterionPtr _crit;

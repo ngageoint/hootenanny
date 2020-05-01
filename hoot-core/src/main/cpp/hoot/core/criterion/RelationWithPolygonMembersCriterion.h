@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Identifies relations with children having polygon geometries
  */
 class RelationWithPolygonMembersCriterion : public RelationWithGeometryMembersCriterion
 {
@@ -52,7 +52,8 @@ public:
 
   virtual QString getCriterion() const override { return "hoot::PolygonCriterion"; }
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const
+  { return "Identifies relations with children having polygon geometries"; }
 
   virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
 

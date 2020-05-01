@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Identifies relations with children having point geometries
  */
 class RelationWithPointMembersCriterion : public RelationWithGeometryMembersCriterion
 {
@@ -52,7 +52,8 @@ public:
 
   virtual QString getCriterion() const override { return "hoot::PointCriterion"; }
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const
+  { return "Identifies relations with children having point geometries"; }
 
   virtual GeometryType getGeometryType() const { return GeometryType::Point; }
 

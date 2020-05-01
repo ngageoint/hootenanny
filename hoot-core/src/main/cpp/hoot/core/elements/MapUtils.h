@@ -63,11 +63,11 @@ public:
   static bool mapIsPointsOnly(const OsmMapPtr& map);
 
   /**
-   * TODO
+   * Splits a map into two separate maps according to element status
    *
-   * @param sourceMap
-   * @param unknown1Map
-   * @param unknown2Map
+   * @param sourceMap the map to split
+   * @param unknown1Map the map to output with Unknown1 status
+   * @param unknown2Map the map to output with Unknown2 status
    */
   static void splitMapByStatus(OsmMapPtr& sourceMap, OsmMapPtr& unknown1Map, OsmMapPtr& unknown2Map);
 };
