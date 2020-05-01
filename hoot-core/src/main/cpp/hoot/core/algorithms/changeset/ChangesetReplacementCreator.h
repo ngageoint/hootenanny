@@ -164,10 +164,10 @@ private:
   bool _geometryFiltersSpecified;
 
   // TODO
-  QSet<long> _retainedRefRelations;
-  QSet<long> _retainedSecRelations;
-  QSet<ElementId> _retainedRefElements;
-  QSet<ElementId> _retainedSecElements;
+  //QSet<long> _retainedRefRelations;
+  //QSet<long> _retainedSecRelations;
+  //QSet<ElementId> _retainedRefElements;
+  //QSet<ElementId> _retainedSecElements;
 
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
@@ -243,7 +243,7 @@ private:
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
     std::shared_ptr<ChainCriterion> nonGeometryFilter);
 
-  QSet<long> _getRelationIds(const ConstOsmMapPtr& map) const;
+  //QSet<long> _getRelationIds(const ConstOsmMapPtr& map) const;
 
   /*
    * TODO

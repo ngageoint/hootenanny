@@ -38,7 +38,7 @@
 #include <hoot/core/conflate/UnifyingConflator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
-#include <hoot/core/criterion/ElementIdCriterion.h>
+//#include <hoot/core/criterion/ElementIdCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
@@ -63,6 +63,8 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
+//#include <hoot/core/ops/DuplicateNodeRemover.h>
+//#include <hoot/core/ops/DuplicateWayRemover.h>
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/ops/MapCropper.h>
@@ -85,7 +87,7 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-#include <hoot/core/visitors/ElementIdsVisitor.h>
+//#include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
@@ -443,6 +445,9 @@ void ChangesetReplacementCreator::create(
   }
   assert(refMaps.size() == conflatedMaps.size());
 
+  //_combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true, "ref-connected-combined");
+
+
   // CHANGESET GENERATION
 
   // Derive a changeset between the ref and conflated maps that replaces ref features with
@@ -722,6 +727,16 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
 void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
 {
+//  DuplicateWayRemover dupeWayRemover;
+//  LOG_STATUS("\t" << dupeWayRemover.getInitStatusMessage());
+//  dupeWayRemover.apply(map);
+//  LOG_STATUS("\t" << dupeWayRemover.getCompletedStatusMessage());
+
+//  DuplicateNodeRemover dupeNodeRemover;
+//  LOG_STATUS("\t" << dupeNodeRemover.getInitStatusMessage());
+//  dupeNodeRemover.apply(map);
+//  LOG_STATUS("\t" << dupeNodeRemover.getCompletedStatusMessage());
+
   // This will handle removing refs in relation members we've cropped out.
   RemoveMissingElementsVisitor missingElementsRemover;
   LOG_STATUS("\t" << missingElementsRemover.getInitStatusMessage());
@@ -794,7 +809,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   ElementCriterionPtr pointCrit(new PointCriterion());
   std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
     new RelationWithPointMembersCriterion());
-  relationPointCrit->setAllowMixedChildren(/*false*/true);
+  relationPointCrit->setAllowMixedChildren(/*true*/false);
   OrCriterionPtr pointOr(new OrCriterion(pointCrit, relationPointCrit));
   featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointOr;
 
@@ -802,14 +817,14 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit(
     new RelationWithLinearMembersCriterion());
   // TODO: This doesn't work for features with dual relation membership.
-  relationLinearCrit->setAllowMixedChildren(/*false*/true);
+  relationLinearCrit->setAllowMixedChildren(true);
   OrCriterionPtr lineOr(new OrCriterion(lineCrit, relationLinearCrit));
   featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineOr;
 
   ElementCriterionPtr polyCrit(new PolygonCriterion());
   std::shared_ptr<RelationWithPolygonMembersCriterion> relationPolyCrit(
     new RelationWithPolygonMembersCriterion());
-  relationPolyCrit->setAllowMixedChildren(/*false*/true);
+  relationPolyCrit->setAllowMixedChildren(/*true*/false);
   OrCriterionPtr polyOr(new OrCriterion(polyCrit, relationPolyCrit));
   featureFilters[GeometryTypeCriterion::GeometryType::Polygon] = polyOr;
 
@@ -964,20 +979,20 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
 
   OsmMapPtr refMap;
-  if (!_unmodifiedRefMap)
-  {
+  //if (!_unmodifiedRefMap)
+  //{
     refMap.reset(new OsmMap());
     refMap->setName("ref");
     // TODO: for this and the sec map can we cache cropped maps that used the same input params across
     // the separated geometry processing loops?
     IoUtils::loadMap(refMap, input, true, Status::Unknown1);
     //
-    _unmodifiedRefMap.reset(new OsmMap(refMap));
-  }
-  else
-  {
-    refMap.reset(new OsmMap(_unmodifiedRefMap));
-  }
+    //_unmodifiedRefMap.reset(new OsmMap(refMap));
+//  }
+//  else
+//  {
+//    refMap.reset(new OsmMap(_unmodifiedRefMap));
+//  }
 
   conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), false);
 
@@ -1051,18 +1066,18 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
 
   OsmMapPtr secMap;
-  if (!_unmodifiedSecMap)
-  {
+  //if (!_unmodifiedSecMap)
+  //{
     secMap.reset(new OsmMap());
     secMap->setName("sec");
-    IoUtils::loadMap(secMap, input, false/*true*/, Status::Unknown2);
+    IoUtils::loadMap(secMap, input, false, Status::Unknown2);
     //
-    _unmodifiedSecMap.reset(new OsmMap(secMap));
-  }
-  else
-  {
-    secMap.reset(new OsmMap(_unmodifiedSecMap));
-  }
+    //_unmodifiedSecMap.reset(new OsmMap(secMap));
+//  }
+//  else
+//  {
+//    secMap.reset(new OsmMap(_unmodifiedSecMap));
+//  }
 
   LOG_VART(MapProjector::toWkt(secMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
@@ -1086,7 +1101,7 @@ void ChangesetReplacementCreator::_filterFeatures(
   elementPruner.setConfiguration(config);
   elementPruner.setOsmMap(map.get());
   // TODO: explain
-  elementPruner.setRecursive(true/*false*/);
+  elementPruner.setRecursive(true);
   LOG_STATUS("\t" << elementPruner.getInitStatusMessage());
   map->visitRw(elementPruner);
   LOG_STATUS("\t" << elementPruner.getCompletedStatusMessage());
@@ -1095,13 +1110,13 @@ void ChangesetReplacementCreator::_filterFeatures(
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
 
-QSet<long> ChangesetReplacementCreator::_getRelationIds(const ConstOsmMapPtr& map) const
-{
-  return
-    QSet<long>::fromList(
-      QList<long>::fromVector(
-        QVector<long>::fromStdVector(ElementIdsVisitor::findElements(map, ElementType::Relation))));
-}
+//QSet<long> ChangesetReplacementCreator::_getRelationIds(const ConstOsmMapPtr& map) const
+//{
+//  return
+//    QSet<long>::fromList(
+//      QList<long>::fromVector(
+//        QVector<long>::fromStdVector(ElementIdsVisitor::findElements(map, ElementType::Relation))));
+//}
 
 OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType)
