@@ -61,6 +61,15 @@ public:
    * @todo probably duplicating CriterionUtils::constainSatisfyingElements
    */
   static bool mapIsPointsOnly(const OsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param sourceMap
+   * @param unknown1Map
+   * @param unknown2Map
+   */
+  static void splitMapByStatus(OsmMapPtr& sourceMap, OsmMapPtr& unknown1Map, OsmMapPtr& unknown2Map);
 };
 
 }

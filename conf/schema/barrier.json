@@ -32,7 +32,6 @@
     },
     {
         "geometries": [
-            "area",
             "linestring"
         ],
         "isA": "barrier",
