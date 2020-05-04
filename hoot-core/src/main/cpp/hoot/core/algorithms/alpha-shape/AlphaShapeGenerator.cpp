@@ -54,6 +54,8 @@ _maxTries(1)
   LOG_VART(_buffer);
   if (_retryOnTooSmallInitialAlpha)
   {
+    // have not seen an instance yet where more than two tries are needed to complete successfully;
+    // in all other cases, no solution could be found no matter how many tries were attempted
     _maxTries = 2;
   }
 }

@@ -438,7 +438,7 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
   hashVis.setOsmMap(map1.get());
   map1->visitRw(hashVis);
   const QMap<QString, ElementId> map1Hashes = hashVis.getHashes();
-  QSet<QString> map1HashesSet = map1Hashes.keys().toSet();
+  const QSet<QString> map1HashesSet = map1Hashes.keys().toSet();
   LOG_VARD(map1HashesSet.size());
   const QSet<std::pair<ElementId, ElementId>> duplicates1 = hashVis.getDuplicates();
   LOG_VARD(duplicates1.size());
@@ -447,7 +447,7 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
   hashVis.setOsmMap(map2.get());
   map2->visitRw(hashVis);
   const QMap<QString, ElementId> map2Hashes = hashVis.getHashes();
-  QSet<QString> map2HashesSet = map2Hashes.keys().toSet();
+  const QSet<QString> map2HashesSet = map2Hashes.keys().toSet();
   LOG_VARD(map2HashesSet.size());
   const QSet<std::pair<ElementId, ElementId>> duplicates2 = hashVis.getDuplicates();
   LOG_VARD(duplicates2.size());
