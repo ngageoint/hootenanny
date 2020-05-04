@@ -196,7 +196,7 @@ QString CalculateHashVisitor::toHashString(const ConstElementPtr& e)
 
 void CalculateHashVisitor::visit(const ElementPtr& e)
 {
-  // don't calculate hashes on review relations.
+  // don't calculate hashes on review relations
   if (ReviewMarker::isReview(e) == false)
   {
     const QString hash = toHashString(e);
@@ -206,7 +206,15 @@ void CalculateHashVisitor::visit(const ElementPtr& e)
     }
     if (_collectHashes)
     {
-      _hashesToElementIds[hash] = e->getElementId();
+      if (_hashesToElementIds.contains(hash))
+      {
+        _duplicates.insert(
+          std::pair<ElementId, ElementId>(_hashesToElementIds[hash], e->getElementId()));
+      }
+      else
+      {
+        _hashesToElementIds[hash] = e->getElementId();
+      }
     }
   }
 }

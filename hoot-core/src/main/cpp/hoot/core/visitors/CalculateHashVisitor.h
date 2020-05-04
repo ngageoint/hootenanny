@@ -68,6 +68,7 @@ public:
   void setCollectHashes(bool collect) { _collectHashes = collect; }
 
   QMap<QString, ElementId> getHashes() const { return _hashesToElementIds; }
+  QSet<std::pair<ElementId, ElementId>> getDuplicates() const { return _duplicates; }
   void clearHashes() { _hashesToElementIds.clear(); }
 
 private:
@@ -80,6 +81,8 @@ private:
   bool _collectHashes;
   // collected hash values mapped to element IDs
   QMap<QString, ElementId> _hashesToElementIds;
+  // TODO
+  QSet<std::pair<ElementId, ElementId>> _duplicates;
 
   QString _toNodeJson(const ConstNodePtr& node);
   QString _toWayJson(const ConstWayPtr& way);
