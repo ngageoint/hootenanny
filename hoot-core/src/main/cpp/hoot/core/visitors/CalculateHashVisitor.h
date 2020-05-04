@@ -28,7 +28,10 @@
 #define CALCULATEHASHVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Relation.h>
 
 namespace hoot
 {
@@ -39,11 +42,10 @@ namespace hoot
  *
  * See this for details: https://github.com/ngageoint/hootenanny/issues/1663
  *
- * This implementation only works for nodes and uses some hacked together string creation
- * code rather than re-using the GeoJson code in: https://github.com/ngageoint/hootenanny/pull/1658
- * When #1658 is merged it probably makes sense to refactor this to use the GeoJSON writer.
+ * We want to keep ID's out of this, so not using GeoJsonWriter. Although, possibly we could add
+ * a switch to GeoJsonWriter to not write ID's and use it at some point instead of this.
  */
-class CalculateHashVisitor : public ElementVisitor
+class CalculateHashVisitor : public ElementOsmMapVisitor
 {
 public:
 
@@ -53,15 +55,36 @@ public:
 
   virtual void visit(const ElementPtr &e);
 
-  static QString toJsonString(const ConstElementPtr& e);
-
-  static QByteArray toHash(const ConstElementPtr& e);
-
-  static QString toHashString(const ConstElementPtr& e);
+  QString toJson(const ConstElementPtr& e);
+  QByteArray toHash(const ConstElementPtr& e);
+  QString toHashString(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
 
   virtual std::string getClassName() const { return className(); }
+
+  void setIncludeCircularError(bool include) { _includeCe = include; }
+  void setWriteHashes(bool write) { _writeHashes = write; }
+  void setCollectHashes(bool collect) { _collectHashes = collect; }
+
+  QMap<QString, ElementId> getHashes() const { return _hashesToElementIds; }
+  void clearHashes() { _hashesToElementIds.clear(); }
+
+private:
+
+  // determines if element circular error will be used in computation of the hash
+  bool _includeCe;
+  // determines whether hashes are written to an element's tags
+  bool _writeHashes;
+  // determines if hash values should be collected for post-processing purposes
+  bool _collectHashes;
+  // collected hash values mapped to element IDs
+  QMap<QString, ElementId> _hashesToElementIds;
+
+  QString _toNodeJson(const ConstNodePtr& node);
+  QString _toWayJson(const ConstWayPtr& way);
+  QString _toRelationJson(const ConstRelationPtr& relation);
+  QString _toInfoTagsJson(const Tags& tags, const double ce);
 };
 
 }

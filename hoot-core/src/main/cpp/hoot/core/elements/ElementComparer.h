@@ -38,6 +38,8 @@ namespace hoot
  * Compares two elements of the same type for similarity
  *
  * Note that if element IDs are ignored, the comparison may be a little more expensive
+ *
+ * @todo change this over to use CalculateHashVisitor
  */
 class ElementComparer : public OsmMapConsumer
 {

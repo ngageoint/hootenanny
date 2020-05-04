@@ -100,6 +100,8 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
   {
     // Set the hoot hash tag here if it doesn't exist, since its required for node comparisons.
     CalculateHashVisitor2 hashVis;
+    // probably shouldn't do this, but its been working this way for awhile now...will remove later
+    hashVis.setIncludeCircularError(true);
     if (!e1->getTags().contains(MetadataTags::HootHash()))
     {
       hashVis.visit(e1);
@@ -135,7 +137,8 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
           LOG_VART(_threshold);
         }
 
-        LOG_TRACE("elements failed comparison:");
+        LOG_DEBUG(
+          "elements failed comparison: " << e1->getElementId() << ", " << e2->getElementId());
       }
 
       return false;
@@ -198,7 +201,7 @@ bool ElementComparer::_compareWay(const std::shared_ptr<const Element>& re,
 
   if (rw->getNodeIds().size() != w->getNodeIds().size())
   {
-    LOG_TRACE(
+    LOG_DEBUG(
       "Ways " << rw->getElementId() << " and " << w->getElementId() <<
       " failed comparison on way node count: " << rw->getNodeIds().size() << " and " <<
       w->getNodeIds().size());

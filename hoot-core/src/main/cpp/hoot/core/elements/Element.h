@@ -156,8 +156,7 @@ public:
    * Returns a simplified string description with no mention of the ID, useful in hashing
    *
    * @return a string
-   * @todo There is a hash visitor for Node, so possibly we can adapt some of that code to do this
-   * instead and repeat for the other element types.
+   * @todo get rid of this now that CalculateHashVisitor is complete
    */
   virtual QString nonIdHash() const = 0;
 
