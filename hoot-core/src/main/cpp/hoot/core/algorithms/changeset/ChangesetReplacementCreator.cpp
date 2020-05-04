@@ -333,7 +333,7 @@ void ChangesetReplacementCreator::create(
   for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
          refFilters.begin(); itr != refFilters.end(); ++itr)
   {
-    LOG_VARD("******************************************");
+    LOG_INFO("******************************************");
     LOG_INFO(
       "Preparing maps for changeset derivation given geometry type: "<<
       GeometryTypeCriterion::typeToString(itr.key()) << ". Pass: " << passCtr << " / " <<
@@ -1246,23 +1246,6 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     // replaced.
     LOG_DEBUG("Using dough map as cutter shape map...");
     cutterMapToUse = doughMap;
-    cookieCutterAlphaShapeBuffer = 10.0;
-  }
-  else if (cutterMap->getElementCount() < 3 && MapUtils::mapIsPointsOnly(cutterMap))
-  {
-    // Generate a cutter shape based on a transformation of the cropped secondary map.
-
-    // Found that if a map only has a couple points or less, generating an alpha shape from them may
-    // not be possible (or at least I don't know how to yet). So instead, go through the points in
-    // the map and replace them with small square polys...from that we can generate the alpha shape.
-
-    LOG_DEBUG("Generating cutter shape map from sec map transformation...");
-    cutterMapToUse.reset(new OsmMap(cutterMap));
-    PointsToPolysConverter pointConverter;
-    LOG_STATUS("\t" << pointConverter.getInitStatusMessage());
-    pointConverter.apply(cutterMapToUse);
-    LOG_STATUS("\t" << pointConverter.getCompletedStatusMessage());
-    MapProjector::projectToWgs84(cutterMapToUse);
   }
   else
   {
@@ -1270,6 +1253,23 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     LOG_DEBUG("Using cutter map as cutter shape map...");
     cutterMapToUse = cutterMap;
   }
+
+  // Found that if a map only has a couple points or less, generating an alpha shape from them may
+  // not be possible (or at least don't know how to yet). So instead, go through the points in
+  // the map and replace them with small square polys...from that we can generate the alpha shape.
+  if ((int)cutterMapToUse->getElementCount() < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
+  {
+    LOG_DEBUG("Creating a cutter shape map transformation for point map...");
+    // Make a copy here since we're making destructive changes to the geometry here for alpha shape
+    // generation purposes only.
+    cutterMapToUse.reset(new OsmMap(cutterMap));
+    PointsToPolysConverter pointConverter/*(1.0)*/;
+    LOG_STATUS("\t" << pointConverter.getInitStatusMessage());
+    pointConverter.apply(cutterMapToUse);
+    LOG_STATUS("\t" << pointConverter.getCompletedStatusMessage());
+    MapProjector::projectToWgs84(cutterMapToUse);
+  }
+
   LOG_VART(cutterMapToUse->getElementCount());
   OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-map");
 
