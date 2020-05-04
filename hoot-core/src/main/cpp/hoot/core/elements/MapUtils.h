@@ -71,15 +71,6 @@ public:
    */
   static void splitMapByStatus(OsmMapPtr& sourceMap, OsmMapPtr& unknown1Map,
                                OsmMapPtr& unknown2Map);
-
-  /**
-   * Combines multiple maps into one map
-   *
-   * @param maps the maps to combine
-   * @param throwOutDupes if true duplicate elements are removed
-   * @return a single combined map
-   */
-  static OsmMapPtr combineMaps(const QList<OsmMapPtr>& maps, const bool throwOutDupes = false);
 };
 
 }

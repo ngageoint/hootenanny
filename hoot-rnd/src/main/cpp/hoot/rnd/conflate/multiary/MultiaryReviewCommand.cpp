@@ -255,6 +255,7 @@ QByteArray MultiaryReviewCommand::_getElementHashID(ElementPtr e) const
   if (!e->getTags().contains(hashKey))
   {
     CalculateHashVisitor v;
+    v.setIncludeCircularError(true);
     v.visit(e);
   }
 

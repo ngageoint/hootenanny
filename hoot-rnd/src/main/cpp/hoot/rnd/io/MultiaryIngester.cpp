@@ -224,7 +224,9 @@ std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream
     conf().getString(ConfigOptions::getSchemaTranslationScriptKey()));
 
   visitors.append(translationVisitor);
-  visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
+  std::shared_ptr<CalculateHashVisitor2> hashVis(new CalculateHashVisitor2());
+  hashVis->setIncludeCircularError(true);
+  visitors.append(hashVis);
   std::shared_ptr<ElementInputStream> filteredNewInputStream(
     new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
   return filteredNewInputStream;

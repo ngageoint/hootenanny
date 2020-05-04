@@ -103,6 +103,7 @@ public:
     }
 
     CalculateHashVisitor hashVisitor;
+    hashVisitor.setIncludeCircularError(true);
     map->visitRw(hashVisitor);
 
     LOG_INFO("Applying pre-conflation operations...");

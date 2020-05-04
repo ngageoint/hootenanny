@@ -54,9 +54,10 @@
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
 
+#include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/elements/MapUtils.h>
+//#include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/elements/RelationMemberUtils.h>
 
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
@@ -73,8 +74,9 @@
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
-#include <hoot/core/ops/RemoveRelationByEid.h>
+//#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/ops/WayJoinerOp.h>
 
@@ -87,6 +89,7 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
+#include <hoot/core/visitors/CalculateHashVisitor.h>
 //#include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
@@ -445,29 +448,101 @@ void ChangesetReplacementCreator::create(
   }
   assert(refMaps.size() == conflatedMaps.size());
 
-  // TODO
-  OsmMapPtr combinedRefMap = refMaps.at(0);
+  // TODO: explain
+
+  /*OsmMapPtr combinedRefMap = refMaps.at(0);
+  LOG_VARD(combinedRefMap->size());
   for (int i = 1; i < refMaps.size(); i++)
   {
     OsmMapPtr map = refMaps.at(i);
-    _combineMaps(combinedRefMap, map, true, "ref-combined-before-changeset");
+    LOG_VARD(map->size());
+    _combineMaps(combinedRefMap, map, true, true, "ref-combined-before-changeset");
   }
+  LOG_VARD(combinedRefMap->size());
   OsmMapPtr combinedConflatedMap = conflatedMaps.at(0);
+  LOG_VARD(combinedConflatedMap->size());
   for (int i = 1; i < conflatedMaps.size(); i++)
   {
     OsmMapPtr map = conflatedMaps.at(i);
-    _combineMaps(combinedConflatedMap, map, true, "conflated-combined-before-changeset");
+    LOG_VARD(map->size());
+    _combineMaps(combinedConflatedMap, map, true, true, "conflated-combined-before-changeset");
   }
+  LOG_VARD(combinedConflatedMap->size());*/
+  // TODO: going to try to use this as part of #3998
+//  for (int i = 0; i < conflatedMaps.size(); i++)
+//  {
+//    if ((i + 1) < conflatedMaps.size())
+//    {
+//      _dedupeMap(conflatedMaps.at(i), conflatedMaps.at(i + 1));
+//    }
+//    else
+//    {
+//      _dedupeMap(conflatedMaps.at(0), conflatedMaps.at(i));
+//    }
+//  }
 
   // CHANGESET GENERATION
 
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
 
-  //_changesetCreator->create(refMaps, conflatedMaps, output);
-  _changesetCreator->create(combinedRefMap, combinedConflatedMap, output);
+  _changesetCreator->create(refMaps, conflatedMaps, output);
+  //_changesetCreator->create(combinedRefMap, combinedConflatedMap, output);
 
   LOG_INFO("Derived replacement changeset: ..." << output.right(maxFilePrintLength));
+}
+
+void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr refMap, OsmMapPtr mapToDedupe)
+{
+  LOG_DEBUG("Size before de-duping: " << mapToDedupe->size());
+
+  CalculateHashVisitor hashVis(false, true);
+
+  hashVis.setOsmMap(refMap.get());
+  refMap->visitRw(hashVis);
+  const QMap<QString, ElementId> refHashes = hashVis.getHashes();
+  QSet<QString> refHashesSet = refHashes.keys().toSet();
+  LOG_VARD(refHashesSet.size());
+
+  hashVis.clearHashes();
+  hashVis.setOsmMap(mapToDedupe.get());
+  mapToDedupe->visitRw(hashVis);
+  const QMap<QString, ElementId> toDedupeHashes = hashVis.getHashes();
+  QSet<QString> toDedupeHashesSet = toDedupeHashes.keys().toSet();
+  LOG_VARD(toDedupeHashesSet.size());
+
+  const QSet<QString> sharedHashes = refHashesSet.intersect(toDedupeHashesSet);
+  QMap<ElementType::Type, QSet<ElementId>> elementsToRemove;
+  for (QSet<QString>::const_iterator itr = sharedHashes.begin(); itr != sharedHashes.end(); ++itr)
+  {
+    const QString sharedHash = *itr;
+    const ElementId toRemove = toDedupeHashes[sharedHash];
+    elementsToRemove[toRemove.getType().getEnum()].insert(toRemove);
+  }
+
+  const QSet<ElementId> relationsToRemove = elementsToRemove[ElementType::Relation];
+  LOG_VARD(relationsToRemove.size());
+  for (QSet<ElementId>::const_iterator itr = relationsToRemove.begin();
+       itr != relationsToRemove.end(); ++itr)
+  {
+    RemoveElementByEid::removeElementNoCheck(mapToDedupe, *itr);
+  }
+  const QSet<ElementId> waysToRemove = elementsToRemove[ElementType::Way];
+  LOG_VARD(waysToRemove.size());
+  for (QSet<ElementId>::const_iterator itr = waysToRemove.begin();
+       itr != waysToRemove.end(); ++itr)
+  {
+    RemoveElementByEid::removeElementNoCheck(mapToDedupe, *itr);
+  }
+  const QSet<ElementId> nodesToRemove = elementsToRemove[ElementType::Node];
+  LOG_VARD(nodesToRemove.size());
+  for (QSet<ElementId>::const_iterator itr = nodesToRemove.begin();
+       itr != nodesToRemove.end(); ++itr)
+  {
+    RemoveElementByEid::removeElementNoCheck(mapToDedupe, *itr);
+  }
+
+   LOG_DEBUG("Size after de-duping: " << mapToDedupe->size());
 }
 
 //void ChangesetReplacementCreator::_preprocessRelations(

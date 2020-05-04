@@ -167,6 +167,7 @@ public:
     }
 
     CalculateHashVisitor hashVisitor;
+    hashVisitor.setIncludeCircularError(true);
     map->visitRw(hashVisitor);
 
     OsmMapWriterFactory::write(map, "/tmp/score-matches-after-prep.osm");

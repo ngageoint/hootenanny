@@ -68,10 +68,4 @@ void MapUtils::splitMapByStatus(
   unknown2Map->visitRw(remove1Vis);
 }
 
-OsmMapPtr MapUtils::combineMaps(const QList<OsmMapPtr>& /*maps*/, const bool /*throwOutDupes*/)
-{
-  // TODO: finish
-  return OsmMapPtr();
-}
-
 }

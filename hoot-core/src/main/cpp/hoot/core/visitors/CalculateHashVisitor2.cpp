@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
 #include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
@@ -39,12 +38,10 @@ HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor2)
 
 void CalculateHashVisitor2::visit(const ElementPtr& e)
 {
-  if (e->getElementType() == ElementType::Node)
-  {
-    e->getTags().remove(Tags::uuidKey());
-    e->getTags()[MetadataTags::HootHash()] =
-      "sha1sum:" + QString::fromUtf8(CalculateHashVisitor::toHash(e).toHex());
-  }
+  e->getTags().remove(Tags::uuidKey());
+  _hashVis.setOsmMap(_map);
+  e->getTags()[MetadataTags::HootHash()] =
+    "sha1sum:" + QString::fromUtf8(_hashVis.toHash(e).toHex());
 }
 
 }
