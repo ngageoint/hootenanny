@@ -163,12 +163,6 @@ private:
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _geometryTypeFilters;
   bool _geometryFiltersSpecified;
 
-  // TODO
-  //QSet<long> _retainedRefRelations;
-  //QSet<long> _retainedSecRelations;
-  //QSet<ElementId> _retainedRefElements;
-  //QSet<ElementId> _retainedSecElements;
-
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
 
@@ -211,10 +205,6 @@ private:
   // controls cropping
   BoundsOptions _boundsOpts;
 
-  // TODO
-  //OsmMapPtr _unmodifiedRefMap;
-  //OsmMapPtr _unmodifiedSecMap;
-
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
 
@@ -242,11 +232,6 @@ private:
    */
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
     std::shared_ptr<ChainCriterion> nonGeometryFilter);
-
-  //QSet<long> _getRelationIds(const ConstOsmMapPtr& map) const;
-
-  //void _preprocessRelations(
-    //OsmMapPtr& map, const GeometryTypeCriterion::GeometryType& geometryType);
 
   void _filterFeatures(
     OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,

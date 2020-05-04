@@ -38,7 +38,6 @@
 #include <hoot/core/conflate/UnifyingConflator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
-//#include <hoot/core/criterion/ElementIdCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
@@ -56,7 +55,6 @@
 
 #include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/elements/MapUtils.h>
-//#include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 
 #include <hoot/core/io/IoUtils.h>
@@ -64,8 +62,6 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
-//#include <hoot/core/ops/DuplicateNodeRemover.h>
-//#include <hoot/core/ops/DuplicateWayRemover.h>
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/ops/MapCropper.h>
@@ -76,7 +72,6 @@
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
-//#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/ops/WayJoinerOp.h>
 
@@ -90,7 +85,6 @@
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/CalculateHashVisitor.h>
-//#include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
@@ -358,51 +352,6 @@ void ChangesetReplacementCreator::create(
     ElementCriterionPtr secFilter = secFilters[itr.key()];
     LOG_VARD(secFilter->toString());
 
-    // TODO: explain
-//    LOG_VARD(_retainedRefRelations.size());
-//    LOG_VARD(_retainedRefRelations);
-//    if (!_retainedRefRelations.isEmpty())
-//    {
-//      NotCriterionPtr elementIdExcludeCrit(
-//        new NotCriterion(
-//          std::shared_ptr<ElementIdCriterion>(
-//            new ElementIdCriterion(
-//              ElementType::Relation, CollectionUtils::qSetToStdSet(_retainedRefRelations)))));
-//      refFilter.reset(new ChainCriterion(refFilter->clone(), elementIdExcludeCrit));
-//      LOG_VARD(refFilter->toString());
-//    }
-//    LOG_VARD(_retainedRefElements.size());
-//    if (!_retainedRefElements.isEmpty())
-//    {
-//      NotCriterionPtr elementIdExcludeCrit(
-//        new NotCriterion(
-//          std::shared_ptr<ElementIdCriterion>(
-//            new ElementIdCriterion(CollectionUtils::qSetToStdSet(_retainedRefElements)))));
-//      refFilter.reset(new ChainCriterion(refFilter->clone(), elementIdExcludeCrit));
-//      LOG_VARD(refFilter->toString());
-//    }
-//    LOG_VARD(_retainedSecRelations.size());
-//    if (!_retainedSecRelations.isEmpty())
-//    {
-//      NotCriterionPtr elementIdExcludeCrit(
-//        new NotCriterion(
-//          std::shared_ptr<ElementIdCriterion>(
-//            new ElementIdCriterion(
-//              ElementType::Relation, CollectionUtils::qSetToStdSet(_retainedSecRelations)))));
-//      secFilter.reset(new ChainCriterion(secFilter->clone(), elementIdExcludeCrit));
-//      LOG_VARD(secFilter->toString());
-//    }
-//    LOG_VARD(_retainedSecElements.size());
-//    if (!_retainedSecElements.isEmpty())
-//    {
-//      NotCriterionPtr elementIdExcludeCrit(
-//        new NotCriterion(
-//          std::shared_ptr<ElementIdCriterion>(
-//            new ElementIdCriterion(CollectionUtils::qSetToStdSet(_retainedSecElements)))));
-//      secFilter.reset(new ChainCriterion(secFilter->clone(), elementIdExcludeCrit));
-//      LOG_VARD(secFilter->toString());
-//    }
-
     _getMapsForGeometryType(
       refMap, conflatedMap, input1, input2, boundsStr, refFilter, secFilter, itr.key(),
       linearFilterClassNames);
@@ -450,24 +399,6 @@ void ChangesetReplacementCreator::create(
 
   // TODO: explain
 
-  /*OsmMapPtr combinedRefMap = refMaps.at(0);
-  LOG_VARD(combinedRefMap->size());
-  for (int i = 1; i < refMaps.size(); i++)
-  {
-    OsmMapPtr map = refMaps.at(i);
-    LOG_VARD(map->size());
-    _combineMaps(combinedRefMap, map, true, true, "ref-combined-before-changeset");
-  }
-  LOG_VARD(combinedRefMap->size());
-  OsmMapPtr combinedConflatedMap = conflatedMaps.at(0);
-  LOG_VARD(combinedConflatedMap->size());
-  for (int i = 1; i < conflatedMaps.size(); i++)
-  {
-    OsmMapPtr map = conflatedMaps.at(i);
-    LOG_VARD(map->size());
-    _combineMaps(combinedConflatedMap, map, true, true, "conflated-combined-before-changeset");
-  }
-  LOG_VARD(combinedConflatedMap->size());*/
   // TODO: going to try to use this as part of #3998
 //  for (int i = 0; i < conflatedMaps.size(); i++)
 //  {
@@ -487,7 +418,6 @@ void ChangesetReplacementCreator::create(
   // secondary features within the bounds and write it out.
 
   _changesetCreator->create(refMaps, conflatedMaps, output);
-  //_changesetCreator->create(combinedRefMap, combinedConflatedMap, output);
 
   LOG_INFO("Derived replacement changeset: ..." << output.right(maxFilePrintLength));
 }
@@ -545,35 +475,6 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr refMap, OsmMapPtr mapToDe
    LOG_DEBUG("Size after de-duping: " << mapToDedupe->size());
 }
 
-//void ChangesetReplacementCreator::_preprocessRelations(
-//  OsmMapPtr& map, const GeometryTypeCriterion::GeometryType& geometryType)
-//{
-//  QSet<long> relationIdsToRemove;
-//  const RelationMap& relations = map->getRelations();
-//  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
-//  {
-//    RelationPtr relation = map->getRelation(it->first);
-//    if (!RelationMemberUtils::membersHaveHomogenousGeometryType(relation, map, geometryType))
-//    {
-//      const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-//      for (size_t i = 0; i < relationMembers.size(); i++)
-//      {
-//        ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-//        const std::set<long>& idsOfAllRelationMemberBelongsTo =
-//          map->getIndex().getElementToRelationMap()->getRelationByElement(member->getElementId());
-
-//      }
-//    }
-//  }
-
-//  for (QSet<long>::const_iterator itr = relationIdsToRemove.begin();
-//       itr != relationIdsToRemove.end(); ++itr)
-//  {
-//    // non-recursive removal
-//    RemoveRelationByEid::removeRelation(map, *itr);
-//  }
-//}
-
 void ChangesetReplacementCreator::_getMapsForGeometryType(
   OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const QString& input1, const QString& input2,
   const QString& boundsStr, const ElementCriterionPtr& refFeatureFilter,
@@ -594,9 +495,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   refMap = _loadRefMap(input1);
 
-  // TODO
-  //_preprocessRelations(refMap, geometryType);
-
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
   // versions later.
 
@@ -616,16 +514,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   _filterFeatures(
     refMap, refFeatureFilter, conf(),
     "ref-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
-  //_retainedRefRelations = _retainedRefRelations.unite(_getRelationIds(refMap));
-  //LOG_VARD(_retainedRefRelations.size());
-  //_retainedRefElements = _retainedRefElements.unite(refMap->getElementIds());
-  //LOG_VARD(_retainedRefElements.size());
 
   // Load the sec dataset and crop to the specified aoi.
 
   OsmMapPtr secMap = _loadSecMap(input2);
-
-  //_preprocessRelations(secMap, geometryType);
 
   MemoryUsageChecker::getInstance()->check();
 
@@ -635,10 +527,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   _filterFeatures(
     secMap, secFeatureFilter, _replacementFilterOptions,
     "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
-  //_retainedSecRelations = _retainedSecRelations.unite(_getRelationIds(secMap));
-  //LOG_VARD(_retainedSecRelations.size());
-  //_retainedSecElements = _retainedSecElements.unite(secMap->getElementIds());
-  //LOG_VARD(_retainedSecElements.size());
 
   const int refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a
@@ -814,16 +702,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
 void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
 {
-//  DuplicateWayRemover dupeWayRemover;
-//  LOG_STATUS("\t" << dupeWayRemover.getInitStatusMessage());
-//  dupeWayRemover.apply(map);
-//  LOG_STATUS("\t" << dupeWayRemover.getCompletedStatusMessage());
-
-//  DuplicateNodeRemover dupeNodeRemover;
-//  LOG_STATUS("\t" << dupeNodeRemover.getInitStatusMessage());
-//  dupeNodeRemover.apply(map);
-//  LOG_STATUS("\t" << dupeNodeRemover.getCompletedStatusMessage());
-
   // This will handle removing refs in relation members we've cropped out.
   RemoveMissingElementsVisitor missingElementsRemover;
   LOG_STATUS("\t" << missingElementsRemover.getInitStatusMessage());
@@ -1065,21 +943,11 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(),
     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
 
+  // TODO
   OsmMapPtr refMap;
-  //if (!_unmodifiedRefMap)
-  //{
-    refMap.reset(new OsmMap());
-    refMap->setName("ref");
-    // TODO: for this and the sec map can we cache cropped maps that used the same input params across
-    // the separated geometry processing loops?
-    IoUtils::loadMap(refMap, input, true, Status::Unknown1);
-    //
-    //_unmodifiedRefMap.reset(new OsmMap(refMap));
-//  }
-//  else
-//  {
-//    refMap.reset(new OsmMap(_unmodifiedRefMap));
-//  }
+  refMap.reset(new OsmMap());
+  refMap->setName("ref");
+  IoUtils::loadMap(refMap, input, true, Status::Unknown1);
 
   conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), false);
 
@@ -1153,18 +1021,9 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
 
   OsmMapPtr secMap;
-  //if (!_unmodifiedSecMap)
-  //{
-    secMap.reset(new OsmMap());
-    secMap->setName("sec");
-    IoUtils::loadMap(secMap, input, false, Status::Unknown2);
-    //
-    //_unmodifiedSecMap.reset(new OsmMap(secMap));
-//  }
-//  else
-//  {
-//    secMap.reset(new OsmMap(_unmodifiedSecMap));
-//  }
+  secMap.reset(new OsmMap());
+  secMap->setName("sec");
+  IoUtils::loadMap(secMap, input, false, Status::Unknown2);
 
   LOG_VART(MapProjector::toWkt(secMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
@@ -1196,14 +1055,6 @@ void ChangesetReplacementCreator::_filterFeatures(
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
-
-//QSet<long> ChangesetReplacementCreator::_getRelationIds(const ConstOsmMapPtr& map) const
-//{
-//  return
-//    QSet<long>::fromList(
-//      QList<long>::fromVector(
-//        QVector<long>::fromStdVector(ElementIdsVisitor::findElements(map, ElementType::Relation))));
-//}
 
 OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType)

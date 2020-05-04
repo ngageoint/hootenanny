@@ -156,7 +156,7 @@ public:
    * Returns a simplified string description with no mention of the ID, useful in hashing
    *
    * @return a string
-   * @todo replace this with CalculateHashVisitor
+   * @todo get rid of this now that CalculateHashVisitor is complete
    */
   virtual QString nonIdHash() const = 0;
 

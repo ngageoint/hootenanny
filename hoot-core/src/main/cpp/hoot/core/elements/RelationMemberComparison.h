@@ -60,6 +60,7 @@ private:
 
 inline uint qHash(const RelationMemberComparison& memberComp)
 {
+  // TODO: change this over to use CalculateHashVisitor
   return qHash(memberComp.getRole() + " " + memberComp.getElement()->nonIdHash());
 }
 

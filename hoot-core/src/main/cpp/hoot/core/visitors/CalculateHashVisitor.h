@@ -72,9 +72,13 @@ public:
 
 private:
 
+  // TODO
   bool _includeCe;
+  // TODO
   bool _writeHashes;
+  // TODO
   bool _collectHashes;
+  // TODO
   QMap<QString, ElementId> _hashesToElementIds;
 
   QString _toNodeJson(const ConstNodePtr& node);
