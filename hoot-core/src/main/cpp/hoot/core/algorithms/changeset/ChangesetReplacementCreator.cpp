@@ -427,7 +427,9 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr refMap, OsmMapPtr mapToDe
 {
   LOG_DEBUG("Size before de-duping: " << mapToDedupe->size());
 
-  CalculateHashVisitor hashVis(false, true);
+  CalculateHashVisitor hashVis;
+  hashVis.setWriteHashes(false);
+  hashVis.setCollectHashes(true);
 
   hashVis.setOsmMap(refMap.get());
   refMap->visitRw(hashVis);
