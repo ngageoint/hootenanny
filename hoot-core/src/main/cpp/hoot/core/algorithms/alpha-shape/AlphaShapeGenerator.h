@@ -62,6 +62,7 @@ private:
   double _alpha;
   double _buffer;
   bool _retryOnTooSmallInitialAlpha;
+  bool _maxTries;
 };
 
 }

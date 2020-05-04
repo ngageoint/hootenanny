@@ -32,6 +32,7 @@ set -e
 
 # TODO: 
 # - consolidate the three replacement workflows into a single function
+# - add disable way snapping option
 
 TEST_NAME=$1
 echo "test name: " $TEST_NAME
