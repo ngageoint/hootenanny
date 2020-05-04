@@ -397,7 +397,8 @@ void ChangesetReplacementCreator::create(
   }
   assert(refMaps.size() == conflatedMaps.size());
 
-  // TODO: explain
+  // Due to the mixed relations processing explained in _getDefaultGeometryFilters, we may have
+  // some duplicated features that need to be cleaned up before we generate the changesets.
 
   // TODO: going to try to use this as part of #3998
 //  for (int i = 0; i < conflatedMaps.size(); i++)
@@ -708,13 +709,15 @@ void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
   map->visitRw(missingElementsRemover);
   LOG_STATUS("\t" << missingElementsRemover.getCompletedStatusMessage());
 
-  // TODO
+  // Due to mixed geometry type relations explained in _getDefaultGeometryFilters, we may have
+  // introduced some duplicate relation members.
   RemoveDuplicateRelationMembersVisitor dupeMembersRemover;
   LOG_STATUS("\t" << dupeMembersRemover.getInitStatusMessage());
   map->visitRw(dupeMembersRemover);
   LOG_STATUS("\t" << dupeMembersRemover.getCompletedStatusMessage());
 
-  // This will remove any relations that were already empty or became empty after the previous step.
+  // This will remove any relations that were already empty or became empty after we removed missing
+  // members.
   RemoveEmptyRelationsOp emptyRelationRemover;
   LOG_STATUS("\t" << emptyRelationRemover.getInitStatusMessage());
   emptyRelationRemover.apply(map);
@@ -767,21 +770,28 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
 {
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> featureFilters;
 
-  // TODO: explain
+  // Unfortunately, trying to process feature types separately by geometry type breaks down when
+  // you have relations with mixed geometry types and/or features that belong to multiple relations
+  // having different geometry types. The single relation with mixed geometry type membership case
+  // is handled with use of the RelationWithGeometryMembersCriterion implementations below. However,
+  // bugs may occur during cropping if, say, a polygon geometry was procesed in the line geometry
+  // processing loop b/c a line and poly belonged to the same geometry. Haven't seen this actual
+  // bug occur yet, but I believe it can...not sure how to prevent it yet. Furthermore, there's a
+  // bigger problem in that if a feature belongs to two relations with different geometry types, it
+  // may be duplicated in the output. This will hopefully be fixed as part of #3998.
 
   // The map will get set on this point crit by the RemoveElementsVisitor later on, right before its
   // needed.
   ElementCriterionPtr pointCrit(new PointCriterion());
   std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
     new RelationWithPointMembersCriterion());
-  relationPointCrit->setAllowMixedChildren(/*true*/false);
+  relationPointCrit->setAllowMixedChildren(false);
   OrCriterionPtr pointOr(new OrCriterion(pointCrit, relationPointCrit));
   featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointOr;
 
   ElementCriterionPtr lineCrit(new LinearCriterion());
   std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit(
     new RelationWithLinearMembersCriterion());
-  // TODO: This doesn't work for features with dual relation membership.
   relationLinearCrit->setAllowMixedChildren(true);
   OrCriterionPtr lineOr(new OrCriterion(lineCrit, relationLinearCrit));
   featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineOr;
@@ -789,7 +799,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   ElementCriterionPtr polyCrit(new PolygonCriterion());
   std::shared_ptr<RelationWithPolygonMembersCriterion> relationPolyCrit(
     new RelationWithPolygonMembersCriterion());
-  relationPolyCrit->setAllowMixedChildren(/*true*/false);
+  relationPolyCrit->setAllowMixedChildren(false);
   OrCriterionPtr polyOr(new OrCriterion(polyCrit, relationPolyCrit));
   featureFilters[GeometryTypeCriterion::GeometryType::Polygon] = polyOr;
 
@@ -943,7 +953,8 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(),
     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
 
-  // TODO
+  // Here and with sec map loading, attempted to cache the initial map to avoid unnecessary
+  // reloading, but it wreaked havoc on the element IDs. May try doing it again later.
   OsmMapPtr refMap;
   refMap.reset(new OsmMap());
   refMap->setName("ref");
@@ -1046,7 +1057,8 @@ void ChangesetReplacementCreator::_filterFeatures(
   elementPruner.addCriterion(featureFilter);
   elementPruner.setConfiguration(config);
   elementPruner.setOsmMap(map.get());
-  // TODO: explain
+  // If recursion isn't used here, nasty crashes that are hard to track down occur at times. I'm
+  // not completely convinced recursion should be used here, though.
   elementPruner.setRecursive(true);
   LOG_STATUS("\t" << elementPruner.getInitStatusMessage());
   map->visitRw(elementPruner);

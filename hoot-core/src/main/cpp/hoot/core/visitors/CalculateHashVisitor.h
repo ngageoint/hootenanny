@@ -72,13 +72,13 @@ public:
 
 private:
 
-  // TODO
+  // determines if element circular error will be used in computation of the hash
   bool _includeCe;
-  // TODO
+  // determines whether hashes are written to an element's tags
   bool _writeHashes;
-  // TODO
+  // determines if hash values should be collected for post-processing purposes
   bool _collectHashes;
-  // TODO
+  // collected hash values mapped to element IDs
   QMap<QString, ElementId> _hashesToElementIds;
 
   QString _toNodeJson(const ConstNodePtr& node);

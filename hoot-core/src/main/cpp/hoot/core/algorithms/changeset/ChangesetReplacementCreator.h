@@ -276,7 +276,7 @@ private:
     OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes, const QString& debugFileName);
 
   /*
-   * TODO
+   * Removes duplicates between one map and another, ignoring elemment IDs
    */
   void _dedupeMap(OsmMapPtr refMap, OsmMapPtr mapToDedupe);
 

@@ -91,7 +91,7 @@ QString CalculateHashVisitor::_toWayJson(const ConstWayPtr& way)
 {
   if (_map == 0)
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("A map must be set when calculating a way hash.");
   }
 
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"way\",\"tags\":{";
@@ -117,7 +117,7 @@ QString CalculateHashVisitor::_toRelationJson(const ConstRelationPtr& relation)
 {
   if (_map == 0)
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("A map must be set when calculating a relation hash.");
   }
 
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"relation\",\"tags\":{";
