@@ -1127,10 +1127,14 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     // replaced.
     LOG_DEBUG("Using dough map as cutter shape map...");
     cutterMapToUse = doughMap;
+    // TODO: riverbank test fails with missing POIs without this and the single point test has
+    // extra POIs in output without this; explain
+    cookieCutterAlphaShapeBuffer = 10.0;
   }
   else
   {
-    // Generate a cutter shape based on the cropped secondary map.
+    // Generate a cutter shape based on the cropped secondary map, which will cause only
+    // overlapping data between the two datasets to be replaced.
     LOG_DEBUG("Using cutter map as cutter shape map...");
     cutterMapToUse = cutterMap;
   }
