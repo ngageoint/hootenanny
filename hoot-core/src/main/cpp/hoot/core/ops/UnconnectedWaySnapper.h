@@ -33,6 +33,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -119,6 +120,8 @@ public:
   void setSnapWayStatuses(const QStringList& statuses);
   void setSnapToWayStatuses(const QStringList& statuses);
   void setMarkSnappedWays(bool mark) { _markSnappedWays = mark; }
+  void setReviewSnappedWays(bool review) { _reviewSnappedWays = review; }
+  void setMarkOnly(bool markOnly) { _markOnly = markOnly; }
 
   /**
    * Finds the closest endpont on 'disconnected' and snaps it to the closest node in 'connectTo'
@@ -133,15 +136,13 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-protected:
+private:
+
+  friend class UnconnectedWaySnapperTest;
 
   // if true, will attempt to snap nodes to existing way nodes instead of adding them to the way as
   // a new way node
   bool _snapToExistingWayNodes;
-
-private:
-
-  friend class UnconnectedWaySnapperTest;
 
   // furthest away a way node can be from a unconnected node for us to consider snapping to it
   double _maxNodeReuseDistance;
@@ -156,6 +157,10 @@ private:
   bool _markSnappedNodes;
   // allow for optionally tagging snapped ways; useful for debugging
   bool _markSnappedWays;
+  // mark anything snapped as needing review
+  bool _reviewSnappedWays;
+  // don't actually snap ways; this allows for marking w/o snapping
+  bool _markOnly;
 
   // the feature criterion to be used for way snap target candidates
   QString _wayToSnapToCriterionClassName;
@@ -185,6 +190,7 @@ private:
   int _taskStatusUpdateInterval;
   OsmMapPtr _map;
   Settings _conf;
+  ReviewMarker _reviewMarker;
 
   /*
    * The radius around the end node to look for ways to snap to.
@@ -279,6 +285,9 @@ private:
    * @return True if successful
    */
   bool _snapClosestEndpointToWay(const WayPtr& disconnected, const WayPtr& connectTo);
+
+  void _markSnappedWay(const long idOfNodeBeingSnapped);
+  void _reviewSnappedWay(const long idOfNodeBeingSnapped);
 
   /*
    * @see WayJoinerAdvanced

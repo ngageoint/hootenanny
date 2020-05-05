@@ -4332,6 +4332,15 @@ Maximum distance used by the Unconnected Way Snapper, in meters, allowed between
 way endpoint node and a neighboring way node for the way endpoint node to be snapped directly to
 the existing way node instead of adding the way endpoint node as a new way node on the way.
 
+=== snap.unconnected.ways.mark.only
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, no ways will be actually snapped and any way that would have been snapped otherwise with
+the current configuration will be marked depending upon the enablement of
++snap.unconnected.ways.mark.snapped.ways+ and +snap.unconnected.ways.review.snapped.ways+.
+
 === snap.unconnected.ways.mark.snapped.nodes
 
 * Data Type: bool
@@ -4347,6 +4356,14 @@ marked with a custom tag.  Useful for debugging purposes.
 
 If true, all ways snapped by the Unconnected Way Snapper to another way or way node will be
 marked with a custom tag.  Useful for debugging purposes.
+
+=== snap.unconnected.ways.review.snapped.ways
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, any snapped way will be marked for review. Useful if you want the opportunity to manually
+correct any snaps made.
 
 === snap.unconnected.ways.snap.to.way.criterion
 
