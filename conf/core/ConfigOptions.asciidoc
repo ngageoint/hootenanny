@@ -504,6 +504,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== calculate.hash.visitor.non.metadata.ignore.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
+
 === changeset.allow.deleting.reference.features
 
 * Data Type: bool

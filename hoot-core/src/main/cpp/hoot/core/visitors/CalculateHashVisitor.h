@@ -44,6 +44,8 @@ namespace hoot
  *
  * We want to keep ID's out of this, so not using GeoJsonWriter. Although, possibly we could add
  * a switch to GeoJsonWriter to not write ID's and use it at some point instead of this.
+ *
+ * @todo implement OperationStatusInfo
  */
 class CalculateHashVisitor : public ElementOsmMapVisitor
 {
@@ -75,6 +77,8 @@ private:
 
   // determines if element circular error will be used in computation of the hash
   bool _includeCe;
+  // TODO
+  QStringList _nonMetadataIgnoreKeys;
   // determines whether hashes are written to an element's tags
   bool _writeHashes;
   // determines if hash values should be collected for post-processing purposes
@@ -84,10 +88,10 @@ private:
   // TODO
   QSet<std::pair<ElementId, ElementId>> _duplicates;
 
-  QString _toNodeJson(const ConstNodePtr& node);
-  QString _toWayJson(const ConstWayPtr& way);
-  QString _toRelationJson(const ConstRelationPtr& relation);
-  QString _toInfoTagsJson(const Tags& tags, const double ce);
+  QString _toJson(const ConstNodePtr& node);
+  QString _toJson(const ConstWayPtr& way);
+  QString _toJson(const ConstRelationPtr& relation);
+  QString _toJson(const Tags& tags, const double ce);
 };
 
 }

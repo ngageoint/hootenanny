@@ -33,9 +33,9 @@
 #include <hoot/core/algorithms/WayJoinerBasic.h>
 
 #include <hoot/core/conflate/CookieCutter.h>
-#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
@@ -400,19 +400,50 @@ void ChangesetReplacementCreator::create(
 
   // Due to the mixed relations processing explained in _getDefaultGeometryFilters, we may have
   // some duplicated features that need to be cleaned up before we generate the changesets.
-  // TODO: We're not accounting for the fact that one of the duplicates may be disconnected from
-  // features it was connect to in the input. We want to remove the least connected one.
-  for (int i = 0; i < conflatedMaps.size(); i++)
+  int dedupePassCtr = 0;
+  const int totalDedupePasses = refMaps.size() + conflatedMaps.size();
+  for (int i = 0; i < refMaps.size(); i++)
   {
-    if ((i + 1) < conflatedMaps.size())
+    dedupePassCtr++;
+    if ((i + 1) < refMaps.size())
     {
-      LOG_DEBUG("De-duping map: " << (i + 1) << " and " << (i + 2) << "...");
-      _dedupeMap(conflatedMaps.at(i), conflatedMaps.at(i + 1));
+      OsmMapPtr map1 = refMaps.at(i);
+      OsmMapPtr map2 = refMaps.at(i + 1);
+      LOG_DEBUG(
+        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
+        dedupePassCtr << " / " << totalDedupePasses << "...");
+      _dedupeMap(map1, map2);
     }
     else
     {
-      LOG_DEBUG("De-duping map: 1 and " << (i + 1) << "...");
-      _dedupeMap(conflatedMaps.at(0), conflatedMaps.at(i));
+      OsmMapPtr map1 = refMaps.at(0);
+      OsmMapPtr map2 = refMaps.at(i);
+      LOG_DEBUG(
+        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
+        dedupePassCtr << " / " << totalDedupePasses << "...");
+      _dedupeMap(map1, map2);
+    }
+  }
+  for (int i = 0; i < conflatedMaps.size(); i++)
+  {
+    dedupePassCtr++;
+    if ((i + 1) < conflatedMaps.size())
+    {
+      OsmMapPtr map1 = conflatedMaps.at(i);
+      OsmMapPtr map2 = conflatedMaps.at(i + 1);
+      LOG_DEBUG(
+        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
+        dedupePassCtr << " / " << totalDedupePasses << "...");
+      _dedupeMap(map1, map2);
+    }
+    else
+    {
+      OsmMapPtr map1 = conflatedMaps.at(0);
+      OsmMapPtr map2 = conflatedMaps.at(i);
+      LOG_DEBUG(
+        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
+        dedupePassCtr << " / " << totalDedupePasses << "...");
+      _dedupeMap(map1, map2);
     }
   }
 
@@ -428,21 +459,23 @@ void ChangesetReplacementCreator::create(
 
 void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
 {
-  LOG_DEBUG("map 1 size before de-duping: " << map1->size());
-  LOG_DEBUG("map 2 size before de-duping: " << map2->size());
+  LOG_DEBUG(map1->getName() << " size before de-duping: " << map1->size());
+  LOG_DEBUG(map2->getName() << " size before de-duping: " << map2->size());
 
   CalculateHashVisitor hashVis;
   hashVis.setWriteHashes(false);
   hashVis.setCollectHashes(true);
 
+  LOG_DEBUG("Calculating " << map1->getName() << " element hashes...");
   hashVis.setOsmMap(map1.get());
   map1->visitRw(hashVis);
   const QMap<QString, ElementId> map1Hashes = hashVis.getHashes();
-  const QSet<QString> map1HashesSet = map1Hashes.keys().toSet();
+  QSet<QString> map1HashesSet = map1Hashes.keys().toSet();
   LOG_VARD(map1HashesSet.size());
   const QSet<std::pair<ElementId, ElementId>> duplicates1 = hashVis.getDuplicates();
   LOG_VARD(duplicates1.size());
 
+  LOG_DEBUG("Calculating " << map2->getName() << " element hashes...");
   hashVis.clearHashes();
   hashVis.setOsmMap(map2.get());
   map2->visitRw(hashVis);
@@ -455,6 +488,7 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
   QMap<ElementType::Type, QSet<ElementId>> elementsToRemove;
   QMap<ElementId, QString> elementIdsToRemoveFromMap;
 
+  LOG_DEBUG("Recording " << map1->getName() << " duplicates...");
   for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates1.begin();
        itr != duplicates1.end(); ++itr)
   {
@@ -490,6 +524,7 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
     }
   }
 
+  LOG_DEBUG("Recording " << map2->getName() << " duplicates...");
   for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates2.begin();
        itr != duplicates2.end(); ++itr)
   {
@@ -525,6 +560,7 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
     }
   }
 
+  LOG_DEBUG("Calculating duplicates between both maps...");
   const QSet<QString> sharedHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(sharedHashes.size());
   for (QSet<QString>::const_iterator itr = sharedHashes.begin(); itr != sharedHashes.end(); ++itr)
@@ -561,13 +597,17 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
     }
   }
 
+  LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
   const QSet<ElementId> relationsToRemove = elementsToRemove[ElementType::Relation];
   LOG_VARD(relationsToRemove.size());
   for (QSet<ElementId>::const_iterator itr = relationsToRemove.begin();
        itr != relationsToRemove.end(); ++itr)
   {
+    LOG_TRACE("Removing " << *itr << "...");
     RemoveElementByEid::removeElementNoCheck(map2, *itr);
   }
+
+  LOG_DEBUG("Removing duplicate ways...");
   const QSet<ElementId> waysToRemove = elementsToRemove[ElementType::Way];
   LOG_VARD(waysToRemove.size());
   for (QSet<ElementId>::const_iterator itr = waysToRemove.begin();
@@ -583,18 +623,22 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
     {
       mapToRemoveFrom = map2;
     }
+    LOG_TRACE("Removing " << *itr << " from " << mapToRemoveFrom->getName() << "...");
     RemoveElementByEid::removeElementNoCheck(mapToRemoveFrom, *itr);
   }
+
+  LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
   const QSet<ElementId> nodesToRemove = elementsToRemove[ElementType::Node];
   LOG_VARD(nodesToRemove.size());
   for (QSet<ElementId>::const_iterator itr = nodesToRemove.begin();
        itr != nodesToRemove.end(); ++itr)
   {
+    LOG_TRACE("Removing " << *itr << "...");
     RemoveElementByEid::removeElementNoCheck(map2, *itr);
   }
 
-  LOG_DEBUG("map 1 size after de-duping: " << map1->size());
-  LOG_DEBUG("map 2 size after de-duping: " << map2->size());
+  LOG_DEBUG(map1->getName() << " size after de-duping: " << map1->size());
+  LOG_DEBUG(map2->getName() << " size after de-duping: " << map2->size());
 }
 
 void ChangesetReplacementCreator::_getMapsForGeometryType(
@@ -1560,6 +1604,8 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
     _tagOobConnectedWays);
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
+  // TODO: tweak
+  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 5);
   // turn on for testing only
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 
