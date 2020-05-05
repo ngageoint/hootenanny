@@ -53,6 +53,9 @@ namespace hoot
  * should focus on trying to fix the lack of snapping in the conflation routines themselves rather
  * than relying on this as a cleanup utility.
  *
+ * Additionally, this class can be configured to mark any snapped roads as needing review or mark
+ * them for review without snapping them.
+ *
  * *Possible* future enhancements:
  *
  * - If a way is snapped to another way and the ways end up being parallel and overlap, snapping
