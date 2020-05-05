@@ -30,7 +30,7 @@ exports.matchCandidateCriterion = "hoot::CollectionRelationCriterion";
 
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var angleHistExtractor = new hoot.AngleHistogramExtractor();
-
+// We may eventually want to try something other than the default name extractor here.
 var nameExtractor = new hoot.NameExtractor();
 
 var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
@@ -142,6 +142,8 @@ function geometryMismatch(map, e1, e2)
   // of disjointed relations (relations with different but connecting ways) a further check is
   // needed (which also has the potential to be very expensive O(n^2)) and is only done for the
   // larger relations when the geometry check fails.
+
+  // TODO: Should we be extracting sublines first and passing those to the extractors?
 
   var numRelationMemberNodes = getNumRelationMemberNodes(map, e1.getElementId()) + getNumRelationMemberNodes(map, e2.getElementId());
   if (numRelationMemberNodes < 2000) // Threshold determined off of one dataset...may need tweaking.

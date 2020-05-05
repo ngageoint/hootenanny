@@ -65,6 +65,7 @@
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // Standard
 #include <fstream>
@@ -382,6 +383,7 @@ int ConflateCmd::runSimple(QStringList& args)
       map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
   }
+  MemoryUsageChecker::getInstance()->check();
   LOG_STATUS(
     "Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
 
@@ -414,6 +416,7 @@ int ConflateCmd::runSimple(QStringList& args)
     stats.append(SingleStat("Calculate Stats for Input 2 Time (sec)", t.getElapsedAndRestart()));
     currentTask++;
   }
+  MemoryUsageChecker::getInstance()->check();
 
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));

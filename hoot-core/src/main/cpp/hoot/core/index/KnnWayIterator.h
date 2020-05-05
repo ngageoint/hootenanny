@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef KNNWAYITERATOR_H
@@ -47,6 +47,7 @@ class Way;
 class KnnWayIterator : public Tgs::KnnIterator
 {
 public:
+
   KnnWayIterator(const OsmMap& map, ConstWayPtr way, const Tgs::RStarTree* tree,
                  const std::vector<long>& treeIdToWid, bool addError = false);
 
@@ -59,11 +60,13 @@ public:
   int getDistanceCount() { return _distanceCount; }
 
 protected:
+
   virtual double _calculateDistance(const Tgs::BoxInternalData& box, int id) const;
 
   virtual double _calculateDistance(const Tgs::BoxInternalData& box) const;
 
 private:
+
   const OsmMap& _map;
 
   double _indexSlush;

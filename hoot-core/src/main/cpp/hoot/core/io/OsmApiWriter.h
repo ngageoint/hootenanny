@@ -41,6 +41,7 @@
 #include <tgs/System/Timer.h>
 
 //  Standard
+#include <condition_variable>
 #include <mutex>
 #include <queue>
 #include <thread>
@@ -300,13 +301,35 @@ private:
   XmlChangeset _changeset;
   /** Mutex protecting large changeset */
   std::mutex _changesetMutex;
+  /**
+   * @brief _startWork Tell the worker threads to begin processing work
+   */
+  void _startWork();
+  /**
+   * @brief _waitForStart Wait for the producer to signal to the consumers to begin work
+   */
+  void _waitForStart();
+  /** Mutex protecting start flag */
+  std::mutex _startMutex;
+  /** Condition variable to notify worker threads */
+  std::condition_variable _start;
+  /** Flag to tell worker threads to start processing */
+  bool _startFlag;
   /** Status of each working thread, working or idle */
   enum ThreadStatus
   {
     Idle,
     Working,
-    Failed
+    Completed,
+    Failed,
+    Unknown
   };
+  /**
+   * @brief _getThreadStatus Safely get the status of the thread
+   * @param thread_index Index of calling thread in _threadStatus vector
+   * @return  Status of the thread
+   */
+  ThreadStatus _getThreadStatus(int thread_index);
   /**
    * @brief _updateThreadStatus Update the thread status
    * @param thread_index Index of calling thread in _threadStatus vector

@@ -38,7 +38,7 @@
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/NodeUtils.h>
-#include <hoot/core/elements/WayNodeUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -115,7 +115,7 @@ RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr& pMap, WayPtr pWay)
   LOG_VART(rnd->getCenter());
 
   LOG_TRACE("Created roundabout: " << rnd->toDetailedString(pMap));
-  LOG_VART(WayNodeUtils::getWayNodesDetailedString(rnd->getRoundaboutWay(), pMap));
+  LOG_VART(WayUtils::getWayNodesDetailedString(rnd->getRoundaboutWay(), pMap));
   return rnd;
 }
 
@@ -285,7 +285,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
 
   // Remove roundabout way & extra nodes
   LOG_TRACE("Removing roundabout way: " << _roundaboutWay->getId() << "...");
-  LOG_VART(WayNodeUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
+  LOG_VART(WayUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
   RemoveWayByEid::removeWayFully(pMap, _roundaboutWay->getId());
   for (std::set<long>::iterator it = extraNodeIDs.begin(); it != extraNodeIDs.end(); ++it)
   {
@@ -314,7 +314,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
 
     pMap->addWay(pWay);
     LOG_TRACE("Adding temp way: " << pWay->getId());
-    LOG_VART(WayNodeUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
+    LOG_VART(WayUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
     _tempWays.push_back(pWay);
   }
   LOG_VART(_tempWays.size());
@@ -396,7 +396,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
 //    OsmUtils::logElementDetail(
 //      pRoundabout, pMap, Log::Trace,
 //      "Roundabout::replaceRoundabout: roundabout after updating nodes");
-    LOG_VART(WayNodeUtils::getWayNodesDetailedString(pRoundabout, pMap));
+    LOG_VART(WayUtils::getWayNodesDetailedString(pRoundabout, pMap));
 
     //  Convert the roundabout to a geometry for distance checking later
     ElementConverter converter(pMap);

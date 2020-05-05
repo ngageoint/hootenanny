@@ -48,6 +48,8 @@ _doCheck(doCheck),
 _removeNodeFully(true),
 _removeOnlyUnusedNodes(false)
 {
+  LOG_VART(_eIdToRemove);
+  LOG_VART(_doCheck);
 }
 
 void RemoveElementByEid::apply(OsmMapPtr& map)

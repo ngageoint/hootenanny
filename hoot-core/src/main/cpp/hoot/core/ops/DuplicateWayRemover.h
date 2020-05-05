@@ -41,9 +41,9 @@ namespace hoot
  * exactly the same geometry then only the partial overlap is removed from the more complex
  * geometry. There may be some scenarios that this is destructive, but in most cases it is probably
  * useful. This routine also doesn't handle the case where two ways have multiple overlapping
- * sections. In that case only the longest duplicate section will be removed.
+ * sections. In that case, only the longest duplicate section will be removed.
  *
- * Area ways will be ignored.
+ * Area ways are ignored.
  */
 class DuplicateWayRemover : public OsmMapOperation
 {
@@ -92,13 +92,9 @@ protected:
   OsmMapPtr _map;
 
   bool _isCandidateWay(const ConstWayPtr& w) const;
-
   void _splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1 = false, bool rev2 = false);
-
   std::vector<WayPtr> _splitWay(WayPtr w, int start, int length, bool newIds = false);
-
   WayPtr _getUpdatedWay(WayPtr way, const std::vector<long>& nodes, bool newIds);
-
   void _replaceMultiple(const ConstWayPtr& oldWay, const std::vector<WayPtr>& ways);
 
  private:

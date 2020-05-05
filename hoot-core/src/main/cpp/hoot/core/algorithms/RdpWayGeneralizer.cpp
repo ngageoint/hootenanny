@@ -39,7 +39,7 @@
 #include <hoot/core/elements/NodeUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/elements/WayNodeUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 
 using namespace std;
 
@@ -108,8 +108,8 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
     const long nodeId = *it;
     LOG_VART(nodeId);
     LOG_VART(_removeNodesSharedByWays);
-    LOG_VART(WayNodeUtils::nodeContainedByMoreThanOneWay(nodeId, _map));
-    if (_removeNodesSharedByWays || !WayNodeUtils::nodeContainedByMoreThanOneWay(nodeId, _map))
+    LOG_VART(WayUtils::nodeContainedByMoreThanOneWay(nodeId, _map));
+    if (_removeNodesSharedByWays || !WayUtils::nodeContainedByMoreThanOneWay(nodeId, _map))
     {
       modifiedNodeIdsToRemove.insert(nodeId);
     }

@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -71,6 +72,7 @@ void ElementIdCriterion::setConfiguration(const Settings& conf)
 
 bool ElementIdCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e->getElementId());
   return _ids.find(e->getElementId()) != _ids.end();
 }
 

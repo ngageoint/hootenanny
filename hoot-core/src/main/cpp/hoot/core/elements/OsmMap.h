@@ -110,6 +110,8 @@ public:
   ElementPtr getElement(const ElementId& id);
   ElementPtr getElement(ElementType type, long id);
 
+  QSet<ElementId> getElementIds() const;
+
   size_t getElementCount() const;
   size_t size() const { return getElementCount(); }
 
@@ -171,6 +173,7 @@ public:
   const NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
   const NodeMap& getNodes() const { return _nodes; }
   QSet<long> getNodeIds() const;
+  QSet<ElementId> getNodeElementIds() const;
 
   long getNodeCount() const { return _nodes.size(); }
 
@@ -218,6 +221,7 @@ public:
   const ConstWayPtr getWay(ElementId eid) const;
   const WayMap& getWays() const { return _ways; }
   QSet<long> getWayIds() const;
+  QSet<ElementId> getWayElementIds() const;
   long getWayCount() const { return _ways.size(); }
 
   void addWay(const WayPtr& w);
@@ -239,7 +243,8 @@ public:
   virtual const RelationPtr getRelation(long id);
   const RelationMap& getRelations() const { return _relations; }
   QSet<long> getRelationIds() const;
-   long getRelationCount() const { return _relations.size(); }
+  QSet<ElementId> getRelationElementIds() const;
+  long getRelationCount() const { return _relations.size(); }
 
   void addRelation(const RelationPtr& r);
 
@@ -479,7 +484,6 @@ inline const ConstWayPtr OsmMap::getWay(long id) const
 
 inline const ConstWayPtr OsmMap::getWay(ElementId eid) const
 {
-  assert(eid.getType() == ElementType::Way);
   return getWay(eid.getId());
 }
 
@@ -498,7 +502,6 @@ inline const WayPtr OsmMap::getWay(long id)
 
 inline const WayPtr OsmMap::getWay(ElementId eid)
 {
-  assert(eid.getType() == ElementType::Way);
   return getWay(eid.getId());
 }
 

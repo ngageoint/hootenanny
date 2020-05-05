@@ -2362,6 +2362,29 @@ RAM usage of applications in a shared server environment.
 Spacing in meters used by the MaximalSublineMatcher during point discretization performed between
 matching ways.  Larger values may increase runtime performance but decrease conflation quality.
 
+=== memory.usage.checker.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+Determines whether memory usage checking is enabled.
+
+=== memory.usage.checker.interval
+
+* Data Type: int
+* Default Value: `100000`
+
+If memory usage checking is run in an element processing loop, use this to control how often a
+memory usage check is made.
+
+=== memory.usage.checker.threshold
+
+* Data Type: int
+* Default Value: `95`
+
+Percentage value (1 to 100) of used system memory above which memory usage checking logs a
+notification. The same threshold value is used separately for both used physical and virtual memory.
+
 [[merger.creators]]
 === merger.creators
 
@@ -4309,6 +4332,15 @@ Maximum distance used by the Unconnected Way Snapper, in meters, allowed between
 way endpoint node and a neighboring way node for the way endpoint node to be snapped directly to
 the existing way node instead of adding the way endpoint node as a new way node on the way.
 
+=== snap.unconnected.ways.mark.only
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, no ways will be actually snapped and any way that would have been snapped otherwise with
+the current configuration will be marked depending upon the enablement of
++snap.unconnected.ways.mark.snapped.ways+ and +snap.unconnected.ways.review.snapped.ways+.
+
 === snap.unconnected.ways.mark.snapped.nodes
 
 * Data Type: bool
@@ -4324,6 +4356,14 @@ marked with a custom tag.  Useful for debugging purposes.
 
 If true, all ways snapped by the Unconnected Way Snapper to another way or way node will be
 marked with a custom tag.  Useful for debugging purposes.
+
+=== snap.unconnected.ways.review.snapped.ways
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, any snapped way will be marked for review. Useful if you want the opportunity to manually
+correct any snaps made.
 
 === snap.unconnected.ways.snap.to.way.criterion
 
@@ -4792,6 +4832,14 @@ Automatically calculates the search radius to be used during conflation of water
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
 
+=== waterway.long.way.threshold
+
+* Data Type: int
+* Default Value: `150000`
+
+Way length threshold, in meters, at or above which River Conflation will switch from the configured
+subline matcher to Frechet subline matching to increase runtime performance.
+
 === waterway.matcher.heading.delta
 
 * Data Type: double
@@ -4806,6 +4854,14 @@ The distance around a point on a waterway to look when calculating the heading. 
 * Default Value: `90.0`
 
 Sets that maximum angle that is still considered a waterway match. Units in degrees.
+
+=== waterway.name.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+Name similarity threshold (0.0 to 1.0) at or above which a linear watereay feature is considered to
+have a name match.
 
 === waterway.rubber.sheet.minimum.ties
 

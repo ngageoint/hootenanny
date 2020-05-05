@@ -30,9 +30,12 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
+
+class ElementCriterion;
 
 /**
  * Various utilities useful when working with relation members but kept out of the Relation class
@@ -119,6 +122,55 @@ public:
    * @return true if any relation in the map contains the element; false otherwise
    */
   static bool elementContainedByAnyRelation(const ElementId& elementId, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if a relation contains any member that satisifies a specified criterion
+   *
+   * @param relation the relation to examine
+   * @param criterion the criterion which must be satisified by member elements
+   * @param map the map owning the relation
+   * @return true if at least one member element satisfies the criterion; false otherwise
+   */
+  static bool containsMemberWithCriterion(
+    const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if a relation contains only members that satisfy specified criterion
+   *
+   * @param relation the relation to examine
+   * @param criterion the criterion which must be satisified by member elements
+   * @param map the map owning the relation
+   * @return true if all member elements satisfy the criterion; false otherwise
+   */
+  static bool containsOnlyMembersWithCriterion(
+    const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
+
+  /**
+   * Detemines if a relation has members all with the same geometry type
+   *
+   * @param relation the relation to examine
+   * @param map the map owning the relation
+   * @param geometryType optional geometry type filter
+   * @return if no geometry type is specified, returns true if all member elements have the same
+   * geometry type and false otherwise; if a geometry type is specified, returns true if all
+   * member elements have the specified geometry type and false otherwise
+   */
+  static bool membersHaveHomogenousGeometryType(
+    const ConstRelationPtr& relation, const ConstOsmMapPtr& map,
+    const GeometryTypeCriterion::GeometryType& geometryType =
+      GeometryTypeCriterion::GeometryType::Unknown);
+
+  /**
+   * Determines if a relation has any member with a specified geometry type
+   *
+   * @param relation the relation to examine
+   * @param map the map owning the relation
+   * @param geometryType geometry type filter
+   * @return true if the relation has any member with the specified geometry type; false otherwise
+   */
+  static bool hasMemberWithGeometryType(
+    const ConstRelationPtr& relation, const ConstOsmMapPtr& map,
+    const GeometryTypeCriterion::GeometryType& geometryType);
 };
 
 }

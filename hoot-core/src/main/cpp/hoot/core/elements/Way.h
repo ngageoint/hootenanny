@@ -190,13 +190,28 @@ public:
   void reverseOrder();
 
   /**
-   * Determines if two ways have the same node IDs
+   * Determines if two ways have the same nodes
    *
-   * @param other way to compare node IDs with
-   * @return true if the other way has the same node IDs in the same order as this way; false
-   * otherwise
+   * @param other way to compare with
+   * @return true if the other way has the same nodes in the same order as this way; false otherwise
    */
-  bool hasSameNodeIds(const Way& other) const;
+  bool hasSameNodes(const Way& other) const;
+
+  /**
+   * Determines if two ways share the same node
+   *
+   * @param other way to compare with
+   * @return true if the other way shares at least one node with this way; false otherwise
+   */
+  bool hasSharedNode(const Way& other) const;
+
+  /**
+   * Retrieves the IDs of shared nodes between two ways
+   *
+   * @param other way to compare with
+   * @return a collection of node IDs
+   */
+  QSet<long> sharedNodeIds(const Way& other) const;
 
   /**
    * This is rarely used. Primarily it is useful when loading the way from a file that does
@@ -207,7 +222,6 @@ public:
   QString toString() const;
 
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
-
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
 
   /**
