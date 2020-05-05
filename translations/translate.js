@@ -156,7 +156,7 @@ translate = {
 
 
   // Apply one to one translations - used for import and export
-  applyOne2One : function(inList, outList, lookup, fCodeList, transMap)
+  applyOne2One : function(inList, outList, lookup, fCodeList, transMap = [])
   {
     var endChar = '',
       tAttrib = '',
@@ -253,7 +253,7 @@ translate = {
 
 
   // Apply one to one translations and don't report errors: missing columns etc
-  applyOne2OneQuiet : function(inList, outList, lookup, transMap)
+  applyOne2OneQuiet : function(inList, outList, lookup, transMap = [])
   {
     var row = [];
 
@@ -291,7 +291,7 @@ translate = {
 
   // Apply one to one translations - For TDS export
   // This version populates the OTH field for values that are not in the rules
-  applyTdsOne2One : function(inList, outList, lookup, fCodeList,transmap)
+  applyTdsOne2One : function(inList, outList, lookup, fCodeList,transmap = [])
   {
     var endChar = '',
       tAttrib = '',
@@ -1013,6 +1013,20 @@ translate = {
     return finalDateTime;
   },
 
+  // For backwards compatibility
+  applySimpleTxtBiased : function(attrs, tags, rules, direction)
+  {
+    if (direction == 'forward')
+    {
+      translate.txtToOSM(attrs,tags,rules);
+    }
+    else
+    {
+      translate.txtToOgr(attrs,tags,rules,[]);
+    }
+  }, // End applySimpleNumBiased
+
+
   // txtToOSM - convert  text attributes to tags
   txtToOSM : function(attrs, tags, rules)
   {
@@ -1028,6 +1042,7 @@ translate = {
       }
     }
   }, // End txtToOSM
+
 
   // txtToOgr - Convert Text tags to attributes
   txtToOgr : function(attrs, tags, rules, transMap)
@@ -1046,6 +1061,21 @@ translate = {
       }
     }
   }, // End txtToOgr
+
+
+  // For backwards compatibility
+  applySimpleNumBiased : function(attrs, tags, rules, direction, intList)
+  {
+    if (direction == 'forward')
+    {
+      translate.numToOSM(attrs,tags,rules);
+    }
+    else
+    {
+      translate.numToOgr(attrs,tags,rules,intList,[]);
+    }
+  }, // End applySimpleNumBiased
+
 
   // numToOSM - Convert Number attributes to tags
   numToOSM : function(attrs, tags, rules)
