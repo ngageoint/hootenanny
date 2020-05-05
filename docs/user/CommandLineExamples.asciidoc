@@ -727,7 +727,7 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
     hoot convert -D convert.ops="hoot::PhoneNumberLocateVisitor" input.osm output.osm
 -----
 
-===== Snap unconnected roads in the second dataset back to neighboring roads in the first dataset:
+===== Snap unconnected roads in one dataset back to neighboring roads in another dataset:
 
 -----
     hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
@@ -736,6 +736,33 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
       -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
+      input1.osm input2.osm output.osm
+-----
+
+===== Snap unconnected roads in one dataset back to neighboring roads in another dataset and mark them as needing review:
+
+-----
+    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
+      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
+      -D snap.unconnected.ways.snap.to.way.status=Input1 \
+      -D snap.unconnected.ways.snap.way.status=Input2 \
+      -D snap.unconnected.ways.review.snapped=true \
+      input1.osm input2.osm output.osm
+-----
+
+===== Mark unconnected roads as needing review in one dataset that could be snapped back to neighboring roads in another dataset:
+
+-----
+    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
+      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
+      -D snap.unconnected.ways.snap.to.way.status=Input1 \
+      -D snap.unconnected.ways.snap.way.status=Input2 \
+      -D snap.unconnected.ways.review.snapped=true \
+      -D snap.unconnected.ways.mark.only=true \
       input1.osm input2.osm output.osm
 -----
 
