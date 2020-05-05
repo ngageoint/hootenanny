@@ -70,6 +70,7 @@
 #include <hoot/core/ops/PointsToPolysConverter.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
@@ -459,6 +460,8 @@ void ChangesetReplacementCreator::create(
 
 void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
 {
+  // TODO: tweak
+  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 5);
   LOG_DEBUG(map1->getName() << " size before de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size before de-duping: " << map2->size());
 
@@ -597,15 +600,15 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
     }
   }
 
-  LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
-  const QSet<ElementId> relationsToRemove = elementsToRemove[ElementType::Relation];
-  LOG_VARD(relationsToRemove.size());
-  for (QSet<ElementId>::const_iterator itr = relationsToRemove.begin();
-       itr != relationsToRemove.end(); ++itr)
-  {
-    LOG_TRACE("Removing " << *itr << "...");
-    RemoveElementByEid::removeElementNoCheck(map2, *itr);
-  }
+//  LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
+//  const QSet<ElementId> relationsToRemove = elementsToRemove[ElementType::Relation];
+//  LOG_VARD(relationsToRemove.size());
+//  for (QSet<ElementId>::const_iterator itr = relationsToRemove.begin();
+//       itr != relationsToRemove.end(); ++itr)
+//  {
+//    LOG_TRACE("Removing " << *itr << "...");
+//    RemoveElementByEid::removeElementNoCheck(map2, *itr);
+//  }
 
   LOG_DEBUG("Removing duplicate ways...");
   const QSet<ElementId> waysToRemove = elementsToRemove[ElementType::Way];
@@ -625,17 +628,23 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
     }
     LOG_TRACE("Removing " << *itr << " from " << mapToRemoveFrom->getName() << "...");
     RemoveElementByEid::removeElementNoCheck(mapToRemoveFrom, *itr);
+    //RecursiveElementRemover(*itr).apply(mapToRemoveFrom);
   }
 
-  LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
-  const QSet<ElementId> nodesToRemove = elementsToRemove[ElementType::Node];
-  LOG_VARD(nodesToRemove.size());
-  for (QSet<ElementId>::const_iterator itr = nodesToRemove.begin();
-       itr != nodesToRemove.end(); ++itr)
-  {
-    LOG_TRACE("Removing " << *itr << "...");
-    RemoveElementByEid::removeElementNoCheck(map2, *itr);
-  }
+//  LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
+//  const QSet<ElementId> nodesToRemove = elementsToRemove[ElementType::Node];
+//  LOG_VARD(nodesToRemove.size());
+//  for (QSet<ElementId>::const_iterator itr = nodesToRemove.begin();
+//       itr != nodesToRemove.end(); ++itr)
+//  {
+//    LOG_TRACE("Removing " << *itr << "...");
+//    RemoveElementByEid::removeElementNoCheck(map2, *itr);
+//  }
+
+  //_cleanupMissingElements(map1);
+  //_cleanupMissingElements(map2);
+  SuperfluousNodeRemover::removeNodes(map1);
+  SuperfluousNodeRemover::removeNodes(map2);
 
   LOG_DEBUG(map1->getName() << " size after de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size after de-duping: " << map2->size());
@@ -1604,8 +1613,6 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
     _tagOobConnectedWays);
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
-  // TODO: tweak
-  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 5);
   // turn on for testing only
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 
