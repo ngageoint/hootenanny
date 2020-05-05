@@ -96,19 +96,16 @@ class PullApiCommand implements InternalCommand {
         String url = "";
         try {
             BoundingBox boundingBox = new BoundingBox(params.getBounds());
-            //buffer the reference data bounding box
-            //to include neighboring data that may be snapped to
-// Disable this for now as pulling a buffered extent does not guarantee that
-// connected ways will be present in the output
-//            boundingBox.adjust(Double.parseDouble(CHANGESET_DERIVE_BUFFER));
+            // buffer the reference data bounding box to include neighboring data that may be snapped to
+            // Disable this for now as pulling a buffered extent does not guarantee that connected ways will be present in the output
+            // boundingBox.adjust(Double.parseDouble(CHANGESET_DERIVE_BUFFER));
 
             double bboxArea = boundingBox.getArea();
 
             double maxBboxArea = params.getMaxBBoxSize();
 
             if (bboxArea > maxBboxArea) {
-                throw new IllegalArgumentException("The bounding box area (" + bboxArea +
-                        ") is too large. It must be less than " + maxBboxArea + " degrees");
+                throw new IllegalArgumentException("The bounding box area (" + bboxArea + ") is too large. It must be less than " + maxBboxArea + " degrees");
             }
 
             InputStream responseStream = null;
@@ -162,5 +159,21 @@ class PullApiCommand implements InternalCommand {
         HttpEntity entity = response.getEntity();
 
         return entity.getContent();
+    }
+
+    /**
+     * String query that will retrieve the connected ways.
+     * @return String query that will retrieve the connected ways.
+     */
+    static String connectedWaysQuery() {
+        String newQuery =
+            "(" +
+                "way({{bbox}});>;" + // get all ways within bbox and the nodes for those ways
+            ");" +
+            "way(bn);" + // select parent ways for the nodes
+            "(._;>;);" + // get the nodes assocaited with those ways as well
+            "out meta;";
+
+        return newQuery;
     }
 }

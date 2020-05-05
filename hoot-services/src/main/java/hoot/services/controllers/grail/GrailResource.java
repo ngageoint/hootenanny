@@ -153,9 +153,16 @@ public class GrailResource {
 
     public GrailResource() {}
 
+    /**
+     * If the PRIVATE_OVERPASS_URL variable is set to a value then return true
+      */
+    private boolean isPrivateOverpassActive() {
+        return !replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL);
+    }
+
     private Command getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
         // Checks to see that the sensitive data was actually replaced meaning there was a value
-        if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
+        if (isPrivateOverpassActive()) {
             params.setPullUrl(PRIVATE_OVERPASS_URL);
         } else {
             APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
@@ -848,10 +855,9 @@ public class GrailResource {
 
     private List<Command> setupRailsPull(String jobId, GrailParams params, Long parentFolderId) throws UnavailableException {
         List<Command> workflow = new LinkedList<>();
-
         Users user = params.getUser();
 
-        // Pull data from the reference OSM API
+        // Pull data from the reference OSM API or private Overpass API
         // Until hoot can read API url directly, download to file first
         File referenceOSMFile = new File(params.getWorkDir(), REFERENCE +".osm");
         if (referenceOSMFile.exists()) { referenceOSMFile.delete(); }
@@ -865,42 +871,61 @@ public class GrailResource {
             throw new UnavailableException("The Rails port API is offline.");
         }
 
-        GrailParams connectedWaysParams = new GrailParams(params);
-        connectedWaysParams.setInput1(referenceOSMFile.getAbsolutePath());
-        File cropFile = new File(params.getWorkDir(), "crop.osm");
-        connectedWaysParams.setOutput(cropFile.getAbsolutePath());
-        // Do an invert crop of this data to get nodes outside bounds
-        workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", InvertCropCommand.class, this.getClass()));
+        File ingestFile;
+        // private overpass query result file should handle getting the connected ways so just use that as the ingest file
+        if (isPrivateOverpassActive()) {
+            File connectedWaysOSMFile = new File(params.getWorkDir(), "connectedWays.osm");
+            if (connectedWaysOSMFile.exists()) { connectedWaysOSMFile.delete(); }
 
-        //read node ids
-        //pull connected ways
-        //pull entire ways
-        //remove cropfile
-        workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
+            GrailParams connectedWaysParams = new GrailParams(params);
+            connectedWaysParams.setOutput(connectedWaysOSMFile.getAbsolutePath());
+            connectedWaysParams.setCustomQuery(PullApiCommand.connectedWaysQuery());
+            workflow.add(getRailsPortApiCommand(jobId, connectedWaysParams));
 
-        // merge OOB connected ways osm files and add 'hoot:change:exclude:delete' tag to each
-        GrailParams mergeOobWaysParams = new GrailParams(params);
-        File mergeOobWaysFile = new File(params.getWorkDir(), "oobways.osm");
-        mergeOobWaysParams.setOutput(mergeOobWaysFile.getAbsolutePath());
-        // Map<String, String> opts = new HashMap<>();
-        // opts.put("convert.ops", "hoot::SetTagValueVisitor");
-        // opts.put("set.tag.value.visitor.element.criteria", "hoot::WayCriterion");
-        // opts.put("set.tag.value.visitor.keys", "hoot:change:exclude:delete");
-        // opts.put("set.tag.value.visitor.values", "yes");
-        // mergeOobWaysParams.setAdvancedOptions(opts);
-        mergeOobWaysParams.setInput1("\\d+\\.osm"); //this is the file filter
-        workflow.add(grailCommandFactory.build(jobId, mergeOobWaysParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+            GrailParams mergeRefParams = new GrailParams(params);
+            ingestFile = new File(params.getWorkDir(), "merge.osm");
+            mergeRefParams.setInput1("(" + connectedWaysOSMFile.getName() + "|" + referenceOSMFile.getName() + ")"); //this is the file filter
+            mergeRefParams.setOutput(ingestFile.getAbsolutePath());
+            workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
 
-        // merge OOB connected ways merge file and the reference osm file
-        GrailParams mergeRefParams = new GrailParams(params);
-        File mergeRefFile = new File(params.getWorkDir(), "merge.osm");
-        mergeRefParams.setInput1("(" + mergeOobWaysFile.getName() + "|" + referenceOSMFile.getName() + ")"); //this is the file filter
-        mergeRefParams.setOutput(mergeRefFile.getAbsolutePath());
-        workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+        } else {
+            GrailParams connectedWaysParams = new GrailParams(params);
+            connectedWaysParams.setInput1(referenceOSMFile.getAbsolutePath());
+            File cropFile = new File(params.getWorkDir(), "crop.osm");
+            connectedWaysParams.setOutput(cropFile.getAbsolutePath());
+            // Do an invert crop of this data to get nodes outside bounds
+            workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", InvertCropCommand.class, this.getClass()));
+
+            //read node ids
+            //pull connected ways
+            //pull entire ways
+            //remove cropfile
+            workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
+
+            // merge OOB connected ways osm files and add 'hoot:change:exclude:delete' tag to each
+            GrailParams mergeOobWaysParams = new GrailParams(params);
+            File mergeOobWaysFile = new File(params.getWorkDir(), "oobways.osm");
+            mergeOobWaysParams.setOutput(mergeOobWaysFile.getAbsolutePath());
+            // Map<String, String> opts = new HashMap<>();
+            // opts.put("convert.ops", "hoot::SetTagValueVisitor");
+            // opts.put("set.tag.value.visitor.element.criteria", "hoot::WayCriterion");
+            // opts.put("set.tag.value.visitor.keys", "hoot:change:exclude:delete");
+            // opts.put("set.tag.value.visitor.values", "yes");
+            // mergeOobWaysParams.setAdvancedOptions(opts);
+            mergeOobWaysParams.setInput1("\\d+\\.osm"); //this is the file filter
+            workflow.add(grailCommandFactory.build(jobId, mergeOobWaysParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+
+            // merge OOB connected ways merge file and the reference osm file
+            GrailParams mergeRefParams = new GrailParams(params);
+            ingestFile = new File(params.getWorkDir(), "merge.osm");
+            mergeRefParams.setInput1("(" + mergeOobWaysFile.getName() + "|" + referenceOSMFile.getName() + ")"); //this is the file filter
+            mergeRefParams.setOutput(ingestFile.getAbsolutePath());
+            workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+        }
 
         // Write the data to the hoot db
         GrailParams pushParams = new GrailParams(params);
-        pushParams.setInput1(mergeRefFile.getAbsolutePath());
+        pushParams.setInput1(ingestFile.getAbsolutePath());
         ExternalCommand importRailsPort = grailCommandFactory.build(jobId, pushParams, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importRailsPort);
 
