@@ -29,10 +29,10 @@
 #define CRITERION_UTILS_H
 
 // Hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 
 namespace hoot
@@ -55,20 +55,22 @@ public:
    * @param minCount the minmal count of elements required (if exactCount == false)
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the map meets the specified criteria; false otherwise
+   * @todo move this to MapUtils?
    */
-  template<class C> static bool constainSatisfyingElements(
-    const ConstOsmMapPtr& map, int minCount = 1, bool exactCount = false)
-  {
-    if (!std::is_base_of<ElementCriterion,C>::value) return false;
+   template<class C>
+   static bool containsSatisfyingElements(
+      const ConstOsmMapPtr& map, int minCount = 1, bool exactCount = false)
+    {
+      if (!std::is_base_of<ElementCriterion,C>::value) return false;
 
-    const long count =
-      (long)FilteredVisitor::getStat(
-        ElementCriterionPtr(new C()),
-        ConstElementVisitorPtr(new ElementCountVisitor()),
-        map);
-    LOG_VART(count);
-    return exactCount ? (count == minCount) : (count >= minCount);
-  }
+      const long count =
+        (long)FilteredVisitor::getStat(
+          ElementCriterionPtr(new C()),
+          ConstElementVisitorPtr(new ElementCountVisitor()),
+          map);
+      LOG_VART(count);
+      return exactCount ? (count == minCount) : (count >= minCount);
+    }
 
   /**
    * Determines whether a collection of elements meet a criterion a minimum or a fixed amount of
@@ -78,8 +80,10 @@ public:
    * @param minCount the minmal count of elements required (if exactCount == false)
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the elements meet the specified criterion the specified number of times
+   * @todo move this to MapUtils?
    */
-  template<class C> static bool constainSatisfyingElements(
+  template<class C>
+  static bool containsSatisfyingElements(
     const std::vector<ConstElementPtr>& elements, int minCount = 1, bool exactCount = false)
   {
     if (!std::is_base_of<ElementCriterion,C>::value) return false;
@@ -98,6 +102,7 @@ public:
     LOG_VART(count);
     return exactCount ? (count == minCount) : (count >= minCount);
   }
+
 
   /**
    * Determines if an element has a given criterion
