@@ -697,7 +697,7 @@ public class GrailResource {
     @Path("/overpassStats")
     @Produces(MediaType.APPLICATION_JSON)
     public Response overpassStats(@Context HttpServletRequest request,
-            GrailParams reqParams) {
+            GrailParams reqParams) throws UnsupportedEncodingException {
 
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
@@ -705,38 +705,33 @@ public class GrailResource {
         String customQuery = reqParams.getCustomQuery();
 
         // Get grail overpass query from the file and store it in a string
-        String overpassQuery;
+        String query;
         if (customQuery == null || customQuery.equals("")) {
             File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_STATS_QUERY);
             try {
-                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+                query = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
             } catch(Exception exc) {
                 String msg = "Failed to poll overpass for stats query. Couldn't read overpass query file: " + overpassQueryFile.getName();
                 throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
             }
         } else {
-            overpassQuery = customQuery;
+            query = customQuery;
 
-            if (overpassQuery.contains("out:xml")) {
-                overpassQuery = overpassQuery.replace("out:xml", "out:json");
+            if (query.contains("out:xml")) {
+                query = query.replace("out:xml", "out:json");
             }
 
             // first line that lists columns which are counts for each feature type
-            overpassQuery = overpassQuery.replace("[out:json]", "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")]");
+            query = query.replace("[out:json]", "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")]");
         }
 
-        // append the connected ways query
-        overpassQuery = PullApiCommand.connectedWaysQuery(overpassQuery);
-
+        String publicOverpassQuery = query;
         // overpass query can have multiple "out *" lines so need to replace all
-        overpassQuery = overpassQuery.replaceAll("out [\\s\\w]+;", "out count;");
+        publicOverpassQuery = publicOverpassQuery.replaceAll("out [\\s\\w]+;", "out count;");
 
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
-        overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(reqParams.getBounds()).toOverpassString());
-        try {
-            overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20"); // need to encode url for the get
-        } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
-
+        publicOverpassQuery = publicOverpassQuery.replace("{{bbox}}", new BoundingBox(reqParams.getBounds()).toOverpassString());
+        publicOverpassQuery = URLEncoder.encode(publicOverpassQuery, "UTF-8").replace("+", "%20"); // need to encode url for the get
 
         List<String> columns = new ArrayList<>();
         List<JSONObject> data = new ArrayList<>();
@@ -750,7 +745,7 @@ public class GrailResource {
         totalObj.put("label", "total");
 
         // Get public overpass data
-        String publicUrl = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "?data=" + overpassQuery;
+        String publicUrl = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "?data=" + publicOverpassQuery;
         ArrayList<Double> publicStats = retrieveOverpassStats(publicUrl, false);
         if(publicStats.size() != 0) {
             columns.add(GRAIL_OVERPASS_LABEL);
@@ -761,8 +756,14 @@ public class GrailResource {
         }
 
         // Get private overpass data if private overpass url was provided
-        if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
-            String privateUrl = replaceSensitiveData(PRIVATE_OVERPASS_URL) + "?data=" + overpassQuery;
+        if (isPrivateOverpassActive()) {
+            String privateOverpassQuery = query;
+            privateOverpassQuery = PullApiCommand.connectedWaysQuery(privateOverpassQuery); // append the connected ways query to private overpass query
+            privateOverpassQuery = privateOverpassQuery.replaceAll("out [\\s\\w]+;", "out count;");
+            privateOverpassQuery = privateOverpassQuery.replace("{{bbox}}", new BoundingBox(reqParams.getBounds()).toOverpassString());
+            privateOverpassQuery = URLEncoder.encode(privateOverpassQuery, "UTF-8").replace("+", "%20"); // need to encode url for the get
+
+            String privateUrl = replaceSensitiveData(PRIVATE_OVERPASS_URL) + "?data=" + privateOverpassQuery;
             ArrayList<Double> privateStats = retrieveOverpassStats(privateUrl, true);
             if(privateStats.size() != 0) {
                 columns.add(GRAIL_RAILS_LABEL);
