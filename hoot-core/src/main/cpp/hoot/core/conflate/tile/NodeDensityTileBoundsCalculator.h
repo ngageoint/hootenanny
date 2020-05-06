@@ -54,7 +54,8 @@ class OsmMap;
 class Node;
 
 /**
- * Caculates divisions as the center of pixels
+ * Calculates divisions as the center of pixels and outputs tile boundaries that attempt to
+ * even distribute nodes based on a specified maximum node per tile count.
  *
  * WARNING: Under the covers we're using signed 32bit integers to represent the number of nodes
  * in a pixel. At this point there are fewer than 2 billion nodes in the planet file. As long as
@@ -212,16 +213,23 @@ private:
 
   double _pixelSize;
   OGREnvelope _envelope;
+  // target max nodes per tile
   long _maxNodesPerTile;
   double _slop;
   int32_t _maxValue;
+
+  // actual max nodes per tile
   long _maxNodeCountInOneTile;
+  // actual min nodes per tile
   long _minNodeCountInOneTile;
-  // TODO
+  // if multiple attempts are enabled, auto reduce the pixel size by this amount
   double _pixelSizeRetryReductionFactor;
+  // if multiple attempts are enabled, auto increase the max node count per tile by this amount
   long _maxNodePerTileIncreaseFactor;
+  // allows for multiple calc attempts
   int _maxNumTries;
-  // seconds; -1 is unlimited
+
+  // timeout in seconds; -1 is unlimited
   int _maxTimePerAttempt;
   QElapsedTimer _timer;
 

@@ -104,21 +104,6 @@ public:
 
     // optional parameters
 
-    /*
-     *  QStringList retainmentFilterOptions;
-    if (args.contains("--retainment-filter-options"))
-    {
-      const int optionNameIndex = args.indexOf("--retainment-filter-options");
-      LOG_VARD(optionNameIndex);
-      retainmentFilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
-      LOG_VARD(retainmentFilterOptions);
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-    }
-    LOG_VARD(retainmentFilterOptions);
-
-     */
-
     double pixelSize = 0.001; // .1km?
     if (args.contains("--pixel-size"))
     {
@@ -224,7 +209,7 @@ public:
     NodeDensityTileBoundsCalculator tileCalc;
     tileCalc.setPixelSize(pixelSize);
     tileCalc.setMaxNodesPerTile(maxNodesPerTile);
-    //tileCalc.setSlop(0.1); // TODO: tweak this?
+    //tileCalc.setSlop(0.1); // tweak this?
     tileCalc.setMaxNodePerTileIncreaseFactor(maxNodeCountAutoIncreaseFactor);
     tileCalc.setMaxNumTries(maxAttempts);
     tileCalc.setMaxTimePerAttempt(maxTimePerAttempt);
