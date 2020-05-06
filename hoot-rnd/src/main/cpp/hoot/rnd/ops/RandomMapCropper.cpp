@@ -31,13 +31,15 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/conflate/tile/TileUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
+#include <hoot/core/io/TileBoundsWriter.h>
+#include <hoot/core/conflate/tile/TileUtils.h>
 
 namespace hoot
 {
@@ -96,16 +98,17 @@ void RandomMapCropper::apply(OsmMapPtr& map)
 
   // compute tiles for the whole dataset, select one tile at random, and crop to the bounds of
   // the selected tile
-  // TODO: Can we intelligently calculate pixel size here somehow?
-  long minNodeCountInOneTile = 0;
-  long maxNodeCountInOneTile = 0;
-  std::vector<std::vector<long>> nodeCounts;
-  const std::vector<std::vector<geos::geom::Envelope>> tiles =
-    TileUtils::calculateTiles(
-      _maxNodeCount, _pixelSize, map, minNodeCountInOneTile, maxNodeCountInOneTile, nodeCounts);
+
+  NodeDensityTileBoundsCalculator tileCalc;
+  tileCalc.setPixelSize(_pixelSize);
+  tileCalc.setMaxNodesPerTile(_maxNodeCount);
+  tileCalc.calculateTiles(map);
+  const std::vector<std::vector<geos::geom::Envelope>> tiles = tileCalc.getTiles();
+  const std::vector<std::vector<long>> nodeCounts = tileCalc.getNodeCounts();
+
   if (!_tileFootprintOutputPath.isEmpty())
   {
-    TileUtils::writeTilesToOsm(tiles, nodeCounts, _tileFootprintOutputPath);
+    TileBoundsWriter::writeTilesToOsm(tiles, nodeCounts, _tileFootprintOutputPath);
     LOG_INFO("Wrote tile footprints to: " << _tileFootprintOutputPath);
   }
   _cropper.setBounds(TileUtils::getRandomTile(tiles, _randomSeed));
@@ -122,8 +125,8 @@ void RandomMapCropper::apply(OsmMapPtr& map)
   LOG_DEBUG(
     "Cropped map bounds: " <<
     GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map)));
-  LOG_INFO("Minimum nodes in a single tile: " << minNodeCountInOneTile);
-  LOG_INFO("Maximum nodes in a single tile: " << maxNodeCountInOneTile);
+  LOG_INFO("Minimum nodes in a single tile: " << tileCalc.getMinNodeCountInOneTile());
+  LOG_INFO("Maximum nodes in a single tile: " << tileCalc.getMaxNodeCountInOneTile());
 }
 
 }

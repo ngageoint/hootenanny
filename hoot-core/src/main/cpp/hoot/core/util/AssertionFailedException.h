@@ -40,10 +40,10 @@ namespace hoot
 class AssertionFailedException : public HootException
 {
 public:
+
   AssertionFailedException(QString str) : HootException(str) {}
 
   virtual ~AssertionFailedException() throw() {}
-
 };
 
 }

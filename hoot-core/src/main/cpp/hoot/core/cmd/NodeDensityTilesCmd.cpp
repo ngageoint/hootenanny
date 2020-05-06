@@ -33,10 +33,11 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/tile/TileUtils.h>
+#include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/io/TileBoundsWriter.h>
 
 namespace hoot
 {
@@ -60,7 +61,7 @@ public:
     if (args.size() < 2)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(
+      throw IllegalArgumentException(
         QString("%1 takes at least two parameters.").arg(getName()));
     }
 
@@ -73,7 +74,7 @@ public:
     }
     else
     {
-      //multiple inputs
+      // multiple inputs
       inputs = input.split(";");
     }
     LOG_VARD(inputs);
@@ -96,19 +97,19 @@ public:
       maxNodesPerTile = args[2].toLong(&parseSuccess);
       if (!parseSuccess || maxNodesPerTile < 1)
       {
-        throw HootException("Invalid maximum nodes per tile value: " + args[2]);
+        throw IllegalArgumentException("Invalid maximum nodes per tile value: " + args[2]);
       }
     }
     LOG_VARD(maxNodesPerTile);
 
-    double pixelSize = 0.001; //.1km?
+    double pixelSize = 0.001; // .1km?
     if (args.size() > 2)
     {
       bool parseSuccess = false;
       pixelSize = args[3].toDouble(&parseSuccess);
       if (!parseSuccess || pixelSize <= 0.0)
       {
-        throw HootException("Invalid pixel size value: " + args[3]);
+        throw IllegalArgumentException("Invalid pixel size value: " + args[3]);
       }
     }
     LOG_VARD(pixelSize);
@@ -120,7 +121,7 @@ public:
       randomSeed = args[4].toInt(&parseSuccess);
       if (!parseSuccess || randomSeed < -1)
       {
-        throw HootException("Invalid random seed value: " + args[4]);
+        throw IllegalArgumentException("Invalid random seed value: " + args[4]);
       }
     }
     LOG_VARD(randomSeed);
@@ -129,23 +130,33 @@ public:
 
     OsmMapPtr inputMap = _readInputs(inputs);
 
-    long minNodeCountInOneTile = 0;
-    long maxNodeCountInOneTile = 0;
-    std::vector<std::vector<long>> nodeCounts;
-    const std::vector<std::vector<geos::geom::Envelope>> tiles =
-      TileUtils::calculateTiles(
-        maxNodesPerTile, pixelSize, inputMap, minNodeCountInOneTile, maxNodeCountInOneTile,
-        nodeCounts);
+    NodeDensityTileBoundsCalculator tileCalc;
+    tileCalc.setPixelSize(pixelSize);
+    tileCalc.setMaxNodesPerTile(maxNodesPerTile);
+    //tileCalc.setSlop(0.1); // TODO: tweak this?
+    tileCalc.setMaxNodePerTileIncreaseFactor(10);
+    tileCalc.setMaxNumTries(1); // TODO: change
+    tileCalc.setPixelSizeRetryReductionFactor(10.0);
+    tileCalc.calculateTiles(inputMap);
+    const std::vector<std::vector<geos::geom::Envelope>> tiles = tileCalc.getTiles();
+    const std::vector<std::vector<long>> nodeCounts = tileCalc.getNodeCounts();
 
     if (output.toLower().endsWith(".geojson"))
     {
-      TileUtils::writeTilesToGeoJson(tiles, nodeCounts, output, inputMap->getSource(),
-                                     args.contains("--random"), randomSeed);
+      TileBoundsWriter::writeTilesToGeoJson(
+        tiles, nodeCounts, output, inputMap->getSource(), args.contains("--random"), randomSeed);
     }
     else
     {
-      TileUtils::writeTilesToOsm(tiles, nodeCounts, output, args.contains("--random"), randomSeed);
+      TileBoundsWriter::writeTilesToOsm(
+        tiles, nodeCounts, output, args.contains("--random"), randomSeed);
     }
+
+    LOG_INFO("Number of calculated tiles: " << tiles.size());
+    LOG_INFO("Maximum node count in a single tile: " << tileCalc.getMaxNodeCountInOneTile());
+    LOG_INFO("Mininum node count in a single tile: " << tileCalc.getMinNodeCountInOneTile());
+    LOG_INFO("Pixel size used: " << tileCalc.getPixelSize());
+    LOG_INFO("Maximum node count per tile used: " << tileCalc.getMaxNodesPerTile());
 
     return 0;
   }

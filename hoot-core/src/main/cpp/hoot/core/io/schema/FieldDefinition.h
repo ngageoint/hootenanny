@@ -40,17 +40,21 @@ namespace hoot
 class FieldDefinition
 {
 public:
+
   class InvalidValueException : public HootException
   {
   public:
+
     InvalidValueException(QString fieldName, QString message) :
       HootException(message),
       _fieldName(fieldName)
-    { }
+    {
+    }
 
     virtual ~InvalidValueException() throw() {}
 
   private:
+
     QString _fieldName;
   };
 
@@ -87,15 +91,16 @@ public:
   virtual QString toString() const = 0;
 
 protected:
+
   void _reportError(const QString& field, const QString& error, StrictChecking strict) const;
 
   bool _allowNull;
   bool _defaultIsNull;
 
 private:
+
   int _width;
   QString _name;
-
 };
 
 }

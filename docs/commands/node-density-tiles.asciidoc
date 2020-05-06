@@ -9,9 +9,11 @@ the specified input(s) and writes the output to a file.
 * +input(s)+            - One or more inputs; may be any supported input format (e.g. OSM file). Specify multiple inputs by separating them 
                           with a semicolon.
 * +output+              - Output file to write the tile boundaries to; must be GeoJSON (*.geojson) or OSM (*.osm).
-* +maxNodeCountPerTile+ - The maximum number of nodes in any tile.  The default is 1000; optional only if pixelSize is not specified
-* +pixelSize+           - The size of the pixel used in the calculation in degrees.  The default is 0.001; optional only if
-                          maxNodeCountPerTile is not specified
+* +maxNodeCountPerTile+ - The maximum number of nodes in any tile; optional only if pixelSize is not specified. The default is 1000. If the 
+                          specified value is less than the number of nodes in the input data, then a single bounding box containing all of the 
+                          data is output. If a solution cannot be found, this value may be automatically increased in order to find one.
+* +pixelSize+           - The size of the pixel used in the calculation in degrees; optional only if maxNodeCountPerTile is not specified. The 
+                          default is 0.001. If a solution cannot be found, this value may be automatically decreased in order to find one.
 * +random-seed+         - Seeds the random number generator for consistent tile boundary selection; valid only if --random is specified;
                           use -1 for pseudo-random seeding; defaults to -1
 * +--random+            - Selects a single random tile from those calculated
