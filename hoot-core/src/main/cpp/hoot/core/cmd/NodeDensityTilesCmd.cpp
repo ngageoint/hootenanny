@@ -34,10 +34,9 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
-#include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/io/TileBoundsWriter.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -83,12 +82,10 @@ public:
     if (!output.toLower().endsWith(".geojson") && !output.toLower().endsWith(".osm"))
     {
       throw IllegalArgumentException(
-        "Invalid output file format: " + output + ".  Only the GeoJSON (.geojson) and OSM " +
+        "Invalid output file format: " + output + ". Only the GeoJSON (.geojson) and OSM " +
         "(.osm) output formats are supported.");
     }
     LOG_VARD(output);
-
-    //if either of max nodes per tile or pixel size is specified, then both must be specified
 
     long maxNodesPerTile = 1000;
     if (args.size() > 2)
@@ -102,27 +99,102 @@ public:
     }
     LOG_VARD(maxNodesPerTile);
 
-    double pixelSize = 0.001; // .1km?
-    if (args.size() > 2)
+    // optional parameters
+
+    /*
+     *  QStringList retainmentFilterOptions;
+    if (args.contains("--retainment-filter-options"))
     {
+      const int optionNameIndex = args.indexOf("--retainment-filter-options");
+      LOG_VARD(optionNameIndex);
+      retainmentFilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(retainmentFilterOptions);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(retainmentFilterOptions);
+
+     */
+
+    double pixelSize = 0.001; // .1km?
+    if (args.contains("--pixel-size"))
+    {
+      const int optionNameIndex = args.indexOf("--pixel-size");
       bool parseSuccess = false;
-      pixelSize = args[3].toDouble(&parseSuccess);
+      const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
+      pixelSize = optionStrVal.toDouble(&parseSuccess);
       if (!parseSuccess || pixelSize <= 0.0)
       {
-        throw IllegalArgumentException("Invalid pixel size value: " + args[3]);
+        throw IllegalArgumentException("Invalid pixel size value: " + optionStrVal);
       }
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
     }
     LOG_VARD(pixelSize);
 
-    int randomSeed = -1;
-    if (args.contains("--random") && args.size() > 4)
+    int maxAttempts = 1;
+    if (args.contains("--maxAttempts"))
     {
+      const int optionNameIndex = args.indexOf("--maxAttempts");
       bool parseSuccess = false;
-      randomSeed = args[4].toInt(&parseSuccess);
+      const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
+      maxAttempts = optionStrVal.toInt(&parseSuccess);
+      if (!parseSuccess || maxAttempts <= 0)
+      {
+        throw IllegalArgumentException("Invalid maximum attempts value: " + optionStrVal);
+      }
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(maxAttempts);
+
+    long maxNodeCountAutoIncreaseFactor = 2;
+    if (args.contains("--maxNodeCountPerTileAutoIncreaseFactor"))
+    {
+      const int optionNameIndex = args.indexOf("--maxNodeCountPerTileAutoIncreaseFactor");
+      bool parseSuccess = false;
+      const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
+      maxNodeCountAutoIncreaseFactor = optionStrVal.toLong(&parseSuccess);
+      if (!parseSuccess || maxNodeCountAutoIncreaseFactor <= 1)
+      {
+        throw IllegalArgumentException(
+          "Invalid maximum node count per tile automatic increase factor value: " + optionStrVal);
+      }
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(maxNodeCountAutoIncreaseFactor);
+
+    double pixelSizeAutoReductionFactor = 2.0;
+    if (args.contains("--pixelSizeAutoReductionFactor"))
+    {
+      const int optionNameIndex = args.indexOf("--pixelSizeAutoReductionFactor");
+      bool parseSuccess = false;
+      const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
+      pixelSizeAutoReductionFactor = optionStrVal.toDouble(&parseSuccess);
+      if (!parseSuccess || pixelSizeAutoReductionFactor <= 1.0)
+      {
+        throw IllegalArgumentException(
+          "Invalid pixel size automatic reduction factor value: " + optionStrVal);
+      }
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(pixelSizeAutoReductionFactor);
+
+    int randomSeed = -1;
+    if (args.contains("--random") && args.contains("--random-seed"))
+    { 
+      const int optionNameIndex = args.indexOf("--random-seed");
+      bool parseSuccess = false;
+      const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
+      randomSeed = optionStrVal.toInt(&parseSuccess);
       if (!parseSuccess || randomSeed < -1)
       {
-        throw IllegalArgumentException("Invalid random seed value: " + args[4]);
+        throw IllegalArgumentException("Invalid random seed value: " + optionStrVal);
       }
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
     }
     LOG_VARD(randomSeed);
 
@@ -134,9 +206,9 @@ public:
     tileCalc.setPixelSize(pixelSize);
     tileCalc.setMaxNodesPerTile(maxNodesPerTile);
     //tileCalc.setSlop(0.1); // TODO: tweak this?
-    tileCalc.setMaxNodePerTileIncreaseFactor(2);
-    tileCalc.setMaxNumTries(1); // TODO: change
-    tileCalc.setPixelSizeRetryReductionFactor(2.0);
+    tileCalc.setMaxNodePerTileIncreaseFactor(maxNodeCountAutoIncreaseFactor);
+    tileCalc.setMaxNumTries(maxAttempts);
+    tileCalc.setPixelSizeRetryReductionFactor(pixelSizeAutoReductionFactor);
     tileCalc.calculateTiles(inputMap);
     const std::vector<std::vector<geos::geom::Envelope>> tiles = tileCalc.getTiles();
     const std::vector<std::vector<long>> nodeCounts = tileCalc.getNodeCounts();
@@ -152,11 +224,17 @@ public:
         tiles, nodeCounts, output, args.contains("--random"), randomSeed);
     }
 
-    LOG_INFO("Number of calculated tiles: " << tiles.size());
-    LOG_INFO("Maximum node count in a single tile: " << tileCalc.getMaxNodeCountInOneTile());
-    LOG_INFO("Mininum node count in a single tile: " << tileCalc.getMinNodeCountInOneTile());
-    LOG_INFO("Pixel size used: " << tileCalc.getPixelSize());
-    LOG_INFO("Maximum node count per tile used: " << tileCalc.getMaxNodesPerTile());
+    LOG_STATUS("Number of calculated tiles: " << StringUtils::formatLargeNumber(tiles.size()));
+    LOG_STATUS(
+      "Maximum node count in a single tile: " <<
+      StringUtils::formatLargeNumber(tileCalc.getMaxNodeCountInOneTile()));
+    LOG_STATUS(
+      "Mininum node count in a single tile: " <<
+      StringUtils::formatLargeNumber(tileCalc.getMinNodeCountInOneTile()));
+    LOG_STATUS("Pixel size used: " << tileCalc.getPixelSize());
+    LOG_STATUS(
+      "Maximum node count per tile used: " <<
+      StringUtils::formatLargeNumber(tileCalc.getMaxNodesPerTile()));
 
     return 0;
   }
@@ -202,9 +280,6 @@ private:
     }
     LOG_VARD(map->getNodeCount());
 
-//    OGREnvelope envelope = CalculateMapBoundsVisitor::getBounds(map);
-//    std::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(envelope));
-//    LOG_VARD(tempEnv->toString());
     OsmMapWriterFactory::writeDebugMap(map);
 
     return map;

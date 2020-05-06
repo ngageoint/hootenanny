@@ -48,15 +48,12 @@ class NodeDensityTileBoundsCalculatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NodeDensityTileBoundsCalculatorTest);
   CPPUNIT_TEST(runToyTest);
-  // TODO: enable
-  //CPPUNIT_TEST(runRetryTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  NodeDensityTileBoundsCalculatorTest()
-    : HootTestFixture("test-files/conflate/tile/",
-                      "test-output/conflate/tile/")
+  NodeDensityTileBoundsCalculatorTest() :
+  HootTestFixture("test-files/conflate/tile/", "test-output/conflate/tile/")
   {
     setResetType(ResetBasic);
   }
@@ -99,43 +96,6 @@ public:
     uut.setMaxNodesPerTile(1000);
     uut.setSlop(0.1);
     uut.setMaxNumTries(1);
-    uut._renderImage(map);
-
-    uut._calculateTiles();
-    vector<vector<Envelope>> e = uut.getTiles();
-
-    OsmMapPtr bounds(new OsmMap());
-
-    for (size_t tx = 0; tx < e.size(); tx++)
-    {
-      for (size_t ty = 0; ty < e[tx].size(); ty++)
-      {
-        addEnvelope(bounds, e[tx][ty], tx, ty);
-      }
-    }
-
-    OsmXmlWriter writer;
-    writer.write(bounds, _outputPath + "TileBounds.osm");
-
-    HOOT_FILE_EQUALS(_inputPath + "TileBounds.osm", _outputPath + "TileBounds.osm");
-  }
-
-  void runRetryTest()
-  {
-    OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/DcGisRoads.osm", map);
-    reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/DcTigerRoads.osm", map);
-
-    NodeDensityTileBoundsCalculator uut;
-    uut.setPixelSize(0.001 / 360.0);
-    uut.setMaxNodesPerTile(10);
-    uut.setSlop(0.1);
-    uut.setMaxNodePerTileIncreaseFactor(10);
-    uut.setPixelSizeRetryReductionFactor(10.0);
-    uut.setMaxNumTries(2);
     uut._renderImage(map);
 
     uut._calculateTiles();

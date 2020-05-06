@@ -6,17 +6,25 @@
 The +node-density-tiles+ command calculates a collection of bounding boxes that contain roughly equal distributions of node data from
 the specified input(s) and writes the output to a file.
 
-* +input(s)+            - One or more inputs; may be any supported input format (e.g. OSM file). Specify multiple inputs by separating them 
-                          with a semicolon.
-* +output+              - Output file to write the tile boundaries to; must be GeoJSON (*.geojson) or OSM (*.osm).
-* +maxNodeCountPerTile+ - The maximum number of nodes in any tile; optional only if pixelSize is not specified. The default is 1000. If the 
-                          specified value is less than the number of nodes in the input data, then a single bounding box containing all of the 
-                          data is output. If a solution cannot be found, this value may be automatically increased in order to find one.
-* +pixelSize+           - The size of the pixel used in the calculation in degrees; optional only if maxNodeCountPerTile is not specified. The 
-                          default is 0.001. If a solution cannot be found, this value may be automatically decreased in order to find one.
-* +random-seed+         - Seeds the random number generator for consistent tile boundary selection; valid only if --random is specified;
-                          use -1 for pseudo-random seeding; defaults to -1
-* +--random+            - Selects a single random tile from those calculated
+* +input(s)+                                - One or more inputs; may be any supported input format (e.g. OSM file). Specify multiple inputs by 
+                                              separating them with a semicolon.
+* +output+                                  - Output file to write the tile boundaries to; must be GeoJSON (*.geojson) or OSM (*.osm).
+* +maxNodeCountPerTile+                     - The maximum number of nodes in any tile. If the specified value is less than the number of nodes 
+                                              in the input data, then a single bounding box containing all of the data is output.
+* +--pixelSize+                             - Optional size of the pixel used in the calculation in degrees. The default size is 0.001.
+* +--maxAttempts+                           - The maximum number of calculation attempts; optional. This is useful when using this command in an
+                                              automated fashion via a script. If this is set to greater than one and the first calculation 
+                                              attempt fails, additional calculation attempts will automatically be made after tweaking the
+                                              initial input parameters. Defaults to a single attempt. Note that as additional attempts are made 
+                                              the adjustments to the inputs may dramatically increase the runtime of a calculation.
+* +--maxNodeCountPerTileAutoIncreaseFactor+ - Optional integer factor greater than 1 by which +maxNodeCountPerTile+ will be automatically 
+                                              increased if +--maxAttempts+ is greater than one and any calculation attempt fails. The default 
+                                              value is 2.
+* +--pixelSizeAutoReductionFactor+          - Optional decimal factor greater than 1.0 by which +--pixelSize+ will be automatically reduced if 
+                                              +--maxAttempts+ is greater than one and any calculation attempt fails. The default value is 2.0.
+* +--random+                                - Selects a single random tile from those calculated
+* +--random-seed+                           - Seeds the random number generator for consistent tile boundary selection; valid only if --random 
+                                              is specified; use -1 for pseudo-random seeding; defaults to -1
 
 If too low a value is specified for maxNodeCountPerTile or too high a value is specified for pixelSize, the algorithm used may not be able
 to find a solution.
@@ -31,7 +39,7 @@ hoot info --formats --input-bounded
 === Usage
 
 --------------------------------------
-hoot node-density-tiles (input1.osm)[;input2.osm...] (output) [maxNodeCountPerTile] [pixelSize] [random-seed] [--random]
+hoot node-density-tiles (input1.osm)[;input2.osm...] (output) [maxNodeCountPerTile] [--pixelSize <value>] [--maxAttempts <value>] [--pixelSizeAutoReductionFactor <value>] [--maxNodeCountPerTileAutoIncreaseFactor <value>] [--random] [--random-seed <value>]
 --------------------------------------
 
 === Examples
@@ -45,13 +53,19 @@ hoot node-density-tiles test-files/MyInputFile.osm MyOutputFile.geojson
 Calculate tiles based on node density, specifying the maximum allowed node count per tile and a pixel size:
 
 --------------------------------------
-hoot node-density-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson 1000 0.001
+hoot node-density-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson 1000 --pixelSize 0.001
 --------------------------------------
 
 Calculate tiles based on node density, narrowing down to a subset of the data specified by a bounding box:
 
 --------------------------------------
 hoot node-density-tiles -D convert.bounding.box="34.04,31.17,34.05,31.18" hootapidb://hoot:hoottest@localhost:5432/hoot/MyInputDb MyOutputFile.geojson
+--------------------------------------
+
+Calculate tiles based on node density, specifying the maximum allowed node count per tile and a pixel size, and allow for more than one calculation attempt:
+
+--------------------------------------
+hoot node-density-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson 1000 --pixelSize 0.001 --maxAttempts 2 --maxNodeCountPerTileAutoIncreaseFactor 2 --pixelSizeAutoReductionFactor 2
 --------------------------------------
 
 Select a random tile based on node density:
@@ -63,7 +77,7 @@ hoot node-density-tiles test-files/MyInputFile.osm MyOutputFile.geojson --random
 Select a random tile based on node density specifying a particular seed for the random number generator:
 
 --------------------------------------
-hoot node-density-tiles test-files/MyInputFile.osm MyOutputFile.geojson 1000 0.001 2 --random
+hoot node-density-tiles test-files/MyInputFile.osm MyOutputFile.geojson 1000 --pixelSize 0.001 --random --random-seed 2
 --------------------------------------
 
 === See Also

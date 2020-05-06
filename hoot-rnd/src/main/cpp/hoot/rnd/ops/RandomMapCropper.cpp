@@ -99,6 +99,8 @@ void RandomMapCropper::apply(OsmMapPtr& map)
   // compute tiles for the whole dataset, select one tile at random, and crop to the bounds of
   // the selected tile
 
+  // TODO: integrate this with the node density retry params if they end up being useful with
+  // the node-density-tiles command
   NodeDensityTileBoundsCalculator tileCalc;
   tileCalc.setPixelSize(_pixelSize);
   tileCalc.setMaxNodesPerTile(_maxNodeCount);

@@ -55,7 +55,7 @@ _maxNodeCountInOneTile(0),
 _minNodeCountInOneTile(LONG_MAX),
 _pixelSizeRetryReductionFactor(10.0),
 _maxNodePerTileIncreaseFactor(10),
-_maxNumTries(2)
+_maxNumTries(1)
 {
 }
 
@@ -167,6 +167,8 @@ QString NodeDensityTileBoundsCalculator::tilesToString(const vector<vector<Envel
 
 void NodeDensityTileBoundsCalculator::_calculateTiles()
 {
+  LOG_INFO("Calculating tiles...");
+
   size_t width = 1;
   vector<PixelBox> boxes;
   boxes.resize(1);
@@ -194,16 +196,16 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
       LOG_TRACE("  i: " << i << " tx: " << tx << " ty: " << ty);
 
       double splitYLeft = _calculateSplitY(PixelBox(b.minX, splitX, b.minY, b.maxY));
-      nextLayer[(tx * 2 + 0) + (ty * 2 + 0) * width] = PixelBox(b.minX, splitX, b.minY,
-        splitYLeft);
-      nextLayer[(tx * 2 + 0) + (ty * 2 + 1) * width] = PixelBox(b.minX, splitX, splitYLeft + 1,
-        b.maxY);
+      nextLayer[(tx * 2 + 0) + (ty * 2 + 0) * width] =
+        PixelBox(b.minX, splitX, b.minY, splitYLeft);
+      nextLayer[(tx * 2 + 0) + (ty * 2 + 1) * width] =
+        PixelBox(b.minX, splitX, splitYLeft + 1, b.maxY);
 
       double splitYRight = _calculateSplitY(PixelBox(splitX + 1, b.maxX, b.minY, b.maxY));
-      nextLayer[(tx * 2 + 1) + (ty * 2 + 0) * width] = PixelBox(splitX + 1, b.maxX, b.minY,
-        splitYRight);
-      nextLayer[(tx * 2 + 1) + (ty * 2 + 1) * width] = PixelBox(splitX + 1, b.maxX, splitYRight + 1,
-        b.maxY);
+      nextLayer[(tx * 2 + 1) + (ty * 2 + 0) * width] =
+        PixelBox(splitX + 1, b.maxX, b.minY, splitYRight);
+      nextLayer[(tx * 2 + 1) + (ty * 2 + 1) * width] =
+        PixelBox(splitX + 1, b.maxX, splitYRight + 1, b.maxY);
     }
 
     boxes = nextLayer;
@@ -583,6 +585,8 @@ void NodeDensityTileBoundsCalculator::_renderImage(const std::shared_ptr<OsmMap>
 void NodeDensityTileBoundsCalculator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1,
                                                    cv::Mat& r2)
 {
+  LOG_INFO("Rendering images...");
+
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
   if (Log::getInstance().getLevel() <= Log::Debug)
   {
@@ -636,6 +640,8 @@ void NodeDensityTileBoundsCalculator::_renderImage(const std::shared_ptr<OsmMap>
 
 void NodeDensityTileBoundsCalculator::_setImages(const cv::Mat& r1, const cv::Mat& r2)
 {
+  LOG_INFO("Exporting images...");
+
   _r1 = r1;
   _r2 = r2;
 
