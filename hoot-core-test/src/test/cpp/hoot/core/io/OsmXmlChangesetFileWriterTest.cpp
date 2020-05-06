@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -32,6 +32,7 @@
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/algorithms/changeset/TestOsmChangesetProvider.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 
 namespace hoot
 {
@@ -54,9 +55,15 @@ public:
   void runSimpleTest()
   {
     std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
-    OsmXmlChangesetFileWriter().write(_outputPath + "changeset.osc", changesetProvider);
+    OsmXmlChangesetFileWriter uut;
+    uut.write(_outputPath + "changeset.osc", changesetProvider);
+    FileUtils::writeFully(_outputPath + "stats", uut.getStatsTable(ChangesetStatsFormat::Text));
+    FileUtils::writeFully(
+      _outputPath + "stats.json", uut.getStatsTable(ChangesetStatsFormat::Json));
 
     HOOT_FILE_EQUALS(_inputPath + "changeset.osc", _outputPath + "changeset.osc");
+    HOOT_FILE_EQUALS(_inputPath + "stats", _outputPath + "stats");
+    HOOT_FILE_EQUALS(_inputPath + "stats.json", _outputPath + "stats.json");
   }
 };
 

@@ -28,15 +28,20 @@
 #define ELEMENTCOMPARER_H
 
 // Hoot
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 
 namespace hoot
 {
 
 /**
  * Compares two elements of the same type for similarity
+ *
+ * Note that if element IDs are ignored, the comparison may be a little more expensive
+ *
+ * @todo change this over to use CalculateHashVisitor
  */
-class ElementComparer
+class ElementComparer : public OsmMapConsumer
 {
 
 public:
@@ -45,7 +50,36 @@ public:
 
   explicit ElementComparer(Meters threshold = 0.05);
 
+  /**
+   * Determines if two elements are the same
+   *
+   * The only reason the inputs are const is b/c we auto update nodes with a hash if they don't
+   * already have one.
+   *
+   * @param e1 the first element to compare
+   * @param e2 the second element to compare
+   * @return true if they are the same; false otherwise
+   */
   bool isSame(ElementPtr e1, ElementPtr e2) const;
+
+  /**
+   * Determines if the tags for two elements are the same
+   *
+   * @param e1 the element owning the first set of tags to compare
+   * @param e2 the element owning the second set of tags to compare
+   * @return true if they are the same; false otherwise
+   */
+  static bool tagsAreSame(ConstElementPtr e1, ConstElementPtr e2);
+
+  void setIgnoreElementId(bool ignore) { _ignoreElementId = ignore; }
+
+  /**
+   * @see OsmMapConsumer
+   *
+   * This only needs to be set if _ignoreElementId = true. The reason a const map isn't used here
+   * is for the same reason isSame doesn't take in const elements.
+   */
+  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
 private:
 
@@ -53,6 +87,10 @@ private:
   //eventually go away completely if all element types were converted over to uses hashes for
   //comparisons
   Meters _threshold;
+  // enabling this allows for element comparisons to ignore the element ID
+  bool _ignoreElementId;
+  // a map is needed when comparing child elements if ignoring element IDs
+  OsmMapPtr _map;
 
   bool _compareNode(const std::shared_ptr<const Element>& re,
                     const std::shared_ptr<const Element>& e) const;
@@ -61,7 +99,7 @@ private:
   bool _compareRelation(const std::shared_ptr<const Element>& re,
                         const std::shared_ptr<const Element>& e) const;
 
-  void _removeTagsNotImportantForComparison(Tags& tags) const;
+  static void _removeTagsNotImportantForComparison(Tags& tags);
 };
 
 }

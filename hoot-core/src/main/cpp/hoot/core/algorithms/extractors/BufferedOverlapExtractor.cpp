@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BufferedOverlapExtractor.h"
 
@@ -65,9 +65,12 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
 {
   ElementConverter ec(map.shared_from_this());
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  if (g1->isEmpty())
+  {
+    return nullValue();
+  }
   std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
-
-  if (g1->isEmpty() || g2->isEmpty())
+  if (g2->isEmpty())
   {
     return nullValue();
   }
@@ -91,6 +94,8 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
   std::shared_ptr<Geometry> overlap;
   try
   {
+    // This buffer calc is a performance bottleneck for Area Conflation. Attempts to reduce the quad
+    // segments option passed to the buffer operation have had no effect on performance so far.
     g1.reset(g1->buffer(buffer));
     g2.reset(g2->buffer(buffer));
     overlap.reset(g1->intersection(g2.get()));

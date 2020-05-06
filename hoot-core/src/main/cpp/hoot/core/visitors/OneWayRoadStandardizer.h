@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ONE_WAY_ROAD_STANDARDIZER_H
@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Replaces all reversed one way roads with regular one way roads
  */
-class OneWayRoadStandardizer : public ElementVisitor, public OperationStatusInfo
+class OneWayRoadStandardizer : public ElementVisitor
 {
 
 public:
@@ -57,6 +57,14 @@ public:
 
   virtual QString getDescription() const
   { return "Replaces all reversed one way roads with regular one way roads"; }
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

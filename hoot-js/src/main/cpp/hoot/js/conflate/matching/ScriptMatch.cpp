@@ -41,6 +41,7 @@
 
 // Qt
 #include <qnumeric.h>
+#include <QElapsedTimer>
 
 // Standard
 #include <sstream>
@@ -228,7 +229,7 @@ bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr
   {
     try
     {
-      // we need to check for a conflict in two directions. Is it conflicting if we merge the shared
+      // We need to check for a conflict in two directions. Is it conflicting if we merge the shared
       // EID with this class first, then is it a conflict if we merge with the other EID first.
       if (_isOrderedConflicting(map, sharedEid, o1, o2) ||
           hm->_isOrderedConflicting(map, sharedEid, o2, o1))
@@ -314,9 +315,8 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
       }
     }
 
-    // if we can still find the second match after the merge was applied then it isn't a conflict
-    if (copiedMap->containsElement(eid21) &&
-        copiedMap->containsElement(eid22))
+    // If we can still find the second match after the merge was applied, then it isn't a conflict.
+    if (copiedMap->containsElement(eid21) && copiedMap->containsElement(eid22))
     {
       ScriptMatch m2(_script, _plugin, copiedMap, copiedMapJs, eid21, eid22, _threshold);
       if (m2.getType() == MatchType::Match)

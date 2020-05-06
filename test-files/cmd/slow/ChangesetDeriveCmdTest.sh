@@ -9,12 +9,18 @@ mkdir -p $OUTPUT_DIR
 # IN MEMORY SORTING (default)
 
 echo "Deriving changeset with in-memory element sorting..."
-hoot changeset-derive -C Testing.conf $INPUT_DIR/map1.osm $INPUT_DIR/map2.osm $OUTPUT_DIR/changeset-1.osc
+hoot changeset-derive -C Testing.conf $INPUT_DIR/map1.osm $INPUT_DIR/map2.osm $OUTPUT_DIR/changeset-1.osc --stats $OUTPUT_DIR/changeset-stats-1.json
 diff $INPUT_DIR/changeset-1.osc $OUTPUT_DIR/changeset-1.osc 
+diff $INPUT_DIR/changeset-stats-1.json $OUTPUT_DIR/changeset-stats-1.json
+# Check command line display of stats
+hoot changeset-derive -C Testing.conf $INPUT_DIR/map1.osm $INPUT_DIR/map2.osm $OUTPUT_DIR/changeset-1.osc --stats
 
 echo "Deriving changeset single input with in-memory element sorting..."
-hoot changeset-derive -C Testing.conf $INPUT_DIR/map1.osm "" $OUTPUT_DIR/changeset-2.osc
+hoot changeset-derive -C Testing.conf --stats $OUTPUT_DIR/changeset-stats-2.json $INPUT_DIR/map1.osm "" $OUTPUT_DIR/changeset-2.osc
 diff $INPUT_DIR/changeset-2.osc $OUTPUT_DIR/changeset-2.osc 
+diff $INPUT_DIR/changeset-stats-2.json $OUTPUT_DIR/changeset-stats-2.json
+# Check command line display of stats
+hoot changeset-derive -C Testing.conf --stats $INPUT_DIR/map1.osm "" $OUTPUT_DIR/changeset-2.osc
 
 # Add at least one map consumer in the convert ops to force in memory sorting when no element buffer size is specified.
 echo "Deriving changeset with unstreamable op..."

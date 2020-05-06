@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -70,7 +70,7 @@ public class ExportCommandTest {
         assertNotNull(exportCommand.getWorkDir());
         assertNotNull(exportCommand.getCommand());
 
-        String expectedCommand = "hoot convert --${DEBUG_LEVEL} " +
+        String expectedCommand = "hoot.bin convert --${DEBUG_LEVEL} " +
                 "${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
         assertEquals(expectedCommand, exportCommand.getCommand());
 
@@ -116,7 +116,7 @@ public class ExportCommandTest {
         assertNotNull(exportCommand.getWorkDir());
         assertNotNull(exportCommand.getCommand());
 
-        String expectedCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
+        String expectedCommand = "hoot.bin convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
         assertEquals(expectedCommand, exportCommand.getCommand());
 
         assertTrue(exportCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));

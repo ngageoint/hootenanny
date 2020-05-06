@@ -34,12 +34,13 @@
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
-#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/CollectionRelationCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 namespace hoot
 {
@@ -92,6 +93,8 @@ QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
       return "Point";
     case Line:
       return "Line";
+    case CollectionRelation:
+      return "Collection Relation";
     default:
       return "Unknown";
   }
@@ -122,11 +125,13 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
     return Point;
   else if (0 == s.compare("line"))
     return Line;
+  else if (0 == s.compare("collectionrelation"))
+    return CollectionRelation;
   else
     return Unknown;
 }
 
-CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType (BaseFeatureType t)
+CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseFeatureType t)
 {
   switch (t)
   {
@@ -152,6 +157,8 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType (Base
       return CalcTypeNone;
     case Line:
       return CalcTypeLength;
+    case CollectionRelation:
+      return CalcTypeArea;
     default:
       return CalcTypeNone;
   }
@@ -172,17 +179,19 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
     case PoiPolygonPOI:
       return ElementCriterionPtr(new PoiPolygonPoiCriterion());
     case Polygon:
-      return ElementCriterionPtr(new PoiPolygonPolyCriterion());
+      return ElementCriterionPtr(new /*PoiPolygonPolyCriterion()*/PolygonCriterion());
     case Area:
-      return ElementCriterionPtr(new NonBuildingAreaCriterion());
+      return ElementCriterionPtr(new NonBuildingAreaCriterion(map));
     case Railway:
       return ElementCriterionPtr(new RailwayCriterion());
     case PowerLine:
       return ElementCriterionPtr(new PowerLineCriterion());
     case Point:
-      return ElementCriterionPtr(new PointCriterion());
+      return ElementCriterionPtr(new PointCriterion(map));
     case Line:
       return ElementCriterionPtr(new LinearCriterion());
+    case CollectionRelation:
+      return ElementCriterionPtr(new CollectionRelationCriterion());
     default:
       return ElementCriterionPtr();
   }

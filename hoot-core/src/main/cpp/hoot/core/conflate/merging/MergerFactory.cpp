@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MergerFactory.h"
 
@@ -33,6 +33,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace std;
 
@@ -60,9 +61,14 @@ void MergerFactory::reset()
 void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
   vector<MergerPtr>& result) const
 {
+  LOG_TRACE(
+    "Creating merger group for " <<
+    StringUtils::formatLargeNumber(matches.size()) << " matches...");
   for (size_t i = 0; i < _creators.size(); i++)
   {
-    PROGRESS_DEBUG("Creating merger " << i + 1 << " / " << _creators.size() << "...");
+    PROGRESS_DEBUG(
+      "Creating merger group " << i + 1 << " / " << _creators.size() << " for " <<
+      StringUtils::formatLargeNumber(matches.size()) << " match(es)...");
 
     OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(_creators[i].get());
     if (omc)
@@ -134,7 +140,7 @@ MergerFactory& MergerFactory::getInstance()
 bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const ConstMatchPtr& m1,
                                   const ConstMatchPtr& m2) const
 {
-  LOG_VART(_creators.size());
+  //LOG_VART(_creators.size());
   // if any creator considers a match conflicting then it is a conflict
   for (size_t i = 0; i < _creators.size(); i++)
   {

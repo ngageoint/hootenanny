@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATEHASHVISITOR2_H
 #define CALCULATEHASHVISITOR2_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/visitors/CalculateHashVisitor.h>
 
 namespace hoot
 {
@@ -37,9 +38,9 @@ namespace hoot
  * Wrapper around CalculateHashVisitor for use with MultiaryIngestCmd - This very well could be
  * replaced by CalculateHashVisitor...but just haven't figured out how to make that work yet.
  *
- * TODO: implement OperationStatusInfo
+ * @todo get rid of this and move the uuid tag check to CalculateHashVisitor
  */
-class CalculateHashVisitor2 : public ElementVisitor
+class CalculateHashVisitor2 : public ElementOsmMapVisitor
 {
 public:
 
@@ -49,6 +50,14 @@ public:
 
   virtual QString getDescription() const
   { return "Calculates unique hash values for elements used by the multiary ingester"; }
+
+  virtual std::string getClassName() const { return className(); }
+
+  void setIncludeCircularError(bool include) { _hashVis.setIncludeCircularError(include); }
+
+private:
+
+  CalculateHashVisitor _hashVis;
 };
 
 }

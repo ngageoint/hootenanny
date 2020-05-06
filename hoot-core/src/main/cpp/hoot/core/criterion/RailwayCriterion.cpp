@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RailwayCriterion.h"
@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 
 namespace hoot
 {
@@ -42,20 +43,38 @@ RailwayCriterion::RailwayCriterion()
 
 bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e->getElementType() == ElementType::Way || e->getElementType() == ElementType::Relation)
+  // See similar note in LinearWaterwayCriterion
+  if (e->getElementType() != ElementType::Way)
   {
-    const Tags& tags = e->getTags();
+    return false;
+  }
+
+  bool passedTagFilter = false;
+
+  const Tags& tags = e->getTags();
+  if (tags.contains("railway"))
+  {
+    passedTagFilter = true;
+  }
+  else
+  {
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
-      // I think we may want to narrow down to a more specific set of railway values here
-      // at some point.
-      if (it.key() == "railway" || OsmSchema::getInstance().isAncestor(it.key(), "railway"))
+      const QString key = it.key();
+      if (OsmSchema::getInstance().isAncestor(key, "railway"))
       {
-        return true;
+        passedTagFilter = true;
+        break;
       }
     }
   }
-  return false;
+
+  if (passedTagFilter && !LinearCriterion().isSatisfied(e))
+  {
+    return false;
+  }
+
+  return passedTagFilter;
 }
 
 }

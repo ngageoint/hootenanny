@@ -54,9 +54,18 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/VersionUtils.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // Standard
 #include <fstream>
@@ -80,7 +89,8 @@ const QString ConflateCmd::JOB_SOURCE = "Conflate";
 HOOT_FACTORY_REGISTER(Command, ConflateCmd)
 
 ConflateCmd::ConflateCmd() :
-_numTotalTasks(0)
+_numTotalTasks(0),
+_filterOps(ConfigOptions().getConflateRemoveSuperfluousOps())
 {
 }
 
@@ -99,32 +109,32 @@ int ConflateCmd::runSimple(QStringList& args)
   Timer totalTime;
   Timer t;
 
+  BoundedCommand::runSimple(args);
+
+  // This parsing is for map stats. Changeset stats args for differential are processed further down
+  // below.
   QList<SingleStat> stats;
   bool displayStats = false;
-  //force stats to always be the last optional param so it can be followed by an optional
-  //output file
   QString outputStatsFile;
   if (args.contains("--stats"))
   {
-    if (args.endsWith("--stats"))
+    displayStats = true;
+    const int statsIndex = args.indexOf("--stats");
+    if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+        args[statsIndex + 1].toLower().endsWith(".json"))
     {
-      displayStats = true;
-      //remove "--stats" from args list
-      args.pop_back();
+      outputStatsFile = args[statsIndex + 1];
+      args.removeAll(outputStatsFile);
     }
-    else if (args[args.size() - 2] == "--stats")
-    {
-      displayStats = true;
-      outputStatsFile = args[args.size() - 1];
-      //remove "--stats" and stats output file name from args list
-      args.pop_back();
-      args.pop_back();
-    }
+    args.removeAll("--stats");
   }
   LOG_VARD(displayStats);
   LOG_VARD(outputStatsFile);
 
   ConfigUtils::checkForTagValueTruncationOverride();
+  QStringList allOps = ConfigOptions().getConflatePreOps();
+  allOps += ConfigOptions().getConflatePostOps();
+  ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
 
   DiffConflator diffConflator;
 
@@ -142,15 +152,63 @@ int ConflateCmd::runSimple(QStringList& args)
     }
   }
   LOG_VARD(isDiffConflate);
+  LOG_VARD(diffConflator.conflatingTags());
 
   // Check for separate output files (for geometry & tags)
   bool separateOutput = false;
   if (args.contains("--separate-output"))
   {
+    const QString errorMsg =
+      QString("--separate-output is only valid when combiend with the --differential and ") +
+      QString("--include-tags options.");
+    if (!isDiffConflate || !diffConflator.conflatingTags())
+    {
+      throw IllegalArgumentException(errorMsg);
+    }
     separateOutput = true;
     args.removeAt(args.indexOf("--separate-output"));
   }
+  LOG_VARD(separateOutput);
 
+  bool displayChangesetStats = false;
+  QString outputChangesetStatsFile;
+  if (args.contains("--changeset-stats"))
+  {
+    if (!isDiffConflate)
+    {
+      throw IllegalArgumentException(
+        "--changeset-stats is only valid when combined with the --differential option.");
+    }
+    else
+    {
+      displayChangesetStats = true;
+      const int statsIndex = args.indexOf("--changeset-stats");
+      LOG_VARD(statsIndex);
+      // If the input immediately after the changeset stats arg isn't a valid changeset stats file
+      // output format, we'll just silently skip it and assume we're outputting stats to the display
+      // only. This mimics how the map stats args and stats args in other commands are parsed. We
+      // may want to eventually return an error or warning here instead.
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+          !args[statsIndex + 1].startsWith("--"))
+      {
+        outputChangesetStatsFile = args[statsIndex + 1];
+        QFileInfo changesetStatsInfo(outputChangesetStatsFile);
+        if (!ChangesetStatsFormat::isValidFileOutputFormat(changesetStatsInfo.completeSuffix()))
+        {
+          outputChangesetStatsFile = "";
+        }
+        else
+        {
+          args.removeAll(outputChangesetStatsFile);
+        }
+      }
+      args.removeAll("--changeset-stats");
+    }
+  }
+  LOG_VARD(displayChangesetStats);
+  LOG_VARD(outputChangesetStatsFile);
+
+  LOG_VARD(args.size() );
   if (args.size() < 3 || args.size() > 4)
   {
     cout << getHelp() << endl << endl;
@@ -182,13 +240,22 @@ int ConflateCmd::runSimple(QStringList& args)
       throw IllegalArgumentException(
         QString("%1 with SQL changeset output takes four parameters.").arg(getName()));
     }
+    else if (displayChangesetStats)
+    {
+      throw IllegalArgumentException(
+        QString("Changeset statistics (--changeset-stats) may only be calculated with an XML ") +
+        QString("changeset output (.osc)."));
+    }
     osmApiDbUrl = args[3];
   }
   else if (args.size() > 3)
   {
     std::cout << getHelp() << std::endl << std::endl;
     throw IllegalArgumentException(
-      QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
+      QString("%1 with output: " + output + " takes three parameters. You provided %2: %3")
+        .arg(getName())
+        .arg(args.size())
+        .arg(args.join(",")));
   }
 
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
@@ -215,10 +282,23 @@ int ConflateCmd::runSimple(QStringList& args)
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
 
-  _updateConfigOptionsForAttributeConflation();
-  if (isDiffConflate)
+  // The highway.merge.tags.only option only gets used with Attribute Conflation for now, so we'll
+  // use it as the sole identifier for it. If that ever changes, then we'll need a different way
+  // to recognize when AC is occurring.
+  const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
+  if (isAttributeConflate)
   {
-    _updateConfigOptionsForDifferentialConflation();
+    _updateConfigOptionsForAttributeConflation();
+  }
+  if (isDiffConflate || isAttributeConflate)
+  {
+    _disableRoundaboutRemoval();
+  }
+  if (_filterOps)
+  {
+    // Let's see if we can remove any ops in the configuration that will have no effect on the
+    // feature types we're conflating in order to improve runtime performance.
+    SuperfluousConflateOpRemover::removeSuperfluousOps();
   }
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
@@ -284,12 +364,13 @@ int ConflateCmd::runSimple(QStringList& args)
     {
       if (output.endsWith(".osc") || output.endsWith(".osc.sql"))
       {
-        OsmUtils::checkVersionLessThanOneCountAndLogWarning(map);
+        VersionUtils::checkVersionLessThanOneCountAndLogWarning(map);
       }
 
       // Store original IDs for tag diff
       progress.set(
-        _getJobPercentComplete(currentTask - 1), "Storing original features for tag differential...");
+        _getJobPercentComplete(currentTask - 1),
+       "Storing original features for tag differential...");
       diffConflator.storeOriginalMap(map);
       diffConflator.markInputElements(map);
       currentTask++;
@@ -302,7 +383,9 @@ int ConflateCmd::runSimple(QStringList& args)
       map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
   }
-  LOG_STATUS("Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
+  MemoryUsageChecker::getInstance()->check();
+  LOG_STATUS(
+    "Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
@@ -333,6 +416,7 @@ int ConflateCmd::runSimple(QStringList& args)
     stats.append(SingleStat("Calculate Stats for Input 2 Time (sec)", t.getElapsedAndRestart()));
     currentTask++;
   }
+  MemoryUsageChecker::getInstance()->check();
 
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));
@@ -341,6 +425,7 @@ int ConflateCmd::runSimple(QStringList& args)
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
     // apply any user specified pre-conflate operations
+    LOG_STATUS("Running pre-conflate operations...");
     QElapsedTimer timer;
     timer.start();
     NamedOp preOps(ConfigOptions().getConflatePreOps());
@@ -388,6 +473,7 @@ int ConflateCmd::runSimple(QStringList& args)
   if (ConfigOptions().getConflatePostOps().size() > 0)
   {
     // apply any user specified post-conflate operations
+    LOG_STATUS("Running post-conflate operations...");
     QElapsedTimer timer;
     timer.start();
     NamedOp postOps(ConfigOptions().getConflatePostOps());
@@ -423,7 +509,23 @@ int ConflateCmd::runSimple(QStringList& args)
     "Writing conflated output: ..." + output.right(maxFilePrintLength) + "...");
   if (isDiffConflate && (output.endsWith(".osc") || output.endsWith(".osc.sql")))
   {
-    diffConflator.writeChangeset(result, output, separateOutput, osmApiDbUrl);
+    // Get the changeset stats output format from the changeset stats file extension, or if no
+    // extension is there assume a text table output to the display.
+    ChangesetStatsFormat statsFormat;
+    if (displayChangesetStats)
+    {
+      if (!outputChangesetStatsFile.isEmpty())
+      {
+        QFileInfo changesetStatsFileInfo(outputChangesetStatsFile);
+        statsFormat.setFormat(
+          ChangesetStatsFormat::fromString(changesetStatsFileInfo.completeSuffix()));
+      }
+      else
+      {
+        statsFormat.setFormat(ChangesetStatsFormat::Text);
+      }
+    }
+    diffConflator.writeChangeset(result, output, separateOutput, statsFormat, osmApiDbUrl);
   }
   else
   {
@@ -482,7 +584,7 @@ int ConflateCmd::runSimple(QStringList& args)
   stats.append(IoSingleStat(IoSingleStat::CancelledWriteBytes));
   stats.append(SingleStat("(Dubious) Bytes Processed per Second", inputBytes / totalElapsed));
 
-  if (isDiffConflate)
+  if (isDiffConflate && displayStats)
   {
     progress.set(
       _getJobPercentComplete(currentTask - 1),
@@ -509,6 +611,39 @@ int ConflateCmd::runSimple(QStringList& args)
     }
   }
 
+  if (displayChangesetStats)
+  {
+    if (outputChangesetStatsFile.isEmpty())
+    {
+      // output to display
+      LOG_STATUS("Changeset Geometry Stats:\n" << diffConflator.getGeometryChangesetStats());
+      if (diffConflator.conflatingTags())
+      {
+        LOG_STATUS("\nChangeset Tag Stats:\n" << diffConflator.getTagChangesetStats() << "\n");
+      }
+    }
+    else
+    {
+      // output to file
+      if (separateOutput)
+      {
+        // output separate files for geometry and tag change stats
+        FileUtils::writeFully(outputChangesetStatsFile, diffConflator.getGeometryChangesetStats());
+        if (diffConflator.conflatingTags())
+        {
+          QString tagsOutFile = outputChangesetStatsFile.replace(".json", "");
+          tagsOutFile.append(".tags.json");
+          FileUtils::writeFully(tagsOutFile, diffConflator.getTagChangesetStats());
+        }
+      }
+      else
+      {
+        // output a single stats file with both geometry and tags change stats
+        FileUtils::writeFully(outputChangesetStatsFile, diffConflator.getUnifiedChangesetStats());
+      }
+    }
+  }
+
   progress.set(
     1.0, Progress::JobState::Successful,
     "Conflation job completed in " +
@@ -530,12 +665,23 @@ float ConflateCmd::_getJobPercentComplete(const int currentTaskNum) const
   return (float)currentTaskNum / (float)_numTotalTasks;
 }
 
-void ConflateCmd::_updateConfigOptionsForDifferentialConflation()
+void ConflateCmd::_disableRoundaboutRemoval()
 {
+  // This applies to both Attribute and Differential Conflation.
+
   // Since Differential throws out all matches, there's no way we can have a bad merge between
   // ref/secondary roundabouts. Therefore, no need to replace/remove them. If there's a match, we'll
-  // end with no secondary roundabout in the diff output and only the ref roundabout when the diff
-  // is applied back to the ref.
+  // end up with no secondary roundabout in the diff output and only the ref roundabout when the
+  // diff is applied back to the ref.
+
+  // Our roundabout handling used with other types of conflation makes no sense for Attribute
+  // Conflation. For the other types of conflation we remove roundabouts b/c hoot isn't very good
+  // at merging them together, so we keep the ref roundabouts and skip conflating them altogether.
+  // Since we always keep the ref geometry in AC, there's no opportunity for bad merging and,
+  // thus, no need to remove them in the first place. So, we'll override that behavior here.
+
+  // If the work for #3442 is done, then we could handle this removal in AttributeConflation.conf
+  // add DifferentialConflation.conf instead of doing it here.
 
   QStringList preConflateOps = ConfigOptions().getConflatePreOps();
   const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
@@ -560,25 +706,19 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
   // There may be a way to eliminate these by adding more custom behavior to the UI.
 
-  // This option only gets used with Attribute Conflation for now, so we'll use it as the sole
-  // identifier for it.  This could change in the future, but hopefully if that happens, by then
-  // we have a better solution for changing these opts in place.
-  if (ConfigOptions().getHighwayMergeTagsOnly())
-  {
-    const QString reviewRelationCritName =
-      QString::fromStdString(ReviewRelationCriterion::className());
+  const QString reviewRelationCritName =
+    QString::fromStdString(ReviewRelationCriterion::className());
 
-    // This swaps the logic that removes all reviews with the logic that removes them based on score
-    // thresholding.
-    if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
-    {
-      QStringList removeElementsCriteria =
-        conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
-      removeElementsCriteria.replaceInStrings(
-        reviewRelationCritName, QString::fromStdString(ReviewScoreCriterion::className()));
-      conf().set(
-        ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
-    }
+  // This swaps the logic that removes all reviews with the logic that removes them based on score
+  // thresholding.
+  if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
+  {
+    QStringList removeElementsCriteria =
+      conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
+    removeElementsCriteria.replaceInStrings(
+      reviewRelationCritName, QString::fromStdString(ReviewScoreCriterion::className()));
+    conf().set(
+      ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
   }
 }
 

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef APITAGTRUNCATEVISITOR_H
 #define APITAGTRUNCATEVISITOR_H
 
 //  Hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -44,7 +44,7 @@ namespace hoot
  *  to include only the last date in the list.  Thirdly the `uuid` field is handled the
  *  same way, only the last UUID in the list is preserved.
  */
-class ApiTagTruncateVisitor : public ElementVisitor, public OperationStatusInfo
+class ApiTagTruncateVisitor : public ElementVisitor
 {
 public:
 
@@ -61,7 +61,11 @@ public:
   { return "Truncating tag key/value pairs for OSM API..."; }
 
   virtual QString getCompletedStatusMessage() const override
-  { return "Truncated tag key/value pairs for " + QString::number(_numAffected) + " elements"; }
+  {
+    return
+      "Truncated tag key/value pairs for " + StringUtils::formatLargeNumber(_numAffected) +
+      " elements";
+  }
 
   /**
    * @brief truncateTags Iterates all tags calling truncateTag one by one
@@ -77,6 +81,8 @@ public:
    * @return Empty string if nothing is changed, truncated string otherwise
    */
   static QString truncateTag(const QString& key, const QString& value);
+
+  virtual std::string getClassName() const { return className(); }
 
 };
 

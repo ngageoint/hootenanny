@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REVIEWMARKER_H
 #define REVIEWMARKER_H
@@ -65,7 +65,7 @@ public:
   /**
    * Returns true if the element is in at least one review.
    */
-  static bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1);
+  static bool isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1);
 
   /**
    * Determines whether a pair of elements should be returned for review
@@ -74,7 +74,7 @@ public:
    * @param e2 the second element in the element pair being examined
    * @return true if the pair should be reviewed against each other; false otherwise
    */
-  static bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2);
+  static bool isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1, ConstElementPtr e2);
 
   /**
    * Returns true if this element is a review record (not an element that needs to be reviewed, but
@@ -98,7 +98,7 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  void mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2, const QString& note,
+  void mark(const OsmMapPtr& map, const ElementPtr& e1, const ElementPtr& e2, const QString& note,
             const QString& reviewType, double score = -1,
             std::vector<QString> choices = std::vector<QString>());
 
@@ -110,14 +110,14 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  void mark(const OsmMapPtr &map, const std::set<ElementId>& ids, const QString& note,
+  void mark(const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
             const QString& reviewType, double score = -1,
             std::vector<QString> choices = std::vector<QString>());
 
   /**
    * Marks a single element as needing review.
    */
-  void mark(const OsmMapPtr &map, const ElementPtr& e, const QString& note,
+  void mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
             const QString& reviewType, double score = -1,
             std::vector<QString> choices = std::vector<QString>());
 
@@ -129,7 +129,7 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  void mark(const OsmMapPtr &map, const std::vector<ElementId>& ids, const QString& note,
+  void mark(const OsmMapPtr& map, const std::vector<ElementId>& ids, const QString& note,
             const QString& reviewType, double score = -1,
             std::vector<QString> choices = std::vector<QString>());
 

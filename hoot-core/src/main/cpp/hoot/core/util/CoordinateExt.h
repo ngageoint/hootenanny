@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COORDINATEEXT_H
 #define COORDINATEEXT_H
@@ -40,6 +40,7 @@ namespace hoot
 class CoordinateExt : public Coordinate
 {
 public:
+
   CoordinateExt(Coordinate c) : Coordinate(c) {}
   CoordinateExt(double xNew = 0.0, double yNew = 0.0, double zNew = DoubleNotANumber)
     : Coordinate( xNew, yNew, zNew ) {}
@@ -97,7 +98,9 @@ public:
   }
 
   // https://www.codeproject.com/Tips/862988/Find-the-Intersection-Point-of-Two-Line-Segments
-  static std::shared_ptr<CoordinateExt> lineSegementsIntersect(const CoordinateExt& p1, const CoordinateExt& p2, const CoordinateExt& q1, const CoordinateExt& q2)
+  static std::shared_ptr<CoordinateExt> lineSegementsIntersect(
+    const CoordinateExt& p1, const CoordinateExt& p2, const CoordinateExt& q1,
+    const CoordinateExt& q2)
   {
     std::shared_ptr<CoordinateExt> intersection;
 

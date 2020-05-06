@@ -188,11 +188,11 @@ void OsmMapIndex::_buildWayTree() const
   _pendingWayInsert.clear();
   _pendingWayRemoval.clear();
 
-  LOG_DEBUG("Bulk inserting Way R-Tree...");
+  LOG_INFO("Bulk inserting Way R-Tree...");
 
   _wayTree->bulkInsert(boxes, ids);
 
-  LOG_DEBUG("Way R-Tree index built in: " << StringUtils::millisecondsToDhms(t.elapsed()));
+  LOG_INFO("Way R-Tree index built in: " << StringUtils::millisecondsToDhms(t.elapsed()));
 }
 
 int OsmMapIndex::_createTreeNid(long nid) const
@@ -482,7 +482,7 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
       LOG_INFO("Child element: " << eid);
       LOG_INFO("Missing relation: " << *it);
       LOG_INFO("Child element: " << _map.getElement(eid)->toString());
-      // TODO: throw exception here or continue to next iteration?
+      continue;
     }
     // the map should contain all the relations returned by the index.
     assert(_map.containsRelation(*it));

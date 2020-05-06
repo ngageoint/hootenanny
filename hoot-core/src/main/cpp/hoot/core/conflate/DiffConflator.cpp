@@ -57,9 +57,10 @@
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
-#include <hoot/core/io/OsmChangesetFileWriter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // standard
 #include <algorithm>
@@ -68,6 +69,9 @@
 #include <tgs/System/SystemInfo.h>
 #include <tgs/System/Time.h>
 #include <tgs/System/Timer.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 using namespace Tgs;
@@ -122,6 +126,9 @@ void DiffConflator::apply(OsmMapPtr& map)
   _reset();
   int currentStep = 1;  // tracks the current job task step for progress reporting
   _numSnappedWays = 0;
+  _geometryChangesetStats = "";
+  _tagChangesetStats = "";
+  _unifiedChangesetStats = "";
 
   // Store the map - we might need it for tag diff later.
   _pMap = map;
@@ -137,6 +144,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     LOG_STATUS("Discarding unconflatable elements...");
     const int mapSizeBefore = _pMap->size();
     NonConflatableElementRemover().apply(_pMap);
+    MemoryUsageChecker::getInstance()->check();
     _stats.append(
       SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
@@ -159,9 +167,10 @@ void DiffConflator::apply(OsmMapPtr& map)
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
+  MemoryUsageChecker::getInstance()->check();
   LOG_STATUS(
     "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
-    " Differential Conflation matches.");
+    " Differential Conflation match conflicts to be removed.");
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
   _stats.append(SingleStat("Number of Matches Found", _matches.size()));
@@ -171,11 +180,15 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   currentStep++;
 
-  // Use matches to calculate and store tag diff. We must do this before we create the map diff,
-  // because that operation deletes all of the info needed for calculating the tag diff.
-  _updateProgress(currentStep - 1, "Storing tag differentials...");
-  _calcAndStoreTagChanges();
-  currentStep++;
+  if (_conflateTags)
+  {
+    // Use matches to calculate and store tag diff. We must do this before we create the map diff,
+    // because that operation deletes all of the info needed for calculating the tag diff.
+    _updateProgress(currentStep - 1, "Storing tag differentials...");
+    _calcAndStoreTagChanges();
+    MemoryUsageChecker::getInstance()->check();
+    currentStep++;
+  }
 
   QString message = "Dropping match conflicts";
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
@@ -188,6 +201,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   // We're eventually getting rid of all matches from the output, but in order to make the road
   // snapping work correctly we'll get rid of secondary elements in matches first.
   _removeMatches(Status::Unknown2);
+  MemoryUsageChecker::getInstance()->check();
 
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
   {
@@ -195,6 +209,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
     // anymore.
     _numSnappedWays = _snapSecondaryRoadsBackToRef();
+    MemoryUsageChecker::getInstance()->check();
   }
 
   if (ConfigOptions().getDifferentialRemoveReferenceData())
@@ -203,6 +218,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
     // differential that we want.
     _removeMatches(Status::Unknown1);
+    MemoryUsageChecker::getInstance()->check();
 
     // Now remove input1 elements
     LOG_STATUS("\tRemoving all reference elements...");
@@ -212,6 +228,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     removeRef1Visitor.setRecursive(true);
     removeRef1Visitor.addCriterion(pTagKeyCrit);
     _pMap->visitRw(removeRef1Visitor);
+    MemoryUsageChecker::getInstance()->check();
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
     LOG_STATUS(
       "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
@@ -227,7 +244,7 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   roadSnapper.apply(_pMap);
   LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
-  return roadSnapper.getNumAffected();
+  return roadSnapper.getNumFeaturesAffected();
 }
 
 void DiffConflator::_removeMatches(const Status& status)
@@ -357,10 +374,10 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
     }
     else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
     {
-      // Diff conflation w/ tags doesn't handle relations. Changed this to silently log that the
-      // relations are being skipped for now. #3449 was created to deal with adding relation support
-      // and then closed since we lack a use case currently that requires it. If we ever get one,
-      // then we can re-open that issue.
+      // Diff conflation w/ tags doesn't handle relations. Changed this to log that the relations
+      // are being skipped for now. #3449 was originally created to deal with adding relation
+      // support and then closed since we lack a use case currently that requires it. If we ever
+      // get one, then we can re-open that issue.
 
       LOG_DEBUG("Relation handling not implemented with differential conflation: " << c);
       if (Log::getInstance().getLevel() <= Log::Trace)
@@ -376,7 +393,9 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
 
 void DiffConflator::_calcAndStoreTagChanges()
 {
-  LOG_INFO("Storing tag changes...");
+  QElapsedTimer timer;
+  timer.start();
+  LOG_DEBUG("Storing tag changes...");
 
   MapProjector::projectToWgs84(_pMap);
 
@@ -460,6 +479,9 @@ void DiffConflator::_calcAndStoreTagChanges()
             StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
     }
   }
+  LOG_STATUS(
+    "Stored tag changes for " << StringUtils::formatLargeNumber(numMatchesProcessed) <<
+    " matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
 }
@@ -533,10 +555,11 @@ std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, Os
 {
   // Conflation requires all data to be in memory, so no point in adding support for the
   // ExternalMergeElementSorter here.
-
   InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
   InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
   std::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
+  //  Deriving changesets for differential shouldn't include any deletes, create and modify only
+  delta->setAllowDeletingReferenceFeatures(false);
   return delta;
 }
 
@@ -559,8 +582,9 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
   }
 }
 
-void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput,
-                                   const QString& osmApiDbUrl)
+void DiffConflator::writeChangeset(
+  OsmMapPtr pResultMap, QString& output, bool separateOutput,
+  const ChangesetStatsFormat& changesetStatsFormat, const QString& osmApiDbUrl)
 {
   if (output.endsWith(".osc.sql") && osmApiDbUrl.trimmed().isEmpty())
   {
@@ -594,12 +618,22 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
     // only one changeset to write
     LOG_DEBUG("Writing single changeset...");
     writer->write(output, pGeoChanges);
+    // ChangesetStatsFormat::Unknown is the default format setting, and we'll assume no stats are
+    // to be output if that's the requested format.
+    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
+    {
+      _geometryChangesetStats = writer->getStatsTable(changesetStatsFormat);
+    }
   }
   else if (separateOutput)
   {
     // write two changesets
     LOG_DEBUG("Writing separate changesets...");
     writer->write(output, pGeoChanges);
+    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
+    {
+      _geometryChangesetStats = writer->getStatsTable(changesetStatsFormat);
+    }
 
     QString outFileName = output;
     if (outFileName.endsWith(".osc"))
@@ -615,6 +649,10 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
     }
     LOG_VARD(outFileName);
     writer->write(outFileName, _pTagChanges);
+    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
+    {
+      _tagChangesetStats = writer->getStatsTable(changesetStatsFormat);
+    }
   }
   else
   {
@@ -625,6 +663,10 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
     pChanges->addChangesetProvider(pGeoChanges);
     pChanges->addChangesetProvider(_pTagChanges);
     writer->write(output, pChanges);
+    if (changesetStatsFormat != ChangesetStatsFormat::Unknown)
+    {
+      _unifiedChangesetStats = writer->getStatsTable(changesetStatsFormat);
+    }
   }
 }
 

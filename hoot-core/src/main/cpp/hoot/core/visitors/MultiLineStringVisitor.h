@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTILINESTRINGVISITOR_H
 #define MULTILINESTRINGVISITOR_H
@@ -33,7 +33,6 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementProvider.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // standard
 #include <string>
@@ -47,7 +46,7 @@ class Way;
  * Creates a multi-linestring out of all ways that are visited. There are no checks to be certain
  * that the ways are actually linear ways. Any way with < 2 nodes will be skipped.
  */
-class MultiLineStringVisitor : public ConstElementVisitor, public OperationStatusInfo
+class MultiLineStringVisitor : public ConstElementVisitor
 {
 public:
 
@@ -76,6 +75,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Created " + QString::number(_numAffected) + " multi-line strings"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

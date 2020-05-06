@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ConfigUtils.h"
@@ -30,9 +30,7 @@
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-
-// Qt
-#include <QStringList>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 
 namespace hoot
 {
@@ -64,6 +62,16 @@ void ConfigUtils::checkForTagValueTruncationOverride()
     {
       conf().set("conflate.post.ops", conflatePostOps);
     }
+  }
+}
+
+void ConfigUtils::checkForDuplicateElementCorrectionMismatch(const QStringList& ops)
+{
+  const QString dupeNodeRemoverClassName =
+    QString::fromStdString(DuplicateNodeRemover::className());
+  if (ops.contains(dupeNodeRemoverClassName))
+  {
+    conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
   }
 }
 

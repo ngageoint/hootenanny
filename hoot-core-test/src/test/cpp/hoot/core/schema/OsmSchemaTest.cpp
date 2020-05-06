@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Log.h>
 
 // CPP Unit
@@ -64,6 +63,13 @@ class OsmSchemaTest : public HootTestFixture
   CPPUNIT_TEST(isAncestorTest);
   CPPUNIT_TEST(isMetaDataTest);
   CPPUNIT_TEST(religionTest);
+  CPPUNIT_TEST(isGenericTest);
+  CPPUNIT_TEST(isGenericKvpTest);
+  CPPUNIT_TEST(hasTypeTest);
+  CPPUNIT_TEST(hasMoreThanOneTypeTest);
+  CPPUNIT_TEST(getFirstTypeTest);
+  CPPUNIT_TEST(explicitTypeMismatchTest);
+  CPPUNIT_TEST(mostSpecificTypeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -431,6 +437,130 @@ public:
     // These should have a high score. The exact value isn't important.
     d = uut.score("building=abbey", "amenity=church");
     CPPUNIT_ASSERT(d >= 0.8);
+  }
+
+  void isGenericTest()
+  {
+    OsmSchema& uut = OsmSchema::getInstance();
+
+    Tags tags;
+    tags["poi"] = "yes";
+    CPPUNIT_ASSERT(uut.isGeneric(tags));
+
+    tags["amenity"] = "ambulance_station";
+    CPPUNIT_ASSERT(!uut.isGeneric(tags));
+
+    // don't account for non-standard tags, so this will come back as generic...that's ok
+    tags["amenity"] = "yes";
+    CPPUNIT_ASSERT(!uut.isGeneric(tags));
+  }
+
+  void isGenericKvpTest()
+  {
+    OsmSchema& uut = OsmSchema::getInstance();
+
+    CPPUNIT_ASSERT(uut.isGenericKvp("poi=yes"));
+    CPPUNIT_ASSERT(!uut.isGenericKvp("amenity=ambulance_station"));
+  }
+
+  void hasTypeTest()
+  {
+    OsmSchema& uut = OsmSchema::getInstance();
+
+    Tags tags;
+    tags["poi"] = "yes";
+    CPPUNIT_ASSERT(uut.hasType(tags));
+
+    tags.clear();
+    tags["amenity"] = "ambulance_station";
+    CPPUNIT_ASSERT(uut.hasType(tags));
+
+    tags.clear();
+    CPPUNIT_ASSERT(!uut.hasType(tags));
+  }
+
+  void hasMoreThanOneTypeTest()
+  {
+    OsmSchema& uut = OsmSchema::getInstance();
+
+    Tags tags;
+    tags["poi"] = "yes";
+    CPPUNIT_ASSERT(!uut.hasMoreThanOneType(tags));
+
+    tags["amenity"] = "ambulance_station";
+    CPPUNIT_ASSERT(uut.hasMoreThanOneType(tags));
+
+    tags.clear();
+    CPPUNIT_ASSERT(!uut.hasMoreThanOneType(tags));
+  }
+
+  void getFirstTypeTest()
+  {
+    OsmSchema& uut = OsmSchema::getInstance();
+
+    Tags tags;
+    tags["poi"] = "yes";
+    HOOT_STR_EQUALS("poi=yes", uut.getFirstType(tags, true));
+    HOOT_STR_EQUALS("", uut.getFirstType(tags, false));
+
+    tags["amenity"] = "ambulance_station";
+    HOOT_STR_EQUALS("amenity=ambulance_station", uut.getFirstType(tags, true));
+    HOOT_STR_EQUALS("amenity=ambulance_station", uut.getFirstType(tags, false));
+  }
+
+  void explicitTypeMismatchTest()
+  {
+    OsmSchema& uut = OsmSchema::getInstance();
+
+    Tags tags1;
+    tags1["amenity"] = "ambulance_station";
+    Tags tags2;
+    tags2["amenity"] = "ambulance_station";
+    CPPUNIT_ASSERT(!uut.explicitTypeMismatch(tags1, tags2, 0.8));
+
+    tags1.clear();
+    tags1["amenity"] = "ambulance_station";
+    tags2.clear();
+    tags2["amenity"] = "animal_boarding";
+    CPPUNIT_ASSERT(uut.explicitTypeMismatch(tags1, tags2, 0.8));
+
+    tags1.clear();
+    tags1["amenity"] = "ambulance_station";
+    tags2.clear();
+    tags2["landuse"] = "military";
+    CPPUNIT_ASSERT(uut.explicitTypeMismatch(tags1, tags2, 0.8));
+
+    tags1.clear();
+    tags1["poi"] = "yes";
+    tags2.clear();
+    tags2["poi"] = "yes";
+    CPPUNIT_ASSERT(!uut.explicitTypeMismatch(tags1, tags2, 0.8));
+
+    tags1.clear();
+    tags1["poi"] = "yes";
+    tags2.clear();
+    tags2["amenity"] = "ambulance_station";
+    CPPUNIT_ASSERT(!uut.explicitTypeMismatch(tags1, tags2, 0.8));
+  }
+
+  void mostSpecificTypeTest()
+  {
+    OsmSchema& uut = OsmSchema::getInstance();
+    Tags tags;
+
+    tags.clear();
+    tags["building"] = "yes";
+    HOOT_STR_EQUALS("building=yes", uut.mostSpecificType(tags));
+
+    tags.clear();
+    tags["building"] = "yes";
+    tags["building"] = "fort";
+    HOOT_STR_EQUALS("building=fort", uut.mostSpecificType(tags));
+
+    tags.clear();
+    tags["building"] = "yes";
+    tags["name"] = "fort";
+    HOOT_STR_EQUALS("building=yes", uut.mostSpecificType(tags));
   }
 };
 

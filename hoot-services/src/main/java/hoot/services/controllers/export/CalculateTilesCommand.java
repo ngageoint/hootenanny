@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -81,7 +81,7 @@ class CalculateTilesCommand extends ExportCommand {
             substitutionMap.put("PIXEL_SIZE", String.valueOf(params.getPixelSize()));
         }
 
-        String command = "hoot node-density-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
+        String command = "hoot.bin node-density-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
         if ((params.getMaxNodeCountPerTile() != -1) && (params.getPixelSize() != -1.0)) {
             command += " ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
         }

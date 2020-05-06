@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef KEEPTAGSVISITOR_H
 #define KEEPTAGSVISITOR_H
@@ -48,6 +48,8 @@ public:
   virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const { return "Keeps tags by key"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

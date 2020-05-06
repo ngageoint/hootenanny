@@ -31,7 +31,7 @@
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/network/NetworkDetails.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -60,6 +60,12 @@ public:
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
   virtual QString getName() const { return QString::fromStdString(className()); }
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
 
 private:
 

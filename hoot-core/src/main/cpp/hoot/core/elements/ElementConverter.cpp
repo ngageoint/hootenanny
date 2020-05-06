@@ -44,7 +44,7 @@
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/CollectionCriterion.h>
+#include <hoot/core/criterion/CollectionRelationCriterion.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -103,7 +103,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
   const std::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
 {
-  LOG_VART(e->getElementType().toString());
+  LOG_VART(e->getElementId());
   switch (e->getElementType().getEnum())
   {
   case ElementType::Node:
@@ -374,11 +374,6 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(
       {
         if (r->isMultiPolygon() || AreaCriterion().isSatisfied(r))
           return GEOS_MULTIPOLYGON;
-        else if (linearCrit.isSatisfied(r))
-          return GEOS_MULTILINESTRING;
-        // an empty geometry, pass back a collection
-        else if (r->getMembers().size() == 0 || CollectionCriterion().isSatisfied(r))
-          return GEOS_GEOMETRYCOLLECTION;
         // Restriction relations are empty geometry
         else if (r->isRestriction())
           return GEOS_GEOMETRYCOLLECTION;
@@ -389,6 +384,12 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(
         // MultiPoint comes from GeoJSON
         else if (r->getType() == MetadataTags::RelationMultiPoint())
           return GEOS_MULTIPOINT;
+        //  Restrictions satisfy the linear criterion so test it after restrictions
+        else if (linearCrit.isSatisfied(r))
+          return GEOS_MULTILINESTRING;
+        // an empty geometry, pass back a collection
+        else if (r->getMembers().size() == 0 || CollectionRelationCriterion().isSatisfied(r))
+          return GEOS_GEOMETRYCOLLECTION;
       }
 
       // We are going to throw an error so we save the type of relation

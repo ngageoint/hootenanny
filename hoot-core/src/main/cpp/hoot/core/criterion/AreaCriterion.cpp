@@ -48,6 +48,8 @@ _map(map)
 
 bool AreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e->getElementId());
+  _currentElementId = e->getElementId();
   return isSatisfied(e->getTags(), e->getElementType());
 }
 
@@ -56,7 +58,7 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
   bool result = false;
 
   // don't process if a node
-  LOG_VART(elementType);
+  //LOG_VART(elementType);
   if (elementType == ElementType::Node)
   {
     return false;
@@ -76,19 +78,24 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
   {
     const QString kvp = OsmSchema::getInstance().toKvp(it.key(), it.value());
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(kvp);
-    LOG_VART(tv.toString());
-
     uint16_t g = tv.geometries;
 
+    LOG_VART(tv.toString());
     LOG_VART(g);
     LOG_VART(g & OsmGeometries::Area);
     LOG_VART(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay));
+    LOG_VART(g & OsmGeometries::LineString);
+    LOG_VART(g & OsmGeometries::ClosedWay);
 
     if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
     {
-      LOG_TRACE(
-        "Found area geometry (non-linestring or closed way) from kvp: " << kvp <<
-        "; crit satisfied.");
+      QString msg =
+        "Found area geometry (non-linestring or closed way) from kvp: " + kvp + "; crit satisfied.";
+      if (!_currentElementId.isNull())
+      {
+        msg += "; ID: " + _currentElementId.toString();
+      }
+      LOG_TRACE(msg);
       result = true;
       break;
     }

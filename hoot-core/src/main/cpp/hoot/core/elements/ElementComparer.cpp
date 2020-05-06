@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementComparer.h"
 
@@ -38,11 +38,12 @@ namespace hoot
 {
 
 ElementComparer::ElementComparer(Meters threshold) :
-_threshold(threshold)
+_threshold(threshold),
+_ignoreElementId(false)
 {
 }
 
-void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
+void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags)
 {
   LOG_TRACE("Removing tags...");
 
@@ -60,10 +61,35 @@ void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
   tags.remove(MetadataTags::SourceDateTime());
 }
 
+bool ElementComparer::tagsAreSame(ConstElementPtr e1, ConstElementPtr e2)
+{
+  // create modified separate copies of the tags for comparing, as we don't care if some tags
+  // are identical
+  Tags tags1 = e1->getTags();
+  _removeTagsNotImportantForComparison(tags1);
+  Tags tags2 = e2->getTags();
+  _removeTagsNotImportantForComparison(tags2);
+  LOG_VART(tags1);
+  LOG_VART(tags2);
+
+  const bool result = tags1 == tags2;
+  if (!result && Log::getInstance().getLevel() == Log::Trace)
+  {
+    LOG_TRACE("compare failed on tags");
+  }
+  return result;
+}
+
 bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 {
-  LOG_VART(e1->getElementId());
-  LOG_VART(e2->getElementId());
+  if (_ignoreElementId && !_map.get())
+  {
+    throw IllegalArgumentException(
+      "If ignoring element IDs in ElementComparer a map must be passed in.");
+  }
+
+  //LOG_VART(e1->getElementId());
+  //LOG_VART(e2->getElementId());
 
   if (e1->getElementType() != e2->getElementType())
   {
@@ -74,6 +100,8 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
   {
     // Set the hoot hash tag here if it doesn't exist, since its required for node comparisons.
     CalculateHashVisitor2 hashVis;
+    // probably shouldn't do this, but its been working this way for awhile now...will remove later
+    hashVis.setIncludeCircularError(true);
     if (!e1->getTags().contains(MetadataTags::HootHash()))
     {
       hashVis.visit(e1);
@@ -83,27 +111,20 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
       hashVis.visit(e2);
     }
   }
-  //only nodes have been converted over to use hash comparisons so far
+  // only nodes have been converted over to use hash comparisons so far
   else
   {
-    //create modified copies of the tags for comparing, as we don't care if some tags are identical
-    Tags tags1 = e1->getTags();
-    _removeTagsNotImportantForComparison(tags1);
-    Tags tags2 = e2->getTags();
-    _removeTagsNotImportantForComparison(tags2);
-
     // not checking status here b/c if only the status changed on the element and no other tags or
     // geometries, there's no point in detecting a change
-    if (e1->getElementId() != e2->getElementId() ||
-        !(tags1 == tags2) ||
-        (e1->getVersion() != e2->getVersion()) ||
+    if ((!_ignoreElementId && e1->getElementId() != e2->getElementId()) ||
+        !tagsAreSame(e1, e2) || (e1->getVersion() != e2->getVersion()) ||
         fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
     {
       if (Log::getInstance().getLevel() == Log::Trace)
       {
-        if (!(tags1 == tags2))
+        if ( e1->getElementId() != e2->getElementId())
         {
-          LOG_TRACE("compare failed on tags");
+          LOG_TRACE("compare failed on IDs");
         }
         else if (e1->getVersion() != e2->getVersion())
         {
@@ -116,8 +137,8 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
           LOG_VART(_threshold);
         }
 
-        LOG_VART(tags1);
-        LOG_VART(tags2);
+        LOG_DEBUG(
+          "elements failed comparison: " << e1->getElementId() << ", " << e2->getElementId());
       }
 
       return false;
@@ -159,6 +180,7 @@ bool ElementComparer::_compareNode(const std::shared_ptr<const Element>& re,
   bool same = false;
   if (re->getTags()[MetadataTags::HootHash()] == e->getTags()[MetadataTags::HootHash()])
   {
+    //LOG_TRACE("Nodes " << re->getElementId() << " and " << e->getElementId() << " are the same.");
     same = true;
   }
   else
@@ -179,16 +201,43 @@ bool ElementComparer::_compareWay(const std::shared_ptr<const Element>& re,
 
   if (rw->getNodeIds().size() != w->getNodeIds().size())
   {
+    LOG_DEBUG(
+      "Ways " << rw->getElementId() << " and " << w->getElementId() <<
+      " failed comparison on way node count: " << rw->getNodeIds().size() << " and " <<
+      w->getNodeIds().size());
     return false;
   }
-  for (size_t i = 0; i < rw->getNodeIds().size(); ++i)
+
+  if (!_ignoreElementId)
   {
-    if (rw->getNodeIds()[i] != w->getNodeIds()[i])
+    for (size_t i = 0; i < rw->getNodeIds().size(); ++i)
     {
-      return false;
+      if (rw->getNodeIds()[i] != w->getNodeIds()[i])
+      {
+        LOG_TRACE(
+          "Ways " << rw->getElementId() << " and " << w->getElementId() <<
+          " failed comparison on way nodes: " << rw->getNodeIds() << " and " << w->getNodeIds());
+        return false;
+      }
+    }
+  }
+  else
+  {
+    for (size_t i = 0; i < rw->getNodeIds().size(); ++i)
+    {
+      NodePtr nodeRw = _map->getNode(ElementId(ElementType::Node, rw->getNodeIds()[i]));
+      NodePtr nodeW = _map->getNode(ElementId(ElementType::Node, w->getNodeIds()[i]));
+      if (!nodeRw || !nodeW || !isSame(nodeRw, nodeW))
+      {
+        LOG_TRACE(
+          "Ways " << rw->getElementId() << " and " << w->getElementId() <<
+          " failed comparison on way nodes: " << rw->getNodeIds() << " and " << w->getNodeIds());
+        return false;
+      }
     }
   }
 
+  LOG_TRACE("Ways " << re->getElementId() << " and " << e->getElementId() << " are the same.");
   return true;
 }
 
@@ -213,7 +262,8 @@ bool ElementComparer::_compareRelation(const std::shared_ptr<const Element>& re,
     }
   }
 
-    return true;
+  LOG_TRACE("Relations " << re->getElementId() << " and " << e->getElementId() << " are the same.");
+  return true;
 }
 
 }

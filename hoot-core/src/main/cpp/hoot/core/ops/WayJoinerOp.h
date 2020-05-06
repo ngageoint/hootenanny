@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __WAY_JOINER_OP_H__
@@ -31,12 +31,13 @@
 //  Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/algorithms/WayJoiner.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
 
-class WayJoinerOp : public OsmMapOperation, public Configurable, public OperationStatusInfo
+class WayJoinerOp : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -58,7 +59,17 @@ public:
   { return "Rejoining ways split during conflation..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Rejoined " + QString::number(_numAffected) + " ways"; }
+  {
+    return
+      "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " pairs of ways";
+  }
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayJoiner.h"
@@ -50,7 +50,10 @@ namespace hoot
 
 WayJoiner::WayJoiner() :
 _leavePid(false),
-_numJoined(0)
+_numJoined(0),
+_numProcessed(0),
+_totalWays(0),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -83,6 +86,7 @@ void WayJoiner::_joinParentChild()
   LOG_INFO("\tJoining parent ways to children...");
 
   WayMap ways = _map->getWays();
+  _totalWays = ways.size();
   vector<long> ids;
   //  Find all ways that have a split parent id
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
@@ -91,7 +95,8 @@ void WayJoiner::_joinParentChild()
     if (way->hasPid())
       ids.push_back(way->getId());
   }
-  //  Sort the ids so that the smallest is first (i.e. largest negative id is the last one allocated)
+  //  Sort the ids so that the smallest is first (i.e. largest negative id is the last one
+  // allocated)
   sort(ids.begin(), ids.end());
 
   //  Iterate all of the ids
@@ -102,6 +107,13 @@ void WayJoiner::_joinParentChild()
     WayPtr parent = ways[parent_id];
     //  Join this way to the parent
     _joinWays(parent, way);
+
+    if (_numProcessed % (_taskStatusUpdateInterval / 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
+        StringUtils::formatLargeNumber(_totalWays) << " total ways.");
+    }
   }
 }
 
@@ -113,8 +125,6 @@ void WayJoiner::_joinSiblings()
   // Get a list of ways that still have a parent
   map<long, deque<long>> w;
   //  Find all ways that have a split parent id
-  int numWaysProcessed = 0;
-  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
@@ -123,18 +133,9 @@ void WayJoiner::_joinSiblings()
       long parent_id = way->getPid();
       w[parent_id].push_back(way->getId());
     }
-
-    numWaysProcessed++;
-    if (numWaysProcessed % (taskStatusUpdateInterval * 10) == 0)
-    {
-      PROGRESS_INFO(
-        "\tParsed " << StringUtils::formatLargeNumber(numWaysProcessed) << " / " <<
-            StringUtils::formatLargeNumber(ways.size()) << " way IDs.");
-    }
   }
 
   //  Rejoin any sibling ways where the parent id no longer exists
-  numWaysProcessed = 0;
   for (map<long, deque<long>>::iterator map_it = w.begin(); map_it != w.end(); ++map_it)
   {
     deque<long>& way_ids = map_it->second;
@@ -142,12 +143,11 @@ void WayJoiner::_joinSiblings()
     while (way_ids.size() > 1)
       _rejoinSiblings(way_ids);
 
-    numWaysProcessed++;
-    if (numWaysProcessed % (taskStatusUpdateInterval * 10) == 0)
+    if (_numProcessed % (_taskStatusUpdateInterval / 10) == 0)
     {
       PROGRESS_INFO(
-        "\tRejoined " << StringUtils::formatLargeNumber(numWaysProcessed) << " / " <<
-            StringUtils::formatLargeNumber(w.size()) << " ways.");
+        "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
+        StringUtils::formatLargeNumber(_totalWays) << " total ways.");
     }
   }
 }
@@ -199,6 +199,13 @@ void WayJoiner::_joinAtNode()
           }
         }
       }
+    }
+
+    if (_numProcessed % (_taskStatusUpdateInterval / 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
+        StringUtils::formatLargeNumber(_totalWays) << " total ways.");
     }
   }
 }
@@ -309,19 +316,19 @@ void WayJoiner::_rejoinSiblings(deque<long>& way_ids)
   {
     WayPtr parent = ways[sorted[0]];
     for (size_t i = 1; i < sorted.size(); ++i)
+    {
       _joinWays(parent, ways[sorted[i]]);
+    }
   }
 }
 
-bool WayJoiner::_joinWays(const WayPtr &parent, const WayPtr &child)
+bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
 {
+  _numProcessed++;
+
   if (!parent || !child)
     return false;
 
-  //  Don't join area ways
-  AreaCriterion areaCrit;
-  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
-    return false;
   //  Check if the two ways are able to be joined back up
   vector<long> child_nodes = child->getNodeIds();
   vector<long> parent_nodes = parent->getNodeIds();
@@ -335,6 +342,11 @@ bool WayJoiner::_joinWays(const WayPtr &parent, const WayPtr &child)
   else if (child_nodes[child_nodes.size() - 1] == parent_nodes[0])
     parentFirst = false;
   else
+    return false;
+  // Don't join area ways; moved this to here, as its a little more expensive than the calcs done
+  // above
+  AreaCriterion areaCrit;
+  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
     return false;
   //  Remove the split parent id
   child->resetPid();
@@ -365,7 +377,9 @@ bool WayJoiner::_joinWays(const WayPtr &parent, const WayPtr &child)
   child->getTags().clear();
   //  Update any ways that have the child's ID as their parent to the parent's ID
   UpdateWayParentVisitor visitor(child->getId(), parent->getId());
+  _map->setEnableProgressLogging(false);
   _map->visitWaysRw(visitor);
+  _map->setEnableProgressLogging(true);
   //  Delete the child
   RecursiveElementRemover(child->getElementId()).apply(_map);
 

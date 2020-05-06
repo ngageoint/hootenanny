@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "EdgeDistanceExtractor.h"
 
@@ -31,7 +31,6 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/Point.h>
-#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -51,6 +50,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, EdgeDistanceExtractor)
 
+// TODO: move this to its own file and factory register it
 class DiscretizeWaysVisitor : public ElementConstOsmMapVisitor
 {
 public:
@@ -67,6 +67,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
 private:
 
@@ -85,13 +86,13 @@ public:
     if (e->getElementType() == ElementType::Way)
     {
       ConstWayPtr w(std::dynamic_pointer_cast<const Way>(e));
-
       Geometry* ls = ElementConverter(_map->shared_from_this()).convertToLineString(w)->clone();
       _lines.push_back(ls);
     }
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
 private:
 
@@ -99,7 +100,7 @@ private:
 };
 
 EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregatorPtr a, Meters spacing):
-  _aggregator(a)
+_aggregator(a)
 {
   if (!_aggregator)
     _aggregator.reset(new MeanAggregator());
@@ -131,7 +132,6 @@ double EdgeDistanceExtractor::distance(const OsmMap &map,
 {
   double d1 = _oneDistance(map, target, candidate);
   double d2 = _oneDistance(map, candidate, target);
-
   return min(d1, d2);
 }
 
@@ -144,23 +144,25 @@ double EdgeDistanceExtractor::_oneDistance(const OsmMap& map,
                                            const std::shared_ptr<const Element>& e1,
                                            const std::shared_ptr<const Element>& e2) const
 {
-  vector<double> distances;
   vector<Coordinate> points = _discretize(map, e1);
-  std::shared_ptr<Geometry> g = _toLines(map, e2);
-  distances.reserve(points.size());
 
+  std::shared_ptr<Geometry> g = _toLines(map, e2);
+
+  // This pre-aggregation step is a performance bottleneck for Area Conflation.
+  vector<double> distances;
+  distances.reserve(points.size());
   for (size_t i = 0; i < points.size(); i++)
   {
     std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(points[i]));
     distances.push_back(g->distance(p.get()));
   }
-
   if (distances.size() == 0)
   {
     return -1;
   }
 
-  return _aggregator->aggregate(distances);
+  const double result = _aggregator->aggregate(distances);
+  return result;
 }
 
 std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(const OsmMap& map,
@@ -183,11 +185,6 @@ std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(const OsmMap& map,
   }
 
   return result;
-}
-
-void EdgeDistanceExtractor::setSpacing(const double spacing)
-{
-  _spacing = spacing;
 }
 
 void EdgeDistanceExtractor::setConfiguration(const Settings& conf)

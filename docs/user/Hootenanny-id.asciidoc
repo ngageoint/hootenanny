@@ -400,6 +400,39 @@ The advanced parameters are accessed by clicking on the triangle next the Type h
 .Advanced Conflation Options. To access the Advanced Conflation Options click on triangle highlighted in the red box next to the Type.
 image::images/id/hoot_advanced_conflate.png[scaledwidth="50%"]
 
+[[HootiD-FavoriteAdvOpts]]
+==== Save Favorite Advanced Options
+
+To make it easier for users to save useful advanced conflation options, hootenanny allows for the saving, updating, and deleting of desired advanced conflation options.
+
+To start, click the advanced options within the sidebar to extend the advanced options panel.
+
+image:images/id/hoot_defaultconf.png[scaledwidth="50%"]
+
+Then select whichever advanced opt group contians the members you would like to set to your prefered custom value.
+
+image:images/id/hoot_selectedgroup.png[scaledwidth="50%"]
+
+Update the members to the desired value(s).Each of the highlighted member's default values have been altered.
+
+image:images/id/hoot_altermembers.png[scaledwidth="50%"]
+
+Click the save favorite button at the top of the advanced options panel
+
+image:images/id/hoot_savefavorite.png[scaledwidth="50%"]
+
+Save favorite opts with the desired name
+
+image:images/id/hoot_myopts.png[scaledwidth="50%"]
+
+Select your saved opts from the conflation type dropdown within the sidebar
+
+image:images/id/hoot_selectmyopt.png[scaledwidth="50%"]
+
+The advanced options panel will now be populated with only the users favorite opt, from here you can run conflation, update the opts members or delete the favorite opt.
+
+image:images/id/hoot_allfavoptoptions.png[scaledwidth="50%"]
+
 [[HootConflictReview]]
 === Reviewing Conflicts in Hootenanny
 
@@ -932,7 +965,7 @@ The following advanced configuration parameters are provided to the user via the
 * *Remove Unlikely Intersections*: Remove implied intersections that are likely incorrect. For example, a motorway overpass intersecting a residential street at a 90° is considered unlikely and "unsnapped". The geometry location is not modified.
 * *DualWay Splitter*: Split highway types that are marked as divided into two separate geometries marked as oneway roads. A number of assumptions must be made to do this including assumptions about the direction of travel on roads (right or left hand drivers).
 * *Implied Divided Marker*: If two roads implicitly should be marked as divided based on the surrounding roads, mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to be marked as divided.
-* *Small Way Merger*: Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.way.merger.threshold` for setting the threshold value.
+* *Small Way Merger*: Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.highway.merger.threshold` for setting the threshold value.
 * *Small Way Merger Threshold*: If highways are smaller than threshold and the tags matched then they will be merged together into a single way.
 * *Remove Empty Areas*: Remove all area elements that have a area of zero.
 * *Remove Duplicate Areas*: Remove any area elements that are essentially the same.

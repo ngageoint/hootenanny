@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -50,6 +50,8 @@ class UnconnectedWaySnapperTest : public HootTestFixture
   CPPUNIT_TEST(runSnapTest);
   CPPUNIT_TEST(runConfigOptionsValidationTest);
   CPPUNIT_TEST(runStaticSnapTest);
+  CPPUNIT_TEST(runReviewSnappedTest);
+  CPPUNIT_TEST(runMarkOnlyTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -82,9 +84,11 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayNodeCriterion");
+    uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayWayNodeCriterion");
     uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
     uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");
+    uut.setMarkOnly(false);
+    uut.setReviewSnappedWays(false);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -93,7 +97,87 @@ public:
     writer.setIsDebugMap(true);
     writer.write(map, _outputPath + testName +  + "Out.osm");
 
-    CPPUNIT_ASSERT_EQUAL(43L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(43L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(38L, uut.getNumSnappedToWays());
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
+  }
+
+  void runReviewSnappedTest()
+  {
+    const QString testName = "runReviewSnappedTest";
+
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + "runSnapTestIn1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(_inputPath + "runSnapTestIn2.osm", map);
+
+    UnconnectedWaySnapper uut;
+    uut.setAddCeToSearchDistance(false);
+    uut.setMaxNodeReuseDistance(0.5);
+    uut.setMaxSnapDistance(5.0);
+    uut.setMarkSnappedNodes(false);
+    uut.setMarkSnappedWays(false);
+    uut.setSnapToExistingWayNodes(true);
+    uut.setWayDiscretizationSpacing(1.0);
+    uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
+    uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
+    uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayWayNodeCriterion");
+    uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
+    uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");
+    uut.setMarkOnly(false);
+    uut.setReviewSnappedWays(true);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+
+    OsmXmlWriter writer;
+    writer.setIsDebugMap(true);
+    writer.write(map, _outputPath + testName +  + "Out.osm");
+
+    CPPUNIT_ASSERT_EQUAL(43L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(38L, uut.getNumSnappedToWays());
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
+  }
+
+  void runMarkOnlyTest()
+  {
+    const QString testName = "runMarkOnlyTest";
+
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + "runSnapTestIn1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(_inputPath + "runSnapTestIn2.osm", map);
+
+    UnconnectedWaySnapper uut;
+    uut.setAddCeToSearchDistance(false);
+    uut.setMaxNodeReuseDistance(0.5);
+    uut.setMaxSnapDistance(5.0);
+    uut.setMarkSnappedNodes(false);
+    uut.setMarkSnappedWays(false);
+    uut.setSnapToExistingWayNodes(true);
+    uut.setWayDiscretizationSpacing(1.0);
+    uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
+    uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
+    uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayWayNodeCriterion");
+    uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
+    uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");
+    uut.setMarkOnly(true);
+    uut.setReviewSnappedWays(true);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+
+    OsmXmlWriter writer;
+    writer.setIsDebugMap(true);
+    writer.write(map, _outputPath + testName +  + "Out.osm");
+
+    CPPUNIT_ASSERT_EQUAL(43L, uut.getNumFeaturesAffected());
     CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWayNodes());
     CPPUNIT_ASSERT_EQUAL(38L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");

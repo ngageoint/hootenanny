@@ -36,6 +36,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -78,6 +79,7 @@ _infoCache(infoCache)
   ConfigOptions opts = ConfigOptions();
   _reviewDistanceThreshold = opts.getPoiPolygonAdditionalSearchDistance();
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
+  _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   LOG_VART(_infoCache.get());
   _timer.start();
 }
@@ -197,7 +199,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
       PROGRESS_DEBUG(
         "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
         " match candidates / " << StringUtils::formatLargeNumber(_map->getNodeCount()) <<
-        " total nodes.");
+        " nodes.");
     }
   }
 
@@ -220,6 +222,10 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
       StringUtils::formatLargeNumber(_map->getNodeCount()) << " nodes.");
     _timer.restart();
   }
+  if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
+  {
+    MemoryUsageChecker::getInstance()->check();
+  }
 }
 
 bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element)
@@ -240,7 +246,7 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
 {
   if (!_polyIndex)
   {
-    LOG_INFO("Creating POI/Polygon feature index...");
+    LOG_STATUS("Creating POI/Polygon feature index...");
 
     // TODO: tune this? - see #3054
     std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
@@ -257,7 +263,9 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
     _getMap()->visitRelationsRo(v);
     v.finalizeIndex();
 
-    LOG_DEBUG("POI/Polygon feature index created.");
+    LOG_STATUS(
+      "POI/Polygon feature index created with " << StringUtils::formatLargeNumber(v.getSize()) <<
+      " elements.");
   }
   return _polyIndex;
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.db;
 
@@ -74,6 +74,8 @@ public class Users {
     private Timestamp provider_created_at;
 
     private Object privileges;
+
+    public Object favoriteOpts;
 
     @JsonProperty(value = "display_name")
     public String getDisplayName() {
@@ -165,6 +167,15 @@ public class Users {
 
     public void setPrivileges(Object privileges) {
         this.privileges = privileges;
+    }
+
+    @JsonProperty(value = "members")
+    public Object getFavoriteOpts() {
+    	return favoriteOpts;
+    }
+
+    public void setFavoriteOpts( Object favoriteOpts ) {
+    	this.favoriteOpts = favoriteOpts;
     }
 
     @Override

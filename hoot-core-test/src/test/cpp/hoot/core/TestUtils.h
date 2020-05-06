@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TESTUTILS_H
@@ -37,6 +37,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfPath.h>
 
 // Qt
 #include <QString>
@@ -189,6 +190,42 @@ public:
    */
   static bool mkpath(const QString& path);
 
+  /**
+   * This is a snapshot of the option, conflate.pre.ops (circa 2/12/20), for testing purposes.
+   *
+   * @return a list of operator class names
+   */
+  static QStringList getConflateCmdSnapshotPreOps();
+
+  /**
+   * This is a snapshot of the option, conflate.post.ops (circa 2/12/20), for testing purposes.
+   *
+   * @return a list of operator class names
+   */
+  static QStringList getConflateCmdSnapshotPostOps();
+
+  /**
+   * This is a snapshot of the option, map.cleaner.transforms (circa 2/12/20), for testing purposes.
+   *
+   * @return a list of operator class names
+   */
+  static QStringList getConflateCmdSnapshotCleaningOps();
+
+  /**
+   * Runs a conflate op reduction test which tests for which superfluous conflate pre/post/cleaning
+   * ops are removed by SuperfluousConflateOpRemover. This is in TestUtils b/c it is shared by
+   * SuperfluousConflateOpRemoveTest in hoot-core and SuperfluousConflateOpRemoveJsTest in hoot-js.
+   *
+   * @param matchCreators the match creator class names involved in the conflation job
+   * @param expectedPreOpSize the expected number of conflation pre ops after op reduction
+   * @param expectedPostOpsSize the expected number of conflation post ops after op reduction
+   * @param expectedCleaningOpsSize the expected number of conflation cleaning ops after op
+   * reduction
+   */
+  static void runConflateOpReductionTest(
+    const QStringList& matchCreators, const int expectedPreOpSize, const int expectedPostOpsSize,
+    const int expectedCleaningOpsSize);
+
 private:
 
   QList<RegisteredReset*> _resets;
@@ -257,10 +294,22 @@ public:
    */
   virtual void setUp()
   {
-    if (_reset == ResetBasic)
-      TestUtils::resetBasic();
-    else if (_reset == ResetAll)
+    if (_reset == ResetAll)
+    {
+      // resetEnvironment reloads Testing.conf, so we don't need to do it here.
       TestUtils::resetEnvironment();
+    }
+    else
+    {
+      if (_reset == ResetBasic)
+      {
+        TestUtils::resetBasic();
+      }
+
+      // We require that all tests use Testing.conf as a starting point and any conf values
+      // specified by it may be overridden when necessary.
+      conf().loadJson(ConfPath::search("Testing.conf"));
+    }
   }
 
   static const QString UNUSED_PATH;

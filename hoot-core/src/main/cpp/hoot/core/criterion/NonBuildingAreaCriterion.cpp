@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NonBuildingAreaCriterion.h"
 
@@ -31,6 +31,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -41,9 +43,28 @@ NonBuildingAreaCriterion::NonBuildingAreaCriterion()
 {
 }
 
+NonBuildingAreaCriterion::NonBuildingAreaCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
+
 bool NonBuildingAreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return AreaCriterion().isSatisfied(e) && !BuildingCriterion().isSatisfied(e);
+  const bool isArea = AreaCriterion(_map).isSatisfied(e);
+  if (!isArea)
+  {
+    return false;
+  }
+
+  const bool isBuilding = BuildingCriterion(_map).isSatisfied(e);
+  if (isBuilding)
+  {
+    return false;
+  }
+
+  LOG_TRACE("is non-building area: " << e);
+
+  return true;
 }
 
 }

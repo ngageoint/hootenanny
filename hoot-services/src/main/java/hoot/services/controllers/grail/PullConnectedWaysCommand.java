@@ -32,8 +32,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +54,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
 
@@ -132,9 +129,8 @@ class PullConnectedWaysCommand implements InternalCommand {
             //http://localhost:3000/api/0.6/node/6096481776/ways
             List<Long> allWayIds = new ArrayList<>();
             for (Long n : nodeIds) {
-                url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/node/" + n + "/ways");
-                URLConnection conn = new URL(url).openConnection();
-                is = conn.getInputStream();
+                url = replaceSensitiveData(params.getPullUrl()).replace("/api/0.6/map", "/api/0.6/node/" + n + "/ways");
+                is = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
                 List<Long> wayIds = getOsmXpath(is, "/osm/way/@id");
                 is.close();
                 allWayIds.addAll(wayIds);
@@ -143,11 +139,12 @@ class PullConnectedWaysCommand implements InternalCommand {
             //Get the full ways
             //http://localhost:3000/api/0.6/way/649672297/full
             for (Long id : allWayIds) {
-                url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/way/" + id + "/full");
+                url = replaceSensitiveData(params.getPullUrl()).replace("/api/0.6/map", "/api/0.6/way/" + id + "/full");
 
                 File outputFile = new File(params.getWorkDir(), id + ".osm");
-                URL requestUrl = new URL(url);
-                FileUtils.copyURLToFile(requestUrl, outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
+                is = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
+                FileUtils.copyInputStreamToFile(is, outputFile);
+                is.close();
             }
 
             //delete the crop.osm file
@@ -155,6 +152,7 @@ class PullConnectedWaysCommand implements InternalCommand {
         }
         catch (IOException ex) {
             String msg = "Failure to pull connected ways from the API [" + url + "]" + ex.getMessage();
+            logger.error(msg);
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 

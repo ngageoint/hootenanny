@@ -51,8 +51,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -60,6 +62,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
@@ -78,17 +83,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.xpath.XPathAPI;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +105,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
@@ -114,7 +117,6 @@ import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.XmlDocumentBuilder;
 
 
 @Controller
@@ -254,6 +256,7 @@ public class GrailResource {
         // Run the differential conflate command.
         GrailParams params = new GrailParams(reqParams);
         params.setUser(user);
+        params.setWorkDir(workDir);
         params.setInput1(referenceOSMFile.getAbsolutePath());
         params.setInput2(secondaryOSMFile.getAbsolutePath());
 
@@ -307,34 +310,41 @@ public class GrailResource {
 
         String fileDirectory = CHANGESETS_FOLDER + "/" + jobDir;
         File workDir = new File(fileDirectory);
+        if (!workDir.exists()) {
+            logger.error("changesetStats: jobDir {} does not exist.", workDir.getAbsolutePath());
+            return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
+        }
 
         try {
             IOFileFilter fileFilter;
-            if(includeTags) {
-                fileFilter = new WildcardFileFilter("*.osc");
+            if (includeTags) {
+                fileFilter = new WildcardFileFilter("*.json");
             } else {
-                fileFilter = new RegexFileFilter("^(?!.*\\.tags\\.).*osc$");
+                fileFilter = new RegexFileFilter("^(?!.*\\.tags\\.).*json$");
             }
 
-            List<File> oscFilesList = (List<File>) FileUtils.listFiles(workDir, fileFilter, null);
+            List<File> statFilesList = (List<File>) FileUtils.listFiles(workDir, fileFilter, null);
 
-            for(File currentOsc : oscFilesList) {
-                String xmlData = FileUtils.readFileToString(currentOsc, "UTF-8");
-                Document changesetDoc = XmlDocumentBuilder.parse(xmlData);
-                logger.debug("Parsing changeset XML: {}", StringUtils.abbreviate(xmlData, 1000));
+            // loop through each stats file based on the fileFilter. Should at most be 2 files, normals stats and if requested the tags stats.
+            for (File currentOsc : statFilesList) {
+                JSONParser parser = new JSONParser();
+                String jsonDoc = FileUtils.readFileToString(currentOsc, "UTF-8");
+                JSONObject statsJson = (JSONObject) parser.parse(jsonDoc);
 
-                for (DbUtils.EntityChangeType entityChangeType : DbUtils.EntityChangeType.values()) {
-                    String changeTypeName = entityChangeType.toString().toLowerCase();
+                // loop for the change type name
+                for (Object changeTypeKey: statsJson.keySet()) {
+                    String changeTypeName = changeTypeKey.toString();
+                    JSONArray valuesArray = (JSONArray) statsJson.get(changeTypeKey);
 
-                    for (DbUtils.nwr_enum elementType : DbUtils.nwr_enum.values()) {
-                        String elementTypeName = elementType.toString();
+                    // loop for the element types
+                    for (Object obj: valuesArray) {
+                        JSONObject valueObject = (JSONObject) obj;
+                        // will always be an object with single key -> value
+                        String elementTypeName = valueObject.keySet().iterator().next().toString();
+                        int elementTypeCount = Integer.parseInt(valueObject.values().iterator().next().toString());
 
-                        NodeList elementXmlNodes = XPathAPI.selectNodeList(changesetDoc,
-                                "//osmChange/" + changeTypeName +"/" + elementTypeName);
-
-                        String key = changeTypeName + "-" + elementTypeName;
-                        int count = jobInfo.get(key) == null ? elementXmlNodes.getLength() :
-                                (int) jobInfo.get(key) + elementXmlNodes.getLength();
+                        String key = changeTypeName.toLowerCase() + "-" + elementTypeName.toLowerCase();
+                        int count = jobInfo.get(key) == null ? elementTypeCount : (int) jobInfo.get(key) + elementTypeCount;
 
                         jobInfo.put(key, count);
                     }
@@ -344,22 +354,12 @@ public class GrailResource {
             File tagDiffFile = new File(workDir, "diff.tags.osc");
             jobInfo.put("hasTags", tagDiffFile.exists());
         }
-        catch (IllegalArgumentException e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Changeset file not found.").build());
+        catch (IOException exc) {
+            throw new WebApplicationException(exc, Response.serverError().entity("Changeset file not found.").build());
         }
-        catch (IOException e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Changeset file not found.").build());
+        catch (ParseException exc) {
+            throw new WebApplicationException(exc, Response.serverError().entity("Changeset file is malformed.").build());
         }
-        catch (ParserConfigurationException e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Changeset file is malformed.").build());
-        }
-        catch (SAXException e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Changeset file is malformed.").build());
-        }
-        catch (TransformerException e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Changeset file is malformed.").build());
-        }
-
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
@@ -413,6 +413,7 @@ public class GrailResource {
         json.put("jobid", jobId);
         String jobDir = reqParams.getParentId();
         File workDir = new File(CHANGESETS_FOLDER, jobDir);
+        params.setWorkDir(workDir);
 
         if (!workDir.exists()) {
             logger.error("ApplyChangeset: jobDir {} does not exist.", workDir.getAbsolutePath());
@@ -527,6 +528,7 @@ public class GrailResource {
 
         GrailParams params = new GrailParams(reqParams);
         params.setUser(user);
+        params.setWorkDir(workDir);
 
         try {
             params.setInput1(HOOTAPI_DB_URL + "/" + input1);
@@ -876,14 +878,29 @@ public class GrailResource {
         //remove cropfile
         workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
 
-        // merge reference and ways osm files
-        GrailParams mergeOsmParams = new GrailParams(params);
-        File mergeFile = new File(params.getWorkDir(), "merge.osm");
-        mergeOsmParams.setOutput(mergeFile.getAbsolutePath());
-        workflow.add(grailCommandFactory.build(jobId, mergeOsmParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+        // merge OOB connected ways osm files and add 'hoot:change:exclude:delete' tag to each
+        GrailParams mergeOobWaysParams = new GrailParams(params);
+        File mergeOobWaysFile = new File(params.getWorkDir(), "oobways.osm");
+        mergeOobWaysParams.setOutput(mergeOobWaysFile.getAbsolutePath());
+        // Map<String, String> opts = new HashMap<>();
+        // opts.put("convert.ops", "hoot::SetTagValueVisitor");
+        // opts.put("set.tag.value.visitor.element.criteria", "hoot::WayCriterion");
+        // opts.put("set.tag.value.visitor.keys", "hoot:change:exclude:delete");
+        // opts.put("set.tag.value.visitor.values", "yes");
+        // mergeOobWaysParams.setAdvancedOptions(opts);
+        mergeOobWaysParams.setInput1("\\d+\\.osm"); //this is the file filter
+        workflow.add(grailCommandFactory.build(jobId, mergeOobWaysParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+
+        // merge OOB connected ways merge file and the reference osm file
+        GrailParams mergeRefParams = new GrailParams(params);
+        File mergeRefFile = new File(params.getWorkDir(), "merge.osm");
+        mergeRefParams.setInput1("(" + mergeOobWaysFile.getName() + "|" + referenceOSMFile.getName() + ")"); //this is the file filter
+        mergeRefParams.setOutput(mergeRefFile.getAbsolutePath());
+        workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+
         // Write the data to the hoot db
         GrailParams pushParams = new GrailParams(params);
-        pushParams.setInput1(mergeFile.getAbsolutePath());
+        pushParams.setInput1(mergeRefFile.getAbsolutePath());
         ExternalCommand importRailsPort = grailCommandFactory.build(jobId, pushParams, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importRailsPort);
 
@@ -909,15 +926,46 @@ public class GrailResource {
         }
     }
 
+    //Used for self-signed SSL certs
+    //still requires import of cert into server java keystore
+    //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
+    public static InputStream getUrlInputStreamWithNullHostnameVerifier(String urlString) throws IOException {
+        InputStream inputStream = null;
+        URL url = new URL(urlString);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        if (url.getProtocol().equalsIgnoreCase("https")) {
+            ((HttpsURLConnection) conn).setHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession sslSession) {
+                    return true;
+                }
+            });
+        }
+
+        try {
+            inputStream = conn.getInputStream();
+        } catch(IOException e) {
+            //read the error response body
+            String err = IOUtils.toString(conn.getErrorStream(), StandardCharsets.UTF_8);
+            logger.error(err);
+            throw new IOException(err);
+        }
+
+        return inputStream;
+    }
+
+
     // Get Capabilities from an OSM API Db
     private static APICapabilities getCapabilities(String capabilitiesUrl) {
         APICapabilities params = new APICapabilities();
 
         try {
+            InputStream inputStream = getUrlInputStreamWithNullHostnameVerifier(replaceSensitiveData(capabilitiesUrl));
+
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new URL(replaceSensitiveData(capabilitiesUrl)).openStream());
-
+            Document doc = db.parse(inputStream);
             doc.getDocumentElement().normalize();
 
             NodeList nl = doc.getElementsByTagName("api");

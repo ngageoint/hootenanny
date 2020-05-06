@@ -105,6 +105,7 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
   MapProjector::projectToWgs84(map);
 
   CalculateHashVisitor hashVisitor;
+  hashVisitor.setIncludeCircularError(true);
   map->visitRw(hashVisitor);
 
   for (NodeMap::const_iterator it = map->getNodes().begin(); it != map->getNodes().end(); ++it)

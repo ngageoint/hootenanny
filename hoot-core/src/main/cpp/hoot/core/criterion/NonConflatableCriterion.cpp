@@ -36,13 +36,26 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 
-NonConflatableCriterion::NonConflatableCriterion()
+NonConflatableCriterion::NonConflatableCriterion() :
+_ignoreChildren(false),
+_geometryTypeFilter(GeometryTypeCriterion::GeometryType::Unknown),
+_ignoreGenericConflators(false)
 {
 }
 
 NonConflatableCriterion::NonConflatableCriterion(ConstOsmMapPtr map) :
-_map(map)
+_map(map),
+_ignoreChildren(false),
+_geometryTypeFilter(GeometryTypeCriterion::GeometryType::Unknown),
+_ignoreGenericConflators(false)
 {
+}
+
+void NonConflatableCriterion::setConfiguration(const Settings& conf)
+{
+  ConfigOptions config = ConfigOptions(conf);
+  _ignoreChildren = config.getNonConflatableCriterionIgnoreRelationMembers();
+  LOG_VARD(_ignoreChildren);
 }
 
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -63,15 +76,62 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
       }
     }
 
-    if (crit->isSatisfied(e))
+    if (_ignoreGenericConflators)
+    {
+      std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+        std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+      assert(conflatableCrit);
+      if (!conflatableCrit->supportsSpecificConflation())
+      {
+        continue;
+      }
+    }
+
+    bool satisfiesGeometryFilter = true;
+    if (_geometryTypeFilter != GeometryTypeCriterion::GeometryType::Unknown)
+    {
+      std::shared_ptr<GeometryTypeCriterion> geometryCrit =
+        std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+      satisfiesGeometryFilter = geometryCrit->getGeometryType() == _geometryTypeFilter;
+    }
+
+    if (crit->isSatisfied(e) && satisfiesGeometryFilter)
     {
       // It is something we can conflate.
       LOG_TRACE("Element: " << e->getElementId() << " is conflatable with: " << itr.key());
       return false;
     }
   }
-  // It is not something we can conflate
+
+  // Technically, there could also be something like a building way with a POI child and you'd want
+  // to check for ways here as well. Will wait to support that situation until an actual use case
+  // is encountered.
+  if (!_ignoreChildren && e->getElementType() == ElementType::Relation)
+  {
+    // We need to verify that none of the child relation members are conflatable in order to sign
+    // off on this element not being conflatable.
+
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
+    const std::vector<RelationData::Entry>& members = relation->getMembers();
+    for (size_t i = 0; i < members.size(); i++)
+    {
+      const RelationData::Entry& member = members[i];
+      ConstElementPtr memberElement = _map->getElement(member.getElementId());
+      if (memberElement && isSatisfied(memberElement))
+      {
+        // It is something we can conflate.
+        LOG_TRACE(
+          "Element: " << e->getElementId() << " has a child that is conflatable: " <<
+          memberElement->getElementId() << ", and member children are not being ignored, " <<
+          "therefore it is conflatable.");
+        return false;
+      }
+    }
+  }
+
+  // It is not something we can conflate.
   LOG_TRACE("Element: " << e->getElementId() << " is not conflatable.");
+  LOG_VART(e);
   return true;
 }
 

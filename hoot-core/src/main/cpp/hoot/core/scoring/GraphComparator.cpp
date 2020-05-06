@@ -78,7 +78,8 @@ GraphComparator::GraphComparator(OsmMapPtr map1, OsmMapPtr map2) :
   _init();
 }
 
-cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c, double& maxGraphCost, const RandomPtr& random)
+cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c, double& maxGraphCost,
+                                                const RandomPtr& random)
 {
   // make a copy of the map so we can manipulate it.
   map.reset(new OsmMap(map));

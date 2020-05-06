@@ -443,7 +443,7 @@ public class MapResource {
         long nodeCnt = 0;
         for (Object aParamsArray : paramsArray) {
             JSONObject param = (JSONObject) aParamsArray;
-            mapId = (String) param.get("mapId");
+            mapId = param.get("mapId").toString();
             bbox = (String) param.get("tile");
 
             // OSM API database data can't be displayed on a hoot map, due to

@@ -1,15 +1,9 @@
 [
     {
-        "import": "FlowDir.json"
-    },
-    {
-        "import": "REF1.json"
-    },
-    {
-        "import": "REF2.json"
-    },
-    {
         "import": "abandoned.json"
+    },
+    {
+        "import": "accuracy.json"
     },
     {
         "import": "addr.json"
@@ -27,6 +21,9 @@
         "import": "amenity.json"
     },
     {
+        "import": "angle.json"
+    },
+    {
         "import": "artwork_type.json"
     },
     {
@@ -34,6 +31,9 @@
     },
     {
         "import": "barrier.json"
+    },
+    {
+        "import": "boundary.json"
     },
     {
         "import": "brand.json"
@@ -90,6 +90,9 @@
         "import": "destroyed.json"
     },
     {
+        "import": "divider.json"
+    },
+    {
         "import": "ele.json"
     },
     {
@@ -103,6 +106,12 @@
     },
     {
         "import": "facility.json"
+    },
+    {
+        "import": "FCODE.json"
+    },
+    {
+        "import": "feature_area.json"
     },
     {
         "import": "fire_hydrant.json"
@@ -136,6 +145,9 @@
         "import": "int_ref.json"
     },
     {
+        "import": "is_divided.json"
+    },
+    {
         "import": "is_in.json"
     },
     {
@@ -149,6 +161,9 @@
     },
     {
         "import": "leisure.json"
+    },
+    {
+        "import": "length.json"
     },
     {
         "import": "license.json"
@@ -220,16 +235,19 @@
         "import": "ref.json"
     },
     {
+        "import": "REF1.json"
+    },
+    {
+        "import": "REF2.json"
+    },
+    {
         "import": "religion.json"
     },
     {
-        "import": "river_flow.json"
-    },
-    {
-        "import": "river_type.json"
-    },
-    {
         "import": "roof.json"
+    },
+    {
+        "import": "route.json"
     },
     {
         "import": "seamark.json"
@@ -271,9 +289,6 @@
         "import": "tunnel.json"
     },
     {
-        "import": "type.json"
-    },
-    {
         "import": "url.json"
     },
     {
@@ -296,15 +311,6 @@
     },
     {
         "import": "width.json"
-    },
-    {
-        "import": "divider.json"
-    },
-    {
-        "import": "is_divided.json"
-    },
-    {
-        "import": "FCODE.json"
     },
     {
         "import": "wikipedia.json"

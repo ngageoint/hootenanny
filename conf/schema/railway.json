@@ -1,11 +1,6 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "linestring",
-            "relation"
-        ],
         "influence": 1,
         "isA": "poi",
         "name": "railway",
@@ -18,6 +13,9 @@
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "node"
+        ],
         "isA": "railway",
         "name": "railway=halt",
         "objectType": "tag",
@@ -62,6 +60,11 @@
         ]
     },
     {
+        "geometries": [
+            "linestring",
+            "area",
+            "relation"
+        ],
         "isA": "railway",
         "name": "railway=platform",
         "objectType": "tag",
@@ -106,6 +109,10 @@
         ]
     },
     {
+        "geometries": [
+            "node",
+            "area"
+        ],
         "isA": "railway",
         "name": "railway=station",
         "objectType": "tag",
@@ -147,6 +154,9 @@
         ]
     },
     {
+        "geometries": [
+            "node"
+        ],
         "isA": "railway",
         "name": "railway=stop",
         "objectType": "tag",
@@ -156,6 +166,33 @@
         }
     },
     {
+        "geometries": [
+            "node"
+        ],
+        "isA": "railway",
+        "name": "railway=buffer_stop",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "railway",
+        "name": "railway=turntable",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "railway",
+        "name": "railway=level_crossing",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node"
+        ],
         "isA": "railway",
         "name": "railway=tram_stop",
         "objectType": "tag",
@@ -170,6 +207,9 @@
         ]
     },
     {
+        "geometries": [
+            "node"
+        ],
         "isA": "railway",
         "name": "railway=subway_entrance",
         "objectType": "tag",
@@ -188,6 +228,62 @@
                     0.8,
                     0.3
                 ]
+            }
+        ]
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "railway",
+        "name": "railway=rail",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "railway=light_rail",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "railway",
+        "name": "railway=light_rail",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "railway=rail",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "railway",
+        "name": "electrified=*",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "railway=rail",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "railway",
+        "name": "railway=disused",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "railway=rail",
+                "weight": 0.8
             }
         ]
     }

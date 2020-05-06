@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMMEDIATELY_CONNECTED_OUT_OF_BOUNDS_WAY_TAGGER_H
 #define IMMEDIATELY_CONNECTED_OUT_OF_BOUNDS_WAY_TAGGER_H
@@ -33,7 +33,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/util/StringUtils.h>
@@ -46,8 +45,7 @@ namespace hoot
  * connected to some way that cross over the bounds. This is useful in generating replacement
  * changesets.
  */
-class ImmediatelyConnectedOutOfBoundsWayTagger : public OsmMapOperation, public OperationStatusInfo,
-  public Boundable
+class ImmediatelyConnectedOutOfBoundsWayTagger : public OsmMapOperation, public Boundable
 {
 public:
 
@@ -90,6 +88,8 @@ public:
   { return "Tags ways outside of a query bounds but immediately connected to ways that cross the bounds"; }
 
   long getNumTagged() const { return _numAffected; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

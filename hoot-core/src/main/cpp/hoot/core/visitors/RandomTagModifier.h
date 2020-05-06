@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RANDOM_TAG_MODIFIER_H
 #define RANDOM_TAG_MODIFIER_H
@@ -64,6 +64,8 @@ public:
   void setReplacementTagValues(const QStringList& values) { _replacementTagValues = values; }
 
   virtual QString getDescription() const { return "Randomly modifies feature tags"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

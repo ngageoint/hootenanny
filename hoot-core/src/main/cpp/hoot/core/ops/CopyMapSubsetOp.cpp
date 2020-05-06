@@ -79,6 +79,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   std::set<ElementId>& getElementsAdded() { return _elementsAdded; }
 
@@ -91,32 +92,31 @@ private:
 };
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids) :
-  _eids(eids),
-  _from(from)
+_eids(eids),
+_from(from)
 {
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>& wayIds) :
-  _from(from)
+_from(from)
 {
-  // Need to get ElementIds from our vector of longs
   for (vector<long>::const_iterator it = wayIds.begin(); it != wayIds.end(); ++it)
   {
     if (from->containsWay(*it))
-    { // make sure it's a way
+    {
       _eids.insert(ElementId(ElementType::Way, *it));
     }
   }
 }
 
-CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid)
-  : _from(from)
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid) :
+_from(from)
 {
   _eids.insert(eid);
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2) :
-  _from(from)
+_from(from)
 {
   _eids.insert(eid1);
   _eids.insert(eid2);

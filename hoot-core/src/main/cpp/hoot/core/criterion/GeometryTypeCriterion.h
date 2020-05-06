@@ -58,12 +58,20 @@ public:
   virtual GeometryType getGeometryType() const = 0;
 
   /**
-   * Returns all GeometryTypeCriterion class names for a given geometry type
+   * Returns all GeometryTypeCriterion class names
    *
-   * @param type geometry type
-   * @return a list of classes inheriting from GeometryTypeCriterion
+   * @return a list of class names
    */
-  static QStringList getCriterionClassNamesByType(const GeometryType& type);
+  static QStringList getCriterionClassNames();
+
+  /**
+   * Returns all GeometryTypeCriterion class names for a given geometry type or all
+   * GeometryTypeCriterion class names if GeometryType::Unknown is passed in as the geometry type
+   *
+   * @param geometryType geometry type
+   * @return a list of class names
+   */
+  static QStringList getCriterionClassNamesByGeometryType(const GeometryType& geometryType);
 
   /**
    * Returns a string representation of a geometry type
@@ -81,6 +89,8 @@ public:
    */
   static GeometryType typeFromString(const QString& geometryTypeStr);
 };
+
+typedef std::shared_ptr<GeometryTypeCriterion> GeometryTypeCriterionPtr;
 
 }
 

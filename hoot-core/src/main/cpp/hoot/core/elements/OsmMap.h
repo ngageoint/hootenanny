@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAP_H
 #define OSMMAP_H
@@ -110,6 +110,8 @@ public:
   ElementPtr getElement(const ElementId& id);
   ElementPtr getElement(ElementType type, long id);
 
+  QSet<ElementId> getElementIds() const;
+
   size_t getElementCount() const;
   size_t size() const { return getElementCount(); }
 
@@ -171,6 +173,7 @@ public:
   const NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
   const NodeMap& getNodes() const { return _nodes; }
   QSet<long> getNodeIds() const;
+  QSet<ElementId> getNodeElementIds() const;
 
   long getNodeCount() const { return _nodes.size(); }
 
@@ -218,6 +221,7 @@ public:
   const ConstWayPtr getWay(ElementId eid) const;
   const WayMap& getWays() const { return _ways; }
   QSet<long> getWayIds() const;
+  QSet<ElementId> getWayElementIds() const;
   long getWayCount() const { return _ways.size(); }
 
   void addWay(const WayPtr& w);
@@ -239,7 +243,8 @@ public:
   virtual const RelationPtr getRelation(long id);
   const RelationMap& getRelations() const { return _relations; }
   QSet<long> getRelationIds() const;
-   long getRelationCount() const { return _relations.size(); }
+  QSet<ElementId> getRelationElementIds() const;
+  long getRelationCount() const { return _relations.size(); }
 
   void addRelation(const RelationPtr& r);
 
@@ -331,6 +336,8 @@ public:
   void appendSource(const QString& url);
   void replaceSource(const QString& url);
 
+  void setEnableProgressLogging(bool enable) { _enableProgressLogging = enable; }
+
 protected:
 
   mutable std::shared_ptr<IdGenerator> _idGen;
@@ -371,6 +378,10 @@ protected:
   int _numNodesSkippedForAppending;
   int _numWaysSkippedForAppending;
   int _numRelationsSkippedForAppending;
+
+  // If we're making recursive calls to the visit methods in another class doing its own progress
+  // logging, its helpful to be able to turn loging here off.
+  bool _enableProgressLogging;
 
   // for use with ElementIterator
   ElementId _currentElementId;
@@ -473,7 +484,6 @@ inline const ConstWayPtr OsmMap::getWay(long id) const
 
 inline const ConstWayPtr OsmMap::getWay(ElementId eid) const
 {
-  assert(eid.getType() == ElementType::Way);
   return getWay(eid.getId());
 }
 
@@ -492,7 +502,6 @@ inline const WayPtr OsmMap::getWay(long id)
 
 inline const WayPtr OsmMap::getWay(ElementId eid)
 {
-  assert(eid.getType() == ElementType::Way);
   return getWay(eid.getId());
 }
 

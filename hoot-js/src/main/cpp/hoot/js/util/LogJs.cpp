@@ -49,7 +49,9 @@ LogJs::LogJs()
 {
 }
 
-LogJs::~LogJs() {}
+LogJs::~LogJs()
+{
+}
 
 void LogJs::Init(Handle<Object> exports)
 {
@@ -112,8 +114,8 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
       script = toString(frame->GetScriptName()).replace("\"", "");
       functionName = toString(frame->GetFunctionName());
     }
-    LOG_VARD(script);
-    LOG_VARD(functionName);
+    LOG_VART(script);
+    LOG_VART(functionName);
 
     std::stringstream rMessage;
     for (int i = 0; i < args.Length(); i++)

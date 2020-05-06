@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -227,6 +227,12 @@ public class ExportResource {
                 Command zipCommand = new ZIPFileCommand(new File(workDir, params.getOutputName() + ".zip"), workDir, outputName + ".alpha.tiles.geojson", this.getClass());
                 workflow.add(zipCommand);
 
+            } else if (inputType.equalsIgnoreCase("changesets")) {
+                File jobDir = new File(CHANGESETS_FOLDER, params.getInput());
+
+                Command zipCommand = getZIPCommand(workDir, jobDir, params.getInput()); // zip osc files in a changesets folder
+                workflow.add(zipCommand);
+
             } else {
                 // These functions ensure the map + containing folder are either owned by the user -or- public.
                 MapResource.getMapForUser(user, params.getInput(), false, false);
@@ -357,7 +363,7 @@ public class ExportResource {
     /**
      * Returns the contents of a geojson job output file
      * This is used by Hoot1 UI when creating a conflation task project
-     * using `hoot node-density-tiles` to build a k-d tree output geojson
+     * using `hoot.bin node-density-tiles` to build a k-d tree output geojson
      * of task areas with roughly equal numbers of features
      *
      * GET hoot-services/job/export/geojson/[job id from exportjob]
@@ -441,8 +447,12 @@ public class ExportResource {
     }
 
     private Command getZIPCommand(File workDir, String outputName) {
+        return getZIPCommand(workDir, workDir, outputName);
+    }
+
+    private Command getZIPCommand(File workDir, File inputDir, String outputName) {
         File targetZIP = new File(workDir, outputName + ".zip");
-        return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
+        return new ZIPDirectoryContentsCommand(targetZIP, inputDir, this.getClass());
     }
 
     private static File getExportFile(String jobId, String outputName, String fileExt) {

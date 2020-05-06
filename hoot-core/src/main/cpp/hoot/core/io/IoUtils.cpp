@@ -147,6 +147,7 @@ void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
   {
     OgrReader reader;
     reader.setDefaultStatus(defaultStatus);
+    reader.setConfiguration(conf());
     reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map);
     reader.close();
   }

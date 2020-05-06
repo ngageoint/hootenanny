@@ -36,6 +36,7 @@
 //  Qt
 #include <QEventLoop>
 #include <QHostAddress>
+#include <QTimer>
 #include <QtNetwork/QSslConfiguration>
 #include <QtNetwork/QSslSocket>
 
@@ -71,25 +72,25 @@ void HootNetworkRequest::setOAuthKeys(const QString& consumer_key, const QString
 }
 
 bool HootNetworkRequest::networkRequest(const QUrl& url, QNetworkAccessManager::Operation http_op,
-                                        const QByteArray& data)
+                                        const QByteArray& data, int timeout)
 {
   //  Call the actually network request function with empty headers map
-  return _networkRequest(url, QMap<QNetworkRequest::KnownHeaders, QVariant>(), http_op, data);
+  return _networkRequest(url, QMap<QNetworkRequest::KnownHeaders, QVariant>(), http_op, data, timeout);
 }
 
 bool HootNetworkRequest::networkRequest(const QUrl& url,
                                         const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
                                         QNetworkAccessManager::Operation http_op,
-                                        const QByteArray& data)
+                                        const QByteArray& data, int timeout)
 {
   //  Simple passthrough function for consistency
-  return _networkRequest(url, headers, http_op, data);
+  return _networkRequest(url, headers, http_op, data, timeout);
 }
 
 bool HootNetworkRequest::_networkRequest(const QUrl& url,
                                          const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
                                          QNetworkAccessManager::Operation http_op,
-                                         const QByteArray& data)
+                                         const QByteArray& data, int timeout)
 {
   QUrl tempUrl(url);
   //  Reset status
@@ -150,7 +151,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url,
     break;
   }
   //  Wait for finished signal from reply object
-  _blockOnReply(reply);
+  _blockOnReply(reply, timeout);
   //  Get the status and content of the reply if available
   _status = _getHttpResponseCode(reply);
   //  According to the documention this shouldn't ever happen
@@ -176,14 +177,30 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url,
   return true;
 }
 
-void HootNetworkRequest::_blockOnReply(QNetworkReply* reply)
+void HootNetworkRequest::_blockOnReply(QNetworkReply* reply, int timeout)
 {
   if (reply != NULL)
   {
+    QTimer timer;
     //  Qt code to force the use of QNetworkReply to be synchronous
     QEventLoop loop;
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    QObject::connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
+    //  Start the timer (convert seconds to miliseconds)
+    timer.start(timeout * 1000);
     loop.exec();
+    //  Cleanup the timer
+    if (timer.isActive())
+    {
+      //  Reply is finished and the timer is still active, stop the timer
+      timer.stop();
+    }
+    else
+    {
+      //  Timer timed-out, disconnect the reply signal and abort
+      QObject::disconnect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+      reply->abort();
+    }
   }
 }
 

@@ -19,7 +19,7 @@
 			<tag k="highway" v="road"/>
 		</way>
 	</modify>
-	<delete if-unused="true">
+	<delete>
 		<node id="-1" version="0" lat="38.8549321261880536" lon="-104.8979050333482093" timestamp="" changeset="0">
 			<tag k="node" v="Should fail"/>
 		</node>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef _ELEMENTS_NODE_H_
 #define _ELEMENTS_NODE_H_
@@ -104,7 +104,7 @@ public:
   std::shared_ptr<Node> cloneSp() const;
 
   virtual geos::geom::Envelope* getEnvelope(
-      const std::shared_ptr<const ElementProvider>& ep) const override;
+    const std::shared_ptr<const ElementProvider>& ep) const override;
 
   virtual const geos::geom::Envelope& getEnvelopeInternal(
     const std::shared_ptr<const ElementProvider>& ep) const override;
@@ -136,9 +136,15 @@ public:
    */
   bool coordsMatch(const Node& other) const;
 
+  /**
+   * @see Element
+   */
+  virtual QString nonIdHash() const;
+
 protected:
 
   friend class SharedPtrPool<Node>;
+
   /**
    * The default constructor shouldn't really be used in typical code. We really _need_ the
    * parameters passed into the other constructors. However, the pool method requires a default

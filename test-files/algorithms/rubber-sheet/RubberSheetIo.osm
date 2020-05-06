@@ -1922,6 +1922,8 @@
         <nd ref="-4772"/>
         <nd ref="-4773"/>
         <nd ref="-7510"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="US Hwy 50"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-649" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2304,6 +2306,8 @@
     <way visible="true" id="-625" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7511"/>
         <nd ref="-7049"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="US Hwy 50"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-624" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2316,6 +2320,8 @@
         <nd ref="-4764"/>
         <nd ref="-4765"/>
         <nd ref="-6187"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="US Hwy 50"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-623" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2481,6 +2487,8 @@
     <way visible="true" id="-608" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7494"/>
         <nd ref="-3597"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-607" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2518,6 +2526,8 @@
         <nd ref="-1274"/>
         <nd ref="-1275"/>
         <nd ref="-7493"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-606" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -3589,21 +3599,4 @@
         <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-624" role=""/>
-        <member type="way" ref="-650" role=""/>
-        <member type="way" ref="-625" role=""/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="US Hwy 50"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="type" v="multilinestring"/>
-    </relation>
-    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-607" role=""/>
-        <member type="way" ref="-608" role=""/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="CONSTITUTION AVE NW"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="type" v="multilinestring"/>
-    </relation>
 </osm>

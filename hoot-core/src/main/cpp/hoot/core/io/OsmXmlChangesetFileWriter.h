@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMXMLCHANGESETFILEWRITER_H
 #define OSMXMLCHANGESETFILEWRITER_H
@@ -45,9 +45,9 @@ namespace hoot
 /**
  * Writes an OSM changeset to an XML file.
  *
- * Before writing this changeset to an OSM API database, the corresponding changeset
- * would have to be created using the API.  Optionally, after writing this the changeset
- * can be closed via the API.
+ * Before writing this changeset to an OSM API database, the corresponding changeset would have to
+ * be created using the API.  Optionally, after writing this the changeset can be closed via the
+ * API.
  */
 class OsmXmlChangesetFileWriter : public OsmChangesetFileWriter
 {
@@ -71,7 +71,8 @@ public:
   /**
    * @see ChangesetFileWriter
    */
-  virtual QString getStatsTable() const { return _stats.toTableString(); }
+  virtual QString getStatsTable(
+    const ChangesetStatsFormat& format = ChangesetStatsFormat::Text) const;
 
   /**
    * @see ChangesetFileWriter
@@ -102,12 +103,13 @@ private:
   ScoreMatrix<long> _stats;
 
   /** Helper functions to write nodes, ways, and relations. */
-  void _writeNode(QXmlStreamWriter& writer, ConstNodePtr n);
-  void _writeWay(QXmlStreamWriter& writer, ConstWayPtr w);
-  void _writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r);
+  void _writeNode(QXmlStreamWriter& writer, ConstElementPtr node, ConstElementPtr previous);
+  void _writeWay(QXmlStreamWriter& writer, ConstElementPtr way, ConstElementPtr previous);
+  void _writeRelation(QXmlStreamWriter& writer, ConstElementPtr relation, ConstElementPtr previous);
   void _writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element);
 
   void _initIdCounters();
+  void _initStats();
 };
 
 }

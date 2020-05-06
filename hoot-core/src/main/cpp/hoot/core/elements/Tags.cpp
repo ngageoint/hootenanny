@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Tags.h"
@@ -54,6 +54,28 @@ Tags::Tags(const QString& key, const QString& value) :
 QHash<QString, QString>()
 {
   set(key, value);
+}
+
+Tags::Tags(const QString& kvp)
+{
+  const QString errorMsg = "Invalid key/value pair passed to Tags: " + kvp;
+  if (!kvp.contains("="))
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+  const QStringList kvpParts = kvp.split("=");
+  if (kvpParts.size() != 2)
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+  const QString key = kvpParts[0];
+  const QString val = kvpParts[1];
+  if (key.trimmed().isEmpty() || val.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+
+  set(key, val);
 }
 
 void Tags::add(const Tags& t)
@@ -775,7 +797,6 @@ QStringList Tags::split(const QString& values)
 QString Tags::toString() const
 {
   QString result;
-
   for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
   {
     result += it.key() + " = " + it.value() + "\n";
@@ -796,6 +817,11 @@ void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) c
   QRegExp sRegExp("(\\d+(\\.\\d+)?)");
   QString copyStr = str;
   units = copyStr.replace(sRegExp, QString("")).trimmed();
+}
+
+bool Tags::hasKvp(const QString& kvp) const
+{
+  return hasAnyKvp(QStringList(kvp));
 }
 
 bool Tags::hasAnyKvp(const QStringList& kvps) const
@@ -824,6 +850,16 @@ bool Tags::hasAnyKvp(const QStringList& kvps) const
     }
   }
   return false;
+}
+
+QStringList Tags::toKvps() const
+{
+  QStringList kvps;
+  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
+  {
+    kvps.append(it.key() + "=" + it.value());
+  }
+  return kvps;
 }
 
 bool Tags::hasAnyKey(const QStringList& keys)
@@ -870,6 +906,30 @@ Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
   return tags;
 }
 
+bool Tags::intersects(const Tags& other) const
+{
+  for (Tags::const_iterator tagItr = other.begin(); tagItr != other.end(); ++tagItr)
+  {
+    if (get(tagItr.key()) == other.get(tagItr.key()))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Tags::bothContainKvp(const Tags& tags1, const Tags& tags2, const QString& kvp)
+{
+  return tags1.hasKvp(kvp) && tags2.hasKvp(kvp);
+}
+
+bool Tags::onlyOneContainsKvp(const Tags& tags1, const Tags& tags2, const QString& kvp)
+{
+  const bool firstHasKvp = tags1.hasKvp(kvp);
+  const bool secondHasKvp = tags2.hasKvp(kvp);
+  return (!firstHasKvp && secondHasKvp) || (firstHasKvp && !secondHasKvp);
+}
+
 QString Tags::getDiffString(const Tags& other) const
 {
   if (this->operator ==(other))
@@ -893,6 +953,16 @@ QString Tags::getDiffString(const Tags& other) const
     }
   }
   return diffStr.trimmed();
+}
+
+bool Tags::bothHaveInformation(const Tags& tags1, const Tags& tags2)
+{
+  return tags1.hasInformationTag() && tags2.hasInformationTag();
+}
+
+bool Tags::onlyOneHasInformation(const Tags& tags1, const Tags& tags2)
+{
+  return tags1.hasInformationTag() || tags2.hasInformationTag();
 }
 
 }

@@ -71,6 +71,11 @@ public:
 
   virtual QString getName() const { return QString::fromStdString(className()); }
 
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const;
+
 private:
 
   std::shared_ptr<MatchThreshold> _matchThreshold;

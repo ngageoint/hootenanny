@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_API_WRITER_TEST_SERVER_H
@@ -41,7 +41,7 @@ public:
 
 protected:
   /** respond() function that responds once to the OSM API Capabilities request */
-  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  bool respond(HttpConnection::HttpConnectionPtr& connection) override;
 };
 
 class PermissionsTestServer : public HttpTestServer
@@ -52,7 +52,7 @@ public:
 
 protected:
   /** respond() function that responds once to the OSM API Permissions request */
-  virtual bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 };
 
 class RetryConflictsTestServer : public HttpTestServer
@@ -71,7 +71,7 @@ protected:
    *   - Changeset Upload - responding with an HTTP 405 error for the test
    *   - Changeset Close
    */
-  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  bool respond(HttpConnection::HttpConnectionPtr& connection) override;
 };
 
 class RetryVersionTestServer : public HttpTestServer
@@ -92,11 +92,68 @@ protected:
    *  - Changeset 1 Upload - respond with updated version
    *  - Changeset Close
    */
-  virtual bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 
 private:
   /** Flag set to false until the first changeset has failed once */
   bool _has_error;
+};
+
+class ChangesetOutputTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  ChangesetOutputTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate a changeset upload.
+   *  Requests, in order:
+   *   - Capabilities
+   *   - Permissions
+   *   - Changeset Create
+   *   - Changeset Upload - responds with HTTP 200
+   *   - Changeset Upload - responds with HTTP 200
+   *   - Changeset Close
+   */
+  bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+};
+
+class ChangesetCreateFailureTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  ChangesetCreateFailureTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate a changeset create failure over and over.
+   *  Requests, in order:
+   *   - Capabilities
+   *   - Permissions
+   *   - Changeset Create Failure x6
+   */
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+};
+
+class CreateWaysFailNodesTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  CreateWaysFailNodesTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate a changeset create failure over and over.
+   *  Requests, in order:
+   *   - Capabilities
+   *   - Permissions
+   *   - Changeset Create
+   *   - Changeset Upload Failure - responds with HTTP
+   *   - Changeset Upload - responds with HTTP 200
+   *   - Changeset Close
+   */
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 };
 
 class OsmApiSampleRequestResponse
@@ -118,6 +175,12 @@ public:
   static const char* SAMPLE_CHANGESET_1_RESPONSE;
   /** Sample element GET response from '/api/0.6/way/1' */
   static const char* SAMPLE_ELEMENT_1_GET_RESPONSE;
+  /** Sample Changeset upload response bodies from '/api/0.6/changeset/1/upload' divided into two responses */
+  static const char* SAMPLE_CHANGESET_SUCCESS_1_RESPONSE;
+  static const char* SAMPLE_CHANGESET_SUCCESS_2_RESPONSE;
+  /** Sample Changeset upload response bodies for a failed response to '/api/0.6/changeset/1/upload' */
+  static const char* SAMPLE_CHANGESET_FAILURE_RESPONSE_1;
+  static const char* SAMPLE_CHANGESET_FAILURE_RESPONSE_2;
 };
 
 }

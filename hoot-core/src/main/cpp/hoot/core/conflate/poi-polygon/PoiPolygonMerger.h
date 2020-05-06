@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMERGER_H
 #define POIPOLYGONMERGER_H
@@ -81,6 +81,8 @@ public:
   virtual QString getDescription() const { return "Merges POIs into polygons"; }
 
   void setTagMergerClass(const QString& className) { _tagMergerClass = className; }
+
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 protected:
 

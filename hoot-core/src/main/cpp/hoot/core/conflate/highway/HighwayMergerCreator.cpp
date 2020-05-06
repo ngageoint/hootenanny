@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayMergerCreator.h"
 
@@ -62,7 +62,7 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
     ConstMatchPtr m = *it;
     LOG_VART(m->toString());
     const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(m.get());
-    // check to make sure all the input matches are building matches.
+    // check to make sure all the input matches are highway matches.
     if (hm == 0)
     {
       // return an empty result
@@ -75,7 +75,7 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
       // there should only be one HighwayMatch in a set.
       sublineMatcher = hm->getSublineMatcher();
       set<pair<ElementId, ElementId>> s = hm->getMatchPairs();
-      LOG_VART(s);
+      //LOG_VART(s);
       eids.insert(s.begin(), s.end());
     }
   }

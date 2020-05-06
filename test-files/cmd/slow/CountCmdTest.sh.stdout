@@ -1,18 +1,18 @@
 counting all features...
 
-Total: 47
+Total count : 47
 counting all elements...
 
-Total: 259
+Total count : 259
 counting all rivers...
 
-Total: 29
+Total count (hoot::LinearWaterwayCriterion): 29
 counting all elements that are not rivers...
 
-Total: 0
+Total count (hoot::LinearWaterwayCriterion): 0
 counting all POIs...
 
-Total: 21
+Total count (hoot::PoiCriterion): 21
 counting all elements that are not POIs...
 
-Total: 26
+Total count (hoot::PoiCriterion): 26

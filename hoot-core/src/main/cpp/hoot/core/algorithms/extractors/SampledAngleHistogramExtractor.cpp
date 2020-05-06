@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SampledAngleHistogramExtractor.h"
 
@@ -62,53 +62,83 @@ public:
   _sampleDistance(sampleDistance),
   _headingDelta(headingDelta)
   {
-
   }
 
   virtual void visit(const std::shared_ptr<const Element>& e)
   {
     if (e->getElementType() == ElementType::Way)
     {
-      const ConstWayPtr& way = _map->getWay(e->getElementId());
-
-      vector<long> wayNodes = way->getNodeIds();
-      if (wayNodes[0] != wayNodes[wayNodes.size() - 1])
+      _addWay(_map->getWay(e->getElementId()));
+    }
+    else if (e->getElementType() == ElementType::Relation)
+    {
+      const ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
+      const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+      for (size_t i = 0; i < relationMembers.size(); i++)
       {
-        wayNodes.push_back(wayNodes[0]);
-      }
-
-      vector<WayLocation> discretizedLocs;
-      WayDiscretizer wayDiscretizer(_map->shared_from_this(), way);
-      wayDiscretizer.discretize(_sampleDistance, discretizedLocs);
-
-      WayLocation lastLoc = discretizedLocs.at(0);
-      for (size_t i = 1; i < discretizedLocs.size(); i++)
-      {
-        //select a loc sampledDistance meters along the way
-        WayLocation currentLoc = discretizedLocs.at(i);
-        const double distance = currentLoc.getCoordinate().distance(lastLoc.getCoordinate());
-        //calculate the heading using some distance around the way
-        const double theta = WayHeading::calculateHeading(currentLoc, _headingDelta);
-        if (! ::qIsNaN(theta))
+        RelationData::Entry member = relationMembers[i];
+        if (member.getElementId().getType() == ElementType::Way)
         {
-          _angleHistogram.addAngle(theta, distance);
+          _addWay(_map->getWay(member.getElementId()));
         }
-        lastLoc = currentLoc;
       }
     }
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
 private:
 
   Histogram& _angleHistogram;
   double _sampleDistance;
   double _headingDelta;
+
+  void _addWay(const ConstWayPtr& way)
+  {
+    if (way)
+    {
+      vector<long> wayNodes = way->getNodeIds();
+      LOG_VART(wayNodes.size());
+      if (wayNodes[0] != wayNodes[wayNodes.size() - 1])
+      {
+        wayNodes.push_back(wayNodes[0]);
+      }
+      LOG_VART(wayNodes.size());
+
+      LOG_VART(_sampleDistance);
+      LOG_VART(_headingDelta);
+
+      vector<WayLocation> discretizedLocs;
+      WayDiscretizer wayDiscretizer(_map->shared_from_this(), way);
+      wayDiscretizer.discretize(_sampleDistance, discretizedLocs);
+
+      WayLocation lastLoc = discretizedLocs.at(0);
+      LOG_VART(lastLoc);
+      for (size_t i = 1; i < discretizedLocs.size(); i++)
+      {
+        //select a loc sampledDistance meters along the way
+        WayLocation currentLoc = discretizedLocs.at(i);
+        LOG_VART(currentLoc);
+        const double distance = currentLoc.getCoordinate().distance(lastLoc.getCoordinate());
+        LOG_VART(distance);
+        //calculate the heading using some distance around the way
+        const double theta = WayHeading::calculateHeading(currentLoc, _headingDelta);
+        LOG_VART(theta);
+        if (! ::qIsNaN(theta))
+        {
+          _angleHistogram.addAngle(theta, distance);
+        }
+        lastLoc = currentLoc;
+      }
+      LOG_VART(_angleHistogram.numBins());
+    }
+  }
 };
 
 SampledAngleHistogramExtractor::SampledAngleHistogramExtractor()
 {
+  setConfiguration(conf());
 }
 
 void SampledAngleHistogramExtractor::setConfiguration(const Settings& conf)

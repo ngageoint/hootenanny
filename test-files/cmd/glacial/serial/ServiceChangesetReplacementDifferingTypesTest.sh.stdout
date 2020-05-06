@@ -1,0 +1,55 @@
+test name:  ServiceChangesetReplacementDifferingTypesTest
+source file 1:  test-files/cmd/glacial/serial/ServiceChangesetReplacementDifferingTypesTest/input1.osm
+crop aoi:  -180,-90,180,90
+source file 2:  test-files/cmd/glacial/serial/ServiceChangesetReplacementDifferingTypesTest/input2.osm
+REF_CONVERT_OPS:  hoot::SetTagValueVisitor
+SEC_CONVERT_OPS:  hoot::SetTagValueVisitor
+replacement aoi:  11.361053,8.507705,11.363033,8.509146
+full replacement:  --full-replacement
+strict bounds: 
+geometry filters: 
+tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion
+replacement filters: 
+chain replacement filters: 
+replacement filter options: 
+retainment filters: 
+chain retainment filters: 
+retainment filter options: 
+source formats:  xml
+way snap tolerance:  5.0
+existing way node tolerance:  5.0
+disable conflation: 
+
+Writing the reference dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementDifferingTypesTest/input1.osm to an osm api db (contains features to be replaced)...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementDifferingTypesTest/ref-original.osm (contains features to be replaced)...
+
+
+Writing the secondary dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementDifferingTypesTest/input2.osm to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementDifferingTypesTest/sec-original.osm (contains features to replace with)...
+
+
+Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementDifferingTypesTest/ref-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementDifferingTypesTest/sec-original.osm over: 11.361053,8.507705,11.363033,8.509146, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementDifferingTypesTest/ServiceChangesetReplacementDifferingTypesTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
+
+
+Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementDifferingTypesTest/ServiceChangesetReplacementDifferingTypesTest-changeset-xml.osc.sql to the reference data in the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=8.50849, max_lat=8.5093049, min_lon=11.3620515, max_lon=11.3628841, num_changes=19
+Node(s) Created: 4
+Node(s) Modified: 0
+Node(s) Deleted: 10
+Way(s) Created: 1
+Way(s) Modified: 0
+Way(s) Deleted: 4
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementDifferingTypesTest-xml-replaced.osm for verification...
+

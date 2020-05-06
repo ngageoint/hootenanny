@@ -7,15 +7,21 @@ exports.experimental = false;
 exports.baseFeatureType = "POI";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
+
 // This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
 // If that ever changes, then the generic score threshold configuration options used below should 
 // be replaced with custom score threshold configuration options.
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+
 exports.searchRadius = parseFloat(hoot.get("search.radius.poi"));
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "point";
+
+// This is needed for disabling superfluous conflate ops. In the future, it may also
+// be used to replace exports.isMatchCandidate (see #3047).
+exports.matchCandidateCriterion = "hoot::PoiCriterion";
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());
@@ -57,6 +63,7 @@ var distances = [
     {k:'building',  v:'train_station',        match:500,      review:1000},
     {k:'barrier',   v:'toll_booth',           match:25,       review:50},
     {k:'barrier',   v:'border_control',       match:50,       review:100},
+    {k:'highway',   v:'turning_circle',       match:5,        review:15},
     {k:'historic',                            match:100,      review:200},
     {k:'landuse',                             match:500,      review:1000},
     {k:'landuse',   v:'built_up_area',        match:2000,     review:3000},
@@ -72,6 +79,7 @@ var distances = [
     {k:'place',     v:'village',              match:2000,     review:3000},
     {k:'power',                               match:25,       review:50},
     {k:'railway',                             match:250,      review:500},
+    {k:'railway',   v:'level_crossing',       match:25,       review:50},
     {k:'railway',   v:'station',              match:500,      review:1000},
     {k:'shop',                                match:100,      review:200},
     {k:'sport',                               match:50,       review:100},
@@ -137,9 +145,6 @@ exports.getSearchRadius = function(e)
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
- *
- * exports.matchCandidateCriterion takes precedence over this function and must
- * be commented out before using it.
  */
 exports.isMatchCandidate = function(map, e)
 {
@@ -196,13 +201,13 @@ function additiveScore(map, e1, e2) {
     var reason = result.reasons;
 
     var ignoreType = false;
-    //hoot.trace("hasName(e1): " + hasName(e1));
-    //hoot.trace("hasName(e2): " + hasName(e2));
+    hoot.trace("hasName(e1): " + hasName(e1));
+    hoot.trace("hasName(e2): " + hasName(e2));
     if (hoot.get("poi.ignore.type.if.name.present") == 'true' && hasName(e1) && hasName(e2))
     {
       ignoreType = true;
     }
-    //hoot.trace("ignoreType: " + ignoreType);
+    hoot.trace("ignoreType: " + ignoreType);
 
     var t1 = e1.getTags().toDict();
     var t2 = e2.getTags().toDict();
@@ -210,15 +215,15 @@ function additiveScore(map, e1, e2) {
     // if there is no type information to compare the name becomes more
     // important
     var oneGeneric = hasTypeTag(t1) == false || hasTypeTag(t2) == false;
-    /*if (oneGeneric)
+    if (oneGeneric)
     {
       hoot.trace("One element in the pair is generic.");
-    }*/
+    }
 
     var e1SearchRadius = exports.getSearchRadius(e1);
-    //hoot.trace("e1SearchRadius: " + e1SearchRadius);
+    hoot.trace("e1SearchRadius: " + e1SearchRadius);
     var e2SearchRadius = exports.getSearchRadius(e2);
-    //hoot.trace("e2SearchRadius: " + e2SearchRadius);
+    hoot.trace("e2SearchRadius: " + e2SearchRadius);
     var searchRadius;
     if (oneGeneric)
     {
@@ -228,16 +233,16 @@ function additiveScore(map, e1, e2) {
     {
       searchRadius = Math.min(e1SearchRadius, e2SearchRadius);
     }
-    //hoot.trace("searchRadius: " + searchRadius);
+    hoot.trace("searchRadius: " + searchRadius);
 
     var d = distance(e1, e2);
-    //hoot.trace("d: " + d);
+    hoot.trace("d: " + d);
 
     if (d > searchRadius)
     {
-      /*hoot.trace(
+      hoot.trace(
         "distance: " + d + " greater than search radius: " + searchRadius + "; returning score: " +
-        result.score);*/
+        result.score);
       return result;
     }
 
@@ -282,10 +287,25 @@ function additiveScore(map, e1, e2) {
         }
     }
 
+    var tags1 = e1.getTags();
+    var tags2 = e2.getTags();
 
-    if (isSuperClose(e1, e2)) {
+    if (isSuperClose(e1, e2)) 
+    {
+      // Adding a list here of things that don't normally have names and we want them to have a better 
+      // chance of matching if they are close together and their types match exactly. Specifically,
+      // choosing to handle railway=level_crossing as a POI rather than as part of railway conflation
+      // as its easier to implement and there are several other railway POI types being used. You *could*
+      // handle it as part of railway conflation, though.
+      if ((tags1.get("railway") == "level_crossing" && tags2.get("railway") == "level_crossing"))
+      {
+        score += 1.0;
+      }
+      else
+      {
         score += 0.5;
-        reason.push("very close together");
+      }
+      reason.push("very close together");
     }
 
     var typeScore = 0;
@@ -318,7 +338,6 @@ function additiveScore(map, e1, e2) {
         typeScore += 1;
         reason.push("similar power (electrical) type");
     }
-
 
     // if at least one feature contains a place
     var placeCount = 0;
@@ -367,8 +386,8 @@ function additiveScore(map, e1, e2) {
     result.score = score;
     result.reasons = reason;
 
-    //hoot.trace("score: " + result.score);
-    //hoot.trace("reasons: " + result.reasons);
+    hoot.trace("score: " + result.score);
+    hoot.trace("reasons: " + result.reasons);
     return result;
 }
 
@@ -389,11 +408,11 @@ exports.matchScore = function(map, e1, e2) {
 
     if (e1.getStatusString() == e2.getStatusString()) 
     {
-      //hoot.trace("same statuses: miss");
+      hoot.trace("same statuses: miss");
       return result;
     }
 
-    /*hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+    hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
     if (e1.getTags().get("note"))
     {
       hoot.trace("e1 note: " + e1.getTags().get("note"));
@@ -402,13 +421,13 @@ exports.matchScore = function(map, e1, e2) {
     if (e2.getTags().get("note"))
     {
       hoot.trace("e2 note: " + e2.getTags().get("note"));
-    }*/
+    }
 
     var additiveResult = additiveScore(map, e1, e2);
     var score = additiveResult.score;
-    //hoot.trace("score: " + score);
+    hoot.trace("score: " + score);
     var reasons = additiveResult.reasons;
-    //hoot.trace("reasons: " + reasons);
+    hoot.trace("reasons: " + reasons);
     var d = "(" + prettyNumber(distance(e1, e2)) + "m)";
 
     var matchScore;
@@ -423,8 +442,8 @@ exports.matchScore = function(map, e1, e2) {
         matchScore = {match: 1, explain: "Very similar " + d + " - " + reasons.join(", ") };
         classification = 'match';
     }
-    //hoot.trace("explanation: " + matchScore.explain);
-    //hoot.trace("classification: " + classification);
+    hoot.trace("explanation: " + matchScore.explain);
+    hoot.trace("classification: " + classification);
 
     return matchScore;
 };

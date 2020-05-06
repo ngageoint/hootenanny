@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGOUTLINEUPDATEOP_H
 #define BUILDINGOUTLINEUPDATEOP_H
@@ -30,9 +30,9 @@
 // Hoot
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 // Standard
 #include <set>
@@ -45,8 +45,7 @@ class OsmMap;
  * Goes through all building relations and updates the outline of the building by taking the union
  * of all the building parts.
  */
-class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable,
-  public OperationStatusInfo
+class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable
 {
 public:
 
@@ -72,6 +71,12 @@ public:
 
   virtual QString getDescription() const override
   { return "Updates multi-part building outlines"; }
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(BuildingCriterion::className())); }
 
 private:
 

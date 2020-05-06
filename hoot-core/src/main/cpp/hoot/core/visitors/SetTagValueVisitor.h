@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SETTAGVALUEVISITOR_H
 #define SETTAGVALUEVISITOR_H
@@ -39,8 +39,7 @@ namespace hoot
  * Sets tags on any elements with the specified key to the specified value or adds a new tag, if
  * the tag doesn't exist on the element.
  */
-class SetTagValueVisitor : public MultipleCriterionConsumerVisitor, public Configurable,
-  public OperationStatusInfo
+class SetTagValueVisitor : public MultipleCriterionConsumerVisitor, public Configurable
 {
 public:
 
@@ -66,6 +65,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Updated " + QString::number(_numAffected) + " tags"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

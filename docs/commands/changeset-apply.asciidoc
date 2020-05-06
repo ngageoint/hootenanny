@@ -29,15 +29,20 @@ changeset-apply (changeset.osc.sql) (targetUrl) [conflictAoi] [conflictTimestamp
 ==== Examples
 
 --------------------------------------
+# Apply 'changeset.osc' to 'localhost' using 'username' and 'password'
 hoot changeset-apply changeset.osc http://username:password@localhost/
 
+# Apply 'changeset.osc', 'changeset-001.osc', and 'changeset-002.osc' to 'localhost' using 'username' and 'password'
 hoot changeset-apply changeset.osc changeset-001.osc changeset-002.osc https://username:password@localhost/
 
+# Apply 'sourcedata.osm' as <create> operations to 'localhost' using 'username' and 'password', display stats and progress
 hoot changeset-apply sourcedata.osm http://username:password@localhost/ --stats --progress
 
+# Apply SQL file 'changeset.osc.sql' to 'localhost' using 'username' and 'password' to the database `databaseName'
 hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
 
-hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName -93.89258,40.96917,-93.60583,41.0425 "2016-05-04 10:15:37.000"-93.89258,40.96917,-93.60583,41.0425
+# Apply SQL file 'changeset.osc.sql' to 'localhost' using 'username' and 'password' to the database `databaseName' with conflict AOI and conflict timestamp
+hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName -93.89258,40.96917,-93.60583,41.0425 "2016-05-04 10:15:37.000"
 --------------------------------------
 
 === See Also

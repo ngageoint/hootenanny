@@ -76,6 +76,8 @@ public:
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   // white box testing
@@ -101,6 +103,7 @@ private:
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
+  int _memoryCheckUpdateInterval;
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;

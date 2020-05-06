@@ -26,6 +26,8 @@
  */
 package hoot.services.job;
 
+import javax.ws.rs.WebApplicationException;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +83,8 @@ class JobRunnable implements Runnable {
                 CommandResult result = command.execute();
 
                 if (result.failed()) {
-                    if (JobStatus.FAILED.equals(jobStatusManager.getJobStatusObj(job.getJobId()).getStatus())) {
+                    //Cancelled jobs also have non-zero exit code, but should not be marked FAILED
+                    if (!JobStatus.CANCELLED.equals(jobStatusManager.getJobStatusObj(job.getJobId()).getStatus())) {
                         jobStatusManager.setFailed(job.getJobId(), "Command with ID = " + result.getId() + " caused the failure.");
                     }
                     break;
@@ -102,9 +105,9 @@ class JobRunnable implements Runnable {
                 DbUtils.checkConflicted(job.getJobId(), parentId);
             }
         }
-        catch (Exception e) {
-            jobStatusManager.setFailed(job.getJobId(),
-                    "Job with ID = " + job.getJobId() + " failed with the following error --> " + ExceptionUtils.getStackTrace(e));
+        catch (WebApplicationException e) {
+            logger.error("Job with ID = " + job.getJobId() + " failed with the following error --> " + ExceptionUtils.getStackTrace(e));
+            jobStatusManager.setFailed(job.getJobId(), e.getResponse().getEntity().toString());
             throw e;
         }
 

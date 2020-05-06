@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TagDistribution.h"
@@ -200,16 +200,18 @@ void TagDistribution::_countTags(const QString& input, std::map<QString, int>& t
 
       // see status logging note in corresponding location in CountCmd::_count
       const long runningTotal = _total + elementCtr;
-      if (runningTotal > 0 && runningTotal % _taskStatusUpdateInterval == 0)
+      if (runningTotal > 0 && runningTotal % (_taskStatusUpdateInterval * 10) == 0)
       {
-        PROGRESS_INFO("Processed " << QString::number(runningTotal) << " elements.");
+        PROGRESS_INFO("Processed " << StringUtils::formatLargeNumber(runningTotal) << " elements.");
       }
     }
   }
 
   if (_total > 0)
   {
-    LOG_INFO("Processed " << StringUtils::formatLargeNumber(_total) << " elements.");
+    LOG_INFO(
+      "Processed " << StringUtils::formatLargeNumber(_total) << " elements from " <<
+      input.right(25) << ".");
   }
 
   LOG_VART(inputTotal);

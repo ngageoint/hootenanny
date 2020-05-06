@@ -1,0 +1,1218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="3.8794559316" minlon="11.50816534871" maxlat="3.88108413909" maxlon="11.51019803541"/>
+    <node visible="true" id="-18394289" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802335272100001" lon="11.5086572067499997"/>
+    <node visible="true" id="-18394288" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802925102799999" lon="11.5087642277299995"/>
+    <node visible="true" id="-18394287" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802928648099999" lon="11.5086548807000000"/>
+    <node visible="true" id="-18394286" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802276694100000" lon="11.5085365879000001"/>
+    <node visible="true" id="-18394285" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801583311200001" lon="11.5085744685600009"/>
+    <node visible="true" id="-18394284" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802080029599999" lon="11.5086711510700006"/>
+    <node visible="true" id="-18394283" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805570690500000" lon="11.5087464035000000"/>
+    <node visible="true" id="-18394282" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8797967519699998" lon="11.5090927763199993"/>
+    <node visible="true" id="-18394281" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800733098200002" lon="11.5082207718399996"/>
+    <node visible="true" id="-18394280" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801177003800000" lon="11.5083013155200007"/>
+    <node visible="true" id="-18394279" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800423567900002" lon="11.5083424770100002"/>
+    <node visible="true" id="-18394278" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800894415800000" lon="11.5084279092100008"/>
+    <node visible="true" id="-18394277" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802436677099998" lon="11.5083436528699998"/>
+    <node visible="true" id="-18394276" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803139401800002" lon="11.5083052618200004"/>
+    <node visible="true" id="-18394275" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803919640400002" lon="11.5084468309899997"/>
+    <node visible="true" id="-18394274" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803216915599998" lon="11.5084852220199991"/>
+    <node visible="true" id="-18394273" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802274916199999" lon="11.5095630084400007"/>
+    <node visible="true" id="-18394272" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803224166799999" lon="11.5095303959499997"/>
+    <node visible="true" id="-18394271" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8797684860200001" lon="11.5084915958899998"/>
+    <node visible="true" id="-18394270" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799148181900001" lon="11.5084121535200001"/>
+    <node visible="true" id="-18394269" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798876530199999" lon="11.5083628641699995"/>
+    <node visible="true" id="-18394268" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799206923799998" lon="11.5083448142000009"/>
+    <node visible="true" id="-18394267" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799034669900001" lon="11.5083135598999995"/>
+    <node visible="true" id="-18394266" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798505337200000" lon="11.5083550658499991"/>
+    <node visible="true" id="-18394265" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803915425300000" lon="11.5090786480199991"/>
+    <node visible="true" id="-18394264" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803393668299999" lon="11.5089839784700008"/>
+    <node visible="true" id="-18394263" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803964386600001" lon="11.5089527992199994"/>
+    <node visible="true" id="-18394262" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803353093199999" lon="11.5088418838600006"/>
+    <node visible="true" id="-18394261" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805241580000001" lon="11.5092339630100007"/>
+    <node visible="true" id="-18394260" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804838387900000" lon="11.5091608062299997"/>
+    <node visible="true" id="-18394259" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803815739599998" lon="11.5092166750999993"/>
+    <node visible="true" id="-18394258" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805170507700000" lon="11.5092378457999995"/>
+    <node visible="true" id="-18394257" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801048786900001" lon="11.5092429240699996"/>
+    <node visible="true" id="-18394256" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801228749600001" lon="11.5092419018599994"/>
+    <node visible="true" id="-18394255" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800184367599999" lon="11.5091558152799998"/>
+    <node visible="true" id="-18394254" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800781832500002" lon="11.5088268111899996"/>
+    <node visible="true" id="-18394253" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799425319099998" lon="11.5088218757000007"/>
+    <node visible="true" id="-18394252" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801500981700001" lon="11.5088006865299999"/>
+    <node visible="true" id="-18394251" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801925208300001" lon="11.5087852755700002"/>
+    <node visible="true" id="-18394250" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801477612099999" lon="11.5087040621399996"/>
+    <node visible="true" id="-18394249" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804218931799999" lon="11.5092898318600003"/>
+    <node visible="true" id="-18394248" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803706584200000" lon="11.5093178221999999"/>
+    <node visible="true" id="-18394247" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8797691096100002" lon="11.5087018216600008"/>
+    <node visible="true" id="-18394246" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798284501600002" lon="11.5088540165900000"/>
+    <node visible="true" id="-18394245" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798734893300000" lon="11.5086447972800006"/>
+    <node visible="true" id="-18394244" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798215869399999" lon="11.5085742427200000"/>
+    <node visible="true" id="-18394243" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8797933852000002" lon="11.5085230725700001"/>
+    <node visible="true" id="-18394242" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8797076468200000" lon="11.5085903015800000"/>
+    <node visible="true" id="-18394241" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802495433100002" lon="11.5088887392100006"/>
+    <node visible="true" id="-18394240" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800867151200000" lon="11.5085932979999992"/>
+    <node visible="true" id="-18394239" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799227248000001" lon="11.5086178991299999"/>
+    <node visible="true" id="-18394238" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800953121999999" lon="11.5086088968499993"/>
+    <node visible="true" id="-18394237" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799050732100002" lon="11.5090505373000003"/>
+    <node visible="true" id="-18394236" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804193668600000" lon="11.5094336144499998"/>
+    <node visible="true" id="-18394235" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804958192600001" lon="11.5094077132199999"/>
+    <node visible="true" id="-18394234" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804291425800002" lon="11.5092858713999995"/>
+    <node visible="true" id="-18394233" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799102596599999" lon="11.5085649947600004"/>
+    <node visible="true" id="-18394232" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798861061899999" lon="11.5085781901999997"/>
+    <node visible="true" id="-18394231" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798695032300001" lon="11.5085480652399994"/>
+    <node visible="true" id="-18394230" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798347475599999" lon="11.5085670528499993"/>
+    <node visible="true" id="-18394229" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798678703800000" lon="11.5086335215400002"/>
+    <node visible="true" id="-18394228" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799294776300002" lon="11.5085998644699998"/>
+    <node visible="true" id="-18394227" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799594573400000" lon="11.5085978315199995"/>
+    <node visible="true" id="-18394226" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800591859400000" lon="11.5085433481300008"/>
+    <node visible="true" id="-18394225" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805101861800000" lon="11.5095906779699995"/>
+    <node visible="true" id="-18394224" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8797332397100002" lon="11.5089313246600007"/>
+    <node visible="true" id="-18394223" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8797194024300001" lon="11.5088961495500008"/>
+    <node visible="true" id="-18394222" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800587068699999" lon="11.5087396944900000"/>
+    <node visible="true" id="-18394221" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800031757600002" lon="11.5086389369499997"/>
+    <node visible="true" id="-18394220" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799328233699999" lon="11.5086572588100005"/>
+    <node visible="true" id="-18394219" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799304918800002" lon="11.5087909957800001"/>
+    <node visible="true" id="-18394218" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798324994200000" lon="11.5088644020000004"/>
+    <node visible="true" id="-18394217" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798664205700000" lon="11.5089514020399992"/>
+    <node visible="true" id="-18394216" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799709742099999" lon="11.5089106321500001"/>
+    <node visible="true" id="-18394215" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799555284700000" lon="11.5088713682199995"/>
+    <node visible="true" id="-18394214" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800172883499999" lon="11.5084673277400000"/>
+    <node visible="true" id="-18394213" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799619029799999" lon="11.5084975857000007"/>
+    <node visible="true" id="-18394212" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799175597600000" lon="11.5085218111500005"/>
+    <node visible="true" id="-18394211" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799385433600002" lon="11.5086795527600003"/>
+    <node visible="true" id="-18394210" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8809094125399999" lon="11.5094883501700007"/>
+    <node visible="true" id="-18394209" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798960845099999" lon="11.5087027487300002"/>
+    <node visible="true" id="-18394208" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8808542038899998" lon="11.5093760498000002"/>
+    <node visible="true" id="-18394207" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799054679700000" lon="11.5087268151500002"/>
+    <node visible="true" id="-18394206" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8808255139400001" lon="11.5095292354600005"/>
+    <node visible="true" id="-18394205" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799479006599999" lon="11.5087160233500008"/>
+    <node visible="true" id="-18394204" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799637247700001" lon="11.5087776986599994"/>
+    <node visible="true" id="-18394203" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806023902500000" lon="11.5088286360000005"/>
+    <node visible="true" id="-18394202" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806069348899999" lon="11.5090713132100007"/>
+    <node visible="true" id="-18394201" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807062384100002" lon="11.5090170621300008"/>
+    <node visible="true" id="-18394200" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799757252200000" lon="11.5082520084599995"/>
+    <node visible="true" id="-18394199" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799480862000002" lon="11.5082175315799997"/>
+    <node visible="true" id="-18394198" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799101691800000" lon="11.5081653487099995"/>
+    <node visible="true" id="-18394197" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798453821300001" lon="11.5082371304199995"/>
+    <node visible="true" id="-18394196" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798471305400000" lon="11.5082389308700002"/>
+    <node visible="true" id="-18394195" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8797332394600001" lon="11.5084470384300008"/>
+    <node visible="true" id="-18394194" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8796930663000002" lon="11.5084785389299995"/>
+    <node visible="true" id="-18394193" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8795496474200002" lon="11.5085909962800006"/>
+    <node visible="true" id="-18394192" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8796097931500002" lon="11.5086670303999998"/>
+    <node visible="true" id="-18394191" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805364606900001" lon="11.5093939443500002"/>
+    <node visible="true" id="-18394190" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805207076300001" lon="11.5093653613499995"/>
+    <node visible="true" id="-18394189" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805828333600001" lon="11.5089019007399997"/>
+    <node visible="true" id="-18394188" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805563246800001" lon="11.5088538023700000"/>
+    <node visible="true" id="-18394187" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804409880000001" lon="11.5096333130299993"/>
+    <node visible="true" id="-18394186" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804737081799998" lon="11.5096859546699992"/>
+    <node visible="true" id="-18394185" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805429063600001" lon="11.5096433196200003"/>
+    <node visible="true" id="-18394184" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799000028199999" lon="11.5082933769100002"/>
+    <node visible="true" id="-18394183" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8797902119700001" lon="11.5083019945800000"/>
+    <node visible="true" id="-18394182" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799140093900002" lon="11.5083078004000008"/>
+    <node visible="true" id="-18394181" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803307190499998" lon="11.5095546876900006"/>
+    <node visible="true" id="-18394180" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804489999700000" lon="11.5095203174199998"/>
+    <node visible="true" id="-18394179" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805787224300001" lon="11.5094706257600006"/>
+    <node visible="true" id="-18394178" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798016104899999" lon="11.5093569739599992"/>
+    <node visible="true" id="-18394177" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798645831499998" lon="11.5094097623800007"/>
+    <node visible="true" id="-18394176" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803628483499999" lon="11.5090943240999994"/>
+    <node visible="true" id="-18394175" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803047121400001" lon="11.5089888395699997"/>
+    <node visible="true" id="-18394174" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802761755200001" lon="11.5092798474099993"/>
+    <node visible="true" id="-18394173" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803352773299999" lon="11.5092765231200005"/>
+    <node visible="true" id="-18394172" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802826088100000" lon="11.5093932238899992"/>
+    <node visible="true" id="-18394171" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802968301799998" lon="11.5094555329099997"/>
+    <node visible="true" id="-18394170" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803028325200000" lon="11.5094730950099997"/>
+    <node visible="true" id="-18394169" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803780235500001" lon="11.5094476211100005"/>
+    <node visible="true" id="-18394168" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802256088400000" lon="11.5093964299400007"/>
+    <node visible="true" id="-18394167" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802231093100001" lon="11.5093428420099997"/>
+    <node visible="true" id="-18394166" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802726452199998" lon="11.5091409619499991"/>
+    <node visible="true" id="-18394165" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802452742700000" lon="11.5090000969300004"/>
+    <node visible="true" id="-18394164" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802181486800000" lon="11.5092364901900002"/>
+    <node visible="true" id="-18394163" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802738802799999" lon="11.5092393975600000"/>
+    <node visible="true" id="-18394162" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803342199699999" lon="11.5092425453300002"/>
+    <node visible="true" id="-18394161" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802780594900002" lon="11.5091406456000005"/>
+    <node visible="true" id="-18394160" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805755428699999" lon="11.5092058906499997"/>
+    <node visible="true" id="-18394159" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806214814700000" lon="11.5091807936800006"/>
+    <node visible="true" id="-18394158" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806566763900001" lon="11.5091615661500004"/>
+    <node visible="true" id="-18394157" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807531377300002" lon="11.5093820144700008"/>
+    <node visible="true" id="-18394156" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807244860500001" lon="11.5093237339099996"/>
+    <node visible="true" id="-18394155" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806519864900002" lon="11.5094928420200002"/>
+    <node visible="true" id="-18394154" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806331386899999" lon="11.5094545036000007"/>
+    <node visible="true" id="-18394153" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803522925400000" lon="11.5092755660799995"/>
+    <node visible="true" id="-18394152" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803746431800001" lon="11.5093880472799999"/>
+    <node visible="true" id="-18394151" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803587258299999" lon="11.5093889425700002"/>
+    <node visible="true" id="-18394150" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807996907400000" lon="11.5091866258000000"/>
+    <node visible="true" id="-18394149" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807559799100000" lon="11.5091073150900005"/>
+    <node visible="true" id="-18394148" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806866209800002" lon="11.5091452069500004"/>
+    <node visible="true" id="-18394147" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807303318200002" lon="11.5092245176500008"/>
+    <node visible="true" id="-18394146" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806257527299999" lon="11.5091054570299995"/>
+    <node visible="true" id="-18394145" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805446192100002" lon="11.5091497815399997"/>
+    <node visible="true" id="-18394143" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800269052799998" lon="11.5093021304600001"/>
+    <node visible="true" id="-18394140" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800694658600001" lon="11.5092855343099991"/>
+    <node visible="true" id="-18394139" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8810841390899999" lon="11.5101829931499999"/>
+    <node visible="true" id="-18394137" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800538441199999" lon="11.5092458229000005"/>
+    <node visible="true" id="-18394136" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8810652632400000" lon="11.5101080639699997"/>
+    <node visible="true" id="-18394134" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800196871099999" lon="11.5091589937399998"/>
+    <node visible="true" id="-18394132" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799259437500000" lon="11.5092032915899996"/>
+    <node visible="true" id="-18394129" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799531224399999" lon="11.5092602551900001"/>
+    <node visible="true" id="-18394126" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799810707000000" lon="11.5093188317700008"/>
+    <node visible="true" id="-18394123" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798232208600001" lon="11.5092518745299994"/>
+    <node visible="true" id="-18394121" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799369132299999" lon="11.5088240472599992"/>
+    <node visible="true" id="-18394119" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801115158199999" lon="11.5091503766900001"/>
+    <node visible="true" id="-18394117" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801174591100001" lon="11.5091500294299998"/>
+    <node visible="true" id="-18394116" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8808083846599999" lon="11.5092828485900007"/>
+    <node visible="true" id="-18394113" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802128748100002" lon="11.5091444543199994"/>
+    <node visible="true" id="-18394110" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802050394299998" lon="11.5090077172999994"/>
+    <node visible="true" id="-18394107" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801495751499999" lon="11.5090182220799999"/>
+    <node visible="true" id="-18394104" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801042321399999" lon="11.5090268099199999"/>
+    <node visible="true" id="-18394101" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800249681399999" lon="11.5092980704300007"/>
+    <node visible="true" id="-18394098" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800596689000000" lon="11.5094307641599993"/>
+    <node visible="true" id="-18394095" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800830119300000" lon="11.5094197240499998"/>
+    <node visible="true" id="-18394092" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800621714000001" lon="11.5094932786800008"/>
+    <node visible="true" id="-18394090" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801317915900002" lon="11.5094905161199996"/>
+    <node visible="true" id="-18394088" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801244063500002" lon="11.5093060266399991"/>
+    <node visible="true" id="-18394087" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801081471000001" lon="11.5092999620699992"/>
+    <node visible="true" id="-18394086" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802017663799999" lon="11.5094877394899999"/>
+    <node visible="true" id="-18394085" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802294306700000" lon="11.5094783671300007"/>
+    <node visible="true" id="-18394084" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798099147500000" lon="11.5092639462400008"/>
+    <node visible="true" id="-18394083" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798508195700001" lon="11.5093086394699995"/>
+    <node visible="true" id="-18394082" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798525672499999" lon="11.5093105490099994"/>
+    <node visible="true" id="-18394081" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8798966781900002" lon="11.5093587453099993"/>
+    <node visible="true" id="-18394080" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799076287499998" lon="11.5093707100699998"/>
+    <node visible="true" id="-18394079" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799341952200002" lon="11.5094263905500007"/>
+    <node visible="true" id="-18394078" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799924247500002" lon="11.5093988508400003"/>
+    <node visible="true" id="-18394077" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800172283099998" lon="11.5094508364799992"/>
+    <node visible="true" id="-18394076" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804629522399998" lon="11.5087978210399999"/>
+    <node visible="true" id="-18394075" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804365005500001" lon="11.5088122720299992"/>
+    <node visible="true" id="-18394074" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804294411800000" lon="11.5087994632499999"/>
+    <node visible="true" id="-18394073" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803695726499998" lon="11.5088321703999998"/>
+    <node visible="true" id="-18394072" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804268874700001" lon="11.5089361645399997"/>
+    <node visible="true" id="-18394071" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804484619099999" lon="11.5089753100099994"/>
+    <node visible="true" id="-18394070" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807299064000000" lon="11.5094548702400008"/>
+    <node visible="true" id="-18394069" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807775424700002" lon="11.5094316563299994"/>
+    <node visible="true" id="-18394066" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807025714200001" lon="11.5092396835800006"/>
+    <node visible="true" id="-18394065" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806651923000000" lon="11.5092601043799991"/>
+    <node visible="true" id="-18394064" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806314875500001" lon="11.5092785178000003"/>
+    <node visible="true" id="-18394062" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805607616000000" lon="11.5093171564799999"/>
+    <node visible="true" id="-18394061" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805544621300001" lon="11.5093205979699995"/>
+    <node visible="true" id="-18394058" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805656122699999" lon="11.5093408292500001"/>
+    <node visible="true" id="-18394055" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806144872699999" lon="11.5094295100400004"/>
+    <node visible="true" id="-18394052" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805347821299998" lon="11.5089281518999993"/>
+    <node visible="true" id="-18394049" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803828276200001" lon="11.5087148858900008"/>
+    <node visible="true" id="-18394046" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803932599199999" lon="11.5087338146300002"/>
+    <node visible="true" id="-18394031" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807703052800000" lon="11.5094169351000009"/>
+    <node visible="true" id="-18394028" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807569437399998" lon="11.5093897563100001"/>
+    <node visible="true" id="-18394025" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806590258000000" lon="11.5094374735000002"/>
+    <node visible="true" id="-18394022" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806511826099999" lon="11.5094215196200000"/>
+    <node visible="true" id="-18394019" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806235445700001" lon="11.5094349881400007"/>
+    <node visible="true" id="-18394016" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805138284199998" lon="11.5086679460900001"/>
+    <node visible="true" id="-18394013" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804571594300001" lon="11.5085651238299995"/>
+    <node visible="true" id="-18394010" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8803365909399998" lon="11.5086309923899996"/>
+    <node visible="true" id="-18394008" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8810239000600002" lon="11.5101980354099993"/>
+    <node visible="true" id="-18394007" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8810050244899998" lon="11.5101231061699991"/>
+    <node visible="true" id="-18394006" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799874212100001" lon="11.5089524413600000"/>
+    <node visible="true" id="-18394005" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8800099263300001" lon="11.5090096506500004"/>
+    <node visible="true" id="-18394004" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799674533999999" lon="11.5090262126400003"/>
+    <node visible="true" id="-18394003" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8799771562099998" lon="11.5090508777499991"/>
+    <node visible="true" id="-18394002" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8802542146199999" lon="11.5088972150100002"/>
+    <node visible="true" id="-18394001" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801909213900001" lon="11.5089103167300006"/>
+    <node visible="true" id="-18394000" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8806758307700000" lon="11.5093589887600007"/>
+    <node visible="true" id="-18393999" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8807321817000000" lon="11.5092942069799999"/>
+    <node visible="true" id="-18393998" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8797977642400001" lon="11.5088658727599995"/>
+    <node visible="true" id="-18393997" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8794559315999999" lon="11.5091604156899994"/>
+    <node visible="true" id="-18393996" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8794730478499999" lon="11.5091789300399991"/>
+    <node visible="true" id="-18393995" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8795108822100000" lon="11.5091442586100001"/>
+    <node visible="true" id="-18393994" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8794937659600000" lon="11.5091257442699995"/>
+    <node visible="true" id="-18393993" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801297421299998" lon="11.5089229808599995"/>
+    <node visible="true" id="-18393992" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8801136499300002" lon="11.5089263119500007"/>
+    <way visible="true" id="-18394144" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394006"/>
+        <nd ref="-18394216"/>
+        <nd ref="-18394215"/>
+        <nd ref="-18394254"/>
+        <nd ref="-18393992"/>
+        <nd ref="-18394006"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.963Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394142" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394167"/>
+        <nd ref="-18394088"/>
+        <nd ref="-18394087"/>
+        <nd ref="-18394257"/>
+        <nd ref="-18394256"/>
+        <nd ref="-18394164"/>
+        <nd ref="-18394167"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.963Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394141" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394113"/>
+        <nd ref="-18394164"/>
+        <nd ref="-18394256"/>
+        <nd ref="-18394117"/>
+        <nd ref="-18394113"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.963Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394138" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394104"/>
+        <nd ref="-18394119"/>
+        <nd ref="-18394255"/>
+        <nd ref="-18394003"/>
+        <nd ref="-18394104"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.963Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394135" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394255"/>
+        <nd ref="-18394119"/>
+        <nd ref="-18394117"/>
+        <nd ref="-18394256"/>
+        <nd ref="-18394257"/>
+        <nd ref="-18394137"/>
+        <nd ref="-18394134"/>
+        <nd ref="-18394255"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.963Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394133" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394155"/>
+        <nd ref="-18394154"/>
+        <nd ref="-18394019"/>
+        <nd ref="-18394022"/>
+        <nd ref="-18394025"/>
+        <nd ref="-18394028"/>
+        <nd ref="-18394031"/>
+        <nd ref="-18394069"/>
+        <nd ref="-18394070"/>
+        <nd ref="-18394155"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.984Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394131" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394046"/>
+        <nd ref="-18394049"/>
+        <nd ref="-18394010"/>
+        <nd ref="-18394013"/>
+        <nd ref="-18394016"/>
+        <nd ref="-18394046"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.984Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394130" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394055"/>
+        <nd ref="-18394058"/>
+        <nd ref="-18394061"/>
+        <nd ref="-18394062"/>
+        <nd ref="-18394064"/>
+        <nd ref="-18394000"/>
+        <nd ref="-18394055"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.985Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394128" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394071"/>
+        <nd ref="-18394072"/>
+        <nd ref="-18394073"/>
+        <nd ref="-18394074"/>
+        <nd ref="-18394075"/>
+        <nd ref="-18394076"/>
+        <nd ref="-18394052"/>
+        <nd ref="-18394071"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.985Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394127" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394165"/>
+        <nd ref="-18394110"/>
+        <nd ref="-18394107"/>
+        <nd ref="-18393993"/>
+        <nd ref="-18394001"/>
+        <nd ref="-18394002"/>
+        <nd ref="-18394175"/>
+        <nd ref="-18394165"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.985Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394125" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394064"/>
+        <nd ref="-18394065"/>
+        <nd ref="-18394066"/>
+        <nd ref="-18393999"/>
+        <nd ref="-18394000"/>
+        <nd ref="-18394064"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.985Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394124" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18393994"/>
+        <nd ref="-18393995"/>
+        <nd ref="-18393996"/>
+        <nd ref="-18393997"/>
+        <nd ref="-18393994"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.986Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394122" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394107"/>
+        <nd ref="-18394104"/>
+        <nd ref="-18394003"/>
+        <nd ref="-18394004"/>
+        <nd ref="-18394005"/>
+        <nd ref="-18394006"/>
+        <nd ref="-18393992"/>
+        <nd ref="-18393993"/>
+        <nd ref="-18394107"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.986Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394120" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394174"/>
+        <nd ref="-18394173"/>
+        <nd ref="-18394153"/>
+        <nd ref="-18394151"/>
+        <nd ref="-18394172"/>
+        <nd ref="-18394174"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.998Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394118" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394147"/>
+        <nd ref="-18394148"/>
+        <nd ref="-18394149"/>
+        <nd ref="-18394150"/>
+        <nd ref="-18394147"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.999Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394115" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394158"/>
+        <nd ref="-18394159"/>
+        <nd ref="-18394160"/>
+        <nd ref="-18394145"/>
+        <nd ref="-18394146"/>
+        <nd ref="-18394158"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.999Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394114" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394163"/>
+        <nd ref="-18394174"/>
+        <nd ref="-18394172"/>
+        <nd ref="-18394168"/>
+        <nd ref="-18394167"/>
+        <nd ref="-18394164"/>
+        <nd ref="-18394163"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.000Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394112" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394168"/>
+        <nd ref="-18394172"/>
+        <nd ref="-18394151"/>
+        <nd ref="-18394152"/>
+        <nd ref="-18394169"/>
+        <nd ref="-18394170"/>
+        <nd ref="-18394171"/>
+        <nd ref="-18394085"/>
+        <nd ref="-18394168"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.999Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394111" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394166"/>
+        <nd ref="-18394165"/>
+        <nd ref="-18394175"/>
+        <nd ref="-18394176"/>
+        <nd ref="-18394161"/>
+        <nd ref="-18394166"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.000Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394109" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394162"/>
+        <nd ref="-18394173"/>
+        <nd ref="-18394174"/>
+        <nd ref="-18394163"/>
+        <nd ref="-18394162"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.000Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394108" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394165"/>
+        <nd ref="-18394166"/>
+        <nd ref="-18394113"/>
+        <nd ref="-18394110"/>
+        <nd ref="-18394165"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.000Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394106" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394113"/>
+        <nd ref="-18394166"/>
+        <nd ref="-18394161"/>
+        <nd ref="-18394162"/>
+        <nd ref="-18394163"/>
+        <nd ref="-18394164"/>
+        <nd ref="-18394113"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.000Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394105" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394140"/>
+        <nd ref="-18394087"/>
+        <nd ref="-18394088"/>
+        <nd ref="-18394090"/>
+        <nd ref="-18394092"/>
+        <nd ref="-18394098"/>
+        <nd ref="-18394095"/>
+        <nd ref="-18394143"/>
+        <nd ref="-18394140"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.000Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394103" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394167"/>
+        <nd ref="-18394168"/>
+        <nd ref="-18394085"/>
+        <nd ref="-18394086"/>
+        <nd ref="-18394090"/>
+        <nd ref="-18394088"/>
+        <nd ref="-18394167"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.000Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394102" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394081"/>
+        <nd ref="-18394082"/>
+        <nd ref="-18394083"/>
+        <nd ref="-18394129"/>
+        <nd ref="-18394126"/>
+        <nd ref="-18394081"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.001Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394100" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394101"/>
+        <nd ref="-18394143"/>
+        <nd ref="-18394095"/>
+        <nd ref="-18394098"/>
+        <nd ref="-18394077"/>
+        <nd ref="-18394078"/>
+        <nd ref="-18394079"/>
+        <nd ref="-18394080"/>
+        <nd ref="-18394081"/>
+        <nd ref="-18394126"/>
+        <nd ref="-18394101"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.000Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394099" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394104"/>
+        <nd ref="-18394107"/>
+        <nd ref="-18394110"/>
+        <nd ref="-18394113"/>
+        <nd ref="-18394117"/>
+        <nd ref="-18394119"/>
+        <nd ref="-18394104"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.001Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394097" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394129"/>
+        <nd ref="-18394083"/>
+        <nd ref="-18394084"/>
+        <nd ref="-18394123"/>
+        <nd ref="-18394132"/>
+        <nd ref="-18394129"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.001Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394096" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394205"/>
+        <nd ref="-18394211"/>
+        <nd ref="-18394220"/>
+        <nd ref="-18394221"/>
+        <nd ref="-18394222"/>
+        <nd ref="-18394204"/>
+        <nd ref="-18394205"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.001Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394094" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394207"/>
+        <nd ref="-18394205"/>
+        <nd ref="-18394204"/>
+        <nd ref="-18394219"/>
+        <nd ref="-18394207"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.001Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394093" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394212"/>
+        <nd ref="-18394213"/>
+        <nd ref="-18394214"/>
+        <nd ref="-18394226"/>
+        <nd ref="-18394227"/>
+        <nd ref="-18394212"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.002Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394091" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394205"/>
+        <nd ref="-18394207"/>
+        <nd ref="-18394209"/>
+        <nd ref="-18394211"/>
+        <nd ref="-18394205"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.001Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394089" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394228"/>
+        <nd ref="-18394229"/>
+        <nd ref="-18394230"/>
+        <nd ref="-18394231"/>
+        <nd ref="-18394232"/>
+        <nd ref="-18394233"/>
+        <nd ref="-18394228"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:09.002Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394068" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394008"/>
+        <nd ref="-18394007"/>
+        <nd ref="-18394136"/>
+        <nd ref="-18394139"/>
+        <nd ref="-18394008"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.915Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394067" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394028"/>
+        <nd ref="-18394157"/>
+        <nd ref="-18394156"/>
+        <nd ref="-18394116"/>
+        <nd ref="-18394208"/>
+        <nd ref="-18394031"/>
+        <nd ref="-18394028"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.919Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394063" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394206"/>
+        <nd ref="-18394069"/>
+        <nd ref="-18394031"/>
+        <nd ref="-18394208"/>
+        <nd ref="-18394210"/>
+        <nd ref="-18394206"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.929Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394060" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394225"/>
+        <nd ref="-18394185"/>
+        <nd ref="-18394186"/>
+        <nd ref="-18394187"/>
+        <nd ref="-18394225"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.940Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394059" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394065"/>
+        <nd ref="-18394064"/>
+        <nd ref="-18394062"/>
+        <nd ref="-18394258"/>
+        <nd ref="-18394261"/>
+        <nd ref="-18394160"/>
+        <nd ref="-18394159"/>
+        <nd ref="-18394065"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.956Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394057" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394082"/>
+        <nd ref="-18394081"/>
+        <nd ref="-18394080"/>
+        <nd ref="-18394177"/>
+        <nd ref="-18394178"/>
+        <nd ref="-18394082"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.956Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394056" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394236"/>
+        <nd ref="-18394235"/>
+        <nd ref="-18394191"/>
+        <nd ref="-18394179"/>
+        <nd ref="-18394180"/>
+        <nd ref="-18394236"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.957Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394054" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394179"/>
+        <nd ref="-18394191"/>
+        <nd ref="-18394190"/>
+        <nd ref="-18394058"/>
+        <nd ref="-18394055"/>
+        <nd ref="-18394179"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.957Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394053" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394161"/>
+        <nd ref="-18394176"/>
+        <nd ref="-18394265"/>
+        <nd ref="-18394264"/>
+        <nd ref="-18394263"/>
+        <nd ref="-18394072"/>
+        <nd ref="-18394071"/>
+        <nd ref="-18394145"/>
+        <nd ref="-18394160"/>
+        <nd ref="-18394261"/>
+        <nd ref="-18394260"/>
+        <nd ref="-18394259"/>
+        <nd ref="-18394162"/>
+        <nd ref="-18394161"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.957Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394051" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394170"/>
+        <nd ref="-18394169"/>
+        <nd ref="-18394236"/>
+        <nd ref="-18394180"/>
+        <nd ref="-18394181"/>
+        <nd ref="-18394272"/>
+        <nd ref="-18394170"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.957Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394050" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394013"/>
+        <nd ref="-18394010"/>
+        <nd ref="-18394287"/>
+        <nd ref="-18394286"/>
+        <nd ref="-18394274"/>
+        <nd ref="-18394275"/>
+        <nd ref="-18394013"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.957Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394048" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394149"/>
+        <nd ref="-18394148"/>
+        <nd ref="-18394158"/>
+        <nd ref="-18394146"/>
+        <nd ref="-18394202"/>
+        <nd ref="-18394201"/>
+        <nd ref="-18394149"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.957Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394047" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394267"/>
+        <nd ref="-18394182"/>
+        <nd ref="-18394281"/>
+        <nd ref="-18394280"/>
+        <nd ref="-18394279"/>
+        <nd ref="-18394270"/>
+        <nd ref="-18394269"/>
+        <nd ref="-18394268"/>
+        <nd ref="-18394267"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.958Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394045" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394278"/>
+        <nd ref="-18394214"/>
+        <nd ref="-18394213"/>
+        <nd ref="-18394270"/>
+        <nd ref="-18394279"/>
+        <nd ref="-18394278"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.958Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394044" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394184"/>
+        <nd ref="-18394196"/>
+        <nd ref="-18394197"/>
+        <nd ref="-18394198"/>
+        <nd ref="-18394199"/>
+        <nd ref="-18394200"/>
+        <nd ref="-18394184"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.959Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394043" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394196"/>
+        <nd ref="-18394184"/>
+        <nd ref="-18394182"/>
+        <nd ref="-18394267"/>
+        <nd ref="-18394266"/>
+        <nd ref="-18394183"/>
+        <nd ref="-18394196"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.958Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394042" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394071"/>
+        <nd ref="-18394052"/>
+        <nd ref="-18394189"/>
+        <nd ref="-18394188"/>
+        <nd ref="-18394203"/>
+        <nd ref="-18394201"/>
+        <nd ref="-18394202"/>
+        <nd ref="-18394146"/>
+        <nd ref="-18394145"/>
+        <nd ref="-18394071"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.959Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394041" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394147"/>
+        <nd ref="-18394066"/>
+        <nd ref="-18394065"/>
+        <nd ref="-18394159"/>
+        <nd ref="-18394158"/>
+        <nd ref="-18394148"/>
+        <nd ref="-18394147"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.959Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394040" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394235"/>
+        <nd ref="-18394234"/>
+        <nd ref="-18394258"/>
+        <nd ref="-18394062"/>
+        <nd ref="-18394061"/>
+        <nd ref="-18394058"/>
+        <nd ref="-18394190"/>
+        <nd ref="-18394191"/>
+        <nd ref="-18394235"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.959Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394039" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394052"/>
+        <nd ref="-18394076"/>
+        <nd ref="-18394283"/>
+        <nd ref="-18394203"/>
+        <nd ref="-18394188"/>
+        <nd ref="-18394189"/>
+        <nd ref="-18394052"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.959Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394038" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394243"/>
+        <nd ref="-18394242"/>
+        <nd ref="-18394192"/>
+        <nd ref="-18394193"/>
+        <nd ref="-18394194"/>
+        <nd ref="-18394195"/>
+        <nd ref="-18394271"/>
+        <nd ref="-18394243"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.959Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394037" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394049"/>
+        <nd ref="-18394046"/>
+        <nd ref="-18394074"/>
+        <nd ref="-18394073"/>
+        <nd ref="-18394072"/>
+        <nd ref="-18394263"/>
+        <nd ref="-18394262"/>
+        <nd ref="-18394288"/>
+        <nd ref="-18394049"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.959Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394036" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394195"/>
+        <nd ref="-18394266"/>
+        <nd ref="-18394267"/>
+        <nd ref="-18394268"/>
+        <nd ref="-18394269"/>
+        <nd ref="-18394270"/>
+        <nd ref="-18394271"/>
+        <nd ref="-18394195"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.960Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394035" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394212"/>
+        <nd ref="-18394231"/>
+        <nd ref="-18394230"/>
+        <nd ref="-18394244"/>
+        <nd ref="-18394243"/>
+        <nd ref="-18394271"/>
+        <nd ref="-18394270"/>
+        <nd ref="-18394213"/>
+        <nd ref="-18394212"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.960Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394034" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394258"/>
+        <nd ref="-18394234"/>
+        <nd ref="-18394249"/>
+        <nd ref="-18394259"/>
+        <nd ref="-18394260"/>
+        <nd ref="-18394261"/>
+        <nd ref="-18394258"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.960Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394033" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394086"/>
+        <nd ref="-18394085"/>
+        <nd ref="-18394171"/>
+        <nd ref="-18394170"/>
+        <nd ref="-18394272"/>
+        <nd ref="-18394273"/>
+        <nd ref="-18394086"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.960Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394032" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394176"/>
+        <nd ref="-18394175"/>
+        <nd ref="-18394002"/>
+        <nd ref="-18394241"/>
+        <nd ref="-18394262"/>
+        <nd ref="-18394263"/>
+        <nd ref="-18394264"/>
+        <nd ref="-18394265"/>
+        <nd ref="-18394176"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.960Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394030" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394241"/>
+        <nd ref="-18394251"/>
+        <nd ref="-18394250"/>
+        <nd ref="-18394284"/>
+        <nd ref="-18394289"/>
+        <nd ref="-18394288"/>
+        <nd ref="-18394262"/>
+        <nd ref="-18394241"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.960Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394029" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394240"/>
+        <nd ref="-18394226"/>
+        <nd ref="-18394214"/>
+        <nd ref="-18394278"/>
+        <nd ref="-18394277"/>
+        <nd ref="-18394274"/>
+        <nd ref="-18394286"/>
+        <nd ref="-18394285"/>
+        <nd ref="-18394238"/>
+        <nd ref="-18394240"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.961Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394027" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394282"/>
+        <nd ref="-18394224"/>
+        <nd ref="-18394223"/>
+        <nd ref="-18393998"/>
+        <nd ref="-18394246"/>
+        <nd ref="-18394218"/>
+        <nd ref="-18394217"/>
+        <nd ref="-18394237"/>
+        <nd ref="-18394282"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.961Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394026" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394075"/>
+        <nd ref="-18394074"/>
+        <nd ref="-18394046"/>
+        <nd ref="-18394016"/>
+        <nd ref="-18394283"/>
+        <nd ref="-18394076"/>
+        <nd ref="-18394075"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.961Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394024" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394285"/>
+        <nd ref="-18394284"/>
+        <nd ref="-18394250"/>
+        <nd ref="-18394238"/>
+        <nd ref="-18394285"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.961Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394023" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394274"/>
+        <nd ref="-18394277"/>
+        <nd ref="-18394276"/>
+        <nd ref="-18394275"/>
+        <nd ref="-18394274"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.961Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394021" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394284"/>
+        <nd ref="-18394285"/>
+        <nd ref="-18394286"/>
+        <nd ref="-18394287"/>
+        <nd ref="-18394010"/>
+        <nd ref="-18394049"/>
+        <nd ref="-18394288"/>
+        <nd ref="-18394289"/>
+        <nd ref="-18394284"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.961Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394020" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394245"/>
+        <nd ref="-18394209"/>
+        <nd ref="-18394207"/>
+        <nd ref="-18394219"/>
+        <nd ref="-18394253"/>
+        <nd ref="-18394121"/>
+        <nd ref="-18394218"/>
+        <nd ref="-18394246"/>
+        <nd ref="-18394247"/>
+        <nd ref="-18394245"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.962Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394018" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394230"/>
+        <nd ref="-18394229"/>
+        <nd ref="-18394245"/>
+        <nd ref="-18394247"/>
+        <nd ref="-18394242"/>
+        <nd ref="-18394243"/>
+        <nd ref="-18394244"/>
+        <nd ref="-18394230"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.962Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394017" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394216"/>
+        <nd ref="-18394006"/>
+        <nd ref="-18394005"/>
+        <nd ref="-18394004"/>
+        <nd ref="-18394237"/>
+        <nd ref="-18394217"/>
+        <nd ref="-18394216"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.962Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394015" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394169"/>
+        <nd ref="-18394152"/>
+        <nd ref="-18394248"/>
+        <nd ref="-18394249"/>
+        <nd ref="-18394234"/>
+        <nd ref="-18394235"/>
+        <nd ref="-18394236"/>
+        <nd ref="-18394169"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.962Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394014" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394239"/>
+        <nd ref="-18394227"/>
+        <nd ref="-18394226"/>
+        <nd ref="-18394240"/>
+        <nd ref="-18394221"/>
+        <nd ref="-18394220"/>
+        <nd ref="-18394239"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.962Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394012" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394240"/>
+        <nd ref="-18394238"/>
+        <nd ref="-18394250"/>
+        <nd ref="-18394222"/>
+        <nd ref="-18394221"/>
+        <nd ref="-18394240"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.962Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394011" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394219"/>
+        <nd ref="-18394204"/>
+        <nd ref="-18394222"/>
+        <nd ref="-18394250"/>
+        <nd ref="-18394251"/>
+        <nd ref="-18394252"/>
+        <nd ref="-18394254"/>
+        <nd ref="-18394215"/>
+        <nd ref="-18394121"/>
+        <nd ref="-18394253"/>
+        <nd ref="-18394219"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.963Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+    <way visible="true" id="-18394009" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18394251"/>
+        <nd ref="-18394241"/>
+        <nd ref="-18394002"/>
+        <nd ref="-18394001"/>
+        <nd ref="-18394252"/>
+        <nd ref="-18394251"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.963Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+    </way>
+</osm>

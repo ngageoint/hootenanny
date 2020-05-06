@@ -45,8 +45,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/criterion/ElementInIdListCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // standard
 #include <algorithm>
@@ -168,9 +168,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   {
     _matchFactory.createMatches(map, _matches, _bounds);
   }
-  LOG_DEBUG("Match count: " << _matches.size());
+  MemoryUsageChecker::getInstance()->check();
+  LOG_DEBUG("Match count: " << StringUtils::formatLargeNumber(_matches.size()));
   LOG_VART(_matches);
-  LOG_TRACE(SystemInfo::getMemoryUsageString());
+  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
   double findMatchesTime = timer.getElapsedAndRestart();
@@ -184,15 +185,18 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // add review tags to all matches that have some review component
   _addReviewTags(map, allMatches);
 
-  LOG_DEBUG("Pre-constraining match count: " << allMatches.size());
+  LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(allMatches.size()));
   _stats.append(SingleStat("Number of Matches Before Whole Groups", _matches.size()));
-  LOG_DEBUG("Number of Matches Before Whole Groups: " << _matches.size());
+  LOG_DEBUG(
+    "Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
   _removeWholeGroups(_matches, matchSets, map);
+  MemoryUsageChecker::getInstance()->check();
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
-  LOG_DEBUG("Number of Whole Groups: " << matchSets.size());
-  LOG_DEBUG("Number of Matches After Whole Groups: " << _matches.size());
+  LOG_DEBUG("Number of Whole Groups: " << StringUtils::formatLargeNumber(matchSets.size()));
+  LOG_DEBUG(
+    "Number of Matches After Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
   LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(map, "after-whole-group-removal");
 
@@ -218,15 +222,17 @@ void UnifyingConflator::apply(OsmMapPtr& map)
       {
         LOG_WARN(exp.what());
       }
+      MemoryUsageChecker::getInstance()->check();
       LOG_TRACE("CM took: " << Time::getTime() - cmStart << "s.");
       LOG_DEBUG("CM Score: " << cm.getScore());
-      LOG_TRACE(SystemInfo::getMemoryUsageString());
+      LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
     }
 
     GreedyConstrainedMatches gm(map);
     gm.addMatches(_matches.begin(), _matches.end());
     double gmStart = Time::getTime();
     vector<ConstMatchPtr> gmMatches = gm.calculateSubset();
+    MemoryUsageChecker::getInstance()->check();
     LOG_TRACE("GM took: " << Time::getTime() - gmStart << "s.");
     LOG_DEBUG("GM Score: " << gm.getScore());
 
@@ -249,7 +255,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Number of Optimized Matches", _matches.size()));
   _stats.append(SingleStat("Number of Matches Optimized per Second",
     (double)allMatches.size() / optimizeMatchesTime));
-  LOG_TRACE(SystemInfo::getMemoryUsageString());
+  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
   // TODO: this stat isn't right for Network
@@ -264,7 +270,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     mg.addMatches(_matches.begin(), _matches.end());
     vector<set<ConstMatchPtr, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(map);
     matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
-    LOG_TRACE(SystemInfo::getMemoryUsageString());
+    LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
   }
   LOG_DEBUG("Match sets count: " << matchSets.size());
   OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization-2");
@@ -275,51 +281,77 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   // Would it help to sort the matches so the biggest or best ones get merged first?
   // convert all the match sets into mergers - #2912
+  LOG_DEBUG(
+    "Converting " << StringUtils::formatLargeNumber(matchSets.size()) <<
+    " match sets to mergers...");
   for (size_t i = 0; i < matchSets.size(); ++i)
   {
     PROGRESS_INFO(
       "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " / " <<
       StringUtils::formatLargeNumber(matchSets.size()) << " to a merger...");
-    _mergerFactory->createMergers(map, matchSets[i], _mergers);
-  }
 
-  LOG_TRACE(SystemInfo::getMemoryUsageString());
+    _mergerFactory->createMergers(map, matchSets[i], _mergers);
+
+    LOG_TRACE(
+      "Converted match set " << StringUtils::formatLargeNumber(i + 1) << " to " <<
+      StringUtils::formatLargeNumber(_mergers.size()) << " merger(s).")
+  }
+  MemoryUsageChecker::getInstance()->check();
+  LOG_VART(_mergers.size());
+
+  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
   // don't need the matches any more
   allMatches.clear();
   _matches.clear();
 
-  LOG_TRACE(SystemInfo::getMemoryUsageString());
+  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
   _mapElementIdsToMergers();
-  LOG_TRACE(SystemInfo::getMemoryUsageString());
+  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
+  LOG_INFO("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
   vector<pair<ElementId, ElementId>> replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
-    if (i % 10 == 0)
+    MergerPtr merger = _mergers[i];
+    const QString msg =
+      "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
+      " / " + StringUtils::formatLargeNumber(_mergers.size());
+    if (i != 0 && i % 10 == 0)
     {
-      PROGRESS_INFO(
-        "Applying merger: " << StringUtils::formatLargeNumber(i + 1) << " / " <<
-        StringUtils::formatLargeNumber(_mergers.size()));
+      PROGRESS_INFO(msg);
     }
-    _mergers[i]->apply(map, replaced);
+    else
+    {
+      LOG_TRACE(msg);
+    }
+
+    merger->apply(map, replaced);
+
     LOG_VART(replaced);
+    LOG_VART(map->size());
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
     replaced.clear();
+    LOG_VART(merger->getImpactedElementIds());
 
     // WARNING: Enabling this could result in a lot of files being generated.
-    //OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
+    //if (i % 30 == 0)
+//    {
+//      OsmMapWriterFactory::writeDebugMap(
+//        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+//    }
   }
+  MemoryUsageChecker::getInstance()->check();
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 
-  LOG_TRACE(SystemInfo::getMemoryUsageString());
+  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
   size_t mergerCount = _mergers.size();
   // free up any used resources.
   _reset();
-  LOG_TRACE(SystemInfo::getMemoryUsageString());
+  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
 
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));

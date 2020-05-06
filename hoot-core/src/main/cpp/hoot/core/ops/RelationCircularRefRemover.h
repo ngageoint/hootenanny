@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RELATION_CIRCULAR_REF_REMOVER_H
@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QMultiMap>
@@ -43,7 +42,7 @@ namespace hoot
  * Removes relations members that have cross references between relations as well as relation
  * members that reference themselves
  */
-class RelationCircularRefRemover : public OsmMapOperation, public OperationStatusInfo
+class RelationCircularRefRemover : public OsmMapOperation
 {
 public:
 
@@ -62,6 +61,8 @@ public:
 
   virtual QString getDescription() const
   { return "Removes half of a relation pair that reference each other from a map"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

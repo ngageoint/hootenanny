@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NONCONFLATABLEELEMENTREMOVER_H
@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -38,7 +37,7 @@ namespace hoot
 /**
  * Recursively removes all elements that are deemed non-conflatable
  */
-class NonConflatableElementRemover : public OsmMapOperation, public OperationStatusInfo
+class NonConflatableElementRemover : public OsmMapOperation
 {
 public:
 
@@ -58,6 +57,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " unconflatable elements"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

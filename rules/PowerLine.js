@@ -12,8 +12,11 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("power.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("power.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("power.line.review.threshold"));
-exports.matchCandidateCriterion = "hoot::PowerLineCriterion"; // See #3047
 exports.geometryType = "line";
+
+// This is needed for disabling superfluous conflate ops. In the future, it may also
+// be used to replace exports.isMatchCandidate (see #3047).
+exports.matchCandidateCriterion = "hoot::PowerLineCriterion";
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
@@ -57,15 +60,9 @@ exports.calculateSearchRadius = function(map)
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
- *
- * exports.matchCandidateCriterion takes precedence over this function and must
- * be commented out before using it.
- * 
- * @todo This must be left enabled for now despite exports.matchCandidateCriterion being enabled.  See #3047.
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isPowerLine(e);
 };
 
@@ -121,10 +118,10 @@ exports.matchScore = function(map, e1, e2)
     var weightedMetricDistanceExtractor1Val = weightedMetricDistanceExtractor1.extract(m, m1, m2);
     var weightedShapeDistanceExtractor7Val = weightedShapeDistanceExtractor7.extract(m, m1, m2);
 
-    /*hoot.trace("centroidDistanceExtractorVal: " + centroidDistanceExtractorVal);
+    hoot.trace("centroidDistanceExtractorVal: " + centroidDistanceExtractorVal);
     hoot.trace("edgeDistanceExtractor1Val: " + edgeDistanceExtractor1Val);
     hoot.trace("weightedMetricDistanceExtractor1Val: " + weightedMetricDistanceExtractor1Val);
-    hoot.trace("weightedShapeDistanceExtractor7Val: " + weightedShapeDistanceExtractor7Val);*/
+    hoot.trace("weightedShapeDistanceExtractor7Val: " + weightedShapeDistanceExtractor7Val);
 
     if ((centroidDistanceExtractorVal > 0.61 && weightedMetricDistanceExtractor1Val < 1.4) || 
          (edgeDistanceExtractor1Val > 0.997 && weightedShapeDistanceExtractor7Val == 0.0))
@@ -191,7 +188,6 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  hoot.trace("Merging elements.");
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
   return snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);

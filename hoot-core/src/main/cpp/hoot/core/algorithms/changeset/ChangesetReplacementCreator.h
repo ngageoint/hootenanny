@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_CREATOR_H
 #define CHANGESET_REPLACEMENT_CREATOR_H
@@ -110,10 +110,13 @@ public:
    * Constructor
    *
    * @param printStats prints statistics for the output changeset
+   * @param outputStatsFile optional file to output the changeset statistics to
    * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
    * the output changeset is of type .osc.sql.
    */
-  ChangesetReplacementCreator(const bool printStats = false, const QString osmApiDbUrl = "");
+  ChangesetReplacementCreator(
+    const bool printStats = false, const QString& statsOutputFile = "",
+    const QString osmApiDbUrl = "");
 
   /**
    * Creates a changeset that replaces features in the first input with features from the second
@@ -141,6 +144,8 @@ public:
   void setRetainmentFilterOptions(const QStringList& optionKvps);
   void setWaySnappingEnabled(const bool enabled) { _waySnappingEnabled = enabled; }
   void setConflationEnabled(const bool enabled) { _conflationEnabled = enabled; }
+  void setCleaningEnabled(const bool enabled) { _cleaningEnabled = enabled; }
+  void setTagOobConnectedWays(const bool addTag) { _tagOobConnectedWays = addTag; }
 
 private:
 
@@ -189,6 +194,14 @@ private:
   // turn on/off conflation of cookie cut data being replaced with replacement data
   bool _conflationEnabled;
 
+  // turn on/off cleaning of input data; cannot be disabled if conflation is enabled
+  bool _cleaningEnabled;
+
+  // Tagging out of bounds connected ways allows for preventing deletion of ways outside of the
+  // replacement bounds when lenient bounds interpretation is enabled. If false, the tags should
+  // added manually before performing the replacement.
+  bool _tagOobConnectedWays;
+
   // controls cropping
   BoundsOptions _boundsOpts;
 
@@ -199,8 +212,14 @@ private:
 
   void _validateInputs(const QString& input1, const QString& input2);
 
+  /*
+   * Returns the default geometry filters (point, line, poly) to use when no other geometry filters
+   * are specified
+   */
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     _getDefaultGeometryFilters() const;
+
+  bool _roadFilterExists() const;
 
   void _setInputFilter(
     std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
@@ -208,7 +227,9 @@ private:
 
   void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
 
-  // Combines filters in _geometryTypeFilters with _replacementFilter.
+  /*
+   * Combines filters in _geometryTypeFilters with _replacementFilter.
+   */
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
     std::shared_ptr<ChainCriterion> nonGeometryFilter);
 
@@ -234,7 +255,8 @@ private:
    */
   void _addChangesetDeleteExclusionTags(OsmMapPtr& map);
 
-  OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap);
+  OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
+                             const GeometryTypeCriterion::GeometryType& geometryType);
 
   /*
    * Copies all ways that are tagged with MetadataTags::HootConnectedWayOutsideBounds() out of a map
@@ -250,8 +272,14 @@ private:
    * Combines two maps into one; throwOutDupes ignores any elements in the second map with the ID
    * as an element in the first map
    */
-  void _combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes,
-                    const QString& debugFileName);
+  void _combineMaps(
+    OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes, const QString& debugFileName);
+
+  /*
+   * Removes duplicates between one map and another, ignoring elemment IDs
+   */
+  void _dedupeMap(OsmMapPtr refMap, OsmMapPtr mapToDedupe);
+
   /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
    * MetadataTags::HootSnapped()=snapped_way tags
@@ -259,6 +287,8 @@ private:
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 
   void _conflate(OsmMapPtr& map, const bool lenientBounds);
+
+  void _clean(OsmMapPtr& map);
 
   void _snapUnconnectedWays(
     OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
@@ -283,6 +313,8 @@ private:
     const ElementCriterionPtr& secFeatureFilter,
     const GeometryTypeCriterion::GeometryType& geometryType,
     const QStringList& linearFilterClassNames = QStringList());
+
+  void _cleanupMissingElements(OsmMapPtr& map);
 };
 
 }

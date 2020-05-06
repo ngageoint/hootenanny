@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -33,12 +33,20 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
 
 /**
  * Derives a set of replacement changes given two map inputs
+ *
+ * @todo move the input parsing to a separate method and assign the parsed inputs to member
+ * variables
+ * @todo command needs some input error handling tests
  */
 class ChangesetDeriveReplacementCmd : public BoundedCommand
 {
@@ -55,12 +63,7 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    const QString boundsStr = args[2].trimmed();
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
-    BoundedCommand::runSimple(args);
-
     // process optional params
-
     bool fullReplacement = false;
     if (args.contains("--full-replacement"))
     {
@@ -68,6 +71,7 @@ public:
       args.removeAll("--full-replacement");
     }
     LOG_VARD(fullReplacement);
+
     QStringList geometryFilters;
     if (args.contains("--geometry-filters"))
     {
@@ -79,6 +83,7 @@ public:
       args.removeAt(optionNameIndex);
     }
     LOG_VARD(geometryFilters);
+
     QStringList replacementFilters;
     if (args.contains("--replacement-filters"))
     {
@@ -90,6 +95,7 @@ public:
       args.removeAt(optionNameIndex);
     }
     LOG_VARD(replacementFilters);
+
     bool chainReplacementFilters = false;
     if (args.contains("--chain-replacement-filters"))
     {
@@ -97,6 +103,7 @@ public:
       args.removeAll("--chain-replacement-filters");
     }
     LOG_VARD(chainReplacementFilters);
+
     QStringList replacementFilterOptions;
     if (args.contains("--replacement-filter-options"))
     {
@@ -108,6 +115,7 @@ public:
       args.removeAt(optionNameIndex);
     }
     LOG_VARD(replacementFilterOptions);
+
     QStringList retainmentFilters;
     if (args.contains("--retainment-filters"))
     {
@@ -119,6 +127,7 @@ public:
       args.removeAt(optionNameIndex);
     }
     LOG_VARD(retainmentFilters);
+
     bool chainRetainmentFilters = false;
     if (args.contains("--chain-retainment-filters"))
     {
@@ -126,6 +135,7 @@ public:
       args.removeAll("--chain-retainment-filters");
     }
     LOG_VARD(chainRetainmentFilters);
+
     QStringList retainmentFilterOptions;
     if (args.contains("--retainment-filter-options"))
     {
@@ -137,6 +147,7 @@ public:
       args.removeAt(optionNameIndex);
     }
     LOG_VARD(retainmentFilterOptions);
+
     bool lenientBounds = true;
     if (args.contains("--strict-bounds"))
     {
@@ -144,13 +155,33 @@ public:
       args.removeAll("--strict-bounds");
     }
     LOG_VARD(lenientBounds);
+
     bool printStats = false;
+    QString outputStatsFile;
     if (args.contains("--stats"))
     {
       printStats = true;
+      const int statsIndex = args.indexOf("--stats");
+      // See similar note in ChangesetDeriveCmd.
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+          !args[statsIndex + 1].startsWith("--"))
+      {
+        outputStatsFile = args[statsIndex + 1];
+        QFileInfo statsInfo(outputStatsFile);
+        if (!ChangesetStatsFormat::isValidFileOutputFormat(statsInfo.completeSuffix()))
+        {
+          outputStatsFile = "";
+        }
+        else
+        {
+          args.removeAll(outputStatsFile);
+        }
+      }
       args.removeAll("--stats");
     }
     LOG_VARD(printStats);
+    LOG_VARD(outputStatsFile);
+
     bool enableWaySnapping = true;
     if (args.contains("--disable-way-snapping"))
     {
@@ -158,6 +189,7 @@ public:
       args.removeAll("--disable-way-snapping");
     }
     LOG_VARD(enableWaySnapping);
+
     bool enableConflation = true;
     if (args.contains("--disable-conflation"))
     {
@@ -166,19 +198,46 @@ public:
     }
     LOG_VARD(enableConflation);
 
+    bool enableCleaning = true;
+    if (args.contains("--disable-cleaning"))
+    {
+      if (!enableConflation)
+      {
+        enableCleaning = false;
+      }
+      else
+      {
+        LOG_WARN(
+          "Cleaning cannot be disabled unless conflation is disabled for changeset replacement " <<
+          "derivation.");
+      }
+      args.removeAll("--disable-cleaning");
+    }
+    LOG_VARD(enableConflation);
+
+    bool tagOobConnectedWays = true;
+    if (args.contains("--disable-oob-way-handling"))
+    {
+      tagOobConnectedWays = false;
+      args.removeAll("--disable-oob-way-handling");
+    }
+    LOG_VARD(tagOobConnectedWays);
+
     LOG_VARD(args.size());
     LOG_VARD(args);
 
-    // param error checking
-
-    if (args.size() < 4 || args.size() > 5)
+    QString boundsStr = "";
+    if (args.size() >= 3)
     {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four or five parameters.").arg(getName()));
+      boundsStr = args[2].trimmed();
+      conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
+      BoundedCommand::runSimple(args);
     }
 
-    // process non-optional params
+    // param error checking
+    checkParameterCount(args.size());
 
+    // process non-optional params
     const QString input1 = args[0].trimmed();
     LOG_VARD(input1);
     const QString input2 = args[1].trimmed();
@@ -200,7 +259,7 @@ public:
       osmApiDbUrl = args[4].trimmed();
     }
 
-    ChangesetReplacementCreator changesetCreator(printStats, osmApiDbUrl);
+    ChangesetReplacementCreator changesetCreator(printStats, outputStatsFile, osmApiDbUrl);
     changesetCreator.setFullReplacement(fullReplacement);
     changesetCreator.setLenientBounds(lenientBounds);
     changesetCreator.setGeometryFilters(geometryFilters);
@@ -213,9 +272,20 @@ public:
     changesetCreator.setRetainmentFilterOptions(retainmentFilterOptions);
     changesetCreator.setWaySnappingEnabled(enableWaySnapping);
     changesetCreator.setConflationEnabled(enableConflation);
+    changesetCreator.setCleaningEnabled(enableCleaning);
+    changesetCreator.setTagOobConnectedWays(tagOobConnectedWays);
     changesetCreator.create(input1, input2, bounds, output);
 
     return 0;
+  }
+
+  void checkParameterCount(int count)
+  {
+    if (count != 4 && count != 5)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(QString("%1 takes four or five parameters.").arg(getName()));
+    }
   }
 };
 

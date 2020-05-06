@@ -123,10 +123,9 @@ private:
   static void _setMatchCreators(QStringList matchCreatorsList);
   static void _setTagFilter(QString filter) { _theInstance->_tagFilter = filter; }
 
-  static void _tempFixDefaults();
-
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;
+  friend class TestUtils;
 };
 
 }

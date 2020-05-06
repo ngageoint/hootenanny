@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SUPERFLUOUSWAYREMOVER_H
 #define SUPERFLUOUSWAYREMOVER_H
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 
@@ -47,7 +46,7 @@ class OsmMap;
  *
  * @todo what about one node ways?
  */
-class SuperfluousWayRemover : public OsmMapOperation, public OperationStatusInfo
+class SuperfluousWayRemover : public OsmMapOperation
 {
 public:
 
@@ -78,7 +77,14 @@ public:
   virtual QString getDescription() const
   { return "Removes ways not in relations or containing zero or all identical nodes"; }
 
-protected:
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
+
+private:
 
   std::shared_ptr<OsmMap> _inputMap;
 };

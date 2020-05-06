@@ -33,7 +33,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/extractors/Histogram.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
 
@@ -45,30 +45,56 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, AngleHistogramExtractor)
 
-class HistogramVisitor : public ConstElementVisitor
+class HistogramVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
   static std::string className() { return "hoot::HistogramVisitor"; }
 
-  HistogramVisitor(Histogram& h, const OsmMap& map) : _h(h), _map(map) {}
+  HistogramVisitor(Histogram& h) : _h(h) {}
 
   virtual void visit(const ConstElementPtr& e)
   {
     if (e->getElementType() == ElementType::Way)
     {
-      const ConstWayPtr& w = std::dynamic_pointer_cast<const Way>(e);
+      _addWay(std::dynamic_pointer_cast<const Way>(e));
+    }
+    else if (e->getElementType() == ElementType::Relation)
+    {
+      const ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
+      const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+      for (size_t i = 0; i < relationMembers.size(); i++)
+      {
+        RelationData::Entry member = relationMembers[i];
+        if (member.getElementId().getType() == ElementType::Way)
+        {
+          _addWay(_map->getWay(member.getElementId()));
+        }
+      }
+    }
+  }
 
-      vector<long> nodes = w->getNodeIds();
+  virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
+
+private:
+
+  Histogram& _h;
+
+  void _addWay(const ConstWayPtr& way)
+  {
+    if (way)
+    {
+      vector<long> nodes = way->getNodeIds();
       if (nodes[0] != nodes[nodes.size() - 1])
       {
         nodes.push_back(nodes[0]);
       }
 
-      Coordinate last = _map.getNode(nodes[0])->toCoordinate();
+      Coordinate last = _map->getNode(nodes[0])->toCoordinate();
       for (size_t i = 1; i < nodes.size(); i++)
       {
-        Coordinate c = _map.getNode(nodes[i])->toCoordinate();
+        Coordinate c = _map->getNode(nodes[i])->toCoordinate();
         double distance = c.distance(last);
         double theta = atan2(c.y - last.y, c.x - last.x);
         _h.addAngle(theta, distance);
@@ -76,13 +102,6 @@ public:
       }
     }
   }
-
-  virtual QString getDescription() const { return ""; }
-
-private:
-
-  Histogram& _h;
-  const OsmMap& _map;
 };
 
 AngleHistogramExtractor::AngleHistogramExtractor()
@@ -111,7 +130,8 @@ Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const Co
   const
 {
   Histogram* result = new Histogram(_bins);
-  HistogramVisitor v(*result, map);
+  HistogramVisitor v(*result);
+  v.setOsmMap(&map);
   e->visitRo(map, v);
   return result;
 }

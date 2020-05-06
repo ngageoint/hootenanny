@@ -65,7 +65,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setUseFileStatus(true);
-    reader.read("test-files/ToyTestCombined.pbf", map);
+    reader.read("test-files/ToyTestCombined.osm.pbf", map);
 
     Conflator uut;
     uut.loadSource(map);

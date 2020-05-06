@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -37,6 +37,10 @@
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -63,6 +67,9 @@ public:
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
+
+    QElapsedTimer timer;
+    timer.start();
 
     const QString QUICK_SWITCH = "--brief";
     const QString OUTPUT_SWITCH = "--output=";
@@ -96,22 +103,33 @@ public:
     QList<QList<SingleStat>> allStats;
     for (int i = 0; i < inputs.size(); i++)
     {
+      QElapsedTimer timer2;
+      timer2.restart();
+
       OsmMapPtr map(new OsmMap());
-      //IoUtils::loadMap has extra logic beyond OsmMapReaderFactory::read for reading in OGR layers.
-      //Using it causes the last part of Osm2OgrTranslationTest to fail.  Need to determine why
-      //either strictly use one reading method or the other.
-      //IoUtils::loadMap(map, inputs[i], true, Status::Invalid);
+      // Tried using IoUtils::loadMap here, but it has extra logic beyond OsmMapReaderFactory::read
+      // for reading in OGR layers. Using it causes the last part of Osm2OgrTranslationTest to fail.
+      // Need to determine why either strictly use one reading method or the other.
       OsmMapReaderFactory::read(map, inputs[i], true, Status::Invalid);
       MapProjector::projectToPlanar(map);
+
+      LOG_STATUS(
+        "Calculating statistics for map " << i + 1 << " of " << inputs.size() << ": " <<
+        inputs[i].right(25) << "...");
 
       std::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
       cso->setQuickSubset(quick);
       cso->apply(map);
       allStats.append(cso->getStats());
+
+      LOG_STATUS(
+        "Statistics calculated for map " << i + 1 << " of " << inputs.size() << ": " <<
+        inputs[i].right(25) << " in " + StringUtils::millisecondsToDhms(timer2.elapsed()));
     }
 
     if (toFile)
     {
+      LOG_STATUS("Writing statistics output to: " << outputFilename.right(25) << "...");
       if (outputFilename.endsWith(".json", Qt::CaseInsensitive))
         MapStatsWriter().writeStatsToJson(allStats, outputFilename);
       else
@@ -119,9 +137,14 @@ public:
     }
     else
     {
+      LOG_STATUS("Writing statistics output to string...");
       cout << "Stat Name\t" << inputs.join(sep) << endl;
       cout << MapStatsWriter().statsToString(allStats, sep);
     }
+
+    LOG_STATUS(
+      "Map statistics calculated in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
 
     return 0;
   }

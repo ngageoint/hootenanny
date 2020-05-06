@@ -77,32 +77,39 @@ See the User Guide for more details on command usage.
     hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
 -----
 
-===== Create a changeset that replaces all features in a dataset with overlapping features from another dataset within a specified bounds:
+===== Create a changeset that replaces features with only overlapping features from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc
 -----
 
-===== Create a changeset that completely replaces all features in a dataset with features from another dataset within a specified bounds:
+===== Create a changeset that completely replaces features with features from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc --full-replacement
 -----
 
-===== Create a changeset that replaces all buildings in a dataset with overlapping buildings from another dataset within a specified bounds:
+===== Create a changeset that completely replaces features with features from another dataset within a specified bounds and modifies no features outside the bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
-      output.osc -geometry-filters "hoot::BuildingCriterion"
+      output.osc --full-replacement --strict-bounds
 -----
 
-===== Create a changeset that completely replaces all buildings in a dataset with buildings from another dataset within a specified bounds:
+===== Create a changeset that replaces buildings with only overlapping buildings from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
-      output.osc -geometry-filters "hoot::BuildingCriterion" --full-replacement
+      output.osc --geometry-filters "hoot::BuildingCriterion"
+-----
+
+===== Create a changeset that completely replaces all buildings with buildings from another dataset within a specified bounds:
+
+-----
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
+      output.osc --geometry-filters "hoot::BuildingCriterion" --full-replacement
 -----
 
 ==== MetaInfo
@@ -275,6 +282,12 @@ See the User Guide for more details on command usage.
 
 -----
     hoot sort input.osm output.osm
+-----
+
+===== Tag features with a conflate matcher capable of matching them (useful in debugging):
+
+-----
+    hoot convert -D convert.ops="hoot::ConflatableCriteriaVisitor" input.osm output.osm
 -----
 
 ==== Comparison
@@ -469,12 +482,21 @@ See the User Guide for more details on command usage.
     hoot convert -D changeset.user.id=1 \
       -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true \
       -D osmapidb.bulk.inserter.disable.database.indexes.during.write=true \
+      input.osm.pbf osmapidb://username:password@localhost:5432/database
+-----
+
+===== Bulk write a map to an offline OSM API database specifying starting element IDs:
+
+-----
+    hoot convert -D changeset.user.id=1 \
+      -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true \
+      -D osmapidb.bulk.inserter.disable.database.indexes.during.write=true \
       -D apidb.bulk.inserter.starting.node.id=10 \
       -D apidb.bulk.inserter.starting.way.id=10 -D apidb.bulk.inserter.starting.relation.id=10 \
       input.osm.pbf osmapidb://username:password@localhost:5432/database
 -----
 
-===== Bulk write a map to an online OSM API database:
+===== Bulk write a map to an online OSM API database (element IDs managed automatically):
 
 -----
     hoot convert -D changeset.user.id=1 \
@@ -487,6 +509,15 @@ See the User Guide for more details on command usage.
 -----
     hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
       -D remove.elements.visitor.element.criteria="hoot::RelationCriterion" input.osm output.osm
+-----
+
+===== Remove all but two specific relations:
+
+-----
+    hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
+    -D remove.elements.visitor.element.criteria="hoot::ElementIdCriterion" 
+    -D element.id.criterion.ids="Relation:-1;Relation:7387470" 
+    -D element.criterion.negate=true input.osm output.osm
 -----
 
 ===== Remove relations and ways from a map:
@@ -513,7 +544,7 @@ See the User Guide for more details on command usage.
 ===== Remove all duplicate areas from a map:
 
 -----
-    hoot convert -D convert.ops="hoot::RemoveDuplicateAreaVisitor" input.osm output.osm
+    hoot convert -D convert.ops="hoot::RemoveDuplicateAreasVisitor" input.osm output.osm
 -----
 
 ===== Remove all empty areas from a map:
@@ -565,7 +596,7 @@ See the User Guide for more details on command usage.
 
 -----
     hoot convert -D convert.ops="hoot::RemoveTagsVisitor" \
-      -D remove.tags.visitor.element.criterion="hoot::WayCriterion" \
+      -D tag.filter.element.criterion="hoot::WayCriterion" \
       -D tag.filter.keys="source;error:circular" input.osm output.osm
 -----
 
@@ -580,7 +611,7 @@ See the User Guide for more details on command usage.
 
 -----
     hoot convert -D convert.ops=hoot::RemoveTagsVisitor -D tag.filter.keys="REF1;REF2" \
-      -D remove.tags.visitor.element.criterion=hoot::TagCriterion \
+      -D tag.filter.element.criterion=hoot::TagCriterion \
       -D tag.criterion.kvps="power=line" -D element.criterion.negate=true input.osm output.osm
 -----
 
@@ -589,7 +620,7 @@ See the User Guide for more details on command usage.
 -----
     hoot convert -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.keys=power \
       -D set.tag.value.visitor.values=minor_line \
-      -D set.tag.value.visitor.element.criterion=hoot::TagValueNumericRangeCriterion \
+      -D set.tag.value.visitor.element.criteria="hoot::TagValueNumericRangeCriterion" \
       -D tag.value.numeric.range.criterion.keys=voltage \
       -D tag.value.numeric.range.criterion.min=1 -D tag.value.numeric.range.criterion.max=45000 \
       input.osm output.osm
@@ -696,15 +727,42 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
     hoot convert -D convert.ops="hoot::PhoneNumberLocateVisitor" input.osm output.osm
 -----
 
-===== Snap unconnected roads in the second dataset back to neighboring roads in the first dataset:
+===== Snap unconnected roads in one dataset back to neighboring roads in another dataset:
 
 -----
     hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
       -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
       -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayNodeCriterion \
+      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
+      input1.osm input2.osm output.osm
+-----
+
+===== Snap unconnected roads in one dataset back to neighboring roads in another dataset and mark them as needing review:
+
+-----
+    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
+      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
+      -D snap.unconnected.ways.snap.to.way.status=Input1 \
+      -D snap.unconnected.ways.snap.way.status=Input2 \
+      -D snap.unconnected.ways.review.snapped=true \
+      input1.osm input2.osm output.osm
+-----
+
+===== Mark unconnected roads as needing review in one dataset that could be snapped back to neighboring roads in another dataset:
+
+-----
+    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
+      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
+      -D snap.unconnected.ways.snap.to.way.status=Input1 \
+      -D snap.unconnected.ways.snap.way.status=Input2 \
+      -D snap.unconnected.ways.review.snapped=true \
+      -D snap.unconnected.ways.mark.only=true \
       input1.osm input2.osm output.osm
 -----
 
@@ -974,7 +1032,7 @@ Requires language translation server installation.  See the Hootenanny Install G
 ===== List all extractors used to score feature properties:
 
 -----
-    hoot info --feature-extractors:
+    hoot info --feature-extractors
 -----
 
 ===== List all input formats that support reading by geospatial bounds:

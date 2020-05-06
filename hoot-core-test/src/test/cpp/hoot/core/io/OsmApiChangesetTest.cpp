@@ -284,15 +284,33 @@ public:
     id = 0;
     ids.clear();
     type = ElementType::Unknown;
+    type2 = ElementType::Unknown;
     hint = "Relation -2 requires the relations with id in 1707148,1707249,1707264,1707653,1707654,1707655,1707656,1707657,1707658,1707699,1707700, which either do not exist, or are not visible.";
-    found = changeset.matchesMultiRelationFailure(hint, id, ids, type);
-    std::vector<long> expected_ids { 1707148,1707249,1707264,1707653,1707654,1707655,1707656,1707657,1707658,1707699,1707700 };
+    found = changeset.matchesMultiElementFailure(hint, id, type, ids, type2);
+    std::vector<long> expected_relation_ids { 1707148,1707249,1707264,1707653,1707654,1707655,1707656,1707657,1707658,1707699,1707700 };
     CPPUNIT_ASSERT_EQUAL(true, found);
     CPPUNIT_ASSERT_EQUAL(-2L, id);
     CPPUNIT_ASSERT_EQUAL(ElementType::Relation, type);
-    CPPUNIT_ASSERT_EQUAL(11, (int)ids.size());
+    CPPUNIT_ASSERT_EQUAL(expected_relation_ids.size(), ids.size());
     for (int i = 0; i < (int)ids.size(); ++i)
-      CPPUNIT_ASSERT_EQUAL(expected_ids[i], ids[i]);
+      CPPUNIT_ASSERT_EQUAL(expected_relation_ids[i], ids[i]);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Relation, type2);
+
+    //  Test multi node failure with way ID
+    id = 0;
+    ids.clear();
+    type = ElementType::Unknown;
+    type2 = ElementType::Unknown;
+    hint = "Way -1 requires the nodes with id in 11,20, which either do not exist, or are not visible.";
+    found = changeset.matchesMultiElementFailure(hint, id, type, ids, type2);
+    std::vector<long> expected_node_ids { 11,20 };
+    CPPUNIT_ASSERT_EQUAL(true, found);
+    CPPUNIT_ASSERT_EQUAL(-1L, id);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Way, type);
+    CPPUNIT_ASSERT_EQUAL(expected_node_ids.size(), ids.size());
+    for (int i = 0; i < (int)ids.size(); ++i)
+      CPPUNIT_ASSERT_EQUAL(expected_node_ids[i], ids[i]);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Node, type2);
 
     //  Test relation failure with empty string
     id = 0;

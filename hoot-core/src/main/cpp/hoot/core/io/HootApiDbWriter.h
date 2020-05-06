@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDBWRITER_H
 #define HOOTAPIDBWRITER_H
@@ -75,6 +75,7 @@ public:
   void setRemap(bool remap) { _remapIds = remap; }
   void setUserEmail(const QString& email) { _userEmail = email; }
   void setJobId(const QString& id) { _jobId = id; }
+  void setPreserveVersionOnInsert(bool preserve) { _preserveVersionOnInsert = preserve; }
 
   virtual void writePartial(const ConstNodePtr& n) override;
   virtual void writePartial(const ConstWayPtr& w) override;
@@ -145,6 +146,9 @@ private:
   bool _textStatus;
   bool _includeCircularError;
   QString _jobId;
+  // If true the version of the element will be retained when writing to the db. Otherwise, the
+  // version is reset to the initial version of 1.
+  bool _preserveVersionOnInsert;
 
   bool _open;
 

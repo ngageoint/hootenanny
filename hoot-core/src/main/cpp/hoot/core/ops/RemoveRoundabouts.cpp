@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveRoundabouts.h"
@@ -109,7 +109,7 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
 
     // This could be very expensive...enable for debugging only.
     //OsmMapWriterFactory::writeDebugMap(
-      //_pMap, "after-handline-crossing-ways-" + QString::number(i + 1));
+      //_pMap, "after-RemoveRoundabouts-handling-crossing-ways-" + QString::number(i + 1));
   }
 
   //  Mangle the last way if it doesn't have a sibling
@@ -119,7 +119,7 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
     removed[removed.size() - 1]->overrideRoundabout();
   }
 
-  OsmMapWriterFactory::writeDebugMap(_pMap, "after-handline-crossing-ways");
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-RemoveRoundabouts-handling-crossing-ways");
 
   // Now remove roundabouts
   for (size_t i = 0; i < removed.size(); i++)

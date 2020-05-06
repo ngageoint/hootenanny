@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LinearWaterwayCriterion.h"
@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 
 namespace hoot
 {
@@ -38,20 +39,47 @@ HOOT_FACTORY_REGISTER(ElementCriterion, LinearWaterwayCriterion)
 
 bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e->getElementType() == ElementType::Way || e->getElementType() == ElementType::Relation)
+  LOG_VART(e->getElementId());
+  //LOG_VART(e);
+
+  // We were taking relations here at one point too. Just not convinced that we need to if all the
+  // constituent linear features are properly tagged and extra processing time was being added. If
+  // we find later that we need to, the behavior can be reverted back to the original state.
+  if (e->getElementType() != ElementType::Way)
   {
-    const Tags& tags = e->getTags();
+    return false;
+  }
+
+  bool passedTagFilter = false;
+
+  const Tags& tags = e->getTags();
+  if (tags.contains("waterway"))
+  {
+    passedTagFilter = true;
+  }
+  else
+  {
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
-      if (it.key() == "waterway" || OsmSchema::getInstance().isAncestor(it.key(), "waterway") ||
-          (it.key() == "type" &&
-           OsmSchema::getInstance().isAncestor("waterway=" + it.value(), "waterway")))
+      const QString key = it.key();
+      const QString val = it.value();
+      if (OsmSchema::getInstance().isAncestor(key, "waterway") ||
+          (key == "type" && OsmSchema::getInstance().isAncestor("waterway=" + val, "waterway")))
       {
-        return true;
+        LOG_TRACE("passed crit");
+        passedTagFilter = true;
+        break;
       }
     }
   }
-  return false;
+
+  if (passedTagFilter && !LinearCriterion().isSatisfied(e))
+  {
+    LOG_TRACE("failed linear crit");
+    return false;
+  }
+
+  return passedTagFilter;
 }
 
 }

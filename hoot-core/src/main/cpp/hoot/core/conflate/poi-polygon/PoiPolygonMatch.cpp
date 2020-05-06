@@ -26,9 +26,6 @@
  */
 #include "PoiPolygonMatch.h"
 
-// geos
-#include <geos/util/TopologyException.h>
-
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h>
@@ -830,6 +827,14 @@ QString PoiPolygonMatch::toString() const
         .arg(_typeScore)
         .arg(_nameScore)
         .arg(_addressScore);
+  }
+}
+
+void PoiPolygonMatch::_clearCache()
+{
+  if (_infoCache)
+  {
+    _infoCache->clear();
   }
 }
 

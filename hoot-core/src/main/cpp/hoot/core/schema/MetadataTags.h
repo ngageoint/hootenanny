@@ -90,6 +90,7 @@ public:
   inline static const QString HootMatchP()              { return "hoot:match:p"; }
   inline static const QString HootMatchScore()          { return "hoot:match:score"; }
   inline static const QString HootMatchedBy()           { return "hoot:matchedBy"; }
+  inline static const QString HootSublineMatcherUsed()  { return "hoot:subline:matcher:used"; }
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
 
@@ -105,6 +106,7 @@ public:
   inline static const QString HootReviewSortOrder()     { return "hoot:review:sort_order"; }
   inline static const QString HootReviewType()          { return "hoot:review:type"; }
   inline static const QString HootReviewUuid()          { return "hoot:review:uuid"; }
+  inline static const QString HootReviewRoadCrossingPolygon() { return "road_crossing_polygon"; }
 
   inline static const QString HootScoreMatch()          { return "hoot:score:match"; }
   inline static const QString HootScoreMiss()           { return "hoot:score:miss"; }
@@ -155,6 +157,7 @@ public:
   inline static const QString RelationReview()          { return "review"; }
   inline static const QString RelationRoute()           { return "route"; }
   inline static const QString RelationRouteMaster()     { return "route_master"; }
+  inline static const QString RelationSite()            { return "site"; }
   inline static const QString RelationSuperRoute()      { return "superroute"; }
   inline static const QString RelationWaterway()        { return "waterway"; }
   inline static const QString RelationType()            { return "type"; }

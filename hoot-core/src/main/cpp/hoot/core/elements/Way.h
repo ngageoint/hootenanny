@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_WAY_H__
 #define __ELEMENT_WAY_H__
@@ -104,7 +104,8 @@ public:
   /**
    * Returns the same result as getEnvelopeInternal, but copied so the caller gets ownership.
    */
-  virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const override
+  virtual geos::geom::Envelope* getEnvelope(
+    const std::shared_ptr<const ElementProvider>& ep) const override
   { return new geos::geom::Envelope(getEnvelopeInternal(ep)); }
 
   /**
@@ -121,8 +122,16 @@ public:
   int getNodeIndex(long nodeId) const;
 
   long getFirstNodeId() const { return getNodeId(0); }
-
   long getLastNodeId() const { return getNodeId(getNodeCount() - 1); }
+
+  /**
+   * Determines if an index is the first or las
+   *
+   * @param index index to examine
+   * @return true if the index is extreme; false otherwise
+   */
+  bool isExtremeIndex(const int index) const
+  { return index == 0 || index == (int)getNodeCount() - 1; }
 
   size_t getNodeCount() const { return _wayData->getNodeIds().size(); }
 
@@ -158,12 +167,6 @@ public:
   bool isValidPolygon() const;
 
   /**
-   * Returns True if the first and last node in the Way have the same node ID, provided the way
-   * contains two or more nodes. If way has zero or one nodes, returns false
-   */
-  bool isFirstLastNodeIdentical() const;
-
-  /**
    * Returns true if there are more than 3 nodes and the first and last nodes in the Way are the
    * same.  Otherwise returns false
    */
@@ -187,13 +190,28 @@ public:
   void reverseOrder();
 
   /**
-   * Determines if two ways have the same node IDs
+   * Determines if two ways have the same nodes
    *
-   * @param other way to compare node IDs with
-   * @return true if the other way has the same node IDs in the same order as this way; false
-   * otherwise
+   * @param other way to compare with
+   * @return true if the other way has the same nodes in the same order as this way; false otherwise
    */
-  bool hasSameNodeIds(const Way& other) const;
+  bool hasSameNodes(const Way& other) const;
+
+  /**
+   * Determines if two ways share the same node
+   *
+   * @param other way to compare with
+   * @return true if the other way shares at least one node with this way; false otherwise
+   */
+  bool hasSharedNode(const Way& other) const;
+
+  /**
+   * Retrieves the IDs of shared nodes between two ways
+   *
+   * @param other way to compare with
+   * @return a collection of node IDs
+   */
+  QSet<long> sharedNodeIds(const Way& other) const;
 
   /**
    * This is rarely used. Primarily it is useful when loading the way from a file that does
@@ -204,7 +222,6 @@ public:
   QString toString() const;
 
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
-
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
 
   /**
@@ -217,6 +234,11 @@ public:
   void resetPid() { _wayData->setPid(WayData::PID_EMPTY); }
   static long getPid(const std::shared_ptr<const Way>& p, const std::shared_ptr<const Way>& c);
   static long getPid(long p, long c);
+
+  /**
+   * @see Element
+   */
+  virtual QString nonIdHash() const;
 
 protected:
 

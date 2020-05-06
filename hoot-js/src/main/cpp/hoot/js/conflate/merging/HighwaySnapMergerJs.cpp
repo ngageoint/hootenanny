@@ -28,6 +28,8 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/highway/HighwayTagOnlyMerger.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/algorithms/subline-matching//SublineStringMatcherJs.h>
@@ -78,7 +80,7 @@ void HighwaySnapMergerJs::Init(Handle<Object> target)
   target->Set(String::NewFromUtf8(current, "HighwaySnapMerger"), ToLocal(&_constructor));
 }
 
-Handle<Object> HighwaySnapMergerJs::New(const HighwaySnapMergerPtr &ptr)
+Handle<Object> HighwaySnapMergerJs::New(const HighwaySnapMergerPtr& ptr)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
@@ -114,7 +116,18 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
       toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
   const QString matchedBy = toCpp<QString>(args[4]);
 
-  HighwaySnapMergerPtr snapMerger(new HighwaySnapMerger(pairs, sublineMatcher));
+  // see explanation in ConflateCmd as to why we use this option to identify Attribute Conflation
+  const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
+  HighwaySnapMergerPtr snapMerger;
+  if (isAttributeConflate)
+  {
+    // HighwayTagOnlyMerger inherits from HighwaySnapMerger, so this works.
+    snapMerger.reset(new HighwayTagOnlyMerger(pairs, sublineMatcher));
+  }
+  else
+  {
+    snapMerger.reset(new HighwaySnapMerger(pairs, sublineMatcher));
+  }
   snapMerger->setMatchedBy(matchedBy);
   snapMerger->apply(map, replaced);
 

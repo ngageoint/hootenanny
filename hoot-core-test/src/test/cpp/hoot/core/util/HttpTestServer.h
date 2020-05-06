@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HTTP_TEST_SERVER_H
@@ -134,10 +134,14 @@ protected:
   virtual bool respond(HttpConnection::HttpConnectionPtr& connection);
   /** Read the HTTP headers from the request and return them, called by the overridden respond() function */
   std::string read_request_headers(HttpConnection::HttpConnectionPtr& connection);
+  /** Read the HTTP body (after reading the request headers, called by the overridden respond() function */
+  std::string read_request_body(const std::string& headers, HttpConnection::HttpConnectionPtr& connection);
   /** Write the response back to the requestor, called by the overridden respond() function */
   void write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response);
   /** Get the value of the interupt flag */
   bool get_interupt() { return _interupt; }
+  /** Shutdown the thread but don't wait on it */
+  void stop();
 
 private:
   /** Function that starts the server listening and accepting connections */
@@ -146,6 +150,8 @@ private:
   void start_accept();
   /** Handle the HTTP connection and calls the overridden respond() function */
   void handle_accept(HttpConnection::HttpConnectionPtr new_connection, const boost::system::error_code& error);
+  /** Parse out the value of the "Content-Length" HTTP header */
+  long parse_content_length(const std::string& headers);
   /** IO Service object */
   boost::asio::io_service _io_service;
   /** Pointer to the ASIO TCP connection acceptor */

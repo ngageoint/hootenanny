@@ -32,6 +32,7 @@
 #include <hoot/core/test/ConflateCaseTest.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfPath.h>
 
 // Qt
 #include <QDir>
@@ -121,6 +122,10 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
   }
   else
   {
+    // We require that all tests use Testing.conf. We want to load it first in order to give each
+    // test a chance to override it when necessary.
+    confs.prepend(ConfPath::search("Testing.conf"));
+
     addTest(new ConflateCaseTest(d, confs));
     _numTests++;
   }

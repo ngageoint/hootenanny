@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayToIntersectionGeoModifier.h"
@@ -87,7 +87,8 @@ bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, Os
         CoordinateExt interP1(pMap->getNode(i1Id)->toCoordinate());
         CoordinateExt interP2(pMap->getNode(i2Id)->toCoordinate());
 
-        std::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(myP1, myP2, interP1, interP2);
+        std::shared_ptr<CoordinateExt> pIntersectionPoint =
+          CoordinateExt::lineSegementsIntersect(myP1, myP2, interP1, interP2);
 
         if (pIntersectionPoint)
         {

@@ -1,9 +1,9 @@
-21:08:11.811 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
-21:08:11.815 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:11.816 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:11.840 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
-21:08:11.840 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 475 elements from input in: 00:00.
-21:08:11.840 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
-21:08:11.841 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:11.841 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:11.864 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
-21:08:11.864 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 475 elements from input in: 00:00.
+20:04:20.303 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
+20:04:20.307 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        20:04:20.307 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        20:04:20.322 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
+20:04:20.322 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 475 elements from input in: 00:00.
+20:04:20.322 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
+20:04:20.323 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        20:04:20.323 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        20:04:20.337 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
+20:04:20.338 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 475 elements from input in: 00:00.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	338	176	424	
 Ways	14	15	49	
@@ -83,16 +83,16 @@ Unmatched Buildings	0	0	0
 Percentage of Buildings Conflated	0	0	0	
 Percentage of Buildings Marked for Review	0	0	0	
 Percentage of Unmatched Buildings	0	0	0	
-Waterways	14	15	49	
+Waterways	14	15	48	
 Conflatable Waterways	14	15	0	
 Conflated Waterways	0	0	12	
 Waterways Marked for Review	0	0	2	
 Waterway Reviews to be Made	0	0	1	
-Unmatched Waterways	14	15	37	
+Unmatched Waterways	14	15	36	
 Meters of Waterway Processed by Conflation	0	0	18756.54581550888	
-Percentage of Waterways Conflated	0	0	24.48979591836735	
-Percentage of Waterways Marked for Review	0	0	4.081632653061225	
-Percentage of Unmatched Waterways	100	100	75.51020408163265	
+Percentage of Waterways Conflated	0	0	25	
+Percentage of Waterways Marked for Review	0	0	4.166666666666666	
+Percentage of Unmatched Waterways	100	100	75	
 Polygon Conflatable POIs	0	0	0	
 Conflatable Polygon Conflatable POIs	0	0	0	
 Conflated Polygon Conflatable POIs	0	0	0	
@@ -150,23 +150,33 @@ Unmatched Points	0	0	0
 Percentage of Points Conflated	0	0	0	
 Percentage of Points Marked for Review	0	0	0	
 Percentage of Unmatched Points	0	0	0	
-Lines	0	0	1	
+Lines	14	15	49	
 Conflatable Lines	0	0	0	
-Conflated Lines	0	0	0	
-Lines Marked for Review	0	0	0	
-Line Reviews to be Made	0	0	0	
-Unmatched Lines	0	0	1	
-Meters of Line Processed by Conflation	0	0	0	
-Percentage of Lines Conflated	0	0	0	
-Percentage of Lines Marked for Review	0	0	0	
-Percentage of Unmatched Lines	0	0	100	
+Conflated Lines	0	0	12	
+Lines Marked for Review	0	0	2	
+Line Reviews to be Made	0	0	1	
+Unmatched Lines	14	15	37	
+Meters of Line Processed by Conflation	0	0	18756.54581550888	
+Percentage of Lines Conflated	0	0	24.48979591836735	
+Percentage of Lines Marked for Review	0	0	4.081632653061225	
+Percentage of Unmatched Lines	100	100	75.51020408163265	
+Collection Relations	0	0	1	
+Conflatable Collection Relations	0	0	0	
+Conflated Collection Relations	0	0	0	
+Collection Relations Marked for Review	0	0	0	
+Collection Relation Reviews to be Made	0	0	0	
+Unmatched Collection Relations	0	0	1	
+Meters Squared of Collection Relations Processed by Conflation	0	0	0	
+Percentage of Collection Relations Conflated	0	0	0	
+Percentage of Collection Relations Marked for Review	0	0	0	
+Percentage of Unmatched Collection Relations	0	0	100	
 Translated Populated Tags	14	107	375	
 Difference Between Total Features in Output and Total Features in Inputs			20	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			68.96551724137932	
-Calculate Stats for Input 1 Time (sec)				8.430442094802856
-Calculate Stats for Input 2 Time (sec)				1.148649930953979
-Apply Pre-Conflate Ops Time (sec)				0.01128888130187988
-Apply Post-Conflate Ops Time (sec)				0.04561591148376465
-Calculate Stats for Output Time (sec)				1.142367124557495
+Calculate Stats for Input 1 Time (sec)				8.881315946578979
+Calculate Stats for Input 2 Time (sec)				0.9929790496826172
+Apply Pre-Conflate Ops Time (sec)				0.01154899597167969
+Apply Post-Conflate Ops Time (sec)				0.02264904975891113
+Calculate Stats for Output Time (sec)				0.9964988231658936
 
-21:08:11.236 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:13 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm
+20:04:19.673 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:12 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm

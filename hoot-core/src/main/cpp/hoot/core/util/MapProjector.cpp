@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MapProjector.h"
@@ -522,6 +522,8 @@ Coordinate MapProjector::project(const Coordinate& c,
 void MapProjector::project(const std::shared_ptr<OsmMap>& map,
                            const std::shared_ptr<OGRSpatialReference>& ref)
 {
+  LOG_DEBUG("Reprojecting map...");
+
   std::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
 
@@ -622,7 +624,7 @@ void MapProjector::projectToPlanar(const std::shared_ptr<OsmMap>& map)
   {
     LOG_DEBUG("Projecting to planar...");
     OGREnvelope env = CalculateMapBoundsVisitor::getBounds(map);
-    LOG_VARD(GeometryUtils::toEnvelope(env));
+    LOG_VART(GeometryUtils::toEnvelope(env));
     projectToPlanar(map, env);
   }
 }
