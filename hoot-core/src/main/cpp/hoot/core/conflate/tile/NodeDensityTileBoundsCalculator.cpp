@@ -55,12 +55,19 @@ _maxNodeCountInOneTile(0),
 _minNodeCountInOneTile(LONG_MAX),
 _pixelSizeRetryReductionFactor(10.0),
 _maxNodePerTileIncreaseFactor(10),
-_maxNumTries(1)
+_maxNumTries(1),
+_maxTimePerAttempt(-1)
 {
 }
 
 void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
-{
+{  
+  if (_maxTimePerAttempt > 0)
+  {
+    _timer.restart();
+  }
+
+  LOG_VARD(map->getNodeCount());
   if (map->getNodeCount() <= _maxNodesPerTile)
   {
     LOG_STATUS(
@@ -73,7 +80,7 @@ void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
     subTiles.push_back(bounds);
     _tiles.push_back(subTiles);
     std::vector<long> subCounts;
-    subCounts.push_back(0);
+    subCounts.push_back(map->getNodeCount());
     _nodeCounts.push_back(subCounts);
     _minNodeCountInOneTile = map->getNodeCount();
     _maxNodeCountInOneTile = map->getNodeCount();
@@ -165,6 +172,16 @@ QString NodeDensityTileBoundsCalculator::tilesToString(const vector<vector<Envel
   return str;
 }
 
+void NodeDensityTileBoundsCalculator::_checkForTimeout()
+{
+  if (_maxTimePerAttempt > 0 && (_timer.elapsed() / 1000) > _maxTimePerAttempt)
+  {
+    throw TileCalcException(
+      "Calculation timed out at " + QString::number(_timer.elapsed() / 1000) +
+      " seconds out of maximum allowed " + QString::number(_maxTimePerAttempt) + " seconds.");
+  }
+}
+
 void NodeDensityTileBoundsCalculator::_calculateTiles()
 {
   LOG_INFO("Calculating tiles...");
@@ -177,8 +194,8 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
   double nodeCount = _sumPixels(boxes[0]);
   LOG_DEBUG("w: " << _r1.cols << " h: " << _r1.rows);
   LOG_DEBUG("Total node count: " << nodeCount);
-
   LOG_VARD(_maxNodesPerTile);
+
   while (!_isDone(boxes))
   {
     width *= 2;
@@ -209,6 +226,8 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
     }
 
     boxes = nextLayer;
+
+    _checkForTimeout();
   }
 
   _tiles.clear();
@@ -226,8 +245,8 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
     for (size_t ty = 0; ty < width; ty++)
     {
       PixelBox& pb = boxes[tx + ty * width];
-      LOG_VARD(pb.getWidth());
-      LOG_VARD(pb.getHeight());
+      LOG_VART(pb.getWidth());
+      LOG_VART(pb.getHeight());
 
       if (pb.getWidth() < 3 || pb.getHeight() < 3)
       {
@@ -245,7 +264,10 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
 
       _tiles[tx][ty] = _toEnvelope(pb);
     }
+
+    _checkForTimeout();
   }
+
   if (_maxNodeCountInOneTile == 0)
   {
     throw TileCalcException(
@@ -471,6 +493,7 @@ void NodeDensityTileBoundsCalculator::_exportImage(cv::Mat &r, QString output)
 
   LOG_VART(_maxValue);
 
+  LOG_VART(r.cols); //18k
   for (int y = 0; y < r.rows; y++)
   {
     int32_t* row = r.ptr<int32_t>(y);
@@ -488,6 +511,8 @@ void NodeDensityTileBoundsCalculator::_exportImage(cv::Mat &r, QString output)
       int v = l * 255;
       qImage.setPixel(x, r.rows - y - 1, qRgb(v, v, 50));
     }
+
+    _checkForTimeout();
   }
 
   qImage.save(output);
@@ -513,6 +538,8 @@ void NodeDensityTileBoundsCalculator::_exportResult(const vector<PixelBox>& boxe
 
   LOG_TRACE("max value: " << _maxValue);
 
+  LOG_VART(_r1.rows); //14k
+  LOG_VART(_r1.cols); //18k
   for (int y = 0; y < _r1.rows; y++)
   {
     int32_t* row1 = _r1.ptr<int32_t>(y);
@@ -524,6 +551,8 @@ void NodeDensityTileBoundsCalculator::_exportResult(const vector<PixelBox>& boxe
 
       qImage.setPixel(x, _r1.rows - y - 1, qRgb(l1 * 255, l2 * 255, 0));
     }
+
+    _checkForTimeout();
   }
 
   pt.setPen(QPen(QColor(0, 0, 255, 100)));
@@ -531,12 +560,14 @@ void NodeDensityTileBoundsCalculator::_exportResult(const vector<PixelBox>& boxe
   {
     const PixelBox& b = boxes[i];
     pt.drawRect(b.minX, _r1.rows - b.maxY - 1, b.maxX - b.minX, b.maxY - b.minY);
+
+    _checkForTimeout();
   }
 
   qImage.save(output);
 }
 
-bool NodeDensityTileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
+bool NodeDensityTileBoundsCalculator::_isDone(vector<PixelBox>& boxes)
 {
   LOG_VART(boxes.size());
 
@@ -652,13 +683,19 @@ void NodeDensityTileBoundsCalculator::_setImages(const cv::Mat& r1, const cv::Ma
   _exportImage(_min, "tmp/min.png");
 }
 
+long NodeDensityTileBoundsCalculator::_sumPixels(const PixelBox& pb)
+{
+  return _sumPixels(pb, _r1) + _sumPixels(pb, _r2);
+}
+
 long NodeDensityTileBoundsCalculator::_sumPixels(const PixelBox& pb, cv::Mat& r)
 {
-  long sum = 0.0;
   LOG_VART(pb.minY);
   LOG_VART(pb.maxY);
   LOG_VART(pb.minX);
   LOG_VART(pb.maxX);
+
+  long sum = 0.0;
   for (int py = pb.minY; py <= pb.maxY; py++)
   {
     int32_t* row = r.ptr<int32_t>(py);

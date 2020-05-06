@@ -44,6 +44,10 @@ using namespace std;
 namespace hoot
 {
 
+/*
+ * A lot of more recently added functionality in NodeDensityTileBoundsCalculator is tested in
+ * NodeDensityTilesCmdTest.sh.
+ */
 class NodeDensityTileBoundsCalculatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NodeDensityTileBoundsCalculatorTest);

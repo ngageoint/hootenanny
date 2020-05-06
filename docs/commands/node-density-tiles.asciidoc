@@ -17,17 +17,21 @@ the specified input(s) and writes the output to a file.
                                               attempt fails, additional calculation attempts will automatically be made after tweaking the
                                               initial input parameters. Defaults to a single attempt. Note that as additional attempts are made 
                                               the adjustments to the inputs may dramatically increase the runtime of a calculation.
+* +--maxTimePerAttempt+                     - Optional maximum time allowed, in seconds, for a calculation attempt. Defaults to no time limit 
+                                              (-1). The timeout is not guaranteed to happen exactly after the specified time has elapsed and 
+                                              will happen as close to it as possible. 
 * +--maxNodeCountPerTileAutoIncreaseFactor+ - Optional integer factor greater than 1 by which +maxNodeCountPerTile+ will be automatically 
                                               increased if +--maxAttempts+ is greater than one and any calculation attempt fails. The default 
                                               value is 2.
 * +--pixelSizeAutoReductionFactor+          - Optional decimal factor greater than 1.0 by which +--pixelSize+ will be automatically reduced if 
                                               +--maxAttempts+ is greater than one and any calculation attempt fails. The default value is 2.0.
-* +--random+                                - Selects a single random tile from those calculated
-* +--random-seed+                           - Seeds the random number generator for consistent tile boundary selection; valid only if --random 
-                                              is specified; use -1 for pseudo-random seeding; defaults to -1
+* +--random+                                - Optionally selects a single random tile from those calculated
+* +--random-seed+                           - Optionally seeds the random number generator for consistent tile boundary selection; valid only 
+                                              if +--random+ is specified; use -1 for pseudo-random seeding; defaults to -1
 
 If too low a value is specified for maxNodeCountPerTile or too high a value is specified for pixelSize, the algorithm used may not be able
-to find a solution.
+to find a solution and the runtime may increase dramatically. The +--maxAttempts+ option allows you to let the algorithm find potentially
+better input values.
 
 This command makes use of the optional 'convert.bounding.box' configuration option to allow for calculating tiles against a subset of the 
 input data. To make use of the option the reader for the specified input data must support bounded reading. To list the Hootenanny input 
@@ -39,7 +43,7 @@ hoot info --formats --input-bounded
 === Usage
 
 --------------------------------------
-hoot node-density-tiles (input1.osm)[;input2.osm...] (output) [maxNodeCountPerTile] [--pixelSize <value>] [--maxAttempts <value>] [--pixelSizeAutoReductionFactor <value>] [--maxNodeCountPerTileAutoIncreaseFactor <value>] [--random] [--random-seed <value>]
+hoot node-density-tiles (input1.osm)[;input2.osm...] (output) (maxNodeCountPerTile) [--pixelSize <value>] [--maxAttempts <value>] [--maxTimePerAttempt <value>] [--pixelSizeAutoReductionFactor <value>] [--maxNodeCountPerTileAutoIncreaseFactor <value>] [--random] [--random-seed <value>]
 --------------------------------------
 
 === Examples

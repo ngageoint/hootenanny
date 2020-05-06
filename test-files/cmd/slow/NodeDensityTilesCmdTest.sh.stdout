@@ -1,1 +1,2 @@
-18:51:33.783 WARN   ...ensityTileBoundsCalculator.cpp( 366) Node density tiles bestSum isn't valid. 0,0,2,9 total: 749 size: 9
+22:12:25.749 WARN   ...ensityTileBoundsCalculator.cpp( 389) Node density tiles bestSum isn't valid. 0,0,2,9 total: 749 size: 9
+22:12:27.470 WARN   ...ensityTileBoundsCalculator.cpp( 389) Node density tiles bestSum isn't valid. 0,0,2,9 total: 749 size: 9

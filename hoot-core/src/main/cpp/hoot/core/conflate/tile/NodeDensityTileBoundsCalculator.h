@@ -36,6 +36,7 @@
 
 // Qt
 #include <QString>
+#include <QElapsedTimer>
 
 // Std
 #include <vector>
@@ -75,8 +76,6 @@ public:
       HootException(message)
       {
       }
-
-      //virtual ~TileCalcException() throw() {}
   };
 
   static std::string className() { return "hoot::NodeDensityTileBoundsCalculator"; }
@@ -201,6 +200,7 @@ public:
   void setPixelSizeRetryReductionFactor(double factor) { _pixelSizeRetryReductionFactor = factor; }
   void setMaxNodePerTileIncreaseFactor(long factor) { _maxNodePerTileIncreaseFactor = factor; }
   void setMaxNumTries(int numTries) { _maxNumTries = numTries; }
+  void setMaxTimePerAttempt(int seconds) { _maxTimePerAttempt = seconds; }
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
 
 private:
@@ -221,6 +221,9 @@ private:
   double _pixelSizeRetryReductionFactor;
   long _maxNodePerTileIncreaseFactor;
   int _maxNumTries;
+  // seconds; -1 is unlimited
+  int _maxTimePerAttempt;
+  QElapsedTimer _timer;
 
   std::vector<std::vector<long>> _nodeCounts;
   std::vector<std::vector<geos::geom::Envelope>> _tiles;
@@ -250,9 +253,11 @@ private:
   bool _isDone(std::vector<PixelBox>& boxes);
 
   long _sumPixels(const PixelBox& pb, cv::Mat& r);
-  long _sumPixels(const PixelBox& pb) { return _sumPixels(pb, _r1) + _sumPixels(pb, _r2); }
+  long _sumPixels(const PixelBox& pb);
 
   geos::geom::Envelope _toEnvelope(const PixelBox& pb);
+
+  void _checkForTimeout();
 };
 
 }

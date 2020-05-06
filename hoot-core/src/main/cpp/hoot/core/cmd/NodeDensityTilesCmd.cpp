@@ -64,6 +64,9 @@ public:
         QString("%1 takes at least two parameters.").arg(getName()));
     }
 
+    QElapsedTimer timer;
+    timer.start();
+
     QStringList inputs;
     const QString input = args[0];
     LOG_VARD(input);
@@ -148,6 +151,22 @@ public:
     }
     LOG_VARD(maxAttempts);
 
+    int maxTimePerAttempt = -1;
+    if (args.contains("--maxTimePerAttempt"))
+    {
+      const int optionNameIndex = args.indexOf("--maxTimePerAttempt");
+      bool parseSuccess = false;
+      const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
+      maxTimePerAttempt = optionStrVal.toInt(&parseSuccess);
+      if (!parseSuccess || maxAttempts <= 0)
+      {
+        throw IllegalArgumentException("Invalid maximum time per attempt value: " + optionStrVal);
+      }
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(maxTimePerAttempt);
+
     long maxNodeCountAutoIncreaseFactor = 2;
     if (args.contains("--maxNodeCountPerTileAutoIncreaseFactor"))
     {
@@ -208,6 +227,7 @@ public:
     //tileCalc.setSlop(0.1); // TODO: tweak this?
     tileCalc.setMaxNodePerTileIncreaseFactor(maxNodeCountAutoIncreaseFactor);
     tileCalc.setMaxNumTries(maxAttempts);
+    tileCalc.setMaxTimePerAttempt(maxTimePerAttempt);
     tileCalc.setPixelSizeRetryReductionFactor(pixelSizeAutoReductionFactor);
     tileCalc.calculateTiles(inputMap);
     const std::vector<std::vector<geos::geom::Envelope>> tiles = tileCalc.getTiles();
@@ -224,6 +244,8 @@ public:
         tiles, nodeCounts, output, args.contains("--random"), randomSeed);
     }
 
+    LOG_STATUS(
+      "Node density tiles calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
     LOG_STATUS("Number of calculated tiles: " << StringUtils::formatLargeNumber(tiles.size()));
     LOG_STATUS(
       "Maximum node count in a single tile: " <<
