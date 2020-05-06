@@ -156,7 +156,7 @@ public class GrailResource {
     /**
      * If the PRIVATE_OVERPASS_URL variable is set to a value then return true
       */
-    private boolean isPrivateOverpassActive() {
+    public static boolean isPrivateOverpassActive() {
         return !replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL);
     }
 
@@ -723,11 +723,13 @@ public class GrailResource {
 
             // first line that lists columns which are counts for each feature type
             overpassQuery = overpassQuery.replace("[out:json]", "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")]");
-
-            // overpass query can have multiple "out *" lines so need to replace all
-            overpassQuery = overpassQuery.replaceAll("out [\\s\\w]+;", "out count;");
         }
 
+        // append the connected ways query
+        overpassQuery = PullApiCommand.connectedWaysQuery(overpassQuery);
+
+        // overpass query can have multiple "out *" lines so need to replace all
+        overpassQuery = overpassQuery.replaceAll("out [\\s\\w]+;", "out count;");
 
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
         overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(reqParams.getBounds()).toOverpassString());
@@ -856,6 +858,7 @@ public class GrailResource {
     private List<Command> setupRailsPull(String jobId, GrailParams params, Long parentFolderId) throws UnavailableException {
         List<Command> workflow = new LinkedList<>();
         Users user = params.getUser();
+        boolean usingPrivateOverpass = isPrivateOverpassActive();
 
         // Pull data from the reference OSM API or private Overpass API
         // Until hoot can read API url directly, download to file first
@@ -865,30 +868,23 @@ public class GrailResource {
         GrailParams getRailsParams = new GrailParams(params);
         getRailsParams.setOutput(referenceOSMFile.getAbsolutePath());
 
+        // have to add the query for getting connected ways before calling getRailsPortApiCommand
+        if (usingPrivateOverpass) {
+            String queryWithConnectedWays = PullApiCommand.connectedWaysQuery(getRailsParams.getCustomQuery());
+            getRailsParams.setCustomQuery(queryWithConnectedWays);
+        }
+
         try {
             workflow.add(getRailsPortApiCommand(jobId, getRailsParams));
         } catch (UnavailableException exc) {
             throw new UnavailableException("The Rails port API is offline.");
         }
 
-        File ingestFile;
+        // if not using private overpass then this will be changed to the merge file
+        File ingestFile = referenceOSMFile;
+
         // private overpass query result file should handle getting the connected ways so just use that as the ingest file
-        if (isPrivateOverpassActive()) {
-            File connectedWaysOSMFile = new File(params.getWorkDir(), "connectedWays.osm");
-            if (connectedWaysOSMFile.exists()) { connectedWaysOSMFile.delete(); }
-
-            GrailParams connectedWaysParams = new GrailParams(params);
-            connectedWaysParams.setOutput(connectedWaysOSMFile.getAbsolutePath());
-            connectedWaysParams.setCustomQuery(PullApiCommand.connectedWaysQuery());
-            workflow.add(getRailsPortApiCommand(jobId, connectedWaysParams));
-
-            GrailParams mergeRefParams = new GrailParams(params);
-            ingestFile = new File(params.getWorkDir(), "merge.osm");
-            mergeRefParams.setInput1("(" + connectedWaysOSMFile.getName() + "|" + referenceOSMFile.getName() + ")"); //this is the file filter
-            mergeRefParams.setOutput(ingestFile.getAbsolutePath());
-            workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
-
-        } else {
+        if (!usingPrivateOverpass) {
             GrailParams connectedWaysParams = new GrailParams(params);
             connectedWaysParams.setInput1(referenceOSMFile.getAbsolutePath());
             File cropFile = new File(params.getWorkDir(), "crop.osm");

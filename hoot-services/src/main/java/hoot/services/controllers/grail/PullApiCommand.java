@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.GRAIL_CONNECTED_WAYS_QUERY;
+import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_CERT_PATH;
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_CERT_PHRASE;
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_URL;
@@ -163,16 +165,36 @@ class PullApiCommand implements InternalCommand {
 
     /**
      * String query that will retrieve the connected ways.
+     *
+     * @param query if query is provided then we append the pull connected ways query to the end.
+     *              else we get the default overpass query and append the pull connected ways query to that.
+     *
      * @return String query that will retrieve the connected ways.
      */
-    static String connectedWaysQuery() {
-        String newQuery =
-            "(" +
-                "way({{bbox}});>;" + // get all ways within bbox and the nodes for those ways
-            ");" +
-            "way(bn);" + // select parent ways for the nodes
-            "(._;>;);" + // get the nodes assocaited with those ways as well
-            "out meta;";
+    static String connectedWaysQuery(String query) {
+        String newQuery;
+
+        // if no query provided then use default overpass query
+        if (query == null || query.equals("")) {
+            newQuery = PullOverpassCommand.getDefaultOverpassQuery();
+        } else {
+            newQuery = query;
+        }
+
+        // connected ways query
+        String connectedWaysQuery;
+        File connectedWaysQueryFile = new File(HOME_FOLDER, GRAIL_CONNECTED_WAYS_QUERY);
+        try {
+            connectedWaysQuery = FileUtils.readFileToString(connectedWaysQueryFile, "UTF-8");
+        } catch(Exception exc) {
+            throw new IllegalArgumentException("Grail pull connected ways error. Couldn't read connected ways overpass query file: " + connectedWaysQueryFile.getName());
+        }
+
+        if (newQuery.lastIndexOf("out meta;") != -1) {
+            newQuery = newQuery.substring(0, newQuery.lastIndexOf("out meta;")) + connectedWaysQuery;
+        } else if (newQuery.lastIndexOf("out count;") != -1) {
+            newQuery = newQuery.substring(0, newQuery.lastIndexOf("out count;")) + connectedWaysQuery;
+        }
 
         return newQuery;
     }
