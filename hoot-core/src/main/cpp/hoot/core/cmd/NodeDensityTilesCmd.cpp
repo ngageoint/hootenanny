@@ -134,9 +134,9 @@ public:
     tileCalc.setPixelSize(pixelSize);
     tileCalc.setMaxNodesPerTile(maxNodesPerTile);
     //tileCalc.setSlop(0.1); // TODO: tweak this?
-    tileCalc.setMaxNodePerTileIncreaseFactor(10);
+    tileCalc.setMaxNodePerTileIncreaseFactor(2);
     tileCalc.setMaxNumTries(1); // TODO: change
-    tileCalc.setPixelSizeRetryReductionFactor(10.0);
+    tileCalc.setPixelSizeRetryReductionFactor(2.0);
     tileCalc.calculateTiles(inputMap);
     const std::vector<std::vector<geos::geom::Envelope>> tiles = tileCalc.getTiles();
     const std::vector<std::vector<long>> nodeCounts = tileCalc.getNodeCounts();

@@ -64,8 +64,9 @@ void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
   if (map->getNodeCount() <= _maxNodesPerTile)
   {
     LOG_STATUS(
-      "Node count is less than specified maximum node count per tile. Returning a single tile "
-      "covering all of the input data...");
+      "Node count " << StringUtils::formatLargeNumber(map->getNodeCount()) << " is less than "
+      "specified maximum node count per tile. Returning a single tile covering all of the input "
+      "data...");
 
     const geos::geom::Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
     std::vector<geos::geom::Envelope> subTiles;
@@ -79,15 +80,15 @@ void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
   }
   else
   {  
-    const double pixelSizeRetryReductionFactor = 10.0;
-    const long maxNodePerTileIncreaseFactor = 10;
-    const int maxNumTries = 2;
     int tryCtr = 0;
-    while (_tiles.empty() && tryCtr <= maxNumTries)
+    while (_tiles.empty() && tryCtr < _maxNumTries)
     {
+      tryCtr++;
       LOG_STATUS(
-        "Running node density tiles calculation attempt " << tryCtr << " / " << maxNumTries <<
-         " with pixel size: " << _pixelSize << " and max nodes: " << _maxNodesPerTile << "...");
+        "Running node density tiles calculation attempt " << tryCtr << " / " <<
+         _maxNumTries << " with pixel size: " << _pixelSize << ", max allowed nodes: " <<
+         StringUtils::formatLargeNumber(_maxNodesPerTile) << ", and total input node size: " <<
+         StringUtils::formatLargeNumber(map->getNodeCount()) << "...");
 
       cv::Mat r1, r2;
       _renderImage(map, r1, r2);
@@ -101,11 +102,10 @@ void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
       }
       catch (const TileCalcException& e)
       {
-        tryCtr++;
         QString msg =
           "Tile calculation attempt " + QString::number(tryCtr) + " / " +
-          QString::number(maxNumTries) + " failed.";
-        if (tryCtr == maxNumTries)
+          QString::number(_maxNumTries) + " failed.";
+        if (tryCtr == _maxNumTries)
         {
           msg += " Aborting calculation.";
           LOG_ERROR(msg);
@@ -113,8 +113,10 @@ void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
         }
         else
         {
-          _pixelSize /= pixelSizeRetryReductionFactor;
-          _maxNodesPerTile *= maxNodePerTileIncreaseFactor;
+          msg += " Retrying calculation...";
+          LOG_STATUS(msg);
+          _pixelSize /= _pixelSizeRetryReductionFactor;
+          _maxNodesPerTile *= _maxNodePerTileIncreaseFactor;
         }
       }
     }
