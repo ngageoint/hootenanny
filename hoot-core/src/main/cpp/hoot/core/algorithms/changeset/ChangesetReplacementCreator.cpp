@@ -341,6 +341,8 @@ void ChangesetReplacementCreator::create(
       refFilters.size() << "...");
 
     OsmMapPtr refMap;
+    // This is a bit of misnomer after recent changes, as this map may have only been cleaned by
+    // this point and not actually conflated with anything.
     OsmMapPtr conflatedMap;
     QStringList linearFilterClassNames;
     //LOG_VARD(itr.value().get());
@@ -401,52 +403,8 @@ void ChangesetReplacementCreator::create(
 
   // Due to the mixed relations processing explained in _getDefaultGeometryFilters, we may have
   // some duplicated features that need to be cleaned up before we generate the changesets.
-  int dedupePassCtr = 0;
-  const int totalDedupePasses = refMaps.size() + conflatedMaps.size();
-  for (int i = 0; i < refMaps.size(); i++)
-  {
-    dedupePassCtr++;
-    if ((i + 1) < refMaps.size())
-    {
-      OsmMapPtr map1 = refMaps.at(i);
-      OsmMapPtr map2 = refMaps.at(i + 1);
-      LOG_DEBUG(
-        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
-        dedupePassCtr << " / " << totalDedupePasses << "...");
-      _dedupeMap(map1, map2);
-    }
-    else
-    {
-      OsmMapPtr map1 = refMaps.at(0);
-      OsmMapPtr map2 = refMaps.at(i);
-      LOG_DEBUG(
-        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
-        dedupePassCtr << " / " << totalDedupePasses << "...");
-      _dedupeMap(map1, map2);
-    }
-  }
-  for (int i = 0; i < conflatedMaps.size(); i++)
-  {
-    dedupePassCtr++;
-    if ((i + 1) < conflatedMaps.size())
-    {
-      OsmMapPtr map1 = conflatedMaps.at(i);
-      OsmMapPtr map2 = conflatedMaps.at(i + 1);
-      LOG_DEBUG(
-        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
-        dedupePassCtr << " / " << totalDedupePasses << "...");
-      _dedupeMap(map1, map2);
-    }
-    else
-    {
-      OsmMapPtr map1 = conflatedMaps.at(0);
-      OsmMapPtr map2 = conflatedMaps.at(i);
-      LOG_DEBUG(
-        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
-        dedupePassCtr << " / " << totalDedupePasses << "...");
-      _dedupeMap(map1, map2);
-    }
-  }
+  _dedupeMaps(refMaps);
+  _dedupeMaps(conflatedMaps);
 
   // CHANGESET GENERATION
 
@@ -458,10 +416,37 @@ void ChangesetReplacementCreator::create(
   LOG_INFO("Derived replacement changeset: ..." << output.right(maxFilePrintLength));
 }
 
+void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
+{
+  int dedupePassCtr = 0;
+  for (int i = 0; i < maps.size(); i++)
+  {
+    dedupePassCtr++;
+    if ((i + 1) < maps.size())
+    {
+      OsmMapPtr map1 = maps.at(i);
+      OsmMapPtr map2 = maps.at(i + 1);
+      LOG_DEBUG(
+        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
+        dedupePassCtr << " / " << maps.size() << "...");
+      _dedupeMap(map1, map2);
+    }
+    else
+    {
+      OsmMapPtr map1 = maps.at(0);
+      OsmMapPtr map2 = maps.at(i);
+      LOG_DEBUG(
+        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
+        dedupePassCtr << " / " << maps.size() << "...");
+      _dedupeMap(map1, map2);
+    }
+  }
+}
+
 void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
 {
   // TODO: tweak
-  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 5);
+  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 7);
   LOG_DEBUG(map1->getName() << " size before de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size before de-duping: " << map2->size());
 
