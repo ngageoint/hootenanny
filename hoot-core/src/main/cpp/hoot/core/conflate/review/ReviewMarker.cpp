@@ -156,7 +156,7 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
   return isReview(map->getElement(uid));
 }
 
-void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
+void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e1, const ElementPtr& e2,
   const QString& note, const QString& reviewType, double score, vector<QString> choices)
 {
   if (!e1 || !e2)

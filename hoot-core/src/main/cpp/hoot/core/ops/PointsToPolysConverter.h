@@ -58,7 +58,8 @@ public:
   {
     return
       "Converted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-      StringUtils::formatLargeNumber(_numProcessed) + " non-child points to polygons."; }
+      StringUtils::formatLargeNumber(_numProcessed) + " non-child points to polygons.";
+  }
 
   virtual QString getDescription() const
   { return "Converts non-child points to rectangular polygons"; }
