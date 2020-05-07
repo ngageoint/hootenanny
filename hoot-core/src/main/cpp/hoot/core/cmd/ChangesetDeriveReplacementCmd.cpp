@@ -213,7 +213,7 @@ public:
       }
       args.removeAll("--disable-cleaning");
     }
-    LOG_VARD(enableConflation);
+    LOG_VARD(enableCleaning);
 
     bool tagOobConnectedWays = true;
     if (args.contains("--disable-oob-way-handling"))
