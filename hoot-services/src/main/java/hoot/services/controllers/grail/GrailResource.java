@@ -109,6 +109,7 @@ import org.w3c.dom.NodeList;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.controllers.ingest.RemoveFilesCommandFactory;
 import hoot.services.controllers.osm.map.SetMapTagsCommandFactory;
 import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
 import hoot.services.geo.BoundingBox;
@@ -150,6 +151,9 @@ public class GrailResource {
 
     @Autowired
     private PullConnectedWaysCommandFactory connectedWaysCommandFactory;
+
+    @Autowired
+    private RemoveFilesCommandFactory removeFilesCommandFactory;
 
     public GrailResource() {}
 
@@ -663,6 +667,12 @@ public class GrailResource {
         InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, layerName, user, this.getClass());
         workflow.add(setFolder);
 
+        // Clean up pulled files
+        ArrayList<File> deleteFiles = new ArrayList<>();
+        deleteFiles.add(workDir);
+        InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+        workflow.add(cleanFolders);
+
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", bbox);
 
@@ -931,6 +941,12 @@ public class GrailResource {
         // Move the data to the folder
         InternalCommand setFolder = updateParentCommandFactory.build(jobId, parentFolderId, params.getOutput(), user, this.getClass());
         workflow.add(setFolder);
+
+        // Clean up pulled files
+        ArrayList<File> deleteFiles = new ArrayList<>();
+        deleteFiles.add(params.getWorkDir());
+        InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+        workflow.add(cleanFolders);
 
         return workflow;
     }
