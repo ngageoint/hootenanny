@@ -59,11 +59,15 @@ end
 
 Vagrant.configure(2) do |config|
 
-  def aws_provider(config, os)
+  def aws_provider(config, os, vbox)
     # AWS Provider.  Set enviornment variables for values below to use
     config.vm.provider :aws do |aws, override|
       override.nfs.functional = false
-      aws.region_config ENV['AWS_DEFAULT_REGION'], :ami => ENV['AWS_AMI_ID']
+      if vbox == "hoot"
+          aws.region_config ENV['AWS_DEFAULT_REGION'], :ami => ENV['AWS_HOOT_AMI_ID']
+      elsif vbox == "minimal"
+          aws.region_config ENV['AWS_DEFAULT_REGION'], :ami => ENV['AWS_MINIMAL_AMI_ID']
+      end
       aws.subnet_id = ENV['AWS_SUBNET_ID']
       if ENV.key?('AWS_KEYPAIR_NAME')
         aws.keypair_name = ENV['AWS_KEYPAIR_NAME']
@@ -154,7 +158,7 @@ Vagrant.configure(2) do |config|
     set_forwarding(hoot_centos7_prov)
     mount_shares(hoot_centos7_prov)
     set_provisioners(hoot_centos7_prov)
-    aws_provider(hoot_centos7_prov, 'CentOS7')
+    aws_provider(hoot_centos7_prov, 'CentOS7', 'hoot')
   end
 
   # Centos7 box - not preprovisioned
@@ -169,7 +173,7 @@ Vagrant.configure(2) do |config|
     $addRepos = "yes"
     $yumUpdate = "yes"    
     set_provisioners(hoot_centos7)
-    aws_provider(hoot_centos7, 'CentOS7')
+    aws_provider(hoot_centos7, 'CentOS7', 'minimal')
   end
 
   # Centos7 - Hoot core ONLY. No UI
