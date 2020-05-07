@@ -59,39 +59,26 @@ end
 
 Vagrant.configure(2) do |config|
 
-  def aws_provider(config, os, account)
+  def aws_provider(config, os)
     # AWS Provider.  Set enviornment variables for values below to use
     config.vm.provider :aws do |aws, override|
       override.nfs.functional = false
-      if account == 'default'
-        aws.subnet_id = ENV['AWS_SUBNET_ID']
-        if ENV.key?('AWS_KEYPAIR_NAME')
-          aws.keypair_name = ENV['AWS_KEYPAIR_NAME']
-        end
-        if ENV.key?('AWS_SECURITY_GROUP')
-          $security_grp = ENV['AWS_SECURITY_GROUP']
-          if $security_grp.is_a?(String) and $security_grp.include? ',' and $security_grp.split(',').length > 0
-              aws.security_groups = $security_grp.split(',')
-          else
-              aws.security_groups = $security_grp
-          end
-        end
-      else
-        if account == 'gov'
-          aws.region_config ENV['AWS_GOV_DEFAULT_REGION'], :ami => ENV['AWS_GOV_AMI_ID']
-          aws.subnet_id = ENV['AWS_GOV_SUBNET_ID']
-          if ENV.key?('AWS_GOV_SECURITY_GROUP')
-            aws.security_groups = ENV['AWS_GOV_SECURITY_GROUP']
-          end
-          if ENV.key?('AWS_GOV_KEYPAIR_NAME')
-            aws.keypair_name = ENV['AWS_GOV_KEYPAIR_NAME']
-          end
+      aws.region_config ENV['AWS_DEFAULT_REGION'], :ami => ENV['AWS_AMI_ID']
+      aws.subnet_id = ENV['AWS_SUBNET_ID']
+      if ENV.key?('AWS_KEYPAIR_NAME')
+        aws.keypair_name = ENV['AWS_KEYPAIR_NAME']
+      end
+      if ENV.key?('AWS_SECURITY_GROUP')
+        $security_grp = ENV['AWS_SECURITY_GROUP']
+        if $security_grp.is_a?(String) and $security_grp.include? ',' and $security_grp.split(',').length > 0
+            aws.security_groups = $security_grp.split(',')
+        else
+            aws.security_groups = $security_grp
         end
       end
 
       aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'm5.2xlarge')
       aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 64 }]
-
 
       aws.tags = {
         'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "jenkins-hootenanny-#{os.downcase}"),
@@ -167,7 +154,7 @@ Vagrant.configure(2) do |config|
     set_forwarding(hoot_centos7_prov)
     mount_shares(hoot_centos7_prov)
     set_provisioners(hoot_centos7_prov)
-    aws_provider(hoot_centos7_prov, 'CentOS7', 'default')
+    aws_provider(hoot_centos7_prov, 'CentOS7')
   end
 
   # Centos7 box - not preprovisioned
@@ -182,7 +169,7 @@ Vagrant.configure(2) do |config|
     $addRepos = "yes"
     $yumUpdate = "yes"    
     set_provisioners(hoot_centos7)
-    aws_provider(hoot_centos7, 'CentOS7', 'gov')
+    aws_provider(hoot_centos7, 'CentOS7')
   end
 
   # Centos7 - Hoot core ONLY. No UI
