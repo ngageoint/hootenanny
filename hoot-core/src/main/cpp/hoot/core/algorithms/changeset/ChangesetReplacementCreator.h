@@ -212,6 +212,10 @@ private:
 
   void _validateInputs(const QString& input1, const QString& input2);
 
+  QString _getJobDescription(
+    const QString& input1, const QString& input2, const QString& bounds,
+    const QString& output) const;
+
   /*
    * Returns the default geometry filters (point, line, poly) to use when no other geometry filters
    * are specified
