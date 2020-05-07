@@ -79,7 +79,7 @@ public class CalculateTilesCommandTest {
         assertNotNull(command.getWorkDir());
         assertNotNull(command.getCommand());
 
-        String expectedCommand = "hoot.bin node-density-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
+        String expectedCommand = "hoot.bin node-density-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} --maxNodesPerTile ${MAX_NODE_COUNT_PER_TILE} --pixelSize ${PIXEL_SIZE}";
         assertEquals(expectedCommand, command.getCommand());
 
         assertTrue(command.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
