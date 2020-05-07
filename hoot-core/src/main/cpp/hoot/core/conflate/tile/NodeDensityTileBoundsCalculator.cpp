@@ -22,14 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "TileBoundsCalculator.h"
+#include "NodeDensityTileBoundsCalculator.h"
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -47,19 +45,93 @@ using namespace std;
 namespace hoot
 {
 
-int TileBoundsCalculator::logWarnCount = 0;
+int NodeDensityTileBoundsCalculator::logWarnCount = 0;
 
-TileBoundsCalculator::TileBoundsCalculator(double pixelSize) :
-_pixelSize(pixelSize),
-_maxNodesPerBox(1000),
+NodeDensityTileBoundsCalculator::NodeDensityTileBoundsCalculator() :
+_pixelSize(0.001),
+_maxNodesPerTile(1000),
 _slop(0.1),
 _maxNodeCountInOneTile(0),
-_minNodeCountInOneTile(LONG_MAX)
+_minNodeCountInOneTile(LONG_MAX),
+_pixelSizeRetryReductionFactor(10),
+_maxNumTries(3),
+_maxTimePerAttempt(-1)
 {
-  LOG_VARD(_pixelSize);
 }
 
-void TileBoundsCalculator::_calculateMin()
+void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
+{  
+  if (_maxTimePerAttempt > 0)
+  {
+    _timer.restart();
+  }
+
+  LOG_VARD(map->getNodeCount());
+  if (map->getNodeCount() <= _maxNodesPerTile)
+  {
+    LOG_STATUS(
+      "Node count " << StringUtils::formatLargeNumber(map->getNodeCount()) << " is less than "
+      "specified maximum node count per tile. Returning a single tile covering all of the input "
+      "data...");
+
+    const geos::geom::Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
+    std::vector<geos::geom::Envelope> subTiles;
+    subTiles.push_back(bounds);
+    _tiles.push_back(subTiles);
+    std::vector<long> subCounts;
+    subCounts.push_back(map->getNodeCount());
+    _nodeCounts.push_back(subCounts);
+    _minNodeCountInOneTile = map->getNodeCount();
+    _maxNodeCountInOneTile = map->getNodeCount();
+  }
+  else
+  {  
+    int tryCtr = 0;
+    while (_tiles.empty() && tryCtr < _maxNumTries)
+    {
+      tryCtr++;
+      LOG_STATUS(
+        "Running node density tiles calculation attempt " << tryCtr << " / " <<
+         _maxNumTries << " with pixel size: " << _pixelSize << ", max allowed nodes: " <<
+         StringUtils::formatLargeNumber(_maxNodesPerTile) << ", and total input node size: " <<
+         StringUtils::formatLargeNumber(map->getNodeCount()) << "...");
+
+      cv::Mat r1, r2;
+      _renderImage(map, r1, r2);
+      // We're calculating for unknown1 only, so fill the second matrix with all zeroes.
+      cv::Mat zeros = cv::Mat::zeros(r1.size(), r1.type());
+      _setImages(r1, zeros);
+
+      try
+      {
+        _calculateTiles();
+      }
+      catch (const TileCalcException& e)
+      {
+        QString msg =
+          "Tile calculation attempt " + QString::number(tryCtr) + " / " +
+          QString::number(_maxNumTries) + " failed.";
+        if (tryCtr == _maxNumTries)
+        {
+          msg += " Aborting calculation.";
+          LOG_ERROR(msg);
+          throw e;
+        }
+        else
+        {
+          msg += " Retrying calculation...";
+          LOG_STATUS(msg);
+          if (_pixelSizeRetryReductionFactor != -1)
+          {
+            _pixelSize -= _pixelSize * (_pixelSizeRetryReductionFactor / 100.0);
+          }
+        }
+      }
+    }
+  }
+}
+
+void NodeDensityTileBoundsCalculator::_calculateMin()
 {
   int w = ceil((_envelope.MaxX - _envelope.MinX) / _pixelSize) + 1;
   LOG_VART(w);
@@ -87,7 +159,7 @@ void TileBoundsCalculator::_calculateMin()
   }
 }
 
-QString TileBoundsCalculator::tilesToString(const vector<vector<Envelope>>& tiles)
+QString NodeDensityTileBoundsCalculator::tilesToString(const vector<vector<Envelope>>& tiles)
 {
   QString str;
   for (size_t tx = 0; tx < tiles.size(); tx++)
@@ -101,8 +173,20 @@ QString TileBoundsCalculator::tilesToString(const vector<vector<Envelope>>& tile
   return str;
 }
 
-vector<vector<Envelope>> TileBoundsCalculator::calculateTiles()
+void NodeDensityTileBoundsCalculator::_checkForTimeout()
 {
+  if (_maxTimePerAttempt > 0 && (_timer.elapsed() / 1000) > _maxTimePerAttempt)
+  {
+    throw TileCalcException(
+      "Calculation timed out at " + QString::number(_timer.elapsed() / 1000) +
+      " seconds out of maximum allowed " + QString::number(_maxTimePerAttempt) + " seconds.");
+  }
+}
+
+void NodeDensityTileBoundsCalculator::_calculateTiles()
+{
+  LOG_INFO("Calculating tiles...");
+
   size_t width = 1;
   vector<PixelBox> boxes;
   boxes.resize(1);
@@ -111,8 +195,8 @@ vector<vector<Envelope>> TileBoundsCalculator::calculateTiles()
   double nodeCount = _sumPixels(boxes[0]);
   LOG_DEBUG("w: " << _r1.cols << " h: " << _r1.rows);
   LOG_DEBUG("Total node count: " << nodeCount);
+  LOG_VARD(_maxNodesPerTile);
 
-  LOG_VARD(_maxNodesPerBox);
   while (!_isDone(boxes))
   {
     width *= 2;
@@ -130,45 +214,48 @@ vector<vector<Envelope>> TileBoundsCalculator::calculateTiles()
       LOG_TRACE("  i: " << i << " tx: " << tx << " ty: " << ty);
 
       double splitYLeft = _calculateSplitY(PixelBox(b.minX, splitX, b.minY, b.maxY));
-      nextLayer[(tx * 2 + 0) + (ty * 2 + 0) * width] = PixelBox(b.minX, splitX, b.minY,
-        splitYLeft);
-      nextLayer[(tx * 2 + 0) + (ty * 2 + 1) * width] = PixelBox(b.minX, splitX, splitYLeft + 1,
-        b.maxY);
+      nextLayer[(tx * 2 + 0) + (ty * 2 + 0) * width] =
+        PixelBox(b.minX, splitX, b.minY, splitYLeft);
+      nextLayer[(tx * 2 + 0) + (ty * 2 + 1) * width] =
+        PixelBox(b.minX, splitX, splitYLeft + 1, b.maxY);
 
       double splitYRight = _calculateSplitY(PixelBox(splitX + 1, b.maxX, b.minY, b.maxY));
-      nextLayer[(tx * 2 + 1) + (ty * 2 + 0) * width] = PixelBox(splitX + 1, b.maxX, b.minY,
-        splitYRight);
-      nextLayer[(tx * 2 + 1) + (ty * 2 + 1) * width] = PixelBox(splitX + 1, b.maxX, splitYRight + 1,
-        b.maxY);
+      nextLayer[(tx * 2 + 1) + (ty * 2 + 0) * width] =
+        PixelBox(splitX + 1, b.maxX, b.minY, splitYRight);
+      nextLayer[(tx * 2 + 1) + (ty * 2 + 1) * width] =
+        PixelBox(splitX + 1, b.maxX, splitYRight + 1, b.maxY);
     }
 
     boxes = nextLayer;
+
+    _checkForTimeout();
   }
 
-  vector<vector<Envelope>> result;
+  _tiles.clear();
   _maxNodeCountInOneTile = 0;
   _minNodeCountInOneTile = LONG_MAX;
   LOG_VARD(width);
-  result.resize(width);
+  _tiles.resize(width);
   _nodeCounts.clear();
   _nodeCounts.resize(width);
 
   for (size_t tx = 0; tx < width; tx++)
   {
-    result[tx].resize(width);
+    _tiles[tx].resize(width);
     _nodeCounts[tx].resize(width);
     for (size_t ty = 0; ty < width; ty++)
     {
       PixelBox& pb = boxes[tx + ty * width];
-      LOG_VARD(pb.getWidth());
-      LOG_VARD(pb.getHeight());
+      LOG_VART(pb.getWidth());
+      LOG_VART(pb.getHeight());
 
       if (pb.getWidth() < 3 || pb.getHeight() < 3)
       {
-        throw HootException(
-          QString("PixelBox must be at least 3 pixels wide and tall. Try reducing the pixel ") +
-          QString("size or increasing the max nodes per pixel value. Current pixel box width: ") +
-          QString::number(pb.getWidth()) + "; height: " + QString::number(pb.getHeight()));
+        throw TileCalcException(
+          "Node density tiles pixel box must be at least three pixels wide and tall. Try "
+          "reducing the pixel size or increasing the maximum allowed nodes per tile. Current "
+          "pixel box width: " + QString::number(pb.getWidth()) + "; height: " +
+          QString::number(pb.getHeight()));
       }
 
       const long nodeCount = _sumPixels(pb);
@@ -176,26 +263,24 @@ vector<vector<Envelope>> TileBoundsCalculator::calculateTiles()
       _maxNodeCountInOneTile = std::max(_maxNodeCountInOneTile, nodeCount);
       _minNodeCountInOneTile = std::min(_minNodeCountInOneTile, nodeCount);
 
-      result[tx][ty] = _toEnvelope(pb);
+      _tiles[tx][ty] = _toEnvelope(pb);
     }
+
+    _checkForTimeout();
   }
+
   if (_maxNodeCountInOneTile == 0)
   {
-    throw HootException(
-      "_maxNodeCountInOneTile == 0; Try reducing the pixel size or increasing the max nodes "
-      "per pixel value.");
+    throw TileCalcException(
+      "The maximum node density tiles node count in one tile is zero. Try reducing the pixel "
+      "size or increasing the maximum allowed nodes per tile.");
   }
-  LOG_DEBUG("Tiles size: " << result.size());
-  LOG_DEBUG("Max node count in one tile: " << _maxNodeCountInOneTile);
-  LOG_DEBUG("Min node count in one tile: " << _minNodeCountInOneTile);
-  LOG_TRACE("Tiles: " + tilesToString(result));
+  LOG_TRACE("Tiles: " + tilesToString(_tiles));
 
   _exportResult(boxes, "tmp/result.png");
-
-  return result;
 }
 
-int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
+int NodeDensityTileBoundsCalculator::_calculateSplitX(PixelBox& b)
 {
   double total = _sumPixels(b);
   LOG_VART(total);
@@ -212,9 +297,10 @@ int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
   LOG_VART(b.getWidth());
   if (b.getWidth() < 6)
   {
-    throw HootException(
-      "The input box must be at least six pixels wide. Try reducing the pixel size or "
-      "increasing the max nodes per pixel value. Width: " + QString::number(b.getWidth()));
+    throw TileCalcException(
+      "Node density tiles pixel box must be at least six pixels wide. Try reducing the input "
+      "pixel size or increasing the maximum nodes allowed per tile. Current pixel box width: " +
+      QString::number(b.getWidth()));
   }
 
   for (int c = b.minX + 2; c < b.maxX - 2; c++)
@@ -241,7 +327,7 @@ int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("bestSum isn't valid. " << b.toString());
+      LOG_WARN("Node density tiles bestSum isn't valid. " << b.toString());
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
@@ -254,7 +340,7 @@ int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
   return best;
 }
 
-int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
+int NodeDensityTileBoundsCalculator::_calculateSplitY(const PixelBox& b)
 {
   double total = _sumPixels(b);
   LOG_VART(total);
@@ -270,9 +356,10 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
 
   if (b.getHeight() < 6)
   {
-    throw HootException(
-      "The input box must be at least six pixels high. Try reducing the pixel size or "
-      "increasing the max nodes per pixel value.Height: " + QString::number(b.getHeight()));
+    throw TileCalcException(
+      "Node density tiles pixel box must be at least six pixels high. Try reducing the input "
+      "pixel size or increasing the maximum nodes allowed per tile. Current pixel box height: " +
+      QString::number(b.getHeight()));
   }
 
   for (int r = b.minY + 2; r < b.maxY - 2; r++)
@@ -298,8 +385,9 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("bestSum isn't valid. " << b.toString() << " total: " << total << " size: " <<
-               b.maxY - b.minY);
+      LOG_WARN(
+        "Node density tiles bestSum isn't valid. " << b.toString() << " total: " << total <<
+        " size: " << b.maxY - b.minY);
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
@@ -312,7 +400,7 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
   return best;
 }
 
-void TileBoundsCalculator::_countNode(const std::shared_ptr<Node> &n)
+void NodeDensityTileBoundsCalculator::_countNode(const std::shared_ptr<Node> &n)
 {
   double x = n->getX();
   double y = n->getY();
@@ -324,7 +412,7 @@ void TileBoundsCalculator::_countNode(const std::shared_ptr<Node> &n)
 
   if (px < 0 || px >= _r1.cols || py < 0 || py >= _r1.rows)
   {
-    throw HootException("Pixel out of bounds.");
+    throw HootException("Node density tiles pixel out of bounds.");
   }
   else
   {
@@ -342,12 +430,12 @@ void TileBoundsCalculator::_countNode(const std::shared_ptr<Node> &n)
   }
 }
 
-double TileBoundsCalculator::_evaluateSplitPoint(const PixelBox& pb, const Pixel& p)
+double NodeDensityTileBoundsCalculator::_evaluateSplitPoint(const PixelBox& pb, const Pixel& p)
 {
   // This function has two goals:
   // * minimize the number of nodes intersected by a split
   // * minimize the difference between quadrant counts, or ignore the quadrant counts if all
-  //   the quadrants are below _maxNodesPerBox
+  //   the quadrants are below _maxNodesPerTile
   //
   // Smaller scores are better.
 
@@ -386,13 +474,15 @@ double TileBoundsCalculator::_evaluateSplitPoint(const PixelBox& pb, const Pixel
   return intersects * slopMultiplier;
 }
 
-void TileBoundsCalculator::_exportImage(cv::Mat &r, QString output)
+void NodeDensityTileBoundsCalculator::_exportImage(cv::Mat &r, QString output)
 {
   QImage qImage(r.cols, r.rows, QImage::Format_RGB16);
   if (qImage.isNull())
   {
-    throw HootException(QString("Unable to allocate image of size %1x%2").arg(r.cols).
-      arg(r.rows));
+    throw HootException(
+      QString("Node density tiles: Unable to allocate image of size %1x%2")
+        .arg(r.cols)
+        .arg(r.rows));
   }
   QPainter pt(&qImage);
   pt.setRenderHint(QPainter::Antialiasing, false);
@@ -404,6 +494,7 @@ void TileBoundsCalculator::_exportImage(cv::Mat &r, QString output)
 
   LOG_VART(_maxValue);
 
+  LOG_VART(r.cols); //18k
   for (int y = 0; y < r.rows; y++)
   {
     int32_t* row = r.ptr<int32_t>(y);
@@ -421,18 +512,22 @@ void TileBoundsCalculator::_exportImage(cv::Mat &r, QString output)
       int v = l * 255;
       qImage.setPixel(x, r.rows - y - 1, qRgb(v, v, 50));
     }
+
+    _checkForTimeout();
   }
 
   qImage.save(output);
 }
 
-void TileBoundsCalculator::_exportResult(const vector<PixelBox>& boxes, QString output)
+void NodeDensityTileBoundsCalculator::_exportResult(const vector<PixelBox>& boxes, QString output)
 {
   QImage qImage(_r1.cols, _r1.rows, QImage::Format_RGB16);
   if (qImage.isNull())
   {
-    throw HootException(QString("Unable to allocate image of size %1x%2").arg(_r1.cols).
-      arg(_r1.rows));
+    throw HootException(
+      QString("Node density tiles: Unable to allocate image of size %1x%2")
+        .arg(_r1.cols)
+        .arg(_r1.rows));
   }
   QPainter pt(&qImage);
   pt.setRenderHint(QPainter::Antialiasing, false);
@@ -442,8 +537,10 @@ void TileBoundsCalculator::_exportResult(const vector<PixelBox>& boxes, QString 
   pen.setColor(qRgb(1, 0, 0));
   pt.setPen(pen);
 
-  LOG_DEBUG("max value: " << _maxValue);
+  LOG_TRACE("max value: " << _maxValue);
 
+  LOG_VART(_r1.rows); //14k
+  LOG_VART(_r1.cols); //18k
   for (int y = 0; y < _r1.rows; y++)
   {
     int32_t* row1 = _r1.ptr<int32_t>(y);
@@ -455,6 +552,8 @@ void TileBoundsCalculator::_exportResult(const vector<PixelBox>& boxes, QString 
 
       qImage.setPixel(x, _r1.rows - y - 1, qRgb(l1 * 255, l2 * 255, 0));
     }
+
+    _checkForTimeout();
   }
 
   pt.setPen(QPen(QColor(0, 0, 255, 100)));
@@ -462,12 +561,14 @@ void TileBoundsCalculator::_exportResult(const vector<PixelBox>& boxes, QString 
   {
     const PixelBox& b = boxes[i];
     pt.drawRect(b.minX, _r1.rows - b.maxY - 1, b.maxX - b.minX, b.maxY - b.minY);
+
+    _checkForTimeout();
   }
 
   qImage.save(output);
 }
 
-bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
+bool NodeDensityTileBoundsCalculator::_isDone(vector<PixelBox>& boxes)
 {
   LOG_VART(boxes.size());
 
@@ -482,7 +583,7 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
       minSize = true;
     }
 
-    if (_sumPixels(b) > _maxNodesPerBox)
+    if (_sumPixels(b) > _maxNodesPerTile)
     {
       smallEnough = false;
     }
@@ -490,9 +591,9 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
 
   if (minSize == true && smallEnough == false)
   {
-    throw HootException(
-      "Could not find a solution. Try reducing the pixel size or increasing the max nodes "
-      "per pixel value.");
+    throw TileCalcException(
+      "Could not find a node density tiles solution. Try reducing the pixel size or "
+      "increasing the maximum nodes allowed per tile.");
   }
   else
   {
@@ -500,11 +601,11 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
   }
 }
 
-void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map)
+void NodeDensityTileBoundsCalculator::_renderImage(const std::shared_ptr<OsmMap>& map)
 {
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
-  renderImage(map, _r1, _r2);
+  _renderImage(map, _r1, _r2);
 
   _calculateMin();
 
@@ -513,21 +614,24 @@ void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map)
   _exportImage(_min, "tmp/min.png");
 }
 
-void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1, cv::Mat& r2)
+void NodeDensityTileBoundsCalculator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1,
+                                                   cv::Mat& r2)
 {
+  LOG_INFO("Rendering images...");
+
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
   if (Log::getInstance().getLevel() <= Log::Debug)
   {
     std::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(_envelope));
-    LOG_VARD(tempEnv->toString());
+    LOG_VART(tempEnv->toString());
   }
-  LOG_VARD(_pixelSize);
-  LOG_VARD(StringUtils::formatLargeNumber(map->getNodeCount()));
+  LOG_VART(_pixelSize);
+  LOG_VART(StringUtils::formatLargeNumber(map->getNodeCount()));
 
   int w = ceil((_envelope.MaxX - _envelope.MinX) / _pixelSize) + 1;
-  LOG_VARD(w);
+  LOG_VART(w);
   int h = ceil((_envelope.MaxY - _envelope.MinY) / _pixelSize) + 1;
-  LOG_VARD(h)
+  LOG_VART(h)
 
   _r1 = cv::Mat(cvSize(w, h), CV_32SC1);
   _r2 = cv::Mat(cvSize(w, h), CV_32SC1);
@@ -545,7 +649,7 @@ void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map, cv::M
   }
 
   const NodeMap& nm = map->getNodes();
-  LOG_VARD(nm.size());
+  LOG_VART(nm.size());
   long nodeCtr = 0;
   const int statusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
@@ -566,8 +670,10 @@ void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map, cv::M
   r2 = _r2;
 }
 
-void TileBoundsCalculator::setImages(const cv::Mat& r1, const cv::Mat& r2)
+void NodeDensityTileBoundsCalculator::_setImages(const cv::Mat& r1, const cv::Mat& r2)
 {
+  LOG_INFO("Exporting images...");
+
   _r1 = r1;
   _r2 = r2;
 
@@ -578,13 +684,19 @@ void TileBoundsCalculator::setImages(const cv::Mat& r1, const cv::Mat& r2)
   _exportImage(_min, "tmp/min.png");
 }
 
-long TileBoundsCalculator::_sumPixels(const PixelBox& pb, cv::Mat& r)
+long NodeDensityTileBoundsCalculator::_sumPixels(const PixelBox& pb)
 {
-  long sum = 0.0;
+  return _sumPixels(pb, _r1) + _sumPixels(pb, _r2);
+}
+
+long NodeDensityTileBoundsCalculator::_sumPixels(const PixelBox& pb, cv::Mat& r)
+{
   LOG_VART(pb.minY);
   LOG_VART(pb.maxY);
   LOG_VART(pb.minX);
   LOG_VART(pb.maxX);
+
+  long sum = 0.0;
   for (int py = pb.minY; py <= pb.maxY; py++)
   {
     int32_t* row = r.ptr<int32_t>(py);
@@ -598,7 +710,7 @@ long TileBoundsCalculator::_sumPixels(const PixelBox& pb, cv::Mat& r)
   return sum;
 }
 
-Envelope TileBoundsCalculator::_toEnvelope(const PixelBox& pb)
+Envelope NodeDensityTileBoundsCalculator::_toEnvelope(const PixelBox& pb)
 {
   return Envelope(_envelope.MinX + pb.minX * _pixelSize,
     _envelope.MinX + (pb.maxX + 1) * _pixelSize,

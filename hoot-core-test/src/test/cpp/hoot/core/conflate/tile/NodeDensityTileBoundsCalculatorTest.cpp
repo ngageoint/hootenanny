@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
+#include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
@@ -44,17 +44,20 @@ using namespace std;
 namespace hoot
 {
 
-class TileBoundsCalculatorTest : public HootTestFixture
+/*
+ * A lot of more recently added functionality in NodeDensityTileBoundsCalculator is tested in
+ * NodeDensityTilesCmdTest.sh.
+ */
+class NodeDensityTileBoundsCalculatorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(TileBoundsCalculatorTest);
+  CPPUNIT_TEST_SUITE(NodeDensityTileBoundsCalculatorTest);
   CPPUNIT_TEST(runToyTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  TileBoundsCalculatorTest()
-    : HootTestFixture("test-files/conflate/tile/",
-                      "test-output/conflate/tile/")
+  NodeDensityTileBoundsCalculatorTest() :
+  HootTestFixture("test-files/conflate/tile/", "test-output/conflate/tile/")
   {
     setResetType(ResetBasic);
   }
@@ -62,14 +65,10 @@ public:
   void addEnvelope(OsmMapPtr map, Envelope& e, int tx, int ty)
   {
     WayPtr w(new Way(Status::Unknown1, map->createNextWayId(), 10.0));
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMinY(),
-                                 10.0));
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(),
-                                 10.0));
-    NodePtr n3(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMaxY(),
-                                 10.0));
-    NodePtr n4(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMaxY(),
-                                 10.0));
+    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMinY(), 10.0));
+    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(), 10.0));
+    NodePtr n3(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMaxY(), 10.0));
+    NodePtr n4(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMaxY(), 10.0));
 
     map->addNode(n1);
     map->addNode(n2);
@@ -96,13 +95,15 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/DcTigerRoads.osm", map);
 
-    TileBoundsCalculator uut(0.1 / 360.0);
+    NodeDensityTileBoundsCalculator uut;
+    uut.setPixelSize(0.1 / 360.0);
+    uut.setMaxNodesPerTile(1000);
+    uut.setSlop(0.1);
+    uut.setMaxNumTries(1);
+    uut._renderImage(map);
 
-    uut.setMaxNodesPerBox(1000);
-    uut.setSlop(0.10);
-    uut.renderImage(map);
-
-    vector<vector<Envelope>> e = uut.calculateTiles();
+    uut._calculateTiles();
+    vector<vector<Envelope>> e = uut.getTiles();
 
     OsmMapPtr bounds(new OsmMap());
 
@@ -117,13 +118,10 @@ public:
     OsmXmlWriter writer;
     writer.write(bounds, _outputPath + "TileBounds.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "TileBounds.osm",
-                     _outputPath + "TileBounds.osm");
-
+    HOOT_FILE_EQUALS(_inputPath + "TileBounds.osm", _outputPath + "TileBounds.osm");
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TileBoundsCalculatorTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TileBoundsCalculatorTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodeDensityTileBoundsCalculatorTest, "quick");
 
 }
