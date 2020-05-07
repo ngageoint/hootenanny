@@ -114,6 +114,8 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const NodePtr& n = it->second;
+    // We don't need to check for existence of the nodes parent here, b/c if it ends up being a dupe
+    // we'll replace it with another node instead of removing it from the map.
     cph.addPoint(n->getX(), n->getY(), n->getId());
     startNodeCount++;
 
@@ -222,10 +224,6 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         StringUtils::formatLargeNumber(startNodeCount) << " total nodes.");
     }
   }
-
-  // Due to how Way::replaceNode is being called, we could end up with some duplicate way nodes, so
-  // its best to put RemoveDuplicateWayNodesVisitor in the cleaning chain immediately after this
-  // runs.
 }
 
 bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long nodeId2,

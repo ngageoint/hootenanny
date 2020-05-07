@@ -247,21 +247,21 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       100.0, calcStatsOp->getSingleStat("Percentage of Unmatched Polygon Conflatable POIs"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Polygons"));
+    CPPUNIT_ASSERT_EQUAL(14.0, calcStatsOp->getSingleStat("Polygons"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygons"));
     CPPUNIT_ASSERT_EQUAL(5.0, calcStatsOp->getSingleStat("Conflated Polygons"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Polygons Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Polygon Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Unmatched Polygons"));
+    CPPUNIT_ASSERT_EQUAL(9.0, calcStatsOp->getSingleStat("Unmatched Polygons"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       14810.8,
       calcStatsOp->getSingleStat("Meters Squared of Polygons Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      41.67, calcStatsOp->getSingleStat("Percentage of Polygons Conflated"), 1e-1);
+      35.71, calcStatsOp->getSingleStat("Percentage of Polygons Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of Polygons Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      58.33, calcStatsOp->getSingleStat("Percentage of Unmatched Polygons"), 1e-1);
+      64.29, calcStatsOp->getSingleStat("Percentage of Unmatched Polygons"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Areas"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Areas"));

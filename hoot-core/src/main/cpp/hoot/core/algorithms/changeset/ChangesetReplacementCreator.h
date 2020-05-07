@@ -212,6 +212,10 @@ private:
 
   void _validateInputs(const QString& input1, const QString& input2);
 
+  QString _getJobDescription(
+    const QString& input1, const QString& input2, const QString& bounds,
+    const QString& output) const;
+
   /*
    * Returns the default geometry filters (point, line, poly) to use when no other geometry filters
    * are specified
@@ -272,8 +276,14 @@ private:
    * Combines two maps into one; throwOutDupes ignores any elements in the second map with the ID
    * as an element in the first map
    */
-  void _combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes,
-                    const QString& debugFileName);
+  void _combineMaps(
+    OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes, const QString& debugFileName);
+
+  /*
+   * Removes duplicates between one map and another, ignoring elemment IDs
+   */
+  void _dedupeMap(OsmMapPtr refMap, OsmMapPtr mapToDedupe);
+
   /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
    * MetadataTags::HootSnapped()=snapped_way tags

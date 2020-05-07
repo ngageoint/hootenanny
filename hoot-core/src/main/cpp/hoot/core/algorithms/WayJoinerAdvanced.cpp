@@ -531,7 +531,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   elements.push_back(wayWithTagsToKeep);
   elements.push_back(wayWithTagsToLose);
   const bool onlyOneIsABridge =
-    CriterionUtils::constainSatisfyingElements<BridgeCriterion>(elements, 1, true);
+    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, 1, true);
   if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
       onlyOneIsABridge)
   {
