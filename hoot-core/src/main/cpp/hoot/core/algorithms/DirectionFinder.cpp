@@ -87,6 +87,7 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   {
     directionText = "**same direction**";
   }
+  // TODO: Should this be node.comparison.coordinate.sensitivity instead?
   const int coordPrecision = ConfigOptions().getWriterPrecision();
   LOG_TRACE(
     "Comparing " << w1->getElementId() << " with " << w2->getElementId() << ": " << directionText <<
