@@ -1,2 +1,5 @@
-22:12:25.749 WARN   ...ensityTileBoundsCalculator.cpp( 389) Node density tiles bestSum isn't valid. 0,0,2,9 total: 749 size: 9
-22:12:27.470 WARN   ...ensityTileBoundsCalculator.cpp( 389) Node density tiles bestSum isn't valid. 0,0,2,9 total: 749 size: 9
+14:36:08.625 WARN   ...ensityTileBoundsCalculator.cpp( 390) Node density tiles bestSum isn't valid. 0,0,2,9 total: 749 size: 9
+14:36:10.385 WARN   ...ensityTileBoundsCalculator.cpp( 390) Node density tiles bestSum isn't valid. 0,0,2,9 total: 749 size: 9
+14:36:10.392 WARN   ...ensityTileBoundsCalculator.cpp( 390) Node density tiles bestSum isn't valid. 9,0,13,17 total: 113 size: 17
+14:36:10.392 WARN   ...ensityTileBoundsCalculator.cpp( 390) Node density tiles bestSum isn't valid. 44,0,62,10 total: 168 size: 10
+14:36:10.403 WARN   ...ensityTileBoundsCalculator.cpp( 394) hoot::NodeDensityTileBoundsCalculator: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...

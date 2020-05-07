@@ -16,7 +16,7 @@ diff $GOLD_FILES_DIR/output-random.geojson $OUTPUT_DIR/output-random.geojson
 hoot node-density-tiles --warn -C Testing.conf "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/output-small.geojson --maxNodesPerTile 10000
 diff $GOLD_FILES_DIR/output-small.geojson $OUTPUT_DIR/output-small.geojson
 
-# auto retry test - takes two attempts
-hoot node-density-tiles --warn -C Testing.conf "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/output-retry.geojson --maxNodesPerTile 500 --pixelSize 0.001 --maxAttempts 2 --nodeCountIncreaseFactor 10 --pixelSizeReductionFactor 10
+# auto retry test - takes four attempts
+hoot node-density-tiles --warn -C Testing.conf "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/output-retry.geojson --maxNodesPerTile 500 --pixelSize 0.001 --maxAttempts 4 --pixelSizeReductionFactor 50
 diff $GOLD_FILES_DIR/output-retry.geojson $OUTPUT_DIR/output-retry.geojson
 

@@ -54,8 +54,7 @@ _slop(0.1),
 _maxNodeCountInOneTile(0),
 _minNodeCountInOneTile(LONG_MAX),
 _pixelSizeRetryReductionFactor(10),
-_maxNodePerTileIncreaseFactor(10),
-_maxNumTries(1),
+_maxNumTries(3),
 _maxTimePerAttempt(-1)
 {
 }
@@ -125,10 +124,6 @@ void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
           if (_pixelSizeRetryReductionFactor != -1)
           {
             _pixelSize -= _pixelSize * (_pixelSizeRetryReductionFactor / 100.0);
-          }
-          if (_maxNodePerTileIncreaseFactor != -1)
-          {
-            _maxNodesPerTile += _maxNodesPerTile * (_maxNodePerTileIncreaseFactor / 100.0);
           }
         }
       }

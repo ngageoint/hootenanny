@@ -157,23 +157,6 @@ public:
     }
     LOG_VARD(maxTimePerAttempt);
 
-    int maxNodeCountAutoIncreaseFactor = -1;
-    if (args.contains("--nodeCountIncreaseFactor"))
-    {
-      const int optionNameIndex = args.indexOf("--nodeCountIncreaseFactor");
-      bool parseSuccess = false;
-      const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
-      maxNodeCountAutoIncreaseFactor = optionStrVal.toInt(&parseSuccess);
-      if (!parseSuccess || maxNodeCountAutoIncreaseFactor < 1)
-      {
-        throw IllegalArgumentException(
-          "Invalid maximum node count per tile automatic increase factor value: " + optionStrVal);
-      }
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-    }
-    LOG_VARD(maxNodeCountAutoIncreaseFactor);
-
     int pixelSizeAutoReductionFactor = 10;
     if (args.contains("--pixelSizeReductionFactor"))
     {
@@ -215,7 +198,6 @@ public:
     tileCalc.setPixelSize(pixelSize);
     tileCalc.setMaxNodesPerTile(maxNodesPerTile);
     //tileCalc.setSlop(0.1); // tweak this?
-    tileCalc.setMaxNodePerTileIncreaseFactor(maxNodeCountAutoIncreaseFactor);
     tileCalc.setMaxNumTries(maxAttempts);
     tileCalc.setMaxTimePerAttempt(maxTimePerAttempt);
     tileCalc.setPixelSizeRetryReductionFactor(pixelSizeAutoReductionFactor);
