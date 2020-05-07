@@ -90,19 +90,24 @@ public:
     }
     LOG_VARD(output);
 
-    long maxNodesPerTile = 1000;
-    if (args.size() > 2)
+    // optional parameters
+
+    int maxNodesPerTile = 1000;
+    if (args.contains("--maxNodesPerTile"))
     {
+      const int optionNameIndex = args.indexOf("--maxNodesPerTile");
       bool parseSuccess = false;
-      maxNodesPerTile = args[2].toLong(&parseSuccess);
+      const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
+      maxNodesPerTile = optionStrVal.toInt(&parseSuccess);
       if (!parseSuccess || maxNodesPerTile < 1)
       {
-        throw IllegalArgumentException("Invalid maximum nodes per tile value: " + args[2]);
+        throw IllegalArgumentException(
+          "Invalid maximum node count per tile value: " + optionStrVal);
       }
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
     }
     LOG_VARD(maxNodesPerTile);
-
-    // optional parameters
 
     double pixelSize = 0.001; // .1km?
     if (args.contains("--pixel-size"))
@@ -120,14 +125,14 @@ public:
     }
     LOG_VARD(pixelSize);
 
-    int maxAttempts = 1;
+    int maxAttempts = 3;
     if (args.contains("--maxAttempts"))
     {
       const int optionNameIndex = args.indexOf("--maxAttempts");
       bool parseSuccess = false;
       const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
       maxAttempts = optionStrVal.toInt(&parseSuccess);
-      if (!parseSuccess || maxAttempts <= 0)
+      if (!parseSuccess || maxAttempts < 1)
       {
         throw IllegalArgumentException("Invalid maximum attempts value: " + optionStrVal);
       }
@@ -143,7 +148,7 @@ public:
       bool parseSuccess = false;
       const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
       maxTimePerAttempt = optionStrVal.toInt(&parseSuccess);
-      if (!parseSuccess || maxAttempts <= 0)
+      if (!parseSuccess || maxTimePerAttempt < -1)
       {
         throw IllegalArgumentException("Invalid maximum time per attempt value: " + optionStrVal);
       }
@@ -152,14 +157,14 @@ public:
     }
     LOG_VARD(maxTimePerAttempt);
 
-    long maxNodeCountAutoIncreaseFactor = 2;
-    if (args.contains("--maxNodeCountPerTileAutoIncreaseFactor"))
+    int maxNodeCountAutoIncreaseFactor = -1;
+    if (args.contains("--nodeCountIncreaseFactor"))
     {
-      const int optionNameIndex = args.indexOf("--maxNodeCountPerTileAutoIncreaseFactor");
+      const int optionNameIndex = args.indexOf("--nodeCountIncreaseFactor");
       bool parseSuccess = false;
       const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
-      maxNodeCountAutoIncreaseFactor = optionStrVal.toLong(&parseSuccess);
-      if (!parseSuccess || maxNodeCountAutoIncreaseFactor <= 1)
+      maxNodeCountAutoIncreaseFactor = optionStrVal.toInt(&parseSuccess);
+      if (!parseSuccess || maxNodeCountAutoIncreaseFactor < 1)
       {
         throw IllegalArgumentException(
           "Invalid maximum node count per tile automatic increase factor value: " + optionStrVal);
@@ -169,14 +174,14 @@ public:
     }
     LOG_VARD(maxNodeCountAutoIncreaseFactor);
 
-    double pixelSizeAutoReductionFactor = 2.0;
-    if (args.contains("--pixelSizeAutoReductionFactor"))
+    int pixelSizeAutoReductionFactor = 10;
+    if (args.contains("--pixelSizeReductionFactor"))
     {
-      const int optionNameIndex = args.indexOf("--pixelSizeAutoReductionFactor");
+      const int optionNameIndex = args.indexOf("--pixelSizeReductionFactor");
       bool parseSuccess = false;
       const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
-      pixelSizeAutoReductionFactor = optionStrVal.toDouble(&parseSuccess);
-      if (!parseSuccess || pixelSizeAutoReductionFactor <= 1.0)
+      pixelSizeAutoReductionFactor = optionStrVal.toInt(&parseSuccess);
+      if (!parseSuccess || pixelSizeAutoReductionFactor < 1)
       {
         throw IllegalArgumentException(
           "Invalid pixel size automatic reduction factor value: " + optionStrVal);
@@ -187,9 +192,9 @@ public:
     LOG_VARD(pixelSizeAutoReductionFactor);
 
     int randomSeed = -1;
-    if (args.contains("--random") && args.contains("--random-seed"))
+    if (args.contains("--random") && args.contains("--randomSeed"))
     { 
-      const int optionNameIndex = args.indexOf("--random-seed");
+      const int optionNameIndex = args.indexOf("--randomSeed");
       bool parseSuccess = false;
       const QString optionStrVal = args.at(optionNameIndex + 1).trimmed();
       randomSeed = optionStrVal.toInt(&parseSuccess);

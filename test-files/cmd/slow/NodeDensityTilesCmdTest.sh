@@ -5,18 +5,18 @@ OUTPUT_DIR=test-output/cmd/slow/NodeDensityTilesCmdTest
 GOLD_FILES_DIR=test-files/cmd/slow/NodeDensityTilesCmdTest
 mkdir -p $OUTPUT_DIR 
 
-hoot node-density-tiles --warn -C Testing.conf "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/output.geojson 1000 --pixel-size 0.001
+hoot node-density-tiles --warn -C Testing.conf "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/output.geojson --maxNodesPerTile 1000 --pixelSize 0.001
 diff $GOLD_FILES_DIR/output.geojson $OUTPUT_DIR/output.geojson
 
 # random test
-hoot node-density-tiles --error -C Testing.conf "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/output-random.geojson 1000 --random --random-seed 1
+hoot node-density-tiles --error -C Testing.conf "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/output-random.geojson --maxNodesPerTile 1000 --random --randomSeed 1
 diff $GOLD_FILES_DIR/output-random.geojson $OUTPUT_DIR/output-random.geojson
 
 # small map test - total nodes = ~7k
-hoot node-density-tiles --warn -C Testing.conf "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/output-small.geojson 10000
+hoot node-density-tiles --warn -C Testing.conf "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/output-small.geojson --maxNodesPerTile 10000
 diff $GOLD_FILES_DIR/output-small.geojson $OUTPUT_DIR/output-small.geojson
 
 # auto retry test - takes two attempts
-hoot node-density-tiles --warn -C Testing.conf "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/output-retry.geojson 500 --pixel-size 0.001 --maxAttempts 2 --maxNodeCountPerTileAutoIncreaseFactor 3 --pixelSizeAutoReductionFactor 2.5
+hoot node-density-tiles --warn -C Testing.conf "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/output-retry.geojson --maxNodesPerTile 500 --pixelSize 0.001 --maxAttempts 2 --nodeCountIncreaseFactor 10 --pixelSizeReductionFactor 10
 diff $GOLD_FILES_DIR/output-retry.geojson $OUTPUT_DIR/output-retry.geojson
 

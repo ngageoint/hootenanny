@@ -198,8 +198,8 @@ public:
    */
   void setSlop(double slop) { _slop = slop; }
 
-  void setPixelSizeRetryReductionFactor(double factor) { _pixelSizeRetryReductionFactor = factor; }
-  void setMaxNodePerTileIncreaseFactor(long factor) { _maxNodePerTileIncreaseFactor = factor; }
+  void setPixelSizeRetryReductionFactor(int factor) { _pixelSizeRetryReductionFactor = factor; }
+  void setMaxNodePerTileIncreaseFactor(int factor) { _maxNodePerTileIncreaseFactor = factor; }
   void setMaxNumTries(int numTries) { _maxNumTries = numTries; }
   void setMaxTimePerAttempt(int seconds) { _maxTimePerAttempt = seconds; }
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
@@ -223,9 +223,9 @@ private:
   // actual min nodes per tile
   long _minNodeCountInOneTile;
   // if multiple attempts are enabled, auto reduce the pixel size by this amount
-  double _pixelSizeRetryReductionFactor;
+  int _pixelSizeRetryReductionFactor;
   // if multiple attempts are enabled, auto increase the max node count per tile by this amount
-  long _maxNodePerTileIncreaseFactor;
+  int _maxNodePerTileIncreaseFactor;
   // allows for multiple calc attempts
   int _maxNumTries;
 
