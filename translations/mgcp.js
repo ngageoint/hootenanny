@@ -167,7 +167,7 @@ mgcp = {
 
   // Sort out if we need to return more than one feature
   // This is generally for Roads, Railways, bridges, tunnels etc
-  manyFeatures: function(geometryType, tags, attrs)
+  manyFeatures: function(geometryType, tags, attrs, transMap)
   {
     // Add the first feature to the structure that we return
     var returnData = [{attrs:attrs, tableName:''}];
@@ -300,11 +300,11 @@ mgcp = {
 
       // apply the simple number and text biased rules
       // Note: These are BACKWARD, not forward!
-      translate.applySimpleNumBiased(newFeatures[i]['attrs'], notUsedTags, mgcp.rules.numBiased,'backward',mgcp.rules.intList);
-      translate.applySimpleTxtBiased(newFeatures[i]['attrs'], notUsedTags, mgcp.rules.txtBiased,'backward');
+      translate.numToOgr(newFeatures[i]['attrs'], notUsedTags, mgcp.rules.numBiased,mgcp.rules.intList,transMap);
+      translate.txtToOgr(newFeatures[i]['attrs'], notUsedTags, mgcp.rules.txtBiased,transMap);
 
       // one 2 one - we call the version that knows about OTH fields
-      translate.applyOne2One(notUsedTags, newFeatures[i]['attrs'], mgcp.lookup, mgcp.fcodeLookup);
+      translate.applyOne2One(notUsedTags, newFeatures[i]['attrs'], mgcp.lookup, mgcp.fcodeLookup, transMap);
 
       // post processing
       mgcp.applyToMgcpPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType,notUsedTags);
@@ -1283,9 +1283,17 @@ mgcp = {
 
 
     // Fix up OSM 'walls' around facilities
-    if (tags.barrier == 'wall' && geometryType == 'Area')
+    if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
     {
-      attrs.F_CODE = 'AL010'; // Facility
+      if (tags.landuse == 'military' || tags.military)
+      {
+        attrs.F_CODE = 'SU001'; // Military Installation
+      }
+      else
+      {
+        attrs.F_CODE = 'AL010'; // Facility
+      }
+
       delete tags.barrier; // Take away the walls...
     }
 
@@ -2094,11 +2102,11 @@ mgcp = {
 
     // apply the simple number and text biased rules
     // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
-    translate.applySimpleNumBiased(notUsedAttrs, tags, mgcp.numLookup,'forward',[]);
-    translate.applySimpleTxtBiased(notUsedAttrs, tags,  mgcp.txtLookup,'forward');
+    translate.numToOSM(notUsedAttrs, tags, mgcp.numLookup);
+    translate.txtToOSM(notUsedAttrs, tags,  mgcp.txtLookup);
 
     // one 2 one
-    translate.applyOne2One(notUsedAttrs, tags, mgcp.lookup, {'k':'v'});
+    translate.applyOne2One(notUsedAttrs, tags, mgcp.lookup, {'k':'v'},[]);
 
     // post processing
     mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
@@ -2126,6 +2134,7 @@ mgcp = {
   {
     var tableName = '';
     var returnData = []; // The array of features to return
+    var transMap = {}; // A map of translated attributes
     attrs = {}; // This is the output <GLOBAL>
     attrs.F_CODE = '';
 
@@ -2203,11 +2212,11 @@ mgcp = {
     if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
 
     // apply the simple number and text biased rules
-    translate.applySimpleNumBiased(attrs, notUsedTags, mgcp.rules.numBiased,'backward',mgcp.rules.intList);
-    translate.applySimpleTxtBiased(attrs, notUsedTags,  mgcp.rules.txtBiased,'backward');
+    translate.numToOgr(attrs, notUsedTags, mgcp.rules.numBiased,mgcp.rules.intList,transMap);
+    translate.txtToOgr(attrs, notUsedTags,  mgcp.rules.txtBiased,transMap);
 
     // one 2 one
-    translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup);
+    translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, transMap);
 
     // post processing
     // mgcp.applyToMgcpPostProcessing(attrs, tableName, geometryType);
@@ -2235,7 +2244,7 @@ mgcp = {
     {
       // Check if we need to return more than one feature
       // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
-      returnData = mgcp.manyFeatures(geometryType,tags,attrs);
+      returnData = mgcp.manyFeatures(geometryType,tags,attrs,transMap);
 
       // Now go through the features and clean them up
       var gType = geometryType.toString().charAt(0);

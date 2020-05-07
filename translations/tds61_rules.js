@@ -30,18 +30,18 @@
 */
 
 tds61.rules = {
-    // ##### Start of One2One Rules #####
+  // ##### Start of One2One Rules #####
 
-    // FCODE rules for Import
-    // This is where anything "unique" to TDS goes.
-    fcodeOne2oneIn : [
+  // FCODE rules for Import
+  // This is where anything "unique" to TDS goes.
+  fcodeOne2oneIn : [
     // ['F_CODE','AP030','highway','road'], // Road
-    ], // End fcodeOne2oneIn
+  ], // End fcodeOne2oneIn
 
-    // These are for finding an FCODE for export.
-    // Note: These get swapped around before being used
-    fcodeOne2oneOut : [
-//     ['F_CODE','AN060','railway','yes'], // Rail yards
+  // These are for finding an FCODE for export.
+  // Note: These get swapped around before being used
+  fcodeOne2oneOut : [
+    //     ['F_CODE','AN060','railway','yes'], // Rail yards
     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
     // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
     ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
@@ -107,10 +107,10 @@ tds61.rules = {
     ['F_CODE','ZD040','natural','hill'], // From GeoNames
     ['F_CODE','ZD040','natural','peak'], // From OSM
     ['F_CODE','ZD040','natural','valley'], // From GeoNames
-    ], // End fcodeOne2oneOut
+  ], // End fcodeOne2oneOut
 
-    // One2one rules for Text Fields
-    txtBiased : {
+  // One2one rules for Text Fields
+  txtBiased : {
     'ADR':'addr:full', // Address
     'AQN':'aquifer_name', // Aquifer Name
     'BA000_VDR':'source:datum:sounding:name', // Water Line : Sounding Datum Name
@@ -125,7 +125,7 @@ tds61.rules = {
     'CUD':'source:currency:datetime', // Currency Date and Time
     'DQS':'source:data_quality', // Data Quality Statement
     'ETZ':'source:extraction_specification:version', // Extraction Specification Version
-//     'F_CODE':'raw:F_CODE', // Feature Code
+    //     'F_CODE':'raw:F_CODE', // Feature Code
     'GB052_RIDH':'aeroway:runway_designator_high', // Runway Direction (high end) : Runway Designator (high)
     'GB052_RIDL':'aeroway:runway_designator_low', // Runway Direction (low end) : Runway Designator (low)
     'IKO':'icao', // ICAO Location Indicator
@@ -191,10 +191,10 @@ tds61.rules = {
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
     'ZSAX_RX4':'security:resource_owner', // Restriction Information : Security Attributes Group <resource owner-producer>
-    }, // End txtBiased
+  }, // End txtBiased
 
-    // One2one ruled for Number fields
-    numBiased : {
+  // One2one ruled for Number fields
+  numBiased : {
     'AHA':'source:accuracy:horizontal', // Absolute Horizontal Accuracy (90%)
     'AOO':'angle', // Angle of Orientation
     'AQTL':'aquifer:thickness:lower', // Aquifer Thickness <lower value>
@@ -240,7 +240,7 @@ tds61.rules = {
     'EPW':'generator:output:electricity', // Electrical Power Generation Capacity
     'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
     'FCL':'ferry:crossing_distance', // Ferry Crossing Distance
-//    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
+    //    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
     'GSGCHL':'aeroway:runway_highend:slope:high_lowervalue', // Runway Direction (high end) : Surface Slope (high) (lower value)
     'GSGCHU':'aeroway:runway_highend:slope:high_uppervalue', // Runway Direction (high end) : Surface Slope (high) (upper value)
     'GSGCLL':'aeroway:runway_highend:slope:low_lowervalue', // Runway Direction (low end) : Surface Slope (low) (lower value)
@@ -326,12 +326,12 @@ tds61.rules = {
     'ZVA':'ele', // Aerodrome Elevation
     'ZVH_AVA':'source:accuracy:highest_elevation', // Highest Elevation <absolute vertical accuracy>
     'ZVH':'ele:max' // Highest Elevation
-    }, // End numBiased
+  }, // End numBiased
 
 
-    // Common one2one rules. Used for both import and export
-    // taken from TDSv60 with the NGA TDSv61 additions
-    one2one : [
+  // Common one2one rules. Used for both import and export
+  // taken from TDSv60 with the NGA TDSv61 additions
+  one2one : [
     // ['ADI','-999999',undefined,undefined], // No Information
     // ADI - Administrative Division - Admin_level may need some work
     ['ADI','1','admin_level','1'], // International or Supranational
@@ -351,7 +351,7 @@ tds61.rules = {
     ['AMA','6','attraction','vertical_ride'], // Vertical Ride
     ['AMA','999','attraction','other'], // Other
 
-     // APT - Airfield Use
+    // APT - Airfield Use
     // ['APT','-999999',undefined,undefined], // No Information
     ['APT','1','aeroway:use','major_airfield'], // Major Airfield
     ['APT','2','aeroway:use','minor_airfield'], // Minor Airfield
@@ -3877,12 +3877,12 @@ tds61.rules = {
     ['ZSAX_RS0','S','security:classification','SECRET'],
     ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
 
-    ], // End one2one
+  ], // End one2one
 
-    // Input Translation Rules:
-    // These are only used for IMPORT and get added to the standard one2one rules
-    // This is mainly for TDS 3.0 attributes but we have added some "funky" TDSv40 attributes as well.
-    one2oneIn : [
+  // Input Translation Rules:
+  // These are only used for IMPORT and get added to the standard one2one rules
+  // This is mainly for TDS 3.0 attributes but we have added some "funky" TDSv40 attributes as well.
+  one2oneIn : [
     // To account for an "error" in the TDSv61 sample GDB
     ['ZI001_VSC','Stereoscopic Imagery','source:vertical_source:type','stereoscopic_imagery'],
     ['ZI001_SRT','NTM Imagery','source:non_spatial_source:type','ntm_imagery'],
@@ -3908,11 +3908,11 @@ tds61.rules = {
     ['ZI016_ROC','18','surface','snow'], // Snow
     ['ZI016_ROC','999','surface','other'], // Other
 
-    ], // End one2oneIn
+  ], // End one2oneIn
 
-    // One2one translation table for converting "Other" OSM attributes to TDS
-    // This is for Export only. The values are swapped before use
-    one2oneOut : [
+  // One2one translation table for converting "Other" OSM attributes to TDS
+  // This is for Export only. The values are swapped before use
+  one2oneOut : [
     ['ZSAX_RS0','U','security:classification','U'],
     ['ZSAX_RS0','R','security:classification','R'],
     ['ZSAX_RS0','C','security:classification','C'],
@@ -3997,10 +3997,10 @@ tds61.rules = {
     ['FFN','843','amenity','jail'], // Imprisonment
     ['FFN','980','building','cemetery_building'], // Death care services
     ['ZI014_PPO','-999999','product','unknown'], // Unknown
-//     [undefined,undefined,'amenity','school'], //  converted in pre processing
-//     [undefined,undefined,'amenity','hospital'], //  converted in pre processing
-//     [undefined,undefined,'amenity','university'], //  converted in pre processing
-//     [undefined,undefined,'amenity','college'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','school'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','hospital'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','university'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','college'], //  converted in pre processing
     [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
     ['IWT','4','water','reservoir'], // Reservoir
@@ -4058,14 +4058,14 @@ tds61.rules = {
     // Added to give something for the OTH value to use
     ['ZI016_ROC','999','surface','other'], // Other
 
-   ], // End one2oneOut
+  ], // End one2oneOut
 
-    // ##### End of One2One Rules #####
+  // ##### End of One2One Rules #####
 
 
-    // ##### Start of fuzzyTable #####
-    // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
-    fuzzyTable : [
+  // ##### Start of fuzzyTable #####
+  // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
+  fuzzyTable : [
     ['ZI016_ROC','1',schemaTools.simple('surface=ground',1)], // Unimproved
     ['ZI016_ROC','2',schemaTools.simple('surface=compacted',1)], // Stabilized earth
     ['ZI016_ROC','3',schemaTools.isA('surface=unpaved', 0.8)], // Flexible Pavement
@@ -4076,7 +4076,7 @@ tds61.rules = {
     ['ZI016_ROC','8',schemaTools.simple('surface=concrete',1)], // Concrete
     ['ZI016_ROC','9',schemaTools.simple('surface=asphalt',1)], // Asphalt
     ['ZI016_ROC','10',schemaTools.simple('surface=asphalt_over_concrete',1)], // Asphalt over Concrete
-    ['ZI016_ROC','11',"surface=cobblestone",schemaTools.isA('surface=cobblestone',1),schemaTools.simple('surface=sett')], // Cobble-stone
+    ['ZI016_ROC','11','surface=cobblestone',schemaTools.isA('surface=cobblestone',1),schemaTools.simple('surface=sett')], // Cobble-stone
     ['ZI016_ROC','12',schemaTools.simple('surface=brick',1)], // Brick
     ['ZI016_ROC','13',schemaTools.simple('surface=metal',1)], // Metal
     ['ZI016_ROC','14',schemaTools.simple('surface=wood',1)], // Wood
@@ -4085,12 +4085,12 @@ tds61.rules = {
     ['ZI016_ROC','17',schemaTools.simple('surface=ice',1)], // Ice
     ['ZI016_ROC','18',schemaTools.simple('surface=snow',1)], // Snow
     ['ZI016_ROC','999',schemaTools.simple('surface=other',1)], // Other
-    ],
-    // ##### End of fuzzyTable #####
+  ],
+  // ##### End of fuzzyTable #####
 
-    // ##### Start of ignoreList #####
-    // This is taken from OSM pre processing and a few added
-    ignoreList : [
+  // ##### Start of ignoreList #####
+  // This is taken from OSM pre processing and a few added
+  ignoreList : [
     'APT2', 'APT3',
     'APU2', 'APU3',
     'AQO2', 'AQO3',
@@ -4158,12 +4158,12 @@ tds61.rules = {
     'ZI071_FFN', 'ZI071_FFN2', 'ZI071_FFN3',
     'ZSAX_RX3', 'ZSAX_RX4',
     'ZVH_VDT',
-    ],
-    // ##### End of ignoreList #####
+  ],
+  // ##### End of ignoreList #####
 
-    // ##### Start of fCodeMap #####
-    // This is a map of FCODE's and filenames
-    fCodeMap : [
+  // ##### Start of fCodeMap #####
+  // This is a map of FCODE's and filenames
+  fCodeMap : [
     ['AF010', ['af010','smokestack_p']], // Smokestack
     ['AH025', ['ah025','engineered_earthwork_s','engineered_earthwork_p']], // Engineered Earthwork
     ['AH060', ['ah060','underground_bunker_s','underground_bunker_p']], // Underground Bunker
@@ -4219,11 +4219,11 @@ tds61.rules = {
     ['GB050', ['gb050','aircraft_revetment_c']], // Aircraft Revetment
     ['ZD040', ['zd040','named_location_s','named_location_c','named_location_p']], // Named Location
     ['ZD045', ['zd045','annotated_location_s','annotated_location_c','annotated_location_p']], // Named Location
-    ],
-    // ##### End of fCodeMap #####
+  ],
+  // ##### End of fCodeMap #####
 
-    // ##### Start of closureList #####
-    closureList : {
+  // ##### Start of closureList #####
+  closureList : {
     'AQTC':['AQTL','AQTU'],
     'AYRC':['AYRL','AYRU'],
     'BPWHAC':['BPWHAL','BPWHAU'],
@@ -4244,15 +4244,15 @@ tds61.rules = {
     'TSCC':['TSCL','TSCU'],
     'WDAC':['WDAL','WDAU'],
     'ZI026_CTUC':['ZI026_CTUL','ZI026_CTUU']
-    },
-    // ##### End of closureList #####
+  },
+  // ##### End of closureList #####
 
-    // ##### Start of swapListIn #####
-    // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
-    // but renamed in different features. We swap these so that there is only one
-    // set of rules needed in the One2One section.
-    // These get converted back on output - if we need to.
-    swapListIn : {
+  // ##### Start of swapListIn #####
+  // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
+  // but renamed in different features. We swap these so that there is only one
+  // set of rules needed in the One2One section.
+  // These get converted back on output - if we need to.
+  swapListIn : {
     'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
     'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
     'HYP':'ZI024_HYP',
@@ -4276,12 +4276,12 @@ tds61.rules = {
     'ZI032_PYM':'PYM',
     'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
     'ZVH_VDT':'VDT'
-    },
-    // ##### End of swapListIn #####
+  },
+  // ##### End of swapListIn #####
 
-    // ##### Start of swapListOut #####
-    // Format is: <FCODE>:{<from>:<to>}
-    swapListOut : {
+  // ##### Start of swapListOut #####
+  // Format is: <FCODE>:{<from>:<to>}
+  swapListOut : {
     'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
@@ -4314,12 +4314,12 @@ tds61.rules = {
     'AP055':{'RIN_RTN':'RTN', 'RIN_RTN2':'RTN2', 'RIN_RTN3':'RTN3'},
     'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'},
     'ZI026':{'ZI026_SUR':'SUR'}
-    },
-    // ##### End of swapListOut #####
+  },
+  // ##### End of swapListOut #####
 
-    // ##### Start of txtLength #####
-    // This list is for validateing the lengths of text attributes prior to export
-    txtLength : {
+  // ##### Start of txtLength #####
+  // This list is for validateing the lengths of text attributes prior to export
+  txtLength : {
     'BA000_VDR':80, 'BEN':15, 'BRN':24, 'CID':20, 'CUD':20, 'ETZ':24, 'F_CODE':5, 'GB052_RIDH':14, 'GB052_RIDL':14,
     'IKO':14, 'MDE':20, 'NA8':80, 'PDA':14, 'PSE':14, 'RIN_RTN':24, 'RIN_RTN2':24, 'RIN_RTN3':24, 'RTN':24, 'RTN2':24,
     'RTN3':24, 'SAX_RS3':14, 'SAX_RS4':14, 'SAX_RS6':14, 'SAX_RX1':254, 'SAX_RX2':254, 'SAX_RX5':254, 'SAX_RX6':254,
@@ -4328,20 +4328,20 @@ tds61.rules = {
     'ZI005_NFN':18, 'ZI005_NFN2':18, 'ZI005_NFN3':18, 'ZI026T_UFI':254, 'ZI027T_UFI':254, 'ZI028_UFI':254, 'ZI031S_URI':254,
     'ZI031T_URI':254, 'ZI039S_UFI':254, 'ZI039T_UFI':254, 'ZSAX_RS0':14,
     'ZSAX_RX0':254, 'ZSAX_RX3':254, 'ZSAX_RX4':254
-    },
-    // ##### End of txtLength #####
+  },
+  // ##### End of txtLength #####
 
-    // ##### Start of intList #####
-    // This list is for validateing the integer attributes prior to export
-    intList : [
+  // ##### Start of intList #####
+  // This list is for validateing the integer attributes prior to export
+  intList : [
     'BC040_LCN', 'BC040_LVN', 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'ZI026_CTUL',
     'ZI026_CTUU'
-    ],
-    // ##### End of intList #####
+  ],
+  // ##### End of intList #####
 
-    // ##### Start of ge4List #####
-    // This list is for validateing the XXX_GE4XX values
-    ge4List : {
+  // ##### Start of ge4List #####
+  // This list is for validateing the XXX_GE4XX values
+  ge4List : {
     'ge:GENC:3:1-2:ABW':'AW', // Aruba
     'ge:GENC:3:1-2:AFG':'AF', // Islamic Republic of Afghanistan
     'ge:GENC:3:1-2:AGO':'AO', // Republic of Angola
@@ -4625,11 +4625,11 @@ tds61.rules = {
     'ge:ISO1:3:VI-15:TKM':'TM', // Turkmenistan
     'ge:ISO1:3:VI-15:TUV':'TV', // Tuvalu
     'other':'other', // Other
-    },
-    // ##### End of ge4List #####
+  },
+  // ##### End of ge4List #####
 
-    // ##### Start of Thematic Group Rules #####
-    thematicGroupList : {
+  // ##### Start of Thematic Group Rules #####
+  thematicGroupList : {
     'PAA010':'IndustryPnt', // Industry
     'AAA010':'IndustrySrf', // Industry
     'LAA011':'IndustryCrv', // Industry
@@ -5136,11 +5136,11 @@ tds61.rules = {
     'AZD070':'HydrographySrf', // Hydrography
     'AZI031':'ResourceSrf', // Resource
     'AZI039':'MetadataSrf' // Metadata
-    }, // End of thematicGroupList
-    // ##### End of Thematic Group Rules #####
+  }, // End of thematicGroupList
+  // ##### End of Thematic Group Rules #####
 
-    // ##### Start of ESRI FCSubtype Rules #####
-    subtypeList : {
+  // ##### Start of ESRI FCSubtype Rules #####
+  subtypeList : {
     'AA010':'100001', // Extraction Mine
     'AA011':'100002', // Shear Wall
     'AA020':'100003', // Mine Shaft Superstructure
@@ -5462,7 +5462,7 @@ tds61.rules = {
     'ZD070':'164755', // Water Measurement Location
     'ZI031':'121591', // Dataset
     'ZI039':'132721', // Entity Collection Metadata
-    }, // End of subtypeList
-    // ##### End of ESRI FCSubtype Rules #####
+  }, // End of subtypeList
+  // ##### End of ESRI FCSubtype Rules #####
 
-} // End of tds61.rules
+}; // End of tds61.rules

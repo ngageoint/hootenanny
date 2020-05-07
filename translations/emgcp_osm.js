@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -134,7 +134,7 @@ emgcp_osm = {
         }
 
         // Use a lookup table to convert the remaining attribute names from "English" to TDS
-        translate.applyOne2One(attrs, nAttrs, emgcp_osm_rules.enumValues, {'k':'v'});
+        translate.applyOne2One(attrs, nAttrs, emgcp_osm_rules.enumValues, {'k':'v'},[]);
 
         var tags = {};
 

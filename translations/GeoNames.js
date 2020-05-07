@@ -29,16 +29,16 @@
 // GeoNames Conversion
 //
 
-hoot.require('geonames_core')
-hoot.require('geonames_rules')
-hoot.require('config')
+hoot.require('geonames_core');
+hoot.require('geonames_rules');
+hoot.require('config');
 
 
 // IMPORT
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
 function translateAttributes(attrs, layerName, geometryType)
 {
-    return geonames.toOsm(attrs, layerName, geometryType);
+  return geonames.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 
