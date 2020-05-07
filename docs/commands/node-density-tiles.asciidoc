@@ -26,7 +26,7 @@ the specified input(s) and writes the output to a file.
 * +--randomSeed+               - Optionally seeds the random number generator for consistent tile boundary selection; valid only if +--random+ 
                                  is specified; use -1 for pseudo-random seeding; defaults to -1
 
-If too low a value is specified for maxNodesPerTile or too high a value is specified for pixelSize, the algorithm used may not be able
+If too low a value is specified for +--maxNodesPerTile+ or too high a value is specified for pixelSize, the algorithm used may not be able
 to find a solution and the runtime may increase dramatically. The +--maxAttempts+ option allows you to let the algorithm find potentially
 better input values.
 
@@ -40,7 +40,7 @@ hoot info --formats --input-bounded
 === Usage
 
 --------------------------------------
-hoot node-density-tiles (input1.osm)[;input2.osm...] (output) [--maxNodeCountPerTile <value>] [--pixelSize <value>] [--maxAttempts <value>] [--maxTimePerAttempt <value>] [--pixelSizeReductionFactor <value>] [--random] [--randomSeed <value>]
+hoot node-density-tiles (input1.osm)[;input2.osm...] (output) [--maxNodesPerTile <value>] [--pixelSize <value>] [--maxAttempts <value>] [--maxTimePerAttempt <value>] [--pixelSizeReductionFactor <value>] [--random] [--randomSeed <value>]
 --------------------------------------
 
 === Examples
@@ -54,7 +54,7 @@ hoot node-density-tiles test-files/MyInputFile.osm MyOutputFile.geojson
 Calculate tiles based on node density, specifying the maximum allowed node count per tile and a pixel size:
 
 --------------------------------------
-hoot node-density-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson --maxNodeCountPerTile 1000 --pixelSize 0.001
+hoot node-density-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson --maxNodesPerTile 1000 --pixelSize 0.001
 --------------------------------------
 
 Calculate tiles based on node density, narrowing down to a subset of the data specified by a bounding box:
@@ -66,7 +66,7 @@ hoot node-density-tiles -D convert.bounding.box="34.04,31.17,34.05,31.18" hootap
 Calculate tiles based on node density, specifying the maximum allowed node count per tile and a pixel size, and allow for more than one calculation attempt:
 
 --------------------------------------
-hoot node-density-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson --maxNodeCountPerTile 1000 --pixelSize 0.001 --maxAttempts 2 --pixelSizeAutoReductionFactor 2
+hoot node-density-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson --maxNodesPerTile 1000 --pixelSize 0.001 --maxAttempts 5 --pixelSizeAutoReductionFactor 10
 --------------------------------------
 
 Select a random tile based on node density:

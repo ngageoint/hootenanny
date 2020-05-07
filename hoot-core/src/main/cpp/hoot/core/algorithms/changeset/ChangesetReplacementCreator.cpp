@@ -281,6 +281,78 @@ void ChangesetReplacementCreator::setReplacementFilterOptions(const QStringList&
   _setInputFilterOptions(_replacementFilterOptions, optionKvps);
 }
 
+QString ChangesetReplacementCreator::_getJobDescription(
+  const QString& input1, const QString& input2, const QString& bounds,
+  const QString& output) const
+{
+  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+  QString lenientStr = "Bounds calculation is ";
+  if (!_lenientBounds)
+  {
+    lenientStr += "not ";
+  }
+  lenientStr += "lenient.";
+  const QString replacementTypeStr = _fullReplacement ? "full" : "overlapping only";
+  QString geometryFiltersStr = "are ";
+  if (!_geometryFiltersSpecified)
+  {
+    geometryFiltersStr += "not ";
+  }
+  geometryFiltersStr += "specified";
+  QString replacementFiltersStr = "is ";
+  if (!_replacementFilter)
+  {
+    replacementFiltersStr += "not ";
+  }
+  replacementFiltersStr += "specified";
+  QString retainmentFiltersStr = "is ";
+  if (!_retainmentFilter)
+  {
+    retainmentFiltersStr += "not ";
+  }
+  retainmentFiltersStr += "specified";
+  QString conflationStr = "is ";
+  if (!_conflationEnabled)
+  {
+    conflationStr += "not ";
+  }
+  conflationStr += "enabled";
+  QString cleaningStr = "is ";
+  if (!_cleaningEnabled)
+  {
+    cleaningStr += "not ";
+  }
+  cleaningStr += "enabled";
+  QString waySnappingStr = "is ";
+  if (!_waySnappingEnabled)
+  {
+    waySnappingStr += "not ";
+  }
+  waySnappingStr += "enabled";
+  QString oobWayHandlingStr = "is ";
+  if (!_tagOobConnectedWays)
+  {
+    oobWayHandlingStr += "not ";
+  }
+  oobWayHandlingStr += "enabled";
+
+  QString str;
+  str += "Deriving replacement output changeset:";
+  str += "\nBeing replaced: ..." + input1.right(maxFilePrintLength);
+  str += "\nReplacing with ..." + input2.right(maxFilePrintLength);
+  str += "\nOutput Changeset: ..." + output.right(maxFilePrintLength);
+  str += "\nBounds: " + bounds + lenientStr;
+  str += "\nReplacement is: " + replacementTypeStr;
+  str += "\nGeometry filters: " + geometryFiltersStr;
+  str += "\nReplacement filter: " + replacementFiltersStr;
+  str += "\nRetainment filter: " + retainmentFiltersStr;
+  str += "\nConflation: " + conflationStr;
+  str += "\nCleaning: " + cleaningStr;
+  str += "\nWay snapping: " + waySnappingStr;
+  str += "\nOut of bounds way handling: " + oobWayHandlingStr;
+  return str;
+}
+
 void ChangesetReplacementCreator::setRetainmentFilterOptions(const QStringList& optionKvps)
 {
   LOG_DEBUG("Creating retainment filter options...");
@@ -291,15 +363,14 @@ void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {
-  LOG_VARD(_chainReplacementFilters);
-  LOG_VARD(_lenientBounds);
-  LOG_VARD(_fullReplacement);
-
   // INPUT VALIDATION AND SETUP
 
   _validateInputs(input1, input2);
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _setGlobalOpts(boundsStr);
+
+  LOG_INFO(_getJobDescription(input1, input2, boundsStr, output));
+
   // If a retainment filter was specified, we'll AND it together with each geometry type filter to
   // further restrict what reference data gets replaced in the final changeset.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
@@ -308,18 +379,6 @@ void ChangesetReplacementCreator::create(
   // further restrict what secondary replacement data goes into the final changeset.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
     _getCombinedFilters(_replacementFilter);
-
-  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
-  QString lenientStr = "Bounds calculation is ";
-  if (!_lenientBounds)
-  {
-    lenientStr += "not ";
-  }
-  lenientStr += "lenient.";
-  LOG_INFO(
-    "Deriving replacement output changeset: ..." << output.right(maxFilePrintLength) <<
-    " from inputs: ..." << input1.right(maxFilePrintLength) << " and ..." <<
-    input2.right(maxFilePrintLength) << "" << ", at bounds: " << boundsStr << ". " << lenientStr);
 
   // CHANGESET CALCULATION
 
@@ -420,7 +479,9 @@ void ChangesetReplacementCreator::create(
 
   _changesetCreator->create(refMaps, conflatedMaps, output);
 
-  LOG_INFO("Derived replacement changeset: ..." << output.right(maxFilePrintLength));
+  LOG_INFO(
+    "Derived replacement changeset: ..." <<
+    output.right(ConfigOptions().getProgressVarPrintLengthMax()));
 }
 
 void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr refMap, OsmMapPtr mapToDedupe)
