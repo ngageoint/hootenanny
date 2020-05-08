@@ -70,12 +70,34 @@ void ElementDeduplicator::_calcElementHashes(
   LOG_VARD(duplicates.size());
 }
 
+void ElementDeduplicator::_removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map)
+{
+  if (elementsToRemove.size() == 0)
+  {
+    return;
+  }
+
+  const ElementId id = *elementsToRemove.begin();
+  LOG_DEBUG(
+    "Removing duplicate " << id.getType().toString() << "s from " << map->getName() << "...");
+  for (QSet<ElementId>::const_iterator itr = elementsToRemove.begin();
+       itr != elementsToRemove.end(); ++itr)
+  {
+    LOG_TRACE("Removing " << *itr << "...");
+    RemoveElementByEid::removeElementNoCheck(map, *itr);
+  }
+}
+
 void ElementDeduplicator::dedupe(OsmMapPtr map)
 {
   _validateInputs();
 
   LOG_STATUS("De-duping intra-map: " << map->getName() << "...");
   LOG_DEBUG(map->getName() << " size before de-duping: " << map->size());
+
+  const long nodesBefore = map->getNodeCount();
+  const long waysBefore = map->getWayCount();
+  const long relationsBefore = map->getRelationCount();
 
   QMap<QString, ElementId> mapHashes;
   QSet<std::pair<ElementId, ElementId>> duplicates;
@@ -103,45 +125,29 @@ void ElementDeduplicator::dedupe(OsmMapPtr map)
 
   if (_dedupeRelations)
   {
-    LOG_DEBUG("Removing duplicate relations from " << map->getName() << "...");
-    const QSet<ElementId> relationsToRemove = elementsToRemove[ElementType::Relation];
-    LOG_VARD(relationsToRemove.size());
-    for (QSet<ElementId>::const_iterator itr = relationsToRemove.begin();
-         itr != relationsToRemove.end(); ++itr)
-    {
-      LOG_TRACE("Removing " << *itr << "...");
-      RemoveElementByEid::removeElementNoCheck(map, *itr);
-    }
+    _removeElements(elementsToRemove[ElementType::Relation], map);
   }
 
   if (_dedupeWays)
   {
-    LOG_DEBUG("Removing duplicate ways...");
-    const QSet<ElementId> waysToRemove = elementsToRemove[ElementType::Way];
-    LOG_VARD(waysToRemove.size());
-    for (QSet<ElementId>::const_iterator itr = waysToRemove.begin();
-         itr != waysToRemove.end(); ++itr)
-    {
-      LOG_TRACE("Removing " << *itr << "...");
-      RemoveElementByEid::removeElementNoCheck(map, *itr);
-    }
+    _removeElements(elementsToRemove[ElementType::Way], map);
   }
 
   if (_dedupeNodes)
   {
-    LOG_DEBUG("Removing duplicate nodes from " << map->getName() << "...");
-    const QSet<ElementId> nodesToRemove = elementsToRemove[ElementType::Node];
-    LOG_VARD(nodesToRemove.size());
-    for (QSet<ElementId>::const_iterator itr = nodesToRemove.begin();
-         itr != nodesToRemove.end(); ++itr)
-    {
-      LOG_TRACE("Removing " << *itr << "...");
-      RemoveElementByEid::removeElementNoCheck(map, *itr);
-    }
+    _removeElements(elementsToRemove[ElementType::Node], map);
   }
 
   LOG_DEBUG(map->getName() << " size after de-duping: " << map->size());
-  // TODO: stats
+  LOG_STATUS(
+    "Removed " << nodesBefore - map->getNodeCount() << " duplicate nodes from " <<
+    map->getName());
+  LOG_STATUS(
+    "Removed " << waysBefore - map->getWayCount() << " duplicate ways from " <<
+    map->getName());
+  LOG_STATUS(
+    "Removed " << relationsBefore - map->getRelationCount() << " duplicate relations from " <<
+    map->getName());
 }
 
 void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
@@ -151,6 +157,13 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
   LOG_STATUS("De-duping map: " << map1->getName() << " and " << map2->getName() << "...");
   LOG_DEBUG(map1->getName() << " size before de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size before de-duping: " << map2->size());
+
+  const long map1NodesBefore = map1->getNodeCount();
+  const long map1WaysBefore = map1->getWayCount();
+  const long map1RelationsBefore = map1->getRelationCount();
+  const long map2NodesBefore = map2->getNodeCount();
+  const long map2WaysBefore = map2->getWayCount();
+  const long map2RelationsBefore = map2->getRelationCount();
 
   QMap<QString, ElementId> map1Hashes;
   QSet<std::pair<ElementId, ElementId>> duplicates1;
@@ -282,15 +295,7 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
 
   if (_dedupeRelations)
   {
-    LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
-    const QSet<ElementId> relationsToRemove = elementsToRemove[ElementType::Relation];
-    LOG_VARD(relationsToRemove.size());
-    for (QSet<ElementId>::const_iterator itr = relationsToRemove.begin();
-         itr != relationsToRemove.end(); ++itr)
-    {
-      LOG_TRACE("Removing " << *itr << "...");
-      RemoveElementByEid::removeElementNoCheck(map2, *itr);
-    }
+    _removeElements(elementsToRemove[ElementType::Relation], map2);
   }
 
   if (_dedupeWays)
@@ -318,20 +323,29 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
 
   if (_dedupeNodes)
   {
-    LOG_DEBUG("Removing duplicate nodes from " << map2->getName() << "...");
-    const QSet<ElementId> nodesToRemove = elementsToRemove[ElementType::Node];
-    LOG_VARD(nodesToRemove.size());
-    for (QSet<ElementId>::const_iterator itr = nodesToRemove.begin();
-         itr != nodesToRemove.end(); ++itr)
-    {
-      LOG_TRACE("Removing " << *itr << "...");
-      RemoveElementByEid::removeElementNoCheck(map2, *itr);
-    }
+    _removeElements(elementsToRemove[ElementType::Node], map2);
   }
 
   LOG_DEBUG(map1->getName() << " size after de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size after de-duping: " << map2->size());
-  // TODO: stats
+  LOG_STATUS(
+    "Removed " << map1NodesBefore - map1->getNodeCount() << " duplicate nodes from " <<
+    map1->getName());
+  LOG_STATUS(
+    "Removed " << map1WaysBefore - map1->getWayCount() << " duplicate ways from " <<
+    map1->getName());
+  LOG_STATUS(
+    "Removed " << map1RelationsBefore - map1->getRelationCount() << " duplicate relations from " <<
+    map1->getName());
+  LOG_STATUS(
+    "Removed " << map2NodesBefore - map2->getNodeCount() << " duplicate nodes from " <<
+    map2->getName());
+  LOG_STATUS(
+    "Removed " << map2WaysBefore - map2->getWayCount() << " duplicate ways from " <<
+    map2->getName());
+  LOG_STATUS(
+    "Removed " << map2RelationsBefore - map2->getRelationCount() << " duplicate relations from " <<
+    map2->getName());
 }
 
 }

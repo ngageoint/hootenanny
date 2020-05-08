@@ -86,6 +86,8 @@ private:
   void _calcElementHashes(
     OsmMapPtr map, QMap<QString, ElementId>& hashes,
     QSet<std::pair<ElementId, ElementId>>& duplicates);
+
+  void _removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map);
 };
 
 }
