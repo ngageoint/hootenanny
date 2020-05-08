@@ -473,7 +473,8 @@ void ChangesetReplacementCreator::create(
   // created by the replacement operation.
   if (refMaps.size() > 1)
   {
-    //_dedupeMaps(refMaps); // TODO: why not ref maps too?
+    // Not completely sure at this point we need to dedupe ref map but doing it anyway.
+    _dedupeMaps(refMaps);
     _dedupeMaps(conflatedMaps);
   }
 
