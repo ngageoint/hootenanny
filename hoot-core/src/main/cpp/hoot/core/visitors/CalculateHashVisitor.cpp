@@ -55,11 +55,6 @@ _collectHashes(false)
 
 QString CalculateHashVisitor::toJson(const ConstElementPtr& e)
 {
-//  if (!e)
-//  {
-//    return "";
-//  }
-
   QString result;
   if (e->getElementType() == ElementType::Node)
   {
@@ -79,11 +74,6 @@ QString CalculateHashVisitor::toJson(const ConstElementPtr& e)
 
 QString CalculateHashVisitor::_toJson(const ConstNodePtr& node)
 {
-//  if (!node)
-//  {
-//    return "";
-//  }
-
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"node\",\"tags\":{";
 
   result += _toJson(node->getTags(), node->getRawCircularError());
@@ -105,10 +95,6 @@ QString CalculateHashVisitor::_toJson(const ConstWayPtr& way)
   {
     throw IllegalArgumentException("A map must be set when calculating a way hash.");
   }
-//  if (!way)
-//  {
-//    return "";
-//  }
 
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"way\",\"tags\":{";
 
@@ -224,12 +210,6 @@ QString CalculateHashVisitor::toHashString(const ConstElementPtr& e)
 
 void CalculateHashVisitor::visit(const ElementPtr& e)
 {
-//  if (!e)
-//  {
-//    LOG_DEBUG("null");
-//    return;
-//  }
-
   // don't calculate hashes on review relations
   if (ReviewMarker::isReview(e) == false)
   {

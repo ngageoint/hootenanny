@@ -457,12 +457,24 @@ void ChangesetReplacementCreator::create(
     LOG_WARN("No features remain after filtering, so no changeset will be generated.");
     return;
   }
-  assert(refMaps.size() == conflatedMaps.size());
+  //assert(refMaps.size() == conflatedMaps.size());
+  if (refMaps.size() != conflatedMaps.size())
+  {
+    throw HootException("Replacement changeset derivation internal map mismatch error.");
+  }
+
+  // CLEANUP
 
   // Due to the mixed relations processing explained in _getDefaultGeometryFilters, we may have
   // some duplicated features that need to be cleaned up before we generate the changesets.
-  //_dedupeMaps(refMaps);
-  _dedupeMaps(conflatedMaps);
+
+  // If we have the maps for only one geometry type, then there isn't a possibility of duplication
+  // created by the replacement operation.
+  if (refMaps.size() > 1)
+  {
+    //_dedupeMaps(refMaps);
+    _dedupeMaps(conflatedMaps);
+  }
 
   // CHANGESET GENERATION
 
@@ -482,10 +494,12 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
   for (int i = 0; i < maps.size(); i++)
   {
     dedupePassCtr++;
+    OsmMapPtr map1;
+    OsmMapPtr map2;
     if ((i + 1) < maps.size())
     {
-      OsmMapPtr map1 = maps.at(i);
-      OsmMapPtr map2 = maps.at(i + 1);
+      map1 = maps.at(i);
+      map2 = maps.at(i + 1);
       LOG_DEBUG(
         "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
         dedupePassCtr << " / " << maps.size() << "...");
@@ -493,13 +507,17 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
     }
     else
     {
-      OsmMapPtr map1 = maps.at(0);
-      OsmMapPtr map2 = maps.at(i);
+      map1 = maps.at(0);
+      map2 = maps.at(i);
       LOG_DEBUG(
         "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
         dedupePassCtr << " / " << maps.size() << "...");
       _dedupeMap(map1, map2);
     }
+    OsmMapWriterFactory::writeDebugMap(
+      map1, "after-dedupe-" + map1->getName() + "-pass-" + QString::number(dedupePassCtr));
+    OsmMapWriterFactory::writeDebugMap(
+      map2, "after-dedupe-" + map2->getName() + "-pass-" + QString::number(dedupePassCtr));
   }
 }
 
@@ -671,9 +689,9 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
     {
       mapToRemoveFrom = map2;
     }
-    LOG_TRACE("Removing " << *itr << " from " << mapToRemoveFrom->getName() << "...");
-    RemoveElementByEid::removeElementNoCheck(mapToRemoveFrom, *itr);
-    //RecursiveElementRemover(*itr).apply(mapToRemoveFrom);
+    LOG_TRACE("Removing " << id << " from " << mapToRemoveFrom->getName() << "...");
+    //RemoveElementByEid::removeElementNoCheck(mapToRemoveFrom, id);
+    RecursiveElementRemover(id).apply(mapToRemoveFrom);
   }
 
 //  LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
