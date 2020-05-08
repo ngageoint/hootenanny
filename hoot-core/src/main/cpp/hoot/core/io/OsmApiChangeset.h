@@ -108,7 +108,7 @@ public:
    * @brief isDone Checks if all elements are either finalized or failed
    * @return true if there aren't any elements left to receive updates from
    */
-  bool isDone() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) == _processedCount + _failedCount; }
+  bool isDone() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) <= _processedCount + _failedCount; }
   /** Elements in a changeset can be in three sections, create, modify, and delete.  Max is used for iterating */
   enum ChangesetType : int
   {
