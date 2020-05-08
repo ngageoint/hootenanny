@@ -282,7 +282,6 @@ private:
   /*
    * Removes duplicates between one map and another, ignoring elemment IDs
    */
-  void _dedupeMap(OsmMapPtr refMap, OsmMapPtr mapToDedupe);
   void _dedupeMaps(const QList<OsmMapPtr>& maps);
 
   /*

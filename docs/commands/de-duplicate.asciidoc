@@ -1,0 +1,32 @@
+[[de-duplicate]]
+== de-duplicate
+
+=== Description
+
+TODO
+
+* +input1+                   - OSM data input 1; may be any supported input format (e.g. .osm file).
+* +output1+                  - Output location; must be a changeset .osc or .osc.sql file.
+* +input2+
+* +output2+
+* +--interDatasetOnly+       - TODO
+* +--skipNodes+              -
+* +--skipWays+               -
+* +--skipRelations+          -
+* +--favorMoreConnectedWays+ -
+
+=== Usage
+
+--------------------------------------
+de-duplicate (input1) (output1) [input2] [output2] [--interDatasetOnly] [--skipNodes] [--skipWays] [--skipRelations] [--favorMoreConnectedWays]
+--------------------------------------
+
+=== Examples
+
+--------------------------------------
+
+--------------------------------------
+
+=== See Also
+
+
