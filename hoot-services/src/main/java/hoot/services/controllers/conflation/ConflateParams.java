@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -85,6 +85,9 @@ public class ConflateParams {
 
     @JsonProperty("CLEANING_OPTIONS")
     private List<String> cleaningOpts;
+
+    @JsonProperty("taskInfo")
+    private String taskInfo;
 
     public String getInputType1() {
         return inputType1;
@@ -220,6 +223,14 @@ public class ConflateParams {
 
     public void setCleaningOpts(List<String> cleaningOpts) {
         this.cleaningOpts = cleaningOpts;
+    }
+
+    public void setTaskInfo(String taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public String getTaskInfo() {
+        return taskInfo;
     }
 
     @Override

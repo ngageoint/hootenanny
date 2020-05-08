@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -80,6 +80,9 @@ public class GrailParams {
     @JsonProperty("ADV_OPTIONS")
     private Map<String, String> advancedOptions;
 
+    @JsonProperty("taskInfo")
+    private String taskInfo;
+
     private String consumerKey;
 
     private String consumerSecret;
@@ -108,6 +111,8 @@ public class GrailParams {
         this.pushUrl = params.getPushUrl();
         this.maxSize = params.getMaxBBoxSize();
         this.customQuery = params.getCustomQuery();
+        this.advancedOptions = params.getAdvancedOptions();
+        this.taskInfo = params.getTaskInfo();
         this.consumerKey = params.getConsumerKey();
         this.consumerSecret = params.getConsumerSecret();
         this.workDir = params.getWorkDir();
@@ -115,7 +120,6 @@ public class GrailParams {
         this.comment = params.getComment();
         this.hashtags = params.getHashtags();
         this.source = params.getSource();
-        this.advancedOptions = params.getAdvancedOptions();
     }
 
     public String getComment() {
@@ -268,6 +272,14 @@ public class GrailParams {
 
     public void setAdvancedOptions(Map<String, String> advancedOptions) {
         this.advancedOptions = advancedOptions;
+    }
+
+    public void setTaskInfo(String taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public String getTaskInfo() {
+        return taskInfo;
     }
 
     @Override

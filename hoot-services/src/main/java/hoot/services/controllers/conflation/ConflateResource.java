@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -54,6 +54,7 @@ import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
+import hoot.services.utils.DbUtils;
 
 
 @Controller
@@ -104,8 +105,9 @@ public class ConflateResource {
     @Path("/execute")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response conflate(ConflateParams params, @Context HttpServletRequest request,
-                             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response conflate(@Context HttpServletRequest request,
+            ConflateParams params,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         Users user = Users.fromRequest(request);
 
         String jobId = UUID.randomUUID().toString();
@@ -121,6 +123,21 @@ public class ConflateResource {
             jobStatusTags.put("bbox", params.getBounds());
             jobStatusTags.put("input1", params.getInput1());
             jobStatusTags.put("input2", params.getInput2());
+            jobStatusTags.put("taskInfo", params.getTaskInfo());
+            jobStatusTags.put("conflationType", params.getConflationType());
+
+            // add both jobIds related to the inputs as the parent seperated by comma if both jobs exist
+            String input1JobId = DbUtils.getJobIdByMapId(Long.parseLong(params.getInput1()));
+            String input2JobId = DbUtils.getJobIdByMapId(Long.parseLong(params.getInput2()));
+            String parentId = null;
+            if (input1JobId != null && input2JobId != null) {
+                parentId = input1JobId + "," + input2JobId;
+            } else if (input1JobId != null) {
+                parentId = input1JobId;
+            } else if (input2JobId != null) {
+                parentId = input2JobId;
+            }
+            jobStatusTags.put("parentId", parentId);
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.CONFLATE, jobStatusTags));
         }
