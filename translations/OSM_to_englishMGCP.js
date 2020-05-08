@@ -30,45 +30,45 @@
 //
 
 // For the OSM+ to NFDD translation
-hoot.require('mgcp')
-hoot.require('mgcp_schema')
-hoot.require('mgcp_rules')
-hoot.require('fcode_common')
+hoot.require('mgcp');
+hoot.require('mgcp_schema');
+hoot.require('mgcp_rules');
+hoot.require('fcode_common');
 
 // The main translation functions
-hoot.require('emgcp')
-hoot.require('emgcp_rules')
+hoot.require('emgcp');
+hoot.require('emgcp_rules');
 
-hoot.require('config')
-hoot.require('translate')
+hoot.require('config');
+hoot.require('translate');
 
 // Create the output Schema - This is not used here. We _do_ use it in the etds functions but
 // we don't need to expose it to the main Hoot program
 function getDbSchema()
 {
-     return mgcp.getDbSchema();
+  return mgcp.getDbSchema();
 }
 
 // Get raw schema directly from translations/schema
 function getRawDbSchema()
 {
-     return mgcp.schema.getDbSchema();
+  return mgcp.schema.getDbSchema();
 }
 
 
 function initialize()
 {
-    // Make sure the MGCP translator exports extra tags to the TXT field
-    hoot.Settings.set({"ogr.mgcp.extra":"note"});
+  // Make sure the MGCP translator exports extra tags to the TXT field
+  hoot.Settings.set({'ogr.mgcp.extra':'note'});
 
-    // Throw errors instead of returning partial translations/o2s_X features
-    hoot.Settings.set({"ogr.throw.error":"true"});
+  // Throw errors instead of returning partial translations/o2s_X features
+  hoot.Settings.set({'ogr.throw.error':'true'});
 
-    // Turn off the ESRI FCSUBTYPE
-    hoot.Settings.set({"ogr.tds.add.fcsubtype":"false"});
+  // Turn off the ESRI FCSUBTYPE
+  hoot.Settings.set({'ogr.tds.add.fcsubtype':'false'});
 
-    // Set the schema type for the export
-    hoot.Settings.set({"osm.map.writer.schema":"MGCP"});
+  // Set the schema type for the export
+  hoot.Settings.set({'osm.map.writer.schema':'MGCP'});
 }
 
 
@@ -82,18 +82,18 @@ function initialize()
 //
 function translateAttributes(attrs, layerName, geometryType)
 {
-    // We use the temp var because etds.toEnglish returns "attrs" and "tableName"
-    var output = emgcp.toEnglish(attrs,layerName,geometryType);
+  // We use the temp var because etds.toEnglish returns "attrs" and "tableName"
+  var output = emgcp.toEnglish(attrs,layerName,geometryType);
 
-    // Make sure the returned value isn't NULL. This does occur
-    if (output)
-    {
-        return output.attrs;
-    }
-    else
-    {
-        return null;
-    }
+  // Make sure the returned value isn't NULL. This does occur
+  if (output)
+  {
+    return output.attrs;
+  }
+  else
+  {
+    return null;
+  }
 } // End of Translate Attributes
 
 
@@ -102,5 +102,5 @@ function translateAttributes(attrs, layerName, geometryType)
 //    This version converts OSM+ tags to NFDD "English" attributes
 function translateToOgr(tags, elementType, geometryType)
 {
-        return emgcp.toEnglish(tags, elementType, geometryType)
+  return emgcp.toEnglish(tags, elementType, geometryType);
 } // End of translateToOgr

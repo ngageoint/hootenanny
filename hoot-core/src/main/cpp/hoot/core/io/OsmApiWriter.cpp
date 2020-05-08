@@ -68,7 +68,8 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _changesetCount(0),
     _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
-    _apiId(0)
+    _apiId(0),
+    _threadsCanExit(false)
 {
   _changesets.push_back(changeset);
   if (isSupported(url))
@@ -94,7 +95,8 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _changesetCount(0),
     _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
-    _apiId(0)
+    _apiId(0),
+    _threadsCanExit(false)
 {
   if (isSupported(url))
     _url = url;
@@ -201,6 +203,8 @@ bool OsmApiWriter::apply()
         _changesetMutex.unlock();
         //  Push that changeset
         _pushChangesets(changeset_info);
+        //  Let the threads know that the remaining changeset is the "remaining" changeset
+        _threadsCanExit = true;
       }
       else
       {
@@ -482,7 +486,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         //  will wait for the producer thread to calculate the remaining changeset and
         //  push in on the queue.  It then loops around and picks up the remaining
         //  changeset and processes it.
-        if (_threadsAreIdle() && index != 0)
+        if (_threadsAreIdle() && index != 0 && _threadsCanExit)
         {
           stop_thread = true;
           _updateThreadStatus(index, ThreadStatus::Completed);

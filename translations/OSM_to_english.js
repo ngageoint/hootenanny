@@ -34,28 +34,28 @@
 // NodeJs Function
 global.toEnglish = function(tags, geometryType)
 {
-    if (typeof SchemaTools === 'undefined') hoot.require('SchemaTools');
-    if (typeof tds61 === 'undefined') hoot.require('tds61');
-    if (typeof tds61_schema === 'undefined') hoot.require('tds61_schema');
-    if (typeof tds61_rules === 'undefined') hoot.require('tds61_rules');
-    if (typeof fcode_common === 'undefined')hoot.require('fcode_common');
-    if (typeof tds61_schema === 'undefined')hoot.require('tds61_schema');
-    if (typeof etds61 === 'undefined') hoot.require('etds61');
-    if (typeof etds61_rules === 'undefined') hoot.require('etds61_rules');
-    if (typeof config === 'undefined') hoot.require('config');
-    if (typeof translate === 'undefined') hoot.require('translate');
+  if (typeof SchemaTools === 'undefined') hoot.require('SchemaTools');
+  if (typeof tds61 === 'undefined') hoot.require('tds61');
+  if (typeof tds61_schema === 'undefined') hoot.require('tds61_schema');
+  if (typeof tds61_rules === 'undefined') hoot.require('tds61_rules');
+  if (typeof fcode_common === 'undefined')hoot.require('fcode_common');
+  if (typeof tds61_schema === 'undefined')hoot.require('tds61_schema');
+  if (typeof etds61 === 'undefined') hoot.require('etds61');
+  if (typeof etds61_rules === 'undefined') hoot.require('etds61_rules');
+  if (typeof config === 'undefined') hoot.require('config');
+  if (typeof translate === 'undefined') hoot.require('translate');
 
-    // Turn off the TDS structure so we just get the raw feature
-    hoot.Settings.set({"ogr.tds.structure":"false"});
+  // Turn off the TDS structure so we just get the raw feature
+  hoot.Settings.set({'ogr.tds.structure':'false'});
 
-    // Turn on partial translations
-    hoot.Settings.set({"ogr.partial.translate":"true"});
+  // Turn on partial translations
+  hoot.Settings.set({'ogr.partial.translate':'true'});
 
-    // Turn off the tds extra function
-    hoot.Settings.set({"ogr.tds.extra":"false"});
+  // Turn off the tds extra function
+  hoot.Settings.set({'ogr.tds.extra':'false'});
 
 
-    return etds61.toEnglish(tags, '', geometryType)
-} // End of toEnglish
+  return etds61.toEnglish(tags, '', geometryType);
+}; // End of toEnglish
 
 

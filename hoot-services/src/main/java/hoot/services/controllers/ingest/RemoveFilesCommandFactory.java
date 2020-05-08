@@ -22,20 +22,25 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.jobs;
+package hoot.services.controllers.ingest;
 
+
+import org.springframework.stereotype.Component;
+
+import java.io.File;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
 
-import hoot.services.controllers.job.JobStatusResponse;
-import hoot.services.controllers.jobs.JobHistory;
-import hoot.services.models.db.Users;
+/**
+ * Used to create an internal command that can clean all the specific folders.
+ * Useful because it can be added to a jobs workflow to cleanup after the files are used and unnecessary
+ */
+@Component
+public class RemoveFilesCommandFactory {
 
-@Service
-public interface JobsStatusesManager {
-    List<JobStatusResponse> getRunningJobs();
-    JobHistory getJobsHistory(Users user, String sort, long offset, long limit, String type, String status, String groupJobId);
+    public RemoveFilesCommand build(String jobId, List<File> deleteFiles) {
+        return new RemoveFilesCommand(jobId, deleteFiles);
+    }
 }

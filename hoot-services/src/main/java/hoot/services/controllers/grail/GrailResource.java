@@ -109,6 +109,7 @@ import org.w3c.dom.NodeList;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.controllers.ingest.RemoveFilesCommandFactory;
 import hoot.services.controllers.osm.map.SetMapTagsCommandFactory;
 import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
 import hoot.services.geo.BoundingBox;
@@ -150,6 +151,9 @@ public class GrailResource {
 
     @Autowired
     private PullConnectedWaysCommandFactory connectedWaysCommandFactory;
+
+    @Autowired
+    private RemoveFilesCommandFactory removeFilesCommandFactory;
 
     public GrailResource() {}
 
@@ -218,6 +222,7 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createDifferentialChangeset(@Context HttpServletRequest request,
             GrailParams reqParams,
+            @QueryParam("deriveType") String deriveType,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
@@ -283,7 +288,12 @@ public class GrailResource {
         ExternalCommand makeDiff = grailCommandFactory.build(jobId, params, debugLevel, RunDiffCommand.class, this.getClass());
         workflow.add(makeDiff);
 
-        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET));
+        Map<String, Object> jobStatusTags = new HashMap<>();
+        jobStatusTags.put("bbox", reqParams.getBounds());
+        jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
+        jobStatusTags.put("deriveType", deriveType);
+
+        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
@@ -466,6 +476,7 @@ public class GrailResource {
             Map<String, Object> jobStatusTags = new HashMap<>();
             jobStatusTags.put("bbox", reqParams.getBounds());
             jobStatusTags.put("parentId", reqParams.getParentId());
+            jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET, jobStatusTags));
         }
@@ -509,6 +520,7 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deriveChangeset(@Context HttpServletRequest request,
             GrailParams reqParams,
+            @QueryParam("deriveType") String deriveType,
             @QueryParam("replacement") @DefaultValue("false") Boolean replacement,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
@@ -561,6 +573,8 @@ public class GrailResource {
             jobStatusTags.put("input1", input1);
             jobStatusTags.put("input2", input2);
             jobStatusTags.put("parentId", reqParams.getParentId());
+            jobStatusTags.put("deriveType", deriveType);
+            jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
             jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
         }
@@ -627,26 +641,11 @@ public class GrailResource {
         params.setUser(user);
         params.setPullUrl(PUBLIC_OVERPASS_URL);
 
-        String url;
-        try {
-            String customQuery = reqParams.getCustomQuery();
-            if (customQuery == null || customQuery.equals("")) {
-                url = "'" + PullOverpassCommand.getOverpassUrl(bbox) + "'";
-            } else {
-                url = "'" + PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), bbox, "xml", customQuery) + "'";
-            }
-
-        } catch(IllegalArgumentException exc) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(exc.getMessage()).build();
-        }
-
-
         File overpassOSMFile = new File(workDir, SECONDARY + ".osm");
         GrailParams getOverpassParams = new GrailParams(params);
         getOverpassParams.setOutput(overpassOSMFile.getAbsolutePath());
         if (overpassOSMFile.exists()) overpassOSMFile.delete();
         workflow.add(getPublicOverpassCommand(jobId, getOverpassParams));
-
 
         params.setInput1(overpassOSMFile.getAbsolutePath());
         params.setOutput(layerName);
@@ -656,6 +655,7 @@ public class GrailResource {
         // Set map tags marking dataset as eligible for derive changeset
         Map<String, String> tags = new HashMap<>();
         tags.put("bbox", params.getBounds());
+        if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
 
@@ -663,8 +663,15 @@ public class GrailResource {
         InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, layerName, user, this.getClass());
         workflow.add(setFolder);
 
+        // Clean up pulled files
+        ArrayList<File> deleteFiles = new ArrayList<>();
+        deleteFiles.add(workDir);
+        InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+        workflow.add(cleanFolders);
+
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", bbox);
+        jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
 
@@ -845,6 +852,7 @@ public class GrailResource {
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", reqParams.getBounds());
+        jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
 
@@ -925,12 +933,19 @@ public class GrailResource {
         Map<String, String> tags = new HashMap<>();
         tags.put("grailReference", "true");
         tags.put("bbox", params.getBounds());
+        if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
 
         // Move the data to the folder
         InternalCommand setFolder = updateParentCommandFactory.build(jobId, parentFolderId, params.getOutput(), user, this.getClass());
         workflow.add(setFolder);
+
+        // Clean up pulled files
+        ArrayList<File> deleteFiles = new ArrayList<>();
+        deleteFiles.add(params.getWorkDir());
+        InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+        workflow.add(cleanFolders);
 
         return workflow;
     }

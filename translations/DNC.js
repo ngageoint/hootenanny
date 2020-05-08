@@ -38,26 +38,26 @@ hoot.require('fcode_common');
 
 function initialize()
 {
-    // Set the schema type for the export
-    hoot.Settings.set({"osm.map.writer.schema":"DNC"});
-    hoot.Settings.set({"ogr.esri.fdname":""});
+  // Set the schema type for the export
+  hoot.Settings.set({'osm.map.writer.schema':'DNC'});
+  hoot.Settings.set({'ogr.esri.fdname':''});
 
-    // We need this to avoid errors with int & LongLong
-    // It really needs to be set on the commandline not here
-    hoot.Settings.set({"ogr.strict.checking":"off"});
+  // We need this to avoid errors with int & LongLong
+  // It really needs to be set on the commandline not here
+  hoot.Settings.set({'ogr.strict.checking':'off'});
 }
 
 // Layer name filter - Filter out all layers that match this regexp
 function layerNameFilter()
 {
-    // Drop all of the tileref and libref layers
-    return "^(?!tileref_|libref_)";
+  // Drop all of the tileref and libref layers
+  return '^(?!tileref_|libref_)';
 }
 
 // Create the output Schema
 function getDbSchema()
 {
-    return dnc.getDbSchema();
+  return dnc.getDbSchema();
 }
 
 // IMPORT
@@ -65,7 +65,7 @@ function getDbSchema()
 // function translateAttributes(attrs, layerName)
 function translateToOsm(attrs, layerName, geometryType)
 {
-    return dnc.toOsm(attrs, layerName, geometryType);
+  return dnc.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 
@@ -73,6 +73,6 @@ function translateToOsm(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 function translateToOgr(tags, elementType, geometryType)
 {
-    return dnc.toOgr(tags, elementType, geometryType)
+  return dnc.toOgr(tags, elementType, geometryType);
 
 } // End of translateToOgr
