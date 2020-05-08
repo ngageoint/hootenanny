@@ -90,7 +90,7 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
         substitutionMap.put("OSC_FILE", params.getOutput());
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
-        substitutionMap.put("ADV_OPTIONS", String.join(" ", advancedOptions));
+        substitutionMap.put("ADV_OPTIONS", advancedOptions);
         substitutionMap.put("STATS_FILE", new File(params.getWorkDir(), "stats.json").getPath());
 
         String command = "hoot.bin changeset-derive-replacement --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${BOUNDS} ${OSC_FILE} ${ADV_OPTIONS} --stats ${STATS_FILE}";
