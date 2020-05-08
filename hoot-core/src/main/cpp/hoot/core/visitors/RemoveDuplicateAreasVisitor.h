@@ -47,8 +47,8 @@ class TagDifferencer;
  *  - Neither element has an area of zero.
  *  - TagComparator::compareTags() returns 1.0.
  *
- * The element with the smaller number of tags will be deleted. If they have the same number of tags
- * then the element with the smaller id is deleted.
+ * The element with the smaller number of tags will be deleted. If they have the same number of
+ * tags, then the element with the smaller id is deleted.
  *
  * RecursiveElementRemover is used to remove the element.
  */

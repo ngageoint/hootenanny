@@ -87,7 +87,20 @@ private:
     OsmMapPtr map, QMap<QString, ElementId>& hashes,
     QSet<std::pair<ElementId, ElementId>>& duplicates);
 
+  /*
+   * TODO
+   */
+  QMap<ElementType::Type, QSet<ElementId>> _dupesToElementIds(
+    const QSet<std::pair<ElementId, ElementId>>& duplicates);
+
   void _removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map);
+
+  /*
+   * TODO
+   */
+  void _removeWaysCheckMap(
+    const QSet<ElementId>& waysToRemove, OsmMapPtr map1, OsmMapPtr map2,
+    const QMap<ElementId, QString>& elementIdsToRemoveFromMap);
 };
 
 }

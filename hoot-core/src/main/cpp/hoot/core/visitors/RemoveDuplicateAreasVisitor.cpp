@@ -173,7 +173,7 @@ void RemoveDuplicateAreasVisitor::visit(const std::shared_ptr<Element>& e)
     areaCrit.setOsmMap(_map);
     std::shared_ptr<Envelope> env(e->getEnvelope(_map->shared_from_this()));
 
-    // if the envelope is null or the element is incomplete.
+    // if the envelope is null or the element is incomplete
     if (env->isNull() ||
         CompletelyContainedByMapElementVisitor::isComplete(_map, e->getElementId()) == false ||
         areaCrit.isSatisfied(e) == false)
