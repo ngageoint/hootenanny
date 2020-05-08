@@ -467,14 +467,16 @@ void ChangesetReplacementCreator::create(
 
   // Due to the mixed relations processing explained in _getDefaultGeometryFilters, we may have
   // some duplicated features that need to be cleaned up before we generate the changesets. This
-  // is kind of a band-aid.
+  // is kind of a band-aid :-(
 
   // If we have the maps for only one geometry type, then there isn't a possibility of duplication
   // created by the replacement operation.
   if (refMaps.size() > 1)
   {
-    // Not completely sure at this point we need to dedupe ref map but doing it anyway.
-    _dedupeMaps(refMaps);
+    LOG_STATUS("Removing duplicated features...");
+    // not completely sure at this point if we need to dedupe ref maps; it breaks the roundabouts
+    // test and adds an extra relation to the out of spec test when we do intra-map de-duping.
+    //_dedupeMaps(refMaps);
     _dedupeMaps(conflatedMaps);
   }
 
@@ -554,79 +556,82 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
   QMap<ElementType::Type, QSet<ElementId>> elementsToRemove;
   QMap<ElementId, QString> elementIdsToRemoveFromMap;
 
-//  LOG_DEBUG("Recording " << map1->getName() << " duplicates...");
-//  for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates1.begin();
-//       itr != duplicates1.end(); ++itr)
-//  {
-//    const std::pair<ElementId, ElementId> dupes = *itr;
-//    const ElementId dupe1 = dupes.first;
-//    LOG_VART(dupe1);
-//    const ElementId dupe2 = dupes.second;
-//    LOG_VART(dupe2);
-//    const ElementType elementType = dupe1.getType();
-//    LOG_VART(elementType);
-//    assert(elementType == dupe2.getType());
+  LOG_DEBUG("Recording " << map1->getName() << " duplicates...");
+  for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates1.begin();
+       itr != duplicates1.end(); ++itr)
+  {
+    const std::pair<ElementId, ElementId> dupes = *itr;
+    const ElementId dupe1 = dupes.first;
+    LOG_VART(dupe1);
+    const ElementId dupe2 = dupes.second;
+    LOG_VART(dupe2);
+    const ElementType elementType = dupe1.getType();
+    LOG_VART(elementType);
+    assert(elementType == dupe2.getType());
 
-//    if (elementType == ElementType::Way)
-//    {
-//      const int numConnectedTo1 = WayUtils::getNumberOfConnectedWays(dupe1.getId(), map1);
-//      LOG_VART(numConnectedTo1);
-//      const int numConnectedTo2 = WayUtils::getNumberOfConnectedWays(dupe2.getId(), map2);
-//      LOG_VART(numConnectedTo2);
-//      if (numConnectedTo1 >= numConnectedTo2)
-//      {
-//        elementIdsToRemoveFromMap[dupe1] = "1";
-//        elementsToRemove[elementType.getEnum()].insert(dupe1);
-//      }
-//      else
-//      {
-//        elementIdsToRemoveFromMap[dupe2] = "2";
-//        elementsToRemove[elementType.getEnum()].insert(dupe2);
-//      }
-//    }
-//    else
-//    {
-//      elementsToRemove[elementType.getEnum()].insert(dupe1);
-//    }
-//  }
+    if (elementType == ElementType::Way)
+    {
+      const int numConnectedTo1 = WayUtils::getNumberOfConnectedWays(dupe1.getId(), map1);
+      LOG_VART(numConnectedTo1);
+      const int numConnectedTo2 = WayUtils::getNumberOfConnectedWays(dupe2.getId(), map2);
+      LOG_VART(numConnectedTo2);
+      if (numConnectedTo1 >= numConnectedTo2)
+      {
+        elementIdsToRemoveFromMap[dupe1] = "1";
+        elementsToRemove[elementType.getEnum()].insert(dupe1);
+      }
+      else
+      {
+        elementIdsToRemoveFromMap[dupe2] = "2";
+        elementsToRemove[elementType.getEnum()].insert(dupe2);
+      }
+    }
+    else
+    {
+      elementsToRemove[elementType.getEnum()].insert(dupe1);
+    }
+  }
 
-//  LOG_DEBUG("Recording " << map2->getName() << " duplicates...");
-//  for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates2.begin();
-//       itr != duplicates2.end(); ++itr)
-//  {
-//    const std::pair<ElementId, ElementId> dupes = *itr;
-//    const ElementId dupe1 = dupes.first;
-//    LOG_VART(dupe1);
-//    const ElementId dupe2 = dupes.second;
-//    LOG_VART(dupe2);
-//    const ElementType elementType = dupe1.getType();
-//    LOG_VART(elementType);
-//    assert(elementType == dupe2.getType());
+  // intra-map de-duping breaks the roundabouts test when ref maps are de-duped
 
-//    if (elementType == ElementType::Way)
-//    {
-//      const int numConnectedTo1 = WayUtils::getNumberOfConnectedWays(dupe1.getId(), map1);
-//      LOG_VART(numConnectedTo1);
-//      const int numConnectedTo2 = WayUtils::getNumberOfConnectedWays(dupe2.getId(), map2);
-//      LOG_VART(numConnectedTo2);
-//      if (numConnectedTo1 >= numConnectedTo2)
-//      {
-//        elementIdsToRemoveFromMap[dupe1] = "1";
-//        elementsToRemove[elementType.getEnum()].insert(dupe1);
-//      }
-//      else
-//      {
-//        elementIdsToRemoveFromMap[dupe2] = "2";
-//        elementsToRemove[elementType.getEnum()].insert(dupe2);
-//      }
-//    }
-//    else
-//    {
-//      elementsToRemove[elementType.getEnum()].insert(dupe1);
-//    }
-//  }
+  LOG_DEBUG("Recording " << map2->getName() << " duplicates...");
+  for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates2.begin();
+       itr != duplicates2.end(); ++itr)
+  {
+    const std::pair<ElementId, ElementId> dupes = *itr;
+    const ElementId dupe1 = dupes.first;
+    LOG_VART(dupe1);
+    const ElementId dupe2 = dupes.second;
+    LOG_VART(dupe2);
+    const ElementType elementType = dupe1.getType();
+    LOG_VART(elementType);
+    assert(elementType == dupe2.getType());
 
-  LOG_DEBUG("Calculating duplicates between both maps...");
+    if (elementType == ElementType::Way)
+    {
+      const int numConnectedTo1 = WayUtils::getNumberOfConnectedWays(dupe1.getId(), map1);
+      LOG_VART(numConnectedTo1);
+      const int numConnectedTo2 = WayUtils::getNumberOfConnectedWays(dupe2.getId(), map2);
+      LOG_VART(numConnectedTo2);
+      if (numConnectedTo1 >= numConnectedTo2)
+      {
+        elementIdsToRemoveFromMap[dupe1] = "1";
+        elementsToRemove[elementType.getEnum()].insert(dupe1);
+      }
+      else
+      {
+        elementIdsToRemoveFromMap[dupe2] = "2";
+        elementsToRemove[elementType.getEnum()].insert(dupe2);
+      }
+    }
+    else
+    {
+      elementsToRemove[elementType.getEnum()].insert(dupe1);
+    }
+  }
+
+  LOG_DEBUG(
+    "Calculating duplicates between " << map1->getName() << " and " << map2->getName() << "...");
   const QSet<QString> sharedHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(sharedHashes.size());
   for (QSet<QString>::const_iterator itr = sharedHashes.begin(); itr != sharedHashes.end(); ++itr)
@@ -663,15 +668,15 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
     }
   }
 
-//  LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
-//  const QSet<ElementId> relationsToRemove = elementsToRemove[ElementType::Relation];
-//  LOG_VARD(relationsToRemove.size());
-//  for (QSet<ElementId>::const_iterator itr = relationsToRemove.begin();
-//       itr != relationsToRemove.end(); ++itr)
-//  {
-//    LOG_TRACE("Removing " << *itr << "...");
-//    RemoveElementByEid::removeElementNoCheck(map2, *itr);
-//  }
+  LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
+  const QSet<ElementId> relationsToRemove = elementsToRemove[ElementType::Relation];
+  LOG_VARD(relationsToRemove.size());
+  for (QSet<ElementId>::const_iterator itr = relationsToRemove.begin();
+       itr != relationsToRemove.end(); ++itr)
+  {
+    LOG_TRACE("Removing " << *itr << "...");
+    RemoveElementByEid::removeElementNoCheck(map2, *itr);
+  }
 
   LOG_DEBUG("Removing duplicate ways...");
   const QSet<ElementId> waysToRemove = elementsToRemove[ElementType::Way];
@@ -694,7 +699,8 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
     //RecursiveElementRemover(id).apply(mapToRemoveFrom);
   }
 
-//  LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
+  // when nodes are removed (conflated only), out of spec, single point, and riverbank tests fail
+//  LOG_DEBUG("Removing duplicate nodes from " << map2->getName() << "...");
 //  const QSet<ElementId> nodesToRemove = elementsToRemove[ElementType::Node];
 //  LOG_VARD(nodesToRemove.size());
 //  for (QSet<ElementId>::const_iterator itr = nodesToRemove.begin();
@@ -938,7 +944,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
 void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
 {
-  LOG_DEBUG("Cleaning up missing elements for " << map->getName() << "...");
+  LOG_INFO("Cleaning up missing elements for " << map->getName() << "...");
 
   // This will handle removing refs in relation members we've cropped out.
   RemoveMissingElementsVisitor missingElementsRemover;
