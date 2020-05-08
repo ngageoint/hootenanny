@@ -101,6 +101,18 @@ private:
     QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
     QMap<ElementId, QString>& elementIdsToRemoveFromMap);
 
+  /*
+   * TODO
+   */
+  void _dupeHashesToElementIdsCheckMap(
+    const QSet<QString>& sharedHashes, OsmMapPtr map1, OsmMapPtr map2,
+    const QMap<QString, ElementId>& map1Hashes, const QMap<QString, ElementId>& map2Hashes,
+    QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
+    QMap<ElementId, QString>& elementIdsToRemoveFromMap);
+
+  /*
+   * TODO
+   */
   void _removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map);
 
   /*
