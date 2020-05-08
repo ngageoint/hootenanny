@@ -134,6 +134,47 @@ QMap<ElementType::Type, QSet<ElementId>> ElementDeduplicator::_dupesToElementIds
   return elementsToRemove;
 }
 
+void ElementDeduplicator::_dupesToElementIdsCheckMap(
+  const QSet<std::pair<ElementId, ElementId>>& duplicates, OsmMapPtr map1, OsmMapPtr map2,
+  QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
+  QMap<ElementId, QString>& elementIdsToRemoveFromMap)
+{
+  for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates.begin();
+         itr != duplicates.end(); ++itr)
+  {
+    const std::pair<ElementId, ElementId> dupes = *itr;
+    const ElementId dupe1 = dupes.first;
+    LOG_VART(dupe1);
+    const ElementId dupe2 = dupes.second;
+    LOG_VART(dupe2);
+    const ElementType elementType = dupe1.getType();
+    LOG_VART(elementType);
+    assert(elementType == dupe2.getType());
+
+    if (elementType == ElementType::Way && _favorMoreConnectedWays)
+    {
+      const int numConnectedTo1 = WayUtils::getNumberOfConnectedWays(dupe1.getId(), map1);
+      LOG_VART(numConnectedTo1);
+      const int numConnectedTo2 = WayUtils::getNumberOfConnectedWays(dupe2.getId(), map2);
+      LOG_VART(numConnectedTo2);
+      if (numConnectedTo1 >= numConnectedTo2)
+      {
+        elementIdsToRemoveFromMap[dupe1] = "1";
+        elementsToRemove[elementType.getEnum()].insert(dupe1);
+      }
+      else
+      {
+        elementIdsToRemoveFromMap[dupe2] = "2";
+        elementsToRemove[elementType.getEnum()].insert(dupe2);
+      }
+    }
+    else
+    {
+      elementsToRemove[elementType.getEnum()].insert(dupe1);
+    }
+  }
+}
+
 void ElementDeduplicator::dedupe(OsmMapPtr map)
 {
   _validateInputs();
@@ -210,76 +251,12 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
   if (_dedupeIntraMap)
   {
     LOG_DEBUG("Recording " << map1->getName() << " duplicates...");
-    for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates1.begin();
-         itr != duplicates1.end(); ++itr)
-    {
-      const std::pair<ElementId, ElementId> dupes = *itr;
-      const ElementId dupe1 = dupes.first;
-      LOG_VART(dupe1);
-      const ElementId dupe2 = dupes.second;
-      LOG_VART(dupe2);
-      const ElementType elementType = dupe1.getType();
-      LOG_VART(elementType);
-      assert(elementType == dupe2.getType());
-
-      if (elementType == ElementType::Way && _favorMoreConnectedWays)
-      {
-        const int numConnectedTo1 = WayUtils::getNumberOfConnectedWays(dupe1.getId(), map1);
-        LOG_VART(numConnectedTo1);
-        const int numConnectedTo2 = WayUtils::getNumberOfConnectedWays(dupe2.getId(), map2);
-        LOG_VART(numConnectedTo2);
-        if (numConnectedTo1 >= numConnectedTo2)
-        {
-          elementIdsToRemoveFromMap[dupe1] = "1";
-          elementsToRemove[elementType.getEnum()].insert(dupe1);
-        }
-        else
-        {
-          elementIdsToRemoveFromMap[dupe2] = "2";
-          elementsToRemove[elementType.getEnum()].insert(dupe2);
-        }
-      }
-      else
-      {
-        elementsToRemove[elementType.getEnum()].insert(dupe1);
-      }
-    }
+    _dupesToElementIdsCheckMap(
+      duplicates1, map1, map2, elementsToRemove, elementIdsToRemoveFromMap);
 
     LOG_DEBUG("Recording " << map2->getName() << " duplicates...");
-    for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates2.begin();
-         itr != duplicates2.end(); ++itr)
-    {
-      const std::pair<ElementId, ElementId> dupes = *itr;
-      const ElementId dupe1 = dupes.first;
-      LOG_VART(dupe1);
-      const ElementId dupe2 = dupes.second;
-      LOG_VART(dupe2);
-      const ElementType elementType = dupe1.getType();
-      LOG_VART(elementType);
-      assert(elementType == dupe2.getType());
-
-      if (elementType == ElementType::Way && _favorMoreConnectedWays)
-      {
-        const int numConnectedTo1 = WayUtils::getNumberOfConnectedWays(dupe1.getId(), map1);
-        LOG_VART(numConnectedTo1);
-        const int numConnectedTo2 = WayUtils::getNumberOfConnectedWays(dupe2.getId(), map2);
-        LOG_VART(numConnectedTo2);
-        if (numConnectedTo1 >= numConnectedTo2)
-        {
-          elementIdsToRemoveFromMap[dupe1] = "1";
-          elementsToRemove[elementType.getEnum()].insert(dupe1);
-        }
-        else
-        {
-          elementIdsToRemoveFromMap[dupe2] = "2";
-          elementsToRemove[elementType.getEnum()].insert(dupe2);
-        }
-      }
-      else
-      {
-        elementsToRemove[elementType.getEnum()].insert(dupe1);
-      }
-    }
+    _dupesToElementIdsCheckMap(
+      duplicates2, map1, map2, elementsToRemove, elementIdsToRemoveFromMap);
   }
 
   LOG_DEBUG(
@@ -324,7 +301,6 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
   {
     _removeElements(elementsToRemove[ElementType::Relation], map2);
   }
-
   if (_dedupeWays)
   {
     LOG_DEBUG("Removing duplicate ways...");
@@ -338,7 +314,6 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
         elementsToRemove[ElementType::Way], map1, map2, elementIdsToRemoveFromMap);
     }
   }
-
   if (_dedupeNodes)
   {
     _removeElements(elementsToRemove[ElementType::Node], map2);

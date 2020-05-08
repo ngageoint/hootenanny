@@ -93,6 +93,14 @@ private:
   QMap<ElementType::Type, QSet<ElementId>> _dupesToElementIds(
     const QSet<std::pair<ElementId, ElementId>>& duplicates);
 
+  /*
+   * TODO
+   */
+  void _dupesToElementIdsCheckMap(
+    const QSet<std::pair<ElementId, ElementId>>& duplicates, OsmMapPtr map1, OsmMapPtr map2,
+    QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
+    QMap<ElementId, QString>& elementIdsToRemoveFromMap);
+
   void _removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map);
 
   /*
