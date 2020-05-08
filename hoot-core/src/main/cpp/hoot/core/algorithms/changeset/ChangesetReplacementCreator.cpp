@@ -690,8 +690,8 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
       mapToRemoveFrom = map2;
     }
     LOG_TRACE("Removing " << id << " from " << mapToRemoveFrom->getName() << "...");
-    //RemoveElementByEid::removeElementNoCheck(mapToRemoveFrom, id);
-    RecursiveElementRemover(id).apply(mapToRemoveFrom);
+    RemoveElementByEid::removeElementNoCheck(mapToRemoveFrom, id);
+    //RecursiveElementRemover(id).apply(mapToRemoveFrom);
   }
 
 //  LOG_DEBUG("Removing duplicate relations from " << map2->getName() << "...");
