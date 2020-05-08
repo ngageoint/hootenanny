@@ -460,19 +460,20 @@ void ChangesetReplacementCreator::create(
   //assert(refMaps.size() == conflatedMaps.size());
   if (refMaps.size() != conflatedMaps.size())
   {
-    throw HootException("Replacement changeset derivation internal map mismatch error.");
+    throw HootException("Replacement changeset derivation internal map count mismatch error.");
   }
 
   // CLEANUP
 
   // Due to the mixed relations processing explained in _getDefaultGeometryFilters, we may have
-  // some duplicated features that need to be cleaned up before we generate the changesets.
+  // some duplicated features that need to be cleaned up before we generate the changesets. This
+  // is kind of a band-aid.
 
   // If we have the maps for only one geometry type, then there isn't a possibility of duplication
   // created by the replacement operation.
   if (refMaps.size() > 1)
   {
-    //_dedupeMaps(refMaps);
+    //_dedupeMaps(refMaps); // TODO: why not ref maps too?
     _dedupeMaps(conflatedMaps);
   }
 
@@ -523,8 +524,6 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
 
 void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
 {
-  // TODO: tweak
-  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 6);
   LOG_DEBUG(map1->getName() << " size before de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size before de-duping: " << map2->size());
 
@@ -704,10 +703,8 @@ void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr map1, OsmMapPtr map2)
 //    RemoveElementByEid::removeElementNoCheck(map2, *itr);
 //  }
 
-  //_cleanupMissingElements(map1);
-  //_cleanupMissingElements(map2);
-  SuperfluousNodeRemover::removeNodes(map1);
-  SuperfluousNodeRemover::removeNodes(map2);
+  _cleanupMissingElements(map1);
+  _cleanupMissingElements(map2);
 
   LOG_DEBUG(map1->getName() << " size after de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size after de-duping: " << map2->size());
@@ -940,6 +937,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
 void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
 {
+  LOG_DEBUG("Cleaning up missing elements for " << map->getName() << "...");
+
   // This will handle removing refs in relation members we've cropped out.
   RemoveMissingElementsVisitor missingElementsRemover;
   LOG_STATUS("\t" << missingElementsRemover.getInitStatusMessage());
@@ -959,6 +958,9 @@ void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
   LOG_STATUS("\t" << emptyRelationRemover.getInitStatusMessage());
   emptyRelationRemover.apply(map);
   LOG_STATUS("\t" << emptyRelationRemover.getCompletedStatusMessage());
+
+  // get rid of straggling nodes
+  SuperfluousNodeRemover::removeNodes(map);
 }
 
 void ChangesetReplacementCreator::_validateInputs(const QString& input1, const QString& input2)
@@ -1571,7 +1573,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
 
 void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,
-  const bool keepOnlyFeaturesInsideBounds, const bool isLinearMap, const QString& debugFileName)
+  const bool keepOnlyFeaturesInsideBounds, const bool /*isLinearMap*/, const QString& debugFileName)
 {
   if (map->size() == 0)
   {
@@ -1592,8 +1594,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   // Clean up straggling nodes in that are the result of cropping. Its ok to ignore info tags when
   // dealing with only linear features, as all nodes in the data being conflated should be way nodes
   // with no information.
-  // TODO: This can be removed now, since its already happening in MapCropper, right?
-  SuperfluousNodeRemover::removeNodes(map, isLinearMap);
+  //SuperfluousNodeRemover::removeNodes(map, isLinearMap);
 
   MemoryUsageChecker::getInstance()->check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
@@ -1678,6 +1679,8 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
   // turn on for testing only
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+  // This needs to be lowered a bit to make feature de-duping work...a little concerning, why?
+  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 6);
 
   // These don't change between scenarios (or at least haven't needed to yet).
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;

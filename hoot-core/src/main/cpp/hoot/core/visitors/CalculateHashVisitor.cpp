@@ -213,20 +213,10 @@ void CalculateHashVisitor::visit(const ElementPtr& e)
   // don't calculate hashes on review relations
   if (ReviewMarker::isReview(e) == false)
   {
-    // TODO: change back to trace
-    LOG_VARD(e->getElementId());
+    LOG_VART(e->getElementId());
 
     const QString hash = toHashString(e);
-    LOG_VARD(hash);
-
-//    if (e->getElementType() == ElementType::Way &&
-//        std::dynamic_pointer_cast<Way>(e)->getNodeCount() == 296)
-//    {
-//      LOG_VARD(e->getElementId());
-//      LOG_VARD(hash);
-//      LOG_VARD(_toJson(std::dynamic_pointer_cast<Way>(e)));
-//      //LOG_VARD(WayUtils::getWayNodesDetailedString(std::dynamic_pointer_cast<Way>(e), _map));
-//    }
+    LOG_VART(hash);
 
     if (_writeHashes)
     {

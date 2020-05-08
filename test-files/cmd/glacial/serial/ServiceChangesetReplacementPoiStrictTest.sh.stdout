@@ -37,9 +37,9 @@ Deriving a changeset between the osm api db and the hoot api db layers over: -12
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiStrictTest/ServiceChangesetReplacementPoiStrictTest-changeset-db.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=37.7629491, max_lat=37.7640966, min_lon=-122.4319154, max_lon=-122.4304989, num_changes=5
+Changeset Details: min_lat=37.7629491, max_lat=37.7640966, min_lon=-122.4319154, max_lon=-122.4304989, num_changes=6
 Node(s) Created: 3
-Node(s) Modified: 1
+Node(s) Modified: 2
 Node(s) Deleted: 1
 Way(s) Created: 0
 Way(s) Modified: 0
@@ -71,9 +71,9 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiStrictTest/ServiceChangesetReplacementPoiStrictTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=37.7629491, max_lat=37.7640966, min_lon=-122.4319154, max_lon=-122.4304989, num_changes=5
+Changeset Details: min_lat=37.7629491, max_lat=37.7640966, min_lon=-122.4319154, max_lon=-122.4304989, num_changes=6
 Node(s) Created: 3
-Node(s) Modified: 1
+Node(s) Modified: 2
 Node(s) Deleted: 1
 Way(s) Created: 0
 Way(s) Modified: 0
@@ -105,9 +105,9 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiStrictTest/ServiceChangesetReplacementPoiStrictTest-changeset-json.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=37.7629491, max_lat=37.7640966, min_lon=-122.4319154, max_lon=-122.4304989, num_changes=5
+Changeset Details: min_lat=37.7629491, max_lat=37.7640966, min_lon=-122.4319154, max_lon=-122.4304989, num_changes=6
 Node(s) Created: 3
-Node(s) Modified: 1
+Node(s) Modified: 2
 Node(s) Deleted: 1
 Way(s) Created: 0
 Way(s) Modified: 0
