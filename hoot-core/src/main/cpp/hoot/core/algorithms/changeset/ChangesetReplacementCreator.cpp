@@ -473,7 +473,6 @@ void ChangesetReplacementCreator::create(
   // created by the replacement operation.
   if (ConfigOptions().getChangesetReplacementDeduplicateCalculatedMaps() && refMaps.size() > 1)
   {
-    LOG_STATUS("Removing duplicated features...");
     // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
     // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
     // de-duping. Mostly worried that not doing so could break the overlapping only replacement
@@ -789,15 +788,18 @@ void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
   map->visitRw(dupeMembersRemover);
   LOG_STATUS("\t" << dupeMembersRemover.getCompletedStatusMessage());
 
+  // get rid of straggling nodes
+  SuperfluousNodeRemover orphanedNodeRemover;
+  LOG_STATUS("\t" << orphanedNodeRemover.getInitStatusMessage());
+  orphanedNodeRemover.apply(map);
+  LOG_STATUS("\t" << orphanedNodeRemover.getCompletedStatusMessage());
+
   // This will remove any relations that were already empty or became empty after we removed missing
   // members.
   RemoveEmptyRelationsOp emptyRelationRemover;
   LOG_STATUS("\t" << emptyRelationRemover.getInitStatusMessage());
   emptyRelationRemover.apply(map);
   LOG_STATUS("\t" << emptyRelationRemover.getCompletedStatusMessage());
-
-  // get rid of straggling nodes
-  SuperfluousNodeRemover::removeNodes(map);
 }
 
 void ChangesetReplacementCreator::_validateInputs(const QString& input1, const QString& input2)
