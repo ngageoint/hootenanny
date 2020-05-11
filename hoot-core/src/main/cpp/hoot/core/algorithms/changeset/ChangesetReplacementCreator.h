@@ -248,6 +248,8 @@ private:
   OsmMapPtr _loadRefMap(const QString& input);
   OsmMapPtr _loadSecMap(const QString& input);
 
+  void _markRelationsWithMissingMembersForReview(OsmMapPtr& map);
+
   /*
    * Keeps track of the changeset versions for features
    */
@@ -317,7 +319,7 @@ private:
     const GeometryTypeCriterion::GeometryType& geometryType,
     const QStringList& linearFilterClassNames = QStringList());
 
-  void _cleanupMissingElements(OsmMapPtr& map);
+  void _cleanup(OsmMapPtr& map);
 };
 
 }

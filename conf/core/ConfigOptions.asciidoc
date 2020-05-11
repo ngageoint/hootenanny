@@ -363,7 +363,7 @@ MatchFactory::_tempFixDefaults() for more info.
 * Default Value: `tmp/bounds.osm`
 
 Output location for a bounds file when the `--write-bounds` option is selected for either the
-`changeset-derive`, `convert`, or `crop` commands.
+`changeset-derive`, `changeset-derive-replacement`, `convert`, or `crop` commands.
 
 === buffered.overlap.extractor.portion
 
@@ -914,6 +914,13 @@ the convert command only and kept as a separate option.
 Same as convert.bounding.box but the resultant bounds filtering is only applied to OSM API database
 data sources when used with the convert and conflate commands.  This setting takes precendence over
 the convert.bounding.box setting for OSM API database data sources only.
+
+=== convert.bounding.box.remove.missing.elements
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
 
 === convert.bounding.box.tag.immediately.connected.out.of.bounds.ways
 

@@ -59,6 +59,14 @@ public:
    * in so they can be removed by DuplicateNodeRemover.
    */
   static void checkForDuplicateElementCorrectionMismatch(const QStringList& ops);
+
+  /**
+   * TODO
+   *
+   * @param opKey
+   * @param entryToRemove
+   */
+  static void removeListOpEntry(const QString& opName, const QString& entryToRemove);
 };
 
 }

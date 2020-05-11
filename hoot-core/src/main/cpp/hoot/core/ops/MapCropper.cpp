@@ -83,6 +83,7 @@ _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
 _removeSuperfluousFeatures(true),
+_removeMissingElements(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
@@ -100,6 +101,7 @@ _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
 _removeSuperfluousFeatures(true),
+_removeMissingElements(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
@@ -116,6 +118,7 @@ _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
 _removeSuperfluousFeatures(true),
+_removeMissingElements(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
@@ -449,11 +452,14 @@ void MapCropper::apply(OsmMapPtr& map)
     numSuperfluousNodesRemoved = SuperfluousNodeRemover::removeNodes(map);
   }
 
-  // This will handle removing refs in relation members we've cropped out.
-  RemoveMissingElementsVisitor missingElementsRemover;
-  LOG_INFO("\t" << missingElementsRemover.getInitStatusMessage());
-  map->visitRw(missingElementsRemover);
-  LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
+  if (_removeMissingElements)
+  {
+    // This will handle removing refs in relation members we've cropped out.
+    RemoveMissingElementsVisitor missingElementsRemover;
+    LOG_INFO("\t" << missingElementsRemover.getInitStatusMessage());
+    map->visitRw(missingElementsRemover);
+    LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
+  }
 
   // This will remove any relations that were already empty or became empty after the previous step.
   RemoveEmptyRelationsOp emptyRelationRemover;

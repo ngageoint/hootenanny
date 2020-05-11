@@ -459,7 +459,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 
-  // Should we be using RemoveMissingElementsVisitor here instead?
+  // If cropping was run with missing element being removed, then this shouldn't be necessary.
   ReportMissingElementsVisitor visitor;
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);

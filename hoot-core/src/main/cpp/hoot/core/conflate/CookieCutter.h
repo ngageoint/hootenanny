@@ -44,7 +44,7 @@ public:
   static std::string className() { return "hoot::CookieCutter"; }
 
   CookieCutter(bool crop, double outputBuffer = 0.0, bool keepEntireFeaturesCrossingBounds = false,
-               bool keepOnlyFeaturesInsideBounds = false);
+               bool keepOnlyFeaturesInsideBounds = false, bool removeMissingElements = true);
 
   /**
    * Uses an input map geometry to cut the shape out of another map
@@ -64,6 +64,8 @@ private:
   bool _keepEntireFeaturesCrossingBounds;
   // see MapCropper
   bool _keepOnlyFeaturesInsideBounds;
+  // TODO
+  bool _removeMissingElements;
 };
 
 }

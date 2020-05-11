@@ -39,8 +39,9 @@ namespace hoot
 
 /**
  * Reports references to missing elements in a given map. If removeMissing is set to true then
- * all missing references are removed. Note: This may not give desired results if your data
- * shouldn't contain missing references.
+ * all missing references are removed.
+ *
+ * Note: This may not give desired results if your data shouldn't contain missing references.
  */
 class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
   public Configurable

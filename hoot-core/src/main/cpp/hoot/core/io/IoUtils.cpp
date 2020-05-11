@@ -192,6 +192,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   const bool strictBoundsHandling =
     ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds();
   cropper.setKeepOnlyFeaturesInsideBounds(strictBoundsHandling);
+  cropper.setRemoveMissingElements(ConfigOptions().getConvertBoundingBoxRemoveMissingElements());
 
   // If we want to keep ways that are outside of the crop bounds but connected to a way that's
   // inside the bounds, we need to tag them before cropping and then tell the cropper to leave
