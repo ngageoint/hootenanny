@@ -474,8 +474,10 @@ void ChangesetReplacementCreator::create(
   if (ConfigOptions().getChangesetReplacementDeduplicateCalculatedMaps() && refMaps.size() > 1)
   {
     LOG_STATUS("Removing duplicated features...");
-    // not completely sure at this point if we need to dedupe ref maps; it breaks the roundabouts
-    // test and adds an extra relation to the out of spec test when we do intra-map de-duping.
+    // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
+    // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
+    // de-duping. Mostly worried that not doing so could break the overlapping only replacement
+    // (non-full) scenario...we'll see...
     //_dedupeMaps(refMaps);
     _dedupeMaps(conflatedMaps);
   }
