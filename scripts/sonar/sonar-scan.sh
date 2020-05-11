@@ -127,4 +127,4 @@ if [ -d $HOOT_HOME/.scannerwork ]; then
 fi
 
 # run the actual scanner
-sonar-scanner $DEBUG_MODE "${OPTIONS[@]}"
+sonar-scanner $DEBUG_MODE -X "${OPTIONS[@]}"
