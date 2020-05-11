@@ -102,7 +102,6 @@ QString CalculateHashVisitor::_toJson(const ConstWayPtr& way)
 
   result += "},\"nodes\":[";
   const std::vector<long>& nodeIds = way->getNodeIds();
-  // TODO: handle no nodes being added?
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     ConstNodePtr node = _map->getNode(nodeIds[i]);
@@ -133,7 +132,6 @@ QString CalculateHashVisitor::_toJson(const ConstRelationPtr& relation)
 
   result += "},\"members\":[";
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-  // TODO: handle no members being added?
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
     ConstElementPtr member = _map->getElement(relationMembers[i].getElementId());

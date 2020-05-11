@@ -77,7 +77,7 @@ private:
 
   // determines if element circular error will be used in computation of the hash
   bool _includeCe;
-  // TODO
+  // allows for ignoring info tag keys on a case by case basis
   QStringList _nonMetadataIgnoreKeys;
   // determines whether hashes are written to an element's tags
   bool _writeHashes;
@@ -85,7 +85,7 @@ private:
   bool _collectHashes;
   // collected hash values mapped to element IDs
   QMap<QString, ElementId> _hashesToElementIds;
-  // TODO
+  // pairings of all duplicate elements found
   QSet<std::pair<ElementId, ElementId>> _duplicates;
 
   QString _toJson(const ConstNodePtr& node);

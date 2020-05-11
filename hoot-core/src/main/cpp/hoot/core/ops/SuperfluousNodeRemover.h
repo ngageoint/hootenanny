@@ -102,9 +102,9 @@ protected:
 
   std::set<long> _usedNodes;
 
-  // TODO
+  // if true, a node can be removed even if it has information tags (non-metadata)
   bool _ignoreInformationTags;
-  // TODO
+  // configurable set of tags where if found on a node, we always want to remove it
   QStringList _unallowedOrphanKvps;
 
   int _taskStatusUpdateInterval;

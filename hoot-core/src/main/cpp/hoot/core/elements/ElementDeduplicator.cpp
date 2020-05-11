@@ -57,12 +57,15 @@ void ElementDeduplicator::dedupe(OsmMapPtr map)
   const long waysBefore = map->getWayCount();
   const long relationsBefore = map->getRelationCount();
 
+  // calculate our unique hashes per element and get a list of duplicate pairs within the map
   QMap<QString, ElementId> mapHashes;
   QSet<std::pair<ElementId, ElementId>> duplicates;
   _calcElementHashes(map, mapHashes, duplicates);
   QSet<QString> mapHashesSet = mapHashes.keys().toSet();
   LOG_VARD(mapHashesSet.size());
 
+  // convert the duplicate pairs to the IDs of the element we actually want to remove, sorted by
+  // element type and then remove them
   const QMap<ElementType::Type, QSet<ElementId>> elementsToRemove = _dupesToElementIds(duplicates);
   if (_dedupeRelations)
   {
@@ -104,6 +107,9 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
   const long map2WaysBefore = map2->getWayCount();
   const long map2RelationsBefore = map2->getRelationCount();
 
+  // calculate our unique hashes per element for each map and get a list of duplicate pairs within
+  // each map
+
   QMap<QString, ElementId> map1Hashes;
   QSet<std::pair<ElementId, ElementId>> duplicates1;
   _calcElementHashes(map1, map1Hashes, duplicates1);
@@ -121,6 +127,8 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
 
   if (_dedupeIntraMap)
   {
+    // remove the dupes within each map
+
     LOG_DEBUG("Recording " << map1->getName() << " duplicates...");
     _dupesToElementIdsCheckMap(
       duplicates1, map1, map2, elementsToRemove, elementIdsToRemoveFromMap);
@@ -130,6 +138,9 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
       duplicates2, map1, map2, elementsToRemove, elementIdsToRemoveFromMap);
   }
 
+  // now, calculate the duplicates when comparing the map's between each other; we'll arbitrarily
+  // remove features from the second map except where _favorMoreConnectedWays has influence if it
+  // has been enabled
   _dupeHashesToElementIdsCheckMap(
     map1HashesSet.intersect(map2HashesSet), map1, map2, map1Hashes, map2Hashes, elementsToRemove,
     elementIdsToRemoveFromMap);

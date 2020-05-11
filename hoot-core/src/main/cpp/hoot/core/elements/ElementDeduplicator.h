@@ -37,10 +37,10 @@ namespace hoot
 /**
  * De-duplicates features within a map or across multiple maps.
  *
- * This has a more strict definition of duplicates than DuplicateWayRemover.
+ * This has a more strict definition of duplicates than cleaning ops like DuplicateWayRemover.
  *
  * @todo For now, this is being tested from tests exercising ChangesetReplacementCreator, but it
- * would be good to give it its own test.
+ * would be good to give it its own test eventually.
  */
 class ElementDeduplicator
 {
@@ -92,20 +92,24 @@ private:
   void _validateInputs();
 
   /*
-   * TODO
+   * Uses CalculateHashVisitor to assign unique hashes to elements and also retrieves the element
+   * IDs of any duplicates found
    */
   void _calcElementHashes(
     OsmMapPtr map, QMap<QString, ElementId>& hashes,
     QSet<std::pair<ElementId, ElementId>>& duplicates);
 
   /*
-   * TODO
+   * Converts pairs of duplicated features' element IDs to a collection of element IDs sorted by
+   * element type for removal purposes; the second element is arbitarily selected for removal
    */
   QMap<ElementType::Type, QSet<ElementId>> _dupesToElementIds(
     const QSet<std::pair<ElementId, ElementId>>& duplicates);
 
   /*
-   * TODO
+   * Similar to _dupesToElementIds except for ways if _favorMoreConnectedWays is enabled, this
+   * will use way connectedness as a factor in determining which element of the pair to mark for
+   * removal
    */
   void _dupesToElementIdsCheckMap(
     const QSet<std::pair<ElementId, ElementId>>& duplicates, OsmMapPtr map1, OsmMapPtr map2,
@@ -113,7 +117,10 @@ private:
     QMap<ElementId, QString>& elementIdsToRemoveFromMap);
 
   /*
-   * TODO
+   * Converts element hashes of duplicated features' element IDs to a collection of element IDs
+   * sorted by element type for removal purposes; for ways if _favorMoreConnectedWays is enabled,
+   * this will use way connectedness as a factor in determining which element of the pair to mark
+   * for removal
    */
   void _dupeHashesToElementIdsCheckMap(
     const QSet<QString>& sharedHashes, OsmMapPtr map1, OsmMapPtr map2,
@@ -121,13 +128,11 @@ private:
     QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
     QMap<ElementId, QString>& elementIdsToRemoveFromMap);
 
-  /*
-   * TODO
-   */
   void _removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map);
 
   /*
-   * TODO
+   * Similar to _removeElements except for ways if _favorMoreConnectedWays is enabled, this
+   * will use way connectedness as a factor in determining which element of the pair to remove
    */
   void _removeWaysCheckMap(
     const QSet<ElementId>& waysToRemove, OsmMapPtr map1, OsmMapPtr map2,

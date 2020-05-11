@@ -510,7 +510,8 @@ See also:
 * Default Value:
 ** ``
 
-TODO
+List of tag keys for the CalculateHashVisitor to ignore during comparison when calculating element
+hashes.
 
 === changeset.allow.deleting.reference.features
 
@@ -612,7 +613,8 @@ delete statements for reference features falling outside of `convert.bounding.bo
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+If enabled, changeset replacement derivation will perform an extra dlement de-duplication step
+before calculating the changeset.
 
 === changeset.source
 
