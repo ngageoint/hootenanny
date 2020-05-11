@@ -291,13 +291,13 @@ void ElementDeduplicator::_dupesToElementIdsCheckMap(
       LOG_VART(numConnectedTo2);
       if (numConnectedTo1 >= numConnectedTo2)
       {
-        elementIdsToRemoveFromMap[dupe1] = "1";
-        elementsToRemove[elementType.getEnum()].insert(dupe1);
+        elementIdsToRemoveFromMap[dupe1] = "2";
+        elementsToRemove[elementType.getEnum()].insert(dupe2);
       }
       else
       {
-        elementIdsToRemoveFromMap[dupe2] = "2";
-        elementsToRemove[elementType.getEnum()].insert(dupe2);
+        elementIdsToRemoveFromMap[dupe2] = "1";
+        elementsToRemove[elementType.getEnum()].insert(dupe1);
       }
     }
     else
@@ -335,13 +335,13 @@ void ElementDeduplicator::_dupeHashesToElementIdsCheckMap(
       LOG_VART(numConnectedTo2);
       if (numConnectedTo1 >= numConnectedTo2)
       {
-        elementIdsToRemoveFromMap[toRemove1] = "1";
-        elementsToRemove[elementType.getEnum()].insert(toRemove1);
+        elementIdsToRemoveFromMap[toRemove1] = "2";
+        elementsToRemove[elementType.getEnum()].insert(toRemove2);
       }
       else
       {
-        elementIdsToRemoveFromMap[toRemove2] = "2";
-        elementsToRemove[elementType.getEnum()].insert(toRemove2);
+        elementIdsToRemoveFromMap[toRemove2] = "1";
+        elementsToRemove[elementType.getEnum()].insert(toRemove1);
       }
     }
     else

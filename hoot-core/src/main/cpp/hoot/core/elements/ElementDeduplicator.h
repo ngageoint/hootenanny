@@ -35,7 +35,12 @@ namespace hoot
 {
 
 /**
- * TODO
+ * De-duplicates features within a map or across multiple maps.
+ *
+ * This has a more strict definition of duplicates than DuplicateWayRemover.
+ *
+ * @todo For now, this is being tested from tests exercising ChangesetReplacementCreator, but it
+ * would be good to give it its own test.
  */
 class ElementDeduplicator
 {
@@ -45,17 +50,20 @@ public:
   ElementDeduplicator();
 
   /**
-   * TODO
+   * Removes intra-map duplicate elements from a map. Ignores element ID, version, changeset,
+   * and metadata tags
    *
-   * @param map
+   * @param map the map to de-duplicate
    */
   void dedupe(OsmMapPtr map);
 
   /**
-   * TODO
+   * Removes intra-map and inter-map duplicate elements from two maps. Ignores element ID, version,
+   * changeset, and metadata tags. The first map's elementsare kept when inter-map duplicate
+   * elements are found.
    *
-   * @param map1
-   * @param map2
+   * @param map the first map to de-duplicate
+   * @param map2 the second map to de-duplicate
    */
   void dedupe(OsmMapPtr map1, OsmMapPtr map2);
 
@@ -67,15 +75,18 @@ public:
 
 private:
 
-  // TODO
+  // If true, and two maps are being de-duped duplicates within each single map are also removed.
+  // This setting is ignored when de-deuping one map as intra-map de-deduplication is always done
+  // in that case.
   bool _dedupeIntraMap;
 
-  // TODO
+  // allows for controlling the element types being de-duped
   bool _dedupeNodes;
   bool _dedupeWays;
   bool _dedupeRelations;
 
-  // TODO
+  // If true when ways are deduped, the way sharing more nodes with other ways is kept over the one
+  // with less shared nodes.
   bool _favorMoreConnectedWays;
 
   void _validateInputs();

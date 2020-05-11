@@ -487,7 +487,7 @@ void ChangesetReplacementCreator::create(
 
   _changesetCreator->create(refMaps, conflatedMaps, output);
 
-  LOG_INFO(
+  LOG_STATUS(
     "Derived replacement changeset: ..." <<
     output.right(ConfigOptions().getProgressVarPrintLengthMax()));
 }
@@ -497,7 +497,8 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
   ElementDeduplicator deduper;
   // intra-map de-duping breaks the roundabouts test when ref maps are de-duped
   deduper.setDedupeIntraMap(true);
-  // when nodes are removed (conflated only), out of spec, single point, and riverbank tests fail
+  // when nodes are removed (cleaned/conflated only), out of spec, single point, and riverbank tests
+  // fail
   deduper.setDedupeNodes(false);
   deduper.setFavorMoreConnectedWays(true);
 
@@ -514,6 +515,10 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
       LOG_DEBUG(
         "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
         dedupePassCtr << " / " << maps.size() << "...");
+      OsmMapWriterFactory::writeDebugMap(
+        map1, "before-dedupe-" + map1->getName() + "-pass-" + QString::number(dedupePassCtr));
+      OsmMapWriterFactory::writeDebugMap(
+        map2, "before-dedupe-" + map2->getName() + "-pass-" + QString::number(dedupePassCtr));
       deduper.dedupe(map1, map2);
     }
     else
@@ -523,6 +528,10 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
       LOG_DEBUG(
         "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
         dedupePassCtr << " / " << maps.size() << "...");
+      OsmMapWriterFactory::writeDebugMap(
+        map1, "before-dedupe-" + map1->getName() + "-pass-" + QString::number(dedupePassCtr));
+      OsmMapWriterFactory::writeDebugMap(
+        map2, "before-dedupe-" + map2->getName() + "-pass-" + QString::number(dedupePassCtr));
       deduper.dedupe(map1, map2);
     }
 
