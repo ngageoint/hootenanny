@@ -63,7 +63,7 @@ public:
   /**
    * see duplicate.way.remover.strict.tag.matching
    */
-  bool getStrictTagMatching() { return _strictTagMatching; }
+  bool getStrictTagMatching() const { return _strictTagMatching; }
 
   /**
    * see duplicate.way.remover.strict.tag.matching

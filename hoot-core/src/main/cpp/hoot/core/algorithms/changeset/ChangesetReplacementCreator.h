@@ -282,7 +282,7 @@ private:
   /*
    * Removes duplicates between one map and another, ignoring elemment IDs
    */
-  void _dedupeMap(OsmMapPtr refMap, OsmMapPtr mapToDedupe);
+  void _dedupeMaps(const QList<OsmMapPtr>& maps);
 
   /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
@@ -291,7 +291,6 @@ private:
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 
   void _conflate(OsmMapPtr& map, const bool lenientBounds);
-
   void _clean(OsmMapPtr& map);
 
   void _snapUnconnectedWays(

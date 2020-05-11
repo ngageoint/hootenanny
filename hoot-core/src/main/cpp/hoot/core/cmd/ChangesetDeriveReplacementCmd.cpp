@@ -63,8 +63,7 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    // TODO: change all these back to debug
-    LOG_VAR(args);
+    LOG_VARD(args);
 
     // process optional params
 

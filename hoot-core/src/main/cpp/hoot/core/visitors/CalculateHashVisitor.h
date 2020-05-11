@@ -44,6 +44,8 @@ namespace hoot
  *
  * We want to keep ID's out of this, so not using GeoJsonWriter. Although, possibly we could add
  * a switch to GeoJsonWriter to not write ID's and use it at some point instead of this.
+ *
+ * @todo implement OperationStatusInfo
  */
 class CalculateHashVisitor : public ElementOsmMapVisitor
 {
@@ -68,23 +70,28 @@ public:
   void setCollectHashes(bool collect) { _collectHashes = collect; }
 
   QMap<QString, ElementId> getHashes() const { return _hashesToElementIds; }
+  QSet<std::pair<ElementId, ElementId>> getDuplicates() const { return _duplicates; }
   void clearHashes() { _hashesToElementIds.clear(); }
 
 private:
 
   // determines if element circular error will be used in computation of the hash
   bool _includeCe;
+  // allows for ignoring info tag keys on a case by case basis
+  QStringList _nonMetadataIgnoreKeys;
   // determines whether hashes are written to an element's tags
   bool _writeHashes;
   // determines if hash values should be collected for post-processing purposes
   bool _collectHashes;
   // collected hash values mapped to element IDs
   QMap<QString, ElementId> _hashesToElementIds;
+  // pairings of all duplicate elements found
+  QSet<std::pair<ElementId, ElementId>> _duplicates;
 
-  QString _toNodeJson(const ConstNodePtr& node);
-  QString _toWayJson(const ConstWayPtr& way);
-  QString _toRelationJson(const ConstRelationPtr& relation);
-  QString _toInfoTagsJson(const Tags& tags, const double ce);
+  QString _toJson(const ConstNodePtr& node);
+  QString _toJson(const ConstWayPtr& way);
+  QString _toJson(const ConstRelationPtr& relation);
+  QString _toJson(const Tags& tags, const double ce);
 };
 
 }

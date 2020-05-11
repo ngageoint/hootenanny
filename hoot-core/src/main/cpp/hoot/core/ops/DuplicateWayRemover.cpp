@@ -157,8 +157,8 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
   return
     // is this a linear way
     (LinearCriterion().isSatisfied(w) &&
-    // if this is not part of a relation
-    _map->getIndex().getParents(w->getElementId()).size() == 0);
+     // if this is not part of a relation
+     _map->getIndex().getParents(w->getElementId()).size() == 0);
 }
 
 void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, bool rev2)

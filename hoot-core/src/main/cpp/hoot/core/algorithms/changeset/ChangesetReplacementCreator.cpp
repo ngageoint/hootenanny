@@ -33,9 +33,9 @@
 #include <hoot/core/algorithms/WayJoinerBasic.h>
 
 #include <hoot/core/conflate/CookieCutter.h>
-#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
@@ -53,8 +53,9 @@
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
 
-#include <hoot/core/elements/ElementComparer.h>
+#include <hoot/core/elements/ElementDeduplicator.h>
 #include <hoot/core/elements/MapUtils.h>
+
 #include <hoot/core/index/OsmMapIndex.h>
 
 #include <hoot/core/io/IoUtils.h>
@@ -69,8 +70,8 @@
 #include <hoot/core/ops/PointsToPolysConverter.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
-#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/ops/WayJoinerOp.h>
@@ -398,6 +399,8 @@ void ChangesetReplacementCreator::create(
       refFilters.size() << "...");
 
     OsmMapPtr refMap;
+    // This is a bit of misnomer after recent changes, as this map may have only been cleaned by
+    // this point and not actually conflated with anything.
     OsmMapPtr conflatedMap;
     QStringList linearFilterClassNames;
     //LOG_VARD(itr.value().get());
@@ -451,26 +454,32 @@ void ChangesetReplacementCreator::create(
   LOG_VART(conflatedMaps.size());
   if (refMaps.size() == 0 && conflatedMaps.size() == 0)
   {
-    LOG_WARN("No features remain after filtering so no changeset will be generated.");
+    LOG_WARN("No features remain after filtering, so no changeset will be generated.");
     return;
   }
-  assert(refMaps.size() == conflatedMaps.size());
+  //assert(refMaps.size() == conflatedMaps.size());
+  if (refMaps.size() != conflatedMaps.size())
+  {
+    throw HootException("Replacement changeset derivation internal map count mismatch error.");
+  }
+
+  // CLEANUP
 
   // Due to the mixed relations processing explained in _getDefaultGeometryFilters, we may have
-  // some duplicated features that need to be cleaned up before we generate the changesets.
+  // some duplicated features that need to be cleaned up before we generate the changesets. This
+  // is kind of a band-aid :-(
 
-  // TODO: going to try to use this as part of #3998
-//  for (int i = 0; i < conflatedMaps.size(); i++)
-//  {
-//    if ((i + 1) < conflatedMaps.size())
-//    {
-//      _dedupeMap(conflatedMaps.at(i), conflatedMaps.at(i + 1));
-//    }
-//    else
-//    {
-//      _dedupeMap(conflatedMaps.at(0), conflatedMaps.at(i));
-//    }
-//  }
+  // If we have the maps for only one geometry type, then there isn't a possibility of duplication
+  // created by the replacement operation.
+  if (ConfigOptions().getChangesetReplacementDeduplicateCalculatedMaps() && refMaps.size() > 1)
+  {
+    // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
+    // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
+    // de-duping. Mostly worried that not doing so could break the overlapping only replacement
+    // (non-full) scenario...we'll see...
+    //_dedupeMaps(refMaps);
+    _dedupeMaps(conflatedMaps);
+  }
 
   // CHANGESET GENERATION
 
@@ -479,64 +488,62 @@ void ChangesetReplacementCreator::create(
 
   _changesetCreator->create(refMaps, conflatedMaps, output);
 
-  LOG_INFO(
+  LOG_STATUS(
     "Derived replacement changeset: ..." <<
     output.right(ConfigOptions().getProgressVarPrintLengthMax()));
 }
 
-void ChangesetReplacementCreator::_dedupeMap(OsmMapPtr refMap, OsmMapPtr mapToDedupe)
+void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
 {
-  LOG_DEBUG("Size before de-duping: " << mapToDedupe->size());
+  ElementDeduplicator deduper;
+  // intra-map de-duping breaks the roundabouts test when ref maps are de-duped
+  deduper.setDedupeIntraMap(true);
+  // when nodes are removed (cleaned/conflated only), out of spec, single point, and riverbank tests
+  // fail
+  deduper.setDedupeNodes(false);
+  deduper.setFavorMoreConnectedWays(true);
 
-  CalculateHashVisitor hashVis;
-  hashVis.setWriteHashes(false);
-  hashVis.setCollectHashes(true);
-
-  hashVis.setOsmMap(refMap.get());
-  refMap->visitRw(hashVis);
-  const QMap<QString, ElementId> refHashes = hashVis.getHashes();
-  QSet<QString> refHashesSet = refHashes.keys().toSet();
-  LOG_VARD(refHashesSet.size());
-
-  hashVis.clearHashes();
-  hashVis.setOsmMap(mapToDedupe.get());
-  mapToDedupe->visitRw(hashVis);
-  const QMap<QString, ElementId> toDedupeHashes = hashVis.getHashes();
-  QSet<QString> toDedupeHashesSet = toDedupeHashes.keys().toSet();
-  LOG_VARD(toDedupeHashesSet.size());
-
-  const QSet<QString> sharedHashes = refHashesSet.intersect(toDedupeHashesSet);
-  QMap<ElementType::Type, QSet<ElementId>> elementsToRemove;
-  for (QSet<QString>::const_iterator itr = sharedHashes.begin(); itr != sharedHashes.end(); ++itr)
+  int dedupePassCtr = 0;
+  for (int i = 0; i < maps.size(); i++)
   {
-    const QString sharedHash = *itr;
-    const ElementId toRemove = toDedupeHashes[sharedHash];
-    elementsToRemove[toRemove.getType().getEnum()].insert(toRemove);
-  }
+    dedupePassCtr++;
+    OsmMapPtr map1;
+    OsmMapPtr map2;
+    if ((i + 1) < maps.size())
+    {
+      map1 = maps.at(i);
+      map2 = maps.at(i + 1);
+      LOG_DEBUG(
+        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
+        dedupePassCtr << " / " << maps.size() << "...");
+      OsmMapWriterFactory::writeDebugMap(
+        map1, "before-dedupe-" + map1->getName() + "-pass-" + QString::number(dedupePassCtr));
+      OsmMapWriterFactory::writeDebugMap(
+        map2, "before-dedupe-" + map2->getName() + "-pass-" + QString::number(dedupePassCtr));
+      deduper.dedupe(map1, map2);
+    }
+    else
+    {
+      map1 = maps.at(0);
+      map2 = maps.at(i);
+      LOG_DEBUG(
+        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
+        dedupePassCtr << " / " << maps.size() << "...");
+      OsmMapWriterFactory::writeDebugMap(
+        map1, "before-dedupe-" + map1->getName() + "-pass-" + QString::number(dedupePassCtr));
+      OsmMapWriterFactory::writeDebugMap(
+        map2, "before-dedupe-" + map2->getName() + "-pass-" + QString::number(dedupePassCtr));
+      deduper.dedupe(map1, map2);
+    }
 
-  const QSet<ElementId> relationsToRemove = elementsToRemove[ElementType::Relation];
-  LOG_VARD(relationsToRemove.size());
-  for (QSet<ElementId>::const_iterator itr = relationsToRemove.begin();
-       itr != relationsToRemove.end(); ++itr)
-  {
-    RemoveElementByEid::removeElementNoCheck(mapToDedupe, *itr);
-  }
-  const QSet<ElementId> waysToRemove = elementsToRemove[ElementType::Way];
-  LOG_VARD(waysToRemove.size());
-  for (QSet<ElementId>::const_iterator itr = waysToRemove.begin();
-       itr != waysToRemove.end(); ++itr)
-  {
-    RemoveElementByEid::removeElementNoCheck(mapToDedupe, *itr);
-  }
-  const QSet<ElementId> nodesToRemove = elementsToRemove[ElementType::Node];
-  LOG_VARD(nodesToRemove.size());
-  for (QSet<ElementId>::const_iterator itr = nodesToRemove.begin();
-       itr != nodesToRemove.end(); ++itr)
-  {
-    RemoveElementByEid::removeElementNoCheck(mapToDedupe, *itr);
-  }
+    _cleanupMissingElements(map1);
+    _cleanupMissingElements(map2);
 
-   LOG_DEBUG("Size after de-duping: " << mapToDedupe->size());
+    OsmMapWriterFactory::writeDebugMap(
+      map1, "after-dedupe-" + map1->getName() + "-pass-" + QString::number(dedupePassCtr));
+    OsmMapWriterFactory::writeDebugMap(
+      map2, "after-dedupe-" + map2->getName() + "-pass-" + QString::number(dedupePassCtr));
+  }
 }
 
 void ChangesetReplacementCreator::_getMapsForGeometryType(
@@ -766,6 +773,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
 void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
 {
+  LOG_INFO("Cleaning up missing elements for " << map->getName() << "...");
+
   // This will handle removing refs in relation members we've cropped out.
   RemoveMissingElementsVisitor missingElementsRemover;
   LOG_STATUS("\t" << missingElementsRemover.getInitStatusMessage());
@@ -778,6 +787,12 @@ void ChangesetReplacementCreator::_cleanupMissingElements(OsmMapPtr& map)
   LOG_STATUS("\t" << dupeMembersRemover.getInitStatusMessage());
   map->visitRw(dupeMembersRemover);
   LOG_STATUS("\t" << dupeMembersRemover.getCompletedStatusMessage());
+
+  // get rid of straggling nodes
+  SuperfluousNodeRemover orphanedNodeRemover;
+  LOG_STATUS("\t" << orphanedNodeRemover.getInitStatusMessage());
+  orphanedNodeRemover.apply(map);
+  LOG_STATUS("\t" << orphanedNodeRemover.getCompletedStatusMessage());
 
   // This will remove any relations that were already empty or became empty after we removed missing
   // members.
@@ -839,9 +854,11 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   // is handled with use of the RelationWithGeometryMembersCriterion implementations below. However,
   // bugs may occur during cropping if, say, a polygon geometry was procesed in the line geometry
   // processing loop b/c a line and poly belonged to the same geometry. Haven't seen this actual
-  // bug occur yet, but I believe it can...not sure how to prevent it yet. Furthermore, there's a
-  // bigger problem in that if a feature belongs to two relations with different geometry types, it
-  // may be duplicated in the output. This will hopefully be fixed as part of #3998.
+  // bug occur yet, but I believe it can...not sure how to prevent it yet.
+  //
+  // Furthermore, if a feature belongs to two relations with different geometry types, it may be
+  // duplicated in the output. This is why we run a de-duplication routine just before changeset
+  // derivation...kind of a band-aid unfortunately :-(
 
   // The map will get set on this point crit by the RemoveElementsVisitor later on, right before its
   // needed.
@@ -1397,7 +1414,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
 
 void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,
-  const bool keepOnlyFeaturesInsideBounds, const bool isLinearMap, const QString& debugFileName)
+  const bool keepOnlyFeaturesInsideBounds, const bool /*isLinearMap*/, const QString& debugFileName)
 {
   if (map->size() == 0)
   {
@@ -1418,8 +1435,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   // Clean up straggling nodes in that are the result of cropping. Its ok to ignore info tags when
   // dealing with only linear features, as all nodes in the data being conflated should be way nodes
   // with no information.
-  // TODO: This can be removed now, since its already happening in MapCropper, right?
-  SuperfluousNodeRemover::removeNodes(map, isLinearMap);
+  //SuperfluousNodeRemover::removeNodes(map, isLinearMap);
 
   MemoryUsageChecker::getInstance()->check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
@@ -1504,6 +1520,8 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
   // turn on for testing only
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+  // This needs to be lowered a bit to make feature de-duping work...a little concerning, why?
+  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 6);
 
   // These don't change between scenarios (or at least haven't needed to yet).
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;

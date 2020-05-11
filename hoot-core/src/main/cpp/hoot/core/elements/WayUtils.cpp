@@ -37,6 +37,7 @@
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/util/CollectionUtils.h>
 
 // GEOS
 #include <geos/geom/Coordinate.h>
@@ -89,6 +90,36 @@ std::set<long> WayUtils::getContainingWayIdsByNodeId(const long nodeId,
 
   LOG_VART(containingWayIds);
   return containingWayIds;
+}
+
+QSet<long> WayUtils::getConnectedWays(const long wayId, const ConstOsmMapPtr& map)
+{
+  QSet<long> connectedWayIds;
+
+  ConstWayPtr way = map->getWay(wayId);
+  if (way)
+  {
+    const std::vector<long>& wayNodeIds = way->getNodeIds();
+    for (size_t i = 0; i < wayNodeIds.size(); i++)
+    {
+      const long wayNodeId = wayNodeIds.at(i);
+      const QSet<long>& idsOfWaysContainingNode =
+        CollectionUtils::stdSetToQSet(map->getIndex().getNodeToWayMap()->getWaysByNode(wayNodeId));
+      connectedWayIds = connectedWayIds.unite(idsOfWaysContainingNode);
+    }
+  }
+
+  return connectedWayIds;
+}
+
+int WayUtils::getNumberOfConnectedWays(const long wayId, const ConstOsmMapPtr& map)
+{
+  return getConnectedWays(wayId, map).size();
+}
+
+bool WayUtils::hasConnectedWays(const long wayId, const ConstOsmMapPtr& map)
+{
+  return getNumberOfConnectedWays(wayId, map) > 0;
 }
 
 bool WayUtils::endWayNodeIsCloserToNodeThanStart(const ConstNodePtr& node,
