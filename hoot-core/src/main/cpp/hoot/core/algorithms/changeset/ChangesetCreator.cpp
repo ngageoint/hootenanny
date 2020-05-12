@@ -70,6 +70,7 @@ ChangesetCreator::ChangesetCreator(
 _osmApiDbUrl(osmApiDbUrl),
 _numTotalTasks(0),
 _currentTaskNum(0),
+_includeReviews(false),
 _printDetailedStats(printDetailedStats),
 _statsOutputFile(statsOutputFile),
 _singleInput(false),
@@ -135,6 +136,10 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
         // ops aren't streamable.
         _numTotalTasks++;
       }
+    }
+    if (!_includeReviews)
+    {
+      _numTotalTasks--;
     }
   }
 
@@ -250,15 +255,16 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
     OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation-" + map1->getName());
     OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation-" + map2->getName());
 
-    // don't want to include review relations - may need to remove this depending on what happens
-    // with #3361
-    std::shared_ptr<TagKeyCriterion> elementCriterion(
-      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
-    RemoveElementsVisitor removeElementsVisitor;
-    removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.addCriterion(elementCriterion);
-    map1->visitRw(removeElementsVisitor);
-    map2->visitRw(removeElementsVisitor);
+    if (!_includeReviews)
+    {
+      std::shared_ptr<TagKeyCriterion> elementCriterion(
+        new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+      RemoveElementsVisitor removeElementsVisitor;
+      removeElementsVisitor.setRecursive(false);
+      removeElementsVisitor.addCriterion(elementCriterion);
+      map1->visitRw(removeElementsVisitor);
+      map2->visitRw(removeElementsVisitor);
+    }
 
     // Truncate tags over 255 characters to push into OSM API.
     ApiTagTruncateVisitor truncateTags;
@@ -524,22 +530,24 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
     _currentTaskNum++;
   }
 
-  // We don't want to include review relations.
-  progress.set(
-    (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Removing review relations...");
-  std::shared_ptr<TagKeyCriterion> elementCriterion(
-    new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
-  RemoveElementsVisitor removeElementsVisitor;
-  removeElementsVisitor.setRecursive(false);
-  removeElementsVisitor.addCriterion(elementCriterion);
-  map1->visitRw(removeElementsVisitor);
-  if (!_singleInput)
+  if (!_includeReviews)
   {
-    map2->visitRw(removeElementsVisitor);
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Removing review relations...");
+    std::shared_ptr<TagKeyCriterion> elementCriterion(
+      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+    RemoveElementsVisitor removeElementsVisitor;
+    removeElementsVisitor.setRecursive(false);
+    removeElementsVisitor.addCriterion(elementCriterion);
+    map1->visitRw(removeElementsVisitor);
+    if (!_singleInput)
+    {
+      map2->visitRw(removeElementsVisitor);
+    }
+    OsmMapWriterFactory::writeDebugMap(map1, "after-remove-reviews-map-1");
+    OsmMapWriterFactory::writeDebugMap(map2, "after-remove-reviews-map-2");
+    _currentTaskNum++;
   }
-  OsmMapWriterFactory::writeDebugMap(map1, "after-remove-reviews-map-1");
-  OsmMapWriterFactory::writeDebugMap(map2, "after-remove-reviews-map-2");
-  _currentTaskNum++;
 
   // Truncate tags over 255 characters to push into OSM API.
   progress.set(
@@ -595,11 +603,14 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
   LOG_DEBUG("Retrieving filtered input stream for: " << input.right(25) << "...");
 
   QList<ElementVisitorPtr> visitors;
-  // We don't want to include review relations.
-  std::shared_ptr<ElementCriterion> elementCriterion(
-    new NotCriterion(
-      std::shared_ptr<TagKeyCriterion>(
-        new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
+  std::shared_ptr<ElementCriterion> elementCriterion;
+  if (!_includeReviews)
+  {
+    elementCriterion.reset(
+      new NotCriterion(
+        std::shared_ptr<TagKeyCriterion>(
+          new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
+  }
   // Tags need to be truncated if they are over 255 characters.
   visitors.append(std::shared_ptr<ApiTagTruncateVisitor>(new ApiTagTruncateVisitor()));
 
@@ -610,8 +621,16 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
   reader->setUseDataSourceIds(true);
   reader->open(input);
   ElementInputStreamPtr inputStream = std::dynamic_pointer_cast<ElementInputStream>(reader);
-  ElementInputStreamPtr filteredInputStream(
-    new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
+  ElementInputStreamPtr filteredInputStream;
+  if (elementCriterion)
+  {
+    filteredInputStream.reset(
+      new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
+  }
+  else
+  {
+    filteredInputStream.reset(new ElementVisitorInputStream(inputStream, visitors.at(0)));
+  }
 
   // Add convert ops supporting streaming into the pipeline, if there are any. TODO: Any
   // OsmMapOperations in the bunch need to operate on the entire map made up of both inputs to

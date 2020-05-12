@@ -33,15 +33,15 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 
 namespace hoot
 {
 
 /**
- * Reports references to missing elements in a given map. If removeMissing is set to true then
- * all missing references are removed.
- *
- * Note: This may not give desired results if your data shouldn't contain missing references.
+ * Reports references to missing elements in a given map. If removeMissing is set to true, then
+ * all missing references are removed. The option also exists to mark elements with missing children
+ * as needing review.
  */
 class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
   public Configurable
@@ -54,15 +54,11 @@ public:
                                const Log::WarningLevel& logLevel = Log::Trace,
                                const int maxReport = Log::getWarnMessageLimit());
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
   virtual void visit(const ConstElementPtr& e);
 
+  virtual void setOsmMap(OsmMap* map) { _map = map; }
+
   virtual void setConfiguration(const Settings& conf);
-
-  void setMaxReport(int maxReport) { _maxReport = maxReport; }
-
-  int getMissingCount() const { return _missingCount; }
 
   virtual QString getDescription() const
   { return "Reports references to missing elements in a map"; }
@@ -74,13 +70,26 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  int getMissingCount() const { return _missingCount; }
+
+  void setMaxReport(int maxReport) { _maxReport = maxReport; }
+  void setMarkWaysForReview(bool mark) { _markWaysForReview = mark; }
+  void setMarkRelationsForReview(bool mark) { _markRelationsForReview = mark; }
+
 protected:
 
   OsmMap* _map;
+
   Log::WarningLevel _logLevel;
+
   int _maxReport;
   int _missingCount;
   bool _removeMissing;
+
+  // TODO
+  bool _markWaysForReview;
+  bool _markRelationsForReview;
+  ReviewMarker _reviewMarker;
 
   virtual void _reportMissing(ElementId referer, ElementId missing);
   virtual void _visitRo(ElementType type, long id);

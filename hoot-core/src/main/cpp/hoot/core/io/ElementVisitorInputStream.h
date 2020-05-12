@@ -39,7 +39,8 @@ class ElementVisitorInputStream : public ElementInputStream
 public:
 
   /**
-   * @brief ElementVisitorInputStream
+   * TODO
+   *
    * @param elementSource The stream used to read elements from
    * @param visitor The operation that should be performed on elements that are read from the input
    * source before being returned

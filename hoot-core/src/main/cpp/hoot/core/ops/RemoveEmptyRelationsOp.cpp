@@ -77,7 +77,7 @@ void RemoveEmptyRelationsOp::_deleteEmptyRelations(const OsmMapPtr& map, const b
     {
       LOG_TRACE(
         "Relation " << relation->getElementId() << " has " << membersSize <<
-        " members.  Members: " << relation->getMembers());
+        " members. Members: " << relation->getMembers());
     }
   }
   if (!reverseOrder)

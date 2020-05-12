@@ -34,9 +34,11 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -63,6 +65,8 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
     LOG_VARD(args);
 
     // process optional params
@@ -265,6 +269,9 @@ public:
     changesetCreator.setCleaningEnabled(enableCleaning);
     changesetCreator.setTagOobConnectedWays(tagOobConnectedWays);
     changesetCreator.create(input1, input2, bounds, output);
+
+    LOG_STATUS(
+      "Changeset generated in " + StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

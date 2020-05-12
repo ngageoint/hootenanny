@@ -113,6 +113,8 @@ public:
   int getNumModifyChanges() const { return _numModifyChanges; }
   int getNumDeleteChanges() const { return _numDeleteChanges; }
 
+  void setIncludeReviews(bool include) { _includeReviews = include; }
+
 private:
 
   friend class ChangesetReplacementCreatorTest;
@@ -121,6 +123,9 @@ private:
 
   int _numTotalTasks;
   int _currentTaskNum;
+
+  // TODO
+  bool _includeReviews;
 
   bool _printDetailedStats;
   QString _statsOutputFile;

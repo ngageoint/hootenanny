@@ -616,6 +616,20 @@ delete statements for reference features falling outside of `convert.bounding.bo
 If enabled, changeset replacement derivation will perform an extra dlement de-duplication step
 before calculating the changeset.
 
+=== changeset.replacement.mark.relations.with.missing.members.for.review
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
+=== changeset.replacement.pass.conflate.reviews
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === changeset.source
 
 * Data Type: string
@@ -1033,6 +1047,13 @@ The pixel size used when running either the `crop-random` command or `RandomMapC
 * Default Value: `tmp/debug.osm`
 
 Debugging: The filename to use when saving the debug map during conflation.
+
+=== debug.maps.remove.missing.elements
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
 
 === debug.maps.write
 
@@ -3041,7 +3062,7 @@ Add a tag with the bounding box for each element
 
 By default, OsmXmlReader will not add child references (node ref, elements members) to parent
 elements if those elements are not present in the data.  For external sorting and translations,
-where partial chunks of elements will be present the setting is changed.
+where partial chunks of elements only may be present the setting is changed.
 
 === osm.map.reader.factory.reader
 
@@ -3930,16 +3951,6 @@ E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
 
 Should RemoveElementsVisitor remove elements recursively?
 
-=== tag.filter.keys
-
-* Data Type: list
-* Default Value:
-** ``
-
-A list of tag keys the KeepTagsVisitor/RemoveTagsVisitor will keep/remove on/from elements.  From
-the command line, separate list items with a semicolon and surround the entire list in double
-quotes.
-
 === replace.tag.visitor.match.tag
 
 * Data Type: string
@@ -4595,6 +4606,16 @@ E.g. "highway=road;amenity=school"
 The plugin name of an element criterion used to select tags to keep/remove used by
 KeepTagsVisitor/RemoveTagsVisitor.  To pass in complex nested criteria for tag filtering, use the
 Hootenanny Javascript interface instead.
+
+=== tag.filter.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of tag keys the KeepTagsVisitor/RemoveTagsVisitor will keep/remove on/from elements.  From
+the command line, separate list items with a semicolon and surround the entire list in double
+quotes.
 
 === tag.key.contains.criterion.text
 

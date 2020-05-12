@@ -27,10 +27,11 @@
 #include "ChangesetReplacementCreator.h"
 
 // Hoot
-#include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 #include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
 #include <hoot/core/algorithms/WayJoinerAdvanced.h>
 #include <hoot/core/algorithms/WayJoinerBasic.h>
+
+#include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
@@ -110,6 +111,7 @@ _cleaningEnabled(true),
 _tagOobConnectedWays(false)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, statsOutputFile, osmApiDbUrl));
+
   setGeometryFilters(QStringList());
 }
 
@@ -383,7 +385,7 @@ void ChangesetReplacementCreator::create(
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
     _getCombinedFilters(_replacementFilter);
 
-  // CHANGESET CALCULATION
+  // DIFF CALCULATION
 
   // Since data with different geometry types require different settings, we'll calculate a separate
   // pair of before/after maps for each geometry type.
@@ -487,6 +489,10 @@ void ChangesetReplacementCreator::create(
 
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
+  _changesetCreator->setIncludeReviews(
+    ConfigOptions().getChangesetReplacementMarkRelationsWithMissingMembersForReview() ||
+    (_conflationEnabled &&
+     ConfigOptions().getChangesetReplacementPassConflateReviews()));
   _changesetCreator->create(refMaps, conflatedMaps, output);
 
   LOG_STATUS(
@@ -513,12 +519,16 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // load the ref dataset and crop to the specified aoi
   refMap = _loadRefMap(input1);
 
-  // Find any relations with missing members and mark them for review, as its possible we'll break
-  // them during this process. There's really nothing that can be done about that, since we don't
-  // have access to the missing members. Any relations with missing members may require manual
-  // cleanup after changeset application.
-  // TODO: enable
-  //_markRelationsWithMissingMembersForReview(refMap);
+  const bool markMissingForReview =
+    ConfigOptions().getChangesetReplacementMarkRelationsWithMissingMembersForReview();
+  if (markMissingForReview)
+  {
+    // Find any relations with missing members and mark them for review, as its possible we'll break
+    // them during this process. There's really nothing that can be done about that, since we don't
+    // have access to the missing members. Any relations with missing members may require manual
+    // cleanup after changeset application.
+    _markRelationsWithMissingMembersForReview(refMap);
+  }
 
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
   // versions later.
@@ -543,8 +553,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   OsmMapPtr secMap = _loadSecMap(input2);
   MemoryUsageChecker::getInstance()->check();
 
-  // TODO: enable
-  //_markRelationsWithMissingMembersForReview(secMap);
+//  if (markMissingForReview)
+//  {
+//    _markRelationsWithMissingMembersForReview(secMap);
+//  }
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.
@@ -559,7 +571,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VARD(refMapSize);
   LOG_VARD(secMapSize);
 
-  // COOKIE CUT
+  // CUT
 
   // cut the secondary data out of the reference data
   OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap, geometryType);
@@ -576,7 +588,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   _combineMaps(cookieCutRefMap, secMap, false, "combined-before-conflation");
   secMap.reset();
 
-  // CONFLATE
+  // CONFLATE / CLEAN
 
   // conflate the cookie cut ref map with the sec map if conflation is enabled
 
@@ -585,10 +597,15 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   {
     if (_conflationEnabled)
     {
-      // TODO: do something with reviews - #3361
       // conflation cleans beforehand
       _conflate(conflatedMap, _lenientBounds);
       conflatedMap->setName("conflated");
+
+      if (!ConfigOptions().getChangesetReplacementPassConflateReviews())
+      {
+        // remove all conflate reviews
+        _removeConflateReviews(conflatedMap);
+      }
     }
     // This is a little misleading to only clean when the sec map has elements, however a test fails
     // if we don't. May need further investigation.
@@ -598,6 +615,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
       conflatedMap->setName("cleaned");
     }
   }
+
+  // SNAP
 
   if (isLinearCrit && _waySnappingEnabled)
   {
@@ -773,7 +792,8 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
 
-  // This needs to be lowered a bit to make feature de-duping work...a little concerning, why?
+  // This needs to be lowered a bit from the default of 7 to make feature de-duping work...a little
+  // concerning, why?
   conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 6);
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
@@ -1161,10 +1181,14 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
   return secMap;
 }
 
-void ChangesetReplacementCreator::_markRelationsWithMissingMembersForReview(OsmMapPtr& /*map*/)
+void ChangesetReplacementCreator::_markRelationsWithMissingMembersForReview(OsmMapPtr& map)
 {
-  // TODO: finish
-  //ReportMissingElementsVisitor
+  ReportMissingElementsVisitor elementMarker;
+  // we may want to add ways to this later as well
+  elementMarker.setMarkRelationsForReview(true);
+  LOG_STATUS("\t" << elementMarker.getInitStatusMessage());
+  map->visitRelationsRw(elementMarker);
+  LOG_STATUS("\t" << elementMarker.getCompletedStatusMessage());
 }
 
 void ChangesetReplacementCreator::_filterFeatures(
@@ -1442,6 +1466,30 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
   LOG_DEBUG("Conflated map size: " << map->size());
 }
 
+void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
+{
+  LOG_INFO("Removing reviews added during conflation from " << map->getName() << "...");
+
+  RemoveElementsVisitor removeVis;
+  removeVis.addCriterion(ElementCriterionPtr(new RelationCriterion("review")));
+  removeVis.addCriterion(
+    ElementCriterionPtr(
+      new NotCriterion(
+        std::shared_ptr<TagCriterion>(
+          new TagCriterion(
+            MetadataTags::HootReviewType(),
+            QString::fromStdString(ReportMissingElementsVisitor::className()))))));
+  removeVis.setChainCriteria(true);
+  removeVis.setRecursive(false);
+  LOG_STATUS("\t" << removeVis.getInitStatusMessage());
+  map->visitRw(removeVis);
+  LOG_STATUS("\t" << removeVis.getCompletedStatusMessage());
+
+  MemoryUsageChecker::getInstance()->check();
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-conflate-reviews-removed");
+}
+
 void ChangesetReplacementCreator::_clean(OsmMapPtr& map)
 {
   map->setName("cleaned");
@@ -1605,6 +1653,7 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
   deduper.setDedupeIntraMap(true);
   // when nodes are removed (cleaned/conflated only), out of spec, single point, and riverbank tests
   // fail
+  // TODO: try passing in a PointCriterion instead to clean up nodes on the out of spec test?
   deduper.setDedupeNodes(false);
   // this prevents connected ways separated by geometry type from being broken up in the output
   deduper.setFavorMoreConnectedWays(true);

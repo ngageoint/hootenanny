@@ -189,10 +189,13 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     }
 
     MapProjector::projectToWgs84(copy);
-    // You can end up with a map unreadable in JOSM if you don't remove missing elements here. Don't
-    // remove elements recursively here.
-    RemoveMissingElementsVisitor missingElementsRemover;
-    copy->visitRw(missingElementsRemover);
+    if (ConfigOptions().getDebugMapsRemoveMissingElements())
+    {
+      // You can end up with a map unreadable in JOSM if you don't remove missing elements here.
+      // Don't remove elements recursively here.
+      RemoveMissingElementsVisitor missingElementsRemover;
+      copy->visitRw(missingElementsRemover);
+    }
     write(copy, debugMapFileName, true, true);
     _debugMapCount++;
   }

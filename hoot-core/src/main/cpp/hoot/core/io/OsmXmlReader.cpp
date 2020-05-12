@@ -97,9 +97,16 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setUseFileStatus(configOptions.getReaderUseFileStatus()),
   setAddSourceDateTime(configOptions.getReaderAddSourceDatetime());
   setPreserveAllTags(configOptions.getReaderPreserveAllTags());
-  setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
   setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
+  if (!_bounds.isNull() && !configOptions.getConvertBoundingBoxRemoveMissingElements())
+  {
+    setAddChildRefsWhenMissing(true);
+  }
+  else
+  {
+    setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
+  }
   setKeepImmediatelyConnectedWaysOutsideBounds(
     configOptions.getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
   setWarnOnVersionZeroElement(configOptions.getReaderWarnOnZeroVersionElement());

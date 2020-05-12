@@ -48,7 +48,7 @@ class ElementCriterionVisitorInputStream : public ElementInputStream
 public:
 
   /**
-   *
+   * TODO
    *
    * @param elementSource
    * @param criterion
@@ -59,7 +59,8 @@ public:
                                      const ElementVisitorPtr& visitor);
 
   /**
-   * @brief ElementCriterionInputStream
+   * TODO
+   *
    * @param elementSource The stream used to read elements from
    * @param criterion If this criterion is satisfied then the element is included, otherwise the
    *    element is dropped.

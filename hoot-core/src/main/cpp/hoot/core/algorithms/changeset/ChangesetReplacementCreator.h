@@ -293,6 +293,7 @@ private:
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 
   void _conflate(OsmMapPtr& map, const bool lenientBounds);
+  void _removeConflateReviews(OsmMapPtr& map);
   void _clean(OsmMapPtr& map);
 
   void _snapUnconnectedWays(

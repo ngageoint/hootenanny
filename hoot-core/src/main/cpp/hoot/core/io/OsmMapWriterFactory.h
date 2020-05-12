@@ -28,7 +28,6 @@
 #define OSMMAPWRITERFACTORY_H
 
 // Hoot
-//#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/io/ElementInputStream.h>
 
