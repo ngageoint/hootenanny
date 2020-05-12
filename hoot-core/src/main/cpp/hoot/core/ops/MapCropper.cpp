@@ -452,6 +452,9 @@ void MapCropper::apply(OsmMapPtr& map)
     numSuperfluousNodesRemoved = SuperfluousNodeRemover::removeNodes(map);
   }
 
+  // Most of the time we want to remove missing refs in order for the output to be clean, but in
+  // some workflows, like cut and replace, we need to keep them around to prevent the resulting
+  // changeset from being too heavy handed.
   if (_removeMissingElements)
   {
     // This will handle removing refs in relation members we've cropped out.

@@ -61,10 +61,10 @@ public:
   static void checkForDuplicateElementCorrectionMismatch(const QStringList& ops);
 
   /**
-   * TODO
+   * Removes an entry from a list configuration option globally
    *
-   * @param opKey
-   * @param entryToRemove
+   * @param opKey key of the configuration option to remove a member from
+   * @param entryToRemove value of the list member from the configuration option to remove
    */
   static void removeListOpEntry(const QString& opName, const QString& entryToRemove);
 };

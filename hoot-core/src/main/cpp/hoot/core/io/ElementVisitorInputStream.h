@@ -39,11 +39,10 @@ class ElementVisitorInputStream : public ElementInputStream
 public:
 
   /**
-   * TODO
+   * Creates a filtered stream of elements
    *
-   * @param elementSource The stream used to read elements from
-   * @param visitor The operation that should be performed on elements that are read from the input
-   * source before being returned
+   * @param elementSource source of the element stream
+   * @param visitor an element visitor to filter the stream with
    */
   ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
                             const ElementVisitorPtr& visitor);

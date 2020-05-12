@@ -553,10 +553,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   OsmMapPtr secMap = _loadSecMap(input2);
   MemoryUsageChecker::getInstance()->check();
 
-//  if (markMissingForReview)
-//  {
-//    _markRelationsWithMissingMembersForReview(secMap);
-//  }
+  if (markMissingForReview)
+  {
+    _markRelationsWithMissingMembersForReview(secMap);
+  }
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.

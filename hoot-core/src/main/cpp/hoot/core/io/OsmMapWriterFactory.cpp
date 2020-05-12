@@ -191,8 +191,10 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     MapProjector::projectToWgs84(copy);
     if (ConfigOptions().getDebugMapsRemoveMissingElements())
     {
-      // You can end up with a map unreadable in JOSM if you don't remove missing elements here.
-      // Don't remove elements recursively here.
+      // Don't remove elements recursively here. You can end up with a map unreadable in JOSM if
+      // you don't remove missing elements here. However, in some cases (like debugging cut and
+      // replace), you want to see them in the raw output to know things are working the way they
+      // should be.
       RemoveMissingElementsVisitor missingElementsRemover;
       copy->visitRw(missingElementsRemover);
     }

@@ -125,7 +125,7 @@ private:
   std::set<long> _explicitlyIncludedWayIds;
   // removes useful features created after cropping
   bool _removeSuperfluousFeatures;
-  // TODO
+  // emoves references to missing elements after cropping occurs
   bool _removeMissingElements;
 
   int _statusUpdateInterval;

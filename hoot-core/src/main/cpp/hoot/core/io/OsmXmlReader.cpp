@@ -99,6 +99,8 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setPreserveAllTags(configOptions.getReaderPreserveAllTags());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
   setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
+  // If a bounds was set and we don't want to remove missing elements as a result of cropping, we
+  // need to modify the reader to allow reading in the missing refs.
   if (!_bounds.isNull() && !configOptions.getConvertBoundingBoxRemoveMissingElements())
   {
     setAddChildRefsWhenMissing(true);

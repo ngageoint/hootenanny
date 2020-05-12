@@ -64,7 +64,7 @@ private:
   bool _keepEntireFeaturesCrossingBounds;
   // see MapCropper
   bool _keepOnlyFeaturesInsideBounds;
-  // TODO
+  // removes references to missing elements after the cut occurs
   bool _removeMissingElements;
 };
 

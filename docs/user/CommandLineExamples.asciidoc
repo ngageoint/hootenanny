@@ -324,18 +324,6 @@ See the User Guide for more details on command usage.
     |     name=<SIMILAR> |                    |              |             |             24 |
 -----
 
-===== Remove duplicate features in a single map:
-
------
-    hoot de-duplicate input.osm output.osm
------
-
-===== Remove duplicate features between two maps:
-
------
-    hoot de-duplicate input1.osm output1.osm input2.osm output2.osm
------
-
 ==== Statistics
 
 ===== Display a set of statistics for a map:

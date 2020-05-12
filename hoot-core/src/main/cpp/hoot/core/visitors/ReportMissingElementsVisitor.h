@@ -86,7 +86,7 @@ protected:
   int _missingCount;
   bool _removeMissing;
 
-  // TODO
+  // allows for marking any elements with missing children as needing review
   bool _markWaysForReview;
   bool _markRelationsForReview;
   ReviewMarker _reviewMarker;

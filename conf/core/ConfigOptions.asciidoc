@@ -613,7 +613,7 @@ delete statements for reference features falling outside of `convert.bounding.bo
 * Data Type: bool
 * Default Value: `true`
 
-If enabled, changeset replacement derivation will perform an extra dlement de-duplication step
+If enabled, changeset replacement derivation will perform an extra element de-duplication step
 before calculating the changeset.
 
 === changeset.replacement.mark.relations.with.missing.members.for.review
@@ -621,14 +621,16 @@ before calculating the changeset.
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+If enabled, any relations encountered by changeset replacement derivation with missing members will
+be marked for review.
 
 === changeset.replacement.pass.conflate.reviews
 
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+If enabled and conflation is also enabled during changeset replacement derivation, conflate review
+relations will be written.
 
 === changeset.source
 
@@ -934,7 +936,8 @@ the convert.bounding.box setting for OSM API database data sources only.
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+If enabled, any call to the `convert` command with a bounds specified by `convert.bounding.box` will
+remove missing references to missing elements as a result of map cropping.
 
 === convert.bounding.box.tag.immediately.connected.out.of.bounds.ways
 
@@ -1053,7 +1056,8 @@ Debugging: The filename to use when saving the debug map during conflation.
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+If enabled, debug maps will have missing element references removed upon their writing. This allows
+the output to be viewed in JOSM.
 
 === debug.maps.write
 

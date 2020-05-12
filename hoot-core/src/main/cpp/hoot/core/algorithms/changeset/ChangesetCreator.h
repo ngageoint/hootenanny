@@ -124,7 +124,7 @@ private:
   int _numTotalTasks;
   int _currentTaskNum;
 
-  // TODO
+  // allows element reviews to be in the changeset
   bool _includeReviews;
 
   bool _printDetailedStats;
