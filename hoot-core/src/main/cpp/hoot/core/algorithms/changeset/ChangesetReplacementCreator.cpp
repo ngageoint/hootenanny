@@ -488,9 +488,7 @@ void ChangesetReplacementCreator::create(
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
   _changesetCreator->setIncludeReviews(
-    ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren() ||
-    (_conflationEnabled &&
-     ConfigOptions().getChangesetReplacementPassConflateReviews()));
+    _conflationEnabled && ConfigOptions().getChangesetReplacementPassConflateReviews());
   _changesetCreator->create(refMaps, conflatedMaps, output);
 
   LOG_STATUS(
