@@ -204,14 +204,22 @@ bool RelationMemberUtils::containsMemberWithCriterion(
   {
     throw IllegalArgumentException("Invalid map specified.");
   }
+  if (!relation)
+  {
+    return false;
+  }
 
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
     ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    if (criterion.isSatisfied(member))
+    if (member)
     {
-      return true;
+      LOG_VART(member->getElementId());
+      if (criterion.isSatisfied(member))
+      {
+        return true;
+      }
     }
   }
   return false;
@@ -224,14 +232,22 @@ bool RelationMemberUtils::containsOnlyMembersWithCriterion(
   {
     throw IllegalArgumentException("Invalid map specified.");
   }
+  if (!relation)
+  {
+    return false;
+  }
 
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
     ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    if (!criterion.isSatisfied(member))
+    if (member)
     {
-      return false;
+      LOG_VART(member->getElementId());
+      if (!criterion.isSatisfied(member))
+      {
+        return false;
+      }
     }
   }
   return true;

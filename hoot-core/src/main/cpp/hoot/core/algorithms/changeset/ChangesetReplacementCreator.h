@@ -249,6 +249,11 @@ private:
   OsmMapPtr _loadSecMap(const QString& input);
 
   /*
+   * Adds a custom tag to any element from the input with a missing child
+   */
+  void _markElementsWithMissingChildren(OsmMapPtr& map);
+
+  /*
    * Keeps track of the changeset versions for features
    */
   QMap<ElementId, long> _getIdToVersionMappings(const OsmMapPtr& map) const;
@@ -291,6 +296,7 @@ private:
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 
   void _conflate(OsmMapPtr& map, const bool lenientBounds);
+  void _removeConflateReviews(OsmMapPtr& map);
   void _clean(OsmMapPtr& map);
 
   void _snapUnconnectedWays(
@@ -317,7 +323,7 @@ private:
     const GeometryTypeCriterion::GeometryType& geometryType,
     const QStringList& linearFilterClassNames = QStringList());
 
-  void _cleanupMissingElements(OsmMapPtr& map);
+  void _cleanup(OsmMapPtr& map);
 };
 
 }

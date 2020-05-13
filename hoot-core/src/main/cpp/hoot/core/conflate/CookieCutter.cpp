@@ -45,11 +45,12 @@ namespace hoot
 {
 
 CookieCutter::CookieCutter(bool crop, double outputBuffer, bool keepEntireFeaturesCrossingBounds,
-                           bool keepOnlyFeaturesInsideBounds) :
+                           bool keepOnlyFeaturesInsideBounds, bool removeMissingElements) :
 _crop(crop),
 _outputBuffer(outputBuffer),
 _keepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds),
-_keepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds)
+_keepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds),
+_removeMissingElements(removeMissingElements)
 {
 }
 
@@ -97,6 +98,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   cropper.setKeepOnlyFeaturesInsideBounds(_keepOnlyFeaturesInsideBounds);
   cropper.setInvert(!_crop);
   cropper.setRemoveSuperflousFeatures(true);
+  cropper.setRemoveMissingElements(_removeMissingElements);
   cropper.apply(doughMap);
 
   OsmMapPtr cookieCutMap = doughMap;

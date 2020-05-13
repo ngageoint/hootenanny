@@ -230,6 +230,15 @@ useful with roads but can be made to work with any linear data. The +--disable-w
 Alternatively, marking snappable ways as needing review instead of snapping them can be performed to provide more control over the changeset 
 output. See the "Snap Unconnected Ways" section of the User Documentation for more detail.
 
+=== Missing Elements
+
+Changeset replacement derivation will not remove any references to missing children elements passed in the input data. If any ways with 
+references to missing way nodes or relations with references to missing elements are found in the inputs to changeset replacement derivation, 
+they will be tagged with the custom tag, "hoot::missing_child=yes". This is due to the fact that changeset replacement derivation may 
+inadvertantly introduce duplicate/unwanted child elements into these features since it is not aware of the existence of the missing children. 
+This tag should be searched for after the resulting changeset has been applied and features having it should be manually cleaned up, if 
+necessary.
+
 === See Also
 
 * `changeset-derive` command
