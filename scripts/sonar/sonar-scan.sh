@@ -14,7 +14,8 @@ SONAR_LOGIN=""
 SONAR_ORG="hootenanny"
 SONAR_PROJECT="hoot"
 SONAR_SOURCES="./hoot-core,./hoot-js,./hoot-rnd,./tbs,./tgs"
-SONAR_THREADS="$(( $(nproc) * 2 ))"  # Sonar scan doesn't max out CPU, double the threads
+#SONAR_THREADS="$(( $(nproc) * 2 ))"  # Sonar scan doesn't max out CPU, double the threads
+SONAR_THREADS="$(nproc)"
 
 # Getting parameters from the command line.
 while getopts ":a:b:dj:l:o:p:r:s:t:" opt; do
@@ -126,5 +127,6 @@ if [ -d $HOOT_HOME/.scannerwork ]; then
     rm -rf $HOOT_HOME/.scannerwork
 fi
 
+export SONAR_SCANNER_OPTS="-Xmx512m"
 # run the actual scanner
-sonar-scanner $DEBUG_MODE -X "${OPTIONS[@]}"
+sonar-scanner $DEBUG_MODE -Dsonar.verbose=true -Dsonar.log.level=TRACE "${OPTIONS[@]}"
