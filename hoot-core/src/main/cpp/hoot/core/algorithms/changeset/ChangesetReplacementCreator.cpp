@@ -1649,9 +1649,8 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
   ElementDeduplicator deduper;
   // intra-map de-duping breaks the roundabouts test when ref maps are de-duped
   deduper.setDedupeIntraMap(true);
-  // when nodes are removed (cleaned/conflated only), out of spec, single point, and riverbank tests
-  // fail
-  //deduper.setDedupeNodes(false);
+  // When nodes are removed (cleaned/conflated only), out of spec, single point, and riverbank tests
+  // fail, so being a little more strict by removing points instead (node + not a way node).
   std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
   deduper.setNodeCriterion(pointCrit);
   // this prevents connected ways separated by geometry type from being broken up in the output
