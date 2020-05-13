@@ -310,7 +310,7 @@ private:
    */
   void _cropMapForChangesetDerivation(
     OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,
-    const bool keepOnlyFeaturesInsideBounds, const bool isLinearMap, const QString& debugFileName);
+    const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName);
 
   /*
    * Populates a reference and a conflated map based on the geometry type being replaced. The maps

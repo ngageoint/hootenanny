@@ -657,10 +657,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
   _cropMapForChangesetDerivation(
     refMap, bounds, _boundsOpts.changesetRefKeepEntireCrossingBounds,
-    _boundsOpts.changesetRefKeepOnlyInsideBounds, isLinearCrit, "ref-cropped-for-changeset");
+    _boundsOpts.changesetRefKeepOnlyInsideBounds, "ref-cropped-for-changeset");
   _cropMapForChangesetDerivation(
     conflatedMap, bounds, _boundsOpts.changesetSecKeepEntireCrossingBounds,
-    _boundsOpts.changesetSecKeepOnlyInsideBounds, isLinearCrit, "sec-cropped-for-changeset");
+    _boundsOpts.changesetSecKeepOnlyInsideBounds, "sec-cropped-for-changeset");
   LOG_VART(_lenientBounds);
   LOG_VART(isLinearCrit);
 
@@ -1562,7 +1562,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
 
 void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,
-  const bool keepOnlyFeaturesInsideBounds, const bool /*isLinearMap*/, const QString& debugFileName)
+  const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName)
 {
   if (map->size() == 0)
   {
@@ -1582,11 +1582,6 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   LOG_STATUS("\t" << cropper.getInitStatusMessage());
   cropper.apply(map);
   LOG_STATUS("\t" << cropper.getCompletedStatusMessage());
-
-  // Clean up straggling nodes in that are the result of cropping. Its ok to ignore info tags when
-  // dealing with only linear features, as all nodes in the data being conflated should be way nodes
-  // with no information.
-  //SuperfluousNodeRemover::removeNodes(map, isLinearMap);
 
   MemoryUsageChecker::getInstance()->check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
@@ -1656,54 +1651,39 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
   deduper.setDedupeIntraMap(true);
   // when nodes are removed (cleaned/conflated only), out of spec, single point, and riverbank tests
   // fail
-  // TODO: try passing in a PointCriterion instead to clean up nodes on the out of spec test?
-  deduper.setDedupeNodes(false);
+  //deduper.setDedupeNodes(false);
+  std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
+  deduper.setNodeCriterion(pointCrit);
   // this prevents connected ways separated by geometry type from being broken up in the output
   deduper.setFavorMoreConnectedWays(true);
 
-  // compare each map to every other map and look for dupes; its possible we could exclude point
-  // only maps here, though
-  int dedupePassCtr = 0;
+  // See notes in _getDefaultGeometryFilters, but basically the point and poly geometry maps may
+  // have duplicates and the line geometry map will not. So dedupe each of the others compared to
+  // the line map.
+
+  OsmMapPtr lineMap;
+  QList<OsmMapPtr> otherMaps;
   for (int i = 0; i < maps.size(); i++)
   {
-    dedupePassCtr++;
-    OsmMapPtr map1;
-    OsmMapPtr map2;
-    if ((i + 1) < maps.size())
+    OsmMapPtr map = maps.at(i);
+    if (map->getName().contains("line"))
     {
-      map1 = maps.at(i);
-      map2 = maps.at(i + 1);
-      LOG_DEBUG(
-        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
-        dedupePassCtr << " / " << maps.size() << "...");
-      OsmMapWriterFactory::writeDebugMap(
-        map1, "before-dedupe-" + map1->getName() + "-pass-" + QString::number(dedupePassCtr));
-      OsmMapWriterFactory::writeDebugMap(
-        map2, "before-dedupe-" + map2->getName() + "-pass-" + QString::number(dedupePassCtr));
-      deduper.dedupe(map1, map2);
+      lineMap = map;
     }
     else
     {
-      map1 = maps.at(0);
-      map2 = maps.at(i);
-      LOG_DEBUG(
-        "De-duping map: " << map1->getName() << " and " << map2->getName() << " pass " <<
-        dedupePassCtr << " / " << maps.size() << "...");
-      OsmMapWriterFactory::writeDebugMap(
-        map1, "before-dedupe-" + map1->getName() + "-pass-" + QString::number(dedupePassCtr));
-      OsmMapWriterFactory::writeDebugMap(
-        map2, "before-dedupe-" + map2->getName() + "-pass-" + QString::number(dedupePassCtr));
-      deduper.dedupe(map1, map2);
+      otherMaps.append(map);
     }
+  }
 
-    // clean up introduced mistakes
-    _cleanup(map1);
-    _cleanup(map2);
-
-    OsmMapWriterFactory::writeDebugMap(
-      map1, "after-dedupe-" + map1->getName() + "-pass-" + QString::number(dedupePassCtr));
-    OsmMapWriterFactory::writeDebugMap(
-      map2, "after-dedupe-" + map2->getName() + "-pass-" + QString::number(dedupePassCtr));
+  for (int i = 0; i < otherMaps.size(); i++)
+  {
+    OsmMapPtr otherMap = otherMaps.at(i);
+    // set the point's map to be the map we're removing features from
+    pointCrit->setOsmMap(otherMap.get());
+    LOG_DEBUG(
+      "De-duping map: " << lineMap->getName() << " and " << otherMap->getName() << "...");
+    deduper.dedupe(lineMap, otherMap);
   }
 }
 
