@@ -101,13 +101,9 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     "Creating changeset from inputs: " << input1 << " and " << input2 << " to output: " <<
     output << "...");
 
-  QFileInfo outputInfo(output);
-  LOG_VARD(outputInfo.dir().absolutePath());
-  const bool outputDirSuccess = QDir().mkpath(outputInfo.dir().absolutePath());
-  if (!outputDirSuccess)
-  {
-    throw IllegalArgumentException("Unable to create output path for: " + output);
-  }
+  // write the output dir now so we don't get a nasty surprise at the end of a long job that it
+  // can't be written
+  IoUtils::writeOutputDir(output);
 
   _singleInput = input2.trimmed().isEmpty();
   LOG_VARD(_singleInput);

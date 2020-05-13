@@ -221,7 +221,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 }
 
-std::shared_ptr<ElementVisitorInputStream> getVisitorInputStream(
+std::shared_ptr<ElementVisitorInputStream> IoUtils::getVisitorInputStream(
   const QString& input, const QString& visitorClassName, const bool useDataSourceIds)
 {
   std::shared_ptr<PartialOsmMapReader> reader =
@@ -237,6 +237,24 @@ std::shared_ptr<ElementVisitorInputStream> getVisitorInputStream(
         std::dynamic_pointer_cast<ElementInputStream>(reader),
         ElementVisitorPtr(
           Factory::getInstance().constructObject<ElementVisitor>(visitorClassName.toStdString()))));
+}
+
+bool IoUtils::isUrl(const QString& str)
+{
+  // this works in the hoot world
+  return str.contains("://");
+}
+
+void IoUtils::writeOutputDir(const QString& dirName)
+{
+  QFileInfo outputInfo(dirName);
+  LOG_VART(outputInfo.dir().absolutePath());
+  const bool outputDirSuccess = QDir().mkpath(outputInfo.dir().absolutePath());
+  LOG_VART(outputDirSuccess);
+  if (!outputDirSuccess)
+  {
+    throw IllegalArgumentException("Unable to create output path for: " + dirName);
+  }
 }
 
 }
