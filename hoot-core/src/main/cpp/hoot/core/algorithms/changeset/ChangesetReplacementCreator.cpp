@@ -403,11 +403,10 @@ void ChangesetReplacementCreator::create(
       refFilters.size() << "...");
 
     OsmMapPtr refMap;
-    // This is a bit of misnomer after recent changes, as this map may have only been cleaned by
+    // This is a bit of a misnomer after recent changes, as this map may have only been cleaned by
     // this point and not actually conflated with anything.
     OsmMapPtr conflatedMap;
     QStringList linearFilterClassNames;
-    //LOG_VARD(itr.value().get());
     if (itr.key() == GeometryTypeCriterion::GeometryType::Line)
     {
       linearFilterClassNames = _linearFilterClassNames;
@@ -461,7 +460,6 @@ void ChangesetReplacementCreator::create(
     LOG_WARN("No features remain after filtering, so no changeset will be generated.");
     return;
   }
-  //assert(refMaps.size() == conflatedMaps.size());
   if (refMaps.size() != conflatedMaps.size())
   {
     throw HootException("Replacement changeset derivation internal map count mismatch error.");
@@ -490,7 +488,7 @@ void ChangesetReplacementCreator::create(
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
   _changesetCreator->setIncludeReviews(
-    ConfigOptions().getChangesetReplacementMarkRelationsWithMissingMembersForReview() ||
+    ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren() ||
     (_conflationEnabled &&
      ConfigOptions().getChangesetReplacementPassConflateReviews()));
   _changesetCreator->create(refMaps, conflatedMaps, output);
@@ -518,16 +516,17 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // load the ref dataset and crop to the specified aoi
   refMap = _loadRefMap(input1);
+  MemoryUsageChecker::getInstance()->check();
 
-  const bool markMissingForReview =
-    ConfigOptions().getChangesetReplacementMarkRelationsWithMissingMembersForReview();
-  if (markMissingForReview)
+  const bool markMissing =
+    ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren();
+  if (markMissing)
   {
     // Find any relations with missing members and mark them for review, as its possible we'll break
     // them during this process. There's really nothing that can be done about that, since we don't
     // have access to the missing members. Any relations with missing members may require manual
     // cleanup after changeset application.
-    _markRelationsWithMissingMembersForReview(refMap);
+    _markElementsWithMissingChildren(refMap);
   }
 
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
@@ -553,9 +552,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   OsmMapPtr secMap = _loadSecMap(input2);
   MemoryUsageChecker::getInstance()->check();
 
-  if (markMissingForReview)
+  if (markMissing)
   {
-    _markRelationsWithMissingMembersForReview(secMap);
+    _markElementsWithMissingChildren(secMap);
   }
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
@@ -1181,14 +1180,18 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
   return secMap;
 }
 
-void ChangesetReplacementCreator::_markRelationsWithMissingMembersForReview(OsmMapPtr& map)
+void ChangesetReplacementCreator::_markElementsWithMissingChildren(OsmMapPtr& map)
 {
   ReportMissingElementsVisitor elementMarker;
-  // we may want to add ways to this later as well
-  elementMarker.setMarkRelationsForReview(true);
+  // Originally, this was going to add reviews rather than tagging elements but there was an ID
+  // provenance problem with reviews.
+  elementMarker.setMarkRelationsForReview(false);
+  elementMarker.setRelationKvp(MetadataTags::HootMissingChild() + "=yes");
   LOG_STATUS("\t" << elementMarker.getInitStatusMessage());
   map->visitRelationsRw(elementMarker);
   LOG_STATUS("\t" << elementMarker.getCompletedStatusMessage());
+
+  OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-missing-marked");
 }
 
 void ChangesetReplacementCreator::_filterFeatures(

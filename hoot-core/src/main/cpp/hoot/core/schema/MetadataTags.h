@@ -175,6 +175,12 @@ public:
   inline static const QString Source()                  { return "source"; }
   inline static const QString OsmApiDbScheme()          { return "osmapidb"; }
   inline static const QString HootApiDbScheme()         { return "hootapidb"; }
+
+  /**
+   * TODO
+   */
+  inline static const QString HootMissingChild()        { return "hoot:missing_child"; }
+
   /**
    * Identifies features snapped with UnconnectedWaySnapper
    */

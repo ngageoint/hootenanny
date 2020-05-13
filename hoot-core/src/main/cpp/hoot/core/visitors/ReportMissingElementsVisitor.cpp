@@ -92,7 +92,52 @@ void ReportMissingElementsVisitor::visit(const ConstElementPtr& e)
   }
   else
   {
+    // TODO: This isn't really an RO anymore with the addition of tagging.
     _visitRo(e->getElementType(), e->getId());
+  }
+}
+
+void ReportMissingElementsVisitor::_updateWay(const WayPtr& way, const QStringList& missingChildIds)
+{
+  if ( missingChildIds.size() > 0)
+  {
+    if (_markWaysForReview && !ReviewMarker::isNeedsReview(_map->shared_from_this(), way))
+    {
+      _reviewMarker.mark(
+        _map->shared_from_this(), way,
+        way->getElementId().toString() + ", name: " + way->getTags().getName() +
+          "; Missing way node(s): " + missingChildIds.join(","),
+        QString::fromStdString(getClassName()), 1.0);
+    }
+
+    if (!_wayKvp.trimmed().isEmpty())
+    {
+      way->getTags().appendValue(_wayKvp);
+    }
+  }
+}
+
+void ReportMissingElementsVisitor::_updateRelation(const RelationPtr& relation,
+                                                   const QStringList& missingChildIds)
+{
+  if ( missingChildIds.size() > 0)
+  {
+    if (_markRelationsForReview &&
+          !ReviewMarker::isNeedsReview(_map->shared_from_this(), relation))
+    {
+      _reviewMarker.mark(
+        _map->shared_from_this(), relation,
+        relation->getElementId().toString() + ", name: " + relation->getTags().getName() +
+          ", type: " + relation->getType() +
+          ", Missing relation member(s): " + missingChildIds.join(","),
+        QString::fromStdString(getClassName()), 1.0);
+        LOG_TRACE("Marked " << relation->getElementId() << " for review.");
+    }
+
+    if (!_relationKvp.trimmed().isEmpty())
+    {
+      relation->getTags().appendValue(_relationKvp);
+    }
   }
 }
 
@@ -102,7 +147,7 @@ void ReportMissingElementsVisitor::_visitRo(ElementType type, long id)
 
   if (type == ElementType::Way)
   {
-    const ConstWayPtr& way = _map->getWay(id);
+    const WayPtr& way = _map->getWay(id);
     for (size_t i = 0; i < way->getNodeCount(); i++)
     {
       if (_map->containsNode(way->getNodeIds()[i]) == false)
@@ -113,19 +158,11 @@ void ReportMissingElementsVisitor::_visitRo(ElementType type, long id)
       }
     }
 
-    if (_markWaysForReview && missingChildIds.size() > 0 &&
-        !ReviewMarker::isNeedsReview(_map->shared_from_this(), way))
-    {
-      _reviewMarker.mark(
-        _map->shared_from_this(), way,
-        way->getElementId().toString() + ", name: " + way->getTags().getName() +
-          "; Missing way node(s): " + missingChildIds.join(","),
-        QString::fromStdString(getClassName()), 1.0);
-    }
+    _updateWay(way, missingChildIds);
   }
   else if (type == ElementType::Relation)
   {
-    const ConstRelationPtr& relation = _map->getRelation(id);
+    const RelationPtr& relation = _map->getRelation(id);
     for (size_t i = 0; i < relation->getMembers().size(); i++)
     {
       const RelationData::Entry& e = relation->getMembers()[i];
@@ -137,17 +174,7 @@ void ReportMissingElementsVisitor::_visitRo(ElementType type, long id)
       }
     }
 
-    if (_markRelationsForReview && missingChildIds.size() > 0 &&
-        !ReviewMarker::isNeedsReview(_map->shared_from_this(), relation))
-    {
-      _reviewMarker.mark(
-        _map->shared_from_this(), relation,
-        relation->getElementId().toString() + ", name: " + relation->getTags().getName() +
-          ", type: " + relation->getType() +
-          ", Missing relation member(s): " + missingChildIds.join(","),
-        QString::fromStdString(getClassName()), 1.0);
-      LOG_TRACE("Marked " << relation << " for review.");
-    }
+    _updateRelation(relation, missingChildIds);
   }
 }
 
@@ -180,15 +207,7 @@ void ReportMissingElementsVisitor::_visitRw(ElementType type, long id)
       LOG_TRACE("Way nodes size after: " << way->getNodeCount());
     } 
 
-    if (_markWaysForReview && missingChildIds.size() > 0 &&
-        !ReviewMarker::isNeedsReview(_map->shared_from_this(), way))
-    {
-      _reviewMarker.mark(
-        _map->shared_from_this(), way,
-        way->getElementId().toString() + ", name: " + way->getTags().getName() +
-          "; Missing way node(s): " + missingChildIds.join(","),
-        QString::fromStdString(getClassName()), 1.0);
-    }
+    _updateWay(way, missingChildIds);
   }
   else if (type == ElementType::Relation)
   {
@@ -216,17 +235,7 @@ void ReportMissingElementsVisitor::_visitRw(ElementType type, long id)
       LOG_TRACE("Relation members size after: " << relation->getMembers().size());
     }
 
-    if (_markRelationsForReview && missingChildIds.size() > 0 &&
-        !ReviewMarker::isNeedsReview(_map->shared_from_this(), relation))
-    {
-      _reviewMarker.mark(
-        _map->shared_from_this(), relation,
-        relation->getElementId().toString() + ", name: " + relation->getTags().getName() +
-          ", type: " + relation->getType() +
-          ", Missing relation member(s): " + missingChildIds.join(","),
-        QString::fromStdString(getClassName()), 1.0);
-      LOG_TRACE("Marked " << relation << " for review.");
-    }
+    _updateRelation(relation, missingChildIds);
   }
 }
 

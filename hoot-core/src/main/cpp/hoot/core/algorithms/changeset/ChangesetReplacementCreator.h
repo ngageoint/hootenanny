@@ -248,7 +248,10 @@ private:
   OsmMapPtr _loadRefMap(const QString& input);
   OsmMapPtr _loadSecMap(const QString& input);
 
-  void _markRelationsWithMissingMembersForReview(OsmMapPtr& map);
+  /*
+   * TODO
+   */
+  void _markElementsWithMissingChildren(OsmMapPtr& map);
 
   /*
    * Keeps track of the changeset versions for features

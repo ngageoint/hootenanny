@@ -40,8 +40,8 @@ namespace hoot
 
 /**
  * Reports references to missing elements in a given map. If removeMissing is set to true, then
- * all missing references are removed. The option also exists to mark elements with missing children
- * as needing review.
+ * all missing references are removed. The option also exists to either mark elements with missing
+ * children as needing review or add a custom tag to the elements.
  */
 class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
   public Configurable
@@ -75,6 +75,8 @@ public:
   void setMaxReport(int maxReport) { _maxReport = maxReport; }
   void setMarkWaysForReview(bool mark) { _markWaysForReview = mark; }
   void setMarkRelationsForReview(bool mark) { _markRelationsForReview = mark; }
+  void setWayKvp(QString kvp) { _wayKvp = kvp; }
+  void setRelationKvp(QString kvp) { _relationKvp = kvp; }
 
 protected:
 
@@ -91,9 +93,16 @@ protected:
   bool _markRelationsForReview;
   ReviewMarker _reviewMarker;
 
+  // TODO
+  QString _wayKvp;
+  QString _relationKvp;
+
   virtual void _reportMissing(ElementId referer, ElementId missing);
   virtual void _visitRo(ElementType type, long id);
   virtual void _visitRw(ElementType type, long id);
+
+  void _updateWay(const WayPtr& way, const QStringList& missingChildIds);
+  void _updateRelation(const RelationPtr& relation, const QStringList& missingChildIds);
 };
 
 }
