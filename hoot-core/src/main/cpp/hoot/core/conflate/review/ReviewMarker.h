@@ -98,8 +98,8 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  void mark(const OsmMapPtr& map, const ElementPtr& e1, const ElementPtr& e2, const QString& note,
-            const QString& reviewType, double score = -1,
+  void mark(const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
+            const QString& note, const QString& reviewType, double score = -1,
             std::vector<QString> choices = std::vector<QString>());
 
   /**
@@ -117,7 +117,7 @@ public:
   /**
    * Marks a single element as needing review.
    */
-  void mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
+  void mark(const OsmMapPtr& map, const ConstElementPtr& e, const QString& note,
             const QString& reviewType, double score = -1,
             std::vector<QString> choices = std::vector<QString>());
 

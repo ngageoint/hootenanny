@@ -134,6 +134,21 @@ public:
    */
   static std::shared_ptr<ElementVisitorInputStream> getVisitorInputStream(
     const QString& input, const QString& visitorClassName, const bool useDataSourceIds = false);
+
+  /**
+   * Determines if an input string is a URL by the hoot definition
+   *
+   * @param str string to examine
+   * @return true if the input is a hoot URL, false otherwise
+   */
+  static bool isUrl(const QString& str);
+
+  /**
+   * Writes an output directory
+   *
+   * @param dirName name of the directory to write
+   */
+  static void writeOutputDir(const QString& dirName);
 };
 
 }

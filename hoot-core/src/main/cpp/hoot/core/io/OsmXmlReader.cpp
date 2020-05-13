@@ -97,9 +97,18 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setUseFileStatus(configOptions.getReaderUseFileStatus()),
   setAddSourceDateTime(configOptions.getReaderAddSourceDatetime());
   setPreserveAllTags(configOptions.getReaderPreserveAllTags());
-  setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
   setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
+  // If a bounds was set and we don't want to remove missing elements as a result of cropping, we
+  // need to modify the reader to allow reading in the missing refs.
+  if (!_bounds.isNull() && !configOptions.getConvertBoundingBoxRemoveMissingElements())
+  {
+    setAddChildRefsWhenMissing(true);
+  }
+  else
+  {
+    setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
+  }
   setKeepImmediatelyConnectedWaysOutsideBounds(
     configOptions.getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
   setWarnOnVersionZeroElement(configOptions.getReaderWarnOnZeroVersionElement());
@@ -459,7 +468,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 
-  // Should we be using RemoveMissingElementsVisitor here instead?
+  // If cropping was run with missing element being removed, then this shouldn't be necessary.
   ReportMissingElementsVisitor visitor;
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);

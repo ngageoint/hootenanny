@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * Removes all relations that have no members.  This needs to be an op, rather than a visitor, so
+ * Removes all relations that have no members. This needs to be an op, rather than a visitor, so
  * that we can delete relations that are children of other relations.
  */
 class RemoveEmptyRelationsOp : public OsmMapOperation

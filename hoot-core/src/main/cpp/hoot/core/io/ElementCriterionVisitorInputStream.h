@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCRITERIONVISITORINPUTSTREAM_H
 #define ELEMENTCRITERIONVISITORINPUTSTREAM_H
@@ -48,23 +48,22 @@ class ElementCriterionVisitorInputStream : public ElementInputStream
 public:
 
   /**
+   * Creates a filtered stream of elements
    *
-   *
-   * @param elementSource
-   * @param criterion
-   * @param visitor
+   * @param elementSource source of the element stream
+   * @param criterion criteria to filter the stream with
+   * @param visitor an element visitor to filter the stream with
    */
   ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
                                      const ElementCriterionPtr& criterion,
                                      const ElementVisitorPtr& visitor);
 
   /**
-   * @brief ElementCriterionInputStream
-   * @param elementSource The stream used to read elements from
-   * @param criterion If this criterion is satisfied then the element is included, otherwise the
-   *    element is dropped.
-   * @param visitors The operations that should be performed on elements that are read from the
-   * input source before being returned
+   * Creates a filtered stream of elements
+   *
+   * @param elementSource source of the element stream
+   * @param criterion riteria to filter the stream with
+   * @param visitors an element visitor to filter the stream with
    */
   ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
                                      const ElementCriterionPtr& criterion,

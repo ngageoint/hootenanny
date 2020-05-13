@@ -31,6 +31,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/WayUtils.h>
 
 // Qt
 #include <QCryptographicHash>
@@ -49,6 +50,7 @@ _collectHashes(false)
   {
     throw IllegalArgumentException("CalculateHashVisitor must either write or collect hashes.");
   }
+  _nonMetadataIgnoreKeys = ConfigOptions().getCalculateHashVisitorNonMetadataIgnoreKeys();
 }
 
 QString CalculateHashVisitor::toJson(const ConstElementPtr& e)
@@ -56,25 +58,25 @@ QString CalculateHashVisitor::toJson(const ConstElementPtr& e)
   QString result;
   if (e->getElementType() == ElementType::Node)
   {
-    result = _toNodeJson(std::dynamic_pointer_cast<const Node>(e));
+    result = _toJson(std::dynamic_pointer_cast<const Node>(e));
   }
   else if (e->getElementType() == ElementType::Way)
   {
-    result =  _toWayJson(std::dynamic_pointer_cast<const Way>(e));
+    result = _toJson(std::dynamic_pointer_cast<const Way>(e));
   }
   else if (e->getElementType() == ElementType::Relation)
   {
-    result =  _toRelationJson(std::dynamic_pointer_cast<const Relation>(e));
+    result = _toJson(std::dynamic_pointer_cast<const Relation>(e));
   }
-  LOG_VART(result);
+  //LOG_VART(result);
   return result;
 }
 
-QString CalculateHashVisitor::_toNodeJson(const ConstNodePtr& node)
+QString CalculateHashVisitor::_toJson(const ConstNodePtr& node)
 {
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"node\",\"tags\":{";
 
-  result += _toInfoTagsJson(node->getTags(), node->getRawCircularError());
+  result += _toJson(node->getTags(), node->getRawCircularError());
 
   const int coordinateComparisonSensitivity =
     ConfigOptions().getNodeComparisonCoordinateSensitivity();
@@ -87,7 +89,7 @@ QString CalculateHashVisitor::_toNodeJson(const ConstNodePtr& node)
   return result;
 }
 
-QString CalculateHashVisitor::_toWayJson(const ConstWayPtr& way)
+QString CalculateHashVisitor::_toJson(const ConstWayPtr& way)
 {
   if (_map == 0)
   {
@@ -96,16 +98,20 @@ QString CalculateHashVisitor::_toWayJson(const ConstWayPtr& way)
 
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"way\",\"tags\":{";
 
-  result += _toInfoTagsJson(way->getTags(), way->getRawCircularError());
+  result += _toJson(way->getTags(), way->getRawCircularError());
 
   result += "},\"nodes\":[";
   const std::vector<long>& nodeIds = way->getNodeIds();
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
-    result += _toNodeJson(_map->getNode(nodeIds[i]));
-    if (i != (nodeIds.size() - 1))
+    ConstNodePtr node = _map->getNode(nodeIds[i]);
+    if (node)
     {
-      result += ",";
+      result += _toJson(node);
+      if (i != (nodeIds.size() - 1))
+      {
+        result += ",";
+      }
     }
   }
   result += "]}}";
@@ -113,7 +119,7 @@ QString CalculateHashVisitor::_toWayJson(const ConstWayPtr& way)
   return result;
 }
 
-QString CalculateHashVisitor::_toRelationJson(const ConstRelationPtr& relation)
+QString CalculateHashVisitor::_toJson(const ConstRelationPtr& relation)
 {
   if (_map == 0)
   {
@@ -122,16 +128,20 @@ QString CalculateHashVisitor::_toRelationJson(const ConstRelationPtr& relation)
 
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"relation\",\"tags\":{";
 
-  result += _toInfoTagsJson(relation->getTags(), relation->getRawCircularError());
+  result += _toJson(relation->getTags(), relation->getRawCircularError());
 
   result += "},\"members\":[";
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
-    result += toJson(_map->getElement(relationMembers[i].getElementId()));
-    if (i != (relationMembers.size() - 1))
+    ConstElementPtr member = _map->getElement(relationMembers[i].getElementId());
+    if (member)
     {
-      result += ",";
+      result += toJson(member);
+      if (i != (relationMembers.size() - 1))
+      {
+        result += ",";
+      }
     }
   }
   result += "]}}";
@@ -139,7 +149,7 @@ QString CalculateHashVisitor::_toRelationJson(const ConstRelationPtr& relation)
   return result;
 }
 
-QString CalculateHashVisitor::_toInfoTagsJson(const Tags& tags, const double ce)
+QString CalculateHashVisitor::_toJson(const Tags& tags, const double ce)
 {
   QString result;
 
@@ -149,11 +159,13 @@ QString CalculateHashVisitor::_toInfoTagsJson(const Tags& tags, const double ce)
   foreach (QString key, tags.keys())
   {
     QString v = tags[key];
-    if (OsmSchema::getInstance().isMetaData(key, v) == false)
+    if (!_nonMetadataIgnoreKeys.contains(key) &&
+        OsmSchema::getInstance().isMetaData(key, v) == false)
     {
       infoTags[key] = v;
     }
   }
+  //LOG_VART(infoTags.keys());
 
   if (_includeCe)
   {
@@ -178,7 +190,7 @@ QString CalculateHashVisitor::_toInfoTagsJson(const Tags& tags, const double ce)
     first = false;
   }
 
-  LOG_VART(result);
+  //LOG_VART(result);
   return result;
 }
 
@@ -196,17 +208,29 @@ QString CalculateHashVisitor::toHashString(const ConstElementPtr& e)
 
 void CalculateHashVisitor::visit(const ElementPtr& e)
 {
-  // don't calculate hashes on review relations.
+  // don't calculate hashes on review relations
   if (ReviewMarker::isReview(e) == false)
   {
+    LOG_VART(e->getElementId());
+
     const QString hash = toHashString(e);
+    LOG_VART(hash);
+
     if (_writeHashes)
     {
       e->getTags()[MetadataTags::HootHash()] = hash;
     }
     if (_collectHashes)
     {
-      _hashesToElementIds[hash] = e->getElementId();
+      if (_hashesToElementIds.contains(hash))
+      {
+        _duplicates.insert(
+          std::pair<ElementId, ElementId>(_hashesToElementIds[hash], e->getElementId()));
+      }
+      else
+      {
+        _hashesToElementIds[hash] = e->getElementId();
+      }
     }
   }
 }
