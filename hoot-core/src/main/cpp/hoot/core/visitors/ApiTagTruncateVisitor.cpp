@@ -35,17 +35,40 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ApiTagTruncateVisitor)
 
+ApiTagTruncateVisitor::ApiTagTruncateVisitor()
+  : _maxLength(ConfigOptions().getMaxTagLength())
+{
+}
+
 void ApiTagTruncateVisitor::visit(const ElementPtr& e)
 {
   Tags& tags = e->getTags();
-  bool elementAffected = truncateTags(tags);
+  bool elementAffected = _truncateTags(tags);
   //  Update the statistics
   _numProcessed++;
   if (elementAffected)
     _numAffected++;
 }
 
+void ApiTagTruncateVisitor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions configOptions(conf);
+  _maxLength = configOptions.getMaxTagLength();
+}
+
 bool ApiTagTruncateVisitor::truncateTags(Tags& tags)
+{
+  ApiTagTruncateVisitor visitor;
+  return visitor._truncateTags(tags);
+}
+
+QString ApiTagTruncateVisitor::truncateTag(const QString &key, const QString &value)
+{
+  ApiTagTruncateVisitor visitor;
+  return visitor._truncateTag(key, value);
+}
+
+bool ApiTagTruncateVisitor::_truncateTags(Tags& tags)
 {
   bool tagsAffected = false;
   //  Iterate all tags looking for ones that are too long or the special cases
@@ -65,7 +88,7 @@ bool ApiTagTruncateVisitor::truncateTags(Tags& tags)
   return tagsAffected;
 }
 
-QString ApiTagTruncateVisitor::truncateTag(const QString &key, const QString &value)
+QString ApiTagTruncateVisitor::_truncateTag(const QString &key, const QString &value)
 {
   QString result;
   //  First check the special cases of lists where only one value is kept
@@ -78,20 +101,33 @@ QString ApiTagTruncateVisitor::truncateTag(const QString &key, const QString &va
     if (values.count() > 1)
       result = values.last();
   }
-  else if (value.length() > 255)
+  else if (value.length() > _maxLength)
   {
-    //  Truncate values greater than 255
+    //  Truncate values greater than max length
     if (value.contains(";"))
     {
-      //  These values are lists that will be truncated at a split point before or at the 255 mark
-      int index = value.lastIndexOf(";", 255);
-      if (index == -1)
-        index = 255;
-      //  Truncate at the index
-      result = value.left(index);
+      int index = value.lastIndexOf(";", _maxLength);
+      //  Some data could come in HTML encoded, don't drop everything after that
+      if (value.contains("&"))  //  as in '&gt;'
+      {
+        int amp = value.lastIndexOf("&", _maxLength);
+        if (amp > index)
+          result = value.left(amp);
+        else
+          result = value.left(_maxLength);
+      }
+      else
+      {
+        //  These values are lists that will be truncated at a split point before or at the max length mark
+        int index = value.lastIndexOf(";", _maxLength);
+        if (index == -1)
+          index = _maxLength;
+        //  Truncate at the index
+        result = value.left(index);
+      }
     }
-    else  //  Just truncate after character 255
-      result = value.left(255);
+    else  //  Just truncate after character max length
+      result = value.left(_maxLength);
   }
   return result;
 }

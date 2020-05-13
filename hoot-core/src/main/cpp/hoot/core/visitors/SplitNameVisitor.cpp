@@ -36,14 +36,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SplitNameVisitor)
 
-SplitNameVisitor::SplitNameVisitor() :
-_maxSize(255)
+SplitNameVisitor::SplitNameVisitor()
+  : _maxSize(ConfigOptions().getMaxTagLength())
 {
 }
 
 void SplitNameVisitor::setConfiguration(const Settings& conf)
 {
-  _maxSize = ConfigOptions(conf).getSplitNameVisitorMaxLength();
+  _maxSize = ConfigOptions(conf).getMaxTagLength();
 }
 
 void SplitNameVisitor::_addExtraNames(Tags& t, const QStringList& extraNames)
