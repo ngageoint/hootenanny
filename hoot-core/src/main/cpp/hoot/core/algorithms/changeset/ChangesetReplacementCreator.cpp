@@ -522,10 +522,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren();
   if (markMissing)
   {
-    // Find any relations with missing members and mark them for review, as its possible we'll break
-    // them during this process. There's really nothing that can be done about that, since we don't
-    // have access to the missing members. Any relations with missing members may require manual
-    // cleanup after changeset application.
+    // Find any elements with missing children and tag them with a custom tag, as its possible we'll
+    // break them during this process. There's really nothing that can be done about that, since we
+    // don't have access to the missing children elements. Any elements with missing children may
+    // require manual cleanup after the resulting changeset is applied.
     _markElementsWithMissingChildren(refMap);
   }
 
@@ -1186,7 +1186,9 @@ void ChangesetReplacementCreator::_markElementsWithMissingChildren(OsmMapPtr& ma
   // Originally, this was going to add reviews rather than tagging elements but there was an ID
   // provenance problem with reviews.
   elementMarker.setMarkRelationsForReview(false);
+  elementMarker.setMarkWaysForReview(false);
   elementMarker.setRelationKvp(MetadataTags::HootMissingChild() + "=yes");
+  elementMarker.setWayKvp(MetadataTags::HootMissingChild() + "=yes");
   LOG_STATUS("\t" << elementMarker.getInitStatusMessage());
   map->visitRelationsRw(elementMarker);
   LOG_STATUS("\t" << elementMarker.getCompletedStatusMessage());
