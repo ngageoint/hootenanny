@@ -88,12 +88,11 @@ void ReportMissingElementsVisitor::visit(const ConstElementPtr& e)
 {    
   if (_removeMissing)
   {
-    _visitRw(e->getElementType(), e->getId());
+    _visitAndRemove(e->getElementType(), e->getId());
   }
   else
   {
-    // TODO: This isn't really an RO anymore with the addition of tagging.
-    _visitRo(e->getElementType(), e->getId());
+    _visitAndReport(e->getElementType(), e->getId());
   }
 }
 
@@ -141,7 +140,7 @@ void ReportMissingElementsVisitor::_updateRelation(const RelationPtr& relation,
   }
 }
 
-void ReportMissingElementsVisitor::_visitRo(ElementType type, long id)
+void ReportMissingElementsVisitor::_visitAndReport(ElementType type, long id)
 { 
   QStringList missingChildIds;
 
@@ -178,7 +177,7 @@ void ReportMissingElementsVisitor::_visitRo(ElementType type, long id)
   }
 }
 
-void ReportMissingElementsVisitor::_visitRw(ElementType type, long id)
+void ReportMissingElementsVisitor::_visitAndRemove(ElementType type, long id)
 {
   QStringList missingChildIds;
 

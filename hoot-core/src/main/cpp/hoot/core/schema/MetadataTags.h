@@ -177,7 +177,8 @@ public:
   inline static const QString HootApiDbScheme()         { return "hootapidb"; }
 
   /**
-   * TODO
+   * This is used by ChangesetReplacementCreator to focus attention on input elements with missing
+   * child references so that they may later be cleaned up.
    */
   inline static const QString HootMissingChild()        { return "hoot:missing_child"; }
 

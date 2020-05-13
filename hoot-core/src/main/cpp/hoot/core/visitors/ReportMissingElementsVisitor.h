@@ -93,13 +93,13 @@ protected:
   bool _markRelationsForReview;
   ReviewMarker _reviewMarker;
 
-  // TODO
+  // allows for custom tagging any elements with missing children as needing review
   QString _wayKvp;
   QString _relationKvp;
 
   virtual void _reportMissing(ElementId referer, ElementId missing);
-  virtual void _visitRo(ElementType type, long id);
-  virtual void _visitRw(ElementType type, long id);
+  virtual void _visitAndReport(ElementType type, long id);
+  virtual void _visitAndRemove(ElementType type, long id);
 
   void _updateWay(const WayPtr& way, const QStringList& missingChildIds);
   void _updateRelation(const RelationPtr& relation, const QStringList& missingChildIds);

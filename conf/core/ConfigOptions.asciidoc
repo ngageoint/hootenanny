@@ -621,8 +621,9 @@ before calculating the changeset.
 * Data Type: bool
 * Default Value: `true`
 
-If enabled, any relations encountered by changeset replacement derivation with missing members will
-be marked for review. TODO
+If enabled, any way having references to nodes whose source elements do not exist or relation having
+references to members whose source elements do not exist will have a custom tag added to them to
+signal that the feature may need manual cleanup.
 
 === changeset.replacement.pass.conflate.reviews
 

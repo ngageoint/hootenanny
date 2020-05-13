@@ -249,7 +249,7 @@ private:
   OsmMapPtr _loadSecMap(const QString& input);
 
   /*
-   * TODO
+   * Adds a custom tag to any element from the input with a missing child
    */
   void _markElementsWithMissingChildren(OsmMapPtr& map);
 
