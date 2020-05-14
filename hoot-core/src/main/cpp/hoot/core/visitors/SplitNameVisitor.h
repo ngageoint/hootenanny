@@ -48,20 +48,20 @@ public:
 
   void setMaxSize(int s) { _maxSize = s; }
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const
-  { return "Splits name tags over 255 characters"; }
+  QString getDescription() const override
+  { return QString("Splits name tags over %1 characters").arg(_maxSize); }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " building outlines"; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual std::string getClassName() const { return className(); }
+  std::string getClassName() const override { return className(); }
 
 private:
 

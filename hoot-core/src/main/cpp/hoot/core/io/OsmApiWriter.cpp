@@ -208,6 +208,8 @@ bool OsmApiWriter::apply()
       }
       else
       {
+        //  Indicate to the worker threads that there is work to be done
+        _startWork();
         //  Allow time for the worker threads to complete some work
         this_thread::yield();
       }

@@ -262,7 +262,7 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
       map2->visitRw(removeElementsVisitor);
     }
 
-    // Truncate tags over 255 characters to push into OSM API.
+    // Truncate tags over max tag length characters to push into OSM API.
     ApiTagTruncateVisitor truncateTags;
     map1->visitRw(truncateTags);
     map2->visitRw(truncateTags);
@@ -545,7 +545,7 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
     _currentTaskNum++;
   }
 
-  // Truncate tags over 255 characters to push into OSM API.
+  // Truncate tags over max tag length characters to push into OSM API.
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Preparing tags for changeset...");
   ApiTagTruncateVisitor truncateTags;
@@ -607,7 +607,7 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
         std::shared_ptr<TagKeyCriterion>(
           new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
   }
-  // Tags need to be truncated if they are over 255 characters.
+  // Tags need to be truncated if they are over max tag length characters.
   visitors.append(std::shared_ptr<ApiTagTruncateVisitor>(new ApiTagTruncateVisitor()));
 
   // open a stream to the input data
