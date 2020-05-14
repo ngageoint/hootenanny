@@ -55,6 +55,7 @@ public:
     _forceToRndList.append("build-model");
     _forceToRndList.append("login");
     _forceToRndList.append("logout");
+    _forceToRndList.append("node-density-plot");
     _forceToRndList.append("optimize-network-conf");
     _forceToRndList.append("perty");
     _forceToRndList.append("score-matches");
@@ -164,11 +165,29 @@ private:
     LOG_VART(rndCmds.size());
 
     // Please update the asciidoc user documentation if you change this usage.
-    cout << "usage: hoot <command> [--trace] [--debug] [--status] [--warn] [--error] " <<
-            "[-D name=value] [-C <config file path>] [<args>]\n";
+    cout << "Usage: hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] " <<
+            "[-D optionName=\"<optionValueEntry 1>;<optionValueEntry 2>;...\"] [args]"
+         << endl << endl;
+
+    cout << "Log Levels:" << endl;
+    cout << "  --trace" << endl;
+    cout << "  --debug" << endl;
+    cout << "  --info" << endl;
+    cout << "  --status" << endl;
+    cout << "  --warn" << endl;
+    cout << "  --error" << endl;
     cout << endl;
-    cout << "For detailed command help type: hoot help (command name)\n"
-            "\n";
+
+    cout << "List Option Operations:" << endl;
+    cout << "  Append:  [-D optionName+=optionValueEntry]" << endl;
+    cout << "  Prepend: [-D optionName++=optionValueEntry]" << endl;
+    cout << "  Remove:  [-D optionName-=optionValueEntry]" << endl;
+    cout << "  Replace: [-D optionName=\"<old optionValueEntry 1>-><new optionValueEntry 1>;<old optionValueEntry 2>-><new optionValueEntry 2>\"...]"
+         << endl;
+    cout << endl;
+
+    cout << "For detailed command help type: hoot help (command name)" << endl << endl;
+
     _printCommands(coreCmds);
     cout << endl << "Advanced:" << endl << endl;
     _printCommands(rndCmds);
