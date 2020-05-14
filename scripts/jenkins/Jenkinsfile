@@ -89,7 +89,8 @@ pipeline {
                 anyOf {
                     // Configure for sonar if user selected it, pull-request, or nightly run of master
                     expression { return params.Sonar }
-                    changeRequest()
+//  UNCOMMENT AFTER SONAR IS FIXED
+//                    changeRequest()
                     allOf {
                         triggeredBy 'TimerTrigger'
                         branch 'master'
@@ -151,7 +152,8 @@ pipeline {
             when {
                 anyOf {
                     expression { return params.Sonar }
-                    changeRequest()
+//  UNCOMMENT AFTER SONAR IS FIXED
+//                    changeRequest()
                     allOf {
                         triggeredBy 'TimerTrigger'
                         branch 'master'
