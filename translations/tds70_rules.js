@@ -3600,9 +3600,7 @@ tds70.rules = {
     ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
 
     // ZVH_VDT - Highest Elevation <vertical datum> - See VDT
-
   ], // End one2one
->>>>>>> origin/master
 
   // Input Translation Rules:
   // These are only used for IMPORT and get added to the standard one2one rules
