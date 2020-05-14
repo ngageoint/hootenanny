@@ -211,6 +211,9 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
+
   // TODO: should not have to call this; enabling this breaks river conflation
   /*if (!isLinearWaterway(e1) && !isLinearWaterway(e2))
   {
@@ -219,9 +222,19 @@ exports.matchScore = function(map, e1, e2)
     hoot.debug("e2: " + e2.getElementId() + ", " + tags2.get("name"));
     return result;
   }*/
+  if (!isLinearWaterway(e1))
+  {
+    hoot.info("not a river:");
+    hoot.info(e1.getElementId() + ", " + tags1.get("name"));
+    hoot.info("mostSpecificType: " + mostSpecificType(e1));
+  }
+  if (!isLinearWaterway(e2))
+  {
+    hoot.info("not a river:");
+    hoot.info(e2.getElementId() + ", " + tags2.get("name"));
+    hoot.info("mostSpecificType: " + mostSpecificType(e2));
+  }
 
-  var tags1 = e1.getTags();
-  var tags2 = e2.getTags();
   hoot.debug("**********************************");
   hoot.debug("e1: " + e1.getElementId() + ", " + tags1.get("name"));
   if (tags1.get("note"))
