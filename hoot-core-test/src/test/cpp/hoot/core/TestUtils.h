@@ -61,11 +61,11 @@ inline QString toQString(const std::string& s)
   return QString::fromStdString(s);
 }
 
-#define HOOT_STR_EQUALS(v1, v2) \
+#define HOOT_STR_EQUALS(expected, actual) \
 { \
   std::stringstream ss1, ss2; \
-  ss1 << v1; \
-  ss2 << v2; \
+  ss1 << expected; \
+  ss2 << actual; \
   CPPUNIT_ASSERT_EQUAL(ss1.str(), ss2.str()); \
 } \
 

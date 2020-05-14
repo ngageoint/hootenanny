@@ -2319,11 +2319,11 @@ into Hootenanny.
 * Data Type: list
 * Default Value:
 ** `hoot::BuildingMatchCreator`
-** `hoot::ScriptMatchCreator,Poi.js`
 ** `hoot::HighwayMatchCreator`
-** `hoot::ScriptMatchCreator,River.js`
 ** `hoot::PoiPolygonMatchCreator`
 ** `hoot::ScriptMatchCreator,Area.js`
+** `hoot::ScriptMatchCreator,River.js`
+** `hoot::ScriptMatchCreator,Poi.js`
 ** `hoot::ScriptMatchCreator,Railway.js`
 ** `hoot::ScriptMatchCreator,PowerLine.js`
 ** `hoot::ScriptMatchCreator,Point.js`
@@ -2404,6 +2404,15 @@ The Linux utility RLIMIT_AS is used for limiting virtual memory. This is analago
 less RAM will be utilized than the value specified. Typically this is most useful when limiting
 RAM usage of applications in a shared server environment.
 
+=== max.tag.length
+
+* Data Type: int
+* Default Value: `255`
+
+The OSM API imposes a 255 character limit to tag values even though the database doesn't.  It is
+possible to update the OSM API to a different limit and allow Hootenanny to use a larger upper
+limit to tag key/value pairs.
+
 === maximal.subline.spacing
 
 * Data Type: double
@@ -2441,10 +2450,10 @@ notification. The same threshold value is used separately for both used physical
 * Data Type: list
 * Default Value:
 ** `hoot::BuildingMergerCreator`
-** `hoot::ScriptMergerCreator`
 ** `hoot::HighwayMergerCreator`
-** `hoot::ScriptMergerCreator`
 ** `hoot::PoiPolygonMergerCreator`
+** `hoot::ScriptMergerCreator`
+** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
@@ -4480,13 +4489,6 @@ the endpoint way node to the way.
 
 The format used to write the element payload portion of the Spark changeset file.  Valid options are
 'json' or 'xml'.
-
-=== split.name.visitor.max.length
-
-* Data Type: int
-* Default Value: `255`
-
-The maximum length, in characters, that the SplitNameVisitor will allow for a name tag.
 
 === stats.generic.data.file
 
