@@ -25,8 +25,6 @@ exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 
 // used during subline matching
 var sublineMatcherName = hoot.get("waterway.subline.matcher");
-//var longWayLengthThreshold = parseInt(hoot.get("waterway.long.way.length.threshold"));
-//var longWayNodeCountThreshold = parseInt(hoot.get("waterway.long.way.node.count.threshold"));
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
@@ -141,37 +139,6 @@ function nameMismatch(map, e1, e2)
   return false;
 }
 
-/*function areLongWays(map, e1, e2) // TODO: move
-{
-  var length1 = 0;
-  var length2 = 0;
-  // TODO: Why would anything but ways be here based on the fact LinearWaterwayCriterion only accepts ways? 
-  // Saw some non-ways during match conflict resolution.
-  if (e1.getElementId().getType() == "Way")
-  {
-    length1 = getLength(map, e1);
-  }
-  if (e2.getElementId().getType() == "Way")
-  {
-    length2 = getLength(map, e2);
-  }
-  hoot.debug("Processing ways of length: " + length1 + ", " + length2 + "...");
-
-  var nodeCount1 = 0;
-  var nodeCount2 = 0;
-  if (e1.getElementId().getType() == "Way")
-  {
-    nodeCount1 = e1.getNodeCount();
-  }
-  if (e2.getElementId().getType() == "Way")
-  {
-    nodeCount2 = e2.getNodeCount();
-  }
-  hoot.debug("Processing ways with node count: " + nodeCount1 + ", " + nodeCount2 + "...");
-
-  return (length1 + length2) > longWayLengthThreshold || (nodeCount1 + nodeCount2) > longWayNodeCountThreshold;
-}*/
-
 function geometryMismatch(map, e1, e2)
 {
   var longRivers = isLongRiverPair(map, e1, e2);
@@ -192,7 +159,6 @@ function geometryMismatch(map, e1, e2)
     // performance, but it didn't help.
     hoot.debug("Extracting sublines with Frechet...");
     sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
-    //sublineMatcherUsed = "hoot::FrechetSublineMatcher";
   }
 
   if (sublines)
@@ -245,7 +211,7 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  // TODO: should not have to call this
+  // TODO: should not have to call this; enabling this breaks river conflation
   /*if (!isLinearWaterway(e1) && !isLinearWaterway(e2))
   {
     hoot.debug("one is not a river:");
@@ -291,30 +257,6 @@ exports.matchScore = function(map, e1, e2)
   return result;
 };
 
-/*function getSublineMatcherUsed(map, pairs)
-{
-  for (var i = 0; i < pairs.length; i++)
-  { 
-    var elementsStr = String(pairs[i]); // Way(-1),Way(-2)...
-    var elementsStrParts = elementsStr.split(",");
-    for (var j = 0; j < elementsStrParts.length; j++)
-    {
-      var elementIdStr = String(elementsStrParts[j]); // Way(-1)
-      var element = map.getElement(elementIdStr);
-      var length = 0;
-      if (element)
-      {
-        var sublineMatcherUsed = element.getTags().get("hoot:subline:matcher:used");
-        if (sublineMatcherUsed != '' && sublineMatcherUsed != null && sublineMatcherUsed != 'undefined')
-        {
-          return sublineMatcherUsed;
-        }
-      }
-    }
-  } 
-  return "";
-}*/
-
 /**
  * The internals of geometry merging can become quite complex. Typically this
  * method will simply call another hoot method to perform the appropriate merging
@@ -332,7 +274,6 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  hoot.debug("Merging...");
   // Snap the ways in the second input to the first input. Use the default tag
   // merge method. Pass the appropriate subline matcher based on what was used during matching.
   return snapRivers(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);

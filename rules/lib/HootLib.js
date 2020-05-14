@@ -46,7 +46,7 @@ function getRelatedTags(relateToKvp, d) {
     var result = [];
     for (var k in d) {
         var kvp = k + '=' + d[k];
-        // TODO: This needs to be updated for features other than POI before its used outside of Poi.js.
+        // This would need to be updated for features other than POI before it could be used outside of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.score(relateToKvp, kvp) > 0) {
                 result.push(kvp);
@@ -78,7 +78,7 @@ function getTagsByCategory(category, d) {
     for (var k in d) {
         var kvp = k + '=' + d[k];
         // if it is not a generic type
-        // TODO: This needs to be updated for features other than POI before its used outside of Poi.js.
+        // This would need to be updated for features other than POI before it could be used outside of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.getCategories(kvp).indexOf(category) >= 0) {
                 result.push(kvp);
