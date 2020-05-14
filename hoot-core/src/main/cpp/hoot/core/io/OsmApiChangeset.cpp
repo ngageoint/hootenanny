@@ -833,7 +833,7 @@ bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, 
             {
               ChangesetRelation* relation_member = dynamic_cast<ChangesetRelation*>(_allRelations[member.getRef()].get());
               //  Don't re-add self referencing relations
-              if (relation->id() != relation_member->id())
+              if (relation_member && relation->id() != relation_member->id())
                 addRelation(changeset, type, relation_member);
             }
           }
@@ -1931,35 +1931,88 @@ void XmlChangeset::failChangeset(const ChangesetInfoPtr& changeset)
 
 void XmlChangeset::failNode(long id, bool beforeSend)
 {
-  //  Set the node's status to failed
-  _allNodes[id]->setStatus(ChangesetElement::ElementStatus::Failed);
+  //  Validate the ID
+  if (_allNodes.find(id) == _allNodes.end() || !_allNodes[id])
+    return;
+  //  Don't set it twice
+  if (_allNodes[id]->getStatus() == ChangesetElement::ElementStatus::Failed)
+    return;
   //  Update the failed count once
   ++_failedCount;
   //  Update sent count as if we already sent it and it failed
-  if (beforeSend)
+  if (beforeSend || _allNodes[id]->getStatus() == ChangesetElement::ElementStatus::Available)
     ++_sentCount;
+  //  Set the node's status to failed
+  _allNodes[id]->setStatus(ChangesetElement::ElementStatus::Failed);
+  //  When a node fails to be created, any parent ways must fail also
+  //  Along with any parent relations
+  if (_nodes[TypeCreate].find(id) != _nodes[TypeCreate].end())
+  {
+    //  Fail parent ways
+    if (_nodeIdsToWays.find(id) != _nodeIdsToWays.end())
+    {
+      const std::set<long>& parents = _nodeIdsToWays[id];
+      for (std::set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
+        failWay(*it, beforeSend);
+    }
+    //  Fail parent relations
+    if (_nodeIdsToRelations.find(id) != _nodeIdsToRelations.end())
+    {
+      const std::set<long>& parents = _nodeIdsToRelations[id];
+      for (std::set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
+        failRelation(*it, beforeSend);
+    }
+  }
 }
 
 void XmlChangeset::failWay(long id, bool beforeSend)
 {
-  //  Set the way's status to failed
-  _allWays[id]->setStatus(ChangesetElement::ElementStatus::Failed);
+  //  Validate the ID
+  if (_allWays.find(id) == _allWays.end() || !_allWays[id])
+    return;
+  //  Don't set it twice
+  if (_allWays[id]->getStatus() == ChangesetElement::ElementStatus::Failed)
+    return;
   //  Update the failed count once
   ++_failedCount;
   //  Update sent count as if we already sent it and it failed
-  if (beforeSend)
+  if (beforeSend || _allWays[id]->getStatus() == ChangesetElement::ElementStatus::Available)
     ++_sentCount;
+  //  Set the way's status to failed
+  _allWays[id]->setStatus(ChangesetElement::ElementStatus::Failed);
+  //  When a way fails to be created, any parent relations must fail also
+  if (_ways[TypeCreate].find(id) != _ways[TypeCreate].end() &&
+      _wayIdsToRelations.find(id) != _wayIdsToRelations.end())
+  {
+    const std::set<long>& parents = _wayIdsToRelations[id];
+    for (std::set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
+      failRelation(*it, beforeSend);
+  }
 }
 
 void XmlChangeset::failRelation(long id, bool beforeSend)
 {
-  //  Set the relation's status to failed
-  _allRelations[id]->setStatus(ChangesetElement::ElementStatus::Failed);
+  //  Validate the ID
+  if (_allRelations.find(id) == _allRelations.end() || !_allRelations[id])
+    return;
+  //  Don't set it twice
+  if (_allRelations[id]->getStatus() == ChangesetElement::ElementStatus::Failed)
+    return;
   //  Update the failed count once
   ++_failedCount;
   //  Update sent count as if we already sent it and it failed
-  if (beforeSend)
+  if (beforeSend || _allRelations[id]->getStatus() == ChangesetElement::ElementStatus::Available)
     ++_sentCount;
+  //  Set the relation's status to failed
+  _allRelations[id]->setStatus(ChangesetElement::ElementStatus::Failed);
+  //  When a relation fails to be created, any parent relations must fail also
+  if (_relations[TypeCreate].find(id) != _relations[TypeCreate].end() &&
+      _relationIdsToRelations.find(id) != _relationIdsToRelations.end())
+  {
+    const std::set<long>& parents = _relationIdsToRelations[id];
+    for (std::set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
+      failRelation(*it, beforeSend);
+  }
   LOG_TRACE("Failed relation (" << id << ")");
 }
 

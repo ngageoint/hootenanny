@@ -212,6 +212,10 @@ private:
 
   void _validateInputs(const QString& input1, const QString& input2);
 
+  QString _getJobDescription(
+    const QString& input1, const QString& input2, const QString& bounds,
+    const QString& output) const;
+
   /*
    * Returns the default geometry filters (point, line, poly) to use when no other geometry filters
    * are specified
@@ -245,6 +249,11 @@ private:
   OsmMapPtr _loadSecMap(const QString& input);
 
   /*
+   * Adds a custom tag to any element from the input with a missing child
+   */
+  void _markElementsWithMissingChildren(OsmMapPtr& map);
+
+  /*
    * Keeps track of the changeset versions for features
    */
   QMap<ElementId, long> _getIdToVersionMappings(const OsmMapPtr& map) const;
@@ -272,8 +281,14 @@ private:
    * Combines two maps into one; throwOutDupes ignores any elements in the second map with the ID
    * as an element in the first map
    */
-  void _combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes,
-                    const QString& debugFileName);
+  void _combineMaps(
+    OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes, const QString& debugFileName);
+
+  /*
+   * Removes duplicates between one map and another, ignoring elemment IDs
+   */
+  void _dedupeMaps(const QList<OsmMapPtr>& maps);
+
   /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
    * MetadataTags::HootSnapped()=snapped_way tags
@@ -281,7 +296,7 @@ private:
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 
   void _conflate(OsmMapPtr& map, const bool lenientBounds);
-
+  void _removeConflateReviews(OsmMapPtr& map);
   void _clean(OsmMapPtr& map);
 
   void _snapUnconnectedWays(
@@ -295,7 +310,7 @@ private:
    */
   void _cropMapForChangesetDerivation(
     OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,
-    const bool keepOnlyFeaturesInsideBounds, const bool isLinearMap, const QString& debugFileName);
+    const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName);
 
   /*
    * Populates a reference and a conflated map based on the geometry type being replaced. The maps
@@ -308,7 +323,7 @@ private:
     const GeometryTypeCriterion::GeometryType& geometryType,
     const QStringList& linearFilterClassNames = QStringList());
 
-  void _cleanupMissingElements(OsmMapPtr& map);
+  void _cleanup(OsmMapPtr& map);
 };
 
 }

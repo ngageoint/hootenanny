@@ -53,6 +53,7 @@
 
 using namespace std;
 using namespace Tgs;
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -97,10 +98,11 @@ void SmallHighwayMerger::apply(std::shared_ptr<OsmMap>& map)
 
       // if the way is smaller than the threshold, that isn't a `hoot:special` way
       if (highwayCrit.isSatisfied(w) &&
-          !w->getTags().contains(MetadataTags::HootSpecial()) &&
-          ElementConverter(map).convertToLineString(w)->getLength() <= _threshold)
+          !w->getTags().contains(MetadataTags::HootSpecial()))
       {
-        _mergeNeighbors(w);
+        std::shared_ptr<LineString> linestring = ElementConverter(map).convertToLineString(w);
+        if (linestring && linestring->getLength() <= _threshold)
+          _mergeNeighbors(w);
       }
     }
 

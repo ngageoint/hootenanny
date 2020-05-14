@@ -128,7 +128,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   elements.push_back(e1);
   elements.push_back(e2);
   const bool onlyOneIsABridge =
-    CriterionUtils::constainSatisfyingElements<BridgeCriterion>(elements, 1, true);
+    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, 1, true);
   if (onlyOneIsABridge)
   {
     LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");

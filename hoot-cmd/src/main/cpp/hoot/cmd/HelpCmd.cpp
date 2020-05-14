@@ -53,6 +53,8 @@ public:
     // admittedly may need some testing against real world data before they're ready for the prime
     // time. This makes the command list display a little cleaner and less confusing.
     _forceToRndList.append("build-model");
+    _forceToRndList.append("login");
+    _forceToRndList.append("logout");
     _forceToRndList.append("optimize-network-conf");
     _forceToRndList.append("perty");
     _forceToRndList.append("score-matches");

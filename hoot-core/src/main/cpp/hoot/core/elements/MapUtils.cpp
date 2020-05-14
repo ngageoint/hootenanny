@@ -34,6 +34,7 @@
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/visitors/RemoveUnknownVisitor.h>
 
 namespace hoot
 {
@@ -52,8 +53,19 @@ bool MapUtils::mapIsPointsOnly(const OsmMapPtr& map)
   pointCrit->setOsmMap(map.get());
   return
     (int)FilteredVisitor::getStat(
-      pointCrit, ElementVisitorPtr(new ElementCountVisitor()), map) ==
-    (int)map->getElementCount();
+      pointCrit,
+      ElementVisitorPtr(new ElementCountVisitor()), map) == (int)map->getElementCount();
+}
+
+void MapUtils::splitMapByStatus(
+  OsmMapPtr& sourceMap, OsmMapPtr& unknown1Map, OsmMapPtr& unknown2Map)
+{
+  RemoveUnknown1Visitor remove1Vis;
+  RemoveUnknown2Visitor remove2Vis;
+  unknown1Map.reset(new OsmMap(sourceMap));
+  unknown1Map->visitRw(remove2Vis);
+  unknown2Map.reset(new OsmMap(sourceMap));
+  unknown2Map->visitRw(remove1Vis);
 }
 
 }

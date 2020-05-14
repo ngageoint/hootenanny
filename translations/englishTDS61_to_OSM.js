@@ -29,13 +29,13 @@
 // Convert NFDD English back to OSM+
 //
 
-hoot.require('etds61_osm')
+hoot.require('etds61_osm');
 
 
 function initialize()
 {
-    // Turn off the TDS structure so we just get the raw feature
-    hoot.Settings.set({"ogr.thematic.structure":"false"});
+  // Turn off the TDS structure so we just get the raw feature
+  hoot.Settings.set({'ogr.thematic.structure':'false'});
 }
 
 
@@ -50,18 +50,18 @@ function initialize()
 function translateAttributes(attrs, layerName, geometryType)
 {
 
-    // We use the temp var because nfdd_e.toEnglish returns "attrs" and "tableName"
-    var output = etds61_osm.toOSM(attrs, layerName, geometryType);
+  // We use the temp var because nfdd_e.toEnglish returns "attrs" and "tableName"
+  var output = etds61_osm.toOSM(attrs, layerName, geometryType);
 
-    // Make sure the returned value isn't NULL. This does occur
-    if (output)
-    {
-        return output.attrs;
-    }
-    else
-    {
-        return null;
-    }
+  // Make sure the returned value isn't NULL. This does occur
+  if (output)
+  {
+    return output.attrs;
+  }
+  else
+  {
+    return null;
+  }
 
 } // End of Translate Attributes
 
@@ -71,7 +71,7 @@ function translateAttributes(attrs, layerName, geometryType)
 //    This version converts OSM+ tags to NFDD "English" attributes
 function translateToOgr(tags, elementType, geometryType)
 {
-        return etds61_osm.toOSM(tags, elementType, geometryType)
+  return etds61_osm.toOSM(tags, elementType, geometryType);
 } // End of translateToOgr
 
 

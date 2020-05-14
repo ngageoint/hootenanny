@@ -1,0 +1,55 @@
+test name:  ServiceChangesetReplacementOutOfSpecMixedRelationsTest
+source file 1:  test-files/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/input1.osm
+crop aoi:  -180,-90,180,90
+source file 2:  test-files/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/input2.osm
+REF_CONVERT_OPS:  hoot::SetTagValueVisitor
+SEC_CONVERT_OPS:  hoot::SetTagValueVisitor
+replacement aoi:  -115.184767,36.031262,-115.048556,36.14796
+full replacement:  --full-replacement
+strict bounds:  --strict-bounds
+geometry filters: 
+tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion
+replacement filters: 
+chain replacement filters: 
+replacement filter options: 
+retainment filters: 
+chain retainment filters: 
+retainment filter options: 
+source formats:  xml
+way snap tolerance:  5.0
+existing way node tolerance:  0.5
+disable conflation:  --disable-conflation
+
+Writing the reference dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/input1.osm to an osm api db (contains features to be replaced)...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/ref-original.osm (contains features to be replaced)...
+
+
+Writing the secondary dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/input2.osm to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/sec-original.osm (contains features to replace with)...
+
+
+Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/ref-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/sec-original.osm over: -115.184767,36.031262,-115.048556,36.14796, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/ServiceChangesetReplacementOutOfSpecMixedRelationsTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
+
+
+Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/ServiceChangesetReplacementOutOfSpecMixedRelationsTest-changeset-xml.osc.sql to the reference data in the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=36.1172999, max_lat=36.1203, min_lon=-115.1796999, max_lon=-115.1722999, num_changes=3049
+Node(s) Created: 1447
+Node(s) Modified: 0
+Node(s) Deleted: 1244
+Way(s) Created: 182
+Way(s) Modified: 0
+Way(s) Deleted: 136
+Relation(s) Created: 30
+Relation(s) Modified: 0
+Relation(s) Deleted: 10
+
+Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementOutOfSpecMixedRelationsTest-xml-replaced.osm for verification...
+

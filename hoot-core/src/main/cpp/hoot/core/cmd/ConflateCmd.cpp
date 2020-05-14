@@ -223,12 +223,11 @@ int ConflateCmd::runSimple(QStringList& args)
   const QString input2 = args[1];
   QString output = args[2];
 
-  QFileInfo outputInfo(output);
-  LOG_VARD(outputInfo.dir().absolutePath());
-  const bool outputDirSuccess = QDir().mkpath(outputInfo.dir().absolutePath());
-  if (!outputDirSuccess)
+  if (!IoUtils::isUrl(output))
   {
-    throw IllegalArgumentException("Unable to create output path for: " + output);
+    // write the output dir now so we don't get a nasty surprise at the end of a long job that it
+    // can't be written
+    IoUtils::writeOutputDir(output);
   }
 
   QString osmApiDbUrl;

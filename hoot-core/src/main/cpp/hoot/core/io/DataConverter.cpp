@@ -321,12 +321,11 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
     throw HootException("Read limit may only be specified when converting OGR inputs.");
   }
 
-  QFileInfo outputInfo(output);
-  LOG_VARD(outputInfo.dir().absolutePath());
-  const bool outputDirSuccess = QDir().mkpath(outputInfo.dir().absolutePath());
-  if (!outputDirSuccess)
+  if (!IoUtils::isUrl(output))
   {
-    throw IllegalArgumentException("Unable to create output path for: " + output);
+    // write the output dir now so we don't get a nasty surprise at the end of a long job that it
+    // can't be written
+    IoUtils::writeOutputDir(output);
   }
 }
 

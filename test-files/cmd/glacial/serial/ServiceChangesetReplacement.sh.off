@@ -32,6 +32,7 @@ set -e
 
 # TODO: 
 # - consolidate the three replacement workflows into a single function
+# - add disable way snapping option
 
 TEST_NAME=$1
 echo "test name: " $TEST_NAME
@@ -166,13 +167,16 @@ export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 REF_DB_INPUT=$OSM_API_DB_URL
 
-# Had to set changeset.max.size to a large number due to the fact with certain larger datasets (debugging data only; larger than we 
-# would probably include in the actual tests) the osm api db bulk inserter would write multiple changesets for the input data and then
-# the sql changeset applier would pick up the wrong latest changeset ID. Worth fixing, but since we only use sql changesets internally
-# for testing, not that big of a deal for now. 
+# Had to set changeset.max.size to a large number due to the fact with certain larger datasets (debugging data only being larger than we 
+# would include in actual tests) the osm api db bulk inserter would write multiple changesets for the input data and then the sql changeset 
+# applier would pick up the wrong latest changeset ID. Worth fixing, but since we only use sql changesets internally for testing...not that 
+# big of a deal for now. 
+
+# debug.maps.remove.missing.elements=false is useful for debugging but it can make output unviewable in JOSM.
+# convert.bounding.box.remove.missing.elements=false ensures that we don't drop any missing elements except when writing out our debug maps.
 
 LOG_LEVEL="--warn"
-GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
+GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounding.box.remove.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=true -D calculate.hash.visitor.non.metadata.ignore.keys=note -D log.class.filter= "
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999"
 PERTY_OPTS="-D random.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE "
@@ -201,8 +205,6 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   # them to be positive to better resemble OSM API data. Generally, you'd want reader.use.data.source.ids=true here. Same applies to the 
   # other workflows below.
   hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-db.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT 
-  # needed for debugging only:
-  #hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=true $REF_DB_INPUT $OUT_DIR/ref-original-tmp.osm
   echo ""
   if [[ "$CROP_OPTS" == "" ]]; then
     echo "Writing the secondary dataset from: $SOURCE_FILE_2 to a hoot api db (contains features to replace with)..."
@@ -211,10 +213,8 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   fi
   echo ""
   # Note that we're throwing out source ids here and treating the secondary data as new data in order to avoid possible id conflicts with the
-  # reference.
+  # reference, since both may have been derived from the same input data if perturbation is being used.
   hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-db.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_DB_INPUT
-  # needed for debugging only:
-  #hoot convert $GENERAL_OPTS $DB_OPTS -D convert.ops="hoot::RemoveMissingElementsVisitor" -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=true $SEC_DB_INPUT $OUT_DIR/sec-original-tmp.osm
 
   # CHANGESET DERIVATION
 
@@ -222,8 +222,6 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   echo "Deriving a changeset between the osm api db and the hoot api db layers over: $REPLACEMENT_AOI, to file: $CHANGESET_DB that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
   hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
-  # debug only
-  # hoot changeset-derive-replacement $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION --stats $OUT_DIR/stats.json
 
   # CHANGESET APPLICATION
 
@@ -234,7 +232,9 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   echo ""
   echo "Reading the entire reference dataset out of the osm api db to: $OUT_DB for verification..."
   echo ""
-  # adding RemoveMissingElementsVisitor here may end up being a bad idea...
+  # We strive not to remove missing elements throughout this process in order to minimize the impact of the changeset. 
+  # debug.maps.remove.missing.elements=false can temporarily be set to prevent removing them from debug output but in our final test output
+  # here, we'll explicitly remove them so the output can be viewed in JOSM.
   hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D convert.ops="hoot::RemoveMissingElementsVisitor" -D debug.maps.filename=$OUT_DIR/final-write-db.osm $OSM_API_DB_URL $OUT_DIR/$OUT_DB
   hoot diff $LOG_LEVEL $GENERAL_OPTS $IN_DIR/$OUT_DB $OUT_DIR/$OUT_DB
 
@@ -294,8 +294,6 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_XML that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
   hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
-  # debug only
-  #hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION --stats $OUT_DIR/stats.json
 
   # CHANGESET APPLICATION
 
@@ -307,6 +305,7 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo "Reading the entire reference dataset out of the osm api db to: $OUT_XML for verification..."
   echo ""
   hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D convert.ops="hoot::RemoveMissingElementsVisitor" -D debug.maps.filename=$OUT_DIR/final-write-xml.osm $OSM_API_DB_URL $OUT_DIR/$OUT_XML
+  #hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/final-write-xml.osm $OSM_API_DB_URL $OUT_DIR/$OUT_XML
   # Not completely sure what the differences between the xml output and db output are yet, but the output maps look identical.
   hoot diff $LOG_LEVEL $GENERAL_OPTS $IN_DIR/$OUT_XML $OUT_DIR/$OUT_XML
 
@@ -356,8 +355,6 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_JSON that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
   hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
-  # debug only
-  # hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION --stats $OUT_DIR/stats.json
 
   # CHANGESET APPLICATION
 

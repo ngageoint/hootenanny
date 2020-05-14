@@ -55,8 +55,8 @@ class OsmMap;
  * of a way and inside the bounds will be removed. This is most useful when performing tile based
  * operations such as the FourPassDriver.
  *
- * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map with no
- * nodes.
+ * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
+ * with no nodes.
  */
 class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable
 {
@@ -99,8 +99,12 @@ public:
 protected:
 
   geos::geom::Envelope _bounds;
+
   std::set<long> _usedNodes;
+
+  // if true, a node can be removed even if it has information tags (non-metadata)
   bool _ignoreInformationTags;
+  // configurable set of tags where if found on a node, we always want to remove it
   QStringList _unallowedOrphanKvps;
 
   int _taskStatusUpdateInterval;

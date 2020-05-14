@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReportMissingElementsVisitor.h"
 
@@ -38,13 +38,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ReportMissingElementsVisitor)
 
-ReportMissingElementsVisitor::ReportMissingElementsVisitor(const bool removeMissing,
-                                                           const Log::WarningLevel& logLevel,
-                                                           const int maxReport) :
+ReportMissingElementsVisitor::ReportMissingElementsVisitor(
+  const bool removeMissing, const Log::WarningLevel& logLevel, const int maxReport) :
 _logLevel(logLevel),
 _maxReport(maxReport),
 _missingCount(0),
-_removeMissing(removeMissing)
+_removeMissing(removeMissing),
+_markWaysForReview(false),
+_markRelationsForReview(false)
 {
 }
 
@@ -84,92 +85,156 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
 }
 
 void ReportMissingElementsVisitor::visit(const ConstElementPtr& e)
-{
+{    
   if (_removeMissing)
   {
-    _visitRw(e->getElementType(), e->getId());
+    _visitAndRemove(e->getElementType(), e->getId());
   }
   else
   {
-    _visitRo(e->getElementType(), e->getId());
+    _visitAndReport(e->getElementType(), e->getId());
   }
 }
 
-void ReportMissingElementsVisitor::_visitRo(ElementType type, long id)
+void ReportMissingElementsVisitor::_updateWay(const WayPtr& way, const QStringList& missingChildIds)
 {
+  if ( missingChildIds.size() > 0)
+  {
+    if (_markWaysForReview && !ReviewMarker::isNeedsReview(_map->shared_from_this(), way))
+    {
+      _reviewMarker.mark(
+        _map->shared_from_this(), way,
+        way->getElementId().toString() + ", name: " + way->getTags().getName() +
+          "; Missing way node(s): " + missingChildIds.join(","),
+        QString::fromStdString(getClassName()), 1.0);
+    }
+
+    if (!_wayKvp.trimmed().isEmpty())
+    {
+      way->getTags().appendValue(_wayKvp);
+    }
+  }
+}
+
+void ReportMissingElementsVisitor::_updateRelation(const RelationPtr& relation,
+                                                   const QStringList& missingChildIds)
+{
+  if ( missingChildIds.size() > 0)
+  {
+    if (_markRelationsForReview &&
+          !ReviewMarker::isNeedsReview(_map->shared_from_this(), relation))
+    {
+      _reviewMarker.mark(
+        _map->shared_from_this(), relation,
+        relation->getElementId().toString() + ", name: " + relation->getTags().getName() +
+          ", type: " + relation->getType() +
+          ", Missing relation member(s): " + missingChildIds.join(","),
+        QString::fromStdString(getClassName()), 1.0);
+        LOG_TRACE("Marked " << relation->getElementId() << " for review.");
+    }
+
+    if (!_relationKvp.trimmed().isEmpty())
+    {
+      relation->getTags().appendValue(_relationKvp);
+    }
+  }
+}
+
+void ReportMissingElementsVisitor::_visitAndReport(ElementType type, long id)
+{ 
+  QStringList missingChildIds;
+
   if (type == ElementType::Way)
   {
-    const ConstWayPtr& w = _map->getWay(id);
-    for (size_t i = 0; i < w->getNodeCount(); i++)
+    const WayPtr& way = _map->getWay(id);
+    for (size_t i = 0; i < way->getNodeCount(); i++)
     {
-      if (_map->containsNode(w->getNodeIds()[i]) == false)
+      if (_map->containsNode(way->getNodeIds()[i]) == false)
       {
-        _reportMissing(ElementId(type, id), ElementId::node(w->getNodeIds()[i]));
+        const ElementId missingChildId = ElementId::node(way->getNodeIds()[i]);
+        _reportMissing(ElementId(type, id), missingChildId);
+        missingChildIds.append(missingChildId.toString());
       }
     }
+
+    _updateWay(way, missingChildIds);
   }
   else if (type == ElementType::Relation)
   {
-    const ConstRelationPtr& r = _map->getRelation(id);
-    for (size_t i = 0; i < r->getMembers().size(); i++)
+    const RelationPtr& relation = _map->getRelation(id);
+    for (size_t i = 0; i < relation->getMembers().size(); i++)
     {
-      const RelationData::Entry& e = r->getMembers()[i];
+      const RelationData::Entry& e = relation->getMembers()[i];
       if (_map->containsElement(e.getElementId()) == false)
       {
-        _reportMissing(ElementId(type, id), e.getElementId());
+        const ElementId missingChildId = e.getElementId();
+        _reportMissing(ElementId(type, id), missingChildId);
+        missingChildIds.append(missingChildId.toString());
       }
     }
+
+    _updateRelation(relation, missingChildIds);
   }
 }
 
-void ReportMissingElementsVisitor::_visitRw(ElementType type, long id)
+void ReportMissingElementsVisitor::_visitAndRemove(ElementType type, long id)
 {
+  QStringList missingChildIds;
+
   if (type == ElementType::Way)
   {
-    const WayPtr& w = _map->getWay(id);
+    const WayPtr& way = _map->getWay(id);
     vector<long> newNids;
-    newNids.reserve(w->getNodeCount());
-    for (size_t i = 0; i < w->getNodeCount(); i++)
+    newNids.reserve(way->getNodeCount());
+    for (size_t i = 0; i < way->getNodeCount(); i++)
     {
-      if (_map->containsNode(w->getNodeIds()[i]) == false)
+      if (_map->containsNode(way->getNodeIds()[i]) == false)
       {
-        _reportMissing(ElementId(type, id), ElementId::node(w->getNodeIds()[i]));
+        const ElementId missingChildId = ElementId::node(way->getNodeIds()[i]);
+        _reportMissing(ElementId(type, id), missingChildId);
+        missingChildIds.append(missingChildId.toString());
       }
       else
       {
-        newNids.push_back(w->getNodeIds()[i]);
+        newNids.push_back(way->getNodeIds()[i]);
       }
     }
-    if (newNids.size() != w->getNodeCount())
+    if (newNids.size() != way->getNodeCount())
     {
-      LOG_TRACE("Way nodes size before: " << w->getNodeCount());
-      w->setNodes(newNids);
-      LOG_TRACE("Way nodes size after: " << w->getNodeCount());
+      LOG_TRACE("Way nodes size before: " << way->getNodeCount());
+      way->setNodes(newNids);
+      LOG_TRACE("Way nodes size after: " << way->getNodeCount());
     } 
+
+    _updateWay(way, missingChildIds);
   }
   else if (type == ElementType::Relation)
   {
-    const RelationPtr& r = _map->getRelation(id);
+    const RelationPtr& relation = _map->getRelation(id);
     vector<RelationData::Entry> newEntries;
-    newEntries.reserve(r->getMembers().size());
-    for (size_t i = 0; i < r->getMembers().size(); i++)
+    newEntries.reserve(relation->getMembers().size());
+    for (size_t i = 0; i < relation->getMembers().size(); i++)
     {
-      const RelationData::Entry& e = r->getMembers()[i];
+      const RelationData::Entry& e = relation->getMembers()[i];
       if (_map->containsElement(e.getElementId()) == false)
       {
-        _reportMissing(ElementId(type, id), e.getElementId());
+        const ElementId missingChildId = e.getElementId();
+        _reportMissing(ElementId(type, id), missingChildId);
+        missingChildIds.append(missingChildId.toString());
       }
       else
       {
         newEntries.push_back(e);
       }
     }
-    if (newEntries.size() != r->getMembers().size())
+    if (newEntries.size() != relation->getMembers().size())
     {
-      LOG_TRACE("Relation members size before: " << r->getMembers().size());
-      r->setMembers(newEntries);
-      LOG_TRACE("Relation members size after: " << r->getMembers().size());
+      LOG_TRACE("Relation members size before: " << relation->getMembers().size());
+      relation->setMembers(newEntries);
+      LOG_TRACE("Relation members size after: " << relation->getMembers().size());
     }
+
+    _updateRelation(relation, missingChildIds);
   }
 }
 
