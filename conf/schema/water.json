@@ -1,10 +1,6 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "area"
-        ],
         "influence": 1,
         "name": "water",
         "objectType": "tag"
@@ -15,6 +11,9 @@
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "area"
+        ],
         "categories": [
             "poi"
         ],
@@ -23,11 +22,22 @@
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "area"
+        ],
         "categories": [
             "poi"
         ],
         "isA": "water",
         "name": "water=lake",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "area"
+        ],
+        "isA": "waterway=riverbank",
+        "name": "water=river",
         "objectType": "tag"
     }
 ]

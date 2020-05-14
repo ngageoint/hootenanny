@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.jobs;
 
@@ -58,7 +58,7 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
 
 
     @Override
-    public JobHistory getJobsHistory(Users user, String sort, long offset, long limit, String type, String status) throws IllegalArgumentException {
+    public JobHistory getJobsHistory(Users user, String sort, long offset, long limit, String type, String status, String groupJobId) throws IllegalArgumentException {
         OrderSpecifier<?> sorter = jobStatus.start.desc();
         List<Integer> types = new ArrayList<>();
         List<Integer> statuses = new ArrayList<>();
@@ -137,21 +137,35 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
                 .limit(limit)
                 .fetch();
 
-        List<JobStatusResponse> jobs = jobsHistory.stream().map(j -> {
-            JobStatusResponse response = new JobStatusResponse();
-            response.setJobId(j.getJobId());
-            response.setJobType(JobType.fromInteger(
-                    (j.getJobType() != null) ? j.getJobType() : JobType.UNKNOWN.ordinal()
-                ).toString());
-            response.setMapId(j.getResourceId());
-            response.setStart(j.getStart().getTime());
-            response.setEnd(j.getEnd().getTime());
-            response.setStatus(hoot.services.job.JobStatus.fromInteger(j.getStatus()).toString());
-            response.setStatusDetail(j.getStatusDetail());
-            response.setTags(PostgresUtils.postgresObjToHStore(j.getTags()));
+        List<String> familyIds = new ArrayList<>();
+        if (!groupJobId.equals("")) {
+            List<String> processedIds = new ArrayList<>();
+            findJobsFamily(familyIds, processedIds, groupJobId);
+        }
 
-            return response;
-        }).collect(Collectors.toList());
+        List<JobStatusResponse> jobs = jobsHistory.stream()
+            .filter(j -> {
+                if (!familyIds.isEmpty()) {
+                    return familyIds.contains(j.getJobId());
+                }
+
+                return true;
+            })
+            .map(j -> {
+                JobStatusResponse response = new JobStatusResponse();
+                response.setJobId(j.getJobId());
+                response.setJobType(JobType.fromInteger(
+                        (j.getJobType() != null) ? j.getJobType() : JobType.UNKNOWN.ordinal()
+                    ).toString());
+                response.setMapId(j.getResourceId());
+                response.setStart(j.getStart().getTime());
+                response.setEnd(j.getEnd().getTime());
+                response.setStatus(hoot.services.job.JobStatus.fromInteger(j.getStatus()).toString());
+                response.setStatusDetail(j.getStatusDetail());
+                response.setTags(PostgresUtils.postgresObjToHStore(j.getTags()));
+
+                return response;
+            }).collect(Collectors.toList());
 
         Long total = createQuery()
                 .select(jobStatus)
@@ -161,6 +175,38 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
 
         //format jobs history
         return new JobHistory(total, jobs);
+    }
+
+    public void findJobsFamily(List<String> familyIds, List<String> processedIds, String currentId) {
+        familyIds.add(currentId);
+        processedIds.add(currentId);
+
+        List<String> ids;
+
+        // Get the 'parent' job
+        String parentId = createQuery()
+                .select(Expressions.stringTemplate("tags->'parentId'"))
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(currentId))
+                .fetchOne();
+
+        // Conflate job will have 2 parent ids, 1 for each input, and will be separated by comma
+        ids = parentId != null ? new ArrayList<>(Arrays.asList(parentId.split(","))) : new ArrayList<>();
+
+        // get the 'child' jobs
+        List<String> childrenIds = createQuery()
+                .select(jobStatus.jobId)
+                .from(jobStatus)
+                .where(Expressions.booleanTemplate("tags->'parentId' like '%" + currentId + "%'"))
+                .fetch();
+
+        ids.addAll(childrenIds);
+
+        for(String jobId : ids) {
+            if (!processedIds.contains(jobId) && jobId != null) {
+                findJobsFamily(familyIds, processedIds, jobId);
+            }
+        }
     }
 
     @Override

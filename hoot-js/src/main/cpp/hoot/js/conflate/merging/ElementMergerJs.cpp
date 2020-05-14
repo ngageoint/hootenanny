@@ -227,34 +227,34 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   MergeType mergeType;
 
   const bool containsPolys =
-    CriterionUtils::constainSatisfyingElements<PoiPolygonPolyCriterion>(map);
+    CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map);
   LOG_VART(containsPolys);
   //non-building areas
   const bool containsAreas =
-    CriterionUtils::constainSatisfyingElements<NonBuildingAreaCriterion>(map);
+    CriterionUtils::containsSatisfyingElements<NonBuildingAreaCriterion>(map);
   LOG_VART(containsAreas);
   const bool containsBuildings =
-    CriterionUtils::constainSatisfyingElements<BuildingCriterion>(map);
+    CriterionUtils::containsSatisfyingElements<BuildingCriterion>(map);
   LOG_VART(containsBuildings);
   const bool containsPois =
-    CriterionUtils::constainSatisfyingElements<PoiCriterion>(map); //general poi definition
+    CriterionUtils::containsSatisfyingElements<PoiCriterion>(map); //general poi definition
   LOG_VART(containsPois);
-  if (CriterionUtils::constainSatisfyingElements<PoiPolygonPoiCriterion>(map, 1, true) &&
-      CriterionUtils::constainSatisfyingElements<PoiPolygonPolyCriterion>(map, 1, true))
+  if (CriterionUtils::containsSatisfyingElements<PoiPolygonPoiCriterion>(map, 1, true) &&
+      CriterionUtils::containsSatisfyingElements<PoiPolygonPolyCriterion>(map, 1, true))
   {
     mergeType = MergeType::PoiToPolygon;
   }
-  else if (CriterionUtils::constainSatisfyingElements<PoiCriterion>(map, 2) && !containsPolys &&
+  else if (CriterionUtils::containsSatisfyingElements<PoiCriterion>(map, 2) && !containsPolys &&
            !containsAreas && !containsBuildings)
   {
     mergeType = MergeType::PoiToPoi;
   }
-  else if (CriterionUtils::constainSatisfyingElements<BuildingCriterion>(map, 2) &&
+  else if (CriterionUtils::containsSatisfyingElements<BuildingCriterion>(map, 2) &&
            !containsAreas && !containsPois)
   {
     mergeType = MergeType::BuildingToBuilding;
   }
-  else if (CriterionUtils::constainSatisfyingElements<NonBuildingAreaCriterion>(map, 2) &&
+  else if (CriterionUtils::containsSatisfyingElements<NonBuildingAreaCriterion>(map, 2) &&
            !containsBuildings && !containsPois)
   {
     mergeType = MergeType::AreaToArea;

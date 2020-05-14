@@ -37,28 +37,28 @@ hoot.require('wpi_rules');
 // IMPORT
 function translateToOsm(attrs, layerName, geometryType)
 {
-    var tags = {};
+  var tags = {};
 
-    // Debug:
-    if (config.getOgrDebugDumptags() == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
+  // Debug:
+  if (config.getOgrDebugDumptags() == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
-    translate.applySimpleNumBiased(attrs, tags, wpi.numRules, 'forward',[]);
-    translate.applySimpleTxtBiased(attrs, tags, wpi.txtRules, 'forward');
+  translate.numToOSM(attrs, tags, wpi.numRules);
+  translate.txtToOsm(attrs, tags, wpi.txtRules);
 
-    // NOTE: The one2one rules have been converted to JSON
-    translate.applyOne2OneQuiet(attrs, tags, wpi.one2one);
+  // NOTE: The one2one rules have been converted to JSON
+  translate.applyOne2OneQuiet(attrs, tags, wpi.one2one,{'k':'v'});
 
-    tags.port = 'yes';
-    tags.source = 'worldportindex';
+  tags.port = 'yes';
+  tags.source = 'worldportindex';
 
-    // Add a UUID
-    tags.uuid = createUuid();
+  // Add a UUID
+  tags.uuid = createUuid();
 
-    // Debug:
-    if (config.getOgrDebugDumptags() == 'true')
-    {
-        translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-        print('');
-    }
-    return tags;
+  // Debug:
+  if (config.getOgrDebugDumptags() == 'true')
+  {
+    translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
+    print('');
+  }
+  return tags;
 } // End of Translate Attributes

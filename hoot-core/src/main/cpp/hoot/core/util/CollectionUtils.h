@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef COLLECTION_UTILS_H
@@ -89,6 +89,18 @@ public:
       qSet.insert(*itr);
     }
     return qSet;
+  }
+
+  template<typename T>
+  static std::set<T> qSetToStdSet(const QSet<T>& set)
+  {
+    // There's probably a more efficient way to do this...
+    std::set<T> stdSet;
+    for (typename QSet<T>::const_iterator itr = set.begin(); itr != set.end(); ++itr)
+    {
+      stdSet.insert(*itr);
+    }
+    return stdSet;
   }
 
 private:

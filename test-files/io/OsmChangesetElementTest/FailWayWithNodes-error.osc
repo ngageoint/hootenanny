@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+	<create>
+		<node id="-1" version="0" lat="38.8549524185660573" lon="-104.8987388916486054" timestamp="" changeset="0"/>
+		<way id="-1" version="0" timestamp="" changeset="0">
+			<nd ref="111111111111"/>
+			<nd ref="-1"/>
+			<nd ref="6"/>
+			<tag k="note" v="1"/>
+			<tag k="highway" v="road"/>
+		</way>
+	</create>
+</osmChange>

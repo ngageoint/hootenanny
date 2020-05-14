@@ -31,6 +31,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/util/Settings.h>
 
 namespace hoot
 {
@@ -73,6 +74,13 @@ void ConfigUtils::checkForDuplicateElementCorrectionMismatch(const QStringList& 
   {
     conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
   }
+}
+
+void ConfigUtils::removeListOpEntry(const QString& opName, const QString& entryToRemove)
+{
+  QStringList opValue = conf().getList(opName);
+  opValue.removeAll(entryToRemove);
+  conf().set(opName, opValue);
 }
 
 }

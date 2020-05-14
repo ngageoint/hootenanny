@@ -12,11 +12,11 @@ mkdir -p $outputDir
 rm -rf $outputDir/*
 
 # Normal Hoot options
-HOOT_OPT="--warn -C Testing.conf"
+HOOT_OPT="--debug -C Testing.conf"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
-#HOOT_OPT="--info -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
+#HOOT_OPT="--debug -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
 
 # Script to compare shapefiles. NOTE: This might not run on Jenkins.
 COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
@@ -42,7 +42,7 @@ hoot diff $HOOT_OPT --ignore-uuid $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.o
 
 # Make shapefiles from the new OSM file
 # NOTE: This assumes that outputDir does not have any shapefiles in it!
-hoot convert --debug -C Testing.conf -D schema.translation.script=$TRANS $outputDir/new_GGDMv30.osm $outputDir".shp"  # > tmp/GGDM30_to_GGDM.txt
+hoot convert $HOOT_OPT -C Testing.conf -D schema.translation.script=$TRANS $outputDir/new_GGDMv30.osm $outputDir".shp"  # > tmp/GGDM30_to_GGDM.txt
 
 ##### This set of tests: comparing the individual shapefiles works!
 # Make individual shapefiles from the new OSM file

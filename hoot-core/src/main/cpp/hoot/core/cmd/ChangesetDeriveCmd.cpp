@@ -30,9 +30,11 @@
 #include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -57,6 +59,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     BoundedCommand::runSimple(args);
 
     bool printStats = false;
@@ -116,6 +121,9 @@ public:
     }
 
     ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl).create(output, input1, input2);
+
+    LOG_STATUS(
+      "Changeset generated in " + StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

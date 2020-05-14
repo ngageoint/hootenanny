@@ -39,15 +39,15 @@ hoot.require('fcode_common');
 // Layer name filter - Filter out all layers that match this regexp
 function layerNameFilter()
 {
-    // Drop all of the "SRC_*" and "o2s_*" layers
-    return "^(?!SRC_|o2s_)";
+  // Drop all of the "SRC_*" and "o2s_*" layers
+  return '^(?!SRC_|o2s_)';
 }
 
 
 // Create the output Schema
 function getDbSchema()
 {
-    return mgcp.getDbSchema();
+  return mgcp.getDbSchema();
 }
 
 
@@ -56,7 +56,7 @@ function getDbSchema()
 // function translateAttributes(attrs, layerName, geometryType)
 function translateToOsm(attrs, layerName, geometryType)
 {
-    return mgcp.toOsm(attrs, layerName, geometryType);
+  return mgcp.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 
@@ -65,19 +65,19 @@ function translateToOsm(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 function translateToOgr(tags, elementType, geometryType)
 {
-    // print('Going to OGR: eType:' + elementType + '  gType:' + geometryType);
+  // print('Going to OGR: eType:' + elementType + '  gType:' + geometryType);
 
-    if (tags.tags)
-    {
-        var tStr = tags['tags'].toString();
+  if (tags.tags)
+  {
+    var tStr = tags['tags'].toString();
 
-        var tObj = JSON.parse('{' + tStr.split('=>').join(':') + '}');
+    var tObj = JSON.parse('{' + tStr.split('=>').join(':') + '}');
 
-        for (var i in tObj) tags[i.replace(/\"/g,'').trim()] = tObj[i].replace(/\"/g,'').trim();
+    for (var i in tObj) tags[i.replace(/\"/g,'').trim()] = tObj[i].replace(/\"/g,'').trim();
 
-        delete tags.tags;
-    }
+    delete tags.tags;
+  }
 
-    return mgcp.toMgcp(tags, elementType, geometryType)
+  return mgcp.toMgcp(tags, elementType, geometryType);
 
 } // End of translateToOgr

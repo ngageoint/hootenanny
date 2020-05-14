@@ -40,6 +40,7 @@ namespace hoot
 class PolygonCriterion : public ConflatableElementCriterion
 {
 public:
+
   static std::string className() { return "hoot::PolygonCriterion"; }
 
   PolygonCriterion();

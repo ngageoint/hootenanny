@@ -203,7 +203,6 @@ void OsmMapJs::getElement(const FunctionCallbackInfo<Value>& args)
     OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
     ElementId eid = toCpp<ElementId>(args[0]);
-
     if (obj->isConst())
     {
       args.GetReturnValue().Set(toV8(obj->getConstMap()->getElement(eid)));

@@ -113,7 +113,6 @@ public:
       }
       else
       {
-        //ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
         return std::dynamic_pointer_cast<const Relation>(e)->getType() == _type;
       }
     }

@@ -65,6 +65,33 @@ public:
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
   /**
+   * Returns the IDs of ways connected to the way with the specified ID
+   *
+   * @param wayId ID of the way to search connected ways for
+   * @param map map owning the way
+   * @return a collection of way IDs
+   */
+  static QSet<long> getConnectedWays(const long wayId, const ConstOsmMapPtr& map);
+
+  /**
+   * Returns the number of ways connected to the way with the specified ID
+   *
+   * @param wayId ID of the way to search connected ways for
+   * @param map map owning the way
+   * @return a way count
+   */
+  static int getNumberOfConnectedWays(const long wayId, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if the way with specified way ID is connected to any other ways
+   *
+   * @param wayId ID of the way to search connected ways for
+   * @param map map owning the way
+   * @return a way count
+   */
+  static bool hasConnectedWays(const long wayId, const ConstOsmMapPtr& map);
+
+  /**
    * Determines the coordinate on a way closest to another node not on the way
    *
    * @param node the node to find the closet way coordinate to

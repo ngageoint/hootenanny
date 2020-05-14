@@ -58,7 +58,7 @@ public:
 
   virtual bool supportsSpecificConflation() const { return false; }
 
-  static bool isLinearRelation(const ConstRelationPtr& r);
+  static bool isLinearRelation(const ConstRelationPtr& relation);
 };
 
 }

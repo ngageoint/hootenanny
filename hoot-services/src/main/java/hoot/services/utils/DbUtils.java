@@ -44,6 +44,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -203,19 +204,22 @@ public class DbUtils {
         return createQuery()
                 .select(jobStatus.resourceId)
                 .from(jobStatus)
-                .where(jobStatus.jobId.eq(jobId)).fetchOne();
+                .where(jobStatus.jobId.eq(jobId))
+                .fetchOne();
     }
 
     /**
-     * Gets the job type for the specified jobId
-     * @param jobId
-     * @return
+     * Gets the job id using the map id
+     *
+     * @param mapId map id which was created from a job
+     * @return job id
      */
-    public static Integer getJobTypeByJobId(String jobId) {
+    public static String getJobIdByMapId(Long mapId) {
         return createQuery()
-                .select(jobStatus.jobType)
-                .from(jobStatus)
-                .where(jobStatus.jobId.eq(jobId)).fetchOne();
+            .select(jobStatus.jobId)
+            .from(jobStatus)
+            .where(jobStatus.resourceId.eq(mapId))
+            .fetchOne();
     }
 
     /**
@@ -821,31 +825,6 @@ NOT EXISTS
         return -1;
     }
 
-    // Gets tags column from job status table for specified job id row
-    public static Map<String, String> getJobTags(String jobId) {
-        Map<String, String> tags = new HashMap<>();
-
-        List<Object> results = createQuery()
-                .select(jobStatus.tags)
-                .from(jobStatus)
-                .where(jobStatus.jobId.eq(jobId))
-                .fetch();
-
-        if (!results.isEmpty()) {
-            Object oTag = results.get(0);
-            tags = PostgresUtils.postgresObjToHStore(oTag);
-        }
-
-        return tags;
-    }
-
-    // Returns the parentId for the specified jobId job
-    public static String getParentId(String jobId) {
-        Map<String, String> tags = getJobTags(jobId);
-
-        return tags.get("parentId");
-    }
-
     // Sets the specified job to a status detail of stale and recurses up to the parent jobs to do the same
     public static void setStale(String jobId) {
         // Find the job
@@ -862,10 +841,18 @@ NOT EXISTS
                 .set(jobStatus.statusDetail, "STALE")
                 .execute();
 
-            String parentId = getParentId(jobId);
-            // If it has a parent, make the parent stale too
-            if(parentId != null) {
-                setStale(parentId);
+            Map<String, String> tags = PostgresUtils.postgresObjToHStore(job.getTags());
+
+            String parentId = tags.get("parentId");
+            if (parentId != null) {
+                ArrayList<String> parentIds = new ArrayList<>(Arrays.asList(parentId.split(",")));
+
+                // If it has parent(s), make the parent(s) stale too
+                for(String id : parentIds) {
+                    if (id != null) {
+                        setStale(id);
+                    }
+                }
             }
         }
     }

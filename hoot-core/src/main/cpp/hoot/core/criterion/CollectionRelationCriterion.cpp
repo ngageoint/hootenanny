@@ -51,7 +51,6 @@ bool CollectionRelationCriterion::isSatisfied(const ConstElementPtr& e) const
   if (e->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-    LinearCriterion linear;
     // This list could get HUGE.
     if (LinearCriterion::isLinearRelation(r) ||
         r->getType() == MetadataTags::RelationWaterway() ||

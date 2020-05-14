@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //  Hoot
@@ -47,7 +47,7 @@ public:
   virtual QString getName() const override { return "split-map"; }
 
   virtual QString getDescription() const override
-  { return "Split a map geospatially into tiled maps."; }
+  { return "Split a map geospatially into tiled maps"; }
 
   virtual int runSimple(QStringList& args) override
   {

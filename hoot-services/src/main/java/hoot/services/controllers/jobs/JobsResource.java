@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.jobs;
 
@@ -90,11 +90,11 @@ public class JobsResource {
             @QueryParam("offset") @DefaultValue("0") long offset,
             @QueryParam("limit") @DefaultValue("25") long limit,
             @QueryParam("jobType") @DefaultValue("") String type,
-            @QueryParam("status") @DefaultValue("") String status
-            ) {
+            @QueryParam("status") @DefaultValue("") String status,
+            @QueryParam("groupJobId") @DefaultValue("") String groupJobId) {
         Users user = Users.fromRequest(request);
         try {
-            return jobsStatusesManager.getJobsHistory(user, sort, offset, limit, type, status);
+            return jobsStatusesManager.getJobsHistory(user, sort, offset, limit, type, status, groupJobId);
         } catch (IllegalArgumentException iae) {
             logger.error(iae.getMessage(), iae);
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());

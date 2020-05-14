@@ -69,6 +69,9 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
 
         List<String> options = new LinkedList<>();
         options.add("api.db.email=" + params.getUser().getEmail());
+	options.add("reader.add.source.datetime=false");
+	options.add("writer.include.circular.error.tags=false");
+	options.add("convert.bounding.box.remove.missing.elements=false");
 
         List<String> hootOptions = toHootOptions(options);
 
@@ -90,7 +93,7 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
         substitutionMap.put("OSC_FILE", params.getOutput());
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
-        substitutionMap.put("ADV_OPTIONS", String.join(" ", advancedOptions));
+        substitutionMap.put("ADV_OPTIONS", advancedOptions);
         substitutionMap.put("STATS_FILE", new File(params.getWorkDir(), "stats.json").getPath());
 
         String command = "hoot.bin changeset-derive-replacement --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${BOUNDS} ${OSC_FILE} ${ADV_OPTIONS} --stats ${STATS_FILE}";

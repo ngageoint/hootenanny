@@ -66,6 +66,7 @@ protected:
 
 inline uint qHash(const ElementComparison& elementComp)
 {
+  // TODO: change this over to use CalculateHashVisitor
   return qHash(elementComp.getElement()->nonIdHash());
 }
 

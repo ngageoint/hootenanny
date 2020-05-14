@@ -33,6 +33,7 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // GEOS
 #include <geos/geom/GeometryFactory.h>
@@ -46,10 +47,17 @@ namespace hoot
 AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer) :
 _alpha(alpha),
 _buffer(buffer),
-_retryOnTooSmallInitialAlpha(true)
+_retryOnTooSmallInitialAlpha(true),
+_maxTries(1)
 {
   LOG_VART(_alpha);
   LOG_VART(_buffer);
+  if (_retryOnTooSmallInitialAlpha)
+  {
+    // have not seen an instance yet where more than two tries are needed to complete successfully;
+    // in all other cases, no solution could be found no matter how many tries were attempted
+    _maxTries = 2;
+  }
 }
 
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
@@ -60,7 +68,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 
   if (cutterShape->getArea() == 0.0)
   {
-    // would rather this be thrown than a warning logged, as the warning may go unoticed by web
+    // would rather this be thrown than a warning logged, as the warning may go unoticed by
     // clients who are expecting the alpha shape to be generated
     throw HootException("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
   }
@@ -92,7 +100,7 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
   MapProjector::projectToPlanar(inputMap);
   LOG_VART(MapProjector::toWkt(inputMap->getProjection()));
 
-  // put all the nodes into a vector of points.
+  // put all the nodes into a vector of points
   std::vector<std::pair<double, double>> points;
   points.reserve(inputMap->getNodes().size());
   const NodeMap& nodes = inputMap->getNodes();
@@ -106,31 +114,40 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
   LOG_VART(points.size());
 
   // create a complex geometry representing the alpha shape
+
   std::shared_ptr<Geometry> cutterShape;
-  AlphaShape alphaShape(_alpha);
-  alphaShape.insert(points);
-  try
+
+  int numTries = 0;
+  while (numTries <= _maxTries)
   {
-    cutterShape = alphaShape.toGeometry();
+    AlphaShape alphaShape(_alpha);
+    alphaShape.insert(points);
+    try
+    {
+      cutterShape = alphaShape.toGeometry();
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      if (_retryOnTooSmallInitialAlpha && e.getWhat().startsWith("Longest face edge of size"))
+      {
+        const double longestFaceEdge = alphaShape.getLongestFaceEdge();
+        LOG_INFO(
+          "Failed to generate alpha shape geometry with alpha value of: " <<
+          StringUtils::formatLargeNumber(_alpha) <<
+          ". Attempting to generate the shape again using the longest face edge size of: " <<
+          StringUtils::formatLargeNumber(longestFaceEdge) << " for alpha...");
+        _alpha = longestFaceEdge;
+      }
+      else
+      {
+        break;
+      }
+    }
+    numTries++;
   }
-  catch (const IllegalArgumentException& e)
+  if (!cutterShape)
   {
-    if (_retryOnTooSmallInitialAlpha && e.getWhat().startsWith("Longest face edge of size"))
-    {
-      const double longestFaceEdge = alphaShape.getLongestFaceEdge();
-      LOG_INFO(
-        "Failed to generate alpha shape geometry with alpha value of: " << _alpha <<
-        ". Attempting to generate the shape a second time using the longest face edge size of: " <<
-        longestFaceEdge << " for alpha...");
-      _alpha = longestFaceEdge;
-      AlphaShape alphaShape2(_alpha);
-      alphaShape2.insert(points);
-      cutterShape = alphaShape2.toGeometry();
-    }
-    else
-    {
-      cutterShape.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
-    }
+    cutterShape.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
   cutterShape.reset(cutterShape->buffer(_buffer));
 
