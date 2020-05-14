@@ -220,14 +220,35 @@ void ElementDeduplicator::_removeElements(const QSet<ElementId>& elementsToRemov
     return;
   }
 
+  // This works b/c we're sending in all ids of the same element type.
   const ElementId id = *elementsToRemove.begin();
   LOG_DEBUG(
     "Removing duplicate " << id.getType().toString() << "s from " << map->getName() << "...");
+
+  ElementCriterionPtr crit;
+  if (id.getType() == ElementType::Node && _nodeCrit)
+  {
+    crit = _nodeCrit;
+  }
+  else if (id.getType() == ElementType::Way && _wayCrit)
+  {
+    crit = _wayCrit;
+  }
+  if (id.getType() == ElementType::Relation && _relationCrit)
+  {
+    crit = _relationCrit;
+  }
+
   for (QSet<ElementId>::const_iterator itr = elementsToRemove.begin();
        itr != elementsToRemove.end(); ++itr)
   {
-    LOG_TRACE("Removing " << *itr << "...");
-    RemoveElementByEid::removeElementNoCheck(map, *itr);
+    const ElementId elementId = *itr;
+    ConstElementPtr element = map->getElement(elementId);
+    if (element && (!crit || crit->isSatisfied(element)))
+    {
+      LOG_TRACE("Removing " << elementId << "...");
+      RemoveElementByEid::removeElementNoCheck(map, elementId);
+    }
   }
 }
 
@@ -235,23 +256,31 @@ void ElementDeduplicator::_removeWaysCheckMap(
   const QSet<ElementId>& waysToRemove, OsmMapPtr map1, OsmMapPtr map2,
   const QMap<ElementId, QString>& elementIdsToRemoveFromMap)
 {
-    LOG_VARD(waysToRemove.size());
-    for (QSet<ElementId>::const_iterator itr = waysToRemove.begin();
-         itr != waysToRemove.end(); ++itr)
+  LOG_VARD(waysToRemove.size());
+
+  for (QSet<ElementId>::const_iterator itr = waysToRemove.begin();
+       itr != waysToRemove.end(); ++itr)
+  {
+    const ElementId elementId = *itr;
+    assert(elementId.getType() == ElementType::Way);
+
+    OsmMapPtr mapToRemoveFrom;
+    if (elementIdsToRemoveFromMap[elementId] == "1")
     {
-      const ElementId id = *itr;
-      OsmMapPtr mapToRemoveFrom;
-      if (elementIdsToRemoveFromMap[id] == "1")
-      {
-        mapToRemoveFrom = map1;
-      }
-      else
-      {
-        mapToRemoveFrom = map2;
-      }
-      LOG_TRACE("Removing " << id << " from " << mapToRemoveFrom->getName() << "...");
-      RemoveElementByEid::removeElementNoCheck(mapToRemoveFrom, id);
+      mapToRemoveFrom = map1;
     }
+    else
+    {
+      mapToRemoveFrom = map2;
+    }
+
+    ConstElementPtr element = mapToRemoveFrom->getElement(elementId);
+    if (element && (!_wayCrit || _wayCrit->isSatisfied(element)))
+    {
+      LOG_TRACE("Removing " << elementId << " from " << mapToRemoveFrom->getName() << "...");
+      RemoveElementByEid::removeElementNoCheck(mapToRemoveFrom, elementId);
+    }
+  }
 }
 
 QMap<ElementType::Type, QSet<ElementId>> ElementDeduplicator::_dupesToElementIds(
@@ -313,7 +342,9 @@ void ElementDeduplicator::_dupesToElementIdsCheckMap(
     }
     else
     {
-      elementsToRemove[elementType.getEnum()].insert(dupe1);
+      // We always favor the first map when the number of connected ways aren't a factor, so record
+      // the second map's element as the one to be removed.
+      elementsToRemove[elementType.getEnum()].insert(dupe2);
     }
   }
 }
@@ -357,7 +388,8 @@ void ElementDeduplicator::_dupeHashesToElementIdsCheckMap(
     }
     else
     {
-      elementsToRemove[elementType.getEnum()].insert(toRemove1);
+      // see related note in _dupesToElementIdsCheckMap
+      elementsToRemove[elementType.getEnum()].insert(toRemove2);
     }
   }
 }

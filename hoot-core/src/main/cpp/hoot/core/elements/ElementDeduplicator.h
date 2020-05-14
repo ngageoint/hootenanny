@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -41,6 +42,9 @@ namespace hoot
  *
  * @todo For now, this is being tested from tests exercising ChangesetReplacementCreator, but it
  * would be good to give it its own test eventually.
+ * @todo its convoluted to have both a boolean and a criterion for each element type; removal should
+ * be able to all be done with a single criterion and all elements, regardless of type, can be
+ * processed in one pass...will just take a decent amount of refactoring
  */
 class ElementDeduplicator
 {
@@ -71,6 +75,9 @@ public:
   void setDedupeNodes(bool dedupe) { _dedupeNodes = dedupe; }
   void setDedupeWays(bool dedupe) { _dedupeWays = dedupe; }
   void setDedupeRelations(bool dedupe) { _dedupeRelations = dedupe; }
+  void setNodeCriterion(ElementCriterionPtr crit) { _nodeCrit = crit; }
+  void setWayCriterion(ElementCriterionPtr crit) { _wayCrit = crit; }
+  void setRelationCriterion(ElementCriterionPtr crit) { _relationCrit = crit; }
   void setFavorMoreConnectedWays(bool favor) { _favorMoreConnectedWays = favor; }
 
 private:
@@ -84,6 +91,11 @@ private:
   bool _dedupeNodes;
   bool _dedupeWays;
   bool _dedupeRelations;
+
+  // criterion for each element type to further restrict what gets replaced
+  ElementCriterionPtr _nodeCrit;
+  ElementCriterionPtr _wayCrit;
+  ElementCriterionPtr _relationCrit;
 
   // If true when ways are deduped, the way sharing more nodes with other ways is kept over the one
   // with less shared nodes.
