@@ -354,7 +354,14 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         changesetSize += workInfo->size();
         //  Remove the "remaining" file if the remaining was successful
         if (workInfo->getLast())
+        {
           _changeset.updateRemainingChangeset();
+          //  Let the threads know that the remaining changeset is the "remaining" changeset
+          _threadsCanExit = true;
+          //  Looping should end the thread because all of the remaining elements have now been sent
+          stop_thread = true;
+          continue;
+        }
         //  When the current changeset is nearing the 50k max (or the specified max), close the changeset
         //  otherwise keep it open and go again
         if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
@@ -377,7 +384,10 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         {
           //  Fail the entire changeset
           _changeset.updateFailedChangeset(workInfo, true);
+          //  Let the threads know that the remaining changeset is the "remaining" changeset
+          _threadsCanExit = true;
           //  Looping should end the thread because all of the remaining elements have now been set to the failed state
+          stop_thread = true;
           continue;
         }
         //  Split the changeset on conflict errors
