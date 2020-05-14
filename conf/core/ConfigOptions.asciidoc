@@ -2319,11 +2319,11 @@ into Hootenanny.
 * Data Type: list
 * Default Value:
 ** `hoot::BuildingMatchCreator`
-** `hoot::ScriptMatchCreator,Poi.js`
 ** `hoot::HighwayMatchCreator`
-** `hoot::ScriptMatchCreator,River.js`
 ** `hoot::PoiPolygonMatchCreator`
 ** `hoot::ScriptMatchCreator,Area.js`
+** `hoot::ScriptMatchCreator,River.js`
+** `hoot::ScriptMatchCreator,Poi.js`
 ** `hoot::ScriptMatchCreator,Railway.js`
 ** `hoot::ScriptMatchCreator,PowerLine.js`
 ** `hoot::ScriptMatchCreator,Point.js`
@@ -2450,10 +2450,10 @@ notification. The same threshold value is used separately for both used physical
 * Data Type: list
 * Default Value:
 ** `hoot::BuildingMergerCreator`
-** `hoot::ScriptMergerCreator`
 ** `hoot::HighwayMergerCreator`
-** `hoot::ScriptMergerCreator`
 ** `hoot::PoiPolygonMergerCreator`
+** `hoot::ScriptMergerCreator`
+** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
