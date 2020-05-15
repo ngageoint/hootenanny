@@ -44,6 +44,13 @@ class FileUtils
 public:
 
   /**
+   * Creates a folder path using QDir::mkpath in a more thread-safe way
+   * @param path relative or absolute path to create (think `mkdir -p`)
+   * @return true if successful
+   */
+  static bool makeDir(const QString& path);
+
+  /**
    * Delete a directory along with all of its contents.
    *
    * @param dirName Path of directory to remove.

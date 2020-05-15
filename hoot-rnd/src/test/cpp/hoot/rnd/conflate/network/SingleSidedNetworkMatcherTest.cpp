@@ -35,6 +35,7 @@
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/rnd/conflate/network/SingleSidedNetworkMatcher.h>
 
@@ -58,7 +59,7 @@ public:
 
   void writeDebugMap(OsmMapPtr map, SingleSidedNetworkMatcher& uut, int index)
   {
-    TestUtils::mkpath("tmp");
+    FileUtils::makeDir("tmp");
     OsmMapPtr copy(new OsmMap(map));
     DebugNetworkMapCreator().addDebugElements(copy, uut.getAllEdgeScores(),
       uut.getAllVertexScores());

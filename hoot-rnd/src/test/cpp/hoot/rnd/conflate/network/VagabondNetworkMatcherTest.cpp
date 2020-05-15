@@ -26,17 +26,18 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
+#include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
-#include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 
 namespace hoot
 {
@@ -58,7 +59,7 @@ public:
 
   void writeDebugMap(OsmMapPtr map, VagabondNetworkMatcher& uut, int index)
   {
-    TestUtils::mkpath("tmp");
+    FileUtils::makeDir("tmp");
     OsmMapPtr copy(new OsmMap(map));
     DebugNetworkMapCreator().addDebugElements(copy, uut.getAllEdgeScores(),
       uut.getAllVertexScores());

@@ -29,8 +29,6 @@
 #include <boost/random/uniform_int.hpp>
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
@@ -38,8 +36,11 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/io/ShapefileWriter.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
@@ -205,7 +206,7 @@ public:
     }
     Envelope bounds = parseEnvelope(args[1]);
     QString workingDir = args[2];
-    QDir(".").mkpath(workingDir);
+    FileUtils::makeDir(workingDir);
 
     OsmMapPtr map(new OsmMap());
 

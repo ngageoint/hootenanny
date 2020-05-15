@@ -103,7 +103,7 @@ public:
 
     // for debugging
 //    MapProjector::projectToWgs84(copy);
-//    QDir(".").mkpath("test-output/scoring");
+//    FileUtils::makeDir("test-output/scoring");
 //    OsmXmlWriter writer;
 //    writer.write(copy, "test-output/scoring/MatchComparatorTest.osm");
 

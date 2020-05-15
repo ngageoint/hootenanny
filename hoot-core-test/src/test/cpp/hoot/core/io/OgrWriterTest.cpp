@@ -146,7 +146,7 @@ public:
     uut.open(_outputPath + "OgrWriterTest.gdb");
     uut.write(createTestMap());
 
-    TestUtils::mkpath("tmp");
+    FileUtils::makeDir("tmp");
     OsmMapWriterFactory::write(createTestMap(), "tmp/TestMap.osm");
 
     // make sure it created a bunch of files. We aren't testing for correct output.
