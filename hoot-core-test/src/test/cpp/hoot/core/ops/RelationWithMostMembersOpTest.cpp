@@ -22,15 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/RelationWithMostMembersOp.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 
@@ -57,7 +58,7 @@ public:
   RelationWithMostMembersOpTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(outputPath);
+    FileUtils::makeDir(outputPath);
   }
 
   void runBasicTest()

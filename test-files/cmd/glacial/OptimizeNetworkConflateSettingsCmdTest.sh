@@ -2,7 +2,7 @@
 set -e
 
 OUTPUT_DIR=test-output/cmd/glacial/OptimizeNetworkConflateSettingsCmdTest
-OUTPUT_FILE=OptimizeNetworkConflateSettingsCmdTest-states-out
+OUTPUT_FILE=OptimizeNetworkConflateSettingsCmdTest-states-out.txt
 mkdir -p $OUTPUT_DIR
 rm -f $OUTPUT_DIR/$OUTPUT_FILE
 

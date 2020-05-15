@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -32,6 +32,7 @@
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/MapProjector.h>
 
 namespace hoot
@@ -61,7 +62,7 @@ public:
 
   void writeDebugMap(OsmMapPtr map, int testNumber)
   {
-    TestUtils::mkpath("tmp");
+    FileUtils::makeDir("tmp");
     OsmMapPtr copy(new OsmMap(map));
 
     MapProjector::projectToWgs84(copy);
