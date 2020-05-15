@@ -173,6 +173,7 @@ function getDbSchema()
     { name:'culvert',desc:'culvert',type:'String',defValue:'' },
     { name:'cutting',desc:'cutting',type:'String',defValue:'' },
     { name:'denomination',desc:'denomination',type:'String',defValue:'' },
+    { name:'description',desc:'description',type:'String',defValue:'' },
     { name:'disused',desc:'disused',type:'String',defValue:'' },
     { name:'embankment',desc:'embankment',type:'String',defValue:'' },
     { name:'foot',desc:'foot',type:'String',defValue:'' },
