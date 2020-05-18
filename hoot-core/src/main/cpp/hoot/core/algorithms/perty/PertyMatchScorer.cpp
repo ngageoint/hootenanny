@@ -27,23 +27,24 @@
 #include "PertyMatchScorer.h"
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/algorithms/perty/PertyOp.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/scoring/MatchScoringMapPreparer.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/TagCountVisitor.h>
 #include <hoot/core/visitors/TagRenameKeyVisitor.h>
-#include <hoot/core/algorithms/perty/PertyOp.h>
-#include <hoot/core/scoring/MatchScoringMapPreparer.h>
 
 // Qt
 #include <QFileInfo>
@@ -86,7 +87,7 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString& r
 {
   LOG_INFO(toString());
 
-  QDir().mkpath(outputPath);
+  FileUtils::makeDir(outputPath);
   QFileInfo inputFileInfo(referenceMapInputPath);
   const QString referenceMapOutputPath =
     outputPath + "/" + inputFileInfo.baseName() + "-reference-out.osm";

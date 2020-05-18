@@ -41,20 +41,20 @@
 #endif
 
 // Hoot
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/Way.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/OsmSchemaLoader.h>
 #include <hoot/core/schema/OsmSchemaLoaderFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/schema/OsmSchemaLoader.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/address/AddressParser.h>
 
 // Qt
 #include <QDomDocument>
@@ -1591,7 +1591,7 @@ OsmSchema& OsmSchema::getInstance()
       const QString errorMsg = "Unable to write schema graphviz file to " + graphvizPath;
       try
       {
-        if (QDir().mkpath("tmp"))
+        if (FileUtils::makeDir("tmp"))
         {
           FileUtils::writeFully(graphvizPath, _theInstance->toGraphvizString());
           LOG_TRACE("Wrote schema graph viz file to: " << graphvizPath);

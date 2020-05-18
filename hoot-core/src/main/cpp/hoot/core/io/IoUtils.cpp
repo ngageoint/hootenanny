@@ -28,19 +28,19 @@
 #include "IoUtils.h"
 
 // Hoot
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
+#include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
-#include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
-#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QFileInfo>
@@ -249,7 +249,7 @@ void IoUtils::writeOutputDir(const QString& dirName)
 {
   QFileInfo outputInfo(dirName);
   LOG_VART(outputInfo.dir().absolutePath());
-  const bool outputDirSuccess = QDir().mkpath(outputInfo.dir().absolutePath());
+  const bool outputDirSuccess = FileUtils::makeDir(outputInfo.dir().absolutePath());
   LOG_VART(outputDirSuccess);
   if (!outputDirSuccess)
   {
