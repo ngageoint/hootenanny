@@ -22,18 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/algorithms/perty/PertyMatchScorer.h>
+#include <hoot/core/algorithms/perty/PertyTestRunner.h>
+#include <hoot/core/algorithms/perty/PertyTestRunResult.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/algorithms/perty/PertyTestRunner.h>
-#include <hoot/core/algorithms/perty/PertyMatchScorer.h>
-#include <hoot/core/algorithms/perty/PertyTestRunResult.h>
 
 namespace hoot
 {
@@ -59,9 +60,9 @@ public:
                       "test-output/rnd/algorithms/perty/PertyTestRunnerTest/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath + "Dynamic");
-    TestUtils::mkpath(_outputPath + "Static");
-    TestUtils::mkpath(_outputPath + "Variance");
+    FileUtils::makeDir(_outputPath + "Dynamic");
+    FileUtils::makeDir(_outputPath + "Static");
+    FileUtils::makeDir(_outputPath + "Variance");
   }
 
   void runDynamicVariablesTest()
