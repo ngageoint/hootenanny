@@ -57,11 +57,12 @@ namespace hoot
 {
 
 int SublineStringMatcherJs::logWarnCount = 0;
+QHash<QString, WaySublineMatchString> SublineStringMatcherJs::_sublineMatchCache;
 
 HOOT_JS_REGISTER(SublineStringMatcherJs)
 
-SublineStringMatcherJs::SublineStringMatcherJs(SublineStringMatcherPtr sm)
-: _sm(sm)
+SublineStringMatcherJs::SublineStringMatcherJs(SublineStringMatcherPtr sm) :
+_sm(sm)
 {
 }
 
@@ -69,10 +70,27 @@ SublineStringMatcherJs::~SublineStringMatcherJs()
 {
 }
 
+QString SublineStringMatcherJs::getSublineMatchKey(
+  const ElementId& elementId1, const ElementId& elementId2)
+{
+  if (elementId1 < elementId2)
+  {
+    return elementId1.toString() + "," + elementId2.toString();
+  }
+  else
+  {
+    return elementId2.toString() + "," + elementId1.toString();
+  }
+}
+
+WaySublineMatchString SublineStringMatcherJs::getSublineMatch(
+  const ElementId& elementId1, const ElementId& elementId2)
+{
+  return _sublineMatchCache[getSublineMatchKey(elementId1, elementId2)];
+}
+
 void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<Value>& args)
 {
-  //QElapsedTimer timer;
-
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
@@ -90,28 +108,19 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 
   try
   {
-    //timer.restart();
-
-    WaySublineMatchString match = sm->findMatch(m, e1, e2);
-
-//    if (timer.elapsed() > 5000)
+    WaySublineMatchString match;
+//    const QString matchKey = getSublineMatchKey(e1->getElementId(), e2->getElementId());
+//    if (_sublineMatchCache.contains(matchKey))
 //    {
-//      LOG_DEBUG("Found match in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
-//      LOG_VARD(e1->getElementId());
-//      LOG_VARD(ElementConverter(m).calculateLength(e1));
-//      if (e1->getElementType() == ElementType::Way)
-//      {
-//        ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e1);
-//        LOG_VARD(way->getNodeCount());
-//      }
-//      LOG_VARD(e2->getElementId());
-//      LOG_VARD(ElementConverter(m).calculateLength(e2));
-//      if (e2->getElementType() == ElementType::Way)
-//      {
-//        ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e2);
-//        LOG_VARD(way->getNodeCount());
-//      }
+//      match = _sublineMatchCache[matchKey];
+//      // TODO: change to trace
+//      LOG_TRACE("Subline cache hit for: " << matchKey);
 //    }
+//    else
+//    {
+      match = sm->findMatch(m, e1, e2);
+      //_sublineMatchCache[matchKey] = match;
+    //}
 
     if (match.isEmpty())
     {
@@ -120,7 +129,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
       return;
     }
 
-    // convert match into elements in a new map.
+    // convert match into elements in a new map
     set<ElementId> eids;
     eids.insert(e1->getElementId());
     eids.insert(e2->getElementId());
@@ -176,6 +185,8 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 
 void SublineStringMatcherJs::findMatch(const FunctionCallbackInfo<Value>& args)
 {
+  // Is this used anywhere?
+
   HandleScope scope(args.GetIsolate());
 
   SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
@@ -189,11 +200,9 @@ void SublineStringMatcherJs::findMatch(const FunctionCallbackInfo<Value>& args)
   ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject());
   ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject());
 
-  WaySublineMatchString match = smJs->getSublineStringMatcher()->findMatch(
-        mapJs->getConstMap(),
-        e1Js->getConstElement(),
-        e2Js->getConstElement());
-
+  WaySublineMatchString match =
+    smJs->getSublineStringMatcher()->findMatch(
+      mapJs->getConstMap(), e1Js->getConstElement(), e2Js->getConstElement());
   WaySublineMatchStringPtr result(new WaySublineMatchString(match));
 
   args.GetReturnValue().Set(WaySublineMatchStringJs::New(result));

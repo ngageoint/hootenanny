@@ -100,8 +100,6 @@ function explicitTypeMismatch(e1, e2)
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
 
-  hoot.debug("Checking types...");
-
   // This isn't foolproof as there could be other untranslated river identifying tags involved.
   var waterway1 = tags1.get("waterway");
   var waterway2 = tags2.get("waterway");
@@ -109,7 +107,7 @@ function explicitTypeMismatch(e1, e2)
       waterway2 != 'undefined' && waterway2 != null && waterway2 != '' && 
       waterway1 != waterway2)
   {
-    hoot.debug("Explict type mismatch: " + waterway1 + ", " + waterway2);
+    hoot.trace("Explict type mismatch: " + waterway1 + ", " + waterway2);
     return true;
   }
 
@@ -126,13 +124,12 @@ function nameMismatch(map, e1, e2)
   // only score the name if both have one
   if (bothElementsHaveName(e1, e2))
   {
-    hoot.debug("Checking names...");
     nameScore = nameExtractor.extract(map, e1, e2);
   }
 
   if (nameScore < exports.nameThreshold)
   {
-    hoot.debug("Explict name mismatch: " + e1.getTags().get("name") + ", " + e2.getTags().get("name"));
+    hoot.trace("Explict name mismatch: " + e1.getTags().get("name") + ", " + e2.getTags().get("name"));
     return true;
   }
 
@@ -142,13 +139,13 @@ function nameMismatch(map, e1, e2)
 function geometryMismatch(map, e1, e2)
 {
   var longRivers = isLongRiverPair(map, e1, e2);
-  hoot.debug("longRivers: " + longRivers);
+  hoot.trace("longRivers: " + longRivers);
 
   var sublines;
   var sublineMatcherUsed = sublineMatcherName;
   if (!longRivers)
   {
-    hoot.debug("Extracting sublines with default...");
+    hoot.trace("Extracting sublines with default...");
     sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   }
   else
@@ -157,7 +154,7 @@ function geometryMismatch(map, e1, e2)
     // Frechet subline matching is a little less accurate but much faster, so we'll switch over 
     // to it for longer ways. Tried tweaking the configuration of MaximalSublineMatcher for 
     // performance, but it didn't help.
-    hoot.debug("Extracting sublines with Frechet...");
+    hoot.trace("Extracting sublines with Frechet...");
     sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
   }
 
@@ -168,28 +165,27 @@ function geometryMismatch(map, e1, e2)
     var m2 = sublines.match2;
 
     var weightedShapeDist = -1;
-    hoot.debug("Getting angleHist...");
+    hoot.trace("Getting angleHist...");
     var angleHist = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    hoot.debug("angleHist: " + angleHist);
+    hoot.trace("angleHist: " + angleHist);
     if (angleHist == 0)
     {
-      hoot.debug("Getting weightedShapeDist...");
+      hoot.trace("Getting weightedShapeDist...");
       weightedShapeDist = weightedShapeDistanceExtractor.extract(m, m1, m2);
-      hoot.debug("weightedShapeDist: " + weightedShapeDist);
+      hoot.trace("weightedShapeDist: " + weightedShapeDist);
       if (weightedShapeDist > 0.861844)
       {
-        hoot.debug("geometry match");
+        hoot.trace("geometry match");
         return false;
       }
     }
     if (angleHist > 0)
     {
-      hoot.debug("geometry match");
+      hoot.trace("geometry match");
       return false;
     }
   }
   
-  hoot.debug("geometry mismatch");
   return true;
 }
 
@@ -214,40 +210,49 @@ exports.matchScore = function(map, e1, e2)
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
 
-  // TODO: should not have to call this; enabling this breaks river conflation
-  /*if (!isLinearWaterway(e1) && !isLinearWaterway(e2))
+  /*var e1IsRiver = isLinearWaterway(e1);
+  var e2IsRiver = isLinearWaterway(e2);
+  if (!e1IsRiver && e2IsRiver)
   {
-    hoot.debug("one is not a river:");
-    hoot.debug("e1: " + e1.getElementId() + ", " + tags1.get("name"));
-    hoot.debug("e2: " + e2.getElementId() + ", " + tags2.get("name"));
-    return result;
+    hoot.log("not a river:");
+    hoot.log(e1.getElementId() + ", " + tags1.get("name"));
+    hoot.log("mostSpecificType: " + mostSpecificType(e1));
+    hoot.log("is a river:");
+    hoot.log(e2.getElementId() + ", " + tags2.get("name"));
+    hoot.log("mostSpecificType: " + mostSpecificType(e2));
+  }
+  else if (e1IsRiver && !e2IsRiver)
+  {
+    hoot.log("is a river:");
+    hoot.log(e1.getElementId() + ", " + tags1.get("name"));
+    hoot.log("mostSpecificType: " + mostSpecificType(e1));
+    hoot.log("not a river:");
+    hoot.log(e2.getElementId() + ", " + tags2.get("name"));
+    hoot.log("mostSpecificType: " + mostSpecificType(e2));
+  }
+  else if (!e1IsRiver && !e2IsRiver)
+  {
+    hoot.log("not a river:");
+    hoot.log(e1.getElementId() + ", " + tags1.get("name"));
+    hoot.log("mostSpecificType: " + mostSpecificType(e1));
+    hoot.log("not a river:");
+    hoot.log(e2.getElementId() + ", " + tags2.get("name"));
+    hoot.log("mostSpecificType: " + mostSpecificType(e2));
   }*/
-  if (!isLinearWaterway(e1))
-  {
-    hoot.info("not a river:");
-    hoot.info(e1.getElementId() + ", " + tags1.get("name"));
-    hoot.info("mostSpecificType: " + mostSpecificType(e1));
-  }
-  if (!isLinearWaterway(e2))
-  {
-    hoot.info("not a river:");
-    hoot.info(e2.getElementId() + ", " + tags2.get("name"));
-    hoot.info("mostSpecificType: " + mostSpecificType(e2));
-  }
 
-  hoot.debug("**********************************");
-  hoot.debug("e1: " + e1.getElementId() + ", " + tags1.get("name"));
+  hoot.trace("**********************************");
+  hoot.trace("e1: " + e1.getElementId() + ", " + tags1.get("name"));
   if (tags1.get("note"))
   {
-    hoot.debug("e1 note: " + tags1.get("note"));
+    hoot.trace("e1 note: " + tags1.get("note"));
   }
-  hoot.debug("e2: " + e2.getElementId() + ", " + tags2.get("name"));
+  hoot.trace("e2: " + e2.getElementId() + ", " + tags2.get("name"));
   if (tags2.get("note"))
   {
-    hoot.debug("e2 note: " + tags2.get("note"));
+    hoot.trace("e2 note: " + tags2.get("note"));
   }  
-  hoot.debug("mostSpecificType 1: " + mostSpecificType(e1));
-  hoot.debug("mostSpecificType 2: " + mostSpecificType(e2));
+  hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
+  hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
   
   // This type and name checks are mostly here to help cull down the potential matches and avoid 
   // costly geometric comparisons for long features. The geometric comparison itself is fairly
@@ -265,7 +270,6 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  hoot.debug("match");
   result = { match: 1.0, miss: 0.0, review: 0.0 };
   return result;
 };

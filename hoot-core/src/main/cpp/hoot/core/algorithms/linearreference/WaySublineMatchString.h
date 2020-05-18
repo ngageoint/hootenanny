@@ -56,15 +56,12 @@ public:
   typedef std::vector<WaySublineMatch> MatchCollection;
 
   WaySublineMatchString() {}
-
   WaySublineMatchString(const WaySublineMatchString& other);
-
   /**
    * Makes a new WaySublineMatchString where all the WayLocations are remapped to reference the
    * new map.
    */
   WaySublineMatchString(const WaySublineMatchString& other, const OsmMapPtr& newMap);
-
   WaySublineMatchString(const MatchCollection& m);
 
   /**

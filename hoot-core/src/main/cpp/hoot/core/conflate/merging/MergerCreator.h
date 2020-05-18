@@ -75,7 +75,18 @@ public:
    * Returns true if m1 and m2 are conflicting. If the MergerCreator has no information on the two
    * input matches then false is returned.
    */
-  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const = 0;
+  /**
+   * TODO
+   *
+   * @param map
+   * @param m1
+   * @param m2
+   * @param matches
+   * @return
+   */
+  virtual bool isConflicting(
+    const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const = 0;
 
   virtual void setArguments(QStringList /*args*/) { throw IllegalArgumentException(); }
 };

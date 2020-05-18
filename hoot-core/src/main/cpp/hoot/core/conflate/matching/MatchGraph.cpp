@@ -184,6 +184,8 @@ public:
 
     DisjointSetMap<ElementId>::AllGroups ag = dsm.getAllGroups();
 
+    const QHash<QString, ConstMatchPtr> idIndexedMatches = Match::getIdIndexedMatches(_matches);
+
     result.reserve(ag.size());
     for (DisjointSetMap<ElementId>::AllGroups::const_iterator it = ag.begin(); it != ag.end(); ++it)
     {
@@ -206,7 +208,8 @@ public:
           ConstMatchPtr m2 = *jt;
           if (m1 != m2)
           {
-            if (checkForConflicts && MergerFactory::getInstance().isConflicting(map, m1, m2))
+            if (checkForConflicts &&
+                MergerFactory::getInstance().isConflicting(map, m1, m2, idIndexedMatches))
             {
               LOG_INFO(m1->toString());
               LOG_INFO(m2->toString());

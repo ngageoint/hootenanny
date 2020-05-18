@@ -108,8 +108,8 @@ vector<CreatorDescription> MarkForReviewMergerCreator::getAllCreators() const
   return vector<CreatorDescription>();
 }
 
-bool MarkForReviewMergerCreator::isConflicting(const ConstOsmMapPtr&, ConstMatchPtr, ConstMatchPtr)
-  const
+bool MarkForReviewMergerCreator::isConflicting(
+  const ConstOsmMapPtr&, ConstMatchPtr, ConstMatchPtr, const QHash<QString, ConstMatchPtr>&) const
 {
   return false;
 }

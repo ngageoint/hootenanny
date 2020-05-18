@@ -94,7 +94,7 @@ vector<CreatorDescription> BuildingMergerCreator::getAllCreators() const
 }
 
 bool BuildingMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
-  ConstMatchPtr m2) const
+  ConstMatchPtr m2, const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const BuildingMatch* bm1 = dynamic_cast<const BuildingMatch*>(m1.get());
   const BuildingMatch* bm2 = dynamic_cast<const BuildingMatch*>(m2.get());

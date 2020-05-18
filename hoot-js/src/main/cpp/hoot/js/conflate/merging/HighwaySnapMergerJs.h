@@ -46,7 +46,7 @@ namespace hoot
 class OsmMapOperation;
 
 /**
- *
+ * @todo rename?
  */
 class HighwaySnapMergerJs : public node::ObjectWrap
 {

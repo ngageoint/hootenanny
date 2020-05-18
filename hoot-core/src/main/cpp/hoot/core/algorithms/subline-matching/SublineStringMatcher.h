@@ -60,9 +60,7 @@ public:
   virtual void setConfiguration(const Settings& s) = 0;
 
   virtual void setMaxRelevantAngle(Radians r) = 0;
-
   virtual void setMinSplitSize(Meters minSplitSize) = 0;
-
   virtual void setHeadingDelta(Meters headingDelta) = 0;
 };
 

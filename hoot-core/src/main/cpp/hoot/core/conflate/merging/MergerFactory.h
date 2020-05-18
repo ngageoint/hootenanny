@@ -79,8 +79,18 @@ public:
    */
   static MergerFactory& getInstance();
 
-  bool isConflicting(const ConstOsmMapPtr& map,  const ConstMatchPtr& m1,
-                     const ConstMatchPtr& m2) const;
+  /**
+   * TODO
+   *
+   * @param map
+   * @param m1
+   * @param m2
+   * @param matches
+   * @return
+   */
+  bool isConflicting(
+    const ConstOsmMapPtr& map,  const ConstMatchPtr& m1, const ConstMatchPtr& m2,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const;
 
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.

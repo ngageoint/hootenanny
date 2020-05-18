@@ -43,8 +43,8 @@ public:
   static std::string className() { return "hoot::FrechetSublineMatcher"; }
 
   FrechetSublineMatcher();
-
   virtual ~FrechetSublineMatcher() { }
+
   /**
    * @param maxRelevantDistance This value is set on a per match basis because it tends to vary
    *  based on the CE of the inputs. If set to -1 then the value is derived based on the CE of the
@@ -54,10 +54,8 @@ public:
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
 
   virtual void setMaxRelevantAngle(Radians angle) override { _maxAngle = angle; }
-
-  virtual void setMinSplitSize(Meters /*minSplitSize*/) override { }
-
-  virtual void setHeadingDelta(Meters /*headingDelta*/) override { }
+  virtual void setMinSplitSize(Meters /*minSplitSize*/) override {}
+  virtual void setHeadingDelta(Meters /*headingDelta*/) override {}
 
   virtual void setConfiguration(const Settings &conf);
 

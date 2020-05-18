@@ -76,11 +76,9 @@ ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script,
   _calculateClassification(map, mapObj, ToLocal(&plugin));
 }
 
-void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Object> mapObj,
-  Handle<Object> plugin)
+void ScriptMatch::_calculateClassification(
+  const ConstOsmMapPtr& map, Handle<Object> mapObj, Handle<Object> plugin)
 {
-  LOG_DEBUG("test1");
-
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
@@ -107,8 +105,6 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
     Handle<Value> value = ToLocal(&_plugin)->Get(featureTypeStr);
     _matchName = toCpp<QString>(value);
   }
-
-  LOG_DEBUG("test2");
 
   try
   {
@@ -162,9 +158,11 @@ double ScriptMatch::getProbability() const
   return _p.getMatchP();
 }
 
-bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const
+bool ScriptMatch::isConflicting(
+  const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+  const QHash<QString, ConstMatchPtr>& matches) const
 {
-  LOG_DEBUG("test4");
+  LOG_TRACE("Checking for match conflict...");
 
   if (_neverCausesConflict)
   {
@@ -208,8 +206,6 @@ bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr
     return false;
   }
 
-  LOG_DEBUG("test15");
-
   // assign o1 and o2 to the non-shared eids
   ElementId o1 = _eid1 == sharedEid ? _eid2 : _eid1;
   ElementId o2 = hm->_eid1 == sharedEid ? hm->_eid2 : hm->_eid1;
@@ -229,8 +225,6 @@ bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr
     cacheConflict = cit2.value();
   }
 
-  LOG_DEBUG("test16");
-
   if (foundCache)
   {
     conflicting = cacheConflict;
@@ -239,12 +233,11 @@ bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr
   {
     try
     {
-      LOG_DEBUG("test17");
-
-      // We need to check for a conflict in two directions. Is it conflicting if we merge the shared
-      // EID with this class first, then is it a conflict if we merge with the other EID first.
-      if (_isOrderedConflicting(map, sharedEid, o1, o2) ||
-          hm->_isOrderedConflicting(map, sharedEid, o2, o1))
+      // We need to check for a conflict in two directions. If its conflicting when we merge the
+      // shared EID with this class first, then is it a conflict if we merge with the other EID
+      // first.
+      if (_isOrderedConflicting(map, sharedEid, o1, o2, matches) ||
+          hm->_isOrderedConflicting(map, sharedEid, o2, o1, matches))
       {
         conflicting = true;
       }
@@ -258,17 +251,16 @@ bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr
       conflicting = true;
     }
     _conflicts[hm->_getConflictKey()] = conflicting;
-
-    LOG_DEBUG("test18");
   }
 
   return conflicting;
 }
 
-bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
-  ElementId other1, ElementId other2) const
+bool ScriptMatch::_isOrderedConflicting(
+  const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2,
+  const QHash<QString, ConstMatchPtr>& matches) const
 {
-  LOG_DEBUG("test5");
+  LOG_TRACE("Checking for order conflict...");
 
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
@@ -281,10 +273,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
 
   OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
   CopyMapSubsetOp(map, eids).apply(copiedMap);
-
   Handle<Object> copiedMapJs = OsmMapJs::create(copiedMap);
-
-  LOG_DEBUG("test6");
 
   // make sure unknown1 is always first
   ElementId eid11, eid12, eid21, eid22;
@@ -303,16 +292,12 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
     eid22 = sharedEid;
   }
 
-  std::shared_ptr<ScriptMatch> m1(
-    new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12, _threshold));
+  std::shared_ptr<const ScriptMatch> m1 = _getMatch(copiedMap, copiedMapJs, eid11, eid12, matches);
   MatchSet ms;
   ms.insert(m1);
   vector<MergerPtr> mergers;
   ScriptMergerCreator creator;
   creator.createMergers(ms, mergers);
-  m1.reset();
-
-  LOG_DEBUG("test7");
 
   bool conflicting = true;
   // if we got a merger, then check to see if it conflicts
@@ -335,33 +320,59 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
       }
     }
 
-    LOG_DEBUG("test12");
-
     // If we can still find the second match after the merge was applied, then it isn't a conflict.
     if (copiedMap->containsElement(eid21) && copiedMap->containsElement(eid22))
-    {
-      LOG_DEBUG("test8");
-
-      ScriptMatch m2(_script, _plugin, copiedMap, copiedMapJs, eid21, eid22, _threshold);
-      if (m2.getType() == MatchType::Match)
+    { 
+      std::shared_ptr<const ScriptMatch> m2 =
+        _getMatch(copiedMap, copiedMapJs, eid21, eid22, matches);
+      if (m2->getType() == MatchType::Match)
       {
         conflicting = false;
       }
-
-      LOG_DEBUG("test9");
     }
   }
-
-  LOG_DEBUG("test10");
 
   return conflicting;
 }
 
-Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> mapObj,
-  Handle<Object> plugin)
+std::shared_ptr<const ScriptMatch> ScriptMatch::_getMatch(
+  OsmMapPtr map, Handle<Object> mapJs, const ElementId& eid1, const ElementId& eid2,
+  const QHash<QString, ConstMatchPtr>& matches) const
 {
-  LOG_DEBUG("test11");
+  std::shared_ptr<const ScriptMatch> match;
 
+  QString matchKey;
+  if (eid1 < eid2)
+  {
+    matchKey = eid1.toString() + "," + eid2.toString();
+  }
+  else
+  {
+    matchKey = eid2.toString() + "," + eid1.toString();
+  }
+  QHash<QString, ConstMatchPtr>::const_iterator itr = matches.find(matchKey);
+  if (itr != matches.end())
+  {
+    std::shared_ptr<const ScriptMatch> scriptMatch =
+      std::dynamic_pointer_cast<const ScriptMatch>(itr.value());
+    if (scriptMatch)
+    {
+      match = scriptMatch;
+      LOG_TRACE("Match cache hit for: " << matchKey);
+    }
+  }
+
+  if (!match)
+  {
+    match.reset(new ScriptMatch(_script, _plugin, map, mapJs, eid1, eid2, _threshold));
+  }
+
+  return match;
+}
+
+Handle<Value> ScriptMatch::_call(
+  const ConstOsmMapPtr& map, Handle<Object> mapObj, Handle<Object> plugin)
+{
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
@@ -372,8 +383,6 @@ Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> mapOb
   Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "matchScore"));
   Handle<Function> func = Handle<Function>::Cast(value);
   Handle<Value> jsArgs[3];
-
-  LOG_DEBUG("test30");
 
   if (func.IsEmpty() || func->IsFunction() == false)
   {
@@ -387,14 +396,11 @@ Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> mapOb
 
   LOG_VART(map->getElement(_eid1).get());
   LOG_VART(map->getElement(_eid2).get());
-
-  LOG_DEBUG("test31");
+  LOG_TRACE("Calling script matcher...");
 
   TryCatch trycatch;
   Handle<Value> result = func->Call(plugin, argc, jsArgs);
   HootExceptionJs::checkV8Exception(result, trycatch);
-
-  LOG_DEBUG("test3");
 
   return handleScope.Escape(result);
 }

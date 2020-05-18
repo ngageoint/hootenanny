@@ -99,7 +99,7 @@ void HighwaySnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   HighwaySnapMergerJs* obj = new HighwaySnapMergerJs();
-  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
+  // node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   args.GetReturnValue().Set(args.This());
@@ -107,8 +107,6 @@ void HighwaySnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
 
 void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
 {
-  LOG_DEBUG("test35");
-
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
@@ -116,7 +114,7 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   OsmMapPtr map = toCpp<OsmMapPtr>(args[1]);
   MergerBase::PairsSet pairs = toCpp<MergerBase::PairsSet>(args[2]);
   vector<pair<ElementId, ElementId>> replaced =
-      toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
+    toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
   const QString matchedBy = toCpp<QString>(args[4]);
   SublineStringMatcherPtr sublineMatcher2;
   if (args.Length() > 5)
@@ -139,17 +137,26 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   else if (matchedBy == "Waterway")
   {
     snapMerger.reset(new RiverSnapMerger(pairs, sublineMatcher, sublineMatcher2));
-    LOG_DEBUG("test36");
   }
   else
   {
     snapMerger.reset(new HighwaySnapMerger(pairs, sublineMatcher));
   }
-  LOG_DEBUG("test37");
   snapMerger->setMatchedBy(matchedBy);
+//  if (pairs.size() == 1)
+//  {
+//    const std::pair<ElementId, ElementId> pair = *pairs.begin();
+//    WaySublineMatchString cachedSublineMatch =
+//      SublineStringMatcherJs::getSublineMatch(pair.first, pair.second);
+//    snapMerger->setSublineMatch(cachedSublineMatch);
+//    if (!cachedSublineMatch.isEmpty())
+//    {
+//      LOG_TRACE(
+//        "Subline cache hit for: " <<
+//        SublineStringMatcherJs::getSublineMatchKey(pair.first, pair.second));
+//    }
+//  }
   snapMerger->apply(map, replaced);
-
-  LOG_DEBUG("test38");
 
   // modify the parameter that was passed in
   Handle<Array> newArr = Handle<Array>::Cast(toV8(replaced));

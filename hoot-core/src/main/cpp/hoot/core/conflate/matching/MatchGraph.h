@@ -86,13 +86,14 @@ private:
 
   std::vector<ConstMatchPtr> _matches;
   bool _checkForConflicts;
-  /**
+
+  /*
    * An internal data structure to prevent users of the class from recompiling the boost graph
    * craziness.
    */
   std::shared_ptr<MatchGraphInternal> _d;
 
-  /**
+  /*
    * Invalidates the current graph.
    */
   void _resetGraph();

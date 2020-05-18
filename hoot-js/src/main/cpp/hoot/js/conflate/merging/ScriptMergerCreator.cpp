@@ -138,7 +138,8 @@ vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
 }
 
 bool ScriptMergerCreator::isConflicting(
-  const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const
+  const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+  const QHash<QString, ConstMatchPtr>& matches) const
 {
   const ScriptMatch* sm1 = dynamic_cast<const ScriptMatch*>(m1.get());
   const ScriptMatch* sm2 = dynamic_cast<const ScriptMatch*>(m2.get());
@@ -146,7 +147,7 @@ bool ScriptMergerCreator::isConflicting(
   bool result = false;
   if (sm1 && sm2)
   {
-    result = m1->isConflicting(m2, map);
+    result = m1->isConflicting(m2, map, matches);
   }
 
   return result;

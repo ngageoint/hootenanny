@@ -422,7 +422,7 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
 }
 
 bool NetworkMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
-  ConstMatchPtr m2) const
+  ConstMatchPtr m2, const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   bool result = false;
   if (dynamic_cast<const NetworkMatch*>(m1.get()) || dynamic_cast<const NetworkMatch*>(m2.get()))

@@ -148,7 +148,9 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   LOG_VART(_pairs);
 }
 
-bool NetworkMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/) const
+bool NetworkMatch::isConflicting(
+  const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,
+  const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   set<pair<ElementId, ElementId>> s = other->getMatchPairs();
 
@@ -158,7 +160,7 @@ bool NetworkMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPt
     const pair<ElementId, ElementId>& ip = *it;
 
     for (set<pair<ElementId, ElementId>>::const_iterator jt = _pairs.begin(); jt != _pairs.end();
-      ++jt)
+         ++jt)
     {
       const pair<ElementId, ElementId>& jp = *jt;
 

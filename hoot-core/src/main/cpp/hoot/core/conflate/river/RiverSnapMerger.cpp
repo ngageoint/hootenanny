@@ -63,36 +63,30 @@ void RiverSnapMerger::setConfiguration(const Settings& conf)
 
 WaySublineMatchString RiverSnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2)
 {
-  LOG_DEBUG("test41");
-  LOG_VARD(e1->getElementType());
-  LOG_VARD(e2->getElementType());
+//  if (!_sublineMatch.isEmpty())
+//  {
+//    return _sublineMatch;
+//  }
+
   if (e1->getElementType() == ElementType::Way && e2->getElementType() == ElementType::Way &&
       isLongWayPair(
         map, std::dynamic_pointer_cast<const Way>(e1), std::dynamic_pointer_cast<const Way>(e2)))
   {
-    LOG_DEBUG("test42");
+    LOG_TRACE("Matching long river sublines for merging...");
     return _sublineMatcher2->findMatch(map, e1, e2);
   }
   else
   {
-    LOG_DEBUG("test43");
+    LOG_TRACE("Matching river sublines for merging...");
     return _sublineMatcher->findMatch(map, e1, e2);
   }
 }
 
 bool RiverSnapMerger::isLongWayPair(ConstOsmMapPtr map, ConstWayPtr way1, ConstWayPtr way2)
 {
-  // don't love doing this check again after it would have already been done in River.js but it may
-  // prevent some bugs
-  /*LinearWaterwayCriterion crit;
-  if (!crit.isSatisfied(way1) || !crit.isSatisfied(way2))
-  {
-    return false;
-  }*/
-
   ElementConverter lengthCalc(map);
-  LOG_VARD(lengthCalc.calculateLength(way1) + lengthCalc.calculateLength(way2));
-  LOG_VARD(way1->getNodeCount() + way2->getNodeCount());
+  LOG_VART(lengthCalc.calculateLength(way1) + lengthCalc.calculateLength(way2));
+  LOG_VART(way1->getNodeCount() + way2->getNodeCount());
   return
     (lengthCalc.calculateLength(way1) + lengthCalc.calculateLength(way2)) > _lengthThreshold ||
     (int)(way1->getNodeCount() + way2->getNodeCount()) > _nodeCountThreshold;

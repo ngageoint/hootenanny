@@ -80,7 +80,7 @@ std::vector<CreatorDescription> MultiaryPoiMergerCreator::getAllCreators() const
 }
 
 bool MultiaryPoiMergerCreator::isConflicting(const ConstOsmMapPtr&, ConstMatchPtr,
-  ConstMatchPtr) const
+  ConstMatchPtr, const QHash<QString, ConstMatchPtr>&) const
 {
   // Any relevant matches that contain conflicts will be resolved during the clustering phase.
   return false;

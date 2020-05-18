@@ -42,6 +42,10 @@ class MatchThreshold;
 class ElementId;
 class MatchType;
 class MatchClassification;
+class Match;
+
+typedef std::shared_ptr<Match> MatchPtr;
+typedef std::shared_ptr<const Match> ConstMatchPtr;
 
 /**
  * Describes a specific match between two sets of elements. For example the match between two
@@ -68,7 +72,7 @@ public:
 
   /**
    * Optionally return the types of members stored in this match. This can be multiple member types
-   * or'd together.
+   * OR'd together.
    */
   virtual MatchMembers getMatchMembers() const { return MatchMembers::None; }
 
@@ -101,10 +105,19 @@ public:
    * cannot be applied to a single OsmMap then true is returned.
    *
    * Two matches can only be conflicting if they contain the same ElementIds in getMatchPairs().
-   *
    */
-  virtual bool isConflicting(const std::shared_ptr<const Match>& other,
-                             const ConstOsmMapPtr& map) const = 0;
+  /**
+   * TODO
+   *
+   * @param other
+   * @param map
+   * @param matches
+   * @return
+   */
+  virtual bool isConflicting(
+    const std::shared_ptr<const Match>& other,
+    const ConstOsmMapPtr& map,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const = 0;
 
   /**
    * If the match should _not_ be optimized into a group of non-conflicting matches, then this
@@ -151,6 +164,24 @@ public:
    */
   bool operator==(const Match& other) const;
 
+  /**
+   * TODO
+   *
+   * @param matches
+   * @return
+   */
+  static QHash<QString, ConstMatchPtr> getIdIndexedMatches(
+    const std::vector<ConstMatchPtr>& matches);
+
+  /**
+   * TODO
+   *
+   * @param matchPairs
+   * @return
+   */
+  static QString matchPairsToString(
+    const std::set<std::pair<ElementId, ElementId>>& matchPairs);
+
 protected:
 
   /*
@@ -167,9 +198,6 @@ protected:
 
   const std::shared_ptr<const MatchThreshold> _threshold;
 };
-
-typedef std::shared_ptr<Match> MatchPtr;
-typedef std::shared_ptr<const Match> ConstMatchPtr;
 
 inline std::ostream& operator<<(std::ostream & o, ConstMatchPtr m)
 {

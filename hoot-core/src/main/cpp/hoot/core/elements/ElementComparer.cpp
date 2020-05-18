@@ -137,7 +137,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
           LOG_VART(_threshold);
         }
 
-        LOG_DEBUG(
+        LOG_TRACE(
           "elements failed comparison: " << e1->getElementId() << ", " << e2->getElementId());
       }
 
@@ -173,8 +173,8 @@ bool ElementComparer::_compareNode(const std::shared_ptr<const Element>& re,
 
   if (re->getElementId().getId() == DEBUG_ID || e->getElementId().getId() == DEBUG_ID)
   {
-    LOG_VARD(re);
-    LOG_VARD(e);
+    LOG_VART(re);
+    LOG_VART(e);
   }
 
   bool same = false;
@@ -201,7 +201,7 @@ bool ElementComparer::_compareWay(const std::shared_ptr<const Element>& re,
 
   if (rw->getNodeIds().size() != w->getNodeIds().size())
   {
-    LOG_DEBUG(
+    LOG_TRACE(
       "Ways " << rw->getElementId() << " and " << w->getElementId() <<
       " failed comparison on way node count: " << rw->getNodeIds().size() << " and " <<
       w->getNodeIds().size());

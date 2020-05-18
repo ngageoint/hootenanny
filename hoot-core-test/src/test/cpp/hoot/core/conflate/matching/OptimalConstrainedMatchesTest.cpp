@@ -84,7 +84,8 @@ public:
 
   virtual double getProbability() const override { return _p; }
 
-  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/) const override
+  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,
+                             const QHash<QString, ConstMatchPtr>& /*matches*/) const override
   {
     QString otherString = other->toString();
     for (MatchSet::iterator it = _conflicts.begin(); it != _conflicts.end(); ++it)
@@ -129,7 +130,8 @@ public:
     return false;
   }
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const override
+  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+                             const QHash<QString, ConstMatchPtr>& /*matches*/) const override
   {
     return m1->isConflicting(m2, map);
   }

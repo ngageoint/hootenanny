@@ -37,7 +37,7 @@ namespace hoot
 {
 
 OptimalConstrainedMatches::OptimalConstrainedMatches(const ConstOsmMapPtr& map) :
-  ConstrainedMatches(map)
+ConstrainedMatches(map)
 {
   _score = -1;
   _timeLimit = -1;

@@ -47,7 +47,7 @@ MaximalSublineMatcher::MaximalSublineMatcher()
 }
 
 WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr &map,
-  const ConstWayPtr& way1, const ConstWayPtr& way2, double &score, Meters maxRelevantDistance) const
+  const ConstWayPtr& way1, const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
 {
   Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
     maxRelevantDistance;

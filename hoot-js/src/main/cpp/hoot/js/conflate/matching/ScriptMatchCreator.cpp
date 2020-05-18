@@ -156,8 +156,6 @@ public:
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
-    //QElapsedTimer timer;
-
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
@@ -190,8 +188,6 @@ public:
       _scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME);
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
-      //timer.restart();
-
       ConstElementPtr e2 = map->getElement(*it);
       LOG_VART(e2->getElementId());
 
@@ -224,26 +220,6 @@ public:
           _result.push_back(m);
         }
       }
-
-//      if (timer.elapsed() > 5000)
-//      {
-//        LOG_DEBUG(
-//          "Compared with neighbor in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
-//        LOG_VARD(e->getElementId());
-//        LOG_VARD(ElementConverter(map).calculateLength(e));
-//        if (e->getElementType() == ElementType::Way)
-//        {
-//          ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
-//          LOG_VARD(way->getNodeCount());
-//        }
-//        LOG_VARD(e2->getElementId());
-//        LOG_VARD(ElementConverter(map).calculateLength(e2));
-//        if (e2->getElementType() == ElementType::Way)
-//        {
-//          ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e2);
-//          LOG_VARD(way->getNodeCount());
-//        }
-//      }
     }
 
     _neighborCountSum += neighbors.size();
