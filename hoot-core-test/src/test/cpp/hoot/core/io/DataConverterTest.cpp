@@ -225,11 +225,14 @@ public:
   {
     // just want to make sure an output dir isn't created for a url out
 
+    const QString badPath = "osmapidb:";
+    QDir(badPath).removeRecursively();
+
     DataConverter uut;
     const QString url = "osmapidb://user:password@postgres:5432";
     LOG_VART(url);
     uut._validateInput(QStringList("input1.osm"), url);
-    QFileInfo outputInfo("osmapidb:");
+    QFileInfo outputInfo(badPath);
     CPPUNIT_ASSERT(!outputInfo.exists());
   }
 };
