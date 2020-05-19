@@ -38,8 +38,8 @@ hoot.require('fcode_common');
 // Layer name filter - Filter out all layers that match this regexp
 function layerNameFilter()
 {
-    // Drop all of the "SRC_*", "o2s_*" and "extra_*" layers
-    return "^(?!SRC_|o2s_|extra_)";
+  // Drop all of the "SRC_*", "o2s_*" and "extra_*" layers
+  return '^(?!SRC_|o2s_|extra_)';
 }
 
 
@@ -48,7 +48,7 @@ function layerNameFilter()
 // function translateAttributes(attrs, layerName, geometryType)
 function translateToOsm(attrs, layerName, geometryType)
 {
-    return gifd.toOsm(attrs, layerName, geometryType);
+  return gifd.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 

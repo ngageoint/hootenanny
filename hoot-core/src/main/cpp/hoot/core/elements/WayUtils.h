@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef WAY_NODE_UTILS_H
-#define WAY_NODE_UTILS_H
+#ifndef WAY_UTILS_H
+#define WAY_UTILS_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -36,9 +36,9 @@ namespace hoot
 {
 
 /**
- * Utilities for use with way nodes
+ * Utilities for use with ways
  */
-class WayNodeUtils
+class WayUtils
 {
 
 public:
@@ -63,6 +63,33 @@ public:
   static std::set<long> getContainingWayIdsByNodeId(
     const long nodeId, const ConstOsmMapPtr& map,
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
+
+  /**
+   * Returns the IDs of ways connected to the way with the specified ID
+   *
+   * @param wayId ID of the way to search connected ways for
+   * @param map map owning the way
+   * @return a collection of way IDs
+   */
+  static QSet<long> getConnectedWays(const long wayId, const ConstOsmMapPtr& map);
+
+  /**
+   * Returns the number of ways connected to the way with the specified ID
+   *
+   * @param wayId ID of the way to search connected ways for
+   * @param map map owning the way
+   * @return a way count
+   */
+  static int getNumberOfConnectedWays(const long wayId, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if the way with specified way ID is connected to any other ways
+   *
+   * @param wayId ID of the way to search connected ways for
+   * @param map map owning the way
+   * @return a way count
+   */
+  static bool hasConnectedWays(const long wayId, const ConstOsmMapPtr& map);
 
   /**
    * Determines the coordinate on a way closest to another node not on the way
@@ -165,8 +192,28 @@ public:
    * @return true if more than one way contains the node; false otherwise
    */
   static bool nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines the IDs of ways intersecting an input way
+   *
+   * @param wayId the ID of the way to find intersecting ways for
+   * @param map the map containing the input and potentially intersecting ways
+   * @return a collection of way IDs
+   */
+  static std::set<long> getIntersectingWayIds(const long wayId, const OsmMapPtr& map);
+
+  /**
+   * Determines if any way intersects with another having a specified tag
+   *
+   * @param wayId ID of the way to search intersecting ways for
+   * @param kvp tag (k=v) the intersecting way must have
+   * @param map the map containing the input and potentially intersecting ways
+   * @return true if an intersecting way with the specified tag is found; false otherwise
+   */
+  static bool wayIntersectsWithWayHavingKvp(const long wayId, const QString& kvp,
+                                            const OsmMapPtr& map);
 };
 
 }
 
-#endif // WAY_NODE_UTILS_H
+#endif // WAY_UTILS_H

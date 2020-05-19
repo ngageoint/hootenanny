@@ -47,7 +47,8 @@ namespace hoot
  * @todo We could eventually remove the default empty string implementations of OperationStatusInfo
  * methods and require them to be implemented in children.
  */
-class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria, public OperationStatusInfo
+class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
+  public OperationStatusInfo
 {
 public:
 

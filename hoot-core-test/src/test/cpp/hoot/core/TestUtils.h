@@ -38,6 +38,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QString>
@@ -61,11 +62,11 @@ inline QString toQString(const std::string& s)
   return QString::fromStdString(s);
 }
 
-#define HOOT_STR_EQUALS(v1, v2) \
+#define HOOT_STR_EQUALS(expected, actual) \
 { \
   std::stringstream ss1, ss2; \
-  ss1 << v1; \
-  ss2 << v2; \
+  ss1 << expected; \
+  ss2 << actual; \
   CPPUNIT_ASSERT_EQUAL(ss1.str(), ss2.str()); \
 } \
 
@@ -184,13 +185,6 @@ public:
     const QString& stdFilePath, const QString& outFilePath);
 
   /**
-   * Creates a folder path using QDir::mkpath in a more thread-safe way
-   * @param path relative or absolute path to create (think `mkdir -p`)
-   * @return true if successful
-   */
-  static bool mkpath(const QString& path);
-
-  /**
    * This is a snapshot of the option, conflate.pre.ops (circa 2/12/20), for testing purposes.
    *
    * @return a list of operator class names
@@ -273,7 +267,7 @@ protected:
       _reset(ResetNone)
   {
     if (outputPath != UNUSED_PATH)
-      TestUtils::mkpath(_outputPath);
+      FileUtils::makeDir(_outputPath);
   }
 
   /**

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FileUtils.h"
@@ -39,11 +39,32 @@
 #include <QTextStream>
 
 // Std
-#include <fstream>
 #include <algorithm>
+#include <fstream>
+#include <thread>
 
 namespace hoot
 {
+
+bool FileUtils::makeDir(const QString& path)
+{
+  //  Don't make it if it exists
+  if (QDir().exists(path))
+    return true;
+  //  Try to make the path 'retry' times waiting 'duration' microseconds in between tries
+  const int retry = 3;
+  //  100 msec should be enough to wait between tries
+  const unsigned int duration = 100;
+  for (int i = 0; i < retry; i++)
+  {
+    if (QDir().mkpath(path))
+      return true;
+    std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+  }
+  //  Report failure
+  LOG_ERROR(QString("Couldn't create output directory: %1").arg(path).toStdString());
+  return false;
+}
 
 void FileUtils::removeDir(const QString& dirName)
 {
@@ -125,14 +146,18 @@ QString FileUtils::readFully(const QString& path)
 void FileUtils::writeFully(const QString& path, const QString& text)
 {
   QFile outFile(path);
+  QFileInfo fi(outFile);
+  QDir dir = fi.dir();
+  //  Attempt to create the directory if it doesn't exist
+  if (!dir.exists())
+    makeDir(dir.absolutePath());
+  //  Delete the previous file
   if (outFile.exists() && !outFile.remove())
-  {
     throw HootException("Unable to remove file: " + path);
-  }
+  //  Open to write
   if (!outFile.open(QFile::WriteOnly | QFile::Text))
-  {
     throw HootException("Error opening file: " + path);
-  }
+  //  Write a UTF-8 file
   QTextStream out(&outFile);
   out.setCodec("UTF-8");
   out << text;

@@ -109,6 +109,7 @@ import org.w3c.dom.NodeList;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.controllers.ingest.RemoveFilesCommandFactory;
 import hoot.services.controllers.osm.map.SetMapTagsCommandFactory;
 import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
 import hoot.services.geo.BoundingBox;
@@ -151,11 +152,21 @@ public class GrailResource {
     @Autowired
     private PullConnectedWaysCommandFactory connectedWaysCommandFactory;
 
+    @Autowired
+    private RemoveFilesCommandFactory removeFilesCommandFactory;
+
     public GrailResource() {}
+
+    /**
+     * If the PRIVATE_OVERPASS_URL variable is set to a value then return true
+      */
+    public static boolean isPrivateOverpassActive() {
+        return !replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL);
+    }
 
     private Command getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
         // Checks to see that the sensitive data was actually replaced meaning there was a value
-        if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
+        if (isPrivateOverpassActive()) {
             params.setPullUrl(PRIVATE_OVERPASS_URL);
         } else {
             APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
@@ -211,6 +222,7 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createDifferentialChangeset(@Context HttpServletRequest request,
             GrailParams reqParams,
+            @QueryParam("deriveType") String deriveType,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
@@ -276,7 +288,12 @@ public class GrailResource {
         ExternalCommand makeDiff = grailCommandFactory.build(jobId, params, debugLevel, RunDiffCommand.class, this.getClass());
         workflow.add(makeDiff);
 
-        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET));
+        Map<String, Object> jobStatusTags = new HashMap<>();
+        jobStatusTags.put("bbox", reqParams.getBounds());
+        jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
+        jobStatusTags.put("deriveType", deriveType);
+
+        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
@@ -459,6 +476,7 @@ public class GrailResource {
             Map<String, Object> jobStatusTags = new HashMap<>();
             jobStatusTags.put("bbox", reqParams.getBounds());
             jobStatusTags.put("parentId", reqParams.getParentId());
+            jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET, jobStatusTags));
         }
@@ -502,6 +520,7 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deriveChangeset(@Context HttpServletRequest request,
             GrailParams reqParams,
+            @QueryParam("deriveType") String deriveType,
             @QueryParam("replacement") @DefaultValue("false") Boolean replacement,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
@@ -554,6 +573,8 @@ public class GrailResource {
             jobStatusTags.put("input1", input1);
             jobStatusTags.put("input2", input2);
             jobStatusTags.put("parentId", reqParams.getParentId());
+            jobStatusTags.put("deriveType", deriveType);
+            jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
             jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
         }
@@ -620,26 +641,11 @@ public class GrailResource {
         params.setUser(user);
         params.setPullUrl(PUBLIC_OVERPASS_URL);
 
-        String url;
-        try {
-            String customQuery = reqParams.getCustomQuery();
-            if (customQuery == null || customQuery.equals("")) {
-                url = "'" + PullOverpassCommand.getOverpassUrl(bbox) + "'";
-            } else {
-                url = "'" + PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), bbox, "xml", customQuery) + "'";
-            }
-
-        } catch(IllegalArgumentException exc) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(exc.getMessage()).build();
-        }
-
-
         File overpassOSMFile = new File(workDir, SECONDARY + ".osm");
         GrailParams getOverpassParams = new GrailParams(params);
         getOverpassParams.setOutput(overpassOSMFile.getAbsolutePath());
         if (overpassOSMFile.exists()) overpassOSMFile.delete();
         workflow.add(getPublicOverpassCommand(jobId, getOverpassParams));
-
 
         params.setInput1(overpassOSMFile.getAbsolutePath());
         params.setOutput(layerName);
@@ -649,6 +655,7 @@ public class GrailResource {
         // Set map tags marking dataset as eligible for derive changeset
         Map<String, String> tags = new HashMap<>();
         tags.put("bbox", params.getBounds());
+        if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
 
@@ -656,8 +663,15 @@ public class GrailResource {
         InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, layerName, user, this.getClass());
         workflow.add(setFolder);
 
+        // Clean up pulled files
+        ArrayList<File> deleteFiles = new ArrayList<>();
+        deleteFiles.add(workDir);
+        InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+        workflow.add(cleanFolders);
+
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", bbox);
+        jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
 
@@ -716,18 +730,16 @@ public class GrailResource {
 
             // first line that lists columns which are counts for each feature type
             overpassQuery = overpassQuery.replace("[out:json]", "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")]");
-
-            // overpass query can have multiple "out *" lines so need to replace all
-            overpassQuery = overpassQuery.replaceAll("out [\\s\\w]+;", "out count;");
         }
 
+        // overpass query can have multiple "out *" lines so need to replace all
+        overpassQuery = overpassQuery.replaceAll("out [\\s\\w]+;", "out count;");
 
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
         overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(reqParams.getBounds()).toOverpassString());
         try {
             overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20"); // need to encode url for the get
         } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
-
 
         List<String> columns = new ArrayList<>();
         List<JSONObject> data = new ArrayList<>();
@@ -752,7 +764,7 @@ public class GrailResource {
         }
 
         // Get private overpass data if private overpass url was provided
-        if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
+        if (isPrivateOverpassActive()) {
             String privateUrl = replaceSensitiveData(PRIVATE_OVERPASS_URL) + "?data=" + overpassQuery;
             ArrayList<Double> privateStats = retrieveOverpassStats(privateUrl, true);
             if(privateStats.size() != 0) {
@@ -840,6 +852,7 @@ public class GrailResource {
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", reqParams.getBounds());
+        jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
 
@@ -848,10 +861,10 @@ public class GrailResource {
 
     private List<Command> setupRailsPull(String jobId, GrailParams params, Long parentFolderId) throws UnavailableException {
         List<Command> workflow = new LinkedList<>();
-
         Users user = params.getUser();
+        boolean usingPrivateOverpass = isPrivateOverpassActive();
 
-        // Pull data from the reference OSM API
+        // Pull data from the reference OSM API or private Overpass API
         // Until hoot can read API url directly, download to file first
         File referenceOSMFile = new File(params.getWorkDir(), REFERENCE +".osm");
         if (referenceOSMFile.exists()) { referenceOSMFile.delete(); }
@@ -859,48 +872,60 @@ public class GrailResource {
         GrailParams getRailsParams = new GrailParams(params);
         getRailsParams.setOutput(referenceOSMFile.getAbsolutePath());
 
+        // have to add the query for getting connected ways before calling getRailsPortApiCommand
+        if (usingPrivateOverpass) {
+            String queryWithConnectedWays = PullApiCommand.connectedWaysQuery(getRailsParams.getCustomQuery());
+            getRailsParams.setCustomQuery(queryWithConnectedWays);
+        }
+
         try {
             workflow.add(getRailsPortApiCommand(jobId, getRailsParams));
         } catch (UnavailableException exc) {
             throw new UnavailableException("The Rails port API is offline.");
         }
 
-        GrailParams connectedWaysParams = new GrailParams(params);
-        connectedWaysParams.setInput1(referenceOSMFile.getAbsolutePath());
-        File cropFile = new File(params.getWorkDir(), "crop.osm");
-        connectedWaysParams.setOutput(cropFile.getAbsolutePath());
-        // Do an invert crop of this data to get nodes outside bounds
-        workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", InvertCropCommand.class, this.getClass()));
+        // if not using private overpass then this will be changed to the merge file
+        File ingestFile = referenceOSMFile;
 
-        //read node ids
-        //pull connected ways
-        //pull entire ways
-        //remove cropfile
-        workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
+        // private overpass query result file should handle getting the connected ways so just use that as the ingest file
+        if (!usingPrivateOverpass) {
+            GrailParams connectedWaysParams = new GrailParams(params);
+            connectedWaysParams.setInput1(referenceOSMFile.getAbsolutePath());
+            File cropFile = new File(params.getWorkDir(), "crop.osm");
+            connectedWaysParams.setOutput(cropFile.getAbsolutePath());
+            // Do an invert crop of this data to get nodes outside bounds
+            workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", InvertCropCommand.class, this.getClass()));
 
-        // merge OOB connected ways osm files and add 'hoot:change:exclude:delete' tag to each
-        GrailParams mergeOobWaysParams = new GrailParams(params);
-        File mergeOobWaysFile = new File(params.getWorkDir(), "oobways.osm");
-        mergeOobWaysParams.setOutput(mergeOobWaysFile.getAbsolutePath());
-        // Map<String, String> opts = new HashMap<>();
-        // opts.put("convert.ops", "hoot::SetTagValueVisitor");
-        // opts.put("set.tag.value.visitor.element.criteria", "hoot::WayCriterion");
-        // opts.put("set.tag.value.visitor.keys", "hoot:change:exclude:delete");
-        // opts.put("set.tag.value.visitor.values", "yes");
-        // mergeOobWaysParams.setAdvancedOptions(opts);
-        mergeOobWaysParams.setInput1("\\d+\\.osm"); //this is the file filter
-        workflow.add(grailCommandFactory.build(jobId, mergeOobWaysParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+            //read node ids
+            //pull connected ways
+            //pull entire ways
+            //remove cropfile
+            workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
 
-        // merge OOB connected ways merge file and the reference osm file
-        GrailParams mergeRefParams = new GrailParams(params);
-        File mergeRefFile = new File(params.getWorkDir(), "merge.osm");
-        mergeRefParams.setInput1("(" + mergeOobWaysFile.getName() + "|" + referenceOSMFile.getName() + ")"); //this is the file filter
-        mergeRefParams.setOutput(mergeRefFile.getAbsolutePath());
-        workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+            // merge OOB connected ways osm files and add 'hoot:change:exclude:delete' tag to each
+            GrailParams mergeOobWaysParams = new GrailParams(params);
+            File mergeOobWaysFile = new File(params.getWorkDir(), "oobways.osm");
+            mergeOobWaysParams.setOutput(mergeOobWaysFile.getAbsolutePath());
+            // Map<String, String> opts = new HashMap<>();
+            // opts.put("convert.ops", "hoot::SetTagValueVisitor");
+            // opts.put("set.tag.value.visitor.element.criteria", "hoot::WayCriterion");
+            // opts.put("set.tag.value.visitor.keys", "hoot:change:exclude:delete");
+            // opts.put("set.tag.value.visitor.values", "yes");
+            // mergeOobWaysParams.setAdvancedOptions(opts);
+            mergeOobWaysParams.setInput1("\\d+\\.osm"); //this is the file filter
+            workflow.add(grailCommandFactory.build(jobId, mergeOobWaysParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+
+            // merge OOB connected ways merge file and the reference osm file
+            GrailParams mergeRefParams = new GrailParams(params);
+            ingestFile = new File(params.getWorkDir(), "merge.osm");
+            mergeRefParams.setInput1("(" + mergeOobWaysFile.getName() + "|" + referenceOSMFile.getName() + ")"); //this is the file filter
+            mergeRefParams.setOutput(ingestFile.getAbsolutePath());
+            workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+        }
 
         // Write the data to the hoot db
         GrailParams pushParams = new GrailParams(params);
-        pushParams.setInput1(mergeRefFile.getAbsolutePath());
+        pushParams.setInput1(ingestFile.getAbsolutePath());
         ExternalCommand importRailsPort = grailCommandFactory.build(jobId, pushParams, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importRailsPort);
 
@@ -908,12 +933,19 @@ public class GrailResource {
         Map<String, String> tags = new HashMap<>();
         tags.put("grailReference", "true");
         tags.put("bbox", params.getBounds());
+        if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
 
         // Move the data to the folder
         InternalCommand setFolder = updateParentCommandFactory.build(jobId, parentFolderId, params.getOutput(), user, this.getClass());
         workflow.add(setFolder);
+
+        // Clean up pulled files
+        ArrayList<File> deleteFiles = new ArrayList<>();
+        deleteFiles.add(params.getWorkDir());
+        InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+        workflow.add(cleanFolders);
 
         return workflow;
     }

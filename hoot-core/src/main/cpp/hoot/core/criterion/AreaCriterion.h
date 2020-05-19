@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * A criterion that will either keep or remove areas.
+ * A criterion that identifies areas
  */
 class AreaCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
 {

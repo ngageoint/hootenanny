@@ -42,7 +42,10 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(e->getElementId());
   //LOG_VART(e);
 
-  if (e->getElementType() == ElementType::Node)
+  // We were taking relations here at one point too. Just not convinced that we need to if all the
+  // constituent linear features are properly tagged and extra processing time was being added. If
+  // we find later that we need to, the behavior can be reverted back to the original state.
+  if (e->getElementType() != ElementType::Way)
   {
     return false;
   }

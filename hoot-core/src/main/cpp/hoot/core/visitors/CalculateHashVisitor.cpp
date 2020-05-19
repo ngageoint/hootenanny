@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateHashVisitor.h"
 
@@ -31,6 +31,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/WayUtils.h>
 
 // Qt
 #include <QCryptographicHash>
@@ -40,40 +41,143 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor)
 
-CalculateHashVisitor::CalculateHashVisitor()
+CalculateHashVisitor::CalculateHashVisitor() :
+_includeCe(false),
+_writeHashes(true),
+_collectHashes(false)
 {
+  if (!_writeHashes && !_collectHashes)
+  {
+    throw IllegalArgumentException("CalculateHashVisitor must either write or collect hashes.");
+  }
+  _nonMetadataIgnoreKeys = ConfigOptions().getCalculateHashVisitorNonMetadataIgnoreKeys();
 }
 
-QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
+QString CalculateHashVisitor::toJson(const ConstElementPtr& e)
 {
-  if (e->getElementType() != ElementType::Node)
+  QString result;
+  if (e->getElementType() == ElementType::Node)
   {
-    throw NotImplementedException("Only nodes are supported at this time.");
+    result = _toJson(std::dynamic_pointer_cast<const Node>(e));
   }
+  else if (e->getElementType() == ElementType::Way)
+  {
+    result = _toJson(std::dynamic_pointer_cast<const Way>(e));
+  }
+  else if (e->getElementType() == ElementType::Relation)
+  {
+    result = _toJson(std::dynamic_pointer_cast<const Relation>(e));
+  }
+  //LOG_VART(result);
+  return result;
+}
 
-  ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
-
+QString CalculateHashVisitor::_toJson(const ConstNodePtr& node)
+{
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"node\",\"tags\":{";
 
-  // put the tags into an ordered map that only contains the non-metadata (info) tags. As
+  result += _toJson(node->getTags(), node->getRawCircularError());
+
+  const int coordinateComparisonSensitivity =
+    ConfigOptions().getNodeComparisonCoordinateSensitivity();
+  result += "}},\"geometry\":{\"type\":\"Point\",\"coordinates\":[";
+  result += QString::number(node->getX(), 'f', coordinateComparisonSensitivity);
+  result += ",";
+  result += QString::number(node->getY(), 'f', coordinateComparisonSensitivity);
+  result += "]}}";
+
+  return result;
+}
+
+QString CalculateHashVisitor::_toJson(const ConstWayPtr& way)
+{
+  if (_map == 0)
+  {
+    throw IllegalArgumentException("A map must be set when calculating a way hash.");
+  }
+
+  QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"way\",\"tags\":{";
+
+  result += _toJson(way->getTags(), way->getRawCircularError());
+
+  result += "},\"nodes\":[";
+  const std::vector<long>& nodeIds = way->getNodeIds();
+  for (size_t i = 0; i < nodeIds.size(); i++)
+  {
+    ConstNodePtr node = _map->getNode(nodeIds[i]);
+    if (node)
+    {
+      result += _toJson(node);
+      if (i != (nodeIds.size() - 1))
+      {
+        result += ",";
+      }
+    }
+  }
+  result += "]}}";
+
+  return result;
+}
+
+QString CalculateHashVisitor::_toJson(const ConstRelationPtr& relation)
+{
+  if (_map == 0)
+  {
+    throw IllegalArgumentException("A map must be set when calculating a relation hash.");
+  }
+
+  QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"relation\",\"tags\":{";
+
+  result += _toJson(relation->getTags(), relation->getRawCircularError());
+
+  result += "},\"members\":[";
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = _map->getElement(relationMembers[i].getElementId());
+    if (member)
+    {
+      result += toJson(member);
+      if (i != (relationMembers.size() - 1))
+      {
+        result += ",";
+      }
+    }
+  }
+  result += "]}}";
+
+  return result;
+}
+
+QString CalculateHashVisitor::_toJson(const Tags& tags, const double ce)
+{
+  QString result;
+
+  // Put the tags into an ordered map that only contains the non-metadata (info) tags. As
   // implemented this is likely quite slow.
   QMap<QString, QString> infoTags;
-  foreach (QString key, e->getTags().keys())
+  foreach (QString key, tags.keys())
   {
-    QString v = e->getTags()[key];
-    if (OsmSchema::getInstance().isMetaData(key, v) == false)
+    QString v = tags[key];
+    if (!_nonMetadataIgnoreKeys.contains(key) &&
+        OsmSchema::getInstance().isMetaData(key, v) == false)
     {
       infoTags[key] = v;
     }
   }
+  //LOG_VART(infoTags.keys());
 
-  const int circularErrorComparisonSensitivity =
-    ConfigOptions().getNodeComparisonCircularErrorSensitivity();
-  if (n->getRawCircularError() >= 0)
+  if (_includeCe)
   {
-    infoTags[MetadataTags::ErrorCircular()] =
-      QString::number(n->getRawCircularError(), 'g', circularErrorComparisonSensitivity);
+    const int circularErrorComparisonSensitivity =
+      ConfigOptions().getNodeComparisonCircularErrorSensitivity();
+    if (ce >= 0)
+    {
+      infoTags[MetadataTags::ErrorCircular()] =
+        QString::number(ce, 'g', circularErrorComparisonSensitivity);
+    }
   }
+
 
   bool first = true;
   foreach (QString key, infoTags.keys())
@@ -86,21 +190,14 @@ QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
     first = false;
   }
 
-  const int coordinateComparisonSensitivity =
-    ConfigOptions().getNodeComparisonCoordinateSensitivity();
-  result += "}},\"geometry\":{\"type\":\"Point\",\"coordinates\":[";
-  result += QString::number(n->getX(), 'f', coordinateComparisonSensitivity);
-  result += ",";
-  result += QString::number(n->getY(), 'f', coordinateComparisonSensitivity);
-  result += "]}}";
-
+  //LOG_VART(result);
   return result;
 }
 
 QByteArray CalculateHashVisitor::toHash(const ConstElementPtr& e)
 {
   QCryptographicHash hash(QCryptographicHash::Sha1);
-  hash.addData(toJsonString(e).toLatin1().constData());
+  hash.addData(toJson(e).toLatin1().constData());
   return hash.result();
 }
 
@@ -111,10 +208,30 @@ QString CalculateHashVisitor::toHashString(const ConstElementPtr& e)
 
 void CalculateHashVisitor::visit(const ElementPtr& e)
 {
-  // don't calculate hashes on review relations.
+  // don't calculate hashes on review relations
   if (ReviewMarker::isReview(e) == false)
   {
-    e->getTags()[MetadataTags::HootHash()] = toHashString(e);
+    LOG_VART(e->getElementId());
+
+    const QString hash = toHashString(e);
+    LOG_VART(hash);
+
+    if (_writeHashes)
+    {
+      e->getTags()[MetadataTags::HootHash()] = hash;
+    }
+    if (_collectHashes)
+    {
+      if (_hashesToElementIds.contains(hash))
+      {
+        _duplicates.insert(
+          std::pair<ElementId, ElementId>(_hashesToElementIds[hash], e->getElementId()));
+      }
+      else
+      {
+        _hashesToElementIds[hash] = e->getElementId();
+      }
+    }
   }
 }
 

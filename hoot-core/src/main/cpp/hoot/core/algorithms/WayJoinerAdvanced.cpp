@@ -34,7 +34,7 @@
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/conflate/highway/HighwayUtils.h>
 #include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -128,7 +128,7 @@ void WayJoinerAdvanced::_joinParentChild()
 
     // don't try to join if there are explicitly conflicting names; fix for #2888
     Tags wayTags = way->getTags();
-    // TODO: use OsmUtils::nameConflictExists here instead
+    // TODO: use TagUtils::nameConflictExists here instead
     const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
     if (parent && parentTags.hasName() && wayTags.hasName() &&
         !Tags::haveMatchingName(parentTags, wayTags, strictNameMatch))
@@ -255,7 +255,7 @@ void WayJoinerAdvanced::_joinAtNode()
             // don't try to join if there are explicitly conflicting names; fix for #2888
             const bool parentHasName = pTags.hasName();
             const bool childHasName = cTags.hasName();
-            // TODO: use OsmUtils::nameConflictExists here instead
+            // TODO: use TagUtils::nameConflictExists here instead
             const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
             if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
                 Tags::haveMatchingName(pTags, cTags, strictNameMatch))
@@ -415,7 +415,7 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
       }
       const Tags parentTags = parent->getTags();
       const bool parentHasName = parentTags.hasName();
-      // TODO: use OsmUtils::nameConflictExists here instead
+      // TODO: use TagUtils::nameConflictExists here instead
       const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
       if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
           Tags::haveMatchingName(parentTags, childTags, strictNameMatch))
@@ -531,7 +531,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   elements.push_back(wayWithTagsToKeep);
   elements.push_back(wayWithTagsToLose);
   const bool onlyOneIsABridge =
-    CriterionUtils::constainSatisfyingElements<BridgeCriterion>(elements, 1, true);
+    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, 1, true);
   if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
       onlyOneIsABridge)
   {
@@ -542,7 +542,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
 
   // don't try to join streets with conflicting one way info
-  if (OsmUtils::oneWayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
+  if (HighwayUtils::oneWayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_TRACE(
       "Conflicting one way street tags between " << wayWithIdToKeep->getElementId() << " and " <<
@@ -553,7 +553,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   // If two roads disagree in highway type and aren't generic, don't join back up.
   HighwayCriterion highwayCrit(_map);
   if (highwayCrit.isSatisfied(wayWithTagsToKeep) && highwayCrit.isSatisfied(wayWithTagsToLose) &&
-      OsmUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
+      HighwayUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_TRACE(
       "Conflicting highway type tags between " << wayWithIdToKeep->getElementId() << " and " <<

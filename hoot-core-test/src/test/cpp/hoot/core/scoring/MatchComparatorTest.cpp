@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -103,7 +103,7 @@ public:
 
     // for debugging
 //    MapProjector::projectToWgs84(copy);
-//    QDir(".").mkpath("test-output/scoring");
+//    FileUtils::makeDir("test-output/scoring");
 //    OsmXmlWriter writer;
 //    writer.write(copy, "test-output/scoring/MatchComparatorTest.osm");
 

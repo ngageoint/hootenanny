@@ -141,12 +141,7 @@ class PullOverpassCommand implements InternalCommand {
         String overpassQuery;
 
         if (query == null || query.equals("")) {
-            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
-            try {
-                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
-            } catch(Exception exc) {
-                throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
-        }
+            overpassQuery = getDefaultOverpassQuery();
         } else {
             overpassQuery = query;
         }
@@ -175,5 +170,18 @@ class PullOverpassCommand implements InternalCommand {
             inputStream = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
         }
         return inputStream;
+    }
+
+    static String getDefaultOverpassQuery() {
+        String overpassQuery;
+
+        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+        try {
+            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+        } catch(Exception exc) {
+            throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
+        }
+
+        return overpassQuery;
     }
 }

@@ -56,6 +56,7 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runVersionConflictResolutionTest);
   CPPUNIT_TEST(runChangesetOutputTest);
   CPPUNIT_TEST(runChangesetCreateFailureTest);
+  CPPUNIT_TEST(runChangesetFailNodesWithWaysTest);
 #endif
   /* These tests are for local testing and require additional resources to complete */
 #ifdef RUN_LOCAL_OSM_API_SERVER
@@ -83,6 +84,7 @@ public:
   const int PORT_VERSION =      9803;
   const int PORT_DEBUG_OUTPUT = 9804;
   const int PORT_CREATE_FAIL =  9805;
+  const int PORT_FAIL_WAYS =    9806;
 
   OsmApiWriterTest()
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
@@ -470,6 +472,52 @@ public:
 #endif
   }
 
+  void runChangesetFailNodesWithWaysTest()
+  {
+#ifdef RUN_LOCAL_TEST_SERVER
+    //  Suppress the OsmApiWriter errors by temporarily changing the log level
+    //  when the log level is Info or above because we expect the all of the errors.
+    //  Below Info is Debug and Trace, those are set because we want to see everything
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Fatal);
+
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_FAIL_WAYS));
+    osm.setUserInfo(TEST_USER_INFO);
+
+    //  Kick off the changeset create failure test server
+    CreateWaysFailNodesTestServer server(PORT_FAIL_WAYS);
+    server.start();
+
+    QList<QString> changesets;
+    changesets.append(_inputPath + "ToyTestAFailure.osc");
+
+    OsmApiWriter writer(osm, changesets);
+    writer.setErrorPathname(_outputPath + "FailWayWithNodes-error.osc");
+
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+    writer.setConfiguration(s);
+    writer.apply();
+
+    //  Wait for the test server to finish
+    server.shutdown();
+
+    Log::getInstance().setLevel(logLevel);
+
+    //  Make sure that the changes failed
+    CPPUNIT_ASSERT(writer.containsFailed());
+
+    //  Check the stats, 31 nodes, 2 ways, 33 creates, 2 errors
+    checkStats(writer.getStats(), 31, 2, 0, 33, 0, 0, 2);
+
+    HOOT_FILE_EQUALS(_inputPath + "FailWayWithNodes-error.osc",
+                     _outputPath + "FailWayWithNodes-error.osc");
+#endif
+  }
+
   void checkStats(QList<SingleStat> stats,
                   int nodes, int ways, int relations,
                   int created, int modified, int deleted,
@@ -501,6 +549,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "slow");
 
 }

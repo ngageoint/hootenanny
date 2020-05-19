@@ -40,6 +40,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
@@ -129,7 +130,7 @@ void OsmGbdxXmlWriter::open(const QString& url)
 
   if (_outputDir.exists() == false)
   {
-    if (QDir().mkpath(_outputDir.path()) == false)
+    if (FileUtils::makeDir(_outputDir.path()) == false)
     {
       throw HootException("Error creating directory for writing.");
     }

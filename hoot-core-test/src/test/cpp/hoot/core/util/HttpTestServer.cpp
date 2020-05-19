@@ -104,14 +104,22 @@ void HttpTestServer::wait()
   _thread->join();
 }
 
-void HttpTestServer::shutdown()
+void HttpTestServer::stop()
 {
   //  Interupt the threads
   _interupt = true;
+  //  Stop the IO service
+  _io_service.stop();
   //  Cancel the acceptor
   _acceptor->cancel();
-  //  Stop the IO service and wait for the server to stop
-  _io_service.stop();
+  _acceptor.reset();
+}
+
+void HttpTestServer::shutdown()
+{
+  //  Stop the server
+  stop();
+  //  Wait for the server to shutdown
   wait();
 }
 
@@ -130,7 +138,9 @@ void HttpTestServer::run_server(int port)
   catch (std::exception& e)
   {
     LOG_ERROR(e.what());
-    shutdown();
+    //  Stop the server here, do not `shutdown`
+    //  Joining the thread inside of the thread causes resource deadlocks
+    stop();
   }
 }
 

@@ -55,7 +55,7 @@
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/WayNodeUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
@@ -83,6 +83,7 @@ _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
 _removeSuperfluousFeatures(true),
+_removeMissingElements(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
@@ -100,6 +101,7 @@ _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
 _removeSuperfluousFeatures(true),
+_removeMissingElements(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
@@ -116,6 +118,7 @@ _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
 _removeSuperfluousFeatures(true),
+_removeMissingElements(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
@@ -352,10 +355,10 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_VART(_explicitlyIncludedWayIds.size());
     if (_explicitlyIncludedWayIds.size() > 0)
     {
-      LOG_VART(WayNodeUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
+      LOG_VART(WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
     }
     if (_inclusionCrit && _explicitlyIncludedWayIds.size() > 0 &&
-        WayNodeUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
+        WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
     {
       LOG_TRACE(
         "Skipping delete for: " << node->getElementId() <<
@@ -449,11 +452,17 @@ void MapCropper::apply(OsmMapPtr& map)
     numSuperfluousNodesRemoved = SuperfluousNodeRemover::removeNodes(map);
   }
 
-  // This will handle removing refs in relation members we've cropped out.
-  RemoveMissingElementsVisitor missingElementsRemover;
-  LOG_INFO("\t" << missingElementsRemover.getInitStatusMessage());
-  map->visitRw(missingElementsRemover);
-  LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
+  // Most of the time we want to remove missing refs in order for the output to be clean, but in
+  // some workflows, like cut and replace, we need to keep them around to prevent the resulting
+  // changeset from being too heavy handed.
+  if (_removeMissingElements)
+  {
+    // This will handle removing refs in relation members we've cropped out.
+    RemoveMissingElementsVisitor missingElementsRemover;
+    LOG_INFO("\t" << missingElementsRemover.getInitStatusMessage());
+    map->visitRw(missingElementsRemover);
+    LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
+  }
 
   // This will remove any relations that were already empty or became empty after the previous step.
   RemoveEmptyRelationsOp emptyRelationRemover;

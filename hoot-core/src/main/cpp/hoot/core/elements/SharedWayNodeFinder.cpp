@@ -49,7 +49,7 @@ bool SharedWayNodeFinder::waysShareNode(const ConstWayPtr& way1, const ConstWayP
 }
 
 bool SharedWayNodeFinder::waysShareEndNode(const ConstWayPtr& way1, const ConstWayPtr& way2,
-                                const bool sameDirection)
+                                           const bool sameDirection)
 {
   LOG_VART(way1->getElementId());
   LOG_VART(way2->getElementId());

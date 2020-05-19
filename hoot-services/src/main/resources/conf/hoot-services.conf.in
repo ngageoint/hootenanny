@@ -116,6 +116,9 @@ grailOverpassQueryPath=conf/services/grailOverpassQuery.oql
 # Grail pull overpass stats query file
 grailOverpassStatsQueryPath=conf/services/grailOverpassStatsQuery.oql
 
+# Grail pull connected ways overpass query file
+grailConnectedWaysQueryPath=conf/services/grailConnectedWaysQuery.oql
+
 # Config options asciidoc location
 configAsciidocPath=conf/core/ConfigOptions.asciidoc
 

@@ -121,30 +121,49 @@ private:
   void _loadTags(pt::ptree& tree)
   {
     pt::ptree::assoc_iterator it = tree.find(BASE_CONFIG_OPTION_KEY);
+
     if (it != tree.not_found())
     {
       //  Split the base configs and process them in order
       QString base = it->second.data().c_str();
-      const QStringList baseConfigs = base.trimmed().split(",", QString::SplitBehavior::SkipEmptyParts);
+      const QStringList baseConfigs =
+        base.trimmed().split(",", QString::SplitBehavior::SkipEmptyParts);
       for (const QString value : baseConfigs)
         load(ConfPath::search(value));
     }
+
     //  Iterate all of the children key/value pairs
     for (pt::ptree::value_type& element : tree.get_child(""))
     {
-      const QString name = QString::fromUtf8(element.first.c_str());
-      //LOG_VART(name);
+      const QString optionName = QString::fromUtf8(element.first.c_str());
+      LOG_VART(optionName);
+
       //  Skip comments
-      if (name.startsWith("#"))
+      if (optionName.startsWith("#"))
         continue;
+
       //  Skip base config
-      if (name == BASE_CONFIG_OPTION_KEY)
+      if (optionName == BASE_CONFIG_OPTION_KEY)
         continue;
+
       //  Throw an exception for unrecognized keys
-      if (!_s->hasKey(name))
-        throw HootException("Unknown JSON setting: (" + name + ")");
+      if (!_s->hasKey(optionName))
+        throw HootException("Unknown JSON setting: (" + optionName + ")");
+
       //  Set key/value pair as name and data, data() turns everything to a string
-      _s->set(name, QString::fromUtf8(element.second.data().c_str()));
+      const QString optionVal = QString::fromUtf8(element.second.data().c_str());
+      LOG_VART(optionVal);
+      if (optionVal.contains("->"))
+      {
+        // '->' replaces one option val with another and there can be multiple list replacement
+        // entries within a single opt val string
+        const QStringList values = optionVal.split(";", QString::SkipEmptyParts);
+        Settings::replaceListOptionEntryValues(*_s, optionName, values);
+      }
+      else
+      {
+        _s->set(optionName, optionVal);
+      }
     }
   }
 };
@@ -152,8 +171,8 @@ private:
 std::shared_ptr<Settings> Settings::_theInstance = NULL;
 
 Settings::Settings() :
-  _dynamicRegex("\\$\\{([\\w\\.]+)\\}"),
-  _staticRegex("\\$\\(([\\w\\.]+)\\)")
+_dynamicRegex("\\$\\{([\\w\\.]+)\\}"),
+_staticRegex("\\$\\(([\\w\\.]+)\\)")
 {
 }
 
@@ -600,7 +619,7 @@ void Settings::parseCommonArguments(QStringList& args)
       Log::getInstance().setLevel(Log::Fatal);
       args = args.mid(1);
     }
-    //HootTest settings have already been parsed by this point
+    // HootTest settings have already been parsed by this point
     else if (hootTestCmdsIgnore.contains(args[0]))
     {
       args = args.mid(1);
@@ -616,6 +635,7 @@ void Settings::parseCommonArguments(QStringList& args)
       bool append = false;
       bool remove = false;
       bool prepend = true;
+      bool replace = false;
 
       // '++=' prepends an option to an option list
       QStringList kvl = kv.split("++=");
@@ -632,6 +652,7 @@ void Settings::parseCommonArguments(QStringList& args)
         append = true;
         remove = false;
         prepend = false;
+        replace = false;
       }
 
       if (kvl.size() != 2)
@@ -647,6 +668,7 @@ void Settings::parseCommonArguments(QStringList& args)
         append = false;
         remove = true;
         prepend = false;
+        replace = false;
       }
 
       if (kvl.size() != 2)
@@ -662,10 +684,22 @@ void Settings::parseCommonArguments(QStringList& args)
         append = false;
         remove = false;
         prepend = false;
+        if (kv.contains("->"))
+        {
+          // '->' replaces one option val with another and there can be multiple list replacement
+          // entries within a single opt val string
+          replace = true;
+        }
+        else
+        {
+          replace = false;
+        }
       }
-      LOG_VART(append);
-      LOG_VART(remove);
-      LOG_VART(prepend);
+
+      LOG_VARD(append);
+      LOG_VARD(remove);
+      LOG_VARD(prepend);
+      LOG_VARD(replace);
 
       if (kvl.size() != 2)
       {
@@ -673,9 +707,9 @@ void Settings::parseCommonArguments(QStringList& args)
       }
 
       const QString optionName = kvl[0];
-      LOG_VART(optionName);
+      LOG_VARD(optionName);
       const QString optionVal = kvl[1];
-      LOG_VART(optionVal);
+      LOG_VARD(optionVal);
 
       if (!conf().hasKey(optionName))
       {
@@ -717,6 +751,10 @@ void Settings::parseCommonArguments(QStringList& args)
       {
         conf().prepend(optionName, values);
       }
+      else if (replace)
+      {
+        replaceListOptionEntryValues(conf(), optionName, values);
+      }
       else
       {
         conf().set(optionName, optionVal);
@@ -733,6 +771,39 @@ void Settings::parseCommonArguments(QStringList& args)
 
   // re-initialize the logger and other resources after the settings have been parsed.
   Hoot::getInstance().reinit();
+}
+
+void Settings::replaceListOptionEntryValues(Settings& settings, const QString& optionName,
+                                            const QStringList& listReplacementEntryValues)
+{
+  LOG_DEBUG(optionName << " before replacement: " << conf().getList(optionName));
+  foreach (QString v, listReplacementEntryValues)
+  {
+    const QStringList valEntryParts = v.split("->");
+    if (valEntryParts.size() != 2)
+    {
+      throw IllegalArgumentException(
+        "When replacing one configuration option value with another, the replacement string "
+        "must have the form: "
+        "\"<old optionValueEntry 1>-><new optionValueEntry 1>;<old optionValueEntry 2>-><new optionValueEntry 2>...\"");
+    }
+    const QString oldValEntry = valEntryParts[0];
+    LOG_VART(oldValEntry);
+    const QString newValEntry = valEntryParts[1];
+    LOG_VART(newValEntry);
+    QStringList newListVal = conf().getList(optionName);
+    LOG_VART(newListVal);
+    if (!newListVal.contains(oldValEntry))
+    {
+      throw IllegalArgumentException(
+        "Option list: " + optionName + " does not contain value entry: (" + oldValEntry + ")");
+    }
+    // replace existing option val entry with new one
+    newListVal = newListVal.replaceInStrings(oldValEntry, newValEntry);
+    LOG_VART(newListVal);
+    settings.set(optionName, newListVal);
+  }
+  LOG_DEBUG(optionName << " after replacement: " << conf().getList(optionName));
 }
 
 QString Settings::_replaceVariables(const QString& key, std::set<QString> used) const

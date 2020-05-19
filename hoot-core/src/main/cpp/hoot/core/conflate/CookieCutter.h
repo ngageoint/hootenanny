@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef COOKIECUTTER_H
@@ -44,7 +44,7 @@ public:
   static std::string className() { return "hoot::CookieCutter"; }
 
   CookieCutter(bool crop, double outputBuffer = 0.0, bool keepEntireFeaturesCrossingBounds = false,
-               bool keepOnlyFeaturesInsideBounds = false);
+               bool keepOnlyFeaturesInsideBounds = false, bool removeMissingElements = true);
 
   /**
    * Uses an input map geometry to cut the shape out of another map
@@ -64,6 +64,8 @@ private:
   bool _keepEntireFeaturesCrossingBounds;
   // see MapCropper
   bool _keepOnlyFeaturesInsideBounds;
+  // removes references to missing elements after the cut occurs
+  bool _removeMissingElements;
 };
 
 }

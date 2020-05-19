@@ -51,31 +51,7 @@ namespace hoot
 {
 
 OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
-  : _description(ConfigOptions().getChangesetDescription()),
-    _source(ConfigOptions().getChangesetSource()),
-    _hashtags(ConfigOptions().getChangesetHashtags()),
-    _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
-    _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
-    _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
-    _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
-    _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
-    _showProgress(false),
-    _consumerKey(ConfigOptions().getHootOsmAuthConsumerKey()),
-    _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
-    _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
-    _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
-    _changesetCount(0),
-    _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
-    _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
-    _apiId(0)
-{
-  _changesets.push_back(changeset);
-  if (isSupported(url))
-    _url = url;
-}
-
-OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
-  : _changesets(changesets),
+  : _startFlag(false),
     _description(ConfigOptions().getChangesetDescription()),
     _source(ConfigOptions().getChangesetSource()),
     _hashtags(ConfigOptions().getChangesetHashtags()),
@@ -92,7 +68,35 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _changesetCount(0),
     _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
-    _apiId(0)
+    _apiId(0),
+    _threadsCanExit(false)
+{
+  _changesets.push_back(changeset);
+  if (isSupported(url))
+    _url = url;
+}
+
+OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
+  : _startFlag(false),
+    _changesets(changesets),
+    _description(ConfigOptions().getChangesetDescription()),
+    _source(ConfigOptions().getChangesetSource()),
+    _hashtags(ConfigOptions().getChangesetHashtags()),
+    _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
+    _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
+    _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
+    _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
+    _showProgress(false),
+    _consumerKey(ConfigOptions().getHootOsmAuthConsumerKey()),
+    _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
+    _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
+    _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
+    _changesetCount(0),
+    _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
+    _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
+    _apiId(0),
+    _threadsCanExit(false)
 {
   if (isSupported(url))
     _url = url;
@@ -140,12 +144,12 @@ bool OsmApiWriter::apply()
   _changeset.fixMalformedInput();
   //  Start the writer threads
   LOG_INFO("Starting " << _maxWriters << " processing threads.");
+  _threadIdle.reserve(_maxWriters);
   for (int i = 0; i < _maxWriters; ++i)
   {
     _threadStatus.push_back(ThreadStatus::Working);
     _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this, i));
   }
-  _threadIdle.reserve(_maxWriters);
   //  Setup the progress indicators
   long total = _changeset.getTotalElementCount();
   float progress = 0.0f;
@@ -199,17 +203,23 @@ bool OsmApiWriter::apply()
         _changesetMutex.unlock();
         //  Push that changeset
         _pushChangesets(changeset_info);
+        //  Let the threads know that the remaining changeset is the "remaining" changeset
+        _threadsCanExit = true;
       }
       else
       {
+        //  Indicate to the worker threads that there is work to be done
+        _startWork();
         //  Allow time for the worker threads to complete some work
-        this_thread::sleep_for(chrono::milliseconds(10));
+        this_thread::yield();
       }
     }
     else
     {
+      //  Indicate to the worker threads that there is work to be done
+      _startWork();
       //  Allow time for the worker threads to complete some work
-      this_thread::sleep_for(chrono::milliseconds(10));
+      this_thread::yield();
     }
     //  Show the progress
     if (_showProgress)
@@ -223,6 +233,8 @@ bool OsmApiWriter::apply()
       }
     }
   }
+  //  Indicate to the worker threads that there is work to be done, if they haven't started already
+  _startWork();
   //  Wait for the threads to shutdown
   for (int i = 0; i < _maxWriters; ++i)
     _threadPool[i].join();
@@ -232,8 +244,8 @@ bool OsmApiWriter::apply()
     LOG_ERROR("Multiple bad changeset ID errors in a row, is the API functioning correctly?");
     _changeset.failRemainingChangeset();
   }
-
-  LOG_INFO("Upload progress: 100%");
+  //  Final write for the error file
+  _changeset.writeErrorFile();
   //  Keep some stats
   _stats.append(SingleStat("API Upload Time (sec)", timer.getElapsedAndRestart()));
   _stats.append(SingleStat("Total OSM Changesets Uploaded", _changesetCount));
@@ -258,6 +270,8 @@ void OsmApiWriter::_changesetThreadFunc(int index)
   long changesetSize = 0;
   bool stop_thread = false;
   int changeset_failures = 0;
+  //  Before working, wait for the signal
+  _waitForStart();
   //  Iterate until all elements are sent and updated
   while (!_changeset.isDone() && !stop_thread)
   {
@@ -299,7 +313,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           //  Reset the network request object and sleep it off
           request = createNetworkRequest(true);
           LOG_DEBUG("Bad changeset ID. Resetting network request object.");
-          this_thread::sleep_for(chrono::milliseconds(100));
+          this_thread::yield();
         }
         //  Try a new create changeset request
         continue;
@@ -338,6 +352,16 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         _changesetMutex.unlock();
         //  Update the size of the current changeset that is open
         changesetSize += workInfo->size();
+        //  Remove the "remaining" file if the remaining was successful
+        if (workInfo->getLast())
+        {
+          _changeset.updateRemainingChangeset();
+          //  Let the threads know that the remaining changeset is the "remaining" changeset
+          _threadsCanExit = true;
+          //  Looping should end the thread because all of the remaining elements have now been sent
+          stop_thread = true;
+          continue;
+        }
         //  When the current changeset is nearing the 50k max (or the specified max), close the changeset
         //  otherwise keep it open and go again
         if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
@@ -360,7 +384,10 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         {
           //  Fail the entire changeset
           _changeset.updateFailedChangeset(workInfo, true);
+          //  Let the threads know that the remaining changeset is the "remaining" changeset
+          _threadsCanExit = true;
           //  Looping should end the thread because all of the remaining elements have now been set to the failed state
+          stop_thread = true;
           continue;
         }
         //  Split the changeset on conflict errors
@@ -426,7 +453,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             //  push it back on the queue and give the API a break
             _pushChangesets(workInfo);
             //  Sleep the thread
-            this_thread::sleep_for(chrono::milliseconds(10));
+            this_thread::sleep_for(chrono::milliseconds(100));
           }
           break;
         default:
@@ -434,6 +461,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           LOG_ERROR("Changeset upload responded with HTTP status response: " << request->getHttpStatus());
           //  Fall through
         case HttpResponseCode::HTTP_METHOD_NOT_ALLOWED:
+        case HttpResponseCode::HTTP_UNAUTHORIZED:
           //  This shouldn't ever happen, push back on the queue, only process a certain amount of times
           workInfo->retry();
           if (workInfo->canRetry())
@@ -446,7 +474,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
     }
     else
     {
-      if (!_changeset.hasElementsToSend() && !_changeset.isDone() && queueSize == 0)
+      if (_changeset.hasElementsToSend() && !_changeset.isDone() && queueSize == 0)
       {
         //  This is a bad state where the producer thread says all elements are sent and
         //  waits for all threads to join but the changeset isn't "done".
@@ -464,34 +492,34 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           id = -1;
         }
         _threadStatusMutex.unlock();
-        if (_threadsAreIdle())
+        //  In this case there are elements that have been sent and not reported back
+        //  BUT there are no threads that are waiting for them either.  Every thread
+        //  except the "first" worker thread will exit here.  The first worker thread
+        //  will wait for the producer thread to calculate the remaining changeset and
+        //  push in on the queue.  It then loops around and picks up the remaining
+        //  changeset and processes it.
+        if (_threadsAreIdle() && index != 0 && _threadsCanExit)
         {
-          //  In this case there are elements that have been sent and not reported back
-          //  BUT there are no threads that are waiting for them either.  Every thread
-          //  except the "first" worker thread will exit here.  The first worker thread
-          //  Tries to calculate the remaining changeset and push in on the queue.  It then
-          //  loops around and picks up the remaining changeset to process.  Next time around
-          //  calculateRemainingChangeset() fails and this thread is stopped.
-          if (index != 0)
-            stop_thread = true;
-          else if (_changeset.calculateRemainingChangeset(workInfo))
-            _pushChangesets(workInfo);
-          else
-            stop_thread = true;
+          stop_thread = true;
+          _updateThreadStatus(index, ThreadStatus::Completed);
         }
       }
       else
       {
         //  Set the status to idle
         _updateThreadStatus(index, ThreadStatus::Idle);
-        //  Sleep the thread
-        this_thread::sleep_for(chrono::milliseconds(10));
+        //  Yield the thread
+        this_thread::yield();
       }
     }
   }
   //  Close the changeset if one is still open
   if (id != -1)
     _closeChangeset(request, id);
+  //  Update the thread to complete if it didn't fail
+  ThreadStatus status = _getThreadStatus(index);
+  if (status != ThreadStatus::Failed && status != ThreadStatus::Unknown)
+    _updateThreadStatus(index, ThreadStatus::Completed);
 }
 
 void OsmApiWriter::setConfiguration(const Settings& conf)
@@ -957,9 +985,19 @@ bool OsmApiWriter::_splitChangeset(const ChangesetInfoPtr& workInfo, const QStri
   _changesetMutex.unlock();
   if (split->size() > 0)
   {
-    //  Push both of the changesets onto the queue
-    _pushChangesets(split, workInfo);
-    return true;
+    //  Fail the split changeset if the error flag is set
+    if (split->getError())
+    {
+      _changeset.failChangeset(split);
+      _pushChangesets(workInfo);
+      return true;
+    }
+    else
+    {
+      //  Push both of the changesets onto the queue
+      _pushChangesets(workInfo, split);
+      return true;
+    }
   }
   //  Nothing was split out, return false
   return false;
@@ -993,6 +1031,30 @@ void OsmApiWriter::_pushChangesets(ChangesetInfoPtr changeset, ChangesetInfoPtr 
   if (changeset2)
     _workQueue.push(changeset2);
 }
+
+void OsmApiWriter::_startWork()
+{
+  std::lock_guard<std::mutex> lock(_startMutex);
+  _startFlag = true;
+  _start.notify_all();
+}
+
+void OsmApiWriter::_waitForStart()
+{
+  std::unique_lock<std::mutex> lock(_startMutex);
+  _start.wait(lock, [this]{ return _startFlag; });
+}
+
+OsmApiWriter::ThreadStatus OsmApiWriter::_getThreadStatus(int thread_index)
+{
+  //  Validate the index
+  if (thread_index < 0 || thread_index >= (int)_threadStatus.size())
+    return ThreadStatus::Unknown;
+  //  Lock the mutex and return the status
+  std::lock_guard<std::mutex> lock(_threadStatusMutex);
+  return _threadStatus[thread_index];
+}
+
 
 void OsmApiWriter::_updateThreadStatus(int thread_index, ThreadStatus status)
 {

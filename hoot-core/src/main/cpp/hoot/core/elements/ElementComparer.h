@@ -38,6 +38,8 @@ namespace hoot
  * Compares two elements of the same type for similarity
  *
  * Note that if element IDs are ignored, the comparison may be a little more expensive
+ *
+ * @todo change this over to use CalculateHashVisitor
  */
 class ElementComparer : public OsmMapConsumer
 {
@@ -81,9 +83,9 @@ public:
 
 private:
 
-  //currently, this threshold applies only to non-node circular error checks and the var would
-  //eventually go away completely if all element types were converted over to uses hashes for
-  //comparisons
+  // currently, this threshold applies only to non-node circular error checks and the var would
+  // eventually go away completely if all element types were converted over to uses hashes for
+  // comparisons
   Meters _threshold;
   // enabling this allows for element comparisons to ignore the element ID
   bool _ignoreElementId;

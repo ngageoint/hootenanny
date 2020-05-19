@@ -65,6 +65,7 @@
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // Standard
 #include <fstream>
@@ -222,12 +223,11 @@ int ConflateCmd::runSimple(QStringList& args)
   const QString input2 = args[1];
   QString output = args[2];
 
-  QFileInfo outputInfo(output);
-  LOG_VARD(outputInfo.dir().absolutePath());
-  const bool outputDirSuccess = QDir().mkpath(outputInfo.dir().absolutePath());
-  if (!outputDirSuccess)
+  if (!IoUtils::isUrl(output))
   {
-    throw IllegalArgumentException("Unable to create output path for: " + output);
+    // write the output dir now so we don't get a nasty surprise at the end of a long job that it
+    // can't be written
+    IoUtils::writeOutputDir(output);
   }
 
   QString osmApiDbUrl;
@@ -382,6 +382,7 @@ int ConflateCmd::runSimple(QStringList& args)
       map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
   }
+  MemoryUsageChecker::getInstance()->check();
   LOG_STATUS(
     "Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
 
@@ -414,6 +415,7 @@ int ConflateCmd::runSimple(QStringList& args)
     stats.append(SingleStat("Calculate Stats for Input 2 Time (sec)", t.getElapsedAndRestart()));
     currentTask++;
   }
+  MemoryUsageChecker::getInstance()->check();
 
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));

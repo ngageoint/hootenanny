@@ -46,6 +46,8 @@
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/elements/ElementConverter.h>
 
 // Qt
 #include <QFileInfo>
@@ -98,6 +100,7 @@ public:
     _numElementsVisited(0),
     _numMatchCandidatesVisited(0),
     _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _memoryCheckUpdateInterval(ConfigOptions().getMemoryUsageCheckerInterval()),
     _totalElementsToProcess(0)
   {
     // Calls to script functions/var are expensive, both memory-wise and processing-wise. Since this
@@ -153,6 +156,8 @@ public:
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
+    //QElapsedTimer timer;
+
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
@@ -185,6 +190,8 @@ public:
       _scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME);
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
+      //timer.restart();
+
       ConstElementPtr e2 = map->getElement(*it);
       LOG_VART(e2->getElementId());
 
@@ -217,6 +224,26 @@ public:
           _result.push_back(m);
         }
       }
+
+//      if (timer.elapsed() > 5000)
+//      {
+//        LOG_DEBUG(
+//          "Compared with neighbor in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+//        LOG_VARD(e->getElementId());
+//        LOG_VARD(ElementConverter(map).calculateLength(e));
+//        if (e->getElementType() == ElementType::Way)
+//        {
+//          ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
+//          LOG_VARD(way->getNodeCount());
+//        }
+//        LOG_VARD(e2->getElementId());
+//        LOG_VARD(ElementConverter(map).calculateLength(e2));
+//        if (e2->getElementType() == ElementType::Way)
+//        {
+//          ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e2);
+//          LOG_VARD(way->getNodeCount());
+//        }
+//      }
     }
 
     _neighborCountSum += neighbors.size();
@@ -573,6 +600,10 @@ public:
         StringUtils::formatLargeNumber(_totalElementsToProcess) << " elements.");
        _timer.restart();
     }
+    if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
+    {
+      MemoryUsageChecker::getInstance()->check();
+    }
   }
 
   void setScriptPath(QString path) { _scriptPath = path; }
@@ -643,6 +674,7 @@ private:
   long _numMatchCandidatesVisited;
 
   int _taskStatusUpdateInterval;
+  int _memoryCheckUpdateInterval;
 
   long _totalElementsToProcess;
 

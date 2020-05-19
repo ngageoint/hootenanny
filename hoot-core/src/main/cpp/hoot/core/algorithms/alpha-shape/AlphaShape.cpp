@@ -317,16 +317,13 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
 std::shared_ptr<OsmMap> AlphaShape::toOsmMap()
 {
   std::shared_ptr<OsmMap> result(new OsmMap());
-
   GeometryConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
-
   const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
   {
     Relation* r = result->getRelation(it->first).get();
     r->setTag("area", "yes");
   }
-
   return result;
 }
 
@@ -379,7 +376,7 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
 
   LOG_DEBUG("Joining faces...");
 
-  // while there is more than one geometry.
+  // while there is more than one geometry
   while (tmp.size() > 1)
   {
     LOG_TRACE("Sorting size: " << tmp.size());

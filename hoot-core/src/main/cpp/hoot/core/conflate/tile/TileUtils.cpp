@@ -28,11 +28,6 @@
 #include "TileUtils.h"
 
 // hoot
-#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
-#include <hoot/core/io/OsmGeoJsonWriter.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 
@@ -41,29 +36,6 @@
 
 namespace hoot
 {
-
-std::vector<std::vector<geos::geom::Envelope>> TileUtils::calculateTiles(
-  const long maxNodesPerTile, const double pixelSize, OsmMapPtr map, long& minNodeCountInOneTile,
-  long& maxNodeCountInOneTile, std::vector<std::vector<long>>& nodeCounts)
-{
-  TileBoundsCalculator tileBoundsCalculator(pixelSize);
-  tileBoundsCalculator.setMaxNodesPerBox(maxNodesPerTile);
-  //tbc.setSlop(0.1);
-  cv::Mat r1, r2;
-  tileBoundsCalculator.renderImage(map, r1, r2);
-  //we're calculating for unknown1 only, so fill the second matrix with all zeroes
-  cv::Mat zeros = cv::Mat::zeros(r1.size(), r1.type());
-  tileBoundsCalculator.setImages(r1, zeros);
-
-  const std::vector<std::vector<geos::geom::Envelope>> tiles =
-    tileBoundsCalculator.calculateTiles();
-
-  minNodeCountInOneTile = tileBoundsCalculator.getMinNodeCountInOneTile();
-  maxNodeCountInOneTile = tileBoundsCalculator.getMaxNodeCountInOneTile();
-  nodeCounts = tileBoundsCalculator.getNodeCounts();
-
-  return tiles;
-}
 
 int TileUtils::getRandomTileIndex(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
                                   int randomSeed)
@@ -105,78 +77,6 @@ geos::geom::Envelope TileUtils::getRandomTile(
   }
   // shouldn't ever get here
   return geos::geom::Envelope();
-}
-
-void TileUtils::writeTilesToGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-  const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
-  const QString& fileSource, const bool selectSingleRandomTile, int randomSeed)
-{
-  LOG_VARD(outputPath);
-
-  int randomTileIndex = -1;
-  if (selectSingleRandomTile)
-    randomTileIndex = TileUtils::getRandomTileIndex(tiles, randomSeed);
-
-  OsmMapPtr boundaryMap = tilesToOsmMap(tiles, nodeCounts, randomTileIndex, selectSingleRandomTile);
-  boundaryMap->appendSource(fileSource);
-
-  OsmGeoJsonWriter writer;
-  Settings s;
-  //  Output the source tags in the geojson writer
-  s.set(ConfigOptions::getJsonOutputTaskingManagerAoiKey(), true);
-  s.set(ConfigOptions::getWriterPrecisionKey(), 9);
-  writer.setConfiguration(s);
-  writer.open(outputPath);
-  writer.write(boundaryMap);
-
-  OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
-}
-
-void TileUtils::writeTilesToOsm(
-  const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-  const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
-  const bool selectSingleRandomTile, int randomSeed)
-{
-  LOG_VARD(outputPath);
-
-  int randomTileIndex = -1;
-  if (selectSingleRandomTile)
-    randomTileIndex = TileUtils::getRandomTileIndex(tiles, randomSeed);
-
-  OsmMapPtr boundaryMap = tilesToOsmMap(tiles, nodeCounts, randomTileIndex, selectSingleRandomTile);
-
-  OsmMapWriterFactory::write(boundaryMap, outputPath);
-  OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
-}
-
-OsmMapPtr TileUtils::tilesToOsmMap(
-  const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-  const std::vector<std::vector<long>>& nodeCounts,
-  int randomTileIndex, const bool selectSingleRandomTile)
-{
-  OsmMapPtr boundaryMap(new OsmMap());
-  int bboxCtr = 1;
-  for (size_t tx = 0; tx < tiles.size(); tx++)
-  {
-    for (size_t ty = 0; ty < tiles[tx].size(); ty++)
-    {
-      //  Only create the bounding tile if we want all of them or
-      //  if this is the randomly selected tile
-      if (!selectSingleRandomTile ||
-          (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
-      {
-        //  Create the way in the map
-        const geos::geom::Envelope env = tiles[tx][ty];
-        ElementId eid = GeometryUtils::createBoundsInMap(boundaryMap, env);
-        //  Update the tags on the bounding rectangle
-        WayPtr bbox = boundaryMap->getWay(eid.getId());
-        bbox->setTag("node_count", QString::number(nodeCounts[tx][ty]));
-        bbox->setTag("task", QString::number(bboxCtr));
-      }
-      bboxCtr++;
-    }
-  }
-  return boundaryMap;
 }
 
 }

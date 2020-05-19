@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/elements/WayNodeUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
@@ -108,7 +108,7 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
             // find the closest way node index at the location of the node being copied to the way
             // we're copying to
             const long index =
-              WayNodeUtils::closestWayNodeInsertIndex(nodeToBeRemoved, replacingWay, _map);
+              WayUtils::closestWayNodeInsertIndex(nodeToBeRemoved, replacingWay, _map);
             LOG_VART(index);
             if (index != -1)
             {

@@ -31,6 +31,9 @@
         }
     },
     {
+        "geometries": [
+            "linestring"
+        ],
         "isA": "barrier",
         "name": "barrier=wall",
         "objectType": "tag"

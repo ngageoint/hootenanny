@@ -39,15 +39,15 @@ hoot.require('fcode_common');
 // Layer name filter - Filter out all layers that match this regexp
 function layerNameFilter()
 {
-    // Drop all of the "SRC_*" and "o2s_*" layers
-    return "^(?!SRC_|o2s_)";
+  // Drop all of the "SRC_*" and "o2s_*" layers
+  return '^(?!SRC_|o2s_)';
 }
 
 
 // Create the output Schema
 function getDbSchema()
 {
-    return tds40.getDbSchema();
+  return tds40.getDbSchema();
 }
 
 
@@ -56,7 +56,7 @@ function getDbSchema()
 // function translateAttributes(attrs, layerName, geometryType)
 function translateToOsm(attrs, layerName, geometryType)
 {
-    return tds40.toOsm(attrs, layerName, geometryType);
+  return tds40.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 
@@ -65,20 +65,20 @@ function translateToOsm(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 function translateToOgr(tags, elementType, geometryType)
 {
-    // print('Going to OGR: eType:' + elementType + '  gType:' + geometryType);
+  // print('Going to OGR: eType:' + elementType + '  gType:' + geometryType);
 
-    // The "tags" value is a string with this structure: "cables"=>"3", "voltage"=>"230000"
-    if (tags.tags)
-    {
-        var tStr = tags['tags'].toString();
+  // The "tags" value is a string with this structure: "cables"=>"3", "voltage"=>"230000"
+  if (tags.tags)
+  {
+    var tStr = tags['tags'].toString();
 
-        var tObj = JSON.parse('{' + tStr.split('=>').join(':') + '}');
+    var tObj = JSON.parse('{' + tStr.split('=>').join(':') + '}');
 
-        for (var i in tObj) tags[i.replace(/\"/g,'').trim()] = tObj[i].replace(/\"/g,'').trim();
+    for (var i in tObj) tags[i.replace(/\"/g,'').trim()] = tObj[i].replace(/\"/g,'').trim();
 
-        delete tags.tags;
-    }
+    delete tags.tags;
+  }
 
-    return tds40.toNfdd(tags, elementType, geometryType)
+  return tds40.toNfdd(tags, elementType, geometryType);
 
 } // End of translateToOgr

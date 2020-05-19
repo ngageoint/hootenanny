@@ -29,13 +29,13 @@
 // Convert NFDD English back to OSM+
 //
 
-hoot.require('emgcp_osm')
+hoot.require('emgcp_osm');
 
 
 function initialize()
 {
-    // Make sure the MGCP translator exports extra tags to the TXT field
-    hoot.Settings.set({"ogr.mgcp.extra":"note"});
+  // Make sure the MGCP translator exports extra tags to the TXT field
+  hoot.Settings.set({'ogr.mgcp.extra':'note'});
 }
 
 
@@ -50,18 +50,18 @@ function initialize()
 function translateAttributes(attrs, layerName, geometryType)
 {
 
-    // We use the temp var because nfdd_e.toEnglish returns "attrs" and "tableName"
-    var output = emgcp_osm.toOSM(attrs, layerName, geometryType);
+  // We use the temp var because nfdd_e.toEnglish returns "attrs" and "tableName"
+  var output = emgcp_osm.toOSM(attrs, layerName, geometryType);
 
-    // Make sure the returned value isn't NULL. This does occur
-    if (output)
-    {
-        return output.attrs;
-    }
-    else
-    {
-        return null;
-    }
+  // Make sure the returned value isn't NULL. This does occur
+  if (output)
+  {
+    return output.attrs;
+  }
+  else
+  {
+    return null;
+  }
 
 } // End of Translate Attributes
 
@@ -71,7 +71,7 @@ function translateAttributes(attrs, layerName, geometryType)
 //    This version converts OSM+ tags to NFDD "English" attributes
 function translateToOgr(tags, elementType, geometryType)
 {
-        return emgcp_osm.toOSM(tags, elementType, geometryType)
+  return emgcp_osm.toOSM(tags, elementType, geometryType);
 } // End of translateToOgr
 
 

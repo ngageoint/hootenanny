@@ -68,6 +68,7 @@ public:
 private:
 
   ConstOsmMapPtr _map;
+
   WayNodeCriterion _wayNodeCrit;
 };
 

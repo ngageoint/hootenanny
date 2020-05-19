@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -49,14 +49,28 @@ namespace Tgs
     CPPUNIT_TEST_SUITE(SystemInfoTest);
     CPPUNIT_TEST(test1);
     CPPUNIT_TEST_SUITE_END();
+
   public:
 
     void test1()
     {
       long vm, rss;
-      SystemInfo::getMemoryUsage(vm, rss);
+      SystemInfo::_getCurrentProcessMemoryUsage(vm, rss);
       CPPUNIT_ASSERT(vm > 0);
       CPPUNIT_ASSERT(rss > 0);
+
+      CPPUNIT_ASSERT(SystemInfo::getTotalSystemVirtualMemory() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getSystemVirtualMemoryUsed() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getCurrentProcessVirtualMemoryUsage() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getVirtualMemoryAvailable() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getPercentageOfVirtualMemoryUsed() > 0);
+
+      CPPUNIT_ASSERT(SystemInfo::getTotalSystemPhysicalMemory() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getSystemPhysicalMemoryUsed() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getCurrentProcessPhysicalMemoryUsage() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getPhysicalMemoryAvailable() >= 1);
+      CPPUNIT_ASSERT(SystemInfo::getPercentageOfPhysicalMemoryUsed() > 0);
+
       CPPUNIT_ASSERT(SystemInfo::getNumberOfProcessors() >= 1);
     }
   };

@@ -170,6 +170,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiReaderTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiReaderTest, "slow");
 
 }
