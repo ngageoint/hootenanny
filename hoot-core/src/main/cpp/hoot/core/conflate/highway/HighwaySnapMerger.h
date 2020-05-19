@@ -62,7 +62,7 @@ public:
 
   void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
 
-  virtual QString getDescription() const { return "Merges both road geometries and tags"; }
+  virtual QString getDescription() const { return "Merges road geometries and tags"; }
 
   virtual QString getName() const { return QString::fromStdString(className()); }
 
@@ -82,7 +82,7 @@ protected:
                           std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   /*
-   * TODO
+   * Finds a matching subline between two elements with the configured subline matcher
    */
   virtual WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2);
 

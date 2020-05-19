@@ -46,7 +46,7 @@ namespace hoot
 class OsmMapOperation;
 
 /**
- * @todo rename?
+ * @todo rename this to SnapMergerJs or MergerJs, as it does more than roads now
  */
 class HighwaySnapMergerJs : public node::ObjectWrap
 {

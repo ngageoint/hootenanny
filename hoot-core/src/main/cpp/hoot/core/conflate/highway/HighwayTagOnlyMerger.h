@@ -61,7 +61,7 @@ public:
   ~HighwayTagOnlyMerger();
 
   virtual QString getDescription() const
-  { return "Merges road tags only (some geometry exceptions)"; }
+  { return "Merges road tags only with minimal geometry exceptions"; }
 
 protected:
 

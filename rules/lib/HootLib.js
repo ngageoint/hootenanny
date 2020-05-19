@@ -378,7 +378,7 @@ function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
 }
 
 /**
- * TODO
+ * Merges rivers together
  */
 function snapRivers(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2)
 {
@@ -386,7 +386,7 @@ function snapRivers(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatc
 }
 
 /**
- * TODO
+ * Determines if a river is considered "long" by River Conflation standards
  */
 function isLongRiverPair(map, e1, e2)
 {

@@ -121,7 +121,7 @@ private:
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const;
 
   /*
-   * TODO
+   * Either creates a new match or retrieves an existing one from the global set of matches
    */
   std::shared_ptr<const ScriptMatch> _getMatch(
     OsmMapPtr map, v8::Handle<v8::Object> mapJs, const ElementId& eid1, const ElementId& eid2,

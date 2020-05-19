@@ -262,7 +262,9 @@ exports.matchScore = function(map, e1, e2)
 exports.mergeSets = function(map, pairs, replaced)
 {
   // Snap the ways in the second input to the first input. Use the default tag
-  // merge method. Pass the appropriate subline matcher based on what was used during matching.
+  // merge method. Since its not possible to know the original subline matcher used during 
+  // matching, pass in both of the possible subline matchers and the same internal core 
+  // logic used to determine which one to use during matching will be used during merging.
   return snapRivers(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 

@@ -38,7 +38,10 @@ namespace hoot
 class WaySublineMatchString;
 
 /**
- * TODO
+ * Merges river features
+ *
+ * This class primarily exists so that we can select a subline matcher based on properties of the
+ * input data for runtime performance reasons.
  */
 class RiverSnapMerger : public HighwaySnapMerger, public Configurable
 {
@@ -59,23 +62,24 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * TODO
+   * Determines if either of two ways is considered "long" by the standards of River Conflation.
+   * Both way length and node count are examined.
    *
-   * @param map
-   * @param way1
-   * @param way2
-   * @return
+   * @param map map owning the input ways
+   * @param way1 the first input way
+   * @param way2 the second input way
+   * @return true if either of the ways is considered "long"; false otherwise
    */
   bool isLongWayPair(ConstOsmMapPtr map, ConstWayPtr way1, ConstWayPtr way2);
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const { return "Merges rivers"; }
 
   virtual QString getName() const { return QString::fromStdString(className()); }
 
 protected:
 
   /*
-   * TODO
+   * @see HighwaySnapMerger
    */
   virtual WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2);
 
@@ -84,6 +88,8 @@ private:
   int _nodeCountThreshold;
   int _lengthThreshold;
 
+  // This is our backup matcher to use for long ways for runtime performance reasons. It may be
+  // a little less accurate but prevents extremely long ways from slowing things down too much.
   std::shared_ptr<SublineStringMatcher> _sublineMatcher2;
 };
 

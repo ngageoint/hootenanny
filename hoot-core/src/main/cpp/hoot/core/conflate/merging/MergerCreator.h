@@ -74,15 +74,13 @@ public:
   /**
    * Returns true if m1 and m2 are conflicting. If the MergerCreator has no information on the two
    * input matches then false is returned.
-   */
-  /**
-   * TODO
    *
-   * @param map
-   * @param m1
-   * @param m2
-   * @param matches
-   * @return
+   * @param map map owning the elements involved in the matches
+   * @param m1 the first match
+   * @param m2 the second match
+   * @param matches an optional set of all matches found during conflation; this allows match
+   * caching to be used in situations where duplicated match calculation is prohibitively expensive
+   * @return true if the two matches are conflicting; false otherwise
    */
   virtual bool isConflicting(
     const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,

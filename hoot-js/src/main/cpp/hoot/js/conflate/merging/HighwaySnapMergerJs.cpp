@@ -119,9 +119,13 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   SublineStringMatcherPtr sublineMatcher2;
   if (args.Length() > 5)
   {
+    // This is little unusual, but we're allowing an extra subline matcher to be passed info for
+    // river conflation only and the actual one used will be determined based on the input data.
+    // See RiverSnapMerger for more info.
     if (matchedBy != "Waterway")
     {
-      throw IllegalArgumentException("TODO");
+      throw IllegalArgumentException(
+        "Only river merging allows passing in multiple subline matchers.");
     }
     sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
   }
@@ -136,6 +140,7 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   }
   else if (matchedBy == "Waterway")
   {
+    // see note above about multiple subline matchers here
     snapMerger.reset(new RiverSnapMerger(pairs, sublineMatcher, sublineMatcher2));
   }
   else

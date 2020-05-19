@@ -105,14 +105,12 @@ public:
    * cannot be applied to a single OsmMap then true is returned.
    *
    * Two matches can only be conflicting if they contain the same ElementIds in getMatchPairs().
-   */
-  /**
-   * TODO
    *
-   * @param other
-   * @param map
-   * @param matches
-   * @return
+   * @param other match to check for conflict with
+   * @param map map owning the elements involved in the matches
+   * @param matches an optional set of all matches found during conflation; this allows match
+   * caching to be used in situations where duplicated match calculation is prohibitively expensive
+   * @return true if the two matches are conflicting; false otherwise
    */
   virtual bool isConflicting(
     const std::shared_ptr<const Match>& other,
@@ -165,19 +163,19 @@ public:
   bool operator==(const Match& other) const;
 
   /**
-   * TODO
+   * Returns a collection of matches indexed by the IDs of the elements involved
    *
-   * @param matches
-   * @return
+   * @param matches the matches to index
+   * @return an indexed collection of matches
    */
   static QHash<QString, ConstMatchPtr> getIdIndexedMatches(
     const std::vector<ConstMatchPtr>& matches);
 
   /**
-   * TODO
+   * String representation for match pairs
    *
-   * @param matchPairs
-   * @return
+   * @param matchPairs the match pairs to represent as a string
+   * @return a string
    */
   static QString matchPairsToString(
     const std::set<std::pair<ElementId, ElementId>>& matchPairs);
