@@ -471,16 +471,8 @@ void OsmSchemaJs::isLongRiverPair(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
   ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject())->getConstElement();
 
-  bool isLongPair = false;
-  if (e1->getElementType() == ElementType::Way && e2->getElementType() == ElementType::Way)
-  {
-    isLongPair =
-      RiverSnapMerger().isLongWayPair(
-        mapJs->getConstMap(), std::dynamic_pointer_cast<const Way>(e1),
-        std::dynamic_pointer_cast<const Way>(e2));
-  }
-
-  args.GetReturnValue().Set(Boolean::New(current, isLongPair));
+  args.GetReturnValue().Set(
+    Boolean::New(current, RiverSnapMerger().isLongPair(mapJs->getConstMap(), e1, e2)));
 }
 
 }

@@ -59,7 +59,7 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr &map
   MaximalSubline::ThresholdMatchCriteria* threshold =
     new MaximalSubline::ThresholdMatchCriteria(mrd, _maxAngle);
   // This should use the _minSplitSize rather than mrd, but that causes some tests to fail. We
-  // should look into the problem and solve it. See #6159
+  // should look into the problem and solve it. See redmine #6159
   MaximalSubline ms(threshold, mrd);
 
   vector<WaySublineMatch> matches = ms.findAllMatches(map, way1, way2, score);

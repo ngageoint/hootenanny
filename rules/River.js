@@ -150,9 +150,7 @@ function geometryMismatch(map, e1, e2)
 
   var sublines;
   var sublineMatcherUsed = sublineMatcherName;
-  //if (!longRivers)
-  // TODO: remove
-  if (!longRivers && e1.getElementId().getType() != "Relation" && e2.getElementId().getType() != "Relation")
+  if (!longRivers)
   {
     hoot.trace("Extracting sublines with default...");
     sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
@@ -174,7 +172,7 @@ function geometryMismatch(map, e1, e2)
     var m2 = sublines.match2;
 
     var weightedShapeDist = -1;
-    hoot.debug("Getting angleHist...");
+    hoot.trace("Getting angleHist...");
     var angleHist = sampledAngleHistogramExtractor.extract(m, m1, m2);
     hoot.debug("angleHist: " + angleHist);
     if (angleHist == 0)

@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
 
 namespace hoot
 {
@@ -62,9 +63,8 @@ void RiverSnapMerger::setConfiguration(const Settings& conf)
 
 WaySublineMatchString RiverSnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2)
 {
-  if (e1->getElementType() == ElementType::Way && e2->getElementType() == ElementType::Way &&
-      isLongWayPair(
-        map, std::dynamic_pointer_cast<const Way>(e1), std::dynamic_pointer_cast<const Way>(e2)))
+  if (e1->getElementType() != ElementType::Node && e2->getElementType() != ElementType::Node &&
+      isLongPair(map, e1, e2))
   {
     LOG_TRACE(
       "Matching long river sublines for merging: " << e1->getElementId() << ", " <<
@@ -80,14 +80,47 @@ WaySublineMatchString RiverSnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e
   }
 }
 
-bool RiverSnapMerger::isLongWayPair(ConstOsmMapPtr map, ConstWayPtr way1, ConstWayPtr way2)
+bool RiverSnapMerger::isLongPair(
+  ConstOsmMapPtr map, ConstElementPtr element1, ConstElementPtr element2)
 {
+  if (element1->getElementType() == ElementType::Node ||
+      element2->getElementType() == ElementType::Node)
+  {
+    return false;
+  }
+
   ElementConverter lengthCalc(map);
-  LOG_VART(lengthCalc.calculateLength(way1) + lengthCalc.calculateLength(way2));
-  LOG_VART(way1->getNodeCount() + way2->getNodeCount());
-  return
-    (lengthCalc.calculateLength(way1) + lengthCalc.calculateLength(way2)) > _lengthThreshold ||
-    (int)(way1->getNodeCount() + way2->getNodeCount()) > _nodeCountThreshold;
+  const double totalLength =
+    lengthCalc.calculateLength(element1) + lengthCalc.calculateLength(element2);
+
+  int nodeCount1 = 0;
+  if (element1->getElementType() == ElementType::Way)
+  {
+    nodeCount1 = std::dynamic_pointer_cast<const Way>(element1)->getNodeCount();
+  }
+  else
+  {
+    nodeCount1 =
+      RelationMemberUtils::getMemberWayNodeCount(
+        std::dynamic_pointer_cast<const Relation>(element1), map);
+  }
+  int nodeCount2 = 0;
+  if (element2->getElementType() == ElementType::Way)
+  {
+    nodeCount2 = std::dynamic_pointer_cast<const Way>(element2)->getNodeCount();
+  }
+  else
+  {
+    nodeCount2 =
+      RelationMemberUtils::getMemberWayNodeCount(
+        std::dynamic_pointer_cast<const Relation>(element2), map);
+  }
+  const int totalNodeCount = nodeCount1 + nodeCount2;
+
+  LOG_VART(totalLength);
+  LOG_VART(totalNodeCount);
+
+  return totalLength > _lengthThreshold || totalNodeCount > _nodeCountThreshold;
 }
 
 }

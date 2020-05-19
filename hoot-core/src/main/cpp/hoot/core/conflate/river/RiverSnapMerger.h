@@ -62,15 +62,20 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * Determines if either of two ways is considered "long" by the standards of River Conflation.
+   * Determines if either of two features is considered "long" by the standards of River Conflation.
    * Both way length and node count are examined.
    *
-   * @param map map owning the input ways
-   * @param way1 the first input way
-   * @param way2 the second input way
-   * @return true if either of the ways is considered "long"; false otherwise
+   * Note that relations are allowed here to despite the fact relation isn't an element type
+   * conflatable by River Conflation. This is due to the fact that relations are passed to matching
+   * during match conflict resolution and trying to prevent that causes regression test failures
+   * for an unknown reason. See comments in ScriptMatch::_isOrderedConflicting.
+   *
+   * @param map map owning the input elements
+   * @param element1 the first input element
+   * @param element2 the second input element
+   * @return true if either of the elements is considered "long"; false otherwise
    */
-  bool isLongWayPair(ConstOsmMapPtr map, ConstWayPtr way1, ConstWayPtr way2);
+  bool isLongPair(ConstOsmMapPtr map, ConstElementPtr element1, ConstElementPtr element2);
 
   virtual QString getDescription() const { return "Merges rivers"; }
 
@@ -85,9 +90,9 @@ protected:
 
 private:
 
-  // way node count at or above considered a "long" way
+  // way node count above which an element is considered "long"
   int _nodeCountThreshold;
-  // way length at or above considered a "long" way
+  // way length above  which an elementis considered "long"
   int _lengthThreshold;
 
   // This is our backup matcher to use for long ways for runtime performance reasons. It may be

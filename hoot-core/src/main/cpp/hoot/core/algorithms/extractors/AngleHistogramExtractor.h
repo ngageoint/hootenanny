@@ -78,8 +78,6 @@ protected:
 
   Radians _smoothing;
   unsigned int _bins;
-  // TODO
-  bool _processRelations;
 };
 
 }

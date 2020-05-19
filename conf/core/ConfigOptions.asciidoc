@@ -174,13 +174,6 @@ your language translation needs.
 
 The number of data bins used by the AngleHistogramExtractor and the SampledAngleHistogramExtractor.
 
-=== angle.histogram.extractor.process.relations
-
-* Data Type: bool
-* Default Value: `true`
-
-TODO
-
 === angle.histogram.extractor.smoothing
 
 * Data Type: double

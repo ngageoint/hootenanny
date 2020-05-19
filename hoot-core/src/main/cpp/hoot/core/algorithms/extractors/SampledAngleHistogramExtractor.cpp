@@ -60,8 +60,7 @@ public:
     const double headingDelta) :
   _angleHistogram(histogram),
   _sampleDistance(sampleDistance),
-  _headingDelta(headingDelta),
-  _processRelations(true)
+  _headingDelta(headingDelta)
   {
   }
 
@@ -69,12 +68,10 @@ public:
   {
     if (e->getElementType() == ElementType::Way)
     {
-      //LOG_DEBUG("Processing " << e->getElementId() << "...");
       _addWay(_map->getWay(e->getElementId()));
     }
-    else if (e->getElementType() == ElementType::Relation && _processRelations)
+    else if (e->getElementType() == ElementType::Relation)
     {
-      //LOG_DEBUG("Processing " << e->getElementId() << "...");
       const ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
       const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
       for (size_t i = 0; i < relationMembers.size(); i++)
@@ -86,23 +83,16 @@ public:
         }
       }
     }
-    else if (e->getElementType() == ElementType::Relation && !_processRelations)
-    {
-      //LOG_DEBUG("Skipping processing " << e->getElementId() << "...");
-    }
   }
 
   virtual QString getDescription() const { return ""; }
   virtual std::string getClassName() const { return ""; }
-
-  void setProcessRelations(bool process) { _processRelations = process; }
 
 private:
 
   Histogram& _angleHistogram;
   double _sampleDistance;
   double _headingDelta;
-  bool _processRelations;
 
   void _addWay(const ConstWayPtr& way)
   {
@@ -165,7 +155,6 @@ Histogram* SampledAngleHistogramExtractor::_createHistogram(const OsmMap& map,
   Histogram* result = new Histogram(8);
   SampledAngleHistogramVisitor v(*result, _sampleDistance, _headingDelta);
   v.setOsmMap(&map);
-  //v.setProcessRelations(_processRelations);
   e->visitRo(map, v);
   return result;
 }
