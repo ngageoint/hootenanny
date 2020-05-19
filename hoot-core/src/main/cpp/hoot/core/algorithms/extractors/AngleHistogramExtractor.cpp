@@ -51,7 +51,7 @@ public:
 
   static std::string className() { return "hoot::HistogramVisitor"; }
 
-  HistogramVisitor(Histogram& h) : _h(h) {}
+  HistogramVisitor(Histogram& h) : _h(h), _processRelations(true) {}
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -59,7 +59,7 @@ public:
     {
       _addWay(std::dynamic_pointer_cast<const Way>(e));
     }
-    else if (e->getElementType() == ElementType::Relation)
+    else if (e->getElementType() == ElementType::Relation && _processRelations)
     {
       const ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
       const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
@@ -77,9 +77,12 @@ public:
   virtual QString getDescription() const { return ""; }
   virtual std::string getClassName() const { return ""; }
 
+  void setProcessRelations(bool process) { _processRelations = process; }
+
 private:
 
   Histogram& _h;
+  bool _processRelations;
 
   void _addWay(const ConstWayPtr& way)
   {
@@ -111,7 +114,8 @@ AngleHistogramExtractor::AngleHistogramExtractor()
 
 AngleHistogramExtractor::AngleHistogramExtractor(Radians smoothing, unsigned int bins) :
 _smoothing(smoothing),
-_bins(bins)
+_bins(bins),
+_processRelations(true)
 {
   LOG_VART(_smoothing);
   LOG_VART(_bins);
@@ -122,6 +126,7 @@ void AngleHistogramExtractor::setConfiguration(const Settings& conf)
   ConfigOptions options(conf);
   _smoothing = options.getAngleHistogramExtractorSmoothing();
   _bins = options.getAngleHistogramExtractorBins();
+  _processRelations = options.getAngleHistogramExtractorProcessRelations();
   LOG_VART(_smoothing);
   LOG_VART(_bins);
 }
@@ -132,6 +137,7 @@ Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const Co
   Histogram* result = new Histogram(_bins);
   HistogramVisitor v(*result);
   v.setOsmMap(&map);
+  v.setProcessRelations(_processRelations);
   e->visitRo(map, v);
   return result;
 }

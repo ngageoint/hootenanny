@@ -260,7 +260,7 @@ bool ScriptMatch::_isOrderedConflicting(
   const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2,
   const QHash<QString, ConstMatchPtr>& matches) const
 {
-  LOG_TRACE("Checking for order conflict...");
+  LOG_TRACE("Checking " << other1 << " and " << other2 << " for order conflict...");
 
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
@@ -292,6 +292,15 @@ bool ScriptMatch::_isOrderedConflicting(
     eid22 = sharedEid;
   }
 
+  LOG_VART(eid11);
+  LOG_VART(eid12);
+//  if (!_isMatchCandidate(copiedMap->getElement(eid11), copiedMap) ||
+//      !_isMatchCandidate(copiedMap->getElement(eid12), copiedMap))
+//  {
+//    LOG_DEBUG("Skipping non-match candidate from pair 1: " << eid11 << ", " << eid12 << "...");
+//    return true;
+//  }
+
   std::shared_ptr<const ScriptMatch> m1 = _getMatch(copiedMap, copiedMapJs, eid11, eid12, matches);
   MatchSet ms;
   ms.insert(m1);
@@ -299,15 +308,14 @@ bool ScriptMatch::_isOrderedConflicting(
   ScriptMergerCreator creator;
   creator.createMergers(ms, mergers);
 
-  bool conflicting = true;
-  // if we got a merger, then check to see if it conflicts
+  // If we got a merger, then check to see if it conflicts.
   if (mergers.size() == 1)
   {
     // apply the merger to our map copy
     vector<pair<ElementId, ElementId>> replaced;
     mergers[0]->apply(copiedMap, replaced);
 
-    // replace the element id in the second merger.
+    // replace the element id in the second merger
     for (size_t i = 0; i < replaced.size(); ++i)
     {
       if (replaced[i].first == eid21)
@@ -323,16 +331,26 @@ bool ScriptMatch::_isOrderedConflicting(
     // If we can still find the second match after the merge was applied, then it isn't a conflict.
     if (copiedMap->containsElement(eid21) && copiedMap->containsElement(eid22))
     { 
+      LOG_VART(eid21);
+      LOG_VART(eid22);
+//      if (!_isMatchCandidate(copiedMap->getElement(eid21), copiedMap) ||
+//          !_isMatchCandidate(copiedMap->getElement(eid22), copiedMap))
+//      {
+//        LOG_DEBUG("Skipping non-match candidate from pair 2: " << eid21 << ", " << eid22 << "...");
+//        //return true;
+//        return false;
+//      }
+
       std::shared_ptr<const ScriptMatch> m2 =
         _getMatch(copiedMap, copiedMapJs, eid21, eid22, matches);
       if (m2->getType() == MatchType::Match)
       {
-        conflicting = false;
+        return false;
       }
     }
   }
 
-  return conflicting;
+  return true;
 }
 
 std::shared_ptr<const ScriptMatch> ScriptMatch::_getMatch(
@@ -368,6 +386,34 @@ std::shared_ptr<const ScriptMatch> ScriptMatch::_getMatch(
   }
 
   return match;
+}
+
+bool ScriptMatch::_isMatchCandidate(ConstElementPtr e, const ConstOsmMapPtr& map) const
+{
+  // This code is a little redundant with that in ScriptMatchVisitor::isMatchCandidate. See related
+  // notes in that method.
+
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_script->getContext(current));
+  Handle<Object> plugin =
+    Handle<Object>::Cast(
+      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+
+  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "isMatchCandidate"));
+  Handle<Function> func = Handle<Function>::Cast(value);
+  Handle<Value> jsArgs[2];
+
+  int argc = 0;
+  Handle<Object> mapObj = OsmMapJs::create(map);
+  jsArgs[argc++] = mapObj;
+  jsArgs[argc++] = ElementJs::New(e);
+
+  TryCatch trycatch;
+  Handle<Value> result = func->Call(plugin, argc, jsArgs);
+  HootExceptionJs::checkV8Exception(result, trycatch);
+
+  return result->BooleanValue();
 }
 
 Handle<Value> ScriptMatch::_call(

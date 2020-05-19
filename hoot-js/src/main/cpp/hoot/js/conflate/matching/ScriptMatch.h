@@ -120,6 +120,8 @@ private:
     ElementId other1, ElementId other2,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const;
 
+  bool _isMatchCandidate(ConstElementPtr e, const ConstOsmMapPtr& map) const;
+
   /*
    * Either creates a new match or retrieves an existing one from the global set of matches
    */

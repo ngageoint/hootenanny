@@ -85,7 +85,9 @@ protected:
 
 private:
 
+  // way node count at or above considered a "long" way
   int _nodeCountThreshold;
+  // way length at or above considered a "long" way
   int _lengthThreshold;
 
   // This is our backup matcher to use for long ways for runtime performance reasons. It may be

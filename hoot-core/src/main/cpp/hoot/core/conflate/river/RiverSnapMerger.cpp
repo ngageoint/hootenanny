@@ -66,12 +66,16 @@ WaySublineMatchString RiverSnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e
       isLongWayPair(
         map, std::dynamic_pointer_cast<const Way>(e1), std::dynamic_pointer_cast<const Way>(e2)))
   {
-    LOG_TRACE("Matching long river sublines for merging...");
-    return _sublineMatcher2->findMatch(map, e1, e2);
+    LOG_TRACE(
+      "Matching long river sublines for merging: " << e1->getElementId() << ", " <<
+       e2->getElementId() << "...");
+   return _sublineMatcher2->findMatch(map, e1, e2);
   }
   else
   {
-    LOG_TRACE("Matching river sublines for merging...");
+    LOG_TRACE(
+      "Matching river sublines for merging: " << e1->getElementId() << ", " <<
+       e2->getElementId() << "...");
     return _sublineMatcher->findMatch(map, e1, e2);
   }
 }

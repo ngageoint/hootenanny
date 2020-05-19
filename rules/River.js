@@ -37,7 +37,8 @@ var frechetSublineMatcher =
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
     { "way.angle.sample.distance" : hoot.get("waterway.angle.sample.distance"),
-      "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta") });
+      "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta"),
+      "angle.histogram.extractor.process.relations" : "false" }); // TODO:
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 
 var nameExtractor = new hoot.NameExtractor(
@@ -97,6 +98,8 @@ exports.isWholeGroup = function()
 
 function explicitTypeMismatch(e1, e2)
 {
+  hoot.trace("Processing type...");
+
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
 
@@ -116,6 +119,8 @@ function explicitTypeMismatch(e1, e2)
 
 function nameMismatch(map, e1, e2)
 {
+  hoot.trace("Processing name...");
+
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
 
@@ -138,12 +143,16 @@ function nameMismatch(map, e1, e2)
 
 function geometryMismatch(map, e1, e2)
 {
+  hoot.trace("Processing geometry...");
+
   var longRivers = isLongRiverPair(map, e1, e2);
   hoot.trace("longRivers: " + longRivers);
 
   var sublines;
   var sublineMatcherUsed = sublineMatcherName;
-  if (!longRivers)
+  //if (!longRivers)
+  // TODO: remove
+  if (!longRivers && e1.getElementId().getType() != "Relation" && e2.getElementId().getType() != "Relation")
   {
     hoot.trace("Extracting sublines with default...");
     sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
@@ -165,9 +174,9 @@ function geometryMismatch(map, e1, e2)
     var m2 = sublines.match2;
 
     var weightedShapeDist = -1;
-    hoot.trace("Getting angleHist...");
+    hoot.debug("Getting angleHist...");
     var angleHist = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    hoot.trace("angleHist: " + angleHist);
+    hoot.debug("angleHist: " + angleHist);
     if (angleHist == 0)
     {
       hoot.trace("Getting weightedShapeDist...");

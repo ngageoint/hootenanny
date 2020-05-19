@@ -126,24 +126,20 @@ vector<bool> WaySublineMatchString::getReverseVector2() const
 WaySublineCollection WaySublineMatchString::getSublineString1() const
 {
   WaySublineCollection result;
-
   for (size_t i = 0; i < _matches.size(); i++)
   {
     result.addSubline(_matches[i].getSubline1());
   }
-
   return result;
 }
 
 WaySublineCollection WaySublineMatchString::getSublineString2() const
 {
   WaySublineCollection result;
-
   for (size_t i = 0; i < _matches.size(); i++)
   {
     result.addSubline(_matches[i].getSubline2());
   }
-
   return result;
 }
 
