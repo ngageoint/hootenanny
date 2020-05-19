@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * Base class to ease OsmMapConsumer usage.
+ * Base class to ease ConstOsmMapConsumer usage.
  */
 class ElementConstOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {

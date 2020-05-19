@@ -210,36 +210,6 @@ exports.matchScore = function(map, e1, e2)
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
 
-  /*var e1IsRiver = isLinearWaterway(e1);
-  var e2IsRiver = isLinearWaterway(e2);
-  if (!e1IsRiver && e2IsRiver)
-  {
-    hoot.log("not a river:");
-    hoot.log(e1.getElementId() + ", " + tags1.get("name"));
-    hoot.log("mostSpecificType: " + mostSpecificType(e1));
-    hoot.log("is a river:");
-    hoot.log(e2.getElementId() + ", " + tags2.get("name"));
-    hoot.log("mostSpecificType: " + mostSpecificType(e2));
-  }
-  else if (e1IsRiver && !e2IsRiver)
-  {
-    hoot.log("is a river:");
-    hoot.log(e1.getElementId() + ", " + tags1.get("name"));
-    hoot.log("mostSpecificType: " + mostSpecificType(e1));
-    hoot.log("not a river:");
-    hoot.log(e2.getElementId() + ", " + tags2.get("name"));
-    hoot.log("mostSpecificType: " + mostSpecificType(e2));
-  }
-  else if (!e1IsRiver && !e2IsRiver)
-  {
-    hoot.log("not a river:");
-    hoot.log(e1.getElementId() + ", " + tags1.get("name"));
-    hoot.log("mostSpecificType: " + mostSpecificType(e1));
-    hoot.log("not a river:");
-    hoot.log(e2.getElementId() + ", " + tags2.get("name"));
-    hoot.log("mostSpecificType: " + mostSpecificType(e2));
-  }*/
-
   hoot.trace("**********************************");
   hoot.trace("e1: " + e1.getElementId() + ", " + tags1.get("name"));
   if (tags1.get("note"))
