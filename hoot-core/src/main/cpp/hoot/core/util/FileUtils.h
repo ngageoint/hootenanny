@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef FILEUTILS_H
@@ -42,6 +42,13 @@ class FileUtils
 {
 
 public:
+
+  /**
+   * Creates a folder path using QDir::mkpath in a more thread-safe way
+   * @param path relative or absolute path to create (think `mkdir -p`)
+   * @return true if successful
+   */
+  static bool makeDir(const QString& path);
 
   /**
    * Delete a directory along with all of its contents.

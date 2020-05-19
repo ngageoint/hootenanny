@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -205,8 +206,8 @@ class ConflateCommand extends ExternalCommand {
                     JSONParser parser = new JSONParser();
                     try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, NETWORK_CONFLATION_PATH))) {
                         JSONObject networkConfigJson = (JSONObject) parser.parse(fileReader);
-                        matchCreators = new ArrayList<>(Arrays.asList(networkConfigJson.get("match.creators").toString().split(";")));
-                        mergerCreators = new ArrayList<>(Arrays.asList(networkConfigJson.get("merger.creators").toString().split(";")));
+			matchCreators = getCreatorsFromJson("match.creators", "MatchCreators", networkConfigJson);
+			mergerCreators = getCreatorsFromJson("merger.creators", "MergerCreators", networkConfigJson);
                     }
                     catch (IOException | ParseException ioe) {
                         throw new RuntimeException("Error reading NetworkAlgorithm.conf file", ioe);
@@ -317,6 +318,58 @@ class ConflateCommand extends ExternalCommand {
         }
 
         super.configureCommand(command, substitutionMap, caller);
+    }
+
+    /*
+     * Returns a list of conflate match or merger creators given a configuration
+     *
+     * @param optionName core configuration option name; e.g. "match.creators"
+     * @param defaultOptionId configuration option name as referenced in the services default config; e.g. "MatchCreators"
+     * @param config the JSON configuration to parse
+     * @note Option replacement syntax is valid for any hoot config option, but in practice its only currently being used from the
+     * match/merger creator options, so the concept or parsing it may have to be abstracted here at a later time.
+     * @return a list of match/merger creator strings
+     */
+    private List<String> getCreatorsFromJson(String optionName, String defaultOptionId, JSONObject config) {
+        // hoot json config files support an option list value entry replacement syntax. For instance, to replace an instance of
+        // "hoot::HighwayMatchCreator", in the "match.creators" config option the json snippet would look like:
+        //
+        // "match.creators": "hoot::HighwayMatchCreator->hoot::NetworkMatchCreator",
+        // 
+        // where '->' means replace the first item with the second item.
+
+        String creatorsStr = config.get(optionName).toString();
+
+        if (creatorsStr.contains("->")) {
+            // If our string contains the replacement operator, parse through each entry and perform the option value entry replacement
+            // on the default configuration. We're assuming that if one option val entry has '->', then they all do which is also what
+            // the core does when parsing CLI args.
+
+            List <String> modifiedCreators;
+            List <String> defaultCreators =
+                new ArrayList<>(Arrays.asList(configOptions.get(defaultOptionId).get("default").split(";")));
+            modifiedCreators = defaultCreators;
+            List <String> creatorReplacements = new ArrayList <>(Arrays.asList(creatorsStr.split(";")));
+            for (int i = 0; i < creatorReplacements.size(); i++) {
+                String creatorReplacement = creatorReplacements.get(i);
+                List <String> creatorReplacementParts = new ArrayList <>(Arrays.asList(creatorReplacement.split("->")));
+                if (creatorReplacementParts.size() != 2) {
+                    throw new IllegalArgumentException(
+                        String.format("Invalid replacement option value entry: \"%s\".", creatorReplacement));
+                }
+                String creatorToReplace = creatorReplacementParts.get(0);
+                String replacementCreator = creatorReplacementParts.get(1);
+                if (!modifiedCreators.contains(creatorToReplace)) {
+                    throw new IllegalArgumentException(
+                        String.format("Option value entry to replace does not exist: \"%s\".", creatorToReplace));
+                }
+                Collections.replaceAll(modifiedCreators, creatorToReplace, replacementCreator);
+            }
+            return modifiedCreators;
+        } else {
+            // Otherwise, just parse the creators as a literal option list value.
+            return new ArrayList<>(Arrays.asList(creatorsStr.split(";")));
+        }
     }
 
     private String[] toOptionsList(String optionsString) {

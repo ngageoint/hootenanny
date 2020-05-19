@@ -36,15 +36,16 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/scoring/DirectedGraph.h>
 #include <hoot/core/scoring/ShortestPath.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/GeometryPainter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
@@ -252,7 +253,7 @@ void GraphComparator::_graphCompareThreadFunc()
       for (size_t j = 0; j < size; ++j)
         diffData[j] = fabs(image1Data[j] - image2Data[j]);
 
-      QDir().mkpath("test-output/route-image");
+      FileUtils::makeDir("test-output/route-image");
       QString s1 = QString("test-output/route-image/route-%1-a.png").arg(info.index, 3, 10, QChar('0'));
       QString s2 = QString("test-output/route-image/route-%1-b.png").arg(info.index, 3, 10, QChar('0'));
       QString sdiff = QString("test-output/route-image/route-%1-diff.png").arg(info.index, 3, 10, QChar('0'));
