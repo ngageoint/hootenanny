@@ -62,7 +62,7 @@ import hoot.services.geo.BoundingBox;
 /**
  * Used for pulling Private Rails Port API data
  */
-class PullApiCommand implements InternalCommand {
+public class PullApiCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullApiCommand.class);
 
     private final GrailParams params;

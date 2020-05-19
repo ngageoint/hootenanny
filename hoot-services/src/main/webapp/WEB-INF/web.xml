@@ -93,6 +93,7 @@
         <url-pattern>/ingest/*</url-pattern>
         <url-pattern>/grail/*</url-pattern>
         <url-pattern>/language/*</url-pattern>
+        <url-pattern>/taskingmanager/*</url-pattern>
         <!-- [!] new url-pattern's added here should be considered for security-applicationContext.xml [!] -->
     </servlet-mapping>
 

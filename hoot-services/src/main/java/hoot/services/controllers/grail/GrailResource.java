@@ -951,7 +951,7 @@ public class GrailResource {
     }
 
     // throws forbidden exception is user does not have advanced privileges
-    private static void advancedUserCheck(Users user) {
+    public static void advancedUserCheck(Users user) {
         HashMap privileges = ((HashMap) user.getPrivileges());
         if(privileges == null || !privileges.get("advanced").equals("true")) {
             throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build());
