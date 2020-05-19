@@ -143,19 +143,8 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
     snapMerger.reset(new HighwaySnapMerger(pairs, sublineMatcher));
   }
   snapMerger->setMatchedBy(matchedBy);
-//  if (pairs.size() == 1)
-//  {
-//    const std::pair<ElementId, ElementId> pair = *pairs.begin();
-//    WaySublineMatchString cachedSublineMatch =
-//      SublineStringMatcherJs::getSublineMatch(pair.first, pair.second);
-//    snapMerger->setSublineMatch(cachedSublineMatch);
-//    if (!cachedSublineMatch.isEmpty())
-//    {
-//      LOG_TRACE(
-//        "Subline cache hit for: " <<
-//        SublineStringMatcherJs::getSublineMatchKey(pair.first, pair.second));
-//    }
-//  }
+  // Some attempts were made to use cached subline matches from SublineStringMatcherJst for
+  // performance reasons, but the results were unstable. See branch 3969b.
   snapMerger->apply(map, replaced);
 
   // modify the parameter that was passed in

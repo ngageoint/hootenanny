@@ -66,8 +66,6 @@ public:
 
   virtual QString getName() const { return QString::fromStdString(className()); }
 
-  void setSublineMatch(WaySublineMatchString subline) { _sublineMatch = subline; }
-
 protected:
 
   // When roads are split and the pieces stored in multilinestring relations, this decides if the
@@ -79,8 +77,6 @@ protected:
   bool _markAddedMultilineStringRelations;
 
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
-  // TODO
-  WaySublineMatchString _sublineMatch;
 
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);

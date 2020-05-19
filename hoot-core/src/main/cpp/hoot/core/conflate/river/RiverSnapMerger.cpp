@@ -63,11 +63,6 @@ void RiverSnapMerger::setConfiguration(const Settings& conf)
 
 WaySublineMatchString RiverSnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2)
 {
-//  if (!_sublineMatch.isEmpty())
-//  {
-//    return _sublineMatch;
-//  }
-
   if (e1->getElementType() == ElementType::Way && e2->getElementType() == ElementType::Way &&
       isLongWayPair(
         map, std::dynamic_pointer_cast<const Way>(e1), std::dynamic_pointer_cast<const Way>(e2)))

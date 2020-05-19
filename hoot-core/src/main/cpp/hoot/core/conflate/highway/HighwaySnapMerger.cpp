@@ -191,12 +191,9 @@ bool HighwaySnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPt
 
 WaySublineMatchString HighwaySnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2)
 {
-//  if (!_sublineMatch.isEmpty())
-//  {
-//    return _sublineMatch;
-//  }
-  _sublineMatch = _sublineMatcher->findMatch(map, e1, e2);
-  return _sublineMatch;
+  // Some attempts were made to use cached subline matches pased in from HighwaySnapMergerJs for
+  // performance reasons, but the results were unstable. See branch 3969b.
+  return _sublineMatcher->findMatch(map, e1, e2);
 }
 
 bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,

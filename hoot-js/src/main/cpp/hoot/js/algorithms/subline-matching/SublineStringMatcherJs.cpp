@@ -57,7 +57,6 @@ namespace hoot
 {
 
 int SublineStringMatcherJs::logWarnCount = 0;
-QHash<QString, WaySublineMatchString> SublineStringMatcherJs::_sublineMatchCache;
 
 HOOT_JS_REGISTER(SublineStringMatcherJs)
 
@@ -68,25 +67,6 @@ _sm(sm)
 
 SublineStringMatcherJs::~SublineStringMatcherJs()
 {
-}
-
-QString SublineStringMatcherJs::getSublineMatchKey(
-  const ElementId& elementId1, const ElementId& elementId2)
-{
-  if (elementId1 < elementId2)
-  {
-    return elementId1.toString() + "," + elementId2.toString();
-  }
-  else
-  {
-    return elementId2.toString() + "," + elementId1.toString();
-  }
-}
-
-WaySublineMatchString SublineStringMatcherJs::getSublineMatch(
-  const ElementId& elementId1, const ElementId& elementId2)
-{
-  return _sublineMatchCache[getSublineMatchKey(elementId1, elementId2)];
 }
 
 void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<Value>& args)
@@ -108,19 +88,9 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 
   try
   {
-    WaySublineMatchString match;
-//    const QString matchKey = getSublineMatchKey(e1->getElementId(), e2->getElementId());
-//    if (_sublineMatchCache.contains(matchKey))
-//    {
-//      match = _sublineMatchCache[matchKey];
-//      // TODO: change to trace
-//      LOG_TRACE("Subline cache hit for: " << matchKey);
-//    }
-//    else
-//    {
-      match = sm->findMatch(m, e1, e2);
-      //_sublineMatchCache[matchKey] = match;
-    //}
+    // Some attempts were made to cache this match for performance reasons, but the results were
+    // unstable. See branch 3969b.
+    WaySublineMatchString match = sm->findMatch(m, e1, e2);
 
     if (match.isEmpty())
     {
