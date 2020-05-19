@@ -61,6 +61,8 @@ function initialize()
   // Get any tag override changes
   toChange = hoot.Settings.get('schema.translation.override');
 
+  outputFormat = config.getOgrOutputFormat();
+
 
 } // End Initialize
 
@@ -68,8 +70,65 @@ function initialize()
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
 function translateToOsm(attrs, layerName, geometryType)
 {
+  if (config.getOgrDebugDumptags() == 'true')
+  {
+    print('In Geometry: ' + geometryType);
+    for (var i in attrs) print('In Attrs :' + i + ': :' + attrs[i] + ':');
+    print('');
+  }
+
   // Translation overrides if set
   if (toChange) attrs = translate.overrideValues(attrs, toChange);
+
+  // Lengthen some of the names if needed
+  var swapList = {
+    'constructn':'construction',
+    'denominatn':'denomination',
+    'descript':'description',
+    'gen_source':'generator:source',
+    'intermit':'intermittent',
+    'pwr_source':'power_source',
+    'public_tpt':'public_transport',
+    'tower_type':'tower:type',
+    'house_name':'addr:housename',
+    'house_num':'addr:housenumber',
+    'addr_intrp':'addr:interpolation',
+    'admin_lvl':'admin_level',
+        };
+
+  for (var i in attrs)
+  {
+    if (i in swapList)
+    {
+      attrs[swapList[i]] = attrs[i];
+      delete attrs[i];
+    }
+  }
+
+  // Push all of the tagsX attributes into one tag
+  for (var i = 2; i < 5; i++)
+  {
+    if (attrs['tags' + i])
+    {
+      attrs.tags = attrs.tags + attrs['tags' + i];
+      delete attrs['tags' + i];
+    }
+  }
+
+  // Split tags
+  tList = attrs['tags'].split(',');
+  for (var val in tList)
+  {
+    // print('Val: ' + tList[val]);
+    vList = tList[val].split('"=>"');
+
+    attrs[vList[0].replace('"','')] = vList[1].replace('"','');
+
+    // Debug
+    // print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+  }
+
+
   return attrs;
 } // End of Translate Attributes
 
@@ -83,12 +142,6 @@ function translateToOgr(tags, elementType, geometryType)
   if (toChange) tags = translate.overrideValues(tags, toChange);
 
   // Debug:
-  if (config.getOgrDebugDumptags() == 'true')
-  {
-    print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-    for (var i in tags) print('In Tags :' + i + ': :' + tags[i] + ':');
-    print('');
-  }
 
   // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.
   // There is no way we can translate these to a single geometry.
@@ -105,6 +158,21 @@ function translateToOgr(tags, elementType, geometryType)
   if (tags['hoot:layername']) delete tags['hoot:layername'];
   if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
 
+  // Shorten some of the names when exporting to shapefile
+  var swapList = {
+    'construction':'constructn',
+    'denomination':'denominatn',
+    'description':'descript',
+    'generator:source':'gen_source',
+    'intermittent':'intermit',
+    'power_source':'pwr_source',
+    'public_transport':'public_tpt',
+    'tower:type':'tower_type',
+    'addr:housename':'house_name',
+    'addr:housenumber':'house_num',
+    'addr:interpolation':'addr_intrp',
+    'admin_level':'admin_lvl',
+        };
 
   // Clean out the Tags
   for (var i in tags)
@@ -118,6 +186,13 @@ function translateToOgr(tags, elementType, geometryType)
       continue;
     }
 
+    // Swap names if needed
+    if (outputFormat == 'shp' && i in swapList)
+    {
+      tags[swapList[i]] = tags[i];
+      delete tags[i];
+      continue;
+    }
 
     // Look for the tag in the schema lookup tables. We assume that the initialize function has been run.
     if (renderDb[geometryType].indexOf(i) == -1)
@@ -136,6 +211,23 @@ function translateToOgr(tags, elementType, geometryType)
       delete tags[i];
     }
   }
+
+  if (outputFormat == 'shp' && tags['tags'].length > 255)
+  {
+    // Not good. Will fix with the rewrite of the tag splitting code
+    if (tags['tags'].length > 1012)
+    {
+      hoot.logError('tags attribute truncated to fit in available space.');
+      tags['tags'] = tags['tags'].substring(0,1012);
+    }
+
+    // Now split the text across the available tags
+    tags['tags4'] = tags['tags'].substring(759,1012);
+    tags['tags3'] = tags['tags'].substring(506,759);
+    tags['tags2'] = tags['tags'].substring(253,506);
+    tags['tags'] = tags['tags'].substring(0,253);
+  }
+
 
   // Debug:
   if (config.getOgrDebugDumptags() == 'true')
@@ -210,7 +302,7 @@ function getDbSchema()
     { name:'shop',desc:'shop',type:'String',defValue:'' },
     { name:'sport',desc:'sport',type:'String',defValue:'' },
     { name:'surface',desc:'surface',type:'String',defValue:'' },
-    { name:'tags',desc:'tags',type:'String',defValue:'' },
+    { name:'tags',desc:'tags',type:'String',length:'254',defValue:'' },
     { name:'toll',desc:'toll',type:'String',defValue:'' },
     { name:'tourism',desc:'tourism',type:'String',defValue:'' },
     { name:'tower:type',desc:'tower:type',type:'String',defValue:'' },
@@ -235,6 +327,40 @@ function getDbSchema()
   ];
 
   var schema = [];
+
+  // Shapefiles can only have 10 character attribute names
+  // This is Ugly and is repeated since getDbSchema gets used before initialise() and the translation functions
+  if (config.getOgrOutputFormat() == 'shp')
+  {
+    var swapList = {
+      'construction':'constructn',
+      'denomination':'denominatn',
+      'description':'descript',
+      'generator:source':'gen_source',
+      'intermittent':'intermit',
+      'power_source':'pwr_source',
+      'public_transport':'public_tpt',
+      'tower:type':'tower_type',
+      'addr:housename':'house_name',
+      'addr:housenumber':'house_num',
+      'addr:interpolation':'addr_intrp',
+      'admin_level':'admin_lvl',
+          };
+
+    // This is brute force and ugly but the list is an array of objects
+    for (var i = 0, cLen = common_list.length; i < cLen; i++)
+    {
+      if (common_list[i].name in swapList)
+      {
+        common_list[i].name = swapList[common_list[i].name]
+      }
+    }
+
+    // Now add a few more Tags attributes su we can export upto 1K of text
+    common_list.push({name:'tags2',desc:'tags2',type:'String',length:'254',defValue:''});
+    common_list.push({name:'tags3',desc:'tags3',type:'String',length:'254',defValue:''});
+    common_list.push({name:'tags4',desc:'tags4',type:'String',length:'254',defValue:''});
+  }
 
   // Add the Line & Polygon specific features
   var tList = [];
