@@ -70,12 +70,8 @@ function initialize()
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
 function translateToOsm(attrs, layerName, geometryType)
 {
-  if (config.getOgrDebugDumptags() == 'true')
-  {
-    print('In Geometry: ' + geometryType);
-    for (var i in attrs) print('In Attrs :' + i + ': :' + attrs[i] + ':');
-    print('');
-  }
+  // Debug
+    if (config.getOgrDebugDumptags() == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In Attrs: ');
 
   // Translation overrides if set
   if (toChange) attrs = translate.overrideValues(attrs, toChange);
@@ -94,6 +90,11 @@ function translateToOsm(attrs, layerName, geometryType)
     'house_num':'addr:housenumber',
     'addr_intrp':'addr:interpolation',
     'admin_lvl':'admin_level',
+    'generator_source':'generator:source',
+    'tower_type':'tower:type',
+    'addr_housename':'addr:housename',
+    'addr_housenumber':'addr:housenumber',
+    'addr_interpolation':'addr:interpolation',
         };
 
   for (var i in attrs)
@@ -106,28 +107,36 @@ function translateToOsm(attrs, layerName, geometryType)
   }
 
   // Push all of the tagsX attributes into one tag
+  // print('tags :' + attrs.tags + ':');
   for (var i = 2; i < 5; i++)
   {
     if (attrs['tags' + i])
     {
-      attrs.tags = attrs.tags + attrs['tags' + i];
+      // print('tag' + i + ' :' + attrs['tags' + i] + ':');
+      attrs.tags = attrs['tags'].toString() + attrs['tags' + i].toString();
       delete attrs['tags' + i];
     }
   }
 
   // Split tags
-  tList = attrs['tags'].split(',');
+  tList = attrs['tags'].split('","');
+  delete attrs.tags;
+
   for (var val in tList)
   {
-    // print('Val: ' + tList[val]);
     vList = tList[val].split('"=>"');
-
-    attrs[vList[0].replace('"','')] = vList[1].replace('"','');
+    attrs[vList[0].toString().replace('"','')] = vList[1].toString().replace('"','');
 
     // Debug
-    // print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+    // print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
   }
 
+  // Debug:
+  if (config.getOgrDebugDumptags() == 'true')
+  {
+    translate.debugOutput(attrs,layerName,geometryType,'','Out tags: ');
+    print('');
+  }
 
   return attrs;
 } // End of Translate Attributes
@@ -137,6 +146,7 @@ function translateToOsm(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 function translateToOgr(tags, elementType, geometryType)
 {
+  if (config.getOgrDebugDumptags() == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
   // Translation overrides if set
   if (toChange) tags = translate.overrideValues(tags, toChange);
@@ -159,7 +169,7 @@ function translateToOgr(tags, elementType, geometryType)
   if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
 
   // Shorten some of the names when exporting to shapefile
-  var swapList = {
+  var shpSwapList = {
     'construction':'constructn',
     'denomination':'denominatn',
     'description':'descript',
@@ -172,6 +182,14 @@ function translateToOgr(tags, elementType, geometryType)
     'addr:housenumber':'house_num',
     'addr:interpolation':'addr_intrp',
     'admin_level':'admin_lvl',
+        };
+
+  var gdbSwapList = {
+    'generator:source':'generator_source',
+    'tower:type':'tower_type',
+    'addr:housename':'addr_housename',
+    'addr:housenumber':'addr_housenumber',
+    'addr:interpolation':'addr_interpolation',
         };
 
   // Clean out the Tags
@@ -187,9 +205,16 @@ function translateToOgr(tags, elementType, geometryType)
     }
 
     // Swap names if needed
-    if (outputFormat == 'shp' && i in swapList)
+    if (outputFormat == 'shp' && i in shpSwapList)
     {
-      tags[swapList[i]] = tags[i];
+      tags[shpSwapList[i]] = tags[i];
+      delete tags[i];
+      continue;
+    }
+
+    if (outputFormat == 'gdb' && i in gdbSwapList)
+    {
+      tags[gdbSwapList[i]] = tags[i];
       delete tags[i];
       continue;
     }
@@ -228,11 +253,10 @@ function translateToOgr(tags, elementType, geometryType)
     tags['tags'] = tags['tags'].substring(0,253);
   }
 
-
   // Debug:
   if (config.getOgrDebugDumptags() == 'true')
   {
-    for (var i in tags) print('Out Tags :' + i + ': :' + tags[i] + ':');
+    translate.debugOutput(tags,'',geometryType,elementType,'Out attrs: ');
     print('');
   }
 
@@ -302,7 +326,7 @@ function getDbSchema()
     { name:'shop',desc:'shop',type:'String',defValue:'' },
     { name:'sport',desc:'sport',type:'String',defValue:'' },
     { name:'surface',desc:'surface',type:'String',defValue:'' },
-    { name:'tags',desc:'tags',type:'String',length:'254',defValue:'' },
+    { name:'tags',desc:'tags',type:'String',defValue:'' },
     { name:'toll',desc:'toll',type:'String',defValue:'' },
     { name:'tourism',desc:'tourism',type:'String',defValue:'' },
     { name:'tower:type',desc:'tower:type',type:'String',defValue:'' },
@@ -327,6 +351,9 @@ function getDbSchema()
   ];
 
   var schema = [];
+
+  // Debug
+  // print('OutputFormat = :' + config.getOgrOutputFormat() + ':')
 
   // Shapefiles can only have 10 character attribute names
   // This is Ugly and is repeated since getDbSchema gets used before initialise() and the translation functions
@@ -357,9 +384,30 @@ function getDbSchema()
     }
 
     // Now add a few more Tags attributes su we can export upto 1K of text
-    common_list.push({name:'tags2',desc:'tags2',type:'String',length:'254',defValue:''});
-    common_list.push({name:'tags3',desc:'tags3',type:'String',length:'254',defValue:''});
-    common_list.push({name:'tags4',desc:'tags4',type:'String',length:'254',defValue:''});
+    common_list.push({name:'tags2',desc:'tags2',type:'String',defValue:''});
+    common_list.push({name:'tags3',desc:'tags3',type:'String',defValue:''});
+    common_list.push({name:'tags4',desc:'tags4',type:'String',defValue:''});
+  }
+
+  // GDB doesn't likr ":" in attribute names
+  if (config.getOgrOutputFormat() == 'gdb')
+  {
+    var swapList = {
+      'generator:source':'generator_source',
+      'tower:type':'tower_type',
+      'addr:housename':'addr_housename',
+      'addr:housenumber':'addr_housenumber',
+      'addr:interpolation':'addr_interpolation',
+          };
+
+    // This is brute force and ugly but the list is an array of objects
+    for (var i = 0, cLen = common_list.length; i < cLen; i++)
+    {
+      if (common_list[i].name in swapList)
+      {
+        common_list[i].name = swapList[common_list[i].name]
+      }
+    }
   }
 
   // Add the Line & Polygon specific features
