@@ -233,7 +233,19 @@ function translateToOgr(tags, elementType, geometryType)
 
   // Find how much text we need to split and store
   tagsLength = 0;
-  for (var i in tagsList) tagsLength += tagsList[i].length;
+  for (var i = tagsList.length - 1; i >= 0; --i)
+  {
+    // Debug
+    // print('len: ' + tagsList[i].length + '  tag: ' + tagsList[i]);
+    if (tagsList[i].length > 254)
+    {
+      hoot.logError('Tag : ' + tagsList[i] + ' : is too long to be stored (' + tagsList[i].length + ' characters). Dropping the tag');
+      tagsList.splice(i,1);
+      continue
+    }
+
+    tagsLength += tagsList[i].length;
+  }
 
   // Set this so it can be used by everything except shapefiles
   // If we export to spapefile, this will get changed.
@@ -256,13 +268,17 @@ function translateToOgr(tags, elementType, geometryType)
       // Loop through the list of tags and try to append them
       for (var i = 0; i < tagsList.length; i++)
       {
-        if (tagsList[i].length + 1 + tags[tName].length < 254)
+        if ((1 + tagsList[i].length + tags[tName].length) < 254)
         {
           tags[tName] += ',' + tagsList[i];
           tagsList.splice(i,1);
         }
       }
     } // End tName
+
+  // Sanity check. If there is anything left in the queue print an error
+    for (var i = 0; i < tagsList.length; i++) hoot.logError('Unable to store: ' + tagsList[i] + ' : in the tags attribute');
+
   } // End shp && tagLength
 
   // Debug:
