@@ -104,7 +104,7 @@ private:
   void _validateInputs();
 
   /*
-   * Uses CalculateHashVisitor to assign unique hashes to elements and also retrieves the element
+   * Uses ElementHashVisitor to assign unique hashes to elements and also retrieves the element
    * IDs of any duplicates found
    */
   void _calcElementHashes(

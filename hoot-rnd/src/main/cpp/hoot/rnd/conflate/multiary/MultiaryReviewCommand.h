@@ -49,7 +49,7 @@ namespace hoot
  *
  * These commands operate on map elements (nodes for now) that are uniquely identified by thier
  * hoot:hash metadata tag. The hoot:hash is a sha1 hash - to see how it is generated, please have
- * a look at the CalculateHashVisitor class.
+ * a look at the MultiaryPoiHashVisitor class.
  */
 class MultiaryReviewCommand
 {
@@ -264,7 +264,7 @@ private:
   Operation _op;
 
   // List of SHA1 hashes, each element should have a MetadataTags::HootHash()
-  // See CalculateHashVisitor for more info
+  // See MultiaryPoiHashVisitor for more info
   QSet<QByteArray> _elementHashes;
 
   // What the final matched / modified element should look like

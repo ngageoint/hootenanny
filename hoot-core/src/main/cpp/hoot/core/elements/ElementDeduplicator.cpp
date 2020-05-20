@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/core/visitors/ElementHashVisitor.h>
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 
@@ -201,7 +201,7 @@ void ElementDeduplicator::_calcElementHashes(
   OsmMapPtr map, QMap<QString, ElementId>& hashes,
   QSet<std::pair<ElementId, ElementId>>& duplicates)
 {
-  CalculateHashVisitor hashVis;
+  ElementHashVisitor hashVis;
   hashVis.setWriteHashes(false);
   hashVis.setCollectHashes(true);
 

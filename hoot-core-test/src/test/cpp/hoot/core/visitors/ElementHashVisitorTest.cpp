@@ -28,14 +28,14 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/core/visitors/ElementHashVisitor.h>
 
 namespace hoot
 {
 
-class CalculateHashVisitorTest : public HootTestFixture
+class ElementHashVisitorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(CalculateHashVisitorTest);
+  CPPUNIT_TEST_SUITE(ElementHashVisitorTest);
   CPPUNIT_TEST(runNodeTest);
   CPPUNIT_TEST(runNodeCeTest);
   CPPUNIT_TEST(runWayTest);
@@ -49,7 +49,7 @@ public:
 
   void runNodeTest()
   {
-    CalculateHashVisitor uut;
+    ElementHashVisitor uut;
 
     NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));
     n1->getTags()["highway"] = "bus_stop";
@@ -67,7 +67,7 @@ public:
 
   void runNodeCeTest()
   {
-    CalculateHashVisitor uut;
+    ElementHashVisitor uut;
     uut.setIncludeCircularError(true);
 
     NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));
@@ -88,7 +88,7 @@ public:
 
   void runWayTest()
   {
-    CalculateHashVisitor uut;
+    ElementHashVisitor uut;
     OsmMapPtr map(new OsmMap());
     uut.setOsmMap(map.get());
 
@@ -119,7 +119,7 @@ public:
 
   void runRelationTest()
   {
-    CalculateHashVisitor uut;
+    ElementHashVisitor uut;
     OsmMapPtr map(new OsmMap());
     uut.setOsmMap(map.get());
 
@@ -163,7 +163,7 @@ public:
 //  }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CalculateHashVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementHashVisitorTest, "quick");
 
 }
 

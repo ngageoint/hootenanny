@@ -87,7 +87,6 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>

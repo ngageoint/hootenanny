@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "CalculateHashVisitor.h"
+#include "ElementHashVisitor.h"
 
 // hoot
 #include <hoot/core/conflate/review/ReviewMarker.h>
@@ -39,21 +39,50 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, ElementHashVisitor)
 
-CalculateHashVisitor::CalculateHashVisitor() :
+ElementHashVisitor::ElementHashVisitor() :
 _includeCe(false),
 _writeHashes(true),
 _collectHashes(false)
 {
   if (!_writeHashes && !_collectHashes)
   {
-    throw IllegalArgumentException("CalculateHashVisitor must either write or collect hashes.");
+    throw IllegalArgumentException("ElementHashVisitor must either write or collect hashes.");
   }
-  _nonMetadataIgnoreKeys = ConfigOptions().getCalculateHashVisitorNonMetadataIgnoreKeys();
+  _nonMetadataIgnoreKeys = ConfigOptions().getElementHashVisitorNonMetadataIgnoreKeys();
 }
 
-QString CalculateHashVisitor::toJson(const ConstElementPtr& e)
+void ElementHashVisitor::visit(const ElementPtr& e)
+{
+  // don't calculate hashes on review relations
+  if (ReviewMarker::isReview(e) == false)
+  {
+    LOG_VART(e->getElementId());
+
+    const QString hash = toHashString(e);
+    LOG_VART(hash);
+
+    if (_writeHashes)
+    {
+      e->getTags()[MetadataTags::HootHash()] = hash;
+    }
+    if (_collectHashes)
+    {
+      if (_hashesToElementIds.contains(hash))
+      {
+        _duplicates.insert(
+          std::pair<ElementId, ElementId>(_hashesToElementIds[hash], e->getElementId()));
+      }
+      else
+      {
+        _hashesToElementIds[hash] = e->getElementId();
+      }
+    }
+  }
+}
+
+QString ElementHashVisitor::toJson(const ConstElementPtr& e)
 {
   QString result;
   if (e->getElementType() == ElementType::Node)
@@ -72,7 +101,7 @@ QString CalculateHashVisitor::toJson(const ConstElementPtr& e)
   return result;
 }
 
-QString CalculateHashVisitor::_toJson(const ConstNodePtr& node)
+QString ElementHashVisitor::_toJson(const ConstNodePtr& node)
 {
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"node\",\"tags\":{";
 
@@ -89,7 +118,7 @@ QString CalculateHashVisitor::_toJson(const ConstNodePtr& node)
   return result;
 }
 
-QString CalculateHashVisitor::_toJson(const ConstWayPtr& way)
+QString ElementHashVisitor::_toJson(const ConstWayPtr& way)
 {
   if (_map == 0)
   {
@@ -119,7 +148,7 @@ QString CalculateHashVisitor::_toJson(const ConstWayPtr& way)
   return result;
 }
 
-QString CalculateHashVisitor::_toJson(const ConstRelationPtr& relation)
+QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation)
 {
   if (_map == 0)
   {
@@ -149,7 +178,7 @@ QString CalculateHashVisitor::_toJson(const ConstRelationPtr& relation)
   return result;
 }
 
-QString CalculateHashVisitor::_toJson(const Tags& tags, const double ce)
+QString ElementHashVisitor::_toJson(const Tags& tags, const double ce)
 {
   QString result;
 
@@ -194,45 +223,16 @@ QString CalculateHashVisitor::_toJson(const Tags& tags, const double ce)
   return result;
 }
 
-QByteArray CalculateHashVisitor::toHash(const ConstElementPtr& e)
+QByteArray ElementHashVisitor::toHash(const ConstElementPtr& e)
 {
   QCryptographicHash hash(QCryptographicHash::Sha1);
   hash.addData(toJson(e).toLatin1().constData());
   return hash.result();
 }
 
-QString CalculateHashVisitor::toHashString(const ConstElementPtr& e)
+QString ElementHashVisitor::toHashString(const ConstElementPtr& e)
 {
   return "sha1sum:" + QString::fromUtf8(toHash(e).toHex());
-}
-
-void CalculateHashVisitor::visit(const ElementPtr& e)
-{
-  // don't calculate hashes on review relations
-  if (ReviewMarker::isReview(e) == false)
-  {
-    LOG_VART(e->getElementId());
-
-    const QString hash = toHashString(e);
-    LOG_VART(hash);
-
-    if (_writeHashes)
-    {
-      e->getTags()[MetadataTags::HootHash()] = hash;
-    }
-    if (_collectHashes)
-    {
-      if (_hashesToElementIds.contains(hash))
-      {
-        _duplicates.insert(
-          std::pair<ElementId, ElementId>(_hashesToElementIds[hash], e->getElementId()));
-      }
-      else
-      {
-        _hashesToElementIds[hash] = e->getElementId();
-      }
-    }
-  }
 }
 
 }

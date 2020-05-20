@@ -505,15 +505,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== calculate.hash.visitor.non.metadata.ignore.keys
-
-* Data Type: list
-* Default Value:
-** ``
-
-List of tag keys for the CalculateHashVisitor to ignore during comparison when calculating element
-hashes.
-
 === changeset.allow.deleting.reference.features
 
 * Data Type: bool
@@ -1232,6 +1223,15 @@ If true, element criterion passed to an ElementCriterionConsumer will be negated
 all ElementCriterionConsumers. Since this configuration option is shared across all
 ElementCriterionConsumers, there may be undesirable effects in invocations involving multiple
 ElementCriterionConsumers.
+
+=== element.hash.visitor.non.metadata.ignore.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of tag keys for the ElementHashVisitor to ignore during comparison when calculating element
+hashes.
 
 === element.id.criterion.ids
 

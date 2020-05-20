@@ -37,7 +37,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 #include <hoot/core/io/IoUtils.h>
 
@@ -166,7 +166,7 @@ public:
       IoUtils::loadMap(map, args[i], false, s);
     }
 
-    CalculateHashVisitor hashVisitor;
+    MultiaryPoiHashVisitor hashVisitor;
     hashVisitor.setIncludeCircularError(true);
     map->visitRw(hashVisitor);
 

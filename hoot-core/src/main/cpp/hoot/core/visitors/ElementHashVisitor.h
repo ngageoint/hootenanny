@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CALCULATEHASHVISITOR_H
-#define CALCULATEHASHVISITOR_H
+#ifndef ELEMENT_HASH_VISITOR_H
+#define ELEMENT_HASH_VISITOR_H
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
@@ -37,8 +37,8 @@ namespace hoot
 {
 
 /**
- * Calculates a hash for each element and store the hash in the MetadataTags::HootHash() tag. Any
- * existing value will be overwritten.
+ * Calculates a hash for each element and optionally stores the hash in the MetadataTags::HootHash()
+ * tag and or collects it for later use. Any existing hash tag value will be overwritten.
  *
  * See this for details: https://github.com/ngageoint/hootenanny/issues/1663
  *
@@ -47,13 +47,13 @@ namespace hoot
  *
  * @todo implement OperationStatusInfo
  */
-class CalculateHashVisitor : public ElementOsmMapVisitor
+class ElementHashVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::CalculateHashVisitor"; }
+  static std::string className() { return "hoot::ElementHashVisitor"; }
 
-  CalculateHashVisitor();
+  ElementHashVisitor();
 
   virtual void visit(const ElementPtr &e);
 
@@ -73,6 +73,13 @@ public:
   QSet<std::pair<ElementId, ElementId>> getDuplicates() const { return _duplicates; }
   void clearHashes() { _hashesToElementIds.clear(); }
 
+protected:
+
+  virtual QString _toJson(const ConstNodePtr& node);
+  virtual QString _toJson(const ConstWayPtr& way);
+  virtual QString _toJson(const ConstRelationPtr& relation);
+  virtual QString _toJson(const Tags& tags, const double ce);
+
 private:
 
   // determines if element circular error will be used in computation of the hash
@@ -87,13 +94,8 @@ private:
   QMap<QString, ElementId> _hashesToElementIds;
   // pairings of all duplicate elements found
   QSet<std::pair<ElementId, ElementId>> _duplicates;
-
-  QString _toJson(const ConstNodePtr& node);
-  QString _toJson(const ConstWayPtr& way);
-  QString _toJson(const ConstRelationPtr& relation);
-  QString _toJson(const Tags& tags, const double ce);
 };
 
 }
 
-#endif // CALCULATEHASHVISITOR_H
+#endif // ELEMENT_HASH_VISITOR_H
