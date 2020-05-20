@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSubline.h"
 
@@ -250,7 +250,6 @@ vector<pair<WayLocation, WayLocation>> MaximalSubline::_discretizePointPairs(
 
     WayLocation wl1(map, w1, loc + w1Offset);
     WayLocation wl2(LocationOfPoint(map, w2).locateAfter(wl1.getCoordinate(), lastMatch));
-    //WayLocation wl2(LocationOfPoint::locate(w2, wl1.getCoordinate()));
     result[i] = pair<WayLocation, WayLocation>(wl1, wl2);
     lastMatch = wl2;
   }
@@ -277,17 +276,17 @@ vector<WaySublineMatch> MaximalSubline::_extractAllMatches(const ConstOsmMapPtr 
   // calculate the way locations for each subline on each way.
   for (size_t i = 0; i < endMatches.size(); i++)
   {
-    WayLocation start1 = _calculateStartWayLocation(map, w1, w2, startMatches[i].row(),
-      startMatches[i].col());
-    WayLocation start2 = _calculateStartWayLocation(map, w2, w1, startMatches[i].col(),
-      startMatches[i].row());
+    WayLocation start1 =
+      _calculateStartWayLocation(map, w1, w2, startMatches[i].row(), startMatches[i].col());
+    WayLocation start2 =
+      _calculateStartWayLocation(map, w2, w1, startMatches[i].col(), startMatches[i].row());
     _snapToStart(start1);
     _snapToStart(start2);
 
-    WayLocation end1 = _calculateEndWayLocation(map, w1, w2, endMatches[i].row(),
-      endMatches[i].col());
-    WayLocation end2 = _calculateEndWayLocation(map, w2, w1, endMatches[i].col(),
-      endMatches[i].row());
+    WayLocation end1 =
+      _calculateEndWayLocation(map, w1, w2, endMatches[i].row(), endMatches[i].col());
+    WayLocation end2 =
+      _calculateEndWayLocation(map, w2, w1, endMatches[i].col(), endMatches[i].row());
     _snapToEnd(end1);
     _snapToEnd(end2);
 
@@ -337,8 +336,8 @@ vector<WaySublineMatch> MaximalSubline::findAllMatches(const ConstOsmMapPtr &map
   rawSublines = _findBestMatches(map, w1, w2, sublineMatrix, bestScore);
 
   vector<WaySublineMatch> result;
-  // until the point pair matching is more sophisticated we can only snap when it is a simple single
-  // match.
+  // Until the point pair matching is more sophisticated, we can only snap when it is a simple
+  // single match.
   if (rawSublines.size() == 1 && snapIntersections)
   {
     LOG_TRACE("Snapping intersections...");

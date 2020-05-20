@@ -286,7 +286,8 @@ double BuildingMatch::getProbability() const
   return _p.getMatchP();
 }
 
-bool BuildingMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/) const
+bool BuildingMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,
+                                  const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(other.get());
   if (bm == 0)

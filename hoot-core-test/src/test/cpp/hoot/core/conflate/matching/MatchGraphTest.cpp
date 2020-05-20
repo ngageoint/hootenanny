@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -72,7 +72,8 @@ class FakeMatch : public Match
 public:
 
   FakeMatch() : Match(std::shared_ptr<MatchThreshold>()) {}
-  FakeMatch(ElementId eid1, ElementId eid2, double p, const std::shared_ptr<const MatchThreshold>& mt) :
+  FakeMatch(ElementId eid1, ElementId eid2, double p,
+            const std::shared_ptr<const MatchThreshold>& mt) :
     Match(mt),
     _eid1(eid1),
     _eid2(eid2),
@@ -91,7 +92,8 @@ public:
 
   virtual double getProbability() const { return _p; }
 
-  virtual bool isConflicting(const ConstMatchPtr& /*other*/, const ConstOsmMapPtr& /*map*/) const
+  virtual bool isConflicting(const ConstMatchPtr& /*other*/, const ConstOsmMapPtr& /*map*/,
+                             const QHash<QString, ConstMatchPtr>& /*matches*/) const
   {
     return false;
   }

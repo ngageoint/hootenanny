@@ -85,7 +85,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   }
 
   // if the element is not a point and is not an area.
-  // NOTE: Originally I was using isLinear. This was a bit too strict in that it wants evidence of
+  // NOTE: Originally, I was using isLinear. This was a bit too strict in that it wants evidence of
   // being linear before the length is calculated. Conversely, this wants evidence that is is not
   // linear before it will assume it doesn't have a length.
   if (e->getElementType() != ElementType::Node && AreaCriterion().isSatisfied(e) == false)

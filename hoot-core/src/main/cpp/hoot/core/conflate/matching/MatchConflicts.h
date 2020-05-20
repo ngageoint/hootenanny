@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCONFLICTS_H
 #define MATCHCONFLICTS_H
@@ -51,20 +51,21 @@ public:
 
   MatchConflicts(const ConstOsmMapPtr& map);
 
-  EidIndexMap calculateEidIndexMap(const std::vector<ConstMatchPtr>& matches) const;
-
   /**
    * Calculates all the conflicts between matches and puts the indexes to the conflicting pairs in
    * the provided conflicts set. conflicts is cleared before inserting conflicts.
    */
   void calculateMatchConflicts(const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts);
 
-  void calculateSubsetConflicts(const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts,
-                                const std::vector<int>& matchSet);
-
 private:
 
   const ConstOsmMapPtr& _map;
+
+  void _calculateSubsetConflicts(
+    const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts,
+    const std::vector<int>& matchSet, const QHash<QString, ConstMatchPtr>& idIndexedMatches);
+
+  EidIndexMap _calculateEidIndexMap(const std::vector<ConstMatchPtr>& matches) const;
 };
 
 }

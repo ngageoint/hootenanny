@@ -56,6 +56,9 @@
 #include <tgs/System/Time.h>
 #include <tgs/System/Timer.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace std;
 using namespace Tgs;
 
@@ -256,8 +259,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Number of Matches Optimized per Second",
     (double)allMatches.size() / optimizeMatchesTime));
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
-  //#warning validateConflictSubset is on, this is slow.
-  //_validateConflictSubset(map, _matches);
   // TODO: this stat isn't right for Network
   LOG_DEBUG("Post constraining match count: " << _matches.size());
   LOG_VART(_matches);
@@ -310,6 +311,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
+  QElapsedTimer mergersTimer;
+  mergersTimer.start();
+
   LOG_INFO("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
   vector<pair<ElementId, ElementId>> replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
@@ -356,6 +360,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
+
+  LOG_INFO(
+    "Applied " << StringUtils::formatLargeNumber(mergerCount) << " mergers in " <<
+    StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
 
   currentStep++;
 }
@@ -481,23 +489,6 @@ void UnifyingConflator::_reset()
   _e2m.clear();
   _matches.clear();
   _mergers.clear();
-}
-
-void UnifyingConflator::_validateConflictSubset(const ConstOsmMapPtr& map,
-                                                std::vector<ConstMatchPtr> matches)
-{
-  for (size_t i = 0; i < matches.size(); i++)
-  {
-    for (size_t j = 0; j < matches.size(); j++)
-    {
-      if (i < j && MergerFactory::getInstance().isConflicting(map, matches[i], matches[j]))
-      {
-        LOG_TRACE("Conflict");
-        LOG_TRACE(matches[i]->toString());
-        LOG_TRACE(matches[j]->toString());
-      }
-    }
-  }
 }
 
 void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches)

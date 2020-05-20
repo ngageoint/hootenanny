@@ -172,14 +172,15 @@ your language translation needs.
 * Data Type: int
 * Default Value: `16`
 
-The number of data bins used by the AngleHistogramExtractor.
+The number of data bins used by the AngleHistogramExtractor and the SampledAngleHistogramExtractor.
 
 === angle.histogram.extractor.smoothing
 
 * Data Type: double
 * Default Value: `0.0`
 
-Smoothing value in radians used by the AngleHistogramExtractor.
+Smoothing value in radians used by the AngleHistogramExtractor and the
+SampledAngleHistogramExtractor.
 
 === api.db.email
 
@@ -4893,13 +4894,21 @@ Automatically calculates the search radius to be used during conflation of water
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
 
-=== waterway.long.way.threshold
+=== waterway.long.way.length.threshold
 
 * Data Type: int
 * Default Value: `150000`
 
 Way length threshold, in meters, at or above which River Conflation will switch from the configured
 subline matcher to Frechet subline matching to increase runtime performance.
+
+=== waterway.long.way.node.count.threshold
+
+* Data Type: int
+* Default Value: `750`
+
+Way node count threshold at or above which River Conflation will switch from the configured subline
+matcher to Frechet subline matching to increase runtime performance.
 
 === waterway.matcher.heading.delta
 

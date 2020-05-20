@@ -171,6 +171,15 @@ public:
   static bool hasMemberWithGeometryType(
     const ConstRelationPtr& relation, const ConstOsmMapPtr& map,
     const GeometryTypeCriterion::GeometryType& geometryType);
+
+  /**
+   * Counts the number of way nodes in way members belonging to a relation
+   *
+   * @param relation the relation containing the way members
+   * @param map the map owning the relation
+   * @return a count
+   */
+  static int getMemberWayNodeCount(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 };
 
 }
