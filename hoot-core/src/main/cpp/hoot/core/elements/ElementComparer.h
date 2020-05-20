@@ -49,7 +49,7 @@ public:
   /**
    * Determines if two elements are the same
    *
-   * The only reason the inputs are const is b/c we auto update nodes with a hash if they don't
+   * The only reason the inputs aren't const is b/c we auto update nodes with a hash if they don't
    * already have one.
    *
    * @param e1 the first element to compare
@@ -102,8 +102,6 @@ private:
                    const std::shared_ptr<const Element>& e) const;
   bool _compareRelation(const std::shared_ptr<const Element>& re,
                         const std::shared_ptr<const Element>& e) const;
-
-  static void _removeTagsNotImportantForComparison(Tags& tags);
 };
 
 }

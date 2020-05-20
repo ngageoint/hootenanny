@@ -546,7 +546,9 @@
     <node visible="true" id="5189641954" timestamp="2017-10-26T00:58:17Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2796317000000013" lon="-16.5269306000000000"/>
     <node visible="true" id="5189641955" timestamp="2017-10-26T00:58:17Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2789198999999964" lon="-16.5291274999999978"/>
     <node visible="true" id="5189641956" timestamp="2017-10-26T00:58:17Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2796920999999983" lon="-16.5286177999999992"/>
-    <node visible="true" id="5189641957" timestamp="2017-10-26T00:58:17Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2807293000000008" lon="-16.5286678999999985"/>
+    <node visible="true" id="5189641957" timestamp="2017-10-26T00:58:17Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2807293000000008" lon="-16.5286678999999985">
+        <tag k="hoot:hash" v="sha1sum:a96d391609ad5d0b12136c806ea202bbf110cd71"/>
+    </node>
     <node visible="true" id="5189641958" timestamp="2017-10-26T00:58:17Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2803868999999928" lon="-16.5281421000000002"/>
     <node visible="true" id="5189641959" timestamp="2017-10-26T00:58:17Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2799133999999945" lon="-16.5273481999999987"/>
     <node visible="true" id="5189641960" timestamp="2017-10-26T00:58:17Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2791864000000004" lon="-16.5278320000000001"/>

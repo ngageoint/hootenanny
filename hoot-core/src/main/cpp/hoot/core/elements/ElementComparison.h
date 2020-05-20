@@ -38,8 +38,7 @@ namespace hoot
 /**
  * Allows for comparing elements within a collection
  *
- * If you are comparing the same elements more than once, you should run ElementHashVisitor on the
- * inputs beforehand as an optimization.
+ * @see ElementComparer
  */
 class ElementComparison
 {

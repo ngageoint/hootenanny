@@ -105,7 +105,7 @@ QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
 {
   QString result = "{\"type\":\"node\",\"tags\":{";
 
-  result += _toJson(node->getTags(), node->getRawCircularError());
+  result += toJson(node->getTags(), node->getRawCircularError());
 
   const int coordinateComparisonSensitivity =
     ConfigOptions().getNodeComparisonCoordinateSensitivity();
@@ -127,7 +127,7 @@ QString ElementHashVisitor::_toJson(const ConstWayPtr& way) const
 
   QString result = "{\"type\":\"way\",\"tags\":{";
 
-  result += _toJson(way->getTags(), way->getRawCircularError());
+  result += toJson(way->getTags(), way->getRawCircularError());
 
   result += "},\"nodes\":[";
   const std::vector<long>& nodeIds = way->getNodeIds();
@@ -157,7 +157,7 @@ QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation) const
 
   QString result = "{\"type\":\"relation\",\"tags\":{";
 
-  result += _toJson(relation->getTags(), relation->getRawCircularError());
+  result += toJson(relation->getTags(), relation->getRawCircularError());
 
   result += "},\"members\":[";
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
@@ -185,12 +185,12 @@ QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation) const
   return result;
 }
 
-QString ElementHashVisitor::_toJson(const Tags& tags, const double ce) const
+QString ElementHashVisitor::toJson(const Tags& tags, const double ce) const
 {
   QString result;
 
   // Put the tags into an ordered map that only contains the non-metadata (info) tags. As
-  // implemented this is likely quite slow.
+  // implemented, this is likely quite slow.
   QMap<QString, QString> infoTags;
   foreach (QString key, tags.keys())
   {
@@ -203,7 +203,7 @@ QString ElementHashVisitor::_toJson(const Tags& tags, const double ce) const
   }
   //LOG_VART(infoTags.keys());
 
-  if (_includeCe)
+  if (_includeCe && ce != -1.0)
   {
     const int circularErrorComparisonSensitivity =
       ConfigOptions().getNodeComparisonCircularErrorSensitivity();
@@ -237,9 +237,21 @@ QByteArray ElementHashVisitor::toHash(const ConstElementPtr& e) const
   return hash.result();
 }
 
+QByteArray ElementHashVisitor::toHash(const Tags& tags, const double ce) const
+{
+  QCryptographicHash hash(QCryptographicHash::Sha1);
+  hash.addData(toJson(tags, ce).toLatin1().constData());
+  return hash.result();
+}
+
 QString ElementHashVisitor::toHashString(const ConstElementPtr& e) const
 {
   return "sha1sum:" + QString::fromUtf8(toHash(e).toHex());
+}
+
+QString ElementHashVisitor::toHashString(const Tags& tags, const double ce) const
+{
+  return "sha1sum:" + QString::fromUtf8(toHash(tags, ce).toHex());
 }
 
 }

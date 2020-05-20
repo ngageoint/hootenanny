@@ -29,7 +29,6 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
@@ -52,41 +51,14 @@ QString ElementComparer::toHashString(const ConstElementPtr& e) const
   return hashVis.toHashString(e);
 }
 
-void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags)
-{
-  LOG_TRACE("Removing tags...");
-
-  // having trouble making this work here in place of the two following lines due to the
-  // ServiceChangesetReplacement* tests...will revisit
-  //tags.removeMetadata();
-
-  tags.remove(MetadataTags::HootStatus());
-  //this is ok b/c we have the actual id to compare to, but it should still probably be fixed to
-  //carry along the hoot:id tag for consistency's sake when that is desired
-  tags.remove(MetadataTags::HootId());
-
-  // not sure where "status" is coming from...should be "hoot:status"...bug somewhere?
-  tags.remove("status");
-  tags.remove(MetadataTags::SourceDateTime());
-}
-
 bool ElementComparer::tagsAreSame(ConstElementPtr e1, ConstElementPtr e2)
 {
-  // create modified separate copies of the tags for comparing, as we don't care if some tags
-  // are identical
-  Tags tags1 = e1->getTags();
-  _removeTagsNotImportantForComparison(tags1);
-  Tags tags2 = e2->getTags();
-  _removeTagsNotImportantForComparison(tags2);
-  LOG_VART(tags1);
-  LOG_VART(tags2);
+  // Considered checking tag sizes here first as an optimization, but since we're ignoring metadata
+  // tags by the time they are removed, we might have well as just calculated the hash.
 
-  const bool result = tags1 == tags2;
-  if (!result && Log::getInstance().getLevel() == Log::Trace)
-  {
-    LOG_TRACE("compare failed on tags");
-  }
-  return result;
+  // no need to set a map if just comparing tags
+  ElementHashVisitor hashVis;
+  return hashVis.toHashString(e1->getTags()) == hashVis.toHashString(e2->getTags());
 }
 
 bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
@@ -190,7 +162,7 @@ bool ElementComparer::_compareNode(const std::shared_ptr<const Element>& re,
   bool same = false;
   if (re->getTags()[MetadataTags::HootHash()] == e->getTags()[MetadataTags::HootHash()])
   {
-    //LOG_TRACE("Nodes " << re->getElementId() << " and " << e->getElementId() << " are the same.");
+    LOG_TRACE("Nodes " << re->getElementId() << " and " << e->getElementId() << " are the same.");
     same = true;
   }
   else

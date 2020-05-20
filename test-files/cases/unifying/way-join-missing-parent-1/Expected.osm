@@ -437,7 +437,6 @@
     </node>
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9037000000000077" lon="-75.4403459943299026">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:hash" v="sha1sum:d99f9d237bbf72cd90cafed8dfda724cccb72c48"/>
         <tag k="hoot:id" v="-17"/>
     </node>
     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9017936972234466" lon="-75.4459999999999980">
@@ -795,7 +794,6 @@
     </node>
     <node visible="true" id="4881733241" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.8997312999999991" lon="-75.4397412000000003">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:hash" v="sha1sum:c50347b43e15859ef4ec104beb3d7f9b2ccba1d0"/>
         <tag k="hoot:id" v="4881733241"/>
     </node>
     <node visible="true" id="4881733242" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.8988060000000075" lon="-75.4413870000000060">

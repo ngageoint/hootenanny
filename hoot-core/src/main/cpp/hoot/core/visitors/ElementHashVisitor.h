@@ -58,8 +58,12 @@ public:
   virtual void visit(const ElementPtr &e);
 
   QString toJson(const ConstElementPtr& e) const;
+  virtual QString toJson(const Tags& tags, const double ce = -1.0) const;
+
   QByteArray toHash(const ConstElementPtr& e) const;
+  QByteArray toHash(const Tags& tags, const double ce = -1.0) const;
   QString toHashString(const ConstElementPtr& e) const;
+  QString toHashString(const Tags& tags, const double ce = -1.0) const;
 
   virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
 
@@ -78,7 +82,6 @@ protected:
   virtual QString _toJson(const ConstNodePtr& node) const;
   virtual QString _toJson(const ConstWayPtr& way) const;
   virtual QString _toJson(const ConstRelationPtr& relation) const;
-  virtual QString _toJson(const Tags& tags, const double ce) const;
 
 private:
 

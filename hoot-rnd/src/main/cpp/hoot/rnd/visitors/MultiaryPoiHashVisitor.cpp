@@ -44,7 +44,7 @@ QString MultiaryPoiHashVisitor::_toJson(const ConstNodePtr& node) const
 {
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"node\",\"tags\":{";
 
-  result += ElementHashVisitor::_toJson(node->getTags(), node->getRawCircularError());
+  result += ElementHashVisitor::toJson(node->getTags(), node->getRawCircularError());
 
   const int coordinateComparisonSensitivity =
     ConfigOptions().getNodeComparisonCoordinateSensitivity();
