@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSublineMatcher.h"
 
@@ -47,7 +47,7 @@ MaximalSublineMatcher::MaximalSublineMatcher()
 }
 
 WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr &map,
-  const ConstWayPtr& way1, const ConstWayPtr& way2, double &score, Meters maxRelevantDistance) const
+  const ConstWayPtr& way1, const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
 {
   Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
     maxRelevantDistance;
@@ -59,7 +59,7 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr &map
   MaximalSubline::ThresholdMatchCriteria* threshold =
     new MaximalSubline::ThresholdMatchCriteria(mrd, _maxAngle);
   // This should use the _minSplitSize rather than mrd, but that causes some tests to fail. We
-  // should look into the problem and solve it. See #6159
+  // should look into the problem and solve it. See redmine #6159
   MaximalSubline ms(threshold, mrd);
 
   vector<WaySublineMatch> matches = ms.findAllMatches(map, way1, way2, score);

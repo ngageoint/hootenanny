@@ -178,7 +178,9 @@ double HighwayMatch::getProbability() const
   return _c.getMatchP();
 }
 
-bool HighwayMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const
+bool HighwayMatch::isConflicting(
+  const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+  const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(other.get());
   // if the other match isn't a highway match then this is a conflict.

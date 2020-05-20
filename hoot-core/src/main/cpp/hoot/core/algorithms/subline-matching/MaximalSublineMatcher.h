@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXIMALSUBLINEMATCHER_H
 #define MAXIMALSUBLINEMATCHER_H
@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * A SublineMatcher fascade for MaximalSubline.
+ * A SublineMatcher facade for MaximalSubline.
  */
 class MaximalSublineMatcher : public SublineMatcher, public Configurable
 {
@@ -55,13 +55,11 @@ public:
   virtual void setConfiguration(const Settings &conf);
 
   virtual void setMaxRelevantAngle(Radians r) override { _maxAngle = r; }
-
   virtual void setMinSplitSize(Meters minSplitSize) override { _minSplitSize = minSplitSize; }
-
-  virtual void setHeadingDelta(Meters /*headingDelta*/) override { }
+  virtual void setHeadingDelta(Meters /*headingDelta*/) override {}
 
   virtual QString getDescription() const
-  { return "Matches lines based on the maximal subline found"; }
+  { return "Matches lines based on the longest matching subline found"; }
 
 private:
 

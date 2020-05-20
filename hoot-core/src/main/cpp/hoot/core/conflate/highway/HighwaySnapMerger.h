@@ -41,6 +41,8 @@ class WaySublineCollection;
  *
  * Note that this was originally written specifically for roads, but now is used by several linear
  * script routines, including railway and river.
+ *
+ * @todo rename to SnapMergerJs
  */
 class HighwaySnapMerger : public HighwayMergerAbstract
 {
@@ -60,7 +62,7 @@ public:
 
   void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
 
-  virtual QString getDescription() const { return "Merges both road geometries and tags"; }
+  virtual QString getDescription() const { return "Merges road geometries and tags"; }
 
   virtual QString getName() const { return QString::fromStdString(className()); }
 
@@ -74,12 +76,17 @@ protected:
   // This is useful for getting rid of them later, if necessary.
   bool _markAddedMultilineStringRelations;
 
+  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);
 
-private:
+  /*
+   * Finds a matching subline between two elements with the configured subline matcher
+   */
+  virtual WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2);
 
-  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+private:
 
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;

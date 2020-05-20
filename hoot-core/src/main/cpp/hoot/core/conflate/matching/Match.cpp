@@ -89,4 +89,42 @@ bool Match::operator==(const Match& other) const
   return true;
 }
 
+QHash<QString, ConstMatchPtr> Match::getIdIndexedMatches(
+  const std::vector<ConstMatchPtr>& matches)
+{
+  QHash<QString, ConstMatchPtr> indexedMatches;
+  for (std::vector<ConstMatchPtr>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+  {
+    ConstMatchPtr match = *it;
+    indexedMatches[matchPairsToString(match->getMatchPairs())] = match;
+  }
+  return indexedMatches;
+}
+
+QString Match::matchPairsToString(
+  const std::set<std::pair<ElementId, ElementId>>& matchPairs)
+{
+  // sorting each individual pair by element id for consistency; For multiple pairs, collection
+  // order must match, which may end up being too strict.
+  QString str;
+  for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = matchPairs.begin();
+       it != matchPairs.end(); ++it)
+  {
+    std::pair<ElementId, ElementId> idPair = *it;
+    const ElementId firstId = idPair.first;
+    const ElementId secondId = idPair.second;
+    if (firstId < secondId)
+    {
+      str += firstId.toString() + "," + secondId.toString();
+    }
+    else
+    {
+      str += secondId.toString() + "," + firstId.toString();
+    }
+    str += ";";
+  }
+  str.chop(1);
+  return str;
+}
+
 }
