@@ -106,10 +106,27 @@ function translateToOsm(attrs, layerName, geometryType)
   }
 
 
-  // Now split all of the tagsX tags into seperate tags.
-  var nameList = ['tags','tags2','tags3','tags4','tags5'];
-  for (var tName of nameList)
-  {
+  // var nameList = ['tags','tags2','tags3','tags4','tags5'];
+  // for (var tName of nameList)
+  // {
+  //   if (attrs[tName])
+  //   {
+  //     var tList = attrs[tName].split('","');
+  //     delete attrs[tName];
+
+  //     for (var val in tList)
+  //     {
+  //       vList = tList[val].split('"=>"');
+  //       attrs[vList[0].toString().replace('"','')] = vList[1].toString().replace('"','');
+
+  //       // Debug
+  //       // print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
+  //     }
+  //   }
+  // }
+
+  // Now split all of the tagsX tags into separate tags.
+  ['tags','tags2','tags3','tags4','tags5'].forEach(function(tName) {
     if (attrs[tName])
     {
       var tList = attrs[tName].split('","');
@@ -124,7 +141,8 @@ function translateToOsm(attrs, layerName, geometryType)
         // print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
       }
     }
-  }
+  });
+
 
   // hoot:id vs osm:id is an issue.
   // If we don't preserve id's on import, osm:id could be positive and hoot:id becomes negative.
@@ -256,8 +274,9 @@ function translateToOgr(tags, elementType, geometryType)
   {
     var nameList = ['tags','tags2','tags3','tags4','tags5'];
 
-    for (var tName of nameList)
+    for (var nam = 0, nLen = nameList.length; nam < nLen; nam++)
     {
+      var tName = nameList[nam];
       // Debug
       // print('tName: ' + tName + '  len:' + tagsList.length);
 
