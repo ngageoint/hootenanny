@@ -34,8 +34,7 @@ namespace hoot
 {
 
 /**
- * This is an abstraction for dealing with relation member element comparisons inside of
- * collections.
+ * Allows for comparing relation members within a collection
  *
  * @see ElementComparison
  */
@@ -60,9 +59,15 @@ private:
 
 inline uint qHash(const RelationMemberComparison& memberComp)
 {
-  // TODO: change this over to use CalculateHashVisitor
-  return qHash(memberComp.getRole() + " " + memberComp.getElement()->nonIdHash());
+  const QString hashFromTag =
+    memberComp.getElement()->getTags().get(MetadataTags::HootHash()).trimmed();
+  if (!hashFromTag.isEmpty())
+  {
+    return qHash(hashFromTag);
+  }
+  return qHash(memberComp.toHashString());
 }
+
 
 }
 

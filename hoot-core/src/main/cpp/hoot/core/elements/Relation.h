@@ -193,11 +193,6 @@ public:
 
   QString toString() const;
 
-  /**
-   * @see Element
-   */
-  virtual QString nonIdHash() const;
-
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
 

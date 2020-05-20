@@ -51,7 +51,7 @@ public:
 
 protected:
 
-  virtual QString _toJson(const ConstNodePtr& node);
+  virtual QString _toJson(const ConstNodePtr& node) const;
 };
 
 }

@@ -82,7 +82,7 @@ void ElementHashVisitor::visit(const ElementPtr& e)
   }
 }
 
-QString ElementHashVisitor::toJson(const ConstElementPtr& e)
+QString ElementHashVisitor::toJson(const ConstElementPtr& e) const
 {
   QString result;
   if (e->getElementType() == ElementType::Node)
@@ -101,7 +101,7 @@ QString ElementHashVisitor::toJson(const ConstElementPtr& e)
   return result;
 }
 
-QString ElementHashVisitor::_toJson(const ConstNodePtr& node)
+QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
 {
   QString result = "{\"type\":\"node\",\"tags\":{";
 
@@ -118,7 +118,7 @@ QString ElementHashVisitor::_toJson(const ConstNodePtr& node)
   return result;
 }
 
-QString ElementHashVisitor::_toJson(const ConstWayPtr& way)
+QString ElementHashVisitor::_toJson(const ConstWayPtr& way) const
 {
   if (_map == 0)
   {
@@ -148,7 +148,7 @@ QString ElementHashVisitor::_toJson(const ConstWayPtr& way)
   return result;
 }
 
-QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation)
+QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation) const
 {
   if (_map == 0)
   {
@@ -185,7 +185,7 @@ QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation)
   return result;
 }
 
-QString ElementHashVisitor::_toJson(const Tags& tags, const double ce)
+QString ElementHashVisitor::_toJson(const Tags& tags, const double ce) const
 {
   QString result;
 
@@ -230,14 +230,14 @@ QString ElementHashVisitor::_toJson(const Tags& tags, const double ce)
   return result;
 }
 
-QByteArray ElementHashVisitor::toHash(const ConstElementPtr& e)
+QByteArray ElementHashVisitor::toHash(const ConstElementPtr& e) const
 {
   QCryptographicHash hash(QCryptographicHash::Sha1);
   hash.addData(toJson(e).toLatin1().constData());
   return hash.result();
 }
 
-QString ElementHashVisitor::toHashString(const ConstElementPtr& e)
+QString ElementHashVisitor::toHashString(const ConstElementPtr& e) const
 {
   return "sha1sum:" + QString::fromUtf8(toHash(e).toHex());
 }

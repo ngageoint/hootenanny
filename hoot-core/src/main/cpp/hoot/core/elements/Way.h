@@ -235,11 +235,6 @@ public:
   static long getPid(const std::shared_ptr<const Way>& p, const std::shared_ptr<const Way>& c);
   static long getPid(long p, long c);
 
-  /**
-   * @see Element
-   */
-  virtual QString nonIdHash() const;
-
 protected:
 
   virtual ElementData& _getElementData() { _makeWritable(); return *_wayData; }

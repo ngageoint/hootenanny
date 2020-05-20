@@ -40,7 +40,7 @@ ElementHashVisitor()
 {
 }
 
-QString MultiaryPoiHashVisitor::_toJson(const ConstNodePtr& node)
+QString MultiaryPoiHashVisitor::_toJson(const ConstNodePtr& node) const
 {
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"node\",\"tags\":{";
 
