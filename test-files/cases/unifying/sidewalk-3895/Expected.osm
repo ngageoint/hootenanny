@@ -3,7 +3,7 @@
     <bounds minlat="39.10359999999999" minlon="-94.53959999999999" maxlat="39.1048" maxlon="-94.53789999999999"/>
     <node visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1040936369806218" lon="-94.5389427097763928">
         <tag k="highway" v="crossing"/>
-        <tag k="hoot:hash" v="sha1sum:34ffd4a5f79d1ea3fd674ea5893c8d06358dc1df"/>
+        <tag k="hoot:hash" v="sha1sum:c314e2860c8ac05fae7502fdfe87d00a6320620d"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1045445403752652" lon="-94.5388187680206329"/>
@@ -48,11 +48,11 @@
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1047999999999973" lon="-94.5388057111111095"/>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1040544990253309" lon="-94.5378999999999934"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1041173718815713" lon="-94.5395999999999930">
-        <tag k="hoot:hash" v="sha1sum:f9359d7cdf58b9acc146a73d15f65d3fae0c0a07"/>
+        <tag k="hoot:hash" v="sha1sum:e4671a131c2181dc32db780a78ba857f3f86610e"/>
     </node>
     <node visible="true" id="191091793" timestamp="2016-02-02T18:28:17Z" version="1" changeset="2773" lat="39.1040899999999922" lon="-94.5388420000000025">
         <tag k="highway" v="crossing"/>
-        <tag k="hoot:hash" v="sha1sum:92f2a5159a07585f56aaa0cafc47d473db5da26e;sha1sum:8c4ef4f187dc8c9cdc64f3dca7794497c815be1b"/>
+        <tag k="hoot:hash" v="sha1sum:66e2409a0467b6cf428e4546c655e7e7131c45e9;sha1sum:6d7bad0816651d8e0c12b9637df2de526851b17c"/>
         <tag k="error:circular" v="15"/>
     </node>
     <way visible="true" id="-17" timestamp="2018-05-20T10:53:39Z" version="1">

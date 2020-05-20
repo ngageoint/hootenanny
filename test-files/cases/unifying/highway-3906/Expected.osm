@@ -2,22 +2,22 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.9057" minlon="-75.437" maxlat="38.9128" maxlon="-75.42729999999999"/>
     <node visible="true" id="-1380" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9075252755916949" lon="-75.4339907980919406">
-        <tag k="hoot:hash" v="sha1sum:0cb64e3501357ccf64d30a0d828dacf38bfe5eea"/>
+        <tag k="hoot:hash" v="sha1sum:80626a2ec8fac07305ecb7772af14e54e2eb7516"/>
     </node>
     <node visible="true" id="-1378" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9071171897275150" lon="-75.4343153125841184">
-        <tag k="hoot:hash" v="sha1sum:97d4916efc843e9618536919f184f2ef59d7fe24"/>
+        <tag k="hoot:hash" v="sha1sum:084455508cc3f228f02982c75e14133c286d0c1b"/>
     </node>
     <node visible="true" id="-1376" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9086311905213762" lon="-75.4323222638823694">
-        <tag k="hoot:hash" v="sha1sum:aaa3c6fd224c4fefeb069ac65f9d99131bd1ffd8"/>
+        <tag k="hoot:hash" v="sha1sum:a18e4e1aff3a8ac24af994e04448962f4eb8f79e"/>
     </node>
     <node visible="true" id="-1374" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9088706800663431" lon="-75.4315531940419390"/>
     <node visible="true" id="-1372" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9063320479024810" lon="-75.4336080275008243"/>
     <node visible="true" id="-1370" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9112434844044941" lon="-75.4284348932876014"/>
     <node visible="true" id="-1368" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9074715608609623" lon="-75.4299801596609569">
-        <tag k="hoot:hash" v="sha1sum:c104d06f122742ecca7b28b73b49f1e5fe32f0cc"/>
+        <tag k="hoot:hash" v="sha1sum:eef631ca810eb8b807a9b810f75a0ad4b31f0d72"/>
     </node>
     <node visible="true" id="-1365" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9074438498509139" lon="-75.4300030660086662">
-        <tag k="hoot:hash" v="sha1sum:027c34ab9a325dcb03cc7594cfc575cf1734f086"/>
+        <tag k="hoot:hash" v="sha1sum:5755ef837f2d7570210ad240c264d21faf07d47e"/>
     </node>
     <node visible="true" id="-1363" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9071218065085418" lon="-75.4316738620668872"/>
     <node visible="true" id="-1360" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9078470816328021" lon="-75.4325637349385119"/>
@@ -264,7 +264,7 @@
     <node visible="true" id="-633" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9124203000000009" lon="-75.4337888000000021"/>
     <node visible="true" id="-632" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9123923999999946" lon="-75.4338728999999972"/>
     <node visible="true" id="-631" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9125016999999929" lon="-75.4278046999999816">
-        <tag k="hoot:hash" v="sha1sum:e2a165666365dddd80703fe2f0c593e1f35102ff"/>
+        <tag k="hoot:hash" v="sha1sum:aa170a157d0e530765716df35d887cb9e3daceb8"/>
     </node>
     <node visible="true" id="-630" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9124282681688811" lon="-75.4326454487295166">
         <tag k="ford" v="yes"/>
@@ -503,7 +503,7 @@
     <node visible="true" id="-309" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9123060000000081" lon="-75.4323823999999945"/>
     <node visible="true" id="-307" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9122796999999920" lon="-75.4325448000000023"/>
     <node visible="true" id="-294" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9121415999999982" lon="-75.4347352999999998">
-        <tag k="hoot:hash" v="sha1sum:16d9522f561a6182d731da991271dc4a8e90b1de"/>
+        <tag k="hoot:hash" v="sha1sum:e97013353cf21e30606d1977e47510fb1f340794"/>
     </node>
     <node visible="true" id="-288" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9119651999999974" lon="-75.4343370999999934"/>
     <node visible="true" id="-286" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9119141999999982" lon="-75.4342789999999894"/>
@@ -611,7 +611,7 @@
     <node visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9060792922400012" lon="-75.4272999999999882"/>
     <node visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9063232409599991" lon="-75.4272999999999882"/>
     <node visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124485243900011" lon="-75.4369999999999976">
-        <tag k="hoot:hash" v="sha1sum:a7f0f59e3160601b79a4ccbb176608f9fdd559c4"/>
+        <tag k="hoot:hash" v="sha1sum:59df38684d0ad9bca120d1d2af23401885c561af"/>
     </node>
     <node visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9105608160700029" lon="-75.4369999999999976"/>
     <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4295209593200013"/>
@@ -628,57 +628,57 @@
     <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4329468526299962"/>
     <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4335187878999989"/>
     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9056999999999960" lon="-75.4365809379746821">
-        <tag k="hoot:hash" v="sha1sum:79b19df3002664ad9acd9bebfa0c5019b8e8c364"/>
+        <tag k="hoot:hash" v="sha1sum:88e20a1bb0a391c2f292d1759e0df563e1b8b0da"/>
     </node>
     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9105670377093134" lon="-75.4272999999999882">
-        <tag k="hoot:hash" v="sha1sum:e1c93f0ae62d50f86e41b32cb4533bd05eebcb8c"/>
+        <tag k="hoot:hash" v="sha1sum:59652c1097d3bbc1b5c7b32bb9b0deea5b3d82f8"/>
     </node>
     <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4302204347825835"/>
     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4303246999999573"/>
     <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9056999999999960" lon="-75.4323745617433445">
-        <tag k="hoot:hash" v="sha1sum:579ed4e6f44fc900c4b517d66ca815f879fc8dba"/>
+        <tag k="hoot:hash" v="sha1sum:2fcf50e17134e757058c64fea9be9e5c47138951"/>
     </node>
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4277938889633788"/>
     <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4361795650537630"/>
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4365385346740425">
-        <tag k="hoot:hash" v="sha1sum:9b85438a994641f2ef546a302b0224da3acad05d"/>
+        <tag k="hoot:hash" v="sha1sum:a756d02c86570ae16bc2544d780fc9849d9afa95"/>
     </node>
     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4353368705882161">
-        <tag k="hoot:hash" v="sha1sum:b31368c738cc9be315fe3b3eb7b9bc0a3066bf47"/>
+        <tag k="hoot:hash" v="sha1sum:7c07aa43ef751a6dae56bdfc48a6046603ea01a4"/>
     </node>
     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4343221315789521"/>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9094651288919309" lon="-75.4272999999999882">
-        <tag k="hoot:hash" v="sha1sum:ae7b28e8677a073985e7cb0662c3d8e96f3e7d7b"/>
+        <tag k="hoot:hash" v="sha1sum:291778e5307cf2de9d8b8f840e3ed455f13f535f"/>
     </node>
     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9073375487077797" lon="-75.4272999999999882"/>
     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9083877096774131" lon="-75.4369999999999976"/>
     <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9068888384755027" lon="-75.4369999999999976">
-        <tag k="hoot:hash" v="sha1sum:49a3d06d4dd84fb7306504d0b7cd014496f7d41c"/>
+        <tag k="hoot:hash" v="sha1sum:3e215e696f6ae009b3f13b893d7a1f42f1c42a14"/>
     </node>
     <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9112813114186480" lon="-75.4272999999999882"/>
     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4276505319516417">
-        <tag k="hoot:hash" v="sha1sum:bf91e31d5edada9cb63842f04b797815c4e4c95a"/>
+        <tag k="hoot:hash" v="sha1sum:e5e3db734f695ba76f052ca2a46b45133b559bc7"/>
     </node>
     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9113884989665166" lon="-75.4272999999999882"/>
     <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9113009331923863" lon="-75.4369999999999976">
-        <tag k="hoot:hash" v="sha1sum:116a128e5405bc15237098bc151cf82dabb15a31"/>
+        <tag k="hoot:hash" v="sha1sum:d53f3f323526f66d4f2c76f53496dd4ae3e6beb4"/>
     </node>
     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9097597475728136" lon="-75.4369999999999976"/>
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4342225323741076"/>
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4293472653316570"/>
     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9089616410256340" lon="-75.4369999999999976"/>
     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9073092592592573" lon="-75.4369999999999976">
-        <tag k="hoot:hash" v="sha1sum:0dda491d3ad46c6936defb529717971630189afc"/>
+        <tag k="hoot:hash" v="sha1sum:c9b0c1ec19cabf70473faa5c2d8e888dbcfe2340"/>
     </node>
     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9056999999999960" lon="-75.4278257476635474">
-        <tag k="hoot:hash" v="sha1sum:1e541ae838b48581f69defdf9d17b32fb03d001e"/>
+        <tag k="hoot:hash" v="sha1sum:1000385912d18f332cc05482bb624206b36f772a"/>
     </node>
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4368862394197919">
-        <tag k="hoot:hash" v="sha1sum:49ef11470322ec9bdb556663c89e87c8bc8046fe"/>
+        <tag k="hoot:hash" v="sha1sum:9259f3eb5cc895da0a21f28366d61fbba40b9903"/>
     </node>
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4329927826086930"/>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4335547949777236">
-        <tag k="hoot:hash" v="sha1sum:ec7359a55d22c15434e3afca6136a0cb8a546d95"/>
+        <tag k="hoot:hash" v="sha1sum:0758449173e8b4b43552d8053e2255b67ac9f8ea"/>
     </node>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4303197844630660"/>
     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4302096460643412"/>
@@ -686,7 +686,7 @@
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4280676724822712"/>
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9105608160693635" lon="-75.4369999999999976"/>
     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124485243862424" lon="-75.4369999999999976">
-        <tag k="hoot:hash" v="sha1sum:258d1ab3e82afa7340b7b064219f4c2e8165102a"/>
+        <tag k="hoot:hash" v="sha1sum:8a9f3652509582e4342893df459a33a266e4b1ac"/>
     </node>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124591980112839" lon="-75.4272999999999882"/>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9128000000000043" lon="-75.4302806165324284"/>
@@ -759,34 +759,34 @@
     <node visible="true" id="4881725477" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121419000000017" lon="-75.4284938999999923">
         <tag k="traffic_signals" v="signal"/>
         <tag k="highway" v="traffic_signals"/>
-        <tag k="hoot:hash" v="sha1sum:a36a29c23621e6a050d58d1456265a458c510872"/>
+        <tag k="hoot:hash" v="sha1sum:dbf9591029497b121ec9c6ceb4a639f7d33dbd21"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881725480" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098842000000005" lon="-75.4286637000000013"/>
     <node visible="true" id="4881725481" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116020000000020" lon="-75.4283929999999998"/>
     <node visible="true" id="4881726044" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127379999999903" lon="-75.4352285999999879">
-        <tag k="hoot:hash" v="sha1sum:c9f3bc936431886fc25979f65e3a55c9690d3f57"/>
+        <tag k="hoot:hash" v="sha1sum:2c2e48c590853e07356c6a1a1584de5486f2e75b"/>
     </node>
     <node visible="true" id="4881726046" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125457999999895" lon="-75.4352856000000003">
-        <tag k="hoot:hash" v="sha1sum:9611e0443b0bea891981e855c5029b08f76da8e1"/>
+        <tag k="hoot:hash" v="sha1sum:951cb0835b302a0c2ba4d10cf56fb96003663bae"/>
     </node>
     <node visible="true" id="4881726094" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072736999999975" lon="-75.4273407000000020"/>
     <node visible="true" id="4881726353" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115279999999970" lon="-75.4283869999999865"/>
     <node visible="true" id="4881726355" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115249999999904" lon="-75.4282060000000030"/>
     <node visible="true" id="4881726363" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115068999999991" lon="-75.4280107000000015">
-        <tag k="hoot:hash" v="sha1sum:75d33ff8318be6d351c3ecfcb0d6eb80b24ee2f1"/>
+        <tag k="hoot:hash" v="sha1sum:edc78805f819388ae5f2b6ceb507ab78078ab411"/>
     </node>
     <node visible="true" id="4881726686" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104949999999903" lon="-75.4299639999999982"/>
     <node visible="true" id="4881726688" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9106049999999968" lon="-75.4306049999999999"/>
     <node visible="true" id="4881726689" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9106049999999968" lon="-75.4299769999999938"/>
     <node visible="true" id="4881726965" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079610000000002" lon="-75.4289650000000051">
-        <tag k="hoot:hash" v="sha1sum:8cfae0f6a6076d60a6993d61d5acb500af1ca9d9"/>
+        <tag k="hoot:hash" v="sha1sum:8f8f04852d1942372b46c692df6f1a0e2c483f3a"/>
         <tag k="railway" v="level_crossing"/>
         <tag k="source:datetime" v="2014-10-01T04:16:48.000Z"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881726968" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9078729999999879" lon="-75.4289770000000033">
-        <tag k="hoot:hash" v="sha1sum:ff33f88a1dfc78da1228566ad94782d48d4d9bf2"/>
+        <tag k="hoot:hash" v="sha1sum:890ed4d88d16cef7a95e228188577c8746851b80"/>
     </node>
     <node visible="true" id="4881726970" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9058479999999918" lon="-75.4293229999999966"/>
     <node visible="true" id="4881727099" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125535999999954" lon="-75.4290174000000064"/>
@@ -796,33 +796,33 @@
     <node visible="true" id="4881727158" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125143999999921" lon="-75.4285193999999990">
         <tag k="traffic_signals" v="signal"/>
         <tag k="highway" v="traffic_signals"/>
-        <tag k="hoot:hash" v="sha1sum:a92176f8b84310512b8a70671ed89fdd7bdedcab;sha1sum:d8db6a30ee4ab613ae4eba004e252de668eaf20a"/>
+        <tag k="hoot:hash" v="sha1sum:e7d220f8131958d3520dadbab93d107606fb8c35;sha1sum:718719392c27a91f6aa7e834f9524b8ee8e37183"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881727159" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124529999999993" lon="-75.4285299999999950"/>
     <node visible="true" id="4881727340" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104564000000011" lon="-75.4274158000000057">
-        <tag k="hoot:hash" v="sha1sum:2cf52b92b01a0b6abbab37d592782f57172a0493"/>
+        <tag k="hoot:hash" v="sha1sum:4e08ccdbabc3a6a608a22078e9d64f5f8a42705c"/>
     </node>
     <node visible="true" id="4881727342" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098158999999910" lon="-75.4280801000000025">
-        <tag k="hoot:hash" v="sha1sum:140da1294253c623c54f1b43a9337ebb66b96326"/>
+        <tag k="hoot:hash" v="sha1sum:b9a347094fa584328dd1bcf0a001ecaec22d3b58"/>
     </node>
     <node visible="true" id="4881727352" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105091999999999" lon="-75.4278633999999926"/>
     <node visible="true" id="4881727385" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127640000000099" lon="-75.4343080000000015">
-        <tag k="hoot:hash" v="sha1sum:eaf71f213f543b20383bb0d4dcfb81e145a59b5d"/>
+        <tag k="hoot:hash" v="sha1sum:963ce471571383bfeba2b103dd554f7528ed52d2"/>
     </node>
     <node visible="true" id="4881727394" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079399999999964" lon="-75.4336610000000007">
-        <tag k="hoot:hash" v="sha1sum:ac92b737fa1036ba73396f4793d8a539e7754f67"/>
+        <tag k="hoot:hash" v="sha1sum:15696cd42aa04842e526a15a3a6b8febd1830592"/>
     </node>
     <node visible="true" id="4881727793" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9096289000000013" lon="-75.4287032000000011">
-        <tag k="hoot:hash" v="sha1sum:fc7a0d964f2c5810c9ebb0ebdd50d0a7d4d41d8f"/>
+        <tag k="hoot:hash" v="sha1sum:95f582b8e26f90c3d87280a0e78e89007c638271"/>
     </node>
     <node visible="true" id="4881727795" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9094924000000049" lon="-75.4275585000000035">
-        <tag k="hoot:hash" v="sha1sum:05c043124b29c10f0190f43c9cd46926d25f2463"/>
+        <tag k="hoot:hash" v="sha1sum:dbd269ad9e78ef0b05558eee3ceed52ae00627d4"/>
     </node>
     <node visible="true" id="4881727823" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9069700000000012" lon="-75.4318009999999930"/>
     <node visible="true" id="4881727825" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9062695000000076" lon="-75.4304467999999986">
         <tag k="highway" v="turning_circle"/>
-        <tag k="hoot:hash" v="sha1sum:4b6655eb154c229c70993521a5ca8ff86dcfa4bd"/>
+        <tag k="hoot:hash" v="sha1sum:0938dbd85eeb305e96e0f9070b8a768e14ce7fcf"/>
         <tag k="source:datetime" v="2015-04-27T15:16:35.000Z"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -835,24 +835,24 @@
     <node visible="true" id="4881729086" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121667000000144" lon="-75.4308120999999971"/>
     <node visible="true" id="4881729621" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121027999999995" lon="-75.4308012999999988"/>
     <node visible="true" id="4881729663" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112962999999894" lon="-75.4329479999999961">
-        <tag k="hoot:hash" v="sha1sum:153f2f2a020d88bbcbb9c2adde9aa12bce6172ea"/>
+        <tag k="hoot:hash" v="sha1sum:c9bc0a1df67896a18476861ce6428359fdc9e785"/>
     </node>
     <node visible="true" id="4881729665" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9119699999999824" lon="-75.4341570999999931">
-        <tag k="hoot:hash" v="sha1sum:cdfd1451e970e701b7a62ab50fe41fdda90f8a34"/>
+        <tag k="hoot:hash" v="sha1sum:647340463f8b20e7a033e71863678b638bb694a3"/>
     </node>
     <node visible="true" id="4881729666" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098534000000029" lon="-75.4311004999999994">
-        <tag k="hoot:hash" v="sha1sum:cd95aec824220ff83a5c4ca2b516c00d84c15433"/>
+        <tag k="hoot:hash" v="sha1sum:b4040e13f193cabdbbdb83329df026def085d734"/>
     </node>
     <node visible="true" id="4881729668" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113890999999938" lon="-75.4330806999999908">
-        <tag k="hoot:hash" v="sha1sum:24fcffc80071270e600cd6655db27abac05e59a0"/>
+        <tag k="hoot:hash" v="sha1sum:292790c589f1e73139f780c2bf6ebc6f3b66f590"/>
     </node>
     <node visible="true" id="4881729676" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9059260000000009" lon="-75.4278869999999984"/>
     <node visible="true" id="4881729677" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9069589000000065" lon="-75.4283003999999977"/>
     <node visible="true" id="4881729678" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083646999999928" lon="-75.4293511000000052">
-        <tag k="hoot:hash" v="sha1sum:1c924f9af9ddbfa64091df010e3ffcc0b18f5d07"/>
+        <tag k="hoot:hash" v="sha1sum:4486c3f3a325a017203bea7bc4411d2cafc6e192"/>
     </node>
     <node visible="true" id="4881729682" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9109600999999969" lon="-75.4325089000000020">
-        <tag k="hoot:hash" v="sha1sum:6a6ad1558fd982660c0acdeb1b02a5a2be1df914"/>
+        <tag k="hoot:hash" v="sha1sum:a36d47025b6588cf319deec491b09bb8112b091a"/>
         <tag k="railway" v="level_crossing"/>
         <tag k="source:datetime" v="2013-04-20T20:53:27.000Z"/>
         <tag k="error:circular" v="15"/>
@@ -860,30 +860,30 @@
     <node visible="true" id="4881729687" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126817999999943" lon="-75.4328961999999876"/>
     <node visible="true" id="4881729698" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126203000000004" lon="-75.4328514000000041"/>
     <node visible="true" id="4881729699" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125367999999980" lon="-75.4337239000000039">
-        <tag k="hoot:hash" v="sha1sum:6c8c462a26f80c3d9af17873b82b01bd9aaefbb0"/>
+        <tag k="hoot:hash" v="sha1sum:4178825f252e400898f3c38167f4be23886fd3a5"/>
     </node>
     <node visible="true" id="4881729702" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127468000000007" lon="-75.4329737000000051"/>
     <node visible="true" id="4881729703" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124601999999982" lon="-75.4326798999999966"/>
     <node visible="true" id="4881729706" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124207000000126" lon="-75.4340993999999938">
-        <tag k="hoot:hash" v="sha1sum:a104fe5e62a6e31dde59f8b6223dbbff80c7d3d2"/>
+        <tag k="hoot:hash" v="sha1sum:6a5059e00f93a587fcfa5cf595f6a40ac1b81d19"/>
     </node>
     <node visible="true" id="4881729707" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124984999999981" lon="-75.4337984999999946">
-        <tag k="hoot:hash" v="sha1sum:e267df4fb028aa09f807f8023675a5f47e3f7bea"/>
+        <tag k="hoot:hash" v="sha1sum:f5251bfd629a819d0c1e624c6c71b645cfb1fc86"/>
     </node>
     <node visible="true" id="4881729708" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125366000000028" lon="-75.4359718999999984">
-        <tag k="hoot:hash" v="sha1sum:d95753f51e39aaf2aa1a4d16cf08dfa1dbea0ab8"/>
+        <tag k="hoot:hash" v="sha1sum:811f012dbf7222ea8902e201802f62e06f2b925d"/>
     </node>
     <node visible="true" id="4881729715" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122061000000059" lon="-75.4347587000000033">
-        <tag k="hoot:hash" v="sha1sum:df5bb38bdb9d0f1c5224eca567de3d7bebfa3917"/>
+        <tag k="hoot:hash" v="sha1sum:60878f38b552015dda1275f51f9e62246a227b03"/>
     </node>
     <node visible="true" id="4881729716" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122234000000020" lon="-75.4346993000000055">
-        <tag k="hoot:hash" v="sha1sum:35cec45f16b28dde275315d683ab48d84ea6fae2"/>
+        <tag k="hoot:hash" v="sha1sum:602a1bc2c18c52bf835a51f55ff720000da3cb8e"/>
     </node>
     <node visible="true" id="4881729717" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122437000000048" lon="-75.4346747000000022">
-        <tag k="hoot:hash" v="sha1sum:daf68e4bc094c188436f9290a1e5a23140edb088"/>
+        <tag k="hoot:hash" v="sha1sum:9530bca5f7134addab17a966638f53e389d13b67"/>
     </node>
     <node visible="true" id="4881729718" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123691999999934" lon="-75.4342627999999991">
-        <tag k="hoot:hash" v="sha1sum:5a3bab32ead73614f3204f49ecccf020cb1bcff8"/>
+        <tag k="hoot:hash" v="sha1sum:89d7c2167af8f8f99d9f66b81807de41264020bd"/>
     </node>
     <node visible="true" id="4881729742" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127950000000027" lon="-75.4302811999999960"/>
     <node visible="true" id="4881729759" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9080269999999970" lon="-75.4366380000000021"/>
@@ -892,41 +892,41 @@
     <node visible="true" id="4881729762" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9077700000000135" lon="-75.4365939999999995"/>
     <node visible="true" id="4881729764" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074090000000012" lon="-75.4366480000000053"/>
     <node visible="true" id="4881729772" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072000000000102" lon="-75.4367749999999972">
-        <tag k="hoot:hash" v="sha1sum:a9a500a7b2a93060536bb93f7fdd6fc7d1ef6cef"/>
+        <tag k="hoot:hash" v="sha1sum:f45d58e1ceb316c2c3abb6a2fb488d4e6612a0e4"/>
     </node>
     <node visible="true" id="4881729789" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122235999999972" lon="-75.4308153999999860"/>
     <node visible="true" id="4881729790" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083430000000092" lon="-75.4369119999999924"/>
     <node visible="true" id="4881729880" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125048000000007" lon="-75.4278309000000036">
-        <tag k="hoot:hash" v="sha1sum:3a59cf97b1038d7c3e970b5c740fefae64607346"/>
+        <tag k="hoot:hash" v="sha1sum:bb1ef5f28f6b4994691f39b48f60a8f886c2adf7"/>
     </node>
     <node visible="true" id="4881729893" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125510000000006" lon="-75.4283704999999998"/>
     <node visible="true" id="4881730482" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074889999999982" lon="-75.4300149999999974">
-        <tag k="hoot:hash" v="sha1sum:2a3933e1f645b255170d59058cf83b3f78dd809e"/>
+        <tag k="hoot:hash" v="sha1sum:be93de7ef1494f2c5c6678c77517f36ef6903159"/>
     </node>
     <node visible="true" id="4881730483" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9070349999999934" lon="-75.4291079999999994">
-        <tag k="hoot:hash" v="sha1sum:75d07e9fddb3e17a5caadc9aaefea74e531462fd"/>
+        <tag k="hoot:hash" v="sha1sum:3455d799e0fc36514a76a8a3cfc421f0ac9a397f"/>
     </node>
     <node visible="true" id="4881730533" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079580000000007" lon="-75.4309590000000014">
-        <tag k="hoot:hash" v="sha1sum:f114e414c6e543a90324d656061227b1b461fbba"/>
+        <tag k="hoot:hash" v="sha1sum:abd3d7392283ea4ff886aace54bc644967118f9f"/>
     </node>
     <node visible="true" id="4881730539" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097260000000063" lon="-75.4366839999999996">
-        <tag k="hoot:hash" v="sha1sum:821b6ba96a985c0bdca2a88686c9342747818cdd"/>
+        <tag k="hoot:hash" v="sha1sum:0f04cade8c1ef7794e84019d9f1e8cb629d1437e"/>
     </node>
     <node visible="true" id="4881730541" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9093639999999823" lon="-75.4337969999999984">
-        <tag k="hoot:hash" v="sha1sum:24fc62dbe69f2cbc30e93f8c6c1c9dee5cfc1da8"/>
+        <tag k="hoot:hash" v="sha1sum:1dba64284aa16339b59a1303283343a9660aef31"/>
     </node>
     <node visible="true" id="4881730543" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9091980000000035" lon="-75.4334860000000020"/>
     <node visible="true" id="4881730547" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9089030000000022" lon="-75.4328739999999982">
-        <tag k="hoot:hash" v="sha1sum:f7f7a380510f38d7c98d4ff7c74ef6036b2cc3aa"/>
+        <tag k="hoot:hash" v="sha1sum:098a3f77fc4ebd14f8d9b9ac5fd9e63897d6a2f4"/>
     </node>
     <node visible="true" id="4881731148" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9061280000000025" lon="-75.4301459999999935">
-        <tag k="hoot:hash" v="sha1sum:0b0706cf58e75c4ea51a2169adea8e2e18897508"/>
+        <tag k="hoot:hash" v="sha1sum:15ef4c19443649a949e9162c59b3fc56ec8f5956"/>
     </node>
     <node visible="true" id="4881731155" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9067129999999963" lon="-75.4300439999999952">
-        <tag k="hoot:hash" v="sha1sum:b2cfa508384c10808ee5fce228804fda2a15477b"/>
+        <tag k="hoot:hash" v="sha1sum:a6767857c643ac6eca0dd583eb30d3b76a343aa5"/>
     </node>
     <node visible="true" id="4881731157" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9081710000000029" lon="-75.4294909999999987">
-        <tag k="hoot:hash" v="sha1sum:76e973408cfa58b192fe706688530d8299e88ed8"/>
+        <tag k="hoot:hash" v="sha1sum:ce586b00ef149726251ea865ad8656bc4a108122"/>
     </node>
     <node visible="true" id="4881731158" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072620000000029" lon="-75.4299550000000067"/>
     <node visible="true" id="4881731171" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9100620000000106" lon="-75.4311220000000020"/>
@@ -954,7 +954,7 @@
     <node visible="true" id="4881732033" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121258999999995" lon="-75.4309034000000054"/>
     <node visible="true" id="4881732034" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123403999999979" lon="-75.4319521000000037"/>
     <node visible="true" id="4881732039" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121415999999982" lon="-75.4347352999999998">
-        <tag k="hoot:hash" v="sha1sum:16d9522f561a6182d731da991271dc4a8e90b1de"/>
+        <tag k="hoot:hash" v="sha1sum:e97013353cf21e30606d1977e47510fb1f340794"/>
     </node>
     <node visible="true" id="4881732040" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121488999999912" lon="-75.4313822000000016"/>
     <node visible="true" id="4881732041" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123330999999979" lon="-75.4366444000000058"/>
@@ -982,7 +982,7 @@
     <node visible="true" id="4881732085" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116106000000030" lon="-75.4340923999999973"/>
     <node visible="true" id="4881732087" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116844000000057" lon="-75.4326697999999993"/>
     <node visible="true" id="4881732088" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9094049999999925" lon="-75.4311359999999951">
-        <tag k="hoot:hash" v="sha1sum:1994af901b3aee69b8aae2ce5bba7b664af3dbe5"/>
+        <tag k="hoot:hash" v="sha1sum:88abb7ae8ca44e88867a24dbed042c2645a2a61e"/>
     </node>
     <node visible="true" id="4881732089" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9078319999999920" lon="-75.4325850000000031"/>
     <node visible="true" id="4881732091" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9076910000000069" lon="-75.4327030000000036"/>
@@ -1012,88 +1012,88 @@
     <node visible="true" id="4881732189" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9111592000000002" lon="-75.4343412999999856"/>
     <node visible="true" id="4881732200" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9110984999999943" lon="-75.4343834999999956"/>
     <node visible="true" id="4881732960" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097539999999924" lon="-75.4275228999999996">
-        <tag k="hoot:hash" v="sha1sum:eccbf718829fdf1cfb5ff1a224adab3ad9534c7b"/>
+        <tag k="hoot:hash" v="sha1sum:817019d286339be988833e1de5d1dc056917e968"/>
     </node>
     <node visible="true" id="4881732962" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072786999999991" lon="-75.4279226000000023">
-        <tag k="hoot:hash" v="sha1sum:b4a6abe52aa570aecda08e2dd0695f84567946cf"/>
+        <tag k="hoot:hash" v="sha1sum:01eb455280d5fe0a7780129fc3c6293c3b40c952"/>
     </node>
     <node visible="true" id="4881732963" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079589999999982" lon="-75.4277859999999976"/>
     <node visible="true" id="4881732964" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9066460000000092" lon="-75.4279290000000060"/>
     <node visible="true" id="4881732965" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9068230000000028" lon="-75.4279559999999947"/>
     <node visible="true" id="4881732967" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9058009999999896" lon="-75.4276760000000053"/>
     <node visible="true" id="4881732999" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105792000000008" lon="-75.4274005999999986">
-        <tag k="hoot:hash" v="sha1sum:d46aef26189f3bbc9c7387d139054d3313c3a7d4"/>
+        <tag k="hoot:hash" v="sha1sum:ed00de66833306224e0a010f4a630200ca830d6f"/>
     </node>
     <node visible="true" id="4881733083" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9073887999999997" lon="-75.4314456999999976">
-        <tag k="hoot:hash" v="sha1sum:5511ec66a7ca09caa6d9e625a7ee9827de69c497"/>
+        <tag k="hoot:hash" v="sha1sum:d650ff8c0e926cedc4402133ad0cecaa05cb5511"/>
     </node>
     <node visible="true" id="4881733094" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114783999999929" lon="-75.4329835000000060">
-        <tag k="hoot:hash" v="sha1sum:d6758537dd3eb27a03c65e65aacde701c4e96725"/>
+        <tag k="hoot:hash" v="sha1sum:8c744779b8de88094aab9acb88852bbce79034f3"/>
     </node>
     <node visible="true" id="4881733148" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113837000000089" lon="-75.4328225999999944">
-        <tag k="hoot:hash" v="sha1sum:a57d9f5f5f7bb5b6687d06567e8ba78a3e7fedf7"/>
+        <tag k="hoot:hash" v="sha1sum:e3813545eefca68184d71988aa92c72155a59973"/>
     </node>
     <node visible="true" id="4881733165" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114348999999962" lon="-75.4329122999999839">
-        <tag k="hoot:hash" v="sha1sum:3fc194c2871d66ea4a142bac319be923c84636ff"/>
+        <tag k="hoot:hash" v="sha1sum:0556d2a92e6c9f455236edb88a42277d44ea02f7"/>
     </node>
     <node visible="true" id="4881733423" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9100570000000090" lon="-75.4319449999999847"/>
     <node visible="true" id="4881733435" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079730000000055" lon="-75.4291970000000020">
-        <tag k="hoot:hash" v="sha1sum:078f3024693f705dbb0a1cbda9e4a9d3ead55140"/>
+        <tag k="hoot:hash" v="sha1sum:b2891bb2db1c00aff0fc5961507c01bed3495262"/>
     </node>
     <node visible="true" id="4881733436" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9087850000000017" lon="-75.4302799999999962">
-        <tag k="hoot:hash" v="sha1sum:8220f51eed8500f8cf3a53a6be43d9d4d70c569d"/>
+        <tag k="hoot:hash" v="sha1sum:243fc2b311dfad10f360b4b0b7d8d2a36c5f005c"/>
     </node>
     <node visible="true" id="4881733488" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072529999999901" lon="-75.4354270000000042">
-        <tag k="hoot:hash" v="sha1sum:aca37600823f7fad8ec5ce61eb8f51235e1b6265"/>
+        <tag k="hoot:hash" v="sha1sum:05b10c370206a0ecc27e47a0dc97edba74227ac3"/>
     </node>
     <node visible="true" id="4881733499" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083789999999965" lon="-75.4345650000000063">
-        <tag k="hoot:hash" v="sha1sum:9c18beee21c63c940c6e594c833b44f9d6b0da2c"/>
+        <tag k="hoot:hash" v="sha1sum:80fed16fcb788d91038a03a31698bc35f9f772d7"/>
     </node>
     <node visible="true" id="4881734217" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126419999999982" lon="-75.4278161000000011"/>
     <node visible="true" id="4881734226" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127816000000095" lon="-75.4277960999999948"/>
     <node visible="true" id="4881734357" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115800000000007" lon="-75.4333797999999973">
-        <tag k="hoot:hash" v="sha1sum:17df7f80a815264f43a508d9fbc30946c1b16fed"/>
+        <tag k="hoot:hash" v="sha1sum:d5949969e9fb32cc63024f4775f537504fbbd554"/>
     </node>
     <node visible="true" id="4881734369" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121786000000043" lon="-75.4346828000000045">
-        <tag k="hoot:hash" v="sha1sum:83014ea8a4d88cb7d204d7d5cd0fcedc215f5dd1"/>
+        <tag k="hoot:hash" v="sha1sum:e2d81040a18f27c85734a73285baaa08a89bdd6b"/>
     </node>
     <node visible="true" id="4881734370" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127628999999970" lon="-75.4367773000000028">
-        <tag k="hoot:hash" v="sha1sum:6c50ef0f143dafcb850927fa016a69cbba241579"/>
+        <tag k="hoot:hash" v="sha1sum:e983e10bd925ce74bf3f08bd5ed868dde71e20db"/>
     </node>
     <node visible="true" id="4881734703" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9069732999999971" lon="-75.4305403999999982"/>
     <node visible="true" id="4881734719" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9071300000000022" lon="-75.4316670000000045"/>
     <node visible="true" id="4881734728" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9058949999999939" lon="-75.4327430000000021">
-        <tag k="hoot:hash" v="sha1sum:a237c69a65ccc4299ac6da1166fbbc91c0cacdba"/>
+        <tag k="hoot:hash" v="sha1sum:d4142821b485947f1b9450cdbf4ddff94b92b05f"/>
     </node>
     <node visible="true" id="4881735239" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127527999999856" lon="-75.4363606999999945"/>
     <node visible="true" id="4881735242" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127600999999999" lon="-75.4362828000000007"/>
     <node visible="true" id="4881735243" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125141000000028" lon="-75.4352487999999965">
-        <tag k="hoot:hash" v="sha1sum:19c565d3926091ab09209e4a3d5ae9b61a788b62"/>
+        <tag k="hoot:hash" v="sha1sum:a22e2abf10babb29f3a1614732b174acd843462e"/>
     </node>
     <node visible="true" id="4881735246" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127936000000005" lon="-75.4352963999999986"/>
     <node visible="true" id="4881735251" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127701999999900" lon="-75.4361906999999974"/>
     <node visible="true" id="4881735267" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126898999999966" lon="-75.4352540999999945">
-        <tag k="hoot:hash" v="sha1sum:0f7379bc3ccafe2e9c4b19c98e89bf1e01007e24"/>
+        <tag k="hoot:hash" v="sha1sum:7267d132f090c2a32edb8aaaf819d0ba99f68e0b"/>
     </node>
     <node visible="true" id="4881735296" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124539000000027" lon="-75.4349681000000061">
-        <tag k="hoot:hash" v="sha1sum:31bbd583a3f8068e456d3bd747ec6abe580e37ac"/>
+        <tag k="hoot:hash" v="sha1sum:d028f2b706d6160cf8968408f2a8d9ae2d83ec40"/>
     </node>
     <node visible="true" id="4881735865" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9073282000000020" lon="-75.4273015999999927"/>
     <node visible="true" id="4881735866" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072441999999938" lon="-75.4274128999999789"/>
     <node visible="true" id="4881735886" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072411999999943" lon="-75.4275061999999963"/>
     <node visible="true" id="4881735985" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9111249999999984" lon="-75.4323700000000059">
-        <tag k="hoot:hash" v="sha1sum:2bf7fdd728a1accb8b3590610a1947b786d714d8"/>
+        <tag k="hoot:hash" v="sha1sum:cd33b641a1cf3293b3e4309a4b9ca36d632323f5"/>
     </node>
     <node visible="true" id="4881735994" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105299999999943" lon="-75.4328160000000025">
-        <tag k="hoot:hash" v="sha1sum:f82c37d6c64b03d8fc2c8006017d1f72563fe045"/>
+        <tag k="hoot:hash" v="sha1sum:d876fb708df4724b78563e2cd1173ab3538f101a"/>
     </node>
     <node visible="true" id="4881735996" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116400000000056" lon="-75.4307229999999862">
-        <tag k="hoot:hash" v="sha1sum:81c6b078b0fadc8fb86a7a18c4231e386400d2ce"/>
+        <tag k="hoot:hash" v="sha1sum:1dc1badb50fffd260e9d2c08433e0452a4ad1d84"/>
     </node>
     <node visible="true" id="4881735998" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112900000000010" lon="-75.4321529999999996"/>
     <node visible="true" id="4881735999" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113340000000036" lon="-75.4320289999999858"/>
     <node visible="true" id="4881736041" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9068120000000022" lon="-75.4345579999999956">
-        <tag k="hoot:hash" v="sha1sum:71776c21877da94605657c10694b49346e93d778"/>
+        <tag k="hoot:hash" v="sha1sum:cc977d7bb10c3d301c5f3db741b6f66e67123968"/>
     </node>
     <node visible="true" id="4881736053" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097419999999943" lon="-75.4321829999999949"/>
     <node visible="true" id="4881736054" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083070000000006" lon="-75.4333610000000050"/>
@@ -1112,7 +1112,7 @@
     <node visible="true" id="4881736707" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9065143999999989" lon="-75.4280818999999951"/>
     <node visible="true" id="4881736719" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075454999999906" lon="-75.4286388999999957"/>
     <node visible="true" id="4881736722" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9089230000000015" lon="-75.4300180000000040">
-        <tag k="hoot:hash" v="sha1sum:3a8ae15aad07b1c18240aa919ffea63cfc0f4dd6"/>
+        <tag k="hoot:hash" v="sha1sum:eb84beb87791d7eedc5388d29eb090d678320285"/>
     </node>
     <node visible="true" id="4881736844" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9108310000000088" lon="-75.4357760000000042">
         <tag k="source" v="county_import_v0.1"/>
@@ -1122,11 +1122,11 @@
     <node visible="true" id="4881737312" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075559999999996" lon="-75.4284679999999952"/>
     <node visible="true" id="4881737314" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074880000000007" lon="-75.4283479999999855"/>
     <node visible="true" id="4881737315" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074600000000004" lon="-75.4278910000000025">
-        <tag k="hoot:hash" v="sha1sum:3702dff962ca35f65d59ed54ee8d777f16295781"/>
+        <tag k="hoot:hash" v="sha1sum:adda94e44d37428c44f60fa05a7a6e7ebf788dfd"/>
     </node>
     <node visible="true" id="4881737326" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9081259999999958" lon="-75.4289430000000038"/>
     <node visible="true" id="4881737431" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075100000000020" lon="-75.4359070000000003">
-        <tag k="hoot:hash" v="sha1sum:54c6e04b029c4bea2fed47577b645fdaa74ddbc8"/>
+        <tag k="hoot:hash" v="sha1sum:5eedfc7da2d8cb3c47a2ee532c9b690b75d03860"/>
     </node>
     <way visible="true" id="-1818" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881735996"/>

@@ -5,7 +5,7 @@
     <node visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0051235458882351" lon="0.0005717796483473"/>
     <node visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0060751017000000" lon="-0.0000762576100000">
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:b5c41e1ce896fc8d2d16688ee41000199aea8c42"/>
+        <tag k="hoot:hash" v="sha1sum:47e918e96f52001f9bd26c72317af798e2d93ff4"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0051170997300000" lon="0.0002994294300000">
@@ -34,7 +34,7 @@
     </node>
     <node visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0062036877700000" lon="0.0049582067700000">
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:150376d801cb3f34039bf9678b0427ee9e561481"/>
+        <tag k="hoot:hash" v="sha1sum:5fbb0c50b094856a34a4cf0ab0983475da1d655f"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0033108975200000" lon="0.0057408881200000">
@@ -55,7 +55,7 @@
     </node>
     <node visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0032514137400000" lon="0.0059850847000000">
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:05bb0e361ec1f953a154147ea17db32570bceb35"/>
+        <tag k="hoot:hash" v="sha1sum:e99206045b439e081a9449fefd6d2b38ecdca1a1"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0064152764700000" lon="0.0034558457500000">
@@ -88,7 +88,7 @@
     </node>
     <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0032073572500000" lon="0.0007878225900000">
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:aa5d566e5d63260622137520d14da951f64f6440"/>
+        <tag k="hoot:hash" v="sha1sum:71e3526df85c4a1124146c71c7d59bfa37b761d1"/>
         <tag k="error:circular" v="15"/>
     </node>
     <way visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1">

@@ -179,7 +179,7 @@
     </node>
     <node visible="true" id="135" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5490360000000045" lon="-72.3467378757499944">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:hash" v="sha1sum:9db9af56438b3000563e2672b738150d513a2f56"/>
+        <tag k="hoot:hash" v="sha1sum:30238ddb8eac8e98420c54d4857866507d5b3cda"/>
         <tag k="hoot:id" v="135"/>
     </node>
     <node visible="true" id="142" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465998999999968" lon="-72.3472215000000034">

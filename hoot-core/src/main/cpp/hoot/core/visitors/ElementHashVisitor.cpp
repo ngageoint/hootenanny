@@ -103,17 +103,17 @@ QString ElementHashVisitor::toJson(const ConstElementPtr& e)
 
 QString ElementHashVisitor::_toJson(const ConstNodePtr& node)
 {
-  QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"node\",\"tags\":{";
+  QString result = "{\"type\":\"node\",\"tags\":{";
 
   result += _toJson(node->getTags(), node->getRawCircularError());
 
   const int coordinateComparisonSensitivity =
     ConfigOptions().getNodeComparisonCoordinateSensitivity();
-  result += "}},\"geometry\":{\"type\":\"Point\",\"coordinates\":[";
+  result += "},\"x\":";
   result += QString::number(node->getX(), 'f', coordinateComparisonSensitivity);
-  result += ",";
+  result += ",\"y\":";
   result += QString::number(node->getY(), 'f', coordinateComparisonSensitivity);
-  result += "]}}";
+  result += "}";
 
   return result;
 }
@@ -125,7 +125,7 @@ QString ElementHashVisitor::_toJson(const ConstWayPtr& way)
     throw IllegalArgumentException("A map must be set when calculating a way hash.");
   }
 
-  QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"way\",\"tags\":{";
+  QString result = "{\"type\":\"way\",\"tags\":{";
 
   result += _toJson(way->getTags(), way->getRawCircularError());
 
@@ -143,7 +143,7 @@ QString ElementHashVisitor::_toJson(const ConstWayPtr& way)
       }
     }
   }
-  result += "]}}";
+  result += "]}";
 
   return result;
 }
@@ -155,7 +155,7 @@ QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation)
     throw IllegalArgumentException("A map must be set when calculating a relation hash.");
   }
 
-  QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"relation\",\"tags\":{";
+  QString result = "{\"type\":\"relation\",\"tags\":{";
 
   result += _toJson(relation->getTags(), relation->getRawCircularError());
 
@@ -163,17 +163,24 @@ QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation)
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
-    ConstElementPtr member = _map->getElement(relationMembers[i].getElementId());
-    if (member)
+    const RelationData::Entry member = relationMembers[i];
+    ConstElementPtr memberElement = _map->getElement(member.getElementId());
+    if (memberElement)
     {
-      result += toJson(member);
+      QString memberJson = toJson(memberElement);
+      const QString typeStr = memberElement->getElementType().toString().toLower();
+      memberJson =
+        memberJson.replace(
+          "\"type\":\"" + typeStr + "\",",
+          "\"type\":\"" + typeStr + "\",\"role\":\"" + member.getRole() + "\",");
+      result += memberJson;
       if (i != (relationMembers.size() - 1))
       {
         result += ",";
       }
     }
   }
-  result += "]}}";
+  result += "]}";
 
   return result;
 }
