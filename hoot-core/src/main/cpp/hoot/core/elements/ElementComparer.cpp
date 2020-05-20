@@ -32,7 +32,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/CalculateHashVisitor2.h>
+#include <hoot/core/visitors/CalculateHashVisitor.h>
 
 namespace hoot
 {
@@ -99,8 +99,8 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
   if (e1->getElementType() == ElementType::Node)
   {
     // Set the hoot hash tag here if it doesn't exist, since its required for node comparisons.
-    CalculateHashVisitor2 hashVis;
-    // probably shouldn't do this, but its been working this way for awhile now...will remove later
+    CalculateHashVisitor hashVis;
+    // TODO: This doesn't seem right, but its been working this way for awhile now...remove later?
     hashVis.setIncludeCircularError(true);
     if (!e1->getTags().contains(MetadataTags::HootHash()))
     {
