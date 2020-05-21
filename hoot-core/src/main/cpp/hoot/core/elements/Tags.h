@@ -206,6 +206,14 @@ public:
   inline bool operator!=(const Tags& other) const { return !(*this == other); }
 
   /**
+   * TODO
+   *
+   * @param other
+   * @return
+   */
+  bool hasSameNonMetadataTags(const Tags& other) const;
+
+  /**
    * Similar to operator== but 'hoot::*' tags are ignored
    */
   bool dataOnlyEqual(const Tags& other) const;

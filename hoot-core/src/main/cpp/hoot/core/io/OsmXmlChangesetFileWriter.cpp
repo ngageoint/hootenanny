@@ -457,8 +457,8 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
     const QString val = it.value();
     if (key.isEmpty() == false && val.isEmpty() == false)
     {
-      //  Ignore 'hoot:hash' for nodes
-      if (key == MetadataTags::HootHash() && element->getElementType() == ElementType::Node)
+      // always ignore 'hoot:hash'
+      if (key == MetadataTags::HootHash())
         continue;
       else if (!_includeDebugTags && key.toLower().startsWith("hoot:"))
         continue;

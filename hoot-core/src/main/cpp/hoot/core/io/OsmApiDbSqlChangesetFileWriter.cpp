@@ -526,8 +526,8 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
 
     if (key.isEmpty() == false && val.isEmpty() == false)
     {
-      //  Ignore 'hoot:hash' for nodes
-      if (key == MetadataTags::HootHash() && element->getElementType() == ElementType::Node)
+      //  always ignore 'hoot:hash'
+      if (key == MetadataTags::HootHash())
         continue;
       else if (!_includeDebugTags && key.toLower().startsWith("hoot:"))
         continue;

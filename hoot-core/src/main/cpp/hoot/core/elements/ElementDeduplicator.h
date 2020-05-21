@@ -36,15 +36,18 @@ namespace hoot
 {
 
 /**
- * De-duplicates features within a map or across multiple maps.
+ * This class de-duplicates features within a map or across multiple maps. It ignores element IDs,
+ * versions and other OSM metadata.
  *
- * This has a more strict definition of duplicates than cleaning ops like DuplicateWayRemover.
+ * This has a more strict definition of way duplicates than DuplicateWayRemover.
  *
  * @todo For now, this is being tested from tests exercising ChangesetReplacementCreator, but it
  * would be good to give it its own test eventually.
  * @todo its convoluted to have both a boolean and a criterion for each element type; removal should
  * be able to all be done with a single criterion and all elements, regardless of type, can be
  * processed in one pass...will just take a decent amount of refactoring
+ * @todo Is there some overlap here with ElementComparer?
+ * @todo Is there any way this could replace DuplicateNodeRemover? I don't think so...
  */
 class ElementDeduplicator
 {

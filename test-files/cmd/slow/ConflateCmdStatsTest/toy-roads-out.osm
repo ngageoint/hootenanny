@@ -166,6 +166,7 @@
         <nd ref="-1669735"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:6a80c09567494f210e2c14d864964e5047c192e2;sha1sum:249c5bd8b28f11a2362ec59d4725fb2c1d7acc8b"/>
         <tag k="note" v="2"/>
         <tag k="hoot:id" v="-1669989"/>
         <tag k="error:circular" v="15"/>
@@ -204,6 +205,7 @@
         <nd ref="-1669777"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:90407984794299d59e7110f4e15d5a904e41c377;sha1sum:ae931db1cbabc0255e43eff6a480061db25b9ef0"/>
         <tag k="note" v="0"/>
         <tag k="hoot:id" v="-1669809"/>
         <tag k="error:circular" v="15"/>

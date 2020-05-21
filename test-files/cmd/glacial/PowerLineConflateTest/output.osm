@@ -4910,6 +4910,7 @@
         <tag k="wires" v="single"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.051991888445569998"/>
+        <tag k="hoot:hash" v="sha1sum:c2447bfc016eb058c4f22afe04024bc5bc56df02;sha1sum:549a0fd0ec95c78b1930fa8f7aed0f7cdf906be8"/>
     </way>
     <way visible="true" id="-2379124" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346539"/>
@@ -5055,6 +5056,7 @@
         <tag k="wires" v="single"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.18038848370772501"/>
+        <tag k="hoot:hash" v="sha1sum:661e7162c24c2800e59584f7908e3503e45b56e5;sha1sum:c2e5fb5bcecb036558bb01b5948bfbfce7f1ca44"/>
     </way>
     <way visible="true" id="-2379109" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349167"/>
@@ -5079,6 +5081,7 @@
         <tag k="Length_Fee" v="2732.35842856"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0076626932828919997"/>
+        <tag k="hoot:hash" v="sha1sum:45ebdfb24b336ccef94918271f771755a6090e77;sha1sum:a84542e703db97d9539cc322619b4a03fd062338"/>
     </way>
     <way visible="true" id="-2379105" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2338247"/>
@@ -5363,11 +5366,13 @@
         <tag k="frequency" v="60"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.092586216840936"/>
+        <tag k="hoot:hash" v="sha1sum:4eef1651dd79caafef95954f4253189e6bd0c174;sha1sum:02faaf90082258eba1c03d1dafa425fc47f56a2e;sha1sum:d97468b69b93e831b598ae275f8cd79ecd10ae79;sha1sum:3563482d68f46a469ff731f28285f71f77716da8;sha1sum:c4055fcf2922b668d0248706a4fe7aad68bfcb7d;sha1sum:fb3ee31b1c11ce96fffcc2330dfd5c2aab6671f4;sha1sum:d0b47bbf9e8b431db230750a7ef1bb3b87a52e8e"/>
     </way>
     <way visible="true" id="-2378926" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347013"/>
         <nd ref="-2347017"/>
         <tag k="power" v="line"/>
+        <tag k="hoot:hash" v="sha1sum:0d86efecaf8287010fe5e35f7f1bbb2e53d53111"/>
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -5400,12 +5405,14 @@
         <tag k="Length_Fee" v="2582.92098913"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0080791688186990004"/>
+        <tag k="hoot:hash" v="sha1sum:97e65d8ebfc93b6911031fbd6f4974d8d18c334e;sha1sum:0d86efecaf8287010fe5e35f7f1bbb2e53d53111;sha1sum:5a3cddf083bf9ce6973235881b9436e69d029a7c"/>
     </way>
     <way visible="true" id="-2378903" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349099"/>
         <nd ref="-2366723"/>
         <nd ref="-2349093"/>
         <tag k="power" v="line"/>
+        <tag k="hoot:hash" v="sha1sum:c2e5fb5bcecb036558bb01b5948bfbfce7f1ca44"/>
         <tag k="name" v="Oleum - Martinez 115kV transmission line"/>
         <tag k="voltage" v="115000"/>
         <tag k="cables" v="6"/>
@@ -5417,6 +5424,7 @@
         <nd ref="-2367052"/>
         <nd ref="-2349131"/>
         <tag k="power" v="line"/>
+        <tag k="hoot:hash" v="sha1sum:c2e5fb5bcecb036558bb01b5948bfbfce7f1ca44"/>
         <tag k="name" v="Oleum - Martinez 115kV transmission line"/>
         <tag k="voltage" v="115000"/>
         <tag k="cables" v="6"/>
@@ -5460,6 +5468,7 @@
         <tag k="Length_Fee" v="48230.41800181"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.137410656126703"/>
+        <tag k="hoot:hash" v="sha1sum:41d2d1749beed7ae77baf4b832154491f5bb746c;sha1sum:0240ccbdbbd3d661268dcb9f59a2bb9f93ab7d57"/>
     </way>
     <way visible="true" id="-2378848" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349031"/>
@@ -5487,12 +5496,14 @@
         <tag k="wires" v="single"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.004831019352687"/>
+        <tag k="hoot:hash" v="sha1sum:bb6250ea4876097b8dcbb79f80640f0cf58e8390;sha1sum:d17994045709971ef6c9ae01c815928c142fe965"/>
     </way>
     <way visible="true" id="-2378845" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2338839"/>
         <nd ref="-2338289"/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="power" v="line"/>
+        <tag k="hoot:hash" v="sha1sum:b6f68e92f261bc024d3e40f1b01156163345c072"/>
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="115000"/>
         <tag k="ref" v="Standard Oil - Sobrante"/>
@@ -5509,6 +5520,7 @@
         <nd ref="-2338783"/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="power" v="line"/>
+        <tag k="hoot:hash" v="sha1sum:b6f68e92f261bc024d3e40f1b01156163345c072"/>
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="115000"/>
         <tag k="ref" v="Standard Oil - Sobrante"/>
@@ -5582,6 +5594,7 @@
         <tag k="Length_Fee" v="58645.62823076"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.187034405899031"/>
+        <tag k="hoot:hash" v="sha1sum:b7f46c3dbeb030f60ee82da9326f194015eba0d2;sha1sum:b6f68e92f261bc024d3e40f1b01156163345c072"/>
     </way>
     <way visible="true" id="-2378773" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2338841"/>
@@ -5608,6 +5621,7 @@
         <nd ref="-2366454"/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="power" v="line"/>
+        <tag k="hoot:hash" v="sha1sum:b6f68e92f261bc024d3e40f1b01156163345c072"/>
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="115000"/>
         <tag k="ref" v="Standard Oil - Sobrante"/>
@@ -5930,6 +5944,7 @@
         <tag k="Length_Fee" v="2660.78913489"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0092071043745129994"/>
+        <tag k="hoot:hash" v="sha1sum:e790b83e055b98cf36376b66c475674ce1bc9dca;sha1sum:153b8fbf1863c3c02914da799a8ebb4356f1a8e1"/>
     </way>
     <way visible="true" id="-2378624" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2338111"/>
@@ -5990,6 +6005,7 @@
         <tag k="wires" v="double"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0015556265734830001"/>
+        <tag k="hoot:hash" v="sha1sum:5b4b95cdbeb1fe79b94fbc62de06bbb79007e472;sha1sum:6b7a3eae4e14ced3285e91806ece4d32a0aeb2f9"/>
     </way>
     <way visible="true" id="-2378597" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345713"/>
@@ -6017,12 +6033,14 @@
         <tag k="wires" v="double"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.001392038258421"/>
+        <tag k="hoot:hash" v="sha1sum:7c80f5acd1b066846e037bef3066739be63e6b95;sha1sum:6edda006b1aada5eac696d60ebc75efa1643916a"/>
     </way>
     <way visible="true" id="-2378557" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367250"/>
         <nd ref="-2346709"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
         <tag k="power" v="line"/>
+        <tag k="hoot:hash" v="sha1sum:ffa6381b7cc37e77a0486920740ac3a88ab9aadf"/>
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="115000"/>
         <tag k="cables" v="6"/>
@@ -6198,6 +6216,7 @@
         <tag k="Length_Fee" v="61.87193626"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.000198593838851"/>
+        <tag k="hoot:hash" v="sha1sum:3f1bfc6dd34e05c0782e89afc66e1ab476905f94;sha1sum:ad4ef87c0ecde9051246dec124edd450f431fb71"/>
     </way>
     <way visible="true" id="-2378496" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346721"/>
@@ -6261,6 +6280,7 @@
         <tag k="Length_Fee" v="289.53575539"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.00092524724585700004"/>
+        <tag k="hoot:hash" v="sha1sum:6f5e837ab5b42f991283dd84340a6ce99776cbb5;sha1sum:163ce0e5a0966af7e224a17fb1c190a13814137e"/>
     </way>
     <way visible="true" id="-2378471" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347649"/>
@@ -6287,6 +6307,7 @@
         <tag k="source" v="Yahoo"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0036052084460860001"/>
+        <tag k="hoot:hash" v="sha1sum:e72412f9f97947d124e7ca2208648cf100021392;sha1sum:23e07663c1cb34a933cee17e3b9fc39ab078ca90"/>
     </way>
     <way visible="true" id="-2378466" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365863"/>
@@ -6343,6 +6364,7 @@
         <tag k="source" v="Yahoo"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.114548422810257"/>
+        <tag k="hoot:hash" v="sha1sum:e969cf31a0f89d59e64d67f219af6029aa2cecf4;sha1sum:9db7596726a3a5d14dbcd871bdb2a9cc7a8b443e"/>
     </way>
     <way visible="true" id="-2378448" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346613"/>
@@ -6454,12 +6476,14 @@
         <tag k="Length_Fee" v="850.09915195"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0029216124809159998"/>
+        <tag k="hoot:hash" v="sha1sum:57e1ab1fe46be7520c74d49a52e1cd8d778c3bfa;sha1sum:6ee2adbc58432c0094bda52ac63eac793eb3af69"/>
     </way>
     <way visible="true" id="-2378385" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346721"/>
         <nd ref="-2366963"/>
         <nd ref="-2346923"/>
         <tag k="power" v="line"/>
+        <tag k="hoot:hash" v="sha1sum:d0b47bbf9e8b431db230750a7ef1bb3b87a52e8e"/>
         <tag k="voltage" v="115000"/>
         <tag k="cables" v="3"/>
         <tag k="REF2" v="todo"/>
@@ -6542,6 +6566,7 @@
         <nd ref="-2345071"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
         <tag k="power" v="line"/>
+        <tag k="hoot:hash" v="sha1sum:062de006d1325d48d8952de8e4bf33afde778d79"/>
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="230000"/>
         <tag k="cables" v="3"/>
@@ -6554,6 +6579,7 @@
         <nd ref="-2345183"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
         <tag k="power" v="line"/>
+        <tag k="hoot:hash" v="sha1sum:2ef226f3ae9510c70fb75eb4fc72ec8d42255b37"/>
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="230000"/>
         <tag k="cables" v="3"/>
@@ -6589,6 +6615,7 @@
         <tag k="frequency" v="60"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0038305885618780001"/>
+        <tag k="hoot:hash" v="sha1sum:70a758f2fdde3ebc6c495aee9b91ccd31a42c713;sha1sum:2ef226f3ae9510c70fb75eb4fc72ec8d42255b37"/>
     </way>
     <way visible="true" id="-2378259" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345871"/>
@@ -6860,6 +6887,7 @@
         <tag k="Length_Fee" v="16005.3039981"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.050269877773390002"/>
+        <tag k="hoot:hash" v="sha1sum:d14bbf0c3e642ac7d972bbb7b2c2aebb16e5dab6;sha1sum:bff3a80cdc28d6d4c0e721be6ef723e9d843834e"/>
     </way>
     <way visible="true" id="-2378143" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2366976"/>
@@ -7004,6 +7032,7 @@
         <tag k="tiger:tlid" v="192077615:192090945:192117152"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.061870607572109"/>
+        <tag k="hoot:hash" v="sha1sum:8a72b9a969f2b53e82a4a5e3ec83f3341cf8296c;sha1sum:6e813d944eba7f0e1876c0308a652e90d026de65"/>
         <tag k="tiger:source" v="tiger_import_dch_v0.6_20070809"/>
     </way>
     <way visible="true" id="-2378066" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -7028,6 +7057,7 @@
         <tag k="Length_Fee" v="1742.69254932"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0054850473304100004"/>
+        <tag k="hoot:hash" v="sha1sum:78a61392d1db2fbe74ae4e5633a4fb999d3c06ca;sha1sum:f8ac7c200a914efdc964d6d24958698e9fc42178;sha1sum:42e503849c0ef4bbc0b6a156fb97988e628d0538;sha1sum:de8cb08188c514bda29361abbdff88dc843df544"/>
     </way>
     <way visible="true" id="-2378063" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2360957"/>
@@ -9121,6 +9151,7 @@
         <tag k="Length_Fee" v="5333.34877055"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.014630481680501999"/>
+        <tag k="hoot:hash" v="sha1sum:34a5b15db93152fc7491c5c19648dcba3e3f4bc7;sha1sum:c395f26db3d31e23786f746d7a3901174e04c809"/>
     </way>
     <way visible="true" id="-2367671" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365841"/>
@@ -10031,6 +10062,7 @@
         <tag k="Length_Fee" v="28164.38775402"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.095780580340901006"/>
+        <tag k="hoot:hash" v="sha1sum:62b05fa4d03f24720a1be99146f464ec12251da8;sha1sum:4f849b4ede49b47c37582fbbefa4c1f9cd72ce52"/>
     </way>
     <way visible="true" id="-2366943" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2348821"/>
@@ -10589,6 +10621,7 @@
         <tag k="Length_Fee" v="24947.68210708"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.073990390109161003"/>
+        <tag k="hoot:hash" v="sha1sum:c6acbe149c115bfcfef290cca709ff4ebf25fc7a;sha1sum:ffa6381b7cc37e77a0486920740ac3a88ab9aadf"/>
     </way>
     <way visible="true" id="-2366815" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346537"/>
@@ -10639,6 +10672,7 @@
         <tag k="frequency" v="60"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.003818398744309"/>
+        <tag k="hoot:hash" v="sha1sum:bf539aa7976a0a3d3b3ebb8f15559c2c6e4ad1ef;sha1sum:062de006d1325d48d8952de8e4bf33afde778d79"/>
     </way>
     <way visible="true" id="-2366741" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345165"/>
@@ -12010,6 +12044,7 @@
         <tag k="Length_Fee" v="58645.62823076"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.187034405899031"/>
+        <tag k="hoot:hash" v="sha1sum:b7f46c3dbeb030f60ee82da9326f194015eba0d2"/>
         <tag k="type" v="multilinestring"/>
     </relation>
     <relation visible="true" id="-672" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -12054,6 +12089,7 @@
         <tag k="Length_Fee" v="18258.84326879"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.061870607572109"/>
+        <tag k="hoot:hash" v="sha1sum:8a72b9a969f2b53e82a4a5e3ec83f3341cf8296c"/>
         <tag k="type" v="multilinestring"/>
     </relation>
     <relation visible="true" id="-631" timestamp="1970-01-01T00:00:00Z" version="1">

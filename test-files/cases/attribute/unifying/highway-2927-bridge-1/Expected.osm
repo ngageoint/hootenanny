@@ -3876,6 +3876,7 @@
         <tag k="source" v="osm:line"/>
         <tag k="motor_vehicle" v="yes"/>
         <tag k="hoot:id" v="-7905"/>
+        <tag k="hoot:hash" v="sha1sum:34f38736c4c63f2e0697f4d945ea0168e5f2efb5;sha1sum:b0bfbaa7077199609124eb01ee389b2fb1b86ad6"/>
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-7898" timestamp="2019-01-17T19:50:06Z" version="1">
@@ -3939,6 +3940,7 @@
         <tag k="source" v="osm:line"/>
         <tag k="motor_vehicle" v="yes"/>
         <tag k="hoot:id" v="-7891"/>
+        <tag k="hoot:hash" v="sha1sum:62c284b8c44584a2b99828602c6a4175bad1978b;sha1sum:6982ec82e5060137cb43abb721e3d17bd2d66de4"/>
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-7887" timestamp="2019-01-17T19:50:06Z" version="1">

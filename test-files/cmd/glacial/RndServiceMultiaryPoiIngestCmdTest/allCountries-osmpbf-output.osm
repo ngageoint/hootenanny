@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="42.50692" minlon="1.44986" maxlat="42.64991" maxlon="1.74028"/>
-    <node visible="true" id="2986043" timestamp="2020-05-20T14:44:20Z" version="1" changeset="78" lat="42.6499099999999984" lon="1.5333500000000000">
+    <node visible="true" id="2986043" timestamp="2020-05-21T20:41:46Z" version="1" changeset="776" lat="42.6499099999999984" lon="1.5333500000000000">
         <tag k="asciiname" v="Pic de Font Blanca"/>
         <tag k="geonameid" v="2986043"/>
         <tag k="feature_class" v="T"/>
@@ -21,7 +21,7 @@
         <tag k="source" v="osm"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="2994701" timestamp="2020-05-20T14:44:20Z" version="1" changeset="78" lat="42.5876499999999965" lon="1.7402800000000000">
+    <node visible="true" id="2994701" timestamp="2020-05-21T20:41:46Z" version="1" changeset="776" lat="42.5876499999999965" lon="1.7402800000000000">
         <tag k="asciiname" v="Roc Mele"/>
         <tag k="geonameid" v="2994701"/>
         <tag k="feature_class" v="T"/>
@@ -42,7 +42,7 @@
         <tag k="source" v="osm"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3007683" timestamp="2020-05-20T14:44:20Z" version="1" changeset="78" lat="42.6120299999999972" lon="1.4736400000000001">
+    <node visible="true" id="3007683" timestamp="2020-05-21T20:41:46Z" version="1" changeset="776" lat="42.6120299999999972" lon="1.4736400000000001">
         <tag k="asciiname" v="Pic des Langounelles"/>
         <tag k="geonameid" v="3007683"/>
         <tag k="feature_class" v="T"/>
@@ -63,7 +63,7 @@
         <tag k="source" v="osm"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3017832" timestamp="2020-05-20T14:44:20Z" version="1" changeset="78" lat="42.5253500000000031" lon="1.7334300000000000">
+    <node visible="true" id="3017832" timestamp="2020-05-21T20:41:46Z" version="1" changeset="776" lat="42.5253500000000031" lon="1.7334300000000000">
         <tag k="admin3_code" v="663"/>
         <tag k="asciiname" v="Pic de les Abelletes"/>
         <tag k="geonameid" v="3017832"/>
@@ -87,7 +87,7 @@
         <tag k="source" v="osm"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3017833" timestamp="2020-05-20T14:44:20Z" version="1" changeset="78" lat="42.5291500000000013" lon="1.7336199999999999">
+    <node visible="true" id="3017833" timestamp="2020-05-21T20:41:46Z" version="1" changeset="776" lat="42.5291500000000013" lon="1.7336199999999999">
         <tag k="asciiname" v="Estany de les Abelletes"/>
         <tag k="geonameid" v="3017833"/>
         <tag k="feature_class" v="H"/>
@@ -108,7 +108,7 @@
         <tag k="source" v="osm"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3023203" timestamp="2020-05-20T14:44:20Z" version="1" changeset="78" lat="42.6256800000000027" lon="1.6182300000000001">
+    <node visible="true" id="3023203" timestamp="2020-05-21T20:41:46Z" version="1" changeset="776" lat="42.6256800000000027" lon="1.6182300000000001">
         <tag k="asciiname" v="Port Vieux de la Coume d'Ose"/>
         <tag k="geonameid" v="3023203"/>
         <tag k="feature_class" v="T"/>
@@ -128,7 +128,7 @@
         <tag k="source" v="osm"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3029315" timestamp="2020-05-20T14:44:20Z" version="1" changeset="78" lat="42.6000000000000014" lon="1.7333300000000000">
+    <node visible="true" id="3029315" timestamp="2020-05-21T20:41:46Z" version="1" changeset="776" lat="42.6000000000000014" lon="1.7333300000000000">
         <tag k="admin3_code" v="091"/>
         <tag k="asciiname" v="Port de la Cabanette"/>
         <tag k="geonameid" v="3029315"/>
@@ -152,7 +152,7 @@
         <tag k="source" v="osm"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3034945" timestamp="2020-05-20T14:44:20Z" version="1" changeset="78" lat="42.6017200000000003" lon="1.4556199999999999">
+    <node visible="true" id="3034945" timestamp="2020-05-21T20:41:46Z" version="1" changeset="776" lat="42.6017200000000003" lon="1.4556199999999999">
         <tag k="asciiname" v="Port Dret"/>
         <tag k="geonameid" v="3034945"/>
         <tag k="feature_class" v="T"/>
@@ -172,7 +172,7 @@
         <tag k="source" v="osm"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3038814" timestamp="2020-05-20T14:44:20Z" version="1" changeset="78" lat="42.5069200000000009" lon="1.4756899999999999">
+    <node visible="true" id="3038814" timestamp="2020-05-21T20:41:46Z" version="1" changeset="776" lat="42.5069200000000009" lon="1.4756899999999999">
         <tag k="latitude" v="42.50692"/>
         <tag k="source" v="osm"/>
         <tag k="longitude" v="1.47569"/>
@@ -191,24 +191,23 @@
         <tag k="attribution" v="osm"/>
         <tag k="feature_class" v="T"/>
     </node>
-    <node visible="true" id="3038815" timestamp="2020-05-20T14:44:17Z" version="1" changeset="76" lat="42.5500299999999996" lon="1.4498599999999999">
-        <tag k="asciiname" v="Font de la Xona"/>
-        <tag k="geonameid" v="3038815"/>
-        <tag k="feature_class" v="H"/>
-        <tag k="country_code" v="AD"/>
-        <tag k="name" v="Font de la Xona"/>
-        <tag k="feature_code" v="SPNG"/>
-        <tag k="latitude" v="42.55003"/>
-        <tag k="admin1_code" v="04"/>
-        <tag k="uuid" v="{1c3e97f5-7430-5a1f-b030-9ce1e7038682}"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="modification_date" v="2010-01-11"/>
-        <tag k="population" v="0"/>
-        <tag k="longitude" v="1.44986"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="dem" v="1976"/>
+    <node visible="true" id="3038815" timestamp="2020-05-21T20:41:46Z" version="1" changeset="776" lat="42.5500299999999996" lon="1.4498599999999999">
+        <tag k="latitude" v="42.50692"/>
         <tag k="source" v="osm"/>
-        <tag k="hoot:hash" v="sha1sum:c121a624c99450392e9fd13d6ba6c99b4d586be5"/>
+        <tag k="longitude" v="1.47569"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="country_code" v="AD"/>
         <tag k="timezone" v="Europe/Andorra"/>
+        <tag k="name" v="Costa de Xurius"/>
+        <tag k="asciiname" v="Costa de Xurius"/>
+        <tag k="uuid" v="{1c3e97f5-7430-5a1f-b030-9ce1e7038682}"/>
+        <tag k="geonameid" v="3038814"/>
+        <tag k="dem" v="1839"/>
+        <tag k="population" v="0"/>
+        <tag k="feature_code" v="SLP"/>
+        <tag k="admin1_code" v="07"/>
+        <tag k="modification_date" v="2015-03-08"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="feature_class" v="T"/>
     </node>
 </osm>

@@ -2532,6 +2532,7 @@
         <nd ref="-479589"/>
         <nd ref="-170472"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:hash" v="sha1sum:de070bc1ef96f45dee30be2c6680cf7f95949096"/>
         <tag k="hoot:id" v="-12665"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="001f53;0020fa"/>
@@ -2563,6 +2564,7 @@
         <tag k="source" v="CNIGS"/>
         <tag k="river_flow" v="temporary"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:hash" v="sha1sum:abe74aa26517d768b0ea01609d7d2d7c1a6e6869"/>
         <tag k="name" v="Ravine Pichomblaise"/>
         <tag k="river_type" v="secondary"/>
         <tag k="hoot:id" v="-12662"/>

@@ -1,24 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.9057" minlon="-75.437" maxlat="38.9128" maxlon="-75.42729999999999"/>
-    <node visible="true" id="-1380" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9075252755916949" lon="-75.4339907980919406">
-        <tag k="hoot:hash" v="sha1sum:80626a2ec8fac07305ecb7772af14e54e2eb7516"/>
-    </node>
-    <node visible="true" id="-1378" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9071171897275150" lon="-75.4343153125841184">
-        <tag k="hoot:hash" v="sha1sum:084455508cc3f228f02982c75e14133c286d0c1b"/>
-    </node>
-    <node visible="true" id="-1376" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9086311905213762" lon="-75.4323222638823694">
-        <tag k="hoot:hash" v="sha1sum:a18e4e1aff3a8ac24af994e04448962f4eb8f79e"/>
-    </node>
+    <node visible="true" id="-1380" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9075252755916949" lon="-75.4339907980919406"/>
+    <node visible="true" id="-1378" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9071171897275150" lon="-75.4343153125841184"/>
+    <node visible="true" id="-1376" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9086311905213762" lon="-75.4323222638823694"/>
     <node visible="true" id="-1374" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9088706800663431" lon="-75.4315531940419390"/>
     <node visible="true" id="-1372" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9063320479024810" lon="-75.4336080275008243"/>
     <node visible="true" id="-1370" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9112434844044941" lon="-75.4284348932876014"/>
-    <node visible="true" id="-1368" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9074715608609623" lon="-75.4299801596609569">
-        <tag k="hoot:hash" v="sha1sum:eef631ca810eb8b807a9b810f75a0ad4b31f0d72"/>
-    </node>
-    <node visible="true" id="-1365" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9074438498509139" lon="-75.4300030660086662">
-        <tag k="hoot:hash" v="sha1sum:5755ef837f2d7570210ad240c264d21faf07d47e"/>
-    </node>
+    <node visible="true" id="-1368" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9074715608609623" lon="-75.4299801596609569"/>
+    <node visible="true" id="-1365" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9074438498509139" lon="-75.4300030660086662"/>
     <node visible="true" id="-1363" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9071218065085418" lon="-75.4316738620668872"/>
     <node visible="true" id="-1360" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9078470816328021" lon="-75.4325637349385119"/>
     <node visible="true" id="-1359" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9076658653568259" lon="-75.4327563788545632"/>
@@ -263,9 +253,7 @@
     <node visible="true" id="-634" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9125713999999974" lon="-75.4333302999999944"/>
     <node visible="true" id="-633" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9124203000000009" lon="-75.4337888000000021"/>
     <node visible="true" id="-632" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9123923999999946" lon="-75.4338728999999972"/>
-    <node visible="true" id="-631" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9125016999999929" lon="-75.4278046999999816">
-        <tag k="hoot:hash" v="sha1sum:aa170a157d0e530765716df35d887cb9e3daceb8"/>
-    </node>
+    <node visible="true" id="-631" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9125016999999929" lon="-75.4278046999999816"/>
     <node visible="true" id="-630" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9124282681688811" lon="-75.4326454487295166">
         <tag k="ford" v="yes"/>
         <tag k="error:circular" v="15"/>
@@ -502,9 +490,7 @@
     <node visible="true" id="-311" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9123330999999979" lon="-75.4366444000000058"/>
     <node visible="true" id="-309" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9123060000000081" lon="-75.4323823999999945"/>
     <node visible="true" id="-307" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9122796999999920" lon="-75.4325448000000023"/>
-    <node visible="true" id="-294" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9121415999999982" lon="-75.4347352999999998">
-        <tag k="hoot:hash" v="sha1sum:e97013353cf21e30606d1977e47510fb1f340794"/>
-    </node>
+    <node visible="true" id="-294" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9121415999999982" lon="-75.4347352999999998"/>
     <node visible="true" id="-288" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9119651999999974" lon="-75.4343370999999934"/>
     <node visible="true" id="-286" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9119141999999982" lon="-75.4342789999999894"/>
     <node visible="true" id="-285" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9118747000000056" lon="-75.4342551000000014"/>
@@ -610,9 +596,7 @@
     <node visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4307593486099961"/>
     <node visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9060792922400012" lon="-75.4272999999999882"/>
     <node visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9063232409599991" lon="-75.4272999999999882"/>
-    <node visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124485243900011" lon="-75.4369999999999976">
-        <tag k="hoot:hash" v="sha1sum:59df38684d0ad9bca120d1d2af23401885c561af"/>
-    </node>
+    <node visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124485243900011" lon="-75.4369999999999976"/>
     <node visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9105608160700029" lon="-75.4369999999999976"/>
     <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4295209593200013"/>
     <node visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4296733597399935"/>
@@ -627,67 +611,39 @@
     <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4272999999999882"/>
     <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4329468526299962"/>
     <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4335187878999989"/>
-    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9056999999999960" lon="-75.4365809379746821">
-        <tag k="hoot:hash" v="sha1sum:88e20a1bb0a391c2f292d1759e0df563e1b8b0da"/>
-    </node>
-    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9105670377093134" lon="-75.4272999999999882">
-        <tag k="hoot:hash" v="sha1sum:59652c1097d3bbc1b5c7b32bb9b0deea5b3d82f8"/>
-    </node>
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9056999999999960" lon="-75.4365809379746821"/>
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9105670377093134" lon="-75.4272999999999882"/>
     <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4302204347825835"/>
     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4303246999999573"/>
-    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9056999999999960" lon="-75.4323745617433445">
-        <tag k="hoot:hash" v="sha1sum:2fcf50e17134e757058c64fea9be9e5c47138951"/>
-    </node>
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9056999999999960" lon="-75.4323745617433445"/>
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4277938889633788"/>
     <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4361795650537630"/>
-    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4365385346740425">
-        <tag k="hoot:hash" v="sha1sum:a756d02c86570ae16bc2544d780fc9849d9afa95"/>
-    </node>
-    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4353368705882161">
-        <tag k="hoot:hash" v="sha1sum:7c07aa43ef751a6dae56bdfc48a6046603ea01a4"/>
-    </node>
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4365385346740425"/>
+    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4353368705882161"/>
     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4343221315789521"/>
-    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9094651288919309" lon="-75.4272999999999882">
-        <tag k="hoot:hash" v="sha1sum:291778e5307cf2de9d8b8f840e3ed455f13f535f"/>
-    </node>
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9094651288919309" lon="-75.4272999999999882"/>
     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9073375487077797" lon="-75.4272999999999882"/>
     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9083877096774131" lon="-75.4369999999999976"/>
-    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9068888384755027" lon="-75.4369999999999976">
-        <tag k="hoot:hash" v="sha1sum:3e215e696f6ae009b3f13b893d7a1f42f1c42a14"/>
-    </node>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9068888384755027" lon="-75.4369999999999976"/>
     <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9112813114186480" lon="-75.4272999999999882"/>
-    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4276505319516417">
-        <tag k="hoot:hash" v="sha1sum:e5e3db734f695ba76f052ca2a46b45133b559bc7"/>
-    </node>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4276505319516417"/>
     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9113884989665166" lon="-75.4272999999999882"/>
-    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9113009331923863" lon="-75.4369999999999976">
-        <tag k="hoot:hash" v="sha1sum:d53f3f323526f66d4f2c76f53496dd4ae3e6beb4"/>
-    </node>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9113009331923863" lon="-75.4369999999999976"/>
     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9097597475728136" lon="-75.4369999999999976"/>
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4342225323741076"/>
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4293472653316570"/>
     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9089616410256340" lon="-75.4369999999999976"/>
-    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9073092592592573" lon="-75.4369999999999976">
-        <tag k="hoot:hash" v="sha1sum:c9b0c1ec19cabf70473faa5c2d8e888dbcfe2340"/>
-    </node>
-    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9056999999999960" lon="-75.4278257476635474">
-        <tag k="hoot:hash" v="sha1sum:1000385912d18f332cc05482bb624206b36f772a"/>
-    </node>
-    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4368862394197919">
-        <tag k="hoot:hash" v="sha1sum:9259f3eb5cc895da0a21f28366d61fbba40b9903"/>
-    </node>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9073092592592573" lon="-75.4369999999999976"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9056999999999960" lon="-75.4278257476635474"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4368862394197919"/>
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4329927826086930"/>
-    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4335547949777236">
-        <tag k="hoot:hash" v="sha1sum:0758449173e8b4b43552d8053e2255b67ac9f8ea"/>
-    </node>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4335547949777236"/>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4303197844630660"/>
     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4302096460643412"/>
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4283670794440866"/>
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4280676724822712"/>
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9105608160693635" lon="-75.4369999999999976"/>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124485243862424" lon="-75.4369999999999976">
-        <tag k="hoot:hash" v="sha1sum:8a9f3652509582e4342893df459a33a266e4b1ac"/>
-    </node>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124485243862424" lon="-75.4369999999999976"/>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124591980112839" lon="-75.4272999999999882"/>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9128000000000043" lon="-75.4302806165324284"/>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4308472613065248"/>
@@ -759,35 +715,25 @@
     <node visible="true" id="4881725477" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121419000000017" lon="-75.4284938999999923">
         <tag k="traffic_signals" v="signal"/>
         <tag k="highway" v="traffic_signals"/>
-        <tag k="hoot:hash" v="sha1sum:dbf9591029497b121ec9c6ceb4a639f7d33dbd21"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881725480" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098842000000005" lon="-75.4286637000000013"/>
     <node visible="true" id="4881725481" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116020000000020" lon="-75.4283929999999998"/>
-    <node visible="true" id="4881726044" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127379999999903" lon="-75.4352285999999879">
-        <tag k="hoot:hash" v="sha1sum:2c2e48c590853e07356c6a1a1584de5486f2e75b"/>
-    </node>
-    <node visible="true" id="4881726046" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125457999999895" lon="-75.4352856000000003">
-        <tag k="hoot:hash" v="sha1sum:951cb0835b302a0c2ba4d10cf56fb96003663bae"/>
-    </node>
+    <node visible="true" id="4881726044" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127379999999903" lon="-75.4352285999999879"/>
+    <node visible="true" id="4881726046" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125457999999895" lon="-75.4352856000000003"/>
     <node visible="true" id="4881726094" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072736999999975" lon="-75.4273407000000020"/>
     <node visible="true" id="4881726353" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115279999999970" lon="-75.4283869999999865"/>
     <node visible="true" id="4881726355" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115249999999904" lon="-75.4282060000000030"/>
-    <node visible="true" id="4881726363" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115068999999991" lon="-75.4280107000000015">
-        <tag k="hoot:hash" v="sha1sum:edc78805f819388ae5f2b6ceb507ab78078ab411"/>
-    </node>
+    <node visible="true" id="4881726363" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115068999999991" lon="-75.4280107000000015"/>
     <node visible="true" id="4881726686" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104949999999903" lon="-75.4299639999999982"/>
     <node visible="true" id="4881726688" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9106049999999968" lon="-75.4306049999999999"/>
     <node visible="true" id="4881726689" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9106049999999968" lon="-75.4299769999999938"/>
     <node visible="true" id="4881726965" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079610000000002" lon="-75.4289650000000051">
-        <tag k="hoot:hash" v="sha1sum:8f8f04852d1942372b46c692df6f1a0e2c483f3a"/>
         <tag k="railway" v="level_crossing"/>
         <tag k="source:datetime" v="2014-10-01T04:16:48.000Z"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="4881726968" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9078729999999879" lon="-75.4289770000000033">
-        <tag k="hoot:hash" v="sha1sum:890ed4d88d16cef7a95e228188577c8746851b80"/>
-    </node>
+    <node visible="true" id="4881726968" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9078729999999879" lon="-75.4289770000000033"/>
     <node visible="true" id="4881726970" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9058479999999918" lon="-75.4293229999999966"/>
     <node visible="true" id="4881727099" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125535999999954" lon="-75.4290174000000064"/>
     <node visible="true" id="4881727145" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124359999999996" lon="-75.4285320000000041"/>
@@ -796,33 +742,19 @@
     <node visible="true" id="4881727158" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125143999999921" lon="-75.4285193999999990">
         <tag k="traffic_signals" v="signal"/>
         <tag k="highway" v="traffic_signals"/>
-        <tag k="hoot:hash" v="sha1sum:e7d220f8131958d3520dadbab93d107606fb8c35;sha1sum:718719392c27a91f6aa7e834f9524b8ee8e37183"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881727159" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124529999999993" lon="-75.4285299999999950"/>
-    <node visible="true" id="4881727340" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104564000000011" lon="-75.4274158000000057">
-        <tag k="hoot:hash" v="sha1sum:4e08ccdbabc3a6a608a22078e9d64f5f8a42705c"/>
-    </node>
-    <node visible="true" id="4881727342" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098158999999910" lon="-75.4280801000000025">
-        <tag k="hoot:hash" v="sha1sum:b9a347094fa584328dd1bcf0a001ecaec22d3b58"/>
-    </node>
+    <node visible="true" id="4881727340" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104564000000011" lon="-75.4274158000000057"/>
+    <node visible="true" id="4881727342" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098158999999910" lon="-75.4280801000000025"/>
     <node visible="true" id="4881727352" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105091999999999" lon="-75.4278633999999926"/>
-    <node visible="true" id="4881727385" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127640000000099" lon="-75.4343080000000015">
-        <tag k="hoot:hash" v="sha1sum:963ce471571383bfeba2b103dd554f7528ed52d2"/>
-    </node>
-    <node visible="true" id="4881727394" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079399999999964" lon="-75.4336610000000007">
-        <tag k="hoot:hash" v="sha1sum:15696cd42aa04842e526a15a3a6b8febd1830592"/>
-    </node>
-    <node visible="true" id="4881727793" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9096289000000013" lon="-75.4287032000000011">
-        <tag k="hoot:hash" v="sha1sum:95f582b8e26f90c3d87280a0e78e89007c638271"/>
-    </node>
-    <node visible="true" id="4881727795" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9094924000000049" lon="-75.4275585000000035">
-        <tag k="hoot:hash" v="sha1sum:dbd269ad9e78ef0b05558eee3ceed52ae00627d4"/>
-    </node>
+    <node visible="true" id="4881727385" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127640000000099" lon="-75.4343080000000015"/>
+    <node visible="true" id="4881727394" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079399999999964" lon="-75.4336610000000007"/>
+    <node visible="true" id="4881727793" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9096289000000013" lon="-75.4287032000000011"/>
+    <node visible="true" id="4881727795" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9094924000000049" lon="-75.4275585000000035"/>
     <node visible="true" id="4881727823" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9069700000000012" lon="-75.4318009999999930"/>
     <node visible="true" id="4881727825" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9062695000000076" lon="-75.4304467999999986">
         <tag k="highway" v="turning_circle"/>
-        <tag k="hoot:hash" v="sha1sum:0938dbd85eeb305e96e0f9070b8a768e14ce7fcf"/>
         <tag k="source:datetime" v="2015-04-27T15:16:35.000Z"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -834,100 +766,51 @@
     <node visible="true" id="4881729070" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127812999999989" lon="-75.4302095999999977"/>
     <node visible="true" id="4881729086" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121667000000144" lon="-75.4308120999999971"/>
     <node visible="true" id="4881729621" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121027999999995" lon="-75.4308012999999988"/>
-    <node visible="true" id="4881729663" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112962999999894" lon="-75.4329479999999961">
-        <tag k="hoot:hash" v="sha1sum:c9bc0a1df67896a18476861ce6428359fdc9e785"/>
-    </node>
-    <node visible="true" id="4881729665" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9119699999999824" lon="-75.4341570999999931">
-        <tag k="hoot:hash" v="sha1sum:647340463f8b20e7a033e71863678b638bb694a3"/>
-    </node>
-    <node visible="true" id="4881729666" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098534000000029" lon="-75.4311004999999994">
-        <tag k="hoot:hash" v="sha1sum:b4040e13f193cabdbbdb83329df026def085d734"/>
-    </node>
-    <node visible="true" id="4881729668" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113890999999938" lon="-75.4330806999999908">
-        <tag k="hoot:hash" v="sha1sum:292790c589f1e73139f780c2bf6ebc6f3b66f590"/>
-    </node>
+    <node visible="true" id="4881729663" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112962999999894" lon="-75.4329479999999961"/>
+    <node visible="true" id="4881729665" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9119699999999824" lon="-75.4341570999999931"/>
+    <node visible="true" id="4881729666" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098534000000029" lon="-75.4311004999999994"/>
+    <node visible="true" id="4881729668" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113890999999938" lon="-75.4330806999999908"/>
     <node visible="true" id="4881729676" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9059260000000009" lon="-75.4278869999999984"/>
     <node visible="true" id="4881729677" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9069589000000065" lon="-75.4283003999999977"/>
-    <node visible="true" id="4881729678" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083646999999928" lon="-75.4293511000000052">
-        <tag k="hoot:hash" v="sha1sum:4486c3f3a325a017203bea7bc4411d2cafc6e192"/>
-    </node>
+    <node visible="true" id="4881729678" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083646999999928" lon="-75.4293511000000052"/>
     <node visible="true" id="4881729682" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9109600999999969" lon="-75.4325089000000020">
-        <tag k="hoot:hash" v="sha1sum:a36d47025b6588cf319deec491b09bb8112b091a"/>
         <tag k="railway" v="level_crossing"/>
         <tag k="source:datetime" v="2013-04-20T20:53:27.000Z"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881729687" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126817999999943" lon="-75.4328961999999876"/>
     <node visible="true" id="4881729698" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126203000000004" lon="-75.4328514000000041"/>
-    <node visible="true" id="4881729699" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125367999999980" lon="-75.4337239000000039">
-        <tag k="hoot:hash" v="sha1sum:4178825f252e400898f3c38167f4be23886fd3a5"/>
-    </node>
+    <node visible="true" id="4881729699" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125367999999980" lon="-75.4337239000000039"/>
     <node visible="true" id="4881729702" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127468000000007" lon="-75.4329737000000051"/>
     <node visible="true" id="4881729703" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124601999999982" lon="-75.4326798999999966"/>
-    <node visible="true" id="4881729706" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124207000000126" lon="-75.4340993999999938">
-        <tag k="hoot:hash" v="sha1sum:6a5059e00f93a587fcfa5cf595f6a40ac1b81d19"/>
-    </node>
-    <node visible="true" id="4881729707" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124984999999981" lon="-75.4337984999999946">
-        <tag k="hoot:hash" v="sha1sum:f5251bfd629a819d0c1e624c6c71b645cfb1fc86"/>
-    </node>
-    <node visible="true" id="4881729708" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125366000000028" lon="-75.4359718999999984">
-        <tag k="hoot:hash" v="sha1sum:811f012dbf7222ea8902e201802f62e06f2b925d"/>
-    </node>
-    <node visible="true" id="4881729715" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122061000000059" lon="-75.4347587000000033">
-        <tag k="hoot:hash" v="sha1sum:60878f38b552015dda1275f51f9e62246a227b03"/>
-    </node>
-    <node visible="true" id="4881729716" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122234000000020" lon="-75.4346993000000055">
-        <tag k="hoot:hash" v="sha1sum:602a1bc2c18c52bf835a51f55ff720000da3cb8e"/>
-    </node>
-    <node visible="true" id="4881729717" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122437000000048" lon="-75.4346747000000022">
-        <tag k="hoot:hash" v="sha1sum:9530bca5f7134addab17a966638f53e389d13b67"/>
-    </node>
-    <node visible="true" id="4881729718" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123691999999934" lon="-75.4342627999999991">
-        <tag k="hoot:hash" v="sha1sum:89d7c2167af8f8f99d9f66b81807de41264020bd"/>
-    </node>
+    <node visible="true" id="4881729706" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124207000000126" lon="-75.4340993999999938"/>
+    <node visible="true" id="4881729707" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124984999999981" lon="-75.4337984999999946"/>
+    <node visible="true" id="4881729708" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125366000000028" lon="-75.4359718999999984"/>
+    <node visible="true" id="4881729715" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122061000000059" lon="-75.4347587000000033"/>
+    <node visible="true" id="4881729716" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122234000000020" lon="-75.4346993000000055"/>
+    <node visible="true" id="4881729717" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122437000000048" lon="-75.4346747000000022"/>
+    <node visible="true" id="4881729718" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123691999999934" lon="-75.4342627999999991"/>
     <node visible="true" id="4881729742" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127950000000027" lon="-75.4302811999999960"/>
     <node visible="true" id="4881729759" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9080269999999970" lon="-75.4366380000000021"/>
     <node visible="true" id="4881729760" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9082009999999983" lon="-75.4367430000000070"/>
     <node visible="true" id="4881729761" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075920000000011" lon="-75.4365939999999995"/>
     <node visible="true" id="4881729762" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9077700000000135" lon="-75.4365939999999995"/>
     <node visible="true" id="4881729764" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074090000000012" lon="-75.4366480000000053"/>
-    <node visible="true" id="4881729772" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072000000000102" lon="-75.4367749999999972">
-        <tag k="hoot:hash" v="sha1sum:f45d58e1ceb316c2c3abb6a2fb488d4e6612a0e4"/>
-    </node>
+    <node visible="true" id="4881729772" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072000000000102" lon="-75.4367749999999972"/>
     <node visible="true" id="4881729789" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122235999999972" lon="-75.4308153999999860"/>
     <node visible="true" id="4881729790" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083430000000092" lon="-75.4369119999999924"/>
-    <node visible="true" id="4881729880" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125048000000007" lon="-75.4278309000000036">
-        <tag k="hoot:hash" v="sha1sum:bb1ef5f28f6b4994691f39b48f60a8f886c2adf7"/>
-    </node>
+    <node visible="true" id="4881729880" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125048000000007" lon="-75.4278309000000036"/>
     <node visible="true" id="4881729893" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125510000000006" lon="-75.4283704999999998"/>
-    <node visible="true" id="4881730482" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074889999999982" lon="-75.4300149999999974">
-        <tag k="hoot:hash" v="sha1sum:be93de7ef1494f2c5c6678c77517f36ef6903159"/>
-    </node>
-    <node visible="true" id="4881730483" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9070349999999934" lon="-75.4291079999999994">
-        <tag k="hoot:hash" v="sha1sum:3455d799e0fc36514a76a8a3cfc421f0ac9a397f"/>
-    </node>
-    <node visible="true" id="4881730533" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079580000000007" lon="-75.4309590000000014">
-        <tag k="hoot:hash" v="sha1sum:abd3d7392283ea4ff886aace54bc644967118f9f"/>
-    </node>
-    <node visible="true" id="4881730539" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097260000000063" lon="-75.4366839999999996">
-        <tag k="hoot:hash" v="sha1sum:0f04cade8c1ef7794e84019d9f1e8cb629d1437e"/>
-    </node>
-    <node visible="true" id="4881730541" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9093639999999823" lon="-75.4337969999999984">
-        <tag k="hoot:hash" v="sha1sum:1dba64284aa16339b59a1303283343a9660aef31"/>
-    </node>
+    <node visible="true" id="4881730482" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074889999999982" lon="-75.4300149999999974"/>
+    <node visible="true" id="4881730483" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9070349999999934" lon="-75.4291079999999994"/>
+    <node visible="true" id="4881730533" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079580000000007" lon="-75.4309590000000014"/>
+    <node visible="true" id="4881730539" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097260000000063" lon="-75.4366839999999996"/>
+    <node visible="true" id="4881730541" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9093639999999823" lon="-75.4337969999999984"/>
     <node visible="true" id="4881730543" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9091980000000035" lon="-75.4334860000000020"/>
-    <node visible="true" id="4881730547" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9089030000000022" lon="-75.4328739999999982">
-        <tag k="hoot:hash" v="sha1sum:098a3f77fc4ebd14f8d9b9ac5fd9e63897d6a2f4"/>
-    </node>
-    <node visible="true" id="4881731148" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9061280000000025" lon="-75.4301459999999935">
-        <tag k="hoot:hash" v="sha1sum:15ef4c19443649a949e9162c59b3fc56ec8f5956"/>
-    </node>
-    <node visible="true" id="4881731155" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9067129999999963" lon="-75.4300439999999952">
-        <tag k="hoot:hash" v="sha1sum:a6767857c643ac6eca0dd583eb30d3b76a343aa5"/>
-    </node>
-    <node visible="true" id="4881731157" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9081710000000029" lon="-75.4294909999999987">
-        <tag k="hoot:hash" v="sha1sum:ce586b00ef149726251ea865ad8656bc4a108122"/>
-    </node>
+    <node visible="true" id="4881730547" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9089030000000022" lon="-75.4328739999999982"/>
+    <node visible="true" id="4881731148" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9061280000000025" lon="-75.4301459999999935"/>
+    <node visible="true" id="4881731155" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9067129999999963" lon="-75.4300439999999952"/>
+    <node visible="true" id="4881731157" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9081710000000029" lon="-75.4294909999999987"/>
     <node visible="true" id="4881731158" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072620000000029" lon="-75.4299550000000067"/>
     <node visible="true" id="4881731171" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9100620000000106" lon="-75.4311220000000020"/>
     <node visible="true" id="4881731172" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9102770000000007" lon="-75.4313870000000009"/>
@@ -953,9 +836,7 @@
     <node visible="true" id="4881732032" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121825000000001" lon="-75.4310193999999967"/>
     <node visible="true" id="4881732033" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121258999999995" lon="-75.4309034000000054"/>
     <node visible="true" id="4881732034" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123403999999979" lon="-75.4319521000000037"/>
-    <node visible="true" id="4881732039" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121415999999982" lon="-75.4347352999999998">
-        <tag k="hoot:hash" v="sha1sum:e97013353cf21e30606d1977e47510fb1f340794"/>
-    </node>
+    <node visible="true" id="4881732039" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121415999999982" lon="-75.4347352999999998"/>
     <node visible="true" id="4881732040" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121488999999912" lon="-75.4313822000000016"/>
     <node visible="true" id="4881732041" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123330999999979" lon="-75.4366444000000058"/>
     <node visible="true" id="4881732042" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9123060000000081" lon="-75.4323823999999945"/>
@@ -981,9 +862,7 @@
     <node visible="true" id="4881732084" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115297000000098" lon="-75.4329138999999884"/>
     <node visible="true" id="4881732085" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116106000000030" lon="-75.4340923999999973"/>
     <node visible="true" id="4881732087" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116844000000057" lon="-75.4326697999999993"/>
-    <node visible="true" id="4881732088" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9094049999999925" lon="-75.4311359999999951">
-        <tag k="hoot:hash" v="sha1sum:88abb7ae8ca44e88867a24dbed042c2645a2a61e"/>
-    </node>
+    <node visible="true" id="4881732088" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9094049999999925" lon="-75.4311359999999951"/>
     <node visible="true" id="4881732089" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9078319999999920" lon="-75.4325850000000031"/>
     <node visible="true" id="4881732091" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9076910000000069" lon="-75.4327030000000036"/>
     <node visible="true" id="4881732097" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9084339999999926" lon="-75.4319220000000001"/>
@@ -1011,90 +890,46 @@
     <node visible="true" id="4881732173" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114050000000020" lon="-75.4330393999999984"/>
     <node visible="true" id="4881732189" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9111592000000002" lon="-75.4343412999999856"/>
     <node visible="true" id="4881732200" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9110984999999943" lon="-75.4343834999999956"/>
-    <node visible="true" id="4881732960" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097539999999924" lon="-75.4275228999999996">
-        <tag k="hoot:hash" v="sha1sum:817019d286339be988833e1de5d1dc056917e968"/>
-    </node>
-    <node visible="true" id="4881732962" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072786999999991" lon="-75.4279226000000023">
-        <tag k="hoot:hash" v="sha1sum:01eb455280d5fe0a7780129fc3c6293c3b40c952"/>
-    </node>
+    <node visible="true" id="4881732960" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097539999999924" lon="-75.4275228999999996"/>
+    <node visible="true" id="4881732962" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072786999999991" lon="-75.4279226000000023"/>
     <node visible="true" id="4881732963" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079589999999982" lon="-75.4277859999999976"/>
     <node visible="true" id="4881732964" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9066460000000092" lon="-75.4279290000000060"/>
     <node visible="true" id="4881732965" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9068230000000028" lon="-75.4279559999999947"/>
     <node visible="true" id="4881732967" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9058009999999896" lon="-75.4276760000000053"/>
-    <node visible="true" id="4881732999" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105792000000008" lon="-75.4274005999999986">
-        <tag k="hoot:hash" v="sha1sum:ed00de66833306224e0a010f4a630200ca830d6f"/>
-    </node>
-    <node visible="true" id="4881733083" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9073887999999997" lon="-75.4314456999999976">
-        <tag k="hoot:hash" v="sha1sum:d650ff8c0e926cedc4402133ad0cecaa05cb5511"/>
-    </node>
-    <node visible="true" id="4881733094" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114783999999929" lon="-75.4329835000000060">
-        <tag k="hoot:hash" v="sha1sum:8c744779b8de88094aab9acb88852bbce79034f3"/>
-    </node>
-    <node visible="true" id="4881733148" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113837000000089" lon="-75.4328225999999944">
-        <tag k="hoot:hash" v="sha1sum:e3813545eefca68184d71988aa92c72155a59973"/>
-    </node>
-    <node visible="true" id="4881733165" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114348999999962" lon="-75.4329122999999839">
-        <tag k="hoot:hash" v="sha1sum:0556d2a92e6c9f455236edb88a42277d44ea02f7"/>
-    </node>
+    <node visible="true" id="4881732999" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105792000000008" lon="-75.4274005999999986"/>
+    <node visible="true" id="4881733083" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9073887999999997" lon="-75.4314456999999976"/>
+    <node visible="true" id="4881733094" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114783999999929" lon="-75.4329835000000060"/>
+    <node visible="true" id="4881733148" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113837000000089" lon="-75.4328225999999944"/>
+    <node visible="true" id="4881733165" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9114348999999962" lon="-75.4329122999999839"/>
     <node visible="true" id="4881733423" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9100570000000090" lon="-75.4319449999999847"/>
-    <node visible="true" id="4881733435" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079730000000055" lon="-75.4291970000000020">
-        <tag k="hoot:hash" v="sha1sum:b2891bb2db1c00aff0fc5961507c01bed3495262"/>
-    </node>
-    <node visible="true" id="4881733436" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9087850000000017" lon="-75.4302799999999962">
-        <tag k="hoot:hash" v="sha1sum:243fc2b311dfad10f360b4b0b7d8d2a36c5f005c"/>
-    </node>
-    <node visible="true" id="4881733488" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072529999999901" lon="-75.4354270000000042">
-        <tag k="hoot:hash" v="sha1sum:05b10c370206a0ecc27e47a0dc97edba74227ac3"/>
-    </node>
-    <node visible="true" id="4881733499" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083789999999965" lon="-75.4345650000000063">
-        <tag k="hoot:hash" v="sha1sum:80fed16fcb788d91038a03a31698bc35f9f772d7"/>
-    </node>
+    <node visible="true" id="4881733435" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079730000000055" lon="-75.4291970000000020"/>
+    <node visible="true" id="4881733436" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9087850000000017" lon="-75.4302799999999962"/>
+    <node visible="true" id="4881733488" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072529999999901" lon="-75.4354270000000042"/>
+    <node visible="true" id="4881733499" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083789999999965" lon="-75.4345650000000063"/>
     <node visible="true" id="4881734217" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126419999999982" lon="-75.4278161000000011"/>
     <node visible="true" id="4881734226" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127816000000095" lon="-75.4277960999999948"/>
-    <node visible="true" id="4881734357" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115800000000007" lon="-75.4333797999999973">
-        <tag k="hoot:hash" v="sha1sum:d5949969e9fb32cc63024f4775f537504fbbd554"/>
-    </node>
-    <node visible="true" id="4881734369" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121786000000043" lon="-75.4346828000000045">
-        <tag k="hoot:hash" v="sha1sum:e2d81040a18f27c85734a73285baaa08a89bdd6b"/>
-    </node>
-    <node visible="true" id="4881734370" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127628999999970" lon="-75.4367773000000028">
-        <tag k="hoot:hash" v="sha1sum:e983e10bd925ce74bf3f08bd5ed868dde71e20db"/>
-    </node>
+    <node visible="true" id="4881734357" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9115800000000007" lon="-75.4333797999999973"/>
+    <node visible="true" id="4881734369" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121786000000043" lon="-75.4346828000000045"/>
+    <node visible="true" id="4881734370" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127628999999970" lon="-75.4367773000000028"/>
     <node visible="true" id="4881734703" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9069732999999971" lon="-75.4305403999999982"/>
     <node visible="true" id="4881734719" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9071300000000022" lon="-75.4316670000000045"/>
-    <node visible="true" id="4881734728" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9058949999999939" lon="-75.4327430000000021">
-        <tag k="hoot:hash" v="sha1sum:d4142821b485947f1b9450cdbf4ddff94b92b05f"/>
-    </node>
+    <node visible="true" id="4881734728" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9058949999999939" lon="-75.4327430000000021"/>
     <node visible="true" id="4881735239" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127527999999856" lon="-75.4363606999999945"/>
     <node visible="true" id="4881735242" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127600999999999" lon="-75.4362828000000007"/>
-    <node visible="true" id="4881735243" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125141000000028" lon="-75.4352487999999965">
-        <tag k="hoot:hash" v="sha1sum:a22e2abf10babb29f3a1614732b174acd843462e"/>
-    </node>
+    <node visible="true" id="4881735243" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125141000000028" lon="-75.4352487999999965"/>
     <node visible="true" id="4881735246" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127936000000005" lon="-75.4352963999999986"/>
     <node visible="true" id="4881735251" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127701999999900" lon="-75.4361906999999974"/>
-    <node visible="true" id="4881735267" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126898999999966" lon="-75.4352540999999945">
-        <tag k="hoot:hash" v="sha1sum:7267d132f090c2a32edb8aaaf819d0ba99f68e0b"/>
-    </node>
-    <node visible="true" id="4881735296" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124539000000027" lon="-75.4349681000000061">
-        <tag k="hoot:hash" v="sha1sum:d028f2b706d6160cf8968408f2a8d9ae2d83ec40"/>
-    </node>
+    <node visible="true" id="4881735267" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126898999999966" lon="-75.4352540999999945"/>
+    <node visible="true" id="4881735296" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124539000000027" lon="-75.4349681000000061"/>
     <node visible="true" id="4881735865" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9073282000000020" lon="-75.4273015999999927"/>
     <node visible="true" id="4881735866" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072441999999938" lon="-75.4274128999999789"/>
     <node visible="true" id="4881735886" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072411999999943" lon="-75.4275061999999963"/>
-    <node visible="true" id="4881735985" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9111249999999984" lon="-75.4323700000000059">
-        <tag k="hoot:hash" v="sha1sum:cd33b641a1cf3293b3e4309a4b9ca36d632323f5"/>
-    </node>
-    <node visible="true" id="4881735994" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105299999999943" lon="-75.4328160000000025">
-        <tag k="hoot:hash" v="sha1sum:d876fb708df4724b78563e2cd1173ab3538f101a"/>
-    </node>
-    <node visible="true" id="4881735996" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116400000000056" lon="-75.4307229999999862">
-        <tag k="hoot:hash" v="sha1sum:1dc1badb50fffd260e9d2c08433e0452a4ad1d84"/>
-    </node>
+    <node visible="true" id="4881735985" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9111249999999984" lon="-75.4323700000000059"/>
+    <node visible="true" id="4881735994" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105299999999943" lon="-75.4328160000000025"/>
+    <node visible="true" id="4881735996" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116400000000056" lon="-75.4307229999999862"/>
     <node visible="true" id="4881735998" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112900000000010" lon="-75.4321529999999996"/>
     <node visible="true" id="4881735999" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113340000000036" lon="-75.4320289999999858"/>
-    <node visible="true" id="4881736041" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9068120000000022" lon="-75.4345579999999956">
-        <tag k="hoot:hash" v="sha1sum:cc977d7bb10c3d301c5f3db741b6f66e67123968"/>
-    </node>
+    <node visible="true" id="4881736041" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9068120000000022" lon="-75.4345579999999956"/>
     <node visible="true" id="4881736053" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9097419999999943" lon="-75.4321829999999949"/>
     <node visible="true" id="4881736054" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083070000000006" lon="-75.4333610000000050"/>
     <node visible="true" id="4881736055" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9084269999999961" lon="-75.4332639999999941"/>
@@ -1111,9 +946,7 @@
     <node visible="true" id="4881736413" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124004000000170" lon="-75.4304779999999937"/>
     <node visible="true" id="4881736707" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9065143999999989" lon="-75.4280818999999951"/>
     <node visible="true" id="4881736719" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075454999999906" lon="-75.4286388999999957"/>
-    <node visible="true" id="4881736722" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9089230000000015" lon="-75.4300180000000040">
-        <tag k="hoot:hash" v="sha1sum:eb84beb87791d7eedc5388d29eb090d678320285"/>
-    </node>
+    <node visible="true" id="4881736722" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9089230000000015" lon="-75.4300180000000040"/>
     <node visible="true" id="4881736844" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9108310000000088" lon="-75.4357760000000042">
         <tag k="source" v="county_import_v0.1"/>
         <tag k="attribution" v="USGS 2001 County Boundary"/>
@@ -1121,17 +954,14 @@
     </node>
     <node visible="true" id="4881737312" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075559999999996" lon="-75.4284679999999952"/>
     <node visible="true" id="4881737314" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074880000000007" lon="-75.4283479999999855"/>
-    <node visible="true" id="4881737315" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074600000000004" lon="-75.4278910000000025">
-        <tag k="hoot:hash" v="sha1sum:adda94e44d37428c44f60fa05a7a6e7ebf788dfd"/>
-    </node>
+    <node visible="true" id="4881737315" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074600000000004" lon="-75.4278910000000025"/>
     <node visible="true" id="4881737326" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9081259999999958" lon="-75.4289430000000038"/>
-    <node visible="true" id="4881737431" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075100000000020" lon="-75.4359070000000003">
-        <tag k="hoot:hash" v="sha1sum:5eedfc7da2d8cb3c47a2ee532c9b690b75d03860"/>
-    </node>
-    <way visible="true" id="-1818" timestamp="2020-02-28T16:48:04Z" version="1">
+    <node visible="true" id="4881737431" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075100000000020" lon="-75.4359070000000003"/>
+    <way visible="true" id="-1833" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881735996"/>
         <nd ref="4881729621"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:8a4175e86ff8cec42f32926ec5ac2e60774cb4e8;sha1sum:04c9fb92997b4d134bdfcaa72cadc5acbf97d0a3"/>
         <tag k="name" v="South Church Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="alt_name" v="South Church Street"/>
@@ -1145,12 +975,33 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1798" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1830" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881733488"/>
+        <nd ref="4881733499"/>
+        <nd ref="4881730541"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:zip_left_1" v="19963"/>
+        <tag k="hoot:hash" v="sha1sum:073f0f7a898268186f103f575397da2966eb41af;sha1sum:179257c52273031debaa8ceaaefb203392ca3bf6"/>
+        <tag k="name" v="Lakeview Avenue"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z;2015-09-14T06:08:20Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Lakeview"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1810" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881730483"/>
         <nd ref="-1368"/>
         <nd ref="4881730482"/>
         <nd ref="4881730533"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:cc8d74873da1816cc79cc9b735fd02e31107b058;sha1sum:2e027bc21757fc1f7a37baa73c47750c921021b1;sha1sum:e19817fcd08cc161a43b0dd3397a274aeaca69e2;sha1sum:913f4ae4cc27e05cfa7adfb55c24aff5efa5e324;sha1sum:9df9b80a8ac9c0e3640f316791e5a6152f1067f0"/>
         <tag k="name" v="Kings Highway"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Hwy"/>
@@ -1162,7 +1013,7 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1759" timestamp="2020-02-28T16:47:47Z" version="1">
+    <way visible="true" id="-1765" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="4881732116"/>
         <nd ref="-445"/>
         <nd ref="-446"/>
@@ -1171,10 +1022,29 @@
         <tag k="source:datetime" v="2019-03-29T03:41:30Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1733" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1743" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881732116"/>
+        <nd ref="-1354"/>
+        <nd ref="-1355"/>
+        <nd ref="-1351"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:3ee2d66ed58bbca4946b0401b0858ac11103a9ae;sha1sum:901c69c1a9ef1be4fa97349dd1aa3a99ebfd3a51"/>
+        <tag k="name" v="Sussex Avenue"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T14:55:32.000Z;2019-03-29T03:41:30Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:name_base" v="Sussex"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1739" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881727825"/>
         <nd ref="4881727823"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:d45eca1881299f20d921f400492288f50482285c;sha1sum:fabf15a226bb48d044e01c42b69fd4524e758500"/>
         <tag k="name" v="Sussex Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Ave"/>
@@ -1186,7 +1056,7 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1730" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1736" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881725477"/>
         <nd ref="4881727145"/>
         <nd ref="4881727146"/>
@@ -1195,6 +1065,7 @@
         <nd ref="4881727158"/>
         <tag k="tiger:name_base_1" v="County Road 213"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:9dce7a350e3034419a2ce15a60bb806f4f2380bb"/>
         <tag k="name" v="North Walnut Street"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
@@ -1208,7 +1079,7 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1727" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1733" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881727342"/>
         <nd ref="4881727865"/>
         <nd ref="4881727352"/>
@@ -1219,11 +1090,12 @@
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1713" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1719" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881727158"/>
         <nd ref="-1"/>
         <tag k="tiger:name_base_1" v="County Road 213"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:a5b12e612c0c59f0e2690db26924ae20d2d66fb7;sha1sum:5bbd0834fe00d901f9bd687d95352b5852cfc499"/>
         <tag k="name_1" v="County Road 213"/>
         <tag k="name" v="North Walnut Street"/>
         <tag k="tiger:zip_left" v="19963"/>
@@ -1237,10 +1109,11 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1710" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1716" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2"/>
         <nd ref="4881729789"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:f8e37fbb30877ab239c68678983a65539582c764;sha1sum:3e432f6e2df63c701b90f4e30f7e2e817ba0a5bb"/>
         <tag k="name" v="North Church Avenue"/>
         <tag k="alt_name" v="North Church Street"/>
         <tag k="tiger:name_direction_prefix" v="N"/>
@@ -1252,13 +1125,14 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1707" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1713" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="4881729880"/>
         <nd ref="4881729893"/>
         <nd ref="4881727158"/>
         <tag k="tiger:name_base_1" v="State Road 36"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:2cad6b09b84f9f83db9e336d8d149e23044cd63b;sha1sum:acf7cc60ca6b6ee54904059a03defc8a806bf48c"/>
         <tag k="name" v="Southeast Front Street"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
@@ -1272,10 +1146,11 @@
         <tag k="tiger:name_base" v="E Front"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1704" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1710" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729772"/>
         <nd ref="-15"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:244fe1495641c154f02c8c7d1a92e2308b8d4904;sha1sum:581ea8eb90b703ff015593928a61a60d0ac247fe"/>
         <tag k="name" v="Caulk Road"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Rd"/>
@@ -1287,7 +1162,7 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1701" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1707" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-16"/>
         <nd ref="4881724996"/>
         <nd ref="4881730539"/>
@@ -1303,11 +1178,12 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1695" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1701" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-18"/>
         <nd ref="4881727385"/>
         <tag k="highway" v="residential"/>
         <tag k="service" v="alley"/>
+        <tag k="hoot:hash" v="sha1sum:a11068924259047a025c1599151b2debead92fe5;sha1sum:158fc9a1f0c81939c35e360bac30970e06a473a4"/>
         <tag k="name" v="Corn Cob Alley"/>
         <tag k="source:datetime" v="2007-12-19T13:32:19.000Z;2019-02-07T03:00:16Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -1315,11 +1191,12 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1692" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1698" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881730541"/>
         <nd ref="4881730539"/>
         <nd ref="-19"/>
         <tag k="highway" v="tertiary"/>
+        <tag k="hoot:hash" v="sha1sum:689a908a77798b58773af92379e315baa330ecde;sha1sum:6df228706bf130286d7b958ff1df0c4169a3ad60"/>
         <tag k="name" v="Kings Highway"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Hwy"/>
@@ -1331,12 +1208,13 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1689" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1695" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21"/>
         <nd ref="4881726363"/>
         <nd ref="4881726355"/>
         <nd ref="4881726353"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:65f10d6af78b8fd3a1fc3d7d851a34560740ac96;sha1sum:b42a05e904cc85e2bbc8c0335e09c3c3beab64c8"/>
         <tag k="name" v="Southeast 2nd Street"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_direction_prefix" v="SE"/>
@@ -1349,7 +1227,7 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1679" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1685" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881732962"/>
         <nd ref="4881735886"/>
         <nd ref="4881735866"/>
@@ -1359,6 +1237,7 @@
         <tag k="tiger:name_base_1" v="Buzzard"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="alley"/>
+        <tag k="hoot:hash" v="sha1sum:282a82a01fdb2bf12876d79385294a1001880af7;sha1sum:9bfefc2abfb1e8aeb5926bf9737ca1a89ac15166"/>
         <tag k="name_1" v="Buzzard Alley"/>
         <tag k="name" v="Ball Park Lane"/>
         <tag k="tiger:name_type" v="Ln"/>
@@ -1369,10 +1248,11 @@
         <tag k="tiger:name_base" v="Ball Park"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1676" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1682" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27"/>
         <nd ref="4881727795"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:7c7e17619676f808ce3ee81872d8e837de5907df;sha1sum:dcb90cbfc196e69632c58c2716418f760c36926f"/>
         <tag k="name" v="Southeast 4th Street"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_direction_prefix" v="SE"/>
@@ -1385,11 +1265,12 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1673" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1679" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20"/>
         <nd ref="4881736844"/>
         <nd ref="4881736380"/>
         <tag k="source" v="county_import_v0.1_20080508235458"/>
+        <tag k="hoot:hash" v="sha1sum:e3e9b9b0fa3f43e86856f14da2d2cf67a64bbb4c;sha1sum:5b45ee649251fc16946d3d83204a103b95bdbd64"/>
         <tag k="boundary" v="administrative"/>
         <tag k="source:datetime" v="2014-02-12T09:54:39.000Z;2014-02-12T09:54:39Z"/>
         <tag k="attribution" v="USGS 2001 County Boundary"/>
@@ -1397,7 +1278,7 @@
         <tag k="border_type" v="county"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1671" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1677" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881733094"/>
         <nd ref="4881728056"/>
         <nd ref="4881728043"/>
@@ -1406,6 +1287,7 @@
         <nd ref="4881727385"/>
         <nd ref="-28"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:a9c925b5e4fadb0600a474451c8257ebb5decf0f;sha1sum:3968760e74f2ad930db6616c09c82c4c92e8b1fd"/>
         <tag k="name" v="Maple Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Ave"/>
@@ -1416,12 +1298,13 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1668" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1674" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729715"/>
         <nd ref="4881729708"/>
         <nd ref="4881734370"/>
         <nd ref="-13"/>
         <tag k="old_railway_operator" v="PRR"/>
+        <tag k="hoot:hash" v="sha1sum:23c03a3aac0c6b3e7107e3d79c94d3606eac501a;sha1sum:bc82a6c867f22bc21b7103e052f4668ed023c6b8"/>
         <tag k="name" v="Indian River Secondary"/>
         <tag k="gauge" v="1435"/>
         <tag k="railway" v="rail"/>
@@ -1436,7 +1319,7 @@
         <tag k="usage" v="branch"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1666" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1672" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-29"/>
         <nd ref="4881735246"/>
         <nd ref="4881726044"/>
@@ -1445,11 +1328,12 @@
         <nd ref="4881735243"/>
         <nd ref="4881735296"/>
         <tag k="highway" v="service"/>
+        <tag k="hoot:hash" v="sha1sum:f1f085f33cab572013b90aaa03ea5d507148e3ff;sha1sum:d981a8440bf7f3c50fc2bbd12a3d2fde9bda08ab;sha1sum:2adafe14d6f9b19272130b3b5e47139dcd63113d"/>
         <tag k="name" v="Lakeview Apts"/>
         <tag k="source:datetime" v="2015-04-27T15:16:24.000Z;2015-04-27T15:16:24Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1663" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1669" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14"/>
         <nd ref="4881729676"/>
         <nd ref="4881736707"/>
@@ -1457,6 +1341,7 @@
         <nd ref="4881736719"/>
         <nd ref="4881726965"/>
         <tag k="old_railway_operator" v="PRR"/>
+        <tag k="hoot:hash" v="sha1sum:31cdffddedd64ed8675216d85355083121ec861a;sha1sum:fbf1c0577b635103a9278e88366403c6406d5457"/>
         <tag k="name" v="Indian River Secondary"/>
         <tag k="gauge" v="1435"/>
         <tag k="railway" v="rail"/>
@@ -1471,20 +1356,22 @@
         <tag k="usage" v="branch"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1661" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1667" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="4881735239"/>
         <nd ref="4881735242"/>
         <nd ref="4881735251"/>
         <nd ref="-31"/>
         <tag k="highway" v="service"/>
+        <tag k="hoot:hash" v="sha1sum:6dc502a0727642447d073fb88c0cd0e38bfe7d12;sha1sum:d2fcb26871f10c2ad9de1bbe2dfc8f60769626b3"/>
         <tag k="source:datetime" v="2015-04-27T15:16:29.000Z;2015-04-27T15:16:29Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1658" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1664" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881727793"/>
         <nd ref="4881725317"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:a98e33b43a7d63169b8a54766a013b0822810604;sha1sum:43be9ac486a79850b51753b15ee54ccce92aa779"/>
         <tag k="name" v="South Maple Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_direction_prefix" v="S"/>
@@ -1497,7 +1384,7 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1655" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1661" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-33"/>
         <nd ref="4881734728"/>
         <nd ref="-1372"/>
@@ -1505,6 +1392,7 @@
         <nd ref="4881733488"/>
         <nd ref="4881737431"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:246ca22e6152e643f66d131f229d0ed84776a5de;sha1sum:9ec6a544a9e062fd46c19da898c4340ebf84bcff;sha1sum:7b70e0c8e0ae57acd7b0d8f9e9cf79bad7ca0bc8;sha1sum:ec60e24ccaf17ddbd3da2d9b80c501af02588dad;sha1sum:02c36d03960f7945f0bdaa4da81a99a31733bd15;sha1sum:4226cf5e04cc4e14bff8978dd92e23e264685292;sha1sum:26e8f915a0ebc12af482f7fb537c1b8b94d267e5;sha1sum:9d57c61df70f45073ae19d8e9d8f05c36cc2ae1c"/>
         <tag k="name" v="West Clarke Avenue"/>
         <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:name_direction_prefix" v="W"/>
@@ -1515,7 +1403,7 @@
         <tag k="tiger:name_base" v="Clarke"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1652" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1658" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881731157"/>
         <nd ref="4881730482"/>
         <nd ref="-1365"/>
@@ -1525,6 +1413,7 @@
         <nd ref="-35"/>
         <tag k="highway" v="residential"/>
         <tag k="service" v="alley"/>
+        <tag k="hoot:hash" v="sha1sum:c944e0b45de48226b0abe8f321fbe5b1f5ec6960;sha1sum:ef2294d014c3d797ed30f9815bc09593c6578d9d;sha1sum:22a5112916ffe4cc0b194be837d975847a4aff47;sha1sum:77d2f2b729b207f4cac924ea7888dbc7b70ec762;sha1sum:229f6eb51c6a5c26fd3131777461cda69511ebaa"/>
         <tag k="name" v="Plum Street"/>
         <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T14:57:17.000Z;2019-04-02T11:40:19Z;2019-04-02T11:40:15Z"/>
@@ -1534,10 +1423,11 @@
         <tag k="tiger:name_base" v="Plum"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1649" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1655" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729682"/>
         <nd ref="4881729663"/>
         <tag k="old_railway_operator" v="PRR"/>
+        <tag k="hoot:hash" v="sha1sum:3efddcd177e950ecd668e1570d84905c04b88c82;sha1sum:d2f8f3f860525f0da3db5904157de6a6a04a264a"/>
         <tag k="name" v="Indian River Secondary"/>
         <tag k="gauge" v="1435"/>
         <tag k="railway" v="rail"/>
@@ -1552,10 +1442,11 @@
         <tag k="usage" v="branch"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1647" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1653" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36"/>
         <nd ref="4881732999"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:3558af60b67f51fac0e53a8248363fd36ad1a0b1;sha1sum:7abc9cb2ec41f6cf0586fce57cb1148adc587241"/>
         <tag k="name" v="Southeast 3rd Street"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_direction_prefix" v="SE"/>
@@ -1568,11 +1459,12 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1644" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1650" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37"/>
         <nd ref="4881733488"/>
         <tag k="tiger:name_base_1" v="Shawnee"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:08abd55c6be8ca73f39508a9137e16f4c4318300;sha1sum:ac248a4511b0d7f56d8ab570dc098043cac8dcd8"/>
         <tag k="name" v="Shawnee Road"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
@@ -1585,7 +1477,7 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1641" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1647" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881736380"/>
         <nd ref="4881736376"/>
         <nd ref="4881736393"/>
@@ -1598,6 +1490,7 @@
         <nd ref="4881736402"/>
         <nd ref="-3"/>
         <tag k="source" v="Yahoo"/>
+        <tag k="hoot:hash" v="sha1sum:c3456a5577b48cbea0771d9d9af70df3de48624a"/>
         <tag k="name" v="Mispillion River"/>
         <tag k="boundary" v="administrative"/>
         <tag k="waterway" v="river"/>
@@ -1606,7 +1499,26 @@
         <tag k="border_type" v="county"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1636" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1645" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881726968"/>
+        <nd ref="4881733435"/>
+        <nd ref="4881731157"/>
+        <nd ref="4881733436"/>
+        <nd ref="4881732088"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:34d779ead155a9d927d05701ecefe0e84a19b520;sha1sum:12338a20cf3bc597c4c2718af3e0df42f82a5857;sha1sum:a10ac719505617e8070fe2981737642864dc81cf;sha1sum:5a03d73495b6e583d166dcaa453bb8111538801f"/>
+        <tag k="name" v="Jefferson Avenue"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T14:58:25.000Z;2019-04-02T11:40:19Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:name_base" v="Jefferson"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1642" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-12"/>
         <nd ref="4881729702"/>
         <nd ref="4881729687"/>
@@ -1618,30 +1530,54 @@
         <tag k="source:datetime" v="2014-10-01T04:16:43.000Z;2019-09-25T16:27:15Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1634" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1640" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881735994"/>
+        <nd ref="4881729682"/>
+        <nd ref="4881735985"/>
+        <nd ref="4881735998"/>
+        <nd ref="4881735999"/>
+        <nd ref="4881735996"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:3c4ab10665bf6b3d63d7fb3ddfa9aa102a6878a4;sha1sum:0284413166d678294f2806deb418ca1243afaf46;sha1sum:c9b948dc5c94bcf80a9692e60eecc6202094ec91;sha1sum:5c9905721fc8402977740a3e4d034abe3ffed2ec"/>
+        <tag k="name" v="Causey Avenue"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-20T20:52:40.000Z;2019-03-29T03:41:35Z"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Causey"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1637" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881730541"/>
         <nd ref="4881735994"/>
         <tag k="tiger:name_base_1" v="Lakeview"/>
         <tag k="tiger:name_base_2" v="Shawnee"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:13d286ce5173f0888fad6d564242b11d9a101532;sha1sum:b49c488a153bc74d7f34ba0b635dda14185e1602"/>
         <tag k="name_1" v="Shawnee Rd"/>
         <tag k="name" v="Lakeview Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
         <tag k="source:datetime" v="2015-09-14T06:08:30.000Z;2015-09-14T06:08:30Z"/>
         <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:name_type_1" v="Ave"/>
         <tag k="tiger:cfcc" v="A31"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_type_1" v="Ave"/>
         <tag k="tiger:name_type_2" v="Rd"/>
-        <tag k="tiger:name_base" v="State Highway 36"/>
         <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1628" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1631" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729070"/>
         <nd ref="4881729742"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:2c50018f021ca04b3c4968a0c2e12d85a10055e7;sha1sum:e259dedad7b6aab91b1d2e509b350460bbb9ce82"/>
         <tag k="bridge" v="yes"/>
         <tag k="name" v="Front Street"/>
         <tag k="layer" v="1"/>
@@ -1654,16 +1590,17 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1622" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1625" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729706"/>
         <nd ref="4881729707"/>
         <nd ref="4881729699"/>
         <nd ref="-11"/>
+        <tag k="hoot:hash" v="sha1sum:bb80591852d30af5bced6f14d3f3fd7158531463;sha1sum:f002baa5bae5e57f87c3c0683865db1b2c407189"/>
         <tag k="waterway" v="stream"/>
         <tag k="source:datetime" v="2014-10-01T04:16:43.000Z;2019-09-25T16:27:15Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1620" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1623" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881737315"/>
         <nd ref="4881737314"/>
         <nd ref="4881737312"/>
@@ -1676,19 +1613,21 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1617" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1620" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729718"/>
         <nd ref="4881729706"/>
+        <tag k="hoot:hash" v="sha1sum:96cd61dbef36934f96bca4972a363c36afdd530d;sha1sum:0ecdfda9cafcc89cf1a88a63f687144d69ab1b71"/>
         <tag k="tunnel" v="culvert"/>
         <tag k="layer" v="-1"/>
         <tag k="waterway" v="stream"/>
         <tag k="source:datetime" v="2014-10-01T04:16:43.000Z;2014-10-01T04:16:43Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1612" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1615" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729621"/>
         <nd ref="4881729086"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:8b56a4304f992df4a96db2dadc9aaa2002858ca0;sha1sum:2bae28876e70149ff7a90902a04c0d3f787d3473"/>
         <tag k="bridge" v="yes"/>
         <tag k="name" v="South Church Avenue"/>
         <tag k="layer" v="1"/>
@@ -1704,7 +1643,7 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1610" timestamp="2020-02-28T16:47:46Z" version="1">
+    <way visible="true" id="-1613" timestamp="2020-02-28T16:47:46Z" version="1">
         <nd ref="4881725255"/>
         <nd ref="-119"/>
         <tag k="highway" v="residential"/>
@@ -1719,7 +1658,7 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1608" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1611" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881725242"/>
         <nd ref="4881725255"/>
         <tag k="highway" v="residential"/>
@@ -1734,10 +1673,11 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1605" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1608" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729086"/>
         <nd ref="4881729789"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:4cf0b7625ba577b3331d4e15aa6a9cf435d31ea3;sha1sum:015790b35e0d0ef07e0281a2123dcb80d1d8fe34"/>
         <tag k="bridge" v="yes"/>
         <tag k="name" v="North Church Avenue"/>
         <tag k="layer" v="1"/>
@@ -1751,7 +1691,7 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1599" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1602" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881725317"/>
         <nd ref="4881731173"/>
         <nd ref="4881731174"/>
@@ -1776,6 +1716,31 @@
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
+    <way visible="true" id="-1596" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881735996"/>
+        <nd ref="4881725477"/>
+        <tag k="tiger:name_type_1" v="Ave"/>
+        <tag k="tiger:name_type_2" v="Rd"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Causey Avenue"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="tiger:zip_right_1" v="19963"/>
+        <tag k="source:datetime" v="2014-12-20T08:06:40.000Z;2014-12-20T08:06:40Z"/>
+        <tag k="tiger:zip_right_2" v="19963"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left_1" v="19963"/>
+        <tag k="tiger:zip_left_2" v="19963"/>
+        <tag k="name_1" v="Shawnee Rd"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:name_base_1" v="Causey"/>
+        <tag k="tiger:name_base_2" v="Shawnee"/>
+        <tag k="hoot:hash" v="sha1sum:b730c29a6aa8df1ce10a78f973ab41b3d22a0555;sha1sum:6fadb953ed98cacbcac0fa667e33d702d4cd5b3e"/>
+        <tag k="highway" v="secondary"/>
+    </way>
     <way visible="true" id="-1593" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881734728"/>
         <nd ref="4881727823"/>
@@ -1785,6 +1750,7 @@
         <nd ref="4881730533"/>
         <nd ref="4881733436"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:87217e16566253ce9f60f369dcec292ba6eb5b32;sha1sum:7d47c548949bc239989d037df1e013ff178bb76b;sha1sum:000d5a3a57416ed009d6f9332cb7ddc057e0d986;sha1sum:868bbd747bd3f8b0a87c16cd1c9494e7c1c4eac4;sha1sum:80c4fc6588f79f9b89d84571734d4f2e293afec9;sha1sum:1b1fd9642e4c662177cd2d5c20e13c80b5342dfb"/>
         <tag k="name" v="Polk Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Ave"/>
@@ -1800,6 +1766,7 @@
         <nd ref="4881733148"/>
         <nd ref="4881733165"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:2b3e1f20a2e5f18053a8879c5dee1e2b0634e6f4;sha1sum:106efea0896fac0f17a5e478e684bc7f0b4772dd"/>
         <tag k="bridge" v="yes"/>
         <tag k="name" v="South Maple Avenue"/>
         <tag k="layer" v="1"/>
@@ -1836,6 +1803,7 @@
         <nd ref="4881726688"/>
         <nd ref="4881735996"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:d12b353d86d89ce74f8d2d99448b217ba887690b;sha1sum:6f63805f70171edd40f3a4d598ef7514553cafb3;sha1sum:e899c7fe454df5746e454b3ebebdc825f9a7f61c"/>
         <tag k="name" v="South Church Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="alt_name" v="South Church Street"/>
@@ -1863,6 +1831,7 @@
         <nd ref="4881732999"/>
         <nd ref="-23"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:dff92d321a54a2f8a44fbeed6707847e40eefc23;sha1sum:6ccbab3ef8bc0733b43532e8cbc9414e4e7169c2;sha1sum:d4403c1c1878fe2078cf1d7f34da0299e1702fbf;sha1sum:cdb7e65e3471c251113003fce973250b7a0c079f;sha1sum:594c9296a13df57b9cd7f90c1f4f83ac61e03b82;sha1sum:9c2a09fa905d00cf9a0d22e2267b1bcadc534366;sha1sum:0c44130b6c1c834c6b23347c7e3bddc0b458257c;sha1sum:2d331f9d17fb0fc33c361cffa0e3d326d062e42d;sha1sum:69ea01ee676a245b6a3407232d7ce49e3cebb288;sha1sum:f753134373dfba07ac41332745e13400f5fc1350"/>
         <tag k="name" v="South Washington Street"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_direction_prefix" v="S"/>
@@ -1890,6 +1859,7 @@
         <nd ref="4881725477"/>
         <tag k="tiger:name_base_1" v="County Road 213"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:b1d735e1be51f554402af2deeacede0b5bb4e661;sha1sum:84faa7533a091d4896a50a35a8203258b4d6f9a3;sha1sum:1ec464648dd260a9139b427661766bfdb14f83bf;sha1sum:13b827e219c33e02455638f254c7779da65e259c;sha1sum:045bacd42f510be79684627bed27ec4a84f796b0;sha1sum:2f9e12314a24fd79304f8eaaabb6a0fbbb3b16ea;sha1sum:2b339923b4f5d2d6616c94f777ed83172067528e;sha1sum:278b024cceb5c7853149fe3b57198d52059dff8c;sha1sum:9e10102795c4d216cf0cb2647dc5692cbb4f49eb;sha1sum:152338312ea5aacddef057d8f7ccf81cf1a14cd3;sha1sum:f228c301d0c6e7326f428681b8451fabf1565323;sha1sum:b4eaab5b94c727e125c203166cf4c0b94565ab11"/>
         <tag k="name_1" v="County Road 213"/>
         <tag k="name" v="South Walnut Street"/>
         <tag k="tiger:zip_left" v="19963"/>
@@ -1902,13 +1872,6 @@
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Walnut"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-236" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881735985"/>
-        <nd ref="4881735998"/>
-        <nd ref="4881735999"/>
-        <nd ref="4881735996"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-230" timestamp="2020-02-28T16:47:46Z" version="1">
@@ -1926,10 +1889,6 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-211" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881726968"/>
-        <nd ref="4881733435"/>
-        <nd ref="4881731157"/>
-        <nd ref="4881733436"/>
         <nd ref="4881732088"/>
         <nd ref="-1339"/>
         <nd ref="-1333"/>
@@ -1937,6 +1896,7 @@
         <nd ref="4881733423"/>
         <nd ref="4881735994"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:0eb29bcff3cdbff980cb14a32ef9a79522400f3d;sha1sum:259213f3d1f81e170faa5ce03aaa21fb457143e5"/>
         <tag k="name" v="Jefferson Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Ave"/>
@@ -1957,6 +1917,7 @@
         <nd ref="4881730543"/>
         <nd ref="4881730541"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:06087520c757565a3b1cd2b92281ff181702a3d5;sha1sum:94481ef21923819c9c4c36b4286864cf90ba1543;sha1sum:44f8afd9ffdc4e96e40e2fc7d3218c686700ba52;sha1sum:6fd0940a22e7ab0cfd73bc3e312b05af461f5ab1;sha1sum:d85a8364401569fa151822f6e317de55f617f7f2;sha1sum:fc62dbd40511f7f7e66d8178d3f45229ae380f31"/>
         <tag k="name" v="Kings Highway"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Hwy"/>
@@ -1965,26 +1926,6 @@
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Kings"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-170" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881729682"/>
-        <nd ref="4881735985"/>
-        <nd ref="4881735998"/>
-        <nd ref="4881735999"/>
-        <nd ref="4881735996"/>
-        <tag k="tiger:name_base_1" v="State Road 36"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="Causey Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="source:datetime" v="2013-04-20T20:52:40.000Z;2019-03-29T03:41:35Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
-        <tag k="tiger:cfcc" v="A21"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Causey"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -2746,22 +2687,6 @@
         <tag k="addr:housenumber" v="21"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-91" timestamp="2020-02-28T16:47:46Z" version="1">
-        <nd ref="4881735996"/>
-        <nd ref="4881725477"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-82" timestamp="2020-02-28T16:47:46Z" version="1">
-        <nd ref="4881735994"/>
-        <nd ref="4881729682"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-81" timestamp="2020-02-28T16:47:46Z" version="1">
-        <nd ref="4881733488"/>
-        <nd ref="4881733499"/>
-        <nd ref="4881730541"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-96"/>
         <nd ref="-652"/>
@@ -2925,6 +2850,7 @@
         <nd ref="-234"/>
         <nd ref="-237"/>
         <nd ref="-73"/>
+        <tag k="hoot:hash" v="sha1sum:d6d9fdf0b6de769351c163b6474156dbe0fb621c"/>
         <tag k="source:datetime" v="2014-10-01T03:34:56Z"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -3083,6 +3009,7 @@
         <nd ref="4881729880"/>
         <nd ref="4881726363"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:6195bcc0489a306b38d07a3dea51e4f2562e0528"/>
         <tag k="name" v="Pearl Alley"/>
         <tag k="tiger:name_type" v="Aly"/>
         <tag k="source:datetime" v="2015-04-27T15:16:25.000Z"/>
@@ -3105,6 +3032,7 @@
         <nd ref="4881729790"/>
         <nd ref="-25"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:188f86e3ed1787699abd3131a290604e34647b47;sha1sum:3d1d567c27eb540896e1d4357b8a16e314024ebf"/>
         <tag k="name" v="Lakelawn Drive"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2013-04-20T14:49:10.000Z;2019-04-02T11:40:18Z"/>
@@ -3133,6 +3061,7 @@
         <nd ref="4881729682"/>
         <nd ref="4881729663"/>
         <tag k="old_railway_operator" v="PRR"/>
+        <tag k="hoot:hash" v="sha1sum:83d6c3c6eda30ae1d65076b0563c9407d58d054f"/>
         <tag k="name" v="Indian River Secondary"/>
         <tag k="railway" v="rail"/>
         <tag k="gauge" v="1435"/>
@@ -3302,6 +3231,7 @@
         <nd ref="4881724934"/>
         <nd ref="4881724937"/>
         <nd ref="-6"/>
+        <tag k="hoot:hash" v="sha1sum:793214e78390a133ff7753ac7f93149479f23a05"/>
         <tag k="source:datetime" v="2020-02-28T16:41:52Z"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -3312,6 +3242,7 @@
         <nd ref="4881727158"/>
         <tag k="tiger:name_base_1" v="State Road 36"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:1589e876c133c43b7274307bfd11d9e0a7fcc8f0;sha1sum:c765560cf8a0537da946c60342a819cd884577d3"/>
         <tag k="name" v="Southeast Front Street"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
@@ -3343,6 +3274,7 @@
         <nd ref="4881729663"/>
         <nd ref="4881729668"/>
         <tag k="old_railway_operator" v="PRR"/>
+        <tag k="hoot:hash" v="sha1sum:e0936be41774ce6e920d83844b62c80045c20043"/>
         <tag k="bridge" v="yes"/>
         <tag k="name" v="Indian River Secondary"/>
         <tag k="railway" v="rail"/>
@@ -3364,6 +3296,7 @@
         <nd ref="4881729716"/>
         <nd ref="4881729717"/>
         <nd ref="4881729718"/>
+        <tag k="hoot:hash" v="sha1sum:08af4e3fcea23185651072be951d6bc60d817055"/>
         <tag k="waterway" v="stream"/>
         <tag k="source:datetime" v="2014-10-01T04:16:43.000Z"/>
         <tag k="error:circular" v="15"/>
@@ -3372,6 +3305,7 @@
         <nd ref="4881734369"/>
         <nd ref="4881729715"/>
         <tag k="old_railway_operator" v="PRR"/>
+        <tag k="hoot:hash" v="sha1sum:507a30bb4e788d99cdc53ab663fd12fb47fefaba"/>
         <tag k="bridge" v="yes"/>
         <tag k="name" v="Indian River Secondary"/>
         <tag k="railway" v="rail"/>
@@ -3390,6 +3324,7 @@
         <nd ref="4881729665"/>
         <nd ref="4881734369"/>
         <tag k="old_railway_operator" v="PRR"/>
+        <tag k="hoot:hash" v="sha1sum:dd7c69e57bdf4c1f6e68b4acc392969962539b9d"/>
         <tag k="name" v="Indian River Secondary"/>
         <tag k="railway" v="rail"/>
         <tag k="gauge" v="1435"/>
@@ -3410,6 +3345,7 @@
         <nd ref="4881735985"/>
         <tag k="tiger:name_base_1" v="State Road 36"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:af87b2236fc941a5102024d20f8b2b668960cc62;sha1sum:bee388fc304f7bb4b45054b4343ec024b42e8405"/>
         <tag k="name" v="Causey Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
@@ -3426,6 +3362,7 @@
         <nd ref="4881735985"/>
         <nd ref="4881733148"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:1891f3785ef4e33285812c28f2e8f3c27e52d283"/>
         <tag k="name" v="South Maple Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Ave"/>
@@ -3464,13 +3401,11 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="496849685" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881732116"/>
-        <nd ref="-1354"/>
-        <nd ref="-1355"/>
         <nd ref="-1351"/>
         <nd ref="4881727394"/>
         <nd ref="4881733499"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:3ee2d66ed58bbca4946b0401b0858ac11103a9ae;sha1sum:d4e7df2801aacba81a98268eec7b238735aac252;sha1sum:1f8fd54005e257492ebb2b6d1620bb4f14bac57d;sha1sum:9e640bf7ff7b171432d979ebccbaa09398c8c920"/>
         <tag k="name" v="Sussex Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Ave"/>
@@ -3478,8 +3413,8 @@
         <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Sussex"/>
+        <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="496849690" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
@@ -3501,18 +3436,19 @@
         <nd ref="4881733499"/>
         <nd ref="4881730541"/>
         <tag k="tiger:name_base_1" v="State Road 36"/>
-        <tag k="tiger:zip_left_1" v="19963"/>
         <tag k="highway" v="secondary"/>
+        <tag k="tiger:zip_left_1" v="19963"/>
+        <tag k="hoot:hash" v="sha1sum:ed0fec3d590d1c035e94d768058920e1787f93cf;sha1sum:a8f97ab2566e247842e9dfa2b73c4e18d1bb51ef"/>
         <tag k="name" v="Lakeview Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
         <tag k="tiger:name_type" v="Ave"/>
-        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z;2015-09-14T06:08:20Z"/>
         <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A21"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Lakeview"/>
+        <tag k="tiger:reviewed" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="496849840" timestamp="2020-02-28T16:48:04Z" version="1">
@@ -3542,6 +3478,7 @@
         <nd ref="4881733165"/>
         <nd ref="4881733094"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:2ad121a8ad3023b26f7a1489ab92f093d5214553"/>
         <tag k="bridge" v="yes"/>
         <tag k="name" v="Maple Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
@@ -3559,6 +3496,7 @@
         <nd ref="4881727342"/>
         <nd ref="4881725480"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:60a28daf9bfa97e8e20e937052ec175505a9a02d;sha1sum:173ca118cd84467dfe8b43266f1da8caff772cb2;sha1sum:daefe87bf055678485599b3913987a73b380f48b"/>
         <tag k="name" v="Barker Street"/>
         <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T15:00:54.000Z;2013-04-20T15:00:54Z"/>
@@ -3577,6 +3515,7 @@
         <nd ref="4881736055"/>
         <nd ref="4881730547"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:853dd0bdb354dc86d1af8190ff09cd357307dfd6;sha1sum:4880582ead5db9a59a64aebf12332498d8a13a0f;sha1sum:3cb6e0bca8e7fa216f9d9e2927915b716f7e1753;sha1sum:ba906079dc25c3f988baf4b16ca988be095b1588"/>
         <tag k="name" v="Williams Street"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="St"/>
@@ -3603,28 +3542,12 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="496850273" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881735985"/>
+        <nd ref="4881735998"/>
+        <nd ref="4881735999"/>
         <nd ref="4881735996"/>
         <nd ref="4881725477"/>
-        <tag k="tiger:name_type_1" v="Ave"/>
-        <tag k="tiger:name_type_2" v="Rd"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="error:circular" v="15"/>
-        <tag k="name" v="Causey Avenue"/>
-        <tag k="tiger:cfcc" v="A31"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="tiger:zip_right_1" v="19963"/>
-        <tag k="source:datetime" v="2014-12-20T08:06:40.000Z"/>
-        <tag k="tiger:zip_right_2" v="19963"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left_1" v="19963"/>
-        <tag k="tiger:zip_left_2" v="19963"/>
-        <tag k="name_1" v="Shawnee Rd"/>
-        <tag k="tiger:name_base" v="State Highway 36"/>
-        <tag k="tiger:name_base_1" v="Causey"/>
-        <tag k="tiger:name_base_2" v="Shawnee"/>
-        <tag k="highway" v="secondary"/>
     </way>
     <way visible="true" id="496850334" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881730541"/>
@@ -3642,7 +3565,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-1759" role="reviewee"/>
+        <member type="way" ref="-1765" role="reviewee"/>
         <tag k="hoot:review:type" v="road_crossing_polygon"/>
         <tag k="hoot:review:sort_order" v="1"/>
         <tag k="hoot:review:note" v="Road crossing polygon: poly criteria filter: hoot::BuildingCriterion; poly tag filter: ; allowed road tag filter:"/>
@@ -3750,18 +3673,15 @@
     </relation>
     <relation visible="true" id="7387465" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-4" role=""/>
-        <member type="way" ref="-1707" role=""/>
+        <member type="way" ref="-1713" role=""/>
         <member type="way" ref="496849655" role=""/>
         <member type="way" ref="496850273" role=""/>
         <member type="way" ref="496849585" role=""/>
-        <member type="way" ref="-170" role=""/>
-        <member type="way" ref="-236" role=""/>
+        <member type="way" ref="-1640" role=""/>
         <member type="way" ref="496850334" role=""/>
         <member type="way" ref="496849786" role=""/>
+        <member type="way" ref="-1830" role=""/>
         <member type="way" ref="-31" role=""/>
-        <member type="way" ref="-91" role=""/>
-        <member type="way" ref="-82" role=""/>
-        <member type="way" ref="-81" role=""/>
         <tag k="wikipedia" v="en:Delaware Route 36"/>
         <tag k="wikidata" v="Q798659"/>
         <tag k="symbol" v="http://commons.wikimedia.org/wiki/File:Elongated_circle_36.svg"/>

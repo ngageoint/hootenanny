@@ -179,7 +179,6 @@
     </node>
     <node visible="true" id="135" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5490360000000045" lon="-72.3467378757499944">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:hash" v="sha1sum:30238ddb8eac8e98420c54d4857866507d5b3cda"/>
         <tag k="hoot:id" v="135"/>
     </node>
     <node visible="true" id="142" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465998999999968" lon="-72.3472215000000034">
@@ -195,6 +194,7 @@
         <tag k="source" v="Unknown"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:774107e4e732c1e6fdcf85690ad46ec026916ce2;sha1sum:ca84b3c1d9282020844567fb5ed9372396fc1448"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="hoot:id" v="-63"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
@@ -278,6 +278,7 @@
         <tag k="source" v="Unknown"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:b04f669eb94675526c58cc1ac6742c64b3c9b821;sha1sum:6f2f5579de29557598f29f319183fc6b3abe1426"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="hoot:id" v="22"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
