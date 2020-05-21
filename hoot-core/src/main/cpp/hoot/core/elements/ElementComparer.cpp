@@ -205,9 +205,8 @@ bool ElementComparer::_compareRelation(ElementPtr re, ElementPtr e) const
   if (rr->getTagCount() != r->getTagCount())
   {
     LOG_TRACE(
-      "Relations " << rw->getElementId() << " and " << w->getElementId() <<
-      " failed comparison on tag count: " << rw->getTagCount() << " and " <<
-      w->getTagCount());
+      "Relations " << rr->getElementId() << " and " << r->getElementId() <<
+      " failed comparison on tag count: " << rr->getTagCount() << " and " << r->getTagCount());
     return false;
   }
 
