@@ -128,13 +128,21 @@ bool ElementComparer::_compareWay(ElementPtr re, ElementPtr e) const
   ConstWayPtr rw = std::dynamic_pointer_cast<const Way>(re);
   ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
 
-  // optimization
+  // optimizations
   if (rw->getNodeCount() != w->getNodeCount())
   {
     LOG_TRACE(
       "Ways " << rw->getElementId() << " and " << w->getElementId() <<
       " failed comparison on way node count: " << rw->getNodeCount() << " and " <<
       w->getNodeCount());
+    return false;
+  }
+  if (rw->getTagCount() != w->getTagCount())
+  {
+    LOG_TRACE(
+      "Ways " << rw->getElementId() << " and " << w->getElementId() <<
+      " failed comparison on tag count: " << rw->getTagCount() << " and " <<
+      w->getTagCount());
     return false;
   }
 
@@ -156,7 +164,7 @@ bool ElementComparer::_compareWay(ElementPtr re, ElementPtr e) const
     {
       LOG_TRACE(
         "Ways " << rw->getElementId() << " and " << w->getElementId() <<
-        " failed comparison on way nodes: " << rw->getNodeIds() << " and " << w->getNodeIds());
+        " failed comparison on tags.");
       return false;
     }
 
@@ -178,9 +186,28 @@ bool ElementComparer::_compareRelation(ElementPtr re, ElementPtr e) const
   ConstRelationPtr rr = std::dynamic_pointer_cast<const Relation>(re);
   ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
 
-  // optimization
-  if (rr->getType() != r->getType() || rr->getMemberCount() != r->getMemberCount())
+  // optimizations
+  if (rr->getType() != r->getType())
   {
+    LOG_TRACE(
+      "Relations " << rr->getElementId() << " and " << r->getElementId() <<
+      " failed comparison on type: " << rr->getType() << " and " << r->getType());
+    return false;
+  }
+  if (rr->getMemberCount() != r->getMemberCount())
+  {
+    LOG_TRACE(
+      "Relations " << rr->getElementId() << " and " << r->getElementId() <<
+      " failed comparison on relation member count: " << rr->getMemberCount() << " and " <<
+      r->getMemberCount());
+    return false;
+  }
+  if (rr->getTagCount() != r->getTagCount())
+  {
+    LOG_TRACE(
+      "Relations " << rw->getElementId() << " and " << w->getElementId() <<
+      " failed comparison on tag count: " << rw->getTagCount() << " and " <<
+      w->getTagCount());
     return false;
   }
 
@@ -192,6 +219,9 @@ bool ElementComparer::_compareRelation(ElementPtr re, ElementPtr e) const
 
     if (!rr->hasSameNonMetadataTags(*r))
     {
+      LOG_TRACE(
+        "Relations " << rr->getElementId() << " and " << r->getElementId() <<
+        " failed comparison on tags.");
       return false;
     }
 
@@ -200,6 +230,9 @@ bool ElementComparer::_compareRelation(ElementPtr re, ElementPtr e) const
       if (rr->getMembers()[i].role != r->getMembers()[i].role ||
           rr->getMembers()[i].getElementId() != r->getMembers()[i].getElementId())
       {
+        LOG_TRACE(
+          "Relations " << rr->getElementId() << " and " << r->getElementId() <<
+          " failed comparison on relation members.");
         return false;
       }
     }
