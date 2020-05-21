@@ -36,6 +36,11 @@ namespace hoot
 /**
  * Allows for comparing relation members within a collection
  *
+ * The original reason for needing this class in addition to its parent was for the relation role
+ * comparison. Now that role is part of the relation hash created by ElementHashVisitor, it seems
+ * like we wouldn't need this class. However, note the call to getRole() in
+ * CollectionRelationMerger...so at this time, this class is needed.
+ *
  * @see ElementComparison
  */
 class RelationMemberComparison : public ElementComparison

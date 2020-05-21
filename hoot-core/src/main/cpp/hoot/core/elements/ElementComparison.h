@@ -66,12 +66,14 @@ public:
 
 protected:
 
+  // This isn't const due to ElementComparer needing to add the hash to it before comparison.
   ElementPtr _element;
   ElementComparer _elementComparer;
 };
 
 inline uint qHash(const ElementComparison& elementComp)
 {
+  // reuse the hash if its already there
   const QString hashFromTag =
     elementComp.getElement()->getTags().get(MetadataTags::HootHash()).trimmed();
   if (!hashFromTag.isEmpty())

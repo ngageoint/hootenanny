@@ -126,6 +126,14 @@ public:
   void setTag(QString k, QString v) { _getElementData().setTag(k, v); }
   void addTags(const Tags& tags) { _getElementData().addTags(tags); }
 
+  /**
+   * TODO
+   *
+   * @param other
+   * @return
+   */
+  bool hasSameNonMetadataTags(const Element& other) const;
+
   bool getVisible() const { return _getElementData().getVisible(); }
   void setVisible(bool visible) { _getElementData().setVisible(visible); }
 

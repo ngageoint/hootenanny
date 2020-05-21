@@ -66,4 +66,9 @@ void Element::_preGeometryChange()
   }
 }
 
+bool Element::hasSameNonMetadataTags(const Element& other) const
+{
+  return getTags().dataOnlyEqual(other.getTags());
+}
+
 }

@@ -118,6 +118,8 @@ public:
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
 
+  size_t getMemberCount() const { return _relationData->getElements().size(); }
+
   /**
    * Returns the IDs of members
    *
