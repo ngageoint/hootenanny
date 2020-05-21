@@ -30,7 +30,6 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/elements/WayUtils.h>
-//#include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
@@ -139,10 +138,8 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
             ConstNodePtr closestReplacementNode =
               closestReplacementLocToInfoNode.getNode(_duplicateNodeTolerance);
             LOG_VART(closestReplacementNode->getElementId());
-            //LOG_VART(ElementComparer::tagsAreSame(nodeToBeRemoved, closestReplacementNode));
             LOG_VART(nodeToBeRemoved->getTags().dataOnlyEqual(closestReplacementNode->getTags()));
 
-            //if (ElementComparer::tagsAreSame(nodeToBeRemoved, closestReplacementNode))
             if (nodeToBeRemoved->hasSameNonMetadataTags(*closestReplacementNode))
             {
               // the two nodes have identical tags, don't make any changes
