@@ -51,8 +51,7 @@ public:
 
   static const long DEBUG_ID = 0;
 
-  // TODO: remove
-  explicit ElementComparer(/*Meters threshold = 0.05*/);
+  ElementComparer();
 
   /**
    * Determines if two elements are the same
@@ -75,10 +74,7 @@ public:
   virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
   /**
-   * TODO
-   *
-   * @param e
-   * @return
+   * Wrapper around ElementHashVisitor::toHashString
    */
   QString toHashString(const ConstElementPtr& e) const;
 
@@ -87,15 +83,10 @@ public:
 
 private:
 
-  // TODO: remove
-  // currently, this threshold applies only to non-node circular error checks and the var would
-  // eventually go away completely if all element types were converted over to uses hashes for
-  // comparisons and CE comparison is enabled
-  //Meters _threshold;
   // enabling this allows for element comparisons to ignore the element ID; requires a map, so
   // default it to false to support callers that don't have a map
   bool _ignoreElementId;
-  // TODO
+  // allows for ignoring element versions during comparison
   bool _ignoreVersion;
   // a map is needed when comparing child elements if ignoring element IDs
   OsmMapPtr _map;

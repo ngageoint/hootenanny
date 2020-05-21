@@ -36,9 +36,7 @@
 namespace hoot
 {
 
-// TODO: remove
-ElementComparer::ElementComparer(/*Meters threshold*/) :
-//_threshold(threshold),
+ElementComparer::ElementComparer() :
 _ignoreElementId(false),
 _ignoreVersion(false)
 {
@@ -78,17 +76,6 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
     LOG_TRACE("compare failed on version: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
-
-  // TODO: remove
-  // different CE?
-//  if (fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
-//  {
-//    LOG_TRACE(
-//      "compare failed on circular error: " << e1->getElementId() << ", " << e2->getElementId());
-//    LOG_VART(fabs(e1->getCircularError() - e2->getCircularError()));
-//    LOG_VART(_threshold);
-//    return false;
-//  }
 
   if (_ignoreElementId && !_map.get())
   {

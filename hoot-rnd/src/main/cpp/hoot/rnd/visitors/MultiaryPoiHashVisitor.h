@@ -34,7 +34,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * This contains the original node hash implementation created for Multiary POI Conflation, which
+ * is dormant. The default implementation this inherits from has been simplified.
  */
 class MultiaryPoiHashVisitor : public ElementHashVisitor
 {

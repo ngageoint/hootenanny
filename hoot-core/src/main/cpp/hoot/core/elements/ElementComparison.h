@@ -57,10 +57,7 @@ public:
   bool isNull() const { return !_element.get(); }
 
   /**
-   * TODO
-   *
-   * @param e
-   * @return
+   * Wrapper around ElementHashVisitor::toHashString
    */
   QString toHashString() const { return _elementComparer.toHashString(_element); }
 

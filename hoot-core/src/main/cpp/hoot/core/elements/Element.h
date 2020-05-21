@@ -127,10 +127,11 @@ public:
   void addTags(const Tags& tags) { _getElementData().addTags(tags); }
 
   /**
-   * TODO
+   * Compares information tags with another element
    *
-   * @param other
-   * @return
+   * @param other element to compare this element's tags with
+   * @return true if this element has the same information tags as the other element; false
+   * otherwise
    */
   bool hasSameNonMetadataTags(const Element& other) const;
 
