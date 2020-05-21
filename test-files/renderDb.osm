@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-25.42965211496126" minlon="153.16023944736" maxlat="-25.42494299723994" maxlon="153.16587208629"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4294534830511338" lon="153.1619614255399995"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4274477669206078" lon="153.1618434083399904"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4294583277411519" lon="153.1629753005499879"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4296521149612609" lon="153.1658720862899941"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4273460268105964" lon="153.1640374553199990"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4257084836401397" lon="153.1602394473599702">
+        <tag k="error:circular" v="15"/>
+        <tag k="papa" v="smurf"/>
+        <tag k="uuid" v="{bfbf2946-4342-444c-9926-1477c7bcce05}"/>
+        <tag k="source" v="cartoon"/>
+        <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.969Z"/>
+    </node>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4270165820404834" lon="153.1617843997499904"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4250108253499469" lon="153.1616663825500098"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4249429972399419" lon="153.1638657939400048"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4272491313805595" lon="153.1657004249099998"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4270553402905044" lon="153.1628036391699936"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4279564662007758" lon="153.1603145492099998">
+        <tag k="error:circular" v="15"/>
+        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
+        <tag k="source" v="test_file:hut_p"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="building" v="hut"/>
+        <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.965Z"/>
+    </node>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12"/>
+        <nd ref="-13"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="uuid" v="{16006a93-ad6c-451e-b5ae-b530e6c5427a}"/>
+        <tag k="source" v="test_file:river_c"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="waterway" v="river"/>
+        <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.974Z"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <nd ref="-9"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="landuse" v="orchard"/>
+        <tag k="uuid" v="{162abddf-bb8a-470a-8986-afdf5a171d45}"/>
+        <tag k="source" v="test_file:orchard_s"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.971Z"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="papa" v="smurf"/>
+        <tag k="uuid" v="{79cd86b0-882c-4d66-b7ec-60fed3cac8f7}"/>
+        <tag k="source" v="cartoon"/>
+        <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.967Z"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="papa" v="smurf"/>
+        <tag k="uuid" v="{c0b66070-d3be-44bd-bb52-03d34716cd49}"/>
+        <tag k="source" v="cartoon"/>
+        <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.967Z"/>
+        <tag k="bigText1" v="This is a very long bit of text and we are trying to break the 255 char limit and see what doesn't get stored in a tag value.  Currently this is shorter than the bicycle comment but not for long"/>
+        <tag k="railway" v="station"/>
+        <tag k="subway" v="yes"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="bicycle:conditional" v="yes @ Mo-Th 20:00-23:30; Fr 20:00-24:00; Sa 00:00-01:30, 05:30-24:00; Su 00:00-01:30, 05:30-23:30; PH 05:30-23:30"/>
+        <tag k="note" v="folding bikes always allowed, electric bikes with Pb batteries not allowed"/>
+        <tag k="public_transport" v="station"/>
+    </way>
+</osm>
