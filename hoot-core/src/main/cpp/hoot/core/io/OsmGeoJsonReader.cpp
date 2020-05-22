@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmGeoJsonReader.h"
@@ -118,8 +118,8 @@ void OsmGeoJsonReader::read(const OsmMapPtr& map)
     _parseGeoJson();
   }
 
-  // GeoJSON doesn't support crs prop anymore, but if you have an old file that has one you can
-  // use something hardcoded like this:
+  // GeoJSON doesn't support the crs prop anymore, but if you find an old file that has one you can
+  // use something hardcoded like this as a temp solution:
 //  std::shared_ptr<OGRSpatialReference> spatRef(new OGRSpatialReference());
 //  spatRef->importFromEPSG(32618);
 //  map->setProjection(spatRef);
