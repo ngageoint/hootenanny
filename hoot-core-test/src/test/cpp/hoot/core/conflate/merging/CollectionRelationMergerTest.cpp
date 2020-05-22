@@ -56,8 +56,8 @@ public:
     "test-files/conflate/merging/CollectionRelationMergerTest/",
     "test-output/conflate/merging/CollectionRelationMergerTest/")
   {
-    // If uncommenting out the writer include debug tags calls in the tests below, also uncomment
-    // this line.
+    // If uncommenting out the writer include debug tags calls for debugging purposes only for the
+    // tests below, then also uncomment this line.
     //setResetType(ResetAll);
   }
 

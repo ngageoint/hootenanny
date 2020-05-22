@@ -611,6 +611,7 @@
         <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
         <tag k="hoot:id" v="-939"/>
+        <tag k="hoot:hash" v="sha1sum:43e198ad545a7b6970b78654691346f5414ee2d4;sha1sum:98d3b99af410c8bb0da3e25678ed7c83b8dac0b1"/>
         <tag k="highway" v="secondary"/>
     </way>
     <way visible="true" id="-937" timestamp="2017-06-07T15:16:55Z" version="1">
@@ -723,6 +724,7 @@
         <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
         <tag k="hoot:id" v="-912"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:71ff660fc5b4ff4f30f1348a748f2075fdf858f7;sha1sum:d50fdc650701c8911a7bfc25329c846b47b01be5;sha1sum:23229f75e7249109e1557b6aaae3e6779495dadc"/>
     </way>
     <way visible="true" id="-909" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="130"/>
@@ -755,6 +757,7 @@
         <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
         <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
         <tag k="hoot:id" v="-909"/>
+        <tag k="hoot:hash" v="sha1sum:3aad1520e160a2366b8aa8b01b9077f387d420cc;sha1sum:e74fb05c686a261f82842bf068ee31267a9f6414"/>
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-900" timestamp="2017-06-07T15:16:56Z" version="1">
@@ -819,6 +822,7 @@
         <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
         <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
         <tag k="hoot:id" v="-893"/>
+        <tag k="hoot:hash" v="sha1sum:26b729f61770fa590ce227fc467d2f4b7dd68353;sha1sum:4aa2b1ce538adde8988cb4d92efa1ba77b45e0ee;sha1sum:19fd5d92d7072f4a73f8b2b051855f76c768f9f7"/>
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-860" timestamp="2017-06-07T15:16:56Z" version="1">
@@ -895,6 +899,7 @@
         <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
         <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
         <tag k="hoot:id" v="-854"/>
+        <tag k="hoot:hash" v="sha1sum:9b60668f4520069eca4d9f48ff45c4e3eecd5a9e;sha1sum:de6b7ff7c97187ac56f786be376ad10104261c1a;sha1sum:7cc6e250e6d76ebf9fe7ee49c8903c0e10af713d;sha1sum:80d2aa2727e2d05a21109f0e7d9499ef41215466"/>
         <tag k="highway" v="tertiary"/>
     </way>
     <way visible="true" id="-836" timestamp="2017-06-07T15:16:56Z" version="1">
@@ -930,6 +935,7 @@
         <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
         <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
         <tag k="hoot:id" v="-836"/>
+        <tag k="hoot:hash" v="sha1sum:94adcc394a5ea455a2b687409e6491a199747caa;sha1sum:de6b7ff7c97187ac56f786be376ad10104261c1a"/>
         <tag k="highway" v="tertiary"/>
     </way>
     <way visible="true" id="-39" timestamp="2017-06-07T15:16:56Z" version="1">
@@ -960,6 +966,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
         <tag k="hoot:id" v="-39"/>
+        <tag k="hoot:hash" v="sha1sum:2292adea6dd60f786ac90515562b995af19e4d51;sha1sum:f3fdcd09b807472b729f3a3eb2badefea4ed259e"/>
         <tag k="highway" v="tertiary"/>
     </way>
     <way visible="true" id="2" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
@@ -1227,6 +1234,7 @@
         <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
         <tag k="hoot:id" v="17"/>
         <tag k="highway" v="tertiary"/>
+        <tag k="hoot:hash" v="sha1sum:42df0d492e92b6986f7ff8cfe588cea7c4f9a2b0;sha1sum:f3fdcd09b807472b729f3a3eb2badefea4ed259e"/>
     </way>
     <way visible="true" id="18" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="112"/>

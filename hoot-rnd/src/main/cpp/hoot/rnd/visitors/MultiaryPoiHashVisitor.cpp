@@ -22,26 +22,39 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "CalculateHashVisitor2.h"
+#include "MultiaryPoiHashVisitor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor2)
+HOOT_FACTORY_REGISTER(ElementVisitor, MultiaryPoiHashVisitor)
 
-void CalculateHashVisitor2::visit(const ElementPtr& e)
+MultiaryPoiHashVisitor::MultiaryPoiHashVisitor() :
+ElementHashVisitor()
 {
-  e->getTags().remove(Tags::uuidKey());
-  _hashVis.setOsmMap(_map);
-  e->getTags()[MetadataTags::HootHash()] =
-    "sha1sum:" + QString::fromUtf8(_hashVis.toHash(e).toHex());
+}
+
+QString MultiaryPoiHashVisitor::_toJson(const ConstNodePtr& node) const
+{
+  QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"node\",\"tags\":{";
+
+  result += ElementHashVisitor::toJson(node->getTags(), node->getRawCircularError());
+
+  const int coordinateComparisonSensitivity =
+    ConfigOptions().getNodeComparisonCoordinateSensitivity();
+  result += "}},\"geometry\":{\"type\":\"Point\",\"coordinates\":[";
+  result += QString::number(node->getX(), 'f', coordinateComparisonSensitivity);
+  result += ",";
+  result += QString::number(node->getY(), 'f', coordinateComparisonSensitivity);
+  result += "]}}";
+
+  return result;
 }
 
 }

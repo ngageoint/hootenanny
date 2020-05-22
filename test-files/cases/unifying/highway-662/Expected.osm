@@ -8,6 +8,7 @@
         <nd ref="-99147"/>
         <nd ref="-99141"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:4f48316af6a122752093eb783dcc50900b03d037;sha1sum:6ac389414a8ebbf3706eb119b329216370fe56c6"/>
         <tag k="note" v="2c;2a"/>
         <tag k="error:circular" v="15"/>
     </way>

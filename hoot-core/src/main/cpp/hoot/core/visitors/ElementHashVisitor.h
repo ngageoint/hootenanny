@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CALCULATEHASHVISITOR_H
-#define CALCULATEHASHVISITOR_H
+#ifndef ELEMENT_HASH_VISITOR_H
+#define ELEMENT_HASH_VISITOR_H
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
@@ -37,8 +37,8 @@ namespace hoot
 {
 
 /**
- * Calculates a hash for each element and store the hash in the MetadataTags::HootHash() tag. Any
- * existing value will be overwritten.
+ * Calculates a hash for each element and optionally stores the hash in the MetadataTags::HootHash()
+ * tag and or collects it for later use. Any existing hash tag value will be overwritten.
  *
  * See this for details: https://github.com/ngageoint/hootenanny/issues/1663
  *
@@ -47,19 +47,23 @@ namespace hoot
  *
  * @todo implement OperationStatusInfo
  */
-class CalculateHashVisitor : public ElementOsmMapVisitor
+class ElementHashVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::CalculateHashVisitor"; }
+  static std::string className() { return "hoot::ElementHashVisitor"; }
 
-  CalculateHashVisitor();
+  ElementHashVisitor();
 
   virtual void visit(const ElementPtr &e);
 
-  QString toJson(const ConstElementPtr& e);
-  QByteArray toHash(const ConstElementPtr& e);
-  QString toHashString(const ConstElementPtr& e);
+  QString toJson(const ConstElementPtr& e) const;
+  virtual QString toJson(const Tags& tags, const double ce = -1.0) const;
+
+  QByteArray toHash(const ConstElementPtr& e) const;
+  QByteArray toHash(const Tags& tags, const double ce = -1.0) const;
+  QString toHashString(const ConstElementPtr& e) const;
+  QString toHashString(const Tags& tags, const double ce = -1.0) const;
 
   virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
 
@@ -72,6 +76,12 @@ public:
   QMap<QString, ElementId> getHashes() const { return _hashesToElementIds; }
   QSet<std::pair<ElementId, ElementId>> getDuplicates() const { return _duplicates; }
   void clearHashes() { _hashesToElementIds.clear(); }
+
+protected:
+
+  virtual QString _toJson(const ConstNodePtr& node) const;
+  virtual QString _toJson(const ConstWayPtr& way) const;
+  virtual QString _toJson(const ConstRelationPtr& relation) const;
 
 private:
 
@@ -87,13 +97,8 @@ private:
   QMap<QString, ElementId> _hashesToElementIds;
   // pairings of all duplicate elements found
   QSet<std::pair<ElementId, ElementId>> _duplicates;
-
-  QString _toJson(const ConstNodePtr& node);
-  QString _toJson(const ConstWayPtr& way);
-  QString _toJson(const ConstRelationPtr& relation);
-  QString _toJson(const Tags& tags, const double ce);
 };
 
 }
 
-#endif // CALCULATEHASHVISITOR_H
+#endif // ELEMENT_HASH_VISITOR_H

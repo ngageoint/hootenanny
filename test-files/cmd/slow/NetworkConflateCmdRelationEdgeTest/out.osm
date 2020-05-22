@@ -49,9 +49,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2782238189999955" lon="-16.5048122620599997"/>
-    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2731524274100003" lon="-16.5341234421699994">
-        <tag k="hoot:hash" v="sha1sum:bf7d69b3ecef9bfcf7273a02e852bb06ee8dfab7"/>
-    </node>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2731524274100003" lon="-16.5341234421699994"/>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2652000000000001" lon="-16.5143222285301512"/>
     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2651999999999965" lon="-16.5333386644505751"/>
     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2652000000000001" lon="-16.5110425089630937"/>
@@ -79,9 +77,7 @@
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2961999999999989" lon="-16.5312379994729923"/>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2962000000000025" lon="-16.5279511804803931"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2962000000000025" lon="-16.5292129125068392"/>
-    <node visible="true" id="281183768" timestamp="2015-07-27T15:26:16Z" version="11" changeset="32910570" user="ulilu" uid="16881" lat="15.2810888999999950" lon="-16.5284106000000008">
-        <tag k="hoot:hash" v="sha1sum:fc1c18b32d32233c8e806ca9c2e1069fe903ffb3"/>
-    </node>
+    <node visible="true" id="281183768" timestamp="2015-07-27T15:26:16Z" version="11" changeset="32910570" user="ulilu" uid="16881" lat="15.2810888999999950" lon="-16.5284106000000008"/>
     <node visible="true" id="1977199753" timestamp="2015-07-27T15:26:15Z" version="3" changeset="32910570" user="ulilu" uid="16881" lat="15.2803193999999998" lon="-16.5234802000000016">
         <tag k="disused" v="yes"/>
         <tag k="public_transport" v="stop_position"/>
@@ -286,9 +282,7 @@
         <tag k="place" v="hamlet"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="3668869268" timestamp="2017-10-26T00:58:23Z" version="2" changeset="53250233" user="ibou9" uid="6841193" lat="15.2814401000000011" lon="-16.5281671999999986">
-        <tag k="hoot:hash" v="sha1sum:18c5d95b6ab3d70166277dee773cbc2574ed3433"/>
-    </node>
+    <node visible="true" id="3668869268" timestamp="2017-10-26T00:58:23Z" version="2" changeset="53250233" user="ibou9" uid="6841193" lat="15.2814401000000011" lon="-16.5281671999999986"/>
     <node visible="true" id="3668869270" timestamp="2015-07-27T15:26:14Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2813075000000023" lon="-16.5197785999999986"/>
     <node visible="true" id="3668869271" timestamp="2015-07-27T15:26:14Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2803815999999948" lon="-16.5192541999999989"/>
     <node visible="true" id="3668869272" timestamp="2017-10-26T00:58:23Z" version="2" changeset="53250233" user="ibou9" uid="6841193" lat="15.2816702999999965" lon="-16.5195429999999988"/>
@@ -303,51 +297,21 @@
     <node visible="true" id="3668874739" timestamp="2017-10-26T00:58:23Z" version="2" changeset="53250233" user="ibou9" uid="6841193" lat="15.2804080000000013" lon="-16.5264284000000004"/>
     <node visible="true" id="3668874740" timestamp="2017-10-27T01:16:31Z" version="3" changeset="53278496" user="ibou9" uid="6841193" lat="15.2765371999999982" lon="-16.5290381999999987"/>
     <node visible="true" id="3668874742" timestamp="2017-10-25T11:42:12Z" version="2" changeset="53233486" user="ibou9" uid="6841193" lat="15.2783829999999998" lon="-16.5195308999999959"/>
-    <node visible="true" id="3668939748" timestamp="2015-07-27T16:17:41Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2665401000000038" lon="-16.5247960999999961">
-        <tag k="hoot:hash" v="sha1sum:2504e856af04bf56e22e361157c6aafedf9f4cde"/>
-    </node>
-    <node visible="true" id="3668939749" timestamp="2015-07-27T16:17:41Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2678442000000025" lon="-16.5216674999999995">
-        <tag k="hoot:hash" v="sha1sum:5d55d2b6c73a3ce71b1d1fc4a05513b553f5869c"/>
-    </node>
-    <node visible="true" id="3668939750" timestamp="2015-07-27T16:17:41Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2778008999999990" lon="-16.5156980000000004">
-        <tag k="hoot:hash" v="sha1sum:3c855721abc18d87a5c402f9073d076065c97e0b"/>
-    </node>
-    <node visible="true" id="3668939751" timestamp="2015-07-27T16:17:41Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2846832999999993" lon="-16.5168287999999990">
-        <tag k="hoot:hash" v="sha1sum:a531fdb149217e462371a513050be8386ea0203d"/>
-    </node>
-    <node visible="true" id="3668939752" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2858547999999974" lon="-16.5184831999999986">
-        <tag k="hoot:hash" v="sha1sum:5ec77c1b9af963129dd066dc2ae12cf2850b16ee"/>
-    </node>
-    <node visible="true" id="3668939753" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2853084000000035" lon="-16.5175733999999999">
-        <tag k="hoot:hash" v="sha1sum:fe49d0191bca1014ce1db5e0deab182a3d04a6fd"/>
-    </node>
-    <node visible="true" id="3668939754" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2692869999999967" lon="-16.5306739000000000">
-        <tag k="hoot:hash" v="sha1sum:8f48b77c5c8b692f0c303de2f54100e66763b4ea"/>
-    </node>
-    <node visible="true" id="3668939756" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2864095999999989" lon="-16.5194089999999996">
-        <tag k="hoot:hash" v="sha1sum:83c79c5425da454e830a7198c79f2069cec8ea77"/>
-    </node>
-    <node visible="true" id="3668939757" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2666228999999980" lon="-16.5234227999999987">
-        <tag k="hoot:hash" v="sha1sum:b5269d2b8076af01e8808df449701ed3d16a4505"/>
-    </node>
-    <node visible="true" id="3668939759" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2787530000000000" lon="-16.5155263999999988">
-        <tag k="hoot:hash" v="sha1sum:9e25d3703ae5fd04ca1e2d26ed72117eaf7648d2"/>
-    </node>
-    <node visible="true" id="3668939761" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2835965999999974" lon="-16.5161271999999997">
-        <tag k="hoot:hash" v="sha1sum:f15d77ae826cf5575c7fb7f07eacc038524b26ac"/>
-    </node>
-    <node visible="true" id="3668939762" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2825202999999963" lon="-16.5157837999999977">
-        <tag k="hoot:hash" v="sha1sum:285aecfab708a99cc511ed2bf767319e76e515e9"/>
-    </node>
-    <node visible="true" id="3668939763" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2806987000000003" lon="-16.5154834000000008">
-        <tag k="hoot:hash" v="sha1sum:20d2c2555e9e028ca5058f6e9f76446a5a777aeb"/>
-    </node>
-    <node visible="true" id="3668939764" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2669541000000031" lon="-16.5225645000000014">
-        <tag k="hoot:hash" v="sha1sum:a9303369f323b10c6e0950e809e3328c5308b021"/>
-    </node>
-    <node visible="true" id="3668939765" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2766830999999996" lon="-16.5160413000000013">
-        <tag k="hoot:hash" v="sha1sum:b90822a5f375d608fa9ce84302ae205972e92cea"/>
-    </node>
+    <node visible="true" id="3668939748" timestamp="2015-07-27T16:17:41Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2665401000000038" lon="-16.5247960999999961"/>
+    <node visible="true" id="3668939749" timestamp="2015-07-27T16:17:41Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2678442000000025" lon="-16.5216674999999995"/>
+    <node visible="true" id="3668939750" timestamp="2015-07-27T16:17:41Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2778008999999990" lon="-16.5156980000000004"/>
+    <node visible="true" id="3668939751" timestamp="2015-07-27T16:17:41Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2846832999999993" lon="-16.5168287999999990"/>
+    <node visible="true" id="3668939752" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2858547999999974" lon="-16.5184831999999986"/>
+    <node visible="true" id="3668939753" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2853084000000035" lon="-16.5175733999999999"/>
+    <node visible="true" id="3668939754" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2692869999999967" lon="-16.5306739000000000"/>
+    <node visible="true" id="3668939756" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2864095999999989" lon="-16.5194089999999996"/>
+    <node visible="true" id="3668939757" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2666228999999980" lon="-16.5234227999999987"/>
+    <node visible="true" id="3668939759" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2787530000000000" lon="-16.5155263999999988"/>
+    <node visible="true" id="3668939761" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2835965999999974" lon="-16.5161271999999997"/>
+    <node visible="true" id="3668939762" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2825202999999963" lon="-16.5157837999999977"/>
+    <node visible="true" id="3668939763" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2806987000000003" lon="-16.5154834000000008"/>
+    <node visible="true" id="3668939764" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2669541000000031" lon="-16.5225645000000014"/>
+    <node visible="true" id="3668939765" timestamp="2015-07-27T16:17:42Z" version="1" changeset="32910570" user="ulilu" uid="16881" lat="15.2766830999999996" lon="-16.5160413000000013"/>
     <node visible="true" id="4060065649" timestamp="2017-10-26T00:58:23Z" version="2" changeset="53250233" user="ibou9" uid="6841193" lat="15.2799467000000000" lon="-16.5248059000000005"/>
     <node visible="true" id="4060065650" timestamp="2017-10-26T00:58:23Z" version="2" changeset="53250233" user="ibou9" uid="6841193" lat="15.2800259999999977" lon="-16.5247537000000015"/>
     <node visible="true" id="4060065651" timestamp="2017-10-26T00:58:23Z" version="2" changeset="53250233" user="ibou9" uid="6841193" lat="15.2800028999999942" lon="-16.5249169000000009"/>
@@ -728,9 +692,7 @@
     <node visible="true" id="5189643547" timestamp="2017-10-26T00:58:20Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2806817999999982" lon="-16.5257657000000009"/>
     <node visible="true" id="5189643548" timestamp="2017-10-26T00:58:20Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2808807999999985" lon="-16.5261254000000015"/>
     <node visible="true" id="5189643549" timestamp="2017-10-26T00:58:20Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2813649000000016" lon="-16.5269618999999963"/>
-    <node visible="true" id="5189643550" timestamp="2017-10-26T00:58:20Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2818821000000007" lon="-16.5278546000000013">
-        <tag k="hoot:hash" v="sha1sum:a0017e5d6bf300bcaaf19d564fff24516fd6b238"/>
-    </node>
+    <node visible="true" id="5189643550" timestamp="2017-10-26T00:58:20Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2818821000000007" lon="-16.5278546000000013"/>
     <node visible="true" id="5189643551" timestamp="2017-10-26T00:58:20Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2802760000000042" lon="-16.5233966000000017"/>
     <node visible="true" id="5189643552" timestamp="2017-10-26T00:58:20Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2792641999999983" lon="-16.5235142999999987"/>
     <node visible="true" id="5189643553" timestamp="2017-10-26T00:58:20Z" version="1" changeset="53250233" user="ibou9" uid="6841193" lat="15.2790802999999968" lon="-16.5223100000000009">
@@ -748,9 +710,7 @@
     <node visible="true" id="5192493418" timestamp="2017-10-27T01:16:27Z" version="1" changeset="53278496" user="ibou9" uid="6841193" lat="15.2767976999999977" lon="-16.5257766000000004"/>
     <node visible="true" id="5192493419" timestamp="2017-10-27T01:16:27Z" version="1" changeset="53278496" user="ibou9" uid="6841193" lat="15.2773658999999977" lon="-16.5267096000000002"/>
     <node visible="true" id="5192493420" timestamp="2017-10-27T01:16:27Z" version="1" changeset="53278496" user="ibou9" uid="6841193" lat="15.2833631000000043" lon="-16.5245815000000000"/>
-    <node visible="true" id="5192494421" timestamp="2017-11-05T19:13:24Z" version="2" changeset="53537179" user="Sal73x" uid="1293386" lat="15.2843295999999995" lon="-16.5261602999999972">
-        <tag k="hoot:hash" v="sha1sum:2417fd14e701bb1fdfb2373cc73dfd4db2d5e815"/>
-    </node>
+    <node visible="true" id="5192494421" timestamp="2017-11-05T19:13:24Z" version="2" changeset="53537179" user="Sal73x" uid="1293386" lat="15.2843295999999995" lon="-16.5261602999999972"/>
     <node visible="true" id="5192494422" timestamp="2017-10-27T01:16:27Z" version="1" changeset="53278496" user="ibou9" uid="6841193" lat="15.2871475999999991" lon="-16.5245133999999965"/>
     <node visible="true" id="5192494423" timestamp="2017-10-27T01:16:27Z" version="1" changeset="53278496" user="ibou9" uid="6841193" lat="15.2872072999999951" lon="-16.5244830000000000"/>
     <node visible="true" id="5192494424" timestamp="2017-10-27T01:16:27Z" version="1" changeset="53278496" user="ibou9" uid="6841193" lat="15.2871368999999984" lon="-16.5244907999999988"/>
@@ -1093,9 +1053,7 @@
     <node visible="true" id="5213030810" timestamp="2017-11-05T20:16:13Z" version="1" changeset="53538704" user="Sal73x" uid="1293386" lat="15.2949116000000025" lon="-16.5361201000000015"/>
     <node visible="true" id="5240226652" timestamp="2017-11-20T23:15:22Z" version="1" changeset="53962932" user="ibou9" uid="6841193" lat="15.2832225999999913" lon="-16.5290700999999984"/>
     <node visible="true" id="5240226653" timestamp="2017-11-20T23:15:22Z" version="1" changeset="53962932" user="ibou9" uid="6841193" lat="15.2828396999999985" lon="-16.5283298999999992"/>
-    <node visible="true" id="5240226654" timestamp="2017-11-20T23:15:22Z" version="1" changeset="53962932" user="ibou9" uid="6841193" lat="15.2822782999999962" lon="-16.5275803000000003">
-        <tag k="hoot:hash" v="sha1sum:2db891b7945b0ee0b580f46877efe9aa28071c9a"/>
-    </node>
+    <node visible="true" id="5240226654" timestamp="2017-11-20T23:15:22Z" version="1" changeset="53962932" user="ibou9" uid="6841193" lat="15.2822782999999962" lon="-16.5275803000000003"/>
     <node visible="true" id="5240226655" timestamp="2019-06-03T05:49:37Z" version="2" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2779908999999936" lon="-16.5302985999999947"/>
     <node visible="true" id="5240226656" timestamp="2017-11-20T23:15:22Z" version="1" changeset="53962932" user="ibou9" uid="6841193" lat="15.2784100999999950" lon="-16.5300036000000006"/>
     <node visible="true" id="5240226657" timestamp="2019-06-03T05:49:37Z" version="2" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2802807999999963" lon="-16.5310710999999984"/>
@@ -1146,9 +1104,7 @@
     <node visible="true" id="5294730925" timestamp="2017-12-19T23:46:43Z" version="1" changeset="54773819" user="ibou9" uid="6841193" lat="15.2808887999999961" lon="-16.5243763000000001"/>
     <node visible="true" id="5294730926" timestamp="2017-12-19T23:46:43Z" version="1" changeset="54773819" user="ibou9" uid="6841193" lat="15.2814494999999972" lon="-16.5252538999999992"/>
     <node visible="true" id="5294730927" timestamp="2017-12-19T23:46:43Z" version="1" changeset="54773819" user="ibou9" uid="6841193" lat="15.2816652999999967" lon="-16.5256374000000008"/>
-    <node visible="true" id="5294730928" timestamp="2017-12-19T23:46:43Z" version="1" changeset="54773819" user="ibou9" uid="6841193" lat="15.2827353999999982" lon="-16.5272638999999977">
-        <tag k="hoot:hash" v="sha1sum:c3382a22bcd14b4b9f11e27ccdec3eb874871304"/>
-    </node>
+    <node visible="true" id="5294730928" timestamp="2017-12-19T23:46:43Z" version="1" changeset="54773819" user="ibou9" uid="6841193" lat="15.2827353999999982" lon="-16.5272638999999977"/>
     <node visible="true" id="5294730929" timestamp="2017-12-19T23:46:43Z" version="1" changeset="54773819" user="ibou9" uid="6841193" lat="15.2833623000000021" lon="-16.5279811999999993"/>
     <node visible="true" id="5294730930" timestamp="2017-12-19T23:46:43Z" version="1" changeset="54773819" user="ibou9" uid="6841193" lat="15.2838539000000004" lon="-16.5287160999999969"/>
     <node visible="true" id="5294730931" timestamp="2019-06-03T05:49:37Z" version="2" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2814994999999971" lon="-16.5227831000000016"/>
@@ -1206,9 +1162,7 @@
     <node visible="true" id="6517545895" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2779547000000022" lon="-16.5302879000000011"/>
     <node visible="true" id="6517545896" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2787709999999972" lon="-16.5297692000000005"/>
     <node visible="true" id="6517545897" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2813818999999995" lon="-16.5280677000000011"/>
-    <node visible="true" id="6517545899" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2806438000000000" lon="-16.5285365999999989">
-        <tag k="hoot:hash" v="sha1sum:05d0f1fed62956fb2480182e5f870dec98c87b14"/>
-    </node>
+    <node visible="true" id="6517545899" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2806438000000000" lon="-16.5285365999999989"/>
     <node visible="true" id="6517545900" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2799192999999978" lon="-16.5289892000000016"/>
     <node visible="true" id="6517545901" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2791506000000012" lon="-16.5295227000000011"/>
     <node visible="true" id="6517545902" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2801927999999982" lon="-16.5310415999999982"/>
@@ -1273,6 +1227,27 @@
         <tag k="noname" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
+    <way visible="true" id="-2948" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="5189643472"/>
+        <nd ref="1977199876"/>
+        <nd ref="2142498121"/>
+        <nd ref="3668857778"/>
+        <nd ref="-1341"/>
+        <nd ref="3668857781"/>
+        <nd ref="-23"/>
+        <tag k="is_in:country_code" v="SN"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="name" v="Route de Saint-Louis"/>
+        <tag k="int_ref" v="TAH 1"/>
+        <tag k="nat_ref" v="N 2"/>
+        <tag k="source:datetime" v="2019-06-03T05:49:37Z;2015-09-11T12:28:29.000Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
     <way visible="true" id="-2941" timestamp="2019-06-03T05:49:37Z" version="3">
         <nd ref="3668874734"/>
         <nd ref="6517545919"/>
@@ -1313,6 +1288,7 @@
         <tag k="oneway" v="no"/>
         <tag k="source" v="Microsoft Bing orbital imagery"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:hash" v="sha1sum:54473f717aacbadfb463974e0edf3a67d892ab75"/>
         <tag k="name" v="Route de Saint-Louis"/>
         <tag k="source:datetime" v="2015-09-11T12:28:29.000Z"/>
         <tag k="surface" v="asphalt"/>
@@ -1390,17 +1366,12 @@
         <nd ref="5192494421"/>
         <nd ref="5189643495"/>
         <nd ref="5189643472"/>
-        <nd ref="1977199876"/>
-        <nd ref="2142498121"/>
-        <nd ref="3668857778"/>
-        <nd ref="-1341"/>
-        <nd ref="3668857781"/>
-        <nd ref="-23"/>
         <tag k="is_in:country_code" v="SN"/>
         <tag k="source" v="Microsoft Bing orbital imagery"/>
         <tag k="maxspeed" v="90"/>
         <tag k="oneway" v="no"/>
         <tag k="highway" v="trunk"/>
+        <tag k="hoot:hash" v="sha1sum:39514b8896036b7d1c27d68ff6e14979911c2e39;sha1sum:c3871b301ec12a2719a47b6badfa8a854f10b24c;sha1sum:d70afdf9d0235d514bbba540ead65cde824ad82d;sha1sum:7b9b0ab1519ee43fe603a38ee19b79574a6bf3fb;sha1sum:cc92139e58194936bb910ab8115173377ce2dfd8;sha1sum:d50fb8b15bfa840cddf20c2ed3fc5acd2556097d;sha1sum:578b24006d1efb9f1acc5a0e0d6afc4a45d50d77;sha1sum:9668ea8bcaa1528a8824e6f9fd002de64bcb5825;sha1sum:7075dc6d33780cc5c76378669a9df111014f1fdd;sha1sum:d3becd9dccfc5a488d68b797cb03c19763f5ac36"/>
         <tag k="name" v="Route de Saint-Louis"/>
         <tag k="int_ref" v="TAH 1"/>
         <tag k="nat_ref" v="N 2"/>
@@ -1980,6 +1951,7 @@
         <nd ref="3668939748"/>
         <nd ref="3668939754"/>
         <tag k="source" v="estimated"/>
+        <tag k="hoot:hash" v="sha1sum:a5c7281b2395b9ccb69c9cb9505512e8819b953e"/>
         <tag k="boundary" v="administrative"/>
         <tag k="source:datetime" v="2015-07-27T16:17:43Z"/>
         <tag k="admin_level" v="3"/>
@@ -2760,6 +2732,7 @@
         <tag k="oneway" v="no"/>
         <tag k="source" v="Microsoft Bing orbital imagery"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:fa325f358a79f738ce9a95494593dd0de21c1960"/>
         <tag k="name" v="Route de Saint-Louis"/>
         <tag k="source:datetime" v="2019-06-03T05:49:37Z;2015-09-11T12:28:29.000Z"/>
         <tag k="surface" v="asphalt"/>
@@ -3804,6 +3777,7 @@
     </relation>
     <relation visible="true" id="4828569" timestamp="2019-07-13T01:47:04Z" version="114" changeset="72201144" user="geo_roads" uid="6849512">
         <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-2948" role=""/>
         <member type="way" ref="-2887" role=""/>
         <member type="way" ref="535381757" role=""/>
         <tag k="source" v="Microsoft Bing orbital imagery"/>
@@ -3819,6 +3793,7 @@
     </relation>
     <relation visible="true" id="6134983" timestamp="2019-04-17T01:34:32Z" version="48" changeset="69291497" user="dancingVJL" uid="8392762">
         <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-2948" role=""/>
         <tag k="int_name" v="TAH 1-SN"/>
         <tag k="is_in:country_code" v="SN"/>
         <tag k="wikidata" v="Q1506411"/>

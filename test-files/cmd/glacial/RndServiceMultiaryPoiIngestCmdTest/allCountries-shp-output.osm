@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="42.50692" minlon="1.44986" maxlat="42.64991" maxlon="1.74028"/>
-    <node visible="true" id="2986043" timestamp="2019-03-04T22:33:50Z" version="1" changeset="413" lat="42.6499099999999984" lon="1.5333500000000000">
+    <node visible="true" id="2986043" timestamp="2020-05-20T14:46:30Z" version="1" changeset="99" lat="42.6499099999999984" lon="1.5333500000000000">
         <tag k="hoot:layername" v="Points"/>
         <tag k="asciiname" v="Pic de Font Blanca"/>
         <tag k="geonameid" v="2986043"/>
@@ -9,6 +9,7 @@
         <tag k="name" v="Pic de Font Blanca"/>
         <tag k="latitude" v="42.64991"/>
         <tag k="admin1_cod" v="00"/>
+        <tag k="uuid" v="{f70c7b9f-a276-5bbc-8149-23c103de2228}"/>
         <tag k="country_co" v="AD"/>
         <tag k="error_circ" v="15"/>
         <tag k="attribution" v="osm"/>
@@ -22,7 +23,7 @@
         <tag k="source" v="osm:points"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="2994701" timestamp="2019-03-04T22:33:50Z" version="1" changeset="413" lat="42.5876499999999965" lon="1.7402800000000000">
+    <node visible="true" id="2994701" timestamp="2020-05-20T14:46:30Z" version="1" changeset="99" lat="42.5876499999999965" lon="1.7402800000000000">
         <tag k="hoot:layername" v="Points"/>
         <tag k="asciiname" v="Roc Mele"/>
         <tag k="geonameid" v="2994701"/>
@@ -30,6 +31,7 @@
         <tag k="name" v="Roc Mélé"/>
         <tag k="latitude" v="42.58765"/>
         <tag k="admin1_cod" v="00"/>
+        <tag k="uuid" v="{f6224e55-cfa6-5364-bb78-e482e2d6e1c5}"/>
         <tag k="country_co" v="AD"/>
         <tag k="error_circ" v="15"/>
         <tag k="cc2" v="AD,FR"/>
@@ -44,7 +46,7 @@
         <tag k="source" v="osm:points"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3007683" timestamp="2019-03-04T22:33:50Z" version="1" changeset="413" lat="42.6120299999999972" lon="1.4736400000000001">
+    <node visible="true" id="3007683" timestamp="2020-05-20T14:46:30Z" version="1" changeset="99" lat="42.6120299999999972" lon="1.4736400000000001">
         <tag k="hoot:layername" v="Points"/>
         <tag k="asciiname" v="Pic des Langounelles"/>
         <tag k="geonameid" v="3007683"/>
@@ -52,6 +54,7 @@
         <tag k="name" v="Pic des Langounelles"/>
         <tag k="latitude" v="42.61203"/>
         <tag k="admin1_cod" v="00"/>
+        <tag k="uuid" v="{db8f0c0e-35c2-5657-ac30-811e2c1554de}"/>
         <tag k="country_co" v="AD"/>
         <tag k="error_circ" v="15"/>
         <tag k="cc2" v="AD,FR"/>
@@ -66,7 +69,7 @@
         <tag k="source" v="osm:points"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3017832" timestamp="2019-03-04T22:33:50Z" version="1" changeset="413" lat="42.5253500000000031" lon="1.7334300000000000">
+    <node visible="true" id="3017832" timestamp="2020-05-20T14:46:30Z" version="1" changeset="99" lat="42.5253500000000031" lon="1.7334300000000000">
         <tag k="hoot:layername" v="Points"/>
         <tag k="asciiname" v="Pic de les Abelletes"/>
         <tag k="geonameid" v="3017832"/>
@@ -76,6 +79,7 @@
         <tag k="admin1_cod" v="A9"/>
         <tag k="admin2_cod" v="66"/>
         <tag k="admin3_cod" v="663"/>
+        <tag k="uuid" v="{c254d8ab-3f1a-539f-91b7-98b485c5c129}"/>
         <tag k="admin4_cod" v="66146"/>
         <tag k="country_co" v="AD"/>
         <tag k="error_circ" v="15"/>
@@ -91,7 +95,7 @@
         <tag k="source" v="osm:points"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3017833" timestamp="2019-03-04T22:33:50Z" version="1" changeset="413" lat="42.5291500000000013" lon="1.7336199999999999">
+    <node visible="true" id="3017833" timestamp="2020-05-20T14:46:30Z" version="1" changeset="99" lat="42.5291500000000013" lon="1.7336199999999999">
         <tag k="hoot:layername" v="Points"/>
         <tag k="asciiname" v="Estany de les Abelletes"/>
         <tag k="geonameid" v="3017833"/>
@@ -99,6 +103,7 @@
         <tag k="name" v="Estany de les Abelletes"/>
         <tag k="latitude" v="42.52915"/>
         <tag k="admin1_cod" v="A9"/>
+        <tag k="uuid" v="{fde621f3-c915-5f50-b521-49cb75c20337}"/>
         <tag k="country_co" v="AD"/>
         <tag k="error_circ" v="15"/>
         <tag k="cc2" v="FR"/>
@@ -113,7 +118,7 @@
         <tag k="source" v="osm:points"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3023203" timestamp="2019-03-04T22:33:50Z" version="1" changeset="413" lat="42.6256800000000027" lon="1.6182300000000001">
+    <node visible="true" id="3023203" timestamp="2020-05-20T14:46:30Z" version="1" changeset="99" lat="42.6256800000000027" lon="1.6182300000000001">
         <tag k="hoot:layername" v="Points"/>
         <tag k="asciiname" v="Port Vieux de la Coume d'Ose"/>
         <tag k="geonameid" v="3023203"/>
@@ -121,6 +126,7 @@
         <tag k="name" v="Port Vieux de la Coume d’Ose"/>
         <tag k="latitude" v="42.62568"/>
         <tag k="admin1_cod" v="00"/>
+        <tag k="uuid" v="{d1012bc9-92bc-5931-aac2-aa5702f42b8b}"/>
         <tag k="country_co" v="AD"/>
         <tag k="error_circ" v="15"/>
         <tag k="attribution" v="osm"/>
@@ -134,7 +140,7 @@
         <tag k="source" v="osm:points"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3029315" timestamp="2019-03-04T22:33:50Z" version="1" changeset="413" lat="42.6000000000000014" lon="1.7333300000000000">
+    <node visible="true" id="3029315" timestamp="2020-05-20T14:46:30Z" version="1" changeset="99" lat="42.6000000000000014" lon="1.7333300000000000">
         <tag k="hoot:layername" v="Points"/>
         <tag k="asciiname" v="Port de la Cabanette"/>
         <tag k="geonameid" v="3029315"/>
@@ -144,6 +150,7 @@
         <tag k="admin1_cod" v="B3"/>
         <tag k="admin2_cod" v="09"/>
         <tag k="admin3_cod" v="091"/>
+        <tag k="uuid" v="{8f74dd78-5728-5ea3-98d1-c63311d077f3}"/>
         <tag k="admin4_cod" v="09139"/>
         <tag k="country_co" v="AD"/>
         <tag k="error_circ" v="15"/>
@@ -159,7 +166,7 @@
         <tag k="source" v="osm:points"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3034945" timestamp="2019-03-04T22:33:50Z" version="1" changeset="413" lat="42.6017200000000003" lon="1.4556199999999999">
+    <node visible="true" id="3034945" timestamp="2020-05-20T14:46:30Z" version="1" changeset="99" lat="42.6017200000000003" lon="1.4556199999999999">
         <tag k="hoot:layername" v="Points"/>
         <tag k="asciiname" v="Port Dret"/>
         <tag k="geonameid" v="3034945"/>
@@ -167,6 +174,7 @@
         <tag k="name" v="Port Dret"/>
         <tag k="latitude" v="42.60172"/>
         <tag k="admin1_cod" v="00"/>
+        <tag k="uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
         <tag k="country_co" v="AD"/>
         <tag k="error_circ" v="15"/>
         <tag k="attribution" v="osm"/>
@@ -180,7 +188,7 @@
         <tag k="source" v="osm:points"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3038814" timestamp="2019-03-04T22:33:50Z" version="1" changeset="413" lat="42.5069200000000009" lon="1.4756899999999999">
+    <node visible="true" id="3038814" timestamp="2020-05-20T14:46:30Z" version="1" changeset="99" lat="42.5069200000000009" lon="1.4756899999999999">
         <tag k="hoot:layername" v="Points"/>
         <tag k="asciiname" v="Costa de Xurius"/>
         <tag k="geonameid" v="3038814"/>
@@ -188,6 +196,7 @@
         <tag k="name" v="Costa de Xurius"/>
         <tag k="latitude" v="42.50692"/>
         <tag k="admin1_cod" v="07"/>
+        <tag k="uuid" v="{1c3e97f5-7430-5a1f-b030-9ce1e7038682}"/>
         <tag k="country_co" v="AD"/>
         <tag k="error_circ" v="15"/>
         <tag k="attribution" v="osm"/>
@@ -200,7 +209,7 @@
         <tag k="source" v="osm:points"/>
         <tag k="timezone" v="Europe/Andorra"/>
     </node>
-    <node visible="true" id="3038815" timestamp="2019-03-04T22:33:50Z" version="1" changeset="413" lat="42.5500299999999996" lon="1.4498599999999999">
+    <node visible="true" id="3038815" timestamp="2020-05-20T14:46:30Z" version="1" changeset="99" lat="42.5500299999999996" lon="1.4498599999999999">
         <tag k="hoot:layername" v="Points"/>
         <tag k="asciiname" v="Costa de Xurius"/>
         <tag k="geonameid" v="3038814"/>
@@ -208,6 +217,7 @@
         <tag k="name" v="Costa de Xurius"/>
         <tag k="latitude" v="42.50692"/>
         <tag k="admin1_cod" v="07"/>
+        <tag k="uuid" v="{1c3e97f5-7430-5a1f-b030-9ce1e7038682}"/>
         <tag k="country_co" v="AD"/>
         <tag k="error_circ" v="15"/>
         <tag k="attribution" v="osm"/>

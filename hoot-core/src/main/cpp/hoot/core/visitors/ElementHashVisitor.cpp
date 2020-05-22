@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "CalculateHashVisitor.h"
+#include "ElementHashVisitor.h"
 
 // hoot
 #include <hoot/core/conflate/review/ReviewMarker.h>
@@ -39,174 +39,21 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, ElementHashVisitor)
 
-CalculateHashVisitor::CalculateHashVisitor() :
+ElementHashVisitor::ElementHashVisitor() :
 _includeCe(false),
 _writeHashes(true),
 _collectHashes(false)
 {
   if (!_writeHashes && !_collectHashes)
   {
-    throw IllegalArgumentException("CalculateHashVisitor must either write or collect hashes.");
+    throw IllegalArgumentException("ElementHashVisitor must either write or collect hashes.");
   }
-  _nonMetadataIgnoreKeys = ConfigOptions().getCalculateHashVisitorNonMetadataIgnoreKeys();
+  _nonMetadataIgnoreKeys = ConfigOptions().getElementHashVisitorNonMetadataIgnoreKeys();
 }
 
-QString CalculateHashVisitor::toJson(const ConstElementPtr& e)
-{
-  QString result;
-  if (e->getElementType() == ElementType::Node)
-  {
-    result = _toJson(std::dynamic_pointer_cast<const Node>(e));
-  }
-  else if (e->getElementType() == ElementType::Way)
-  {
-    result = _toJson(std::dynamic_pointer_cast<const Way>(e));
-  }
-  else if (e->getElementType() == ElementType::Relation)
-  {
-    result = _toJson(std::dynamic_pointer_cast<const Relation>(e));
-  }
-  //LOG_VART(result);
-  return result;
-}
-
-QString CalculateHashVisitor::_toJson(const ConstNodePtr& node)
-{
-  QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"node\",\"tags\":{";
-
-  result += _toJson(node->getTags(), node->getRawCircularError());
-
-  const int coordinateComparisonSensitivity =
-    ConfigOptions().getNodeComparisonCoordinateSensitivity();
-  result += "}},\"geometry\":{\"type\":\"Point\",\"coordinates\":[";
-  result += QString::number(node->getX(), 'f', coordinateComparisonSensitivity);
-  result += ",";
-  result += QString::number(node->getY(), 'f', coordinateComparisonSensitivity);
-  result += "]}}";
-
-  return result;
-}
-
-QString CalculateHashVisitor::_toJson(const ConstWayPtr& way)
-{
-  if (_map == 0)
-  {
-    throw IllegalArgumentException("A map must be set when calculating a way hash.");
-  }
-
-  QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"way\",\"tags\":{";
-
-  result += _toJson(way->getTags(), way->getRawCircularError());
-
-  result += "},\"nodes\":[";
-  const std::vector<long>& nodeIds = way->getNodeIds();
-  for (size_t i = 0; i < nodeIds.size(); i++)
-  {
-    ConstNodePtr node = _map->getNode(nodeIds[i]);
-    if (node)
-    {
-      result += _toJson(node);
-      if (i != (nodeIds.size() - 1))
-      {
-        result += ",";
-      }
-    }
-  }
-  result += "]}}";
-
-  return result;
-}
-
-QString CalculateHashVisitor::_toJson(const ConstRelationPtr& relation)
-{
-  if (_map == 0)
-  {
-    throw IllegalArgumentException("A map must be set when calculating a relation hash.");
-  }
-
-  QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"relation\",\"tags\":{";
-
-  result += _toJson(relation->getTags(), relation->getRawCircularError());
-
-  result += "},\"members\":[";
-  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-  for (size_t i = 0; i < relationMembers.size(); i++)
-  {
-    ConstElementPtr member = _map->getElement(relationMembers[i].getElementId());
-    if (member)
-    {
-      result += toJson(member);
-      if (i != (relationMembers.size() - 1))
-      {
-        result += ",";
-      }
-    }
-  }
-  result += "]}}";
-
-  return result;
-}
-
-QString CalculateHashVisitor::_toJson(const Tags& tags, const double ce)
-{
-  QString result;
-
-  // Put the tags into an ordered map that only contains the non-metadata (info) tags. As
-  // implemented this is likely quite slow.
-  QMap<QString, QString> infoTags;
-  foreach (QString key, tags.keys())
-  {
-    QString v = tags[key];
-    if (!_nonMetadataIgnoreKeys.contains(key) &&
-        OsmSchema::getInstance().isMetaData(key, v) == false)
-    {
-      infoTags[key] = v;
-    }
-  }
-  //LOG_VART(infoTags.keys());
-
-  if (_includeCe)
-  {
-    const int circularErrorComparisonSensitivity =
-      ConfigOptions().getNodeComparisonCircularErrorSensitivity();
-    if (ce >= 0)
-    {
-      infoTags[MetadataTags::ErrorCircular()] =
-        QString::number(ce, 'g', circularErrorComparisonSensitivity);
-    }
-  }
-
-
-  bool first = true;
-  foreach (QString key, infoTags.keys())
-  {
-    if (!first)
-    {
-      result += ",";
-    }
-    result += QString("\"%1\":\"%2\"").arg(key, infoTags[key]);
-    first = false;
-  }
-
-  //LOG_VART(result);
-  return result;
-}
-
-QByteArray CalculateHashVisitor::toHash(const ConstElementPtr& e)
-{
-  QCryptographicHash hash(QCryptographicHash::Sha1);
-  hash.addData(toJson(e).toLatin1().constData());
-  return hash.result();
-}
-
-QString CalculateHashVisitor::toHashString(const ConstElementPtr& e)
-{
-  return "sha1sum:" + QString::fromUtf8(toHash(e).toHex());
-}
-
-void CalculateHashVisitor::visit(const ElementPtr& e)
+void ElementHashVisitor::visit(const ElementPtr& e)
 {
   // don't calculate hashes on review relations
   if (ReviewMarker::isReview(e) == false)
@@ -233,6 +80,178 @@ void CalculateHashVisitor::visit(const ElementPtr& e)
       }
     }
   }
+}
+
+QString ElementHashVisitor::toJson(const ConstElementPtr& e) const
+{
+  QString result;
+  if (e->getElementType() == ElementType::Node)
+  {
+    result = _toJson(std::dynamic_pointer_cast<const Node>(e));
+  }
+  else if (e->getElementType() == ElementType::Way)
+  {
+    result = _toJson(std::dynamic_pointer_cast<const Way>(e));
+  }
+  else if (e->getElementType() == ElementType::Relation)
+  {
+    result = _toJson(std::dynamic_pointer_cast<const Relation>(e));
+  }
+  //LOG_VART(result);
+  return result;
+}
+
+QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
+{
+  QString result = "{\"type\":\"node\",\"tags\":{";
+
+  result += toJson(node->getTags(), node->getRawCircularError());
+
+  const int coordinateComparisonSensitivity =
+    ConfigOptions().getNodeComparisonCoordinateSensitivity();
+  result += "},\"x\":";
+  result += QString::number(node->getX(), 'f', coordinateComparisonSensitivity);
+  result += ",\"y\":";
+  result += QString::number(node->getY(), 'f', coordinateComparisonSensitivity);
+  result += "}";
+
+  return result;
+}
+
+QString ElementHashVisitor::_toJson(const ConstWayPtr& way) const
+{
+  if (_map == 0)
+  {
+    throw IllegalArgumentException("A map must be set when calculating a way hash.");
+  }
+
+  QString result = "{\"type\":\"way\",\"tags\":{";
+
+  result += toJson(way->getTags(), way->getRawCircularError());
+
+  result += "},\"nodes\":[";
+  const std::vector<long>& nodeIds = way->getNodeIds();
+  for (size_t i = 0; i < nodeIds.size(); i++)
+  {
+    ConstNodePtr node = _map->getNode(nodeIds[i]);
+    if (node)
+    {
+      result += _toJson(node);
+      if (i != (nodeIds.size() - 1))
+      {
+        result += ",";
+      }
+    }
+  }
+  result += "]}";
+
+  return result;
+}
+
+QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation) const
+{
+  if (_map == 0)
+  {
+    throw IllegalArgumentException("A map must be set when calculating a relation hash.");
+  }
+
+  QString result = "{\"type\":\"relation\",\"tags\":{";
+
+  result += toJson(relation->getTags(), relation->getRawCircularError());
+
+  result += "},\"members\":[";
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    const RelationData::Entry member = relationMembers[i];
+    ConstElementPtr memberElement = _map->getElement(member.getElementId());
+    if (memberElement)
+    {
+      QString memberJson = toJson(memberElement);
+      const QString typeStr = memberElement->getElementType().toString().toLower();
+      memberJson =
+        memberJson.replace(
+          "\"type\":\"" + typeStr + "\",",
+          "\"type\":\"" + typeStr + "\",\"role\":\"" + member.getRole() + "\",");
+      result += memberJson;
+      if (i != (relationMembers.size() - 1))
+      {
+        result += ",";
+      }
+    }
+  }
+  result += "]}";
+
+  return result;
+}
+
+QString ElementHashVisitor::toJson(const Tags& tags, const double ce) const
+{
+  QString result;
+
+  // Put the tags into an ordered map that only contains the non-metadata (info) tags. As
+  // implemented, this is likely quite slow.
+  QMap<QString, QString> infoTags;
+  foreach (QString key, tags.keys())
+  {
+    QString v = tags[key];
+    if (!_nonMetadataIgnoreKeys.contains(key) &&
+        OsmSchema::getInstance().isMetaData(key, v) == false)
+    {
+      infoTags[key] = v;
+    }
+  }
+  //LOG_VART(infoTags.keys());
+
+  if (_includeCe && ce != -1.0)
+  {
+    const int circularErrorComparisonSensitivity =
+      ConfigOptions().getNodeComparisonCircularErrorSensitivity();
+    if (ce >= 0)
+    {
+      infoTags[MetadataTags::ErrorCircular()] =
+        QString::number(ce, 'g', circularErrorComparisonSensitivity);
+    }
+  }
+
+
+  bool first = true;
+  foreach (QString key, infoTags.keys())
+  {
+    if (!first)
+    {
+      result += ",";
+    }
+    result += QString("\"%1\":\"%2\"").arg(key, infoTags[key]);
+    first = false;
+  }
+
+  //LOG_VART(result);
+  return result;
+}
+
+QByteArray ElementHashVisitor::toHash(const ConstElementPtr& e) const
+{
+  QCryptographicHash hash(QCryptographicHash::Sha1);
+  hash.addData(toJson(e).toLatin1().constData());
+  return hash.result();
+}
+
+QByteArray ElementHashVisitor::toHash(const Tags& tags, const double ce) const
+{
+  QCryptographicHash hash(QCryptographicHash::Sha1);
+  hash.addData(toJson(tags, ce).toLatin1().constData());
+  return hash.result();
+}
+
+QString ElementHashVisitor::toHashString(const ConstElementPtr& e) const
+{
+  return "sha1sum:" + QString::fromUtf8(toHash(e).toHex());
+}
+
+QString ElementHashVisitor::toHashString(const Tags& tags, const double ce) const
+{
+  return "sha1sum:" + QString::fromUtf8(toHash(tags, ce).toHex());
 }
 
 }

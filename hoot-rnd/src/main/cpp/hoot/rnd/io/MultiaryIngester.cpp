@@ -35,7 +35,7 @@
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
-#include <hoot/core/visitors/CalculateHashVisitor2.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmChangeWriterFactory.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
@@ -224,7 +224,7 @@ std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream
     conf().getString(ConfigOptions::getSchemaTranslationScriptKey()));
 
   visitors.append(translationVisitor);
-  std::shared_ptr<CalculateHashVisitor2> hashVis(new CalculateHashVisitor2());
+  std::shared_ptr<MultiaryPoiHashVisitor> hashVis(new MultiaryPoiHashVisitor());
   hashVis->setIncludeCircularError(true);
   visitors.append(hashVis);
   std::shared_ptr<ElementInputStream> filteredNewInputStream(
