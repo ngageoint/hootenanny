@@ -12613,7 +12613,124 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1022"/>
     </node>
-    <way visible="true" id="-11657" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11831" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-27985"/>
+        <nd ref="-27986"/>
+        <nd ref="-27987"/>
+        <nd ref="-27988"/>
+        <nd ref="-27989"/>
+        <nd ref="-9479"/>
+        <nd ref="-12864"/>
+        <nd ref="-27990"/>
+        <nd ref="-27991"/>
+        <nd ref="-27992"/>
+        <nd ref="-27993"/>
+        <nd ref="-27994"/>
+        <nd ref="-27995"/>
+        <nd ref="-27996"/>
+        <nd ref="-27997"/>
+        <nd ref="-27998"/>
+        <nd ref="-27999"/>
+        <nd ref="-28000"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:b87fe017b3f6267f51fc3bf6d7936173fe899fc9;sha1sum:9d1ee648759d448d543d73eca77e90d9720aae37"/>
+        <tag k="name" v="17th St SW"/>
+        <tag k="hoot:score:uuid" v="{affa8ad9-7bc1-5ef6-b576-a478e54211fb}"/>
+        <tag k="uuid" v="{a4433ded-7d2e-5736-8a87-ea653c7336e5}"/>
+        <tag k="hoot:id" v="-11831"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.1"/>
+        <tag k="hoot:score:miss" v="0.9"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11807" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-79960"/>
+        <nd ref="-79961"/>
+        <nd ref="-79962"/>
+        <nd ref="-79963"/>
+        <nd ref="-79964"/>
+        <nd ref="-79965"/>
+        <nd ref="-79966"/>
+        <nd ref="-79967"/>
+        <nd ref="-79968"/>
+        <nd ref="-79969"/>
+        <nd ref="-38727"/>
+        <nd ref="-79970"/>
+        <nd ref="-79971"/>
+        <nd ref="-79972"/>
+        <nd ref="-79973"/>
+        <nd ref="-79974"/>
+        <nd ref="-79975"/>
+        <nd ref="-79976"/>
+        <nd ref="-79977"/>
+        <nd ref="-79978"/>
+        <nd ref="-79979"/>
+        <nd ref="-79980"/>
+        <nd ref="-79981"/>
+        <nd ref="-79982"/>
+        <nd ref="-79983"/>
+        <nd ref="-79984"/>
+        <nd ref="-79985"/>
+        <nd ref="-79986"/>
+        <nd ref="-79987"/>
+        <nd ref="-79988"/>
+        <nd ref="-79989"/>
+        <nd ref="-79990"/>
+        <nd ref="-79991"/>
+        <nd ref="-79992"/>
+        <nd ref="-79993"/>
+        <nd ref="-79994"/>
+        <nd ref="-79995"/>
+        <nd ref="-79996"/>
+        <nd ref="-79997"/>
+        <nd ref="-79998"/>
+        <nd ref="-79999"/>
+        <nd ref="-80000"/>
+        <nd ref="-80001"/>
+        <nd ref="-27131"/>
+        <nd ref="-80002"/>
+        <nd ref="-80003"/>
+        <nd ref="-80004"/>
+        <nd ref="-80005"/>
+        <nd ref="-80006"/>
+        <nd ref="-80007"/>
+        <nd ref="-80008"/>
+        <nd ref="-80009"/>
+        <nd ref="-80010"/>
+        <nd ref="-80011"/>
+        <nd ref="-80012"/>
+        <nd ref="-80013"/>
+        <nd ref="-80014"/>
+        <nd ref="-80015"/>
+        <nd ref="-80016"/>
+        <nd ref="-80017"/>
+        <nd ref="-80018"/>
+        <nd ref="-79921"/>
+        <nd ref="-80019"/>
+        <nd ref="-80020"/>
+        <nd ref="-80021"/>
+        <nd ref="-80022"/>
+        <nd ref="-80023"/>
+        <nd ref="-80024"/>
+        <nd ref="-80025"/>
+        <nd ref="-49466"/>
+        <nd ref="-80026"/>
+        <nd ref="-1039"/>
+        <nd ref="-36950"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:172af1eaf6b72d8b4b60478f8cbc739bb07be891;sha1sum:46c01967a1acf49e893557c19832536b301865b0;sha1sum:002470a41c9c41f8abb3ef6adc00cd4d12d6ef71;sha1sum:6d1903a556a1ebebab4a7c6c66115e2b93dc783f;sha1sum:f6cba81bf857b58f4f0b85966831e025a19e216b"/>
+        <tag k="name" v="22nd St NW"/>
+        <tag k="hoot:score:uuid" v="{8f74dd78-5728-5ea3-98d1-c63311d077f3}"/>
+        <tag k="uuid" v="{db8f0c0e-35c2-5657-ac30-811e2c1554de}"/>
+        <tag k="hoot:id" v="-11807"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.975"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11801" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-60891"/>
         <nd ref="-60890"/>
         <nd ref="-60889"/>
@@ -12622,13 +12739,13 @@
         <nd ref="-39101"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:82721056cb1b1a0fe41904bf5d87cc84f024e84e;sha1sum:793b1eb4b6a075eee218a7a7c3e8ef7a7f33cb55;sha1sum:0b80c83d3c179a6c4badbdf997efbab98e5d05ac;sha1sum:d77b669eb2fa76bf3f005b9462cd2ae89a20098b"/>
+        <tag k="hoot:hash" v="sha1sum:82721056cb1b1a0fe41904bf5d87cc84f024e84e;sha1sum:793b1eb4b6a075eee218a7a7c3e8ef7a7f33cb55"/>
         <tag k="name" v="14th St NW"/>
         <tag k="alt_name" v="14th St SW;US Hwy 1"/>
-        <tag k="hoot:id" v="-11657"/>
+        <tag k="hoot:id" v="-11801"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11647" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11791" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89011"/>
         <nd ref="-1360"/>
         <tag k="hoot:status" v="3"/>
@@ -12636,10 +12753,10 @@
         <tag k="hoot:hash" v="sha1sum:83231501cde861cf56c941449b4951dd6e7d1608;sha1sum:decd6bff8b4bfbf11257451ae082e6223b4c25dc"/>
         <tag k="name" v="US Hwy 1"/>
         <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
-        <tag k="hoot:id" v="-11647"/>
+        <tag k="hoot:id" v="-11791"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11629" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11773" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-88985"/>
         <nd ref="-39109"/>
         <tag k="hoot:status" v="3"/>
@@ -12647,10 +12764,10 @@
         <tag k="hoot:hash" v="sha1sum:02d02704277ac9f0dc0f03c289fa9b604a591d89;sha1sum:b820eac4f292163beb28cbfc52296cdad0b01f86"/>
         <tag k="name" v="15th St SW"/>
         <tag k="alt_name" v="Raoul Wallenberg Pl"/>
-        <tag k="hoot:id" v="-11629"/>
+        <tag k="hoot:id" v="-11773"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11623" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11767" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27114"/>
         <nd ref="-27115"/>
         <nd ref="-27116"/>
@@ -12699,28 +12816,79 @@
         <nd ref="-27158"/>
         <nd ref="-27159"/>
         <nd ref="-27160"/>
-        <nd ref="-27161"/>
-        <nd ref="-27162"/>
-        <nd ref="-27163"/>
-        <nd ref="-27164"/>
-        <nd ref="-27165"/>
-        <nd ref="-27166"/>
-        <nd ref="-27167"/>
-        <nd ref="-27168"/>
-        <nd ref="-14490"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:6d3a642c84390fa6f75abaf5a1e4e23ee630cd80;sha1sum:14bb5b545db3df35e603d4c3414c09127d43e5e1;sha1sum:5d330118c1b2d8f7499a618ffcf76e38eae17cb4;sha1sum:78934d538273708bcb9b670b4f44d33ad0c93321;sha1sum:8b70d3ea3835456340b0b40883ab1d23abfcf846;sha1sum:e25d8c8ee4225a6d3730a82eb7ba3266eb822481;sha1sum:c772ebd8058a81732ee1e886d3825d7b328a23f5;sha1sum:627a2039357f19f73e6edc2105f0560de19bd73e;sha1sum:e7d66e0c75eeddc4663364b7e997726ec4e28a09;sha1sum:a121c1da39bd01f94db1148f2b045fe76a87b59a;sha1sum:03fc97dfc9a51b2e055a9bba45118f1b2da4f156"/>
+        <tag k="hoot:hash" v="sha1sum:5d330118c1b2d8f7499a618ffcf76e38eae17cb4;sha1sum:78934d538273708bcb9b670b4f44d33ad0c93321;sha1sum:8b70d3ea3835456340b0b40883ab1d23abfcf846;sha1sum:e25d8c8ee4225a6d3730a82eb7ba3266eb822481;sha1sum:c772ebd8058a81732ee1e886d3825d7b328a23f5;sha1sum:627a2039357f19f73e6edc2105f0560de19bd73e;sha1sum:e7d66e0c75eeddc4663364b7e997726ec4e28a09"/>
         <tag k="name" v="H St NW"/>
-        <tag k="hoot:score:uuid" v="{33d3977e-0451-5e0f-a8ad-687038806b1c}"/>
-        <tag k="uuid" v="{e067beac-a57f-58d0-86c7-89edcbc82c10}"/>
-        <tag k="hoot:id" v="-11623"/>
-        <tag k="hoot:score:match" v="0.35"/>
+        <tag k="hoot:score:uuid" v="{d453457d-ddd9-5b99-8149-c68d413b7175}"/>
+        <tag k="uuid" v="{69d6c63a-d959-5f87-aac2-9f928f42b781}"/>
+        <tag k="hoot:id" v="-11767"/>
+        <tag k="hoot:score:match" v="0"/>
         <tag k="hoot:score:review" v="0.025"/>
-        <tag k="hoot:score:miss" v="0.625"/>
+        <tag k="hoot:score:miss" v="0.975"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11578" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11752" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-29862"/>
+        <nd ref="-29863"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="E St Expy"/>
+        <tag k="hoot:score:uuid" v="{765647c3-5857-5cd8-a9aa-1070abb02b42}"/>
+        <tag k="uuid" v="{02cce939-83d8-51a8-b861-b95b73166491}"/>
+        <tag k="hoot:id" v="-11752"/>
+        <tag k="hoot:score:match" v="0.175"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.8"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11737" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1040"/>
+        <nd ref="-52807"/>
+        <nd ref="-80356"/>
+        <nd ref="-49654"/>
+        <nd ref="-14817"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:06701f0da0272df833b22b61715d4034383eca9d"/>
+        <tag k="hoot:score:uuid" v="{cacab830-ce43-5854-8b86-b2b75d5b5ba7}"/>
+        <tag k="uuid" v="{a3ba5a1b-3487-58ed-9a89-77d37d04fa0a}"/>
+        <tag k="hoot:id" v="-11737"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.975"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11725" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88986"/>
+        <nd ref="-1768"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="12th St SW"/>
+        <tag k="hoot:score:uuid" v="{dac813cb-655e-59a2-9bc8-eab76d0e5c71}"/>
+        <tag k="uuid" v="{30bde504-e31d-5600-b14a-c1add791002c}"/>
+        <tag k="hoot:id" v="-11725"/>
+        <tag k="hoot:score:match" v="0.175"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.8"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11716" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1047"/>
+        <nd ref="-80165"/>
+        <nd ref="-49651"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Virginia Ave NW"/>
+        <tag k="hoot:score:uuid" v="{144ec689-2343-5991-9dc0-aa2ecb35bc29}"/>
+        <tag k="uuid" v="{c6f4afbf-7d1c-51b3-8c3e-39fb500aa87b}"/>
+        <tag k="hoot:id" v="-11716"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.25"/>
+        <tag k="hoot:score:miss" v="0.75"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11701" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-15170"/>
         <nd ref="-50200"/>
         <nd ref="-50199"/>
@@ -12750,13 +12918,13 @@
         <nd ref="-15054"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:bd1244553651955a7db41c2f336fff66f14ad64d;sha1sum:705860440eef43fa25b89d1659af5507ec0e50a8;sha1sum:9a4650afc3ef6aa4eb7f975ea291961d232dee76;sha1sum:a0024928b8f304da408db9b77a2bab2571c5fee2;sha1sum:35f156658ffc701b630b71374d97e788a51b11ab;sha1sum:d8abb21cb1e0a4d5152a3eb765b0e5278c2900a5"/>
+        <tag k="hoot:hash" v="sha1sum:bd1244553651955a7db41c2f336fff66f14ad64d;sha1sum:705860440eef43fa25b89d1659af5507ec0e50a8"/>
         <tag k="name" v="Raoul Wallenberg Pl SW"/>
         <tag k="alt_name" v="15th St SW"/>
-        <tag k="hoot:id" v="-11578"/>
+        <tag k="hoot:id" v="-11701"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11553" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11670" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1040"/>
         <nd ref="-60528"/>
         <nd ref="-60529"/>
@@ -12790,28 +12958,40 @@
         <nd ref="-1065"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:84de77009abf079bbc175069fd7d4ad366a8bba3;sha1sum:17de1146fe13347c579f01c95f227b8db790e45f;sha1sum:be009fe88d47f0db69a1af395b37a180593810aa;sha1sum:054027560ebc389b32679cc66002d6e4c62ccfeb;sha1sum:7826f3e9e606ca603dcf6377fbdf4bc7b243c464;sha1sum:ab5750c87fa1287d70eaec81990652495386ae87;sha1sum:84818049115038b909c968070749ca626c28c206;sha1sum:317f6b8f20afb809e98d2ad57921ee8fc9dcffb8"/>
+        <tag k="hoot:hash" v="sha1sum:be009fe88d47f0db69a1af395b37a180593810aa;sha1sum:054027560ebc389b32679cc66002d6e4c62ccfeb;sha1sum:7826f3e9e606ca603dcf6377fbdf4bc7b243c464;sha1sum:ab5750c87fa1287d70eaec81990652495386ae87;sha1sum:84818049115038b909c968070749ca626c28c206;sha1sum:317f6b8f20afb809e98d2ad57921ee8fc9dcffb8"/>
         <tag k="name" v="25th St NW"/>
         <tag k="alt_name" v="New Hampshire Ave NW"/>
-        <tag k="hoot:id" v="-11553"/>
+        <tag k="hoot:id" v="-11670"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11547" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11664" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1772"/>
         <nd ref="-88949"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:48fbae2dd30be303be96beede8e5a3b9a3c10495;sha1sum:bfd22a8eca5e9f6aa9353ac35d0f2979b2451c3a"/>
         <tag k="name" v="W Basin Dr SW"/>
         <tag k="hoot:score:uuid" v="{da6e3872-b4f0-5be9-b346-ce1a7694668e}"/>
         <tag k="uuid" v="{00e22c8e-155b-5de4-a0fa-3e98ef220d01}"/>
-        <tag k="hoot:id" v="-11547"/>
+        <tag k="hoot:id" v="-11664"/>
         <tag k="hoot:score:match" v="0"/>
         <tag k="hoot:score:review" v="0.025"/>
         <tag k="hoot:score:miss" v="0.975"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11544" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11661" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7226"/>
+        <nd ref="-7227"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:score:uuid" v="{94d2266d-7d7e-57b2-9556-2998c17e4371}"/>
+        <tag k="uuid" v="{f69d74b4-9285-51c8-99b1-6160c121650f}"/>
+        <tag k="hoot:id" v="-11661"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.1"/>
+        <tag k="hoot:score:miss" v="0.9"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11655" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89001"/>
         <nd ref="-70450"/>
         <nd ref="-70451"/>
@@ -12852,12 +13032,12 @@
         <nd ref="-49510"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:f7d2621d1d9503ab2693e78e103e0e0b66ab0f0d;sha1sum:9b4bdbe1e356de1b48221f048064953978721551;sha1sum:ab9787968c6b5c4e044d2abebfe9c4d6017b8cfa;sha1sum:3bc73699003ce68a1acd86e71b2be2dfc5cf3c05;sha1sum:6672487a27a3e5d5281044ac92c55a52978c2e78;sha1sum:153a1443faa50486deab042590964f86d021c6ed;sha1sum:88f576de22a7e0392ac69f2ec6a6e372cb5fa3a7;sha1sum:d750f0a877ffeb0dd9a9e80ee8445cb6f5ffb630;sha1sum:cce5ad1eb70aa6821558ea4229aa261c583063ac;sha1sum:fb534df2fce3b17ab175aaf6d118e046934ca4c0;sha1sum:6f7c223946518f79eda899710bd18e900d9e4f8e;sha1sum:895a8c3a01a13e8f891ec7f75a1cadd284a34f50;sha1sum:7212e20abcccd1219e36df4e96992913c9ff445a"/>
+        <tag k="hoot:hash" v="sha1sum:ab9787968c6b5c4e044d2abebfe9c4d6017b8cfa;sha1sum:3bc73699003ce68a1acd86e71b2be2dfc5cf3c05;sha1sum:6672487a27a3e5d5281044ac92c55a52978c2e78;sha1sum:153a1443faa50486deab042590964f86d021c6ed;sha1sum:88f576de22a7e0392ac69f2ec6a6e372cb5fa3a7;sha1sum:d750f0a877ffeb0dd9a9e80ee8445cb6f5ffb630;sha1sum:cce5ad1eb70aa6821558ea4229aa261c583063ac"/>
         <tag k="name" v="I St NW"/>
-        <tag k="hoot:id" v="-11544"/>
+        <tag k="hoot:id" v="-11655"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11538" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11646" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14818"/>
         <nd ref="-14819"/>
         <nd ref="-14820"/>
@@ -12872,11 +13052,11 @@
         <nd ref="-9837"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:24ed7b209640803849ccfd70433932849d7b9acd;sha1sum:567768d44a30fcc999640e5c577876ecdf6f35f0;sha1sum:d15776b507283b56126ba48da68c2190e7d6843f;sha1sum:fa78b6511d9d0e914148b2192fcce0f39d5f31d9"/>
-        <tag k="hoot:id" v="-11538"/>
+        <tag k="hoot:hash" v="sha1sum:d15776b507283b56126ba48da68c2190e7d6843f;sha1sum:fa78b6511d9d0e914148b2192fcce0f39d5f31d9"/>
+        <tag k="hoot:id" v="-11646"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11535" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11643" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-88953"/>
         <nd ref="-14772"/>
         <nd ref="-14773"/>
@@ -12919,12 +13099,12 @@
         <nd ref="-14809"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:da64150f32065a61bc0cf72e66db9b9c50f7758d;sha1sum:061a0be5864c8e365e5827a0fa1d3fe05704cc05;sha1sum:c7d799adf91e903a3b926bc29b989b442b2608b4;sha1sum:d6c57e6ba56254bf3563cf748d2f91616d1b0abe;sha1sum:f024bdeb08cd9a363b844e014555c8bc5910d1d8;sha1sum:9f4fd37099d5f109c4fb5bbac541c3ef68e6d67b;sha1sum:b5c6ab131412f39a15c1f38547ce27182b336dc4;sha1sum:19f48a553f29f0bab6f7c5e58d50dcafaf64b21f;sha1sum:a89effcfef5dfe3f55c7b3ce24cc79a5321d2be0;sha1sum:18ddf37079b9e734b7047814d276470accb05a77;sha1sum:a7c07b81ca617e3eb01ed18e381e44722739ac15;sha1sum:330963539225f122444dc8a267ca38cac739f8b4"/>
+        <tag k="hoot:hash" v="sha1sum:c7d799adf91e903a3b926bc29b989b442b2608b4;sha1sum:d6c57e6ba56254bf3563cf748d2f91616d1b0abe;sha1sum:f024bdeb08cd9a363b844e014555c8bc5910d1d8;sha1sum:9f4fd37099d5f109c4fb5bbac541c3ef68e6d67b;sha1sum:b5c6ab131412f39a15c1f38547ce27182b336dc4;sha1sum:19f48a553f29f0bab6f7c5e58d50dcafaf64b21f;sha1sum:a89effcfef5dfe3f55c7b3ce24cc79a5321d2be0;sha1sum:18ddf37079b9e734b7047814d276470accb05a77"/>
         <tag k="name" v="H St NW"/>
-        <tag k="hoot:id" v="-11535"/>
+        <tag k="hoot:id" v="-11643"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11529" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11637" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1772"/>
         <nd ref="-36915"/>
         <nd ref="-36916"/>
@@ -12933,17 +13113,67 @@
         <nd ref="-88963"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:d0505f0409fb7590f4bc28cc2336827161ab43ca;sha1sum:11730a5ddaa7392a63cad6192c617e1244b5c8da"/>
         <tag k="name" v="W Basin Dr SW"/>
         <tag k="hoot:score:uuid" v="{00e22c8e-155b-5de4-a0fa-3e98ef220d01}"/>
         <tag k="uuid" v="{da6e3872-b4f0-5be9-b346-ce1a7694668e}"/>
-        <tag k="hoot:id" v="-11529"/>
+        <tag k="hoot:id" v="-11637"/>
         <tag k="hoot:score:match" v="0"/>
         <tag k="hoot:score:review" v="0.025"/>
         <tag k="hoot:score:miss" v="0.975"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11511" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11625" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-70543"/>
+        <nd ref="-49690"/>
+        <nd ref="-22771"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:score:uuid" v="{51895d6e-997c-5077-a053-f6c74d678d61}"/>
+        <tag k="uuid" v="{dfd4908f-657d-57c4-9936-5c0cba4fd624};{b0f18d71-0713-54de-9940-bfcf189baa23}"/>
+        <tag k="hoot:id" v="-11625"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.5"/>
+        <tag k="hoot:score:miss" v="0.5"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11616" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36947"/>
+        <nd ref="-55145"/>
+        <nd ref="-55146"/>
+        <nd ref="-55147"/>
+        <nd ref="-55148"/>
+        <nd ref="-55149"/>
+        <nd ref="-55150"/>
+        <nd ref="-7226"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:score:uuid" v="{94d2266d-7d7e-57b2-9556-2998c17e4371}"/>
+        <tag k="uuid" v="{ee5efb97-18e3-5230-9800-62ed07d81cae};{94d2266d-7d7e-57b2-9556-2998c17e4371}"/>
+        <tag k="hoot:id" v="-11616"/>
+        <tag k="hoot:score:match" v="0.275"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.7"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11613" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36941"/>
+        <nd ref="-36942"/>
+        <nd ref="-36943"/>
+        <nd ref="-36944"/>
+        <nd ref="-36945"/>
+        <nd ref="-36946"/>
+        <nd ref="-36947"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:score:uuid" v="{d1012bc9-92bc-5931-aac2-aa5702f42b8b}"/>
+        <tag k="uuid" v="{6117767e-8a0b-5624-a599-fa50f96213a6}"/>
+        <tag k="hoot:id" v="-11613"/>
+        <tag k="hoot:score:match" v="0.1"/>
+        <tag k="hoot:score:review" v="0.05"/>
+        <tag k="hoot:score:miss" v="0.85"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11604" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14511"/>
         <nd ref="-36959"/>
         <nd ref="-21298"/>
@@ -12953,10 +13183,24 @@
         <tag k="hoot:hash" v="sha1sum:cdcedee14e973e432ebe31e87d9655a58e3b307a;sha1sum:a848952618e86a22bfec7ce4eb6c294cef547629;sha1sum:a2e9ab06c68d82cabbafafab8af09f0954be637f;sha1sum:53d6672468b1b25465a99de75f286e8353b6d10e"/>
         <tag k="name" v="US Hwy 29"/>
         <tag k="alt_name" v="K St NW"/>
-        <tag k="hoot:id" v="-11511"/>
+        <tag k="hoot:id" v="-11604"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11502" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11601" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-49736"/>
+        <nd ref="-27259"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Virginia Avenue North W"/>
+        <tag k="hoot:score:uuid" v="{7d3f5ab4-9d53-54dd-8e29-25591f352188}"/>
+        <tag k="uuid" v="{210ca3aa-cee4-5927-bde0-37d8ea31fc4a}"/>
+        <tag k="hoot:id" v="-11601"/>
+        <tag k="hoot:score:match" v="0.175"/>
+        <tag k="hoot:score:review" v="0.075"/>
+        <tag k="hoot:score:miss" v="0.75"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11592" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1032"/>
         <nd ref="-1033"/>
         <nd ref="-1034"/>
@@ -12967,11 +13211,11 @@
         <nd ref="-1039"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:807b36bc78fc81dbdd4299ce12467e66d2116a2b;sha1sum:ae910e3b7cd42a23c0a973b5272c7182b0fcacfe;sha1sum:5c0955c983d026121a7ad9bdb0a0c2d528d2f70e"/>
-        <tag k="hoot:id" v="-11502"/>
+        <tag k="hoot:hash" v="sha1sum:5c0955c983d026121a7ad9bdb0a0c2d528d2f70e"/>
+        <tag k="hoot:id" v="-11592"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11496" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11586" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-24823"/>
         <nd ref="-24824"/>
         <nd ref="-24825"/>
@@ -12980,51 +13224,147 @@
         <nd ref="-9821"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:b8fe85695698ebcd8545e4203d703d0c1688b4c4;sha1sum:81304f5bc3dea61be10dca3a1ff5b894b86a2d58"/>
-        <tag k="hoot:id" v="-11496"/>
+        <tag k="hoot:id" v="-11586"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11487" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11574" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-49562"/>
+        <nd ref="-80319"/>
+        <nd ref="-80320"/>
+        <nd ref="-80321"/>
+        <nd ref="-80322"/>
+        <nd ref="-14809"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:score:uuid" v="{5bcc684e-e8b4-5fa0-9205-d084af3b4a2c}"/>
+        <tag k="uuid" v="{7ea678f2-d2a2-5062-8d80-a1be33b7db83}"/>
+        <tag k="hoot:id" v="-11574"/>
+        <tag k="hoot:score:match" v="0.3"/>
+        <tag k="hoot:score:review" v="0.1"/>
+        <tag k="hoot:score:miss" v="0.6"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11571" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7227"/>
+        <nd ref="-59334"/>
+        <nd ref="-59335"/>
+        <nd ref="-36941"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:score:uuid" v="{6117767e-8a0b-5624-a599-fa50f96213a6}"/>
+        <tag k="uuid" v="{d1012bc9-92bc-5931-aac2-aa5702f42b8b}"/>
+        <tag k="hoot:id" v="-11571"/>
+        <tag k="hoot:score:match" v="0.1"/>
+        <tag k="hoot:score:review" v="0.05"/>
+        <tag k="hoot:score:miss" v="0.85"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11565" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-78819"/>
         <nd ref="-59274"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:7d050f41caacc8501b12c3de8e289a7a79c4a316;sha1sum:6a2924e64dc556398f1896db2486d288252a01bc"/>
         <tag k="name" v="Snows Ct NW"/>
-        <tag k="hoot:id" v="-11487"/>
+        <tag k="hoot:id" v="-11565"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11484" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11562" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14817"/>
         <nd ref="-1046"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:339a926411d86fa1265ab88946f2a062fff631e3;sha1sum:5e3d7ae95a4c40500cf2a728f30cc1472b200bae"/>
         <tag k="name" v="G St NW"/>
         <tag k="hoot:score:uuid" v="{697fd29c-f267-54e1-b21a-a531d7ab8b9c}"/>
         <tag k="uuid" v="{e380af90-03a6-5dfe-b6a3-e8226c8e7244}"/>
         <tag k="alt_name" v="Virginia Avenue North W"/>
-        <tag k="hoot:id" v="-11484"/>
+        <tag k="hoot:id" v="-11562"/>
         <tag k="hoot:score:match" v="0.025"/>
         <tag k="hoot:score:review" v="0.15"/>
         <tag k="hoot:score:miss" v="0.825"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11451" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1027"/>
-        <nd ref="-1028"/>
-        <nd ref="-1029"/>
-        <nd ref="-1030"/>
-        <nd ref="-88959"/>
+    <way visible="true" id="-11556" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-27160"/>
+        <nd ref="-27161"/>
+        <nd ref="-27162"/>
+        <nd ref="-27163"/>
+        <nd ref="-27164"/>
+        <nd ref="-27165"/>
+        <nd ref="-27166"/>
+        <nd ref="-27167"/>
+        <nd ref="-27168"/>
+        <nd ref="-14490"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:bf65fb7881ae88fe0ff5b0f9300c0c5f6d4eb5aa;sha1sum:a9de63d394910079a42d9c14ae19955ada209532;sha1sum:8269a96b2a8bd7d1ac42dec9cc1db125d756f50b;sha1sum:7e63a552dcf100e7069e2eb9789f362ef3c029f6;sha1sum:4f8bb433fccc183f00f6e6fafe28fcc8bab63b4a;sha1sum:ecad37ca7b978e8b694eda75ba93de4655774554;sha1sum:cdaa90185e540e00ef699eb4bbf119c27481482c;sha1sum:ba24a42504aab5ed8275fbbba9f9e9c2239126e4"/>
-        <tag k="name" v="US Hwy 29"/>
-        <tag k="alt_name" v="K St NW"/>
-        <tag k="hoot:id" v="-11451"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="H St NW"/>
+        <tag k="hoot:score:uuid" v="{33d3977e-0451-5e0f-a8ad-687038806b1c}"/>
+        <tag k="uuid" v="{e067beac-a57f-58d0-86c7-89edcbc82c10}"/>
+        <tag k="hoot:id" v="-11556"/>
+        <tag k="hoot:score:match" v="0.35"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.625"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11442" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11550" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-8050"/>
+        <nd ref="-74998"/>
+        <nd ref="-74999"/>
+        <nd ref="-75000"/>
+        <nd ref="-75001"/>
+        <nd ref="-75002"/>
+        <nd ref="-75003"/>
+        <nd ref="-75004"/>
+        <nd ref="-75005"/>
+        <nd ref="-75006"/>
+        <nd ref="-74993"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:score:uuid" v="{428360fe-3a4a-5931-a3f8-a3ba1111927c}"/>
+        <tag k="uuid" v="{e541d417-6057-552b-bb54-363333eb962b}"/>
+        <tag k="hoot:id" v="-11550"/>
+        <tag k="hoot:score:match" v="0.325"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.65"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11532" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-39105"/>
+        <nd ref="-50215"/>
+        <nd ref="-50216"/>
+        <nd ref="-50217"/>
+        <nd ref="-50218"/>
+        <nd ref="-50219"/>
+        <nd ref="-50220"/>
+        <nd ref="-50221"/>
+        <nd ref="-50222"/>
+        <nd ref="-50223"/>
+        <nd ref="-50224"/>
+        <nd ref="-50141"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:score:uuid" v="{d2670373-2b9e-5f76-84fa-3fc143852494}"/>
+        <tag k="uuid" v="{3b01e36a-fcdf-542d-ac09-cef73b3e1bd2}"/>
+        <tag k="hoot:id" v="-11532"/>
+        <tag k="hoot:score:match" v="0.05"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.925"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11520" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1046"/>
+        <nd ref="-49736"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Virginia Avenue North W"/>
+        <tag k="hoot:score:uuid" v="{5b1d9821-6bd2-577b-8602-bb92a8d649b7}"/>
+        <tag k="uuid" v="{abba0be0-4fbf-59eb-bca8-e443c95db4c2}"/>
+        <tag k="hoot:id" v="-11520"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.1"/>
+        <tag k="hoot:score:miss" v="0.9"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11490" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-39109"/>
         <nd ref="-39108"/>
         <nd ref="-39107"/>
@@ -13038,31 +13378,30 @@
         <nd ref="-15170"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:0c938e9528705fc6ff5d5354c56fdd86c9fb6be0;sha1sum:e5f5d2aea1e3f6cc2b801c3e6c8f6e6148513589"/>
         <tag k="name" v="Raoul Wallenberg Pl"/>
         <tag k="hoot:score:uuid" v="{d2670373-2b9e-5f76-84fa-3fc143852494}"/>
         <tag k="uuid" v="{771d89c2-e3c6-57ab-ac1f-1e209e8c9a76}"/>
         <tag k="alt_name" v="15th St SW;Raoul Wallenberg Pl SW"/>
-        <tag k="hoot:id" v="-11442"/>
+        <tag k="hoot:id" v="-11490"/>
         <tag k="hoot:score:match" v="0"/>
         <tag k="hoot:score:review" v="0.025"/>
         <tag k="hoot:score:miss" v="0.975"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11439" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11484" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89013"/>
         <nd ref="-27885"/>
         <nd ref="-27886"/>
         <nd ref="-27887"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:f324edc48ec0ae2dca8d2fbbd0480b4057fa22b0;sha1sum:8f2341648f146e6d70c8f303b2c8133cca92b19e;sha1sum:adfa1039ef31a7a5fdbe1c8e832810b997387f45;sha1sum:25388f7fbe6bfc669e723e270207a543e6c2d300"/>
+        <tag k="hoot:hash" v="sha1sum:adfa1039ef31a7a5fdbe1c8e832810b997387f45;sha1sum:25388f7fbe6bfc669e723e270207a543e6c2d300"/>
         <tag k="name" v="14th St SW"/>
         <tag k="alt_name" v="US Hwy 1"/>
-        <tag k="hoot:id" v="-11439"/>
+        <tag k="hoot:id" v="-11484"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11430" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11475" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-88973"/>
         <nd ref="-2098"/>
         <nd ref="-2099"/>
@@ -13072,10 +13411,10 @@
         <tag k="hoot:hash" v="sha1sum:c1cffc0bd73a10a7a2a6ebfafe7b58b8577cd1eb;sha1sum:ab3d7b060a9b883ea1f12f6669286a705a85e2b0;sha1sum:783d1c9495e1bbb40346623bbf6bf01f4da15fb2;sha1sum:671a1e41fe75d33464326be408f3947fcd7c741e"/>
         <tag k="name" v="14th St SW"/>
         <tag k="alt_name" v="US Hwy 1"/>
-        <tag k="hoot:id" v="-11430"/>
+        <tag k="hoot:id" v="-11475"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11424" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11463" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36952"/>
         <nd ref="-36953"/>
         <nd ref="-36954"/>
@@ -13089,46 +13428,70 @@
         <tag k="hoot:hash" v="sha1sum:637416d84fe13c01a79548a7fae6279c146fad88;sha1sum:4cfbb6bef1867ad1a0f1626568db5157ee66adfb;sha1sum:c8823b2962102ec0a5219f14573005583c344d74;sha1sum:3ba0c5c9f6e8d91681f097c6e694097ec2049378;sha1sum:213db3e93ebd8c58f66af7f65183beb7e9d92a39;sha1sum:9ab681b7099464e7dc59461f21ec4c7318e28e33"/>
         <tag k="name" v="US Hwy 29"/>
         <tag k="alt_name" v="K St NW"/>
-        <tag k="hoot:id" v="-11424"/>
+        <tag k="hoot:id" v="-11463"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11421" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11460" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27887"/>
         <nd ref="-27888"/>
         <nd ref="-27889"/>
         <nd ref="-2103"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:12e3f2b61b66536f03a978bc99d1266a0a3606f5;sha1sum:91f278383dfb7e1adf82705f6304a46a60658b1c"/>
         <tag k="name" v="14th St SW"/>
         <tag k="hoot:score:uuid" v="{724bd02b-912e-53ef-a69b-71d1683afd25}"/>
         <tag k="uuid" v="{2370aada-23df-5b3c-a5e8-20cb5cf3836e}"/>
         <tag k="alt_name" v="US Hwy 1"/>
-        <tag k="hoot:id" v="-11421"/>
+        <tag k="hoot:id" v="-11460"/>
         <tag k="hoot:score:match" v="0"/>
         <tag k="hoot:score:review" v="0.175"/>
         <tag k="hoot:score:miss" v="0.825"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11418" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11457" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-39467"/>
+        <nd ref="-42852"/>
+        <nd ref="-42853"/>
+        <nd ref="-42854"/>
+        <nd ref="-42855"/>
+        <nd ref="-42856"/>
+        <nd ref="-9485"/>
+        <nd ref="-42857"/>
+        <nd ref="-42858"/>
+        <nd ref="-42859"/>
+        <nd ref="-42860"/>
+        <nd ref="-42861"/>
+        <nd ref="-27985"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:46abfb17ead66cb7e90e8f87688f0786458edf05"/>
+        <tag k="name" v="17th St SW"/>
+        <tag k="hoot:score:uuid" v="{4c6b8bdd-ad8e-5993-a6d9-438c25d433be}"/>
+        <tag k="uuid" v="{def66075-e68b-5751-971b-6f338af0cc4c};{affa8ad9-7bc1-5ef6-b576-a478e54211fb}"/>
+        <tag k="hoot:id" v="-11457"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.375"/>
+        <tag k="hoot:score:miss" v="0.625"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11454" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2100"/>
         <nd ref="-2101"/>
         <nd ref="-2102"/>
         <nd ref="-2103"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:84cb1dac785cb1508b408316f3da3a84c2bdc8f2;sha1sum:3c6850193b9396739c487f3732f5d8de60209651"/>
         <tag k="name" v="14th St SW"/>
         <tag k="hoot:score:uuid" v="{2370aada-23df-5b3c-a5e8-20cb5cf3836e}"/>
         <tag k="uuid" v="{724bd02b-912e-53ef-a69b-71d1683afd25}"/>
         <tag k="alt_name" v="US Hwy 1"/>
-        <tag k="hoot:id" v="-11418"/>
+        <tag k="hoot:id" v="-11454"/>
         <tag k="hoot:score:match" v="0"/>
         <tag k="hoot:score:review" v="0.175"/>
         <tag k="hoot:score:miss" v="0.825"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11412" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11445" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-60891"/>
         <nd ref="-60892"/>
         <nd ref="-60893"/>
@@ -13138,29 +13501,33 @@
         <tag k="hoot:hash" v="sha1sum:6547614a4cd701cc49db64db5ea15b5fb1b26bd1;sha1sum:c5bd7eff7c0365bc13cdc0eb24958400df4129b2"/>
         <tag k="name" v="14th St NW"/>
         <tag k="alt_name" v="US Hwy 1"/>
-        <tag k="hoot:id" v="-11412"/>
+        <tag k="hoot:id" v="-11445"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11406" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11439" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-38696"/>
+        <nd ref="-38697"/>
+        <nd ref="-38698"/>
+        <nd ref="-38699"/>
         <nd ref="-1022"/>
         <nd ref="-1023"/>
         <nd ref="-1024"/>
         <nd ref="-1025"/>
         <nd ref="-1026"/>
         <nd ref="-1027"/>
+        <nd ref="-1028"/>
+        <nd ref="-1029"/>
+        <nd ref="-1030"/>
+        <nd ref="-88959"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:65e9d0fbafb4ac070b89099047260880539e62c0;sha1sum:848d9100937ff783c92c3f264f0c30a1e36cedd1;sha1sum:c598eb97990824ec16415b1b64079e409a4789bf;sha1sum:6089ca2bccad83f48e4b8ddc97acc2c01e0a4c4e;sha1sum:2ffdac3d278ac10b794807caa07c9c8668447b39;sha1sum:6dac3a7f975acd0368d8c11939c9b1b9125502c6;sha1sum:6092ec319db163b7e372c83641437ce2d240cc65;sha1sum:48cb9828898564eaa5a4285c22f09489e7646b15"/>
+        <tag k="hoot:hash" v="sha1sum:65e9d0fbafb4ac070b89099047260880539e62c0;sha1sum:848d9100937ff783c92c3f264f0c30a1e36cedd1;sha1sum:fa99638f2f42e548be6592c8da21685006d337b0;sha1sum:a097fc7a5ed7e6e5a242409c2bccaedd9f8e0f2a;sha1sum:c598eb97990824ec16415b1b64079e409a4789bf;sha1sum:6089ca2bccad83f48e4b8ddc97acc2c01e0a4c4e;sha1sum:2ffdac3d278ac10b794807caa07c9c8668447b39;sha1sum:6dac3a7f975acd0368d8c11939c9b1b9125502c6;sha1sum:6092ec319db163b7e372c83641437ce2d240cc65;sha1sum:48cb9828898564eaa5a4285c22f09489e7646b15;sha1sum:8269a96b2a8bd7d1ac42dec9cc1db125d756f50b;sha1sum:7e63a552dcf100e7069e2eb9789f362ef3c029f6;sha1sum:bf65fb7881ae88fe0ff5b0f9300c0c5f6d4eb5aa;sha1sum:a9de63d394910079a42d9c14ae19955ada209532;sha1sum:4f8bb433fccc183f00f6e6fafe28fcc8bab63b4a;sha1sum:ecad37ca7b978e8b694eda75ba93de4655774554;sha1sum:cdaa90185e540e00ef699eb4bbf119c27481482c;sha1sum:ba24a42504aab5ed8275fbbba9f9e9c2239126e4"/>
         <tag k="name" v="US Hwy 29"/>
         <tag k="alt_name" v="K St NW"/>
-        <tag k="hoot:id" v="-11406"/>
+        <tag k="hoot:id" v="-11439"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11400" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-38696"/>
-        <nd ref="-38697"/>
-        <nd ref="-38698"/>
-        <nd ref="-38699"/>
+    <way visible="true" id="-11433" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1022"/>
         <nd ref="-36948"/>
         <nd ref="-36949"/>
@@ -13169,13 +13536,108 @@
         <nd ref="-36952"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:3db676c1e4db95aa2a050029393cbbc7a67259d8;sha1sum:b6101a2b4f4088d411bb19450c561a6a318155e8;sha1sum:fa99638f2f42e548be6592c8da21685006d337b0;sha1sum:a097fc7a5ed7e6e5a242409c2bccaedd9f8e0f2a;sha1sum:bc9775349b0d3794b7c8249a6a331e6595db770c;sha1sum:5ade12e6a84b574a76aeb63bdf367e1d5bee6d8a;sha1sum:bcc0dcf47d4e1ca1f81686a7054e48143f313908;sha1sum:906e5800fb16502eceb79f8911a3de5edf3de56f"/>
+        <tag k="hoot:hash" v="sha1sum:3db676c1e4db95aa2a050029393cbbc7a67259d8;sha1sum:b6101a2b4f4088d411bb19450c561a6a318155e8;sha1sum:bc9775349b0d3794b7c8249a6a331e6595db770c;sha1sum:5ade12e6a84b574a76aeb63bdf367e1d5bee6d8a;sha1sum:bcc0dcf47d4e1ca1f81686a7054e48143f313908;sha1sum:906e5800fb16502eceb79f8911a3de5edf3de56f"/>
         <tag k="name" v="US Hwy 29"/>
         <tag k="alt_name" v="K St NW"/>
-        <tag k="hoot:id" v="-11400"/>
+        <tag k="hoot:id" v="-11433"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11391" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11430" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-38686"/>
+        <nd ref="-38687"/>
+        <nd ref="-38688"/>
+        <nd ref="-38689"/>
+        <nd ref="-1226"/>
+        <nd ref="-38690"/>
+        <nd ref="-38691"/>
+        <nd ref="-38692"/>
+        <nd ref="-38693"/>
+        <nd ref="-38694"/>
+        <nd ref="-38695"/>
+        <nd ref="-38696"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:63e09938aec4149bcb4f394de1fb157e6a9839f5;sha1sum:0e82a064748a5be24b1634930e16f77d347fa6aa;sha1sum:e1a5321bb5c36c18c52e94450157e01b4c9eb728;sha1sum:2320329aa9d611e336a0bd22e1e9d8caa0230a9f;sha1sum:ccf930b5bb65859e69595474bb8e139997276316;sha1sum:6f1002ec94c7d969d92cec446c635043f6ef1ef9;sha1sum:a295129cd7a1c7edbf9b4f5e1a06136e46effb38;sha1sum:3f413b6d41447c3a6b1ef23ace749babcaad4f64"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="hoot:id" v="-11430"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11427" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-39463"/>
+        <nd ref="-50102"/>
+        <nd ref="-50103"/>
+        <nd ref="-50104"/>
+        <nd ref="-50105"/>
+        <nd ref="-50106"/>
+        <nd ref="-50107"/>
+        <nd ref="-50108"/>
+        <nd ref="-50109"/>
+        <nd ref="-50110"/>
+        <nd ref="-50111"/>
+        <nd ref="-50112"/>
+        <nd ref="-50113"/>
+        <nd ref="-50114"/>
+        <nd ref="-15150"/>
+        <nd ref="-50115"/>
+        <nd ref="-50116"/>
+        <nd ref="-50117"/>
+        <nd ref="-50118"/>
+        <nd ref="-50119"/>
+        <nd ref="-50120"/>
+        <nd ref="-50121"/>
+        <nd ref="-50122"/>
+        <nd ref="-50123"/>
+        <nd ref="-50124"/>
+        <nd ref="-50125"/>
+        <nd ref="-50126"/>
+        <nd ref="-50127"/>
+        <nd ref="-50128"/>
+        <nd ref="-50129"/>
+        <nd ref="-50130"/>
+        <nd ref="-50131"/>
+        <nd ref="-50132"/>
+        <nd ref="-50133"/>
+        <nd ref="-50134"/>
+        <nd ref="-50135"/>
+        <nd ref="-50136"/>
+        <nd ref="-50137"/>
+        <nd ref="-50138"/>
+        <nd ref="-50139"/>
+        <nd ref="-50140"/>
+        <nd ref="-50141"/>
+        <nd ref="-50142"/>
+        <nd ref="-50143"/>
+        <nd ref="-50144"/>
+        <nd ref="-39109"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Maine Ave SW"/>
+        <tag k="hoot:score:uuid" v="{aeb5cc44-25f2-51df-9ff0-89def62fb613}"/>
+        <tag k="uuid" v="{e6767435-6e34-5ded-b534-3ddd92994b64};{d309824d-3660-5b67-b0a4-c487b8d649c0};{d2670373-2b9e-5f76-84fa-3fc143852494}"/>
+        <tag k="hoot:id" v="-11427"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.975"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11424" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1768"/>
+        <nd ref="-1769"/>
+        <nd ref="-1770"/>
+        <nd ref="-1771"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="12th St SW"/>
+        <tag k="hoot:score:uuid" v="{30bde504-e31d-5600-b14a-c1add791002c}"/>
+        <tag k="uuid" v="{dac813cb-655e-59a2-9bc8-eab76d0e5c71}"/>
+        <tag k="hoot:id" v="-11424"/>
+        <tag k="hoot:score:match" v="0.175"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.8"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11418" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-88992"/>
         <nd ref="-38667"/>
         <nd ref="-38668"/>
@@ -13199,26 +13661,15 @@
         <nd ref="-38684"/>
         <nd ref="-38685"/>
         <nd ref="-38686"/>
-        <nd ref="-38687"/>
-        <nd ref="-38688"/>
-        <nd ref="-38689"/>
-        <nd ref="-1226"/>
-        <nd ref="-38690"/>
-        <nd ref="-38691"/>
-        <nd ref="-38692"/>
-        <nd ref="-38693"/>
-        <nd ref="-38694"/>
-        <nd ref="-38695"/>
-        <nd ref="-38696"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:001e02e6070b5da99f3dc93be11b392c5efcea69;sha1sum:987b75f42f15c00b0e7583853b03b0fadcaadd02;sha1sum:42cbd3fbeb6e712e37da4449dc99df0c81cb2371;sha1sum:810d664c1a3ba3ff633671672bc9100b14028b28;sha1sum:15ad90c1f9f34e183316e1e81942c59d05e89880;sha1sum:adefc0d6e8a872ff7ff2498524e53c845c522867;sha1sum:63e09938aec4149bcb4f394de1fb157e6a9839f5;sha1sum:0e82a064748a5be24b1634930e16f77d347fa6aa;sha1sum:dee0262d02d84b57f301e733677f41ac91529a25;sha1sum:c5db21e63f725c7f4b37c57028f12a1d1bf4e4d2;sha1sum:4d31f967c56f40f440692ef143d50f491bace4a2;sha1sum:0b14c3c5fa9719512a2f9380746c3a40844db0fa;sha1sum:b6498032cf85cd01e0c3c0748dca907b8b7f51c6;sha1sum:a760e99c39e29c926ce7dd8f20732928bda401f8;sha1sum:e1a5321bb5c36c18c52e94450157e01b4c9eb728;sha1sum:2320329aa9d611e336a0bd22e1e9d8caa0230a9f;sha1sum:ccf930b5bb65859e69595474bb8e139997276316;sha1sum:6f1002ec94c7d969d92cec446c635043f6ef1ef9;sha1sum:a295129cd7a1c7edbf9b4f5e1a06136e46effb38;sha1sum:3f413b6d41447c3a6b1ef23ace749babcaad4f64"/>
+        <tag k="hoot:hash" v="sha1sum:001e02e6070b5da99f3dc93be11b392c5efcea69;sha1sum:987b75f42f15c00b0e7583853b03b0fadcaadd02;sha1sum:42cbd3fbeb6e712e37da4449dc99df0c81cb2371;sha1sum:810d664c1a3ba3ff633671672bc9100b14028b28;sha1sum:15ad90c1f9f34e183316e1e81942c59d05e89880;sha1sum:adefc0d6e8a872ff7ff2498524e53c845c522867;sha1sum:4d31f967c56f40f440692ef143d50f491bace4a2;sha1sum:0b14c3c5fa9719512a2f9380746c3a40844db0fa;sha1sum:b6498032cf85cd01e0c3c0748dca907b8b7f51c6;sha1sum:a760e99c39e29c926ce7dd8f20732928bda401f8;sha1sum:dee0262d02d84b57f301e733677f41ac91529a25;sha1sum:c5db21e63f725c7f4b37c57028f12a1d1bf4e4d2"/>
         <tag k="name" v="US Hwy 29"/>
         <tag k="alt_name" v="K St NW"/>
-        <tag k="hoot:id" v="-11391"/>
+        <tag k="hoot:id" v="-11418"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11379" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11397" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-15017"/>
         <nd ref="-49740"/>
         <nd ref="-49739"/>
@@ -13237,18 +13688,18 @@
         <nd ref="-14817"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:521bcfd5cf21d1a30c564575391aedf2962a3311;sha1sum:be250aa19d56d65dcc11ab2f74a321b68c586543;sha1sum:4d29d20c8ef338ccf20a87923c99077c2e3e41b6;sha1sum:3f738c66284be954d15a2b3db6d70b4e2a6011fd;sha1sum:a6d861044120f973363f3fe20db67556d72be5d6;sha1sum:f5c9ff3e797f717e630729e951adf6f13b03c10d;sha1sum:b3d0365436ca5a5a682987595b544585873e92e8;sha1sum:b859f2a17541ef26b606be00aa213a679591846d;sha1sum:5b6bf4e685266e6558d4e4b091fd1974172f70a8;sha1sum:0c24db706dca3869684c710a693dd2fdf0a39ac0;sha1sum:6967687f7835d8b83968bca2170fefd4432ad1ba;sha1sum:ecdc7ce2b8b8f6a4e9f3a4733f974096c012ed8d;sha1sum:79a62a93a527e74d621a3e0bb0106a2e631e1c92;sha1sum:af9beef96a747e5606acd5dea65e09e1b7afa80b"/>
+        <tag k="hoot:hash" v="sha1sum:4d29d20c8ef338ccf20a87923c99077c2e3e41b6;sha1sum:3f738c66284be954d15a2b3db6d70b4e2a6011fd;sha1sum:a6d861044120f973363f3fe20db67556d72be5d6;sha1sum:f5c9ff3e797f717e630729e951adf6f13b03c10d;sha1sum:b3d0365436ca5a5a682987595b544585873e92e8;sha1sum:b859f2a17541ef26b606be00aa213a679591846d;sha1sum:5b6bf4e685266e6558d4e4b091fd1974172f70a8;sha1sum:0c24db706dca3869684c710a693dd2fdf0a39ac0;sha1sum:6967687f7835d8b83968bca2170fefd4432ad1ba;sha1sum:ecdc7ce2b8b8f6a4e9f3a4733f974096c012ed8d"/>
         <tag k="name" v="Virginia Avenue North W"/>
         <tag k="hoot:score:uuid" v="{f6224e55-cfa6-5364-bb78-e482e2d6e1c5}"/>
         <tag k="uuid" v="{244f13cc-2aa6-511d-b45c-48e7be10de49};{c254d8ab-3f1a-539f-91b7-98b485c5c129};{121d9178-ed6a-5a9e-8f8f-3d9ab962e092}"/>
         <tag k="alt_name" v="G St NW"/>
-        <tag k="hoot:id" v="-11379"/>
+        <tag k="hoot:id" v="-11397"/>
         <tag k="hoot:score:match" v="0.2"/>
         <tag k="hoot:score:review" v="0.075"/>
         <tag k="hoot:score:miss" v="0.725"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11376" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11394" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-15140"/>
         <nd ref="-70793"/>
         <nd ref="-70794"/>
@@ -13259,10 +13710,10 @@
         <tag k="hoot:hash" v="sha1sum:1cad03c0e2df30890520f87354afd2a9028bbe28;sha1sum:ddaec42a8eb9341644aebe42d4e73b69a1c4e2b0"/>
         <tag k="name" v="Kutz Brg"/>
         <tag k="alt_name" v="Independence Ave SW"/>
-        <tag k="hoot:id" v="-11376"/>
+        <tag k="hoot:id" v="-11394"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11373" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11391" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-39690"/>
         <nd ref="-39691"/>
         <nd ref="-39692"/>
@@ -13273,12 +13724,47 @@
         <nd ref="-39697"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:888c49343dd50db49334dda8143e015923d43d94;sha1sum:b77d016d0439ca2e2ace226d523de6e5efe69fc1"/>
         <tag k="name" v="W Executive Ave NW"/>
-        <tag k="hoot:id" v="-11373"/>
+        <tag k="hoot:id" v="-11391"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-11357" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11375" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5040"/>
+        <nd ref="-14475"/>
+        <nd ref="-14476"/>
+        <nd ref="-14477"/>
+        <nd ref="-14478"/>
+        <nd ref="-14479"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Pennsylvania Ave NW"/>
+        <tag k="hoot:score:uuid" v="{390efadd-fafb-52a1-a42a-3e2fbf3f0e66}"/>
+        <tag k="uuid" v="{b31e506f-9106-58c3-9d40-afa4f06cba5f}"/>
+        <tag k="hoot:id" v="-11375"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.275"/>
+        <tag k="hoot:score:miss" v="0.725"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11366" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-14809"/>
+        <nd ref="-14810"/>
+        <nd ref="-14811"/>
+        <nd ref="-14812"/>
+        <nd ref="-14813"/>
+        <nd ref="-14814"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="H St NW"/>
+        <tag k="hoot:score:uuid" v="{7ea678f2-d2a2-5062-8d80-a1be33b7db83}"/>
+        <tag k="uuid" v="{5bcc684e-e8b4-5fa0-9205-d084af3b4a2c}"/>
+        <tag k="hoot:id" v="-11366"/>
+        <tag k="hoot:score:match" v="0.3"/>
+        <tag k="hoot:score:review" v="0.1"/>
+        <tag k="hoot:score:miss" v="0.6"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11363" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-15635"/>
         <nd ref="-15636"/>
         <nd ref="-15637"/>
@@ -13291,10 +13777,24 @@
         <tag k="hoot:score:uuid" v="{6a389106-11e5-5699-92e4-5b121994f553}"/>
         <tag k="uuid" v="{e5d5af2b-ebeb-5fe0-a08e-275fc5475a8c};{fbe56e4f-bc2a-5e4d-820d-f5d57e7f65b8}"/>
         <tag k="alt_name" v="South Pl NW"/>
-        <tag k="hoot:id" v="-11357"/>
+        <tag k="hoot:id" v="-11363"/>
         <tag k="hoot:score:match" v="0.525"/>
         <tag k="hoot:score:review" v="0.025"/>
         <tag k="hoot:score:miss" v="0.45"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-11360" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12864"/>
+        <nd ref="-12865"/>
+        <tag k="foot" v="designated"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="path"/>
+        <tag k="hoot:score:uuid" v="{87f8a061-d9f1-5bc9-ac28-27f07c8febae}"/>
+        <tag k="uuid" v="{80068967-fcb9-590a-98e3-9694f19b68d7}"/>
+        <tag k="hoot:id" v="-11360"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.975"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-6214" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13305,6 +13805,21 @@
         <tag k="hoot:hash" v="sha1sum:e0146c49d0ad1da301f1d2e2e52ddc396a5c3a18"/>
         <tag k="name" v="21st St NW"/>
         <tag k="hoot:id" v="-6214"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-6188" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36950"/>
+        <nd ref="-1024"/>
+        <nd ref="-27199"/>
+        <nd ref="-80027"/>
+        <nd ref="-80028"/>
+        <nd ref="-80029"/>
+        <nd ref="-89006"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:d058dcae27a87ed97f5350e4b90f4b91b20c4437"/>
+        <tag k="name" v="22nd St NW"/>
+        <tag k="hoot:id" v="-6188"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-6181" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13358,6 +13873,39 @@
         <tag k="hoot:id" v="-6126"/>
         <tag k="error:circular" v="5"/>
     </way>
+    <way visible="true" id="-6108" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-29863"/>
+        <nd ref="-29864"/>
+        <nd ref="-29865"/>
+        <nd ref="-29866"/>
+        <nd ref="-28026"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:2ea4ac8c3330437393789bc9f34b1e7bc67684f0"/>
+        <tag k="name" v="E St Expy"/>
+        <tag k="hoot:id" v="-6108"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-6097" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-39109"/>
+        <nd ref="-88984"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:65563f81b622ea809fcfab9b71c1397daaabe968"/>
+        <tag k="name" v="Maine Ave SW"/>
+        <tag k="hoot:id" v="-6097"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-6084" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10062"/>
+        <nd ref="-49689"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:hash" v="sha1sum:331378899f425ca3e49bfa4bbc5ace9b09e3f61a"/>
+        <tag k="name" v="I- 66"/>
+        <tag k="hoot:id" v="-6084"/>
+        <tag k="error:circular" v="5"/>
+    </way>
     <way visible="true" id="-6081" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-39101"/>
         <nd ref="-2103"/>
@@ -13378,6 +13926,22 @@
         <tag k="hoot:hash" v="sha1sum:fee4d5c32ad1b577301ce0c9dd8f3b8d496cb1c2"/>
         <tag k="name" v="Virginia Ave NW"/>
         <tag k="hoot:id" v="-6058"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-6027" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-15170"/>
+        <nd ref="-15171"/>
+        <nd ref="-15172"/>
+        <nd ref="-15173"/>
+        <nd ref="-15174"/>
+        <nd ref="-15175"/>
+        <nd ref="-15176"/>
+        <nd ref="-2103"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:a2387068e57b0e6856244a5066b465d40036b3c1"/>
+        <tag k="name" v="Independence Ave SW"/>
+        <tag k="hoot:id" v="-6027"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5955" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13466,6 +14030,17 @@
         <tag k="hoot:id" v="-5861"/>
         <tag k="error:circular" v="5"/>
     </way>
+    <way visible="true" id="-5770" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-27259"/>
+        <nd ref="-49735"/>
+        <nd ref="-88981"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:a182a12868db54e37e177c8a1a3b88c48be2bce7"/>
+        <tag k="name" v="Virginia Avenue North W"/>
+        <tag k="hoot:id" v="-5770"/>
+        <tag k="error:circular" v="5"/>
+    </way>
     <way visible="true" id="-5754" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27248"/>
         <nd ref="-49559"/>
@@ -13491,6 +14066,20 @@
         <tag k="hoot:id" v="-5748"/>
         <tag k="error:circular" v="5"/>
     </way>
+    <way visible="true" id="-5747" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-70543"/>
+        <nd ref="-70544"/>
+        <nd ref="-70545"/>
+        <nd ref="-14848"/>
+        <nd ref="-70546"/>
+        <nd ref="-70547"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:abe590dbde95e59ab275f9c230b2c7ff27b4d6c7"/>
+        <tag k="name" v="US Hwy 50"/>
+        <tag k="hoot:id" v="-5747"/>
+        <tag k="error:circular" v="5"/>
+    </way>
     <way visible="true" id="-5694" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14825"/>
         <nd ref="-70550"/>
@@ -13509,25 +14098,6 @@
         <tag k="hoot:hash" v="sha1sum:96cfe53c47f41fbc0512a9c920cd574faf399903"/>
         <tag k="name" v="US Hwy 50"/>
         <tag k="hoot:id" v="-5694"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5674" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-14809"/>
-        <nd ref="-14810"/>
-        <nd ref="-14811"/>
-        <nd ref="-14812"/>
-        <nd ref="-14813"/>
-        <nd ref="-14814"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:92a73054b1b26c40a95aa7db7dcfe3ca982b949c"/>
-        <tag k="name" v="H St NW"/>
-        <tag k="hoot:score:uuid" v="{7ea678f2-d2a2-5062-8d80-a1be33b7db83}"/>
-        <tag k="uuid" v="{5bcc684e-e8b4-5fa0-9205-d084af3b4a2c}"/>
-        <tag k="hoot:id" v="-5674"/>
-        <tag k="hoot:score:match" v="0.3"/>
-        <tag k="hoot:score:review" v="0.1"/>
-        <tag k="hoot:score:miss" v="0.6"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5650" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13558,40 +14128,46 @@
         <nd ref="-38687"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:3b726b1ddc9596527692958a492407178174f562;sha1sum:78f5c2af3f43d75ba2ce68f77c7457e9d4caa695;sha1sum:2ec0c4a8c3be8a22e4cfce0c4d1fbfc0ea0724b8;sha1sum:ea38c0e342b8f9349772f69e9e4d6f7c9c82d171;sha1sum:387904b41089ceef2195567570382b35946b2d5f;sha1sum:29bd72b5a8b44c1fe6f63f5284ad13c22047a90e;sha1sum:36afc0b122413789630148b42e8310e59bb13343;sha1sum:24d983f464da7fa217ea3a505119afa37814769a"/>
+        <tag k="hoot:hash" v="sha1sum:3b726b1ddc9596527692958a492407178174f562;sha1sum:78f5c2af3f43d75ba2ce68f77c7457e9d4caa695;sha1sum:2ec0c4a8c3be8a22e4cfce0c4d1fbfc0ea0724b8;sha1sum:ea38c0e342b8f9349772f69e9e4d6f7c9c82d171;sha1sum:387904b41089ceef2195567570382b35946b2d5f;sha1sum:29bd72b5a8b44c1fe6f63f5284ad13c22047a90e"/>
         <tag k="name" v="17th St NW"/>
         <tag k="hoot:id" v="-5650"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-5596" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-39520"/>
-        <nd ref="-39521"/>
-        <nd ref="-39522"/>
-        <nd ref="-39523"/>
-        <nd ref="-39524"/>
-        <nd ref="-39525"/>
-        <nd ref="-39526"/>
-        <nd ref="-39527"/>
-        <nd ref="-2351"/>
-        <nd ref="-39528"/>
-        <nd ref="-39529"/>
-        <nd ref="-39530"/>
-        <nd ref="-39531"/>
-        <nd ref="-39532"/>
-        <nd ref="-39533"/>
-        <nd ref="-39534"/>
-        <nd ref="-39535"/>
-        <nd ref="-39536"/>
-        <nd ref="-39537"/>
-        <nd ref="-39538"/>
-        <nd ref="-39539"/>
-        <nd ref="-39540"/>
-        <nd ref="-39541"/>
+    <way visible="true" id="-5547" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-39470"/>
+        <nd ref="-39471"/>
+        <nd ref="-39472"/>
+        <nd ref="-39473"/>
+        <nd ref="-39474"/>
+        <nd ref="-39475"/>
+        <nd ref="-39476"/>
+        <nd ref="-28000"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:ff34c0f7458598d35125390cc46b1b0cb22ba838;sha1sum:7c54465efad828426ca0df0faa200dffa582aa50;sha1sum:b27e3559acbbfa10ac7e184d553c8ae50a60cf8b;sha1sum:cef25edc759c019aaeafcda04925a81678fb4942"/>
+        <tag k="hoot:hash" v="sha1sum:e5dee5ee7347a77db8aeb94a399f88fbb4e419a0"/>
         <tag k="name" v="Independence Ave SW"/>
-        <tag k="hoot:id" v="-5596"/>
+        <tag k="hoot:id" v="-5547"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5536" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-39463"/>
+        <nd ref="-39464"/>
+        <nd ref="-39465"/>
+        <nd ref="-39466"/>
+        <nd ref="-39467"/>
+        <nd ref="-39468"/>
+        <nd ref="-39469"/>
+        <nd ref="-39470"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:83b00b38f910b92b6eeebd97a679034b0d99e500;sha1sum:5bb601213bbc4db7b914917b4075329872a694f2"/>
+        <tag k="name" v="Independence Ave SW"/>
+        <tag k="hoot:score:uuid" v="{def66075-e68b-5751-971b-6f338af0cc4c}"/>
+        <tag k="uuid" v="{4c6b8bdd-ad8e-5993-a6d9-438c25d433be}"/>
+        <tag k="hoot:id" v="-5536"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.375"/>
+        <tag k="hoot:score:miss" v="0.625"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5494" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13643,6 +14219,85 @@
         <tag k="hoot:id" v="-5494"/>
         <tag k="error:circular" v="5"/>
     </way>
+    <way visible="true" id="-5471" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-49689"/>
+        <nd ref="-49690"/>
+        <nd ref="-49691"/>
+        <nd ref="-49692"/>
+        <nd ref="-49693"/>
+        <nd ref="-49694"/>
+        <nd ref="-49695"/>
+        <nd ref="-49696"/>
+        <nd ref="-49697"/>
+        <nd ref="-49698"/>
+        <nd ref="-49699"/>
+        <nd ref="-49700"/>
+        <nd ref="-49701"/>
+        <nd ref="-49702"/>
+        <nd ref="-49703"/>
+        <nd ref="-49704"/>
+        <nd ref="-49705"/>
+        <nd ref="-14856"/>
+        <nd ref="-49706"/>
+        <nd ref="-49707"/>
+        <nd ref="-49708"/>
+        <nd ref="-14819"/>
+        <nd ref="-49709"/>
+        <nd ref="-49710"/>
+        <nd ref="-49711"/>
+        <nd ref="-49712"/>
+        <nd ref="-49713"/>
+        <nd ref="-49714"/>
+        <nd ref="-49715"/>
+        <nd ref="-49716"/>
+        <nd ref="-49717"/>
+        <nd ref="-49718"/>
+        <nd ref="-49719"/>
+        <nd ref="-49720"/>
+        <nd ref="-49721"/>
+        <nd ref="-5482"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:hash" v="sha1sum:c31160904f5977cb48000f35dee5ff83c8da4398;sha1sum:8d5c4fdb169bff5611a0fcbdfbcc1068734a68e9;sha1sum:ec7c3a0f8d47ddec99e57dada98b4825f920db75;sha1sum:83087292bf03532e829d8f8d500f1873b086a28e"/>
+        <tag k="name" v="I- 66"/>
+        <tag k="hoot:id" v="-5471"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5455" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-49669"/>
+        <nd ref="-14829"/>
+        <nd ref="-49670"/>
+        <nd ref="-49671"/>
+        <nd ref="-49672"/>
+        <nd ref="-49673"/>
+        <nd ref="-49674"/>
+        <nd ref="-49675"/>
+        <nd ref="-49676"/>
+        <nd ref="-49677"/>
+        <nd ref="-49678"/>
+        <nd ref="-49679"/>
+        <nd ref="-49680"/>
+        <nd ref="-49681"/>
+        <nd ref="-49682"/>
+        <nd ref="-49683"/>
+        <nd ref="-49684"/>
+        <nd ref="-49685"/>
+        <nd ref="-49686"/>
+        <nd ref="-49687"/>
+        <nd ref="-49688"/>
+        <nd ref="-10062"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:hash" v="sha1sum:b8e6c22aba3b3669770de860558633161871d90b"/>
+        <tag k="name" v="I- 66"/>
+        <tag k="hoot:score:uuid" v="{8d6b7032-a0fc-528a-9417-225eaff5ef25}"/>
+        <tag k="uuid" v="{ef8d6428-a780-56be-8ada-e7561c051dbb}"/>
+        <tag k="hoot:id" v="-5455"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.475"/>
+        <tag k="hoot:score:miss" v="0.525"/>
+        <tag k="error:circular" v="5"/>
+    </way>
     <way visible="true" id="-5434" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1200"/>
         <nd ref="-14998"/>
@@ -13662,6 +14317,135 @@
         <tag k="hoot:id" v="-5434"/>
         <tag k="error:circular" v="5"/>
     </way>
+    <way visible="true" id="-5429" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-49654"/>
+        <nd ref="-49655"/>
+        <nd ref="-49656"/>
+        <nd ref="-49657"/>
+        <nd ref="-49658"/>
+        <nd ref="-49659"/>
+        <nd ref="-49660"/>
+        <nd ref="-49661"/>
+        <nd ref="-49662"/>
+        <nd ref="-49663"/>
+        <nd ref="-49664"/>
+        <nd ref="-49665"/>
+        <nd ref="-49666"/>
+        <nd ref="-49667"/>
+        <nd ref="-49668"/>
+        <nd ref="-49669"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:hash" v="sha1sum:535c03c77602b16d125023280f0e790eb9670de2;sha1sum:9f5e1a3626789dde7beddb0f57f1bc557440398f"/>
+        <tag k="name" v="I- 66"/>
+        <tag k="hoot:score:uuid" v="{35d758f4-91d8-55dc-8293-c7cf1b139591}"/>
+        <tag k="uuid" v="{c777fcbd-3bc7-5418-8402-0d56a97914ef}"/>
+        <tag k="hoot:id" v="-5429"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.975"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5425" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-49651"/>
+        <nd ref="-52804"/>
+        <nd ref="-27260"/>
+        <nd ref="-80166"/>
+        <nd ref="-80167"/>
+        <nd ref="-80168"/>
+        <nd ref="-89007"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:f2ffd778b92c63846d841ee2cad546063c2a56a8;sha1sum:ce5c087a15a14253b3f737a5b506ac83b2314974;sha1sum:b596dacab1148abb46bb627a25c8ab790821ba1e"/>
+        <tag k="name" v="Virginia Ave NW"/>
+        <tag k="hoot:score:uuid" v="{f0396c63-878d-53fe-969b-82a25fa1e7c1}"/>
+        <tag k="uuid" v="{ee135620-8eea-5494-b2d9-dd8c9a714680}"/>
+        <tag k="hoot:id" v="-5425"/>
+        <tag k="hoot:score:match" v="0.075"/>
+        <tag k="hoot:score:review" v="0.075"/>
+        <tag k="hoot:score:miss" v="0.85"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5424" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-28000"/>
+        <nd ref="-39477"/>
+        <nd ref="-39478"/>
+        <nd ref="-39479"/>
+        <nd ref="-39480"/>
+        <nd ref="-39481"/>
+        <nd ref="-39482"/>
+        <nd ref="-39483"/>
+        <nd ref="-39484"/>
+        <nd ref="-39485"/>
+        <nd ref="-39486"/>
+        <nd ref="-39487"/>
+        <nd ref="-39488"/>
+        <nd ref="-39489"/>
+        <nd ref="-39490"/>
+        <nd ref="-39491"/>
+        <nd ref="-39492"/>
+        <nd ref="-39493"/>
+        <nd ref="-39494"/>
+        <nd ref="-39495"/>
+        <nd ref="-39496"/>
+        <nd ref="-39497"/>
+        <nd ref="-39498"/>
+        <nd ref="-39499"/>
+        <nd ref="-39500"/>
+        <nd ref="-39501"/>
+        <nd ref="-39502"/>
+        <nd ref="-39503"/>
+        <nd ref="-39504"/>
+        <nd ref="-39505"/>
+        <nd ref="-39506"/>
+        <nd ref="-39507"/>
+        <nd ref="-39508"/>
+        <nd ref="-39509"/>
+        <nd ref="-39510"/>
+        <nd ref="-39511"/>
+        <nd ref="-39512"/>
+        <nd ref="-28025"/>
+        <nd ref="-39513"/>
+        <nd ref="-39514"/>
+        <nd ref="-39515"/>
+        <nd ref="-39516"/>
+        <nd ref="-36940"/>
+        <nd ref="-28008"/>
+        <nd ref="-39517"/>
+        <nd ref="-39518"/>
+        <nd ref="-27317"/>
+        <nd ref="-39519"/>
+        <nd ref="-28009"/>
+        <nd ref="-39520"/>
+        <nd ref="-39521"/>
+        <nd ref="-39522"/>
+        <nd ref="-39523"/>
+        <nd ref="-39524"/>
+        <nd ref="-39525"/>
+        <nd ref="-39526"/>
+        <nd ref="-39527"/>
+        <nd ref="-2351"/>
+        <nd ref="-39528"/>
+        <nd ref="-39529"/>
+        <nd ref="-39530"/>
+        <nd ref="-39531"/>
+        <nd ref="-39532"/>
+        <nd ref="-39533"/>
+        <nd ref="-39534"/>
+        <nd ref="-39535"/>
+        <nd ref="-39536"/>
+        <nd ref="-39537"/>
+        <nd ref="-39538"/>
+        <nd ref="-39539"/>
+        <nd ref="-39540"/>
+        <nd ref="-39541"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:885337c31b50b7ed3b5c1f38f7949d7f50f39dce;sha1sum:b7b99e7d508ef9de9e000f06715d6a2cf0759fec;sha1sum:0dabf5b1f4db35d0588d7383a6f1ebc506ff29ef;sha1sum:5aab354e4353a070de5cc9d5f3c943c975eaf4de;sha1sum:4f516f986f5637958efe8868a862bfe79e9bba7f;sha1sum:6493721e378471ffd031df1c03c7b4dcbc96afcb;sha1sum:f0d66708e655f09738d7947cfbcf8f53d9e69cdf;sha1sum:ff34c0f7458598d35125390cc46b1b0cb22ba838;sha1sum:7c54465efad828426ca0df0faa200dffa582aa50;sha1sum:b27e3559acbbfa10ac7e184d553c8ae50a60cf8b;sha1sum:cef25edc759c019aaeafcda04925a81678fb4942"/>
+        <tag k="name" v="Independence Ave SW"/>
+        <tag k="hoot:id" v="-5424"/>
+        <tag k="error:circular" v="5"/>
+    </way>
     <way visible="true" id="-5377" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21731"/>
         <nd ref="-1325"/>
@@ -13674,7 +14458,7 @@
         <nd ref="-80163"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:0a8df8e4d27adbcbb640e6b1cb4cb68881f7ee2b;sha1sum:32b869455e1f760c0514ca0c6df556779479706e;sha1sum:bf80466008ae4ab470dd21b0eb98f321ec09c438;sha1sum:e58bfbc169eb5d67e7d39d4d8edcc6b91be54f7b;sha1sum:855136bb75c19d4e049aae4468ee67333e168e16;sha1sum:2a893105e9b99dbc7a95d7b7617423ae9b06da00;sha1sum:9bc20a3a85359f66b1c8315f8b055c1aca727f46"/>
+        <tag k="hoot:hash" v="sha1sum:0a8df8e4d27adbcbb640e6b1cb4cb68881f7ee2b;sha1sum:32b869455e1f760c0514ca0c6df556779479706e;sha1sum:e58bfbc169eb5d67e7d39d4d8edcc6b91be54f7b;sha1sum:855136bb75c19d4e049aae4468ee67333e168e16"/>
         <tag k="name" v="Virginia Ave NW"/>
         <tag k="hoot:score:uuid" v="{db8f0c0e-35c2-5657-ac30-811e2c1554de}"/>
         <tag k="uuid" v="{8f74dd78-5728-5ea3-98d1-c63311d077f3}"/>
@@ -13729,49 +14513,9 @@
         <nd ref="-1025"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:5586b40ce78f7b926a2241015b8169e43cced846;sha1sum:1d0dcf691173c2aff42e0cbec6b15d7388ec89c6;sha1sum:50fd3f7a4b91db6a9d03e4e17a0a381ef44aca82;sha1sum:72528204abc29c33b62d291f74b43176bffc989c;sha1sum:08b5b81b1c2bd3c18410298b2ed043814edf45ac;sha1sum:64b30cd48149bc835056463cf8105aa50c64a230;sha1sum:1b0262ccb542ac27e3b1010593c61e5f544e4f09;sha1sum:4143cc477069ce00dcd6a7d625d1de30ad5c99a2;sha1sum:4744487fee993155a71487d73ed876724a693a5c;sha1sum:c844338a0a2b49aa142c67758c91024e75dbc747"/>
+        <tag k="hoot:hash" v="sha1sum:5586b40ce78f7b926a2241015b8169e43cced846;sha1sum:1d0dcf691173c2aff42e0cbec6b15d7388ec89c6;sha1sum:4744487fee993155a71487d73ed876724a693a5c;sha1sum:c844338a0a2b49aa142c67758c91024e75dbc747"/>
         <tag k="name" v="Pennsylvania Ave NW"/>
         <tag k="hoot:id" v="-5296"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5294" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1047"/>
-        <nd ref="-80165"/>
-        <nd ref="-49651"/>
-        <nd ref="-52804"/>
-        <nd ref="-27260"/>
-        <nd ref="-80166"/>
-        <nd ref="-80167"/>
-        <nd ref="-80168"/>
-        <nd ref="-89007"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:bb16ad45cafce0abc3bf90fc8d9072f59ecaedb7;sha1sum:f2ffd778b92c63846d841ee2cad546063c2a56a8;sha1sum:ce5c087a15a14253b3f737a5b506ac83b2314974;sha1sum:b596dacab1148abb46bb627a25c8ab790821ba1e"/>
-        <tag k="name" v="Virginia Ave NW"/>
-        <tag k="hoot:score:uuid" v="{f0396c63-878d-53fe-969b-82a25fa1e7c1}"/>
-        <tag k="uuid" v="{ee135620-8eea-5494-b2d9-dd8c9a714680}"/>
-        <tag k="hoot:id" v="-5294"/>
-        <tag k="hoot:score:match" v="0.075"/>
-        <tag k="hoot:score:review" v="0.075"/>
-        <tag k="hoot:score:miss" v="0.85"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5273" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1046"/>
-        <nd ref="-49736"/>
-        <nd ref="-27259"/>
-        <nd ref="-49735"/>
-        <nd ref="-88981"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:0d0bf3ff0e5bbc64d4ebe77226fc20c23824c9ac;sha1sum:f71ba72d2a273921f6e0e8c4783676508d114f6f;sha1sum:a182a12868db54e37e177c8a1a3b88c48be2bce7"/>
-        <tag k="name" v="Virginia Avenue North W"/>
-        <tag k="hoot:score:uuid" v="{7d3f5ab4-9d53-54dd-8e29-25591f352188}"/>
-        <tag k="uuid" v="{210ca3aa-cee4-5927-bde0-37d8ea31fc4a}"/>
-        <tag k="hoot:id" v="-5273"/>
-        <tag k="hoot:score:match" v="0.175"/>
-        <tag k="hoot:score:review" v="0.075"/>
-        <tag k="hoot:score:miss" v="0.75"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5045" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13898,7 +14642,7 @@
         <nd ref="-70733"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:c41af90757122e9a148332a87bb1688a4a34b013;sha1sum:2589e53d6c9195112bd3ac24ae47c5ae325a0641;sha1sum:0fac8f7207df1b6b2fa908eba7d7529811234761;sha1sum:1f2ba92764242c523c8cc57025d908dd05ecb62d;sha1sum:08005f0dfc83b7f94a885c5de893992147d56068;sha1sum:e42496a0d85c768533708c65b015c64a0cad6af7;sha1sum:5de492b74d4c4e27ae3dc559b512354dc10972a1"/>
+        <tag k="hoot:hash" v="sha1sum:c41af90757122e9a148332a87bb1688a4a34b013;sha1sum:2589e53d6c9195112bd3ac24ae47c5ae325a0641;sha1sum:0fac8f7207df1b6b2fa908eba7d7529811234761;sha1sum:1f2ba92764242c523c8cc57025d908dd05ecb62d;sha1sum:08005f0dfc83b7f94a885c5de893992147d56068"/>
         <tag k="name" v="Virginia Ave NW"/>
         <tag k="hoot:score:uuid" v="{4610e7a7-d503-5c76-b6df-219b340e267b}"/>
         <tag k="uuid" v="{e9041f5e-babe-59ba-ac9f-5625c20886ea};{fde621f3-c915-5f50-b521-49cb75c20337}"/>
@@ -13906,93 +14650,6 @@
         <tag k="hoot:score:match" v="0"/>
         <tag k="hoot:score:review" v="0.25"/>
         <tag k="hoot:score:miss" v="0.75"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5036" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-79960"/>
-        <nd ref="-79961"/>
-        <nd ref="-79962"/>
-        <nd ref="-79963"/>
-        <nd ref="-79964"/>
-        <nd ref="-79965"/>
-        <nd ref="-79966"/>
-        <nd ref="-79967"/>
-        <nd ref="-79968"/>
-        <nd ref="-79969"/>
-        <nd ref="-38727"/>
-        <nd ref="-79970"/>
-        <nd ref="-79971"/>
-        <nd ref="-79972"/>
-        <nd ref="-79973"/>
-        <nd ref="-79974"/>
-        <nd ref="-79975"/>
-        <nd ref="-79976"/>
-        <nd ref="-79977"/>
-        <nd ref="-79978"/>
-        <nd ref="-79979"/>
-        <nd ref="-79980"/>
-        <nd ref="-79981"/>
-        <nd ref="-79982"/>
-        <nd ref="-79983"/>
-        <nd ref="-79984"/>
-        <nd ref="-79985"/>
-        <nd ref="-79986"/>
-        <nd ref="-79987"/>
-        <nd ref="-79988"/>
-        <nd ref="-79989"/>
-        <nd ref="-79990"/>
-        <nd ref="-79991"/>
-        <nd ref="-79992"/>
-        <nd ref="-79993"/>
-        <nd ref="-79994"/>
-        <nd ref="-79995"/>
-        <nd ref="-79996"/>
-        <nd ref="-79997"/>
-        <nd ref="-79998"/>
-        <nd ref="-79999"/>
-        <nd ref="-80000"/>
-        <nd ref="-80001"/>
-        <nd ref="-27131"/>
-        <nd ref="-80002"/>
-        <nd ref="-80003"/>
-        <nd ref="-80004"/>
-        <nd ref="-80005"/>
-        <nd ref="-80006"/>
-        <nd ref="-80007"/>
-        <nd ref="-80008"/>
-        <nd ref="-80009"/>
-        <nd ref="-80010"/>
-        <nd ref="-80011"/>
-        <nd ref="-80012"/>
-        <nd ref="-80013"/>
-        <nd ref="-80014"/>
-        <nd ref="-80015"/>
-        <nd ref="-80016"/>
-        <nd ref="-80017"/>
-        <nd ref="-80018"/>
-        <nd ref="-79921"/>
-        <nd ref="-80019"/>
-        <nd ref="-80020"/>
-        <nd ref="-80021"/>
-        <nd ref="-80022"/>
-        <nd ref="-80023"/>
-        <nd ref="-80024"/>
-        <nd ref="-80025"/>
-        <nd ref="-49466"/>
-        <nd ref="-80026"/>
-        <nd ref="-1039"/>
-        <nd ref="-36950"/>
-        <nd ref="-1024"/>
-        <nd ref="-27199"/>
-        <nd ref="-80027"/>
-        <nd ref="-80028"/>
-        <nd ref="-80029"/>
-        <nd ref="-89006"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:4adffe86c3f091b80e33dd203b3665d8d582cc45;sha1sum:172af1eaf6b72d8b4b60478f8cbc739bb07be891;sha1sum:46c01967a1acf49e893557c19832536b301865b0;sha1sum:002470a41c9c41f8abb3ef6adc00cd4d12d6ef71;sha1sum:6d1903a556a1ebebab4a7c6c66115e2b93dc783f;sha1sum:f6cba81bf857b58f4f0b85966831e025a19e216b;sha1sum:53e26c74528c2fe0d6f48abe2fa6079846dcf612;sha1sum:3f292ccf2a90b6d712d47b2df2ddbb0239f14177;sha1sum:d058dcae27a87ed97f5350e4b90f4b91b20c4437;sha1sum:b3e2d037233fc996ffda2fe465ee47fb467c823c;sha1sum:e19161d6f3b0a4d121bf12e2673fc9ec6e67da5c;sha1sum:e4de76b832d19ec01b873b3dcc39cb80f4a0ce8f;sha1sum:5a37a95089097f30f99cb5eb7c9fe27ab755ce41"/>
-        <tag k="name" v="22nd St NW"/>
-        <tag k="hoot:id" v="-5036"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5035" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -14100,14 +14757,9 @@
         <nd ref="-70541"/>
         <nd ref="-70542"/>
         <nd ref="-70543"/>
-        <nd ref="-70544"/>
-        <nd ref="-70545"/>
-        <nd ref="-14848"/>
-        <nd ref="-70546"/>
-        <nd ref="-70547"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:09d9cdede01720c4c5d375a47f44cb6eeb387292;sha1sum:3ffdd9aa81b6810899da656aae2b46ec3545b695;sha1sum:770bd775af455a5a87aa6474ada367c31c6b11c6;sha1sum:445912ff08924a3c710318a9a61c5996d830a437;sha1sum:abe590dbde95e59ab275f9c230b2c7ff27b4d6c7;sha1sum:c74ef791ad4197470700083ed011992b74b10991;sha1sum:40f6caa4f80da7e3898cf3a7ff0a4b900854252f"/>
+        <tag k="hoot:hash" v="sha1sum:09d9cdede01720c4c5d375a47f44cb6eeb387292;sha1sum:3ffdd9aa81b6810899da656aae2b46ec3545b695;sha1sum:770bd775af455a5a87aa6474ada367c31c6b11c6"/>
         <tag k="name" v="US Hwy 50"/>
         <tag k="hoot:score:uuid" v="{dfd4908f-657d-57c4-9936-5c0cba4fd624}"/>
         <tag k="uuid" v="{51895d6e-997c-5077-a053-f6c74d678d61}"/>
@@ -14159,7 +14811,7 @@
         <nd ref="-38986"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:a45b70e33a8daf2ada03aa6a0935e00534e9d3c9;sha1sum:9b182de07323eab40923654ff9a5dfd272f0d265;sha1sum:45ef02ff54d3fa83f7f1a64bebbf3e8e47233eb5;sha1sum:6991d37b2bce18ce66fdb6f456657fb941fe9f94"/>
+        <tag k="hoot:hash" v="sha1sum:a45b70e33a8daf2ada03aa6a0935e00534e9d3c9;sha1sum:9b182de07323eab40923654ff9a5dfd272f0d265"/>
         <tag k="name" v="E St NW"/>
         <tag k="hoot:id" v="-5027"/>
         <tag k="error:circular" v="5"/>
@@ -14267,7 +14919,7 @@
         <nd ref="-88991"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:66497563f29f9f20fa61aad0aab4d240048c4b3b;sha1sum:258bc379d47b1c783b34fbaa48fcefa1d4949603;sha1sum:f494b6eb6c56b8b6e3b2a102774f1f1ccfc3aba7;sha1sum:8f0b052b848530f111022028e2a2a2c75323db06;sha1sum:b40bf45aa049cff16bfe597509605b3b37254b82;sha1sum:1937f6a03465077f079a67eb35097951903cbe88;sha1sum:c3f8d5d471268141143dd6f0a307f2a22df90c41;sha1sum:8a0293a03c52465bbbf96b5b45f2c67d898c1f65;sha1sum:7bd767db046f518dfd4adba04b6d86950276adb7;sha1sum:3cb6befc495784b16f0259a675ecfba6768fe347;sha1sum:9887ffa4205c67487ba76f6a627a9b93595f8095"/>
+        <tag k="hoot:hash" v="sha1sum:66497563f29f9f20fa61aad0aab4d240048c4b3b;sha1sum:f494b6eb6c56b8b6e3b2a102774f1f1ccfc3aba7;sha1sum:8f0b052b848530f111022028e2a2a2c75323db06;sha1sum:b40bf45aa049cff16bfe597509605b3b37254b82;sha1sum:1937f6a03465077f079a67eb35097951903cbe88;sha1sum:c3f8d5d471268141143dd6f0a307f2a22df90c41;sha1sum:8a0293a03c52465bbbf96b5b45f2c67d898c1f65;sha1sum:7bd767db046f518dfd4adba04b6d86950276adb7"/>
         <tag k="name" v="19th St NW"/>
         <tag k="hoot:score:uuid" v="{f6224e55-cfa6-5364-bb78-e482e2d6e1c5}"/>
         <tag k="uuid" v="{f70c7b9f-a276-5bbc-8149-23c103de2228}"/>
@@ -14323,7 +14975,7 @@
         <nd ref="-1022"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:1bb6bd8c2ba1fb01ae071939120036baf421e44c;sha1sum:2e3918cc16a3e2bd325012a3e8a6add4a46f2fc1;sha1sum:664aa58681df3574bdd6857addf66b73d73ec45f;sha1sum:f578bb23c6da73939ecb21b068f99ea2ca7a113a;sha1sum:c77384a9e35b0c2a57313052c06e14128bc908eb;sha1sum:a1225e9ea0e8a3a898b5898967076abdb5887975;sha1sum:7b1a8b539afba8cc53e7ea12705afcf1f15dd671;sha1sum:ee862ff1ea224cec13e31c2046dbcbd2c368ef15;sha1sum:04c0961adad3a94e4637cf137188268eec278b59;sha1sum:c8ba2c0521cc597d02508d8c766ca12e46992fb7;sha1sum:3db1e98c30a8252d1dd699910ab509e10eb1755a;sha1sum:d5df9cb6a2eb2b5449ec408b3abb037be475b3ee;sha1sum:32e4b5bc466027c777d26accc49ae7fcfe6bc330;sha1sum:c190c80e83ee953d5fb71a56965840b84b371830;sha1sum:117751ea6b8f028e6c041b6bc2cfb51ade897214;sha1sum:12e18375c5dadfef05b2bf83b9bf6cbaf1d15d2e;sha1sum:d4e8a12db9f4f683250c2dd9242e31fcb47284aa"/>
+        <tag k="hoot:hash" v="sha1sum:1bb6bd8c2ba1fb01ae071939120036baf421e44c;sha1sum:2e3918cc16a3e2bd325012a3e8a6add4a46f2fc1;sha1sum:664aa58681df3574bdd6857addf66b73d73ec45f;sha1sum:f578bb23c6da73939ecb21b068f99ea2ca7a113a;sha1sum:c77384a9e35b0c2a57313052c06e14128bc908eb;sha1sum:ee862ff1ea224cec13e31c2046dbcbd2c368ef15;sha1sum:04c0961adad3a94e4637cf137188268eec278b59"/>
         <tag k="name" v="21st St NW"/>
         <tag k="hoot:id" v="-5020"/>
         <tag k="error:circular" v="5"/>
@@ -14353,7 +15005,7 @@
         <nd ref="-52807"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="primary"/>
-        <tag k="hoot:hash" v="sha1sum:9d15213116afb68c16b37f9eb33f461f5966ef01;sha1sum:f54b5629144d9fddc1d95a5008ce888dd6f9e381;sha1sum:49f4f7534f15fe48a634652253e32334001dcffe;sha1sum:26a9a8105b22048ca6275a38ef9bfc7fd0b398b6;sha1sum:7781f31579d6add566bda24e4170febb9716390a;sha1sum:c6f0c35b9d699c407e92d8215df1e8fbdc928879"/>
+        <tag k="hoot:hash" v="sha1sum:9d15213116afb68c16b37f9eb33f461f5966ef01;sha1sum:f54b5629144d9fddc1d95a5008ce888dd6f9e381;sha1sum:49f4f7534f15fe48a634652253e32334001dcffe"/>
         <tag k="name" v="I- 66"/>
         <tag k="hoot:score:uuid" v="{5fddf465-0640-558a-8f2b-dc9562ce838a}"/>
         <tag k="uuid" v="{09cbcd3b-42f8-5e18-8c9a-e57225c8726d};{5b1d9821-6bd2-577b-8602-bb92a8d649b7};{cacab830-ce43-5854-8b86-b2b75d5b5ba7}"/>
@@ -14361,81 +15013,6 @@
         <tag k="hoot:score:match" v="0.1"/>
         <tag k="hoot:score:review" v="0.025"/>
         <tag k="hoot:score:miss" v="0.875"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5016" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88986"/>
-        <nd ref="-1768"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:895a78b438270cea9d21d3aa4dbf1553b431ea81"/>
-        <tag k="name" v="12th St SW"/>
-        <tag k="hoot:score:uuid" v="{dac813cb-655e-59a2-9bc8-eab76d0e5c71}"/>
-        <tag k="uuid" v="{30bde504-e31d-5600-b14a-c1add791002c}"/>
-        <tag k="hoot:id" v="-5016"/>
-        <tag k="hoot:score:match" v="0.175"/>
-        <tag k="hoot:score:review" v="0.025"/>
-        <tag k="hoot:score:miss" v="0.8"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5014" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-39463"/>
-        <nd ref="-50102"/>
-        <nd ref="-50103"/>
-        <nd ref="-50104"/>
-        <nd ref="-50105"/>
-        <nd ref="-50106"/>
-        <nd ref="-50107"/>
-        <nd ref="-50108"/>
-        <nd ref="-50109"/>
-        <nd ref="-50110"/>
-        <nd ref="-50111"/>
-        <nd ref="-50112"/>
-        <nd ref="-50113"/>
-        <nd ref="-50114"/>
-        <nd ref="-15150"/>
-        <nd ref="-50115"/>
-        <nd ref="-50116"/>
-        <nd ref="-50117"/>
-        <nd ref="-50118"/>
-        <nd ref="-50119"/>
-        <nd ref="-50120"/>
-        <nd ref="-50121"/>
-        <nd ref="-50122"/>
-        <nd ref="-50123"/>
-        <nd ref="-50124"/>
-        <nd ref="-50125"/>
-        <nd ref="-50126"/>
-        <nd ref="-50127"/>
-        <nd ref="-50128"/>
-        <nd ref="-50129"/>
-        <nd ref="-50130"/>
-        <nd ref="-50131"/>
-        <nd ref="-50132"/>
-        <nd ref="-50133"/>
-        <nd ref="-50134"/>
-        <nd ref="-50135"/>
-        <nd ref="-50136"/>
-        <nd ref="-50137"/>
-        <nd ref="-50138"/>
-        <nd ref="-50139"/>
-        <nd ref="-50140"/>
-        <nd ref="-50141"/>
-        <nd ref="-50142"/>
-        <nd ref="-50143"/>
-        <nd ref="-50144"/>
-        <nd ref="-39109"/>
-        <nd ref="-88984"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:5c75878934c64919d1645bb0d313087530e0611b;sha1sum:dd16b03fecaed2eb16effa1210ccdc2a015b1cf2;sha1sum:a3cc2a30307cdb66ecd8f14f64b5d86c419a888c;sha1sum:65563f81b622ea809fcfab9b71c1397daaabe968"/>
-        <tag k="name" v="Maine Ave SW"/>
-        <tag k="hoot:score:uuid" v="{aeb5cc44-25f2-51df-9ff0-89def62fb613}"/>
-        <tag k="uuid" v="{e6767435-6e34-5ded-b534-3ddd92994b64};{d309824d-3660-5b67-b0a4-c487b8d649c0}"/>
-        <tag k="hoot:id" v="-5014"/>
-        <tag k="hoot:score:match" v="0"/>
-        <tag k="hoot:score:review" v="0.025"/>
-        <tag k="hoot:score:miss" v="0.975"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5013" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -14492,91 +15069,16 @@
         <nd ref="-1046"/>
         <nd ref="-49653"/>
         <nd ref="-49654"/>
-        <nd ref="-49655"/>
-        <nd ref="-49656"/>
-        <nd ref="-49657"/>
-        <nd ref="-49658"/>
-        <nd ref="-49659"/>
-        <nd ref="-49660"/>
-        <nd ref="-49661"/>
-        <nd ref="-49662"/>
-        <nd ref="-49663"/>
-        <nd ref="-49664"/>
-        <nd ref="-49665"/>
-        <nd ref="-49666"/>
-        <nd ref="-49667"/>
-        <nd ref="-49668"/>
-        <nd ref="-49669"/>
-        <nd ref="-14829"/>
-        <nd ref="-49670"/>
-        <nd ref="-49671"/>
-        <nd ref="-49672"/>
-        <nd ref="-49673"/>
-        <nd ref="-49674"/>
-        <nd ref="-49675"/>
-        <nd ref="-49676"/>
-        <nd ref="-49677"/>
-        <nd ref="-49678"/>
-        <nd ref="-49679"/>
-        <nd ref="-49680"/>
-        <nd ref="-49681"/>
-        <nd ref="-49682"/>
-        <nd ref="-49683"/>
-        <nd ref="-49684"/>
-        <nd ref="-49685"/>
-        <nd ref="-49686"/>
-        <nd ref="-49687"/>
-        <nd ref="-49688"/>
-        <nd ref="-10062"/>
-        <nd ref="-49689"/>
-        <nd ref="-49690"/>
-        <nd ref="-49691"/>
-        <nd ref="-49692"/>
-        <nd ref="-49693"/>
-        <nd ref="-49694"/>
-        <nd ref="-49695"/>
-        <nd ref="-49696"/>
-        <nd ref="-49697"/>
-        <nd ref="-49698"/>
-        <nd ref="-49699"/>
-        <nd ref="-49700"/>
-        <nd ref="-49701"/>
-        <nd ref="-49702"/>
-        <nd ref="-49703"/>
-        <nd ref="-49704"/>
-        <nd ref="-49705"/>
-        <nd ref="-14856"/>
-        <nd ref="-49706"/>
-        <nd ref="-49707"/>
-        <nd ref="-49708"/>
-        <nd ref="-14819"/>
-        <nd ref="-49709"/>
-        <nd ref="-49710"/>
-        <nd ref="-49711"/>
-        <nd ref="-49712"/>
-        <nd ref="-49713"/>
-        <nd ref="-49714"/>
-        <nd ref="-49715"/>
-        <nd ref="-49716"/>
-        <nd ref="-49717"/>
-        <nd ref="-49718"/>
-        <nd ref="-49719"/>
-        <nd ref="-49720"/>
-        <nd ref="-49721"/>
-        <nd ref="-5482"/>
-        <nd ref="-5483"/>
-        <nd ref="-88980"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="primary"/>
-        <tag k="hoot:hash" v="sha1sum:bc2fe3f89c8cab9713aa647ea9047caa4b0d027e;sha1sum:0e43a55e504f9479fcf5c85157aa779c01ea9919;sha1sum:71443681fef775e9a2525fda00378aeabc5bfa2f;sha1sum:9c920beef6c96cb27274abf4fa62d7b06cb57176;sha1sum:4be5625b3d54157d35a153d70182811cf2711515;sha1sum:535c03c77602b16d125023280f0e790eb9670de2;sha1sum:9f5e1a3626789dde7beddb0f57f1bc557440398f;sha1sum:ae1364c4d667c55e6bebfcfbaa3e73c9f81601bf;sha1sum:b8e6c22aba3b3669770de860558633161871d90b;sha1sum:2be98dd35218ebf761e353185a6049f3e1faf011;sha1sum:331378899f425ca3e49bfa4bbc5ace9b09e3f61a;sha1sum:c31160904f5977cb48000f35dee5ff83c8da4398;sha1sum:8d5c4fdb169bff5611a0fcbdfbcc1068734a68e9;sha1sum:ec7c3a0f8d47ddec99e57dada98b4825f920db75;sha1sum:83087292bf03532e829d8f8d500f1873b086a28e;sha1sum:e31102998a0d1dfab843b7ef5f6a7e9d75953d0e;sha1sum:2b6140a699b57e21f8923abb34f07c7e4bab47f6;sha1sum:c8eec3a95ecbf01ea1abf923a698f67e32314116"/>
+        <tag k="hoot:hash" v="sha1sum:bc2fe3f89c8cab9713aa647ea9047caa4b0d027e"/>
         <tag k="name" v="I- 66"/>
-        <tag k="hoot:score:uuid" v="{c6f4afbf-7d1c-51b3-8c3e-39fb500aa87b}"/>
-        <tag k="uuid" v="{144ec689-2343-5991-9dc0-aa2ecb35bc29};{697fd29c-f267-54e1-b21a-a531d7ab8b9c};{c777fcbd-3bc7-5418-8402-0d56a97914ef}"/>
-        <tag k="alt_name" v="US Hwy 50"/>
+        <tag k="hoot:score:uuid" v="{ee135620-8eea-5494-b2d9-dd8c9a714680}"/>
+        <tag k="uuid" v="{f0396c63-878d-53fe-969b-82a25fa1e7c1};{144ec689-2343-5991-9dc0-aa2ecb35bc29};{697fd29c-f267-54e1-b21a-a531d7ab8b9c}"/>
         <tag k="hoot:id" v="-5010"/>
-        <tag k="hoot:score:match" v="0"/>
-        <tag k="hoot:score:review" v="0.25"/>
-        <tag k="hoot:score:miss" v="0.75"/>
+        <tag k="hoot:score:match" v="0.075"/>
+        <tag k="hoot:score:review" v="0.075"/>
+        <tag k="hoot:score:miss" v="0.85"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5009" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -14618,7 +15120,7 @@
         <nd ref="-88979"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:ef04a936f7f6d16022c9dc503010e166be2f205f;sha1sum:5ac4453d5c16fb8f4695866702a59366683c7612;sha1sum:460eecd97985c20f117b67a5bf9ed4be73972023;sha1sum:8a2c1c67d642b00cc9c0f7edac8c4d20ac2adfc9"/>
+        <tag k="hoot:hash" v="sha1sum:ef04a936f7f6d16022c9dc503010e166be2f205f;sha1sum:5ac4453d5c16fb8f4695866702a59366683c7612"/>
         <tag k="name" v="F St NW"/>
         <tag k="hoot:id" v="-5009"/>
         <tag k="error:circular" v="5"/>
@@ -14747,7 +15249,7 @@
         <nd ref="-38986"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:d9910d9f698f5cfa78b3a1d1279464165b378656;sha1sum:92440afdb9e357cee0e09e582e4fde4770c5fd6a;sha1sum:e7fbf79b996cccd57f1d3196937edb598835b087;sha1sum:dd78e910f8c1f5bfebc37760a2c67c84b9a4ae53"/>
+        <tag k="hoot:hash" v="sha1sum:d9910d9f698f5cfa78b3a1d1279464165b378656;sha1sum:92440afdb9e357cee0e09e582e4fde4770c5fd6a"/>
         <tag k="name" v="Pennsylvania Ave NW"/>
         <tag k="hoot:id" v="-5003"/>
         <tag k="error:circular" v="5"/>
@@ -14890,7 +15392,7 @@
         <nd ref="-14479"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:aee6819a204262433c2718be2f596323fb3e9fd6;sha1sum:7755f997c37523c795284b743cdf55a0f8cb1c0a;sha1sum:0cf88d44d9132faf04921ff9dfb8da47b91216c0;sha1sum:4fb2f35e5f1c5e1439b11785026021044c07c790;sha1sum:8e8bdf781bf16da4eaf921defc171df20e9e8b14;sha1sum:b6cbbc165d1b6568856b03bedc9f41e14f7cf838;sha1sum:3f29a576dc92ab8e2db1101914a78cc6a207ed82;sha1sum:c4e0856a7dc4257f837a169b1034cc1d1e15113e;sha1sum:8ef03b95004cf001288aaa55f8f2b5f4e0f24b9e;sha1sum:8b291bac2eb4cbf8e7aebda38c11b335edcf22bb;sha1sum:8baa41016edf30e2cbf6822ee29ad22eda8e175d;sha1sum:db5f53f19188b93b62de41ce2ccea76dc51e92db;sha1sum:bd6d8c1f5bb2170c57475dfc3a0ec725c690ad55"/>
+        <tag k="hoot:hash" v="sha1sum:aee6819a204262433c2718be2f596323fb3e9fd6;sha1sum:7755f997c37523c795284b743cdf55a0f8cb1c0a;sha1sum:0cf88d44d9132faf04921ff9dfb8da47b91216c0;sha1sum:4fb2f35e5f1c5e1439b11785026021044c07c790;sha1sum:3f29a576dc92ab8e2db1101914a78cc6a207ed82;sha1sum:c4e0856a7dc4257f837a169b1034cc1d1e15113e;sha1sum:8ef03b95004cf001288aaa55f8f2b5f4e0f24b9e;sha1sum:8b291bac2eb4cbf8e7aebda38c11b335edcf22bb;sha1sum:bd6d8c1f5bb2170c57475dfc3a0ec725c690ad55"/>
         <tag k="name" v="24th St NW"/>
         <tag k="hoot:id" v="-4996"/>
         <tag k="error:circular" v="5"/>
@@ -14921,7 +15423,7 @@
         <nd ref="-88961"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:99a684e4478bc0af28421379de39b1c31e6df7bd;sha1sum:0f2df0f8f6aca7d5244d3a82b68b05f78bab9701;sha1sum:d5270dad7504786f9f36e9462a37b05d5e764622;sha1sum:4a46263939ce75aa6bfa3c633fa6838d8b432237;sha1sum:a0578f1cb3a0b8922336953fbc88971b27301c8f;sha1sum:b7a79531f503f817f25c1d5cab9ef8a01c31427b;sha1sum:30d7ba565b082344a4922c63ecc2f88f2fb974b1;sha1sum:a2d9e6286357bff26b5b7483aba6fe1168adaec4;sha1sum:5a3b6251ea6038ac74522c30de51681739da468b"/>
+        <tag k="hoot:hash" v="sha1sum:99a684e4478bc0af28421379de39b1c31e6df7bd;sha1sum:0f2df0f8f6aca7d5244d3a82b68b05f78bab9701;sha1sum:d5270dad7504786f9f36e9462a37b05d5e764622;sha1sum:4a46263939ce75aa6bfa3c633fa6838d8b432237;sha1sum:30d7ba565b082344a4922c63ecc2f88f2fb974b1;sha1sum:a2d9e6286357bff26b5b7483aba6fe1168adaec4;sha1sum:5a3b6251ea6038ac74522c30de51681739da468b"/>
         <tag k="name" v="13th St NW"/>
         <tag k="hoot:id" v="-4992"/>
         <tag k="error:circular" v="5"/>
@@ -14968,7 +15470,7 @@
         <nd ref="-88958"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:8f24d5fff0bdf4a09003789a4dc39299c5be71be;sha1sum:bc79d2b74f0c39cf32b84203730bb6fea36308a4;sha1sum:a692d697c5393eb7c49d4159183a91bd6875c71c;sha1sum:e0ef8d2e0da7011ea765f2c8d6925feb9d2d9a0c;sha1sum:3d11ff5bbb0440550c59a236a8318cb8492c9d61"/>
+        <tag k="hoot:hash" v="sha1sum:8f24d5fff0bdf4a09003789a4dc39299c5be71be;sha1sum:bc79d2b74f0c39cf32b84203730bb6fea36308a4;sha1sum:a692d697c5393eb7c49d4159183a91bd6875c71c"/>
         <tag k="name" v="26th St NW"/>
         <tag k="hoot:id" v="-4989"/>
         <tag k="error:circular" v="5"/>
@@ -15055,9 +15557,21 @@
         <nd ref="-88952"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:9eb5e367d8765702247834fba4572a51c5f5e916;sha1sum:670cac41fec5be2135e76c6aca7deb5f1255922b;sha1sum:841395ad6c1ba34a2bdc95bfdc9e70d9e81e6168;sha1sum:52c8088a507af44885fe6cb786c070d46f8d8cc4;sha1sum:b7d6daf3cd9c697b15d832b7575b52ca529a1698;sha1sum:2366dc8d991331f15bc6c3db1691e4bd620b0478;sha1sum:2ca1cb1ece87fa5aa757b3e4452d2b6c4ac9a5b2"/>
+        <tag k="hoot:hash" v="sha1sum:9eb5e367d8765702247834fba4572a51c5f5e916;sha1sum:670cac41fec5be2135e76c6aca7deb5f1255922b;sha1sum:841395ad6c1ba34a2bdc95bfdc9e70d9e81e6168;sha1sum:52c8088a507af44885fe6cb786c070d46f8d8cc4;sha1sum:b7d6daf3cd9c697b15d832b7575b52ca529a1698"/>
         <tag k="name" v="25th St NW"/>
         <tag k="hoot:id" v="-4984"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-4983" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5482"/>
+        <nd ref="-5483"/>
+        <nd ref="-88980"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:hash" v="sha1sum:c8eec3a95ecbf01ea1abf923a698f67e32314116"/>
+        <tag k="name" v="US Hwy 50"/>
+        <tag k="alt_name" v="I- 66"/>
+        <tag k="hoot:id" v="-4983"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-4980" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -15403,18 +15917,6 @@
         <tag k="hoot:id" v="-4383"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-4378" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1768"/>
-        <nd ref="-1769"/>
-        <nd ref="-1770"/>
-        <nd ref="-1771"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:597ca032342b2794618bec8617f3f4fe7930d4c8"/>
-        <tag k="name" v="12th St SW"/>
-        <tag k="hoot:id" v="-4378"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-4358" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346"/>
         <nd ref="-2347"/>
@@ -15490,22 +15992,13 @@
         <nd ref="-5040"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:7fb4c9171bf01e2712cfbc808d85ecd6b17e8dbd;sha1sum:fefe816f8da2eed573b4a8c7f74088c76e3d9924"/>
+        <tag k="hoot:hash" v="sha1sum:7fb4c9171bf01e2712cfbc808d85ecd6b17e8dbd"/>
         <tag k="hoot:score:uuid" v="{b31e506f-9106-58c3-9d40-afa4f06cba5f}"/>
         <tag k="uuid" v="{390efadd-fafb-52a1-a42a-3e2fbf3f0e66}"/>
         <tag k="hoot:id" v="-4246"/>
         <tag k="hoot:score:match" v="0"/>
         <tag k="hoot:score:review" v="0.275"/>
         <tag k="hoot:score:miss" v="0.725"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-4154" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7226"/>
-        <nd ref="-7227"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:f3bd1c78ac992ad5a766d8a66faf55798b995794"/>
-        <tag k="hoot:id" v="-4154"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-4123" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -15520,8 +16013,13 @@
         <nd ref="-8050"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:32fb4a64569d1c3b51799e6e60446d5924ad228f;sha1sum:457ad1c067c991ac500dbf67736b7b8b305ff8a2"/>
+        <tag k="hoot:hash" v="sha1sum:32fb4a64569d1c3b51799e6e60446d5924ad228f"/>
+        <tag k="hoot:score:uuid" v="{e541d417-6057-552b-bb54-363333eb962b}"/>
+        <tag k="uuid" v="{428360fe-3a4a-5931-a3f8-a3ba1111927c}"/>
         <tag k="hoot:id" v="-4123"/>
+        <tag k="hoot:score:match" v="0.325"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.65"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-4062" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -15534,7 +16032,7 @@
         <nd ref="-9485"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:4516d4556ecc4d7a24d5453d99459bfa3f394553;sha1sum:ce7fd4246f430321200c9e4454babb5fa08c0247"/>
+        <tag k="hoot:hash" v="sha1sum:4516d4556ecc4d7a24d5453d99459bfa3f394553"/>
         <tag k="hoot:score:uuid" v="{966bb205-6dd6-5f9a-aded-323467242a36}"/>
         <tag k="uuid" v="{76fd45aa-9d02-5d9f-a6ef-83ff87c10ee9}"/>
         <tag k="hoot:id" v="-4062"/>
@@ -15595,30 +16093,6 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:hash" v="sha1sum:b1333ebd1e7f285feb406b2e269410652b63b601"/>
         <tag k="hoot:id" v="-4013"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-3854" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-12864"/>
-        <nd ref="-12865"/>
-        <tag k="foot" v="designated"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="path"/>
-        <tag k="hoot:hash" v="sha1sum:e61ee3a5f4f04124fe525e95947113d1566f47ff"/>
-        <tag k="hoot:id" v="-3854"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-3781" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5040"/>
-        <nd ref="-14475"/>
-        <nd ref="-14476"/>
-        <nd ref="-14477"/>
-        <nd ref="-14478"/>
-        <nd ref="-14479"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:905751d89a336627f71c422cb0904953db6bc249"/>
-        <tag k="name" v="Pennsylvania Ave NW"/>
-        <tag k="hoot:id" v="-3781"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-3768" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -15689,9 +16163,9 @@
         <nd ref="-14885"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:f692e8a623144ad2b4b3c0448d765032f412f53b;sha1sum:3354ad39e9937c2114541948687278a736398514;sha1sum:b83235ea53058809b7a66a1f54322b0135dbfa65;sha1sum:bc9fa39a75d8a676a4c45adaaf1967d32b907820"/>
+        <tag k="hoot:hash" v="sha1sum:f692e8a623144ad2b4b3c0448d765032f412f53b;sha1sum:3354ad39e9937c2114541948687278a736398514;sha1sum:b83235ea53058809b7a66a1f54322b0135dbfa65"/>
         <tag k="hoot:score:uuid" v="{f16cc391-dd09-56f9-8b12-e8ce9c7707a3}"/>
-        <tag k="uuid" v="{88f8135a-2b0d-5fae-ace9-ba88d3547385}"/>
+        <tag k="uuid" v="{88f8135a-2b0d-5fae-ace9-ba88d3547385};{5ba9769a-6a07-5545-a0ad-d110a073c41f}"/>
         <tag k="hoot:id" v="-3767"/>
         <tag k="hoot:score:match" v="0.05"/>
         <tag k="hoot:score:review" v="0.475"/>
@@ -15782,7 +16256,7 @@
         <nd ref="-14992"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:3a80907192c97c85fd3ef7e0c4529da4d322e76f;sha1sum:37818e4aedcbf36e97be75645b68543f9f328d01;sha1sum:882b6a9c96b983907f943a6fdb33d66f8a15bca0;sha1sum:20054182960dfc1a282781dbece9e33c24bc9ed5;sha1sum:465ba74b074f54acec7751f7a9e1cc4dcbccdb2a;sha1sum:d20e831b53c7aca56479e9d804f0e9b8fa05d6e1;sha1sum:703add1f01b274d13047cb25733ccc15e4b41a3a;sha1sum:f97a0b7b4015eb0766235ec304a4f8b85fd4c9be;sha1sum:4041e6b5332292c5beff08e340a9ab290c091fc1;sha1sum:e400c9ee87e631cb005b861dacceaa17f3137f23"/>
+        <tag k="hoot:hash" v="sha1sum:3a80907192c97c85fd3ef7e0c4529da4d322e76f;sha1sum:37818e4aedcbf36e97be75645b68543f9f328d01;sha1sum:882b6a9c96b983907f943a6fdb33d66f8a15bca0;sha1sum:20054182960dfc1a282781dbece9e33c24bc9ed5;sha1sum:465ba74b074f54acec7751f7a9e1cc4dcbccdb2a;sha1sum:d20e831b53c7aca56479e9d804f0e9b8fa05d6e1;sha1sum:703add1f01b274d13047cb25733ccc15e4b41a3a;sha1sum:f97a0b7b4015eb0766235ec304a4f8b85fd4c9be"/>
         <tag k="name" v="E St NW"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="hoot:id" v="-3762"/>
@@ -15883,18 +16357,16 @@
         <nd ref="-15168"/>
         <nd ref="-15169"/>
         <nd ref="-15170"/>
-        <nd ref="-15171"/>
-        <nd ref="-15172"/>
-        <nd ref="-15173"/>
-        <nd ref="-15174"/>
-        <nd ref="-15175"/>
-        <nd ref="-15176"/>
-        <nd ref="-2103"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:344608dab965d1e796852367ccd28b5cb83df289;sha1sum:82eca27ff83f3eb4e487fd2a8df8975aacda8b96;sha1sum:e2d42c394a4c643bee31377ccf1a3cfb1c421647;sha1sum:482eed84c7de9e576ff8b20631ce510ec922f624;sha1sum:a2387068e57b0e6856244a5066b465d40036b3c1"/>
+        <tag k="hoot:hash" v="sha1sum:344608dab965d1e796852367ccd28b5cb83df289;sha1sum:82eca27ff83f3eb4e487fd2a8df8975aacda8b96;sha1sum:e2d42c394a4c643bee31377ccf1a3cfb1c421647"/>
         <tag k="name" v="Independence Ave SW"/>
+        <tag k="hoot:score:uuid" v="{d309824d-3660-5b67-b0a4-c487b8d649c0}"/>
+        <tag k="uuid" v="{ecaa64c9-15c5-5e52-a249-16a134655aab}"/>
         <tag k="hoot:id" v="-3749"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.975"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-3717" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -15943,7 +16415,7 @@
         <nd ref="-14982"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:ab426ee02e5a22d86130a10304943c9be81ea02f;sha1sum:8f238f863da3c1597f531adc863219ad031f7a55;sha1sum:46eaf674684e783cf1caec34091727058ae22e95"/>
+        <tag k="hoot:hash" v="sha1sum:ab426ee02e5a22d86130a10304943c9be81ea02f"/>
         <tag k="name" v="Ellipse Rd NW"/>
         <tag k="hoot:id" v="-3716"/>
         <tag k="error:circular" v="5"/>
@@ -15988,7 +16460,7 @@
         <nd ref="-21736"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:a280535109acf57a6cfb69da33adad9af14be4bd;sha1sum:a5f4fc48bffc1da33498caa41f01162e36caba32;sha1sum:0cdee77101846ac94ff8d9ca2afcb0c25ff1394d;sha1sum:cb2b6310b7bcc1d8e29099b094416adce3550b17;sha1sum:e1b9eb172a44fb31af6f306ae36162ea2e8af0b2;sha1sum:2851a692969cdd75f4126bf73f34cfc4b64cc48a"/>
+        <tag k="hoot:hash" v="sha1sum:a280535109acf57a6cfb69da33adad9af14be4bd;sha1sum:a5f4fc48bffc1da33498caa41f01162e36caba32;sha1sum:0cdee77101846ac94ff8d9ca2afcb0c25ff1394d;sha1sum:cb2b6310b7bcc1d8e29099b094416adce3550b17;sha1sum:e1b9eb172a44fb31af6f306ae36162ea2e8af0b2"/>
         <tag k="name" v="E St Expy"/>
         <tag k="hoot:score:uuid" v="{c449b4eb-f3a6-56d0-8126-a294dc39e0d9}"/>
         <tag k="uuid" v="{3a9d13ad-ee6c-5652-b87f-b6b5151fd910};{676e01e6-70fc-512f-9d4c-dbfb4b5df977}"/>
@@ -16168,7 +16640,7 @@
         <nd ref="-27334"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:e1ac19aa147eab75640e99df4f3aa1ed3f9dca78;sha1sum:7b969a7ddf172b9848cea77331841b1329143489;sha1sum:fc51d36ec8c71a7c97dae432124d9d770d3f923e;sha1sum:0dd4dd2550c62000aa48412fc0fe26b6fc9b034e;sha1sum:3540caf4c0c41544b309a09b1550c70f65fbe288"/>
+        <tag k="hoot:hash" v="sha1sum:e1ac19aa147eab75640e99df4f3aa1ed3f9dca78;sha1sum:7b969a7ddf172b9848cea77331841b1329143489;sha1sum:fc51d36ec8c71a7c97dae432124d9d770d3f923e"/>
         <tag k="name" v="C St NW"/>
         <tag k="hoot:id" v="-3122"/>
         <tag k="error:circular" v="5"/>
@@ -16222,32 +16694,6 @@
         <tag k="hoot:id" v="-3105"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-3086" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-27985"/>
-        <nd ref="-27986"/>
-        <nd ref="-27987"/>
-        <nd ref="-27988"/>
-        <nd ref="-27989"/>
-        <nd ref="-9479"/>
-        <nd ref="-12864"/>
-        <nd ref="-27990"/>
-        <nd ref="-27991"/>
-        <nd ref="-27992"/>
-        <nd ref="-27993"/>
-        <nd ref="-27994"/>
-        <nd ref="-27995"/>
-        <nd ref="-27996"/>
-        <nd ref="-27997"/>
-        <nd ref="-27998"/>
-        <nd ref="-27999"/>
-        <nd ref="-28000"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:8cceaa6cd482f29360cfef056f8e9ed2a0dafe28;sha1sum:b87fe017b3f6267f51fc3bf6d7936173fe899fc9;sha1sum:9d1ee648759d448d543d73eca77e90d9720aae37"/>
-        <tag k="name" v="17th St SW"/>
-        <tag k="hoot:id" v="-3086"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-3085" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28001"/>
         <nd ref="-28002"/>
@@ -16289,7 +16735,7 @@
         <nd ref="-28025"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:eb56bced67dd642b1a9b762289ec4916e50c1b37;sha1sum:9237fb2d9b2e3fb454912c739e7eaae63dcf44ef"/>
+        <tag k="hoot:hash" v="sha1sum:eb56bced67dd642b1a9b762289ec4916e50c1b37"/>
         <tag k="name" v="Daniel French Dr SW"/>
         <tag k="hoot:score:uuid" v="{80068967-fcb9-590a-98e3-9694f19b68d7}"/>
         <tag k="uuid" v="{87f8a061-d9f1-5bc9-ac28-27f07c8febae}"/>
@@ -16330,14 +16776,9 @@
         <nd ref="-29861"/>
         <nd ref="-14876"/>
         <nd ref="-29862"/>
-        <nd ref="-29863"/>
-        <nd ref="-29864"/>
-        <nd ref="-29865"/>
-        <nd ref="-29866"/>
-        <nd ref="-28026"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:9fe637a1a57af3015c0ed0f2e206abf9349f4ec4;sha1sum:a683dbd81443b44d22ce043913d966baa8565bd9;sha1sum:60d5d6c122f7b0e1f2a9e63340c0d69e11582e00;sha1sum:076d836a3792dfdebb3f2b3f64e64e6b15df512d;sha1sum:c39e5a4735dbce5b0f707376ca2d829b1104afd7;sha1sum:2ea4ac8c3330437393789bc9f34b1e7bc67684f0"/>
+        <tag k="hoot:hash" v="sha1sum:9fe637a1a57af3015c0ed0f2e206abf9349f4ec4;sha1sum:a683dbd81443b44d22ce043913d966baa8565bd9;sha1sum:60d5d6c122f7b0e1f2a9e63340c0d69e11582e00"/>
         <tag k="name" v="E St Expy"/>
         <tag k="hoot:score:uuid" v="{5ba9769a-6a07-5545-a0ad-d110a073c41f}"/>
         <tag k="uuid" v="{e6477554-5533-526d-8b83-a7b00d78000a}"/>
@@ -16443,20 +16884,6 @@
         <tag k="hoot:id" v="-2569"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-2568" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36941"/>
-        <nd ref="-36942"/>
-        <nd ref="-36943"/>
-        <nd ref="-36944"/>
-        <nd ref="-36945"/>
-        <nd ref="-36946"/>
-        <nd ref="-36947"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:345d663cabb26d720d7afe1deef29e5f787110ce"/>
-        <tag k="hoot:id" v="-2568"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-2514" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-38700"/>
         <nd ref="-27128"/>
@@ -16514,7 +16941,7 @@
         <nd ref="-24823"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:4a1a795e0f053822dfe6c76e28e6e5b1be28f104;sha1sum:1517c2c99f8a6ac190f8f24932a60ee7eb6bd6b1;sha1sum:429f1484e6333d6879541518f7b91777fd11eb26;sha1sum:d93132875e67f619cf50ca605026b336fba240a4;sha1sum:ac97a53cddda8d8856caff1fa1ae14c0c6c202a2"/>
+        <tag k="hoot:hash" v="sha1sum:4a1a795e0f053822dfe6c76e28e6e5b1be28f104;sha1sum:d93132875e67f619cf50ca605026b336fba240a4;sha1sum:ac97a53cddda8d8856caff1fa1ae14c0c6c202a2"/>
         <tag k="hoot:id" v="-2513"/>
         <tag k="error:circular" v="5"/>
     </way>
@@ -16711,79 +17138,16 @@
         <nd ref="-39461"/>
         <nd ref="-39462"/>
         <nd ref="-39463"/>
-        <nd ref="-39464"/>
-        <nd ref="-39465"/>
-        <nd ref="-39466"/>
-        <nd ref="-39467"/>
-        <nd ref="-39468"/>
-        <nd ref="-39469"/>
-        <nd ref="-39470"/>
-        <nd ref="-39471"/>
-        <nd ref="-39472"/>
-        <nd ref="-39473"/>
-        <nd ref="-39474"/>
-        <nd ref="-39475"/>
-        <nd ref="-39476"/>
-        <nd ref="-28000"/>
-        <nd ref="-39477"/>
-        <nd ref="-39478"/>
-        <nd ref="-39479"/>
-        <nd ref="-39480"/>
-        <nd ref="-39481"/>
-        <nd ref="-39482"/>
-        <nd ref="-39483"/>
-        <nd ref="-39484"/>
-        <nd ref="-39485"/>
-        <nd ref="-39486"/>
-        <nd ref="-39487"/>
-        <nd ref="-39488"/>
-        <nd ref="-39489"/>
-        <nd ref="-39490"/>
-        <nd ref="-39491"/>
-        <nd ref="-39492"/>
-        <nd ref="-39493"/>
-        <nd ref="-39494"/>
-        <nd ref="-39495"/>
-        <nd ref="-39496"/>
-        <nd ref="-39497"/>
-        <nd ref="-39498"/>
-        <nd ref="-39499"/>
-        <nd ref="-39500"/>
-        <nd ref="-39501"/>
-        <nd ref="-39502"/>
-        <nd ref="-39503"/>
-        <nd ref="-39504"/>
-        <nd ref="-39505"/>
-        <nd ref="-39506"/>
-        <nd ref="-39507"/>
-        <nd ref="-39508"/>
-        <nd ref="-39509"/>
-        <nd ref="-39510"/>
-        <nd ref="-39511"/>
-        <nd ref="-39512"/>
-        <nd ref="-28025"/>
-        <nd ref="-39513"/>
-        <nd ref="-39514"/>
-        <nd ref="-39515"/>
-        <nd ref="-39516"/>
-        <nd ref="-36940"/>
-        <nd ref="-28008"/>
-        <nd ref="-39517"/>
-        <nd ref="-39518"/>
-        <nd ref="-27317"/>
-        <nd ref="-39519"/>
-        <nd ref="-28009"/>
-        <nd ref="-39520"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:6ca7973152f23b2f860b53bbcbab8efc96cd85e0;sha1sum:15b21c9f5f454afbee06eb5e549f4f5b8722d83d;sha1sum:83b00b38f910b92b6eeebd97a679034b0d99e500;sha1sum:5bb601213bbc4db7b914917b4075329872a694f2;sha1sum:603bfcd95519c8c06a96f9e040c9a73d5bc77f7a;sha1sum:e5dee5ee7347a77db8aeb94a399f88fbb4e419a0;sha1sum:885337c31b50b7ed3b5c1f38f7949d7f50f39dce;sha1sum:b7b99e7d508ef9de9e000f06715d6a2cf0759fec;sha1sum:0dabf5b1f4db35d0588d7383a6f1ebc506ff29ef;sha1sum:5aab354e4353a070de5cc9d5f3c943c975eaf4de;sha1sum:4f516f986f5637958efe8868a862bfe79e9bba7f;sha1sum:6493721e378471ffd031df1c03c7b4dcbc96afcb;sha1sum:f0d66708e655f09738d7947cfbcf8f53d9e69cdf;sha1sum:a00b46f2b2d2631d3f1813beeea9b88e1bd753c9;sha1sum:8e10932e946e33d3f1d9e06d60adb4310e2f4106"/>
+        <tag k="hoot:hash" v="sha1sum:6ca7973152f23b2f860b53bbcbab8efc96cd85e0"/>
         <tag k="name" v="Independence Ave SW"/>
-        <tag k="hoot:score:uuid" v="{def66075-e68b-5751-971b-6f338af0cc4c}"/>
-        <tag k="uuid" v="{4c6b8bdd-ad8e-5993-a6d9-438c25d433be}"/>
+        <tag k="hoot:score:uuid" v="{e6767435-6e34-5ded-b534-3ddd92994b64}"/>
+        <tag k="uuid" v="{aeb5cc44-25f2-51df-9ff0-89def62fb613}"/>
         <tag k="hoot:id" v="-2473"/>
         <tag k="hoot:score:match" v="0"/>
-        <tag k="hoot:score:review" v="0.375"/>
-        <tag k="hoot:score:miss" v="0.625"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.975"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-2458" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -16805,32 +17169,6 @@
         <tag k="hoot:hash" v="sha1sum:124e7aeeddc7642c291e301a2bae8fc8e9db35ee;sha1sum:3326085f7d3381c6aec772ed4444404242728ce8"/>
         <tag k="name" v="South Pl NW"/>
         <tag k="hoot:id" v="-2458"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-2270" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-39467"/>
-        <nd ref="-42852"/>
-        <nd ref="-42853"/>
-        <nd ref="-42854"/>
-        <nd ref="-42855"/>
-        <nd ref="-42856"/>
-        <nd ref="-9485"/>
-        <nd ref="-42857"/>
-        <nd ref="-42858"/>
-        <nd ref="-42859"/>
-        <nd ref="-42860"/>
-        <nd ref="-42861"/>
-        <nd ref="-27985"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:e5c2b14c4e95da21f39c744034bd7bf217a6b60b;sha1sum:46abfb17ead66cb7e90e8f87688f0786458edf05"/>
-        <tag k="name" v="17th St SW"/>
-        <tag k="hoot:score:uuid" v="{a4433ded-7d2e-5736-8a87-ea653c7336e5}"/>
-        <tag k="uuid" v="{affa8ad9-7bc1-5ef6-b576-a478e54211fb}"/>
-        <tag k="hoot:id" v="-2270"/>
-        <tag k="hoot:score:match" v="0"/>
-        <tag k="hoot:score:review" v="0.1"/>
-        <tag k="hoot:score:miss" v="0.9"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-2235" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -16970,7 +17308,7 @@
         <nd ref="-49448"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:c510033be3e8c95ca6f563909d2bf3a80a8d1815;sha1sum:193f51a1bb623657d5b21734e363b3d0f3578931;sha1sum:57867276d99a67b8196553c1bfe48f9a59a03f1c;sha1sum:e7196e4679f4758ee373ac4698a662dd3eac62bb;sha1sum:f70ee853dd80ad2b3210d9a7a5d3652376320a98;sha1sum:0b949c295c1385d225e44dc8797a6cfbb05dac72;sha1sum:6dc4b2c3c37c990d746ab1daa8219296f33f230e;sha1sum:73b4959053706a8649b0ff97457e87cdd8b3adec;sha1sum:7ad6ebd843130beda2660896b7e3f62de4cfeea1;sha1sum:85a9634193e9d6070ad1c72398d089fd50a7d919;sha1sum:4bdc2a9d788841aafe9f43c7ed87e9ab778e86aa;sha1sum:c6a739662388f8dbf4e0374d5ff7e3d5160dddfb;sha1sum:c720dd06e9c45acf2152cc5f0f3012d48ac1093a;sha1sum:252b54b30d6de02fa4f5dde8204fb266818aff0e;sha1sum:617a15f9aa2e101b04b62e71dd4e33861cff1ad4"/>
+        <tag k="hoot:hash" v="sha1sum:c510033be3e8c95ca6f563909d2bf3a80a8d1815;sha1sum:193f51a1bb623657d5b21734e363b3d0f3578931;sha1sum:f70ee853dd80ad2b3210d9a7a5d3652376320a98;sha1sum:0b949c295c1385d225e44dc8797a6cfbb05dac72;sha1sum:7ad6ebd843130beda2660896b7e3f62de4cfeea1;sha1sum:85a9634193e9d6070ad1c72398d089fd50a7d919;sha1sum:c720dd06e9c45acf2152cc5f0f3012d48ac1093a"/>
         <tag k="name" v="Washington Cir NW"/>
         <tag k="hoot:id" v="-1899"/>
         <tag k="error:circular" v="5"/>
@@ -17005,7 +17343,7 @@
         <nd ref="-27248"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:92c44be5be5eb774f64fddf21a0f2aae938d52f0;sha1sum:d4f31a07b177e2cb6b0be7ae524936443f74e3a4;sha1sum:3734d1290fbfb74a3de02f4c202c563cf5c474f1;sha1sum:074425c39e32a42c5895d046c61c159a5ea7c6ba"/>
+        <tag k="hoot:hash" v="sha1sum:92c44be5be5eb774f64fddf21a0f2aae938d52f0;sha1sum:d4f31a07b177e2cb6b0be7ae524936443f74e3a4"/>
         <tag k="name" v="Pennsylvania Ave NW"/>
         <tag k="hoot:id" v="-1895"/>
         <tag k="error:circular" v="5"/>
@@ -17020,7 +17358,7 @@
         <nd ref="-22771"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:ea75b4a3bfb88e53385dfb43c8f9af6d3be39a6e;sha1sum:9d92e4eab1c02bf26acee61a0dd4103864ccd304"/>
+        <tag k="hoot:hash" v="sha1sum:ea75b4a3bfb88e53385dfb43c8f9af6d3be39a6e"/>
         <tag k="hoot:score:uuid" v="{42ad5cf8-8351-53cf-acc9-0ddc029325b6}"/>
         <tag k="uuid" v="{65180a67-7014-5778-98f3-1fb53ac34bf5};{c597850a-77d2-5275-9957-85dd3c70c0ee}"/>
         <tag k="hoot:id" v="-1890"/>
@@ -17055,7 +17393,7 @@
         <nd ref="-14992"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:2b3d5b15f6b38feac04a0b942e6b7664d7c32f5b;sha1sum:c9cfc45f477f4d32cbbf9603f41897e5b58488b9;sha1sum:2bf5663d46a52ec17584d1166af22d8ca2ac3c8c;sha1sum:bff867e2baa279de505a85ed5493a2c25f01ab22;sha1sum:ea7d5765a32e3bc404a2bc2a3d77ee44bf59678a"/>
+        <tag k="hoot:hash" v="sha1sum:2b3d5b15f6b38feac04a0b942e6b7664d7c32f5b;sha1sum:c9cfc45f477f4d32cbbf9603f41897e5b58488b9;sha1sum:2bf5663d46a52ec17584d1166af22d8ca2ac3c8c"/>
         <tag k="name" v="17th St NW"/>
         <tag k="hoot:id" v="-1884"/>
         <tag k="error:circular" v="5"/>
@@ -17097,30 +17435,6 @@
         <tag k="hoot:hash" v="sha1sum:da3b4a30599bce1a981c42293054a5ccc9230951"/>
         <tag k="name" v="Ellipse Rd NW"/>
         <tag k="hoot:id" v="-1871"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-1870" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-39105"/>
-        <nd ref="-50215"/>
-        <nd ref="-50216"/>
-        <nd ref="-50217"/>
-        <nd ref="-50218"/>
-        <nd ref="-50219"/>
-        <nd ref="-50220"/>
-        <nd ref="-50221"/>
-        <nd ref="-50222"/>
-        <nd ref="-50223"/>
-        <nd ref="-50224"/>
-        <nd ref="-50141"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:a73c5e38ff4eb87ab7338f3aa19582e9b1daed79"/>
-        <tag k="hoot:score:uuid" v="{d2670373-2b9e-5f76-84fa-3fc143852494}"/>
-        <tag k="uuid" v="{3b01e36a-fcdf-542d-ac09-cef73b3e1bd2}"/>
-        <tag k="hoot:id" v="-1870"/>
-        <tag k="hoot:score:match" v="0.05"/>
-        <tag k="hoot:score:review" v="0.025"/>
-        <tag k="hoot:score:miss" v="0.925"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-1867" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -17237,26 +17551,6 @@
         <tag k="hoot:score:miss" v="0.575"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-1610" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36947"/>
-        <nd ref="-55145"/>
-        <nd ref="-55146"/>
-        <nd ref="-55147"/>
-        <nd ref="-55148"/>
-        <nd ref="-55149"/>
-        <nd ref="-55150"/>
-        <nd ref="-7226"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:d230ec42e33007b794da1177df75e6f3e8066197;sha1sum:d706820058445076ec825e07629f2d20e24c4ad9"/>
-        <tag k="hoot:score:uuid" v="{f69d74b4-9285-51c8-99b1-6160c121650f};{ee5efb97-18e3-5230-9800-62ed07d81cae}"/>
-        <tag k="uuid" v="{94d2266d-7d7e-57b2-9556-2998c17e4371}"/>
-        <tag k="hoot:id" v="-1610"/>
-        <tag k="hoot:score:match" v="0;0.275"/>
-        <tag k="hoot:score:review" v="0.1;0.025"/>
-        <tag k="hoot:score:miss" v="0.9;0.7"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-1534" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27985"/>
         <nd ref="-9482"/>
@@ -17309,22 +17603,6 @@
         <tag k="hoot:hash" v="sha1sum:671175bb66148c53908bbb6907be59adb67d7e5a"/>
         <tag k="name" v="Snows Ct NW"/>
         <tag k="hoot:id" v="-1319"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-1305" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7227"/>
-        <nd ref="-59334"/>
-        <nd ref="-59335"/>
-        <nd ref="-36941"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:74f9e069b8293db39835a8c5b371564e3cea3afc"/>
-        <tag k="hoot:score:uuid" v="{6117767e-8a0b-5624-a599-fa50f96213a6}"/>
-        <tag k="uuid" v="{d1012bc9-92bc-5931-aac2-aa5702f42b8b}"/>
-        <tag k="hoot:id" v="-1305"/>
-        <tag k="hoot:score:match" v="0.1"/>
-        <tag k="hoot:score:review" v="0.05"/>
-        <tag k="hoot:score:miss" v="0.85"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-1289" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -17386,8 +17664,13 @@
         <nd ref="-24823"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:e302b3a9e902e06f516aad3646416673a1fe4ce7;sha1sum:4f4fe040b7fbc84afef223d907530a9cbdad3972;sha1sum:567e1532e7ba148c7194e5c5ec8794f1a494c55d;sha1sum:f6dbd8237c1c24fd2bf6f3160c84c33254862776"/>
+        <tag k="hoot:hash" v="sha1sum:e302b3a9e902e06f516aad3646416673a1fe4ce7;sha1sum:4f4fe040b7fbc84afef223d907530a9cbdad3972;sha1sum:567e1532e7ba148c7194e5c5ec8794f1a494c55d"/>
+        <tag k="hoot:score:uuid" v="{c777fcbd-3bc7-5418-8402-0d56a97914ef}"/>
+        <tag k="uuid" v="{35d758f4-91d8-55dc-8293-c7cf1b139591}"/>
         <tag k="hoot:id" v="-1243"/>
+        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:review" v="0.025"/>
+        <tag k="hoot:score:miss" v="0.975"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-1236" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -17445,7 +17728,7 @@
         <tag k="foot" v="designated"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="path"/>
-        <tag k="hoot:hash" v="sha1sum:cd061dcc968963fdead381e84551d7b6d70c22d6;sha1sum:a20fa282afac0a5687be933e71f81530a9f1be22"/>
+        <tag k="hoot:hash" v="sha1sum:cd061dcc968963fdead381e84551d7b6d70c22d6"/>
         <tag k="hoot:score:uuid" v="{12aa10bf-dade-5e5c-8eae-aba920a52842}"/>
         <tag k="uuid" v="{34ce73c9-0b96-5ec8-a240-028db1de2c38}"/>
         <tag k="hoot:id" v="-1215"/>
@@ -17599,14 +17882,14 @@
         <nd ref="-49448"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:15880f6ee53126302d18ed690046a23a1ee7bdd0;sha1sum:cdaf9e1d5f3a879c0ee96871782fc4fea3217a78;sha1sum:5e3bf873697ca9b5ccd3a4237c50dfd48f9b7efe;sha1sum:6aba639d2a8af27974e300c0879cc8031bf7f4a0;sha1sum:a089f698247bdad7c11b31c5f208a0f0b364335a"/>
+        <tag k="hoot:hash" v="sha1sum:15880f6ee53126302d18ed690046a23a1ee7bdd0;sha1sum:6aba639d2a8af27974e300c0879cc8031bf7f4a0;sha1sum:a089f698247bdad7c11b31c5f208a0f0b364335a"/>
         <tag k="name" v="New Hampshire Ave NW"/>
-        <tag k="hoot:score:uuid" v="{69d6c63a-d959-5f87-aac2-9f928f42b781}"/>
-        <tag k="uuid" v="{d453457d-ddd9-5b99-8149-c68d413b7175}"/>
+        <tag k="hoot:score:uuid" v="{e067beac-a57f-58d0-86c7-89edcbc82c10}"/>
+        <tag k="uuid" v="{33d3977e-0451-5e0f-a8ad-687038806b1c};{d453457d-ddd9-5b99-8149-c68d413b7175}"/>
         <tag k="hoot:id" v="-669"/>
-        <tag k="hoot:score:match" v="0"/>
+        <tag k="hoot:score:match" v="0.35"/>
         <tag k="hoot:score:review" v="0.025"/>
-        <tag k="hoot:score:miss" v="0.975"/>
+        <tag k="hoot:score:miss" v="0.625"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-668" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -17674,23 +17957,13 @@
         <nd ref="-34177"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:10672ad1cefcb5f4eeb3855165f13a317b30e53a;sha1sum:05a367fda534ad672527e0dae0c04674ec17b78f;sha1sum:f334959c6a1d6b6e80b8af68bfc303c1085f238a;sha1sum:84b552b1f4c370438ac366281f8e3b141e48deb7"/>
+        <tag k="hoot:hash" v="sha1sum:10672ad1cefcb5f4eeb3855165f13a317b30e53a;sha1sum:84b552b1f4c370438ac366281f8e3b141e48deb7"/>
         <tag k="hoot:score:uuid" v="{382d3f3d-3e4d-5654-8d79-1bc8e866925e}"/>
         <tag k="uuid" v="{9b0ea9de-a01c-5684-984e-2b8789301027};{810ca363-f4a3-504d-9b20-03f5dda96c7a};{382d3f3d-3e4d-5654-8d79-1bc8e866925e}"/>
         <tag k="hoot:id" v="-663"/>
         <tag k="hoot:score:match" v="0.3"/>
         <tag k="hoot:score:review" v="0.1"/>
         <tag k="hoot:score:miss" v="0.6"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-661" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-70543"/>
-        <nd ref="-49690"/>
-        <nd ref="-22771"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:3e41c6b905ee8a4a4952b541766f4b680bd83468;sha1sum:7e5b82026faf29e51f99f27e04edc9ddf7d4c57c"/>
-        <tag k="hoot:id" v="-661"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-660" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -17893,9 +18166,14 @@
         <nd ref="-36938"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:a265db4159abc604afc0db059dffe13767005678;sha1sum:9ca48dbd3fd8a250fa462510b8aef8e01684e6ab;sha1sum:13285727cd73de951ee0367612e0e3920fc2da5d;sha1sum:ca5909556eb4142496ab8c6b37c30df4885d4cbb;sha1sum:ac0fd47a21170ec7568af4e2041175f049cd97ef;sha1sum:7854b96562eb4c660ede381c2dc9a7e5d433cbfe"/>
+        <tag k="hoot:hash" v="sha1sum:a265db4159abc604afc0db059dffe13767005678;sha1sum:9ca48dbd3fd8a250fa462510b8aef8e01684e6ab;sha1sum:13285727cd73de951ee0367612e0e3920fc2da5d"/>
         <tag k="name" v="Lincoln Memorial Cir"/>
+        <tag k="hoot:score:uuid" v="{34ce73c9-0b96-5ec8-a240-028db1de2c38}"/>
+        <tag k="uuid" v="{12aa10bf-dade-5e5c-8eae-aba920a52842}"/>
         <tag k="hoot:id" v="-658"/>
+        <tag k="hoot:score:match" v="0.05"/>
+        <tag k="hoot:score:review" v="0.075"/>
+        <tag k="hoot:score:miss" v="0.875"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-657" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -17915,7 +18193,7 @@
         <nd ref="-70744"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:d388414bb32705fc831160ed25ed30fdd87bac90;sha1sum:b80927e5639655479491a68ce13233f22f5437f6;sha1sum:fc6d86752a25262cad80a4000d9c0adcb809f913;sha1sum:930c9e5556955e7cd570b6aa43e46d96bd6f0215"/>
+        <tag k="hoot:hash" v="sha1sum:d388414bb32705fc831160ed25ed30fdd87bac90;sha1sum:b80927e5639655479491a68ce13233f22f5437f6"/>
         <tag k="name" v="D St NW"/>
         <tag k="hoot:id" v="-657"/>
         <tag k="error:circular" v="5"/>
@@ -18062,29 +18340,6 @@
         <tag k="hoot:id" v="-389"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-388" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-8050"/>
-        <nd ref="-74998"/>
-        <nd ref="-74999"/>
-        <nd ref="-75000"/>
-        <nd ref="-75001"/>
-        <nd ref="-75002"/>
-        <nd ref="-75003"/>
-        <nd ref="-75004"/>
-        <nd ref="-75005"/>
-        <nd ref="-75006"/>
-        <nd ref="-74993"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:1d4ee55b7930d58f7819653ea01a122a65d7d3b8"/>
-        <tag k="hoot:score:uuid" v="{428360fe-3a4a-5931-a3f8-a3ba1111927c}"/>
-        <tag k="uuid" v="{e541d417-6057-552b-bb54-363333eb962b}"/>
-        <tag k="hoot:id" v="-388"/>
-        <tag k="hoot:score:match" v="0.325"/>
-        <tag k="hoot:score:review" v="0.025"/>
-        <tag k="hoot:score:miss" v="0.65"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-304" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-57339"/>
         <nd ref="-76357"/>
@@ -18192,7 +18447,7 @@
         <nd ref="-79952"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:105668c3a53ca1a39b0b8710c3e4fb605bfd3730;sha1sum:e54e6b2a0fe87c470cc2d3aa4e364c08dcd1fd8b;sha1sum:823428de68ede605efc9aed53a44749a0da5aa28;sha1sum:c9123b5ea676e5e2c8a2817b66d45c3ee1477791;sha1sum:ccc335ff0f26d6bffad7a83447397b75b7a3827b;sha1sum:6b453aa0fc1ab41fc6183d7147353504989e6dee;sha1sum:83944196f5abf2a55eb9aef3ac047c2018453d95;sha1sum:93925d7afdfbb9f23296a27c643b09158e3ae881;sha1sum:5b6affae0e058cd5bff45d3a054aa8004a3e1118;sha1sum:c09d5e61d00fd19499f323fcceed8b17ba3b7c7f"/>
+        <tag k="hoot:hash" v="sha1sum:105668c3a53ca1a39b0b8710c3e4fb605bfd3730;sha1sum:e54e6b2a0fe87c470cc2d3aa4e364c08dcd1fd8b;sha1sum:823428de68ede605efc9aed53a44749a0da5aa28;sha1sum:c9123b5ea676e5e2c8a2817b66d45c3ee1477791;sha1sum:83944196f5abf2a55eb9aef3ac047c2018453d95;sha1sum:93925d7afdfbb9f23296a27c643b09158e3ae881;sha1sum:5b6affae0e058cd5bff45d3a054aa8004a3e1118;sha1sum:c09d5e61d00fd19499f323fcceed8b17ba3b7c7f"/>
         <tag k="name" v="I St NW"/>
         <tag k="hoot:id" v="-68"/>
         <tag k="error:circular" v="5"/>
@@ -18276,36 +18531,6 @@
         <tag k="hoot:hash" v="sha1sum:aedec949d08dac4b5c836148de612a4d04f90334;sha1sum:96fe7ec62f9b5fe135f32445a1f97f28484eb48d;sha1sum:5f4899a6f66fd95478c1b099f5e0c2353415fcc2;sha1sum:114beca1333223823f7bacc9c71c94be8ed50d03;sha1sum:b2302fc8cb7bfb21dd384e6b44493129d3a441a5;sha1sum:167317396a3c853e59c74dcdd932fa9e82536575;sha1sum:304da510af4639d82f14df306fd59ab3c59dce5a;sha1sum:bcb052b1f8f0c4e054fcafa86dc1254b7aa750ab;sha1sum:0f2830d215fcc9eff00721078948fa73cd3e852a"/>
         <tag k="name" v="G St NW"/>
         <tag k="hoot:id" v="-63"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-49562"/>
-        <nd ref="-80319"/>
-        <nd ref="-80320"/>
-        <nd ref="-80321"/>
-        <nd ref="-80322"/>
-        <nd ref="-14809"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:5736dc7eb5c5a3ab07762c05e6c5b2047b59acd1"/>
-        <tag k="hoot:id" v="-58"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1040"/>
-        <nd ref="-52807"/>
-        <nd ref="-80356"/>
-        <nd ref="-49654"/>
-        <nd ref="-14817"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:348fd8cee84c6f03db68ba0aac4e9450cf9316f7;sha1sum:06701f0da0272df833b22b61715d4034383eca9d;sha1sum:d48565f080999938f8961766cfa3c1774b605ce0;sha1sum:039eb79540b9b8641d02481228a4a4efeb8ee76d"/>
-        <tag k="hoot:score:uuid" v="{cacab830-ce43-5854-8b86-b2b75d5b5ba7}"/>
-        <tag k="uuid" v="{a3ba5a1b-3487-58ed-9a89-77d37d04fa0a}"/>
-        <tag k="hoot:id" v="-56"/>
-        <tag k="hoot:score:match" v="0"/>
-        <tag k="hoot:score:review" v="0.025"/>
-        <tag k="hoot:score:miss" v="0.975"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">

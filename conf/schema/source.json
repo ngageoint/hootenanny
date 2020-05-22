@@ -28,16 +28,6 @@
     },
     {
         "isA": "source",
-        "name": "source:datetime",
-        "objectType": "tag"
-    },
-    {
-        "isA": "source",
-        "name": "source:ingest:datetime",
-        "objectType": "tag"
-    },
-    {
-        "isA": "source",
         "name": "source:en",
         "objectType": "tag"
     },

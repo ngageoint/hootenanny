@@ -3172,7 +3172,6 @@
         <nd ref="4881732781"/>
         <nd ref="4881725755"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:hash" v="sha1sum:5910243fe66e13e54cfda48cc6aefe67ed38deb4;sha1sum:cec52b1cbbf47eb98f4da3f45c8a754f98b7d39b"/>
         <tag k="boundary" v="administrative"/>
         <tag k="hoot:id" v="-1124"/>
         <tag k="source:datetime" v="2015-12-23T16:54:03.000Z;2015-12-23T16:54:03Z"/>
@@ -4398,7 +4397,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="destination:ref" v="DE 1 Business"/>
         <tag k="highway" v="motorway_link"/>
-        <tag k="hoot:hash" v="sha1sum:37ac74a9beabc80a67f2cd686efc033b54a6a563"/>
         <tag k="destination" v="Milford"/>
         <tag k="ref" v="DE 1 Business"/>
         <tag k="hoot:id" v="-49"/>
@@ -5225,7 +5223,7 @@
         <tag k="tiger:name_base_1" v="State Highway 1"/>
         <tag k="hoot:id" v="496850140"/>
         <tag k="highway" v="motorway"/>
-        <tag k="hoot:hash" v="sha1sum:64ea1964ebd5db40d6fcf07fb6266122688f990b;sha1sum:52c838e1e0672427ea4c17d221be9db164121cfe"/>
+        <tag k="hoot:hash" v="sha1sum:64ea1964ebd5db40d6fcf07fb6266122688f990b"/>
     </way>
     <way visible="true" id="496850145" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881725014"/>
