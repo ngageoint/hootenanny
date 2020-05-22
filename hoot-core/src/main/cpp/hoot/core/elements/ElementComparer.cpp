@@ -128,21 +128,14 @@ bool ElementComparer::_compareWay(ElementPtr re, ElementPtr e) const
   ConstWayPtr rw = std::dynamic_pointer_cast<const Way>(re);
   ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
 
-  // optimizations
+  // optimization; tag count comparison isn't a good opt b/c you need to count metadata tags only
+  // and that count isn't available without extra computation
   if (rw->getNodeCount() != w->getNodeCount())
   {
     LOG_TRACE(
       "Ways " << rw->getElementId() << " and " << w->getElementId() <<
       " failed comparison on way node count: " << rw->getNodeCount() << " and " <<
       w->getNodeCount());
-    return false;
-  }
-  if (rw->getTagCount() != w->getTagCount())
-  {
-    LOG_TRACE(
-      "Ways " << rw->getElementId() << " and " << w->getElementId() <<
-      " failed comparison on tag count: " << rw->getTagCount() << " and " <<
-      w->getTagCount());
     return false;
   }
 
@@ -186,7 +179,8 @@ bool ElementComparer::_compareRelation(ElementPtr re, ElementPtr e) const
   ConstRelationPtr rr = std::dynamic_pointer_cast<const Relation>(re);
   ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
 
-  // optimizations
+  // optimization; tag count comparison isn't a good opt b/c you need to count metadata tags only
+  // and that count isn't available without extra computation
   if (rr->getType() != r->getType())
   {
     LOG_TRACE(
@@ -200,13 +194,6 @@ bool ElementComparer::_compareRelation(ElementPtr re, ElementPtr e) const
       "Relations " << rr->getElementId() << " and " << r->getElementId() <<
       " failed comparison on relation member count: " << rr->getMemberCount() << " and " <<
       r->getMemberCount());
-    return false;
-  }
-  if (rr->getTagCount() != r->getTagCount())
-  {
-    LOG_TRACE(
-      "Relations " << rr->getElementId() << " and " << r->getElementId() <<
-      " failed comparison on tag count: " << rr->getTagCount() << " and " << r->getTagCount());
     return false;
   }
 
