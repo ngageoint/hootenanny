@@ -35,6 +35,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -116,6 +117,12 @@ void OsmGeoJsonReader::read(const OsmMapPtr& map)
     _loadJSON(_results[i]);
     _parseGeoJson();
   }
+
+  // GeoJSON doesn't support crs prop anymore, but if you have an old file that has one you can
+  // use something hardcoded like this:
+//  std::shared_ptr<OGRSpatialReference> spatRef(new OGRSpatialReference());
+//  spatRef->importFromEPSG(32618);
+//  map->setProjection(spatRef);
 }
 
 void OsmGeoJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& map)
