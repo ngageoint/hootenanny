@@ -1405,8 +1405,8 @@
         <tag k="railway" v="Other"/>
         <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:43.000Z"/>
         <tag k="gauge" v="144"/>
-        <tag k="lanes" v="1"/>
         <tag k="REF1" v="000075"/>
+        <tag k="lanes" v="1"/>
         <tag k="REF2" v="todo"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{7eaf829c-4b09-4bef-b3b5-40c9f6b4b358};{ec1f8089-9b4f-4d65-a0f2-fa646679d9e2}"/>
@@ -1423,6 +1423,7 @@
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:hash" v="sha1sum:881448f8b7abd3ff1a81bbdcd7dc420b436cb3f5;sha1sum:1c3fdaefda7a76321bf819e4274683aeaf3e041a"/>
     </way>
     <way visible="true" id="-1611" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-777"/>

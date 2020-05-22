@@ -4,20 +4,20 @@ set -e
 mkdir -p test-output/cmd/glacial/NonDestructiveTest/
 
 # First run the Congo network conflation
-hoot conflate --warn -C Testing.conf -C ReferenceConflation.conf -C NetworkAlgorithm.conf \
+hoot conflate -C Testing.conf -C ReferenceConflation.conf -C NetworkAlgorithm.conf \
  -D writer.include.debug.tags=true \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
  test-files/Congo_OSM_Roads_Bridges_subset.osm \
  test-output/cmd/glacial/NonDestructiveTest/output.osm
 
 # Derive the changeset for the Congo conflation
-hoot changeset-derive --status -C Testing.conf --stats \
+hoot changeset-derive -C Testing.conf --stats \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
  test-output/cmd/glacial/NonDestructiveTest/output.osm \
  test-output/cmd/glacial/NonDestructiveTest/changeset.osc
 
 # Check the output against the expected output
-hoot diff --warn -C Testing.conf \
+hoot diff -C Testing.conf \
   test-output/cmd/glacial/NonDestructiveTest/output.osm \
   test-files/cmd/glacial/NonDestructiveTest/Expected.osm || \
   diff \

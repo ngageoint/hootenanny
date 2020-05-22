@@ -1001,7 +1001,7 @@
         <nd ref="4881730482"/>
         <nd ref="4881730533"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:cc8d74873da1816cc79cc9b735fd02e31107b058;sha1sum:e19817fcd08cc161a43b0dd3397a274aeaca69e2;sha1sum:913f4ae4cc27e05cfa7adfb55c24aff5efa5e324;sha1sum:9df9b80a8ac9c0e3640f316791e5a6152f1067f0"/>
+        <tag k="hoot:hash" v="sha1sum:cc8d74873da1816cc79cc9b735fd02e31107b058;sha1sum:2e027bc21757fc1f7a37baa73c47750c921021b1;sha1sum:e19817fcd08cc161a43b0dd3397a274aeaca69e2;sha1sum:913f4ae4cc27e05cfa7adfb55c24aff5efa5e324;sha1sum:9df9b80a8ac9c0e3640f316791e5a6152f1067f0"/>
         <tag k="name" v="Kings Highway"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Hwy"/>
@@ -1028,6 +1028,7 @@
         <nd ref="-1355"/>
         <nd ref="-1351"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:3ee2d66ed58bbca4946b0401b0858ac11103a9ae;sha1sum:901c69c1a9ef1be4fa97349dd1aa3a99ebfd3a51"/>
         <tag k="name" v="Sussex Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Ave"/>
@@ -1182,6 +1183,7 @@
         <nd ref="4881727385"/>
         <tag k="highway" v="residential"/>
         <tag k="service" v="alley"/>
+        <tag k="hoot:hash" v="sha1sum:a11068924259047a025c1599151b2debead92fe5;sha1sum:158fc9a1f0c81939c35e360bac30970e06a473a4"/>
         <tag k="name" v="Corn Cob Alley"/>
         <tag k="source:datetime" v="2007-12-19T13:32:19.000Z;2019-02-07T03:00:16Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -1212,6 +1214,7 @@
         <nd ref="4881726355"/>
         <nd ref="4881726353"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:65f10d6af78b8fd3a1fc3d7d851a34560740ac96;sha1sum:b42a05e904cc85e2bbc8c0335e09c3c3beab64c8"/>
         <tag k="name" v="Southeast 2nd Street"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_direction_prefix" v="SE"/>
@@ -1389,7 +1392,7 @@
         <nd ref="4881733488"/>
         <nd ref="4881737431"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:246ca22e6152e643f66d131f229d0ed84776a5de;sha1sum:9ec6a544a9e062fd46c19da898c4340ebf84bcff;sha1sum:7b70e0c8e0ae57acd7b0d8f9e9cf79bad7ca0bc8;sha1sum:ec60e24ccaf17ddbd3da2d9b80c501af02588dad;sha1sum:4226cf5e04cc4e14bff8978dd92e23e264685292;sha1sum:26e8f915a0ebc12af482f7fb537c1b8b94d267e5;sha1sum:9d57c61df70f45073ae19d8e9d8f05c36cc2ae1c"/>
+        <tag k="hoot:hash" v="sha1sum:246ca22e6152e643f66d131f229d0ed84776a5de;sha1sum:9ec6a544a9e062fd46c19da898c4340ebf84bcff;sha1sum:7b70e0c8e0ae57acd7b0d8f9e9cf79bad7ca0bc8;sha1sum:ec60e24ccaf17ddbd3da2d9b80c501af02588dad;sha1sum:02c36d03960f7945f0bdaa4da81a99a31733bd15;sha1sum:4226cf5e04cc4e14bff8978dd92e23e264685292;sha1sum:26e8f915a0ebc12af482f7fb537c1b8b94d267e5;sha1sum:9d57c61df70f45073ae19d8e9d8f05c36cc2ae1c"/>
         <tag k="name" v="West Clarke Avenue"/>
         <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:name_direction_prefix" v="W"/>
@@ -1410,7 +1413,7 @@
         <nd ref="-35"/>
         <tag k="highway" v="residential"/>
         <tag k="service" v="alley"/>
-        <tag k="hoot:hash" v="sha1sum:22a5112916ffe4cc0b194be837d975847a4aff47;sha1sum:77d2f2b729b207f4cac924ea7888dbc7b70ec762"/>
+        <tag k="hoot:hash" v="sha1sum:c944e0b45de48226b0abe8f321fbe5b1f5ec6960;sha1sum:ef2294d014c3d797ed30f9815bc09593c6578d9d;sha1sum:22a5112916ffe4cc0b194be837d975847a4aff47;sha1sum:77d2f2b729b207f4cac924ea7888dbc7b70ec762;sha1sum:229f6eb51c6a5c26fd3131777461cda69511ebaa"/>
         <tag k="name" v="Plum Street"/>
         <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T14:57:17.000Z;2019-04-02T11:40:19Z;2019-04-02T11:40:15Z"/>
@@ -1424,7 +1427,7 @@
         <nd ref="4881729682"/>
         <nd ref="4881729663"/>
         <tag k="old_railway_operator" v="PRR"/>
-        <tag k="hoot:hash" v="sha1sum:d2f8f3f860525f0da3db5904157de6a6a04a264a"/>
+        <tag k="hoot:hash" v="sha1sum:3efddcd177e950ecd668e1570d84905c04b88c82;sha1sum:d2f8f3f860525f0da3db5904157de6a6a04a264a"/>
         <tag k="name" v="Indian River Secondary"/>
         <tag k="gauge" v="1435"/>
         <tag k="railway" v="rail"/>
@@ -1536,7 +1539,7 @@
         <nd ref="4881735996"/>
         <tag k="tiger:name_base_1" v="State Road 36"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:3c4ab10665bf6b3d63d7fb3ddfa9aa102a6878a4;sha1sum:0284413166d678294f2806deb418ca1243afaf46;sha1sum:5c9905721fc8402977740a3e4d034abe3ffed2ec"/>
+        <tag k="hoot:hash" v="sha1sum:3c4ab10665bf6b3d63d7fb3ddfa9aa102a6878a4;sha1sum:0284413166d678294f2806deb418ca1243afaf46;sha1sum:c9b948dc5c94bcf80a9692e60eecc6202094ec91;sha1sum:5c9905721fc8402977740a3e4d034abe3ffed2ec"/>
         <tag k="name" v="Causey Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
@@ -1613,6 +1616,7 @@
     <way visible="true" id="-1620" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729718"/>
         <nd ref="4881729706"/>
+        <tag k="hoot:hash" v="sha1sum:96cd61dbef36934f96bca4972a363c36afdd530d;sha1sum:0ecdfda9cafcc89cf1a88a63f687144d69ab1b71"/>
         <tag k="tunnel" v="culvert"/>
         <tag k="layer" v="-1"/>
         <tag k="waterway" v="stream"/>
@@ -1799,7 +1803,7 @@
         <nd ref="4881726688"/>
         <nd ref="4881735996"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:d12b353d86d89ce74f8d2d99448b217ba887690b;sha1sum:6f63805f70171edd40f3a4d598ef7514553cafb3"/>
+        <tag k="hoot:hash" v="sha1sum:d12b353d86d89ce74f8d2d99448b217ba887690b;sha1sum:6f63805f70171edd40f3a4d598ef7514553cafb3;sha1sum:e899c7fe454df5746e454b3ebebdc825f9a7f61c"/>
         <tag k="name" v="South Church Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="alt_name" v="South Church Street"/>
@@ -1855,7 +1859,7 @@
         <nd ref="4881725477"/>
         <tag k="tiger:name_base_1" v="County Road 213"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:b1d735e1be51f554402af2deeacede0b5bb4e661;sha1sum:84faa7533a091d4896a50a35a8203258b4d6f9a3;sha1sum:1ec464648dd260a9139b427661766bfdb14f83bf;sha1sum:13b827e219c33e02455638f254c7779da65e259c;sha1sum:045bacd42f510be79684627bed27ec4a84f796b0;sha1sum:2f9e12314a24fd79304f8eaaabb6a0fbbb3b16ea;sha1sum:2b339923b4f5d2d6616c94f777ed83172067528e;sha1sum:278b024cceb5c7853149fe3b57198d52059dff8c;sha1sum:f228c301d0c6e7326f428681b8451fabf1565323;sha1sum:b4eaab5b94c727e125c203166cf4c0b94565ab11"/>
+        <tag k="hoot:hash" v="sha1sum:b1d735e1be51f554402af2deeacede0b5bb4e661;sha1sum:84faa7533a091d4896a50a35a8203258b4d6f9a3;sha1sum:1ec464648dd260a9139b427661766bfdb14f83bf;sha1sum:13b827e219c33e02455638f254c7779da65e259c;sha1sum:045bacd42f510be79684627bed27ec4a84f796b0;sha1sum:2f9e12314a24fd79304f8eaaabb6a0fbbb3b16ea;sha1sum:2b339923b4f5d2d6616c94f777ed83172067528e;sha1sum:278b024cceb5c7853149fe3b57198d52059dff8c;sha1sum:9e10102795c4d216cf0cb2647dc5692cbb4f49eb;sha1sum:152338312ea5aacddef057d8f7ccf81cf1a14cd3;sha1sum:f228c301d0c6e7326f428681b8451fabf1565323;sha1sum:b4eaab5b94c727e125c203166cf4c0b94565ab11"/>
         <tag k="name_1" v="County Road 213"/>
         <tag k="name" v="South Walnut Street"/>
         <tag k="tiger:zip_left" v="19963"/>
@@ -1892,6 +1896,7 @@
         <nd ref="4881733423"/>
         <nd ref="4881735994"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:0eb29bcff3cdbff980cb14a32ef9a79522400f3d;sha1sum:259213f3d1f81e170faa5ce03aaa21fb457143e5"/>
         <tag k="name" v="Jefferson Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Ave"/>
@@ -1912,7 +1917,7 @@
         <nd ref="4881730543"/>
         <nd ref="4881730541"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:06087520c757565a3b1cd2b92281ff181702a3d5;sha1sum:94481ef21923819c9c4c36b4286864cf90ba1543;sha1sum:fc62dbd40511f7f7e66d8178d3f45229ae380f31"/>
+        <tag k="hoot:hash" v="sha1sum:06087520c757565a3b1cd2b92281ff181702a3d5;sha1sum:94481ef21923819c9c4c36b4286864cf90ba1543;sha1sum:44f8afd9ffdc4e96e40e2fc7d3218c686700ba52;sha1sum:6fd0940a22e7ab0cfd73bc3e312b05af461f5ab1;sha1sum:d85a8364401569fa151822f6e317de55f617f7f2;sha1sum:fc62dbd40511f7f7e66d8178d3f45229ae380f31"/>
         <tag k="name" v="Kings Highway"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Hwy"/>
@@ -3400,7 +3405,7 @@
         <nd ref="4881727394"/>
         <nd ref="4881733499"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:1f8fd54005e257492ebb2b6d1620bb4f14bac57d;sha1sum:9e640bf7ff7b171432d979ebccbaa09398c8c920"/>
+        <tag k="hoot:hash" v="sha1sum:3ee2d66ed58bbca4946b0401b0858ac11103a9ae;sha1sum:d4e7df2801aacba81a98268eec7b238735aac252;sha1sum:1f8fd54005e257492ebb2b6d1620bb4f14bac57d;sha1sum:9e640bf7ff7b171432d979ebccbaa09398c8c920"/>
         <tag k="name" v="Sussex Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Ave"/>
@@ -3510,7 +3515,7 @@
         <nd ref="4881736055"/>
         <nd ref="4881730547"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:853dd0bdb354dc86d1af8190ff09cd357307dfd6;sha1sum:4880582ead5db9a59a64aebf12332498d8a13a0f"/>
+        <tag k="hoot:hash" v="sha1sum:853dd0bdb354dc86d1af8190ff09cd357307dfd6;sha1sum:4880582ead5db9a59a64aebf12332498d8a13a0f;sha1sum:3cb6e0bca8e7fa216f9d9e2927915b716f7e1753;sha1sum:ba906079dc25c3f988baf4b16ca988be095b1588"/>
         <tag k="name" v="Williams Street"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="St"/>

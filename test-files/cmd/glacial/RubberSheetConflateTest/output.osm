@@ -5370,6 +5370,7 @@
         <nd ref="-27516"/>
         <nd ref="-180277"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:cc8b0deb6dc28b4eb52ef32295206a5992c4300e;sha1sum:04c3d2631b013e85f3b14af257dc1efa894d0430"/>
         <tag k="name" v="E ST EXPY NW"/>
         <tag k="alt_name" v="E St Expy"/>
         <tag k="error:circular" v="5"/>
@@ -5417,6 +5418,7 @@
         <nd ref="-27555"/>
         <nd ref="-180266"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:cc8b0deb6dc28b4eb52ef32295206a5992c4300e;sha1sum:04c3d2631b013e85f3b14af257dc1efa894d0430"/>
         <tag k="name" v="E ST EXPY NW"/>
         <tag k="alt_name" v="E St Expy"/>
         <tag k="error:circular" v="5"/>
@@ -7705,6 +7707,7 @@
         <nd ref="-76182"/>
         <tag k="foot" v="designated"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:0e13838ac68d36ff620755984be2a0ae4ead00b8;sha1sum:a36fc7fa0bb5a36e5712af2bf4792260adb5c2b1"/>
         <tag k="name" v="STATE PL NW"/>
         <tag k="alt_name" v="State Pl NW"/>
         <tag k="error:circular" v="5"/>
@@ -8955,6 +8958,7 @@
         <nd ref="-173723"/>
         <nd ref="-180277"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:04c3d2631b013e85f3b14af257dc1efa894d0430"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-26102" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -8967,6 +8971,7 @@
         <nd ref="-180277"/>
         <nd ref="-180280"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:cc8b0deb6dc28b4eb52ef32295206a5992c4300e;sha1sum:04c3d2631b013e85f3b14af257dc1efa894d0430"/>
         <tag k="name" v="E ST EXPY NW"/>
         <tag k="alt_name" v="E St Expy"/>
         <tag k="error:circular" v="5"/>
@@ -12516,6 +12521,7 @@
         <nd ref="-119110"/>
         <nd ref="-114581"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:54647f2809bcf78065107328c6ba15e91323f930;sha1sum:e07d53820455aaee4a3e6dc9f0a53902488bee3f"/>
         <tag k="name" v="17TH ST SW"/>
         <tag k="alt_name" v="17th St SW"/>
         <tag k="error:circular" v="5"/>

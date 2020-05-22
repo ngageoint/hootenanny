@@ -6615,6 +6615,7 @@
         <nd ref="4881728931"/>
         <nd ref="4881728943"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:hash" v="sha1sum:0f8611fe3f9d9d97e3b9607dc378b318ff170c7a"/>
         <tag k="source:datetime" v="2020-02-28T16:48:04Z"/>
         <tag k="error:circular" v="15"/>
     </way>

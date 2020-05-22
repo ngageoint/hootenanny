@@ -963,6 +963,7 @@
         <tag k="oneway" v="yes"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:6fc76a2446742414747b694ba3ede13cc492afba;sha1sum:abba2658fb73ab0145f9feb078333ba8380fe664"/>
         <tag k="name" v="Gagne"/>
         <tag k="alt_name" v="Gagne Lane"/>
         <tag k="hoot:id" v="-1860"/>
@@ -975,7 +976,7 @@
         <nd ref="4881727630"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="service"/>
-        <tag k="hoot:hash" v="sha1sum:123ecdadf06507ba8c19bd043a9d8384e6b6d03f"/>
+        <tag k="hoot:hash" v="sha1sum:18c9c9e0d8a0757259a7953ae367f31d24fafa63;sha1sum:74400ad3c63487434c22608a08f5d8143723bebc;sha1sum:123ecdadf06507ba8c19bd043a9d8384e6b6d03f"/>
         <tag k="hoot:id" v="-1857"/>
         <tag k="source:datetime" v="2015-06-26T22:20:00.000Z;2015-06-26T22:20:00Z"/>
         <tag k="error:circular" v="15"/>
@@ -1210,8 +1211,8 @@
         <tag k="tiger:name_base_1" v="United States Highway 113"/>
         <tag k="tiger:name_base_2" v="Dupont"/>
         <tag k="hoot:id" v="-1790"/>
+        <tag k="hoot:hash" v="sha1sum:03c3cf595088a968bc678367409dae8dfa8f2349;sha1sum:c77bd0f1856413e9b7d9e7b6ddee702d0914b972"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:c77bd0f1856413e9b7d9e7b6ddee702d0914b972"/>
     </way>
     <way visible="true" id="-1757" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="4881728010"/>
@@ -1401,7 +1402,7 @@
         <tag k="tiger:name_base_1" v="United States Highway 113"/>
         <tag k="tiger:name_base_2" v="Dupont"/>
         <tag k="hoot:id" v="-72"/>
-        <tag k="hoot:hash" v="sha1sum:499a1503ce9d5fc416cfeba0001a558e22f76d3e;sha1sum:19bb1301410c986a91ca60bc693212badf52773c;sha1sum:a961c65319c3ef7a895cd5460e79671ba4fffdba"/>
+        <tag k="hoot:hash" v="sha1sum:523d273bb7e25fccd97c69990aef50a81628be2f;sha1sum:499a1503ce9d5fc416cfeba0001a558e22f76d3e;sha1sum:19bb1301410c986a91ca60bc693212badf52773c;sha1sum:afc022c9cdd30ec260c9e38332f82c3f4a63208e;sha1sum:a961c65319c3ef7a895cd5460e79671ba4fffdba"/>
         <tag k="highway" v="trunk"/>
     </way>
     <way visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1461,7 +1462,7 @@
         <tag k="tiger:name_base_1" v="United States Highway 113"/>
         <tag k="tiger:name_base_2" v="Dupont"/>
         <tag k="hoot:id" v="-67"/>
-        <tag k="hoot:hash" v="sha1sum:2864163da8008f39f068a3a00133dad91c2551f3;sha1sum:a961c65319c3ef7a895cd5460e79671ba4fffdba;sha1sum:ad69fc5f9581354a71f8ac538fa928d842014ede;sha1sum:c77bd0f1856413e9b7d9e7b6ddee702d0914b972"/>
+        <tag k="hoot:hash" v="sha1sum:2864163da8008f39f068a3a00133dad91c2551f3;sha1sum:a961c65319c3ef7a895cd5460e79671ba4fffdba;sha1sum:855b36a707b53670110b347709182c54fd330cf5;sha1sum:ad69fc5f9581354a71f8ac538fa928d842014ede;sha1sum:c77bd0f1856413e9b7d9e7b6ddee702d0914b972"/>
         <tag k="highway" v="trunk"/>
     </way>
     <way visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1824,7 +1825,7 @@
         <tag k="tiger:name_base_1" v="State Road 36"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:bed32d79c5bff545d6da027b918f8f8a3dfbc39a;sha1sum:51c51c8a3bccddf1c92cf9cd1e4c8a4a9b05d7fd;sha1sum:ad08f9812f21a93aa1bf6555f0e23ef4c9de0dc2;sha1sum:f919165b5cc24f0c76e514441d48cb6a78a22743;sha1sum:e502278a31de43d87d96aa300ef2e0607f26f7ab;sha1sum:d5feca6925710b725815bfa38a10dc8cd61b3a44;sha1sum:21a6044c80a480b705335a9b733eebc0b53366bc;sha1sum:351d2c6d27bab308d15c8d23754782855db0bff0;sha1sum:c5536f42322f20c4bba6f7e84d3605a228034499;sha1sum:b43d927198597117698b3caed2877115ce1c751f;sha1sum:ddf8f2bdb00e8cf2c43a89653fe5dcac7fe58ab2;sha1sum:49fdc2bbf39ef1932f8436c2fba81ad46069824b;sha1sum:31d824d84170fa5afea7695fef374b8348e75903;sha1sum:ce82457142b9071e450eee4fbcbe57f7a0413252;sha1sum:e68f0fa39ddedf07e3f765dd6b813cf0437b6556"/>
+        <tag k="hoot:hash" v="sha1sum:bed32d79c5bff545d6da027b918f8f8a3dfbc39a;sha1sum:a778a4d91b0c753b99943bdc1bc48a1cb87362df;sha1sum:51c51c8a3bccddf1c92cf9cd1e4c8a4a9b05d7fd;sha1sum:ad08f9812f21a93aa1bf6555f0e23ef4c9de0dc2;sha1sum:dfc46b26981053fa400f3ddff67e5f76407b8372;sha1sum:f919165b5cc24f0c76e514441d48cb6a78a22743;sha1sum:e502278a31de43d87d96aa300ef2e0607f26f7ab;sha1sum:d5feca6925710b725815bfa38a10dc8cd61b3a44;sha1sum:21a6044c80a480b705335a9b733eebc0b53366bc;sha1sum:351d2c6d27bab308d15c8d23754782855db0bff0;sha1sum:c5536f42322f20c4bba6f7e84d3605a228034499;sha1sum:b43d927198597117698b3caed2877115ce1c751f;sha1sum:ddf8f2bdb00e8cf2c43a89653fe5dcac7fe58ab2;sha1sum:49fdc2bbf39ef1932f8436c2fba81ad46069824b;sha1sum:31d824d84170fa5afea7695fef374b8348e75903;sha1sum:ce82457142b9071e450eee4fbcbe57f7a0413252;sha1sum:e68f0fa39ddedf07e3f765dd6b813cf0437b6556"/>
         <tag k="name" v="Lakeview Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
@@ -1941,7 +1942,7 @@
         <tag k="tiger:name_base_1" v="County Road 36A"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:hash" v="sha1sum:1dd1709c9d1e49604bb051e47232180eea485d11;sha1sum:2accfd12ac03526940a16e090d6ff9dbd21812b1"/>
+        <tag k="hoot:hash" v="sha1sum:1dd1709c9d1e49604bb051e47232180eea485d11;sha1sum:2accfd12ac03526940a16e090d6ff9dbd21812b1;sha1sum:3bcb697e49f17c230af5d411899da6f9d6b5ff1d"/>
         <tag k="name_1" v="County Road 36A"/>
         <tag k="name" v="Seabury Avenue"/>
         <tag k="tiger:zip_left" v="19963"/>

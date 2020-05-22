@@ -5283,7 +5283,7 @@
         <nd ref="6096477729"/>
         <nd ref="6096477731"/>
         <tag k="source" v="ehealthafrica.org"/>
-        <tag k="hoot:hash" v="sha1sum:324ec0eae2d75b0f53696698b0fadb1969a812cc"/>
+        <tag k="hoot:hash" v="sha1sum:51df04c472a6907114ead9609a2217ca4f0cbf63;sha1sum:324ec0eae2d75b0f53696698b0fadb1969a812cc"/>
         <tag k="boundary" v="administrative"/>
         <tag k="source:datetime" v="2014-05-06T13:32:11.000Z;2014-05-06T13:32:11Z"/>
         <tag k="source:date" v="2013"/>
@@ -5577,7 +5577,7 @@
         <nd ref="6096477619"/>
         <tag k="oneway" v="no"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:e2ce1299e811fa5614780fed2188dcf88137ed4c;sha1sum:4dec1fd1b2f8a9c72e0e8f45248a3e2e4a18ed54"/>
+        <tag k="hoot:hash" v="sha1sum:1d2a09bfaf896e336212bc54f26d51b8159aebde;sha1sum:e2ce1299e811fa5614780fed2188dcf88137ed4c;sha1sum:4dec1fd1b2f8a9c72e0e8f45248a3e2e4a18ed54"/>
         <tag k="ref" v="A12"/>
         <tag k="source:datetime" v="2015-11-27T14:48:33.000Z;2019-05-07T08:54:06Z"/>
         <tag k="surface" v="paved"/>
@@ -11449,6 +11449,7 @@
         <nd ref="-437"/>
         <tag k="oneway" v="yes"/>
         <tag k="highway" v="trunk"/>
+        <tag k="hoot:hash" v="sha1sum:8c22a932ed22e2d1a0496e7cd61c50ddfd83b651"/>
         <tag k="ref" v="A12"/>
         <tag k="source:datetime" v="2018-01-24T04:35:31Z"/>
         <tag k="surface" v="paved"/>

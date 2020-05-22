@@ -1371,7 +1371,7 @@
         <tag k="maxspeed" v="90"/>
         <tag k="oneway" v="no"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:39514b8896036b7d1c27d68ff6e14979911c2e39;sha1sum:c3871b301ec12a2719a47b6badfa8a854f10b24c;sha1sum:7b9b0ab1519ee43fe603a38ee19b79574a6bf3fb;sha1sum:cc92139e58194936bb910ab8115173377ce2dfd8;sha1sum:d50fb8b15bfa840cddf20c2ed3fc5acd2556097d;sha1sum:578b24006d1efb9f1acc5a0e0d6afc4a45d50d77;sha1sum:9668ea8bcaa1528a8824e6f9fd002de64bcb5825;sha1sum:7075dc6d33780cc5c76378669a9df111014f1fdd;sha1sum:d3becd9dccfc5a488d68b797cb03c19763f5ac36"/>
+        <tag k="hoot:hash" v="sha1sum:39514b8896036b7d1c27d68ff6e14979911c2e39;sha1sum:c3871b301ec12a2719a47b6badfa8a854f10b24c;sha1sum:d70afdf9d0235d514bbba540ead65cde824ad82d;sha1sum:7b9b0ab1519ee43fe603a38ee19b79574a6bf3fb;sha1sum:cc92139e58194936bb910ab8115173377ce2dfd8;sha1sum:d50fb8b15bfa840cddf20c2ed3fc5acd2556097d;sha1sum:578b24006d1efb9f1acc5a0e0d6afc4a45d50d77;sha1sum:9668ea8bcaa1528a8824e6f9fd002de64bcb5825;sha1sum:7075dc6d33780cc5c76378669a9df111014f1fdd;sha1sum:d3becd9dccfc5a488d68b797cb03c19763f5ac36"/>
         <tag k="name" v="Route de Saint-Louis"/>
         <tag k="int_ref" v="TAH 1"/>
         <tag k="nat_ref" v="N 2"/>

@@ -179,6 +179,7 @@
         <nd ref="-101"/>
         <nd ref="-4"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:f54300c9d3bfa8ad8eb2452a0b54a527453a9257;sha1sum:505c3420f748266425245058a223b26691bbeee3;sha1sum:52bf94ad44041846fc83d8b193219223812bc8d3;sha1sum:40a5612d74e527f9b0c87c5bb59adbb99ceb91bf;sha1sum:25df8128fffb6dd77e32c68f63eebb394fac3c5a;sha1sum:0180508b1b5f82057867e0587aa5e767b47c7c54;sha1sum:9c398a0b1b304955fbc102b27d207dc624724ab3"/>
         <tag k="name" v="Monroe Avenue"/>
         <tag k="tiger:zip_left" v="64124"/>
         <tag k="tiger:name_type" v="Ave"/>
@@ -198,7 +199,7 @@
         <nd ref="-2"/>
         <tag k="tiger:name_base_1" v="7"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:hash" v="sha1sum:6d6b6be42cbbba14d3df3f6e2fbcdaec53cdbe8f;sha1sum:4c38ad3aa00abc3b3787b7427733ff3422b313d5;sha1sum:ae06110d2f2f1275a23e8ee9893a2e11d34e35c2;sha1sum:459a865beb2637b2aff30ae6c0cde468e81b8768"/>
+        <tag k="hoot:hash" v="sha1sum:6d6b6be42cbbba14d3df3f6e2fbcdaec53cdbe8f;sha1sum:4c38ad3aa00abc3b3787b7427733ff3422b313d5;sha1sum:30d33488180f62c9873817f1a515aafe88f41207;sha1sum:ae06110d2f2f1275a23e8ee9893a2e11d34e35c2;sha1sum:459a865beb2637b2aff30ae6c0cde468e81b8768"/>
         <tag k="name_1" v="East 7 Street"/>
         <tag k="name" v="East 7th Street"/>
         <tag k="tiger:zip_left" v="64124"/>

@@ -1886,6 +1886,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm;mgcp:railrdl_rail"/>
+        <tag k="hoot:hash" v="sha1sum:1c3fdaefda7a76321bf819e4274683aeaf3e041a;sha1sum:ba9eab73ee32c2d2aa8f2c5c119076bd97e307fd"/>
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-5758" timestamp="2018-02-15T20:56:52Z" version="1">
@@ -3891,6 +3892,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm;mgcp:railrdl_rail"/>
+        <tag k="hoot:hash" v="sha1sum:c158e7036af325d561819f3a01b98c12187097a7;sha1sum:263fc347482f20d0e8849c38b82777d0fe099e43"/>
     </way>
     <way visible="true" id="-5569" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="163"/>
@@ -4458,6 +4460,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="hoot:hash" v="sha1sum:8e1dd0adbdc9cc805fa8e512caab4c533b155791"/>
     </way>
     <way visible="true" id="-5509" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="539"/>
@@ -4494,6 +4497,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm;mgcp:railrdl_rail"/>
+        <tag k="hoot:hash" v="sha1sum:9af69a89d3e811ec1810cfee3ddbd4af7163330b;sha1sum:8e1dd0adbdc9cc805fa8e512caab4c533b155791"/>
     </way>
     <way visible="true" id="-5507" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-4251"/>
@@ -4601,6 +4605,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm;mgcp:railrdl_rail"/>
+        <tag k="hoot:hash" v="sha1sum:9af69a89d3e811ec1810cfee3ddbd4af7163330b"/>
     </way>
     <way visible="true" id="-5496" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-4250"/>
@@ -4661,6 +4666,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="hoot:hash" v="sha1sum:8e1dd0adbdc9cc805fa8e512caab4c533b155791"/>
     </way>
     <way visible="true" id="-5493" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="328"/>
