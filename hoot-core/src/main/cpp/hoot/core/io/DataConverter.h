@@ -118,6 +118,8 @@ public:
 
 private:
 
+  friend class DataConverterTest;
+
   QString _translation;
   QString _translationDirection;
   QStringList _shapeFileColumns;

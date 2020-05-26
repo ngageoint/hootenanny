@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -37,7 +37,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 #include <hoot/core/io/IoUtils.h>
 
@@ -166,7 +166,8 @@ public:
       IoUtils::loadMap(map, args[i], false, s);
     }
 
-    CalculateHashVisitor hashVisitor;
+    MultiaryPoiHashVisitor hashVisitor;
+    hashVisitor.setIncludeCircularError(true);
     map->visitRw(hashVisitor);
 
     OsmMapWriterFactory::write(map, "/tmp/score-matches-after-prep.osm");

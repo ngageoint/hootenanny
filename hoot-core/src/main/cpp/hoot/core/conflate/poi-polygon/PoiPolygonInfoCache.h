@@ -64,14 +64,14 @@ typedef std::shared_ptr<PoiPolygonInfoCache> PoiPolygonInfoCachePtr;
  * africom/somalia/229_Mogadishu_SOM_Translated. Further caching could be deemed necessary
  * given performance with other datasets.
  *
- * Note: I did notice later in the second round of performance testing that largely differing
- * runtimes were being returned on a vagrant instance with the same configuration. I'm not sure
- * what could be causing this, but that means the results are suspect. Going to go ahead and use
- * the caching config from the best runtime, but it still may need to be tweaked.
+ * Its worth noting that if you are doing performance tweaks on a Vagrant VM, the runtimes may vary
+ * with subsequent executions of the exact same conflate job. So in that case, its best to look for
+ * tweaks with fairly large improvements and ignore the smaller performance improvements.
  *
  * Some of the geometry comparisons in this class could be abstracted out beyond poi/poly geoms and
- * moved into a class like OsmUtils if we ever need them to be used with other conflation algs. If
- * that's done there will be some work to make any caching being performed work across unit tests.
+ * moved into a class like OsmGeometryUtils if we ever need them to be used with other conflation
+ * algs. If that's done there will be some work to make any caching being performed work across unit
+ * tests.
  */
 class PoiPolygonInfoCache : public Configurable
 {
@@ -207,7 +207,7 @@ private:
 
   bool _cacheEnabled;
 
-  //Didn't see any performance improvement by reserving initial sizes for these caches.
+  // Didn't see any performance improvement by reserving initial sizes for these caches.
 
   // key is "elementID 1;elementID 2"; ordering of the ID keys doesn't matter here, since we check
   // in both directions

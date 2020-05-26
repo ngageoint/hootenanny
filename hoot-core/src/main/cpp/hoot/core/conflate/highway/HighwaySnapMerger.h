@@ -41,6 +41,8 @@ class WaySublineCollection;
  *
  * Note that this was originally written specifically for roads, but now is used by several linear
  * script routines, including railway and river.
+ *
+ * @todo rename to SnapMergerJs
  */
 class HighwaySnapMerger : public HighwayMergerAbstract
 {
@@ -60,7 +62,7 @@ public:
 
   void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
 
-  virtual QString getDescription() const { return "Merges both road geometries and tags"; }
+  virtual QString getDescription() const { return "Merges road geometries and tags"; }
 
   virtual QString getName() const { return QString::fromStdString(className()); }
 
@@ -74,17 +76,22 @@ protected:
   // This is useful for getting rid of them later, if necessary.
   bool _markAddedMultilineStringRelations;
 
+  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);
 
-private:
+  /*
+   * Finds a matching subline between two elements with the configured subline matcher
+   */
+  virtual WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2);
 
-  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+private:
 
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;
 
-  /**
+  /*
    * Returns true if the way directly connects the left and right ways. There is some tolerance
    * for "directly". See ticket #951 for details.
    */
@@ -93,13 +100,15 @@ private:
   void _removeSpans(OsmMapPtr map, const ElementPtr& w1, const ElementPtr& w2) const;
   void _removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const;
 
-  /**
+  /*
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.
    */
-  void _snapEnds(const OsmMapPtr &map, ElementPtr snapee, ElementPtr snapTo) const;
-  void _snapEnds(WayPtr snapee, WayPtr middle, WayPtr snapTo) const;
+  void _snapEnds(const OsmMapPtr& map, ElementPtr snapee, ElementPtr snapTo) const;
+  void _snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr middle, WayPtr snapTo) const;
+  void _snapEnd(const OsmMapPtr& map, WayPtr snapee, NodePtr replacedNode,
+                NodePtr replacementNode) const;
 
-  /**
+  /*
    * Splits the splitee up into a match element and a scrap element. All the tags are assigned
    * appropriately and the match and scrap are added to the replaced list and added to the map.
    * The original elements are deleted.

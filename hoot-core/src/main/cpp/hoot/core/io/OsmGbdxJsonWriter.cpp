@@ -32,7 +32,6 @@
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
@@ -42,6 +41,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
@@ -74,7 +74,7 @@ void OsmGbdxJsonWriter::open(const QString& path)
 
   if (_outputDir.exists() == false)
   {
-    if (QDir().mkpath(_outputDir.path()) == false)
+    if (FileUtils::makeDir(_outputDir.path()) == false)
     {
       throw HootException("Error creating directory for writing.");
     }

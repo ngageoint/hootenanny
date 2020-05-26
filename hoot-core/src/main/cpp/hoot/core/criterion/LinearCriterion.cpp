@@ -55,10 +55,8 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   else if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-    result |= r->getType() == MetadataTags::RelationMultilineString();
-    result |= r->getType() == MetadataTags::RelationRoute();
-    result |= r->getType() == MetadataTags::RelationBoundary();
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
+    result = isLinearRelation(relation);
   }
   else if (e->getElementType() == ElementType::Way)
   {
@@ -88,6 +86,16 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(result);
 
   return result;
+}
+
+bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
+{
+  return relation->getType() == MetadataTags::RelationMultilineString() ||
+         relation->getType() == MetadataTags::RelationRoute() ||
+         relation->getType() == MetadataTags::RelationBoundary() ||
+         relation->getType() == MetadataTags::RelationRouteMaster() ||
+         relation->getType() == MetadataTags::RelationSuperRoute() ||
+         relation->getType() == MetadataTags::RelationRestriction();
 }
 
 }

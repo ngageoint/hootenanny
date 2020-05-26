@@ -30,6 +30,8 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 
+#include <QRegularExpression>
+
 namespace hoot
 {
 
@@ -40,6 +42,9 @@ bool id_sort_order(long lhs, long rhs)
   else if (lhs < 0 && rhs < 0)  return lhs > rhs; //  Negative numbers count down
   else                          return lhs < rhs; //  Negative numbers come before positive
 }
+
+/**  Global regular expression for truncating tag keys/values at max tag length */
+QRegularExpression truncateTags("&[^;]+$", QRegularExpression::UseUnicodePropertiesOption);
 
 ChangesetElement::ChangesetElement(const XmlObject& object, ElementIdToIdMap* idMap)
   : _type(ElementType::Unknown),
@@ -133,14 +138,19 @@ QString ChangesetElement::toString(const ElementAttributes& attributes, long cha
   return ts.readAll();
 }
 
-QString& ChangesetElement::escapeString(QString& value) const
+QString ChangesetElement::escapeString(const QString& value) const
 {
+  int max = ConfigOptions().getMaxTagLength();
   //  Simple XML encoding of some problematic characters
-  return value.replace("&", "&amp;")
-              .replace("\"", "&quot;")
-              .replace("\n", "&#10;")
-              .replace(">", "&gt;")
-              .replace("<", "&lt;");
+  QString escape = value.toHtmlEscaped();
+  //  Check if the encoding process made the string too long
+  if (escape.length() > max)
+  {
+    escape = escape.left(max);
+    escape.replace(truncateTags, "");
+  }
+  //  Return the final escaped string
+  return escape;
 }
 
 QString ChangesetElement::toTagString(const ElementTag& tag) const
@@ -150,11 +160,11 @@ QString ChangesetElement::toTagString(const ElementTag& tag) const
   ts.setCodec("UTF-8");
   QString key(tag.first);
   QString value(tag.second);
-  //  Tag values of length 255 need to be truncated
+  //  Tag values of max length need to be truncated
   QString newValue(ApiTagTruncateVisitor::truncateTag(key, value));
 
   //  Make sure to XML encode the value
-  ts << "\t\t\t<tag k=\"" << key << "\" v=\"";
+  ts << "\t\t\t<tag k=\"" << escapeString(key) << "\" v=\"";
   if (newValue != "")
     ts << escapeString(newValue);
   else

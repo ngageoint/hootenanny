@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SublineStringMatcherJs.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -43,9 +44,11 @@
 #include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/elements/ElementConverter.h>
 
 // Qt
 #include <QStringList>
+#include <QElapsedTimer>
 
 using namespace std;
 using namespace v8;
@@ -57,7 +60,8 @@ int SublineStringMatcherJs::logWarnCount = 0;
 
 HOOT_JS_REGISTER(SublineStringMatcherJs)
 
-SublineStringMatcherJs::SublineStringMatcherJs(SublineStringMatcherPtr sm) : _sm(sm)
+SublineStringMatcherJs::SublineStringMatcherJs(SublineStringMatcherPtr sm) :
+_sm(sm)
 {
 }
 
@@ -84,6 +88,8 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 
   try
   {
+    // Some attempts were made to cache this match for performance reasons, but the results were
+    // unstable. See branch 3969b.
     WaySublineMatchString match = sm->findMatch(m, e1, e2);
 
     if (match.isEmpty())
@@ -93,12 +99,13 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
       return;
     }
 
-    // convert match into elements in a new map.
+    // convert match into elements in a new map
     set<ElementId> eids;
     eids.insert(e1->getElementId());
     eids.insert(e2->getElementId());
     OsmMapPtr copiedMap(new OsmMap(m->getProjection()));
     CopyMapSubsetOp(m, eids).apply(copiedMap);
+    LOG_VART(copiedMap->size());
     WaySublineMatchString copiedMatch(match, copiedMap);
 
     // split the shared line based on the matching subline
@@ -148,6 +155,8 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 
 void SublineStringMatcherJs::findMatch(const FunctionCallbackInfo<Value>& args)
 {
+  // Is this used anywhere?
+
   HandleScope scope(args.GetIsolate());
 
   SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
@@ -161,11 +170,9 @@ void SublineStringMatcherJs::findMatch(const FunctionCallbackInfo<Value>& args)
   ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject());
   ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject());
 
-  WaySublineMatchString match = smJs->getSublineStringMatcher()->findMatch(
-        mapJs->getConstMap(),
-        e1Js->getConstElement(),
-        e2Js->getConstElement());
-
+  WaySublineMatchString match =
+    smJs->getSublineStringMatcher()->findMatch(
+      mapJs->getConstMap(), e1Js->getConstElement(), e2Js->getConstElement());
   WaySublineMatchStringPtr result(new WaySublineMatchString(match));
 
   args.GetReturnValue().Set(WaySublineMatchStringJs::New(result));

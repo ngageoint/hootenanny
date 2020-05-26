@@ -85,7 +85,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   }
 
   // if the element is not a point and is not an area.
-  // NOTE: Originally I was using isLinear. This was a bit too strict in that it wants evidence of
+  // NOTE: Originally, I was using isLinear. This was a bit too strict in that it wants evidence of
   // being linear before the length is calculated. Conversely, this wants evidence that is is not
   // linear before it will assume it doesn't have a length.
   if (e->getElementType() != ElementType::Node && AreaCriterion().isSatisfied(e) == false)
@@ -374,11 +374,6 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(
       {
         if (r->isMultiPolygon() || AreaCriterion().isSatisfied(r))
           return GEOS_MULTIPOLYGON;
-        else if (linearCrit.isSatisfied(r))
-          return GEOS_MULTILINESTRING;
-        // an empty geometry, pass back a collection
-        else if (r->getMembers().size() == 0 || CollectionRelationCriterion().isSatisfied(r))
-          return GEOS_GEOMETRYCOLLECTION;
         // Restriction relations are empty geometry
         else if (r->isRestriction())
           return GEOS_GEOMETRYCOLLECTION;
@@ -389,6 +384,12 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(
         // MultiPoint comes from GeoJSON
         else if (r->getType() == MetadataTags::RelationMultiPoint())
           return GEOS_MULTIPOINT;
+        //  Restrictions satisfy the linear criterion so test it after restrictions
+        else if (linearCrit.isSatisfied(r))
+          return GEOS_MULTILINESTRING;
+        // an empty geometry, pass back a collection
+        else if (r->getMembers().size() == 0 || CollectionRelationCriterion().isSatisfied(r))
+          return GEOS_GEOMETRYCOLLECTION;
       }
 
       // We are going to throw an error so we save the type of relation

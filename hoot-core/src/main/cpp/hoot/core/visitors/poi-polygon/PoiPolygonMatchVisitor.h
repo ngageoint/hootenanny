@@ -103,6 +103,7 @@ private:
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
+  int _memoryCheckUpdateInterval;
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;

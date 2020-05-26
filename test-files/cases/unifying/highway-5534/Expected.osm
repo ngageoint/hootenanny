@@ -33,6 +33,7 @@
         <tag k="location" v="surface"/>
         <tag k="incline:interval:closure" v="closed_interval"/>
         <tag k="source" v="tdsv40;nfdd"/>
+        <tag k="hoot:hash" v="sha1sum:3354d943624fc0f8027328fa5f2c5b54d6b71d43;sha1sum:d692498a258e3595954754c7e41fe2fbd831c972"/>
         <tag k="highway" v="secondary"/>
     </way>
 </osm>

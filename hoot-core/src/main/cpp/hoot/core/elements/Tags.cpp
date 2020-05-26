@@ -601,9 +601,35 @@ bool Tags::operator==(const Tags& other) const
   return true;
 }
 
+bool Tags::hasSameNonMetadataTags(const Tags& other) const
+{
+  Tags otherCopy = other;
+  otherCopy.removeMetadata();
+  Tags thisCopy = *this;
+  thisCopy.removeMetadata();
+  return otherCopy == thisCopy;
+}
+
 void Tags::removeMetadata()
 {
   removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
+
+  // there are some other metadata keys that don't start with hoot::
+  QStringList keysToRemove;
+  OsmSchema& schema = OsmSchema::getInstance();
+  for (Tags::const_iterator it = begin(); it != end(); ++it)
+  {
+    const QString key = it.key();
+    if (schema.isMetaData(key, it.value()))
+    {
+      keysToRemove.append(key);
+    }
+  }
+
+  for (int i = 0; i < keysToRemove.size(); i++)
+  {
+    remove(keysToRemove.at(i));
+  }
 }
 
 void Tags::removeByTagKeyContains(const QString& tagKeySubstring)
@@ -953,6 +979,16 @@ QString Tags::getDiffString(const Tags& other) const
     }
   }
   return diffStr.trimmed();
+}
+
+bool Tags::bothHaveInformation(const Tags& tags1, const Tags& tags2)
+{
+  return tags1.hasInformationTag() && tags2.hasInformationTag();
+}
+
+bool Tags::onlyOneHasInformation(const Tags& tags1, const Tags& tags2)
+{
+  return tags1.hasInformationTag() || tags2.hasInformationTag();
 }
 
 }

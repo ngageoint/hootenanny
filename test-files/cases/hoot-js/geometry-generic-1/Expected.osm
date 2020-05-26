@@ -277,6 +277,7 @@
         <nd ref="-252744032"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:matchedBy" v="Line"/>
+        <tag k="hoot:hash" v="sha1sum:0a13516e99e25bdef59e150cb7c75a5e09cd55db;sha1sum:21a6dc456df253e33a443542c698a6b0cf78172a"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="note" v="C;D"/>
@@ -291,6 +292,7 @@
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:matchedBy" v="Highway"/>
+        <tag k="hoot:hash" v="sha1sum:aa74ee3d2db405142fdf7373bb5c5d7da215f90c;sha1sum:053b5d032ed793077f88eb410c3e363eefe5bd58"/>
         <tag k="name" v="highway1"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>

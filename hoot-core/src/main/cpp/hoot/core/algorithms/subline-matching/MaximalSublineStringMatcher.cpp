@@ -116,7 +116,6 @@ vector<WayPtr> MaximalSublineStringMatcher::_changeMap(const vector<ConstWayPtr>
   {
     result.push_back(map->getWay(ways[i]->getId()));
   }
-
   return result;
 }
 
@@ -173,7 +172,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   try
   {
     WaySublineMatchString result = scoredResult.matches;
-    // this likely shouldn't be necessary. See https://github.com/ngageoint/hootenanny/issues/157.
+    // This likely shouldn't be necessary. See https://github.com/ngageoint/hootenanny/issues/157.
     result.removeEmptyMatches();
     LOG_VART(result);
     return result;

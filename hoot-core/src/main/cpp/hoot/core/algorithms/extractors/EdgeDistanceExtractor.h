@@ -56,20 +56,20 @@ public:
 
   static std::string className() { return "hoot::EdgeDistanceExtractor"; }
 
-  virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const;
+  double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual std::string getClassName() const { return EdgeDistanceExtractor::className(); }
+  std::string getClassName() const override { return EdgeDistanceExtractor::className(); }
 
-  virtual std::string getName() const;
+  std::string getName() const override;
 
-  virtual void setValueAggregator(const ValueAggregatorPtr& va) { _aggregator = va; }
+  void setValueAggregator(const ValueAggregatorPtr& va) override { _aggregator = va; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setSpacing(const double spacing) { _spacing = spacing; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the distance from one set of lines to another"; }
 
 private:

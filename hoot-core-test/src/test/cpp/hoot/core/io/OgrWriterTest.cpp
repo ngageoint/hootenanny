@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -146,7 +146,7 @@ public:
     uut.open(_outputPath + "OgrWriterTest.gdb");
     uut.write(createTestMap());
 
-    TestUtils::mkpath("tmp");
+    FileUtils::makeDir("tmp");
     OsmMapWriterFactory::write(createTestMap(), "tmp/TestMap.osm");
 
     // make sure it created a bunch of files. We aren't testing for correct output.

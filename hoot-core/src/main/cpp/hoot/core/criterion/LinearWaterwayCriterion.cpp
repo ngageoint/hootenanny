@@ -42,25 +42,44 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(e->getElementId());
   //LOG_VART(e);
 
-  if (!LinearCriterion().isSatisfied(e))
+  // We were taking relations here at one point too. Just not convinced that we need to if all the
+  // constituent linear features are properly tagged and extra processing time was being added. If
+  // we find later that we need to, the behavior can be reverted back to the original state.
+  if (e->getElementType() != ElementType::Way)
+  {
+    return false;
+  }
+
+  bool passedTagFilter = false;
+
+  const Tags& tags = e->getTags();
+  if (tags.contains("waterway"))
+  {
+    passedTagFilter = true;
+  }
+  else
+  {
+    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+    {
+      const QString key = it.key();
+      const QString val = it.value();
+      if (OsmSchema::getInstance().isAncestor(key, "waterway") ||
+          (key == "type" && OsmSchema::getInstance().isAncestor("waterway=" + val, "waterway")))
+      {
+        LOG_TRACE("passed crit");
+        passedTagFilter = true;
+        break;
+      }
+    }
+  }
+
+  if (passedTagFilter && !LinearCriterion().isSatisfied(e))
   {
     LOG_TRACE("failed linear crit");
     return false;
   }
 
-  const Tags& tags = e->getTags();
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
-  {
-    if (it.key() == "waterway" || OsmSchema::getInstance().isAncestor(it.key(), "waterway") ||
-        (it.key() == "type" &&
-         OsmSchema::getInstance().isAncestor("waterway=" + it.value(), "waterway")))
-    {
-      LOG_TRACE("passed crit");
-      return true;
-    }
-  }
-
-  return false;
+  return passedTagFilter;
 }
 
 }

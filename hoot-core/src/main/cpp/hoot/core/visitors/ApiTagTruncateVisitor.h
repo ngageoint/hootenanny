@@ -29,38 +29,49 @@
 
 //  Hoot
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
 
 /**
  * @brief The ApiTagTruncateVisitor class truncates tags that are going to be passed into
- *  an OSM API database.  The API imposes a 255 character limit to tag values even though
- *  the database doesn't.  All tags have this limit but three tags (so far) require special
+ *  an OSM API database.  The OSM API imposes a 255 character limit to tag values even though
+ *  the database doesn't.  Allow this class to specify its own upper limit for custom OSM API
+ *  instances.  All tags have this limit but three tags (so far) require special
  *  processing.  First, lists aren't truncated mid-listitem, the last item that starts but
- *  doesn't end before the 255 limit is removed along with all items after that.  Second,
+ *  doesn't end before the upper limit is removed along with all items after that.  Second,
  *  `source:datetime` and `source:ingest:datetime` are date lists that are truncated down
  *  to include only the last date in the list.  Thirdly the `uuid` field is handled the
  *  same way, only the last UUID in the list is preserved.
  */
-class ApiTagTruncateVisitor : public ElementVisitor
+class ApiTagTruncateVisitor : public ElementVisitor, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::ApiTagTruncateVisitor"; }
 
-  ApiTagTruncateVisitor() { }
+  ApiTagTruncateVisitor();
 
-  virtual void visit(const ElementPtr& e) override;
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const override
-  { return "Truncates tag key/value pairs to the API limit of 255 characters"; }
+  QString getDescription() const override
+  { return QString("Truncates tag key/value pairs to the API limit of %1 characters").arg(_maxLength); }
 
-  virtual QString getInitStatusMessage() const override
+  QString getInitStatusMessage() const override
   { return "Truncating tag key/value pairs for OSM API..."; }
 
-  virtual QString getCompletedStatusMessage() const override
-  { return "Truncated tag key/value pairs for " + QString::number(_numAffected) + " elements"; }
+  QString getCompletedStatusMessage() const override
+  {
+    return
+      "Truncated tag key/value pairs for " + StringUtils::formatLargeNumber(_numAffected) +
+      " elements";
+  }
+
+  std::string getClassName() const override { return className(); }
+
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * @brief truncateTags Iterates all tags calling truncateTag one by one
@@ -72,13 +83,17 @@ public:
   /**
    * @brief truncateTag Does the actual truncating of a tag
    * @param key Tag key (some tags require special processing)
-   * @param value Tag value to be truncated if > 255 in length
+   * @param value Tag value to be truncated if > _maxLength in length
    * @return Empty string if nothing is changed, truncated string otherwise
    */
   static QString truncateTag(const QString& key, const QString& value);
 
-  virtual std::string getClassName() const { return className(); }
+private:
 
+  QString _truncateTag(const QString& key, const QString& value);
+  bool _truncateTags(Tags& tags);
+
+  int _maxLength;
 };
 
 }

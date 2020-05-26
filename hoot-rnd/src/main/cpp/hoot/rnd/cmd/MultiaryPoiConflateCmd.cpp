@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -34,7 +34,7 @@
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -102,7 +102,8 @@ public:
       IoUtils::loadMap(map, inputs[i], false, Status::fromInput(i));
     }
 
-    CalculateHashVisitor hashVisitor;
+    MultiaryPoiHashVisitor hashVisitor;
+    hashVisitor.setIncludeCircularError(true);
     map->visitRw(hashVisitor);
 
     LOG_INFO("Applying pre-conflation operations...");

@@ -121,7 +121,7 @@ etds70_osm = {
         }
 
         // Use a lookup table to convert the remaining attribute names from "English" to TDS
-        translate.applyOne2One(attrs, nAttrs, etds70_osm_rules.enumValues, {'k':'v'});
+        translate.applyOne2One(attrs, nAttrs, etds70_osm_rules.enumValues, {'k':'v'},[]);
         var tags = {};
 
         // Now convert the attributes to tags.

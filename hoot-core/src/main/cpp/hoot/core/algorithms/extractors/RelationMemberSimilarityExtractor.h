@@ -31,13 +31,12 @@
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ElementComparer.h>
-
 namespace hoot
 {
 
 /**
- * Uses a Jaccard index to determine how similar the members of two relations are.
+ * Uses a Jaccard index to score how similar the members of two relations are in the range of 0.0
+ * to 1.0.
  *
  * Since relations may have similar members with different element IDs between reference and
  * secondary layers, the comparisons ignore element IDs and look at the member elements directly.

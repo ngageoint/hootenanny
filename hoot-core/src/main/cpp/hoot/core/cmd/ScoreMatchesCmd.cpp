@@ -37,7 +37,6 @@
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>

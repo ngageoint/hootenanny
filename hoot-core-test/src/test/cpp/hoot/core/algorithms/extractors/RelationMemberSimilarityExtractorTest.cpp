@@ -68,7 +68,7 @@ public:
         *map, map->getElement(ElementId(ElementType::Relation, 7387470)),
         map->getElement(ElementId(ElementType::Relation, -1)));
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.2, score, 1e-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.233, score, 1e-3);
   }
 };
 

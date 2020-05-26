@@ -33,43 +33,43 @@ hoot.require('translate');
 
 function initialize()
 {
-    // Get any changes
-    toChange = hoot.Settings.get("schema.translation.override");
+  // Get any changes
+  toChange = hoot.Settings.get('schema.translation.override');
 }
 
 
 function translateAttributes(attrs, layerName, geometryType)
 { 
-    // Add UUID
-    if (!(attrs.uuid)) attrs.uuid = createUuid();
+  // Add UUID
+  if (!(attrs.uuid)) attrs.uuid = createUuid();
 
-    // Say where the data came from
-    // NOTE: layerName will be empty if using a SchemaTranslationVisitor to convert the OSM file.
-    // This is due to not having metadata pass from OSM reader -> map -> translation
-    if (layerName !== '')
-    {
-        attrs.source = translate.appendValue(attrs.source,'osm:' + layerName.toLowerCase(),';');
-    }
-    else
-    {
-        attrs.source = translate.appendValue(attrs.source,'osm',';');
-    }
+  // Say where the data came from
+  // NOTE: layerName will be empty if using a SchemaTranslationVisitor to convert the OSM file.
+  // This is due to not having metadata pass from OSM reader -> map -> translation
+  if (layerName !== '')
+  {
+    attrs.source = translate.appendValue(attrs.source,'osm:' + layerName.toLowerCase(),';');
+  }
+  else
+  {
+    attrs.source = translate.appendValue(attrs.source,'osm',';');
+  }
 
-    if (!(attrs.attribution))
-    {
-        attrs.attribution = 'osm';
-    }
-    else
-    {
-        attrs.attribution = attrs.attribution + ';osm';
-    }
+  if (!(attrs.attribution))
+  {
+    attrs.attribution = 'osm';
+  }
+  else
+  {
+    attrs.attribution = attrs.attribution + ';osm';
+  }
 
-    // Add the Open Database Licence
-    if (!(attrs.license)) attrs.license =  'This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.'
+  // Add the Open Database Licence
+  if (!(attrs.license)) attrs.license =  'This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.';
 
-    // Override attributes if appropriate
-    translate.overrideValues(attrs,toChange);
+  // Override attributes if appropriate
+  translate.overrideValues(attrs,toChange);
 
-    return attrs;
+  return attrs;
 }
 

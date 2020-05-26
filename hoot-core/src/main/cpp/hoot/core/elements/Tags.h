@@ -211,6 +211,17 @@ public:
   bool dataOnlyEqual(const Tags& other) const;
 
   /**
+   * Determines if two sets of tags have the same information values
+   *
+   * This may have overlap with dataOnlyEqual, however the two have differences...worth looking
+   * into at some point.
+   *
+   * @param other tags to compare with
+   * @return true if both sets of tags have the same information values; false otherwise
+   */
+  bool hasSameNonMetadataTags(const Tags& other) const;
+
+  /**
    * Get a list of all non-'hoot::*' tags
    */
   QStringList getDataOnlyValues(const Tags& tags) const;
@@ -398,6 +409,24 @@ public:
    * @return true if exactly one of the sets of tags contain the key/value pair; false otherwise
    */
   static bool onlyOneContainsKvp(const Tags& tags1, const Tags& tags2, const QString& kvp);
+
+  /**
+   * Determines if two sets of tags contain non-metadata information
+   *
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @return true if both sets of tags contain non-metadata information; false otherwise
+   */
+  static bool bothHaveInformation(const Tags& tags1, const Tags& tags2);
+
+  /**
+   * Determines if one of two sets of tags contain non-metadata information
+   *
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @return true if exactly one of sets of tags contain non-metadata information; false otherwise
+   */
+  static bool onlyOneHasInformation(const Tags& tags1, const Tags& tags2);
 
 private:
 

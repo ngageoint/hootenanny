@@ -22,29 +22,49 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "CalculateHashVisitor2.h"
 
-// hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
-#include <hoot/core/schema/MetadataTags.h>
+#ifndef CONNECTED_RELATION_MEMBER_FINDER_H
+#define CONNECTED_RELATION_MEMBER_FINDER_H
+
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor2)
-
-void CalculateHashVisitor2::visit(const ElementPtr& e)
+/**
+ * Finds instances where way members across different relations are connected
+ */
+class ConnectedRelationMemberFinder : public ConstOsmMapConsumer
 {
-  if (e->getElementType() == ElementType::Node)
-  {
-    e->getTags().remove(Tags::uuidKey());
-    e->getTags()[MetadataTags::HootHash()] =
-      "sha1sum:" + QString::fromUtf8(CalculateHashVisitor::toHash(e).toHex());
-  }
-}
+
+public:
+
+  ConnectedRelationMemberFinder();
+
+  /**
+   * Determines if any way from one relation is connected to a way in another relation
+   *
+   * @param relation1 first relation to examine
+   * @param relation2 second relation to examine
+   * @return true if connected ways are found; false otherwise
+   */
+  bool haveConnectedWayMembers(
+    const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const;
+
+  /**
+   * @see ConstOsmMapConsumer
+   */
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+private:
+
+  ConstOsmMapPtr _map;
+};
 
 }
+
+#endif // CONNECTED_RELATION_MEMBER_FINDER_H

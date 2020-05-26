@@ -117,6 +117,7 @@ public:
 
   const Tags& getTags() const { return _getElementData().getTags(); }
   Tags& getTags() { return _getElementData().getTags(); }
+  int getTagCount() const { return _getElementData().getTags().size(); }
 
   bool hasCircularError() const { return _getElementData().hasCircularError(); }
   void setCircularError(Meters circularError) { _getElementData().setCircularError(circularError); }
@@ -125,6 +126,15 @@ public:
   void setTags(const Tags& tags) { _getElementData().setTags(tags); }
   void setTag(QString k, QString v) { _getElementData().setTag(k, v); }
   void addTags(const Tags& tags) { _getElementData().addTags(tags); }
+
+  /**
+   * Compares information tags with another element
+   *
+   * @param other element to compare this element's tags with
+   * @return true if this element has the same information tags as the other element; false
+   * otherwise
+   */
+  bool hasSameNonMetadataTags(const Element& other) const;
 
   bool getVisible() const { return _getElementData().getVisible(); }
   void setVisible(bool visible) { _getElementData().setVisible(visible); }
@@ -151,15 +161,6 @@ public:
    * Returns a string description of the object to aid in debugging.
    */
   virtual QString toString() const = 0;
-
-  /**
-   * Returns a simplified string description with no mention of the ID, useful in hashing
-   *
-   * @return a string
-   * @todo There is a hash visitor for Node, so possibly we can adapt some of that code to do this
-   * instead and repeat for the other element types.
-   */
-  virtual QString nonIdHash() const = 0;
 
   /**
    * Applies a read only visitor to this element and all child elements. The visitor will be called

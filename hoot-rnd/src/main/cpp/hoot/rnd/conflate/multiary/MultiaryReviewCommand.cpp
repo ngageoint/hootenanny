@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MultiaryReviewCommand.h"
@@ -34,7 +34,7 @@
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -254,7 +254,8 @@ QByteArray MultiaryReviewCommand::_getElementHashID(ElementPtr e) const
   // Ensure the hash is present
   if (!e->getTags().contains(hashKey))
   {
-    CalculateHashVisitor v;
+    MultiaryPoiHashVisitor v;
+    v.setIncludeCircularError(true);
     v.visit(e);
   }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TILE_UTILS_H
@@ -30,9 +30,6 @@
 
 // GEOS
 #include <geos/geom/Envelope.h>
-
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -43,24 +40,6 @@ namespace hoot
 class TileUtils
 {
 public:
-
-  static std::string className() { return "hoot::TileUtils"; }
-
-  /**
-   * Calculates a set of boundary tiles
-   *
-   * @param maxNodesPerTile the requested maximum number of nodes to be in any one tile
-   * @param pixelSize the pixel size used to calculate the boundaries
-   * @param map the map containing the nodes
-   * @param minNodeCountInOneTile the smallest number of nodes actually found in any one tile
-   * @param maxNodeCountInOneTile the largest number of nodes actually found in any one tile
-   * @param nodeCounts a collection to store the number of node counts for each computed tile
-   * @return a grid of tile bounding boxes
-   */
-  static std::vector<std::vector<geos::geom::Envelope>>  calculateTiles(
-    const long maxNodesPerTile, const double pixelSize, OsmMapPtr map,
-    long& minNodeCountInOneTile, long& maxNodeCountInOneTile,
-    std::vector<std::vector<long>>& nodeCounts);
 
   /**
    * Retrieves a random tile index from a collection of tiles
@@ -81,53 +60,6 @@ public:
    */
   static geos::geom::Envelope getRandomTile(
     const std::vector<std::vector<geos::geom::Envelope>>& tiles, int randomSeed);
-
-  /**
-   * Writes boundary tiles to a GeoJSON output file
-   *
-   * @param tiles the collection of tiles to write
-   * @param nodeCounts a collection of the number of node counts for each computed tile
-   * @param outputPath the output file path
-   * @param selectSingleRandomTile
-   * @param randomSeed optional random number generator seed
-   * @todo collapse with OSM writing method and refactor to TileFootprintWriter?
-   * @todo refactor selectSingleRandomTile out?
-   */
-  static void writeTilesToGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                                  const std::vector<std::vector<long>>& nodeCounts,
-                                  const QString& outputPath,
-                                  const QString& fileSource = "",
-                                  const bool selectSingleRandomTile = false, int randomSeed = -1);
-
-  /**
-   * Writes boundary tiles to an OSM output file
-   *
-   * @param tiles the collection of tiles to write
-   * @param nodeCounts a collection of the number of node counts for each computed tile
-   * @param outputPath the output file path
-   * @param selectSingleRandomTile
-   * @param randomSeed optional random number generator seed
-   * @todo collapse with GeoJSON writing method and refactor to TileFootprintWriter?
-   * @todo refactor selectSingleRandomTile out?
-   */
-  static void writeTilesToOsm(
-    const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-    const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
-    const bool selectSingleRandomTile = false, int randomSeed = -1);
-
-private:
-
-  /**
-   * Convert boundary tiles to an OsmMap object
-   *
-   * @param tiles the collection of tiles to write
-   * @param nodeCounts a collection of the number of node counts for each computed tile
-   * @param randomTileIndex index of the random tile to use
-   * @param selectSingleRandomTile
-   */
-  static OsmMapPtr tilesToOsmMap(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-    const std::vector<std::vector<long>>& nodeCounts,
-    int randomTileIndex, const bool selectSingleRandomTile = false);
 };
 
 }

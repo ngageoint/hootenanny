@@ -44,6 +44,7 @@ using namespace geos::geom;
 #include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
@@ -132,7 +133,7 @@ void ShapefileWriter::open(const QString& url)
 {
   if (QDir(url).exists() == false)
   {
-    if (QDir(".").mkpath(url) == false)
+    if (FileUtils::makeDir(url) == false)
     {
       throw HootException("Error creating directory for writing: " + url);
     }

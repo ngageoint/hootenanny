@@ -36,12 +36,15 @@
 #include <hoot/core/io/DataConverter.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+// Qt
+#include <QFileInfo>
+
 namespace hoot
 {
 
 class DataConverterTest : public HootTestFixture
 {
-  //just testing input validation here, as the command line tests get the rest
+  // just testing input validation here, as the command line tests get the rest
   CPPUNIT_TEST_SUITE(DataConverterTest);
   CPPUNIT_TEST(runEmptyInputsTest);
   CPPUNIT_TEST(runEmptyOutputTest);
@@ -51,6 +54,7 @@ class DataConverterTest : public HootTestFixture
   CPPUNIT_TEST(runFeatureLimitNonOgrInputsTest);
   CPPUNIT_TEST(runTranslationFileDoesntExistTest);
   CPPUNIT_TEST(runInvalidTranslationFileFormatTest);
+  CPPUNIT_TEST(runUrlOutputTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -215,6 +219,21 @@ public:
 
     CPPUNIT_ASSERT(exceptionMsg.contains(
       "Invalid translation file format: test-files/DcGisRoads.osm"));
+  }
+
+  void runUrlOutputTest()
+  {
+    // just want to make sure an output dir isn't created for a url out
+
+    const QString badPath = "osmapidb:";
+    QDir(badPath).removeRecursively();
+
+    DataConverter uut;
+    const QString url = "osmapidb://user:password@postgres:5432";
+    LOG_VART(url);
+    uut._validateInput(QStringList("input1.osm"), url);
+    QFileInfo outputInfo(badPath);
+    CPPUNIT_ASSERT(!outputInfo.exists());
   }
 };
 

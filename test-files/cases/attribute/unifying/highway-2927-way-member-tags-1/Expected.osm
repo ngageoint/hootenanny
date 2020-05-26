@@ -15,7 +15,11 @@
     </node>
     <node visible="true" id="-1702" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4966684789968543" lon="-66.8999130454100310">
         <tag k="hoot:status" v="1"/>
+        <tag k="highway" v="motorway_junction"/>
+        <tag k="name" v="San Agustín del Norte"/>
+        <tag k="ref" v="19-A"/>
         <tag k="hoot:id" v="-1702"/>
+        <tag k="source:datetime" v="2014-09-06T19:28:51.000Z"/>
     </node>
     <node visible="true" id="-1698" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4970356391966728" lon="-66.9015098172667422">
         <tag k="hoot:status" v="3"/>

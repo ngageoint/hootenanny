@@ -22,37 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CALCULATEHASHVISITOR2_H
-#define CALCULATEHASHVISITOR2_H
+
+#include "RelationWithLinearMembersCriterion.h"
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-/**
- * Wrapper around CalculateHashVisitor for use with MultiaryIngestCmd - This very well could be
- * replaced by CalculateHashVisitor...but just haven't figured out how to make that work yet.
- *
- * TODO: implement OperationStatusInfo
- */
-class CalculateHashVisitor2 : public ElementVisitor
+HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithLinearMembersCriterion)
+
+RelationWithLinearMembersCriterion::RelationWithLinearMembersCriterion() :
+RelationWithGeometryMembersCriterion()
 {
-public:
+}
 
-  static std::string className() { return "hoot::CalculateHashVisitor2"; }
-
-  virtual void visit(const ElementPtr& e);
-
-  virtual QString getDescription() const
-  { return "Calculates unique hash values for elements used by the multiary ingester"; }
-
-  virtual std::string getClassName() const { return className(); }
-};
+RelationWithLinearMembersCriterion::RelationWithLinearMembersCriterion(ConstOsmMapPtr map) :
+RelationWithGeometryMembersCriterion(map)
+{
+}
 
 }
 
-#endif // CALCULATEHASHVISITOR_H

@@ -37,6 +37,7 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 namespace hoot
 {
@@ -133,6 +134,9 @@ public:
     NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
     MapProjector::projectToWgs84(map);
 
+    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    map->visitRw(hashRemover);
+
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(true);
     writer.setIncludeHootInfo(true);
@@ -163,6 +167,9 @@ public:
 
     NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
     MapProjector::projectToWgs84(map);
+
+    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    map->visitRw(hashRemover);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(true);

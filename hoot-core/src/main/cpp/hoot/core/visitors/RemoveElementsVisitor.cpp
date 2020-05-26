@@ -106,7 +106,7 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
 
   if (_criteriaSatisfied(e))
   {
-    LOG_TRACE("Removing element: " << e);
+    LOG_TRACE("Removing element: " << e->getElementId() << "...");
     _count++;
     if (_recursive)
     {

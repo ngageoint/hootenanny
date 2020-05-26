@@ -65,13 +65,13 @@ public:
 
   void splitIntersections();
 
-  virtual QString getInitStatusMessage() const { return "Splitting road intersections..."; }
+  virtual QString getInitStatusMessage() const { return "Splitting linear intersections..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Split " + QString::number(_numAffected) + " road intersections"; }
+  { return "Split " + QString::number(_numAffected) + " linear intersections"; }
 
   virtual QString getDescription() const override
-  { return "Makes all road intersections contain only way end nodes"; }
+  { return "Makes all linear intersections contain only way end nodes"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria

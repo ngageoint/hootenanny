@@ -22,6 +22,7 @@
         <nd ref="-81157"/>
         <nd ref="-81155"/>
         <tag k="highway" v="footway"/>
+        <tag k="hoot:hash" v="sha1sum:b4869dd303eafc27827cec9c30232be6fb12724e"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-81185" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -47,6 +48,7 @@
         <nd ref="-81181"/>
         <nd ref="-81155"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:2cf6ee3bbaaba2969051357d31af5d7667f9d8e0;sha1sum:b4869dd303eafc27827cec9c30232be6fb12724e"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-80972" timestamp="1970-01-01T00:00:00Z" version="1">

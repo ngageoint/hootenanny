@@ -30,7 +30,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 
@@ -262,7 +262,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElemen
   if (_addTimestamp)
   {
     if (n->getTimestamp() != 0)
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(n->getTimestamp()));
+      writer.writeAttribute("timestamp", DateTimeUtils::toTimeString(n->getTimestamp()));
     else
       writer.writeAttribute("timestamp", "");
   }
@@ -315,7 +315,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElement
   if (_addTimestamp)
   {
     if (w->getTimestamp() != 0)
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(w->getTimestamp()));
+      writer.writeAttribute("timestamp", DateTimeUtils::toTimeString(w->getTimestamp()));
     else
       writer.writeAttribute("timestamp", "");
   }
@@ -384,7 +384,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
   if (_addTimestamp)
   {
     if (r->getTimestamp() != 0)
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(r->getTimestamp()));
+      writer.writeAttribute("timestamp", DateTimeUtils::toTimeString(r->getTimestamp()));
     else
       writer.writeAttribute("timestamp", "");
   }
@@ -457,8 +457,8 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
     const QString val = it.value();
     if (key.isEmpty() == false && val.isEmpty() == false)
     {
-      //  Ignore 'hoot:hash' for nodes
-      if (key == MetadataTags::HootHash() && element->getElementType() == ElementType::Node)
+      // always ignore 'hoot:hash'
+      if (key == MetadataTags::HootHash())
         continue;
       else if (!_includeDebugTags && key.toLower().startsWith("hoot:"))
         continue;

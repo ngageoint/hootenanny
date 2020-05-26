@@ -41,12 +41,10 @@
 namespace hoot
 {
 
-/**
- *
- */
 class ElementIdJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   ElementId& getElementId() { return _eid; }
@@ -54,6 +52,7 @@ public:
   static v8::Handle<v8::Object> New(ElementId eid);
 
 private:
+
   ElementIdJs();
   ~ElementIdJs();
 
@@ -70,6 +69,15 @@ private:
 inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
+
+  // try as string first
+  if (v->IsString())
+  {
+    eid = ElementId(toCpp<QString>(v));
+    return;
+  }
+
+  // now try as an object
   if (v.IsEmpty() || !v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toString(v) + ")");

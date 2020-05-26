@@ -77,6 +77,7 @@ public:
 private:
 
   OsmMap* _map;
+
   bool _recursive;
   int _count;
   long _startElementCount;

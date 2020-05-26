@@ -17,20 +17,37 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+exports.nameThreshold = parseFloat(hoot.get("waterway.name.threshold"));
 
 // This is needed for disabling superfluous conflate ops. In the future, it may also
 // be used to replace exports.isMatchCandidate (see #3047). 
 exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 
+// used during subline matching
+var sublineMatcherName = hoot.get("waterway.subline.matcher");
+
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": hoot.get("waterway.subline.matcher") });
+      "way.subline.matcher": sublineMatcherName }); // default subline matcher
+var frechetSublineMatcher =
+  new hoot.MaximalSublineStringMatcher(
+    { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
+      "way.subline.matcher": "hoot::FrechetSublineMatcher" }); // we'll switch over to this one in certain situations
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
     { "way.angle.sample.distance" : hoot.get("waterway.angle.sample.distance"),
-      "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta") });
+      "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta"),
+      "angle.histogram.extractor.process.relations" : "false" }); // TODO:
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
+
+var nameExtractor = new hoot.NameExtractor(
+  new hoot.MaxWordSetDistance(
+    {"token.separator": "[\\s-,';]+"},
+    // runs just a little faster w/ tokenize off
+    {"translate.string.distance.tokenize": "false"},
+    new hoot.LevenshteinDistance(
+      {"levenshtein.distance.alpha": 1.15})));
 
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
@@ -63,7 +80,6 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isLinearWaterway(e);
 };
 
@@ -79,6 +95,106 @@ exports.isWholeGroup = function()
 {
   return false;
 };
+
+function explicitTypeMismatch(e1, e2)
+{
+  hoot.trace("Processing type...");
+
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
+
+  // This isn't foolproof as there could be other untranslated river identifying tags involved.
+  var waterway1 = tags1.get("waterway");
+  var waterway2 = tags2.get("waterway");
+  if (waterway1 != 'undefined' && waterway1 != null && waterway1 != '' && 
+      waterway2 != 'undefined' && waterway2 != null && waterway2 != '' && 
+      waterway1 != waterway2)
+  {
+    hoot.trace("Explict type mismatch: " + waterway1 + ", " + waterway2);
+    return true;
+  }
+
+  return false;
+}
+
+function nameMismatch(map, e1, e2)
+{
+  hoot.trace("Processing name...");
+
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
+
+  var nameScore = 1.0;
+
+  // only score the name if both have one
+  if (bothElementsHaveName(e1, e2))
+  {
+    nameScore = nameExtractor.extract(map, e1, e2);
+  }
+
+  if (nameScore < exports.nameThreshold)
+  {
+    hoot.trace("Explict name mismatch: " + e1.getTags().get("name") + ", " + e2.getTags().get("name"));
+    return true;
+  }
+
+  return false;
+}
+
+function geometryMismatch(map, e1, e2)
+{
+  hoot.trace("Processing geometry...");
+
+  var longRivers = isLongRiverPair(map, e1, e2);
+  hoot.trace("longRivers: " + longRivers);
+
+  var sublines;
+  var sublineMatcherUsed = sublineMatcherName;
+  if (!longRivers)
+  {
+    hoot.trace("Extracting sublines with default...");
+    sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  }
+  else
+  {
+    // Longer ways are can be very computationally expensive with the default subline matching. 
+    // Frechet subline matching is a little less accurate but much faster, so we'll switch over 
+    // to it for longer ways. Tried tweaking the configuration of MaximalSublineMatcher for 
+    // performance, but it didn't help.
+    hoot.trace("Extracting sublines with Frechet...");
+    sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
+  }
+
+  if (sublines)
+  {
+    var m = sublines.map;
+    var m1 = sublines.match1;
+    var m2 = sublines.match2;
+
+    var weightedShapeDist = -1;
+    hoot.trace("Getting angleHist...");
+    var angleHist = sampledAngleHistogramExtractor.extract(m, m1, m2);
+    hoot.debug("angleHist: " + angleHist);
+    if (angleHist == 0)
+    {
+      hoot.trace("Getting weightedShapeDist...");
+      weightedShapeDist = weightedShapeDistanceExtractor.extract(m, m1, m2);
+      hoot.trace("weightedShapeDist: " + weightedShapeDist);
+      if (weightedShapeDist > 0.861844)
+      {
+        hoot.trace("geometry match");
+        return false;
+      }
+    }
+    if (angleHist > 0)
+    {
+      hoot.trace("geometry match");
+      return false;
+    }
+  }
+  
+  return true;
+}
 
 /**
  * Returns the match score for the three class relationships.
@@ -98,29 +214,40 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  // extract the sublines needed for matching
-  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
-  if (sublines)
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
+
+  hoot.trace("**********************************");
+  hoot.trace("e1: " + e1.getElementId() + ", " + tags1.get("name"));
+  if (tags1.get("note"))
   {
-    var m = sublines.map;
-    var m1 = sublines.match1;
-    var m2 = sublines.match2;
-
-    var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
-
-    if (sampledAngleHistogramValue == 0 && weightedShapeDistanceValue > 0.861844)
-    {
-      hoot.trace("Found Match!");
-      result = { match: 1.0, explain:"match" };
-    }
-    else if (sampledAngleHistogramValue > 0)
-    {
-      hoot.trace("Found Match!");
-      result = { match: 1.0, explain:"match" };
-    }
+    hoot.trace("e1 note: " + tags1.get("note"));
+  }
+  hoot.trace("e2: " + e2.getElementId() + ", " + tags2.get("name"));
+  if (tags2.get("note"))
+  {
+    hoot.trace("e2 note: " + tags2.get("note"));
+  }  
+  hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
+  hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
+  
+  // This type and name checks are mostly here to help cull down the potential matches and avoid 
+  // costly geometric comparisons for long features. The geometric comparison itself is fairly
+  // accurate.
+  if (explicitTypeMismatch(e1, e2))
+  {
+    return result;
+  }
+  if (nameMismatch(map, e1, e2))
+  {
+    return result;
+  }
+  if (geometryMismatch(map, e1, e2))
+  {
+    return result;
   }
 
+  result = { match: 1.0, miss: 0.0, review: 0.0 };
   return result;
 };
 
@@ -141,9 +268,11 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  // snap the ways in the second input to the first input. Use the default tag
-  // merge method.
-  return snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
+  // Snap the ways in the second input to the first input. Use the default tag
+  // merge method. Since its not possible to know the original subline matcher used during 
+  // matching, pass in both of the possible subline matchers and the same internal core 
+  // logic used to determine which one to use during matching will be used during merging.
+  return snapRivers(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

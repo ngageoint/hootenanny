@@ -25,7 +25,7 @@
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0738493359199985" lon="-69.3535279974600058">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="484907523" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-8"/>
         <nd ref="-7"/>
         <nd ref="-6"/>

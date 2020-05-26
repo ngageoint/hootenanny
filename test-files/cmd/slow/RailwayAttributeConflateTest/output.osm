@@ -1123,7 +1123,7 @@
     <node visible="true" id="-3" timestamp="2018-02-15T20:56:52Z" version="1" lat="39.6318742999999998" lon="125.8983422000000019"/>
     <node visible="true" id="-2" timestamp="2018-02-15T20:56:52Z" version="1" lat="39.6350596000000053" lon="125.9030145999999917"/>
     <node visible="true" id="-1" timestamp="2018-02-15T20:56:52Z" version="1" lat="39.6350843999999896" lon="125.9030951000000016"/>
-    <way visible="true" id="-4829" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1631" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-38"/>
         <nd ref="-39"/>
         <tag k="FCSubtype" v="0"/>
@@ -1151,7 +1151,7 @@
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm"/>
     </way>
-    <way visible="true" id="-4827" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1629" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-123"/>
         <nd ref="-163"/>
         <tag k="FCSubtype" v="0"/>
@@ -1178,7 +1178,7 @@
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm"/>
     </way>
-    <way visible="true" id="-4825" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1627" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-12"/>
         <nd ref="-467"/>
         <tag k="FCSubtype" v="0"/>
@@ -1210,7 +1210,7 @@
         <tag k="source" v="osm"/>
         <tag k="gndb_id" v="6183466"/>
     </way>
-    <way visible="true" id="-4823" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1625" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-141"/>
         <nd ref="-142"/>
         <tag k="FCSubtype" v="0"/>
@@ -1242,7 +1242,7 @@
         <tag k="source" v="osm"/>
         <tag k="gndb_id" v="6183466"/>
     </way>
-    <way visible="true" id="-4821" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1623" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-531"/>
         <nd ref="-272"/>
         <tag k="FCSubtype" v="0"/>
@@ -1269,7 +1269,7 @@
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm"/>
     </way>
-    <way visible="true" id="-4819" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1621" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-453"/>
         <nd ref="-60"/>
         <tag k="FCSubtype" v="0"/>
@@ -1301,7 +1301,7 @@
         <tag k="source" v="osm"/>
         <tag k="gndb_id" v="6282826"/>
     </way>
-    <way visible="true" id="-4817" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1619" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-484"/>
         <nd ref="-15"/>
         <tag k="FCSubtype" v="0"/>
@@ -1333,7 +1333,7 @@
         <tag k="source" v="osm"/>
         <tag k="gndb_id" v="6183466"/>
     </way>
-    <way visible="true" id="-4815" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1617" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-290"/>
         <nd ref="-5"/>
         <tag k="FCSubtype" v="0"/>
@@ -1365,7 +1365,7 @@
         <tag k="source" v="osm"/>
         <tag k="gndb_id" v="6183466"/>
     </way>
-    <way visible="true" id="-4813" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1615" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-719"/>
         <nd ref="-720"/>
         <tag k="FCSubtype" v="0"/>
@@ -1394,7 +1394,7 @@
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm"/>
     </way>
-    <way visible="true" id="-4811" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1613" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-718"/>
         <nd ref="-785"/>
         <tag k="FCSubtype" v="0"/>
@@ -1405,8 +1405,8 @@
         <tag k="railway" v="Other"/>
         <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:43.000Z"/>
         <tag k="gauge" v="144"/>
-        <tag k="lanes" v="1"/>
         <tag k="REF1" v="000075"/>
+        <tag k="lanes" v="1"/>
         <tag k="REF2" v="todo"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{7eaf829c-4b09-4bef-b3b5-40c9f6b4b358};{ec1f8089-9b4f-4d65-a0f2-fa646679d9e2}"/>
@@ -1423,8 +1423,9 @@
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:hash" v="sha1sum:881448f8b7abd3ff1a81bbdcd7dc420b436cb3f5;sha1sum:1c3fdaefda7a76321bf819e4274683aeaf3e041a"/>
     </way>
-    <way visible="true" id="-4809" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1611" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-777"/>
         <nd ref="-697"/>
         <tag k="FCSubtype" v="0"/>
@@ -1453,7 +1454,7 @@
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm"/>
     </way>
-    <way visible="true" id="-4807" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1609" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-792"/>
         <nd ref="-793"/>
         <tag k="FCSubtype" v="0"/>
@@ -1482,7 +1483,7 @@
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm"/>
     </way>
-    <way visible="true" id="-4805" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1607" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-327"/>
         <nd ref="-328"/>
         <tag k="FCSubtype" v="0"/>
@@ -1514,7 +1515,7 @@
         <tag k="source" v="osm"/>
         <tag k="gndb_id" v="6282826"/>
     </way>
-    <way visible="true" id="-4803" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1605" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-394"/>
         <nd ref="-283"/>
         <tag k="FCSubtype" v="0"/>
@@ -1546,7 +1547,7 @@
         <tag k="source" v="osm"/>
         <tag k="gndb_id" v="6183466"/>
     </way>
-    <way visible="true" id="-4801" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1603" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-920"/>
         <nd ref="-821"/>
         <nd ref="-281"/>
@@ -1580,7 +1581,7 @@
         <tag k="source" v="osm"/>
         <tag k="gndb_id" v="6183466"/>
     </way>
-    <way visible="true" id="-4793" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1595" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-892"/>
         <nd ref="-893"/>
         <tag k="FCSubtype" v="0"/>
@@ -1612,7 +1613,7 @@
         <tag k="source" v="osm"/>
         <tag k="gndb_id" v="6183466"/>
     </way>
-    <way visible="true" id="-4789" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1591" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-816"/>
         <nd ref="-817"/>
         <tag k="FCSubtype" v="0"/>
@@ -1644,7 +1645,7 @@
         <tag k="source" v="osm"/>
         <tag k="gndb_id" v="6183466"/>
     </way>
-    <way visible="true" id="-4785" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1587" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
         <tag k="FCSubtype" v="0"/>
@@ -1676,7 +1677,7 @@
         <tag k="source" v="osm"/>
         <tag k="gndb_id" v="6183466"/>
     </way>
-    <way visible="true" id="-4781" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1583" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-13"/>
         <nd ref="-14"/>
         <tag k="FCSubtype" v="0"/>

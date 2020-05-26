@@ -35,7 +35,7 @@
 #include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 
 #include <hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h>
 
@@ -104,7 +104,8 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
   conflate(map);
   MapProjector::projectToWgs84(map);
 
-  CalculateHashVisitor hashVisitor;
+  MultiaryPoiHashVisitor hashVisitor;
+  hashVisitor.setIncludeCircularError(true);
   map->visitRw(hashVisitor);
 
   for (NodeMap::const_iterator it = map->getNodes().begin(); it != map->getNodes().end(); ++it)

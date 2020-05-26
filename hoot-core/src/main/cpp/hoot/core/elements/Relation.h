@@ -118,6 +118,8 @@ public:
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
 
+  size_t getMemberCount() const { return _relationData->getElements().size(); }
+
   /**
    * Returns the IDs of members
    *
@@ -192,11 +194,6 @@ public:
   void setType(const QString& type);
 
   QString toString() const;
-
-  /**
-   * @see Element
-   */
-  virtual QString nonIdHash() const;
 
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);

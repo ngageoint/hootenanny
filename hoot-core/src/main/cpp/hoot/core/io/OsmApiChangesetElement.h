@@ -147,7 +147,7 @@ protected:
    * @param value String value
    * @return XML ecoded string
    */
-  QString& escapeString(QString& value) const;
+  QString escapeString(const QString& value) const;
   /**
    * @brief diffElement Compare (diff) two elements, this and element, adding diff output to the
    *   text streams

@@ -68,7 +68,9 @@ public:
 
   virtual double getProbability() const override;
 
-  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const override;
+  virtual bool isConflicting(
+    const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   virtual bool isWholeGroup() const override { return _isWholeGroup; }
 
@@ -91,13 +93,16 @@ public:
 private:
 
   ElementId _eid1, _eid2;
+
   bool _isWholeGroup;
   QString _matchName;
   bool _neverCausesConflict;
   MatchClassification _p;
+
   v8::Persistent<v8::Object> _plugin;
   std::shared_ptr<PluginContext> _script;
   QString _explainText;
+
   typedef std::pair<ElementId, ElementId> ConflictKey;
   mutable QHash<ConflictKey, bool> _conflicts;
 
@@ -105,13 +110,26 @@ private:
 
   void _calculateClassification(const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
     v8::Handle<v8::Object> plugin);
-  v8::Handle<v8::Value> _call(const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
-    v8::Handle<v8::Object> plugin);
-  ConflictKey _getConflictKey() const { return ConflictKey(_eid1, _eid2); }
-  bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
-    ElementId other1, ElementId other2) const;
-  v8::Handle<v8::Value> _callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const;
 
+  v8::Handle<v8::Value> _call(
+    const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj, v8::Handle<v8::Object> plugin);
+
+  ConflictKey _getConflictKey() const { return ConflictKey(_eid1, _eid2); }
+
+  bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
+    ElementId other1, ElementId other2,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const;
+
+  bool _isMatchCandidate(ConstElementPtr e, const ConstOsmMapPtr& map) const;
+
+  /*
+   * Either creates a new match or retrieves an existing one from the global set of matches
+   */
+  std::shared_ptr<const ScriptMatch> _getMatch(
+    OsmMapPtr map, v8::Handle<v8::Object> mapJs, const ElementId& eid1, const ElementId& eid2,
+    const QHash<QString, ConstMatchPtr>& matches) const;
+
+  v8::Handle<v8::Value> _callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const;
 };
 
 }

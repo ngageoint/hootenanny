@@ -79,7 +79,7 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     {
       return;
     }
-    // we don't want the creators to hold onto a map pointer that will go out of scope
+    // We don't want the creators to hold onto a map pointer that will go out of scope.
     if (omc)
     {
       omc->setOsmMap((OsmMap*)0);
@@ -137,14 +137,16 @@ MergerFactory& MergerFactory::getInstance()
   return *_theInstance;
 }
 
-bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const ConstMatchPtr& m1,
-                                  const ConstMatchPtr& m2) const
+bool MergerFactory::isConflicting(
+  const ConstOsmMapPtr& map, const ConstMatchPtr& m1, const ConstMatchPtr& m2,
+  const QHash<QString, ConstMatchPtr>& matches) const
 {
   //LOG_VART(_creators.size());
+
   // if any creator considers a match conflicting then it is a conflict
   for (size_t i = 0; i < _creators.size(); i++)
   {
-    if (_creators[i]->isConflicting(map, m1, m2))
+    if (_creators[i]->isConflicting(map, m1, m2, matches))
     {
       LOG_TRACE("Conflicting matches: " << m1 << ", " << m2);
       return true;

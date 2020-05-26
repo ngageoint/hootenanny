@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXIMALSUBLINESTRINGMATCHER_H
 #define MAXIMALSUBLINESTRINGMATCHER_H
@@ -61,14 +61,11 @@ public:
   virtual void setConfiguration(const Settings& s);
 
   virtual void setMaxRelevantAngle(Radians r);
-
   /**
    * minSplitSize is not supported at this time.
    */
   virtual void setMinSplitSize(Meters minSplitSize);
-
   virtual void setHeadingDelta(Meters headingDelta);
-
   virtual void setSublineMatcher(const std::shared_ptr<SublineMatcher>& sm);
 
   virtual QString getDescription() const
@@ -87,6 +84,7 @@ private:
   class ScoredMatch
   {
   public:
+
     ScoredMatch() : score(0.0) {}
     ScoredMatch(double s, const std::vector<WaySublineMatch>& m) : score(s), matches(m) {}
 
@@ -124,7 +122,7 @@ private:
 
   void _insertElementIds(const std::vector<ConstWayPtr>& ways, std::set<ElementId>& elements) const;
 
-  /**
+  /*
    * ways.size() == reversed.size()
    * If reversed is true then the nodes in the corresponding way are reversed.
    */

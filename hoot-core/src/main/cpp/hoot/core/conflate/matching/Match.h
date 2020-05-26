@@ -42,6 +42,10 @@ class MatchThreshold;
 class ElementId;
 class MatchType;
 class MatchClassification;
+class Match;
+
+typedef std::shared_ptr<Match> MatchPtr;
+typedef std::shared_ptr<const Match> ConstMatchPtr;
 
 /**
  * Describes a specific match between two sets of elements. For example the match between two
@@ -68,7 +72,7 @@ public:
 
   /**
    * Optionally return the types of members stored in this match. This can be multiple member types
-   * or'd together.
+   * OR'd together.
    */
   virtual MatchMembers getMatchMembers() const { return MatchMembers::None; }
 
@@ -102,9 +106,16 @@ public:
    *
    * Two matches can only be conflicting if they contain the same ElementIds in getMatchPairs().
    *
+   * @param other match to check for conflict with
+   * @param map map owning the elements involved in the matches
+   * @param matches an optional set of all matches found during conflation; this allows match
+   * caching to be used in situations where duplicated match calculation is prohibitively expensive
+   * @return true if the two matches are conflicting; false otherwise
    */
-  virtual bool isConflicting(const std::shared_ptr<const Match>& other,
-                             const ConstOsmMapPtr& map) const = 0;
+  virtual bool isConflicting(
+    const std::shared_ptr<const Match>& other,
+    const ConstOsmMapPtr& map,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const = 0;
 
   /**
    * If the match should _not_ be optimized into a group of non-conflicting matches, then this
@@ -151,6 +162,24 @@ public:
    */
   bool operator==(const Match& other) const;
 
+  /**
+   * Returns a collection of matches indexed by the IDs of the elements involved
+   *
+   * @param matches the matches to index
+   * @return an indexed collection of matches
+   */
+  static QHash<QString, ConstMatchPtr> getIdIndexedMatches(
+    const std::vector<ConstMatchPtr>& matches);
+
+  /**
+   * String representation for match pairs
+   *
+   * @param matchPairs the match pairs to represent as a string
+   * @return a string
+   */
+  static QString matchPairsToString(
+    const std::set<std::pair<ElementId, ElementId>>& matchPairs);
+
 protected:
 
   /*
@@ -167,9 +196,6 @@ protected:
 
   const std::shared_ptr<const MatchThreshold> _threshold;
 };
-
-typedef std::shared_ptr<Match> MatchPtr;
-typedef std::shared_ptr<const Match> ConstMatchPtr;
 
 inline std::ostream& operator<<(std::ostream & o, ConstMatchPtr m)
 {

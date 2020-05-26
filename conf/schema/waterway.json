@@ -74,7 +74,6 @@
         ],
         "aliases": [
             "type=river",
-            "type=stream",
             "river_type=*",
             "river_flow=*",
             "FlowDir=*"  
@@ -101,6 +100,9 @@
         "geometries": [
             "linestring"
         ],
+        "aliases": [
+            "type=stream" 
+        ],
         "isA": "waterway",
         "name": "waterway=stream",
         "objectType": "tag"
@@ -111,6 +113,14 @@
         ],
         "isA": "waterway",
         "name": "waterway=wadi",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "waterway",
+        "name": "waterway=tidal_channel",
         "objectType": "tag"
     },
     {

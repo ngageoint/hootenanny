@@ -29,8 +29,7 @@
 // hoot
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/elements/ElementComparer.h>
+#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
@@ -57,6 +56,12 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
   if (!_map)
   {
     throw IllegalArgumentException("No map set on WayNodeCopier.");
+  }
+  if (toReplaceWayId.getType() != ElementType::Way || replacingWayId.getType() != ElementType::Way)
+  {
+    throw IllegalArgumentException(
+      "WayNodeCopier only processes ways. Input IDs: " + toReplaceWayId.toString() + ", " +
+      replacingWayId.toString());
   }
 
   bool elementsModified = false;
@@ -101,10 +106,8 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
           {
             // find the closest way node index at the location of the node being copied to the way
             // we're copying to
-            //const long index =
-              //OsmUtils::closestWayNodeIndexToNode(nodeToBeRemoved, replacingWay, _map, false);
             const long index =
-              OsmUtils::closestWayNodeInsertIndex(nodeToBeRemoved, replacingWay, _map);
+              WayUtils::closestWayNodeInsertIndex(nodeToBeRemoved, replacingWay, _map);
             LOG_VART(index);
             if (index != -1)
             {
@@ -135,9 +138,9 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
             ConstNodePtr closestReplacementNode =
               closestReplacementLocToInfoNode.getNode(_duplicateNodeTolerance);
             LOG_VART(closestReplacementNode->getElementId());
-            LOG_VART(ElementComparer::tagsAreSame(nodeToBeRemoved, closestReplacementNode));
+            LOG_VART(nodeToBeRemoved->getTags().dataOnlyEqual(closestReplacementNode->getTags()));
 
-            if (ElementComparer::tagsAreSame(nodeToBeRemoved, closestReplacementNode))
+            if (nodeToBeRemoved->hasSameNonMetadataTags(*closestReplacementNode))
             {
               // the two nodes have identical tags, don't make any changes
 

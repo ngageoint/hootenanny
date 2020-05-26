@@ -90,6 +90,7 @@ public:
   inline static const QString HootMatchP()              { return "hoot:match:p"; }
   inline static const QString HootMatchScore()          { return "hoot:match:score"; }
   inline static const QString HootMatchedBy()           { return "hoot:matchedBy"; }
+  inline static const QString HootSublineMatcherUsed()  { return "hoot:subline:matcher:used"; }
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
 
@@ -174,6 +175,13 @@ public:
   inline static const QString Source()                  { return "source"; }
   inline static const QString OsmApiDbScheme()          { return "osmapidb"; }
   inline static const QString HootApiDbScheme()         { return "hootapidb"; }
+
+  /**
+   * This is used by ChangesetReplacementCreator to focus attention on input elements with missing
+   * child references so that they may later be cleaned up.
+   */
+  inline static const QString HootMissingChild()        { return "hoot:missing_child"; }
+
   /**
    * Identifies features snapped with UnconnectedWaySnapper
    */

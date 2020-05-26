@@ -46,7 +46,7 @@ function getRelatedTags(relateToKvp, d) {
     var result = [];
     for (var k in d) {
         var kvp = k + '=' + d[k];
-        // TODO: This needs to be updated for features other than POI before its used outside of Poi.js.
+        // This would need to be updated for features other than POI before it could be used outside of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.score(relateToKvp, kvp) > 0) {
                 result.push(kvp);
@@ -78,7 +78,7 @@ function getTagsByCategory(category, d) {
     for (var k in d) {
         var kvp = k + '=' + d[k];
         // if it is not a generic type
-        // TODO: This needs to be updated for features other than POI before its used outside of Poi.js.
+        // This would need to be updated for features other than POI before it could be used outside of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.getCategories(kvp).indexOf(category) >= 0) {
                 result.push(kvp);
@@ -198,6 +198,10 @@ function explicitTypeMismatch(e1, e2, minTypeScore)
   return hoot.OsmSchema.explicitTypeMismatch(e1, e2, minTypeScore);
 }
 
+/**
+ * Returns the most specific type tag found as determined by the hoot schema. 
+   If the element has more than one specific type, only the first will be returned.
+ */
 function mostSpecificType(e)
 {
   return hoot.OsmSchema.mostSpecificType(e);
@@ -349,12 +353,44 @@ function mergeCollectionRelations(map, elementId1, elementId2)
 }
 
 /**
+ * Recursively returns the total number of nodes contained with a relation
+ */
+function getNumRelationMemberNodes(map, relationId)
+{
+  return map.getNumRelationMemberNodes(relationId);
+}
+
+/**
+ * Determines if two relations have at least one connected way member
+ */
+function relationsHaveConnectedWayMembers(map, relationId1, relationId2)
+{
+  return map.relationsHaveConnectedWayMembers(relationId1, relationId2);
+}
+
+/**
  * Snaps the ways in the second input to the first input. The replaced array will
  * be updated appropriately to reflect the elements that were replaced.
  */
 function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
 {
   return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy);
+}
+
+/**
+ * Merges rivers together
+ */
+function snapRivers(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2)
+{
+  return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2);
+}
+
+/**
+ * Determines if a river is considered "long" by River Conflation standards
+ */
+function isLongRiverPair(map, e1, e2)
+{
+  return hoot.OsmSchema.isLongRiverPair(map, e1, e2);
 }
 
 /**
@@ -494,4 +530,12 @@ function isRailway(e)
 function isPowerLine(e)
 {
   return hoot.OsmSchema.isPowerLine(e);
+}
+
+/*
+ * Returns the length of the feature in meters
+ */
+function getLength(map, e)
+{
+  return hoot.ElementConverter.calculateLength(map, e);
 }

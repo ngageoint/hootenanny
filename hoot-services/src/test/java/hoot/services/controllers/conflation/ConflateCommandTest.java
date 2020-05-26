@@ -36,6 +36,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.exec.CommandLine;
@@ -269,6 +271,105 @@ public class ConflateCommandTest {
 
     @Test
     @Category(UnitTest.class)
+    public void testSortingMatcherMerger() {
+        String jobId = UUID.randomUUID().toString();
+
+        // handles disabled features...
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setDisabledFeatures(Arrays.asList("GenericPointPolygon", "GenericPolygons", "Pois"));
+        String debugLevel = "error";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        Pattern matcherPattern = Pattern.compile("match\\.creators=([^\\s]+)[,]");
+        String options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
+
+        Matcher matcher = matcherPattern.matcher(options);
+        boolean matcherFound = matcher.find();
+
+        assertTrue(matcherFound);
+
+        String[] sortedMatchers = matcher.group(1).split(";");
+        assertEquals(sortedMatchers[0], "hoot::BuildingMatchCreator");
+        assertEquals(sortedMatchers[1], "hoot::HighwayMatchCreator");
+        assertEquals(sortedMatchers[5], "hoot::ScriptMatchCreator,Railway.js");
+        assertEquals(sortedMatchers[9], "hoot::ScriptMatchCreator,CollectionRelation.js");
+
+        Pattern mergerPattern = Pattern.compile("merger\\.creators=([^\\s]+)[,\\]]");
+
+        matcher = mergerPattern.matcher(options);
+        boolean mergerFound = matcher.find();
+
+        assertTrue(mergerFound);
+
+        String[] sortedMergers = matcher.group(1).split(";");
+        assertEquals(sortedMergers[0], "hoot::BuildingMergerCreator");
+        assertEquals(sortedMergers[1], "hoot::HighwayMergerCreator");
+        assertEquals(sortedMergers[5], "hoot::ScriptMergerCreator");
+        assertEquals(sortedMergers[9], "hoot::ScriptMergerCreator");
+
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testSortingMatcherMergerNetwork() {
+        String jobId = UUID.randomUUID().toString();
+
+        // handles disabled features...
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setConflationType("Network");
+        conflateParams.setDisabledFeatures(Arrays.asList("Rivers"));
+        String debugLevel = "error";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        Pattern matcherPattern = Pattern.compile("match\\.creators=([^\\s]+)[,]");
+        String options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
+
+        Matcher matcher = matcherPattern.matcher(options);
+        boolean matcherFound = matcher.find();
+
+        assertTrue(matcherFound);
+
+        String[] sortedMatchers = matcher.group(1).split(";");
+        assertEquals(sortedMatchers[0], "hoot::BuildingMatchCreator");
+        assertEquals(sortedMatchers[1], "hoot::NetworkMatchCreator");
+        assertEquals(sortedMatchers[5], "hoot::ScriptMatchCreator,Railway.js");
+        assertEquals(sortedMatchers[9], "hoot::ScriptMatchCreator,Polygon.js");
+
+        Pattern mergerPattern = Pattern.compile("merger\\.creators=([^\\s]+)[,\\]]");
+
+        matcher = mergerPattern.matcher(options);
+        boolean mergerFound = matcher.find();
+
+        assertTrue(mergerFound);
+
+        String[] sortedMergers = matcher.group(1).split(";");
+        assertEquals(sortedMergers[0], "hoot::BuildingMergerCreator");
+        assertEquals(sortedMergers[1], "hoot::NetworkMergerCreator");
+        assertEquals(sortedMergers[5], "hoot::ScriptMergerCreator");
+        assertEquals(sortedMergers[9], "hoot::ScriptMergerCreator");
+
+    }
+
+    @Test
+    @Category(UnitTest.class)
     public void testDifferential() {
         String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
 
@@ -471,4 +572,5 @@ public class ConflateCommandTest {
 
         new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
-    }}
+    }
+}

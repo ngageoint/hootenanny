@@ -94,7 +94,8 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
   LOG_VART(eids);
 
   std::shared_ptr<ScriptMerger> sm(new ScriptMerger(script, plugin, eids));
-  // only add the merger if there are elements to merge.
+  sm->setMatchType(matchType.join(";"));
+  // only add the merger if there are elements to merge
   if (sm->hasFunction("mergeSets"))
   {
     if (eids.size() >= 1)
@@ -136,8 +137,9 @@ vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
   return result;
 }
 
-bool ScriptMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
-  ConstMatchPtr m2) const
+bool ScriptMergerCreator::isConflicting(
+  const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+  const QHash<QString, ConstMatchPtr>& matches) const
 {
   const ScriptMatch* sm1 = dynamic_cast<const ScriptMatch*>(m1.get());
   const ScriptMatch* sm2 = dynamic_cast<const ScriptMatch*>(m2.get());
@@ -145,7 +147,7 @@ bool ScriptMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr
   bool result = false;
   if (sm1 && sm2)
   {
-    result = m1->isConflicting(m2, map);
+    result = m1->isConflicting(m2, map, matches);
   }
 
   return result;

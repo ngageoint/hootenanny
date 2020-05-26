@@ -140,6 +140,8 @@ protected:
   void write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response);
   /** Get the value of the interupt flag */
   bool get_interupt() { return _interupt; }
+  /** Shutdown the thread but don't wait on it */
+  void stop();
 
 private:
   /** Function that starts the server listening and accepting connections */

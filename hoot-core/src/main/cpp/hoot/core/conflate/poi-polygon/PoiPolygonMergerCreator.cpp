@@ -148,7 +148,7 @@ vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
 }
 
 bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
-  ConstMatchPtr m2) const
+  ConstMatchPtr m2, const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   LOG_VART(m1);
   LOG_VART(m2);
