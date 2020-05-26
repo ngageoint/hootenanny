@@ -40,7 +40,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) = 0;
 
-  virtual void setOsmMap(OsmMap* map)
+  void setOsmMap(OsmMap* map) override
   {
     setOsmMap((const OsmMap*)map);
   }
