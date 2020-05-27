@@ -37,6 +37,10 @@
 #include <hoot/core/scoring/MapMatchScoringUtils.h>
 #include <hoot/core/algorithms/perty/PertyTestRunner.h>
 #include <hoot/core/algorithms/perty/PertyTestRunResult.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -57,6 +61,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     LOG_VARD(args.size());
     if (args.size() < 2 || args.size() > 3)
     {
@@ -140,6 +147,9 @@ public:
         return -1;
       }
     }
+
+    LOG_STATUS(
+      "PERTY operation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

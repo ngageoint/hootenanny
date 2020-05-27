@@ -36,6 +36,10 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -54,6 +58,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() != 2)
     {
       std::cout << getHelp() << std::endl << std::endl;
@@ -80,6 +87,8 @@ public:
     {
       _sortInMemory(input, output);
     }
+
+    LOG_STATUS("Map sorted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

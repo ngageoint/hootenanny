@@ -32,9 +32,13 @@
 #include <hoot/core/io/WordCountWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/TagDistribution.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <map>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -61,6 +65,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
@@ -93,6 +100,9 @@ public:
     writer.write(output, wc);
 
     cout << "Total word count: " << total << endl;
+
+    LOG_STATUS(
+      "Names counted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

@@ -35,6 +35,10 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -54,11 +58,15 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() < 3 || args.size() > 5)
     {
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes three to five parameters.").arg(getName()));
     }
+
     int i = 0;
     QString cutterShapePath = args[i++];
     QString doughPath = args[i++];
@@ -102,6 +110,9 @@ public:
 
     MapProjector::projectToWgs84(result);
     IoUtils::saveMap(result, outputPath);
+
+    LOG_STATUS(
+      "Map cookie cut in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

@@ -40,6 +40,10 @@
 #include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 using namespace Tgs;
@@ -109,6 +113,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     bool showConfusion = false;
     if (args.contains("--confusion"))
     {
@@ -177,6 +184,9 @@ public:
     QString result = evaluateThreshold(map, output, mt, showConfusion);
 
     cout << result;
+
+    LOG_STATUS(
+      "Matches scored in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

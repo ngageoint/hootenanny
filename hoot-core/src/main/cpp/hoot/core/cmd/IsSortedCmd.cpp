@@ -31,10 +31,12 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/IsSortedVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFile>
 #include <QFileInfo>
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -54,6 +56,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() != 1)
     {
       std::cout << getHelp() << std::endl << std::endl;
@@ -109,6 +114,9 @@ public:
     {
       std::cout << input << " is not sorted." << std::endl;
     }
+
+    LOG_STATUS(
+      "Map sorted check ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

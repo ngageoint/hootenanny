@@ -82,7 +82,7 @@ public:
 
     IoUtils::saveMap(map, out);
 
-    LOG_INFO("Cropping completed in: " + StringUtils::millisecondsToDhms(timer.elapsed()) + ".");
+    LOG_STATUS("Map cropped in: " << StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
 
     return 0;
   }

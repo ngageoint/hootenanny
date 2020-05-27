@@ -30,6 +30,10 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -51,6 +55,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() != 3)
     {
       LOG_VARD(args);
@@ -58,6 +65,7 @@ public:
       throw HootException(QString("%1 takes three parameters.").
                           arg(getName()));
     }
+
     //  Load the tile map ignoring the file IDs
     OsmMapPtr tile_map(new OsmMap());
     IoUtils::loadMap(tile_map, args[0], false);
@@ -73,6 +81,8 @@ public:
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
     //  Write the maps out to disk
     mapSplitter.writeMaps(args[2]);
+
+    LOG_STATUS("Map split in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

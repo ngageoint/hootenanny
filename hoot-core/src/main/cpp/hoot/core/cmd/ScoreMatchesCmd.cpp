@@ -72,6 +72,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     bool showConfusion = false;
     if (args.contains("--confusion"))
     {
@@ -137,6 +140,9 @@ public:
       const QString result = evaluateThreshold(maps, output, mt, showConfusion, score);
       cout << result;
     }
+
+    LOG_STATUS(
+      "Match scoring ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

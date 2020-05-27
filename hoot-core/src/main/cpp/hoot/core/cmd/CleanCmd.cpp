@@ -61,13 +61,14 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    Tgs::Timer timer;
+
     if (args.size() != 2)
     {
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    Tgs::Timer timer;
     Progress progress(
       ConfigOptions().getJobId(),
       JOB_SOURCE,

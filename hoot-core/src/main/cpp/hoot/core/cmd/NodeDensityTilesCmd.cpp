@@ -38,6 +38,9 @@
 #include <hoot/core/io/TileBoundsWriter.h>
 #include <hoot/core/util/StringUtils.h>
 
+// Qt
+#include <QElapsedTimer>
+
 namespace hoot
 {
 
@@ -57,15 +60,15 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() < 2)
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
         QString("%1 takes at least two parameters.").arg(getName()));
     }
-
-    QElapsedTimer timer;
-    timer.start();
 
     QStringList inputs;
     const QString input = args[0];

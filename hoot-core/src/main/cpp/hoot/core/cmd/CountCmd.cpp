@@ -70,6 +70,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() < 1 || args.size() > 3)
     {
       LOG_VAR(args);
@@ -97,9 +100,6 @@ public:
         throw IllegalArgumentException("Input file does not exist: " + input);
       }
     }
-
-    QElapsedTimer timer;
-    timer.start();
 
     QString criterionClassName = "";
     if (args.size() > 1)
@@ -132,7 +132,7 @@ public:
     }
 
     LOG_STATUS(
-      "Counting finished in " + StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+      "Features counted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     //putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
     QString displayStr = "Total count ";

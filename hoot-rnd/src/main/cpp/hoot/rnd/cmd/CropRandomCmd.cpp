@@ -34,9 +34,11 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/rnd/ops/RandomMapCropper.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -58,6 +60,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() < 4 || args.size() > 6)
     {
       std::cout << getHelp() << std::endl << std::endl;
@@ -154,6 +159,8 @@ public:
     LOG_INFO(cropper.getCompletedStatusMessage());
 
     OsmMapWriterFactory::write(map, output);
+
+    LOG_STATUS("Map cropped in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

@@ -28,9 +28,12 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-
 #include <hoot/core/io/ArffToRfConverter.h>
 #include <hoot/core/scoring/RandomForestModelBuilder.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -50,6 +53,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     // This argument is only valid when converting to .rf from training data.
     bool exportArffOnly = false;
     if (args.contains("--export-arff-only"))
@@ -82,6 +88,8 @@ public:
 
       RandomForestModelBuilder::build(inputs, args.last(), exportArffOnly);
     }
+
+    LOG_STATUS("Model built in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

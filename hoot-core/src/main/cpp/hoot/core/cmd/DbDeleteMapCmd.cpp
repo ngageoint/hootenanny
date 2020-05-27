@@ -29,6 +29,10 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/HootApiDbWriter.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -50,6 +54,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() != 1)
     {
       cout << getHelp() << endl << endl;
@@ -57,6 +64,8 @@ public:
     }
 
     HootApiDbWriter().deleteMap(args[0]);
+
+    LOG_STATUS("Map deleted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

@@ -30,6 +30,10 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/CumulativeConflator.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -53,6 +57,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     // doesn't work with stats yet
     if (args.contains("--stats"))
     {
@@ -73,6 +80,9 @@ public:
     const QString output = args.last();
 
     CumulativeConflator::conflate(inputs, output);
+
+    LOG_STATUS(
+      "Conflation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

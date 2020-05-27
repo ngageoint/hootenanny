@@ -36,11 +36,14 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace std;
 
+// Qt
 #include <QDir>
 #include <QFileInfo>
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -60,6 +63,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     bool ignoreUuid = false;
     bool useDateTime = false;
     bool setErrorLimit = false;
@@ -133,6 +139,10 @@ public:
       if (mapCompare.isMatch(map1, map2))
         result = 0;
     }
+
+    LOG_STATUS(
+      "Map difference calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
 
     return result;
   }
