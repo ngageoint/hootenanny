@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Completely replaces tags in one feature to another
+ * Completely replaces tags in a feature
  */
 class ReplaceTagMerger : public TagMerger, public Configurable
 {
