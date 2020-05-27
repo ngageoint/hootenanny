@@ -1,9 +1,10 @@
-14:33:46.361 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
-14:33:46.363 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        14:33:46.363 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        14:33:46.367 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
-14:33:46.367 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 103 elements from input in: 00:00.
-14:33:46.367 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
-14:33:46.368 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        14:33:46.368 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        14:33:46.371 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
-14:33:46.371 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 103 elements from input in: 00:00.
+21:50:18.349 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
+21:50:18.352 INFO   .../hoot/core/io/OsmXmlReader.cpp( 870) Read 0 elements from input.        21:50:18.352 INFO   .../hoot/core/io/OsmXmlReader.cpp( 870) Read 0 elements from input.        21:50:18.355 INFO   .../hoot/core/io/OsmXmlReader.cpp( 473) 	Reporting missing elements...
+21:50:18.356 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 103 elements from input in: 00:00.
+21:50:18.356 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
+21:50:18.357 INFO   .../hoot/core/io/OsmXmlReader.cpp( 870) Read 0 elements from input.        21:50:18.357 INFO   .../hoot/core/io/OsmXmlReader.cpp( 870) Read 0 elements from input.        21:50:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 473) 	Reporting missing elements...
+21:50:18.360 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 103 elements from input in: 00:00.
+21:50:18.361 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	70	41	90	
 Ways	10	8	12	
@@ -26,7 +27,9 @@ Features with Names	9	7	10
 Bridges	0	0	0	
 Tunnels	0	0	0	
 One-Way Streets	0	0	0	
+Reversed Roads	0	0	0	
 Road Roundabouts	0	0	0	
+Multi-Use Features	0	0	0	
 Multi-Use Buildings	0	0	0	
 Buildings With Height Info	0	0	0	
 Shortest Building Height	0	0	0	
@@ -173,10 +176,10 @@ Percentage of Unmatched Collection Relations	0	0	0
 Translated Populated Tags	70	55	86	
 Difference Between Total Features in Output and Total Features in Inputs			-5	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-27.77777777777778	
-Calculate Stats for Input 1 Time (sec)				7.52054500579834
-Calculate Stats for Input 2 Time (sec)				0.6179490089416504
-Apply Pre-Conflate Ops Time (sec)				0.005882024765014648
-Apply Post-Conflate Ops Time (sec)				0.004269123077392578
-Calculate Stats for Output Time (sec)				0.5807580947875977
+Calculate Stats for Input 1 Time (sec)				7.859045028686523
+Calculate Stats for Input 2 Time (sec)				0.6379351615905762
+Apply Pre-Conflate Ops Time (sec)				0.005518913269042969
+Apply Post-Conflate Ops Time (sec)				0.003650903701782227
+Calculate Stats for Output Time (sec)				0.5866830348968506
 
-14:33:45.976 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:09 for reference map: ...st-files/ToyBuildingsTestA.osm and secondary map: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm
+21:50:17.968 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:09 for reference map: ...st-files/ToyBuildingsTestA.osm and secondary map: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm

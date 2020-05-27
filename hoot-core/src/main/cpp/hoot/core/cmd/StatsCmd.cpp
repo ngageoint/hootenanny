@@ -79,7 +79,7 @@ public:
     bool quick = false;
     bool toFile = false;
     QString outputFilename = "";
-    //  Capture any flags and remove them before processing inputs
+    // Capture any flags and remove them before processing inputs
     for (int i = 0; i < args.size(); i++)
     {
       if (args[i].startsWith(OUTPUT_SWITCH))
