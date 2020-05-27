@@ -91,6 +91,7 @@ public:
       throw HootException("Cannot specify both the --score and --test options.");
     }
 
+    const QString msg = "PERTY operation ran in %1 total.";
     if (!scoreOptionSpecified && !testOptionSpecified)
     {
       OsmMapPtr map(new OsmMap());
@@ -101,11 +102,14 @@ public:
 
       MapProjector::projectToWgs84(map);
       IoUtils::saveMap(map, args[1]);
+
+      LOG_STATUS(msg.arg(StringUtils::millisecondsToDhms(timer.elapsed())));
     }
     else if (scoreOptionSpecified)
     {
       std::shared_ptr<const MatchComparator> matchComparator =
         PertyMatchScorer().scoreMatches(args[0], args[1]);
+      LOG_STATUS(msg.arg(StringUtils::millisecondsToDhms(timer.elapsed())));
       cout << MapMatchScoringUtils::getMatchScoringString(matchComparator);
     }
     else if (testOptionSpecified)
@@ -146,10 +150,9 @@ public:
         LOG_ERROR("At least one PERTY test run failed the score variance check.");
         return -1;
       }
-    }
 
-    LOG_STATUS(
-      "PERTY operation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+       LOG_STATUS(msg.arg(StringUtils::millisecondsToDhms(timer.elapsed())));
+    }
 
     return 0;
   }
