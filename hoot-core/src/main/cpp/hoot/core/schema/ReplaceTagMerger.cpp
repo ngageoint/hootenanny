@@ -22,32 +22,42 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 22020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef GENERALIZETAGMERGER_H
-#define GENERALIZETAGMERGER_H
+#include "ReplaceTagMerger.h"
 
-#include <hoot/core/schema/TagMerger.h>
+// hoot
+#include <hoot/core/schema/TagComparator.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-class GeneralizeTagMerger : public TagMerger
+HOOT_FACTORY_REGISTER(TagMerger, ReplaceTagMerger)
+HOOT_FACTORY_REGISTER(TagMerger, ReplaceTag1Merger)
+HOOT_FACTORY_REGISTER(TagMerger, ReplaceTag2Merger)
+
+ReplaceTagMerger::ReplaceTagMerger(bool swap)
 {
-public:
-
-  static std::string className() { return "hoot::GeneralizeTagMerger"; }
-
-  GeneralizeTagMerger();
-
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
-
-  virtual QString getDescription() const
-  { return "Keeps tags from both features and overlapping tags are generalized to a common parent"; }
-
-  virtual QString getClassName() const { return QString::fromStdString(className()); }
-};
-
+  _swap = swap;
 }
 
-#endif // GENERALIZETAGMERGER_H
+Tags ReplaceTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
+{
+  if (_swap)
+  {
+    return TagComparator::getInstance().replaceMerge(t2, t1, _overwriteExcludeTagKeys);
+  }
+  else
+  {
+    return TagComparator::getInstance().replaceMerge(t1, t2, _overwriteExcludeTagKeys);
+  }
+}
+
+void ReplaceTagMerger::setConfiguration(const Settings& conf)
+{
+  ConfigOptions config = ConfigOptions(conf);
+  setOverwriteExcludeTagKeys(config.getTagMergerOverwriteExclude());
+}
+
+}

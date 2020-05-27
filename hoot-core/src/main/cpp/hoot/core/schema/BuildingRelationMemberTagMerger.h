@@ -42,7 +42,7 @@ public:
   static std::string className() { return "hoot::BuildingRelationMemberTagMerger"; }
 
   BuildingRelationMemberTagMerger();
-  BuildingRelationMemberTagMerger(const std::set<QString>& ignoreTagKeys);
+  BuildingRelationMemberTagMerger(const QSet<QString>& ignoreTagKeys);
 
   /**
    * Merges tags between a building and a single building part
@@ -58,14 +58,16 @@ public:
   virtual QString getDescription() const
   { return "Merges building and building part tags together"; }
 
-  static std::set<QString> getBuildingPartTagNames();
+  static QSet<QString> getBuildingPartTagNames();
+
+  virtual QString getClassName() const { return QString::fromStdString(className()); }
 
 private:
 
   // tag keys that identify building parts
-  static std::set<QString> _buildingPartTagNames;
+  static QSet<QString> _buildingPartTagNames;
   // a set of tag keys, which will be ignored during tag merging
-  std::set<QString> _ignoreTagKeys;
+  QSet<QString> _ignoreTagKeys;
 };
 
 }

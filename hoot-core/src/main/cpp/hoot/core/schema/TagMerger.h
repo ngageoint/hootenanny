@@ -57,6 +57,8 @@ public:
    * @return a merged set of tags
    */
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const = 0;
+
+  virtual QString getClassName() const  = 0;
 };
 
 typedef std::shared_ptr<TagMerger> TagMergerPtr;

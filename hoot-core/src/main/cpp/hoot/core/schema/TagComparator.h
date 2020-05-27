@@ -109,6 +109,17 @@ public:
   Tags overwriteMerge(Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys = QStringList());
 
   /**
+   * TODO
+   *
+   * @param t1
+   * @param t2
+   * @param overwriteExcludeTagKeys
+   * @return
+   */
+  Tags replaceMerge(const Tags& t1, const Tags& t2,
+                    const QStringList& overwriteExcludeTagKeys = QStringList());
+
+  /**
    * Determines whether two tag sets have identical non-name, non-metadata tags.  Case sensitivity
    * is determined with duplicate.name.case.sensitive.
    *

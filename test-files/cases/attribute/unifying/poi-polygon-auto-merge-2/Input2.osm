@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>>
+  <node id='-85814' action='modify' lat='38.74040490645' lon='-77.58198514849'>
+    <tag k='amenity' v='theatre' />
+    <tag k='name' v='poi2' />
+  </node>
+  <node id='-85815' action='modify' lat='38.74042059716' lon='-77.58199587733'>
+    <tag k='amenity' v='community_centre' />
+    <tag k='name' v='poi1' />
+  </node>
+</osm>

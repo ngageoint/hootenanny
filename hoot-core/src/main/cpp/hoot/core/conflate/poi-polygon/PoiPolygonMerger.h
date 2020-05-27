@@ -45,7 +45,8 @@ class TagMerger;
  * conflicts (OverwriteTagMerger), so by default poi type tags may be dropped.  When
  * _autoMergeManyPoiToOnePolyMatches is set to true tag merging uses the PreserveTypesTagMerger,
  * which will put all poi type tags that are unrelated to the poly type tag into an alt_tags field,
- * so none of the types are lost.
+ * so none of the types are lost. The exception to this is when the Attribute Conflation workflow
+ * is being run. For AC, we always overwrite all building tags (with some configurable exceptions).
  */
 class PoiPolygonMerger : public MergerBase
 {
@@ -98,13 +99,15 @@ private:
   // Allows for setting the tag merger from unit tests. Mergers are set up to support Configurable,
   // so easier to specify the tag merge this way for now.
   QString _tagMergerClass;
+  // this is the tag merger that is used throughout poi/poly merging
+  std::shared_ptr<TagMerger> _tagMerger;
 
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
                             std::vector<ElementId>& buildings2,
-                            std::vector<std::pair<ElementId, ElementId>>& replaced) const;
+                            std::vector<std::pair<ElementId, ElementId>>& replaced);
 
-  Tags _mergePoiTags(const OsmMapPtr& map, Status s) const;
-  std::shared_ptr<const TagMerger> _getTagMerger();
+  Tags _mergePoiTags(const OsmMapPtr& map, Status s);
+  std::shared_ptr<TagMerger> _getTagMerger();
 
   std::vector<ElementId> _getBuildingParts(const OsmMapPtr& map, Status s) const;
 

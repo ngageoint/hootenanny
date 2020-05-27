@@ -624,7 +624,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
 
   TagMergerPtr tagMerger;
   LOG_VART(preserveTypes);
-  std::set<QString> overwriteExcludeTags;
+  QSet<QString> overwriteExcludeTags;
   if (allAreBuildingParts)
   {
     // exclude building part type tags from the type tag preservation by passing them in to be

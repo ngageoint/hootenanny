@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OVERWRITETAGMERGER_H
-#define OVERWRITETAGMERGER_H
+#ifndef REPLACE_TAG_MERGER_H
+#define REPLACE_TAG_MERGER_H
 
 // Hoot
 #include <hoot/core/schema/TagMerger.h>
@@ -35,21 +35,20 @@ namespace hoot
 {
 
 /**
- * Combine all names in a fashion where no unique names will be lost and then favor t1 tags over
- * t2 tags. See TagComparator::overwriteMerge.
+ * Completely replaces tags in one feature to another
  */
-class OverwriteTagMerger : public TagMerger, public Configurable
+class ReplaceTagMerger : public TagMerger, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::OverwriteTagMerger"; }
+  static std::string className() { return "hoot::ReplaceTagMerger"; }
 
   /**
    * If swap is set to true then t1 will be overwritten with t2 values.
    */
-  OverwriteTagMerger(bool swap = false);
+  ReplaceTagMerger(bool swap = false);
 
-  virtual ~OverwriteTagMerger() {}
+  virtual ~ReplaceTagMerger() {}
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
@@ -70,40 +69,47 @@ protected:
 };
 
 /**
- * The same as OverwriteTagMerger with a more explicit name. Tag 2 will be overwritten with Tag 1
- * tags.
+ * The same as ReplaceTagMerger with a more explicit name. Tags 2 will be completely replaced with
+ * tags 1.
  */
-class OverwriteTag2Merger : public OverwriteTagMerger
+class ReplaceTag2Merger : public ReplaceTagMerger
 {
 public:
 
-  static std::string className() { return "hoot::OverwriteTag2Merger"; }
+  static std::string className() { return "hoot::ReplaceTag2Merger"; }
 
-  OverwriteTag2Merger() : OverwriteTagMerger(false) {}
+  ReplaceTag2Merger() : ReplaceTagMerger(false) {}
 
   virtual QString getDescription() const
-  {  return "Overwrites conflicting tags with those from the reference feature"; }
+  {
+    return
+      "Completely replaces tags in the secondary feature with those from the reference feature";
+  }
 
   virtual QString getClassName() const { return QString::fromStdString(className()); }
 };
 
 /**
- * Similar to OverwriteTagMerger, but tag 1 values will be overwritten with tag 2 values.
+ * The same as ReplaceTagMerger with a more explicit name. Tags 1 will be completely replaced with
+ * tags 2.
  */
-class OverwriteTag1Merger : public OverwriteTagMerger
+class ReplaceTag1Merger : public ReplaceTagMerger
 {
 public:
 
-  static std::string className() { return "hoot::OverwriteTag1Merger"; }
+  static std::string className() { return "hoot::ReplaceTag1Merger"; }
 
-  OverwriteTag1Merger() : OverwriteTagMerger(true) {}
+  ReplaceTag1Merger() : ReplaceTagMerger(true) {}
 
   virtual QString getDescription() const
-  {  return "Overwrites conflicting tags with those from the secondary feature"; }
+  {
+    return
+      "Completely replaces tags in the reference feature with those from the secondary feature";
+  }
 
   virtual QString getClassName() const { return QString::fromStdString(className()); }
 };
 
 }
 
-#endif // OVERWRITETAGMERGER_H
+#endif // REPLACE_TAG_MERGER_H

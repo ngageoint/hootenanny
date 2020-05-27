@@ -211,7 +211,7 @@ public:
     expected["alt_name"] = "Building 2";
     expected["shop"] = "supermarket";
 
-    std::set<QString> keys;
+    QSet<QString> keys;
     keys.insert("amenity");
     PreserveTypesTagMerger uut(keys);
     uut.setOverwrite1(false);

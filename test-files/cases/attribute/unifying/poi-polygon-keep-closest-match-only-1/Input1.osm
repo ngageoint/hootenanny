@@ -1,1590 +1,1593 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="2.0604" minlon="45.33337" maxlat="2.06181" maxlon="45.334332"/>
-    <node visible="true" id="-1892254" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0613483930808849" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{e1c5bcce-181b-4c55-a8e4-2b6b7657997f}"/>
-    </node>
-    <node visible="true" id="-1892253" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0614338575218145" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{97af5e08-c67e-4cd0-8688-16e98d0c81c0}"/>
-    </node>
-    <node visible="true" id="-1892252" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3340188348919426">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4687b398-caa7-4967-9c28-d4b13f8db90f}"/>
-    </node>
-    <node visible="true" id="-1892251" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3338883471302125">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{70859774-43d1-4391-8a90-bd1a73209b8e}"/>
-    </node>
-    <node visible="true" id="-1892250" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604000000000000" lon="45.3343320000000034">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{11f29714-0413-4795-aea7-4f8817fae79c}"/>
-    </node>
-    <node visible="true" id="-1892249" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604160932048812" lon="45.3343320000000034">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{95da9307-baa7-432a-b697-7c394d18d22a}"/>
-    </node>
-    <node visible="true" id="-1892248" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604000000000000" lon="45.3342880225139027">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4fe05d1d-69e3-41b6-abba-243737906a66}"/>
-    </node>
-    <node visible="true" id="-1892247" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604000000000000" lon="45.3341416427437380">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{af8643eb-ec57-4812-a131-5764b43cb89d}"/>
-    </node>
-    <node visible="true" id="-1892246" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604000000000000" lon="45.3342426750179044">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{eb8f57d2-9fbd-495e-b0f8-1ef97cfd5b46}"/>
-    </node>
-    <node visible="true" id="-1892245" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604300482355464" lon="45.3343320000000034">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9e89bba0-9517-49bb-9b79-8ef1a6503375}"/>
-    </node>
-    <node visible="true" id="-1892244" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0605588895543834" lon="45.3343320000000034">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{97a1beac-883c-479a-93b1-160d9fc9c152}"/>
-    </node>
-    <node visible="true" id="-1892243" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604241314205614" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{fccadfda-de06-4e78-b93e-aefa7e0314d8}"/>
-    </node>
-    <node visible="true" id="-1892242" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604681245798973" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{0623d220-888d-44a6-8081-a487fd2211cb}"/>
-    </node>
-    <node visible="true" id="-1892241" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3337770079256117">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{551a3cb3-fcef-4b7e-9666-b4779c67e766}"/>
-    </node>
-    <node visible="true" id="-1892240" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3338883471302125">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ffcfe8ab-5301-44ff-9e4d-7d28a9ac018f}"/>
-    </node>
-    <node visible="true" id="-1892239" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3340350791231756">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{07458b35-21bb-4b1b-a36c-b7ec822d9f72}"/>
-    </node>
-    <node visible="true" id="-1892238" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3340354806195833">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{63ae8dff-a12b-472c-9c60-708d7fcfd0b9}"/>
-    </node>
-    <node visible="true" id="-1892237" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3337270292957442">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{50fee728-6449-4985-9a77-9fe0a8e17a08}"/>
-    </node>
-    <node visible="true" id="-1892236" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3335822672067721">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{65a2c879-b869-4c0c-a264-327cfe6a0db4}"/>
-    </node>
-    <node visible="true" id="-1892235" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3334947853089290">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{90011ea3-cc30-47cc-b98b-b732cde10259}"/>
-    </node>
-    <node visible="true" id="-1892234" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3335729777332759">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1fbf38dc-79d2-4319-85b2-ac4b72abab76}"/>
-    </node>
-    <node visible="true" id="-1892233" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0613062949408429" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{59158aa8-0297-4087-b221-facf54714151}"/>
-    </node>
-    <node visible="true" id="-1892232" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0612053225402698" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b041a32b-88b8-4193-a6f1-f713d9161676}"/>
-    </node>
-    <node visible="true" id="-1892231" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0610619812953392" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{620c9db2-9002-411d-8cf4-f3910cccb3f0}"/>
-    </node>
-    <node visible="true" id="-1892230" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0610067248431112" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{56d6ccc3-2f9e-49a6-b55b-2d9aa3741857}"/>
-    </node>
-    <node visible="true" id="-1892229" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0612053225402698" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{f16a02b2-f093-40f2-85fc-676a9e697ab6}"/>
-    </node>
-    <node visible="true" id="-1892228" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0610619812953392" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ba80d956-da26-4cca-8e87-096c80dad2e7}"/>
-    </node>
-    <node visible="true" id="-1892227" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604000000000000" lon="45.3339022889027490">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{176de798-d2aa-490f-a35f-8d67b3d60cc1}"/>
-    </node>
-    <node visible="true" id="-1892226" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604000000000000" lon="45.3340195841988702">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{d3299952-8517-4a3f-b613-be2cafcad5a0}"/>
-    </node>
-    <node visible="true" id="-1892225" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604000000000000" lon="45.3338380692607146">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c2f40acb-4511-4f06-9dc9-ec8790f83339}"/>
-    </node>
-    <node visible="true" id="-1892224" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604000000000000" lon="45.3337046000620347">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{5b3b04b8-3c27-48e6-aff1-bd3918bbee65}"/>
-    </node>
-    <node visible="true" id="-1892223" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604000000000000" lon="45.3340195841988702">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{2d6601ad-40bd-4c08-8d10-5cfa58da4e23}"/>
-    </node>
-    <node visible="true" id="-1892222" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604000000000000" lon="45.3341037190567917">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{2dd89c04-3285-4620-b39d-8cc7c4552113}"/>
-    </node>
-    <node visible="true" id="-1892221" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0617511748242747" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{a44d999e-0603-4126-b1f0-d0e37e191c65}"/>
-    </node>
-    <node visible="true" id="-1892220" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0617578820160412" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{91398090-e0c7-43f7-9669-01165850459f}"/>
-    </node>
-    <node visible="true" id="-1892219" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{0b73d226-7a04-4c7d-a6b4-8b29c28d10a0}"/>
-    </node>
-    <node visible="true" id="-1892218" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618096218618143" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c695e212-1178-481c-a1cc-fb8b805b9130}"/>
-    </node>
-    <node visible="true" id="-1892217" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3333711240964092">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{e65fe455-5d1c-40ba-a0c7-817a93918929}"/>
-    </node>
-    <node visible="true" id="-1892216" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0615907843855981" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b650f2b2-8491-4c8d-ada7-a23552a50209}"/>
-    </node>
-    <node visible="true" id="-1892215" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0616068539742942" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4a6f2672-abe6-414d-8195-3c589a9dfe3b}"/>
-    </node>
-    <node visible="true" id="-1892214" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0616068539742942" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{01527af4-88d7-4fba-b6a5-92f13b35a79f}"/>
-    </node>
-    <node visible="true" id="-1892213" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0617361913003083" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{88eb7451-e5b8-44a1-8762-ad71273f535e}"/>
-    </node>
-    <node visible="true" id="-1892212" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0617014719540636" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9735a3cc-1114-4994-980e-3e73ce2071f1}"/>
-    </node>
-    <node visible="true" id="-1892211" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0616811019750685" lon="45.3333700000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c927f017-e0c9-4c06-b7ad-87d92e7bbdc7}"/>
-    </node>
-    <node visible="true" id="-1892210" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3335729777332759">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{0b67141e-83db-4200-9c3f-6fb74225cca9}"/>
-    </node>
-    <node visible="true" id="-1892209" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0618099999999999" lon="45.3335822672067721">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{8ef64e46-e968-48a7-bb5a-43116835148e}"/>
-    </node>
-    <node visible="true" id="-1434337" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0609430223207701" lon="45.3340165124133989">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{0a331aca-1efd-445b-9562-eddbcf135326}"/>
-    </node>
-    <node visible="true" id="-1434336" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0607647462419498" lon="45.3340749019707019">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{a48f46b0-db27-441d-b215-7123661c1a20}"/>
-    </node>
-    <node visible="true" id="-1434335" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0607157683074799" lon="45.3340909431108017">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{dc30a9da-12a5-4f30-8288-59b6bb484a02}"/>
-    </node>
-    <node visible="true" id="-1434334" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0607576633387499" lon="45.3342173151888019">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4ee4634f-7011-476a-a7dd-8a13f94b289b}"/>
-    </node>
-    <node visible="true" id="-1434333" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0609849168407899" lon="45.3341428845588013">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c31d5218-9368-4dd6-b520-b38026b4b039}"/>
-    </node>
-    <node visible="true" id="-1434255" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0606361939517699" lon="45.3337159929689975">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{8bd7dbe3-3090-4827-b7c8-71b62b574615}"/>
-    </node>
-    <node visible="true" id="-1434254" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0606541562033600" lon="45.3337638253883028">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9f1b9b25-bd98-48ce-99e4-79fc1a534150}"/>
-    </node>
-    <node visible="true" id="-1434253" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0607175187239100" lon="45.3337403179098999">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{6c6f0b85-e940-4098-bf5d-000c95b41061}"/>
-    </node>
-    <node visible="true" id="-1434252" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0606995564718900" lon="45.3336924854887968">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{31fe6643-c4a0-41ef-be9e-040b538fd04f}"/>
-    </node>
-    <node visible="true" id="-1434246" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0618072854166698" lon="45.3335738418090983">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{7115b394-629a-49d0-a253-a7d415b3a3e4}"/>
-    </node>
-    <node visible="true" id="-1434225" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0615923394492000" lon="45.3333747221887009">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1e808843-9663-400f-938f-9020fd471e40}"/>
-    </node>
-    <node visible="true" id="-1434224" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0616138062821601" lon="45.3334399095229017">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{081cb9d5-d9f7-4a35-9a0a-6617828c00ad}"/>
-    </node>
-    <node visible="true" id="-1434223" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0617451420861101" lon="45.3333971804373022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c8136801-9581-44fe-aa80-fb23d5de208b}"/>
-    </node>
-    <node visible="true" id="-1434221" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0616830731897600" lon="45.3333759858959979">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9d53f119-a286-461c-8986-e1baee2153cf}"/>
-    </node>
-    <node visible="true" id="-1434148" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0617518492631901" lon="45.3333720049258986">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{6c872957-2b29-4a8e-9d94-e64dd314e82f}"/>
-    </node>
-    <node visible="true" id="-1434130" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0605062786267001" lon="45.3339842637480999">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{3a71ddfc-37ca-444b-b381-d08fb57bff99}"/>
-    </node>
-    <node visible="true" id="-1434129" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0604919891660800" lon="45.3339890128301022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{12880d3b-4cb1-446b-9421-794621efa097}"/>
-    </node>
-    <node visible="true" id="-1434127" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0604114744934101" lon="45.3341378293878989">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{d013a65a-1822-4311-9bd9-93e0d7ea919c}"/>
-    </node>
-    <node visible="true" id="-1434126" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0605428706850399" lon="45.3340930377551032">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{158fa651-4f1e-4080-9a37-09ca6b4bf8e4}"/>
-    </node>
-    <node visible="true" id="-1434125" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0605804875045601" lon="45.3341145548040032">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{0c173858-bd37-460c-9fc4-09246830a1a8}"/>
-    </node>
-    <node visible="true" id="-1434124" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0605973675923002" lon="45.3341527466744978">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{eb93c8a2-5917-4607-b991-26066c5dd3c7}"/>
-    </node>
-    <node visible="true" id="-1434123" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0606337851015599" lon="45.3341368447695032">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4db8b020-c9a2-42b1-8c6e-06e14ee65b41}"/>
-    </node>
-    <node visible="true" id="-1434122" timestamp="2019-12-18T17:53:11Z" version="1" lat="2.0606169050135601" lon="45.3340986528981986">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{6c809f84-70f5-45f8-996b-c52fa09c8680}"/>
-    </node>
-    <node visible="true" id="-1432486" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0604375209610799" lon="45.3338266759510020">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{505cc4d6-26ce-40f5-bd47-8f0c4334d5eb}"/>
-    </node>
-    <node visible="true" id="-1432471" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0604564996111998" lon="45.3338835116389021">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{353315d4-2971-45da-a8a8-636ffaf364ea}"/>
-    </node>
-    <node visible="true" id="-1431985" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614930927123498" lon="45.3338755983979027">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{f0e12a2f-8844-4694-8398-3c22374fef48}"/>
-    </node>
-    <node visible="true" id="-1431984" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613896441065500" lon="45.3339091899215987">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{d04bff71-0b8f-4ded-a4f5-c446a1e0b58e}"/>
-    </node>
-    <node visible="true" id="-1431983" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614356666853899" lon="45.3340492136292994">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{d75d3ed1-f872-4494-8b46-a5286b75fff8}"/>
-    </node>
-    <node visible="true" id="-1431982" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614507424554702" lon="45.3340443182717010">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{f5b27404-fc22-40af-884a-c6686695229b}"/>
-    </node>
-    <node visible="true" id="-1431981" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0615391152927800" lon="45.3340156221145989">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b3cbd055-ca71-46a1-9f4e-8dccf082ef1a}"/>
-    </node>
-    <node visible="true" id="-1431980" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0616096961770500" lon="45.3342303645723987">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{a1b74420-e100-4cf0-b482-11cdebd76313}"/>
-    </node>
-    <node visible="true" id="-1431979" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0617346260437999" lon="45.3341897977419990">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{503ccce7-902a-457b-bea7-e9e2bb6fb9ac}"/>
-    </node>
-    <node visible="true" id="-1431978" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0616640451565900" lon="45.3339750552675014">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1a033fac-e840-4435-9dc9-1094305a8de5}"/>
-    </node>
-    <node visible="true" id="-1431976" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0615718422866598" lon="45.3341151940337994">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{3a65dd9a-7102-4692-92a3-bcf1b21f028a}"/>
-    </node>
-    <node visible="true" id="-1431974" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0616180225742400" lon="45.3338350315398984">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{69426ebb-e1dd-49f8-bbc4-408f265e3ce3}"/>
-    </node>
-    <node visible="true" id="-1431970" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614710482886101" lon="45.3341060987895972">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{229939fc-f731-46e6-a691-7a10c3159a7a}"/>
-    </node>
-    <node visible="true" id="-1431969" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0615189293007199" lon="45.3340905510162031">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{52bb51e1-0771-43a9-9349-40ff13765eb3}"/>
-    </node>
-    <node visible="true" id="-1431968" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0615313504606898" lon="45.3341283424132016">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{129c0253-6080-4783-8a58-07b5d3c22b29}"/>
-    </node>
-    <node visible="true" id="-1431965" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612756722014600" lon="45.3339461985359975">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{18277f6c-173c-4df8-aa06-bb0d1ddcac5c}"/>
-    </node>
-    <node visible="true" id="-1431964" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613216947785502" lon="45.3340862222337009">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{049e4b30-c7b3-4474-8769-ccefceeb538e}"/>
-    </node>
-    <node visible="true" id="-1431961" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613040205218098" lon="45.3340630194862015">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{3e500a0f-57e8-4aec-9d88-815355ffea35}"/>
-    </node>
-    <node visible="true" id="-1431960" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612996645974100" lon="45.3340492767529000">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{edeec817-370a-494f-8f36-54150578d8e0}"/>
-    </node>
-    <node visible="true" id="-1431959" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612657980802700" lon="45.3339424360873977">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{636de4d4-9e70-4a5a-b127-3739c7105b92}"/>
-    </node>
-    <node visible="true" id="-1431958" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610296655864699" lon="45.3340163838012984">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{98cea67c-9656-4e5e-a9aa-bb26f7f59fa2}"/>
-    </node>
-    <node visible="true" id="-1431957" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610787389865499" lon="45.3341711968797014">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{190beeff-4290-408e-b41e-b7c4ea013c8e}"/>
-    </node>
-    <node visible="true" id="-1431956" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612410172572502" lon="45.3341203800109014">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{97d98eda-70c9-4f7a-87a8-1a1721cce918}"/>
-    </node>
-    <node visible="true" id="-1431955" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612311548782900" lon="45.3340892650248009">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{743c5bdc-296b-452f-bf09-64dad2427826}"/>
-    </node>
-    <node visible="true" id="-1431954" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613050089896698" lon="45.3340661378657970">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{74884e54-0746-4fc9-b47d-67f89f6b8d3c}"/>
-    </node>
-    <node visible="true" id="-1431953" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612427051629201" lon="45.3338818136488015">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c97356e3-3c0b-4e50-a238-97cd7c3a74bf}"/>
-    </node>
-    <node visible="true" id="-1431952" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613643173038101" lon="45.3338454618576989">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{3b4b85d1-00a0-439e-ae2b-a36d5fcd1163}"/>
-    </node>
-    <node visible="true" id="-1431951" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613276613945799" lon="45.3337243098547020">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{8e0b0ec7-8539-4b56-b818-b9fdc84f5fad}"/>
-    </node>
-    <node visible="true" id="-1431950" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612060490133599" lon="45.3337606621007012">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{80f5beaf-0f68-4e04-b228-88427ed6d6ad}"/>
-    </node>
-    <node visible="true" id="-1431948" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614665153019200" lon="45.3338149132574983">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1cd80e1f-aa62-4f66-8123-f298ef3cf691}"/>
-    </node>
-    <node visible="true" id="-1431947" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614298593044902" lon="45.3336937609589015">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{a242416d-5bf5-4c09-b24f-455dcee6b2ce}"/>
-    </node>
-    <node visible="true" id="-1431945" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614755656253099" lon="45.3338354864540989">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{0f53ad55-d746-4231-922a-f35d3bece622}"/>
-    </node>
-    <node visible="true" id="-1431944" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0616081080350601" lon="45.3337958674260975">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{3859fc9b-876e-491c-a468-4ee435cb5a95}"/>
-    </node>
-    <node visible="true" id="-1431943" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0615714515797099" lon="45.3336747148465022">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{17311173-2f6c-4d9a-a3dc-2a01ea3e4c09}"/>
-    </node>
-    <node visible="true" id="-1431942" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614389096296399" lon="45.3337143341546991">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{f1de0ea5-9441-44fd-b419-3a5c261f3695}"/>
-    </node>
-    <node visible="true" id="-1431941" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613995977276298" lon="45.3335937429863023">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1cb63160-1622-4818-a453-462fbb1de171}"/>
-    </node>
-    <node visible="true" id="-1431940" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612973997316000" lon="45.3336242916006995">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{6e877f09-8250-43d5-9cf6-c8c74b2ac150}"/>
-    </node>
-    <node visible="true" id="-1431935" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0615624012542999" lon="45.3336541416490988">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{0642fb6c-3798-47cd-931c-7506d277eac2}"/>
-    </node>
-    <node visible="true" id="-1431934" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0615321395040800" lon="45.3335541241265005">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1ccef167-7cf2-45f0-8acc-30f84c4678f2}"/>
-    </node>
-    <node visible="true" id="-1431933" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614779047331999" lon="45.3335703357687976">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9e4a8b5e-14ed-4a1d-9cad-e834babba948}"/>
-    </node>
-    <node visible="true" id="-1431932" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614922711952102" lon="45.3336178185668999">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{cdc79115-a0f1-4587-8cdf-55fdf31e3196}"/>
-    </node>
-    <node visible="true" id="-1431931" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614575364807499" lon="45.3336282013282030">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{e6962107-edc2-4fb2-9abf-92d0a2187cd1}"/>
-    </node>
-    <node visible="true" id="-1431930" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614431700188800" lon="45.3335807185311026">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{837c1374-d97e-402b-b1b0-d39e0bc74628}"/>
-    </node>
-    <node visible="true" id="-1431929" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611934920951902" lon="45.3338935158347027">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{69aaebdb-6261-4a07-93bf-94b3d4831608}"/>
-    </node>
-    <node visible="true" id="-1431928" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612359789947599" lon="45.3338787784567998">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b6706330-9243-4da5-a3f7-8c4372d81e0f}"/>
-    </node>
-    <node visible="true" id="-1431927" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611966156849602" lon="45.3337666891080033">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b42b79bd-0bd9-4965-b2b5-b88e09c2facb}"/>
-    </node>
-    <node visible="true" id="-1431926" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611544767094001" lon="45.3337823940681020">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{3afac8b9-1218-47af-bf85-f23eba71b597}"/>
-    </node>
-    <node visible="true" id="-1431925" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611553794421198" lon="45.3336492405414972">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{acba5a8e-4208-40c2-aa07-2446193d291b}"/>
-    </node>
-    <node visible="true" id="-1431924" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610391914474402" lon="45.3336895427534969">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b225370c-62e1-4384-b3da-3b5a048b7e7f}"/>
-    </node>
-    <node visible="true" id="-1431923" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610811256310799" lon="45.3338089790821002">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{54e761e7-ca7e-485e-b83c-acff16c9d26b}"/>
-    </node>
-    <node visible="true" id="-1431922" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611200513468502" lon="45.3337943353458002">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{96804224-38a1-43d1-bf86-3255a66bf5b8}"/>
-    </node>
-    <node visible="true" id="-1431919" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610599558297902" lon="45.3337674295307025">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b9edc105-d195-4047-8fbb-7002cca31a58}"/>
-    </node>
-    <node visible="true" id="-1431918" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610241543518302" lon="45.3337793276245975">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{af81b011-e52b-42fe-aa9c-9819a49ac8d6}"/>
-    </node>
-    <node visible="true" id="-1431917" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0609996929083798" lon="45.3337066123967034">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{da7a53a7-94e2-4b2d-9490-f3a2007518de}"/>
-    </node>
-    <node visible="true" id="-1431916" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0609187874439998" lon="45.3337335009700979">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{cf7143a7-ceb8-4b1b-beb5-38bab04bdef3}"/>
-    </node>
-    <node visible="true" id="-1431915" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0609570689561800" lon="45.3338473012557017">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{6a8f178e-1eba-438f-9e2a-d0addf2ff2ad}"/>
-    </node>
-    <node visible="true" id="-1431914" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610747408326699" lon="45.3338113810238994">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{2d3c5cd4-93b0-46c1-b625-6f4fcde68dcb}"/>
-    </node>
-    <node visible="true" id="-1431913" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608226307227402" lon="45.3340347681579985">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ee04cce1-8688-43e8-84b3-3b0c82791d2e}"/>
-    </node>
-    <node visible="true" id="-1431912" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0609340821659199" lon="45.3340012972272035">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b3a5e984-fb68-452a-94d3-fb94d0a28277}"/>
-    </node>
-    <node visible="true" id="-1431911" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608967316811402" lon="45.3338784262263985">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c54f9b67-737f-4bb4-9626-43cf7990a278}"/>
-    </node>
-    <node visible="true" id="-1431910" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607852802392301" lon="45.3339118971657982">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{e257b57e-6265-49d0-824c-a2ede9fd79a9}"/>
-    </node>
-    <node visible="true" id="-1431909" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607339174431800" lon="45.3339978355679989">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{be083455-c6b3-40c9-94a9-921309b8f3b5}"/>
-    </node>
-    <node visible="true" id="-1431908" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607942162534201" lon="45.3339780857184991">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{01f2e059-48ac-454e-848d-d84a201805ab}"/>
-    </node>
-    <node visible="true" id="-1431907" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607741131826902" lon="45.3339174449415978">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{79b0e575-7c09-4600-91a5-03f3be6081b5}"/>
-    </node>
-    <node visible="true" id="-1431906" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0606648347957202" lon="45.3339532353931034">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{fa170b74-3788-43be-86dc-48d61d01d87e}"/>
-    </node>
-    <node visible="true" id="-1431905" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607055441577700" lon="45.3340760309787001">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{fe556600-e4c9-421a-8f00-03fa5c5b10d7}"/>
-    </node>
-    <node visible="true" id="-1431904" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607545223204902" lon="45.3340599897633965">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{da29d856-8832-4265-b386-8393c2550bea}"/>
-    </node>
-    <node visible="true" id="-1431903" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607652400339900" lon="45.3338747510947968">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{016e98d1-510b-405a-980a-d15c65e782e4}"/>
-    </node>
-    <node visible="true" id="-1431902" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607419615559199" lon="45.3338045331520973">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{7ca932b6-ba84-4cda-bc36-a4820c71ebc3}"/>
-    </node>
-    <node visible="true" id="-1431901" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607364013216598" lon="45.3338063541051000">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{30ee53dd-7646-4920-aba0-a9cba8274271}"/>
-    </node>
-    <node visible="true" id="-1431900" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607271854183700" lon="45.3338093721509026">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1d531e33-c96d-4253-9b43-3b5632810c1f}"/>
-    </node>
-    <node visible="true" id="-1431899" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607223717694900" lon="45.3337948473727010">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{5dcfba0b-692c-4741-ae10-bb1f5ff909bb}"/>
-    </node>
-    <node visible="true" id="-1431898" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0606278675173901" lon="45.3338257994918976">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{aac09cb9-6f81-480f-9427-c87c90cbff72}"/>
-    </node>
-    <node visible="true" id="-1431897" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0606658363954700" lon="45.3339403286546982">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{f50774fe-4be8-4f52-96e8-6060cc2a0425}"/>
-    </node>
-    <node visible="true" id="-1431896" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607751147823001" lon="45.3339045382021979">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{7fb4239b-3c4a-41fd-9455-7eb5f73b9458}"/>
-    </node>
-    <node visible="true" id="-1431895" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608604672878199" lon="45.3337429264787986">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{a6e371af-6076-45a9-98cb-a670189b3cac}"/>
-    </node>
-    <node visible="true" id="-1431894" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607490158473101" lon="45.3337763974276982">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ffbe2f58-baa7-4407-a761-21d279f9818f}"/>
-    </node>
-    <node visible="true" id="-1431893" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607862818388099" lon="45.3338989904263983">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1bee0d4e-0bae-407b-a2fb-decba3e2e98d}"/>
-    </node>
-    <node visible="true" id="-1431892" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608977332806000" lon="45.3338655194861033">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{7bde850a-894d-4c29-9e1b-da4f80d48109}"/>
-    </node>
-    <node visible="true" id="-1431891" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608870745219598" lon="45.3338304556296023">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9e5b94e3-9ec8-448b-83da-23c49ca97b42}"/>
-    </node>
-    <node visible="true" id="-1431890" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607962821702799" lon="45.3338577222634029">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{07c389fa-7626-4324-ae23-1744e2474ff7}"/>
-    </node>
-    <node visible="true" id="-1431889" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607812977303599" lon="45.3338084283262006">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ab65f7a1-ea80-428d-ae8d-40da43730903}"/>
-    </node>
-    <node visible="true" id="-1431888" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608720900816202" lon="45.3337811616896005">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{28a45a1f-c3f3-4160-95ef-77c997cf4e36}"/>
-    </node>
-    <node visible="true" id="-1431887" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0605646002293301" lon="45.3336735053813982">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1b043533-688c-4921-a69c-47114b3ef6b2}"/>
-    </node>
-    <node visible="true" id="-1431886" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0605963625325301" lon="45.3337715527045972">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{38bce580-85b0-4c76-83b4-f9365f0718bc}"/>
-    </node>
-    <node visible="true" id="-1431885" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0606400189534502" lon="45.3337575806756021">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{87f34848-ec01-44d0-9bff-756d3fd5ebb9}"/>
-    </node>
-    <node visible="true" id="-1431884" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0606082566497901" lon="45.3336595333497030">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{dcdf7998-acdb-484e-b7ea-004662e27052}"/>
-    </node>
-    <node visible="true" id="-1431883" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607244359661898" lon="45.3336257879490034">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{7826fb29-c9b2-4c10-99f9-5f7720790458}"/>
-    </node>
-    <node visible="true" id="-1431882" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607536015506800" lon="45.3337106666831033">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{d1b407de-ccdb-401c-9ab6-4756f3555712}"/>
-    </node>
-    <node visible="true" id="-1431881" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608401889172199" lon="45.3336812724906011">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{af04cfb1-caee-4f57-95c1-0c79824561a1}"/>
-    </node>
-    <node visible="true" id="-1431880" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608110233318500" lon="45.3335963937518969">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4c6c0e81-7bf7-4bb0-8a76-9ca8c500ed1f}"/>
-    </node>
-    <node visible="true" id="-1431879" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0609283839613202" lon="45.3334039563331004">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{8b2e6fb8-1a63-41b6-bd54-798e7ada4cb3}"/>
-    </node>
-    <node visible="true" id="-1431878" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608142203552200" lon="45.3334380819166967">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{a2ebbb8c-83c7-4bac-9770-1656cdd1c528}"/>
-    </node>
-    <node visible="true" id="-1431877" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608487061066798" lon="45.3335520613185992">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{a98b420a-d501-4bac-b792-15421f0bb97f}"/>
-    </node>
-    <node visible="true" id="-1431876" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0609628698100799" lon="45.3335179359849008">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b9c3841e-9ba9-42e0-8b3b-ed1e4230b24e}"/>
-    </node>
-    <node visible="true" id="-1431875" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611343553573902" lon="45.3335983208177993">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9128f536-6cf1-48e0-9a70-01618d480bc7}"/>
-    </node>
-    <node visible="true" id="-1431874" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612438603997800" lon="45.3335640277231988">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{47183fb9-12ba-4acc-b75f-e8329135cb42}"/>
-    </node>
-    <node visible="true" id="-1431873" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612053142418900" lon="45.3334424227684991">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{fab22178-e12b-444f-92eb-446f535e31ef}"/>
-    </node>
-    <node visible="true" id="-1431872" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610957500753901" lon="45.3334765313610006">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1b7c1aad-ba18-41fd-b952-5dd9adbc4c4a}"/>
-    </node>
-    <node visible="true" id="-1431871" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611215178669098" lon="45.3335578217894977">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{667cd154-f132-4a18-8216-e24aa66f3b03}"/>
-    </node>
-    <node visible="true" id="-1431869" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612262054997501" lon="45.3334358803859985">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ee5a4e26-56d2-4753-b492-8b3adf53d892}"/>
-    </node>
-    <node visible="true" id="-1431864" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0609750983472002" lon="45.3333799042408003">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{bc54829e-bd80-45ff-9a45-2a57b9b3c677}"/>
-    </node>
-    <node visible="true" id="-1431863" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0609814634228698" lon="45.3333999858294021">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{036d188b-289d-41b0-b6e6-ef2dcf315c9c}"/>
-    </node>
-    <node visible="true" id="-1431862" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0609438074063400" lon="45.3334117781412971">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{e1c6a7e4-1b57-4ce1-8fc4-43649c753633}"/>
-    </node>
-    <node visible="true" id="-1431861" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0609761369271302" lon="45.3335137683137006">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{8b682c86-5714-40c1-b081-602403aa39be}"/>
-    </node>
-    <node visible="true" id="-1431860" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610211315667399" lon="45.3334997609639032">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4d231a99-25b1-43fa-9655-e7956d1e2060}"/>
-    </node>
-    <node visible="true" id="-1431858" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613180597741301" lon="45.3334071149650981">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{d798eae0-85dd-48a2-a3ff-cc15d33407d3}"/>
-    </node>
-    <node visible="true" id="-1431854" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612210068029100" lon="45.3334436533677021">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{826d4877-8c12-48ed-b4ae-0cab12f33d89}"/>
-    </node>
-    <node visible="true" id="-1431853" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0612597730537798" lon="45.3335605932471992">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{32cfd4ad-3648-4f59-8d43-910aa97e1d1e}"/>
-    </node>
-    <node visible="true" id="-1431852" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613536824021099" lon="45.3335298358773002">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{74b0002e-2887-488b-956d-a87ee8ff111d}"/>
-    </node>
-    <node visible="true" id="-1431851" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613331102788299" lon="45.3334677824365997">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{a2f5382b-8705-43be-af2d-e3d402e1e6d1}"/>
-    </node>
-    <node visible="true" id="-1431850" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613660219835799" lon="45.3334570029213992">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1e7e5e61-5dd4-4a29-96d2-1b37523aaf76}"/>
-    </node>
-    <node visible="true" id="-1431849" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613478258945701" lon="45.3334021165218033">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{feee73ae-8738-47bf-b66f-96c7c6c226af}"/>
-    </node>
-    <node visible="true" id="-1431836" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0617844359087898" lon="45.3335029225861987">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{f87e9c67-5131-4d10-9599-ae2b1804d624}"/>
-    </node>
-    <node visible="true" id="-1431828" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0616305117030902" lon="45.3334859216785020">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{78777bf5-16b3-4cc8-bc17-090245a14361}"/>
-    </node>
-    <node visible="true" id="-1431827" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0616726467644502" lon="45.3336166984759998">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{297a9f8b-d62f-4d03-a43e-7dd319897d78}"/>
-    </node>
-    <node visible="true" id="-1431824" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0617651503534500" lon="45.3334430650005018">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{f8c85d45-c130-4378-abaa-677a9799bb9d}"/>
-    </node>
-    <node visible="true" id="-1431823" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0617176639335399" lon="45.3337564206690971">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{7ce675e7-659c-48e6-8a52-9a60cc8ad443}"/>
-    </node>
-    <node visible="true" id="-1431819" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0618098772520899" lon="45.3340351204526968">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{828375e2-3c11-42dc-b6fe-a1a950679b30}"/>
-    </node>
-    <node visible="true" id="-1431814" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0617351471701699" lon="45.3338026087713999">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{3878b653-47e9-48ac-a4b1-1f2d9bc9b54b}"/>
-    </node>
-    <node visible="true" id="-1431813" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0617697643657098" lon="45.3339026068726980">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{28a7494b-98c5-463a-8fc6-de294236272f}"/>
-    </node>
-    <node visible="true" id="-1431637" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608121911201800" lon="45.3335740968961005">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{cba4c69f-507f-4c7d-adb7-403e40f1fa54}"/>
-    </node>
-    <node visible="true" id="-1431636" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607639294483802" lon="45.3334416974745977">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{95f5e802-1d44-4bbc-92e5-194a75694ab0}"/>
-    </node>
-    <node visible="true" id="-1431635" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0606349974725102" lon="45.3334881289190008">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{267b2e08-dba2-49d8-9a34-989cb8d1910d}"/>
-    </node>
-    <node visible="true" id="-1431634" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0606832591420199" lon="45.3336205283300018">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c118593c-eaf9-42e6-af56-0763faace36e}"/>
-    </node>
-    <node visible="true" id="-1431629" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0604888215632702" lon="45.3335407703029034">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{74b9107e-12c6-4325-a571-4a616ef2f8aa}"/>
-    </node>
-    <node visible="true" id="-1431628" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0605370832301899" lon="45.3336731697019033">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{971d1ae1-0272-4f1b-bb85-0f6537c32bd9}"/>
-    </node>
-    <node visible="true" id="-1431613" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0604282984941902" lon="45.3333828046267016">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{2739e11c-b871-4dc6-b961-cedc6eb88808}"/>
-    </node>
-    <node visible="true" id="-1431590" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0607889732680200" lon="45.3343117584143016">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{dcde81b1-1261-4147-8190-4996cde7fc02}"/>
-    </node>
-    <node visible="true" id="-1431589" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610162262762102" lon="45.3342373274975969">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4f9123cb-d418-4bdb-87cf-3c7070e7c657}"/>
-    </node>
-    <node visible="true" id="-1431578" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0606308682375798" lon="45.3343080784972017">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{7d662427-cb67-4036-b237-06c156be3dce}"/>
-    </node>
-    <node visible="true" id="-1431577" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0605569551650902" lon="45.3340883567220985">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{78caa5bc-0e45-4173-b0f0-582d4734f6e1}"/>
-    </node>
-    <node visible="true" id="-1431573" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610228620131599" lon="45.3335052201393012">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c9648971-9c21-4498-86d0-54dcd02506f1}"/>
-    </node>
-    <node visible="true" id="-1431572" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610469391562898" lon="45.3335811772286021">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ce3c7210-cb79-45b4-867f-9a0e600f56fc}"/>
-    </node>
-    <node visible="true" id="-1431560" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611023671044699" lon="45.3342457371136973">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{723ff327-f917-402e-bd71-bc71de64eadd}"/>
-    </node>
-    <node visible="true" id="-1431559" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613384985077299" lon="45.3341717892973008">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{59c2978a-f3a6-47e9-aa3b-9ea623bccacc}"/>
-    </node>
-    <node visible="true" id="-1431488" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611757869628402" lon="45.3336606435970992">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b5ed9290-fb7b-47bd-992b-a5a570984472}"/>
-    </node>
-    <node visible="true" id="-1431450" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0609949669220100" lon="45.3339599613955997">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9e0c77c2-a5ed-43d0-842f-49e25b0d8787}"/>
-    </node>
-    <node visible="true" id="-1431449" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611116746891800" lon="45.3339211746070987">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{fc48eebe-585e-4ed5-9511-e8690c95f596}"/>
-    </node>
-    <node visible="true" id="-1431433" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0608879772431599" lon="45.3336818570129978">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{03d581db-82d8-4d50-9509-11a09c103a41}"/>
-    </node>
-    <node visible="true" id="-1431432" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0610021408591601" lon="45.3336477313086021">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4693d7c3-1ce3-4cb1-9747-30561debf353}"/>
-    </node>
-    <node visible="true" id="-1431352" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611197113356501" lon="45.3339188783512981">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{a7480f65-1a91-45c9-bd6b-c1c8f4181d95}"/>
-    </node>
-    <node visible="true" id="-1431351" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0611589943190398" lon="45.3339052522949970">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ec3cbdb1-5cbe-4d9f-b0bf-eb0d57f5c7ec}"/>
-    </node>
-    <node visible="true" id="-1431274" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613674796786001" lon="45.3335253169666004">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{1aa96829-9872-4320-b9eb-d39693ffcfd7}"/>
-    </node>
-    <node visible="true" id="-1431273" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614849917156501" lon="45.3334868284814974">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{3e3ed631-24d0-4d99-bf34-2d89615c1682}"/>
-    </node>
-    <node visible="true" id="-1431272" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614678506531399" lon="45.3334351235860993">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{6e4cbcf6-3dcb-49ea-9331-16929bef6131}"/>
-    </node>
-    <node visible="true" id="-1431271" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614397728627600" lon="45.3334443199784971">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{00162c7f-e57c-406d-99a7-9e186775347b}"/>
-    </node>
-    <node visible="true" id="-1431270" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614309515780600" lon="45.3334177136818965">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{00cf6ae0-f126-4233-8258-070904df5084}"/>
-    </node>
-    <node visible="true" id="-1431269" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613732151603799" lon="45.3334366239633013">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{8a6ae1bd-7fa6-41e5-832a-3b5f33781494}"/>
-    </node>
-    <node visible="true" id="-1431268" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613604087295800" lon="45.3333979952864965">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{bcfe45b0-71c4-4240-93b1-c312b71bf352}"/>
-    </node>
-    <node visible="true" id="-1431063" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0613574408449100" lon="45.3333961357432997">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{76e9b2dc-094c-4041-88fc-c949d820c44d}"/>
-    </node>
-    <node visible="true" id="-1430435" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614008028502600" lon="45.3341741872400021">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c4222e24-7be9-4719-840c-ed178f7c29b8}"/>
-    </node>
-    <node visible="true" id="-1430434" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614029996521701" lon="45.3342300544820986">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ec176909-25c3-4c20-8608-f7542c69c1ab}"/>
-    </node>
-    <node visible="true" id="-1430433" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614662569619600" lon="45.3342275973390016">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b9ae7513-16b8-4e1b-9ff3-9daa65b52cc9}"/>
-    </node>
-    <node visible="true" id="-1430432" timestamp="2019-12-18T17:53:12Z" version="1" lat="2.0614640612562800" lon="45.3341717306394969">
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{0416f69f-e42a-45ff-a18a-bf9c40a00ac6}"/>
-    </node>
-    <way visible="true" id="-366645" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892253"/>
-        <nd ref="-1431063"/>
-        <nd ref="-1892254"/>
-        <nd ref="-1892253"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{7f42d814-8966-4e79-b683-ed9b2e212837}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366644" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1431813"/>
-        <nd ref="-1892251"/>
-        <nd ref="-1892252"/>
-        <nd ref="-1431813"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{3e7227bd-6435-418a-9ef8-96efa47a5cb3}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366643" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892248"/>
-        <nd ref="-1892249"/>
-        <nd ref="-1892250"/>
-        <nd ref="-1892248"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ac43dc41-9a53-4662-80df-4c6bb6d0e571}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366642" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1434127"/>
-        <nd ref="-1434126"/>
-        <nd ref="-1431577"/>
-        <nd ref="-1431578"/>
-        <nd ref="-1892244"/>
-        <nd ref="-1892245"/>
-        <nd ref="-1892246"/>
-        <nd ref="-1892247"/>
-        <nd ref="-1434127"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{99554481-838d-4b8b-9210-110482e1833d}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366641" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892242"/>
-        <nd ref="-1431613"/>
-        <nd ref="-1892243"/>
-        <nd ref="-1892242"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{cb26daea-01f6-4113-9755-87bbc5e8981c}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366640" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892240"/>
-        <nd ref="-1431813"/>
-        <nd ref="-1431814"/>
-        <nd ref="-1892241"/>
-        <nd ref="-1892240"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{292d3c93-8006-415c-9f94-e43e25dc25e2}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366639" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892238"/>
-        <nd ref="-1431819"/>
-        <nd ref="-1892239"/>
-        <nd ref="-1892238"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{afb2554b-2f5d-4de6-a68a-1576925a6549}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366638" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1431827"/>
-        <nd ref="-1434246"/>
-        <nd ref="-1892236"/>
-        <nd ref="-1892237"/>
-        <nd ref="-1431823"/>
-        <nd ref="-1431827"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{19dba021-221d-46f2-b3d5-d6530d1e21b3}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366637" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892234"/>
-        <nd ref="-1434246"/>
-        <nd ref="-1431836"/>
-        <nd ref="-1892235"/>
-        <nd ref="-1892234"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{5ef56443-a383-40c8-bb8f-ca310d734cc6}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366636" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1431869"/>
-        <nd ref="-1892232"/>
-        <nd ref="-1892233"/>
-        <nd ref="-1431858"/>
-        <nd ref="-1431869"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{631d09c8-8656-43c2-bdc6-c1cfcc1ed46e}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366635" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1431872"/>
-        <nd ref="-1431860"/>
-        <nd ref="-1431861"/>
-        <nd ref="-1431862"/>
-        <nd ref="-1431863"/>
-        <nd ref="-1431864"/>
-        <nd ref="-1892230"/>
-        <nd ref="-1892231"/>
-        <nd ref="-1431872"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{94322354-4183-4648-af6e-e763f4eeda59}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366634" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1431872"/>
-        <nd ref="-1892228"/>
-        <nd ref="-1892229"/>
-        <nd ref="-1431869"/>
-        <nd ref="-1431873"/>
-        <nd ref="-1431872"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{76f918a5-91ad-4d0b-9d87-406810bf03f4}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366633" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1434129"/>
-        <nd ref="-1892226"/>
-        <nd ref="-1892227"/>
-        <nd ref="-1432471"/>
-        <nd ref="-1434129"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{809e2bdb-9e77-4291-9fd1-d150a165d5a4}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366632" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892224"/>
-        <nd ref="-1432486"/>
-        <nd ref="-1892225"/>
-        <nd ref="-1892224"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{d71dac03-9221-4f42-baf4-3ab63344f89a}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366631" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1434126"/>
-        <nd ref="-1434127"/>
-        <nd ref="-1892222"/>
-        <nd ref="-1892223"/>
-        <nd ref="-1434129"/>
-        <nd ref="-1434130"/>
-        <nd ref="-1434126"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{476b7b75-e9da-4909-ae98-77d3259a331f}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366630" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892220"/>
-        <nd ref="-1434148"/>
-        <nd ref="-1892221"/>
-        <nd ref="-1892220"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b3ee6544-6003-4ef4-9d32-c869421501bf}"/>
-    </way>
-    <way visible="true" id="-366629" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892217"/>
-        <nd ref="-1892218"/>
-        <nd ref="-1892219"/>
-        <nd ref="-1892217"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c96f9ed1-2610-4d8c-bfaa-72dc56e1d6db}"/>
-    </way>
-    <way visible="true" id="-366628" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892215"/>
-        <nd ref="-1434225"/>
-        <nd ref="-1892216"/>
-        <nd ref="-1892215"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{e16252d0-ad13-4488-b6ee-cea05585f271}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366627" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892211"/>
-        <nd ref="-1434221"/>
-        <nd ref="-1892212"/>
-        <nd ref="-1892213"/>
-        <nd ref="-1434223"/>
-        <nd ref="-1434224"/>
-        <nd ref="-1434225"/>
-        <nd ref="-1892214"/>
-        <nd ref="-1892211"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{29202729-2712-43f5-b148-7aa93f924174}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-366626" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1892209"/>
-        <nd ref="-1434246"/>
-        <nd ref="-1892210"/>
-        <nd ref="-1892209"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{61763357-265f-4c4c-8b7b-77eb0f8578e1}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-277405" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1434333"/>
-        <nd ref="-1434334"/>
-        <nd ref="-1434335"/>
-        <nd ref="-1434336"/>
-        <nd ref="-1434337"/>
-        <nd ref="-1434333"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{bde4aa7b-8f90-488e-beb0-ce795b2a2734}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-277393" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1434252"/>
-        <nd ref="-1434253"/>
-        <nd ref="-1434254"/>
-        <nd ref="-1434255"/>
-        <nd ref="-1434252"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{15c05a69-e5ba-429b-a7e3-ae267f167a00}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-277366" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1434122"/>
-        <nd ref="-1434123"/>
-        <nd ref="-1434124"/>
-        <nd ref="-1434125"/>
-        <nd ref="-1434122"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{67228679-81c0-4784-a66f-27ae4c0b37ba}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276941" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431981"/>
-        <nd ref="-1431982"/>
-        <nd ref="-1431983"/>
-        <nd ref="-1431984"/>
-        <nd ref="-1431985"/>
-        <nd ref="-1431981"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{91bcea43-62ef-4b55-9ced-707560cffd83}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276940" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431976"/>
-        <nd ref="-1431981"/>
-        <nd ref="-1431978"/>
-        <nd ref="-1431979"/>
-        <nd ref="-1431980"/>
-        <nd ref="-1431976"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{d3938cd9-c35f-4eeb-9b11-1f4422aa5c1a}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276939" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431981"/>
-        <nd ref="-1431985"/>
-        <nd ref="-1431974"/>
-        <nd ref="-1431978"/>
-        <nd ref="-1431981"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{cdcf3460-7e4c-48ca-9cfa-7d5143374949}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276938" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431981"/>
-        <nd ref="-1431976"/>
-        <nd ref="-1431968"/>
-        <nd ref="-1431969"/>
-        <nd ref="-1431970"/>
-        <nd ref="-1431982"/>
-        <nd ref="-1431981"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{150d38e5-c98e-4d30-8716-d1a5f8a1b87e}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276937" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431984"/>
-        <nd ref="-1431983"/>
-        <nd ref="-1431964"/>
-        <nd ref="-1431965"/>
-        <nd ref="-1431984"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c728fd65-2268-4b98-80b9-4e728885d303}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276936" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431954"/>
-        <nd ref="-1431955"/>
-        <nd ref="-1431956"/>
-        <nd ref="-1431957"/>
-        <nd ref="-1431958"/>
-        <nd ref="-1431959"/>
-        <nd ref="-1431960"/>
-        <nd ref="-1431961"/>
-        <nd ref="-1431954"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c427a775-afda-4e63-b117-2db97d02a4ce}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276935" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431950"/>
-        <nd ref="-1431951"/>
-        <nd ref="-1431952"/>
-        <nd ref="-1431953"/>
-        <nd ref="-1431950"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9e356318-ba1e-4541-8ecc-f5e47d837dac}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276934" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431951"/>
-        <nd ref="-1431947"/>
-        <nd ref="-1431948"/>
-        <nd ref="-1431952"/>
-        <nd ref="-1431951"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{3ee2d67b-3b29-4dde-b0bb-6132c6d980be}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276933" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431942"/>
-        <nd ref="-1431943"/>
-        <nd ref="-1431944"/>
-        <nd ref="-1431945"/>
-        <nd ref="-1431942"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4862b95c-e9df-4700-bc2e-c8c7048ffff8}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276932" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431947"/>
-        <nd ref="-1431951"/>
-        <nd ref="-1431940"/>
-        <nd ref="-1431941"/>
-        <nd ref="-1431947"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{976a45f1-f759-407f-9c51-2db2cd7c9a7e}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276931" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431930"/>
-        <nd ref="-1431931"/>
-        <nd ref="-1431932"/>
-        <nd ref="-1431933"/>
-        <nd ref="-1431934"/>
-        <nd ref="-1431935"/>
-        <nd ref="-1431947"/>
-        <nd ref="-1431941"/>
-        <nd ref="-1431930"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ad973f5c-dbd9-4aee-925e-bd5aa4ed356f}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276930" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431926"/>
-        <nd ref="-1431927"/>
-        <nd ref="-1431928"/>
-        <nd ref="-1431929"/>
-        <nd ref="-1431926"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{018adc15-64ba-44ff-8779-e5d0c456eab6}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276929" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431927"/>
-        <nd ref="-1431926"/>
-        <nd ref="-1431922"/>
-        <nd ref="-1431923"/>
-        <nd ref="-1431924"/>
-        <nd ref="-1431925"/>
-        <nd ref="-1431927"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{adcb91a0-5b04-41bc-abbe-f3e75a1e63b4}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276928" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431914"/>
-        <nd ref="-1431915"/>
-        <nd ref="-1431916"/>
-        <nd ref="-1431917"/>
-        <nd ref="-1431918"/>
-        <nd ref="-1431919"/>
-        <nd ref="-1431914"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c25358c5-0371-42f8-bb5b-5905e5eaee53}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276927" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431910"/>
-        <nd ref="-1431911"/>
-        <nd ref="-1431912"/>
-        <nd ref="-1431913"/>
-        <nd ref="-1431910"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{ef5d353d-6ece-42b0-a37e-db897c207698}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276926" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431904"/>
-        <nd ref="-1431905"/>
-        <nd ref="-1431906"/>
-        <nd ref="-1431907"/>
-        <nd ref="-1431908"/>
-        <nd ref="-1431909"/>
-        <nd ref="-1431904"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{7a445927-5da6-49a9-a9dd-fb0af3a05d0b}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276925" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431896"/>
-        <nd ref="-1431897"/>
-        <nd ref="-1431898"/>
-        <nd ref="-1431899"/>
-        <nd ref="-1431900"/>
-        <nd ref="-1431901"/>
-        <nd ref="-1431902"/>
-        <nd ref="-1431903"/>
-        <nd ref="-1431896"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{6ebf10e5-d43d-4595-b634-68a841cf5844}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276924" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431888"/>
-        <nd ref="-1431889"/>
-        <nd ref="-1431890"/>
-        <nd ref="-1431891"/>
-        <nd ref="-1431892"/>
-        <nd ref="-1431893"/>
-        <nd ref="-1431894"/>
-        <nd ref="-1431895"/>
-        <nd ref="-1431888"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c5786c11-db98-4f0b-ac23-8d8298f77eaf}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276923" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431884"/>
-        <nd ref="-1431885"/>
-        <nd ref="-1431886"/>
-        <nd ref="-1431887"/>
-        <nd ref="-1431884"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{e54a59e1-eaad-4ee4-b9b9-3b82e730a216}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276922" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431880"/>
-        <nd ref="-1431881"/>
-        <nd ref="-1431882"/>
-        <nd ref="-1431883"/>
-        <nd ref="-1431880"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{c0a075ca-8785-498b-a723-c6f5c0f865b3}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276921" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431876"/>
-        <nd ref="-1431877"/>
-        <nd ref="-1431878"/>
-        <nd ref="-1431879"/>
-        <nd ref="-1431876"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4e349456-ddb6-426a-a761-5a49081dfb52}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276920" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431871"/>
-        <nd ref="-1431872"/>
-        <nd ref="-1431873"/>
-        <nd ref="-1431874"/>
-        <nd ref="-1431875"/>
-        <nd ref="-1431871"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9ff2ecb5-d4ae-48de-908a-ef098d46c830}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276916" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431849"/>
-        <nd ref="-1431850"/>
-        <nd ref="-1431851"/>
-        <nd ref="-1431852"/>
-        <nd ref="-1431853"/>
-        <nd ref="-1431854"/>
-        <nd ref="-1431849"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{dbb080c9-8b80-4139-8965-1efb92a0f711}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276911" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431824"/>
-        <nd ref="-1431836"/>
-        <nd ref="-1434246"/>
-        <nd ref="-1431827"/>
-        <nd ref="-1431828"/>
-        <nd ref="-1431824"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{79ca51c6-c892-4c0d-a473-2f1f62c4232a}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276870" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431634"/>
-        <nd ref="-1431635"/>
-        <nd ref="-1431636"/>
-        <nd ref="-1431637"/>
-        <nd ref="-1431634"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9a0382a6-4e13-43be-844e-6879d1b65440}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276868" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431635"/>
-        <nd ref="-1431634"/>
-        <nd ref="-1431628"/>
-        <nd ref="-1431629"/>
-        <nd ref="-1431635"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{7f913750-6db5-4c62-9541-5d29c5d374ac}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276860" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1434334"/>
-        <nd ref="-1434333"/>
-        <nd ref="-1431589"/>
-        <nd ref="-1431590"/>
-        <nd ref="-1434334"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{0cd276fd-28b4-4360-a556-ca7c097f2e92}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276857" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431872"/>
-        <nd ref="-1431871"/>
-        <nd ref="-1431572"/>
-        <nd ref="-1431573"/>
-        <nd ref="-1431860"/>
-        <nd ref="-1431872"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{10fdf887-a7e3-433b-a228-4f8e84965180}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276855" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431957"/>
-        <nd ref="-1431956"/>
-        <nd ref="-1431955"/>
-        <nd ref="-1431954"/>
-        <nd ref="-1431559"/>
-        <nd ref="-1431560"/>
-        <nd ref="-1431957"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{b87408b5-3dcd-4bb5-a29e-2f42ef30e17d}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276841" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431951"/>
-        <nd ref="-1431950"/>
-        <nd ref="-1431488"/>
-        <nd ref="-1431940"/>
-        <nd ref="-1431951"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{966294e4-e98d-450a-9c89-a2911db6b9f8}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276833" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431915"/>
-        <nd ref="-1431914"/>
-        <nd ref="-1431449"/>
-        <nd ref="-1431450"/>
-        <nd ref="-1431915"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{9e32c180-e301-4861-b04d-2912446dc1a6}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276830" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431877"/>
-        <nd ref="-1431876"/>
-        <nd ref="-1431432"/>
-        <nd ref="-1431433"/>
-        <nd ref="-1431877"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{e22856c8-cf04-4550-99e7-a4e24d368ded}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276817" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431923"/>
-        <nd ref="-1431922"/>
-        <nd ref="-1431351"/>
-        <nd ref="-1431352"/>
-        <nd ref="-1431923"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{4576cf30-8d63-45b5-b3fb-d01a33b53efe}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276804" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1431852"/>
-        <nd ref="-1431851"/>
-        <nd ref="-1431850"/>
-        <nd ref="-1431849"/>
-        <nd ref="-1431268"/>
-        <nd ref="-1431269"/>
-        <nd ref="-1431270"/>
-        <nd ref="-1431271"/>
-        <nd ref="-1431272"/>
-        <nd ref="-1431273"/>
-        <nd ref="-1431274"/>
-        <nd ref="-1431852"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{423415df-a7d1-44b4-b80b-06d36ff726e9}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <way visible="true" id="-276638" timestamp="2019-12-18T17:54:51Z" version="1">
-        <nd ref="-1430432"/>
-        <nd ref="-1430433"/>
-        <nd ref="-1430434"/>
-        <nd ref="-1430435"/>
-        <nd ref="-1430432"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{09ff55b1-b916-49e2-8786-2b45e58e3179}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-    </way>
-    <relation visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-366629" role="outer"/>
-        <member type="way" ref="-366630" role="outer"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="uuid" v="{617deb24-4ac7-4025-b4bc-d4e7f2a9c66d}"/>
-        <tag k="source:imagery:id" v="105001000F9E5000"/>
-        <tag k="type" v="multipolygon"/>
-    </relation>
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat='2.0604' minlon='45.33337' maxlat='2.06181' maxlon='45.334332' origin='hootenanny' />
+  <node id='-257725055' visible='true' version='1' lat='2.06134839308' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{e1c5bcce-181b-4c55-a8e4-2b6b7657997f}' />
+  </node>
+  <node id='-257725056' visible='true' version='1' lat='2.06143385752' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{97af5e08-c67e-4cd0-8688-16e98d0c81c0}' />
+  </node>
+  <node id='-257725057' visible='true' version='1' lat='2.06181' lon='45.33401883489'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{4687b398-caa7-4967-9c28-d4b13f8db90f}' />
+  </node>
+  <node id='-257725058' visible='true' version='1' lat='2.06181' lon='45.33388834713'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{70859774-43d1-4391-8a90-bd1a73209b8e}' />
+  </node>
+  <node id='-257725059' visible='true' version='1' lat='2.0604' lon='45.334332'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{11f29714-0413-4795-aea7-4f8817fae79c}' />
+  </node>
+  <node id='-257725060' visible='true' version='1' lat='2.0604160932' lon='45.334332'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{95da9307-baa7-432a-b697-7c394d18d22a}' />
+  </node>
+  <node id='-257725061' visible='true' version='1' lat='2.0604' lon='45.33428802251'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{4fe05d1d-69e3-41b6-abba-243737906a66}' />
+  </node>
+  <node id='-257725062' visible='true' version='1' lat='2.0604' lon='45.33414164274'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{af8643eb-ec57-4812-a131-5764b43cb89d}' />
+  </node>
+  <node id='-257725063' visible='true' version='1' lat='2.0604' lon='45.33424267502'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{eb8f57d2-9fbd-495e-b0f8-1ef97cfd5b46}' />
+  </node>
+  <node id='-257725064' visible='true' version='1' lat='2.06043004824' lon='45.334332'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{9e89bba0-9517-49bb-9b79-8ef1a6503375}' />
+  </node>
+  <node id='-257725065' visible='true' version='1' lat='2.06055888955' lon='45.334332'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{97a1beac-883c-479a-93b1-160d9fc9c152}' />
+  </node>
+  <node id='-257725066' visible='true' version='1' lat='2.06042413142' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{fccadfda-de06-4e78-b93e-aefa7e0314d8}' />
+  </node>
+  <node id='-257725067' visible='true' version='1' lat='2.06046812458' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{0623d220-888d-44a6-8081-a487fd2211cb}' />
+  </node>
+  <node id='-257725068' visible='true' version='1' lat='2.06181' lon='45.33377700793'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{551a3cb3-fcef-4b7e-9666-b4779c67e766}' />
+  </node>
+  <node id='-257725069' visible='true' version='1' lat='2.06181' lon='45.33388834713'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{ffcfe8ab-5301-44ff-9e4d-7d28a9ac018f}' />
+  </node>
+  <node id='-257725070' visible='true' version='1' lat='2.06181' lon='45.33403507912'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{07458b35-21bb-4b1b-a36c-b7ec822d9f72}' />
+  </node>
+  <node id='-257725071' visible='true' version='1' lat='2.06181' lon='45.33403548062'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{63ae8dff-a12b-472c-9c60-708d7fcfd0b9}' />
+  </node>
+  <node id='-257725072' visible='true' version='1' lat='2.06181' lon='45.3337270293'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{50fee728-6449-4985-9a77-9fe0a8e17a08}' />
+  </node>
+  <node id='-257725073' visible='true' version='1' lat='2.06181' lon='45.33358226721'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{65a2c879-b869-4c0c-a264-327cfe6a0db4}' />
+  </node>
+  <node id='-257725074' visible='true' version='1' lat='2.06181' lon='45.33349478531'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{90011ea3-cc30-47cc-b98b-b732cde10259}' />
+  </node>
+  <node id='-257725075' visible='true' version='1' lat='2.06181' lon='45.33357297773'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1fbf38dc-79d2-4319-85b2-ac4b72abab76}' />
+  </node>
+  <node id='-257725076' visible='true' version='1' lat='2.06130629494' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{59158aa8-0297-4087-b221-facf54714151}' />
+  </node>
+  <node id='-257725077' visible='true' version='1' lat='2.06120532254' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b041a32b-88b8-4193-a6f1-f713d9161676}' />
+  </node>
+  <node id='-257725078' visible='true' version='1' lat='2.0610619813' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{620c9db2-9002-411d-8cf4-f3910cccb3f0}' />
+  </node>
+  <node id='-257725079' visible='true' version='1' lat='2.06100672484' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{56d6ccc3-2f9e-49a6-b55b-2d9aa3741857}' />
+  </node>
+  <node id='-257725080' visible='true' version='1' lat='2.06120532254' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{f16a02b2-f093-40f2-85fc-676a9e697ab6}' />
+  </node>
+  <node id='-257725081' visible='true' version='1' lat='2.0610619813' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{ba80d956-da26-4cca-8e87-096c80dad2e7}' />
+  </node>
+  <node id='-257725082' visible='true' version='1' lat='2.0604' lon='45.3339022889'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{176de798-d2aa-490f-a35f-8d67b3d60cc1}' />
+  </node>
+  <node id='-257725083' visible='true' version='1' lat='2.0604' lon='45.3340195842'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{d3299952-8517-4a3f-b613-be2cafcad5a0}' />
+  </node>
+  <node id='-257725084' visible='true' version='1' lat='2.0604' lon='45.33383806926'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{c2f40acb-4511-4f06-9dc9-ec8790f83339}' />
+  </node>
+  <node id='-257725085' visible='true' version='1' lat='2.0604' lon='45.33370460006'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{5b3b04b8-3c27-48e6-aff1-bd3918bbee65}' />
+  </node>
+  <node id='-257725086' visible='true' version='1' lat='2.0604' lon='45.3340195842'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{2d6601ad-40bd-4c08-8d10-5cfa58da4e23}' />
+  </node>
+  <node id='-257725087' visible='true' version='1' lat='2.0604' lon='45.33410371906'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{2dd89c04-3285-4620-b39d-8cc7c4552113}' />
+  </node>
+  <node id='-257725088' visible='true' version='1' lat='2.06175117482' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{a44d999e-0603-4126-b1f0-d0e37e191c65}' />
+  </node>
+  <node id='-257725089' visible='true' version='1' lat='2.06175788202' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{91398090-e0c7-43f7-9669-01165850459f}' />
+  </node>
+  <node id='-257725090' visible='true' version='1' lat='2.06181' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{0b73d226-7a04-4c7d-a6b4-8b29c28d10a0}' />
+  </node>
+  <node id='-257725091' visible='true' version='1' lat='2.06180962186' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{c695e212-1178-481c-a1cc-fb8b805b9130}' />
+  </node>
+  <node id='-257725092' visible='true' version='1' lat='2.06181' lon='45.3333711241'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{e65fe455-5d1c-40ba-a0c7-817a93918929}' />
+  </node>
+  <node id='-257725093' visible='true' version='1' lat='2.06159078439' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b650f2b2-8491-4c8d-ada7-a23552a50209}' />
+  </node>
+  <node id='-257725094' visible='true' version='1' lat='2.06160685397' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{4a6f2672-abe6-414d-8195-3c589a9dfe3b}' />
+  </node>
+  <node id='-257725095' visible='true' version='1' lat='2.06160685397' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{01527af4-88d7-4fba-b6a5-92f13b35a79f}' />
+  </node>
+  <node id='-257725096' visible='true' version='1' lat='2.0617361913' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{88eb7451-e5b8-44a1-8762-ad71273f535e}' />
+  </node>
+  <node id='-257725097' visible='true' version='1' lat='2.06170147195' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{9735a3cc-1114-4994-980e-3e73ce2071f1}' />
+  </node>
+  <node id='-257725098' visible='true' version='1' lat='2.06168110198' lon='45.33337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{c927f017-e0c9-4c06-b7ad-87d92e7bbdc7}' />
+  </node>
+  <node id='-257725099' visible='true' version='1' lat='2.06181' lon='45.33357297773'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{0b67141e-83db-4200-9c3f-6fb74225cca9}' />
+  </node>
+  <node id='-257725100' visible='true' version='1' lat='2.06181' lon='45.33358226721'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{8ef64e46-e968-48a7-bb5a-43116835148e}' />
+  </node>
+  <node id='-257725101' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06094302232' lon='45.33401651241'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{0a331aca-1efd-445b-9562-eddbcf135326}' />
+  </node>
+  <node id='-257725102' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06076474624' lon='45.33407490197'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{a48f46b0-db27-441d-b215-7123661c1a20}' />
+  </node>
+  <node id='-257725103' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06071576831' lon='45.33409094311'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{dc30a9da-12a5-4f30-8288-59b6bb484a02}' />
+  </node>
+  <node id='-257725104' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06075766334' lon='45.33421731519'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{4ee4634f-7011-476a-a7dd-8a13f94b289b}' />
+  </node>
+  <node id='-257725105' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06098491684' lon='45.33414288456'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{c31d5218-9368-4dd6-b520-b38026b4b039}' />
+  </node>
+  <node id='-257725106' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06063619395' lon='45.33371599297'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{8bd7dbe3-3090-4827-b7c8-71b62b574615}' />
+  </node>
+  <node id='-257725107' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.0606541562' lon='45.33376382539'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{9f1b9b25-bd98-48ce-99e4-79fc1a534150}' />
+  </node>
+  <node id='-257725108' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06071751872' lon='45.33374031791'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{6c6f0b85-e940-4098-bf5d-000c95b41061}' />
+  </node>
+  <node id='-257725109' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06069955647' lon='45.33369248549'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{31fe6643-c4a0-41ef-be9e-040b538fd04f}' />
+  </node>
+  <node id='-257725110' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06180728542' lon='45.33357384181'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{7115b394-629a-49d0-a253-a7d415b3a3e4}' />
+  </node>
+  <node id='-257725111' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06159233945' lon='45.33337472219'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1e808843-9663-400f-938f-9020fd471e40}' />
+  </node>
+  <node id='-257725112' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06161380628' lon='45.33343990952'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{081cb9d5-d9f7-4a35-9a0a-6617828c00ad}' />
+  </node>
+  <node id='-257725113' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06174514209' lon='45.33339718044'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{c8136801-9581-44fe-aa80-fb23d5de208b}' />
+  </node>
+  <node id='-257725114' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06168307319' lon='45.3333759859'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{9d53f119-a286-461c-8986-e1baee2153cf}' />
+  </node>
+  <node id='-257725115' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06175184926' lon='45.33337200493'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{6c872957-2b29-4a8e-9d94-e64dd314e82f}' />
+  </node>
+  <node id='-257725116' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06050627863' lon='45.33398426375'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{3a71ddfc-37ca-444b-b381-d08fb57bff99}' />
+  </node>
+  <node id='-257725117' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06049198917' lon='45.33398901283'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{12880d3b-4cb1-446b-9421-794621efa097}' />
+  </node>
+  <node id='-257725118' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06041147449' lon='45.33413782939'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{d013a65a-1822-4311-9bd9-93e0d7ea919c}' />
+  </node>
+  <node id='-257725119' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06054287069' lon='45.33409303776'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{158fa651-4f1e-4080-9a37-09ca6b4bf8e4}' />
+  </node>
+  <node id='-257725120' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.0605804875' lon='45.3341145548'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{0c173858-bd37-460c-9fc4-09246830a1a8}' />
+  </node>
+  <node id='-257725121' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06059736759' lon='45.33415274667'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{eb93c8a2-5917-4607-b991-26066c5dd3c7}' />
+  </node>
+  <node id='-257725122' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.0606337851' lon='45.33413684477'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{4db8b020-c9a2-42b1-8c6e-06e14ee65b41}' />
+  </node>
+  <node id='-257725123' timestamp='2019-12-18T17:53:11Z' visible='true' version='1' lat='2.06061690501' lon='45.3340986529'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{6c809f84-70f5-45f8-996b-c52fa09c8680}' />
+  </node>
+  <node id='-257725124' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06043752096' lon='45.33382667595'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{505cc4d6-26ce-40f5-bd47-8f0c4334d5eb}' />
+  </node>
+  <node id='-257725125' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06045649961' lon='45.33388351164'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{353315d4-2971-45da-a8a8-636ffaf364ea}' />
+  </node>
+  <node id='-257725126' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06149309271' lon='45.3338755984'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{f0e12a2f-8844-4694-8398-3c22374fef48}' />
+  </node>
+  <node id='-257725127' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06138964411' lon='45.33390918992'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{d04bff71-0b8f-4ded-a4f5-c446a1e0b58e}' />
+  </node>
+  <node id='-257725128' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06143566669' lon='45.33404921363'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{d75d3ed1-f872-4494-8b46-a5286b75fff8}' />
+  </node>
+  <node id='-257725129' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06145074246' lon='45.33404431827'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{f5b27404-fc22-40af-884a-c6686695229b}' />
+  </node>
+  <node id='-257725130' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06153911529' lon='45.33401562211'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b3cbd055-ca71-46a1-9f4e-8dccf082ef1a}' />
+  </node>
+  <node id='-257725131' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06160969618' lon='45.33423036457'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{a1b74420-e100-4cf0-b482-11cdebd76313}' />
+  </node>
+  <node id='-257725132' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06173462604' lon='45.33418979774'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{503ccce7-902a-457b-bea7-e9e2bb6fb9ac}' />
+  </node>
+  <node id='-257725133' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06166404516' lon='45.33397505527'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1a033fac-e840-4435-9dc9-1094305a8de5}' />
+  </node>
+  <node id='-257725134' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06157184229' lon='45.33411519403'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{3a65dd9a-7102-4692-92a3-bcf1b21f028a}' />
+  </node>
+  <node id='-257725135' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06161802257' lon='45.33383503154'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{69426ebb-e1dd-49f8-bbc4-408f265e3ce3}' />
+  </node>
+  <node id='-257725136' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06147104829' lon='45.33410609879'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{229939fc-f731-46e6-a691-7a10c3159a7a}' />
+  </node>
+  <node id='-257725137' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0615189293' lon='45.33409055102'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{52bb51e1-0771-43a9-9349-40ff13765eb3}' />
+  </node>
+  <node id='-257725138' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06153135046' lon='45.33412834241'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{129c0253-6080-4783-8a58-07b5d3c22b29}' />
+  </node>
+  <node id='-257725139' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0612756722' lon='45.33394619854'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{18277f6c-173c-4df8-aa06-bb0d1ddcac5c}' />
+  </node>
+  <node id='-257725140' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06132169478' lon='45.33408622223'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{049e4b30-c7b3-4474-8769-ccefceeb538e}' />
+  </node>
+  <node id='-257725141' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06130402052' lon='45.33406301949'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{3e500a0f-57e8-4aec-9d88-815355ffea35}' />
+  </node>
+  <node id='-257725142' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0612996646' lon='45.33404927675'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{edeec817-370a-494f-8f36-54150578d8e0}' />
+  </node>
+  <node id='-257725143' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06126579808' lon='45.33394243609'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{636de4d4-9e70-4a5a-b127-3739c7105b92}' />
+  </node>
+  <node id='-257725144' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06102966559' lon='45.3340163838'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{98cea67c-9656-4e5e-a9aa-bb26f7f59fa2}' />
+  </node>
+  <node id='-257725145' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06107873899' lon='45.33417119688'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{190beeff-4290-408e-b41e-b7c4ea013c8e}' />
+  </node>
+  <node id='-257725146' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06124101726' lon='45.33412038001'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{97d98eda-70c9-4f7a-87a8-1a1721cce918}' />
+  </node>
+  <node id='-257725147' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06123115488' lon='45.33408926502'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{743c5bdc-296b-452f-bf09-64dad2427826}' />
+  </node>
+  <node id='-257725148' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06130500899' lon='45.33406613787'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{74884e54-0746-4fc9-b47d-67f89f6b8d3c}' />
+  </node>
+  <node id='-257725149' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06124270516' lon='45.33388181365'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{c97356e3-3c0b-4e50-a238-97cd7c3a74bf}' />
+  </node>
+  <node id='-257725150' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0613643173' lon='45.33384546186'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{3b4b85d1-00a0-439e-ae2b-a36d5fcd1163}' />
+  </node>
+  <node id='-257725151' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06132766139' lon='45.33372430985'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{8e0b0ec7-8539-4b56-b818-b9fdc84f5fad}' />
+  </node>
+  <node id='-257725152' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06120604901' lon='45.3337606621'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{80f5beaf-0f68-4e04-b228-88427ed6d6ad}' />
+  </node>
+  <node id='-257725153' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0614665153' lon='45.33381491326'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1cd80e1f-aa62-4f66-8123-f298ef3cf691}' />
+  </node>
+  <node id='-257725154' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0614298593' lon='45.33369376096'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{a242416d-5bf5-4c09-b24f-455dcee6b2ce}' />
+  </node>
+  <node id='-257725155' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06147556563' lon='45.33383548645'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{0f53ad55-d746-4231-922a-f35d3bece622}' />
+  </node>
+  <node id='-257725156' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06160810804' lon='45.33379586743'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{3859fc9b-876e-491c-a468-4ee435cb5a95}' />
+  </node>
+  <node id='-257725157' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06157145158' lon='45.33367471485'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{17311173-2f6c-4d9a-a3dc-2a01ea3e4c09}' />
+  </node>
+  <node id='-257725158' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06143890963' lon='45.33371433415'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{f1de0ea5-9441-44fd-b419-3a5c261f3695}' />
+  </node>
+  <node id='-257725159' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06139959773' lon='45.33359374299'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1cb63160-1622-4818-a453-462fbb1de171}' />
+  </node>
+  <node id='-257725160' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06129739973' lon='45.3336242916'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{6e877f09-8250-43d5-9cf6-c8c74b2ac150}' />
+  </node>
+  <node id='-257725161' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06156240125' lon='45.33365414165'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{0642fb6c-3798-47cd-931c-7506d277eac2}' />
+  </node>
+  <node id='-257725162' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0615321395' lon='45.33355412413'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1ccef167-7cf2-45f0-8acc-30f84c4678f2}' />
+  </node>
+  <node id='-257725163' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06147790473' lon='45.33357033577'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{9e4a8b5e-14ed-4a1d-9cad-e834babba948}' />
+  </node>
+  <node id='-257725164' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0614922712' lon='45.33361781857'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{cdc79115-a0f1-4587-8cdf-55fdf31e3196}' />
+  </node>
+  <node id='-257725165' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06145753648' lon='45.33362820133'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{e6962107-edc2-4fb2-9abf-92d0a2187cd1}' />
+  </node>
+  <node id='-257725166' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06144317002' lon='45.33358071853'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{837c1374-d97e-402b-b1b0-d39e0bc74628}' />
+  </node>
+  <node id='-257725167' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0611934921' lon='45.33389351583'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{69aaebdb-6261-4a07-93bf-94b3d4831608}' />
+  </node>
+  <node id='-257725168' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06123597899' lon='45.33387877846'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b6706330-9243-4da5-a3f7-8c4372d81e0f}' />
+  </node>
+  <node id='-257725169' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06119661568' lon='45.33376668911'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b42b79bd-0bd9-4965-b2b5-b88e09c2facb}' />
+  </node>
+  <node id='-257725170' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06115447671' lon='45.33378239407'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{3afac8b9-1218-47af-bf85-f23eba71b597}' />
+  </node>
+  <node id='-257725171' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06115537944' lon='45.33364924054'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{acba5a8e-4208-40c2-aa07-2446193d291b}' />
+  </node>
+  <node id='-257725172' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06103919145' lon='45.33368954275'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b225370c-62e1-4384-b3da-3b5a048b7e7f}' />
+  </node>
+  <node id='-257725173' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06108112563' lon='45.33380897908'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{54e761e7-ca7e-485e-b83c-acff16c9d26b}' />
+  </node>
+  <node id='-257725174' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06112005135' lon='45.33379433535'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{96804224-38a1-43d1-bf86-3255a66bf5b8}' />
+  </node>
+  <node id='-257725175' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06105995583' lon='45.33376742953'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b9edc105-d195-4047-8fbb-7002cca31a58}' />
+  </node>
+  <node id='-257725176' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06102415435' lon='45.33377932762'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{af81b011-e52b-42fe-aa9c-9819a49ac8d6}' />
+  </node>
+  <node id='-257725177' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06099969291' lon='45.3337066124'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{da7a53a7-94e2-4b2d-9490-f3a2007518de}' />
+  </node>
+  <node id='-257725178' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06091878744' lon='45.33373350097'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{cf7143a7-ceb8-4b1b-beb5-38bab04bdef3}' />
+  </node>
+  <node id='-257725179' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06095706896' lon='45.33384730126'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{6a8f178e-1eba-438f-9e2a-d0addf2ff2ad}' />
+  </node>
+  <node id='-257725180' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06107474083' lon='45.33381138102'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{2d3c5cd4-93b0-46c1-b625-6f4fcde68dcb}' />
+  </node>
+  <node id='-257725181' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06082263072' lon='45.33403476816'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{ee04cce1-8688-43e8-84b3-3b0c82791d2e}' />
+  </node>
+  <node id='-257725182' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06093408217' lon='45.33400129723'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b3a5e984-fb68-452a-94d3-fb94d0a28277}' />
+  </node>
+  <node id='-257725183' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06089673168' lon='45.33387842623'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{c54f9b67-737f-4bb4-9626-43cf7990a278}' />
+  </node>
+  <node id='-257725184' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06078528024' lon='45.33391189717'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{e257b57e-6265-49d0-824c-a2ede9fd79a9}' />
+  </node>
+  <node id='-257725185' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06073391744' lon='45.33399783557'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{be083455-c6b3-40c9-94a9-921309b8f3b5}' />
+  </node>
+  <node id='-257725186' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06079421625' lon='45.33397808572'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{01f2e059-48ac-454e-848d-d84a201805ab}' />
+  </node>
+  <node id='-257725187' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06077411318' lon='45.33391744494'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{79b0e575-7c09-4600-91a5-03f3be6081b5}' />
+  </node>
+  <node id='-257725188' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0606648348' lon='45.33395323539'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{fa170b74-3788-43be-86dc-48d61d01d87e}' />
+  </node>
+  <node id='-257725189' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06070554416' lon='45.33407603098'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{fe556600-e4c9-421a-8f00-03fa5c5b10d7}' />
+  </node>
+  <node id='-257725190' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06075452232' lon='45.33405998976'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{da29d856-8832-4265-b386-8393c2550bea}' />
+  </node>
+  <node id='-257725191' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06076524003' lon='45.33387475109'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{016e98d1-510b-405a-980a-d15c65e782e4}' />
+  </node>
+  <node id='-257725192' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06074196156' lon='45.33380453315'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{7ca932b6-ba84-4cda-bc36-a4820c71ebc3}' />
+  </node>
+  <node id='-257725193' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06073640132' lon='45.33380635411'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{30ee53dd-7646-4920-aba0-a9cba8274271}' />
+  </node>
+  <node id='-257725194' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06072718542' lon='45.33380937215'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1d531e33-c96d-4253-9b43-3b5632810c1f}' />
+  </node>
+  <node id='-257725195' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06072237177' lon='45.33379484737'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{5dcfba0b-692c-4741-ae10-bb1f5ff909bb}' />
+  </node>
+  <node id='-257725196' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06062786752' lon='45.33382579949'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{aac09cb9-6f81-480f-9427-c87c90cbff72}' />
+  </node>
+  <node id='-257725197' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0606658364' lon='45.33394032865'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{f50774fe-4be8-4f52-96e8-6060cc2a0425}' />
+  </node>
+  <node id='-257725198' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06077511478' lon='45.3339045382'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{7fb4239b-3c4a-41fd-9455-7eb5f73b9458}' />
+  </node>
+  <node id='-257725199' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06086046729' lon='45.33374292648'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{a6e371af-6076-45a9-98cb-a670189b3cac}' />
+  </node>
+  <node id='-257725200' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06074901585' lon='45.33377639743'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{ffbe2f58-baa7-4407-a761-21d279f9818f}' />
+  </node>
+  <node id='-257725201' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06078628184' lon='45.33389899043'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1bee0d4e-0bae-407b-a2fb-decba3e2e98d}' />
+  </node>
+  <node id='-257725202' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06089773328' lon='45.33386551949'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{7bde850a-894d-4c29-9e1b-da4f80d48109}' />
+  </node>
+  <node id='-257725203' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06088707452' lon='45.33383045563'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{9e5b94e3-9ec8-448b-83da-23c49ca97b42}' />
+  </node>
+  <node id='-257725204' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06079628217' lon='45.33385772226'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{07c389fa-7626-4324-ae23-1744e2474ff7}' />
+  </node>
+  <node id='-257725205' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06078129773' lon='45.33380842833'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{ab65f7a1-ea80-428d-ae8d-40da43730903}' />
+  </node>
+  <node id='-257725206' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06087209008' lon='45.33378116169'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{28a45a1f-c3f3-4160-95ef-77c997cf4e36}' />
+  </node>
+  <node id='-257725207' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06056460023' lon='45.33367350538'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1b043533-688c-4921-a69c-47114b3ef6b2}' />
+  </node>
+  <node id='-257725208' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06059636253' lon='45.3337715527'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{38bce580-85b0-4c76-83b4-f9365f0718bc}' />
+  </node>
+  <node id='-257725209' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06064001895' lon='45.33375758068'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{87f34848-ec01-44d0-9bff-756d3fd5ebb9}' />
+  </node>
+  <node id='-257725210' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06060825665' lon='45.33365953335'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{dcdf7998-acdb-484e-b7ea-004662e27052}' />
+  </node>
+  <node id='-257725211' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06072443597' lon='45.33362578795'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{7826fb29-c9b2-4c10-99f9-5f7720790458}' />
+  </node>
+  <node id='-257725212' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06075360155' lon='45.33371066668'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{d1b407de-ccdb-401c-9ab6-4756f3555712}' />
+  </node>
+  <node id='-257725213' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06084018892' lon='45.33368127249'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{af04cfb1-caee-4f57-95c1-0c79824561a1}' />
+  </node>
+  <node id='-257725214' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06081102333' lon='45.33359639375'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{4c6c0e81-7bf7-4bb0-8a76-9ca8c500ed1f}' />
+  </node>
+  <node id='-257725215' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06092838396' lon='45.33340395633'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{8b2e6fb8-1a63-41b6-bd54-798e7ada4cb3}' />
+  </node>
+  <node id='-257725216' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06081422036' lon='45.33343808192'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{a2ebbb8c-83c7-4bac-9770-1656cdd1c528}' />
+  </node>
+  <node id='-257725217' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06084870611' lon='45.33355206132'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{a98b420a-d501-4bac-b792-15421f0bb97f}' />
+  </node>
+  <node id='-257725218' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06096286981' lon='45.33351793598'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b9c3841e-9ba9-42e0-8b3b-ed1e4230b24e}' />
+  </node>
+  <node id='-257725219' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06113435536' lon='45.33359832082'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{9128f536-6cf1-48e0-9a70-01618d480bc7}' />
+  </node>
+  <node id='-257725220' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0612438604' lon='45.33356402772'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{47183fb9-12ba-4acc-b75f-e8329135cb42}' />
+  </node>
+  <node id='-257725221' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06120531424' lon='45.33344242277'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{fab22178-e12b-444f-92eb-446f535e31ef}' />
+  </node>
+  <node id='-257725222' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06109575008' lon='45.33347653136'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1b7c1aad-ba18-41fd-b952-5dd9adbc4c4a}' />
+  </node>
+  <node id='-257725223' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06112151787' lon='45.33355782179'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{667cd154-f132-4a18-8216-e24aa66f3b03}' />
+  </node>
+  <node id='-257725224' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0612262055' lon='45.33343588039'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{ee5a4e26-56d2-4753-b492-8b3adf53d892}' />
+  </node>
+  <node id='-257725225' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06097509835' lon='45.33337990424'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{bc54829e-bd80-45ff-9a45-2a57b9b3c677}' />
+  </node>
+  <node id='-257725226' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06098146342' lon='45.33339998583'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{036d188b-289d-41b0-b6e6-ef2dcf315c9c}' />
+  </node>
+  <node id='-257725227' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06094380741' lon='45.33341177814'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{e1c6a7e4-1b57-4ce1-8fc4-43649c753633}' />
+  </node>
+  <node id='-257725228' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06097613693' lon='45.33351376831'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{8b682c86-5714-40c1-b081-602403aa39be}' />
+  </node>
+  <node id='-257725229' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06102113157' lon='45.33349976096'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{4d231a99-25b1-43fa-9655-e7956d1e2060}' />
+  </node>
+  <node id='-257725230' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06131805977' lon='45.33340711497'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{d798eae0-85dd-48a2-a3ff-cc15d33407d3}' />
+  </node>
+  <node id='-257725231' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0612210068' lon='45.33344365337'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{826d4877-8c12-48ed-b4ae-0cab12f33d89}' />
+  </node>
+  <node id='-257725232' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06125977305' lon='45.33356059325'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{32cfd4ad-3648-4f59-8d43-910aa97e1d1e}' />
+  </node>
+  <node id='-257725233' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0613536824' lon='45.33352983588'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{74b0002e-2887-488b-956d-a87ee8ff111d}' />
+  </node>
+  <node id='-257725234' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06133311028' lon='45.33346778244'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{a2f5382b-8705-43be-af2d-e3d402e1e6d1}' />
+  </node>
+  <node id='-257725235' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06136602198' lon='45.33345700292'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1e7e5e61-5dd4-4a29-96d2-1b37523aaf76}' />
+  </node>
+  <node id='-257725236' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06134782589' lon='45.33340211652'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{feee73ae-8738-47bf-b66f-96c7c6c226af}' />
+  </node>
+  <node id='-257725237' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06178443591' lon='45.33350292259'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{f87e9c67-5131-4d10-9599-ae2b1804d624}' />
+  </node>
+  <node id='-257725238' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0616305117' lon='45.33348592168'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{78777bf5-16b3-4cc8-bc17-090245a14361}' />
+  </node>
+  <node id='-257725239' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06167264676' lon='45.33361669848'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{297a9f8b-d62f-4d03-a43e-7dd319897d78}' />
+  </node>
+  <node id='-257725240' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06176515035' lon='45.333443065'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{f8c85d45-c130-4378-abaa-677a9799bb9d}' />
+  </node>
+  <node id='-257725241' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06171766393' lon='45.33375642067'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{7ce675e7-659c-48e6-8a52-9a60cc8ad443}' />
+  </node>
+  <node id='-257725242' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06180987725' lon='45.33403512045'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{828375e2-3c11-42dc-b6fe-a1a950679b30}' />
+  </node>
+  <node id='-257725243' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06173514717' lon='45.33380260877'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{3878b653-47e9-48ac-a4b1-1f2d9bc9b54b}' />
+  </node>
+  <node id='-257725244' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06176976437' lon='45.33390260687'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{28a7494b-98c5-463a-8fc6-de294236272f}' />
+  </node>
+  <node id='-257725245' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06081219112' lon='45.3335740969'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{cba4c69f-507f-4c7d-adb7-403e40f1fa54}' />
+  </node>
+  <node id='-257725246' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06076392945' lon='45.33344169747'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{95f5e802-1d44-4bbc-92e5-194a75694ab0}' />
+  </node>
+  <node id='-257725247' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06063499747' lon='45.33348812892'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{267b2e08-dba2-49d8-9a34-989cb8d1910d}' />
+  </node>
+  <node id='-257725248' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06068325914' lon='45.33362052833'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{c118593c-eaf9-42e6-af56-0763faace36e}' />
+  </node>
+  <node id='-257725249' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06048882156' lon='45.3335407703'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{74b9107e-12c6-4325-a571-4a616ef2f8aa}' />
+  </node>
+  <node id='-257725250' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06053708323' lon='45.3336731697'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{971d1ae1-0272-4f1b-bb85-0f6537c32bd9}' />
+  </node>
+  <node id='-257725251' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06042829849' lon='45.33338280463'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{2739e11c-b871-4dc6-b961-cedc6eb88808}' />
+  </node>
+  <node id='-257725252' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06078897327' lon='45.33431175841'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{dcde81b1-1261-4147-8190-4996cde7fc02}' />
+  </node>
+  <node id='-257725253' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06101622628' lon='45.3342373275'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{4f9123cb-d418-4bdb-87cf-3c7070e7c657}' />
+  </node>
+  <node id='-257725254' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06063086824' lon='45.3343080785'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{7d662427-cb67-4036-b237-06c156be3dce}' />
+  </node>
+  <node id='-257725255' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06055695517' lon='45.33408835672'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{78caa5bc-0e45-4173-b0f0-582d4734f6e1}' />
+  </node>
+  <node id='-257725256' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06102286201' lon='45.33350522014'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{c9648971-9c21-4498-86d0-54dcd02506f1}' />
+  </node>
+  <node id='-257725257' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06104693916' lon='45.33358117723'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{ce3c7210-cb79-45b4-867f-9a0e600f56fc}' />
+  </node>
+  <node id='-257725258' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.0611023671' lon='45.33424573711'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{723ff327-f917-402e-bd71-bc71de64eadd}' />
+  </node>
+  <node id='-257725259' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06133849851' lon='45.3341717893'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{59c2978a-f3a6-47e9-aa3b-9ea623bccacc}' />
+  </node>
+  <node id='-257725260' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06117578696' lon='45.3336606436'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b5ed9290-fb7b-47bd-992b-a5a570984472}' />
+  </node>
+  <node id='-257725261' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06099496692' lon='45.3339599614'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{9e0c77c2-a5ed-43d0-842f-49e25b0d8787}' />
+  </node>
+  <node id='-257725262' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06111167469' lon='45.33392117461'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{fc48eebe-585e-4ed5-9511-e8690c95f596}' />
+  </node>
+  <node id='-257725263' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06088797724' lon='45.33368185701'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{03d581db-82d8-4d50-9509-11a09c103a41}' />
+  </node>
+  <node id='-257725264' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06100214086' lon='45.33364773131'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{4693d7c3-1ce3-4cb1-9747-30561debf353}' />
+  </node>
+  <node id='-257725265' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06111971134' lon='45.33391887835'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{a7480f65-1a91-45c9-bd6b-c1c8f4181d95}' />
+  </node>
+  <node id='-257725266' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06115899432' lon='45.33390525229'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{ec3cbdb1-5cbe-4d9f-b0bf-eb0d57f5c7ec}' />
+  </node>
+  <node id='-257725267' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06136747968' lon='45.33352531697'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{1aa96829-9872-4320-b9eb-d39693ffcfd7}' />
+  </node>
+  <node id='-257725268' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06148499172' lon='45.33348682848'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{3e3ed631-24d0-4d99-bf34-2d89615c1682}' />
+  </node>
+  <node id='-257725269' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06146785065' lon='45.33343512359'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{6e4cbcf6-3dcb-49ea-9331-16929bef6131}' />
+  </node>
+  <node id='-257725270' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06143977286' lon='45.33344431998'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{00162c7f-e57c-406d-99a7-9e186775347b}' />
+  </node>
+  <node id='-257725271' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06143095158' lon='45.33341771368'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{00cf6ae0-f126-4233-8258-070904df5084}' />
+  </node>
+  <node id='-257725272' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06137321516' lon='45.33343662396'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{8a6ae1bd-7fa6-41e5-832a-3b5f33781494}' />
+  </node>
+  <node id='-257725273' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06136040873' lon='45.33339799529'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{bcfe45b0-71c4-4240-93b1-c312b71bf352}' />
+  </node>
+  <node id='-257725274' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06135744084' lon='45.33339613574'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{76e9b2dc-094c-4041-88fc-c949d820c44d}' />
+  </node>
+  <node id='-257725275' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06140080285' lon='45.33417418724'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{c4222e24-7be9-4719-840c-ed178f7c29b8}' />
+  </node>
+  <node id='-257725276' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06140299965' lon='45.33423005448'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{ec176909-25c3-4c20-8608-f7542c69c1ab}' />
+  </node>
+  <node id='-257725277' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06146625696' lon='45.33422759734'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b9ae7513-16b8-4e1b-9ff3-9daa65b52cc9}' />
+  </node>
+  <node id='-257725278' timestamp='2019-12-18T17:53:12Z' visible='true' version='1' lat='2.06146406126' lon='45.33417173064'>
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{0416f69f-e42a-45ff-a18a-bf9c40a00ac6}' />
+  </node>
+  <way id='-255167857' visible='true' version='1'>
+    <nd ref='-257725056' />
+    <nd ref='-257725274' />
+    <nd ref='-257725055' />
+    <nd ref='-257725056' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{7f42d814-8966-4e79-b683-ed9b2e212837}' />
+  </way>
+  <way id='-255167858' visible='true' version='1'>
+    <nd ref='-257725244' />
+    <nd ref='-257725058' />
+    <nd ref='-257725057' />
+    <nd ref='-257725244' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{3e7227bd-6435-418a-9ef8-96efa47a5cb3}' />
+  </way>
+  <way id='-255167859' visible='true' version='1'>
+    <nd ref='-257725061' />
+    <nd ref='-257725060' />
+    <nd ref='-257725059' />
+    <nd ref='-257725061' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{ac43dc41-9a53-4662-80df-4c6bb6d0e571}' />
+  </way>
+  <way id='-255167860' visible='true' version='1'>
+    <nd ref='-257725118' />
+    <nd ref='-257725119' />
+    <nd ref='-257725255' />
+    <nd ref='-257725254' />
+    <nd ref='-257725065' />
+    <nd ref='-257725064' />
+    <nd ref='-257725063' />
+    <nd ref='-257725062' />
+    <nd ref='-257725118' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{99554481-838d-4b8b-9210-110482e1833d}' />
+  </way>
+  <way id='-255167861' visible='true' version='1'>
+    <nd ref='-257725067' />
+    <nd ref='-257725251' />
+    <nd ref='-257725066' />
+    <nd ref='-257725067' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{cb26daea-01f6-4113-9755-87bbc5e8981c}' />
+  </way>
+  <way id='-255167862' visible='true' version='1'>
+    <nd ref='-257725069' />
+    <nd ref='-257725244' />
+    <nd ref='-257725243' />
+    <nd ref='-257725068' />
+    <nd ref='-257725069' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{292d3c93-8006-415c-9f94-e43e25dc25e2}' />
+  </way>
+  <way id='-255167863' visible='true' version='1'>
+    <nd ref='-257725071' />
+    <nd ref='-257725242' />
+    <nd ref='-257725070' />
+    <nd ref='-257725071' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{afb2554b-2f5d-4de6-a68a-1576925a6549}' />
+  </way>
+  <way id='-255167864' visible='true' version='1'>
+    <nd ref='-257725239' />
+    <nd ref='-257725110' />
+    <nd ref='-257725073' />
+    <nd ref='-257725072' />
+    <nd ref='-257725241' />
+    <nd ref='-257725239' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{19dba021-221d-46f2-b3d5-d6530d1e21b3}' />
+  </way>
+  <way id='-255167865' visible='true' version='1'>
+    <nd ref='-257725075' />
+    <nd ref='-257725110' />
+    <nd ref='-257725237' />
+    <nd ref='-257725074' />
+    <nd ref='-257725075' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{5ef56443-a383-40c8-bb8f-ca310d734cc6}' />
+  </way>
+  <way id='-255167866' visible='true' version='1'>
+    <nd ref='-257725224' />
+    <nd ref='-257725077' />
+    <nd ref='-257725076' />
+    <nd ref='-257725230' />
+    <nd ref='-257725224' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{631d09c8-8656-43c2-bdc6-c1cfcc1ed46e}' />
+  </way>
+  <way id='-255167867' visible='true' version='1'>
+    <nd ref='-257725222' />
+    <nd ref='-257725229' />
+    <nd ref='-257725228' />
+    <nd ref='-257725227' />
+    <nd ref='-257725226' />
+    <nd ref='-257725225' />
+    <nd ref='-257725079' />
+    <nd ref='-257725078' />
+    <nd ref='-257725222' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{94322354-4183-4648-af6e-e763f4eeda59}' />
+  </way>
+  <way id='-255167868' visible='true' version='1'>
+    <nd ref='-257725222' />
+    <nd ref='-257725081' />
+    <nd ref='-257725080' />
+    <nd ref='-257725224' />
+    <nd ref='-257725221' />
+    <nd ref='-257725222' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{76f918a5-91ad-4d0b-9d87-406810bf03f4}' />
+  </way>
+  <way id='-255167869' visible='true' version='1'>
+    <nd ref='-257725117' />
+    <nd ref='-257725083' />
+    <nd ref='-257725082' />
+    <nd ref='-257725125' />
+    <nd ref='-257725117' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{809e2bdb-9e77-4291-9fd1-d150a165d5a4}' />
+  </way>
+  <way id='-255167870' visible='true' version='1'>
+    <nd ref='-257725085' />
+    <nd ref='-257725124' />
+    <nd ref='-257725084' />
+    <nd ref='-257725085' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{d71dac03-9221-4f42-baf4-3ab63344f89a}' />
+  </way>
+  <way id='-255167871' visible='true' version='1'>
+    <nd ref='-257725119' />
+    <nd ref='-257725118' />
+    <nd ref='-257725087' />
+    <nd ref='-257725086' />
+    <nd ref='-257725117' />
+    <nd ref='-257725116' />
+    <nd ref='-257725119' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{476b7b75-e9da-4909-ae98-77d3259a331f}' />
+  </way>
+  <way id='-255167872' visible='true' version='1'>
+    <nd ref='-257725089' />
+    <nd ref='-257725115' />
+    <nd ref='-257725088' />
+    <nd ref='-257725089' />
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{b3ee6544-6003-4ef4-9d32-c869421501bf}' />
+  </way>
+  <way id='-255167873' visible='true' version='1'>
+    <nd ref='-257725092' />
+    <nd ref='-257725091' />
+    <nd ref='-257725090' />
+    <nd ref='-257725092' />
+    <tag k='error:circular' v='15' />
+    <tag k='uuid' v='{c96f9ed1-2610-4d8c-bfaa-72dc56e1d6db}' />
+  </way>
+  <way id='-255167874' visible='true' version='1'>
+    <nd ref='-257725094' />
+    <nd ref='-257725111' />
+    <nd ref='-257725093' />
+    <nd ref='-257725094' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{e16252d0-ad13-4488-b6ee-cea05585f271}' />
+  </way>
+  <way id='-255167875' visible='true' version='1'>
+    <nd ref='-257725098' />
+    <nd ref='-257725114' />
+    <nd ref='-257725097' />
+    <nd ref='-257725096' />
+    <nd ref='-257725113' />
+    <nd ref='-257725112' />
+    <nd ref='-257725111' />
+    <nd ref='-257725095' />
+    <nd ref='-257725098' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{29202729-2712-43f5-b148-7aa93f924174}' />
+  </way>
+  <way id='-255167876' visible='true' version='1'>
+    <nd ref='-257725100' />
+    <nd ref='-257725110' />
+    <nd ref='-257725099' />
+    <nd ref='-257725100' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{61763357-265f-4c4c-8b7b-77eb0f8578e1}' />
+  </way>
+  <way id='-255167877' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725105' />
+    <nd ref='-257725104' />
+    <nd ref='-257725103' />
+    <nd ref='-257725102' />
+    <nd ref='-257725101' />
+    <nd ref='-257725105' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{bde4aa7b-8f90-488e-beb0-ce795b2a2734}' />
+  </way>
+  <way id='-255167878' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725109' />
+    <nd ref='-257725108' />
+    <nd ref='-257725107' />
+    <nd ref='-257725106' />
+    <nd ref='-257725109' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{15c05a69-e5ba-429b-a7e3-ae267f167a00}' />
+  </way>
+  <way id='-255167879' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725123' />
+    <nd ref='-257725122' />
+    <nd ref='-257725121' />
+    <nd ref='-257725120' />
+    <nd ref='-257725123' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{67228679-81c0-4784-a66f-27ae4c0b37ba}' />
+  </way>
+  <way id='-255167880' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725130' />
+    <nd ref='-257725129' />
+    <nd ref='-257725128' />
+    <nd ref='-257725127' />
+    <nd ref='-257725126' />
+    <nd ref='-257725130' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{91bcea43-62ef-4b55-9ced-707560cffd83}' />
+  </way>
+  <way id='-255167881' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725134' />
+    <nd ref='-257725130' />
+    <nd ref='-257725133' />
+    <nd ref='-257725132' />
+    <nd ref='-257725131' />
+    <nd ref='-257725134' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{d3938cd9-c35f-4eeb-9b11-1f4422aa5c1a}' />
+  </way>
+  <way id='-255167882' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725130' />
+    <nd ref='-257725126' />
+    <nd ref='-257725135' />
+    <nd ref='-257725133' />
+    <nd ref='-257725130' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{cdcf3460-7e4c-48ca-9cfa-7d5143374949}' />
+  </way>
+  <way id='-255167883' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725130' />
+    <nd ref='-257725134' />
+    <nd ref='-257725138' />
+    <nd ref='-257725137' />
+    <nd ref='-257725136' />
+    <nd ref='-257725129' />
+    <nd ref='-257725130' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{150d38e5-c98e-4d30-8716-d1a5f8a1b87e}' />
+  </way>
+  <way id='-255167884' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725127' />
+    <nd ref='-257725128' />
+    <nd ref='-257725140' />
+    <nd ref='-257725139' />
+    <nd ref='-257725127' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{c728fd65-2268-4b98-80b9-4e728885d303}' />
+  </way>
+  <way id='-255167885' action='modify' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725148' />
+    <nd ref='-257725147' />
+    <nd ref='-257725146' />
+    <nd ref='-257725145' />
+    <nd ref='-257725144' />
+    <nd ref='-257725143' />
+    <nd ref='-257725142' />
+    <nd ref='-257725141' />
+    <nd ref='-257725148' />
+    <tag k='building' v='yes' />
+    <tag k='conflation_should_not' v='delete_me' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:datetime' v='March 2016' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{c427a775-afda-4e63-b117-2db97d02a4ce}' />
+  </way>
+  <way id='-255167886' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725152' />
+    <nd ref='-257725151' />
+    <nd ref='-257725150' />
+    <nd ref='-257725149' />
+    <nd ref='-257725152' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{9e356318-ba1e-4541-8ecc-f5e47d837dac}' />
+  </way>
+  <way id='-255167887' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725151' />
+    <nd ref='-257725154' />
+    <nd ref='-257725153' />
+    <nd ref='-257725150' />
+    <nd ref='-257725151' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{3ee2d67b-3b29-4dde-b0bb-6132c6d980be}' />
+  </way>
+  <way id='-255167888' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725158' />
+    <nd ref='-257725157' />
+    <nd ref='-257725156' />
+    <nd ref='-257725155' />
+    <nd ref='-257725158' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{4862b95c-e9df-4700-bc2e-c8c7048ffff8}' />
+  </way>
+  <way id='-255167889' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725154' />
+    <nd ref='-257725151' />
+    <nd ref='-257725160' />
+    <nd ref='-257725159' />
+    <nd ref='-257725154' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{976a45f1-f759-407f-9c51-2db2cd7c9a7e}' />
+  </way>
+  <way id='-255167890' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725166' />
+    <nd ref='-257725165' />
+    <nd ref='-257725164' />
+    <nd ref='-257725163' />
+    <nd ref='-257725162' />
+    <nd ref='-257725161' />
+    <nd ref='-257725154' />
+    <nd ref='-257725159' />
+    <nd ref='-257725166' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{ad973f5c-dbd9-4aee-925e-bd5aa4ed356f}' />
+  </way>
+  <way id='-255167891' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725170' />
+    <nd ref='-257725169' />
+    <nd ref='-257725168' />
+    <nd ref='-257725167' />
+    <nd ref='-257725170' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{018adc15-64ba-44ff-8779-e5d0c456eab6}' />
+  </way>
+  <way id='-255167892' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725169' />
+    <nd ref='-257725170' />
+    <nd ref='-257725174' />
+    <nd ref='-257725173' />
+    <nd ref='-257725172' />
+    <nd ref='-257725171' />
+    <nd ref='-257725169' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{adcb91a0-5b04-41bc-abbe-f3e75a1e63b4}' />
+  </way>
+  <way id='-255167893' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725180' />
+    <nd ref='-257725179' />
+    <nd ref='-257725178' />
+    <nd ref='-257725177' />
+    <nd ref='-257725176' />
+    <nd ref='-257725175' />
+    <nd ref='-257725180' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{c25358c5-0371-42f8-bb5b-5905e5eaee53}' />
+  </way>
+  <way id='-255167894' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725184' />
+    <nd ref='-257725183' />
+    <nd ref='-257725182' />
+    <nd ref='-257725181' />
+    <nd ref='-257725184' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{ef5d353d-6ece-42b0-a37e-db897c207698}' />
+  </way>
+  <way id='-255167895' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725190' />
+    <nd ref='-257725189' />
+    <nd ref='-257725188' />
+    <nd ref='-257725187' />
+    <nd ref='-257725186' />
+    <nd ref='-257725185' />
+    <nd ref='-257725190' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{7a445927-5da6-49a9-a9dd-fb0af3a05d0b}' />
+  </way>
+  <way id='-255167896' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725198' />
+    <nd ref='-257725197' />
+    <nd ref='-257725196' />
+    <nd ref='-257725195' />
+    <nd ref='-257725194' />
+    <nd ref='-257725193' />
+    <nd ref='-257725192' />
+    <nd ref='-257725191' />
+    <nd ref='-257725198' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{6ebf10e5-d43d-4595-b634-68a841cf5844}' />
+  </way>
+  <way id='-255167897' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725206' />
+    <nd ref='-257725205' />
+    <nd ref='-257725204' />
+    <nd ref='-257725203' />
+    <nd ref='-257725202' />
+    <nd ref='-257725201' />
+    <nd ref='-257725200' />
+    <nd ref='-257725199' />
+    <nd ref='-257725206' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{c5786c11-db98-4f0b-ac23-8d8298f77eaf}' />
+  </way>
+  <way id='-255167898' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725210' />
+    <nd ref='-257725209' />
+    <nd ref='-257725208' />
+    <nd ref='-257725207' />
+    <nd ref='-257725210' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{e54a59e1-eaad-4ee4-b9b9-3b82e730a216}' />
+  </way>
+  <way id='-255167899' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725214' />
+    <nd ref='-257725213' />
+    <nd ref='-257725212' />
+    <nd ref='-257725211' />
+    <nd ref='-257725214' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{c0a075ca-8785-498b-a723-c6f5c0f865b3}' />
+  </way>
+  <way id='-255167900' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725218' />
+    <nd ref='-257725217' />
+    <nd ref='-257725216' />
+    <nd ref='-257725215' />
+    <nd ref='-257725218' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{4e349456-ddb6-426a-a761-5a49081dfb52}' />
+  </way>
+  <way id='-255167901' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725223' />
+    <nd ref='-257725222' />
+    <nd ref='-257725221' />
+    <nd ref='-257725220' />
+    <nd ref='-257725219' />
+    <nd ref='-257725223' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{9ff2ecb5-d4ae-48de-908a-ef098d46c830}' />
+  </way>
+  <way id='-255167902' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725236' />
+    <nd ref='-257725235' />
+    <nd ref='-257725234' />
+    <nd ref='-257725233' />
+    <nd ref='-257725232' />
+    <nd ref='-257725231' />
+    <nd ref='-257725236' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{dbb080c9-8b80-4139-8965-1efb92a0f711}' />
+  </way>
+  <way id='-255167903' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725240' />
+    <nd ref='-257725237' />
+    <nd ref='-257725110' />
+    <nd ref='-257725239' />
+    <nd ref='-257725238' />
+    <nd ref='-257725240' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{79ca51c6-c892-4c0d-a473-2f1f62c4232a}' />
+  </way>
+  <way id='-255167904' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725248' />
+    <nd ref='-257725247' />
+    <nd ref='-257725246' />
+    <nd ref='-257725245' />
+    <nd ref='-257725248' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{9a0382a6-4e13-43be-844e-6879d1b65440}' />
+  </way>
+  <way id='-255167905' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725247' />
+    <nd ref='-257725248' />
+    <nd ref='-257725250' />
+    <nd ref='-257725249' />
+    <nd ref='-257725247' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{7f913750-6db5-4c62-9541-5d29c5d374ac}' />
+  </way>
+  <way id='-255167906' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725104' />
+    <nd ref='-257725105' />
+    <nd ref='-257725253' />
+    <nd ref='-257725252' />
+    <nd ref='-257725104' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{0cd276fd-28b4-4360-a556-ca7c097f2e92}' />
+  </way>
+  <way id='-255167907' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725222' />
+    <nd ref='-257725223' />
+    <nd ref='-257725257' />
+    <nd ref='-257725256' />
+    <nd ref='-257725229' />
+    <nd ref='-257725222' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{10fdf887-a7e3-433b-a228-4f8e84965180}' />
+  </way>
+  <way id='-255167908' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725145' />
+    <nd ref='-257725146' />
+    <nd ref='-257725147' />
+    <nd ref='-257725148' />
+    <nd ref='-257725259' />
+    <nd ref='-257725258' />
+    <nd ref='-257725145' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{b87408b5-3dcd-4bb5-a29e-2f42ef30e17d}' />
+  </way>
+  <way id='-255167909' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725151' />
+    <nd ref='-257725152' />
+    <nd ref='-257725260' />
+    <nd ref='-257725160' />
+    <nd ref='-257725151' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{966294e4-e98d-450a-9c89-a2911db6b9f8}' />
+  </way>
+  <way id='-255167910' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725179' />
+    <nd ref='-257725180' />
+    <nd ref='-257725262' />
+    <nd ref='-257725261' />
+    <nd ref='-257725179' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{9e32c180-e301-4861-b04d-2912446dc1a6}' />
+  </way>
+  <way id='-255167911' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725217' />
+    <nd ref='-257725218' />
+    <nd ref='-257725264' />
+    <nd ref='-257725263' />
+    <nd ref='-257725217' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{e22856c8-cf04-4550-99e7-a4e24d368ded}' />
+  </way>
+  <way id='-255167912' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725173' />
+    <nd ref='-257725174' />
+    <nd ref='-257725266' />
+    <nd ref='-257725265' />
+    <nd ref='-257725173' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{4576cf30-8d63-45b5-b3fb-d01a33b53efe}' />
+  </way>
+  <way id='-255167913' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725233' />
+    <nd ref='-257725234' />
+    <nd ref='-257725235' />
+    <nd ref='-257725236' />
+    <nd ref='-257725273' />
+    <nd ref='-257725272' />
+    <nd ref='-257725271' />
+    <nd ref='-257725270' />
+    <nd ref='-257725269' />
+    <nd ref='-257725268' />
+    <nd ref='-257725267' />
+    <nd ref='-257725233' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{423415df-a7d1-44b4-b80b-06d36ff726e9}' />
+  </way>
+  <way id='-255167914' timestamp='2019-12-18T17:54:51Z' visible='true' version='1'>
+    <nd ref='-257725278' />
+    <nd ref='-257725277' />
+    <nd ref='-257725276' />
+    <nd ref='-257725275' />
+    <nd ref='-257725278' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='uuid' v='{09ff55b1-b916-49e2-8786-2b45e58e3179}' />
+  </way>
+  <relation id='-251005703' action='modify' visible='true' version='1'>
+    <member type='way' ref='-255167873' role='outer' />
+    <member type='way' ref='-255167872' role='outer' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:imagery:datetime' v='March 2016' />
+    <tag k='source:imagery:id' v='105001000F9E5000' />
+    <tag k='type' v='multipolygon' />
+    <tag k='uuid' v='{617deb24-4ac7-4025-b4bc-d4e7f2a9c66d}' />
+  </relation>
 </osm>

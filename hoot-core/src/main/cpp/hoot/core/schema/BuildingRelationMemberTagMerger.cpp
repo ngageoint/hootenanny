@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-std::set<QString> BuildingRelationMemberTagMerger::_buildingPartTagNames;
+QSet<QString> BuildingRelationMemberTagMerger::_buildingPartTagNames;
 
 HOOT_FACTORY_REGISTER(TagMerger, BuildingRelationMemberTagMerger)
 
@@ -47,12 +47,12 @@ BuildingRelationMemberTagMerger::BuildingRelationMemberTagMerger()
 }
 
 BuildingRelationMemberTagMerger::BuildingRelationMemberTagMerger(
-  const std::set<QString>& ignoreTagKeys) :
+  const QSet<QString>& ignoreTagKeys) :
 _ignoreTagKeys(ignoreTagKeys)
 {
 }
 
-std::set<QString> BuildingRelationMemberTagMerger::getBuildingPartTagNames()
+QSet<QString> BuildingRelationMemberTagMerger::getBuildingPartTagNames()
 {
   if (_buildingPartTagNames.size() == 0)
   {
