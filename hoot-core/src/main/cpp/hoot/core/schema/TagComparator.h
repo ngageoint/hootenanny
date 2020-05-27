@@ -90,8 +90,8 @@ public:
    *                     to be the final "name" tag, and the "name" tag from t2
    *                     gets demoted to alt_name, along with any alt_names from
    *                     t1 & t2.
-   * @param t1 - Tags that are given preference
-   * @param t2 - These names/tags get demoted to alt_name
+   * @param t1 Tags that are given preference
+   * @param t2 These names/tags get demoted to alt_name
    * @param result Tags w/names merged
    * @param overwriteExcludeTagKeys keys of tags which should not be overwritten in t2
    */
@@ -109,12 +109,12 @@ public:
   Tags overwriteMerge(Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys = QStringList());
 
   /**
-   * TODO
+   * Replace all tags in t2 with those from t1
    *
-   * @param t1
-   * @param t2
-   * @param overwriteExcludeTagKeys
-   * @return
+   * @param t1 Tags that replace
+   * @param t2 Tags that are replaced
+   * @param overwriteExcludeTagKeys keys of tags which should not be overwritten in t2
+   * @return merged tags
    */
   Tags replaceMerge(const Tags& t1, const Tags& t2,
                     const QStringList& overwriteExcludeTagKeys = QStringList());

@@ -43,10 +43,11 @@ class TagMerger;
  *
  * The default tag merging behavior is to keep all poly type tags over poi type tags when there are
  * conflicts (OverwriteTagMerger), so by default poi type tags may be dropped.  When
- * _autoMergeManyPoiToOnePolyMatches is set to true tag merging uses the PreserveTypesTagMerger,
- * which will put all poi type tags that are unrelated to the poly type tag into an alt_tags field,
- * so none of the types are lost. The exception to this is when the Attribute Conflation workflow
- * is being run. For AC, we always overwrite all building tags (with some configurable exceptions).
+ * _autoMergeManyPoiToOnePolyMatches is set to true tag merging uses the PreserveTypesTagMerger
+ * instead, which will put all poi type tags that are unrelated to the poly type tag into an
+ * alt_tags field, so none of the types are lost. The exception to this is when the Attribute
+ * Conflation workflow is being run. For AC, we favor the POI tags during conflicts instead of the
+ * building tags (with some configurable exceptions).
  */
 class PoiPolygonMerger : public MergerBase
 {

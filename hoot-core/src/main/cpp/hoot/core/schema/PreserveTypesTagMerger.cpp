@@ -52,13 +52,6 @@ _skipTagKeys(skipTagKeys)
   setConfiguration(conf());
 }
 
-//void PreserveTypesTagMerger::setConfiguration(const Settings& conf)
-//{
-//  ConfigOptions config = ConfigOptions(conf);
-//  const QSet<QString> tagMergerExcludeList =
-//    QSet<QString>::fromList(config.getTagMergerOverwriteExclude());
-//  _skipTagKeys = _skipTagKeys.unite(tagMergerExcludeList);
-//}
 void PreserveTypesTagMerger::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
@@ -113,7 +106,8 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     LOG_VART(it.value());
 
     bool skippingTagPreservation = false;
-    // ignore tags that we're specified to be explicitly skipped - TODO
+    // ignore type tags that either were specified to be explicitly skipped or general tags that
+    // we don't want to be overwritten
     if (_skipTagKeys.find(it.key()) != _skipTagKeys.end() ||
         _overwriteExcludeTagKeys.contains(it.key()))
     {

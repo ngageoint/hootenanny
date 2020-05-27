@@ -79,15 +79,9 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
     LOG_VART(ConfigOptions().getTagMergerDefault());
 
     std::string tagMergerClass;
-    // We always want to use the default tag merger configured specifically for Attribute Conflation
-    // when it is enabled. See related note in ConflateCmd.
-    /*if (ConfigOptions().getHighwayMergeTagsOnly())
-    {
-      tagMergerClass = ConfigOptions().getTagMergerDefault().trimmed().toStdString();
-    }
-    // In all situations except AC, this setting always preserve types when merging many POIs in. This
-    // case can go away if we end up defaulting poi/poly merging to use PreserveTypesTagMerger.
-    else*/ if (_autoMergeManyPoiToOnePolyMatches)
+    // We force this setting always preserve types when merging many POIs in. It works with
+    // Attribute Conflation as well, via tag.merger.overwrite.exclude.
+    if (_autoMergeManyPoiToOnePolyMatches)
     {
       tagMergerClass = PreserveTypesTagMerger::className();
     }
@@ -197,7 +191,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     LOG_VART(poiBuildingMergedTags);
     //OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-2");
   }
-  // TODO
+  // If there weren't any poi tags at all, just use the building tags.
   if (poiTags1.size() == 0 && poiTags2.size()  == 0)
   {
     poiBuildingMergedTags = buildingTags;
