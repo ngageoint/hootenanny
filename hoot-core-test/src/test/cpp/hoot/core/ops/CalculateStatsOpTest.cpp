@@ -85,7 +85,7 @@ public:
 
     // This is here to prevent inadvertent removal of stats and to make sure any new stats get added
     // to this test.
-    CPPUNIT_ASSERT_EQUAL(206, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(208, calcStatsOp->getStats().size());
 
     // This lets you know if the total stat calls made don't match what was predicted by
     // _initStatCalc.

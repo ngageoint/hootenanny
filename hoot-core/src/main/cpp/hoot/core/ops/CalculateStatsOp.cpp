@@ -241,7 +241,7 @@ void CalculateStatsOp::_initStatCalc()
     numSlowStatCalcs = _slowStatData.size();
 
     // the number of calls to _applyVisitor outside of a loop and always called
-    numSlowStatCalcs += /*7*/8;
+    numSlowStatCalcs += 9;
 
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
@@ -255,9 +255,6 @@ void CalculateStatsOp::_initStatCalc()
       // extra calls to _applyVisitor made for poi/poly only and only for input maps
       numSlowStatCalcs += 2;
     }
-
-    // _applyVisitor called by SumNumericTagsVisitor (could be rolled into _applyVisitor maybe?)
-    //numSlowStatCalcs += 1;
 
     LOG_VARD(MatchFactory::getInstance().getCreators().size());
     // extra calls to _applyVisitor made for each feature type by _generateFeatureStats
@@ -329,9 +326,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   if (!_quick)
   {
-    FeatureCountVisitor featureCountVisitor;
-    _applyVisitor(&featureCountVisitor, "Feature Count");
-    const long featureCount = featureCountVisitor.getCount();
+    const long featureCount = _getApplyVisitor(new FeatureCountVisitor(), "Feature Count");
     LOG_VART(featureCount);
 
     double conflatedFeatureCount =
@@ -367,14 +362,10 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         "Conflatable Feature Count");
     LOG_VARD(matchCreators.size());
 
-    SumNumericTagsVisitor tagSumVis(QStringList(MetadataTags::HootPoiPolygonPoisMerged()));
-//    LOG_STATUS(
-//      "Calculating statistic: SumNumericTagsVisitor (" << _currentStatCalcIndex << " / " <<
-//      _totalStatCalcs << ") ...");
-//    _constMap->visitRo(tagSumVis);
-//    _currentStatCalcIndex++;
-//    long poisMergedIntoPolys = tagSumVis.getStat();
-    const double poisMergedIntoPolys = _getApplyVisitor(&tagSumVis, "POIs Merged Into Polygons");
+    const double poisMergedIntoPolys =
+      _getApplyVisitor(
+        new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged())),
+        "POIs Merged Into Polygons");
     //we need to add any pois that may have been merged into polygons by poi/poly into the total
     //conflated feature count
     conflatedFeatureCount += poisMergedIntoPolys;
@@ -392,10 +383,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       _applyVisitor(
         new NeedsReviewCriterion(_constMap), new FeatureCountVisitor(), "Reviewable Feature Count");
 
-    CountUniqueReviewsVisitor curv;
-    //_constMap->visitRo(curv);
-    //const double numReviewsToBeMade = curv.getStat();
-    const double numReviewsToBeMade = _getApplyVisitor(&curv, "Number of Reviews");
+    const double numReviewsToBeMade =
+      _getApplyVisitor(new CountUniqueReviewsVisitor(), "Number of Reviews");
 
     const double untaggedFeatureCount =
       _applyVisitor(
@@ -435,7 +424,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       double conflatableFeatureCountForFeatureType = 0.0;
       if (!_inputIsConflatedMapOutput)
       {
-        conflatableFeatureCountForFeatureType = matchCandidateCountsByMatchCreator[matchCreatorName];
+        conflatableFeatureCountForFeatureType =
+          matchCandidateCountsByMatchCreator[matchCreatorName];
         LOG_VARD(conflatableFeatureCountForFeatureType);
       }
 
@@ -502,10 +492,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       }
     }
 
-    LongestTagVisitor v2;
-    //_applyVisitor(&v2, "Longest Tag");
-    //_addStat("Longest Tag", v2.getStat());
-    _addStat("Longest Tag", _getApplyVisitor(&v2, "Longest Tag"));
+    _addStat("Longest Tag", _getApplyVisitor(new LongestTagVisitor(), "Longest Tag"));
 
     // TODO: this should be moved into _generateFeatureStats?
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
@@ -763,6 +750,10 @@ double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& vis
   }
 
   ElementVisitor& childVisitor = v.getChildVisitor();
+
+  // There's a possible optimization that could be made here (and in the _applyVisitor below) to
+  // check the criterion used by FilteredVisitor, and if it inherits from GeometryTypeCriterion
+  // then call visitWaysRo, etc. Not sure if its worth the effort, though.
 
   _constMap->visitRo(*fv);
 
