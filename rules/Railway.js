@@ -11,6 +11,8 @@ exports.geometryType = "line";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 
+exports.searchRadius = parseFloat(hoot.get("search.radius.railway"));
+
 // This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
 // If that ever changes, then the generic score threshold configuration options used below should 
 // be replaced with custom score threshold configuration options.
@@ -35,15 +37,6 @@ var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 var parallelScoreExtractor = new hoot.ParallelScoreExtractor();
 var lengthScoreExtractor = new hoot.LengthScoreExtractor();
-
-/**
- * Runs before match creation occurs and provides an opportunity to perform custom initialization.
- */
-exports.calculateSearchRadius = function(map)
-{
-  exports.searchRadius = parseFloat(hoot.get("search.radius.railway"));
-  hoot.log("Using specified search radius for railway conflation: " + exports.searchRadius);
-}
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is

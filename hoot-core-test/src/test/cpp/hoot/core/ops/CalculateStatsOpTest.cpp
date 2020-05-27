@@ -79,12 +79,20 @@ public:
       ConfigOptions::getStatsTranslateScriptDefaultValue());
   }
 
-  // This is here to prevent inadvertant removal of stats and to make sure any new stats get added
-  // to this test.
   void runStatsNumTest()
   {
     std::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types.osm");
+
+    // This is here to prevent inadvertent removal of stats and to make sure any new stats get added
+    // to this test.
     CPPUNIT_ASSERT_EQUAL(206, calcStatsOp->getStats().size());
+
+    // This lets you know if the total stat calls made don't match what was predicted by
+    // _initStatCalc.
+    // TODO: These don't quite match up yet...off by one...not sure where, though.
+    LOG_VART(calcStatsOp->_currentStatCalcIndex);
+    LOG_VART(calcStatsOp->_totalStatCalcs);
+    //CPPUNIT_ASSERT(calcStatsOp->_currentStatCalcIndex == calcStatsOp->_totalStatCalcs);
   }
 
   void runStatsTest()
@@ -606,8 +614,8 @@ private:
     reader.read(inputFile, map);
 
     std::shared_ptr<CalculateStatsOp> calcStatsOp(new CalculateStatsOp());
-    //If we figure out the error messages logged by the script translator related stats are
-    //invalid and fix them, then this log disablement can be removed.
+    // If we figure out the error messages logged by the script translator related stats are
+    // invalid and fix them, then this log disablement can be removed.
     {
       DisableLog dl(Log::Fatal);
       calcStatsOp->apply(map);
