@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -37,6 +37,10 @@
 #include <hoot/core/scoring/MapMatchScoringUtils.h>
 #include <hoot/core/algorithms/perty/PertyTestRunner.h>
 #include <hoot/core/algorithms/perty/PertyTestRunResult.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -57,6 +61,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     LOG_VARD(args.size());
     if (args.size() < 2 || args.size() > 3)
     {
@@ -84,6 +91,7 @@ public:
       throw HootException("Cannot specify both the --score and --test options.");
     }
 
+    const QString msg = "PERTY operation ran in %1 total.";
     if (!scoreOptionSpecified && !testOptionSpecified)
     {
       OsmMapPtr map(new OsmMap());
@@ -94,11 +102,14 @@ public:
 
       MapProjector::projectToWgs84(map);
       IoUtils::saveMap(map, args[1]);
+
+      LOG_STATUS(msg.arg(StringUtils::millisecondsToDhms(timer.elapsed())));
     }
     else if (scoreOptionSpecified)
     {
       std::shared_ptr<const MatchComparator> matchComparator =
         PertyMatchScorer().scoreMatches(args[0], args[1]);
+      LOG_STATUS(msg.arg(StringUtils::millisecondsToDhms(timer.elapsed())));
       cout << MapMatchScoringUtils::getMatchScoringString(matchComparator);
     }
     else if (testOptionSpecified)
@@ -139,6 +150,8 @@ public:
         LOG_ERROR("At least one PERTY test run failed the score variance check.");
         return -1;
       }
+
+       LOG_STATUS(msg.arg(StringUtils::millisecondsToDhms(timer.elapsed())));
     }
 
     return 0;

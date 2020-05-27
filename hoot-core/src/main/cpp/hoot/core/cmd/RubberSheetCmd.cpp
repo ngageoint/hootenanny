@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -31,6 +31,10 @@
 #include <hoot/core/algorithms/rubber-sheet/RubberSheeter.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheetDeriver.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheetApplier.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -49,6 +53,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.contains("--derive"))
     {
       args.removeAt(args.indexOf("--derive"));
@@ -101,6 +108,10 @@ public:
 
       RubberSheeter().rubberSheet(args[0], args[1], args[2]);
     }
+
+    LOG_STATUS(
+      "Rubber sheeting operation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
 
     return 0;
   }

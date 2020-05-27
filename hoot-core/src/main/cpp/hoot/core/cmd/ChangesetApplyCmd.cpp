@@ -32,10 +32,12 @@
 #include <hoot/core/io/OsmApiWriter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFile>
 #include <QFileInfo>
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -57,6 +59,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     bool showStats = false;
     bool showProgress = false;
     //  Check for stats flag
@@ -198,6 +203,9 @@ public:
     {
       throw HootException("Invalid changeset file format: " + args[0]);
     }
+
+    LOG_STATUS(
+      "Changeset applied in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }
