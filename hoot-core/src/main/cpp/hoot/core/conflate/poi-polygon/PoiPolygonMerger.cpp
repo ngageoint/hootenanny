@@ -166,37 +166,29 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
 
   // merge the tags
 
-  Tags buildingTags = finalBuilding->getTags();
-  LOG_VART(buildingTags);
-
   // We're always keeping the building geometry, but the tags kept depends on the source status
   // of the features or the conflation workflow chosen.
-
-  Tags poiBuildingMergedTags;
+  Tags finalBuildingTags = finalBuilding->getTags();
+  LOG_VART(finalBuildingTags);
+ // Tags poiBuildingMergedTags;
   if (poiTags1.size() > 0)
   {
     // If this is a ref POI, we'll keep its tags and replace the building tags.
     LOG_TRACE("Merging POI tags with building tags for POI status Unknown1...");
-    poiBuildingMergedTags =
-      _getTagMerger()->mergeTags(poiTags1, buildingTags, finalBuilding->getElementType());
-    LOG_VART(poiBuildingMergedTags);
+    finalBuildingTags =
+      _getTagMerger()->mergeTags(poiTags1, finalBuildingTags, finalBuilding->getElementType());
+    LOG_VART(finalBuildingTags);
     //OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-1");
   }
   if (poiTags2.size() > 0)
   {
     LOG_TRACE("Merging POI tags with building tags for POI status Unknown2...");
     // If this is a sec POI, we'll keep the buildings tags and replace its tags.
-    poiBuildingMergedTags =
-      _getTagMerger()->mergeTags(buildingTags, poiTags2, finalBuilding->getElementType());
-    LOG_VART(poiBuildingMergedTags);
+    finalBuildingTags =
+      _getTagMerger()->mergeTags(finalBuildingTags, poiTags2, finalBuilding->getElementType());
+    LOG_VART(finalBuildingTags);
     //OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-2");
   }
-  // If there weren't any poi tags at all, just use the building tags.
-  if (poiTags1.size() == 0 && poiTags2.size()  == 0)
-  {
-    poiBuildingMergedTags = buildingTags;
-  }
-  LOG_VART(poiBuildingMergedTags);
 
   // do some book keeping to remove the POIs and mark them as replaced.
   long poisMerged = 0;
@@ -235,12 +227,12 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   {
     // If the poly merge target was previously conflated, let's add to the total number of POIs that
     // have been merged.
-    if (poiBuildingMergedTags.contains(MetadataTags::HootPoiPolygonPoisMerged()))
+    if (finalBuildingTags.contains(MetadataTags::HootPoiPolygonPoisMerged()))
     {
-      poisMerged += poiBuildingMergedTags[MetadataTags::HootPoiPolygonPoisMerged()].toLong();
+      poisMerged += finalBuildingTags[MetadataTags::HootPoiPolygonPoisMerged()].toLong();
     }
     LOG_VART(poisMerged);
-    poiBuildingMergedTags.set(MetadataTags::HootPoiPolygonPoisMerged(), QString::number(poisMerged));
+    finalBuildingTags.set(MetadataTags::HootPoiPolygonPoisMerged(), QString::number(poisMerged));
     finalBuilding->setStatus(Status::Conflated);
     ConfigOptions conf;
     if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
@@ -249,7 +241,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     }
   }
 
-  finalBuilding->setTags(poiBuildingMergedTags);
+  finalBuilding->setTags(finalBuildingTags);
   LOG_VART(finalBuilding);
 }
 

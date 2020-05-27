@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-0.001901" minlon="0.00177" maxlat="0.0001194" maxlon="0.003985"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0001194000000000" lon="0.0023600000000000"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0001179000000000" lon="0.0033200000000000"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0004452000000000" lon="0.0033190000000000"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0004462000000000" lon="0.0039850000000000"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0014060000000000" lon="0.0039830000000000"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0014050000000000" lon="0.0033390000000000"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0019010000000000" lon="0.0033380000000000"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0019000000000000" lon="0.0023600000000000"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0014560000000000" lon="0.0023600000000000"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0014550000000000" lon="0.0017700000000000"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0004766000000000" lon="0.0017710000000000"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0004775000000000" lon="0.0023600000000000"/>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12"/>
+        <nd ref="-11"/>
+        <nd ref="-10"/>
+        <nd ref="-9"/>
+        <nd ref="-8"/>
+        <nd ref="-7"/>
+        <nd ref="-6"/>
+        <nd ref="-5"/>
+        <nd ref="-4"/>
+        <nd ref="-3"/>
+        <nd ref="-2"/>
+        <nd ref="-1"/>
+        <nd ref="-12"/>
+        <tag k="alt_name" v="F"/>
+        <tag k="note" v="Toy Scenario 6"/>
+        <tag k="building" v="yes"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="poi" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="A"/>
+    </way>
+</osm>
