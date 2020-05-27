@@ -271,7 +271,7 @@ public:
     changesetCreator.create(input1, input2, bounds, output);
 
     LOG_STATUS(
-      "Changeset generated in " + StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+      "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

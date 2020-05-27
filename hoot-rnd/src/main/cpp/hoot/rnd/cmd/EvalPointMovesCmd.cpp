@@ -42,10 +42,12 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDir>
 #include <QFile>
+#include <QElapsedTimer>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
@@ -192,6 +194,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() != 3)
     {
       cout << getHelp() << endl << endl;
@@ -272,6 +277,9 @@ public:
     cout << "Save to .shp\t";
     compareMaps(map, shpTransform(map, workingDir), pointCount).print();
     cout << endl;
+
+    LOG_STATUS(
+      "Point moves evaluated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

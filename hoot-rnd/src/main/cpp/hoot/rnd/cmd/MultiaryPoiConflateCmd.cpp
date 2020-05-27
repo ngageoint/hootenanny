@@ -41,16 +41,15 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
 #include <QStringList>
+#include <QElapsedTimer>
 
 // Standard
 #include <fstream>
-
-// Tgs
-#include <tgs/System/Timer.h>
 
 using namespace std;
 using namespace Tgs;
@@ -75,7 +74,8 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    Timer totalTime;
+    QElapsedTimer timer;
+    timer.start();
 
     QStringList inputs;
     QString output;
@@ -121,9 +121,8 @@ public:
 
     IoUtils::saveMap(map, output);
 
-    LOG_INFO("Total time elapsed: " << totalTime.getElapsed());
-
-    LOG_INFO("Conflation job completed.");
+    LOG_STATUS(
+      "Conflation completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }
