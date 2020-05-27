@@ -550,5 +550,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
 
 }
