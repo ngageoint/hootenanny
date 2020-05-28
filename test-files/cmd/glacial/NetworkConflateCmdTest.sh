@@ -4,7 +4,7 @@ set -e
 mkdir -p $HOOT_HOME/tmp/
 mkdir -p test-output/cmd/glacial/NetworkConflateCmdTest
 
-HOOT_OPTS="-D uuid.helper.repeatable=true -D writer.include.debug.tags=true"
+HOOT_OPTS="-D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator"
 
 hoot conflate --warn -C ReferenceConflation.conf -C NetworkAlgorithm.conf -C Testing.conf  \
  $HOOT_OPTS \

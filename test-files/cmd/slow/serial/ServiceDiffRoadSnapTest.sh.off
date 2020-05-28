@@ -8,6 +8,14 @@ set -e
 
 TEST_NAME=$1
 ALG_CONFIG=$2
+# This is a bit of a hack, but just trying to reduce test runtime here.
+if [ "$ALG_CONFIG" == "UnifyingAlgorithm.conf" ]; then
+  MATCHERS="-D match.creators=hoot::HighwayMatchCreator"
+  MERGERS="-D merger.creators=hoot::HighwayMergerCreator"
+else
+  MATCHERS="-D match.creators=hoot::NetworkMatchCreator"
+  MERGERS="-D merger.creators=hoot::NetworkMergerCreator"
+fi
 
 INPUT_DIR=test-files/cmd/slow/DiffConflateCmdTest
 GOLD_DIR=test-files/cmd/slow/serial/$TEST_NAME
@@ -21,7 +29,7 @@ export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
-GENERAL_OPTS=$CONFIG" -C "$ALG_CONFIG" -C DifferentialConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
+GENERAL_OPTS=$CONFIG" -C "$ALG_CONFIG" -C DifferentialConflation.conf -C Testing.conf $MATCHERS $MERGERS -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false -D snap.unconnected.ways.mark.snapped.nodes=true -D snap.unconnected.ways.mark.snapped.ways=true"
 

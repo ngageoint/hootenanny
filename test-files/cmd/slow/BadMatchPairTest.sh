@@ -11,5 +11,5 @@ mkdir -p test-output/cmd/slow/BadMatchPairTest
 
 CONFIG="-C Testing.conf"
 
-hoot conflate --error $CONFIG -D match.creators="hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,Poi.js;hoot::NetworkMatchCreator;hoot::ScriptMatchCreator,River.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js" -D merger.creators="hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::NetworkMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator" -D conflate.match.highway.classifier="hoot::HighwayExpertClassifier" -D way.subline.matcher="hoot::MaximalSublineMatcher" -D rubber.sheet.minimum.ties=4 -D rubber.sheet.ref=true -D uuid.helper.repeatable=true test-files/cmd/slow/BadMatchPairTest/MapEditBandug-cropped-1.osm test-files/cmd/slow/BadMatchPairTest/OSMmap-cropped-1.osm test-output/cmd/slow/BadMatchPairTest/output.osm
+hoot conflate --error $CONFIG -D conflate.match.highway.classifier="hoot::HighwayExpertClassifier" -D way.subline.matcher="hoot::MaximalSublineMatcher" -D rubber.sheet.minimum.ties=4 -D rubber.sheet.ref=true -D uuid.helper.repeatable=true test-files/cmd/slow/BadMatchPairTest/MapEditBandug-cropped-1.osm test-files/cmd/slow/BadMatchPairTest/OSMmap-cropped-1.osm test-output/cmd/slow/BadMatchPairTest/output.osm
 
