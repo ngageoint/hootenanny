@@ -45,8 +45,6 @@
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>
 
-// hoot
-
 // TGS
 #include <tgs/Statistics/Random.h>
 using namespace Tgs;
