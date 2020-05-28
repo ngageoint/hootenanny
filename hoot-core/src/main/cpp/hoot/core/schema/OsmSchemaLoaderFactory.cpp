@@ -36,16 +36,11 @@ using namespace std;
 namespace hoot
 {
 
-std::shared_ptr<OsmSchemaLoaderFactory> OsmSchemaLoaderFactory::_theInstance;
-
 OsmSchemaLoaderFactory& OsmSchemaLoaderFactory::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new OsmSchemaLoaderFactory());
-  }
-
-  return *_theInstance;
+  //  Local static singleton instance
+  static OsmSchemaLoaderFactory instance;
+  return instance;
 }
 
 std::shared_ptr<OsmSchemaLoader> OsmSchemaLoaderFactory::createLoader(QString url)

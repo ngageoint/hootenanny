@@ -50,9 +50,12 @@ public:
 
 private:
 
-  OsmSchemaLoaderFactory() {}
-
-  static std::shared_ptr<OsmSchemaLoaderFactory> _theInstance;
+  /** Default constructor/destructor */
+  OsmSchemaLoaderFactory() = default;
+  ~OsmSchemaLoaderFactory() = default;
+  /** Delete copy constructor and assignment operator */
+  OsmSchemaLoaderFactory(const OsmSchemaLoaderFactory&) = delete;
+  OsmSchemaLoaderFactory& operator=(const OsmSchemaLoaderFactory&) = delete;
 };
 
 }

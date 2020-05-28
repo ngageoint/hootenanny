@@ -37,19 +37,11 @@ using namespace std;
 namespace hoot
 {
 
-std::shared_ptr<ScriptSchemaTranslatorFactory> ScriptSchemaTranslatorFactory::_theInstance;
-
-ScriptSchemaTranslatorFactory::ScriptSchemaTranslatorFactory()
-{
-}
-
 ScriptSchemaTranslatorFactory& ScriptSchemaTranslatorFactory::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new ScriptSchemaTranslatorFactory());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static ScriptSchemaTranslatorFactory instance;
+  return instance;
 }
 
 bool CompareSt(ScriptSchemaTranslator* st1, ScriptSchemaTranslator* st2)

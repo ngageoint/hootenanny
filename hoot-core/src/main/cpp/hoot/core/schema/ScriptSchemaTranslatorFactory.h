@@ -58,13 +58,16 @@ public:
 
 private:
 
-  static std::shared_ptr<ScriptSchemaTranslatorFactory> _theInstance;
-
-  ScriptSchemaTranslatorFactory();
+  void _init();
 
   std::vector<std::string> _translators;
 
-  void _init();
+  /** Default constructor/destructor */
+  ScriptSchemaTranslatorFactory() = default;
+  ~ScriptSchemaTranslatorFactory() = default;
+  /** Delete copy constructor and assignment operator */
+  ScriptSchemaTranslatorFactory(const ScriptSchemaTranslatorFactory&) = delete;
+  ScriptSchemaTranslatorFactory& operator=(const ScriptSchemaTranslatorFactory&) = delete;
 };
 
 }
