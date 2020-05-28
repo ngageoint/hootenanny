@@ -63,9 +63,12 @@ public:
 
 private:
 
-  OsmChangesetFileWriterFactory();
-
-  static std::shared_ptr<OsmChangesetFileWriterFactory> _theInstance;
+  /** Default constructor/destructor */
+  OsmChangesetFileWriterFactory() = default;
+  ~OsmChangesetFileWriterFactory() = default;
+  /** Delete copy constructor and assignment operator */
+  OsmChangesetFileWriterFactory(const OsmChangesetFileWriterFactory&) = delete;
+  OsmChangesetFileWriterFactory& operator=(const OsmChangesetFileWriterFactory&) = delete;
 };
 
 }

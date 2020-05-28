@@ -44,8 +44,6 @@ class Stxxl
 {
 public:
 
-  ~Stxxl();
-
   /**
    * Initializes the STXXL container.
    */
@@ -62,13 +60,17 @@ public:
 
 private:
 
-  static std::shared_ptr<Stxxl> _theInstance;
+  void _init();
+  QString _removeComments(QString s);
+
   QTemporaryFile _configFileTmp;
 
   Stxxl();
-
-  void _init();
-  QString _removeComments(QString s);
+  /** Default destructor */
+  ~Stxxl() = default;
+  /** Delete copy constructor and assignment operator */
+  Stxxl(const Stxxl&) = delete;
+  Stxxl& operator=(const Stxxl&) = delete;
 };
 
 }

@@ -102,8 +102,6 @@ class Factory
 {
 public:
 
-  virtual ~Factory();
-
   static Factory& getInstance();
 
   /**
@@ -175,13 +173,16 @@ public:
 
 private:
 
-  Factory();
-
-  static Factory* _theInstance;
-
   QMutex _mutex;
 
   std::map<std::string, std::shared_ptr<ObjectCreator>> _creators;
+
+  /** Default constructor/destructor */
+  Factory() = default;
+  ~Factory() = default;
+  /** Delete copy constructor and assignment operator */
+  Factory(const Factory&) = delete;
+  Factory& operator=(const Factory&) = delete;
 };
 
 template<class Base, class T>

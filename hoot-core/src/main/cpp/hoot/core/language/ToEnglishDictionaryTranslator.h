@@ -107,7 +107,7 @@ private:
   static QSet<QString> _streetTypes;
   QRegExp _whiteSpace;
 
-  QString _transform(icu::Transliterator* t, const QString& input) const;
+  QString _transform(const std::shared_ptr<icu::Transliterator>& t, const QString& input) const;
 
   static void _readStreetTypes();
 };

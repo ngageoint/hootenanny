@@ -44,17 +44,18 @@ class LibPostalInit
 {
 public:
 
-  ~LibPostalInit();
-
-  static const LibPostalInitPtr& getInstance();
+  static LibPostalInit& getInstance();
 
 private:
 
-  LibPostalInit();
-
-  static LibPostalInitPtr _theInstance;
-
   QString _dataDir;
+
+  LibPostalInit();
+  ~LibPostalInit();
+  /** Delete copy constructor and assignment operator */
+  LibPostalInit(const LibPostalInit&) = delete;
+  LibPostalInit& operator=(const LibPostalInit&) = delete;
+
 };
 
 }

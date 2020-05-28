@@ -98,16 +98,7 @@ public:
     Fatal = 5000
   };
 
-  static Log& getInstance()
-  {
-    if (_theInstance == NULL)
-    {
-      _theInstance.reset(new Log());
-      _theInstance->init();
-      _theInstance->setLevel(_theInstance->_level);
-    }
-    return *_theInstance;
-  }
+  static Log& getInstance();
 
   WarningLevel getLevel() const { return _level; }
 
@@ -145,14 +136,19 @@ public:
 
 private:
 
+  bool notFiltered(const std::string& prettyFunction);
+
   WarningLevel _level;
-  static std::shared_ptr<Log> _theInstance;
   static int _warnMessageLimit;
-  bool _classFilterInitialized = false;
+  bool _classFilterInitialized;
   QStringList _classFilter;
 
   Log();
-  bool notFiltered(const std::string& prettyFunction);
+  /** Default destructor */
+  ~Log() = default;
+  /** Delete copy constructor and assignment operator */
+  Log(const Log&) = delete;
+  Log& operator=(const Log&) = delete;
 };
 
 /**

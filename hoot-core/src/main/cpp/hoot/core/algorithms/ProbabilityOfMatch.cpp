@@ -57,8 +57,6 @@ using namespace Tgs;
 namespace hoot
 {
 
-std::shared_ptr<ProbabilityOfMatch> ProbabilityOfMatch::_theInstance;
-
 ProbabilityOfMatch::ProbabilityOfMatch()
 {
   _parallelExp = ConfigOptions().getMatchParallelExponent();
@@ -137,11 +135,9 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 
 ProbabilityOfMatch& ProbabilityOfMatch::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new ProbabilityOfMatch());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static ProbabilityOfMatch instance;
+  return instance;
 }
 
 double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,

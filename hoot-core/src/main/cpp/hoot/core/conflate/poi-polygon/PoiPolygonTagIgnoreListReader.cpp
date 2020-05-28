@@ -34,8 +34,6 @@
 namespace hoot
 {
 
-std::shared_ptr<PoiPolygonTagIgnoreListReader> PoiPolygonTagIgnoreListReader::_theInstance;
-
 PoiPolygonTagIgnoreListReader::PoiPolygonTagIgnoreListReader()
 {
   LOG_DEBUG("Reading ignore lists...");
@@ -49,11 +47,9 @@ PoiPolygonTagIgnoreListReader::PoiPolygonTagIgnoreListReader()
 
 PoiPolygonTagIgnoreListReader& PoiPolygonTagIgnoreListReader::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new PoiPolygonTagIgnoreListReader());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static PoiPolygonTagIgnoreListReader instance;
+  return instance;
 }
 
 }

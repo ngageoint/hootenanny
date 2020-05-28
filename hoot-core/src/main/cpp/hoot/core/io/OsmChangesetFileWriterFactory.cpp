@@ -36,19 +36,11 @@
 namespace hoot
 {
 
-std::shared_ptr<OsmChangesetFileWriterFactory> OsmChangesetFileWriterFactory::_theInstance;
-
-OsmChangesetFileWriterFactory::OsmChangesetFileWriterFactory()
-{
-}
-
 OsmChangesetFileWriterFactory& OsmChangesetFileWriterFactory::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new OsmChangesetFileWriterFactory());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static OsmChangesetFileWriterFactory instance;
+  return instance;
 }
 
 std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWriter(

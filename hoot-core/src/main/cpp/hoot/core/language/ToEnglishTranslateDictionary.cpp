@@ -45,8 +45,6 @@ namespace pt = boost::property_tree;
 namespace hoot
 {
 
-std::shared_ptr<ToEnglishTranslateDictionary> ToEnglishTranslateDictionary::_theInstance = NULL;
-
 ToEnglishTranslateDictionary::ToEnglishTranslateDictionary() :
 _transliterationCachingEnabled(false)
 {
@@ -60,37 +58,29 @@ _transliterationCachingEnabled(false)
 
   UErrorCode error = U_ZERO_ERROR;
 
-  _titler = Transliterator::createInstance("Any-Title", UTRANS_FORWARD, error);
+  _titler.reset(Transliterator::createInstance("Any-Title", UTRANS_FORWARD, error));
   if (_titler == NULL || error != U_ZERO_ERROR)
   {
     LOG_ERROR("transliterator error code: " << error);
     throw HootException("transliterator error");
   }
 
-  _transliterator =
-    Transliterator::createInstance("Any-Latin; Latin-ASCII", UTRANS_FORWARD, error);
+  _transliterator.reset(
+    Transliterator::createInstance("Any-Latin; Latin-ASCII", UTRANS_FORWARD, error));
   if (_transliterator == NULL || error != U_ZERO_ERROR)
   {
     LOG_ERROR("transliterator error code: " << error);
     throw HootException("transliterator error");
   }
-}
-
-ToEnglishTranslateDictionary::~ToEnglishTranslateDictionary()
-{
-  delete _transliterator;
-  delete _titler;
+  //  Load the dictionary file
+  load(ConfPath::search("dictionary.json"));
 }
 
 ToEnglishTranslateDictionary& ToEnglishTranslateDictionary::getInstance()
 {
-  if (_theInstance == NULL)
-  {
-    QString dictionary = ConfPath::search("dictionary.json");
-    _theInstance.reset(new ToEnglishTranslateDictionary());
-    _theInstance->load(dictionary);
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static ToEnglishTranslateDictionary instance;
+  return instance;
 }
 
 bool ToEnglishTranslateDictionary::getFromTransliterationCache(const QString& originalText,

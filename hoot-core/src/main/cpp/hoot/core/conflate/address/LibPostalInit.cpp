@@ -36,8 +36,6 @@
 namespace hoot
 {
 
-LibPostalInitPtr LibPostalInit::_theInstance;
-
 LibPostalInit::LibPostalInit()
 {
   // This init takes ~5 seconds normally.
@@ -57,13 +55,11 @@ LibPostalInit::~LibPostalInit()
   libpostal_teardown_language_classifier();
 }
 
-const LibPostalInitPtr& LibPostalInit::getInstance()
+LibPostalInit& LibPostalInit::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new LibPostalInit());
-  }
-  return _theInstance;
+  //  Local static singleton instance
+  static LibPostalInit instance;
+  return instance;
 }
 
 }

@@ -35,8 +35,6 @@
 namespace hoot
 {
 
-AddressTagKeysPtr AddressTagKeys::_theInstance;
-
 AddressTagKeys::AddressTagKeys()
 {
   ConfigOptions config = ConfigOptions(conf());
@@ -45,13 +43,11 @@ AddressTagKeys::AddressTagKeys()
   LOG_VART(_additionalTagKeys);
 }
 
-const AddressTagKeysPtr& AddressTagKeys::getInstance()
+AddressTagKeys& AddressTagKeys::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new AddressTagKeys());
-  }
-  return _theInstance;
+  //  Local static singleton instance
+  static AddressTagKeys instance;
+  return instance;
 }
 
 void AddressTagKeys::_readAddressTagKeys(const QString& configFile)
@@ -114,19 +110,15 @@ QSet<QString> AddressTagKeys::getAddressTagKeys(const Element& element) const
 
 QString AddressTagKeys::getAddressTagKey(const Tags& tags, const QString& addressTagType) const
 {
-  const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
-  for (int i = 0; i < tagKeys.size(); i++)
-  {
-    const QString tagKey = tagKeys.at(i);
-    if (tags.contains(tagKey))
-    {
-      return tagKey;
-    }
-  }
-  return "";
+  return _getAddressTag(tags, addressTagType, true);
 }
 
 QString AddressTagKeys::getAddressTagValue(const Tags& tags, const QString& addressTagType) const
+{
+  return _getAddressTag(tags, addressTagType, false);
+}
+
+QString AddressTagKeys::_getAddressTag(const Tags& tags, const QString& addressTagType, bool key) const
 {
   const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
   for (int i = 0; i < tagKeys.size(); i++)
@@ -134,7 +126,10 @@ QString AddressTagKeys::getAddressTagValue(const Tags& tags, const QString& addr
     const QString tagKey = tagKeys.at(i);
     if (tags.contains(tagKey))
     {
-      return tags.get(tagKey);
+      if (key)
+        return tagKey;
+      else
+        return tags.get(tagKey);
     }
   }
   return "";

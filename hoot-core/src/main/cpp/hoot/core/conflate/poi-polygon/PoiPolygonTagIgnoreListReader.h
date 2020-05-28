@@ -49,8 +49,11 @@ public:
 private:
 
   PoiPolygonTagIgnoreListReader();
-
-  static std::shared_ptr<PoiPolygonTagIgnoreListReader> _theInstance;
+  /** Default destructor */
+  ~PoiPolygonTagIgnoreListReader() = default;
+  /** Delete copy constructor and assignment operator */
+  PoiPolygonTagIgnoreListReader(const PoiPolygonTagIgnoreListReader&) = delete;
+  PoiPolygonTagIgnoreListReader& operator=(const PoiPolygonTagIgnoreListReader&) = delete;
 
   QStringList _poiTagIgnoreList;
   QStringList _polyTagIgnoreList;

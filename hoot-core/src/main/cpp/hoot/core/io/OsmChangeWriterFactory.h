@@ -69,9 +69,12 @@ public:
 
 private:
 
-  OsmChangeWriterFactory();
-
-  static std::shared_ptr<OsmChangeWriterFactory> _theInstance;
+  /** Default constructor/destructor */
+  OsmChangeWriterFactory() = default;
+  ~OsmChangeWriterFactory() = default;
+  /** Delete copy constructor and assignment operator */
+  OsmChangeWriterFactory(const OsmChangeWriterFactory&) = delete;
+  OsmChangeWriterFactory& operator=(const OsmChangeWriterFactory&) = delete;
 };
 
 }

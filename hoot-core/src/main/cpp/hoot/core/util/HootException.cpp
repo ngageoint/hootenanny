@@ -42,15 +42,11 @@ HOOT_REGISTER_EXCEPTION(NeedsReviewException)
 HOOT_REGISTER_EXCEPTION(UnsupportedException)
 HOOT_REGISTER_EXCEPTION(NotImplementedException)
 
-HootExceptionThrower* HootExceptionThrower::_theInstance = 0;
-
 HootExceptionThrower& HootExceptionThrower::getInstance()
 {
-  if (_theInstance == 0)
-  {
-    _theInstance = new HootExceptionThrower();
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static HootExceptionThrower instance;
+  return instance;
 }
 
 void HootExceptionThrower::rethrowPointer(HootException* e)

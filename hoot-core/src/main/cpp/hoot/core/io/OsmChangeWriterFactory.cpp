@@ -36,19 +36,11 @@ using namespace std;
 namespace hoot
 {
 
-std::shared_ptr<OsmChangeWriterFactory> OsmChangeWriterFactory::_theInstance;
-
-OsmChangeWriterFactory::OsmChangeWriterFactory()
-{
-}
-
 OsmChangeWriterFactory& OsmChangeWriterFactory::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new OsmChangeWriterFactory());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static OsmChangeWriterFactory instance;
+  return instance;
 }
 
 std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(

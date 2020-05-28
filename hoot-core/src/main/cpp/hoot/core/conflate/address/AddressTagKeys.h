@@ -48,7 +48,7 @@ class AddressTagKeys
 {
 public:
 
-  static const AddressTagKeysPtr& getInstance();
+  static AddressTagKeys& getInstance();
 
   /**
    * Returns the tag keys of all address tags on an element
@@ -83,21 +83,27 @@ public:
 
 private:
 
-  AddressTagKeys();
+  /*
+   * Reads tag keys used to identify tags as addresses
+   */
+  void _readAddressTagKeys(const QString& configFile);
+
+  QString _getAddressTag(const Tags& tags, const QString& addressTagType, bool key) const;
 
   friend class AddressScoreExtractorTest;
-
-  static AddressTagKeysPtr _theInstance;
 
   //extra tags to search for addresses in
   QSet<QString> _additionalTagKeys;
   //maps address tag types to valid address tag keys
   QMultiMap<QString, QString> _addressTypeToTagKeys;
 
-  /*
-   * Reads tag keys used to identify tags as addresses
-   */
-  void _readAddressTagKeys(const QString& configFile);
+  AddressTagKeys();
+  /**  Default destructor */
+  ~AddressTagKeys() = default;
+  /** Delete copy constructor and assignment operator */
+  AddressTagKeys(const AddressTagKeys&) = delete;
+  AddressTagKeys& operator=(const AddressTagKeys&) = delete;
+
 };
 
 }

@@ -44,8 +44,6 @@ using namespace std;
 namespace hoot
 {
 
-std::shared_ptr<OgrUtilities> OgrUtilities::_theInstance;
-
 void OgrUtilities::loadDriverInfo()
 {
   //  Load the extension-based driver info
@@ -106,9 +104,9 @@ OgrUtilities::~OgrUtilities()
 
 OgrUtilities& OgrUtilities::getInstance()
 {
-  if (!_theInstance.get())
-      _theInstance.reset(new OgrUtilities());
-  return *_theInstance;
+  //  Local static singleton instance
+  static OgrUtilities instance;
+  return instance;
 }
 
 QSet<QString> OgrUtilities::getSupportedFormats(const bool readOnly)

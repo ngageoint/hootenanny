@@ -155,7 +155,7 @@ public:
   /**
    * Return the singleton instance.
    */
-  static std::shared_ptr<TestUtils> getInstance();
+  static TestUtils& getInstance();
 
   /**
    * Register a way to reset the environment. This is most useful in plugins to avoid circular
@@ -237,7 +237,7 @@ public:
 
   AutoRegisterResetInstance()
   {
-    TestUtils::getInstance()->registerReset(this);
+    TestUtils::getInstance().registerReset(this);
   }
 
   virtual void reset()

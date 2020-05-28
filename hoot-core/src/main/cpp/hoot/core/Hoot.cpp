@@ -60,8 +60,6 @@ using namespace std;
 namespace hoot
 {
 
-std::shared_ptr<Hoot> Hoot::_theInstance;
-
 Hoot::Hoot()
 {
   _init();
@@ -69,11 +67,9 @@ Hoot::Hoot()
 
 Hoot& Hoot::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new Hoot());
-  }
-  return *_theInstance;
+  /** Hootenanny singletons follow the Meyers' Singleton pattern seen below */
+  static Hoot instance;
+  return instance;
 }
 
 void Hoot::_init()

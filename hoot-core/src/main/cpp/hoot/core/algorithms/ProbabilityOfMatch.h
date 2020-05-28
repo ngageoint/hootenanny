@@ -68,11 +68,15 @@ public:
 
 private:
 
-  ProbabilityOfMatch();
-
-  static std::shared_ptr<ProbabilityOfMatch> _theInstance;
   double _parallelExp;
   double _dMax;
+
+  ProbabilityOfMatch();
+  /** Default destructor */
+  ~ProbabilityOfMatch() = default;
+  /** Delete copy constructor and assignment operator */
+  ProbabilityOfMatch(const ProbabilityOfMatch&) = delete;
+  ProbabilityOfMatch& operator=(const ProbabilityOfMatch&) = delete;
 };
 
 }
