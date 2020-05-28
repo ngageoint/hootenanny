@@ -237,7 +237,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmXmlReader reader;
     const QString inputPath =
-      "test-files/cases/attribute/unifying/building-3136-many-to-many-auto-merge-1";
+      "test-files/cases/attribute/unifying/building/building-3136-many-to-many-auto-merge-1";
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(inputPath + "/Input1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
