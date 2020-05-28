@@ -45,8 +45,6 @@
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>
 
-// hoot
-
 // TGS
 #include <tgs/Statistics/Random.h>
 using namespace Tgs;
@@ -119,7 +117,7 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     const QString inputPath =
-      "test-files/cases/attribute/unifying/building-3136-many-to-many-auto-merge-1";
+      "test-files/cases/attribute/unifying/building/building-3136-many-to-many-auto-merge-1";
     reader.read(inputPath + "/Input1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
     reader.read(inputPath + "/Input2.osm", map);

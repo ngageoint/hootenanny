@@ -372,7 +372,10 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(
       }
       else
       {
-        if (r->isMultiPolygon() || AreaCriterion().isSatisfied(r))
+        if (r->isMultiPolygon() ||
+            // relation type=site was added to fix BadMatchPairTest crashing in Polygon.js.
+            r->getType() == MetadataTags::RelationSite() ||
+            AreaCriterion().isSatisfied(r))
           return GEOS_MULTIPOLYGON;
         // Restriction relations are empty geometry
         else if (r->isRestriction())

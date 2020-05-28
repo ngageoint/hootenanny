@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="10.07319253078" minlon="-69.35422185554" maxlat="10.07417236388" maxlon="-69.35318588552001"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0736330208900000" lon="-69.3533997952199996">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-8"/>
+    </node>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0737174206199995" lon="-69.3532547941800033">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-7"/>
+    </node>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0736011511400019" lon="-69.3531858855200056">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-6"/>
+    </node>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0731925307799983" lon="-69.3538879049000059">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-5"/>
+    </node>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0737560023300023" lon="-69.3542218555400041">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-4"/>
+    </node>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0741723638799989" lon="-69.3535065370700039">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-3"/>
+    </node>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0739414761799981" lon="-69.3533696980099990">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-2"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0738493359199985" lon="-69.3535279974600058">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-1"/>
+    </node>
+    <way visible="true" id="484907523" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-8"/>
+        <nd ref="-7"/>
+        <nd ref="-6"/>
+        <nd ref="-5"/>
+        <nd ref="-4"/>
+        <nd ref="-3"/>
+        <nd ref="-2"/>
+        <nd ref="-1"/>
+        <nd ref="-8"/>
+        <tag k="addr:street" v="Calle 30"/>
+        <tag k="alt_name" v="Building 1;Building 2"/>
+        <tag k="website" v="http://www.rbproducciones.com"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Producciones RB"/>
+        <tag k="length" v="101.6"/>
+        <tag k="man_made" v="works"/>
+        <tag k="source:datetime" v="2017-04-05T09:55:16Z"/>
+        <tag k="name:es" v="Producciones RB"/>
+        <tag k="addr:city" v="Barquisimeto"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="81.5"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="8176.2"/>
+        <tag k="addr:postcode" v="3001"/>
+        <tag k="phone" v="02512372628"/>
+        <tag k="opening_hours" v="Mo-Fr 08:00-17:00"/>
+        <tag k="shop" v="department_store"/>
+        <tag k="angle" v="239.2"/>
+        <tag k="hoot:id" v="484907523"/>
+    </way>
+</osm>
