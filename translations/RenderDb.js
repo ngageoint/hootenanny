@@ -32,6 +32,45 @@
 hoot.require('config');
 hoot.require('translate');
 
+// Shorten some of the names when exporting to shapefile
+var shpSwapList = {
+  'construction':'constructn',
+  'denomination':'denominatn',
+  'description':'descript',
+  'generator:source':'gen_source',
+  'intermittent':'intermit',
+  'power_source':'pwr_source',
+  'public_transport':'public_tpt',
+  'tower:type':'tower_type',
+  'addr:housename':'house_name',
+  'addr:housenumber':'house_num',
+  'addr:interpolation':'addr_intrp',
+  'admin_level':'admin_lvl',
+  'source:imagery:datetime':'imagery_dt',
+  'source:imagery:id':'imagery_id',
+};
+
+var gdbSwapList = {
+  'generator:source':'generator_source',
+  'tower:type':'tower_type',
+  'addr:housename':'addr_housename',
+  'addr:housenumber':'addr_housenumber',
+  'addr:interpolation':'addr_interpolation',
+  'source:imagery:datetime':'source_imagery_datetime',
+  'source:imagery:id':'source_imagery_id',
+};
+
+var inputSwapList = Object.keys(shpSwapList).reduce(function(map, key) {
+  map[shpSwapList[key]] = key;
+  return map;
+}, {});
+
+inputSwapList = Object.keys(gdbSwapList).reduce(function(map, key) {
+  map[gdbSwapList[key]] = key;
+  return map;
+}, inputSwapList);
+
+
 function initialize()
 {
   var _global = (0, eval)('this');
@@ -75,32 +114,11 @@ function translateToOsm(attrs, layerName, geometryType)
   // Translation overrides if set
   if (renderDb.config.toChange) attrs = translate.overrideValues(attrs, renderDb.config.toChange);
 
-  // Lengthen/swap some of the names if needed
-  var swapList = {
-    'constructn':'construction',
-    'denominatn':'denomination',
-    'descript':'description',
-    'gen_source':'generator:source',
-    'intermit':'intermittent',
-    'pwr_source':'power_source',
-    'public_tpt':'public_transport',
-    'tower_type':'tower:type',
-    'house_name':'addr:housename',
-    'house_num':'addr:housenumber',
-    'addr_intrp':'addr:interpolation',
-    'admin_lvl':'admin_level',
-    'generator_source':'generator:source',
-    'tower_type':'tower:type',
-    'addr_housename':'addr:housename',
-    'addr_housenumber':'addr:housenumber',
-    'addr_interpolation':'addr:interpolation',
-        };
-
   for (var i in attrs)
   {
-    if (i in swapList)
+    if (i in inputSwapList)
     {
-      attrs[swapList[i]] = attrs[i];
+      attrs[inputSwapList[i]] = attrs[i];
       delete attrs[i];
     }
   }
@@ -187,31 +205,6 @@ function translateToOgr(tags, elementType, geometryType)
   if (tags['hoot:status'] == 'invalid' || tags['hoot:status'] == 'Invalid') delete tags['hoot:status'];
   if (tags['hoot:layername']) delete tags['hoot:layername'];
   if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-
-  // Shorten some of the names when exporting to shapefile
-  var shpSwapList = {
-    'construction':'constructn',
-    'denomination':'denominatn',
-    'description':'descript',
-    'generator:source':'gen_source',
-    'intermittent':'intermit',
-    'power_source':'pwr_source',
-    'public_transport':'public_tpt',
-    'tower:type':'tower_type',
-    'addr:housename':'house_name',
-    'addr:housenumber':'house_num',
-    'addr:interpolation':'addr_intrp',
-    'admin_level':'admin_lvl',
-        };
-
-  var gdbSwapList = {
-    'generator:source':'generator_source',
-    'tower:type':'tower_type',
-    'addr:housename':'addr_housename',
-    'addr:housenumber':'addr_housenumber',
-    'addr:interpolation':'addr_interpolation',
-        };
-
 
   var tagsList = [];
   // Sort out what tags go into the "tags" attribute and what gets it's own column
@@ -371,6 +364,8 @@ function getDbSchema()
     { name:'route',desc:'route',type:'String',defValue:'' },
     { name:'service',desc:'service',type:'String',defValue:'' },
     { name:'shop',desc:'shop',type:'String',defValue:'' },
+    { name:'source:imagery:datetime',desc:'source:imagery:datetime',type:'String',defValue:'' },
+    { name:'source:imagery:id',desc:'source:imagery:id',type:'String',defValue:'' },
     { name:'sport',desc:'sport',type:'String',defValue:'' },
     { name:'surface',desc:'surface',type:'String',defValue:'' },
     { name:'tags',desc:'tags',type:'String',defValue:'' },
@@ -406,27 +401,13 @@ function getDbSchema()
   // This is Ugly and is repeated since getDbSchema gets used before initialise() and the translation functions
   if (config.getOgrOutputFormat() == 'shp')
   {
-    var swapList = {
-      'construction':'constructn',
-      'denomination':'denominatn',
-      'description':'descript',
-      'generator:source':'gen_source',
-      'intermittent':'intermit',
-      'power_source':'pwr_source',
-      'public_transport':'public_tpt',
-      'tower:type':'tower_type',
-      'addr:housename':'house_name',
-      'addr:housenumber':'house_num',
-      'addr:interpolation':'addr_intrp',
-      'admin_level':'admin_lvl',
-          };
 
     // This is brute force and ugly but the list is an array of objects
     for (var i = 0, cLen = common_list.length; i < cLen; i++)
     {
-      if (common_list[i].name in swapList)
+      if (common_list[i].name in shpSwapList)
       {
-        common_list[i].name = swapList[common_list[i].name]
+        common_list[i].name = shpSwapList[common_list[i].name]
       }
     }
 
@@ -440,20 +421,13 @@ function getDbSchema()
   // GDB doesn't likr ":" in attribute names
   if (config.getOgrOutputFormat() == 'gdb')
   {
-    var swapList = {
-      'generator:source':'generator_source',
-      'tower:type':'tower_type',
-      'addr:housename':'addr_housename',
-      'addr:housenumber':'addr_housenumber',
-      'addr:interpolation':'addr_interpolation',
-          };
 
     // This is brute force and ugly but the list is an array of objects
     for (var i = 0, cLen = common_list.length; i < cLen; i++)
     {
-      if (common_list[i].name in swapList)
+      if (common_list[i].name in gdbSwapList)
       {
-        common_list[i].name = swapList[common_list[i].name]
+        common_list[i].name = gdbSwapList[common_list[i].name]
       }
     }
   }
