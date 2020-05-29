@@ -70,8 +70,8 @@ void PertyTestRunner::_writeStatsForOutputFiles(const QString& inputMapPath, con
   MapStatsWriter().writeStats(inputMapPath, statsOutputPath, sep);
 }
 
-QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(const QString& referenceMapInputPath,
-                                                                          const QString& outputPath)
+QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
+  const QString& referenceMapInputPath, const QString& outputPath)
 {
   if (_expectedScores.size() != _numTestRuns)
   {

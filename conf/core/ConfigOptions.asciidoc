@@ -2238,9 +2238,9 @@ option.
 Raise the Levenshtein score to this power before returning this result. If alpha is greater than
 1 then this makes low scores even lower. Valid values are > 0.
 
-The default alpha value of 1.15 was determined through experimentation with a Jakarta data set
-using MeanWordSetDistance as the container classes. See Redmine ticket #2349 for some experiment
-details.  The "best" value varies depending on the input data as well as how the data is being used.
+The default value was determined through experimentation with a Jakarta data set using
+MeanWordSetDistance as the container classes. See Redmine ticket #2349 for some experiment details.
+The "best" value varies depending on the input data as well as how the data is being used.
 
 === libpostal.data.dir
 
@@ -3594,8 +3594,7 @@ configuration option, 'language.translation.translator', controls which translat
 * Default Value: `true`
 
 Automatically calculates the search radius to be used during conflation of power lines using rubber
-sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
-pre-conflation operation on the input data to be conflated.
+sheet tie point distances.
 
 === power.line.match.threshold
 
@@ -4891,8 +4890,7 @@ SampledAngleHistogramExtractor
 * Default Value: `true`
 
 Automatically calculates the search radius to be used during conflation of waterways using rubber
-sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
-pre-conflation operation on the input data to be conflated.
+sheet tie point distances.
 
 === waterway.long.way.length.threshold
 

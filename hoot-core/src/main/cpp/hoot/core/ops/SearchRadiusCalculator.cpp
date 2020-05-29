@@ -66,7 +66,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
 {
   LOG_VARD(map->getElementCount());
 
-  // We need to filter out feature that don't need to be included in the search radius calculation.
+  // We need to filter out features that don't need to be included in the search radius calculation.
 
   // don't care about conflated data and invalid data
   ElementCriterionPtr crit;
