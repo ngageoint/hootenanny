@@ -42,7 +42,7 @@ AverageTagMerger::AverageTagMerger()
 Tags AverageTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
   Tags result;
-  TagComparator::getInstance().averageTags(t1, 1.0, t2, 1.0, result, false);
+  TagComparator::getInstance().averageTags(t1, 1.0, t2, 1.0, result, false, _caseSensitive);
   return result;
 }
 

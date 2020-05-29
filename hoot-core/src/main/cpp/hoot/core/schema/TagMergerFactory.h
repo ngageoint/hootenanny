@@ -48,8 +48,6 @@ class TagMergerFactory
 {
 public:
 
-  ~TagMergerFactory();
-
   static TagMergerFactory& getInstance();
 
   /**
@@ -76,12 +74,15 @@ public:
 
 private:
 
-  TagMergerFactory();
-
   QHash<QString, std::shared_ptr<TagMerger>> _mergers;
   std::shared_ptr<TagMerger> _default;
 
-  static std::shared_ptr<TagMergerFactory> _theInstance;
+  /** Default constructor/destructor */
+  TagMergerFactory() = default;
+  ~TagMergerFactory() = default;
+  /** Delete copy constructor and assignment operator */
+  TagMergerFactory(const TagMergerFactory&) = delete;
+  TagMergerFactory& operator=(const TagMergerFactory&) = delete;
 };
 
 }

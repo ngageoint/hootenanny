@@ -67,7 +67,6 @@ public:
   void averageTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(true);
 
     {
         Tags t1;
@@ -199,7 +198,6 @@ public:
   void averageCaseSensitiveTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(true);
 
     {
       Tags t1;
@@ -244,7 +242,6 @@ public:
   void averageCaseInsensitiveTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(false);
 
     {
       Tags t1;
@@ -281,7 +278,7 @@ public:
       expected["uuid"] = "foo;bar";
 
       Tags avg;
-      uut.averageTags(t1, t2, avg);
+      uut.averageTags(t1, t2, avg, false, false);
       compareTags(expected, avg);
      }
   }
@@ -289,7 +286,6 @@ public:
   void buildingTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(true);
 
     {
       Tags t1;
@@ -356,7 +352,6 @@ public:
   void compareTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(true);
 
     {
       Tags t1;
@@ -437,7 +432,6 @@ public:
   void compareEnumTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(true);
 
     {
       Tags t1;
@@ -489,7 +483,6 @@ public:
   void compareNamesTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(true);
 
     {
       Tags t1;
@@ -526,7 +519,6 @@ public:
   void generalizeTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(true);
 
     {
         Tags t1;
@@ -646,7 +638,6 @@ public:
   void generalizeCaseSensitiveTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(true);
 
     {
       Tags t1;
@@ -678,7 +669,6 @@ public:
   void generalizeCaseInsensitiveTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(false);
 
     {
       Tags t1;
@@ -701,7 +691,7 @@ public:
       expected["uid"] = "123;456";
       expected["building"] = "yes";
 
-      Tags gen = uut.generalize(t1, t2);
+      Tags gen = uut.generalize(t1, t2, false, false);
       compareTags(expected, gen);
     }
   }
@@ -712,7 +702,6 @@ public:
   void railwayBusStopTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(true);
 
     vector<Tags> railways;
     vector<Tags> buses;
@@ -795,7 +784,6 @@ public:
   void realWorldTest()
   {
     TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(true);
 
     {
       Tags t1;
@@ -860,7 +848,6 @@ public:
   {
     TagComparator& uut = TagComparator::getInstance();
 
-    uut.setCaseSensitive(true);
     {
       Tags t1;
       t1["highway"] = "primary_link";
@@ -880,7 +867,6 @@ public:
       CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
     }
 
-    uut.setCaseSensitive(true);
     {
       Tags t1;
       t1["highway"] = "primary_link";
@@ -900,7 +886,6 @@ public:
       CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
     }
 
-    uut.setCaseSensitive(false);
     {
       Tags t1;
       t1["highway"] = "primary_link";
@@ -917,10 +902,9 @@ public:
       t2["tunnel"] = "";
       t2[MetadataTags::HootId()] = "1";
 
-      CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
+      CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2, false));
     }
 
-    uut.setCaseSensitive(false);
     {
       Tags t1;
       t1["highway"] = "primary_link";
@@ -937,10 +921,9 @@ public:
       t2[MetadataTags::HootId()] = "1";
       t2["BRIDGE"] = "";
 
-      CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
+      CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2, false));
     }
 
-    uut.setCaseSensitive(true);
     {
       Tags t1;
       t1["highway"] = "primary_link";
@@ -960,7 +943,6 @@ public:
       CPPUNIT_ASSERT(!uut.nonNameTagsExactlyMatch(t1, t2));
     }
 
-    uut.setCaseSensitive(true);
     {
       Tags t1;
       t1["key1"] = "bar";

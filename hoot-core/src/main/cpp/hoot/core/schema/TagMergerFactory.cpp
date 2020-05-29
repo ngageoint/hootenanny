@@ -35,24 +35,11 @@
 namespace hoot
 {
 
-std::shared_ptr<TagMergerFactory> TagMergerFactory::_theInstance;
-
-TagMergerFactory::TagMergerFactory()
-{
-}
-
-TagMergerFactory::~TagMergerFactory()
-{
-  reset();
-}
-
 TagMergerFactory& TagMergerFactory::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new TagMergerFactory());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static TagMergerFactory instance;
+  return instance;
 }
 
 std::shared_ptr<TagMerger> TagMergerFactory::getDefaultPtr()

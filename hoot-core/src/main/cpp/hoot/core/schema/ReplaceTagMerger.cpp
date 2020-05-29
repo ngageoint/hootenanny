@@ -46,16 +46,17 @@ Tags ReplaceTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*e
 {
   if (_swap)
   {
-    return TagComparator::getInstance().replaceMerge(t2, t1, _overwriteExcludeTagKeys);
+    return TagComparator::getInstance().replaceMerge(t2, t1, _overwriteExcludeTagKeys, _caseSensitive);
   }
   else
   {
-    return TagComparator::getInstance().replaceMerge(t1, t2, _overwriteExcludeTagKeys);
+    return TagComparator::getInstance().replaceMerge(t1, t2, _overwriteExcludeTagKeys, _caseSensitive);
   }
 }
 
 void ReplaceTagMerger::setConfiguration(const Settings& conf)
 {
+  TagMerger::setConfiguration(conf);
   ConfigOptions config = ConfigOptions(conf);
   setOverwriteExcludeTagKeys(config.getTagMergerOverwriteExclude());
 }
