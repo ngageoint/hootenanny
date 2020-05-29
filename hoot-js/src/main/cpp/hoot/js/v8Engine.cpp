@@ -32,8 +32,6 @@ using namespace v8;
 namespace hoot
 {
 
-std::shared_ptr<v8Engine> v8Engine::_theInstance;
-
 bool v8Engine::_needPlatform = false;
 
 v8Engine::v8Engine()
@@ -83,11 +81,9 @@ v8Engine::~v8Engine()
 
 v8Engine& v8Engine::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new v8Engine());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static v8Engine instance;
+  return instance;
 }
 
 Isolate* v8Engine::getIsolate()

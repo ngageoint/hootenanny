@@ -51,22 +51,20 @@ public:
    */
   void init() {}
 
-  ~v8Engine();
-
   static v8::Isolate* getIsolate();
 
   static void setPlatformInit(bool needsPlatform = true);
 
 private:
-  /** static pointer to the singleton instance */
-  static std::shared_ptr<v8Engine> _theInstance;
   /** static flag for platform initialization */
   static bool _needPlatform;
 
-  /**
-   * @brief v8Engine - private constructor
-   */
+  /** private constructor/destructor */
   v8Engine();
+  ~v8Engine();
+  /** Delete copy constructor and assignment operator */
+  v8Engine(const v8Engine&) = delete;
+  v8Engine& operator=(const v8Engine&) = delete;
 
   /** Creation parameters allocator for main isolate */
   std::shared_ptr<v8::ArrayBuffer::Allocator> _allocator;

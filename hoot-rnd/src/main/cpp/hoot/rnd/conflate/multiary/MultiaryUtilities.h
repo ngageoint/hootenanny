@@ -147,9 +147,12 @@ public:
 
 private:
 
-  MultiaryUtilities() {}
-
-  static std::shared_ptr<MultiaryUtilities> _theInstance;
+  /** Default constructor/destructor */
+  MultiaryUtilities() = default;
+  ~MultiaryUtilities() = default;
+  /** Delete copy constructor and assignment operator */
+  MultiaryUtilities(const MultiaryUtilities&) = delete;
+  MultiaryUtilities& operator=(const MultiaryUtilities&) = delete;
 
   std::shared_ptr<SearchBoundsCalculator> _searchBoundsCalculator;
 };

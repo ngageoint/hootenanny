@@ -41,19 +41,11 @@ void Method(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(String::NewFromUtf8(current, "world"));
 }
 
-std::shared_ptr<JsRegistrar> JsRegistrar::_theInstance = NULL;
-
-JsRegistrar::JsRegistrar()
-{
-}
-
 JsRegistrar& JsRegistrar::getInstance()
 {
-  if (_theInstance == NULL)
-  {
-    _theInstance.reset(new JsRegistrar());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static JsRegistrar instance;
+  return instance;
 }
 
 void JsRegistrar::Init(Handle<Object> exports)

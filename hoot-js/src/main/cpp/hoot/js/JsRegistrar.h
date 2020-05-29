@@ -56,9 +56,7 @@ class ClassInitializerTemplate : public ClassInitializer
 {
 public:
 
-  ClassInitializerTemplate()
-  {
-  }
+  ClassInitializerTemplate() { }
 
   virtual ~ClassInitializerTemplate() { }
 
@@ -86,9 +84,13 @@ public:
 private:
 
   std::vector<std::shared_ptr<ClassInitializer>> _initializers;
-  static std::shared_ptr<JsRegistrar> _theInstance;
 
-  JsRegistrar();
+  /** Default constructor/destructor */
+  JsRegistrar() = default;
+  ~JsRegistrar() = default;
+  /** Delete copy constructor and assignment operator */
+  JsRegistrar(const JsRegistrar&) = delete;
+  JsRegistrar& operator=(const JsRegistrar&) = delete;
 };
 
 template<class T>
