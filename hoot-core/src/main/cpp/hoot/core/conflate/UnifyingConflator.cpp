@@ -47,6 +47,7 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 
 // standard
 #include <algorithm>
@@ -509,6 +510,13 @@ void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches, const 
       LOG_DEBUG(match);
     }
   }
+}
+
+bool UnifyingConflator::isNetworkConflate()
+{
+  return
+    ConfigOptions().getMatchCreators().contains(
+      QString::fromStdString(NetworkMatchCreator::className()));
 }
 
 }

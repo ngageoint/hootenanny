@@ -107,6 +107,13 @@ public:
   virtual void setProgress(Progress progress) override { _progress = progress; }
   virtual unsigned int getNumSteps() const override { return 3; }
 
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static bool isNetworkConflate();
+
 private:
 
   geos::geom::Envelope _bounds;
