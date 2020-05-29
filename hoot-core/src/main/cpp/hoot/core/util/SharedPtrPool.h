@@ -59,13 +59,21 @@ public:
       std::bind(&SharedPtrPool<T>::_destroy, this, std::placeholders::_1));
   }
 
-  static SharedPtrPool<T>& getInstance() { return _theInstance; }
+  static SharedPtrPool<T>& getInstance()
+  {
+    static SharedPtrPool<T> instance;
+    return instance;
+  }
 
 private:
 
-  SharedPtrPool() {}
+  /** Default constructor/destructor */
+  SharedPtrPool() = default;
+  ~SharedPtrPool() = default;
+  /** Delete copy constructor and assignment operator */
+  SharedPtrPool(const SharedPtrPool<T>&) = delete;
+  SharedPtrPool<T>& operator=(const SharedPtrPool<T>&) = delete;
 
-  static SharedPtrPool<T> _theInstance;
   boost::fast_pool_allocator<T> _pool;
 
   void _destroy(T* v)

@@ -43,9 +43,6 @@ using namespace std;
 namespace hoot
 {
 
-template<class Node>
-SharedPtrPool<Node> SharedPtrPool<Node>::_theInstance;
-
 Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
 Element(s)
 {
