@@ -144,7 +144,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     LOG_STATUS("Discarding unconflatable elements...");
     const int mapSizeBefore = _pMap->size();
     NonConflatableElementRemover().apply(_pMap);
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
     _stats.append(
       SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
@@ -167,7 +167,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   LOG_STATUS(
     "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
     " Differential Conflation match conflicts to be removed.");
@@ -186,7 +186,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // because that operation deletes all of the info needed for calculating the tag diff.
     _updateProgress(currentStep - 1, "Storing tag differentials...");
     _calcAndStoreTagChanges();
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
     currentStep++;
   }
 
@@ -201,7 +201,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   // We're eventually getting rid of all matches from the output, but in order to make the road
   // snapping work correctly we'll get rid of secondary elements in matches first.
   _removeMatches(Status::Unknown2);
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
 
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
   {
@@ -209,7 +209,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
     // anymore.
     _numSnappedWays = _snapSecondaryRoadsBackToRef();
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
   }
 
   if (ConfigOptions().getDifferentialRemoveReferenceData())
@@ -218,7 +218,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
     // differential that we want.
     _removeMatches(Status::Unknown1);
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
 
     // Now remove input1 elements
     LOG_STATUS("\tRemoving all reference elements...");
@@ -228,7 +228,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     removeRef1Visitor.setRecursive(true);
     removeRef1Visitor.addCriterion(pTagKeyCrit);
     _pMap->visitRw(removeRef1Visitor);
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
     LOG_STATUS(
       "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<

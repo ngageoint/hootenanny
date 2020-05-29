@@ -171,7 +171,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   {
     _matchFactory.createMatches(map, _matches, _bounds);
   }
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   LOG_DEBUG("Match count: " << StringUtils::formatLargeNumber(_matches.size()));
   LOG_VART(_matches);
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
@@ -195,7 +195,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
   _removeWholeGroups(_matches, matchSets, map);
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
   LOG_DEBUG("Number of Whole Groups: " << StringUtils::formatLargeNumber(matchSets.size()));
   LOG_DEBUG(
@@ -225,7 +225,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
       {
         LOG_WARN(exp.what());
       }
-      MemoryUsageChecker::getInstance()->check();
+      MemoryUsageChecker::getInstance().check();
       LOG_TRACE("CM took: " << Time::getTime() - cmStart << "s.");
       LOG_DEBUG("CM Score: " << cm.getScore());
       LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
@@ -235,7 +235,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     gm.addMatches(_matches.begin(), _matches.end());
     double gmStart = Time::getTime();
     vector<ConstMatchPtr> gmMatches = gm.calculateSubset();
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
     LOG_TRACE("GM took: " << Time::getTime() - gmStart << "s.");
     LOG_DEBUG("GM Score: " << gm.getScore());
 
@@ -297,7 +297,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
       "Converted match set " << StringUtils::formatLargeNumber(i + 1) << " to " <<
       StringUtils::formatLargeNumber(_mergers.size()) << " merger(s).")
   }
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   LOG_VART(_mergers.size());
 
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
@@ -348,7 +348,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 //        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
 //    }
   }
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
