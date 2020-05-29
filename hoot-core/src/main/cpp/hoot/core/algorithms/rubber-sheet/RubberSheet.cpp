@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
@@ -41,6 +40,8 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -70,21 +71,53 @@ bool compareMatches(const RubberSheet::Match& m1, const RubberSheet::Match& m2)
   return m1.p > m2.p;
 }
 
-RubberSheet::RubberSheet() :
-_ref(ConfigOptions().getRubberSheetRef()),
-_debug(ConfigOptions().getRubberSheetDebug()),
-_minimumTies(ConfigOptions().getRubberSheetMinimumTies()),
-_failWhenMinTiePointsNotFound(ConfigOptions().getRubberSheetFailWhenMinimumTiePointsNotFound()),
-_logWarningWhenRequirementsNotFound(ConfigOptions().getRubberSheetLogMissingRequirementsAsWarning()),
-_maxAllowedWays(ConfigOptions().getRubberSheetMaxAllowedWays())
+RubberSheet::RubberSheet()
 {
   _emptyMatch.score = 0.0;
   _emptyMatch.p = 0.0;
+
+  setConfiguration(conf());
+}
+
+void RubberSheet::setConfiguration(const Settings& conf)
+{
+  ConfigOptions config = ConfigOptions(conf);
+
+  setReference(config.getRubberSheetRef());
+  setDebug(config.getRubberSheetDebug());
+  setMinimumTies(config.getRubberSheetMinimumTies());
+  setFailWhenMinimumTiePointsNotFound(config.getRubberSheetFailWhenMinimumTiePointsNotFound());
+  setLogWarningWhenRequirementsNotFound(config.getRubberSheetLogMissingRequirementsAsWarning());
+  setMaxAllowedWays(config.getRubberSheetMaxAllowedWays());
+  setCriteria(config.getRubberSheetElementCriteria());
 
   LOG_VARD(_ref);
   LOG_VARD(_minimumTies);
   LOG_VARD(_failWhenMinTiePointsNotFound);
   LOG_VARD(_logWarningWhenRequirementsNotFound);
+}
+
+void RubberSheet::setCriteria(const QStringList& criteria)
+{
+  LOG_VARD(criteria.size());
+
+  _criteria.reset();
+  if (!criteria.isEmpty())
+  {
+    _criteria.reset(new OrCriterion());
+    for (int i = 0; i < criteria.size(); i++)
+    {
+      const QString critName = criteria.at(i);
+      if (!critName.trimmed().isEmpty())
+      {
+        LOG_VART(critName);
+        ElementCriterionPtr crit =
+          std::shared_ptr<ElementCriterion>(
+            Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
+        _criteria->addCriterion(crit);
+      }
+    }
+  }
 }
 
 void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
@@ -142,31 +175,107 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
 
 void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
 {
-  if (_maxAllowedWays != -1 && map->getWayCount() > _maxAllowedWays)
+  if (!_criteria)
   {
-    LOG_WARN(
-      "Skipping rubber sheeting of map having " <<
-      StringUtils::formatLargeNumber(map->getWayCount()) << " ways out of a " <<
-      StringUtils::formatLargeNumber(_maxAllowedWays) <<
-      " maximum allowed for rubber sheeting.");
-    return;
+    // check our way limit first
+    if (_maxAllowedWays != -1 && map->getWayCount() > _maxAllowedWays)
+    {
+      LOG_WARN(
+        "Skipping rubber sheeting of map having " <<
+        StringUtils::formatLargeNumber(map->getWayCount()) << " ways out of a " <<
+        StringUtils::formatLargeNumber(_maxAllowedWays) <<
+        " maximum allowed for rubber sheeting.");
+      return;
+    }
+
+    // no filtering criteria, so rubbersheet everything
+    _calcAndApplyTransform(map);
   }
   else
   {
-    LOG_INFO(
-      "Proceeding to rubber sheet map having " <<
-      StringUtils::formatLargeNumber(map->getWayCount()) << " ways out of a " <<
-      StringUtils::formatLargeNumber(_maxAllowedWays) << " maximum allowed for rubber sheeting.");
+    // rubbersheet a filtered subset of the input
+    _filterCalcAndApplyTransform(map);
   }
-
-  std::shared_ptr<OGRSpatialReference> oldSrs = _projection;
-  calculateTransform(map);
-  _projection = oldSrs;
-
-  applyTransform(map);
 }
 
-void RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
+bool RubberSheet::_calcAndApplyTransform(OsmMapPtr& map)
+{
+  LOG_INFO(
+    "Rubber sheeting map having " <<
+    StringUtils::formatLargeNumber(map->getWayCount()) << " ways out of a " <<
+    StringUtils::formatLargeNumber(_maxAllowedWays) << " maximum allowed for rubber sheeting.");
+
+  std::shared_ptr<OGRSpatialReference> oldSrs = _projection;
+  bool success = calculateTransform(map);
+  _projection = oldSrs;
+
+  if (success)
+  {
+    success = applyTransform(map);
+  }
+
+  return success;
+}
+
+void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
+{
+  // Filtering out potentially multiple feature types here. Not sure if it would be beneficial to
+  // rubbersheet each type separately...
+  LOG_DEBUG("Filtering map before rubbersheeting...");
+
+  _projection = map->getProjection();
+
+  LOG_VARD(_criteria->toString());
+  LOG_VARD(NotCriterionPtr(new NotCriterion(_criteria)));
+
+  // copy out elements not meeting filter criteria into one map
+  OsmMapPtr toNotModify(new OsmMap());
+  CopyMapSubsetOp mapCopier1(map, NotCriterionPtr(new NotCriterion(_criteria)));
+  mapCopier1.apply(toNotModify);
+  LOG_DEBUG(
+    "Element count for map not being modified: " <<
+    StringUtils::formatLargeNumber(toNotModify->getElementCount()));
+
+  // copy out element meeting filter criteria into another map
+  OsmMapPtr toModify(new OsmMap());
+  CopyMapSubsetOp mapCopier2(map, _criteria);
+  mapCopier2.apply(toModify);
+  LOG_DEBUG(
+    "Element count for map being modified: " <<
+    StringUtils::formatLargeNumber(toModify->getElementCount()));
+
+  // check our way limit first
+  if (_maxAllowedWays != -1 && toModify->getWayCount() > _maxAllowedWays)
+  {
+    LOG_WARN(
+      "Skipping rubber sheeting of map having " <<
+      StringUtils::formatLargeNumber(toModify->getWayCount()) << " ways out of a " <<
+      StringUtils::formatLargeNumber(_maxAllowedWays) << " maximum allowed for rubber sheeting.");
+    return;
+  }
+
+  // run the rubbersheeting on the second map
+  if (_calcAndApplyTransform(toModify))
+  {
+    // possibly reduce some memory consumption
+    map.reset();
+
+    if (_projection.get() != 0)
+    {
+      MapProjector::project(toNotModify, _projection);
+      MapProjector::project(toModify, _projection);
+    }
+
+    // append the second map back to the first map to be the final map
+    toNotModify->append(toModify, true);
+    map = toNotModify;
+    LOG_DEBUG(
+      "Element count for result map: " <<
+      StringUtils::formatLargeNumber(toNotModify->getElementCount()));
+  }
+}
+
+bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
@@ -182,7 +291,7 @@ void RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
     {
       LOG_INFO(msg);
     }
-    return;
+    return false;
   }
 
   if (_projection.get() != 0)
@@ -218,6 +327,8 @@ void RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
         StringUtils::formatLargeNumber(nm.size()) << " nodes...");
     }
   }
+
+  return true;
 }
 
 std::shared_ptr<DataFrame> RubberSheet::_buildDataFrame(Status s) const
@@ -332,7 +443,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   return bestCandidate;
 }
 
-void RubberSheet::calculateTransform(std::shared_ptr<OsmMap>& map)
+bool RubberSheet::calculateTransform(std::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
@@ -340,10 +451,10 @@ void RubberSheet::calculateTransform(std::shared_ptr<OsmMap>& map)
   MapProjector::projectToPlanar(_map);
   _projection = _map->getProjection();
 
-  _findTies();
+  return _findTies();
 }
 
-void RubberSheet::_findTies()
+bool RubberSheet::_findTies()
 {
   _nm.setMap(_map);
   // The search radius is two times the max circular error which handles if
@@ -353,7 +464,7 @@ void RubberSheet::_findTies()
   int ctr = 0;
 
   std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
-  // go through all the intersections w/ 2 or more roads intersecting
+  // go through all the intersections w/ 2 or more ways intersecting
   for (NodeToWayMap::const_iterator it = n2w->begin(); it != n2w->end(); ++it)
   {
     long nid = it->first;
@@ -404,14 +515,6 @@ void RubberSheet::_findTies()
 
   sort(_finalPairs.begin(), _finalPairs.end(), compareMatches);
 
-  QStringList t;
-  t << "amenity=cafe";
-  t << "highway=stop";
-  t << "amenity=place_of_worship";
-  t << "amenity=parking";
-  t << "amenity=toilets";
-  t << "amenity=bench";
-
   set<long> touched;
   LOG_DEBUG("Found " << _finalPairs.size() << " potential tie points.");
 
@@ -425,14 +528,6 @@ void RubberSheet::_findTies()
     {
       if (_finalPairs[i].p > 0.5)
       {
-        if (_debug)
-        {
-          QString k = t[i % t.size()].split("=")[0];
-          QString v = t[i % t.size()].split("=")[1];
-
-          n1->getTags()[k] = v;
-          n2->getTags()[k] = v;
-        }
         Tie t;
         t.c1 = n1->toCoordinate();
         t.c2 = n2->toCoordinate();
@@ -511,7 +606,11 @@ void RubberSheet::_findTies()
     _interpolator1to2.reset();
     _interpolator2to1.reset();
     _interpolatorClassName.clear();
+
+    return false;
   }
+
+  return true;
 }
 
 const RubberSheet::Match& RubberSheet::_findMatch(long nid1, long nid2)
@@ -566,8 +665,8 @@ Coordinate RubberSheet::_translate(const Coordinate& c, Status s)
   return Coordinate(c.x + (*delta)[0], c.y + (*delta)[1]);
 }
 
-void RubberSheet::_writeInterpolator(const std::shared_ptr<const Interpolator>& interpolator, QIODevice& os)
-  const
+void RubberSheet::_writeInterpolator(
+  const std::shared_ptr<const Interpolator>& interpolator, QIODevice& os) const
 {
   // this could be modified to write an empty or null interpolator if needed.
   if (!interpolator)

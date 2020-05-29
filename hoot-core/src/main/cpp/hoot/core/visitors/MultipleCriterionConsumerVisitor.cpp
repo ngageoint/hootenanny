@@ -39,7 +39,6 @@ _negateCriteria(false),
 _chainCriteria(false),
 _configureChildren(true)
 {
-
 }
 
 void MultipleCriterionConsumerVisitor::addCriterion(const ElementCriterionPtr& crit)

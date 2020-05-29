@@ -425,6 +425,11 @@ int ConflateCmd::runSimple(QStringList& args)
 
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
+    // By default rubbersheeting has no filters. When conflating, we need to add some.
+    conf().set(
+      ConfigOptions::getRubberSheetElementCriteriaKey(),
+      ConfigOptions().getConflateRubberSheetElementCriteria());
+
     // apply any user specified pre-conflate operations
     LOG_STATUS("Running pre-conflate operations...");
     QElapsedTimer timer;

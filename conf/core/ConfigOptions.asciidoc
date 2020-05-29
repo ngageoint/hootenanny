@@ -770,6 +770,7 @@ List of operations to run in the conflate command after data is conflated, but b
 ** `hoot::RemoveRoundabouts`
 ** `hoot::MapCleaner`
 ** `hoot::HighwayCornerSplitter`
+** `hoot::RubberSheet`
 
 Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
 about the available operations.
@@ -801,6 +802,15 @@ other situations when the relationship is not clear. Valid values are between 0.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== conflate.rubber.sheet.element.criteria
+
+* Data Type: list
+* Default Value:
+** `hoot::LinearWaterwayCriterion`
+** `hoot::PowerLineCriterion`
+
+TODO
 
 === conflate.stats.types
 
@@ -4022,6 +4032,13 @@ with attribute.conflation.allow.reviews.by.score.
 If set to true, then debug symbols will be added to nodes and additional tags will be added to
 matched nodes. This is a destructive operation that is only useful when debugging and should not
 be used during serious conflation.
+
+=== rubber.sheet.element.criteria
+
+* Data Type: list
+* Default Value: ``
+
+TODO
 
 === rubber.sheet.fail.when.minimum.tie.points.not.found
 

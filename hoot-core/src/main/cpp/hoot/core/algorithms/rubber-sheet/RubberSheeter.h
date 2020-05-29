@@ -51,7 +51,6 @@ public:
    * @param output the rubber sheeted combined output
    */
   void rubberSheet(const QString& input1, const QString& input2, const QString& output);
- 
 };
 
 }

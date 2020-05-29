@@ -105,7 +105,8 @@ vector<long> ElementIdsVisitor::_findCloseNodes(const ConstOsmMapPtr& map,
 }
 
 vector<long> ElementIdsVisitor::_findCloseWays(const ConstOsmMapPtr& map,
-                                               ConstWayPtr refWay, Meters maxDistance, bool addError)
+                                               ConstWayPtr refWay, Meters maxDistance,
+                                               bool addError)
 {
   return map->getIndex().findWayNeighbors(refWay, maxDistance, addError);
 }
