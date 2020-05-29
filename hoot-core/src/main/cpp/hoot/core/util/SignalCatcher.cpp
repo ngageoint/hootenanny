@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SignalCatcher.h"
@@ -39,18 +39,11 @@
 namespace hoot
 {
 
-std::shared_ptr<SignalCatcher> SignalCatcher::_instance;
-
-SignalCatcher::SignalCatcher()
-  : _defaultSet(false)
+SignalCatcher& SignalCatcher::getInstance()
 {
-}
-
-std::shared_ptr<SignalCatcher> SignalCatcher::getInstance()
-{
-  if (!SignalCatcher::_instance)
-    SignalCatcher::_instance.reset(new SignalCatcher());
-  return SignalCatcher::_instance;
+  //  Local static singleton instance
+  static SignalCatcher instance;
+  return instance;
 }
 
 void SignalCatcher::registerDefaultHandlers()

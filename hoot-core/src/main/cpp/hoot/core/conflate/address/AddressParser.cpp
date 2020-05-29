@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddressParser.h"
 
@@ -286,8 +286,8 @@ bool AddressParser::_isParseableAddressFromComponents(const Tags& tags, QString&
                                                       QString& street) const
 {
   // we only require a valid street address...no other higher order parts, like city, state, etc.
-  houseNum = AddressTagKeys::getInstance()->getAddressTagValue(tags, "house_number");
-  street = AddressTagKeys::getInstance()->getAddressTagValue(tags, "street").toLower();
+  houseNum = AddressTagKeys::getInstance().getAddressTagValue(tags, "house_number");
+  street = AddressTagKeys::getInstance().getAddressTagValue(tags, "street").toLower();
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
     LOG_TRACE("Found address from components: " << houseNum << ", " << street << ".");
@@ -393,14 +393,14 @@ QSet<QString> AddressParser::_parseAddressFromComponents(const Tags& tags, QStri
     {
       QString parsedAddress = houseNum + " ";
       const QString streetPrefix =
-        AddressTagKeys::getInstance()->getAddressTagValue(tags, "street_prefix");
+        AddressTagKeys::getInstance().getAddressTagValue(tags, "street_prefix");
       if (!streetPrefix.isEmpty())
       {
         parsedAddress += streetPrefix + " ";
       }
       parsedAddress += street;
       const QString streetSuffix =
-        AddressTagKeys::getInstance()->getAddressTagValue(tags, "street_suffix");
+        AddressTagKeys::getInstance().getAddressTagValue(tags, "street_suffix");
       if (!streetSuffix.isEmpty())
       {
         parsedAddress += " " + streetPrefix;
@@ -422,7 +422,7 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
 
   //let's always look in the name field; arguably, we could look in all of them instead of just
   //one...
-  QSet<QString> additionalTagKeys = AddressTagKeys::getInstance()->getAdditionalTagKeys();
+  QSet<QString> additionalTagKeys = AddressTagKeys::getInstance().getAdditionalTagKeys();
   additionalTagKeys = additionalTagKeys.unite(QSet<QString>::fromList(tags.getNameKeys()));
   LOG_VART(additionalTagKeys);
 
@@ -450,7 +450,7 @@ QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& ho
 
   // look for a full address tag first
   QString fullAddress =
-    AddressTagKeys::getInstance()->getAddressTagValue(element.getTags(), "full_address");
+    AddressTagKeys::getInstance().getAddressTagValue(element.getTags(), "full_address");
   LOG_VART(fullAddress);
   if (fullAddress.isEmpty())
   {

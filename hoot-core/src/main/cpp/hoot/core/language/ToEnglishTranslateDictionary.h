@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TO_ENGLISH_TRANSLATE_DICTIONARY_H
@@ -51,16 +51,14 @@ class ToEnglishTranslateDictionary
 {
 public:
 
-  ~ToEnglishTranslateDictionary();
-
   static ToEnglishTranslateDictionary& getInstance();
 
   const QMap<QString, QStringList>& getTable() { return _translations; }
 
   void load(const QString& path);
 
-  Transliterator* getTransliterator() const { return _transliterator; }
-  Transliterator* getTitler() const { return _titler; }
+  std::shared_ptr<Transliterator> getTransliterator() const { return _transliterator; }
+  std::shared_ptr<Transliterator> getTitler() const { return _titler; }
 
   bool getFromTransliterationCache(const QString& originalText, QString& transliteratedText);
   void insertIntoTransliterationCache(const QString& originalText, const QString& transliteratedText);
@@ -69,17 +67,21 @@ public:
 
 private:
 
-  ToEnglishTranslateDictionary();
-
-  static std::shared_ptr<ToEnglishTranslateDictionary> _theInstance;
+  void _loadTags(boost::property_tree::ptree& tree);
 
   QMap<QString, QStringList> _translations;
   std::shared_ptr<Tgs::LruCache<QString, QString>> _transliterationCache;
-  Transliterator* _transliterator;
-  Transliterator* _titler;
+  std::shared_ptr<Transliterator> _transliterator;
+  std::shared_ptr<Transliterator> _titler;
   bool _transliterationCachingEnabled;
 
-  void _loadTags(boost::property_tree::ptree& tree);
+  ToEnglishTranslateDictionary();
+  /** Default destructor */
+  ~ToEnglishTranslateDictionary() = default;
+  /** Delete copy constructor and assignment operator */
+  ToEnglishTranslateDictionary(const ToEnglishTranslateDictionary&) = delete;
+  ToEnglishTranslateDictionary& operator=(const ToEnglishTranslateDictionary&) = delete;
+
 };
 
 }

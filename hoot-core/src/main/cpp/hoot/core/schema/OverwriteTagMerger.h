@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/schema/TagMerger.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -38,7 +37,7 @@ namespace hoot
  * Combine all names in a fashion where no unique names will be lost and then favor t1 tags over
  * t2 tags. See TagComparator::overwriteMerge.
  */
-class OverwriteTagMerger : public TagMerger, public Configurable
+class OverwriteTagMerger : public TagMerger
 {
 public:
 

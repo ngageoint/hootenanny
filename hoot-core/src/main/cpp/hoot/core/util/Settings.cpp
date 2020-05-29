@@ -865,11 +865,11 @@ QString Settings::_replaceVariablesValue(QString value, std::set<QString> used) 
     int offset = 0;
     if (_dynamicRegex.indexIn(value, offset) >= 0)
     {
-      offset += _dynamicRegex.matchedLength();
       QString varStr = _dynamicRegex.capturedTexts()[0];
       QString subKey = _dynamicRegex.capturedTexts()[1];
       QString expanded = _replaceVariables(subKey, used);
       value.replace(varStr, expanded);
+      offset += expanded.length();
       done = false;
     }
   }

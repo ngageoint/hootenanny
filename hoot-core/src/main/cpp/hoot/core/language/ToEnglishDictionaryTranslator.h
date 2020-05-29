@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TO_ENGLISH_DICTIONARY_TRANSLATOR_H
@@ -107,7 +107,7 @@ private:
   static QSet<QString> _streetTypes;
   QRegExp _whiteSpace;
 
-  QString _transform(icu::Transliterator* t, const QString& input) const;
+  QString _transform(const std::shared_ptr<icu::Transliterator>& t, const QString& input) const;
 
   static void _readStreetTypes();
 };
