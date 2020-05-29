@@ -173,8 +173,6 @@ private:
     double score;
   };
 
-  MapProjector() {}
-
   static std::shared_ptr<MapProjector> _theInstance;
 
   static bool _angleLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
@@ -192,6 +190,13 @@ private:
   size_t _findBestScore(std::vector<PlanarTestResult>& results);
 
   static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
+
+  /** Default constructor/destructor */
+  MapProjector() = default;
+  ~MapProjector() = default;
+  /** Delete copy constructor and assignment operator */
+  MapProjector(const MapProjector&) = delete;
+  MapProjector& operator=(const MapProjector&) = delete;
 };
 
 class ReprojectCoordinateFilter : public geos::geom::CoordinateFilter
