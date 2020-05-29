@@ -115,11 +115,11 @@ void IntegerProgrammingSolver::solveBranchAndCut()
   try
   {
     //  Register a new SIGABRT signal handler to ignore it for this call only
-    SignalCatcher::getInstance()->registerHandler(SIGABRT, SIG_IGN);
+    SignalCatcher::getInstance().registerHandler(SIGABRT, SIG_IGN);
     //  This function can intermittently throw an exception that is heretofore unhandled
     result = glp_intopt(_lp, &iocp);
     //  Unregister the SIGABRT signal handler and use the hoot default
-    SignalCatcher::getInstance()->unregisterHandler(SIGABRT);
+    SignalCatcher::getInstance().unregisterHandler(SIGABRT);
   }
   catch (...)
   {
@@ -162,11 +162,11 @@ void IntegerProgrammingSolver::solveSimplex()
   try
   {
     //  Register a new SIGABRT signal handler to ignore it for this call only
-    SignalCatcher::getInstance()->registerHandler(SIGABRT, SIG_IGN);
+    SignalCatcher::getInstance().registerHandler(SIGABRT, SIG_IGN);
     //  This function can potentially throw an exception that is heretofore unhandled
     result = glp_simplex(_lp, &smcp);
     //  Unregister the SIGABRT signal handler and use the hoot default
-    SignalCatcher::getInstance()->unregisterHandler(SIGABRT);
+    SignalCatcher::getInstance().unregisterHandler(SIGABRT);
   }
   catch (...)
   {

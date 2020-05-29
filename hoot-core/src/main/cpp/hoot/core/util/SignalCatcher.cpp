@@ -39,18 +39,11 @@
 namespace hoot
 {
 
-std::shared_ptr<SignalCatcher> SignalCatcher::_instance;
-
-SignalCatcher::SignalCatcher()
-  : _defaultSet(false)
+SignalCatcher& SignalCatcher::getInstance()
 {
-}
-
-std::shared_ptr<SignalCatcher> SignalCatcher::getInstance()
-{
-  if (!SignalCatcher::_instance)
-    SignalCatcher::_instance.reset(new SignalCatcher());
-  return SignalCatcher::_instance;
+  //  Local static singleton instance
+  static SignalCatcher instance;
+  return instance;
 }
 
 void SignalCatcher::registerDefaultHandlers()
