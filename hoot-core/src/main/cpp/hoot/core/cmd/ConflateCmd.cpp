@@ -66,6 +66,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 
 // Standard
 #include <fstream>
@@ -293,6 +294,7 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     _disableRoundaboutRemoval();
   }
+
   if (_filterOps)
   {
     // Let's see if we can remove any ops in the configuration that will have no effect on the
