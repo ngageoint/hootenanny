@@ -57,13 +57,13 @@ class RubberSheetTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RubberSheetTest);
   // TODO: re-enable
-//  CPPUNIT_TEST(runSimpleTest);
-//  CPPUNIT_TEST(runIoTest);
-//  CPPUNIT_TEST(runCalculateTiePointDistancesTest);
-//  CPPUNIT_TEST(runCalculateTiePointDistancesNotEnoughTiePointsTest1);
-//  CPPUNIT_TEST(runCalculateTiePointDistancesNotEnoughTiePointsTest2);
+  CPPUNIT_TEST(runSimpleTest);
+  CPPUNIT_TEST(runIoTest);
+  CPPUNIT_TEST(runCalculateTiePointDistancesTest);
+  CPPUNIT_TEST(runCalculateTiePointDistancesNotEnoughTiePointsTest1);
+  CPPUNIT_TEST(runCalculateTiePointDistancesNotEnoughTiePointsTest2);
   //CPPUNIT_TEST(runFilterTest1);
-  CPPUNIT_TEST(runFilterTest2);
+  //CPPUNIT_TEST(runFilterTest2);
   CPPUNIT_TEST_SUITE_END();
 
 public:

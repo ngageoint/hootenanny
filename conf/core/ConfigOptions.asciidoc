@@ -770,7 +770,6 @@ List of operations to run in the conflate command after data is conflated, but b
 ** `hoot::RemoveRoundabouts`
 ** `hoot::MapCleaner`
 ** `hoot::HighwayCornerSplitter`
-** `hoot::RubberSheet`
 
 Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
 about the available operations.
