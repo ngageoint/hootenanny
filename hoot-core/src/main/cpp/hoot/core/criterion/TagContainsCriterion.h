@@ -47,7 +47,7 @@ public:
 
   static std::string className() { return "hoot::TagContainsCriterion"; }
 
-  TagContainsCriterion() {}
+  TagContainsCriterion();
   TagContainsCriterion(QString key, QString valueSubstring);
   TagContainsCriterion(QStringList keys, QStringList valueSubstrings);
 

@@ -37,6 +37,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, TagContainsCriterion)
 
+TagContainsCriterion::TagContainsCriterion() :
+_caseSensitive(false)
+{
+}
+
 TagContainsCriterion::TagContainsCriterion(QString key, QString valueSubstring) :
 _caseSensitive(false)
 {
