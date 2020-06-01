@@ -78,7 +78,8 @@ Tags BuildingRelationMemberTagMerger::mergeTags(
   Tags constituentBuildingTagsCopy = constituentBuildingTags;
 
   Tags names;
-  TagComparator::getInstance().mergeNames(relationTagsCopy, constituentBuildingTagsCopy, names);
+  TagComparator::getInstance().mergeNames(relationTagsCopy, constituentBuildingTagsCopy, names,
+                                          QStringList(), _caseSensitive);
   mergedTags.set(names);
   LOG_VART(mergedTags);
 

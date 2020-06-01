@@ -29,7 +29,6 @@
 
 #include <hoot/core/schema/TagMerger.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -40,7 +39,7 @@ namespace hoot
  * key are encountered. In the case where duplicated types have the same level of specificity, the
  * duplicated types are arbitrarily placed in an "alt_types" tag.
  */
-class PreserveTypesTagMerger : public TagMerger, public Configurable
+class PreserveTypesTagMerger : public TagMerger
 {
 public:
 

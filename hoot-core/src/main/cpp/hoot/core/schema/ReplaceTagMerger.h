@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/schema/TagMerger.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -37,7 +36,7 @@ namespace hoot
 /**
  * Completely replaces tags in a feature
  */
-class ReplaceTagMerger : public TagMerger, public Configurable
+class ReplaceTagMerger : public TagMerger
 {
 public:
 

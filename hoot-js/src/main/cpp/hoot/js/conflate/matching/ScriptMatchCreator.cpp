@@ -581,7 +581,7 @@ public:
     }
     if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
     {
-      MemoryUsageChecker::getInstance()->check();
+      MemoryUsageChecker::getInstance().check();
     }
   }
 

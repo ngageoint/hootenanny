@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OverwriteTagMerger.h"
 
@@ -46,16 +46,17 @@ Tags OverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /
 {
   if (_swap)
   {
-    return TagComparator::getInstance().overwriteMerge(t2, t1, _overwriteExcludeTagKeys);
+    return TagComparator::getInstance().overwriteMerge(t2, t1, _overwriteExcludeTagKeys, _caseSensitive);
   }
   else
   {
-    return TagComparator::getInstance().overwriteMerge(t1, t2, _overwriteExcludeTagKeys);
+    return TagComparator::getInstance().overwriteMerge(t1, t2, _overwriteExcludeTagKeys, _caseSensitive);
   }
 }
 
 void OverwriteTagMerger::setConfiguration(const Settings& conf)
 {
+  TagMerger::setConfiguration(conf);
   ConfigOptions config = ConfigOptions(conf);
   setOverwriteExcludeTagKeys(config.getTagMergerOverwriteExclude());
 }

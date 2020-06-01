@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef _HOOT_FACTORY_H
@@ -102,8 +102,6 @@ class Factory
 {
 public:
 
-  virtual ~Factory();
-
   static Factory& getInstance();
 
   /**
@@ -175,13 +173,16 @@ public:
 
 private:
 
-  Factory();
-
-  static Factory* _theInstance;
-
   QMutex _mutex;
 
   std::map<std::string, std::shared_ptr<ObjectCreator>> _creators;
+
+  /** Default constructor/destructor */
+  Factory() = default;
+  ~Factory() = default;
+  /** Delete copy constructor and assignment operator */
+  Factory(const Factory&) = delete;
+  Factory& operator=(const Factory&) = delete;
 };
 
 template<class Base, class T>

@@ -54,6 +54,7 @@ _skipTagKeys(skipTagKeys)
 
 void PreserveTypesTagMerger::setConfiguration(const Settings& conf)
 {
+  TagMerger::setConfiguration(conf);
   ConfigOptions config = ConfigOptions(conf);
   setOverwriteExcludeTagKeys(config.getTagMergerOverwriteExclude());
 }
@@ -79,10 +80,10 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
 
   // handle name and text tags in the standard overwrite merge fashion
   //const QStringList excludeKeysAsList = QStringList::fromSet(_skipTagKeys);
-  TagComparator::getInstance().mergeNames(
-    tagsToOverwriteWith, tagsToBeOverwritten, result, _overwriteExcludeTagKeys);
-  TagComparator::getInstance().mergeText(
-    tagsToOverwriteWith, tagsToBeOverwritten, result, _overwriteExcludeTagKeys);
+  TagComparator::getInstance().mergeNames(tagsToOverwriteWith, tagsToBeOverwritten, result,
+                                          _overwriteExcludeTagKeys, _caseSensitive);
+  TagComparator::getInstance().mergeText(tagsToOverwriteWith, tagsToBeOverwritten, result,
+                                         _overwriteExcludeTagKeys, _caseSensitive);
   LOG_TRACE("Tags after name/text merging: " << result);
 
   // retain any previously set alt_types

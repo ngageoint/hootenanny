@@ -134,7 +134,8 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
           if (_strictTagMatching)
           {
             nonNameTagsIdentical =
-              TagComparator::getInstance().nonNameTagsExactlyMatch(w->getTags(), w2->getTags());
+              TagComparator::getInstance().nonNameTagsExactlyMatch(w->getTags(), w2->getTags(),
+                                                                   ConfigOptions().getDuplicateNameCaseSensitive());
           }
 
           if (nonNameTagsIdentical || !_strictTagMatching)

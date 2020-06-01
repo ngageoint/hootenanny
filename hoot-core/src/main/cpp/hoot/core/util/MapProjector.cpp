@@ -53,8 +53,6 @@ namespace hoot
 
 int MapProjector::logWarnCount = 0;
 
-std::shared_ptr<MapProjector> MapProjector::_theInstance;
-
 class DisableCplErrors
 {
 public:
@@ -113,11 +111,9 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
 
 MapProjector& MapProjector::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new MapProjector());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static MapProjector instance;
+  return instance;
 }
 
 bool MapProjector::_angleLessThan(const MapProjector::PlanarTestResult& p1,

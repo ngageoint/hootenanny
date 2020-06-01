@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SIGNALCATCHER_H
@@ -46,7 +46,7 @@ class SignalCatcher
 {
 public:
 
-  static std::shared_ptr<SignalCatcher> getInstance();
+  static SignalCatcher& getInstance();
 
   void registerDefaultHandlers();
 
@@ -58,16 +58,19 @@ public:
 
 private:
 
-  SignalCatcher();
+  /** Default constructor/destructor */
+  SignalCatcher() = default;
+  ~SignalCatcher() = default;
+  /** Delete copy constructor and assignment operator */
+  SignalCatcher(const SignalCatcher&) = delete;
+  SignalCatcher& operator=(const SignalCatcher&) = delete;
 
   static void default_handler(int sig);
   static void terminateHandler();
 
-  static std::shared_ptr<SignalCatcher> _instance;
-
   std::map<unsigned int, std::stack<__sighandler_t>> _handlers;
 
-  bool _defaultSet;
+  bool _defaultSet = false;
 
 };
 

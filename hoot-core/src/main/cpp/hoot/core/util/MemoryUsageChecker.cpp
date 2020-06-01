@@ -28,6 +28,7 @@
 #include "MemoryUsageChecker.h"
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
@@ -37,42 +38,27 @@
 namespace hoot
 {
 
-MemoryUsageCheckerPtr MemoryUsageChecker::_theInstance;
-
-MemoryUsageChecker::MemoryUsageChecker() :
-_enabled(true),
-_notificationThreshold(0.95),
-_loggedPhysicalMemNotification(false),
-_loggedVirtualMemNotification(false)
+MemoryUsageChecker::MemoryUsageChecker()
+  : _enabled(ConfigOptions().getMemoryUsageCheckerEnabled()),
+    _notificationThreshold(0.95),
+    _loggedPhysicalMemNotification(false),
+    _loggedVirtualMemNotification(false)
 {
-  setConfiguration(conf());
-}
-
-const MemoryUsageCheckerPtr& MemoryUsageChecker::getInstance()
-{
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new MemoryUsageChecker());
-  }
-  return _theInstance;
-}
-
-void MemoryUsageChecker::setConfiguration(const Settings& conf)
-{
-  if (this == _theInstance.get())
-  {
-    throw HootException("Please do not set the configuration on the singleton instance.");
-  }
-
-  ConfigOptions opts(conf);
-  _enabled = opts.getMemoryUsageCheckerEnabled();
-  const int thresholdVal = opts.getMemoryUsageCheckerThreshold();
+  const int thresholdVal = ConfigOptions().getMemoryUsageCheckerThreshold();
   if (thresholdVal < 1 || thresholdVal > 100)
   {
-    throw IllegalArgumentException(
-      "MemoryUsageChecker notification threshold must a percentage value from 1 to 100.");
+    //  Use the default 95% and log a warning
+    LOG_WARN("MemoryUsageChecker notification threshold must a percentage value from 1 to 100.");
   }
-  _notificationThreshold = (double)thresholdVal / 100.0;
+  else
+    _notificationThreshold = (double)thresholdVal / 100.0;
+}
+
+MemoryUsageChecker& MemoryUsageChecker::getInstance()
+{
+  //  Local static singleton instance
+  static MemoryUsageChecker instance;
+  return instance;
 }
 
 void MemoryUsageChecker::check()

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSM_CHANGESET_FILE_WRITER_FACTORY_H
 #define OSM_CHANGESET_FILE_WRITER_FACTORY_H
@@ -63,9 +63,12 @@ public:
 
 private:
 
-  OsmChangesetFileWriterFactory();
-
-  static std::shared_ptr<OsmChangesetFileWriterFactory> _theInstance;
+  /** Default constructor/destructor */
+  OsmChangesetFileWriterFactory() = default;
+  ~OsmChangesetFileWriterFactory() = default;
+  /** Delete copy constructor and assignment operator */
+  OsmChangesetFileWriterFactory(const OsmChangesetFileWriterFactory&) = delete;
+  OsmChangesetFileWriterFactory& operator=(const OsmChangesetFileWriterFactory&) = delete;
 };
 
 }

@@ -42,8 +42,6 @@
 namespace hoot
 {
 
-std::shared_ptr<MultiaryUtilities> MultiaryUtilities::_theInstance;
-
 void MultiaryUtilities::conflate(OsmMapPtr map)
 {
   MatchFactory& matchFactory = MatchFactory::getInstance();
@@ -207,11 +205,9 @@ SearchBoundsCalculatorPtr MultiaryUtilities::getBoundsCalculator()
 
 MultiaryUtilities& MultiaryUtilities::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new MultiaryUtilities());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static MultiaryUtilities instance;
+  return instance;
 }
 
 }
