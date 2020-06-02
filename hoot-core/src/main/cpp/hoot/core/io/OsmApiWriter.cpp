@@ -170,7 +170,7 @@ bool OsmApiWriter::apply()
     if (_allThreadsFailed())
     {
       _changeset.failRemainingChangeset();
-      continue;
+      break;
     }
     //  Only queue up enough work to keep all the threads busy with times QUEUE_SIZE_MULTIPLIER
     //  so that results can come back and update the changeset for more atomic changesets instead
@@ -211,7 +211,7 @@ bool OsmApiWriter::apply()
         //  Indicate to the worker threads that there is work to be done
         _startWork();
         //  Allow time for the worker threads to complete some work
-        this_thread::yield();
+        _yield();
       }
     }
     else
@@ -219,7 +219,7 @@ bool OsmApiWriter::apply()
       //  Indicate to the worker threads that there is work to be done
       _startWork();
       //  Allow time for the worker threads to complete some work
-      this_thread::yield();
+      _yield();
     }
     //  Show the progress
     if (_showProgress)
@@ -313,7 +313,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           //  Reset the network request object and sleep it off
           request = createNetworkRequest(true);
           LOG_DEBUG("Bad changeset ID. Resetting network request object.");
-          this_thread::yield();
+          _yield();
         }
         //  Try a new create changeset request
         continue;
@@ -362,9 +362,17 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           stop_thread = true;
           continue;
         }
-        //  When the current changeset is nearing the 50k max (or the specified max), close the changeset
+        //  When the changeset eclipses the 10k max, the API automatically closes the changeset,
+        //  reset the id and continue
+        if (changesetSize >= _maxChangesetSize)
+        {
+          //  No need to call _closeChangeset() because it was closed by the API
+          //  Signal for a new changeset to be created
+          id = -1;
+        }
+        //  When the changeset is nearing the 10k max (or the specified max), close the changeset
         //  otherwise keep it open and go again
-        if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
+        else if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
         {
           //  Close the changeset
           _closeChangeset(request, id);
@@ -373,7 +381,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         }
         //  Throttle the input rate if desired
         if (_throttleWriters && !_changeset.isDone())
-          this_thread::sleep_for(chrono::seconds(_throttleTime));
+          _yield(_throttleTime * 1000);
       }
       else
       {
@@ -453,7 +461,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             //  push it back on the queue and give the API a break
             _pushChangesets(workInfo);
             //  Sleep the thread
-            this_thread::sleep_for(chrono::milliseconds(100));
+            _yield();
           }
           break;
         default:
@@ -509,7 +517,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         //  Set the status to idle
         _updateThreadStatus(index, ThreadStatus::Idle);
         //  Yield the thread
-        this_thread::yield();
+        _yield();
       }
     }
   }
@@ -520,6 +528,15 @@ void OsmApiWriter::_changesetThreadFunc(int index)
   ThreadStatus status = _getThreadStatus(index);
   if (status != ThreadStatus::Failed && status != ThreadStatus::Unknown)
     _updateThreadStatus(index, ThreadStatus::Completed);
+}
+
+void OsmApiWriter::_yield(int milliseconds)
+{
+  //  Sleep for the specified number of milliseconds
+  if (milliseconds != 10)
+    std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+  else
+    std::this_thread::yield();
 }
 
 void OsmApiWriter::setConfiguration(const Settings& conf)

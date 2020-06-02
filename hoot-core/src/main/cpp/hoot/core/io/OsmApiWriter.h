@@ -241,6 +241,8 @@ private:
    * @param index Index into the thread status vector to report the status
    */
   void _changesetThreadFunc(int index);
+  /** Yield or sleep this thread */
+  void _yield(int milliseconds = 10);
   /**
    * @brief createNetworkRequest Create a network request object
    * @param requiresAuthentication Authentication flag set to true will cause OAuth credentials,

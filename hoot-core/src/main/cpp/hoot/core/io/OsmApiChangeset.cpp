@@ -2268,8 +2268,9 @@ void XmlChangeset::failRemainingElements(const ChangesetElementMap& elements)
   for (ChangesetElementMap::const_iterator it = elements.begin(); it != elements.end(); ++it)
   {
     ChangesetElementPtr element = it->second;
-    //  Anything that isn't finalized is now failed
-    if (element->getStatus() != ChangesetElement::Finalized)
+    //  Anything that isn't finalized or failed is now failed
+    ChangesetElement::ElementStatus status = element->getStatus();
+    if (status != ChangesetElement::Finalized && status != ChangesetElement::Failed)
     {
       element->setStatus(ChangesetElement::Failed);
       ++_failedCount;
