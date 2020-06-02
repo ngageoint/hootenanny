@@ -845,19 +845,6 @@ QString Settings::_replaceStaticVariables(QString value) const
       offset += expanded.length();
       done = false;
     }
-//    if (_staticRegex.indexIn(value, offset) >= 0)
-//    {
-//      offset += _staticRegex.matchedLength();
-//      QString varStr = _staticRegex.capturedTexts()[0];
-//      QString subKey = _staticRegex.capturedTexts()[1];
-//      QString expanded;
-//      if (hasKey(subKey))
-//      {
-//        expanded = getString(subKey);
-//      }
-//      value.replace(varStr, expanded);
-//      done = false;
-//    }
   }
 
   return value;
@@ -887,15 +874,6 @@ QString Settings::_replaceVariablesValue(QString value, std::set<QString> used) 
       offset += expanded.length();
       done = false;
     }
-//    if (_dynamicRegex.indexIn(value, offset) >= 0)
-//    {
-//      QString varStr = _dynamicRegex.capturedTexts()[0];
-//      QString subKey = _dynamicRegex.capturedTexts()[1];
-//      QString expanded = _replaceVariables(subKey, used);
-//      value.replace(varStr, expanded);
-//      offset += expanded.length();
-//      done = false;
-//    }
   }
 
   return value;
