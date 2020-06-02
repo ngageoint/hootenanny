@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,7 +30,7 @@
 
     FCODE translations that are common for all products. Product specific FCODES go in the individual
     product "rules" scripts.
-    
+
     These can be used for BOTH import and export so the values need to be unique. Non-unique values go
     in the individual product rules scripts.
 */
@@ -234,7 +234,7 @@ fcodeCommon = {
       ['F_CODE','BA023','foreshore','yes'], // GGDM3/NAS7 Foreshore (Precise IHO)
       ['F_CODE','BA024','shoreline','yes'], // GGDM3/NAS7 SHORELINE
       ['F_CODE','BA030','place','island'], // Island
-      ['F_CODE','BA040','water','tidal'], // Tidal Water
+      ['F_CODE','BA040','tidal','yes'], // Tidal Water
       ['F_CODE','BA050','natural','beach'], // GGDM3/NAS7 Beach
       ['F_CODE','BB005','landuse','harbour'], // Harbor, Harbour
       ['F_CODE','BB008','harbour:waters','yes'], // GGDM3/NAS7 HARBOUR_WATERS

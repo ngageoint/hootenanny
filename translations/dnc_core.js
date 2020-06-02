@@ -624,11 +624,11 @@ dnc = {
       // Rules format:  ["test expression","output result"];
       // Note: t = tags, a = attrs and attrs can only be on the RHS
       var rulesList = [
-        ['t[\'radar:use\'] == \'early_warning\' && !(t.man_made == \'radar_station\')','t.man_made = \'radar_station\''],
-        ['t[\'cable:type\'] && !(t.cable)','t.cable = \'yes\';'],
-        ['t[\'tower:type\'] && !(t.man_made)','t.man_made = \'tower\''],
-        ['t.foreshore && !(t.tidal)','t.tidal = \'yes\'; t.natural = \'water\''],
-        ['t.water == \'tidal\' && !(t.natural)','t.natural = \'water\'']
+        ['t["radar:use"] == "early_warning" && !(t.man_made == "radar_station")','t.man_made = "radar_station"'],
+        ['t["cable:type"] && !(t.cable)','t.cable = "yes";'],
+        ['t["tower:type"] && !(t.man_made)','t.man_made = "tower"'],
+        ['t.foreshore && !(t.tidal)','t.tidal = "yes"; t.natural = "water"'],
+        ['t.tidal == "yes" && !(t.natural)','t.natural = "water"']
         // ["t.tidal && !(t.water)","t.natural = 'water'"]
       ];
 
@@ -871,7 +871,8 @@ dnc = {
       // Rules format:  ["test expression","output result"];
       // Note: t = tags, a = attrs and attrs can only be on the RHS
       var rulesList = [
-        ['t[\'radar:use\'] == \'early_warning\' && t.man_made == \'radar_station\'','delete t.man_made']
+        ['t["radar:use"] == "early_warning" && t.man_made == "radar_station"','delete t.man_made'],
+        ['t.water == "tidal"','t.tidal = "yes";delete t.water']
       ];
 
       dnc.dncPreRules = translate.buildComplexRules(rulesList);
@@ -1520,7 +1521,6 @@ dnc = {
     // Apply one2one rules
     // NOTE: This is a local function updates a structure of what got translated so we can undo it if needed
     // dnc.applyOne2OneModified(notUsedTags, attrs, dnc.lookup, transMap);
-    print('toOgr applyOne2One');
     translate.applyOne2One(notUsedTags, attrs, dnc.lookup, dnc.fcodeLookup,transMap);
 
     // Translate the XXX:2, XXX2, XXX:3 etc attributes

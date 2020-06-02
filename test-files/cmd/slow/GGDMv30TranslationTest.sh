@@ -31,7 +31,7 @@ COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
 ##### End of initial setup #####
 
 #  Jam all of the shapefiles into one OSM file
-hoot convert $HOOT_OPT -D schema.translation.script=$TRANS $inputDir/*.shp $outputDir/new_GGDMv30.osm # > tmp/GGDM30_to_OSM.txt
+hoot convert $HOOT_OPT -D schema.translation.script=$TRANS $inputDir/*.shp $outputDir/new_GGDMv30.osm  # > tmp/GGDM30_to_OSM.txt
 
 # Uncomment this to update the OSM file if you edit the shapefiles or the translation file.
 #cp $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm
@@ -42,7 +42,7 @@ hoot diff $HOOT_OPT --ignore-uuid $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.o
 
 # Make shapefiles from the new OSM file
 # NOTE: This assumes that outputDir does not have any shapefiles in it!
-hoot convert $HOOT_OPT -C Testing.conf -D schema.translation.script=$TRANS $outputDir/new_GGDMv30.osm $outputDir".shp"  # > tmp/GGDM30_to_GGDM.txt
+hoot convert $HOOT_OPT -C Testing.conf -D schema.translation.script=$TRANS $outputDir/new_GGDMv30.osm $outputDir".shp"   # > tmp/GGDM30_to_GGDM.txt
 
 ##### This set of tests: comparing the individual shapefiles works!
 # Make individual shapefiles from the new OSM file
