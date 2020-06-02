@@ -46,7 +46,8 @@ namespace hoot
 {
 
 CreatorDescription::CreatorDescription() :
-experimental()
+experimental(),
+baseFeatureType(BaseFeatureType::Unknown)
 {
 }
 
@@ -54,7 +55,8 @@ CreatorDescription::CreatorDescription(std::string className, QString descriptio
                                        bool experimental) :
 experimental(experimental),
 className(className),
-description(description)
+description(description),
+baseFeatureType(BaseFeatureType::Unknown)
 {
 }
 
