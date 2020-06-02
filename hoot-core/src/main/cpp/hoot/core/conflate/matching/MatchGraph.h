@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHGRAPH_H
 #define MATCHGRAPH_H
@@ -86,13 +86,14 @@ private:
 
   std::vector<ConstMatchPtr> _matches;
   bool _checkForConflicts;
-  /**
+
+  /*
    * An internal data structure to prevent users of the class from recompiling the boost graph
    * craziness.
    */
   std::shared_ptr<MatchGraphInternal> _d;
 
-  /**
+  /*
    * Invalidates the current graph.
    */
   void _resetGraph();

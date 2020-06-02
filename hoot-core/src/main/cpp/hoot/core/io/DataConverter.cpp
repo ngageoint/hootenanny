@@ -429,6 +429,19 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
       "OGR output...");
   }
 
+  // Set a config option so the translation script knows what the output format is
+  // For this, output format == file extension
+  // We are going to grab everything after the last "." in the output file name and use it as the file extension
+  QString outputFormat = "";
+  if (output.lastIndexOf(".") > -1)
+  {
+    outputFormat = output.right(output.size() - output.lastIndexOf(".") - 1).toLower();
+  }
+  conf().set(ConfigOptions::getOgrOutputFormatKey(), outputFormat);
+
+  LOG_DEBUG(conf().getString(ConfigOptions::getOgrOutputFormatKey()));
+
+
   // Translation for going to OGR is always required and happens in the writer itself. It is not to
   // be done with convert ops, so let's ignore any translation ops that were specified.
   _convertOps.removeAll(QString::fromStdString(SchemaTranslationOp::className()));

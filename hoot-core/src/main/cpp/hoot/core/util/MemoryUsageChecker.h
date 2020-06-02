@@ -28,15 +28,8 @@
 #ifndef MEMORY_USAGE_CHECKER_H
 #define MEMORY_USAGE_CHECKER_H
 
-// Hoot
-#include <hoot/core/util/Configurable.h>
-
 namespace hoot
 {
-
-class MemoryUsageChecker;
-
-typedef std::shared_ptr<MemoryUsageChecker> MemoryUsageCheckerPtr;
 
 /**
  * Utility for checking available memory (Singleton)
@@ -49,17 +42,12 @@ typedef std::shared_ptr<MemoryUsageChecker> MemoryUsageCheckerPtr;
  * logged based on what percentage the process memory is of that value instead of the total
  * available.
  */
-class MemoryUsageChecker : public Configurable
+class MemoryUsageChecker
 {
 
 public:
 
-  static const MemoryUsageCheckerPtr& getInstance();
-
-  /**
-   * @see Configurable
-   */
-  void setConfiguration(const Settings& conf);
+  static MemoryUsageChecker& getInstance();
 
   /**
    * Checks the available physical and virtual memory and logs a single message when it drops below
@@ -70,8 +58,11 @@ public:
 private:
 
   MemoryUsageChecker();
-
-  static MemoryUsageCheckerPtr _theInstance;
+  /** Default constructor/destructor */
+  ~MemoryUsageChecker() = default;
+  /** Delete copy constructor and assignment operator */
+  MemoryUsageChecker(const MemoryUsageChecker&) = delete;
+  MemoryUsageChecker& operator=(const MemoryUsageChecker&) = delete;
 
   bool _enabled;
   // memory usage percentage threshold above which a notification is logged

@@ -61,14 +61,11 @@ public:
   virtual void setConfiguration(const Settings& s);
 
   virtual void setMaxRelevantAngle(Radians r);
-
   /**
    * minSplitSize is not supported at this time.
    */
   virtual void setMinSplitSize(Meters minSplitSize);
-
   virtual void setHeadingDelta(Meters headingDelta);
-
   virtual void setSublineMatcher(const std::shared_ptr<SublineMatcher>& sm);
 
   virtual QString getDescription() const
@@ -125,7 +122,7 @@ private:
 
   void _insertElementIds(const std::vector<ConstWayPtr>& ways, std::set<ElementId>& elements) const;
 
-  /**
+  /*
    * ways.size() == reversed.size()
    * If reversed is true then the nodes in the corresponding way are reversed.
    */

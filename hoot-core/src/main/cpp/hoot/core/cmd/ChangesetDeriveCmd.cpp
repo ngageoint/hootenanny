@@ -123,7 +123,7 @@ public:
     ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl).create(output, input1, input2);
 
     LOG_STATUS(
-      "Changeset generated in " + StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+      "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

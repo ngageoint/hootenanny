@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LIB_POSTAL_INIT_H
 #define LIB_POSTAL_INIT_H
@@ -44,17 +44,18 @@ class LibPostalInit
 {
 public:
 
-  ~LibPostalInit();
-
-  static const LibPostalInitPtr& getInstance();
+  static LibPostalInit& getInstance();
 
 private:
 
-  LibPostalInit();
-
-  static LibPostalInitPtr _theInstance;
-
   QString _dataDir;
+
+  LibPostalInit();
+  ~LibPostalInit();
+  /** Delete copy constructor and assignment operator */
+  LibPostalInit(const LibPostalInit&) = delete;
+  LibPostalInit& operator=(const LibPostalInit&) = delete;
+
 };
 
 }

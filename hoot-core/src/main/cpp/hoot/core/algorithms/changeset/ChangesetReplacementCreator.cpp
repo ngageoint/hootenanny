@@ -87,7 +87,6 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
@@ -514,7 +513,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // load the ref dataset and crop to the specified aoi
   refMap = _loadRefMap(input1);
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
 
   const bool markMissing =
     ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren();
@@ -548,7 +547,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // load the sec dataset and crop to the specified aoi
   OsmMapPtr secMap = _loadSecMap(input2);
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
 
   if (markMissing)
   {
@@ -1351,7 +1350,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   MapProjector::projectToWgs84(doughMap);
   LOG_VART(doughMap->getElementCount());
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
 
   return cookieCutMap;
@@ -1365,7 +1364,7 @@ QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
   ElementIdToVersionMapper idToVersionMapper;
   LOG_STATUS("\t" << idToVersionMapper.getInitStatusMessage());
   idToVersionMapper.apply(map);
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   LOG_STATUS("\t" << idToVersionMapper.getCompletedStatusMessage());
   const QMap<ElementId, long> idToVersionMappings = idToVersionMapper.getMappings();
   LOG_VART(idToVersionMappings.size());
@@ -1403,7 +1402,7 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
   childDeletionExcludeTagOp.apply(map);
   LOG_STATUS("\t" << childDeletionExcludeTagOp.getCompletedStatusMessage());
 
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclusion-tagging");
 }
 
@@ -1428,7 +1427,7 @@ void ChangesetReplacementCreator::_combineMaps(
   LOG_VART(MapProjector::toWkt(map1->getProjection()));
   LOG_DEBUG("Combined map size: " << map1->size());
 
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(map1, debugFileName);
 }
 
@@ -1488,7 +1487,7 @@ void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
   map->visitRw(removeVis);
   LOG_STATUS("\t" << removeVis.getCompletedStatusMessage());
 
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-conflate-reviews-removed");
 }
@@ -1535,7 +1534,7 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
 
   MapProjector::projectToWgs84(map);   // snapping works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
 
@@ -1555,7 +1554,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
   OsmMapPtr connectedWays = MapUtils::getMapSubset(map, copyCrit);
   connectedWays->setName(outputMapName);
   LOG_VART(MapProjector::toWkt(connectedWays->getProjection()));
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways");
   return connectedWays;
 }
@@ -1583,7 +1582,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   cropper.apply(map);
   LOG_STATUS("\t" << cropper.getCompletedStatusMessage());
 
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
   LOG_DEBUG("Cropped map: " << map->getName() << " size: " << map->size());
@@ -1611,7 +1610,7 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
   map->visitRw(removeVis);
   LOG_STATUS("\t" << removeVis.getCompletedStatusMessage());
 
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-unsnapped-removed");
 }
@@ -1639,7 +1638,7 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(
   tagSetter.apply(map);
   LOG_STATUS("\t" << tagSetter.getCompletedStatusMessage());
 
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclude-tags");
 }

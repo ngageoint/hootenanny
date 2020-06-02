@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OgrUtilities.h"
 
@@ -43,8 +43,6 @@ using namespace std;
 
 namespace hoot
 {
-
-std::shared_ptr<OgrUtilities> OgrUtilities::_theInstance;
 
 void OgrUtilities::loadDriverInfo()
 {
@@ -106,9 +104,9 @@ OgrUtilities::~OgrUtilities()
 
 OgrUtilities& OgrUtilities::getInstance()
 {
-  if (!_theInstance.get())
-      _theInstance.reset(new OgrUtilities());
-  return *_theInstance;
+  //  Local static singleton instance
+  static OgrUtilities instance;
+  return instance;
 }
 
 QSet<QString> OgrUtilities::getSupportedFormats(const bool readOnly)

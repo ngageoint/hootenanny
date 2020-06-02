@@ -32,6 +32,45 @@
 hoot.require('config');
 hoot.require('translate');
 
+// Shorten some of the names when exporting to shapefile
+var shpSwapList = {
+  'construction':'constructn',
+  'denomination':'denominatn',
+  'description':'descript',
+  'generator:source':'gen_source',
+  'intermittent':'intermit',
+  'power_source':'pwr_source',
+  'public_transport':'public_tpt',
+  'tower:type':'tower_type',
+  'addr:housename':'house_name',
+  'addr:housenumber':'house_num',
+  'addr:interpolation':'addr_intrp',
+  'admin_level':'admin_lvl',
+  'source:imagery:datetime':'imagery_dt',
+  'source:imagery:id':'imagery_id',
+};
+
+var gdbSwapList = {
+  'generator:source':'generator_source',
+  'tower:type':'tower_type',
+  'addr:housename':'addr_housename',
+  'addr:housenumber':'addr_housenumber',
+  'addr:interpolation':'addr_interpolation',
+  'source:imagery:datetime':'source_imagery_datetime',
+  'source:imagery:id':'source_imagery_id',
+};
+
+var inputSwapList = Object.keys(shpSwapList).reduce(function(map, key) {
+  map[shpSwapList[key]] = key;
+  return map;
+}, {});
+
+inputSwapList = Object.keys(gdbSwapList).reduce(function(map, key) {
+  map[gdbSwapList[key]] = key;
+  return map;
+}, inputSwapList);
+
+
 function initialize()
 {
   var _global = (0, eval)('this');
@@ -56,11 +95,12 @@ function initialize()
       } // End for j
     } // End for i
 
+    // Grab the config variables once so we don't have to keep calling into the core
+    _global.renderDb.config = {};
+    _global.renderDb.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+    _global.renderDb.config.outputFormat = config.getOgrOutputFormat();
+    _global.renderDb.config.toChange = config.getSchemaTranslationOverride();
   } // End !_global
-
-  // Get any tag override changes
-  toChange = hoot.Settings.get('schema.translation.override');
-
 
 } // End Initialize
 
@@ -68,8 +108,76 @@ function initialize()
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
 function translateToOsm(attrs, layerName, geometryType)
 {
+  // Debug
+  if (renderDb.config.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In Attrs: ');
+
   // Translation overrides if set
-  if (toChange) attrs = translate.overrideValues(attrs, toChange);
+  if (renderDb.config.toChange) attrs = translate.overrideValues(attrs, renderDb.config.toChange);
+
+  for (var i in attrs)
+  {
+    if (i in inputSwapList)
+    {
+      attrs[inputSwapList[i]] = attrs[i];
+      delete attrs[i];
+    }
+  }
+
+
+  // var nameList = ['tags','tags2','tags3','tags4','tags5'];
+  // for (var tName of nameList)
+  // {
+  //   if (attrs[tName])
+  //   {
+  //     var tList = attrs[tName].split('","');
+  //     delete attrs[tName];
+
+  //     for (var val in tList)
+  //     {
+  //       vList = tList[val].split('"=>"');
+  //       attrs[vList[0].toString().replace('"','')] = vList[1].toString().replace('"','');
+
+  //       // Debug
+  //       // print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
+  //     }
+  //   }
+  // }
+
+  // Now split all of the tagsX tags into separate tags.
+  ['tags','tags2','tags3','tags4','tags5'].forEach(function(tName) {
+    if (attrs[tName])
+    {
+      var tList = attrs[tName].split('","');
+      delete attrs[tName];
+
+      for (var val in tList)
+      {
+        vList = tList[val].split('"=>"');
+        attrs[vList[0].toString().replace('"','')] = vList[1].toString().replace('"','');
+
+        // Debug
+        // print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
+      }
+    }
+  });
+
+
+  // hoot:id vs osm:id is an issue.
+  // If we don't preserve id's on import, osm:id could be positive and hoot:id becomes negative.
+  // Leaving this commented out at the moment.
+  // if (attrs.osm_id && !(attrs['hoot:id']))
+  // {
+  //   attrs['hoot:id'] = attrs.osm_id;
+  //   delete attrs.osm_id;
+  // }
+
+  // Debug:
+  if (renderDb.config.OgrDebugDumptags == 'true')
+  {
+    translate.debugOutput(attrs,layerName,geometryType,'','Out tags: ');
+    print('');
+  }
+
   return attrs;
 } // End of Translate Attributes
 
@@ -78,17 +186,10 @@ function translateToOsm(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 function translateToOgr(tags, elementType, geometryType)
 {
+  if (renderDb.config.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
   // Translation overrides if set
-  if (toChange) tags = translate.overrideValues(tags, toChange);
-
-  // Debug:
-  if (config.getOgrDebugDumptags() == 'true')
-  {
-    print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-    for (var i in tags) print('In Tags :' + i + ': :' + tags[i] + ':');
-    print('');
-  }
+  if (renderDb.config.toChange) tags = translate.overrideValues(tags, renderDb.config.toChange);
 
   // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.
   // There is no way we can translate these to a single geometry.
@@ -105,8 +206,8 @@ function translateToOgr(tags, elementType, geometryType)
   if (tags['hoot:layername']) delete tags['hoot:layername'];
   if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
 
-
-  // Clean out the Tags
+  var tagsList = [];
+  // Sort out what tags go into the "tags" attribute and what gets it's own column
   for (var i in tags)
   {
     // Drop Hoot specific stuff
@@ -118,29 +219,84 @@ function translateToOgr(tags, elementType, geometryType)
       continue;
     }
 
+    // Swap names if needed
+    if (renderDb.config.outputFormat == 'shp' && i in shpSwapList)
+    {
+      tags[shpSwapList[i]] = tags[i];
+      delete tags[i];
+      continue;
+    }
+    // Swap names if needed
+    if (renderDb.config.outputFormat == 'gdb' && i in gdbSwapList)
+    {
+      tags[gdbSwapList[i]] = tags[i];
+      delete tags[i];
+      continue;
+    }
 
-    // Look for the tag in the schema lookup tables. We assume that the initialize function has been run.
+    // Look for the tag in the schema lookup tables. We assume that the initialize function has been run....
     if (renderDb[geometryType].indexOf(i) == -1)
     {
-      // Add the value to the "tags" tags with this format:
-      // "operator_type"=>"private_religious", "error:circular"=>"15", "school:first_cycle"=>"yes", "school:preschool_cycle"=>"yes"
-      if (tags.tags)
-      {
-        tags.tags = tags.tags + ',\"' + i + '\"=>\"' + tags[i] + '\"';
-      }
-      else
-      {
-        tags.tags = '\"' + i + '\"=>\"' + tags[i] + '\"';
-      }
-
+      tagsList.push('\"' + i + '\"=>\"' + tags[i] + '\"');
       delete tags[i];
     }
   }
 
-  // Debug:
-  if (config.getOgrDebugDumptags() == 'true')
+  // Find how much text we need to split and store
+  tagsLength = 0;
+  for (var i = tagsList.length - 1; i >= 0; --i)
   {
-    for (var i in tags) print('Out Tags :' + i + ': :' + tags[i] + ':');
+    // Debug
+    // print('len: ' + tagsList[i].length + '  tag: ' + tagsList[i]);
+    if (tagsList[i].length > 254)
+    {
+      hoot.logError('Tag : ' + tagsList[i] + ' : is too long to be stored (' + tagsList[i].length + ' characters). Dropping the tag');
+      tagsList.splice(i,1);
+      continue
+    }
+
+    tagsLength += tagsList[i].length;
+  }
+
+  // Set this so it can be used by everything except shapefiles
+  // If we export to spapefile, this will get changed.
+  tags.tags = tagsList.join();
+
+  // Shapefile slice and dice time
+  if (renderDb.config.outputFormat == 'shp' && tagsLength > 254)
+  {
+    var nameList = ['tags','tags2','tags3','tags4','tags5'];
+
+    for (var nam = 0, nLen = nameList.length; nam < nLen; nam++)
+    {
+      var tName = nameList[nam];
+      // Debug
+      // print('tName: ' + tName + '  len:' + tagsList.length);
+
+      if (tagsList.length == 0) break;
+
+      tags[tName] = tagsList.pop();
+
+      // Loop through the list of tags and try to append them
+      for (var i = 0; i < tagsList.length; i++)
+      {
+        if ((1 + tagsList[i].length + tags[tName].length) < 254)
+        {
+          tags[tName] += ',' + tagsList[i];
+          tagsList.splice(i,1);
+        }
+      }
+    } // End tName
+
+  // Sanity check. If there is anything left in the queue print an error
+    for (var i = 0; i < tagsList.length; i++) hoot.logError('Unable to store: ' + tagsList[i] + ' : in the tags attribute');
+
+  } // End shp && tagLength
+
+  // Debug:
+  if (renderDb.config.OgrDebugDumptags == 'true')
+  {
+    translate.debugOutput(tags,'',geometryType,elementType,'Out attrs: ');
     print('');
   }
 
@@ -173,6 +329,7 @@ function getDbSchema()
     { name:'culvert',desc:'culvert',type:'String',defValue:'' },
     { name:'cutting',desc:'cutting',type:'String',defValue:'' },
     { name:'denomination',desc:'denomination',type:'String',defValue:'' },
+    { name:'description',desc:'description',type:'String',defValue:'' },
     { name:'disused',desc:'disused',type:'String',defValue:'' },
     { name:'embankment',desc:'embankment',type:'String',defValue:'' },
     { name:'foot',desc:'foot',type:'String',defValue:'' },
@@ -207,6 +364,8 @@ function getDbSchema()
     { name:'route',desc:'route',type:'String',defValue:'' },
     { name:'service',desc:'service',type:'String',defValue:'' },
     { name:'shop',desc:'shop',type:'String',defValue:'' },
+    { name:'source:imagery:datetime',desc:'source:imagery:datetime',type:'String',defValue:'' },
+    { name:'source:imagery:id',desc:'source:imagery:id',type:'String',defValue:'' },
     { name:'sport',desc:'sport',type:'String',defValue:'' },
     { name:'surface',desc:'surface',type:'String',defValue:'' },
     { name:'tags',desc:'tags',type:'String',defValue:'' },
@@ -234,6 +393,44 @@ function getDbSchema()
   ];
 
   var schema = [];
+
+  // Debug
+  // print('OutputFormat = :' + config.getOgrOutputFormat() + ':')
+
+  // Shapefiles can only have 10 character attribute names
+  // This is Ugly and is repeated since getDbSchema gets used before initialise() and the translation functions
+  if (config.getOgrOutputFormat() == 'shp')
+  {
+
+    // This is brute force and ugly but the list is an array of objects
+    for (var i = 0, cLen = common_list.length; i < cLen; i++)
+    {
+      if (common_list[i].name in shpSwapList)
+      {
+        common_list[i].name = shpSwapList[common_list[i].name]
+      }
+    }
+
+    // Now add a few more Tags attributes su we can export upto 1K of text
+    common_list.push({name:'tags2',desc:'tags2',type:'String',defValue:''});
+    common_list.push({name:'tags3',desc:'tags3',type:'String',defValue:''});
+    common_list.push({name:'tags4',desc:'tags4',type:'String',defValue:''});
+    common_list.push({name:'tags5',desc:'tags4',type:'String',defValue:''});
+  }
+
+  // GDB doesn't likr ":" in attribute names
+  if (config.getOgrOutputFormat() == 'gdb')
+  {
+
+    // This is brute force and ugly but the list is an array of objects
+    for (var i = 0, cLen = common_list.length; i < cLen; i++)
+    {
+      if (common_list[i].name in gdbSwapList)
+      {
+        common_list[i].name = gdbSwapList[common_list[i].name]
+      }
+    }
+  }
 
   // Add the Line & Polygon specific features
   var tList = [];

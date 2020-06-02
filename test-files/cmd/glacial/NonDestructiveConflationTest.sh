@@ -5,6 +5,7 @@ mkdir -p test-output/cmd/glacial/NonDestructiveTest/
 
 # First run the Congo network conflation
 hoot conflate -C Testing.conf -C ReferenceConflation.conf -C NetworkAlgorithm.conf \
+ -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator \
  -D writer.include.debug.tags=true \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
  test-files/Congo_OSM_Roads_Bridges_subset.osm \

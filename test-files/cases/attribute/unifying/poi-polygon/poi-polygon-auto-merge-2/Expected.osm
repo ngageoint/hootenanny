@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.74020563419" minlon="-77.58210987120999" maxlat="38.74039392295" maxlon="-77.58186579018999"/>
+    <node visible="true" id="-85823" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403395284700096" lon="-77.5820696380699957">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-85823"/>
+    </node>
+    <node visible="true" id="-85822" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403269758899924" lon="-77.5820106294799814">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-85822"/>
+    </node>
+    <node visible="true" id="-85821" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403939229499983" lon="-77.5819677141300019">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-85821"/>
+    </node>
+    <node visible="true" id="-85820" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403478968600012" lon="-77.5818657901899940">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-85820"/>
+    </node>
+    <node visible="true" id="-85819" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402788576599946" lon="-77.5819221165799888">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-85819"/>
+    </node>
+    <node visible="true" id="-85818" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402683971699986" lon="-77.5818952944899962">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-85818"/>
+    </node>
+    <node visible="true" id="-85817" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402056341899979" lon="-77.5819382098299997">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-85817"/>
+    </node>
+    <node visible="true" id="-85816" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402746734600072" lon="-77.5821098712099939">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-85816"/>
+    </node>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-85816"/>
+        <nd ref="-85817"/>
+        <nd ref="-85818"/>
+        <nd ref="-85819"/>
+        <nd ref="-85820"/>
+        <nd ref="-85821"/>
+        <nd ref="-85822"/>
+        <nd ref="-85823"/>
+        <nd ref="-85816"/>
+        <tag k="hoot:poipolygon:poismerged" v="2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="amenity" v="theatre"/>
+        <tag k="name" v="poi2"/>
+        <tag k="alt_types" v="amenity=community_centre"/>
+        <tag k="alt_name" v="poi1;poly1"/>
+        <tag k="hoot:id" v="-1"/>
+    </way>
+</osm>

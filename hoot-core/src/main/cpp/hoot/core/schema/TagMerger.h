@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGMERGER_H
 #define TAGMERGER_H
@@ -31,6 +31,8 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -39,13 +41,13 @@ namespace hoot
  * Interface for merging two sets of tags into one set of tags. This is most useful when conflating
  * two different features into a single feature.
  */
-class TagMerger : public ApiEntityInfo
+class TagMerger : public ApiEntityInfo, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::TagMerger"; }
 
-  TagMerger() {}
+  TagMerger() : _caseSensitive(ConfigOptions().getDuplicateNameCaseSensitive()) {}
   virtual ~TagMerger() {}
 
   /**
@@ -57,6 +59,18 @@ public:
    * @return a merged set of tags
    */
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const = 0;
+
+  virtual QString getClassName() const  = 0;
+
+  void setConfiguration(const Settings& conf) override
+  {
+    _caseSensitive = ConfigOptions(conf).getDuplicateNameCaseSensitive();
+  }
+
+protected:
+
+  bool _caseSensitive;
+
 };
 
 typedef std::shared_ptr<TagMerger> TagMergerPtr;

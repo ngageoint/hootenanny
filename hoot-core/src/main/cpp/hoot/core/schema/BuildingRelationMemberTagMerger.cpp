@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingRelationMemberTagMerger.h"
 
@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-std::set<QString> BuildingRelationMemberTagMerger::_buildingPartTagNames;
+QSet<QString> BuildingRelationMemberTagMerger::_buildingPartTagNames;
 
 HOOT_FACTORY_REGISTER(TagMerger, BuildingRelationMemberTagMerger)
 
@@ -47,12 +47,12 @@ BuildingRelationMemberTagMerger::BuildingRelationMemberTagMerger()
 }
 
 BuildingRelationMemberTagMerger::BuildingRelationMemberTagMerger(
-  const std::set<QString>& ignoreTagKeys) :
+  const QSet<QString>& ignoreTagKeys) :
 _ignoreTagKeys(ignoreTagKeys)
 {
 }
 
-std::set<QString> BuildingRelationMemberTagMerger::getBuildingPartTagNames()
+QSet<QString> BuildingRelationMemberTagMerger::getBuildingPartTagNames()
 {
   if (_buildingPartTagNames.size() == 0)
   {
@@ -78,7 +78,8 @@ Tags BuildingRelationMemberTagMerger::mergeTags(
   Tags constituentBuildingTagsCopy = constituentBuildingTags;
 
   Tags names;
-  TagComparator::getInstance().mergeNames(relationTagsCopy, constituentBuildingTagsCopy, names);
+  TagComparator::getInstance().mergeNames(relationTagsCopy, constituentBuildingTagsCopy, names,
+                                          QStringList(), _caseSensitive);
   mergedTags.set(names);
   LOG_VART(mergedTags);
 

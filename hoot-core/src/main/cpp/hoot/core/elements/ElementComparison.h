@@ -30,17 +30,15 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementComparer.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
 
 /**
- * This is an abstraction for dealing with element comparisons inside of collections.
+ * Allows for comparing elements within a collection
  *
- * This is useful because ElementComparer has evolved as the way to compare elements vs using ==
- * operators. Additionally, there is also a hash visitor available for nodes only. At some point we
- * may want to look into consolidating all of this behavior into the Element == operators, if
- * possible.
+ * @see ElementComparer
  */
 class ElementComparison
 {
@@ -58,16 +56,28 @@ public:
 
   bool isNull() const { return !_element.get(); }
 
+  /**
+   * Wrapper around ElementHashVisitor::toHashString
+   */
+  QString toHashString() const { return _elementComparer.toHashString(_element); }
+
 protected:
 
+  // This isn't const due to ElementComparer needing to add the hash to it before comparison.
   ElementPtr _element;
   ElementComparer _elementComparer;
 };
 
 inline uint qHash(const ElementComparison& elementComp)
 {
-  // TODO: change this over to use CalculateHashVisitor
-  return qHash(elementComp.getElement()->nonIdHash());
+  // reuse the hash if its already there
+  const QString hashFromTag =
+    elementComp.getElement()->getTags().get(MetadataTags::HootHash()).trimmed();
+  if (!hashFromTag.isEmpty())
+  {
+    return qHash(hashFromTag);
+  }
+  return qHash(elementComp.toHashString());
 }
 
 }

@@ -258,6 +258,7 @@
         <nd ref="-1559888"/>
         <nd ref="-1559867"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:2e910c53a5e14608bc55ab0d19a5a432e30e4ccd;sha1sum:2c97c18fe31731001d2b09ccb4df52bb5fac08ad"/>
         <tag k="note" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -288,6 +289,7 @@
         <nd ref="-1559866"/>
         <nd ref="-1559882"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:0492f9551aec03a615e994189fd36ceaf68d0fa4;sha1sum:544390570faec8689c28039c73dab6d4ea5300af"/>
         <tag k="note" v="2"/>
         <tag k="error:circular" v="15"/>
     </way>

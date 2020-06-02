@@ -118,8 +118,8 @@ void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
       }
     }
 
-    vector<ScriptToOgrSchemaTranslator::TranslatedFeature> f = _translator->translateToOgr(t,
-      e->getElementType(), g->getGeometryTypeId());
+    vector<ScriptToOgrSchemaTranslator::TranslatedFeature> f =
+      _translator->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());
 
     // only write the feature if it wasn't filtered by the translation script.
     for (size_t i = 0; i < f.size(); i++)

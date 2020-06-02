@@ -50,6 +50,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
+
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -128,6 +130,9 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
+    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    map->visitRw(hashRemover);
+
     ElementConverter ec(map);
     HOOT_STR_EQUALS("[2]{(Way(-1), Way(-5)), (Way(-2), Way(-7))}", replaced);
     HOOT_STR_EQUALS("LINESTRING (50.0000000000000000 0.0000000000000000, 100.0000000000000000 0.0000000000000000)",
@@ -194,6 +199,9 @@ public:
 
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
+
+    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    map->visitRw(hashRemover);
 
     HOOT_STR_EQUALS(0, replaced.size());
     HOOT_STR_EQUALS(1, map->getWays().size());
@@ -353,6 +361,9 @@ public:
 
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
+
+    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    map->visitRw(hashRemover);
 
     const QString testFileName = "runTagsSplitTest.json";
     OsmJsonWriter writer;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HOOTEXCEPTION_H
@@ -101,8 +101,6 @@ class HootExceptionThrower
 {
 public:
 
-  HootExceptionThrower() {}
-
   typedef void (*ThrowMethod)(HootException* e);
 
   static HootExceptionThrower& getInstance();
@@ -122,7 +120,13 @@ public:
 private:
 
   QVector<ThrowMethod> _throwMethods;
-  static HootExceptionThrower* _theInstance;
+
+  /** Default constructor/destructor */
+  HootExceptionThrower() = default;
+  ~HootExceptionThrower() = default;
+  /** Delete copy constructor and assignment operator */
+  HootExceptionThrower(const HootExceptionThrower&) = delete;
+  HootExceptionThrower& operator=(const HootExceptionThrower&) = delete;
 };
 
 #define HOOT_REGISTER_EXCEPTION(ClassName)      \

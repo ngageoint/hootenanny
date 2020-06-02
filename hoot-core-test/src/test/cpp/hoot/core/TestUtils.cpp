@@ -202,14 +202,11 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString& tagKey,
   return map->getElement(*bag.begin());
 }
 
-std::shared_ptr<TestUtils> TestUtils::getInstance()
+TestUtils& TestUtils::getInstance()
 {
-  if (!_theInstance)
-  {
-    _theInstance.reset(new TestUtils());
-  }
-
-  return _theInstance;
+  //  Local static singleton instance
+  static TestUtils instance;
+  return instance;
 }
 
 std::string TestUtils::readFile(QString f1)
@@ -270,7 +267,7 @@ void TestUtils::resetEnvironment(const QStringList confs)
   // make sure the UUIDs are repeatable
   UuidHelper::resetRepeatableKey();
 
-  foreach (RegisteredReset* rr, getInstance()->_resets)
+  foreach (RegisteredReset* rr, getInstance()._resets)
   {
     rr->reset();
   }

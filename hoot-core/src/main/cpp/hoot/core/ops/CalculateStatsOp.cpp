@@ -216,51 +216,74 @@ void CalculateStatsOp::_initConflatableFeatureCounts()
 
 void CalculateStatsOp::_initStatCalc()
 {
+  // for debugging only
   _numInterpresetStatDataCalls = 0;
   _numGenerateFeatureStatCalls = 0;
 
-  // Admittedly, this is a little fragile but don't have a better way to do it right now.
+  // Basically, we're trying to count the total calls to _applyVisitor here, which results in a
+  // pass over the data. Technically the number of stats is larger, since each _applyVisitor call
+  // may fuel multiple stats. However, for status reporting purposes we're more concerned with the
+  // processing time incurred by _applyVisitor, and the status is easier to update doing it this way.
+  // Admittedly, the way the stat total count is being calculated here is a very brittle way to do
+  // it but haven't come up with a better way yet. This also could eventually be tied in with
+  // progress reporting.
 
   const int numQuickStatCalcs = _quickStatData.size();
   LOG_VARD(numQuickStatCalcs);
   int numSlowStatCalcs = 0;
+  // number of quick stat calcs, each one calling _applyVisitor once
   _totalStatCalcs = numQuickStatCalcs;
+
   if (!_quick)
   {
     LOG_VARD(_slowStatData.size());
+    // number of slow stat calcs, each one calling _applyVisitor once
     numSlowStatCalcs = _slowStatData.size();
-    numSlowStatCalcs += 7; // the number of calls to _applyVisitor outside of a loop
+
+    // the number of calls to _applyVisitor outside of a loop and always called
+    numSlowStatCalcs += 9;
+
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
       // the number of calls to _applyVisitor made during translated tag calc
       numSlowStatCalcs += 10;
     }
-//    LOG_VARD(_inputIsConflatedMapOutput);
-//    if (!_inputIsConflatedMapOutput)
-//    {
-//      // extra calls to _applyVisitor made for poi/poly
-//      // TODO: don't understand why these don't trigger...disabling the increment of the count of
-//      // these for now
-//      numSlowStatCalcs += 2;
-//    }
-    // for SumNumericTagsVisitor (could be rolled into _applyVisitor probably)
-    numSlowStatCalcs += 1;
+
+    LOG_VARD(_inputIsConflatedMapOutput);
+    if (!_inputIsConflatedMapOutput)
+    {
+      // extra calls to _applyVisitor made for poi/poly only and only for input maps
+      numSlowStatCalcs += 2;
+    }
 
     LOG_VARD(MatchFactory::getInstance().getCreators().size());
-    // extra calls to _applyVisitor made by _generateFeatureStats
+    // extra calls to _applyVisitor made for each feature type by _generateFeatureStats
     int numCallsToGenerateFeatureStats = 0;
+    int numSizeCalcs = 0;
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            _conflatableFeatureCounts.begin(); it != _conflatableFeatureCounts.end(); ++it)
     {
-      const QString featureType = CreatorDescription::baseFeatureTypeToString(it.key());
+      CreatorDescription::BaseFeatureType featureTypeEnum = it.key();
+      const QString featureType = CreatorDescription::baseFeatureTypeToString(featureTypeEnum);
       if (!_featureTypesToSkip.contains(featureType, Qt::CaseInsensitive))
       {
         numCallsToGenerateFeatureStats++;
+
+        const CreatorDescription::FeatureCalcType calcType =
+          CreatorDescription::getFeatureCalcType(featureTypeEnum);
+        if (calcType == CreatorDescription::CalcTypeArea ||
+            calcType == CreatorDescription::CalcTypeLength)
+        {
+          numSizeCalcs++;
+        }
       }
     }
     LOG_VARD(numCallsToGenerateFeatureStats);
-    numSlowStatCalcs += 5 * numCallsToGenerateFeatureStats;
-    numSlowStatCalcs += 8;  // number of length/area calcs
+    // _generateFeatureStats calls _applyVisitor multiple times for each feature type
+    numSlowStatCalcs += (5 * numCallsToGenerateFeatureStats);
+    // these _applyVisitor calls are made in _generateFeatureStats but are conditional on feature
+    // type, so computing the total separately
+    numSlowStatCalcs += numSizeCalcs;
 
     _totalStatCalcs += numSlowStatCalcs;
   }
@@ -272,6 +295,14 @@ void CalculateStatsOp::_initStatCalc()
 
 void CalculateStatsOp::apply(const OsmMapPtr& map)
 {
+  // We don't want to auto calc search radius unless conflating, b/c it could result in a somewhat
+  // expensive rubbersheeting operation. Changing the config glocally works here b/c stats are
+  // either calculated by themselves or after a conflation job. As more script conflators
+  // implement a search radius function vs using a predefined value, this list could get a little
+  // unruly.
+  conf().set(ConfigOptions::getPowerLineAutoCalcSearchRadiusKey(), false);
+  conf().set(ConfigOptions::getWaterwayAutoCalcSearchRadiusKey(), false);
+
   _initStatCalc();
 
   QString logMsg = "Performing " + QString::number(_totalStatCalcs) + " map statistic calculations";
@@ -284,7 +315,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     logMsg += " for " + map->getName();
   }
   logMsg += "...";
-  LOG_INFO(logMsg);
+  LOG_STATUS(logMsg);
 
   MapProjector::projectToPlanar(map);
 
@@ -295,9 +326,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   if (!_quick)
   {
-    FeatureCountVisitor featureCountVisitor;
-    _applyVisitor(&featureCountVisitor, "Feature Count");
-    const long featureCount = featureCountVisitor.getCount();
+    const long featureCount = _getApplyVisitor(new FeatureCountVisitor(), "Feature Count");
     LOG_VART(featureCount);
 
     double conflatedFeatureCount =
@@ -332,13 +361,11 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         matchCandidateCountsData,
         "Conflatable Feature Count");
     LOG_VARD(matchCreators.size());
-    SumNumericTagsVisitor tagSumVis(QStringList(MetadataTags::HootPoiPolygonPoisMerged()));
-    LOG_STATUS(
-      "Calculating statistic: SumNumericTagsVisitor (" << _currentStatCalcIndex << " / " <<
-      _totalStatCalcs << ") ...");
-    _constMap->visitRo(tagSumVis);
-    _currentStatCalcIndex++;
-    long poisMergedIntoPolys = tagSumVis.getStat();
+
+    const double poisMergedIntoPolys =
+      _getApplyVisitor(
+        new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged())),
+        "POIs Merged Into Polygons");
     //we need to add any pois that may have been merged into polygons by poi/poly into the total
     //conflated feature count
     conflatedFeatureCount += poisMergedIntoPolys;
@@ -356,12 +383,12 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       _applyVisitor(
         new NeedsReviewCriterion(_constMap), new FeatureCountVisitor(), "Reviewable Feature Count");
 
-    CountUniqueReviewsVisitor curv;
-    _constMap->visitRo(curv);
-    const double numReviewsToBeMade = curv.getStat();
+    const double numReviewsToBeMade =
+      _getApplyVisitor(new CountUniqueReviewsVisitor(), "Number of Reviews");
+
     const double untaggedFeatureCount =
       _applyVisitor(
-        new NoInformationCriterion(),new FeatureCountVisitor(), "No Information Feature Count");
+        new NoInformationCriterion(), new FeatureCountVisitor(), "No Information Feature Count");
     _addStat("Untagged Features", untaggedFeatureCount);
     long unconflatableFeatureCount = -1.0;
     if (!_inputIsConflatedMapOutput)
@@ -397,7 +424,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       double conflatableFeatureCountForFeatureType = 0.0;
       if (!_inputIsConflatedMapOutput)
       {
-        conflatableFeatureCountForFeatureType = matchCandidateCountsByMatchCreator[matchCreatorName];
+        conflatableFeatureCountForFeatureType =
+          matchCandidateCountsByMatchCreator[matchCreatorName];
         LOG_VARD(conflatableFeatureCountForFeatureType);
       }
 
@@ -464,11 +492,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       }
     }
 
-    LongestTagVisitor v2;
-    _applyVisitor(&v2, "Longest Tag");
-    _addStat("Longest Tag", v2.getStat());
+    _addStat("Longest Tag", _getApplyVisitor(new LongestTagVisitor(), "Longest Tag"));
 
-    // TODO: this should be moved into _generateFeatureStats
+    // TODO: this should be moved into _generateFeatureStats?
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
@@ -507,8 +533,6 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _applyVisitor(
           new PoiPolygonPolyCriterion(), new SchemaTranslatedTagCountVisitor(st),
           "Translated POI/Polygon Polygons Count"));
-      // TODO: Do we actually need to calculate a search radius here, or can we suppress that
-      // (#3380)?
       _addStat("Power Line Translated Populated Tag Percent",
         _applyVisitor(
           new PowerLineCriterion(), new SchemaTranslatedTagCountVisitor(st),
@@ -727,6 +751,10 @@ double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& vis
 
   ElementVisitor& childVisitor = v.getChildVisitor();
 
+  // There's a possible optimization that could be made here (and in the _applyVisitor below) to
+  // check the criterion used by FilteredVisitor, and if it inherits from GeometryTypeCriterion
+  // then call visitWaysRo, etc. Not sure if its worth the effort, though.
+
   _constMap->visitRo(*fv);
 
   DataProducer* dataProducer = dynamic_cast<DataProducer*>(&childVisitor);
@@ -754,6 +782,17 @@ void CalculateStatsOp::_applyVisitor(ConstElementVisitor* v, const QString& stat
   _constMap->visitRo(*v);
 
   _currentStatCalcIndex++;
+}
+
+double CalculateStatsOp::_getApplyVisitor(ConstElementVisitor* v, const QString& statName)
+{
+  _applyVisitor(v, statName);
+  const SingleStatistic* ss = dynamic_cast<const SingleStatistic*>(v);
+  if (v == 0)
+  {
+    throw HootException(v->getClassName() + " does not implement SingleStatistic.");
+  }
+  return ss->getStat();
 }
 
 double CalculateStatsOp::getSingleStat(const QString& n) const
@@ -790,15 +829,6 @@ long CalculateStatsOp::indexOfSingleStat(const QString& n) const
     }
   }
   return -1;
-}
-
-void CalculateStatsOp::printStats()
-{
-  LOG_INFO("Number of statistics calculated: " + QString::number(_stats.size()));
-  for (int i = 0; i < _stats.size(); i++)
-  {
-    LOG_INFO(_stats[i].toString());
-  }
 }
 
 ConstElementVisitorPtr CalculateStatsOp::_getElementVisitorForFeatureType(
@@ -910,6 +940,11 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
         "Area Processed: " + description));
     _numGenerateFeatureStatCalls++;
   }
+//  else
+//  {
+//    _addStat(QString("Amount %1 Processed by Conflation").arg(description), -1);
+//    _numGenerateFeatureStatCalls++;
+//  }
 
   double percentageOfTotalFeaturesConflated = 0.0;
   if (totalFeatures > 0.0)
@@ -938,7 +973,7 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   _addStat(
     QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated);
 
-  _numGenerateFeatureStatCalls += 5;
+  _numGenerateFeatureStatCalls += 6;
 }
 
 }

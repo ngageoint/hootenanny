@@ -63,7 +63,6 @@ class AddressScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(runWayTest);
   CPPUNIT_TEST(runRelationTest);
   CPPUNIT_TEST(translateTagValueTest);
-  CPPUNIT_TEST(additionalTagsTest);
   CPPUNIT_TEST(invalidFullAddressTest);
   CPPUNIT_TEST(invalidComponentAddressTest);
   CPPUNIT_TEST(addressNormalizationTest);
@@ -424,47 +423,6 @@ public:
     uut.setConfiguration(settings);
     uut.setCacheEnabled(false);
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
-  }
-
-  void additionalTagsTest()
-  {
-    AddressScoreExtractor uut;
-    uut.setConfiguration(conf());
-    uut.setCacheEnabled(false);
-    QSet<QString> additionalTagKeys;
-    additionalTagKeys.insert("note");
-    additionalTagKeys.insert("description");
-    AddressTagKeysPtr addressTagKeys = AddressTagKeys::getInstance();
-    addressTagKeys->_additionalTagKeys = additionalTagKeys;
-
-    OsmMapPtr map(new OsmMap());
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-    map->addWay(way1);
-
-    node1->getTags().set("note", "123 Main Street");
-    way1->getTags().set("note", "123 main St");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
-
-    node1->getTags().clear();
-    node1->getTags().set("description", "123 Main Street");
-    way1->getTags().clear();
-    way1->getTags().set("description", "123 main St");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
-
-    node1->getTags().clear();
-    node1->getTags().set("blah", "123 Main Street");
-    way1->getTags().clear();
-    way1->getTags().set("blah", "123 main St");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
-
-    // name gets parsed by default
-    node1->getTags().clear();
-    node1->getTags().set("name", "123 Main Street");
-    way1->getTags().clear();
-    way1->getTags().set("name", "123 main St");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
   }
 
   void invalidFullAddressTest()

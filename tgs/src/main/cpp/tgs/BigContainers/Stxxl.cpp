@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Stxxl.h"
 
@@ -44,24 +44,16 @@
 namespace Tgs
 {
 
-std::shared_ptr<Stxxl> Stxxl::_theInstance;
-
 Stxxl::Stxxl()
 {
   _init();
 }
 
-Stxxl::~Stxxl()
-{
-}
-
 Stxxl& Stxxl::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new Stxxl());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static Stxxl instance;
+  return instance;
 }
 
 void Stxxl::_init()

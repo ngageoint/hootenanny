@@ -37,11 +37,8 @@
 namespace hoot
 {
 
-class FilteredVisitor :
-    public ConstElementVisitor,
-    public ConstOsmMapConsumer,
-    public ElementCriterionConsumer,
-    public ElementVisitorConsumer
+class FilteredVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
+  public ElementCriterionConsumer, public ElementVisitorConsumer
 {
 
 public:

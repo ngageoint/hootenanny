@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "v8Engine.h"
 
@@ -31,8 +31,6 @@ using namespace v8;
 
 namespace hoot
 {
-
-std::shared_ptr<v8Engine> v8Engine::_theInstance;
 
 bool v8Engine::_needPlatform = false;
 
@@ -83,11 +81,9 @@ v8Engine::~v8Engine()
 
 v8Engine& v8Engine::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new v8Engine());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static v8Engine instance;
+  return instance;
 }
 
 Isolate* v8Engine::getIsolate()

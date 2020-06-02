@@ -48,7 +48,9 @@
         {"name":"Bridges", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::BridgeCriterion", "StatCall":"Stat" },
         {"name":"Tunnels", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::TunnelCriterion", "StatCall":"Stat" },
         {"name":"One-Way Streets", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::OneWayCriterion", "StatCall":"Stat" },
+ 	{"name":"Reversed Roads", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::ReversedRoadCriterion", "StatCall":"Stat" },
         {"name":"Road Roundabouts", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::RoundaboutCriterion", "StatCall":"Stat" },
+        {"name":"Multi-Use Features", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::MultiUseCriterion", "StatCall":"Stat" },
         {"name":"Multi-Use Buildings", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::MultiUseBuildingCriterion", "StatCall":"Stat" },
 
         {"name":"Buildings With Height Info", "visitor":"hoot::BuildingHeightVisitor", "criterion":"", "StatCall":"Stat" },

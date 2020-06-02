@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WaySublineMatchString.h"
 
@@ -126,24 +126,20 @@ vector<bool> WaySublineMatchString::getReverseVector2() const
 WaySublineCollection WaySublineMatchString::getSublineString1() const
 {
   WaySublineCollection result;
-
   for (size_t i = 0; i < _matches.size(); i++)
   {
     result.addSubline(_matches[i].getSubline1());
   }
-
   return result;
 }
 
 WaySublineCollection WaySublineMatchString::getSublineString2() const
 {
   WaySublineCollection result;
-
   for (size_t i = 0; i < _matches.size(); i++)
   {
     result.addSubline(_matches[i].getSubline2());
   }
-
   return result;
 }
 

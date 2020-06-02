@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ToEnglishDictionaryTranslator.h"
@@ -271,7 +271,7 @@ QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input
   return result;
 }
 
-QString ToEnglishDictionaryTranslator::_transform(Transliterator* t, const QString& input) const
+QString ToEnglishDictionaryTranslator::_transform(const shared_ptr<Transliterator>& t, const QString& input) const
 {
   UnicodeString str((UChar*)input.constData(), input.size());
 

@@ -22,13 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/conflate/matching/ScoreMatchesDiff.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -53,6 +57,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() != 3)
     {
       std::cout << getHelp() << std::endl << std::endl;
@@ -70,6 +77,10 @@ public:
       LOG_ERROR(e.what());
       return 1;
     }
+
+    LOG_STATUS(
+      "Matches difference calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
 
     return 0;
   }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -84,7 +84,8 @@ public:
 
   virtual double getProbability() const override { return _p; }
 
-  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/) const override
+  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,
+                             const QHash<QString, ConstMatchPtr>& /*matches*/) const override
   {
     QString otherString = other->toString();
     for (MatchSet::iterator it = _conflicts.begin(); it != _conflicts.end(); ++it)
@@ -129,7 +130,8 @@ public:
     return false;
   }
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const
+  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+                             const QHash<QString, ConstMatchPtr>& /*matches*/) const
   {
     return m1->isConflicting(m2, map);
   }

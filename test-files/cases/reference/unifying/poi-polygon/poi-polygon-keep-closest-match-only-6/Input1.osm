@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-85797' action='modify' lat='38.74027467346' lon='-77.58210987121' />
+  <node id='-85798' action='modify' lat='38.74020563419' lon='-77.58193820983' />
+  <node id='-85800' action='modify' lat='38.74026839717' lon='-77.58189529449' />
+  <node id='-85802' action='modify' lat='38.74027885766' lon='-77.58192211658' />
+  <node id='-85804' action='modify' lat='38.74034789686' lon='-77.58186579019' />
+  <node id='-85806' action='modify' lat='38.74039392295' lon='-77.58196771413' />
+  <node id='-85808' action='modify' lat='38.74032697589' lon='-77.58201062948' />
+  <node id='-85810' action='modify' lat='38.74033952847' lon='-77.58206963807' />
+  <way id='-85799' action='modify'>
+    <nd ref='-85797' />
+    <nd ref='-85798' />
+    <nd ref='-85800' />
+    <nd ref='-85802' />
+    <nd ref='-85804' />
+    <nd ref='-85806' />
+    <nd ref='-85808' />
+    <nd ref='-85810' />
+    <nd ref='-85797' />
+    <tag k='amenity' v='arts_centre' />
+    <tag k='name' v='poly1' />
+  </way>
+</osm>

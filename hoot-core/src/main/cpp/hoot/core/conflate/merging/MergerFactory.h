@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGEFACTORY_H
 #define MERGEFACTORY_H
@@ -79,8 +79,19 @@ public:
    */
   static MergerFactory& getInstance();
 
-  bool isConflicting(const ConstOsmMapPtr& map,  const ConstMatchPtr& m1,
-                     const ConstMatchPtr& m2) const;
+  /**
+   * Determines if two matches are conflicting
+   *
+   * @param map map owning the elements involved in the matches
+   * @param m1 the first match
+   * @param m2 the second match
+   * @param matches an optional set of all matches found during conflation; this allows match
+   * caching to be used in situations where duplicated match calculation is prohibitively expensive
+   * @return true if the two matches are conflicting; false otherwise
+   */
+  bool isConflicting(
+    const ConstOsmMapPtr& map,  const ConstMatchPtr& m1, const ConstMatchPtr& m2,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const;
 
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.

@@ -76,8 +76,8 @@ ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script,
   _calculateClassification(map, mapObj, ToLocal(&plugin));
 }
 
-void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Object> mapObj,
-  Handle<Object> plugin)
+void ScriptMatch::_calculateClassification(
+  const ConstOsmMapPtr& map, Handle<Object> mapObj, Handle<Object> plugin)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
@@ -158,8 +158,12 @@ double ScriptMatch::getProbability() const
   return _p.getMatchP();
 }
 
-bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const
+bool ScriptMatch::isConflicting(
+  const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+  const QHash<QString, ConstMatchPtr>& matches) const
 {
+  LOG_TRACE("Checking for match conflict...");
+
   if (_neverCausesConflict)
   {
     return false;
@@ -229,10 +233,11 @@ bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr
   {
     try
     {
-      // We need to check for a conflict in two directions. Is it conflicting if we merge the shared
-      // EID with this class first, then is it a conflict if we merge with the other EID first.
-      if (_isOrderedConflicting(map, sharedEid, o1, o2) ||
-          hm->_isOrderedConflicting(map, sharedEid, o2, o1))
+      // We need to check for a conflict in two directions. If its conflicting when we merge the
+      // shared EID with this class first, then is it a conflict if we merge with the other EID
+      // first.
+      if (_isOrderedConflicting(map, sharedEid, o1, o2, matches) ||
+          hm->_isOrderedConflicting(map, sharedEid, o2, o1, matches))
       {
         conflicting = true;
       }
@@ -241,7 +246,7 @@ bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr
         conflicting = false;
       }
     }
-    catch (const NeedsReviewException& e)
+    catch (const NeedsReviewException& /*e*/)
     {
       conflicting = true;
     }
@@ -251,9 +256,12 @@ bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr
   return conflicting;
 }
 
-bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
-  ElementId other1, ElementId other2) const
+bool ScriptMatch::_isOrderedConflicting(
+  const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2,
+  const QHash<QString, ConstMatchPtr>& matches) const
 {
+  LOG_TRACE("Checking " << other1 << " and " << other2 << " for order conflict...");
+
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
@@ -265,7 +273,6 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
 
   OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
   CopyMapSubsetOp(map, eids).apply(copiedMap);
-
   Handle<Object> copiedMapJs = OsmMapJs::create(copiedMap);
 
   // make sure unknown1 is always first
@@ -285,24 +292,33 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
     eid22 = sharedEid;
   }
 
-  std::shared_ptr<ScriptMatch> m1(
-    new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12, _threshold));
+  LOG_VART(eid11);
+  LOG_VART(eid12);
+  // This and the other commented block of code below is an attempt to prevent script matching
+  // being executed on non-candidate matches, during match conflict resolution. These changes cause
+  // regression test failures, and it isn't clear why at this point.
+//  if (!_isMatchCandidate(copiedMap->getElement(eid11), copiedMap) ||
+//      !_isMatchCandidate(copiedMap->getElement(eid12), copiedMap))
+//  {
+//    LOG_TRACE("Skipping non-match candidate from pair 1: " << eid11 << ", " << eid12 << "...");
+//    return true;
+//  }
+
+  std::shared_ptr<const ScriptMatch> m1 = _getMatch(copiedMap, copiedMapJs, eid11, eid12, matches);
   MatchSet ms;
   ms.insert(m1);
   vector<MergerPtr> mergers;
   ScriptMergerCreator creator;
   creator.createMergers(ms, mergers);
-  m1.reset();
 
-  bool conflicting = true;
-  // if we got a merger, then check to see if it conflicts
+  // If we got a merger, then check to see if it conflicts.
   if (mergers.size() == 1)
   {
     // apply the merger to our map copy
     vector<pair<ElementId, ElementId>> replaced;
     mergers[0]->apply(copiedMap, replaced);
 
-    // replace the element id in the second merger.
+    // replace the element id in the second merger
     for (size_t i = 0; i < replaced.size(); ++i)
     {
       if (replaced[i].first == eid21)
@@ -317,20 +333,94 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
 
     // If we can still find the second match after the merge was applied, then it isn't a conflict.
     if (copiedMap->containsElement(eid21) && copiedMap->containsElement(eid22))
-    {
-      ScriptMatch m2(_script, _plugin, copiedMap, copiedMapJs, eid21, eid22, _threshold);
-      if (m2.getType() == MatchType::Match)
+    { 
+      LOG_VART(eid21);
+      LOG_VART(eid22);
+//      if (!_isMatchCandidate(copiedMap->getElement(eid21), copiedMap) ||
+//          !_isMatchCandidate(copiedMap->getElement(eid22), copiedMap))
+//      {
+//        LOG_TRACE("Skipping non-match candidate from pair 2: " << eid21 << ", " << eid22 << "...");
+//        //return true;
+//        return false;
+//      }
+
+      std::shared_ptr<const ScriptMatch> m2 =
+        _getMatch(copiedMap, copiedMapJs, eid21, eid22, matches);
+      if (m2->getType() == MatchType::Match)
       {
-        conflicting = false;
+        return false;
       }
     }
   }
 
-  return conflicting;
+  return true;
 }
 
-Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> mapObj,
-  Handle<Object> plugin)
+std::shared_ptr<const ScriptMatch> ScriptMatch::_getMatch(
+  OsmMapPtr map, Handle<Object> mapJs, const ElementId& eid1, const ElementId& eid2,
+  const QHash<QString, ConstMatchPtr>& matches) const
+{
+  std::shared_ptr<const ScriptMatch> match;
+
+  QString matchKey;
+  if (eid1 < eid2)
+  {
+    matchKey = eid1.toString() + "," + eid2.toString();
+  }
+  else
+  {
+    matchKey = eid2.toString() + "," + eid1.toString();
+  }
+  QHash<QString, ConstMatchPtr>::const_iterator itr = matches.find(matchKey);
+  if (itr != matches.end())
+  {
+    std::shared_ptr<const ScriptMatch> scriptMatch =
+      std::dynamic_pointer_cast<const ScriptMatch>(itr.value());
+    if (scriptMatch)
+    {
+      match = scriptMatch;
+      LOG_TRACE("Match cache hit for: " << matchKey);
+    }
+  }
+
+  if (!match)
+  {
+    match.reset(new ScriptMatch(_script, _plugin, map, mapJs, eid1, eid2, _threshold));
+  }
+
+  return match;
+}
+
+bool ScriptMatch::_isMatchCandidate(ConstElementPtr e, const ConstOsmMapPtr& map) const
+{
+  // This code is a little redundant with that in ScriptMatchVisitor::isMatchCandidate. See related
+  // notes in that method.
+
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_script->getContext(current));
+  Handle<Object> plugin =
+    Handle<Object>::Cast(
+      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+
+  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "isMatchCandidate"));
+  Handle<Function> func = Handle<Function>::Cast(value);
+  Handle<Value> jsArgs[2];
+
+  int argc = 0;
+  Handle<Object> mapObj = OsmMapJs::create(map);
+  jsArgs[argc++] = mapObj;
+  jsArgs[argc++] = ElementJs::New(e);
+
+  TryCatch trycatch;
+  Handle<Value> result = func->Call(plugin, argc, jsArgs);
+  HootExceptionJs::checkV8Exception(result, trycatch);
+
+  return result->BooleanValue();
+}
+
+Handle<Value> ScriptMatch::_call(
+  const ConstOsmMapPtr& map, Handle<Object> mapObj, Handle<Object> plugin)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
@@ -355,6 +445,7 @@ Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> mapOb
 
   LOG_VART(map->getElement(_eid1).get());
   LOG_VART(map->getElement(_eid2).get());
+  LOG_TRACE("Calling script matcher...");
 
   TryCatch trycatch;
   Handle<Value> result = func->Call(plugin, argc, jsArgs);

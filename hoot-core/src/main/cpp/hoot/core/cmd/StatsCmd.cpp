@@ -62,14 +62,14 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() < 1)
     {
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
-
-    QElapsedTimer timer;
-    timer.start();
 
     const QString QUICK_SWITCH = "--brief";
     const QString OUTPUT_SWITCH = "--output=";
@@ -79,7 +79,7 @@ public:
     bool quick = false;
     bool toFile = false;
     QString outputFilename = "";
-    //  Capture any flags and remove them before processing inputs
+    // Capture any flags and remove them before processing inputs
     for (int i = 0; i < args.size(); i++)
     {
       if (args[i].startsWith(OUTPUT_SWITCH))

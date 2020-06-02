@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Factory.h"
@@ -39,16 +39,6 @@ using namespace std;
 namespace hoot
 {
 
-Factory* Factory::_theInstance = NULL;
-
-Factory::Factory()
-{
-}
-
-Factory::~Factory()
-{
-}
-
 boost::any Factory::constructObject(const std::string& name)
 {
   QMutexLocker locker(&_mutex);
@@ -64,11 +54,9 @@ boost::any Factory::constructObject(const std::string& name)
 
 Factory& Factory::getInstance()
 {
-  if (_theInstance == NULL)
-  {
-    _theInstance = new Factory();
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static Factory instance;
+  return instance;
 }
 
 vector<std::string> Factory::getObjectNamesByBase(const std::string& baseName)

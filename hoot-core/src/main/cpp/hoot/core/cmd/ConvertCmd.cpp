@@ -59,6 +59,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     LOG_VART(args.size());
     LOG_VART(args);
 
@@ -69,9 +72,6 @@ public:
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
     }
-
-    QElapsedTimer timer;
-    timer.start();
 
     QStringList inputs;
     QString output;
@@ -109,8 +109,8 @@ public:
     converter.setConfiguration(conf());
     converter.convert(inputs, output);
 
-    LOG_INFO(
-      "Convert operation completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    LOG_STATUS(
+      "Data conversion completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
     return 0;
   }

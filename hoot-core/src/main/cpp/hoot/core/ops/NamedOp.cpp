@@ -152,7 +152,7 @@ void NamedOp::apply(OsmMapPtr& map)
       throw HootException("Unexpected operation: " + s);
     }
 
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
 
     LOG_DEBUG(
       "\tElement count after operation " << s << ": " <<
