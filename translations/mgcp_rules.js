@@ -95,19 +95,19 @@ mgcp.rules = {
     ['F_CODE','AL015','information','office'], // Tourism Office
     ['F_CODE','AL015','man_made','depot'],
     ['F_CODE','AL015','tourism','hotel'], // To fix amenity etc
-    ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
-    ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
-    // ['F_CODE','AL105','place','town'], // From OSM
-    // ['F_CODE','AL105','place','village'], // From OSM
     // ['F_CODE','AL105','place','hamlet'], // From OSM
     // ['F_CODE','AL105','place','isolated_dwelling'], // From OSM
+    // ['F_CODE','AL105','place','town'], // From OSM
+    // ['F_CODE','AL105','place','village'], // From OSM
+    ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
+    ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
     ['F_CODE','AL130','historic','memorial'],
     ['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
     ['F_CODE','AL200','ruins','yes'], // Ruins
     ['F_CODE','AL241','man_made','mast'], // MGCP does not have AT011 (Aerial)
     ['F_CODE','AL260','barrier','city_wall'], // Wall
     ['F_CODE','AP020',undefined,undefined], // Road Interchange -Not valid MGCP
-    // ['F_CODE','AP030','highway','living_street'],
+    ['F_CODE','AP030','highway','construction'], // Lifecycle
     ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
     ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
     ['F_CODE','AP030','highway','primary'],
@@ -115,18 +115,18 @@ mgcp.rules = {
     ['F_CODE','AP030','highway','residential'],
     ['F_CODE','AP030','highway','secondary'],
     ['F_CODE','AP030','highway','secondary_link'],
-    // ['F_CODE','AP030','highway','service'],
     ['F_CODE','AP030','highway','tertiary'],
     ['F_CODE','AP030','highway','tertiary_link'],
     ['F_CODE','AP030','highway','trunk'], // Motorway
     ['F_CODE','AP030','highway','trunk_link'], // Motorway
     ['F_CODE','AP030','highway','unclassified'],
-    ['F_CODE','AP030','highway','construction'], // Lifecycle
-    // ['F_CODE','AP030','highway','pedestrian'], // It is still a road
     ['F_CODE','AP030','highway','yes'], // Just in case...
-    // ['F_CODE','AP050','highway','footway'],
+    // ['F_CODE','AP030','highway','living_street'],
+    // ['F_CODE','AP030','highway','pedestrian'], // It is still a road
+    // ['F_CODE','AP030','highway','service'],
     // ['F_CODE','AP050','highway','bridleway'],
     // ['F_CODE','AP050','highway','cycleway'],
+    // ['F_CODE','AP050','highway','footway'],
     ['F_CODE','AQ125','amenity','bus_station'],
     ['F_CODE','AT050','landuse','facility'],
     ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
@@ -136,9 +136,15 @@ mgcp.rules = {
     ['F_CODE','BH130','landuse','reservoir'], // From OSM
     ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
-    ['F_CODE','EB020','natural','thicket'], // Thicket
+    ['F_CODE','DB090','embankment','berm'],
+    ['F_CODE','DB090','embankment','divider'],
+    ['F_CODE','DB090','embankment','fill'],
+    ['F_CODE','DB090','embankment','levee'],
+    ['F_CODE','DB090','embankment','mound'], // Embankment
+    ['F_CODE','DB090','man_made','dyke'],
     ['F_CODE','EB020','natural','brush'], // Thicket
     ['F_CODE','EB020','natural','heath'], // Thicket
+    ['F_CODE','EB020','natural','thicket'], // Thicket
     ['F_CODE','ED010','natural','wetland'], // Marsh
     ['F_CODE','ED010','wetland','reedbed'], // Marsh
     ['F_CODE','FA015','man_made','shooting_range'], // Firing Range
@@ -152,11 +158,11 @@ mgcp.rules = {
     ['F_CODE','ZD040','natural','hill'], // From OSM
     ['F_CODE','ZD040','natural','peak'], // From OSM
     ['F_CODE','ZD040','natural','valley'], // From GeoNames
-    // ['F_CODE','ZD040','place','state'], // From OSM
     // ['F_CODE','ZD040','place','county'], // From OSM
-    // ['F_CODE','ZD040','place','quarter'], // From OSM
-    // ['F_CODE','ZD040','place','suburb'], // From OSM
     // ['F_CODE','ZD040','place','neighbourhood'], // From OSM
+    // ['F_CODE','ZD040','place','quarter'], // From OSM
+    // ['F_CODE','ZD040','place','state'], // From OSM
+    // ['F_CODE','ZD040','place','suburb'], // From OSM
     // ['F_CODE','ZD040','place','unknown'], // From OSM
     ], // End fcodeOne2oneOut
 
@@ -489,9 +495,9 @@ mgcp.rules = {
     // FIC - Embankment Type
     // ['FIC','0','embankment:type','unknown'], // Unknown
     ['FIC','0',undefined,undefined], // Unknown
-    ['FIC','1','embankment:type','mound'], // Mound
-    ['FIC','2','embankment:type','fill'], // Fill
-    ['FIC','3','embankment:type','dyke'], // Dyke
+    ['FIC','1','embankment','mound'], // Mound
+    ['FIC','2','embankment','fill'], // Fill
+    ['FIC','3','man-made','dyke'], // Dyke
     ['FIC','999','embankment:type','other'], // Other
 
     // FMM - Farming Method
@@ -2017,6 +2023,18 @@ mgcp.rules = {
     [undefined,undefined,'natural','water'], // To stop warnings. Fixed in biased rules
 
     ['COS','4','operational_status','non_operational'], // Non-operational
+
+    ['FIC','1','embankment:type','mound'], // Mound
+    ['FIC','1','embankment:type','berm'],
+    ['FIC','1','embankment','berm'],
+    ['FIC','2','embankment:type','fill'], // Fill
+    ['FIC','3','embankment:type','dyke'], // Dyke
+    ['FIC','3','embankment','dyke'], // Dyke
+    ['FIC','999','embankment','levee'], // TDS etc
+    ['FIC','999','embankment','divider'], // TDS etc
+    ['FIC','999','embankment:type','levee'], // TDS etc
+    ['FIC','999','embankment:type','divider'], // TDS etc
+    ['FIC','999','embankment:type','other'], // Other
 
     // AFC - Agricultural Facility Type
     ['FFN','2','building','farm'],

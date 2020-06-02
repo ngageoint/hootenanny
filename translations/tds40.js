@@ -2398,6 +2398,30 @@ tds40 = {
     // Debug:
     if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
+    // Use the FCODE to add some tags
+    if (attrs.F_CODE)
+    {
+        var ftag = tds40.fcodeLookup['F_CODE'][attrs.F_CODE];
+        if (ftag)
+        {
+            if (!tags[ftag[0]])
+            {
+                tags[ftag[0]] = ftag[1];
+            }
+            else
+            {
+                // Debug
+                hoot.logDebug('Tried to replace: ' + ftag[0] + '=' + tags[ftag[0]] + '  with ' + ftag[1]);
+            }
+            // Debug: Dump out the tags from the FCODE
+            // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        }
+        else
+        {
+            hoot.logTrace('Translation for F_CODE ' + attrs.F_CODE + ' not found');
+        }
+    }
+
     // The Nuke Option: If we have a relation, drop the feature and carry on
     if (tags['building:part']) return null;
 

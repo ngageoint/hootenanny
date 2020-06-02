@@ -93,6 +93,12 @@ tds70.rules = {
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
+    ['F_CODE','DB090','embankment','mound'], // Embankment
+    ['F_CODE','DB090','embankment','berm'],
+    ['F_CODE','DB090','man_made','dyke'],
+    ['F_CODE','DB090','embankment','fill'],
+    ['F_CODE','DB090','embankment','levee'],
+    ['F_CODE','DB090','embankment','divider'],
     ['F_CODE','EB070','natural','heath'], // Brush
     ['F_CODE','ED010','natural','wetland'], // Marsh
     ['F_CODE','ED010','wetland','reedbed'], // Marsh
@@ -1327,12 +1333,12 @@ tds70.rules = {
 
     // FIC - Embankment Type
     // ['FIC','-999999',undefined,undefined], // No Information
-    ['FIC','1','embankment:type','mound'], // Mound
-    ['FIC','2','embankment:type','fill'], // Fill
-    ['FIC','3','embankment:type','dyke'], // Dyke
-    ['FIC','5','embankment:type','levee'], // Levee
-    ['FIC','6','embankment:type','divider'], // Divider
-    ['FIC','999','embankment:type','other'], // Other
+    ['FIC','1','embankment','mound'], // Mound
+    ['FIC','2','embankment','fill'], // Fill
+    ['FIC','3','man-made','dyke'], // Dyke
+    ['FIC','5','embankment','levee'], // Levee
+    ['FIC','6','embankment','divider'], // Divider
+    ['FIC','999','embankment','other'], // Other
 
     // FLO - Floating
     // ['FLO','-999999',undefined,undefined], // No Information
@@ -1865,11 +1871,6 @@ tds70.rules = {
     // ['LUN','-999999',undefined,undefined], // No Information
     ['LUN','1000','underground','no'],
     ['LUN','1001','underground','yes'],
-
-    // MAN - Maritime Navigation Marked
-    // ['MAN','-999999',undefined,undefined], // No Information
-    ['MAN','1000','navigation:maritime_landmark','no'],
-    ['MAN','1001','navigation:maritime_landmark','yes'],
 
     // MCC - Structural Material Type
     // ['MCC','-999999',undefined,undefined], // No Information
@@ -3599,7 +3600,6 @@ tds70.rules = {
     ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
 
     // ZVH_VDT - Highest Elevation <vertical datum> - See VDT
-
   ], // End one2one
 
   // Input Translation Rules:
@@ -3667,6 +3667,16 @@ tds70.rules = {
     ['FFN','999','shop','other'],
     ['FFN','999','social_facility','other'],
     ['FFN','999','tourism','other'],
+
+    ['FIC','1','embankment:type','mound'], // Mound
+    ['FIC','1','embankment:type','berm'],
+    ['FIC','1','embankment','berm'],
+    ['FIC','2','embankment:type','fill'], // Fill
+    ['FIC','3','embankment','dyke'], // Dyke
+    ['FIC','3','embankment:type','dyke'], // Dyke
+    ['FIC','5','embankment:type','levee'], // Levee
+    ['FIC','6','embankment:type','divider'], // Divider
+    ['FIC','999','embankment:type','other'], // Other
 
     // Funky Road Type attributes from TDSv40
     ['RTY','4','ref:road:type','boulevard'], // Boulevard
@@ -3829,9 +3839,6 @@ tds70.rules = {
   // ##### Start of ignoreList #####
   // This is taken from OSM pre processing and a few added
   ignoreList : [
-
-
-
     'APT2', 'APT3',
     'APU2', 'APU3',
     'AQO2', 'AQO3',
@@ -3849,7 +3856,6 @@ tds70.rules = {
     'FRT2', 'FRT3',
     'F_CODE',
     'HST2', 'HST3',
-    'HYP',
     'MCC2', 'MCC3',
     'MEM',
     'MST2', 'MST3',
@@ -3863,11 +3869,9 @@ tds70.rules = {
     'RIN_ROI2', 'RIN_ROI3',
     'RIN_RTN2', 'RIN_RTN3',
     'RRC2', 'RRC3',
-    'RTN', 'RTN2', 'RTN3',
     'SBT2', 'SBT3',
     'SSR2', 'SSR3',
     'STL2', 'STL3',
-    'SUR',
     'TRS2', 'TRS3',
     'TSM2', 'TSM3',
     'TTC2', 'TTC3',
@@ -3877,7 +3881,6 @@ tds70.rules = {
     'VCT2', 'VCT3',
     'VSP2', 'VSP3',
     'WBD',
-    'WD1',
     'WEQ2', 'WEQ3',
     'YWQ',
     'ZI005_FNA2', 'ZI005_FNA3',
@@ -3890,7 +3893,6 @@ tds70.rules = {
     'ZI014_PRW2', 'ZI014_PRW3',
     'ZI019_ASP2', 'ZI019_ASP3',
     'ZI019_ASU2', 'ZI019_ASU3',
-    'ZI025_MAN',
     'ZI025_WLE',
     'ZI032_GUG',
     'ZI032_PYC',
@@ -3898,9 +3900,8 @@ tds70.rules = {
     'ZI032_TOS',
     'ZI071_FFN', 'ZI071_FFN2', 'ZI071_FFN3',
     'ZSAX_RX3', 'ZSAX_RX4',
-    'ZVH_VDT',
-  ],
-  // ##### End of ignoreList #####
+    ],
+    // ##### End of ignoreList #####
 
   // ##### Start of fCodeMap #####
   // This is a map of FCODE's and filenames
@@ -3987,23 +3988,16 @@ tds70.rules = {
     'ZI002_UFI':'UFI',
     'ZI025_WLE':'WLE',
     'ZI032_GUG':'GUG',
-    'HYP':'ZI024_HYP',
-    // 'LEN_':'LZN',
     'PFD':'PWA',
     'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
     'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
     'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
-    'RTN':'RIN_RTN', 'RTN2':'RIN_RTN2', 'RTN3':'RIN_RTN3',
-    'SUR':'ZI026_SUR',
     'WBD':'PWA',
-    'WD1':'ZI016_WD1',
     'YWQ':'ZI024_YWQ',
-    'ZI025_MAN':'MAN',
     'ZI032_TOS':'TOS',
     'ZI032_PYC':'PYC',
     'ZI032_PYM':'PYM',
     'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
-    'ZVH_VDT':'VDT'
   },
   // ##### End of swapListIn #####
 
@@ -4032,17 +4026,12 @@ tds70.rules = {
     'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AM080':{'ZI014_YWQ':'YWQ'},
-    'AQ059':{'ZI016_WD1':'WD1'},
     'AQ113':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AQ116':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'BH070':{'PWA':'WBD'},
     'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
-    'ED010':{'ZI024_HYP':'HYP'},
-    'BD115':{'MAN':'ZI025_MAN'},
-    'AP055':{'RIN_RTN':'RTN', 'RIN_RTN2':'RTN2', 'RIN_RTN3':'RTN3'},
-    'ZI026':{'ZI026_SUR':'SUR'}
-  },
+    },
 
   // ##### End of swapListOut #####
 

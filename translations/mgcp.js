@@ -2084,7 +2084,15 @@ mgcp = {
       var ftag = mgcp.fcodeLookup['F_CODE'][attrs.F_CODE];
       if (ftag)
       {
-        tags[ftag[0]] = ftag[1];
+        if (!tags[ftag[0]])
+        {
+          tags[ftag[0]] = ftag[1];
+        }
+        else
+        {
+          // Debug
+          print('Tried to replace: ' + ftag[0] + '=' + tags[ftag[0]] + '  with ' + ftag[1]);
+        }
         // Debug: Dump out the tags from the FCODE
         // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
       }
