@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -35,6 +35,7 @@
 #include <hoot/core/io/OsmGeoJsonReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -52,6 +53,7 @@ class OsmGeoJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(runObjectGeoJsonTest);
   CPPUNIT_TEST(runMultiObjectGeoJsonTest);
   CPPUNIT_TEST(isSupportedTest);
+  CPPUNIT_TEST(runCrsBackwardCompatibilityTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -100,6 +102,8 @@ public:
     reader.open(_inputPath + input);
     reader.read(map);
 
+    MapProjector::projectToWgs84(map);
+
     OsmXmlWriter writer;
     writer.open(_outputPath + output);
     writer.write(map);
@@ -123,6 +127,11 @@ public:
     // Non-Overpass API url's with the correct scheme can point to anything for GeoJSON reading.
     CPPUNIT_ASSERT(uut.isSupported("http://blah"));
     CPPUNIT_ASSERT(uut.isSupported("https://blah"));
+  }
+
+  void runCrsBackwardCompatibilityTest()
+  {
+    runTest("crs.geojson", "crs.osm");
   }
 };
 

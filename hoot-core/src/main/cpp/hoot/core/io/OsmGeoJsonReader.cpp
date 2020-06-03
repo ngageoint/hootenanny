@@ -46,6 +46,7 @@
 // Qt
 #include <QTextStream>
 #include <QTextCodec>
+#include <QRegExp>
 
 // Standard
 #include <string>
@@ -117,12 +118,6 @@ void OsmGeoJsonReader::read(const OsmMapPtr& map)
     _loadJSON(_results[i]);
     _parseGeoJson();
   }
-
-  // GeoJSON doesn't support the crs prop anymore, but if you find an old file that has one you can
-  // use something hardcoded like this as a temp solution:
-//  std::shared_ptr<OGRSpatialReference> spatRef(new OGRSpatialReference());
-//  spatRef->importFromEPSG(32618);
-//  map->setProjection(spatRef);
 }
 
 void OsmGeoJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& map)
@@ -162,6 +157,10 @@ void OsmGeoJsonReader::_parseGeoJson()
     _map->replaceSource(QString(_propTree.get_child(MetadataTags::Source().toStdString()).data().c_str()));
   }
 
+  // The GeoJSON spec doesn't support the crs prop anymore and expects all data to be in WGS84.
+  // This is here for backward compatibility with older data.
+  _parseCoordSys();
+
   // If we don't have a "features" child then we should just have a single feature
   if (_propTree.not_found() != _propTree.find("features"))
   {
@@ -174,6 +173,50 @@ void OsmGeoJsonReader::_parseGeoJson()
   {
     // Single Feature
     _parseGeoJsonFeature(_propTree);
+  }
+}
+
+void OsmGeoJsonReader::_parseCoordSys()
+{
+  if (_propTree.not_found() != _propTree.find("crs"))
+  {
+    // Since there's no spec for this, not exactly sure what to expect here. Below is what I've seen
+    // so far. Its possible this code isn't quite extensible enough.
+    // "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::32618" } }
+
+    int crs = -1;
+    bool ok = false;
+
+    boost::property_tree::ptree crsProp = _propTree.get_child("crs");
+    if (crsProp.not_found() != crsProp.find("properties"))
+    {
+      pt::ptree crsProps = crsProp.get_child("properties");
+      if (crsProps.not_found() != crsProps.find("name"))
+      {
+        const QString crsName = QString::fromStdString(crsProps.get("name", std::string("")));
+        LOG_VART(crsName);
+
+        QRegExp crsNameRegex("EPSG::([0-9]+)", Qt::CaseInsensitive);
+        const int index = crsNameRegex.indexIn(crsName);
+        LOG_VART(index);
+        const QStringList matches = crsNameRegex.capturedTexts();
+        LOG_VART(matches);
+        if (matches.size() == 2)
+        {
+          const QString crsStr = matches[1];
+          LOG_VART(crsStr);
+          crs = crsStr.toInt(&ok);
+        }
+      }
+    }
+
+    if (ok && crs != -1)
+    {
+      LOG_DEBUG("Setting map projection to EPSG: " << crs);
+      std::shared_ptr<OGRSpatialReference> spatRef(new OGRSpatialReference());
+      spatRef->importFromEPSG(crs);
+      _map->setProjection(spatRef);
+    }
   }
 }
 
