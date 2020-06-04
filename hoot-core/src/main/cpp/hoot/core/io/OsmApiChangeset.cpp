@@ -2282,7 +2282,6 @@ void XmlChangeset::failRemainingElements(const ChangesetElementMap& elements)
     if (status != ChangesetElement::Finalized && status != ChangesetElement::Failed)
     {
       element->setStatus(ChangesetElement::Failed);
-      LOG_INFO("Failing Element: " + element->toString(0));
       ++_failedCount;
     }
   }
