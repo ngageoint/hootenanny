@@ -168,7 +168,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-projecting-to-planar");
 
   // find all the matches in this _pMap
-  _intraDatasetElementIds.clear();
+  _intraDatasetMatchOnlyElementIds.clear();
   _intraDatasetElementIdsPopulated = false;
   if (_matchThreshold.get())
   {
@@ -267,7 +267,7 @@ void DiffConflator::_removeMatches(const Status& status)
 
   if (!_intraDatasetElementIdsPopulated)
   {
-    _intraDatasetElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
+    _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
     _intraDatasetElementIdsPopulated = true;
   }
 

@@ -209,8 +209,8 @@ private:
   // Stores the matches we found
   std::vector<ConstMatchPtr> _matches;
 
-  // TODO
-  QSet<ElementId> _intraDatasetElementIds;
+  // IDs of all elements involved in only intra-dataset matches
+  QSet<ElementId> _intraDatasetMatchOnlyElementIds;
   bool _intraDatasetElementIdsPopulated;
 
   // Stores stats calcuated during conflation
@@ -267,9 +267,6 @@ private:
 
   void _updateProgress(const int currentStep, const QString message);
 
-  /*
-   * TODO
-   */
   QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(
     const std::vector<ConstMatchPtr>& matches);
 };
