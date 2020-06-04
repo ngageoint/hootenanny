@@ -86,6 +86,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 DiffConflator::DiffConflator() :
 _matchFactory(MatchFactory::getInstance()),
 _settings(Settings::getInstance()),
+_intraDatasetElementIdsPopulated(false),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _numSnappedWays(0)
 {
@@ -96,6 +97,7 @@ DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThresho
 _matchFactory(MatchFactory::getInstance()),
 _matchThreshold(matchThreshold),
 _settings(Settings::getInstance()),
+_intraDatasetElementIdsPopulated(false),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _numSnappedWays(0)
 {
@@ -166,6 +168,8 @@ void DiffConflator::apply(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-projecting-to-planar");
 
   // find all the matches in this _pMap
+  _intraDatasetElementIds.clear();
+  _intraDatasetElementIdsPopulated = false;
   if (_matchThreshold.get())
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds, _matchThreshold);
@@ -256,46 +260,125 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
 
 void DiffConflator::_removeMatches(const Status& status)
 {
-  // TODO: don't remove poi/poly intra-dataset matches
-
   LOG_DEBUG("\tRemoving match elements with status: " << status.toString() << "...");
 
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
   LOG_VARD(treatReviewsAsMatches);
+
+  if (!_intraDatasetElementIdsPopulated)
+  {
+    _intraDatasetElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
+    _intraDatasetElementIdsPopulated = true;
+  }
+
   for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
+    LOG_VART(match);
     if (treatReviewsAsMatches || match->getType() != MatchType::Review)
     {
-      std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
+      std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
       for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
            pit != pairs.end(); ++pit)
-      {
+      {  
+        ElementPtr e1;
+        ElementPtr e2;
+
         if (!pit->first.isNull())
         {
           LOG_VART(pit->first);
-          ElementPtr e = _pMap->getElement(pit->first);
-          if (e && e->getStatus() == status)
-          {
-            //LOG_VART(e->getTags().get("name"));
-            RecursiveElementRemover(pit->first).apply(_pMap);
-          }
+          e1 = _pMap->getElement(pit->first);
+
         }
         if (!pit->second.isNull())
         {
           LOG_VART(pit->second);
-          ElementPtr e = _pMap->getElement(pit->second);
-          if (e && e->getStatus() == status)
-          {
-            //LOG_VART(e->getTags().get("name"));
-            RecursiveElementRemover(pit->second).apply(_pMap);
-          }
+          e2 = _pMap->getElement(pit->second);
+        }
+
+        if (e1 && e1->getStatus() == status &&
+            // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
+            // these to be removed from the diff output.
+            !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
+              _intraDatasetElementIds.contains(pit->first)))
+        {
+          LOG_VART(e1);
+          RecursiveElementRemover(pit->first).apply(_pMap);
+        }
+        if (e2 && e2->getStatus() == status &&
+            !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
+             _intraDatasetElementIds.contains(pit->second)))
+        {
+          LOG_VART(e2);
+          RecursiveElementRemover(pit->second).apply(_pMap);
         }
       }
     }
   }
 
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-" + status.toString() + "-matches");
+}
+
+QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
+  const std::vector<ConstMatchPtr>& matches)
+{
+  QSet<ElementId> elementIds;
+
+  const bool allowReviews = ConfigOptions().getDifferentialTreatReviewsAsMatches();
+
+  // Go through and record any element's involved in an intradataset match.
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
+       matchItr != matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    if (match->getType() == MatchType::Match ||
+        (allowReviews && match->getType() == MatchType::Review))
+    {
+      if (match->getMatchPairs().size() != 1)
+      {
+        LOG_VART(match->getMatchPairs().size());
+      }
+      assert(match->getMatchPairs().size() == 1);
+      std::pair<ElementId, ElementId> matchElementIds = *(match->getMatchPairs()).begin();
+      ConstElementPtr e1 = _pMap->getElement(matchElementIds.first);
+      ConstElementPtr e2 = _pMap->getElement(matchElementIds.second);
+      // any match with elements having the same status (came from the same dataset) is in
+      // intra-dataset match
+      if (e1 && e2 && e1->getStatus() == e2->getStatus())
+      {
+        elementIds.insert(matchElementIds.first);
+        elementIds.insert(matchElementIds.second);
+      }
+    }
+  }
+
+  // Now, go back through and exclude any that were also involved in an inter-dataset match.
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
+       matchItr != matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    if (match->getType() == MatchType::Match ||
+        (allowReviews && match->getType() == MatchType::Review))
+    {
+      if (match->getMatchPairs().size() != 1)
+      {
+        LOG_VART(match->getMatchPairs().size());
+      }
+      assert(match->getMatchPairs().size() == 1);
+      std::pair<ElementId, ElementId> matchElementIds = *(match->getMatchPairs()).begin();
+      ConstElementPtr e1 = _pMap->getElement(matchElementIds.first);
+      ConstElementPtr e2 = _pMap->getElement(matchElementIds.second);
+      // any match with elements having the same status (came from the same dataset) is in
+      // intra-dataset match
+      if (e1 && e2 && e1->getStatus() != e2->getStatus())
+      {
+        elementIds.remove(matchElementIds.first);
+        elementIds.remove(matchElementIds.second);
+      }
+    }
+  }
+
+  return elementIds;
 }
 
 MemChangesetProviderPtr DiffConflator::getTagDiff()

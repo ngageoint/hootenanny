@@ -209,6 +209,10 @@ private:
   // Stores the matches we found
   std::vector<ConstMatchPtr> _matches;
 
+  // TODO
+  QSet<ElementId> _intraDatasetElementIds;
+  bool _intraDatasetElementIdsPopulated;
+
   // Stores stats calcuated during conflation
   QList<SingleStat> _stats;
 
@@ -262,6 +266,12 @@ private:
   long _snapSecondaryRoadsBackToRef();
 
   void _updateProgress(const int currentStep, const QString message);
+
+  /*
+   * TODO
+   */
+  QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(
+    const std::vector<ConstMatchPtr>& matches);
 };
 
 }
