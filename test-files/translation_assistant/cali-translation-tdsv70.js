@@ -5,7 +5,7 @@ var attributeMapping = {
     "cali-test": {
         "CITY": "IGNORED",
         "CNTRY_CODE": {
-            "ZI020_GE4::(Location Country) Designation : GENC Short URN-based Identifier": "COLOMBIA AS OF 2013-06-30"
+            "ZI020_GE4::(Location Country) Designation : GENC Short URN-based Identifier": "COLOMBIA"
         },
         "COUNTRY": "IGNORED",
         "ET_ID": "IGNORED",

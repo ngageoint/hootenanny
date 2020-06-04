@@ -6,11 +6,11 @@ export TA_IN=test-files/translation_assistant
 export TA_OUT=test-output/cmd/slow/translation_assistant_convert-ogr2osm
 mkdir -p $TA_OUT
 
-# Lots and lots of debug output
-# HOOT_OPT="--debug -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
-
 # Minimal output
 HOOT_OPT="--debug -C Testing.conf"
+
+# Lots and lots of debug output
+#HOOT_OPT="--debug -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
 
 schemas=( "tdsv61" "tdsv40" "mgcp" "tdsv70")
 
