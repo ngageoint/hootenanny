@@ -96,6 +96,7 @@ ggdm30.rules = {
     ['F_CODE','AT042','power','tower'], // OSM
     ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
     ['F_CODE','BA030','place','islet'], // Island - From OSM
+    ['F_CODE','BA040','water','tidal'], // Tidal Water
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
@@ -1317,7 +1318,7 @@ ggdm30.rules = {
     ['CAA','4','controlling_authority','tribal'], // Tribal
     ['CAA','5','controlling_authority','military'], // Military
     ['CAA','6','controlling_authority','municipal'], // Municipal
-    ['CAA','7','controlling_authority','joint_military_and_civilian'], // Joint Military and Civilian
+    ['CAA','7','controlling_authority','joint_military_civilian'], // Joint Military and Civilian
     ['CAA','8','controlling_authority','international'], // International
     ['CAA','11','controlling_authority','province'], // Province
     ['CAA','13','controlling_authority','regional'], // Regional
@@ -2913,7 +2914,7 @@ ggdm30.rules = {
     ['IWT','1','water','lake'], // Lake
     ['IWT','2','water','pond'], // Pond
     ['IWT','3','water','undifferentiated_water_body'], // Undifferentiated Water Body
-    ['IWT','4','man_made','reservoir'], // Reservoir
+    ['IWT','4','water','reservoir'], // Reservoir
     ['IWT','5','landuse','basin'], // Basin
     ['IWT','6','water','water-hole'], // Water-hole
     ['IWT','7','water','landlocked_sea'], // Landlocked Sea
@@ -5781,7 +5782,7 @@ ggdm30.rules = {
     // ZI017_RRA - Track Information : Railway Power Method
     // ['ZI017_RRA','-999999',undefined,undefined], // No Information
     ['ZI017_RRA','1','electrified','rail'], // Electrified Track
-    ['ZI017_RRA','3','electrified','overhead'], // Overhead Electrified
+    ['ZI017_RRA','3','electrified','contact_line'], // Overhead Electrified
     ['ZI017_RRA','4','electrified','no'], // Non-electrified
     ['ZI017_RRA','999','electrified','other'], // Other
 
@@ -6268,7 +6269,7 @@ ggdm30.rules = {
     //     [undefined,undefined,'amenity','college'], //  converted in pre processing
     [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
-    ['IWT','4','water','reservoir'], // Reservoir
+    ['IWT','4','man_made','reservoir'], // Reservoir
 
     // From UFD
     ['CAA','-999999','controlling_authority','unknown'],

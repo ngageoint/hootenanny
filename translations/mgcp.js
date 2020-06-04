@@ -908,6 +908,11 @@ mgcp = {
         // Castles are not Bunkers but they get stored in the same layer
         if (tags.military == 'bunker' && tags.historic == 'castle') delete tags.military;
         break;
+
+      // BA040 - Tidal Water
+      case 'BA040':
+        tags.natural = 'water';
+        break;
     } // End switch FCODE
 
     // Sort out TRS (Transport Type)
@@ -1187,7 +1192,6 @@ mgcp = {
       // ["(t.shop || t.office) && !(t.building)","a.F_CODE = 'AL015'"],
       ["t.tourism == 'information' && t.information","delete t.tourism"],
       ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
-      ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
       ["t.water == 'pond'","a.F_CODE = 'BH170'; t.natural = 'other_pool_type'"],
       ["t.water == 'river'","t.waterway = 'river'"],
       ["t.waterway == 'riverbank'","t.waterway = 'river'"],
@@ -1471,6 +1475,26 @@ mgcp = {
       attrs.F_CODE = 'AQ140'; // Vehicle lot / car park
     }
 
+    // Fix the changed Tidal tag
+    if (tags.water == 'tidal')
+    {
+      tags.tidal = 'yes';
+      delete tags.water;
+    }
+
+    // Sort out tidal features
+    if (tags.tidal && (tags.water || tags.waterway))
+    {
+      if (tags.tidal == 'yes') attrs.TID = '1001'; // Tidal
+      if (tags.tidal == 'no') attrs.TID = '1000'; // non-Tidal
+
+      // Ignore other options
+      delete tags.tidal;
+    }
+
+    // Military buildings in MGCP TRD3 have a MFC tag that we need to account for
+    if (tags.building && tags.military) attrs.F_CODE = 'AL015';
+
     // Keep looking for an FCODE
     // This uses the fcodeLookup tables that are defined earlier
     // var fcodeLookup = translate.createLookup(fcodeList);
@@ -1610,6 +1634,25 @@ mgcp = {
         attrs.F_CODE = 'AM070'; // Storage Tank
         tags.product = 'gas';
         break;
+    }
+
+    // Fix up water features from OSM
+    if (tags.natural == 'water' && !(tags.water || tags.waterway))
+    {
+      if (tags.tidal == 'yes')
+      {
+        attrs.F_CODE = 'BA040';
+      }
+      else if (geometryType =='Line')
+      {
+        tags.waterway = 'river';
+        attrs.F_CODE = 'BH140';
+      }
+      else
+      {
+        tags.water = 'lake';
+        attrs.F_CODE = 'BH080';
+      }
     }
 
     // Names. Sometimes we don't have a name but we do have language ones

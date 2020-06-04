@@ -67,7 +67,7 @@ mgcp.rules = {
     ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
     ['F_CODE','BH060','water:race','flume'], // Flume - NFDD BH065
     ['F_CODE','BH080','water','lake'], // Lake - NFDD BH082
-    ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
+    ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BI041','man_made','basin_gate'], // Water Gate - NFDD BI045
     ['F_CODE','DB200','natural','gully'], // Gully - FCODE Retired
     ['F_CODE','EC030','landuse','forest'], // Wood - NFDD EC015
@@ -82,6 +82,7 @@ mgcp.rules = {
     // Note: These get swapped around before being used
     fcodeOne2oneOut : [
     ['F_CODE','AD010','power','station'], // Electric Power Station, Power Plant
+    ['F_CODE','AG030',undefined,undefined], // Shopping Complex - Not valid MGCP
     ['F_CODE','AH050','historic','castle'], // Fortification - Not great
     ['F_CODE','AJ110','building','greenhouse_horticulture'], // Greenhouse
     ['F_CODE','AK030','leisure','water_park'], // Amusement Park
@@ -107,6 +108,7 @@ mgcp.rules = {
     ['F_CODE','AL241','man_made','mast'], // MGCP does not have AT011 (Aerial)
     ['F_CODE','AL260','barrier','city_wall'], // Wall
     ['F_CODE','AP020',undefined,undefined], // Road Interchange -Not valid MGCP
+    // ['F_CODE','AP030','highway','living_street'],
     ['F_CODE','AP030','highway','construction'], // Lifecycle
     ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
     ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
@@ -131,10 +133,11 @@ mgcp.rules = {
     ['F_CODE','AT050','landuse','facility'],
     ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
     ['F_CODE','BA030','place','islet'], // From OSM
+    ['F_CODE','BA040','water','tidal'], // Tidal Water
     ['F_CODE','BB190','man_made','pier'], // From OSM
     ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
     ['F_CODE','BH130','landuse','reservoir'], // From OSM
-    ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
+    ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
     ['F_CODE','DB090','embankment','berm'],
     ['F_CODE','DB090','embankment','divider'],

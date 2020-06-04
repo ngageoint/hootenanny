@@ -770,50 +770,50 @@ ggdm30 = {
       // Rules format:  ["test expression","output result"];
       // Note: t = tags, a = attrs and attrs can only be on the RHS
       var rulesList = [
-        ['t.barrier == \'dragons_teeth\' && !(t.tank_trap)','t.barrier = \'tank_trap\'; t.tank_trap = \'dragons_teeth\''],
-        ['t[\'bridge:movable\'] && t[\'bridge:movable\'] !== \'no\' && t[\'bridge:movable\'] !== \'unknown\'','t.bridge = \'movable\''],
-        ['t.navigationaid && !(t.aeroway)','t.aeroway = \'navigationaid\''],
-        ['t.amenity == \'stop\' && t[\'transport:type\'] == \'bus\'','t.highway = \'bus_stop\''],
-        ['t.diplomatic && !(t.amenity)','t.amenity = \'embassy\''],
-        ['t.boundary == \'protected_area\' && !(t.protect_class)','t.protect_class = \'4\''],
-        ['t.bunker_type && !(t.military)','t.military = \'bunker\''],
-        ['t.cable ==\'yes\' && t[\'cable:type\'] == \'power\'',' t.power = \'line\'; delete t.cable; delete t[\'cable:type\']'],
-        ['t.control_tower == \'yes\' && t.use == \'air_traffic_control\'','t[\'tower:type\'] = \'observation\''],
-        ['t.crossing == \'tank\'','t.highway = \'crossing\''],
+        ['t.barrier == "dragons_teeth" && !(t.tank_trap)','t.barrier = "tank_trap"; t.tank_trap = "dragons_teeth"'],
+        ['t["bridge:movable"] && t["bridge:movable"] !== "no" && t["bridge:movable"] !== "unknown"','t.bridge = "movable"'],
+        ['t.navigationaid && !(t.aeroway)','t.aeroway = "navigationaid"'],
+        ['t.amenity == "stop" && t["transport:type"] == "bus"','t.highway = "bus_stop"'],
+        ['t.diplomatic && !(t.amenity)','t.amenity = "embassy"'],
+        ['t.boundary == "protected_area" && !(t.protect_class)','t.protect_class = "4"'],
+        ['t.bunker_type && !(t.military)','t.military = "bunker"'],
+        ['t.cable =="yes" && t["cable:type"] == "power"',' t.power = "line"; delete t.cable; delete t["cable:type"]'],
+        ['t.control_tower == "yes" && t.use == "air_traffic_control"','t["tower:type"] = "observation"'],
+        ['t.crossing == "tank"','t.highway = "crossing"'],
         ['t.desert_surface','t.surface = t.desert_surface; delete t.desert_surface'],
-        ['t.dock && !(t.waterway)','t.waterway = \'dock\''],
-        ['t.drive_in == \'yes\'','t.amenity = \'cinema\''],
-        ['t[\'generator:source\']','t.power = \'generator\''],
-        ['t[\'glacier:type\'] == \'icecap\' && t.natural == \'glacier\'','delete t.natural'],
-        ['t.golf == \'driving_range\' && !(t.leisure)','t.leisure = \'golf_course\''],
-        ['t.historic == \'castle\' && !(t.ruins) && !(t.building)','t.building = \'yes\''],
+        ['t.dock && !(t.waterway)','t.waterway = "dock"'],
+        ['t.drive_in == "yes"','t.amenity = "cinema"'],
+        ['t["generator:source"]','t.power = "generator"'],
+        ['t["glacier:type"] == "icecap" && t.natural == "glacier"','delete t.natural'],
+        ['t.golf == "driving_range" && !(t.leisure)','t.leisure = "golf_course"'],
+        ['t.historic == "castle" && !(t.ruins) && !(t.building)','t.building = "yes"'],
         //["t.in_tunnel == 'yes' && !(t.tunnel)","t.tunnel = 'yes'; delete t.in_tunnel"],
-        ['t.industrial && !(t.landuse)','t.landuse = \'industrial\''],
-        ['(t.landuse == \'built_up_area\' || t.place == \'settlement\') && t.building','t[\'settlement:type\'] = t.building; delete t.building'],
-        ['t.leisure == \'stadium\'','t.building = \'yes\''],
-        ['t[\'material:vertical\']','t.material = t[\'material:vertical\']; delete t[\'material:vertical\']'],
-        ['t[\'monitoring:weather\'] == \'yes\'','t.man_made = \'monitoring_station\''],
-        ['t.natural ==\'spring\' && t[\'spring:type\'] == \'spring\'','delete t[\'spring:type\']'],
+        ['t.industrial && !(t.landuse)','t.landuse = "industrial"'],
+        ['(t.landuse == "built_up_area" || t.place == "settlement") && t.building','t["settlement:type"] = t.building; delete t.building'],
+        ['t.leisure == "stadium"','t.building = "yes"'],
+        ['t["material:vertical"]','t.material = t["material:vertical"]; delete t["material:vertical"]'],
+        ['t["monitoring:weather"] == "yes"','t.man_made = "monitoring_station"'],
+        ['t.natural =="spring" && t["spring:type"] == "spring"','delete t["spring:type"]'],
         //["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
-        ['t.product && t.man_made == \'storage_tank\'','t.content = t.product; delete t.product'],
-        ['t.public_transport == \'station\' && t[\'transport:type\'] == \'railway\'','t.railway = \'station\''],
-        ['t.public_transport == \'station\' && t[\'transport:type\'] == \'bus\'','t.bus = \'yes\''],
-        ['t.protect_class && !(t.boundary)','t.boundary = \'protected_area\''],
-        ['t.pylon ==\'yes\' && t[\'cable:type\'] == \'cableway\'',' t.aerialway = \'pylon\''],
-        ['t.pylon ==\'yes\' && t[\'cable:type\'] == \'power\'',' t.power = \'tower\''],
-        ['t[\'seamark:mooring:category\'] && !(t[\'seamark:type\'])','t[\'seamark:type\'] = \'mooring\''],
-        ['t.sidetrack && !(t.railway)','t.railway = \'rail\''],
-        ['t.sidetrack && !(t.service)','t.service = \'siding\''],
-        ['t.social_facility','t.amenity = \'social_facility\'; t[\'social_facility:for\'] = t.social_facility; t.social_facility = \'shelter\''],
-        ['t[\'theatre:type\'] && !(t.amenity)','t.amenity = \'theatre\''],
-        ['t[\'tower:material\']','t.material = t[\'tower:material\']; delete t[\'tower:material\']'],
-        ['t[\'tower:type\'] && !(t.man_made)','t.man_made = \'tower\''],
-        ['t.use == \'islamic_prayer_hall\' && !(t.amenity)','t.amenity = \'place_of_worship\''],
-        ['t.water || t.landuse == \'basin\'','t.natural = \'water\''],
-        ['t.waterway == \'flow_control\'','t.flow_control = \'sluice_gate\''],
-        ['t.waterway == \'vanishing_point\' && t[\'water:sink:type\'] == \'sinkhole\'','t.natural = \'sinkhole\'; delete t.waterway; delete t[\'water:sink:type\']'],
-        ['t.wetland && !(t.natural)','t.natural = \'wetland\''],
-        ['t[\'width:minimum_traveled_way\'] && !(t.width)','t.width = t[\'width:minimum_traveled_way\']']
+        ['t.product && t.man_made == "storage_tank"','t.content = t.product; delete t.product'],
+        ['t.public_transport == "station" && t["transport:type"] == "railway"','t.railway = "station"'],
+        ['t.public_transport == "station" && t["transport:type"] == "bus"','t.bus = "yes"'],
+        ['t.protect_class && !(t.boundary)','t.boundary = "protected_area"'],
+        ['t.pylon =="yes" && t["cable:type"] == "cableway"',' t.aerialway = "pylon"'],
+        ['t.pylon =="yes" && t["cable:type"] == "power"',' t.power = "tower"'],
+        ['t["seamark:mooring:category"] && !(t["seamark:type"])','t["seamark:type"] = "mooring"'],
+        ['t.sidetrack && !(t.railway)','t.railway = "rail"'],
+        ['t.sidetrack && !(t.service)','t.service = "siding"'],
+        ['t.social_facility','t.amenity = "social_facility"; t["social_facility:for"] = t.social_facility; t.social_facility = "shelter"'],
+        ['t["theatre:type"] && !(t.amenity)','t.amenity = "theatre"'],
+        ['t["tower:material"]','t.material = t["tower:material"]; delete t["tower:material"]'],
+        ['t["tower:type"] && !(t.man_made)','t.man_made = "tower"'],
+        ['t.use == "islamic_prayer_hall" && !(t.amenity)','t.amenity = "place_of_worship"'],
+        ['t.water || t.landuse == "basin"','t.natural = "water"'],
+        ['t.waterway == "flow_control"','t.flow_control = "sluice_gate"'],
+        ['t.waterway == "vanishing_point" && t["water:sink:type"] == "sinkhole"','t.natural = "sinkhole"; delete t.waterway; delete t["water:sink:type"]'],
+        ['t.wetland && !(t.natural)','t.natural = "wetland"'],
+        ['t["width:minimum_traveled_way"] && !(t.width)','t.width = t["width:minimum_traveled_way"]']
       ];
 
       ggdm30.osmPostRules = translate.buildComplexRules(rulesList);
@@ -916,10 +916,37 @@ ggdm30 = {
         tags.man_made = 'works';
       }
     }
-    // Add defaults for common features
-    if (attrs.F_CODE == 'AP020' && !(tags.junction)) tags.junction = 'yes';
-    if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
-    if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
+
+    // Additional rules for particular FCODE's
+    switch (attrs.F_CODE)
+    {
+    case undefined: // Break early if no value. Should not get here.....
+      break;
+
+      // Add defaults for common features
+      case 'AP020':
+        if (! tags.junction) tags.junction = 'yes';
+        break;
+
+      case 'AQ040':
+        if (! tags.bridge) tags.bridge = 'yes';
+        break;
+
+      case 'BH140':
+        if (! tags.waterway) tags.waterway = 'river';
+        break;
+
+      // Tidal Water
+      case 'BA040':
+        tags.natural = 'water';
+        break;
+
+      // BH082 - Inland Water
+      case 'BH082':
+        // This leaves us with just "natural=water"
+        if (tags.water == 'undifferentiated_water_body') delete tags.water;
+        break;
+    } // End switch F_CODE
 
     // Fix lifecycle tags
     switch (tags.condition)
@@ -1218,71 +1245,70 @@ ggdm30 = {
     {
       // See ToOsmPostProcessing for more details about rulesList
       var rulesList = [
-        ['t.aeroway == \'navigationaid\' && t.navigationaid','delete t.navigationaid'],
-        ['t.amenity == \'bus_station\'','t.public_transport = \'station\'; t[\'transport:type\'] = \'bus\''],
+        ['t.aeroway == "navigationaid" && t.navigationaid','delete t.navigationaid'],
+        ['t.amenity == "bus_station"','t.public_transport = "station"; t["transport:type"] = "bus"'],
         // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
-        ['t.barrier == \'tank_trap\' && t.tank_trap == \'dragons_teeth\'','t.barrier = \'dragons_teeth\'; delete t.tank_trap'],
-        ['t.communication == \'line\'','t[\'cable:type\'] = \'communication\''],
+        ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
+        ['t.communication == "line"','t["cable:type"] = "communication"'],
         ['t.content && !(t.product)','t.product = t.content; delete t.content'],
-        ['t.control_tower && t.man_made == \'tower\'','delete t.man_made'],
-        ['t.crossing == \'tank\' && t.highway == \'crossing\'','delete t.highway'],
-        ['t.diplomatic && t.amenity == \'embassy\'','delete t.amenity'],
-        ['t.dock && t.waterway == \'dock\'','delete t.waterway'],
-        ['t.golf == \'driving_range\' && t.leisure == \'golf_course\'','delete t.leisure'],
-        ['t.highway == \'bus_stop\'','t[\'transport:type\'] = \'bus\''],
-        ['t.highway == \'crossing\'','t[\'transport:type\'] = \'road\';a.F_CODE = \'AQ062\'; delete t.highway'],
-        ['t.highway == \'give-way\'','a.F_CODE = \'AQ062\''],
-        ['t.highway == \'mini_roundabout\'','t.junction = \'roundabout\''],
-        ['t.highway == \'steps\'','t.highway = \'footway\''],
-        ['t.highway == \'stop\'','a.F_CODE = \'AQ062\''],
-        ['t.historic == \'castle\' && t.building','delete t.building'],
-        ['t.historic == \'castle\' && t.ruins == \'yes\'','t.condition = \'destroyed\'; delete t.ruins'],
-        ['t.landcover == \'snowfield\' || t.landcover == \'ice-field\'','a.F_CODE = \'BJ100\''],
-        ['t.landuse == \'allotments\'','t.landuse = \'farmland\''],
-        ['t.landuse == \'brownfield\'','t.landuse = \'built_up_area\'; t.condition = \'destroyed\''],
-        ['t.landuse == \'construction\'','t.landuse = \'built_up_area\'; t.condition = \'construction\''],
-        ['t.landuse == \'farm\'','t.landuse = \'farmland\''],
-        ['t.landuse == \'farmland\' && t.crop == \'fruit_tree\'','t.landuse = \'orchard\''],
-        ['t.landuse == \'farmyard\'','t.facility = \'yes\'; t.use = \'agriculture\'; delete t.landuse'],
-        ['t.landuse == \'grass\'','t.natural = \'grassland\'; t[\'grassland:type\'] = \'grassland\';'],
-        ['t.landuse == \'meadow\'','t.natural = \'grassland\'; t[\'grassland:type\'] = \'meadow\';'],
-        ['t.landuse == \'military\'','t.military = \'installation\'; delete t.landuse'],
-        ['t.landuse == \'railway\' && t[\'railway:yard\'] == \'marshalling_yard\'','a.F_CODE = \'AN060\''],
-        ['t.leisure == \'recreation_ground\'','t.landuse = \'recreation_ground\'; delete t.leisure'],
-        ['t.landuse == \'reservoir\'','t.water = \'reservoir\'; delete t.landuse'],
-        ['t.landuse == \'retail\'','t.landuse = \'built_up_area\'; t.use = \'commercial\''],
-        ['t.landuse == \'scrub\'','t.natural = \'scrub\'; delete t.landuse'],
-        ['t.launch_pad','delete t.launch_pad; t.aeroway=\'launchpad\''],
-        ['t.leisure == \'sports_centre\'','t.facility = \'yes\'; t.use = \'recreation\'; delete t.leisure'],
-        ['t.leisure == \'stadium\' && t.building','delete t.building'],
-        ['t.man_made && t.building == \'yes\'','delete t.building'],
-        ['t.man_made == \'embankment\'','t.embankment = \'yes\'; delete t.man_made'],
-        ['t.man_made == \'launch_pad\'','delete t.man_made; t.aeroway=\'launchpad\''],
-        ['t.median == \'yes\'','t.is_divided = \'yes\''],
-        ['t.military == \'barracks\'','t.use = \'dormitory\''],
-        ['t.natural == \'desert\' && t.surface','t.desert_surface = t.surface; delete t.surface'],
-        ['t.natural == \'sinkhole\'','a.F_CODE = \'BH145\'; t[\'water:sink:type\'] = \'sinkhole\'; delete t.natural'],
-        ['t.natural == \'spring\' && !(t[\'spring:type\'])','t[\'spring:type\'] = \'spring\''],
-        ['t.natural == \'wood\'','t.landuse = \'forest\'; delete t.natural'],
-        ['t.power == \'pole\'','t[\'cable:type\'] = \'power\'; t[\'tower:shape\'] = \'pole\''],
-        ['t.power == \'tower\'','t[\'cable:type\'] = \'power\''],
-        ['t.power == \'line\'','t[\'cable:type\'] = \'power\'; t.cable = \'yes\'; delete t.power'],
-        ['t.power == \'generator\'','t.use = \'power_generation\'; a.F_CODE = \'AL013\''],
-        ['t.rapids == \'yes\'','t.waterway = \'rapids\'; delete t.rapids'],
-        ['t.railway == \'station\'','t.public_transport = \'station\';  t[\'transport:type\'] = \'railway\''],
-        ['t.railway == \'level_crossing\'','t[\'transport:type\'] = \'railway\';t[\'transport:type2\'] = \'road\'; a.F_CODE = \'AQ062\'; delete t.railway'],
-        ['t.railway == \'crossing\'','t[\'transport:type\'] = \'railway\'; a.F_CODE = \'AQ062\'; delete t.railway'],
+        ['t.control_tower && t.man_made == "tower"','delete t.man_made'],
+        ['t.crossing == "tank" && t.highway == "crossing"','delete t.highway'],
+        ['t.diplomatic && t.amenity == "embassy"','delete t.amenity'],
+        ['t.dock && t.waterway == "dock"','delete t.waterway'],
+        ['t.golf == "driving_range" && t.leisure == "golf_course"','delete t.leisure'],
+        ['t.highway == "bus_stop"','t["transport:type"] = "bus"'],
+        ['t.highway == "crossing"','t["transport:type"] = "road";a.F_CODE = "AQ062"; delete t.highway'],
+        ['t.highway == "give-way"','a.F_CODE = "AQ062"'],
+        ['t.highway == "mini_roundabout"','t.junction = "roundabout"'],
+        ['t.highway == "steps"','t.highway = "footway"'],
+        ['t.highway == "stop"','a.F_CODE = "AQ062"'],
+        ['t.historic == "castle" && t.building','delete t.building'],
+        ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
+        ['t.landcover == "snowfield" || t.landcover == "ice-field"','a.F_CODE = "BJ100"'],
+        ['t.landuse == "allotments"','t.landuse = "farmland"'],
+        ['t.landuse == "brownfield"','t.landuse = "built_up_area"; t.condition = "destroyed"'],
+        ['t.landuse == "construction"','t.landuse = "built_up_area"; t.condition = "construction"'],
+        ['t.landuse == "farm"','t.landuse = "farmland"'],
+        ['t.landuse == "farmland" && t.crop == "fruit_tree"','t.landuse = "orchard"'],
+        ['t.landuse == "farmyard"','t.facility = "yes"; t.use = "agriculture"; delete t.landuse'],
+        ['t.landuse == "grass"','t.natural = "grassland"; t["grassland:type"] = "grassland";'],
+        ['t.landuse == "meadow"','t.natural = "grassland"; t["grassland:type"] = "meadow";'],
+        ['t.landuse == "military"','t.military = "installation"; delete t.landuse'],
+        ['t.landuse == "railway" && t["railway:yard"] == "marshalling_yard"','a.F_CODE = "AN060"'],
+        ['t.leisure == "recreation_ground"','t.landuse = "recreation_ground"; delete t.leisure'],
+        ['t.landuse == "reservoir"','t.water = "reservoir"; delete t.landuse'],
+        ['t.landuse == "retail"','t.landuse = "built_up_area"; t.use = "commercial"'],
+        ['t.landuse == "scrub"','t.natural = "scrub"; delete t.landuse'],
+        ['t.launch_pad','delete t.launch_pad; t.aeroway="launchpad"'],
+        ['t.leisure == "sports_centre"','t.facility = "yes"; t.use = "recreation"; delete t.leisure'],
+        ['t.leisure == "stadium" && t.building','delete t.building'],
+        ['t.man_made && t.building == "yes"','delete t.building'],
+        ['t.man_made == "embankment"','t.embankment = "yes"; delete t.man_made'],
+        ['t.man_made == "launch_pad"','delete t.man_made; t.aeroway="launchpad"'],
+        ['t.median == "yes"','t.is_divided = "yes"'],
+        ['t.military == "barracks"','t.use = "dormitory"'],
+        ['t.natural == "desert" && t.surface','t.desert_surface = t.surface; delete t.surface'],
+        ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
+        ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
+        ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
+        ['t.power == "pole"','t["cable:type"] = "power"; t["tower:shape"] = "pole"'],
+        ['t.power == "tower"','t["cable:type"] = "power"'],
+        ['t.power == "line"','t["cable:type"] = "power"; t.cable = "yes"; delete t.power'],
+        ['t.power == "generator"','t.use = "power_generation"; a.F_CODE = "AL013"'],
+        ['t.rapids == "yes"','t.waterway = "rapids"; delete t.rapids'],
+        ['t.railway == "station"','t.public_transport = "station";  t["transport:type"] = "railway"'],
+        ['t.railway == "level_crossing"','t["transport:type"] = "railway";t["transport:type2"] = "road"; a.F_CODE = "AQ062"; delete t.railway'],
+        ['t.railway == "crossing"','t["transport:type"] = "railway"; a.F_CODE = "AQ062"; delete t.railway'],
         ['t.resource','t.raw_material = t.resource; delete t.resource'],
-        ['t.route == \'road\' && !(t.highway)','t.highway = \'road\'; delete t.route'],
+        ['t.route == "road" && !(t.highway)','t.highway = "road"; delete t.route'],
         // ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
-        ['t.social_facility == \'shelter\'','t.social_facility = t[\'social_facility:for\']; delete t.amenity; delete t[\'social_facility:for\']'],
-        ['t[\'tower:type\'] == \'minaret\' && t.man_made == \'tower\'','delete t.man_made'],
-        ['t.tunnel == \'building_passage\'','t.tunnel = \'yes\''],
-        ['t.use == \'islamic_prayer_hall\' && t.amenity == \'place_of_worship\'','delete t.amenity'],
-        ['!(t.water) && t.natural == \'water\'','t.water = \'lake\''],
-        ['t.wetland && t.natural == \'wetland\'','delete t.natural'],
-        ['t.water == \'river\'','t.waterway = \'river\''],
-        ['t.waterway == \'riverbank\'','t.waterway = \'river\'']
+        ['t.social_facility == "shelter"','t.social_facility = t["social_facility:for"]; delete t.amenity; delete t["social_facility:for"]'],
+        ['t["tower:type"] == "minaret" && t.man_made == "tower"','delete t.man_made'],
+        ['t.tunnel == "building_passage"','t.tunnel = "yes"'],
+        ['t.use == "islamic_prayer_hall" && t.amenity == "place_of_worship"','delete t.amenity'],
+        ['t.wetland && t.natural == "wetland"','delete t.natural'],
+        ['t.water == "river"','t.waterway = "river"'],
+        ['t.waterway == "riverbank"','t.waterway = "river"']
       ];
 
       ggdm30.tdsPreRules = translate.buildComplexRules(rulesList);
@@ -1369,17 +1395,37 @@ ggdm30 = {
       }
     }
 
-    // Fix up water features from OSM
-    if (tags.natural == 'water' && !(tags.water))
+    if (tags.water == 'tidal')
     {
-      if (geometryType =='Line')
+      tags.tidal = 'yes';
+      delete tags.water;
+    }
+
+    // Sort out tidal features
+    if (tags.tidal && (tags.water || tags.waterway))
+    {
+      if (tags.tidal == 'yes') attrs.TID = '1001'; // Tidal
+      if (tags.tidal == 'no') attrs.TID = '1000'; // non-Tidal
+
+      // Ignore other options
+      delete tags.tidal;
+    }
+
+    // Fix up water features from OSM
+    if (tags.natural == 'water' && !(tags.water || tags.waterway))
+    {
+      if (tags.tidal == 'yes')
+      {
+        attrs.F_CODE = 'BA040';
+      }
+      else if (geometryType =='Line')
       {
         tags.waterway = 'river';
         attrs.F_CODE = 'BH140';
       }
       else
       {
-        tags.water = 'lake';
+        tags.water = 'undifferentiated_water_body';
         attrs.F_CODE = 'BH082';
       }
     }
