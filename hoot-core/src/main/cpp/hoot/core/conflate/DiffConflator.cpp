@@ -300,14 +300,14 @@ void DiffConflator::_removeMatches(const Status& status)
             // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
             // these to be removed from the diff output.
             !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
-              _intraDatasetElementIds.contains(pit->first)))
+              _intraDatasetMatchOnlyElementIds.contains(pit->first)))
         {
           LOG_VART(e1);
           RecursiveElementRemover(pit->first).apply(_pMap);
         }
         if (e2 && e2->getStatus() == status &&
             !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
-             _intraDatasetElementIds.contains(pit->second)))
+             _intraDatasetMatchOnlyElementIds.contains(pit->second)))
         {
           LOG_VART(e2);
           RecursiveElementRemover(pit->second).apply(_pMap);
