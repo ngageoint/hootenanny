@@ -2914,7 +2914,7 @@ tds61.rules = {
     ['TRS','5','transport:type','canal'], // Canal
     ['TRS','6','transport:type','caravan_route'], // Caravan Route
     ['TRS','7','transport:type','maritime'],
-    ['TRS','8',undefined,undefined], // No Transportation System
+    ['TRS','8','transport:type','none'], // No Transportation System
     ['TRS','9','transport:type','pedestrian'], // Pedestrian
     ['TRS','10','transport:type','pipeline'], // Pipeline
     ['TRS','11','transport:type','portage'], // Portage
@@ -3577,6 +3577,7 @@ tds61.rules = {
     ['ZI014_PPO','163','product','helium'], // Helium -- From PPO
     ['ZI014_PPO','164','product','hydrothermal_fluid'], // Hydrothermal Fluid -- From PPO
     ['ZI014_PPO','165','product','clothing'], // Clothing
+    ['ZI014_PPO','170','product','beverage'], // Beverage -- From PPO
     ['ZI014_PPO','173','product','fluorite'], // Fluorite -- From PPO
     ['ZI014_PPO','192','product','petroleum_lubricant'], // Petroleum Lubricant
     ['ZI014_PPO','204','product','phosphate'], // Phosphate -- From PPO

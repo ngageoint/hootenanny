@@ -4582,7 +4582,7 @@ ggdm30.rules = {
     ['TRS','5','transport:type','canal'], // Canal
     ['TRS','6','transport:type','caravan_route'], // Caravan Route
     ['TRS','7','transport:type','maritime'],
-    ['TRS','8',undefined,undefined], // No Transportation System
+    ['TRS','8','transport:type','none'], // No Transportation System
     ['TRS','9','transport:type','pedestrian'], // Pedestrian
     ['TRS','10','transport:type','pipeline'], // Pipeline
     ['TRS','11','transport:type','portage'], // Portage

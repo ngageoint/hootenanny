@@ -118,6 +118,7 @@ tds70.rules = {
   txtBiased : {
     'ADR':'addr:full', // Address
     'BA000_VDR':'source:datum:sounding:name', // Water Line : Sounding Datum Name
+    'BEN':'be_number', // Basic Encyclopedia (BE) Number
     'BRN':'bridge:reference', // Bridge Reference Number
     'CCN':'source:copyright', // Commercial Copyright Notice
     'CDR':'source:commercial_distribution_restriction', // Commercial Distribution Restriction
@@ -156,6 +157,7 @@ tds70.rules = {
     'ZI020_GE42':'country_code:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
     'ZI020_GE43':'country_code:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
     'ZI020_GE44':'country_code:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
+    'ZSAX_RS0':'security:classification', // Restriction Information : Security Attributes Group <resource classification>
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
     'ZSAX_RX4':'security:resource_owner', // Restriction Information : Security Attributes Group <resource owner-producer>
@@ -651,6 +653,7 @@ tds70.rules = {
     ['BSU','15','building:superstructure:type','steeple'], // Steeple
     ['BSU','16','building:superstructure:type','turret'], // Turret
     ['BSU','17','building:superstructure:type','dome'], // Dome
+    ['BSU','18','building:superstructure:type','solar_panels'], // Solar Panels
     ['BSU','999','building:superstructure:type','other'], // Other
 
     // CAA - Controlling Authority - This does not play nicely in OSM
@@ -2606,7 +2609,7 @@ tds70.rules = {
     ['TRS','5','transport:type','canal'], // Canal
     ['TRS','6','transport:type','caravan_route'], // Caravan Route
     ['TRS','7','transport:type','maritime'],
-    ['TRS','8',undefined,undefined], // No Transportation System
+    ['TRS','8','transport:type','none'], // No Transportation System
     ['TRS','9','transport:type','pedestrian'], // Pedestrian
     ['TRS','10','transport:type','pipeline'], // Pipeline
     ['TRS','11','transport:type','portage'], // Portage
@@ -3062,21 +3065,21 @@ tds70.rules = {
     ['ZI004_RCG','73','attribution','information_network_security_agency_(ethiopia)'], // Information Network Security Agency (Ethiopia)
     ['ZI004_RCG','74','attribution','ministry_of_state_for_defense_(kenya)'], // Ministry of State for Defense (Kenya)
     ['ZI004_RCG','75','attribution','el_instituto_nacional_de_estadistica_y_geografia_(mexico)'], // El Instituto Nacional de Estadistica y Geografia (Mexico)
-    ['ZI004_RCG','76','attribution','instituto_geográfico_militar_(chile)'], // Instituto Geográfico Militar (Chile)
-    ['ZI004_RCG','77','attribution','servicio_geográfico_militar_(uruguay)'], // Servicio Geográfico Militar (Uruguay)
-    ['ZI004_RCG','78','attribution','dirección_del_servicio_geográfico_military_(paraguay)'], // Dirección del Servicio Geográfico Military (Paraguay)
-    ['ZI004_RCG','79','attribution','instituto_geográfico_nacional_(peru)'], // Instituto Geográfico Nacional (Peru)
-    ['ZI004_RCG','80','attribution','instituto_geográfico_agustín_codazzi_(colombia)'], // Instituto Geográfico Agustín Codazzi (Colombia)
-    ['ZI004_RCG','81','attribution','instituto_geográfico_y_del_catastro_nacional_(el_salvador)'], // Instituto Geográfico y del Catastro Nacional (El Salvador)
-    ['ZI004_RCG','82','attribution','instituto_geográfico_nacional_(guatemala)'], // Instituto Geográfico Nacional (Guatemala)
-    ['ZI004_RCG','83','attribution','servicio_geográfico_militar_(guatemala)'], // Servicio Geográfico Militar (Guatemala)
-    ['ZI004_RCG','84','attribution','instituto_cartográfico_militar_(dominican_republic)'], // Instituto Cartográfico Militar (Dominican Republic)
-    ['ZI004_RCG','85','attribution','instituto_nicaragüense_de_estudios_terretoriales_(nicaragua)'], // Instituto Nicaragüense de Estudios Terretoriales (Nicaragua)
-    ['ZI004_RCG','86','attribution','dirección_general_de_registros,_catastro,_y_geografía_(honduras)'], // Dirección General de Registros, Catastro, y Geografía (Honduras)
-    ['ZI004_RCG','87','attribution','instituto_geográfico_militar_(ecuador)'], // Instituto Geográfico Militar (Ecuador)
-    ['ZI004_RCG','88','attribution','instituto_geográfico_nacional_"tommy_guardia"_(panama)'], // Instituto Geográfico Nacional "Tommy Guardia" (Panama)
-    ['ZI004_RCG','89','attribution','instituto_geográfico_nacional_(argentina)'], // Instituto Geográfico Nacional (Argentina)
-    ['ZI004_RCG','90','attribution','diretoria_de_serviço_geográfico_(brazil)'], // Diretoria de Serviço Geográfico (Brazil)
+    ['ZI004_RCG','76','attribution','instituto_geografico_militar_(chile)'], // Instituto Geografico Militar (Chile)
+    ['ZI004_RCG','77','attribution','servicio_geografico_militar_(uruguay)'], // Servicio Geografico Militar (Uruguay)
+    ['ZI004_RCG','78','attribution','direccion_del_servicio_geografico_military_(paraguay)'], // Direccion del Servicio Geografico Military (Paraguay)
+    ['ZI004_RCG','79','attribution','instituto_geografico_nacional_(peru)'], // Instituto Geografico Nacional (Peru)
+    ['ZI004_RCG','80','attribution','instituto_geografico_agustin_codazzi_(colombia)'], // Instituto Geografico Agustin Codazzi (Colombia)
+    ['ZI004_RCG','81','attribution','instituto_geografico_y_del_catastro_nacional_(el_salvador)'], // Instituto Geografico y del Catastro Nacional (El Salvador)
+    ['ZI004_RCG','82','attribution','instituto_geografico_nacional_(guatemala)'], // Instituto Geografico Nacional (Guatemala)
+    ['ZI004_RCG','83','attribution','servicio_geografico_militar_(guatemala)'], // Servicio Geografico Militar (Guatemala)
+    ['ZI004_RCG','84','attribution','instituto_cartografico_militar_(dominican_republic)'], // Instituto Cartografico Militar (Dominican Republic)
+    ['ZI004_RCG','85','attribution','instituto_nicaraguense_de_estudios_terretoriales_(nicaragua)'], // Instituto Nicaraguense de Estudios Terretoriales (Nicaragua)
+    ['ZI004_RCG','86','attribution','direccion_general_de_registros,_catastro,_y_geografia_(honduras)'], // Direccion General de Registros, Catastro, y Geografia (Honduras)
+    ['ZI004_RCG','87','attribution','instituto_geografico_militar_(ecuador)'], // Instituto Geografico Militar (Ecuador)
+    ['ZI004_RCG','88','attribution','instituto_geografico_nacional_tommy_guardia_(panama)'], // Instituto Geografico Nacional "Tommy Guardia" (Panama)
+    ['ZI004_RCG','89','attribution','instituto_geografico_nacional_(argentina)'], // Instituto Geografico Nacional (Argentina)
+    ['ZI004_RCG','90','attribution','diretoria_de_servico_geografico_(brazil)'], // Diretoria de Servico Geografico (Brazil)
     ['ZI004_RCG','999','attribution','other'], // Other
 
     // ZI013_CSP - Crop Information : Crop Species
@@ -3203,18 +3206,28 @@ tds70.rules = {
     ['ZI014_PPO','3','product','ammunition'], // Ammunition
     ['ZI014_PPO','4','product','asphalt'], // Asphalt
     ['ZI014_PPO','5','product','motor_vehicle'], // Motor Vehicle
+    ['ZI014_PPO','8','product','basalt'], // Basalt -- From PPO
+    ['ZI014_PPO','9','product','bauxite'], // Bauxite -- From PPO
+    ['ZI014_PPO','11','product','bivalve_mollusc'], // Bivalve Mollusc -- From PPO
     ['ZI014_PPO','13','product','brick'], // Brick
     ['ZI014_PPO','15','product','cement'], // Cement
     ['ZI014_PPO','16','product','chemical'], // Chemical
+    ['ZI014_PPO','17','product','clay'], // Clay -- From PPO
     ['ZI014_PPO','18','product','coal'], // Coal
+    ['ZI014_PPO','19','product','cobbles'], // Cobbles -- From PPO
     ['ZI014_PPO','20','product','coffee'], // Coffee
     ['ZI014_PPO','21','product','coke'], // Coke
     ['ZI014_PPO','23','product','concrete'], // Concrete
     ['ZI014_PPO','25','product','consumer_goods'], // Consumer Goods
     ['ZI014_PPO','26','product','copper'], // Copper
     ['ZI014_PPO','28','product','cotton'], // Cotton
+    ['ZI014_PPO','29','product','crustacean'], // Crustacean -- From PPO
+    ['ZI014_PPO','30','product','cultivated_shellfish'], // Cultivated Shellfish -- From PPO
     ['ZI014_PPO','32','product','desalinated_water'], // Desalinated Water
+    ['ZI014_PPO','33','product','diamond'], // Diamond -- From PPO
+    ['ZI014_PPO','34','product','diatomaceous_earth'], // Diatomaceous Earth -- From PPO
     ['ZI014_PPO','37','product','electric_power'], // Electric Power
+    ['ZI014_PPO','35','product','dolomite'], // Dolomite -- From PPO
     ['ZI014_PPO','38','product','explosive'], // Explosive
     ['ZI014_PPO','39','product','fish'], // Fish
     ['ZI014_PPO','41','product','food'], // Food
@@ -3224,6 +3237,8 @@ tds70.rules = {
     ['ZI014_PPO','46','product','petrol'], // Petrol
     ['ZI014_PPO','47','product','glass'], // Glass
     ['ZI014_PPO','48','product','gold'], // Gold
+    ['ZI014_PPO','50','product','granite'], // Granite -- From PPO
+    ['ZI014_PPO','53','product','gravel'], // Gravel -- From PPO
     ['ZI014_PPO','57','product','ice'], // Ice
     ['ZI014_PPO','58','product','iron'], // Iron
     ['ZI014_PPO','59','product','lead'], // Lead
@@ -3232,46 +3247,75 @@ tds70.rules = {
     ['ZI014_PPO','62','product','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
     ['ZI014_PPO','63','product','lumber'], // Lumber
     ['ZI014_PPO','65','product','manganese'], // Manganese
+    ['ZI014_PPO','66','product','marble'], // Marble -- From PPO
     ['ZI014_PPO','69','product','metal'], // Metal
     ['ZI014_PPO','70','product','milk'], // Milk
+    ['ZI014_PPO','72','product','mussels'], // Mussels -- From PPO
     ['ZI014_PPO','73','product','no_product'], // No Product
     ['ZI014_PPO','74','product','non-solid_hydrocarbon_fuel'], // Non-solid Hydrocarbon Fuel
+    ['ZI014_PPO','77','product','oysters'], // Oysters -- From PPO
     ['ZI014_PPO','80','product','paper'], // Paper
     ['ZI014_PPO','83','product','petroleum'], // Petroleum
     ['ZI014_PPO','84','product','plastic'], // Plastic
+    ['ZI014_PPO','85','product','porphyry'], // Porphyry -- From PPO
     ['ZI014_PPO','87','product','prestressed_concrete'], // Prestressed Concrete
+    ['ZI014_PPO','88','product','pumice'], // Pumice -- From PPO
+    ['ZI014_PPO','89','product','quartz'], // Quartz -- From PPO
     ['ZI014_PPO','90','product','radioactive_material'], // Radioactive Material
     ['ZI014_PPO','92','product','rice'], // Rice
+    ['ZI014_PPO','93','product','rock'], // Rock -- From PPO
     ['ZI014_PPO','94','product','rubber'], // Rubber
     ['ZI014_PPO','95','product','salt'], // Salt
+    ['ZI014_PPO','96','product','sand'], // Sand -- From PPO
+    ['ZI014_PPO','97','product','sandstone'], // Sandstone -- From PPO
     ['ZI014_PPO','101','product','sewage'], // Sewage
     ['ZI014_PPO','105','product','silver'], // Silver
     ['ZI014_PPO','106','product','snow'], // Snow
     ['ZI014_PPO','109','product','steel'], // Steel
+    ['ZI014_PPO','110','product','stone'], // Stone -- From PPO
     ['ZI014_PPO','111','product','sugar'], // Sugar
     ['ZI014_PPO','114','product','textile'], // Textile
+    ['ZI014_PPO','116','product','timber'], // Timber -- From PPO
     ['ZI014_PPO','117','product','tobacco'], // Tobacco
+    ['ZI014_PPO','118','product','travertine'], // Travertine -- From PPO
     ['ZI014_PPO','120','product','uranium'], // Uranium
     ['ZI014_PPO','121','product','vegetation_product'], // Vegetation Product
     ['ZI014_PPO','122','product','water'], // Water
     ['ZI014_PPO','123','product','wine'], // Wine
     ['ZI014_PPO','126','product','zinc'], // Zinc
+    ['ZI014_PPO','130','product','chalk'], // Chalk -- From PPO
     ['ZI014_PPO','136','product','biochemical'], // Biochemical
     ['ZI014_PPO','137','product','petrochemical'], // Petrochemical
     ['ZI014_PPO','146','product','heating_steam_and/or_water'], // Heating Steam and/or Water
     ['ZI014_PPO','147','product','electronic_equipment'], // Electronic Equipment
     ['ZI014_PPO','148','product','electrical_equipment'], // Electrical Equipment
+    ['ZI014_PPO','149','product','brine'], // Brine -- From PPO
     ['ZI014_PPO','150','product','fertilizer'], // Fertilizer
+    ['ZI014_PPO','151','product','chromium'], // Chromium -- From PPO
+    ['ZI014_PPO','152','product','nickel'], // Nickel -- From PPO
+    ['ZI014_PPO','153','product','tin'], // Tin -- From PPO
     ['ZI014_PPO','154','product','munitions'], // Munitions
     ['ZI014_PPO','155','product','olive_oil'], // Olive Oil
     ['ZI014_PPO','156','product','whale_products'], // Whale Products
     ['ZI014_PPO','157','product','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
+    ['ZI014_PPO','158','product','pottery'], // Pottery -- From PPO
+    ['ZI014_PPO','159','product','charcoal'], // Charcoal -- From PPO
     ['ZI014_PPO','160','product','milled_grain'], // Milled Grain
+    ['ZI014_PPO','161','product','coalbed_methane'], // Coalbed Methane -- From PPO
+    ['ZI014_PPO','162','product','natural_gas_condensate'], // Natural Gas Condensate -- From PPO
+    ['ZI014_PPO','163','product','helium'], // Helium -- From PPO
+    ['ZI014_PPO','164','product','hydrothermal_fluid'], // Hydrothermal Fluid -- From PPO
     ['ZI014_PPO','165','product','clothing'], // Clothing
+    ['ZI014_PPO','170','product','beverage'], // Beverage -- From PPO
+    ['ZI014_PPO','173','product','fluorite'], // Fluorite -- From PPO
     ['ZI014_PPO','192','product','petroleum_lubricant'], // Petroleum Lubricant
+    ['ZI014_PPO','204','product','phosphate'], // Phosphate -- From PPO
     ['ZI014_PPO','214','product','biodiesel'], // Biodiesel
+    ['ZI014_PPO','224','product','vanadium'], // Vanadium -- From PPO
     ['ZI014_PPO','279','product','fluorine'], // Fluorine
+    ['ZI014_PPO','283','product','mica'], // Mica -- From PPO
     ['ZI014_PPO','325','product','phosphorus'], // Phosphorus
+    ['ZI014_PPO','339','product','selenium'], // Selenium -- From PPO
     ['ZI014_PPO','435','product','nuclear_fuel'], // Nuclear Fuel
     ['ZI014_PPO','999','product','other'], // Other
 
@@ -3594,11 +3638,11 @@ tds70.rules = {
     ['ZI071_UAO','5','direction','vertical_up'], // Vertical Up
 
     // ZSAX_RS0 - Restriction Information : Security Attributes Group <resource classification>
-    ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
-    ['ZSAX_RS0','R','security:classification','RESTRICTED'],
-    ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
-    ['ZSAX_RS0','S','security:classification','SECRET'],
-    ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
+    ['ZSAX_RS0','U','security:classification','U'],
+    ['ZSAX_RS0','R','security:classification','R'],
+    ['ZSAX_RS0','C','security:classification','C'],
+    ['ZSAX_RS0','S','security:classification','S'],
+    ['ZSAX_RS0','TS','security:classification','TS'],
 
     // ZVH_VDT - Highest Elevation <vertical datum> - See VDT
   ], // End one2one
@@ -3648,11 +3692,11 @@ tds70.rules = {
   // One2one translation table for converting "Other" OSM attributes to TDS
   // This is for Export only. The values are swapped before use
   one2oneOut : [
-    ['ZSAX_RS0','U','security:classification','U'],
-    ['ZSAX_RS0','R','security:classification','R'],
-    ['ZSAX_RS0','C','security:classification','C'],
-    ['ZSAX_RS0','S','security:classification','S'],
-    ['ZSAX_RS0','TS','security:classification','TS'],
+    ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
+    ['ZSAX_RS0','R','security:classification','RESTRICTED'],
+    ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
+    ['ZSAX_RS0','S','security:classification','SECRET'],
+    ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
 
     // OTH Filler.  These are to build OTH values
     ['RTY','999','highway','other'],
@@ -4103,7 +4147,7 @@ tds70.rules = {
     'ge:GENC:3:1-2:CPV':'CV', // Republic of Cape Verde
     'ge:GENC:3:1-2:CRI':'CR', // Republic of Costa Rica
     'ge:GENC:3:1-2:CUB':'CU', // Republic of Cuba
-    'ge:GENC:3:1-2:CUW':'CW', // Curaçao
+    'ge:GENC:3:1-2:CUW':'CW', // Curacao
     'ge:GENC:3:1-2:CXR':'CX', // Territory of Christmas Island
     'ge:GENC:3:1-2:CYM':'KY', // Cayman Islands
     'ge:GENC:3:1-2:CYP':'CY', // Republic of Cyprus
