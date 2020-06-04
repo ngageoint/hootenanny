@@ -334,20 +334,20 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
     if (match->getType() == MatchType::Match ||
         (allowReviews && match->getType() == MatchType::Review))
     {
-      if (match->getMatchPairs().size() != 1)
+      std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr = pairs.begin();
+           pairItr != pairs.end(); ++pairItr)
       {
-        LOG_VART(match->getMatchPairs().size());
-      }
-      assert(match->getMatchPairs().size() == 1);
-      std::pair<ElementId, ElementId> matchElementIds = *(match->getMatchPairs()).begin();
-      ConstElementPtr e1 = _pMap->getElement(matchElementIds.first);
-      ConstElementPtr e2 = _pMap->getElement(matchElementIds.second);
-      // any match with elements having the same status (came from the same dataset) is in
-      // intra-dataset match
-      if (e1 && e2 && e1->getStatus() == e2->getStatus())
-      {
-        elementIds.insert(matchElementIds.first);
-        elementIds.insert(matchElementIds.second);
+        std::pair<ElementId, ElementId> pair = *pairItr;
+        ConstElementPtr e1 = _pMap->getElement(pair.first);
+        ConstElementPtr e2 = _pMap->getElement(pair.second);
+        // Any match with elements having the same status (came from the same dataset) is an
+        // intra-dataset match.
+        if (e1 && e2 && e1->getStatus() == e2->getStatus())
+        {
+          elementIds.insert(pair.first);
+          elementIds.insert(pair.second);
+        }
       }
     }
   }
@@ -360,20 +360,20 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
     if (match->getType() == MatchType::Match ||
         (allowReviews && match->getType() == MatchType::Review))
     {
-      if (match->getMatchPairs().size() != 1)
+      std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr = pairs.begin();
+           pairItr != pairs.end(); ++pairItr)
       {
-        LOG_VART(match->getMatchPairs().size());
-      }
-      assert(match->getMatchPairs().size() == 1);
-      std::pair<ElementId, ElementId> matchElementIds = *(match->getMatchPairs()).begin();
-      ConstElementPtr e1 = _pMap->getElement(matchElementIds.first);
-      ConstElementPtr e2 = _pMap->getElement(matchElementIds.second);
-      // any match with elements having the same status (came from the same dataset) is in
-      // intra-dataset match
-      if (e1 && e2 && e1->getStatus() != e2->getStatus())
-      {
-        elementIds.remove(matchElementIds.first);
-        elementIds.remove(matchElementIds.second);
+        std::pair<ElementId, ElementId> pair = *pairItr;
+        ConstElementPtr e1 = _pMap->getElement(pair.first);
+        ConstElementPtr e2 = _pMap->getElement(pair.second);
+        // Any match with elements having a different status (came from different datasets) is an
+        // inter-dataset match.
+        if (e1 && e2 && e1->getStatus() != e2->getStatus())
+        {
+          elementIds.insert(pair.first);
+          elementIds.insert(pair.second);
+        }
       }
     }
   }
