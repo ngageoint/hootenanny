@@ -441,14 +441,15 @@ private:
    * @param changeset Subset containing the element
    * @param node/way/relation Pointer to the element to count
    * @param elements Reference to a vector of sets of IDs so that node/way/relation IDs aren't counted twice
+   * @param countSent
    * @return total number of elements within this element
    */
-  size_t getObjectCount(ChangesetNode* node, ElementCountSet& elements);
-  size_t getObjectCount(ChangesetWay* way, ElementCountSet& elements);
-  size_t getObjectCount(ChangesetRelation* relation, ElementCountSet& elements);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetNode* node, ElementCountSet& elements);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelation* relation, ElementCountSet& elements);
+  size_t getObjectCount(ChangesetNode* node, ElementCountSet& elements, bool countSent = true);
+  size_t getObjectCount(ChangesetWay* way, ElementCountSet& elements, bool countSent = true);
+  size_t getObjectCount(ChangesetRelation* relation, ElementCountSet& elements, bool countSent = true);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetNode* node, ElementCountSet& elements, bool countSent = true);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements, bool countSent = true);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelation* relation, ElementCountSet& elements, bool countSent = true);
   /**
    * @brief isSent Check if this element's status is buffering, sent, or finalized
    * @param element Pointer to the element to check

@@ -170,6 +170,7 @@ bool OsmApiWriter::apply()
     if (_allThreadsFailed())
     {
       _changeset.failRemainingChangeset();
+      _threadsCanExit = true;
       break;
     }
     //  Only queue up enough work to keep all the threads busy with times QUEUE_SIZE_MULTIPLIER
@@ -196,7 +197,7 @@ bool OsmApiWriter::apply()
         //  all of the threads are idle and not waiting for something to come back
         //  There are two things that can be done here, first is to put everything that is
         //  "ready to send" in a changeset and send it OR move everything to the error state
-
+/*
         //  Option #1: Get all of the remaining elements as a single changeset
         _changesetMutex.lock();
         _changeset.calculateRemainingChangeset(changeset_info);
@@ -205,6 +206,15 @@ bool OsmApiWriter::apply()
         _pushChangesets(changeset_info);
         //  Let the threads know that the remaining changeset is the "remaining" changeset
         _threadsCanExit = true;
+*/
+        LOG_STATUS("Apply Changeset: Remaining elements unsendable...");
+        //  Option #2: Move everything to the error state and exit
+        _changesetMutex.lock();
+        _changeset.failRemainingChangeset();
+        _changesetMutex.unlock();
+        //  Let the threads know that the remaining changeset has failed
+        _threadsCanExit = true;
+        break;
       }
       else
       {
@@ -352,16 +362,6 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         _changesetMutex.unlock();
         //  Update the size of the current changeset that is open
         changesetSize += workInfo->size();
-        //  Remove the "remaining" file if the remaining was successful
-        if (workInfo->getLast())
-        {
-          _changeset.updateRemainingChangeset();
-          //  Let the threads know that the remaining changeset is the "remaining" changeset
-          _threadsCanExit = true;
-          //  Looping should end the thread because all of the remaining elements have now been sent
-          stop_thread = true;
-          continue;
-        }
         //  When the changeset eclipses the 10k max, the API automatically closes the changeset,
         //  reset the id and continue
         if (changesetSize >= _maxChangesetSize)
@@ -405,6 +405,9 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           {
             if (_changesetClosed(info->response))
             {
+              //  The changeset was closed already so set the ID to -1 and reprocess
+              id = -1;
+
               if ((int)workInfo->size() > _maxChangesetSize / 2)
               {
                 //  Split the changeset into half so that it is smaller and won't fail
@@ -412,8 +415,6 @@ void OsmApiWriter::_changesetThreadFunc(int index)
               }
               else
               {
-                //  The changeset was closed already so set the ID to -1 and reprocess
-                id = -1;
                 //  Push the changeset back on the queue
                 _pushChangesets(workInfo);
               }
@@ -482,7 +483,12 @@ void OsmApiWriter::_changesetThreadFunc(int index)
     }
     else
     {
-      if (_changeset.hasElementsToSend() && !_changeset.isDone() && queueSize == 0)
+      if (_threadsCanExit)
+      {
+        stop_thread = true;
+        _updateThreadStatus(index, ThreadStatus::Completed);
+      }
+      else if (!_changeset.isDone() && queueSize == 0)
       {
         //  This is a bad state where the producer thread says all elements are sent and
         //  waits for all threads to join but the changeset isn't "done".
@@ -500,17 +506,6 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           id = -1;
         }
         _threadStatusMutex.unlock();
-        //  In this case there are elements that have been sent and not reported back
-        //  BUT there are no threads that are waiting for them either.  Every thread
-        //  except the "first" worker thread will exit here.  The first worker thread
-        //  will wait for the producer thread to calculate the remaining changeset and
-        //  push in on the queue.  It then loops around and picks up the remaining
-        //  changeset and processes it.
-        if (_threadsAreIdle() && index != 0 && _threadsCanExit)
-        {
-          stop_thread = true;
-          _updateThreadStatus(index, ThreadStatus::Completed);
-        }
       }
       else
       {
