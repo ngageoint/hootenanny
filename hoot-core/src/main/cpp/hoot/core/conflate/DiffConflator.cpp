@@ -107,6 +107,13 @@ DiffConflator::~DiffConflator()
   _reset();
 }
 
+void DiffConflator::setConfiguration(const Settings &conf)
+{
+  _settings = conf;
+  _matchThreshold.reset();
+  _reset();
+}
+
 void DiffConflator::_updateProgress(const int currentStep, const QString message)
 {
   // Always check for a valid task weight and that the job was set to running. Otherwise, this is
@@ -249,6 +256,8 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
 
 void DiffConflator::_removeMatches(const Status& status)
 {
+  // TODO: don't remove poi/poly intra-dataset matches
+
   LOG_DEBUG("\tRemoving match elements with status: " << status.toString() << "...");
 
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
@@ -287,13 +296,6 @@ void DiffConflator::_removeMatches(const Status& status)
   }
 
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-" + status.toString() + "-matches");
-}
-
-void DiffConflator::setConfiguration(const Settings &conf)
-{
-  _settings = conf;
-  _matchThreshold.reset();
-  _reset();
 }
 
 MemChangesetProviderPtr DiffConflator::getTagDiff()
