@@ -126,7 +126,7 @@ pipeline {
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel 6'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel 8'"
             }
         }
         stage("Services Tests") {
