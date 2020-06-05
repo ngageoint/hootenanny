@@ -92,10 +92,14 @@ private:
 
   long _numFromElementsParsed;
   long _numToElementsParsed;
+
   // Prevents any reference features from being deleted. This is useful for Differential Conflation
   // and can be used as a safety feature for other conflation workflows.
   bool _allowDeletingReferenceFeatures;
   QMap<Change::ChangeType, int> _changesByType;
+
+  // list of metadata tag keys allowed to trigger a change
+  QStringList _metadataAllowKeys;
 };
 
 typedef std::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;

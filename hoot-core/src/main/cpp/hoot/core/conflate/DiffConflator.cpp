@@ -326,7 +326,8 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
 
   const bool allowReviews = ConfigOptions().getDifferentialTreatReviewsAsMatches();
 
-  // Go through and record any element's involved in an intradataset match.
+  // Go through and record any element's involved in an intra-dataset match, since we don't want
+  // those types of matches from preventing an element from passing through to the diff output.
 
   for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
        matchItr != matches.end(); ++matchItr)
@@ -353,7 +354,8 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
     }
   }
 
-  // Now, go back through and exclude any that are also involved in an inter-dataset match.
+  // Now, go back through and exclude any previously added that are also involved in an
+  // inter-dataset match, since we don't want those in the diff output.
 
   for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
        matchItr != matches.end(); ++matchItr)

@@ -102,6 +102,9 @@ private:
   //  Keep track of the matrix of add, modify, delete for nodes, ways, relations
   ScoreMatrix<long> _stats;
 
+  // list of metadata tag keys allowed to be written to the changeset
+  QStringList _metadataAllowKeys;
+
   /** Helper functions to write nodes, ways, and relations. */
   void _writeNode(QXmlStreamWriter& writer, ConstElementPtr node, ConstElementPtr previous);
   void _writeWay(QXmlStreamWriter& writer, ConstElementPtr way, ConstElementPtr previous);

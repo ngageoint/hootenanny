@@ -592,6 +592,14 @@ for conflation campaigns
 The maximum allowed element size of an OSM changeset that can be written to an OSM API database
 in a single changeset.
 
+=== changeset.metadata.allowed.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+This allows for writing metadata tags to the changeset output.
+
 === changeset.replacement.allow.deleting.reference.features.outside.bounds
 
 * Data Type: bool
@@ -2302,7 +2310,7 @@ A list of map operations to be applied to a map for cleaning purposes, in order.
 
 If true, when comparing maps with the Compare command it will print out the details for all elements
 identified as different between the two maps when there is a size difference (up to a default
-limit). This is useful in debugging remote test errors. TODO: set this back to false
+limit). This is useful in debugging remote test errors.
 
 === map.merge.ignore.duplicate.ids
 
