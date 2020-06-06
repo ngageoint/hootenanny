@@ -17,13 +17,10 @@ void AddUserIdVisitor::visit(const ElementPtr& pElement)
 {
   Tags& tags = pElement->getTags();
 
-  if (tags.getNonDebugCount() > 0)
+  if (!pElement->getUser().isEmpty() && tags.getNonDebugCount() > 0)
   {
-    if (!pElement->getUser().isEmpty())
-    {
       tags[MetadataTags::HootUserName()] = pElement->getUser();
       tags[MetadataTags::HootUserId()] = QString::number(pElement->getUid());
-    }
   }
 }
 
