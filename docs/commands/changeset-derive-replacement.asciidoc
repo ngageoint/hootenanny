@@ -243,7 +243,7 @@ following configuration options to properly manage references to missing child e
 automatically internally for itself):
 
 * +convert.bounding.box.remove.missing.elements+=false
-* +osm.map.reader.xml.add.child.refs.when.missing+=true OR +osm.map.reader.json.add.child.refs.when.missing+=true
+* +map.reader.add.child.refs.when.missing+=true
 * +log.warnings.for.missing.elements+=false
 
 === See Also

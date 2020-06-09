@@ -61,7 +61,7 @@ int OsmGbdxXmlWriter::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGbdxXmlWriter)
 
 OsmGbdxXmlWriter::OsmGbdxXmlWriter() :
-_formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
+_formatXml(ConfigOptions().getWriterXmlFormat()),
 _precision(ConfigOptions().getWriterPrecision()),
 _encodingErrorCount(0),
 _fileNumber(0)

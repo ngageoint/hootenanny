@@ -82,7 +82,7 @@ class HootGbdxTask(GbdxTaskInterface):
         override = 'schema.translation.override=' + json.dumps(envVars)
         hootCmd = ['hoot','convert','--error',
                 '-D','convert.ops=hoot::AddBboxVisitor;hoot::TranslationOp',
-                '-D','osm.map.writer.skip.empty.map=true',
+                '-D','map.writer.skip.empty=true',
                 '-D',override,
                 # '-D','ogr.debug.dumptags=true',
                 '-D','schema.translation.script=/var/lib/hootenanny/translations/GBDX.js']
@@ -118,7 +118,7 @@ class HootGbdxTask(GbdxTaskInterface):
         hootCmd = ['hoot','convert','--error',
                 '-D','convert.ops=hoot::AddBboxVisitor;hoot::TranslationOp',
                 '-D','osm.add.bbox.tag=true',
-                '-D','osm.map.writer.skip.empty.map=true',
+                '-D','map.writer.skip.empty=true',
                 '-D',override,
                 '-D','schema.translation.script=/var/lib/hootenanny/translations/GBDX_XML_Shape.js']
                 # '-D','ogr.debug.dumptags=true',

@@ -109,7 +109,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   }
   else
   {
-    setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
+    setAddChildRefsWhenMissing(configOptions.getMapReaderAddChildRefsWhenMissing());
   }
   setKeepImmediatelyConnectedWaysOutsideBounds(
     configOptions.getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());

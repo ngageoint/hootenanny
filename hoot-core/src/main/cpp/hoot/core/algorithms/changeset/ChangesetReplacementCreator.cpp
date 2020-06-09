@@ -808,8 +808,7 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
-  conf().set(ConfigOptions::getOsmMapReaderXmlAddChildRefsWhenMissingKey(), true);
-  conf().set(ConfigOptions::getOsmMapReaderJsonAddChildRefsWhenMissingKey(), true);
+  conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
   conf().set(ConfigOptions::getLogWarningsForMissingElementsKey(), false);
 
   // If we're adding missing child element tags to parents, then we need to explicitly specify that

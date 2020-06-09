@@ -82,7 +82,7 @@ _keepImmediatelyConnectedWaysOutsideBounds(
   ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds()),
 _missingNodeCount(0),
 _missingWayCount(0),
-_addChildRefsWhenMissing(ConfigOptions().getOsmMapReaderJsonAddChildRefsWhenMissing()),
+_addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
 _logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements())
 {
 }
@@ -407,10 +407,9 @@ void OsmJsonReader::_parseOverpassJson()
 
   // The previous two final load steps correspond to effectively the same behavior that the XML
   // reader uses, except with that reader we simply don't add a missing ref in the first place b/c
-  // we're guaranteed element type ordering (unless
-  // osm.map.reader.xml.add.child.refs.when.missing=true). Because of that, we know at the time a
-  // parent element is loaded any missing child refs mean the child itself is definitely absent
-  // from the input.
+  // we're guaranteed element type ordering (unless map.reader.add.child.refs.when.missing=true).
+  // Because of that, we know at the time a parent element is loaded any missing child refs mean
+  // the child itself is definitely absent from the input.
 }
 
 void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType)

@@ -58,12 +58,12 @@ int OsmXmlWriter::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 
 OsmXmlWriter::OsmXmlWriter() :
-_formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
+_formatXml(ConfigOptions().getWriterXmlFormat()),
 _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
 _includePointInWays(false),
 _includeCompatibilityTags(true),
 _includePid(false),
-_osmSchema(ConfigOptions().getOsmMapWriterSchema()),
+_osmSchema(ConfigOptions().getMapWriterSchema()),
 _precision(ConfigOptions().getWriterPrecision()),
 _encodingErrorCount(0),
 _numWritten(0),

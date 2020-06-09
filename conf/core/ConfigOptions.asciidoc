@@ -3094,25 +3094,7 @@ as master for determining the sequencing of element ID's.
 
 Add a tag with the bounding box for each element
 
-=== osm.map.reader.json.add.child.refs.when.missing
-
-* Data Type: bool
-* Default Value: `false`
-
-By default, OsmJsonReader will not add child references (node ref, elements members) to parent
-elements if those elements are not present in the data.  For external sorting and translations,
-where partial chunks of elements only may be present the setting is changed.
-
-=== osm.map.reader.xml.add.child.refs.when.missing
-
-* Data Type: bool
-* Default Value: `false`
-
-By default, OsmXmlReader will not add child references (node ref, elements members) to parent
-elements if those elements are not present in the data.  For external sorting and translations,
-where partial chunks of elements only may be present the setting is changed.
-
-=== osm.map.reader.factory.reader
+=== map.factory.reader
 
 * Data Type: string
 * Default Value: ``
@@ -3120,7 +3102,7 @@ where partial chunks of elements only may be present the setting is changed.
 Specifies the reader that the OsmMapReaderFactory will use. This overrides any information derived
 from the URL.
 
-=== osm.map.writer.factory.writer
+=== map.factory.writer
 
 * Data Type: string
 * Default Value: ``
@@ -3128,14 +3110,18 @@ from the URL.
 Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived
 from the URL.
 
-=== osm.map.writer.format.xml
+=== map.reader.add.child.refs.when.missing
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
-Turns on autoformatting (line breaks, indentation etc) for XML output.
+By default, file based readers will not add child references (node ref, elements members) to parent
+elements if those elements are not present in the data.  For external sorting and translations
+where partial chunks of elements only may be present, or workflows where you are working with
+remote sourced data with missing element children, the default value may need to be changed. This
+option is not supported by all file based readers.
 
-=== osm.map.writer.schema
+=== map.writer.schema
 
 * Data Type: string
 * Default Value: ``
@@ -3143,13 +3129,13 @@ Turns on autoformatting (line breaks, indentation etc) for XML output.
 Sets the value for a "schema" attribute when writing a map to OSM XML.  NOTE: this will only be
 written if the value is not empty.
 
-=== osm.map.writer.skip.empty.map
+=== map.writer.skip.empty
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, the OSM map writer will NOT write a file if the map is empty.
-The default is to write a file even if the map is empty.
+If true, the OSM map writer will NOT write a file if the map is empty. The default is to write a
+file even if the map is empty.
 
 === overpass.api.host
 
@@ -5223,3 +5209,10 @@ If true, OSM elements written to XML file output (.osm) are sorted by ID.  Setti
 will require reading the entire source dataset into memory.  Setting it to false may result in
 using smaller amounts of memory during writing if the data source being written is also a streamable
 format (see the "Supported Data Formats" section in README.md).
+
+=== writer.xml.format
+
+* Data Type: bool
+* Default Value: `true`
+
+Turns on autoformatting (line breaks, indentation etc) for XML output.
