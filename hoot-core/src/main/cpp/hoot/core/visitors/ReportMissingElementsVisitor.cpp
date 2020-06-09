@@ -45,7 +45,11 @@ _maxReport(maxReport),
 _missingCount(0),
 _removeMissing(removeMissing),
 _markWaysForReview(false),
-_markRelationsForReview(false)
+_numWaysMarkedForReview(0),
+_markRelationsForReview(false),
+_numRelationsMarkedForReview(0),
+_numWaysTagged(0),
+_numRelationsTagged(0)
 {
 }
 
@@ -107,11 +111,13 @@ void ReportMissingElementsVisitor::_updateWay(const WayPtr& way, const QStringLi
         way->getElementId().toString() + ", name: " + way->getTags().getName() +
           "; Missing way node(s): " + missingChildIds.join(","),
         QString::fromStdString(getClassName()), 1.0);
+      _numWaysMarkedForReview++;
     }
 
     if (!_wayKvp.trimmed().isEmpty())
     {
       way->getTags().appendValue(_wayKvp);
+      _numWaysTagged++;
     }
   }
 }
@@ -130,12 +136,14 @@ void ReportMissingElementsVisitor::_updateRelation(const RelationPtr& relation,
           ", type: " + relation->getType() +
           ", Missing relation member(s): " + missingChildIds.join(","),
         QString::fromStdString(getClassName()), 1.0);
-        LOG_TRACE("Marked " << relation->getElementId() << " for review.");
+       _numRelationsMarkedForReview++;
+       LOG_TRACE("Marked " << relation->getElementId() << " for review.");
     }
 
     if (!_relationKvp.trimmed().isEmpty())
     {
       relation->getTags().appendValue(_relationKvp);
+      _numRelationsTagged++;
     }
   }
 }

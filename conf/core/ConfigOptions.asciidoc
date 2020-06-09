@@ -2275,6 +2275,13 @@ The maximum number of warn log messages that will be emitted per class before th
 A value of -1 passed to class will ensure that no warnings are logged by it, if it honors the
 option. A setting of -1 is useful for tests where you do not have granular enough logging control.
 
+=== log.warnings.for.missing.elements
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 [[MapCleanerTransforms]]
 === map.cleaner.transforms
 
@@ -3087,6 +3094,15 @@ as master for determining the sequencing of element ID's.
 
 Add a tag with the bounding box for each element
 
+=== osm.map.reader.json.add.child.refs.when.missing
+
+* Data Type: bool
+* Default Value: `false`
+
+By default, OsmJsonReader will not add child references (node ref, elements members) to parent
+elements if those elements are not present in the data.  For external sorting and translations,
+where partial chunks of elements only may be present the setting is changed.
+
 === osm.map.reader.xml.add.child.refs.when.missing
 
 * Data Type: bool
@@ -3389,15 +3405,6 @@ If true, instances where multiple POIs were matched to a single polygon will res
 POIs being automatically merged into the polygon.  If false, then each matched POI will generate a
 review against the polygon instead.
 
-=== poi.polygon.max.size.per.cache
-
-* Data Type: int
-* Default Value: `100000`
-
-The maximum number of elements to cache information for when using POI/Polygon Conflation. This
-maximum size is repeated across multiple internal element information caches. To disable caching,
-specify a value less than one.
-
 === poi.polygon.disable.same.source.conflation
 
 * Data Type: bool
@@ -3460,6 +3467,15 @@ If an evidence score for a feature pair falls below this value, the relationship
 features will be classified as a review or miss, depending on the value of
 'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except
 when working with specific POI/Polygon conflation use cases that require it.
+
+=== poi.polygon.max.size.per.cache
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum number of elements to cache information for when using POI/Polygon Conflation. This
+maximum size is repeated across multiple internal element information caches. To disable caching,
+specify a value less than one.
 
 === poi.polygon.name.score.threshold
 

@@ -76,6 +76,7 @@ _wayId(0),
 _relationId(0),
 _inputCompressed(false),
 _addChildRefsWhenMissing(false),
+_logWarningsForMissingElements(true),
 _numRead(0),
 _statusUpdateInterval(1000),
 _keepImmediatelyConnectedWaysOutsideBounds(false)
@@ -91,6 +92,7 @@ OsmXmlReader::~OsmXmlReader()
 void OsmXmlReader::setConfiguration(const Settings& conf)
 {
   PartialOsmMapReader::setConfiguration(conf);
+
   ConfigOptions configOptions(conf);
   setDefaultAccuracy(configOptions.getCircularErrorDefaultValue());
   setKeepStatusTag(configOptions.getReaderKeepStatusTag());
@@ -112,6 +114,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setKeepImmediatelyConnectedWaysOutsideBounds(
     configOptions.getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
   setWarnOnVersionZeroElement(configOptions.getReaderWarnOnZeroVersionElement());
+  setLogWarningsForMissingElements(configOptions.getLogWarningsForMissingElements());
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
@@ -158,8 +161,8 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
   double x = _parseDouble(attributes.value("lon"));
   double y = _parseDouble(attributes.value("lat"));
 
-  // check the next 3 attributes to see if a value exists, if not, assign a default since these
-  // are not officially required by the DTD
+  // Check the next 3 attributes to see if a value exists, if not, assign a default since these
+  // are not officially required by the DTD.
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
   {
@@ -415,10 +418,9 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
-  //  Reusing the reader for multiple files has two options, the first is the
-  //  default where the reader is reset and duplicates error out.  The second
-  //  is where duplicates are ignored in the same file and across files so the
-  //  ID maps aren't reset
+  // Reusing the reader for multiple files has two options, the first is the default where the
+  // reader is reset and duplicates error out.  The second is where duplicates are ignored in the
+  // same file and across files so the ID maps aren't reset.
   if (!_ignoreDuplicates)
   {
     _nodeIdMap.clear();
@@ -624,17 +626,20 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
         else
         {
           _missingNodeCount++;
-          if (logWarnCount < Log::getWarnMessageLimit())
+          if (_logWarningsForMissingElements)
           {
-            LOG_WARN(
-              "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
-              ElementId(ElementType::Way, _wayId) << "...");
+            if (logWarnCount < Log::getWarnMessageLimit())
+            {
+              LOG_WARN(
+                "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
+                ElementId(ElementType::Way, _wayId) << "...");
+            }
+            else if (logWarnCount == Log::getWarnMessageLimit())
+            {
+              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            }
+            logWarnCount++;
           }
-          else if (logWarnCount == Log::getWarnMessageLimit())
-          {
-            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-          }
-          logWarnCount++;
         }
       }
       else
@@ -666,17 +671,20 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           else
           {
             _missingNodeCount++;
-            if (logWarnCount < Log::getWarnMessageLimit())
+            if (_logWarningsForMissingElements)
             {
-              LOG_WARN(
-                "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
-                ElementId(ElementType::Relation, _relationId) << "...");
+              if (logWarnCount < Log::getWarnMessageLimit())
+              {
+                LOG_WARN(
+                  "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
+                  ElementId(ElementType::Relation, _relationId) << "...");
+              }
+              else if (logWarnCount == Log::getWarnMessageLimit())
+              {
+                LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+              }
+              logWarnCount++;
             }
-            else if (logWarnCount == Log::getWarnMessageLimit())
-            {
-              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-            }
-            logWarnCount++;
           }
         }
         else
@@ -699,17 +707,20 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           else
           {
             _missingWayCount++;
-            if (logWarnCount < Log::getWarnMessageLimit())
+            if (_logWarningsForMissingElements)
             {
-              LOG_WARN(
-                "Skipping missing " << ElementId(ElementType::Way, ref) << " in " <<
-                ElementId(ElementType::Relation, _relationId) << "...");
+              if (logWarnCount < Log::getWarnMessageLimit())
+              {
+                LOG_WARN(
+                  "Skipping missing " << ElementId(ElementType::Way, ref) << " in " <<
+                  ElementId(ElementType::Relation, _relationId) << "...");
+              }
+              else if (logWarnCount == Log::getWarnMessageLimit())
+              {
+                LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+              }
+              logWarnCount++;
             }
-            else if (logWarnCount == Log::getWarnMessageLimit())
-            {
-              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-            }
-            logWarnCount++;
           }
         }
         else
@@ -728,16 +739,19 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
       }
       else
       {
-        if (logWarnCount < Log::getWarnMessageLimit())
+        if (_logWarningsForMissingElements)
         {
-          LOG_WARN("Found a relation member with unexpected type: " << type << " in relation ("
-                     << _relationId << ")");
+          if (logWarnCount < Log::getWarnMessageLimit())
+          {
+            LOG_WARN("Found a relation member with unexpected type: " << type << " in relation ("
+                       << _relationId << ")");
+          }
+          else if (logWarnCount == Log::getWarnMessageLimit())
+          {
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
         }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
       }
     }
     else if (qName == QLatin1String("tag") && _element)

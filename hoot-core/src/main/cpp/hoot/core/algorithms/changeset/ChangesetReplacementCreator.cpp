@@ -805,7 +805,12 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   ConfigUtils::removeListOpEntry(
     ConfigOptions::getConflatePostOpsKey(),
     QString::fromStdString(RemoveMissingElementsVisitor::className()));
+  // Having to set multiple different settings to prevent missing elements from being dropped here
+  // is convoluted...may need to look into changing at some point.
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
+  conf().set(ConfigOptions::getOsmMapReaderXmlAddChildRefsWhenMissingKey(), true);
+  conf().set(ConfigOptions::getOsmMapReaderJsonAddChildRefsWhenMissingKey(), true);
+  conf().set(ConfigOptions::getLogWarningsForMissingElementsKey(), false);
 
   // If we're adding missing child element tags to parents, then we need to explicitly specify that
   // they are allowed to pass through to the changeset output. See notes where
@@ -1194,15 +1199,19 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
 void ChangesetReplacementCreator::_markElementsWithMissingChildren(OsmMapPtr& map)
 {
   ReportMissingElementsVisitor elementMarker;
-  // Originally this was going to add reviews rather than tagging elements, but there was an ID
+  // Originally, this was going to add reviews rather than tagging elements, but there was an ID
   // provenance problem when using reviews.
   elementMarker.setMarkRelationsForReview(false);
   elementMarker.setMarkWaysForReview(false);
   elementMarker.setRelationKvp(MetadataTags::HootMissingChild() + "=yes");
   elementMarker.setWayKvp(MetadataTags::HootMissingChild() + "=yes");
-  LOG_STATUS("\t" << elementMarker.getInitStatusMessage());
+  LOG_STATUS("\tMarking elements with missing child elements...");
   map->visitRelationsRw(elementMarker);
-  LOG_STATUS("\t" << elementMarker.getCompletedStatusMessage());
+  LOG_STATUS(
+    "\tMarked " << elementMarker.getNumWaysTagged() << " ways with missing child elements.");
+  LOG_STATUS(
+    "\tMarked " << elementMarker.getNumRelationsTagged() <<
+    " relations with missing child elements.");
 
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-missing-marked");
 }

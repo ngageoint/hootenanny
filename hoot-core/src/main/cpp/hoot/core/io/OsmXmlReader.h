@@ -136,6 +136,7 @@ public:
   // to OsmMapReader;
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
+  void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
 
 protected:
 
@@ -180,6 +181,8 @@ protected:
 
   //adds child refs to elements when they aren't present in the source data
   bool _addChildRefsWhenMissing;
+  // TODO
+  bool _logWarningsForMissingElements;
 
   long _numRead;
   long _statusUpdateInterval;

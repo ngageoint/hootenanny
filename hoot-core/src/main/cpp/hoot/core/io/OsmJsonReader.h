@@ -110,7 +110,6 @@ namespace hoot
  * Also, be aware that this class doesn't do anything clever to handle large datasets - it simply
  * keeps everything in memory. Be careful if you want to use it with large datasets.
  */
-
 class OsmJsonReader : public OsmMapReader, public Boundable, private ParallelBoundedApiReader
 {
 public:
@@ -239,6 +238,7 @@ public:
 
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
+  void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
 
   bool isValidJson(const QString& jsonStr);
 
@@ -289,6 +289,11 @@ protected:
 
   int _missingNodeCount;
   int _missingWayCount;
+
+  //adds child refs to elements when they aren't present in the source data
+  bool _addChildRefsWhenMissing;
+  // TODO
+  bool _logWarningsForMissingElements;
 
   /**
    * @brief _loadJSON Loads JSON into a boost property tree

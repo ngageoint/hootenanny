@@ -6112,7 +6112,7 @@
         <tag k="old_ref" v="NV 604"/>
         <tag k="highway" v="trunk"/>
     </way>
-    <way visible="true" id="674621868" timestamp="2020-04-24T19:37:49Z" version="3" changeset="12056">
+    <!-- way visible="true" id="674621868" timestamp="2020-04-24T19:37:49Z" version="3" changeset="12056">
         <nd ref="3783743835"/>
         <nd ref="3783743836"/>
         <tag k="name" v="South Las Vegas Boulevard"/>
@@ -6127,7 +6127,7 @@
         <tag k="maxspeed" v="30 mph"/>
         <tag k="old_ref" v="NV 604"/>
         <tag k="highway" v="trunk"/>
-    </way>
+    </way -->
     <way visible="true" id="706736272" timestamp="2020-04-24T19:37:49Z" version="1" changeset="12056">
         <nd ref="6641197219"/>
         <nd ref="6641197217"/>

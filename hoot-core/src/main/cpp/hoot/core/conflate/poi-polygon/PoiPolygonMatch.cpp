@@ -337,7 +337,8 @@ bool PoiPolygonMatch::_inputFeaturesHaveSameSource() const
     if (!e1SourceVal.contains(":") || !e2SourceVal.contains(":"))
     {
       LOG_TRACE(
-        "Source prefix match enabled and at least one feature has no source prefix.  No feature source match.");
+        "Source prefix match enabled and at least one feature has no source prefix. "
+        "No feature source match.");
       return false;
     }
     else
