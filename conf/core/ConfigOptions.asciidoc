@@ -2280,7 +2280,8 @@ option. A setting of -1 is useful for tests where you do not have granular enoug
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+Determines whether references in parent elements to child elements which do not exist in the input
+trigger warning log messages.
 
 [[MapCleanerTransforms]]
 === map.cleaner.transforms

@@ -139,7 +139,7 @@ protected:
   // an area
   bool _requireAreaForPolygonConversion;
 
-  // TODO
+  // determines whether missing elements trigger a warning
   bool _logWarningsForMissingElements;
 };
 

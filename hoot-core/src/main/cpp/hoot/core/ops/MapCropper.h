@@ -138,7 +138,7 @@ private:
   int _numCrossingWaysRemoved;
   int _numNodesRemoved;
 
-  // TODO
+  // determines whether missing elements trigger a warning
   bool _logWarningsForMissingElements;
 
   void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);

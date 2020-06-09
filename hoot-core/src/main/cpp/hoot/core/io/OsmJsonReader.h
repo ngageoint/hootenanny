@@ -292,7 +292,7 @@ protected:
 
   //adds child refs to elements when they aren't present in the source data
   bool _addChildRefsWhenMissing;
-  // TODO
+  // determines whether missing elements trigger a warning
   bool _logWarningsForMissingElements;
 
   /**
