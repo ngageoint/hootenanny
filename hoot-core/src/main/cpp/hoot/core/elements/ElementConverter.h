@@ -84,7 +84,8 @@ public:
    *      from the parameter will be set as the spatial reference for the element converter
    * @note the default spatial reference used is WGS84
    */
-  ElementConverter(const ConstElementProviderPtr& provider);
+  ElementConverter(const ConstElementProviderPtr& provider,
+                   const bool logWarningsForMissingElements = true);
 
   /**
    * Calculate the length of the given way in meters. The projection must be planar.
@@ -137,6 +138,9 @@ protected:
   // if true, conversions to polys require that the source element be classifiable in the schema as
   // an area
   bool _requireAreaForPolygonConversion;
+
+  // determines whether missing elements trigger a warning
+  bool _logWarningsForMissingElements;
 };
 
 }

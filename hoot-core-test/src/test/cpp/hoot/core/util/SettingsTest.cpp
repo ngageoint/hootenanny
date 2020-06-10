@@ -79,22 +79,22 @@ public:
     uut.loadDefaults();
     uut.set("perty.csm.D", "2");
     uut.set("perty.test.num.runs", 2);
-    uut.set("osm.map.writer.factory.writer", "1");
-    uut.set("osm.map.reader.factory.reader", "${perty.csm.D}");
-    HOOT_STR_EQUALS(QString("2"), uut.getString("osm.map.reader.factory.reader"));
+    uut.set("map.factory.writer", "1");
+    uut.set("map.factory.reader", "${perty.csm.D}");
+    HOOT_STR_EQUALS(QString("2"), uut.getString("map.factory.reader"));
 
-    uut.set("osm.map.reader.factory.reader", "${perty.csm.D} ${osm.map.writer.factory.writer}");
-    HOOT_STR_EQUALS(QString("2 1"), uut.getString("osm.map.reader.factory.reader"));
+    uut.set("map.factory.reader", "${perty.csm.D} ${map.factory.writer}");
+    HOOT_STR_EQUALS(QString("2 1"), uut.getString("map.factory.reader"));
 
-    uut.set("osm.map.reader.factory.reader", "${osm.map.writer.factory.writer} ${osm.map.writer.factory.writer}");
-    HOOT_STR_EQUALS(QString("1 1"), uut.getString("osm.map.reader.factory.reader"));
+    uut.set("map.factory.reader", "${map.factory.writer} ${map.factory.writer}");
+    HOOT_STR_EQUALS(QString("1 1"), uut.getString("map.factory.reader"));
 
     uut.set("perty.csm.D", "${doesnt.exist}");
     HOOT_STR_EQUALS(QString(""), uut.getString("perty.csm.D"));
 
     HOOT_STR_EQUALS("", uut.getValue("${doesnt.exist}"));
-    HOOT_STR_EQUALS("1", uut.getValue("${osm.map.writer.factory.writer}"));
-    HOOT_STR_EQUALS(1, uut.getDoubleValue("${osm.map.writer.factory.writer}"));
+    HOOT_STR_EQUALS("1", uut.getValue("${map.factory.writer}"));
+    HOOT_STR_EQUALS(1, uut.getDoubleValue("${map.factory.writer}"));
     HOOT_STR_EQUALS(2, uut.getDoubleValue("${perty.test.num.runs}"));
   }
 
@@ -103,8 +103,8 @@ public:
     Settings uut;
     uut.loadDefaults();
     uut.set("perty.csm.D", "2");
-    uut.set("osm.map.writer.factory.writer", "1");
-    uut.set("osm.map.reader.factory.reader", "${perty.csm.D}");
+    uut.set("map.factory.writer", "1");
+    uut.set("map.factory.reader", "${perty.csm.D}");
 
     uut.storeJson(_outputPath + "SettingsTest.json");
 
@@ -112,15 +112,15 @@ public:
     uut2.loadDefaults();
     uut2.loadJson(_outputPath + "SettingsTest.json");
     HOOT_STR_EQUALS(uut.getString("perty.csm.D"), "2");
-    HOOT_STR_EQUALS(uut.getString("osm.map.writer.factory.writer"), "1");
-    HOOT_STR_EQUALS(uut.getString("osm.map.reader.factory.reader"), "2");
+    HOOT_STR_EQUALS(uut.getString("map.factory.writer"), "1");
+    HOOT_STR_EQUALS(uut.getString("map.factory.reader"), "2");
 
     Settings uut3;
     uut3.loadDefaults();
     uut3.loadFromString(uut.toString());
     HOOT_STR_EQUALS(uut.getString("perty.csm.D"), "2");
-    HOOT_STR_EQUALS(uut.getString("osm.map.writer.factory.writer"), "1");
-    HOOT_STR_EQUALS(uut.getString("osm.map.reader.factory.reader"), "2");
+    HOOT_STR_EQUALS(uut.getString("map.factory.writer"), "1");
+    HOOT_STR_EQUALS(uut.getString("map.factory.reader"), "2");
   }
 
   void baseSettingsTest()

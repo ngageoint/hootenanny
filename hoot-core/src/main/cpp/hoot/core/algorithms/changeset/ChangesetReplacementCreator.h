@@ -98,6 +98,11 @@ struct BoundsOptions
  * data added to the output changeset, as well as the reference data removed from the changeset can
  * be further restricted with a non-geometry type filter.
  *
+ * Occasionally, relations will be passed in with some members missing. This class will optionally
+ * tag those with a custom metadata tag to be passed to the changeset output. This allows for
+ * potential manual repairing of those relations after the changeset is written (tag can then be
+ * removed).
+ *
  * TODO: implement progress
  * TODO: can probably break some of this up into separate classes now; e.g. filtering, etc.
  */
@@ -249,7 +254,9 @@ private:
   OsmMapPtr _loadSecMap(const QString& input);
 
   /*
-   * Adds a custom tag to any element from the input with a missing child
+   * Adds a custom tag to any element from the input with a missing child. This is primarily useful
+   * in repairing relations manually that were passed in without some of their child elements after
+   * the replacement changeset is written.
    */
   void _markElementsWithMissingChildren(OsmMapPtr& map);
 

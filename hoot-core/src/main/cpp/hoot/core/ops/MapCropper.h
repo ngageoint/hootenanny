@@ -105,6 +105,7 @@ public:
   void setInclusionCriterion(const ElementCriterionPtr& crit) { _inclusionCrit = crit; }
   void setRemoveSuperflousFeatures(bool remove) { _removeSuperfluousFeatures = remove; }
   void setRemoveMissingElements(bool remove) { _removeMissingElements = remove; }
+  void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
 
 private:
 
@@ -125,7 +126,7 @@ private:
   std::set<long> _explicitlyIncludedWayIds;
   // removes useful features created after cropping
   bool _removeSuperfluousFeatures;
-  // emoves references to missing elements after cropping occurs
+  // removes references to missing elements after cropping occurs
   bool _removeMissingElements;
 
   int _statusUpdateInterval;
@@ -136,6 +137,9 @@ private:
   int _numCrossingWaysKept;
   int _numCrossingWaysRemoved;
   int _numNodesRemoved;
+
+  // determines whether missing elements trigger a warning
+  bool _logWarningsForMissingElements;
 
   void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);
 

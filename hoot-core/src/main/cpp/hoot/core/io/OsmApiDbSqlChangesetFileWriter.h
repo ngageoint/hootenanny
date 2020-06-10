@@ -142,6 +142,9 @@ private:
 
   QList<Change> _parsedChanges;
 
+  // list of metadata tag keys allowed to be written to the changeset
+  QStringList _metadataAllowKeys;
+
   friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 };
 

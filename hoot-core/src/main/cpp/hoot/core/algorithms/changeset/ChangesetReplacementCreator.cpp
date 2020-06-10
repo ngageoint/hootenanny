@@ -91,6 +91,7 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 
@@ -515,6 +516,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   refMap = _loadRefMap(input1);
   MemoryUsageChecker::getInstance().check();
 
+  // always remove any existing missing child tags
+  RemoveTagsVisitor missingChildTagRemover(QStringList(MetadataTags::HootMissingChild()));
+  refMap->visitRw(missingChildTagRemover);
   const bool markMissing =
     ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren();
   if (markMissing)
@@ -549,6 +553,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   OsmMapPtr secMap = _loadSecMap(input2);
   MemoryUsageChecker::getInstance().check();
 
+  secMap->visitRw(missingChildTagRemover);
   if (markMissing)
   {
     _markElementsWithMissingChildren(secMap);
@@ -800,7 +805,20 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   ConfigUtils::removeListOpEntry(
     ConfigOptions::getConflatePostOpsKey(),
     QString::fromStdString(RemoveMissingElementsVisitor::className()));
+  // Having to set multiple different settings to prevent missing elements from being dropped here
+  // is convoluted...may need to look into changing at some point.
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
+  conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
+  conf().set(ConfigOptions::getLogWarningsForMissingElementsKey(), false);
+
+  // If we're adding missing child element tags to parents, then we need to explicitly specify that
+  // they are allowed to pass through to the changeset output. See notes where
+  // _markElementsWithMissingChildren is called for more info on why this tag is added.
+  if (ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren())
+  {
+    QStringList metadataAllowTagKeys(MetadataTags::HootMissingChild());
+    conf().set(ConfigOptions::getChangesetMetadataAllowedTagKeysKey(), metadataAllowTagKeys);
+  }
 
   // These don't change between scenarios (or at least we haven't needed to yet).
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
@@ -1139,7 +1157,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
 
   // Here and with sec map loading, attempted to cache the initial map to avoid unnecessary
-  // reloading, but it wreaked havoc on the element IDs. May try doing it again later.
+  // reloading, but it wreaked havoc on the element IDs. May try debugging it again later.
   OsmMapPtr refMap;
   refMap.reset(new OsmMap());
   refMap->setName("ref");
@@ -1180,15 +1198,19 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
 void ChangesetReplacementCreator::_markElementsWithMissingChildren(OsmMapPtr& map)
 {
   ReportMissingElementsVisitor elementMarker;
-  // Originally, this was going to add reviews rather than tagging elements but there was an ID
-  // provenance problem with reviews.
+  // Originally, this was going to add reviews rather than tagging elements, but there was an ID
+  // provenance problem when using reviews.
   elementMarker.setMarkRelationsForReview(false);
   elementMarker.setMarkWaysForReview(false);
   elementMarker.setRelationKvp(MetadataTags::HootMissingChild() + "=yes");
   elementMarker.setWayKvp(MetadataTags::HootMissingChild() + "=yes");
-  LOG_STATUS("\t" << elementMarker.getInitStatusMessage());
+  LOG_STATUS("\tMarking elements with missing child elements...");
   map->visitRelationsRw(elementMarker);
-  LOG_STATUS("\t" << elementMarker.getCompletedStatusMessage());
+  LOG_STATUS(
+    "\tMarked " << elementMarker.getNumWaysTagged() << " ways with missing child elements.");
+  LOG_STATUS(
+    "\tMarked " << elementMarker.getNumRelationsTagged() <<
+    " relations with missing child elements.");
 
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-missing-marked");
 }
@@ -1222,7 +1244,7 @@ void ChangesetReplacementCreator::_filterFeatures(
 OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType)
 {
-  // could use some refactoring here after the addition of _fullReplacement
+  // This could use some refactoring after the addition of _fullReplacement.
 
   // If the passed in dough map is empty, there's nothing to be cut out.
   if (doughMap->getElementCount() == 0)

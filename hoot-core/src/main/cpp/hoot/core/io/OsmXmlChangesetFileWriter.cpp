@@ -50,7 +50,8 @@ OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
 _precision(ConfigOptions().getWriterPrecision()),
 _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
 _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
+_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
 {
 }
 
@@ -460,7 +461,9 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
       // always ignore 'hoot:hash'
       if (key == MetadataTags::HootHash())
         continue;
-      else if (!_includeDebugTags && key.toLower().startsWith("hoot:"))
+      else if (!_includeDebugTags && key.toLower().startsWith("hoot:") &&
+               // There are some instances where we want to explicitly allow some metadata tags.
+               !_metadataAllowKeys.contains(key))
         continue;
 
       writer.writeStartElement("tag");
