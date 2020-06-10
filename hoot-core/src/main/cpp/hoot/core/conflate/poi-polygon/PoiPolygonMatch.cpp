@@ -108,7 +108,8 @@ _enableReviewReduction(true),
 _disableSameSourceConflation(false),
 _disableSameSourceConflationMatchTagKeyPrefixOnly(true),
 _sourceTagKey(""),
-_disableIntradatasetConflation(false),
+_disableIntradatasetConflation1(false),
+_disableIntradatasetConflation2(false),
 _reviewMultiUseBuildings(false),
 _rf(rf),
 _explainText(""),
@@ -205,7 +206,8 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
     config.getPoiPolygonDisableSameSourceConflationMatchTagKeyPrefixOnly());
   setSourceTagKey(config.getPoiPolygonSourceTagKey());
 
-  setDisableIntradatasetConflation(config.getPoiPolygonDisableIntradatasetConflation());
+  setDisableIntradatasetConflation1(config.getPoiPolygonDisableIntradatasetConflation1());
+  setDisableIntradatasetConflation2(config.getPoiPolygonDisableIntradatasetConflation2());
 
   setReviewMultiUseBuildings(config.getPoiPolygonReviewMultiuseBuildings());
 
@@ -385,7 +387,7 @@ bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
 
 void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {  
-  //for testing only
+  // for testing only
 //  ConstElementPtr e1 = _map->getElement(eid1);
 //  ConstElementPtr e2 = _map->getElement(eid2);
 //  const bool oneElementIsRelation =
@@ -407,7 +409,13 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //  }
 
   // don't conflate features from within the same input dataset when this option is enabled
-  if (_disableIntradatasetConflation && _poi->getStatus() == _poly->getStatus())
+  if (_disableIntradatasetConflation1 &&
+      _poi->getStatus() == Status::Unknown1 && _poly->getStatus() == Status::Unknown1)
+  {
+    return;
+  }
+  if (_disableIntradatasetConflation2 &&
+      _poi->getStatus() == Status::Unknown2 && _poly->getStatus() == Status::Unknown2)
   {
     return;
   }

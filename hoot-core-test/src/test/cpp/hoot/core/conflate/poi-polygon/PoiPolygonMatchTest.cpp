@@ -924,7 +924,6 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    // both of these elements get the same status
     WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
@@ -935,6 +934,10 @@ public:
     map->addNode(n1);
 
     {
+      // both of these elements get the same status
+      w1->setStatus(Status::Unknown1);
+      n1->setStatus(Status::Unknown1);
+
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
@@ -946,11 +949,80 @@ public:
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
       // this prevents them from matching when they have the same status
-      uut.setDisableIntradatasetConflation(true);
+      uut.setDisableIntradatasetConflation1(true);
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
+    }
+
+    {
+      // these element have different statuses
+      w1->setStatus(Status::Unknown1);
+      n1->setStatus(Status::Unknown2);
+
+      PoiPolygonMatch uut(
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
+        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+      uut.setEnableReviewReduction(true);
+      uut.setMatchDistanceThreshold(0.0);
+      uut.setReviewDistanceThreshold(0.0);
+      uut.setNameScoreThreshold(0.8);
+      uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
+      // so this setting has no effect
+      uut.setDisableIntradatasetConflation1(true);
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+    }
+
+    {
+      // both of these elements get the same status
+      w1->setStatus(Status::Unknown2);
+      n1->setStatus(Status::Unknown2);
+
+      PoiPolygonMatch uut(
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
+        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+      uut.setEnableReviewReduction(true);
+      uut.setMatchDistanceThreshold(0.0);
+      uut.setReviewDistanceThreshold(0.0);
+      uut.setNameScoreThreshold(0.8);
+      uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
+      // this prevents them from matching when they have the same status
+      uut.setDisableIntradatasetConflation2(true);
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
+    }
+
+    {
+      // these element have different statuses
+      w1->setStatus(Status::Unknown2);
+      n1->setStatus(Status::Unknown1);
+
+      PoiPolygonMatch uut(
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
+        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+      uut.setEnableReviewReduction(true);
+      uut.setMatchDistanceThreshold(0.0);
+      uut.setReviewDistanceThreshold(0.0);
+      uut.setNameScoreThreshold(0.8);
+      uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
+      // so this setting has no effect
+      uut.setDisableIntradatasetConflation2(true);
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
     }
   }
 };

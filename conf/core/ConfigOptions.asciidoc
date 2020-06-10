@@ -3392,13 +3392,21 @@ If true, instances where multiple POIs were matched to a single polygon will res
 POIs being automatically merged into the polygon.  If false, then each matched POI will generate a
 review against the polygon instead.
 
-=== poi.polygon.disable.intradataset.conflation
+=== poi.polygon.disable.intradataset.conflation.1
 
 * Data Type: bool
 * Default Value: `false`
 
-Enabling this option prevents POIs and Polygons from within the same dataset to be matched. Enabling
-it option causes poi.polygon.disable.same.source.conflation to be ignored.
+Enabling this option prevents all POIs and Polygons within the first input dataset from being
+matched. Enabling it causes poi.polygon.disable.same.source.conflation to be ignored.
+
+=== poi.polygon.disable.intradataset.conflation.2
+
+* Data Type: bool
+* Default Value: `false`
+
+Enabling this option prevents all POIs and Polygons within the second input dataset from being
+matched. Enabling it causes poi.polygon.disable.same.source.conflation to be ignored.
 
 === poi.polygon.disable.same.source.conflation
 
