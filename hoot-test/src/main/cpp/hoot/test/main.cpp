@@ -639,7 +639,7 @@ int main(int argc, char* argv[])
       listener.reset(new HootTestListener(false, suppressFailureDetail, -1));
       result.addListener(listener.get());
       Log::getInstance().setLevel(Log::Info);
-      populateTests(ALL, vAllTests, printDiff, suppressFailureDetail);
+      populateTests(ALL, vAllTests, printDiff, suppressFailureDetail, true);
       CppUnit::Test* t = findTest(vAllTests, testName.toStdString());
       if (t == NULL)
       {
