@@ -29,6 +29,8 @@
 
 // Hoot
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -38,13 +40,14 @@ class Element;
 /**
  * Identifies reversed roads
  */
-class ReversedRoadCriterion : public GeometryTypeCriterion
+class ReversedRoadCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
 public:
 
   static std::string className() { return "hoot::ReversedRoadCriterion"; }
 
-  ReversedRoadCriterion() {}
+  ReversedRoadCriterion();
+  ReversedRoadCriterion(ConstOsmMapPtr map);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -58,6 +61,11 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+private:
+
+  ConstOsmMapPtr _map;
 };
 
 }
