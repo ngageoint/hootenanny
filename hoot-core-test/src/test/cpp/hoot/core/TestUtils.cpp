@@ -99,6 +99,14 @@ NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
   return result;
 }
 
+WayPtr TestUtils::createDummyWay(OsmMapPtr map, Status status)
+{
+  geos::geom::Coordinate coords[] =
+  { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(0, 10),
+    geos::geom::Coordinate::getNull() };
+  return createWay(map, status, coords);
+}
+
 WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circularError,
                             const QString& note)
 {

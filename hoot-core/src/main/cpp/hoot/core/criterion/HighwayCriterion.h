@@ -27,6 +27,7 @@
 #ifndef HIGHWAYCRITERION_H
 #define HIGHWAYCRITERION_H
 
+// Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
@@ -43,8 +44,8 @@ public:
 
   static std::string className() { return "hoot::HighwayCriterion"; }
 
-  HighwayCriterion() {}
-  HighwayCriterion(ConstOsmMapPtr map) : _map(map) {}
+  HighwayCriterion();
+  HighwayCriterion(ConstOsmMapPtr map);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
