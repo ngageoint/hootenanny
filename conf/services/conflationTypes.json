@@ -122,6 +122,7 @@
 	    "poi.polygon.additional.search.distance": "Additional search radius (m)",
             "poi.polygon.allow.cross.conflation.merging": "Allow merging of Building and POI to Polygon matches",
             "poi.polygon.max.size.per.cache": "Cache size",
+      	    "poi.polygon.disable.sintradataset.conflation": "Disable intra-dataset conflation",
             "poi.polygon.disable.same.source.conflation": "Disable same source conflation",
             "poi.polygon.keep.closest.matches.only": "Keep the closest match only",
             "poi.polygon.match.distance.threshold" : "Match distance threshold (m)",

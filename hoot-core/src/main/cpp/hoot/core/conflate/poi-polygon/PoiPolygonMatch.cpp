@@ -99,7 +99,7 @@ _reviewIfMatchedTypes(QStringList()),
 _nameScore(-1.0),
 _nameScoreThreshold(-1.0),
 _addressScore(-1.0),
-//leaving this false by default due to libpostals startup time
+// leaving this false by default due to libpostal's startup time
 _addressMatchEnabled(false),
 _phoneNumberScore(-1.0),
 _phoneNumberMatchEnabled(true),
@@ -108,11 +108,12 @@ _enableReviewReduction(true),
 _disableSameSourceConflation(false),
 _disableSameSourceConflationMatchTagKeyPrefixOnly(true),
 _sourceTagKey(""),
+_disableIntradatasetConflation(false),
 _reviewMultiUseBuildings(false),
 _rf(rf),
 _explainText(""),
 _infoCache(infoCache),
-_timingThreshold(1000000)    //nanoseconds
+_timingThreshold(1000000)    // nanoseconds
 {
   LOG_VART(_infoCache.get());
 
@@ -203,6 +204,8 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   setDisableSameSourceConflationMatchTagKeyPrefixOnly(
     config.getPoiPolygonDisableSameSourceConflationMatchTagKeyPrefixOnly());
   setSourceTagKey(config.getPoiPolygonSourceTagKey());
+
+  setDisableIntradatasetConflation(config.getPoiPolygonDisableIntradatasetConflation());
 
   setReviewMultiUseBuildings(config.getPoiPolygonReviewMultiuseBuildings());
 
@@ -395,13 +398,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   _eid1 = eid1;
   _eid2 = eid2;
 
-  //if the options was activated to not conflate features with the same source tag, then exit
-  //out with a miss now
-  if (_disableSameSourceConflation && _inputFeaturesHaveSameSource())
-  {
-    return;
-  }
-
   _categorizeElementsByGeometryType();
 
   //FOR REDUCING REVIEWS DURING REVIEW TYPE DEBUGGING ONLY!
@@ -410,7 +406,20 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //    return;
 //  }
 
-  //allow for auto marking features with certain types for review if they get matched
+  // don't conflate features from within the same input dataset when this option is enabled
+  if (_disableIntradatasetConflation && _poi->getStatus() == _poly->getStatus())
+  {
+    return;
+  }
+
+  // if the options was activated to not conflate features with the same source tag, then exit
+  // out with a miss now
+  if (_disableSameSourceConflation && _inputFeaturesHaveSameSource())
+  {
+    return;
+  }
+
+  // allow for auto marking features with certain types for review if they get matched
   const bool foundReviewIfMatchedType =
     _featureHasReviewIfMatchedType(_poi) || _featureHasReviewIfMatchedType(_poly);
   LOG_VART(foundReviewIfMatchedType);
