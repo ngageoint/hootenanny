@@ -75,7 +75,7 @@ bool OsmMapReaderFactory::hasPartialReader(const QString& url)
 
 std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& url)
 {
-  QString readerOverride = ConfigOptions().getOsmMapReaderFactoryReader();
+  QString readerOverride = ConfigOptions().getMapFactoryReader();
 
   std::shared_ptr<OsmMapReader> reader;
   if (readerOverride != "")

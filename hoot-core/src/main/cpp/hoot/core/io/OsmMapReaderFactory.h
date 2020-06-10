@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPREADERFACTORY_H
 #define OSMMAPREADERFACTORY_H
@@ -52,9 +52,9 @@ public:
 
   static std::shared_ptr<OsmMapReader> createReader(const QString& url, bool useFileId = true,
                                                     Status defaultStatus = Status::Invalid);
-  //Note the url as the last param here...was getting runtime overlap between these two where
-  //bools were being passed as status ints and vice versa.  May need to do some more refactoring
-  //here to make things cleaner.
+  // Note the url as the last param here...was getting runtime overlap between these two where
+  // bools were being passed as status ints and vice versa. May need to do some more refactoring
+  // here to make things cleaner.
   static std::shared_ptr<OsmMapReader> createReader(bool useFileId, bool useFileStatus,
                                                     const QString& url);
 

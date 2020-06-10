@@ -56,7 +56,7 @@ describe('TranslationServer', function () {
         });
 
         // console.log(tds_xml);
-        
+
         xml = parser.parseFromString(tds_xml);
         gj = osmtogeojson(xml);
 
@@ -64,7 +64,7 @@ describe('TranslationServer', function () {
 
         var tags = gj.features[0].properties;
         assert.equal(tags["F_CODE"], 'BH082');
-        assert.equal(tags["IWT"], '5'); 
+        assert.equal(tags["IWT"], '5');
     });
 
     it('should translate Reservoir (F_CODE=BH082 & IWT=4) from tdsv61 -> osm -> tdsv61', function() {
@@ -101,8 +101,7 @@ describe('TranslationServer', function () {
 
         var tags = gj.features[0].properties;
         assert.equal(tags['natural'], 'water');
-        assert.equal(tags['man_made'], 'reservoir');
-        assert.equal(tags['water'], 'lake');
+        assert.equal(tags['water'], 'reservoir');
 
         var tds_xml = server.handleInputs({
             osm: osm_xml,
@@ -112,7 +111,7 @@ describe('TranslationServer', function () {
         });
 
         // console.log(tds_xml);
-        
+
         xml = parser.parseFromString(tds_xml);
         gj = osmtogeojson(xml);
 
@@ -121,7 +120,7 @@ describe('TranslationServer', function () {
         var tags = gj.features[0].properties;
         assert.equal(tags["F_CODE"], 'BH082');
         // TEMPORARILY DISABLED until TDSv61 sort order issues are resolved
-        //assert.equal(tags["IWT"], '4'); 
+        //assert.equal(tags["IWT"], '4');
 
     });
 });

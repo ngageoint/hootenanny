@@ -39,6 +39,8 @@ namespace hoot
  * class. See hoot::AddRefVisitor for an example implementation.
  *
  * This is also used by hoot::VisitorOp and hoot::NamedOp.
+ *
+ * @todo move this to the visitors folder
  */
 class ConstElementVisitor : public ElementVisitor
 {

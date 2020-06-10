@@ -128,6 +128,10 @@ public:
   void setDisableSameSourceConflationMatchTagKeyPrefixOnly(const bool disabled)
   { _disableSameSourceConflationMatchTagKeyPrefixOnly = disabled; }
   void setSourceTagKey(const QString& key) { _sourceTagKey = key; }
+  void setDisableIntradatasetConflation1(const bool disabled)
+  { _disableIntradatasetConflation1 = disabled; }
+  void setDisableIntradatasetConflation2(const bool disabled)
+  { _disableIntradatasetConflation2 = disabled; }
   void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
   void setAddressMatchingEnabled(const bool enabled) { _addressMatchEnabled = enabled; }
 
@@ -212,6 +216,11 @@ private:
   bool _disableSameSourceConflation;
   bool _disableSameSourceConflationMatchTagKeyPrefixOnly;
   QString _sourceTagKey;
+
+  // prevents elements with the same status from matching (same input dataset); this is a simpler
+  // way to prevent intra-dataset matches than using _disableSameSourceConflation
+  bool _disableIntradatasetConflation1;
+  bool _disableIntradatasetConflation2;
 
   bool _reviewMultiUseBuildings;
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OneWayRoadStandardizer.h"
@@ -43,12 +43,32 @@ OneWayRoadStandardizer::OneWayRoadStandardizer()
 
 void OneWayRoadStandardizer::visit(const std::shared_ptr<Element>& e)
 {
-  if (ReversedRoadCriterion().isSatisfied(e))
+  if (ReversedRoadCriterion(_map->shared_from_this()).isSatisfied(e))
   {
-    WayPtr road = std::dynamic_pointer_cast<Way>(e);
-    road->reverseOrder();
-    road->getTags().set("oneway", "yes");
-    _numAffected++;
+    // must be a way or relation if ReversedRoadCriterion was satisfied
+    if (e->getElementType() == ElementType::Way)
+    {
+      WayPtr road = std::dynamic_pointer_cast<Way>(e);
+      road->reverseOrder();
+      road->getTags().set("oneway", "yes");
+      _numAffected++;
+    }
+    else
+    {
+      RelationPtr roadRelation = std::dynamic_pointer_cast<Relation>(e);
+      for (size_t i = 0; i < roadRelation->getMembers().size(); ++i)
+      {
+        ElementPtr member = _map->getElement(roadRelation->getMembers()[i].getElementId());
+        if (member->getElementType() == ElementType::Way)
+        {
+          // assuming the oneway tag isn't also present on the member
+          WayPtr road = std::dynamic_pointer_cast<Way>(member);
+          road->reverseOrder();
+          _numAffected++;
+        }
+      }
+      roadRelation->getTags().set("oneway", "yes");
+    }
   }
 }
 

@@ -123,10 +123,17 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     if (_usedNodes.find(n->getId()) == _usedNodes.end() &&
         n->getTags().hasAnyKvp(_unallowedOrphanKvps))
     {
+      LOG_TRACE("Skipping " << n->getElementId() << " with unallowed orphan kvp...");
     }
     else if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
     {
+      LOG_TRACE(
+        "Not marking " << n->getElementId() << " for removal due to having non-metadata tags...");
       _usedNodes.insert(n->getId());
+    }
+    else
+    {
+      LOG_TRACE("Marking " << n->getElementId() << " for removal...");
     }
     _numProcessed++;
 
@@ -139,6 +146,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     }
   }
   LOG_VART(_usedNodes.size());
+  //LOG_VART(_usedNodes);
 
   std::shared_ptr<OsmMap> reprojected;
   const NodeMap* nodesWgs84 = &nodes;
@@ -150,6 +158,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     reprojected.reset(new OsmMap(map));
     MapProjector::projectToWgs84(reprojected);
     nodesWgs84 = &reprojected->getNodes();
+    LOG_VART(nodesWgs84->size());
   }
 
   // Now, let's remove any that aren't in our do not remove list.
@@ -160,6 +169,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     const Node* n = it->second.get();
     LOG_VART(n->getElementId());
     const long nodeId = n->getId();
+    LOG_VART(_usedNodes.find(nodeId) == _usedNodes.end());
     if (_usedNodes.find(nodeId) == _usedNodes.end())
     {
       if (_bounds.isNull() || _bounds.contains(n->getX(), n->getY()))
@@ -173,6 +183,10 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         LOG_TRACE("node not in bounds. " << n->getElementId());
         LOG_VART(_bounds);
       }
+    }
+    else
+    {
+      LOG_TRACE("Not removing node: " << n->getElementId() << "...");
     }
     _numProcessed++;
 
@@ -203,7 +217,7 @@ long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
   }
   LOG_INFO(nodeRemover.getInitStatusMessage());
   nodeRemover.apply(map);
-  LOG_DEBUG(nodeRemover.getCompletedStatusMessage());
+  LOG_INFO(nodeRemover.getCompletedStatusMessage());
   return nodeRemover.getNumFeaturesAffected();
 }
 

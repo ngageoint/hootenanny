@@ -134,6 +134,12 @@ public:
     OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
     Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
 
+  /*
+   * For creating a way where you just need to operate on its tags and
+   * don't care about the geometric aspect of it.
+   */
+  static WayPtr createDummyWay(OsmMapPtr map, Status status = Status::Unknown1);
+
   static RelationPtr createRelation(
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
     Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());

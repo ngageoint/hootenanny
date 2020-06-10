@@ -621,7 +621,7 @@ bool XmlChangeset::addWay(ChangesetInfoPtr& changeset, ChangesetType type, Chang
   {
     //  The number of elements in this way (fully "hydrated") cannot exceed the max size in a changeset
     ElementCountSet elements(ElementType::Max);
-    size_t count = getObjectCount(way, elements);
+    size_t count = getObjectCount(way, elements, false);
     if (count + changeset->size() > (size_t)_maxChangesetSize)
       return false;
     bool sendable = true;
@@ -793,7 +793,7 @@ bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, 
   {
     //  The number of elements in this relation (fully "hydrated") cannot exceed the max size in a changeset
     ElementCountSet elements(ElementType::Max);
-    size_t count = getObjectCount(relation, elements);
+    size_t count = getObjectCount(relation, elements, false);
     if (count + changeset->size() > (size_t)_maxChangesetSize)
       return false;
     bool sendable = true;
@@ -979,25 +979,25 @@ bool XmlChangeset::canMoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& /
   return source->size() != count;
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetNode* node, ElementCountSet& elements)
+size_t XmlChangeset::getObjectCount(ChangesetNode* node, ElementCountSet& elements, bool countSent)
 {
   ChangesetInfoPtr empty;
-  return getObjectCount(empty, node, elements);
+  return getObjectCount(empty, node, elements, countSent);
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetWay* way, ElementCountSet& elements)
+size_t XmlChangeset::getObjectCount(ChangesetWay* way, ElementCountSet& elements, bool countSent)
 {
   ChangesetInfoPtr empty;
-  return getObjectCount(empty, way, elements);
+  return getObjectCount(empty, way, elements, countSent);
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetRelation* relation, ElementCountSet& elements)
+size_t XmlChangeset::getObjectCount(ChangesetRelation* relation, ElementCountSet& elements, bool countSent)
 {
   ChangesetInfoPtr empty;
-  return getObjectCount(empty, relation, elements);
+  return getObjectCount(empty, relation, elements, countSent);
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& /*changeset*/, ChangesetNode* node, ElementCountSet& elements)
+size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& /*changeset*/, ChangesetNode* node, ElementCountSet& elements, bool countSent)
 {
   //  Cannot count NULL nodes
   if (node == NULL)
@@ -1005,18 +1005,24 @@ size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& /*changeset*/, ChangesetNo
   //  Do not recount nodes already counted
   if (elements[ElementType::Node].find(node->id()) != elements[ElementType::Node].end())
     return 0;
+  //  Do not count non-available nodes
+  if (!countSent && node->getStatus() != ChangesetElement::Available)
+    return 0;
   //  Record the node ID in the node elements set
   elements[ElementType::Node].insert(node->id());
   //  Nodes count as one object
   return 1;
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements)
+size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements, bool countSent)
 {
   if (way == NULL)
     return 0;
   //  Get the count of nodes and way that make up this "change"
   size_t count = 0;
+  //  Do not count non-available ways
+  if (!countSent && way->getStatus() != ChangesetElement::Available)
+    return 0;
   //  Increment the count if it isn't already found in the element set
   if (elements[ElementType::Way].find(way->id()) == elements[ElementType::Way].end())
   {
@@ -1043,12 +1049,15 @@ size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* w
   return count;
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelation* relation, ElementCountSet& elements)
+size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelation* relation, ElementCountSet& elements, bool countSent)
 {
   if (relation == NULL)
     return 0;
   //  Get the count of nodes, ways, and relations that make up this "change"
   size_t count = 0;
+  //  Do not count non-available relations
+  if (!countSent && relation->getStatus() != ChangesetElement::Available)
+    return 0;
   //  Increment the count if the relation isn't already found in the element set
   if (elements[ElementType::Relation].find(relation->id()) == elements[ElementType::Relation].end())
   {
@@ -1070,7 +1079,7 @@ size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelati
           ChangesetNode* node = NULL;
           if (_allNodes.find(id) != _allNodes.end())
             node = dynamic_cast<ChangesetNode*>(_allNodes[id].get());
-          count += getObjectCount(changeset, node, elements);
+          count += getObjectCount(changeset, node, elements, countSent);
         }
       }
     }
@@ -1083,7 +1092,7 @@ size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelati
           ChangesetWay* way = NULL;
           if (_allWays.find(id) != _allWays.end())
             way = dynamic_cast<ChangesetWay*>(_allWays[id].get());
-          count += getObjectCount(changeset, way, elements);
+          count += getObjectCount(changeset, way, elements, countSent);
         }
       }
     }
@@ -1099,7 +1108,7 @@ size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelati
             ChangesetRelation* relation = NULL;
             if (_allRelations.find(id) != _allRelations.end())
               relation = dynamic_cast<ChangesetRelation*>(_allRelations[id].get());
-            count += getObjectCount(changeset, relation, elements);
+            count += getObjectCount(changeset, relation, elements, countSent);
           }
         }
       }
@@ -2268,8 +2277,9 @@ void XmlChangeset::failRemainingElements(const ChangesetElementMap& elements)
   for (ChangesetElementMap::const_iterator it = elements.begin(); it != elements.end(); ++it)
   {
     ChangesetElementPtr element = it->second;
-    //  Anything that isn't finalized is now failed
-    if (element->getStatus() != ChangesetElement::Finalized)
+    //  Anything that isn't finalized or failed is now failed
+    ChangesetElement::ElementStatus status = element->getStatus();
+    if (status != ChangesetElement::Finalized && status != ChangesetElement::Failed)
     {
       element->setStatus(ChangesetElement::Failed);
       ++_failedCount;
