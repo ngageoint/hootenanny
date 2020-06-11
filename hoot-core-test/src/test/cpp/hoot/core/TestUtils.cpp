@@ -99,6 +99,14 @@ NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
   return result;
 }
 
+WayPtr TestUtils::createDummyWay(OsmMapPtr map, Status status)
+{
+  geos::geom::Coordinate coords[] =
+  { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(0, 10),
+    geos::geom::Coordinate::getNull() };
+  return createWay(map, status, coords);
+}
+
 WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circularError,
                             const QString& note)
 {
@@ -373,7 +381,7 @@ void TestUtils::runConflateOpReductionTest(
   CPPUNIT_ASSERT_EQUAL(17,  TestUtils::getConflateCmdSnapshotCleaningOps().size());
 
   MatchFactory::getInstance().reset();
-  MatchFactory::_setMatchCreators(matchCreators);
+  MatchFactory::getInstance()._setMatchCreators(matchCreators);
   // This is a snapshot of the ops in order to avoid any changes made to them result in requiring
   // this test's results to change over time. Clearly, any newly added ops could be being filtered
   // incorrectly, and we can update this list periodically if that's deemed important.

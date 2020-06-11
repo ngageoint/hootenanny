@@ -234,10 +234,17 @@ output. See the "Snap Unconnected Ways" section of the User Documentation for mo
 
 Changeset replacement derivation will not remove any references to missing children elements passed in the input data. If any ways with 
 references to missing way nodes or relations with references to missing elements are found in the inputs to changeset replacement derivation, 
-they will be tagged with the custom tag, "hoot::missing_child=yes". This is due to the fact that changeset replacement derivation may 
-inadvertantly introduce duplicate/unwanted child elements into these features since it is not aware of the existence of the missing children. 
-This tag should be searched for after the resulting changeset has been applied and features having it should be manually cleaned up, if 
-necessary.
+they will be tagged with the custom tag, "hoot::missing_child=yes" (configurable; turn off tagging with the +changeset.replacement.mark.elements.with.missing.children+ configuration option). This is due to the fact that changeset replacement derivation may inadvertantly introduce 
+duplicate/unwanted child elements into these features since it is not aware of the existence of the missing children. This tag should be 
+searched for after the resulting changeset has been applied and features having it should be manually cleaned up, if necessary.
+
+If you are using this command with file based data sources and in conjunction with other hoot commands (`convert`, etc), you need to use the
+following configuration options to properly manage references to missing child elements (`changeset-derive-replacment` sets these options 
+automatically internally for itself):
+
+* +convert.bounding.box.remove.missing.elements+=false
+* +map.reader.add.child.refs.when.missing+=true
+* +log.warnings.for.missing.elements+=false
 
 === See Also
 

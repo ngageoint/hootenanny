@@ -90,7 +90,8 @@ _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
 _numCrossingWaysKept(0),
 _numCrossingWaysRemoved(0),
-_numNodesRemoved(0)
+_numNodesRemoved(0),
+_logWarningsForMissingElements(true)
 {
 }
 
@@ -108,7 +109,8 @@ _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
 _numCrossingWaysKept(0),
 _numCrossingWaysRemoved(0),
-_numNodesRemoved(0)
+_numNodesRemoved(0),
+_logWarningsForMissingElements(true)
 {
 }
 
@@ -125,7 +127,8 @@ _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
 _numCrossingWaysKept(0),
 _numCrossingWaysRemoved(0),
-_numNodesRemoved(0)
+_numNodesRemoved(0),
+_logWarningsForMissingElements(true)
 {
 }
 
@@ -208,6 +211,8 @@ void MapCropper::setConfiguration(const Settings& conf)
   setKeepEntireFeaturesCrossingBounds(confOpts.getCropKeepEntireFeaturesCrossingBounds());
   setKeepOnlyFeaturesInsideBounds(confOpts.getCropKeepOnlyFeaturesInsideBounds());
 
+  setLogWarningsForMissingElements(confOpts.getLogWarningsForMissingElements());
+
   _statusUpdateInterval = confOpts.getTaskStatusUpdateInterval();
 }
 
@@ -235,6 +240,7 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(_invert);
   LOG_VARD(_keepEntireFeaturesCrossingBounds);
   LOG_VARD(_keepOnlyFeaturesInsideBounds);
+  LOG_VARD(_envelope.isNull());
   LOG_VARD(_envelope);
   if (_envelopeG)
   {
@@ -248,23 +254,28 @@ void MapCropper::apply(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& w = it->second;
+    LOG_VART(w.get());
     LOG_TRACE("Checking " << w->getElementId() << " for cropping...");
     LOG_VART(w->getNodeIds());
     LOG_VART(w);
 
-    std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+    std::shared_ptr<LineString> ls =
+      ElementConverter(map, _logWarningsForMissingElements).convertToLineString(w);
     if (!ls.get())
     {
-      if (logWarnCount < Log::getWarnMessageLimit())
+      if (_logWarningsForMissingElements)
       {
-        LOG_WARN("Couldn't convert " << w->getElementId() << " to line string. Keeping way...");
-        LOG_VARW(w);
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("Couldn't convert " << w->getElementId() << " to line string. Keeping way...");
+          LOG_VARW(w);
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
 
       _numProcessed++;
       wayCtr++;
@@ -488,7 +499,8 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   LOG_TRACE("Cropping way crossing bounds: " << wid << "...");
 
   std::shared_ptr<Way> way = map->getWay(wid);
-  std::shared_ptr<Geometry> fg = ElementConverter(map).convertToGeometry(way);
+  std::shared_ptr<Geometry> fg =
+    ElementConverter(map, _logWarningsForMissingElements).convertToGeometry(way);
 
   // perform the intersection with the geometry
   std::shared_ptr<Geometry> g;
@@ -646,6 +658,8 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
   {
     if (_invert == false)
     {
+      LOG_VART(_envelopeG);
+      LOG_VART(_envelopeG->getEnvelopeInternal());
       result = !_envelopeG->getEnvelopeInternal()->intersects(e);
       //result = !_envelopeG->intersects(GeometryFactory::getDefaultInstance()->toGeometry(&e));
       LOG_TRACE(

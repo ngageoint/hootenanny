@@ -36,6 +36,8 @@ namespace hoot
 
 /**
  * Generates an alpha shape
+ *
+ * https://github.com/ngageoint/hootenanny/files/595246/Hootenanny.-.Alpha.Shape.2013-03-07.pptx
  */
 class AlphaShapeGenerator
 {

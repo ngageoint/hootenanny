@@ -50,7 +50,7 @@ namespace hoot
 
 bool ElementStreamer::isStreamableIo(const QString& input, const QString& output)
 {
-  QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
+  QString writerName = ConfigOptions().getMapFactoryWriter();
   if (writerName.trimmed().isEmpty())
   {
     writerName = OsmMapWriterFactory::getWriterName(output);

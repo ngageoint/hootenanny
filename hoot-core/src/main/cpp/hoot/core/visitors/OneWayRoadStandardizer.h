@@ -29,7 +29,7 @@
 #define ONE_WAY_ROAD_STANDARDIZER_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Replaces all reversed one way roads with regular one way roads
  */
-class OneWayRoadStandardizer : public ElementVisitor
+class OneWayRoadStandardizer : public ElementOsmMapVisitor
 {
 
 public:

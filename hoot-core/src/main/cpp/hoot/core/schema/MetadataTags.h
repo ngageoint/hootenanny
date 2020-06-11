@@ -112,6 +112,8 @@ public:
   inline static const QString HootScoreMiss()           { return "hoot:score:miss"; }
   inline static const QString HootScoreReview()         { return "hoot:score:review"; }
   inline static const QString HootScoreUuid()           { return "hoot:score:uuid"; }
+  inline static const QString HootUserName()            { return "hoot:user_name"; }
+  inline static const QString HootUserId()              { return "hoot:user_id"; }
 
   // used with JOSM validation interop; match those used in JosmValidator.java
   inline static const QString HootValidationError()     { return "hoot:validation:error"; }

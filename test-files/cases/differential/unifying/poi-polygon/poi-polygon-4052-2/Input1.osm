@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="36.3579936" minlon="43.112612" maxlat="36.359156" maxlon="43.1142917"/>
+    <node visible="true" id="100530934" timestamp="2016-02-02T18:10:04Z" version="1" changeset="1254" lat="36.3579936000000004" lon="43.1142917000000025">
+        <tag k="amenity" v="hospital"/>
+        <tag k="is_in" v="Iraq, Mosul"/>
+        <tag k="name" v="المستشفى الجمهوري"/>
+        <tag k="source:datetime" v="2008-05-16T10:49:22.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="2488247028" timestamp="2016-02-03T01:09:08Z" version="1" changeset="39009" lat="36.3591559999999987" lon="43.1126119999999986">
+        <tag k="amenity" v="hospital"/>
+        <tag k="is_in" v="Iraq , جمهورية العراق"/>
+        <tag k="name:de" v="Mustashfa al Musil al Amm"/>
+        <tag k="alt_name" v="مستشفى الموصل العام"/>
+        <tag k="name" v="مستشفى الموصل العام"/>
+        <tag k="name:ar" v="مستشفى الموصل العام"/>
+        <tag k="name:en" v="Mustashfa al Musil al Amm"/>
+        <tag k="source:datetime" v="2013-10-08T15:29:02.000Z"/>
+        <tag k="name:fr" v="Mustashfa al Musil al Amm"/>
+        <tag k="name:ar1" v="مستشفى الموصل العام"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="int_name" v="Mustashfá al Mūşil al Āmm, مستشفى الموصل العام, Mustashfa al Musil al Amm, مستشفى الموصل العام"/>
+    </node>
+</osm>

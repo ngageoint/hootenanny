@@ -12,7 +12,7 @@ var HOOT_HOME = process.env.HOOT_HOME;
 if (typeof hoot === 'undefined') {
     hoot = require(HOOT_HOME + '/lib/HootJs');
     hoot.Log.setLogLevel("warn");
-    hoot.Settings.set({"osm.map.reader.xml.add.child.refs.when.missing":"true"});
+    hoot.Settings.set({"map.reader.add.child.refs.when.missing":"true"});
     hoot.Settings.set({"ogr.add.uuid": "false"});
     hoot.Settings.set({"ogr.esri.fcsubtype": "false"});
     hoot.Settings.set({"ogr.note.extra": "attribute"});
@@ -320,9 +320,9 @@ var postHandler = function(data) {
     var translation = data.transMap[data.transDir][data.translation];
 
     if (data.transDir === "toogr") {
-        hoot.Settings.set({"osm.map.writer.schema": data.translation});
+        hoot.Settings.set({"map.writer.schema": data.translation});
     } else {
-        hoot.Settings.set({"osm.map.writer.schema": "OSM"});
+        hoot.Settings.set({"map.writer.schema": "OSM"});
     }
     var map = new hoot.OsmMap();
     // loadMapFromString arguments: map, XML, preserve ID's, hoot:status
