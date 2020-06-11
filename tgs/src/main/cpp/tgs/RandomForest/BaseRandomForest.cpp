@@ -44,7 +44,10 @@ namespace Tgs
   {
   }
 
-  BaseRandomForest::~BaseRandomForest(){}
+  BaseRandomForest::~BaseRandomForest()
+  {
+    clear();
+  }
 
   void BaseRandomForest::clear()
   {

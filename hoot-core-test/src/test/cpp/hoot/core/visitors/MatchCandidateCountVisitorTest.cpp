@@ -80,7 +80,7 @@ public:
     QStringList matchCreators;
     matchCreators.append("hoot::BuildingMatchCreator");
     MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
     map->visitRo(uut);
@@ -104,7 +104,7 @@ public:
     QStringList matchCreators;
     matchCreators.append("hoot::HighwayMatchCreator");
     MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
     map->visitRo(uut);
@@ -130,7 +130,7 @@ public:
     matchCreators.append("hoot::HighwayMatchCreator");
     matchCreators.append("hoot::ScriptMatchCreator,Line.js");
     MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
     map->visitRo(uut);
@@ -161,7 +161,7 @@ public:
     QStringList matchCreators;
     matchCreators.append("hoot::ScriptMatchCreator,Poi.js");
     MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
     map->visitRo(uut);
@@ -187,7 +187,7 @@ public:
     matchCreators.append("hoot::ScriptMatchCreator,River.js");
     matchCreators.append("hoot::ScriptMatchCreator,Poi.js");
     MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
     map->visitRo(uut);
@@ -213,7 +213,7 @@ public:
     QStringList matchCreators;
     matchCreators.append("hoot::ScriptMatchCreator,Poi.js");
     MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
     map->visitRo(uut);
@@ -247,8 +247,8 @@ public:
     const QString poiTagFilter = "{ \"must\": [ { \"tag\": \"poi=yes\" } ] }";
 
     MatchFactory::getInstance().reset();
-    MatchFactory::_setTagFilter(poiTagFilter);
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setTagFilter(poiTagFilter);
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
     uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)2, (int)uut->getStat());
@@ -256,16 +256,16 @@ public:
     const QString restaurantTagFilter = "{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }";
 
     MatchFactory::getInstance().reset();
-    MatchFactory::_setTagFilter(restaurantTagFilter);
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setTagFilter(restaurantTagFilter);
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
     uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
     node1->getTags().set("amenity", "restaurant");
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)1, (int)uut->getStat());
 
     MatchFactory::getInstance().reset();
-    MatchFactory::_setTagFilter(restaurantTagFilter);
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setTagFilter(restaurantTagFilter);
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
     uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
     node2->getTags().set("amenity", "restaurant");
     map->visitRo(*uut);
@@ -288,29 +288,29 @@ public:
     std::shared_ptr<MatchCandidateCountVisitor> uut;
 
     MatchFactory::getInstance().reset();
-    MatchFactory::_setTagFilter("");
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setTagFilter("");
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
     uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)39, (int)uut->getStat());
 
     MatchFactory::getInstance().reset();
-    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"building=yes\" } ] }");
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setTagFilter("{ \"must\": [ { \"tag\": \"building=yes\" } ] }");
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
     uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)17, (int)uut->getStat());
 
     MatchFactory::getInstance().reset();
-    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"poi=yes\" } ] }");
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setTagFilter("{ \"must\": [ { \"tag\": \"poi=yes\" } ] }");
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
     uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)21, (int)uut->getStat());
 
     MatchFactory::getInstance().reset();
-    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"name=Starbucks\" } ] }");
-    MatchFactory::_setMatchCreators(matchCreators);
+    MatchFactory::getInstance()._setTagFilter("{ \"must\": [ { \"tag\": \"name=Starbucks\" } ] }");
+    MatchFactory::getInstance()._setMatchCreators(matchCreators);
     uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)12, (int)uut->getStat());

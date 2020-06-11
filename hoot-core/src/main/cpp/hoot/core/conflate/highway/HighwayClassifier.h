@@ -39,6 +39,9 @@ class HighwayClassifier
 {
 public:
 
+  HighwayClassifier() = default;
+  virtual ~HighwayClassifier() = default;
+
   static std::string className() { return "hoot::HighwayClassifier"; }
 
   /**

@@ -46,6 +46,7 @@ public:
   static int logWarnCount;
 
   HighwayRfClassifier();
+  ~HighwayRfClassifier() = default;
 
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
