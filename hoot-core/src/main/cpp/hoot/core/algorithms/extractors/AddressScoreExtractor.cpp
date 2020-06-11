@@ -183,16 +183,27 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
   for (QList<Address>::const_iterator element2AddrItr = element2Addresses.begin();
        element2AddrItr != element2Addresses.end(); ++element2AddrItr)
   {
-    const Address element2Address = *element2AddrItr;
+    Address element2Address = *element2AddrItr;
     for (QList<Address>::const_iterator element1AddrItr = element1Addresses.begin();
          element1AddrItr != element1Addresses.end(); ++element1AddrItr)
     {
-      const Address element1Address = *element1AddrItr;
+      Address element1Address = *element1AddrItr;
       if (element2Address == element1Address)
       {
         LOG_TRACE("Found address match.");
         return 1.0;
       }
+//      else if (Address::isIntersectionAddress(element1Address) &&
+//               Address::isIntersectionAddress(element2Address))
+//      {
+//        element1Address.removeStreetTypes();
+//        element2Address.removeStreetTypes();
+//        if (element2Address == element1Address)
+//        {
+//          LOG_TRACE("Found address match.");
+//          return 1.0;
+//        }
+//      }
     }
   }
 

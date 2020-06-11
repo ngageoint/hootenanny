@@ -220,6 +220,28 @@ void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
   }
 }
 
+void StringUtils::removeAll(QString& input, const QStringList& toRemove,
+                            Qt::CaseSensitivity caseSensitivity)
+{
+  for (int i = 0; i < toRemove.size(); i++)
+  {
+    input.remove(toRemove.at(i), caseSensitivity);
+  }
+}
+
+void StringUtils::removeLastIndexOf(QString& input, const QStringList& toRemove,
+                                    Qt::CaseSensitivity caseSensitivity)
+{
+  for (int i = 0; i < toRemove.size(); i++)
+  {
+    const int index = input.lastIndexOf(toRemove.at(i), -1, caseSensitivity);
+    if (index != -1)
+    {
+      input = input.remove(index, toRemove.at(i).length());
+    }
+  }
+}
+
 bool StringUtils::containsAny(const QStringList& input, const QStringList& toCompare,
                               Qt::CaseSensitivity caseSensitivity)
 {

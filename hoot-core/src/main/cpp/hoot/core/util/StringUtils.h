@@ -180,6 +180,26 @@ public:
   static void removeAll(QStringList& input, const QStringList& toRemove);
 
   /**
+   * TODO
+   *
+   * @param input
+   * @param toRemove
+   * @param caseSensitivity
+   */
+  static void removeAll(QString& input, const QStringList& toRemove,
+                        Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
+   *TODO
+   *
+   * @param input
+   * @param toRemove
+   * @param caseSensitivity
+   */
+  static void removeLastIndexOf(QString& input, const QStringList& toRemove,
+                                Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
    * Determines if list contains any strings from another list
    *
    * @param input list to search

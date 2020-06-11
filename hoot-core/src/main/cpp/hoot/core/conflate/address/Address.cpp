@@ -155,4 +155,17 @@ bool Address::isIntersectionAddress(const QString& addressStr,
   return StringUtils::bisectsAny(addressStr, getIntersectionSplitTokens());
 }
 
+bool Address::isIntersectionAddress(const Address& address,
+                                    const bool requireStreetTypeInIntersection)
+{
+  return isIntersectionAddress(address._address, requireStreetTypeInIntersection);
+}
+
+void Address::removeStreetTypes()
+{
+  LOG_TRACE(_address);
+  StringUtils::removeLastIndexOf(_address, _streetTypes.toList());
+  LOG_TRACE(_address);
+}
+
 }

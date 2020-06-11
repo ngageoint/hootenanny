@@ -338,6 +338,8 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   libpostal_address_parser_response_destroy(parsed);
   LOG_VART(street);
   LOG_VART(houseNum);
+  LOG_VART(requireStreetTypeInIntersection);
+  LOG_VART(Address::isIntersectionAddress(street, requireStreetTypeInIntersection));
 
   if (!houseNum.isEmpty() && !street.isEmpty())
   {

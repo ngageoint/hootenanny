@@ -65,6 +65,16 @@ public:
   /**
    * TODO
    *
+   * @param address
+   * @param requireStreetTypeInIntersection
+   * @return
+   */
+  static bool isIntersectionAddress(const Address& address,
+                                    const bool requireStreetTypeInIntersection = false);
+
+  /**
+   * TODO
+   *
    * @param includeAbbreviations
    * @return
    */
@@ -90,6 +100,11 @@ public:
    * @return
    */
   static QStringList getIntersectionSplitTokens();
+
+  /**
+   * TODO
+   */
+  void removeStreetTypes();
 
 private:
 
