@@ -147,7 +147,7 @@ bool Address::isIntersectionAddress(const QString& addressStr,
   // libpostal doesn't recognize intersections correctly, so doing it with very simple custom logic
 
   if (requireStreetTypeInIntersection &&
-      !StringUtils::endsWithAny(addressStr, _streetTypes.toList()))
+      !StringUtils::endsWithAny(addressStr, getStreetTypes().toList()))
   {
     return false;
   }

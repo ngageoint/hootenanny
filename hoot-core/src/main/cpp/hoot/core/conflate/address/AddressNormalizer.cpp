@@ -143,18 +143,6 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
 {
   LOG_TRACE("Normalizing intersection: " << address << "...");
 
-  /*
-   * 16th &amp; Bryant Street
-   * 16th and Bryant Street
-   * 16th St and Bryant Street
-   * 16th and Bryant
-   *
-   * Jones Street and Bryant Street
-   * Jones St and Bryant Street
-   * Jones and Bryant Street
-   * Jones &amp; Bryant
-   */
-
   const QMap<QString, QString> streetTypeAbbreviationsToFullTypes =
     Address::getStreetTypeAbbreviationsToFullTypes();
   const QStringList addressParts =
