@@ -142,28 +142,34 @@ public:
    *
    * @param input a list of strings to examine
    * @param substring the substring to search for
+   * @param caseSensitivity determines whether comparisons are case sensitive
    * @return true if any string in the input list contains the given substring; false otherwise
    */
-  static bool containsSubstring(const QStringList& input, const QString& substring);
+  static bool containsSubstring(const QStringList& input, const QString& substring,
+                                Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
    * Determines whether any string in a list of strings contains a substring
    *
    * @param input a list of strings to examine
    * @param substrings a list of substrings to search for
+   * @param caseSensitivity determines whether comparisons are case sensitive
    * @return true if any string in the input list contains any string in the given substrings;
    * false otherwise
    */
-  static bool containsSubstrings(const QStringList& input, const QStringList& substrings);
+  static bool containsSubstrings(const QStringList& input, const QStringList& substrings,
+                                 Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
    * Returns the first index of a substring in a collection of input strings
    *
    * @param input a list of strings to examine
    * @param substring the substring to search for
+   * @param caseSensitivity determines whether comparisons are case sensitive
    * @return an index if the substring in the input list is found; -1 otherwise
    */
-  static int indexOfSubstring(const QStringList& input, const QString& substring);
+  static int indexOfSubstring(const QStringList& input, const QString& substring,
+                              Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
    * Removes all strings in a specified list from another string list
@@ -178,9 +184,57 @@ public:
    *
    * @param input list to search
    * @param toCompare list to compare with
+   * @param caseSensitivity determines whether comparisons are case sensitive
    * @return true if at least one match is found; false otherwise
    */
-  static bool containsAny(const QStringList& input, const QStringList& compareList);
+  static bool containsAny(const QStringList& input, const QStringList& compareList,
+                          Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @param compareList
+   * @param caseSensitivity determines whether comparisons are case sensitive
+   * @return
+   */
+  static bool endsWithAny(const QString& input, const QStringList& compareList,
+                          Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @param compareList
+   * @param caseSensitivity
+   * @return
+   */
+  static QString endsWithAnyAsStr(const QString& input, const QStringList& compareList,
+                                  Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @param compareList
+   * @param caseSensitivity
+   * @return
+   */
+  static bool bisectsAny(const QString& input, const QStringList& compareList,
+                         Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @param tokenList
+   * @param numOutputTokens
+   * @param caseSensitivity
+   * @return
+   */
+  static QStringList splitOnAny(const QString& input, const QStringList& tokenList,
+                                const int numOutputTokens,
+                                Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
    * Removes all map entries from input that are contained in a specified list
@@ -189,6 +243,18 @@ public:
    * @param keysToRemove keys to remove from input map
    */
   static void removeAllWithKey(QMap<QString, QString>& input, const QStringList& keysToRemove);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @param strToReplace
+   * @param replacementStr
+   * @param caseSensitivity
+   */
+  static void replaceLastIndexOf(QString& input, const QString& strToReplace,
+                                 const QString& replacementStr,
+                                 Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 };
 
 }

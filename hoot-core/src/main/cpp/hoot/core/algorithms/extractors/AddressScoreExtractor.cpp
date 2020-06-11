@@ -98,6 +98,7 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
     const QList<Address>* cachedVal = _addressesCache[element->getElementId()];
     if (cachedVal != 0)
     {
+      LOG_TRACE("Found cached address.");
       _addressCacheHits++;
       return *cachedVal;
     }
@@ -114,6 +115,12 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
       elementAddresses =
         _addressParser.parseAddressesFromWayNodes(
           *way, map, elementBeingComparedWith->getElementId());
+      if (elementAddresses.size() != 0)
+      {
+        LOG_TRACE(
+          "Found " << elementAddresses.size() << " addresses on the way nodes of " <<
+          element->getElementId());
+      }
     }
     //if still no luck, try to find the address from a poly way node that is a relation member
     else if (element->getElementType() == ElementType::Relation)
@@ -122,7 +129,17 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
       elementAddresses =
         _addressParser.parseAddressesFromRelationMembers(
           *relation, map, elementBeingComparedWith->getElementId());
+      if (elementAddresses.size() != 0)
+      {
+        LOG_TRACE(
+          "Found " << elementAddresses.size() << " addresses on the relation members of " <<
+          element->getElementId());
+      }
     }
+  }
+  else
+  {
+    LOG_TRACE("Found " << elementAddresses.size() << " addresses on " << element->getElementId());
   }
 
   if (_cacheEnabled)

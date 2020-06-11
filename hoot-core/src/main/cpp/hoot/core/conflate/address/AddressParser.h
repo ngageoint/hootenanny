@@ -161,7 +161,11 @@ private:
   bool _isRangeAddress(const QString& houseNum) const;
   bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,
                                          QString& street) const;
-  bool _isValidAddressStr(QString& address, QString& houseNum,  QString& street) const;
+  /*
+   * TODO
+   */
+  bool _isValidAddressStr(QString& address, QString& houseNum,  QString& street,
+                          const bool requireStreetTypeInIntersection = false) const;
   /*
    * Parses tags which contain a complete address string
    */

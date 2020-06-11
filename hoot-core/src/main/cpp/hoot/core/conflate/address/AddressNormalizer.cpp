@@ -31,6 +31,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/address/LibPostalInit.h>
 #include <hoot/core/conflate/address/AddressTagKeys.h>
+#include <hoot/core/conflate/address/Address.h>
+#include <hoot/core/util/StringUtils.h>
 
 // libpostal
 #include <libpostal/libpostal.h>
@@ -84,13 +86,29 @@ void AddressNormalizer::normalizeAddresses(const ElementPtr& e)
 
 QSet<QString> AddressNormalizer::normalizeAddress(const QString& address) const
 {
+  const QString addressToNormalize = address.trimmed().simplified();
+  if (!Address::isIntersectionAddress(addressToNormalize))
+  {
+    return _normalizeAddressWithLibPostal(addressToNormalize);
+  }
+  else
+  {
+    // libpostal doesn't handle intersections very well, so doing it with custom logic
+    return _normalizeAddressIntersection(addressToNormalize);
+  }
+}
+
+QSet<QString> AddressNormalizer::_normalizeAddressWithLibPostal(const QString& address) const
+{
+  LOG_TRACE("Normalizing " << address << " with libpostal...");
+
+  QSet<QString> normalizedAddresses;
+  QString addressCopy = address;
+
   // See note about init of this in AddressParser::parseAddresses.
   LibPostalInit::getInstance();
 
-  LOG_VART(address);
-  const QString addressToNormalize = address.trimmed().simplified();
-  LOG_VART(addressToNormalize);
-  QSet<QString> normalizedAddresses;
+  _prepareAddressForLibPostalNormalization(addressCopy);
 
   size_t num_expansions;
   // specifying a language in the options is optional, but could we get better performance if
@@ -98,14 +116,13 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString& address) const
   // first, of course)?
   char** expansions =
     libpostal_expand_address(
-      addressToNormalize.toUtf8().data(), libpostal_get_default_options(),
-      &num_expansions);
+      addressCopy.toUtf8().data(), libpostal_get_default_options(), &num_expansions);
   // add all the normalizations libpostal finds as possible addresses
   for (size_t i = 0; i < num_expansions; i++)
   {
     const QString normalizedAddress = QString::fromUtf8(expansions[i]);
     LOG_VART(normalizedAddress);
-    if (_isValidNormalizedAddress(addressToNormalize, normalizedAddress) &&
+    if (_isValidNormalizedAddress(addressCopy, normalizedAddress) &&
         !normalizedAddresses.contains(normalizedAddress))
     {
       normalizedAddresses.insert(normalizedAddress);
@@ -120,6 +137,104 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString& address) const
   libpostal_expansion_array_destroy(expansions, num_expansions);
 
   return normalizedAddresses;
+}
+
+QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& address) const
+{
+  LOG_TRACE("Normalizing intersection: " << address << "...");
+
+  /*
+   * 16th &amp; Bryant Street
+   * 16th and Bryant Street
+   * 16th St and Bryant Street
+   * 16th and Bryant
+   *
+   * Jones Street and Bryant Street
+   * Jones St and Bryant Street
+   * Jones and Bryant Street
+   * Jones &amp; Bryant
+   */
+
+  const QMap<QString, QString> streetTypeAbbreviationsToFullTypes =
+    Address::getStreetTypeAbbreviationsToFullTypes();
+  const QStringList addressParts =
+    StringUtils::splitOnAny(address, Address::getIntersectionSplitTokens(), 2);
+  LOG_VART(addressParts.size());
+  if (addressParts.size() != 2)
+  {
+    throw IllegalArgumentException("TODO");
+  }
+  QString modifiedAddress;
+  for (int i = 0; i < addressParts.size(); i++)
+  {
+    QString addressPart = addressParts.at(i).trimmed();
+    LOG_VART(addressPart);
+    for (QMap<QString, QString>::const_iterator itr = streetTypeAbbreviationsToFullTypes.begin();
+         itr != streetTypeAbbreviationsToFullTypes.end(); ++itr)
+    {
+      const QString abbrev = itr.key().trimmed();
+      LOG_VART(abbrev);
+      const QString fullType = itr.value().trimmed();
+      LOG_VART(fullType);
+
+      LOG_VART(addressPart.endsWith(abbrev, Qt::CaseInsensitive));
+      if (addressPart.endsWith(abbrev, Qt::CaseInsensitive))
+      {
+        StringUtils::replaceLastIndexOf(addressPart, abbrev, fullType);
+        LOG_VART(addressPart);
+      }
+    }
+    LOG_VART(addressPart);
+
+    modifiedAddress += addressPart.trimmed();
+    if (i == 0)
+    {
+      modifiedAddress += " and ";
+    }
+  }
+  LOG_VART(modifiedAddress);
+
+  QStringList modifiedAddressParts =
+    StringUtils::splitOnAny(modifiedAddress, Address::getIntersectionSplitTokens(), 2);
+  const QString firstIntersectionPart = modifiedAddressParts[0].trimmed();
+  LOG_VART(firstIntersectionPart);
+  const QString secondIntersectionPart = modifiedAddressParts[1].trimmed();
+  LOG_VART(secondIntersectionPart);
+  const QStringList streetFullTypes =
+    Address::getStreetFullTypesToTypeAbbreviations().keys();
+  const QString firstIntersectionEndingStreetType =
+    StringUtils::endsWithAnyAsStr(firstIntersectionPart.trimmed(), streetFullTypes).trimmed();
+  LOG_VART(firstIntersectionEndingStreetType);
+  const QString secondIntersectionEndingStreetType =
+    StringUtils::endsWithAnyAsStr(secondIntersectionPart.trimmed(), streetFullTypes).trimmed();
+  LOG_VART(secondIntersectionEndingStreetType);
+  if (!firstIntersectionEndingStreetType.isEmpty() &&
+      secondIntersectionEndingStreetType.isEmpty())
+  {
+    modifiedAddressParts[1] =
+      modifiedAddressParts[1].trimmed() + " " + firstIntersectionEndingStreetType.trimmed();
+  }
+  else if (firstIntersectionEndingStreetType.isEmpty() &&
+           !secondIntersectionEndingStreetType.isEmpty())
+  {
+    modifiedAddressParts[0] =
+      modifiedAddressParts[0].trimmed() + " " + secondIntersectionEndingStreetType.trimmed();
+  }
+  modifiedAddress = modifiedAddressParts[0].trimmed() + " and " + modifiedAddressParts[1].trimmed();
+  LOG_VART(modifiedAddress);
+
+  return _normalizeAddressWithLibPostal(modifiedAddress);
+}
+
+void AddressNormalizer::_prepareAddressForLibPostalNormalization(QString& address)
+{
+  LOG_TRACE("Before normalization fix: " << address);
+  LOG_VART(Address::isIntersectionAddress(address));
+  if (address.endsWith("st", Qt::CaseInsensitive) && !Address::isIntersectionAddress(address))
+  {
+    StringUtils::replaceLastIndexOf(address, "st", "Street");
+  }
+  LOG_TRACE("After normalization fix: " << address);
 }
 
 bool AddressNormalizer::_isValidNormalizedAddress(const QString& inputAddress,

@@ -30,6 +30,10 @@
 // hoot
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
 
+// Qt
+#include <QSet>
+#include <QMap>
+
 namespace hoot
 {
 
@@ -48,12 +52,58 @@ public:
 
   QString toString() const { return "Address: " + _address; }
 
+  /**
+   * TODO
+   *
+   * @param addressStr
+   * @param requireStreetTypeInIntersection
+   * @return
+   */
+  static bool isIntersectionAddress(const QString& addressStr,
+                                    const bool requireStreetTypeInIntersection = false);
+
+  /**
+   * TODO
+   *
+   * @param includeAbbreviations
+   * @return
+   */
+  static QSet<QString> getStreetTypes(const bool includeAbbreviations = true);
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static QMap<QString, QString> getStreetFullTypesToTypeAbbreviations();
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static QMap<QString, QString> getStreetTypeAbbreviationsToFullTypes();
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static QStringList getIntersectionSplitTokens();
+
 private:
 
   QString _address;
   ExactStringDistance _addrComp;
   //see AddressParser::addressesMatchDespiteSubletterDiffs
   bool _allowLenientHouseNumberMatching;
+
+  // TODO
+  static QSet<QString> _streetTypes;
+  // TODO
+  static QMap<QString, QString> _streetFullTypesToTypeAbbreviations;
+  // TODO
+  static QMap<QString, QString> _streetTypeAbbreviationsToFullTypes;
 };
 
 }

@@ -33,6 +33,7 @@
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/address/Address.h>
+#include <hoot/core/util/StringUtils.h>
 
 // libpostal
 #include <libpostal/libpostal.h>
@@ -165,7 +166,7 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
 
     if (normalizeAddresses)
     {
-      //normalize and translate the address strings, so we end up comparing apples to apples
+      // normalize and translate the address strings, so we end up comparing apples to apples
       const QSet<QString> normalizedAddresses = _addressNormalizer.normalizeAddress(parsedAddress);
       LOG_VART(normalizedAddresses);
 
@@ -301,14 +302,15 @@ bool AddressParser::_isRangeAddress(const QString& houseNum) const
   return houseNum.contains("-");
 }
 
-bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QString& street) const
+bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QString& street,
+                                       const bool requireStreetTypeInIntersection) const
 {
   // use libpostal to break down the address string
   libpostal_address_parser_response_t* parsed =
     libpostal_parse_address(
       address.toUtf8().data(), libpostal_get_address_parser_default_options());
   /*
-   *Label: house_number, Component: 781
+    Label: house_number, Component: 781
     Label: road, Component: franklin ave
     Label: suburb, Component: crown heights
     Label: city_district, Component: brooklyn
@@ -323,7 +325,7 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
     LOG_VART(label);
     const QString component = QString::fromUtf8((const char*)parsed->components[i]);
     LOG_VART(component);
-    //we only care about the street address
+    // we only care about the street address
     if (label == "house_number")
     {
       houseNum = component;
@@ -334,13 +336,22 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
     }
   }
   libpostal_address_parser_response_destroy(parsed);
+  LOG_VART(street);
+  LOG_VART(houseNum);
 
-  // intersections won't have numbers; unfortunately this lets through a false positive, like:
-  // "lrv station-church street" - TODO: should this be re-enabled?
-  if (/*!houseNum.isEmpty() &&*/ !street.isEmpty())
+  if (!houseNum.isEmpty() && !street.isEmpty())
   {
     address = houseNum + " " + street;
     address = address.trimmed();
+    LOG_TRACE("Found address: " << address);
+    return true;
+  }
+  // intersections won't have numbers
+  else if (Address::isIntersectionAddress(street, requireStreetTypeInIntersection))
+  {
+    address = street;
+    address = address.trimmed();
+    LOG_TRACE("Found intersection address: " << address);
     return true;
   }
   else
@@ -423,7 +434,6 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
   //let's always look in the name field; arguably, we could look in all of them instead of just
   //one...
   QSet<QString> additionalTagKeys = AddressTagKeys::getInstance().getAdditionalTagKeys();
-  additionalTagKeys = additionalTagKeys.unite(QSet<QString>::fromList(tags.getNameKeys()));
   LOG_VART(additionalTagKeys);
 
   for (QSet<QString>::const_iterator tagItr = additionalTagKeys.begin();
@@ -432,6 +442,21 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
     const QString tagKey = *tagItr;
     QString tagVal = tags.get(tagKey);
     if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street))
+    {
+      parsedAddress = tagVal;
+      LOG_TRACE("Found address: " << parsedAddress << " from additional tag key: " << tagKey << ".");
+      break;
+    }
+  }
+
+  additionalTagKeys = QSet<QString>::fromList(tags.getNameKeys());
+  LOG_VART(additionalTagKeys);
+  for (QSet<QString>::const_iterator tagItr = additionalTagKeys.begin();
+       tagItr != additionalTagKeys.end(); ++tagItr)
+  {
+    const QString tagKey = *tagItr;
+    QString tagVal = tags.get(tagKey);
+    if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street, true))
     {
       parsedAddress = tagVal;
       LOG_TRACE("Found address: " << parsedAddress << " from additional tag key: " << tagKey << ".");

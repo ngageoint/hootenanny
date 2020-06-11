@@ -69,6 +69,14 @@ private:
 
   mutable int _numNormalized;
 
+  /*
+   * TODO
+   */
+  static void _prepareAddressForLibPostalNormalization(QString& address);
+
+  QSet<QString> _normalizeAddressWithLibPostal(const QString& address) const;
+  QSet<QString> _normalizeAddressIntersection(const QString& address) const;
+
   static bool _isValidNormalizedAddress(const QString& inputAddress,
                                         const QString& normalizedAddress);
 };
