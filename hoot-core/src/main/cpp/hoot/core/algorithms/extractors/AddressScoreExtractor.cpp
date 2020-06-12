@@ -153,11 +153,11 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
 double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& element1,
                                       const ConstElementPtr& element2) const
 {
-  //Experimented with partial addresses matches in the past and it had no positive affect.  Search
-  //the history for this class to see examples, to see if its worth experimenting with again at
-  //some point.
+  // Experimented with partial addresses matches in the past and it had no positive affect.  Search
+  // the history for this class to see examples, to see if its worth experimenting with again at
+  // some point.
 
-  //see if the first element has any address
+  // see if the first element has any address
   const QList<Address> element1Addresses = _getElementAddresses(map, element1, element2);
   LOG_VART(element1Addresses.size());
   if (element1Addresses.size() == 0)
@@ -166,7 +166,7 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
     return -1.0;
   }
 
-  //see if the second element has an address
+  // see if the second element has an address
   const QList<Address> element2Addresses = _getElementAddresses(map, element2, element1);
   LOG_VART(element2Addresses.size());
   if (element2Addresses.size() == 0)
@@ -179,7 +179,7 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
   _addressesProcessed += element2Addresses.size();
   _addressesProcessed += element1Addresses.size();
 
-  //check for address matches
+  // check for address matches
   for (QList<Address>::const_iterator element2AddrItr = element2Addresses.begin();
        element2AddrItr != element2Addresses.end(); ++element2AddrItr)
   {
@@ -193,17 +193,19 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
         LOG_TRACE("Found address match.");
         return 1.0;
       }
-//      else if (Address::isIntersectionAddress(element1Address) &&
-//               Address::isIntersectionAddress(element2Address))
-//      {
-//        element1Address.removeStreetTypes();
-//        element2Address.removeStreetTypes();
-//        if (element2Address == element1Address)
-//        {
-//          LOG_TRACE("Found address match.");
-//          return 1.0;
-//        }
-//      }
+      else if (element1Address.getParsedFromAddressTag() &&
+               element2Address.getParsedFromAddressTag() &&
+               Address::isIntersectionAddress(element1Address) &&
+               Address::isIntersectionAddress(element2Address))
+      {
+        element1Address.removeStreetTypes();
+        element2Address.removeStreetTypes();
+        if (element2Address == element1Address)
+        {
+          LOG_TRACE("Found address match.");
+          return 1.0;
+        }
+      }
     }
   }
 

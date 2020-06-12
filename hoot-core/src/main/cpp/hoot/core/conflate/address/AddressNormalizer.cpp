@@ -184,6 +184,7 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
 
   QStringList modifiedAddressParts =
     StringUtils::splitOnAny(modifiedAddress, Address::getIntersectionSplitTokens(), 2);
+  assert(modifiedAddressParts.size() == 2);
   const QString firstIntersectionPart = modifiedAddressParts[0].trimmed();
   LOG_VART(firstIntersectionPart);
   const QString secondIntersectionPart = modifiedAddressParts[1].trimmed();

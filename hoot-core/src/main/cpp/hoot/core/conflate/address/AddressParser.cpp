@@ -43,7 +43,8 @@ namespace hoot
 
 AddressParser::AddressParser() :
 _allowLenientHouseNumberMatching(true),
-_preTranslateTagValuesToEnglish(false)
+_preTranslateTagValuesToEnglish(false),
+_parsedFromAddressTag(true)
 {
 }
 
@@ -128,6 +129,8 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
 QList<Address> AddressParser::parseAddresses(const Element& element,
                                              const bool normalizeAddresses) const
 {
+  _parsedFromAddressTag = true;
+
   // Make this call here, so that we don't cause it to be done unnecessarily as part of this
   // class's init when its a mem var on another class, since this init is expensive.
   LibPostalInit::getInstance();
@@ -176,6 +179,7 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
         const QString normalizedAddress = *normalizedAddressItr;
         LOG_VART(normalizedAddress);
         Address address(normalizedAddress, _allowLenientHouseNumberMatching);
+        address.setParsedFromAddressTag(_parsedFromAddressTag);
         if (!addresses.contains(address))
         {
           LOG_TRACE("Adding address: " << address << " for element: " << element.getElementId());
@@ -305,6 +309,7 @@ bool AddressParser::_isRangeAddress(const QString& houseNum) const
 bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QString& street,
                                        const bool requireStreetTypeInIntersection) const
 {
+  LOG_VART(address);
   // use libpostal to break down the address string
   libpostal_address_parser_response_t* parsed =
     libpostal_parse_address(
@@ -349,9 +354,16 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
     return true;
   }
   // intersections won't have numbers
-  else if (Address::isIntersectionAddress(street, requireStreetTypeInIntersection))
+  else if (!street.isEmpty() &&
+           Address::isIntersectionAddress(street, requireStreetTypeInIntersection))
   {
     address = street;
+    address = address.trimmed();
+    LOG_TRACE("Found intersection address: " << address);
+    return true;
+  }
+  else if (Address::isIntersectionAddress(address, requireStreetTypeInIntersection))
+  {
     address = address.trimmed();
     LOG_TRACE("Found intersection address: " << address);
     return true;
@@ -502,6 +514,7 @@ QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& ho
     if (!parsedAddress.isEmpty())
     {
       parsedAddresses.insert(parsedAddress);
+      _parsedFromAddressTag = false;
     }
   }
 

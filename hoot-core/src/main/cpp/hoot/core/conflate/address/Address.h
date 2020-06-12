@@ -99,19 +99,27 @@ public:
    *
    * @return
    */
-  static QStringList getIntersectionSplitTokens();
+  static QList<QRegExp> getIntersectionSplitTokens();
 
   /**
    * TODO
    */
   void removeStreetTypes();
 
+  bool getParsedFromAddressTag() const { return _parsedFromAddressTag; }
+  void setParsedFromAddressTag(bool from) { _parsedFromAddressTag = from; }
+
 private:
 
   QString _address;
+
   ExactStringDistance _addrComp;
+
   //see AddressParser::addressesMatchDespiteSubletterDiffs
   bool _allowLenientHouseNumberMatching;
+
+  // TODO
+  bool _parsedFromAddressTag;
 
   // TODO
   static QSet<QString> _streetTypes;

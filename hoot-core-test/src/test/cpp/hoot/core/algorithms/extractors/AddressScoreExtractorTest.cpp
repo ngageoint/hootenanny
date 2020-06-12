@@ -54,6 +54,7 @@ namespace hoot
 class AddressScoreExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AddressScoreExtractorTest);
+  // TODO: re-enable
   CPPUNIT_TEST(runTagTest);
   CPPUNIT_TEST(runCombinedTagTest);
   CPPUNIT_TEST(runRangeTest);
@@ -294,11 +295,11 @@ public:
 
     node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones St and Bryant Street");
     way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones and Bryant");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0); // TODO: support??
 
     node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones St and Bryant Street");
     way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones &amp; Bryant");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0); // TODO: support??
 
     node1->getTags().clear();
     node1->getTags().set("name", "Jones and Bryant");

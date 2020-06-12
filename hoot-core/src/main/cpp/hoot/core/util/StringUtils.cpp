@@ -295,6 +295,18 @@ bool StringUtils::bisectsAny(const QString& input, const QStringList& toCompare,
   return false;
 }
 
+bool StringUtils::bisectsAny(const QString& input, const QList<QRegExp>& toCompare)
+{
+  for (int i = 0; i < toCompare.size(); i++)
+  {
+    if (input.split(toCompare.at(i), QString::SkipEmptyParts).size() == 2)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 QStringList StringUtils::splitOnAny(const QString& input, const QStringList& tokenList,
                                     const int numOutputTokens,
                                     Qt::CaseSensitivity caseSensitivity)
@@ -303,6 +315,21 @@ QStringList StringUtils::splitOnAny(const QString& input, const QStringList& tok
   {
     const QStringList inputParts =
       input.split(tokenList.at(i), QString::SkipEmptyParts, caseSensitivity);
+    if (inputParts.size() == numOutputTokens)
+    {
+      return inputParts;
+    }
+  }
+  return QStringList();
+}
+
+QStringList StringUtils::splitOnAny(const QString& input, const QList<QRegExp>& tokenList,
+                                    const int numOutputTokens)
+{
+  for (int i = 0; i < tokenList.size(); i++)
+  {
+    const QStringList inputParts =
+      input.split(tokenList.at(i), QString::SkipEmptyParts);
     if (inputParts.size() == numOutputTokens)
     {
       return inputParts;

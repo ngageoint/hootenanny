@@ -247,6 +247,15 @@ public:
    * TODO
    *
    * @param input
+   * @param compareList
+   * @return
+   */
+  static bool bisectsAny(const QString& input, const QList<QRegExp>& compareList);
+
+  /**
+   * TODO
+   *
+   * @param input
    * @param tokenList
    * @param numOutputTokens
    * @param caseSensitivity
@@ -255,6 +264,17 @@ public:
   static QStringList splitOnAny(const QString& input, const QStringList& tokenList,
                                 const int numOutputTokens,
                                 Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @param tokenList
+   * @param numOutputTokens
+   * @return
+   */
+  static QStringList splitOnAny(const QString& input, const QList<QRegExp>& tokenList,
+                                const int numOutputTokens);
 
   /**
    * Removes all map entries from input that are contained in a specified list

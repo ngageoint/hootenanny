@@ -151,6 +151,8 @@ private:
   //when enabled, will attempt to translate address tags to English with a translator other than
   //the one built into libpostal before address normalization
   mutable bool _preTranslateTagValuesToEnglish;
+  // TODO
+  mutable bool _parsedFromAddressTag;
 
   ToEnglishAddressTranslator _addressTranslator;
   AddressNormalizer _addressNormalizer;
