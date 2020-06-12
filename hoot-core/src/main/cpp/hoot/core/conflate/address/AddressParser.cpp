@@ -141,6 +141,8 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
   QString houseNum;
   QString street;
   const QSet<QString> parsedAddresses = _parseAddresses(element, houseNum, street);
+  LOG_TRACE("Parsed " << parsedAddresses.size() << " addresses for " << element.getElementId());
+  //LOG_TRACE("Parsed " << parsedAddresses.size() << " addresses for " << element);
   LOG_VART(parsedAddresses);
 
   // add the parsed addresses to a collection in which they will later be compared to each other

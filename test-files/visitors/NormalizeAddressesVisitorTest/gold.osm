@@ -300,7 +300,7 @@
     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7694999999999936" lon="-122.4326999999999970">
         <tag k="wheelchair" v="yes"/>
         <tag k="addr:state" v="CA"/>
-        <tag k="address" v="duboce and scott street"/>
+        <tag k="address" v="duboce street and scott street"/>
         <tag k="name" v="Duboce Park Dog Play Area"/>
         <tag k="addr:postcode" v="94117"/>
         <tag k="addr:city" v="San Francisco"/>
@@ -312,7 +312,7 @@
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695999999999970" lon="-122.4339999999999975">
         <tag k="wheelchair" v="yes"/>
         <tag k="addr:state" v="CA"/>
-        <tag k="address" v="duboce and scott street"/>
+        <tag k="address" v="duboce street and scott street"/>
         <tag k="name" v="Duboce Park Children�s Play Area"/>
         <tag k="addr:postcode" v="94117"/>
         <tag k="addr:city" v="San Francisco"/>
@@ -324,7 +324,7 @@
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7693999999999974" lon="-122.4342000000000041">
         <tag k="wheelchair" v="yes"/>
         <tag k="addr:state" v="CA"/>
-        <tag k="address" v="duboce and scott street"/>
+        <tag k="address" v="duboce street and scott street"/>
         <tag k="name" v="Duboce Park Basketball Courts"/>
         <tag k="addr:postcode" v="94117"/>
         <tag k="sport" v="basketball"/>
@@ -344,19 +344,17 @@
         <tag k="leisure" v="park"/>
         <tag k="phone" v="(415) 203-1299"/>
         <tag k="REF2" v="000d65"/>
-        <tag k="alt_address" v="45 hoff sankt"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649000000000044" lon="-122.4333999999999918">
         <tag k="wheelchair" v="limited"/>
         <tag k="addr:state" v="CA"/>
-        <tag k="address" v="noe saint and beaver street"/>
+        <tag k="address" v="noe street and beaver street"/>
         <tag k="name" v="Noe &amp; Beaver Mini Park Community Garden"/>
         <tag k="addr:postcode" v="94114"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="leisure" v="garden"/>
         <tag k="REF2" v="005aa3"/>
-        <tag k="alt_address" v="noe street and beaver street"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7642000000000095" lon="-122.4202999999999975">
@@ -368,13 +366,12 @@
         <tag k="addr:city" v="San Francisco"/>
         <tag k="leisure" v="park"/>
         <tag k="REF2" v="009232"/>
-        <tag k="alt_address" v="45 hoff sankt"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7639999999999958" lon="-122.4157999999999902">
         <tag k="wheelchair" v="yes"/>
         <tag k="addr:state" v="CA"/>
-        <tag k="address" v="17th and folsom street"/>
+        <tag k="address" v="17th street and folsom street"/>
         <tag k="name" v="17th &amp; Folsom Park"/>
         <tag k="addr:postcode" v="94110"/>
         <tag k="addr:city" v="San Francisco"/>
@@ -386,7 +383,7 @@
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7646999999999977" lon="-122.4099999999999824">
         <tag k="wheelchair" v="yes"/>
         <tag k="addr:state" v="CA"/>
-        <tag k="address" v="16th and bryant street"/>
+        <tag k="address" v="16th street and bryant street"/>
         <tag k="name" v="Franklin Square Children�s Play Area"/>
         <tag k="addr:postcode" v="94103"/>
         <tag k="addr:city" v="San Francisco"/>
@@ -398,7 +395,7 @@
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7610999999999919" lon="-122.4268999999999892">
         <tag k="wheelchair" v="limited"/>
         <tag k="addr:state" v="CA"/>
-        <tag k="address" v="19th and dolores street"/>
+        <tag k="address" v="19th street and dolores street"/>
         <tag k="name" v="Mission Dolores Park Tennis Courts"/>
         <tag k="addr:postcode" v="94110"/>
         <tag k="sport" v="tennis"/>
@@ -427,7 +424,6 @@
         <tag k="addr:postcode" v="94110"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="REF2" v="none"/>
-        <tag k="alt_address" v="45 hoff sankt"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695999999999970" lon="-122.4344999999999999">
@@ -445,7 +441,7 @@
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695999999999970" lon="-122.4333999999999918">
         <tag k="wheelchair" v="yes"/>
         <tag k="addr:state" v="CA"/>
-        <tag k="address" v="duboce and scott street"/>
+        <tag k="address" v="duboce street and scott street"/>
         <tag k="name" v="Duboce Park"/>
         <tag k="addr:postcode" v="94117"/>
         <tag k="addr:city" v="San Francisco"/>
@@ -457,7 +453,7 @@
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7610000000000028" lon="-122.4274000000000058">
         <tag k="wheelchair" v="limited"/>
         <tag k="addr:state" v="CA"/>
-        <tag k="address" v="19th and dolores street"/>
+        <tag k="address" v="19th street and dolores street"/>
         <tag k="name" v="Mission Dolores Basketball Courts"/>
         <tag k="addr:postcode" v="94110"/>
         <tag k="sport" v="basketball"/>

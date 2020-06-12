@@ -59,7 +59,7 @@ public:
 
     AddressCountVisitor uut;
     map->visitRo(uut);
-    CPPUNIT_ASSERT_EQUAL(30, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(28, (int)uut.getStat());
   }
 
 };

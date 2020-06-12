@@ -327,6 +327,9 @@ public:
 //    way1->getTags().set(
 //      TestUtils::FULL_ADDRESS_TAG_NAME, "6th street and Hoff Street Parking Garage");
 //    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    // Have also seen this: 'name = Valencia @ 14th Streets'. Not really sure @ should be added to
+    // the intersection tokens, but maybe.
   }
 
   void runWayTest()
@@ -668,6 +671,21 @@ public:
 
       NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
       node->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Hudson Street, San Ignacio, Belize");
+      map->addNode(node);
+
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node, way), 0.0);
+    }
+
+    {
+      OsmMapPtr map(new OsmMap());
+
+      WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+      way->getTags().set("addr:housename", "462");
+      way->getTags().set(TestUtils::STREET_TAG_NAME, "Duboce Avenue");
+      map->addWay(way);
+
+      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      node->getTags().set(TestUtils::STREET_TAG_NAME, "Duboce Avenue");
       map->addNode(node);
 
       CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node, way), 0.0);

@@ -65,7 +65,7 @@ public:
     const QString outputFile = _outputPath + "out.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
-    CPPUNIT_ASSERT_EQUAL(25, uut._addressNormalizer.getNumNormalized());
+    CPPUNIT_ASSERT_EQUAL(21, uut._addressNormalizer.getNumNormalized());
     HOOT_FILE_EQUALS(_inputPath + "gold.osm", outputFile);
   }
 
