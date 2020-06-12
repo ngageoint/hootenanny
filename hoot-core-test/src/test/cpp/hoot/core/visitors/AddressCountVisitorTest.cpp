@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
@@ -59,7 +59,7 @@ public:
 
     AddressCountVisitor uut;
     map->visitRo(uut);
-    CPPUNIT_ASSERT_EQUAL(30, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(28, (int)uut.getStat());
   }
 
 };

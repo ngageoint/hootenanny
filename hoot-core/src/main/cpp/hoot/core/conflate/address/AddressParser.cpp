@@ -33,6 +33,7 @@
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/address/Address.h>
+#include <hoot/core/util/StringUtils.h>
 
 // libpostal
 #include <libpostal/libpostal.h>
@@ -42,7 +43,8 @@ namespace hoot
 
 AddressParser::AddressParser() :
 _allowLenientHouseNumberMatching(true),
-_preTranslateTagValuesToEnglish(false)
+_preTranslateTagValuesToEnglish(false),
+_parsedFromAddressTag(true)
 {
 }
 
@@ -127,6 +129,8 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
 QList<Address> AddressParser::parseAddresses(const Element& element,
                                              const bool normalizeAddresses) const
 {
+  _parsedFromAddressTag = true;
+
   // Make this call here, so that we don't cause it to be done unnecessarily as part of this
   // class's init when its a mem var on another class, since this init is expensive.
   LibPostalInit::getInstance();
@@ -137,6 +141,8 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
   QString houseNum;
   QString street;
   const QSet<QString> parsedAddresses = _parseAddresses(element, houseNum, street);
+  LOG_TRACE("Parsed " << parsedAddresses.size() << " addresses for " << element.getElementId());
+  //LOG_TRACE("Parsed " << parsedAddresses.size() << " addresses for " << element);
   LOG_VART(parsedAddresses);
 
   // add the parsed addresses to a collection in which they will later be compared to each other
@@ -165,7 +171,7 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
 
     if (normalizeAddresses)
     {
-      //normalize and translate the address strings, so we end up comparing apples to apples
+      // normalize and translate the address strings, so we end up comparing apples to apples
       const QSet<QString> normalizedAddresses = _addressNormalizer.normalizeAddress(parsedAddress);
       LOG_VART(normalizedAddresses);
 
@@ -175,6 +181,7 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
         const QString normalizedAddress = *normalizedAddressItr;
         LOG_VART(normalizedAddress);
         Address address(normalizedAddress, _allowLenientHouseNumberMatching);
+        address.setParsedFromAddressTag(_parsedFromAddressTag);
         if (!addresses.contains(address))
         {
           LOG_TRACE("Adding address: " << address << " for element: " << element.getElementId());
@@ -301,14 +308,17 @@ bool AddressParser::_isRangeAddress(const QString& houseNum) const
   return houseNum.contains("-");
 }
 
-bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QString& street) const
+bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QString& street,
+                                       const bool requireStreetTypeInIntersection) const
 {
+  LOG_VART(address);
+
   // use libpostal to break down the address string
   libpostal_address_parser_response_t* parsed =
     libpostal_parse_address(
       address.toUtf8().data(), libpostal_get_address_parser_default_options());
   /*
-   *Label: house_number, Component: 781
+    Label: house_number, Component: 781
     Label: road, Component: franklin ave
     Label: suburb, Component: crown heights
     Label: city_district, Component: brooklyn
@@ -323,7 +333,7 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
     LOG_VART(label);
     const QString component = QString::fromUtf8((const char*)parsed->components[i]);
     LOG_VART(component);
-    //we only care about the street address
+    // we only care about the street address
     if (label == "house_number")
     {
       houseNum = component;
@@ -335,12 +345,35 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   }
   libpostal_address_parser_response_destroy(parsed);
 
-  // intersections won't have numbers; unfortunately this lets through a false positive, like:
-  // "lrv station-church street" - TODO: should this be re-enabled?
-  if (/*!houseNum.isEmpty() &&*/ !street.isEmpty())
+  LOG_VART(street);
+  LOG_VART(houseNum);
+  LOG_VART(requireStreetTypeInIntersection);
+  LOG_VART(Address::isStreetIntersectionAddress(street, requireStreetTypeInIntersection));
+  LOG_VART(Address::isStreetIntersectionAddress(address, requireStreetTypeInIntersection));
+
+  // street address with house number
+  if (!houseNum.isEmpty() && !street.isEmpty())
   {
     address = houseNum + " " + street;
     address = address.trimmed();
+    LOG_TRACE("Found address: " << address);
+    return true;
+  }
+  // intersections won't have numbers
+  else if (!street.isEmpty() &&
+           Address::isStreetIntersectionAddress(street, requireStreetTypeInIntersection))
+  {
+    address = street;
+    address = address.trimmed();
+    LOG_TRACE("Found intersection address: " << address);
+    return true;
+  }
+  // if libpostal didn't pull out a street, then let's see if the string passed in is an
+  // intersection
+  else if (Address::isStreetIntersectionAddress(address, requireStreetTypeInIntersection))
+  {
+    address = address.trimmed();
+    LOG_TRACE("Found intersection address: " << address);
     return true;
   }
   else
@@ -423,7 +456,6 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
   //let's always look in the name field; arguably, we could look in all of them instead of just
   //one...
   QSet<QString> additionalTagKeys = AddressTagKeys::getInstance().getAdditionalTagKeys();
-  additionalTagKeys = additionalTagKeys.unite(QSet<QString>::fromList(tags.getNameKeys()));
   LOG_VART(additionalTagKeys);
 
   for (QSet<QString>::const_iterator tagItr = additionalTagKeys.begin();
@@ -432,6 +464,21 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
     const QString tagKey = *tagItr;
     QString tagVal = tags.get(tagKey);
     if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street))
+    {
+      parsedAddress = tagVal;
+      LOG_TRACE("Found address: " << parsedAddress << " from additional tag key: " << tagKey << ".");
+      break;
+    }
+  }
+
+  additionalTagKeys = QSet<QString>::fromList(tags.getNameKeys());
+  LOG_VART(additionalTagKeys);
+  for (QSet<QString>::const_iterator tagItr = additionalTagKeys.begin();
+       tagItr != additionalTagKeys.end(); ++tagItr)
+  {
+    const QString tagKey = *tagItr;
+    QString tagVal = tags.get(tagKey);
+    if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street, true))
     {
       parsedAddress = tagVal;
       LOG_TRACE("Found address: " << parsedAddress << " from additional tag key: " << tagKey << ".");
@@ -475,6 +522,7 @@ QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& ho
     if (!parsedAddress.isEmpty())
     {
       parsedAddresses.insert(parsedAddress);
+      _parsedFromAddressTag = false;
     }
   }
 

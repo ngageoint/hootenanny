@@ -98,6 +98,7 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
     const QList<Address>* cachedVal = _addressesCache[element->getElementId()];
     if (cachedVal != 0)
     {
+      LOG_TRACE("Found cached address.");
       _addressCacheHits++;
       return *cachedVal;
     }
@@ -114,6 +115,12 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
       elementAddresses =
         _addressParser.parseAddressesFromWayNodes(
           *way, map, elementBeingComparedWith->getElementId());
+      if (elementAddresses.size() != 0)
+      {
+        LOG_TRACE(
+          "Found " << elementAddresses.size() << " addresses on the way nodes of " <<
+          element->getElementId());
+      }
     }
     //if still no luck, try to find the address from a poly way node that is a relation member
     else if (element->getElementType() == ElementType::Relation)
@@ -122,7 +129,17 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
       elementAddresses =
         _addressParser.parseAddressesFromRelationMembers(
           *relation, map, elementBeingComparedWith->getElementId());
+      if (elementAddresses.size() != 0)
+      {
+        LOG_TRACE(
+          "Found " << elementAddresses.size() << " addresses on the relation members of " <<
+          element->getElementId());
+      }
     }
+  }
+  else
+  {
+    LOG_TRACE("Found " << elementAddresses.size() << " addresses on " << element->getElementId());
   }
 
   if (_cacheEnabled)
@@ -136,11 +153,11 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
 double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& element1,
                                       const ConstElementPtr& element2) const
 {
-  //Experimented with partial addresses matches in the past and it had no positive affect.  Search
-  //the history for this class to see examples, to see if its worth experimenting with again at
-  //some point.
+  // Experimented with partial addresses matches in the past and it had no positive affect.  Search
+  // the history for this class to see examples, to see if its worth experimenting with again at
+  // some point.
 
-  //see if the first element has any address
+  // see if the first element has any address
   const QList<Address> element1Addresses = _getElementAddresses(map, element1, element2);
   LOG_VART(element1Addresses.size());
   if (element1Addresses.size() == 0)
@@ -149,7 +166,7 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
     return -1.0;
   }
 
-  //see if the second element has an address
+  // see if the second element has an address
   const QList<Address> element2Addresses = _getElementAddresses(map, element2, element1);
   LOG_VART(element2Addresses.size());
   if (element2Addresses.size() == 0)
@@ -162,19 +179,37 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
   _addressesProcessed += element2Addresses.size();
   _addressesProcessed += element1Addresses.size();
 
-  //check for address matches
+  // check for address matches
   for (QList<Address>::const_iterator element2AddrItr = element2Addresses.begin();
        element2AddrItr != element2Addresses.end(); ++element2AddrItr)
   {
-    const Address element2Address = *element2AddrItr;
+    Address element2Address = *element2AddrItr;
     for (QList<Address>::const_iterator element1AddrItr = element1Addresses.begin();
          element1AddrItr != element1Addresses.end(); ++element1AddrItr)
     {
-      const Address element1Address = *element1AddrItr;
+      Address element1Address = *element1AddrItr;
       if (element2Address == element1Address)
       {
         LOG_TRACE("Found address match.");
         return 1.0;
+      }
+      // This is kind of a last ditch effort to get an street intersection match (may be a better
+      // way to do it or a better place to put this code). If both addresses being compared are
+      // intersections and possibly one has street types in one or both of its intersection parts
+      // and the other doesn't, let's try dropping all street type tokens and comparing the address
+      // strings again.
+      else if (element1Address.getParsedFromAddressTag() &&
+               element2Address.getParsedFromAddressTag() &&
+               Address::isStreetIntersectionAddress(element1Address) &&
+               Address::isStreetIntersectionAddress(element2Address))
+      {
+        element1Address.removeStreetTypes();
+        element2Address.removeStreetTypes();
+        if (element2Address == element1Address)
+        {
+          LOG_TRACE("Found address match.");
+          return 1.0;
+        }
       }
     }
   }

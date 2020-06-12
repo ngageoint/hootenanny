@@ -108,8 +108,6 @@ private:
   QRegExp _whiteSpace;
 
   QString _transform(const std::shared_ptr<icu::Transliterator>& t, const QString& input) const;
-
-  static void _readStreetTypes();
 };
 
 }

@@ -33,6 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/conflate/address/Address.h>
 
 // Qt
 #include <QMap>
@@ -58,29 +59,7 @@ _tokenizeInput(true)
   assert(sizeof(UChar) == sizeof(QChar));
   _whiteSpace.setPattern("\\W+");
 
-  _readStreetTypes();
-}
-
-void ToEnglishDictionaryTranslator::_readStreetTypes()
-{
-  // see related note in ImplicitTagUtils::_modifyUndesirableTokens
-  if (_streetTypes.isEmpty())
-  {
-    const QStringList streetTypesRaw =
-      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
-    // This list could be expanded.  See the note in the associated config file.
-    for (int i = 0; i < streetTypesRaw.size(); i++)
-    {
-      const QString streetTypeEntry = streetTypesRaw.at(i);
-      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
-      if (streetTypeEntryParts.size() != 2)
-      {
-        throw HootException("Invalid street type entry: " + streetTypeEntry);
-      }
-      //don't care about the abbreviation here
-      _streetTypes.insert(streetTypeEntryParts.at(0).toLower());
-    }
-  }
+  _streetTypes = Address::getStreetTypes(false);
 }
 
 QString ToEnglishDictionaryTranslator::translate(const QString& textToTranslate)

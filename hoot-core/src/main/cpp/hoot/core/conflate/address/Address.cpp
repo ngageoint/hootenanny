@@ -22,26 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Address.h"
 
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/address/AddressParser.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
 
+QSet<QString> Address::_streetTypes;
+QMap<QString, QString> Address::_streetFullTypesToTypeAbbreviations;
+QMap<QString, QString> Address::_streetTypeAbbreviationsToFullTypes;
+
 Address::Address() :
 _address(""),
-_allowLenientHouseNumberMatching(true)
+_allowLenientHouseNumberMatching(true),
+_parsedFromAddressTag(true)
 {
 }
 
 Address::Address(const QString& address, const bool allowLenientHouseNumberMatching) :
 _address(address),
-_allowLenientHouseNumberMatching(allowLenientHouseNumberMatching)
+_allowLenientHouseNumberMatching(allowLenientHouseNumberMatching),
+_parsedFromAddressTag(true)
 {
 }
 
@@ -54,7 +62,146 @@ bool Address::operator==(const Address& address) const
     !_address.isEmpty() &&
       (_addrComp.compare(_address, address._address) == 1.0 ||
        (_allowLenientHouseNumberMatching &&
+        // don't do subletter matching on an intersection, as it won't have house numbers
+        !isStreetIntersectionAddress(_address, !_parsedFromAddressTag) &&
         AddressParser::addressesMatchDespiteSubletterDiffs(_address, address._address)));
+}
+
+QList<QRegExp> Address::getIntersectionSplitTokens()
+{
+  QList<QRegExp> intersectionSplitTokens;
+  intersectionSplitTokens.append(QRegExp("\\s+and\\s+", Qt::CaseInsensitive));
+  intersectionSplitTokens.append(QRegExp("\\s+&\\s+", Qt::CaseInsensitive));
+  intersectionSplitTokens.append(QRegExp("\\s+&amp;\\s+", Qt::CaseInsensitive));
+  return intersectionSplitTokens;
+}
+
+QSet<QString> Address::getStreetTypes(const bool includeAbbreviations)
+{
+  if (_streetTypes.isEmpty())
+  {
+    const QStringList streetTypesRaw =
+      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
+    // This list could be expanded.  See the note in the associated config file.
+    for (int i = 0; i < streetTypesRaw.size(); i++)
+    {
+      const QString streetTypeEntry = streetTypesRaw.at(i);
+      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
+      if (streetTypeEntryParts.size() != 2)
+      {
+        throw HootException("Invalid street type entry: " + streetTypeEntry);
+      }
+      _streetTypes.insert(streetTypeEntryParts.at(0).toLower());
+      if (includeAbbreviations)
+      {
+        _streetTypes.insert(streetTypeEntryParts.at(1).toLower());
+      }
+    }
+  }
+  return _streetTypes;
+}
+
+QMap<QString, QString> Address::getStreetFullTypesToTypeAbbreviations()
+{
+  if (_streetFullTypesToTypeAbbreviations.isEmpty())
+  {
+    const QStringList streetTypesRaw =
+      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
+    // This list could be expanded.  See the note in the associated config file.
+    for (int i = 0; i < streetTypesRaw.size(); i++)
+    {
+      const QString streetTypeEntry = streetTypesRaw.at(i);
+      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
+      if (streetTypeEntryParts.size() != 2)
+      {
+        throw HootException("Invalid street type entry: " + streetTypeEntry);
+      }
+      _streetFullTypesToTypeAbbreviations[streetTypeEntryParts.at(0).toLower()] =
+        streetTypeEntryParts.at(1).toLower();
+    }
+  }
+  return _streetFullTypesToTypeAbbreviations;
+}
+
+QMap<QString, QString> Address::getStreetTypeAbbreviationsToFullTypes()
+{
+  if (_streetTypeAbbreviationsToFullTypes.isEmpty())
+  {
+    const QStringList streetTypesRaw =
+      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
+    // This list could be expanded.  See the note in the associated config file.
+    for (int i = 0; i < streetTypesRaw.size(); i++)
+    {
+      const QString streetTypeEntry = streetTypesRaw.at(i);
+      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
+      if (streetTypeEntryParts.size() != 2)
+      {
+        throw HootException("Invalid street type entry: " + streetTypeEntry);
+      }
+      _streetTypeAbbreviationsToFullTypes[streetTypeEntryParts.at(1).toLower()] =
+        streetTypeEntryParts.at(0).toLower();
+    }
+  }
+  return _streetTypeAbbreviationsToFullTypes;
+}
+
+bool Address::isStreetIntersectionAddress(const QString& addressStr,
+                                          const bool requireStreetTypeInIntersection)
+{
+  if (addressStr.trimmed().isEmpty())
+  {
+    return false;
+  }
+
+  // libpostal doesn't recognize intersections correctly, so doing it with some very simple custom
+  // logic. Not even using a regex here, b/c our definition of an intersection is very loose. We
+  // tighten it up some with 'requireStreetTypeInIntersection', which is meant to be used when an
+  // address is parsed from a non-address tag (name, etc.). Our definition of an intersection
+  // address is likely not foolproof.
+
+  if (requireStreetTypeInIntersection &&
+      !StringUtils::endsWithAny(addressStr, getStreetTypes().toList()))
+  {
+    return false;
+  }
+
+  return StringUtils::bisectsAny(addressStr, getIntersectionSplitTokens());
+}
+
+bool Address::isStreetIntersectionAddress(const Address& address,
+                                          const bool requireStreetTypeInIntersection)
+{
+  return isStreetIntersectionAddress(address._address, requireStreetTypeInIntersection);
+}
+
+void Address::removeStreetTypes()
+{
+  LOG_TRACE(_address);
+
+  if (!isStreetIntersectionAddress(_address, !_parsedFromAddressTag))
+  {
+    // If its a non-intersection, just remove the last street type token. We're assuming its at the
+    // end, which may not be alway true.
+    StringUtils::removeLastIndexOf(_address, _streetTypes.toList());
+  }
+  else
+  {
+    // If we have an intersection address, split it into its two parts and remove street type tokens
+    // from the end of each.
+
+    QStringList addressParts = StringUtils::splitOnAny(_address, getIntersectionSplitTokens(), 2);
+    assert(addressParts.size() == 2);
+    const QStringList streetTypes = getStreetTypes().toList();
+
+    QString firstIntersectionPart = addressParts[0].trimmed();
+    StringUtils::removeLastIndexOf(firstIntersectionPart, streetTypes);
+    QString secondIntersectionPart = addressParts[1].trimmed();
+    StringUtils::removeLastIndexOf(secondIntersectionPart, streetTypes);
+
+    _address = firstIntersectionPart.trimmed() + " and " + secondIntersectionPart.trimmed();
+  }
+
+  LOG_TRACE(_address);
 }
 
 }

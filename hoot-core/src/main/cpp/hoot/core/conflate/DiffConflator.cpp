@@ -167,7 +167,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-projecting-to-planar");
 
-  // find all the matches in this _pMap
+  // find all the matches in this map
   _intraDatasetMatchOnlyElementIds.clear();
   _intraDatasetElementIdsPopulated = false;
   if (_matchThreshold.get())
