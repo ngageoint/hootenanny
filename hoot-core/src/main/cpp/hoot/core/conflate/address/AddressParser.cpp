@@ -310,6 +310,7 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
                                        const bool requireStreetTypeInIntersection) const
 {
   LOG_VART(address);
+
   // use libpostal to break down the address string
   libpostal_address_parser_response_t* parsed =
     libpostal_parse_address(
@@ -341,11 +342,14 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
     }
   }
   libpostal_address_parser_response_destroy(parsed);
+
   LOG_VART(street);
   LOG_VART(houseNum);
   LOG_VART(requireStreetTypeInIntersection);
-  LOG_VART(Address::isIntersectionAddress(street, requireStreetTypeInIntersection));
+  LOG_VART(Address::isStreetIntersectionAddress(street, requireStreetTypeInIntersection));
+  LOG_VART(Address::isStreetIntersectionAddress(address, requireStreetTypeInIntersection));
 
+  // street address with house number
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
     address = houseNum + " " + street;
@@ -355,14 +359,16 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   }
   // intersections won't have numbers
   else if (!street.isEmpty() &&
-           Address::isIntersectionAddress(street, requireStreetTypeInIntersection))
+           Address::isStreetIntersectionAddress(street, requireStreetTypeInIntersection))
   {
     address = street;
     address = address.trimmed();
     LOG_TRACE("Found intersection address: " << address);
     return true;
   }
-  else if (Address::isIntersectionAddress(address, requireStreetTypeInIntersection))
+  // if libpostal didn't pull out a street, then let's see if the string passed in is an
+  // intersection
+  else if (Address::isStreetIntersectionAddress(address, requireStreetTypeInIntersection))
   {
     address = address.trimmed();
     LOG_TRACE("Found intersection address: " << address);

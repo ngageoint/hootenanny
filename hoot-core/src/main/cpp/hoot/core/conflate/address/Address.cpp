@@ -62,7 +62,8 @@ bool Address::operator==(const Address& address) const
     !_address.isEmpty() &&
       (_addrComp.compare(_address, address._address) == 1.0 ||
        (_allowLenientHouseNumberMatching &&
-        !isIntersectionAddress(_address, !_parsedFromAddressTag) &&
+        // don't do subletter matching on an intersection, as it won't have house numbers
+        !isStreetIntersectionAddress(_address, !_parsedFromAddressTag) &&
         AddressParser::addressesMatchDespiteSubletterDiffs(_address, address._address)));
 }
 
@@ -144,15 +145,19 @@ QMap<QString, QString> Address::getStreetTypeAbbreviationsToFullTypes()
   return _streetTypeAbbreviationsToFullTypes;
 }
 
-bool Address::isIntersectionAddress(const QString& addressStr,
-                                    const bool requireStreetTypeInIntersection)
+bool Address::isStreetIntersectionAddress(const QString& addressStr,
+                                          const bool requireStreetTypeInIntersection)
 {
   if (addressStr.trimmed().isEmpty())
   {
     return false;
   }
 
-  // libpostal doesn't recognize intersections correctly, so doing it with very simple custom logic
+  // libpostal doesn't recognize intersections correctly, so doing it with some very simple custom
+  // logic. Not even using a regex here, b/c our definition of an intersection is very loose. We
+  // tighten it up some with 'requireStreetTypeInIntersection', which is meant to be used when an
+  // address is parsed from a non-address tag (name, etc.). Our definition of an intersection
+  // address is likely not foolproof.
 
   if (requireStreetTypeInIntersection &&
       !StringUtils::endsWithAny(addressStr, getStreetTypes().toList()))
@@ -163,22 +168,27 @@ bool Address::isIntersectionAddress(const QString& addressStr,
   return StringUtils::bisectsAny(addressStr, getIntersectionSplitTokens());
 }
 
-bool Address::isIntersectionAddress(const Address& address,
-                                    const bool requireStreetTypeInIntersection)
+bool Address::isStreetIntersectionAddress(const Address& address,
+                                          const bool requireStreetTypeInIntersection)
 {
-  return isIntersectionAddress(address._address, requireStreetTypeInIntersection);
+  return isStreetIntersectionAddress(address._address, requireStreetTypeInIntersection);
 }
 
 void Address::removeStreetTypes()
 {
   LOG_TRACE(_address);
 
-  if (!isIntersectionAddress(_address, !_parsedFromAddressTag))
+  if (!isStreetIntersectionAddress(_address, !_parsedFromAddressTag))
   {
+    // If its a non-intersection, just remove the last street type token. We're assuming its at the
+    // end, which may not be alway true.
     StringUtils::removeLastIndexOf(_address, _streetTypes.toList());
   }
   else
   {
+    // If we have an intersection address, split it into its two parts and remove street type tokens
+    // from the end of each.
+
     QStringList addressParts = StringUtils::splitOnAny(_address, getIntersectionSplitTokens(), 2);
     assert(addressParts.size() == 2);
     const QStringList streetTypes = getStreetTypes().toList();

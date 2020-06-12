@@ -193,10 +193,15 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
         LOG_TRACE("Found address match.");
         return 1.0;
       }
+      // This is kind of a last ditch effort to get an street intersection match (may be a better
+      // way to do it or a better place to put this code). If both addresses being compared are
+      // intersections and possibly one has street types in one or both of its intersection parts
+      // and the other doesn't, let's try dropping all street type tokens and comparing the address
+      // strings again.
       else if (element1Address.getParsedFromAddressTag() &&
                element2Address.getParsedFromAddressTag() &&
-               Address::isIntersectionAddress(element1Address) &&
-               Address::isIntersectionAddress(element2Address))
+               Address::isStreetIntersectionAddress(element1Address) &&
+               Address::isStreetIntersectionAddress(element2Address))
       {
         element1Address.removeStreetTypes();
         element2Address.removeStreetTypes();

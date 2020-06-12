@@ -87,13 +87,14 @@ void AddressNormalizer::normalizeAddresses(const ElementPtr& e)
 QSet<QString> AddressNormalizer::normalizeAddress(const QString& address) const
 {
   const QString addressToNormalize = address.trimmed().simplified();
-  if (!Address::isIntersectionAddress(addressToNormalize))
+  if (!Address::isStreetIntersectionAddress(addressToNormalize))
   {
     return _normalizeAddressWithLibPostal(addressToNormalize);
   }
   else
   {
-    // libpostal doesn't handle intersections very well, so doing it with custom logic
+    // libpostal doesn't handle intersections very well, so doing intersection normalization with
+    // custom logic
     return _normalizeAddressIntersection(addressToNormalize);
   }
 }
@@ -148,10 +149,16 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   const QStringList addressParts =
     StringUtils::splitOnAny(address, Address::getIntersectionSplitTokens(), 2);
   LOG_VART(addressParts.size());
+
   if (addressParts.size() != 2)
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException(
+      "A non-intersection address was passed into street intersection address normalization.");
   }
+
+  // replace all street type abbreviations in both intersection parts in the address with their full
+  // name counterparts
+
   QString modifiedAddress;
   for (int i = 0; i < addressParts.size(); i++)
   {
@@ -181,6 +188,12 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
     }
   }
   LOG_VART(modifiedAddress);
+
+  // If one of the intersection parts has a street type and the other doesn't we'll copy one street
+  // type over to the other. This isn't foolproof as we could end up giving one of the intersections
+  // an incorrect street type (the actual element's address tags never get modified, though).
+  // However, it does help with address matching and will remain in place unless its causing harm
+  // in some way.
 
   QStringList modifiedAddressParts =
     StringUtils::splitOnAny(modifiedAddress, Address::getIntersectionSplitTokens(), 2);
@@ -212,14 +225,18 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   modifiedAddress = modifiedAddressParts[0].trimmed() + " and " + modifiedAddressParts[1].trimmed();
   LOG_VART(modifiedAddress);
 
+  // go ahead and send it to libpostal to finish out the normalization to avoid duplicating some
+  // code, although it probably won't change any from this point
   return _normalizeAddressWithLibPostal(modifiedAddress);
 }
 
 void AddressNormalizer::_prepareAddressForLibPostalNormalization(QString& address)
 {
   LOG_TRACE("Before normalization fix: " << address);
-  LOG_VART(Address::isIntersectionAddress(address));
-  if (address.endsWith("st", Qt::CaseInsensitive) && !Address::isIntersectionAddress(address))
+  LOG_VART(Address::isStreetIntersectionAddress(address));
+  // This is a nast thing libpostal does where it changes "St" to "Saint" when it should be
+  // "Street".
+  if (address.endsWith("st", Qt::CaseInsensitive) && !Address::isStreetIntersectionAddress(address))
   {
     StringUtils::replaceLastIndexOf(address, "st", "Street");
   }

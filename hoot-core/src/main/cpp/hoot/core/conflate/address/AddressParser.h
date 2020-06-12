@@ -151,7 +151,8 @@ private:
   //when enabled, will attempt to translate address tags to English with a translator other than
   //the one built into libpostal before address normalization
   mutable bool _preTranslateTagValuesToEnglish;
-  // TODO
+  // is the current address being parsed from an OSM address tag or some other auxiliary tag (name,
+  // etc.)?
   mutable bool _parsedFromAddressTag;
 
   ToEnglishAddressTranslator _addressTranslator;
@@ -163,9 +164,6 @@ private:
   bool _isRangeAddress(const QString& houseNum) const;
   bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,
                                          QString& street) const;
-  /*
-   * TODO
-   */
   bool _isValidAddressStr(QString& address, QString& houseNum,  QString& street,
                           const bool requireStreetTypeInIntersection = false) const;
   /*

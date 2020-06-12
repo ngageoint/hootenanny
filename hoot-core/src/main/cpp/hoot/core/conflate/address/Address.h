@@ -39,6 +39,10 @@ namespace hoot
 
 /**
  * Encapsulates a street address for conflation purposes
+ *
+ * Note that a QMap can be used to represent the street type full names and their abbreviations
+ * b/c we currently only support a one to one mapping. If we expand it to support multiple
+ * abbreviations per full name, then we'll need to switch to a QMultiMap.
  */
 class Address
 {
@@ -53,56 +57,60 @@ public:
   QString toString() const { return "Address: " + _address; }
 
   /**
-   * TODO
+   * Determines if an address string represents a street intersection
    *
-   * @param addressStr
-   * @param requireStreetTypeInIntersection
-   * @return
+   * @param addressStr address to examine
+   * @param requireStreetTypeInIntersection if true, a street type token must be present at the end
+   * of the input
+   * @return true if the input represents a street intersection address; false otherwise
    */
-  static bool isIntersectionAddress(const QString& addressStr,
-                                    const bool requireStreetTypeInIntersection = false);
+  static bool isStreetIntersectionAddress(const QString& addressStr,
+                                          const bool requireStreetTypeInIntersection = false);
 
   /**
-   * TODO
+   * Determines if an address represents a street intersection
    *
-   * @param address
-   * @param requireStreetTypeInIntersection
-   * @return
+   * @param address address to examine
+   * @param requireStreetTypeInIntersection if true, a street type token must be present at the end
+   * of the input
+   * @return true if the input represents a street intersection address; false otherwise
    */
-  static bool isIntersectionAddress(const Address& address,
-                                    const bool requireStreetTypeInIntersection = false);
+  static bool isStreetIntersectionAddress(const Address& address,
+                                          const bool requireStreetTypeInIntersection = false);
 
   /**
-   * TODO
+   * Returns a collection of street type (suffix) tokens; e.g. "Street"
    *
-   * @param includeAbbreviations
-   * @return
+   * @param includeAbbreviations if true, abbreviations for the tokens are also included
+   * @return a collection of string tokens
    */
   static QSet<QString> getStreetTypes(const bool includeAbbreviations = true);
 
   /**
-   * TODO
+   * Returns a mapping of street type (suffix) tokens mapped to accepted abbreviations for them;
+   * e.g. "Street" --> "St"
    *
-   * @return
+   * @return a mapping of string tokens
    */
   static QMap<QString, QString> getStreetFullTypesToTypeAbbreviations();
 
   /**
-   * TODO
+   * Returns a mapping of street type (suffix) abbreviation tokens mapped to accepted full names for
+   * them; e.g "St" --> "Street"
    *
-   * @return
+   * @return a mapping of string tokens
    */
   static QMap<QString, QString> getStreetTypeAbbreviationsToFullTypes();
 
   /**
-   * TODO
+   * Returns a collection of string tokens used to separate the two parts of an intersection address
    *
-   * @return
+   * @return a collection of string tokens
    */
   static QList<QRegExp> getIntersectionSplitTokens();
 
   /**
-   * TODO
+   * Removes street type (suffix) text from the address
    */
   void removeStreetTypes();
 
@@ -118,14 +126,14 @@ private:
   //see AddressParser::addressesMatchDespiteSubletterDiffs
   bool _allowLenientHouseNumberMatching;
 
-  // TODO
+  // was the address parsed from an OSM address tag or some other auxiliary tag (name, etc.)?
   bool _parsedFromAddressTag;
 
-  // TODO
+  // see getStreetTypes
   static QSet<QString> _streetTypes;
-  // TODO
+  // see getStreetFullTypesToTypeAbbreviations
   static QMap<QString, QString> _streetFullTypesToTypeAbbreviations;
-  // TODO
+  // see getStreetTypeAbbreviationsToFullTypes
   static QMap<QString, QString> _streetTypeAbbreviationsToFullTypes;
 };
 

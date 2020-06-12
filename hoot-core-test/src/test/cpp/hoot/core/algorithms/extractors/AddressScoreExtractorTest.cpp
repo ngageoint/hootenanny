@@ -54,7 +54,6 @@ namespace hoot
 class AddressScoreExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AddressScoreExtractorTest);
-  // TODO: re-enable
   CPPUNIT_TEST(runTagTest);
   CPPUNIT_TEST(runCombinedTagTest);
   CPPUNIT_TEST(runRangeTest);
@@ -257,8 +256,6 @@ public:
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     map->addWay(way1);
 
-    // TODO: explain
-
     node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
@@ -283,6 +280,18 @@ public:
     way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones and Bryant Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
+    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones St and Bryant Street");
+    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones and Bryant");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones St and Bryant Street");
+    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones &amp; Bryant");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    // If an intersection address comes from a name tag, we must be more strict. In that case, we
+    // require that the address end with a street type token. However, I don't think this is
+    // foolproof yet and will deal with exceptions as they come along.
+
     node1->getTags().clear();
     node1->getTags().set("name", "Jones St and Bryant Street");
     way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
@@ -292,14 +301,6 @@ public:
     node1->getTags().set("name", "Jones and Bryant Street");
     way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
-
-    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones St and Bryant Street");
-    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones and Bryant");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0); // TODO: support??
-
-    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones St and Bryant Street");
-    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "Jones &amp; Bryant");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0); // TODO: support??
 
     node1->getTags().clear();
     node1->getTags().set("name", "Jones and Bryant");

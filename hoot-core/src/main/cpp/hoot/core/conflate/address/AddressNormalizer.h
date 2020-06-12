@@ -70,7 +70,8 @@ private:
   mutable int _numNormalized;
 
   /*
-   * TODO
+   * libpostal has a few weird quirks, so we have to hack the input address a bit (hopefully goes
+   * away at some point)
    */
   static void _prepareAddressForLibPostalNormalization(QString& address);
 
