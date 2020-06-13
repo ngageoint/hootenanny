@@ -48,8 +48,9 @@ public:
 
   static std::string className() { return "hoot::UselessElementCriterion"; }
 
-  UselessElementCriterion() { }
-  UselessElementCriterion(ConstOsmMapPtr map) : _map(map) {}
+  UselessElementCriterion() = default;
+  UselessElementCriterion(ConstOsmMapPtr map) : _map(map) { }
+  virtual ~UselessElementCriterion() = default;
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

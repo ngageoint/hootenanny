@@ -63,6 +63,8 @@ public:
    */
   RemoveWayByEid(long wId, bool removeFully = false);
 
+  virtual ~RemoveWayByEid() = default;
+
   /**
    * @brief apply Apply the operation to the given map
    * @param map the map to operate on

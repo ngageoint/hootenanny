@@ -87,7 +87,7 @@ public:
   class NodeDistance
   {
   public:
-    NodeDistance() {}
+    NodeDistance() = default;
 
     NodeDistance(double dist, int nodeId)
     {

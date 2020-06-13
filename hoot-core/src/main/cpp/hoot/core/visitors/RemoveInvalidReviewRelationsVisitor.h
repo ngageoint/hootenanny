@@ -41,7 +41,8 @@ public:
 
   static std::string className() { return "hoot::RemoveInvalidReviewRelationsVisitor"; }
 
-  RemoveInvalidReviewRelationsVisitor();
+  RemoveInvalidReviewRelationsVisitor() = default;
+  virtual ~RemoveInvalidReviewRelationsVisitor() = default;
 
   virtual void visit(const ElementPtr& e);
 

@@ -50,6 +50,7 @@ public:
 
   PhoneNumberLocator();
   PhoneNumberLocator(const QString& regionCode);
+  virtual ~PhoneNumberLocator() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

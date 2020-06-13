@@ -70,6 +70,9 @@ public:
 
   static std::string className() { return "hoot::PolyClusterGeoModifierAction"; }
 
+  PolyClusterGeoModifierAction() = default;
+  virtual ~PolyClusterGeoModifierAction() = default;
+
   virtual QString getCommandName() const override { return "poly_cluster"; }
   virtual QList<QString> getParameterNames() const override { return QList<QString>
     { DISTANCE_PARAM, ALPHA_PARAM, REMOVE_POLYS_PARAM, CHECK_INTERSECTIONS_PARAM, CLUSTER_TAG_LIST_PARAM }; }

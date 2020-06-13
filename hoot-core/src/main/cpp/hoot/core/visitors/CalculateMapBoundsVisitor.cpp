@@ -37,11 +37,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CalculateMapBoundsVisitor)
 
-CalculateMapBoundsVisitor::CalculateMapBoundsVisitor() :
-_envelope()
-{
-}
-
 void CalculateMapBoundsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   // TRICKY: We will be in trouble if our element is NOT a node

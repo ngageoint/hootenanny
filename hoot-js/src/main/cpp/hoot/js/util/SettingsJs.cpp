@@ -39,12 +39,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(SettingsJs)
 
-SettingsJs::SettingsJs()
-{
-}
-
-SettingsJs::~SettingsJs() {}
-
 void SettingsJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

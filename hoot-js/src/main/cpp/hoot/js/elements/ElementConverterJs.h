@@ -42,8 +42,8 @@ public:
 
 private:
 
-  ElementConverterJs();
-  ~ElementConverterJs();
+  ElementConverterJs() = default;
+  virtual ~ElementConverterJs() = default;
 
   static void calculateLength(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

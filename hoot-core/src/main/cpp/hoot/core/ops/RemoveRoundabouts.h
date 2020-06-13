@@ -69,7 +69,8 @@ public:
   /**
    * @brief RemoveRoundabouts - Default constructor
    */
-  RemoveRoundabouts();
+  RemoveRoundabouts() = default;
+  virtual ~RemoveRoundabouts() = default;
 
   /**
    * @brief apply - Apply the RemoveRoundabouts op

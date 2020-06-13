@@ -64,7 +64,7 @@ public:
   /**
    * @brief ~ElementCache
    */
-  virtual ~ElementCacheLRU() { }
+  virtual ~ElementCacheLRU() = default;
 
   virtual bool isEmpty() const;
 

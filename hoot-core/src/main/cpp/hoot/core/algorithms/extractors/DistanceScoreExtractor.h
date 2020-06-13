@@ -44,7 +44,8 @@ public:
 
   DistanceScoreExtractor(ValueAggregatorPtr wayAgg);
 
-  DistanceScoreExtractor();
+  DistanceScoreExtractor() = default;
+  virtual ~DistanceScoreExtractor() = default;
 
   virtual std::string getClassName() const override { return className(); }
 

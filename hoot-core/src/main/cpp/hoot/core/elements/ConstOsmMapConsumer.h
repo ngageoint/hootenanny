@@ -38,6 +38,9 @@ class ConstOsmMapConsumer : public OsmMapConsumer
 {
 public:
 
+  ConstOsmMapConsumer() = default;
+  virtual ~ConstOsmMapConsumer() = default;
+
   virtual void setOsmMap(const OsmMap* map) = 0;
 
   void setOsmMap(OsmMap* map) override

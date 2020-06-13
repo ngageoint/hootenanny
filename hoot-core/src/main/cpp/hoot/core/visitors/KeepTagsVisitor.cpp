@@ -35,11 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, KeepTagsVisitor)
 
-KeepTagsVisitor::KeepTagsVisitor() :
-RemoveTagsVisitor()
-{
-}
-
 KeepTagsVisitor::KeepTagsVisitor(const QStringList& keys) :
 RemoveTagsVisitor(keys)
 {

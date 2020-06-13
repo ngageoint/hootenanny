@@ -43,9 +43,9 @@ class ElementIterator
 {
 public:
 
-  ElementIterator() {}
+  ElementIterator() = default;
 
-  virtual ~ElementIterator() {}
+  virtual ~ElementIterator() = default;
 
   const std::shared_ptr<Element>& next();
 

@@ -36,11 +36,13 @@ namespace hoot
 class UuidHelperJs : public node::ObjectWrap
 {
 public:
+
  static void Init(v8::Handle<v8::Object> target);
 
 private:
-  UuidHelperJs();
-  ~UuidHelperJs();
+
+  UuidHelperJs() = default;
+  virtual ~UuidHelperJs() = default;
 
   static void createUuid(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void createUuid5(const v8::FunctionCallbackInfo<v8::Value>& args);

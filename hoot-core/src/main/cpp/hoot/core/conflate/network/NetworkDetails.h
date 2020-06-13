@@ -58,9 +58,8 @@ public:
 
   static std::string className() { return "hoot::NetworkDetails"; }
 
-  static int logWarnCount;
-
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
+  virtual ~NetworkDetails() = default;
 
   Meters calculateDistance(ConstEdgeLocationPtr el) const;
   /**
@@ -187,6 +186,8 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
 private:
+
+  static int logWarnCount;
 
   std::shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;

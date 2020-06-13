@@ -72,6 +72,7 @@ public:
    * Use create instead.
    */
   VagabondNetworkMatcher();
+  virtual ~VagabondNetworkMatcher() = default;
 
   // Leaving this hardcoded for now, as we don't use this matcher in production conflation jobs.
   // If we ever do end up using it production, then add a config option for it.

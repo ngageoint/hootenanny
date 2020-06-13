@@ -47,6 +47,9 @@ public:
 
   static std::string className() { return "hoot::ToEnglishTranslator"; }
 
+  ToEnglishTranslator() = default;
+  virtual ~ToEnglishTranslator() = default;
+
   /**
    * Returns the translators source languages
    *

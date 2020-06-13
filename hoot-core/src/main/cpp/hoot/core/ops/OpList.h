@@ -54,7 +54,8 @@ public:
 
   static std::string className() { return "hoot::OpList"; }
 
-  OpList();
+  OpList() = default;
+  virtual ~OpList() = default;
 
   void addOp(const std::shared_ptr<OsmMapOperation>& op) { _ops.push_back(op); }
 

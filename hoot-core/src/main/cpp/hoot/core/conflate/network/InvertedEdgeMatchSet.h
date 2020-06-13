@@ -38,7 +38,9 @@ namespace hoot
 class InvertedEdgeMatchSet : public EdgeMatchSet
 {
 public:
-  InvertedEdgeMatchSet();
+
+  InvertedEdgeMatchSet() = default;
+  virtual ~InvertedEdgeMatchSet() = default;
 
   virtual bool contains(const EdgeMatchPtr &em) const = 0;
 

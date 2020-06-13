@@ -39,11 +39,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveRef2VisitorMultipleCriterion)
 
-RemoveRef2VisitorMultipleCriterion::RemoveRef2VisitorMultipleCriterion() :
-RemoveRef2Visitor()
-{
-}
-
 void RemoveRef2VisitorMultipleCriterion::addCriterion(const ElementCriterionPtr& e)
 {
   //hacking use of ChainCriterion here

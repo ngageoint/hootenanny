@@ -38,7 +38,8 @@ public:
 
   static std::string className() { return "hoot::AddBboxVisitor"; }
 
-  AddBboxVisitor();
+  AddBboxVisitor() = default;
+  virtual ~AddBboxVisitor() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
 

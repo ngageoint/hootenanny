@@ -62,9 +62,9 @@ public:
 
   typedef map<QString, set<QString>> RefToUuid;
 
-  GetRefUuidVisitor(QString ref) : _ref(ref) {}
+  GetRefUuidVisitor(QString ref) : _ref(ref) { }
 
-  virtual ~GetRefUuidVisitor() {}
+  virtual ~GetRefUuidVisitor() = default;
 
   const RefToUuid& getRefToUuid() const { return _ref2Uuid; }
 
@@ -117,9 +117,8 @@ class UuidToEidVisitor : public ConstElementVisitor
 {
 public:
 
-  UuidToEidVisitor() {}
-
-  virtual ~UuidToEidVisitor() {}
+  UuidToEidVisitor() = default;
+  virtual ~UuidToEidVisitor() = default;
 
   const MatchComparator::UuidToEid& getUuidToEid() const { return _uuidToEid; }
 

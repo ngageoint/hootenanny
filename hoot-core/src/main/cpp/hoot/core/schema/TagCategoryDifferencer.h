@@ -43,10 +43,9 @@ class TagCategoryDifferencer : public TagFilteredDifferencer, public Configurabl
 public:
   static std::string className() { return "hoot::TagCategoryDifferencer"; }
 
-  TagCategoryDifferencer() {}
+  TagCategoryDifferencer() = default;
   TagCategoryDifferencer(OsmSchemaCategory category);
-
-  virtual ~TagCategoryDifferencer();
+  virtual ~TagCategoryDifferencer() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

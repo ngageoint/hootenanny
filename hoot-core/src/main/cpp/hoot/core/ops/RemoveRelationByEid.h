@@ -52,6 +52,7 @@ public:
    * @brief RemoveRelationByEid Default constructor
    */
   RemoveRelationByEid();
+  virtual ~RemoveRelationByEid() = default;
 
   /**
    * @brief RemoveRelationByEid

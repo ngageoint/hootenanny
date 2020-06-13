@@ -37,10 +37,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SchemaTranslationOp)
 
-SchemaTranslationOp::SchemaTranslationOp()
-{
-}
-
 void SchemaTranslationOp::apply(std::shared_ptr<OsmMap> &map)
 {
   map->visitRw(_translator);

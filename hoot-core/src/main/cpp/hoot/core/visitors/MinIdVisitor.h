@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::MinIdVisitor"; }
 
-  MinIdVisitor() : _minId(std::numeric_limits<long>::max()) {}
+  MinIdVisitor() : _minId(std::numeric_limits<long>::max()) { }
+  virtual ~MinIdVisitor() = default;
 
   long getMinId() const { return _minId; }
 

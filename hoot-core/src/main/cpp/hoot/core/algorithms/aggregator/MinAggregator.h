@@ -38,7 +38,8 @@ public:
 
   static std::string className() { return "hoot::MinAggregator"; }
 
-  MinAggregator();
+  MinAggregator() = default;
+  virtual ~MinAggregator() = default;
 
   virtual double aggregate(std::vector<double>& d) const override;
 

@@ -44,7 +44,7 @@ public:
 
   static std::string className() { return "hoot::BuildModelCmd"; }
 
-  BuildModelCmd() { }
+  BuildModelCmd() = default;
 
   virtual QString getName() const override { return "build-model"; }
 

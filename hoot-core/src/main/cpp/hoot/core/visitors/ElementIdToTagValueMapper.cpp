@@ -35,10 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ElementIdToTagValueMapper)
 
-ElementIdToTagValueMapper::ElementIdToTagValueMapper()
-{
-}
-
 void ElementIdToTagValueMapper::addCriterion(const ElementCriterionPtr& e)
 {
   _crit = e;

@@ -39,12 +39,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmGeoJsonWriterJs)
 
-OsmGeoJsonWriterJs::OsmGeoJsonWriterJs()
-{
-}
-
-OsmGeoJsonWriterJs::~OsmGeoJsonWriterJs() {}
-
 void OsmGeoJsonWriterJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

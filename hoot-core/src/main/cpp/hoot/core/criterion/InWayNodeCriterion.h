@@ -49,8 +49,9 @@ public:
 
   static std::string className() { return "hoot::InWayNodeCriterion"; }
 
-  InWayNodeCriterion() {}
+  InWayNodeCriterion() = default;
   InWayNodeCriterion(const OsmMap& map, const std::vector<long>& wayIds);
+  virtual ~InWayNodeCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

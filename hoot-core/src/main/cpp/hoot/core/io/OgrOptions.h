@@ -49,7 +49,7 @@ public:
 
   OgrOptions();
 
-  ~OgrOptions();
+  virtual ~OgrOptions();
 
   void deleteCrypticOptions();
 

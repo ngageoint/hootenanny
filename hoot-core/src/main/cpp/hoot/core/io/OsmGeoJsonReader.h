@@ -63,8 +63,8 @@ public:
 
   static std::string className() { return "hoot::OsmGeoJsonReader"; }
 
-  OsmGeoJsonReader();
-  virtual ~OsmGeoJsonReader();
+  OsmGeoJsonReader() = default;
+  virtual ~OsmGeoJsonReader() = default;
 
   /**
    * @brief isSupported returns true if the URL is likely supported. This isn't

@@ -43,14 +43,6 @@ namespace hoot
 
 const double NetworkMatcher::EPSILON = 1e-6;
 
-NetworkMatcher::~NetworkMatcher()
-{
-}
-
-void NetworkMatcher::finalize()
-{
-}
-
 void NetworkMatcher::_createEdge2Index()
 {
   LOG_DEBUG("Creating edge index...");

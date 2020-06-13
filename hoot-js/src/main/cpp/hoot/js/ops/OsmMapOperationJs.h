@@ -44,13 +44,15 @@ class OsmMapOperation;
 class OsmMapOperationJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   OsmMapOperation* getMapOp() { return _op.get(); }
 
 private:
-  OsmMapOperationJs(OsmMapOperation *op);
-  ~OsmMapOperationJs();
+
+  OsmMapOperationJs(OsmMapOperation *op) : _op(op) { }
+  virtual ~OsmMapOperationJs() = default;
 
   static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void applyAndGetResult(const v8::FunctionCallbackInfo<v8::Value>& args);

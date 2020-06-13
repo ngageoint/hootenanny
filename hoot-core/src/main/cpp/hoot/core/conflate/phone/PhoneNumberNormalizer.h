@@ -51,6 +51,7 @@ class PhoneNumberNormalizer : public Configurable
 public:
 
   PhoneNumberNormalizer();
+  virtual ~PhoneNumberNormalizer() = default;
 
   /**
    * @see Configurable

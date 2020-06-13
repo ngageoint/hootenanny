@@ -60,6 +60,7 @@ class AddressParser : public Configurable
 public:
 
   AddressParser();
+  virtual ~AddressParser() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

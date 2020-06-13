@@ -45,6 +45,7 @@ public:
 
   CriterionCountVisitor();
   CriterionCountVisitor(const ElementCriterionPtr& pCrit);
+  virtual ~CriterionCountVisitor() = default;
 
   virtual void addCriterion(const ElementCriterionPtr& pCrit)
   {

@@ -41,7 +41,8 @@ namespace hoot
 class IndexedEdgeLinks : public QMultiHash<ConstEdgeMatchPtr, ConstEdgeMatchPtr>
 {
 public:
-  IndexedEdgeLinks();
+  IndexedEdgeLinks() = default;
+  virtual ~IndexedEdgeLinks() = default;
 };
 
 typedef std::shared_ptr<IndexedEdgeLinks> IndexedEdgeLinksPtr;

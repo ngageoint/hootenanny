@@ -57,6 +57,7 @@ public:
    * Always construct with create() to make a shared pointer.
    */
   ConflictsNetworkMatcher();
+  virtual ~ConflictsNetworkMatcher() = default;
 
   /**
    * Use this instead of a constructor.

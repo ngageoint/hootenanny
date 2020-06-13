@@ -50,6 +50,7 @@ class OsmMapIndex : public ElementListener
 public:
 
   OsmMapIndex(const OsmMap& map);
+  virtual ~OsmMapIndex() = default;
 
   void addNode(const ConstNodePtr& n);
   void addRelation(const ConstRelationPtr& r);

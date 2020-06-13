@@ -38,10 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddBboxVisitor)
 
-AddBboxVisitor::AddBboxVisitor()
-{
-}
-
 void AddBboxVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (e->getTags().getNonDebugCount() > 0)

@@ -63,13 +63,14 @@ public:
 
   static const QString MATCH_NAME;
 
-  PoiPolygonMatch();
+  PoiPolygonMatch() = default;
   // this constructor added primarily for testing purposes
   PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
     PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr(),
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>());
+  virtual ~PoiPolygonMatch() = default;
 
   virtual void setConfiguration(const Settings& conf) override;
 

@@ -38,7 +38,9 @@ namespace hoot
 class IntegerFieldDefinition : public FieldDefinition
 {
 public:
+
   IntegerFieldDefinition();
+  virtual ~IntegerFieldDefinition() = default;
 
   void addEnumeratedValue(int v) { _enumeratedValues.insert(v); }
 
@@ -61,6 +63,7 @@ public:
   virtual void validate(const QVariant& v, StrictChecking strict) const;
 
 private:
+
   int _min;
   int _max;
   int _defaultValue;

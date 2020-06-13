@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::RoundaboutCriterion"; }
 
-  RoundaboutCriterion() {}
+  RoundaboutCriterion() = default;
+  virtual ~RoundaboutCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

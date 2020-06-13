@@ -65,6 +65,7 @@ public:
   static std::string className() { return "hoot::OsmJsonWriter"; }
 
   OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
+  virtual ~OsmJsonWriter() = default;
 
   virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".json"); }
 

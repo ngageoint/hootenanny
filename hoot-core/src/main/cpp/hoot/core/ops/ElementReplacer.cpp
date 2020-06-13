@@ -34,15 +34,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ElementReplacer)
 
-ElementReplacer::ElementReplacer()
-{
-}
-
-ElementReplacer::ElementReplacer(OsmMapPtr mapToReplaceFrom) :
-_mapToReplaceFrom(mapToReplaceFrom)
-{
-}
-
 void ElementReplacer::apply(std::shared_ptr<OsmMap>& map)
 {
   if (!_mapToReplaceFrom)

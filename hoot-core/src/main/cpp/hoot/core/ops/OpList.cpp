@@ -38,10 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, OpList)
 
-OpList::OpList()
-{
-}
-
 void OpList::apply(std::shared_ptr<OsmMap> &map)
 {
   for (size_t i = 0; i < _ops.size(); i++)

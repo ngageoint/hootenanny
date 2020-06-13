@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::ReprojectToGeographicOp"; }
 
-  ReprojectToGeographicOp();
+  ReprojectToGeographicOp() = default;
+  virtual ~ReprojectToGeographicOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 

@@ -41,7 +41,8 @@ public:
 
   static std::string className() { return "hoot::ParallelScoreExtractor"; }
 
-  ParallelScoreExtractor();
+  ParallelScoreExtractor() = default;
+  virtual ~ParallelScoreExtractor() = default;
 
   virtual std::string getClassName() const override { return className(); }
 

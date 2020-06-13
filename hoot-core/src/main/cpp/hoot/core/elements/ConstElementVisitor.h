@@ -46,8 +46,8 @@ class ConstElementVisitor : public ElementVisitor
 {
 public:
 
-  ConstElementVisitor() {}
-  virtual ~ConstElementVisitor() {}
+  ConstElementVisitor() = default;
+  virtual ~ConstElementVisitor() = default;
 
   static std::string className() { return "hoot::ConstElementVisitor"; }
 

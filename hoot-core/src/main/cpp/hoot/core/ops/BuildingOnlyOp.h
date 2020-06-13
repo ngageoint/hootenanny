@@ -65,7 +65,8 @@ public:
   /**
    * @brief BuildingOnlyOp - default constructor
    */
-  BuildingOnlyOp();
+  BuildingOnlyOp() = default;
+  virtual ~BuildingOnlyOp() = default;
 
   /**
    * @brief apply - perform the operation on the map (see class description)

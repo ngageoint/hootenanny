@@ -45,6 +45,7 @@ class PertyMatchScorer : public Configurable
 public:
 
   PertyMatchScorer();
+  virtual ~PertyMatchScorer() = default;
 
   /**
     Takes a single file as input, runs PERTY on the file, and then conflates the unmodified data

@@ -41,7 +41,8 @@ public:
 
   static std::string className() { return "hoot::AddHilbertReviewSortOrderOp"; }
 
-  AddHilbertReviewSortOrderOp();
+  AddHilbertReviewSortOrderOp() = default;
+  virtual ~AddHilbertReviewSortOrderOp() = default;
 
   virtual void apply(OsmMapPtr& map);
 

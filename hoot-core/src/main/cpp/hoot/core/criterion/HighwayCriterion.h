@@ -44,8 +44,9 @@ public:
 
   static std::string className() { return "hoot::HighwayCriterion"; }
 
-  HighwayCriterion();
-  HighwayCriterion(ConstOsmMapPtr map);
+  HighwayCriterion() = default;
+  HighwayCriterion(ConstOsmMapPtr map) : _map(map) { }
+  virtual ~HighwayCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

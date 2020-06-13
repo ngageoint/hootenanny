@@ -48,8 +48,8 @@ public:
 
   static std::string className() { return "hoot::HootServicesLanguageInfoClient"; }
 
-  HootServicesLanguageInfoClient();
-  virtual ~HootServicesLanguageInfoClient() {}
+  HootServicesLanguageInfoClient() : _useCookies(true) { }
+  virtual ~HootServicesLanguageInfoClient() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

@@ -36,6 +36,9 @@ class ElementConsumer
 {
 public:
 
+  ElementConsumer() = default;
+  virtual ~ElementConsumer() = default;
+
   virtual void addElement(const ElementPtr& e) = 0;
 };
 

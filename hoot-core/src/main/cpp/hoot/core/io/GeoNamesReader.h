@@ -43,12 +43,13 @@ public:
   static std::string className() { return "hoot::GeoNamesReader"; }
 
   GeoNamesReader();
+  virtual ~GeoNamesReader() = default;
 
   virtual void close();
 
-  virtual void initializePartial() {}
+  virtual void initializePartial() { }
 
-  virtual void finalizePartial() {}
+  virtual void finalizePartial() { }
 
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 

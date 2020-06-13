@@ -39,6 +39,7 @@ public:
   static std::string className() { return "hoot::MaximalNearestSublineMatcher"; }
 
   MaximalNearestSublineMatcher();
+  virtual ~MaximalNearestSublineMatcher() = default;
 
   virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const override;

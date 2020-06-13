@@ -51,7 +51,7 @@ public:
 
   static string className() { return "hoot::CropCmd"; }
 
-  CropCmd() {}
+  CropCmd() = default;
 
   virtual QString getName() const override { return "crop"; }
 

@@ -40,9 +40,8 @@ class RngConsumer
 {
 public:
 
-  virtual ~RngConsumer()
-  {
-  }
+  RngConsumer() = default;
+  virtual ~RngConsumer() = default;
 
   /**
    * Set the classes random number generator. The class should use a reference to this random

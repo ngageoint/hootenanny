@@ -38,10 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, MarkForReviewMerger)
 
-MarkForReviewMerger::MarkForReviewMerger()
-{
-}
-
 MarkForReviewMerger::MarkForReviewMerger(const set<pair<ElementId, ElementId>>& pairs,
                                          QString note, QString reviewType, double score) :
   _pairs(pairs),

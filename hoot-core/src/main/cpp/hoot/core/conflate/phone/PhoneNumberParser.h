@@ -58,6 +58,7 @@ class PhoneNumberParser : public Configurable
 public:
 
   PhoneNumberParser();
+  virtual ~PhoneNumberParser() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

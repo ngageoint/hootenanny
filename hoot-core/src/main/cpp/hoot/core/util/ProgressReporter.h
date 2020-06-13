@@ -41,7 +41,8 @@ class ProgressReporter
 {
 public:
 
-  virtual ~ProgressReporter() {}
+  ProgressReporter() = default;
+  virtual ~ProgressReporter() = default;
 
   /**
    * Allows for passing in progress info for status updates.

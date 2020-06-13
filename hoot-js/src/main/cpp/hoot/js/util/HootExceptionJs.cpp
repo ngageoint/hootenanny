@@ -42,10 +42,6 @@ HOOT_JS_REGISTER(HootExceptionJs)
 
 Persistent<Function> HootExceptionJs::_constructor;
 
-HootExceptionJs::HootExceptionJs()
-{
-}
-
 Handle<Object> HootExceptionJs::create(const std::shared_ptr<HootException>& e)
 {
   Isolate* current = v8::Isolate::GetCurrent();

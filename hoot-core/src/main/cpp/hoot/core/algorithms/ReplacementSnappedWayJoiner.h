@@ -46,6 +46,7 @@ public:
 
   ReplacementSnappedWayJoiner();
   ReplacementSnappedWayJoiner(const QMap<ElementId, long>& refIdToVersionMappings);
+  virtual ~ReplacementSnappedWayJoiner() = default;
 
   /**
    * @see WayJoiner

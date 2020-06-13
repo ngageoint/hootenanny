@@ -57,10 +57,6 @@ IdGeneratorJs::IdGeneratorJs(IdGeneratorPtr idGen)
   _idGen = idGen;
 }
 
-IdGeneratorJs::~IdGeneratorJs()
-{
-}
-
 void IdGeneratorJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();

@@ -38,15 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, MapCleaner)
 
-MapCleaner::MapCleaner()
-{
-}
-
-MapCleaner::MapCleaner(const Progress& progress) :
-_progress(progress)
-{
-}
-
 void MapCleaner::apply(std::shared_ptr<OsmMap>& map)
 {
   NamedOp cleaningOps(ConfigOptions().getMapCleanerTransforms());

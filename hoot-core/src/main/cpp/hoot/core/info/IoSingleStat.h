@@ -48,6 +48,7 @@ public:
   };
 
   IoSingleStat(Type t);
+  virtual ~IoSingleStat() = default;
 };
 
 }

@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::CalculateAreaVisitor"; }
 
-  CalculateAreaVisitor() : _total(0) {}
+  CalculateAreaVisitor() : _total(0) { }
+  virtual ~CalculateAreaVisitor() = default;
 
   /**
    * Returns the area in meters squared.

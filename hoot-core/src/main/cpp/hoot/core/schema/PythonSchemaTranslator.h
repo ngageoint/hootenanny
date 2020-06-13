@@ -44,8 +44,7 @@ public:
 
   static std::string className() { return "hoot::PythonSchemaTranslator"; }
 
-  PythonSchemaTranslator();
-
+  PythonSchemaTranslator() = default;
   virtual ~PythonSchemaTranslator();
 
   virtual bool isValidScript();

@@ -71,6 +71,7 @@ public:
   MapCropper();
   MapCropper(const geos::geom::Envelope& envelope);
   MapCropper(const std::shared_ptr<const geos::geom::Geometry>& g);
+  virtual ~MapCropper() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 

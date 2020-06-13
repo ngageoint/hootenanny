@@ -48,12 +48,12 @@ public:
   /**
    * @brief ElementCache
    */
-  ElementCache() { }
+  ElementCache() = default;
 
   /**
    * @brief ~ElementCache
    */
-  virtual ~ElementCache() { }
+  virtual ~ElementCache() = default;
 
   /**
    * @brief isEmpty

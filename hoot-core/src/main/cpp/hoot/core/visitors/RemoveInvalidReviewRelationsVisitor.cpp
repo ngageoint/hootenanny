@@ -39,10 +39,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidReviewRelationsVisitor)
 
-RemoveInvalidReviewRelationsVisitor::RemoveInvalidReviewRelationsVisitor()
-{
-}
-
 void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
 {
   if (e->getElementType() == ElementType::Relation)

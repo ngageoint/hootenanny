@@ -35,6 +35,10 @@ namespace hoot
 class ConstElementConsumer : public ElementConsumer
 {
 public:
+
+  ConstElementConsumer() = default;
+  virtual ~ConstElementConsumer() = default;
+
   virtual void addElement(const ConstElementPtr& e) = 0;
   virtual void addElement(const ElementPtr& e)
   {

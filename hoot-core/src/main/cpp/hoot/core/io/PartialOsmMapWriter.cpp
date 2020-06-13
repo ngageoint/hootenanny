@@ -33,10 +33,6 @@
 namespace hoot
 {
 
-PartialOsmMapWriter::PartialOsmMapWriter()
-{
-}
-
 void PartialOsmMapWriter::write(const ConstOsmMapPtr& map)
 {
   writePartial(map);

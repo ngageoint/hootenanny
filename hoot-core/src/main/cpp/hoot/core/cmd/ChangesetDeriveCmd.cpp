@@ -50,7 +50,7 @@ public:
 
   static std::string className() { return "hoot::ChangesetDeriveCmd"; }
 
-  ChangesetDeriveCmd() {}
+  ChangesetDeriveCmd() = default;
 
   virtual QString getName() const override { return "changeset-derive"; }
 

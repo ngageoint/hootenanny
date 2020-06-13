@@ -57,7 +57,7 @@ class NodeDensityPlotCmd : public BaseCommand
 
     static string className() { return "hoot::NodeDensityPlotCmd"; }
 
-    NodeDensityPlotCmd() { }
+    NodeDensityPlotCmd() = default;
 
     virtual QString getName() const override { return "node-density-plot"; }
 

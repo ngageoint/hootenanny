@@ -55,7 +55,8 @@ class CompactnessExtractor : public FeatureExtractorBase
 {
 public:
 
-  CompactnessExtractor();
+  CompactnessExtractor() = default;
+  virtual ~CompactnessExtractor() = default;
 
   static std::string className() { return "hoot::CompactnessExtractor"; }
 

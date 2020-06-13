@@ -42,6 +42,8 @@ public:
 
   static std::string className() { return "hoot::RemoveUnknownVisitor"; }
 
+  virtual ~RemoveUnknownVisitor() = default;
+
   void set(Status status) { _status = status; }
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
@@ -55,7 +57,7 @@ protected:
 
 private:
 
-  RemoveUnknownVisitor() {}
+  RemoveUnknownVisitor() = default;
 
   Status _status;
 };
@@ -70,6 +72,7 @@ public:
   static std::string className() { return "hoot::RemoveUnknown1Visitor"; }
 
   RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
+  virtual ~RemoveUnknown1Visitor() = default;
 
   virtual QString getInitStatusMessage() const { return "Removing unknown1 elements..."; }
 
@@ -89,6 +92,7 @@ public:
   static std::string className() { return "hoot::RemoveUnknown2Visitor"; }
 
   RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
+  virtual ~RemoveUnknown2Visitor() = default;
 
   virtual QString getInitStatusMessage() const { return "Removing unknown2 elements..."; }
 

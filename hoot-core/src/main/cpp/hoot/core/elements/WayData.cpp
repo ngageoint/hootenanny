@@ -50,10 +50,6 @@ WayData::WayData(const WayData& from)
 {
 }
 
-WayData::~WayData()
-{
-}
-
 void WayData::clear()
 {
   ElementData::clear();

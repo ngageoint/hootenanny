@@ -42,7 +42,8 @@ public:
 
   static std::string className() { return "hoot::PoiCriterion"; }
 
-  PoiCriterion() {}
+  PoiCriterion() = default;
+  virtual ~PoiCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

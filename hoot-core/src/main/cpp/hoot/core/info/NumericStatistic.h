@@ -42,7 +42,8 @@ class NumericStatistic : public SingleStatistic
 {
 public:
 
-  virtual ~NumericStatistic() {}
+  NumericStatistic() = default;
+  virtual ~NumericStatistic() = default;
 
   virtual long numWithStat() const = 0;
   virtual double getMin() const = 0;

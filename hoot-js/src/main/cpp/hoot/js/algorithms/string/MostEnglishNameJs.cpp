@@ -45,14 +45,6 @@ HOOT_JS_REGISTER(MostEnglishNameJs)
 
 Persistent<Function> MostEnglishNameJs::_constructor;
 
-MostEnglishNameJs::MostEnglishNameJs()
-{
-}
-
-MostEnglishNameJs::~MostEnglishNameJs()
-{
-}
-
 void MostEnglishNameJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();

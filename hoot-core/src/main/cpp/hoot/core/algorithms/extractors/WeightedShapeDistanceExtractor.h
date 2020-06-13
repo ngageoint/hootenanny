@@ -44,7 +44,8 @@ public:
 
   WeightedShapeDistanceExtractor(ValueAggregatorPtr wayAgg);
 
-  WeightedShapeDistanceExtractor();
+  WeightedShapeDistanceExtractor() = default;
+  virtual ~WeightedShapeDistanceExtractor() = default;
 
   virtual std::string getClassName() const override { return className(); }
 

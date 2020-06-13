@@ -63,9 +63,8 @@ class NodeIdVisitor : public ConstElementVisitor
 {
 public:
 
-  set<long>& allNodes;
-
-  NodeIdVisitor(set<long>& nodes) : allNodes(nodes) {}
+  NodeIdVisitor(set<long>& nodes) : allNodes(nodes) { }
+  virtual ~NodeIdVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -77,14 +76,20 @@ public:
 
   virtual QString getDescription() const { return ""; }
   virtual std::string getClassName() const { return ""; }
+
+private:
+
+  set<long>& allNodes;
 };
 
 class NodeReplaceVisitor : public ConstElementVisitor
 {
 public:
 
-  NodeReplaceVisitor(OsmMap& map, const std::map<long, long>& fromTo) : _fromTo(fromTo), _map(map)
-  {}
+  NodeReplaceVisitor(OsmMap& map, const std::map<long, long>& fromTo)
+    : _fromTo(fromTo), _map(map)
+  { }
+  virtual ~NodeReplaceVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -125,10 +130,6 @@ private:
   const map<long, long>& _fromTo;
   OsmMap& _map;
 };
-
-BuildingOutlineUpdateOp::BuildingOutlineUpdateOp()
-{
-}
 
 void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap>& map)
 {

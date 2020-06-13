@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::ConstOsmMapOperation"; }
 
-  virtual ~ConstOsmMapOperation() {}
+  ConstOsmMapOperation() = default;
+  virtual ~ConstOsmMapOperation() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map)
   { apply((const std::shared_ptr<OsmMap>&)map); }

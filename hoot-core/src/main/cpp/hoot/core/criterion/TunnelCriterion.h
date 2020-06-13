@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::TunnelCriterion"; }
 
-  TunnelCriterion();
+  TunnelCriterion() = default;
+  virtual ~TunnelCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 

@@ -41,10 +41,6 @@ namespace hoot
 
 std::shared_ptr<ToEnglishTranslator> ToEnglishAddressTranslator::_translator;
 
-ToEnglishAddressTranslator::ToEnglishAddressTranslator()
-{
-}
-
 void ToEnglishAddressTranslator::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);

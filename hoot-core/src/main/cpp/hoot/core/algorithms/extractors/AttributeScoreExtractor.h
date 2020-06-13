@@ -46,6 +46,7 @@ public:
   AttributeScoreExtractor(ValueAggregatorPtr wayAgg, bool useWeight = false);
 
   AttributeScoreExtractor(bool useWeight = false);
+  virtual ~AttributeScoreExtractor() = default;
 
   virtual std::string getClassName() const override { return className(); }
 

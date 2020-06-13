@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::UnionPolygonsOp"; }
 
   UnionPolygonsOp();
+  virtual ~UnionPolygonsOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 

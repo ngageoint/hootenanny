@@ -36,10 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, TunnelCriterion)
 
-TunnelCriterion::TunnelCriterion()
-{
-}
-
 bool TunnelCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const Tags& tags = e->getTags();

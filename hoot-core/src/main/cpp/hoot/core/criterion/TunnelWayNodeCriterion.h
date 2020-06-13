@@ -41,6 +41,7 @@ public:
 
   TunnelWayNodeCriterion();
   TunnelWayNodeCriterion(ConstOsmMapPtr map);
+  virtual ~TunnelWayNodeCriterion() = default;
 
   virtual void setOsmMap(const OsmMap* map) override;
 

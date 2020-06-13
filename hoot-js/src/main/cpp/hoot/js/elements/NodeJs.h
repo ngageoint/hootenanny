@@ -56,9 +56,9 @@ public:
 
 private:
 
-  NodeJs(ConstNodePtr n);
-  NodeJs();
-  ~NodeJs();
+  NodeJs(ConstNodePtr n) : _constNode(n) { }
+  NodeJs() = default;
+  virtual ~NodeJs() = default;
 
   static void getX(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getY(const v8::FunctionCallbackInfo<v8::Value>& args);

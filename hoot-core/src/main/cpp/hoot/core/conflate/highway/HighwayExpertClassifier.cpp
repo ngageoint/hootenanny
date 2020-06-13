@@ -41,10 +41,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayExpertClassifier)
 
-HighwayExpertClassifier::HighwayExpertClassifier()
-{
-}
-
 MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
   ElementId /*eid1*/, ElementId /*eid2*/, const WaySublineMatchString &match)
 {

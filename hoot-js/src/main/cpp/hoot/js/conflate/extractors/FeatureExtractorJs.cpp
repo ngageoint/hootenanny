@@ -49,14 +49,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(FeatureExtractorJs)
 
-FeatureExtractorJs::FeatureExtractorJs(FeatureExtractorPtr fe) : _fe(fe)
-{
-}
-
-FeatureExtractorJs::~FeatureExtractorJs()
-{
-}
-
 void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();

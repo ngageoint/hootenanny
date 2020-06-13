@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::RmseAggregator"; }
 
-  RmseAggregator();
+  RmseAggregator() = default;
+  virtual ~RmseAggregator() = default;
 
   virtual double aggregate(std::vector<double>& d) const;
 

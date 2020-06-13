@@ -53,6 +53,7 @@ public:
   static std::string className() { return "hoot::MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
+  virtual ~MultiLineStringVisitor() = default;
 
   void setElementProvider(const ConstElementProviderPtr& provider ) { _provider = provider; }
 

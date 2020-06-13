@@ -73,6 +73,8 @@ public:
   RemoveNodeByEid(long nId, bool doCheck = true, bool removeFully = false,
                   bool removeOnlyUnused = false);
 
+  virtual ~RemoveNodeByEid() = default;
+
   /**
    * @brief apply Peform the op on the given map
    * @param map map upon which to operate

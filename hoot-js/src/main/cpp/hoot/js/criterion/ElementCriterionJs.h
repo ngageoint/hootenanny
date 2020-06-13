@@ -49,8 +49,8 @@ public:
 
 private:
 
-  ElementCriterionJs(ElementCriterion* c);
-  ~ElementCriterionJs();
+  ElementCriterionJs(ElementCriterion* c) : _c(c) { }
+  virtual ~ElementCriterionJs() = default;
 
   static void addCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);

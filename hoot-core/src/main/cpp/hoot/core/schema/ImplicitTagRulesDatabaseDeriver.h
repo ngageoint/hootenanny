@@ -53,6 +53,7 @@ class ImplicitTagRulesDatabaseDeriver : public Configurable
 public:
 
   ImplicitTagRulesDatabaseDeriver();
+  virtual ~ImplicitTagRulesDatabaseDeriver() = default;
 
   /**
    * Creates an implicit tag rules database given input element data

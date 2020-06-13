@@ -40,7 +40,8 @@ class BulkInsert
 {
 public:
 
-  virtual ~BulkInsert() {}
+  BulkInsert() = default;
+  virtual ~BulkInsert() = default;
 
   virtual void flush() = 0;
 

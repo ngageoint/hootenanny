@@ -47,6 +47,7 @@ public:
    */
   ElementCriterionInputStream(const ElementInputStreamPtr& elementSource,
                               const ElementCriterionPtr& criterion);
+  virtual ~ElementCriterionInputStream() = default;
 
   /**
    * @brief close

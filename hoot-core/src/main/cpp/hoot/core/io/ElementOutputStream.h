@@ -42,8 +42,8 @@ class ElementOutputStream
 {
 public:
 
-  ElementOutputStream();
-  virtual ~ElementOutputStream();
+  ElementOutputStream() = default;
+  virtual ~ElementOutputStream() = default;
 
   /**
    * Close the output stream. It can safely be expected that if close isn't called explicitly it

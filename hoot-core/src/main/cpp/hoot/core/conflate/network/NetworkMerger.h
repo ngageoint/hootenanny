@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::NetworkMerger"; }
 
-  NetworkMerger();
+  NetworkMerger() = default;
+  virtual ~NetworkMerger() = default;
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.

@@ -41,6 +41,7 @@ public:
 
   LinearWaterwayWayNodeCriterion();
   LinearWaterwayWayNodeCriterion(ConstOsmMapPtr map);
+  virtual ~LinearWaterwayWayNodeCriterion() = default;
 
   virtual void setOsmMap(const OsmMap* map) override;
 

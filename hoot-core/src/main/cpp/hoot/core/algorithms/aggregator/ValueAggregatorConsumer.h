@@ -40,7 +40,8 @@ class ValueAggregatorConsumer
 {
 public:
 
-  virtual ~ValueAggregatorConsumer() {}
+  ValueAggregatorConsumer() = default;
+  virtual ~ValueAggregatorConsumer() = default;
   virtual void setValueAggregator(const ValueAggregatorPtr& sd) = 0;
 };
 

@@ -62,6 +62,7 @@ public:
   static std::string className() { return "hoot::TranslatedTagDifferencer"; }
 
   TranslatedTagDifferencer();
+  virtual ~TranslatedTagDifferencer() = default;
 
   virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2) const;

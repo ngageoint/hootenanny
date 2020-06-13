@@ -50,10 +50,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnlikelyIntersectionRemover)
 
-UnlikelyIntersectionRemover::UnlikelyIntersectionRemover()
-{
-}
-
 void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const set<long>& wayIds)
 {
   // This evaluate and split method uses a simple heuristic for finding a split. It also assumes

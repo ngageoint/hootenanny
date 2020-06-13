@@ -55,9 +55,9 @@ public:
 
 private:
 
-  MostEnglishNameJs();
-  MostEnglishNameJs(MostEnglishNamePtr sd) { _sd = sd; }
-  ~MostEnglishNameJs();
+  MostEnglishNameJs(MostEnglishNamePtr sd) : _sd(sd) { }
+  MostEnglishNameJs() = default;
+  virtual ~MostEnglishNameJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getMostEnglishName(const v8::FunctionCallbackInfo<v8::Value>& args);

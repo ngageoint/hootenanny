@@ -48,7 +48,7 @@ class InMemoryElementSorter : public ElementInputStream
 public:
 
   InMemoryElementSorter(ConstOsmMapPtr map);
-  virtual ~InMemoryElementSorter() {}
+  virtual ~InMemoryElementSorter() = default;
 
   /**
    * @see ElementInputStream

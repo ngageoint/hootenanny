@@ -51,8 +51,7 @@ public:
   static std::string className() { return "hoot::SparkJsonWriter"; }
 
   SparkJsonWriter();
-
-  virtual ~SparkJsonWriter() {}
+  virtual ~SparkJsonWriter() = default;
 
   /**
    * @see OsmMapWriter

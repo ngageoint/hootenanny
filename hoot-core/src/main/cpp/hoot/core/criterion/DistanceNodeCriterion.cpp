@@ -39,10 +39,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, DistanceNodeCriterion)
 
-DistanceNodeCriterion::DistanceNodeCriterion()
-{
-}
-
 void DistanceNodeCriterion::setConfiguration(const Settings& s)
 {
   ConfigOptions opts(s);

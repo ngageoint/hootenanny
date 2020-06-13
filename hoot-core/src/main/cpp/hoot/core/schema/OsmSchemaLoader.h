@@ -37,9 +37,9 @@ class OsmSchemaLoader
 public:
   static std::string className() { return "hoot::OsmSchemaLoader"; }
 
-  OsmSchemaLoader() {}
+  OsmSchemaLoader() = default;
 
-  virtual ~OsmSchemaLoader() {}
+  virtual ~OsmSchemaLoader() = default;
 
   /**
    * Returns true if the specified path is likely supported. This should be a quick operation like

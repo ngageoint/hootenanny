@@ -40,7 +40,8 @@ public:
 
   static std::string className() { return "hoot::HighwayExpertClassifier"; }
 
-  HighwayExpertClassifier();
+  HighwayExpertClassifier() = default;
+  virtual ~HighwayExpertClassifier() = default;
 
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match);

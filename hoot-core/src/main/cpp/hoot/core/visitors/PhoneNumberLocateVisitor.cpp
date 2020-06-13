@@ -32,11 +32,6 @@
 namespace hoot
 {
 
-PhoneNumberLocateVisitor::PhoneNumberLocateVisitor()
-{
-
-}
-
 void PhoneNumberLocateVisitor::setConfiguration(const Settings& conf)
 {
   _phoneNumberLocator.setConfiguration(conf);

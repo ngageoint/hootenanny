@@ -41,7 +41,7 @@ public:
 
   DefaultIdGenerator() { reset(); }
 
-  virtual ~DefaultIdGenerator() {}
+  virtual ~DefaultIdGenerator() = default;
 
   virtual IdGeneratorPtr clone() const;
 

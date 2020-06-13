@@ -46,6 +46,7 @@ public:
 
   StatusCriterion() { setConfiguration(conf()); }
   StatusCriterion(Status s) : _status(s) { }
+  virtual ~StatusCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

@@ -47,9 +47,8 @@ public:
 
   static std::string className() { return "hoot::OsmNetworkExtractor"; }
 
-  static int logWarnCount;
-
-  OsmNetworkExtractor();
+  OsmNetworkExtractor() = default;
+  virtual ~OsmNetworkExtractor() = default;
 
   OsmNetworkPtr extractNetwork(ConstOsmMapPtr map);
 
@@ -62,6 +61,8 @@ public:
   void setCriterion(ElementCriterionPtr criterion) { _criterion = criterion; }
 
 private:
+
+  static int logWarnCount;
 
   friend class OsmNetworkExtractorVisitor;
 

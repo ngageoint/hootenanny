@@ -46,10 +46,6 @@ namespace hoot
 
 int RfExtractorClassifier::logWarnCount = 0;
 
-RfExtractorClassifier::RfExtractorClassifier()
-{
-}
-
 MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
   ElementId eid1, ElementId eid2) const
 {

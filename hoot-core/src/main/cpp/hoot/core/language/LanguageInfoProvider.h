@@ -50,6 +50,9 @@ public:
 
   static std::string className() { return "hoot::LanguageInfoProvider"; }
 
+  LanguageInfoProvider() = default;
+  virtual ~LanguageInfoProvider() = default;
+
   /**
    * Retrieves available language apps
    *

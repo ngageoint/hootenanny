@@ -51,6 +51,7 @@ public:
 
   WeightedWordDistance(StringDistance* d, WordWeightDictionary* dictionary);
   WeightedWordDistance();
+  virtual ~WeightedWordDistance() = default;
 
   virtual double compare(const QString& s1, const QString& s2) const override;
 

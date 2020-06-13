@@ -43,7 +43,8 @@ class HasPhoneNumberCriterion : public ElementCriterion, public Configurable
 public:
   static std::string className() { return "hoot::HasPhoneNumberCriterion"; }
 
-  HasPhoneNumberCriterion();
+  HasPhoneNumberCriterion() = default;
+  virtual ~HasPhoneNumberCriterion() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

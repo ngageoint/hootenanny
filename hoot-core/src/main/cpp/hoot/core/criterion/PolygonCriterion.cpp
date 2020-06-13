@@ -38,10 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PolygonCriterion)
 
-PolygonCriterion::PolygonCriterion()
-{
-}
-
 bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());

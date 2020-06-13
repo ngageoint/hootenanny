@@ -48,7 +48,7 @@ public:
    */
   OverwriteTagMerger(bool swap = false);
 
-  virtual ~OverwriteTagMerger() {}
+  virtual ~OverwriteTagMerger() = default;
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
@@ -78,7 +78,8 @@ public:
 
   static std::string className() { return "hoot::OverwriteTag2Merger"; }
 
-  OverwriteTag2Merger() : OverwriteTagMerger(false) {}
+  OverwriteTag2Merger() : OverwriteTagMerger(false) { }
+  virtual ~OverwriteTag2Merger() = default;
 
   virtual QString getDescription() const
   {  return "Overwrites conflicting tags with those from the reference feature"; }
@@ -95,7 +96,8 @@ public:
 
   static std::string className() { return "hoot::OverwriteTag1Merger"; }
 
-  OverwriteTag1Merger() : OverwriteTagMerger(true) {}
+  OverwriteTag1Merger() : OverwriteTagMerger(true) { }
+  virtual ~OverwriteTag1Merger() = default;
 
   virtual QString getDescription() const
   {  return "Overwrites conflicting tags with those from the secondary feature"; }

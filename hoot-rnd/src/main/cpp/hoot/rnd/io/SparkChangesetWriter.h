@@ -52,7 +52,6 @@ public:
   static std::string className() { return "hoot::SparkChangesetWriter"; }
 
   SparkChangesetWriter();
-
   virtual ~SparkChangesetWriter();
 
   /**

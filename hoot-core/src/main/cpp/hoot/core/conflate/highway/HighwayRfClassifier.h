@@ -43,10 +43,8 @@ public:
 
   static std::string className() { return "hoot::HighwayRfClassifier"; }
 
-  static int logWarnCount;
-
-  HighwayRfClassifier();
-  ~HighwayRfClassifier() = default;
+  HighwayRfClassifier() = default;
+  virtual ~HighwayRfClassifier() = default;
 
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
@@ -55,6 +53,8 @@ public:
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;
 
 private:
+
+  static int logWarnCount;
   // these are mutable because we do a lazy load.
   mutable std::shared_ptr<Tgs::RandomForest> _rf;
   mutable QStringList _rfFactorLabels;

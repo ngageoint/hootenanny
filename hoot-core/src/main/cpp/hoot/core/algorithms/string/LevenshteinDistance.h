@@ -52,6 +52,7 @@ public:
    * @param alph See the levenshtein.distance.alpha configuration option for an explanation.
    */
   LevenshteinDistance(double alpha = -1);
+  virtual ~LevenshteinDistance() = default;
 
   virtual double compare(const QString& s1, const QString& s2) const override;
 

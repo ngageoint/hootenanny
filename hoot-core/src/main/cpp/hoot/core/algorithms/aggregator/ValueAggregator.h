@@ -45,8 +45,8 @@ public:
 
   static std::string className() { return "hoot::ValueAggregator"; }
 
-  ValueAggregator() {}
-  virtual ~ValueAggregator() {}
+  ValueAggregator() = default;
+  virtual ~ValueAggregator() = default;
 
   /**
    * Aggregates the values in the vector d into a single value. The aggregation may be something

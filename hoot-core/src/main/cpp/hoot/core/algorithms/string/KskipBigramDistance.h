@@ -78,11 +78,10 @@ class KskipBigramDistance : public StringDistance
 {
 public:
 
-  KskipBigramDistance(int k = 2);
-
   static std::string className() { return "hoot::KskipBigramDistance"; }
 
-  virtual ~KskipBigramDistance() {}
+  KskipBigramDistance(int k = 2);
+  virtual ~KskipBigramDistance() = default;
 
   void setK(int k);
 

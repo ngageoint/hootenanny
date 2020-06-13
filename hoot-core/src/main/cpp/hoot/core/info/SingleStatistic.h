@@ -37,7 +37,8 @@ class SingleStatistic
 {
 public:
 
-  virtual ~SingleStatistic() {}
+  SingleStatistic() = default;
+  virtual ~SingleStatistic() = default;
 
   virtual double getStat() const = 0;
 };

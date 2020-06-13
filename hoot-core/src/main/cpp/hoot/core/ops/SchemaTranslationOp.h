@@ -50,7 +50,8 @@ public:
 
   static std::string className() { return "hoot::SchemaTranslationOp"; }
 
-  SchemaTranslationOp();
+  SchemaTranslationOp() = default;
+  virtual ~SchemaTranslationOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 

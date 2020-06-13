@@ -41,6 +41,7 @@ public:
   static std::string className() { return "hoot::QuantileAggregator"; }
 
   QuantileAggregator();
+  virtual ~QuantileAggregator() = default;
 
   /**
    * quantile - A value from 0 to 1 for the quantile.

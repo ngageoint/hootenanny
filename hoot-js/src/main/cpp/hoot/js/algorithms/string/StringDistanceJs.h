@@ -44,6 +44,7 @@ namespace hoot
 class StringDistanceJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   StringDistancePtr getStringDistance() { return _sd; }
@@ -51,9 +52,10 @@ public:
   static v8::Handle<v8::Object> New(const StringDistancePtr& sd);
 
 private:
-  StringDistanceJs();
-  StringDistanceJs(StringDistancePtr sd) { _sd = sd; }
-  ~StringDistanceJs();
+
+  StringDistanceJs(StringDistancePtr sd) : _sd(sd) { }
+  StringDistanceJs() = default;
+  virtual ~StringDistanceJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);

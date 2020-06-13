@@ -33,14 +33,6 @@
 namespace hoot
 {
 
-ElementOutputStream::ElementOutputStream()
-{
-}
-
-ElementOutputStream::~ElementOutputStream()
-{
-}
-
 void ElementOutputStream::writeAllElements(ElementInputStream& eis, ElementOutputStream& eos)
 {
   while (eis.hasMoreElements())

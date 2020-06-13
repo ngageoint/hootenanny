@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::BridgeCriterion"; }
 
-  BridgeCriterion();
+  BridgeCriterion() = default;
+  virtual ~BridgeCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 

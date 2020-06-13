@@ -34,10 +34,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ElementIdToVersionMapper)
 
-ElementIdToVersionMapper::ElementIdToVersionMapper()
-{
-}
-
 void ElementIdToVersionMapper::apply(const OsmMapPtr& map)
 {
   _numAffected = 0;

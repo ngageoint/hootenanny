@@ -57,9 +57,10 @@ public:
 
 private:
 
-  TagsJs(ConstNodePtr n);
-  TagsJs();
-  ~TagsJs();
+//TODO: REMOVE ME
+//  TagsJs(ConstNodePtr n);
+  TagsJs() = default;
+  virtual ~TagsJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

@@ -46,8 +46,9 @@ public:
 
   static std::string className() { return "hoot::VisitorOp"; }
 
-  VisitorOp() {}
+  VisitorOp() = default;
   VisitorOp(const ElementVisitorPtr& v) { _visitor = v; }
+  virtual ~VisitorOp() = default;
 
   /**
    * Takes ownership of the visitor.

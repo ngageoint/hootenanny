@@ -45,6 +45,7 @@ class GreedyConstrainedMatches : public ConstrainedMatches
 public:
 
   GreedyConstrainedMatches(const ConstOsmMapPtr& map);
+  virtual ~GreedyConstrainedMatches() = default;
 
   virtual std::vector<ConstMatchPtr> calculateSubset() override;
 };

@@ -47,8 +47,8 @@ public:
 
   static std::string className() { return "hoot::RemoveRef2VisitorMultipleCriterion"; }
 
-  RemoveRef2VisitorMultipleCriterion();
-  virtual ~RemoveRef2VisitorMultipleCriterion() {}
+  RemoveRef2VisitorMultipleCriterion() = default;
+  virtual ~RemoveRef2VisitorMultipleCriterion() = default;
 
   virtual void addCriterion(const ElementCriterionPtr& e) override;
 

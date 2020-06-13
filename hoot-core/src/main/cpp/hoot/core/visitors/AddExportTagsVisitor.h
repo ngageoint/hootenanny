@@ -46,6 +46,7 @@ class AddExportTagsVisitor : public ElementVisitor
 public:
 
   AddExportTagsVisitor();
+  virtual ~AddExportTagsVisitor() = default;
 
   static std::string className() { return "hoot::AddExportTagsVisitor"; }
 

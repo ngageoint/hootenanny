@@ -46,9 +46,8 @@ public:
 
   static std::string className() { return "hoot::RfExtractorClassifier"; }
 
-  static int logWarnCount;
-
-  RfExtractorClassifier();
+  RfExtractorClassifier() = default;
+  virtual ~RfExtractorClassifier() = default;
 
   /**
    * Classifies the match type of a building pair and returns the results.
@@ -62,6 +61,8 @@ public:
   void import(QDomElement& docRoot);
 
 protected:
+
+  static int logWarnCount;
 
   mutable std::vector<std::shared_ptr<const FeatureExtractor>> _extractors;
   QStringList _rfFactorLabels;

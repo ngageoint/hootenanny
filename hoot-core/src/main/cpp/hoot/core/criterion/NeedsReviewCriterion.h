@@ -45,8 +45,9 @@ public:
 
   static std::string className() { return "hoot::NeedsReviewCriterion"; }
 
-  NeedsReviewCriterion() {}
+  NeedsReviewCriterion() = default;
   NeedsReviewCriterion(ConstOsmMapPtr& map) : _map(map) { }
+  virtual ~NeedsReviewCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 

@@ -36,11 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiPolygonTypeTagger)
 
-ImplicitPoiPolygonTypeTagger::ImplicitPoiPolygonTypeTagger() :
-ImplicitPoiTypeTagger()
-{
-}
-
 ImplicitPoiPolygonTypeTagger::ImplicitPoiPolygonTypeTagger(const QString& databasePath) :
 ImplicitPoiTypeTagger(databasePath)
 {

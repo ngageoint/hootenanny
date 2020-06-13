@@ -67,14 +67,15 @@ public:
 
   static std::string className() { return "hoot::GeometryConverter"; }
 
-  static int logWarnCount;
-
   GeometryConverter(const OsmMapPtr& map);
   GeometryConverter(const ConstOsmMapPtr& map);
+  virtual ~GeometryConverter() = default;
 
   class NodeFactory
   {
   public:
+    NodeFactory() = default;
+    virtual ~NodeFactory() = default;
     virtual NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
       Status s, double circularError) = 0;
   };
@@ -200,6 +201,8 @@ public:
   void setNodeFactory(const std::shared_ptr<NodeFactory>& nf) { _nf = nf; }
 
 protected:
+
+  static int logWarnCount;
 
   NodePtr _createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s,
     double circularError);

@@ -37,12 +37,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(MergerFactoryJs)
 
-MergerFactoryJs::MergerFactoryJs()
-{
-}
-
-MergerFactoryJs::~MergerFactoryJs() {}
-
 void MergerFactoryJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

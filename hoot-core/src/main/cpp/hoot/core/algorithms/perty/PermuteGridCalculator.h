@@ -49,7 +49,8 @@ public:
 
   static std::string className() { return "hoot::PermuteGridCalculator"; }
 
-  virtual ~PermuteGridCalculator() { }
+  PermuteGridCalculator() = default;
+  virtual ~PermuteGridCalculator() = default;
 
   /**
    * Calculates a permutation grid and the values in that grid for a given envelope. The number of

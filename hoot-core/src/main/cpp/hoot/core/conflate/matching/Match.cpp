@@ -38,14 +38,6 @@ namespace hoot
 
 long Match::_orderCount = 0;
 
-Match::Match()
-{
-}
-
-Match::~Match()
-{
-}
-
 QString Match::explain() const
 {
   return toString();

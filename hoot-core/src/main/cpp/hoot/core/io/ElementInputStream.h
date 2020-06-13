@@ -39,7 +39,7 @@ class ElementInputStream
 
 public:
 
-  ElementInputStream() {}
+  ElementInputStream() = default;
 
   /**
    * @brief getProjection
@@ -52,7 +52,7 @@ public:
    *
    * If the stream is open when the destructor is called, close must be called in the destructor
    */
-  virtual ~ElementInputStream() {}
+  virtual ~ElementInputStream() = default;
 
   /**
    * @brief closeStream

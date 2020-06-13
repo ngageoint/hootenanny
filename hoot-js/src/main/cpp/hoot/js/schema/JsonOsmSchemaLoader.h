@@ -46,7 +46,7 @@ public:
 
   JsonOsmSchemaLoader();
 
-  virtual ~JsonOsmSchemaLoader() {}
+  virtual ~JsonOsmSchemaLoader() = default;
 
   virtual bool isSupported(QString url) const override { return url.endsWith(".json"); }
 

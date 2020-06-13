@@ -38,7 +38,8 @@ public:
 
   static std::string className() { return "hoot::MeanAggregator"; }
 
-  MeanAggregator();
+  MeanAggregator() = default;
+  virtual ~MeanAggregator() = default;
 
   virtual double aggregate(std::vector<double>& d) const override;
 

@@ -29,8 +29,4 @@
 namespace hoot
 {
 
-IndexedEdgeLinks::IndexedEdgeLinks()
-{
-}
-
 }

@@ -38,10 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, NonConflatableElementRemover)
 
-NonConflatableElementRemover::NonConflatableElementRemover()
-{
-}
-
 void NonConflatableElementRemover::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;

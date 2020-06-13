@@ -40,7 +40,8 @@ class BuildingRfClassifier : public RfExtractorClassifier
 {
 public:
 
-  BuildingRfClassifier();
+  BuildingRfClassifier() = default;
+  virtual ~BuildingRfClassifier() = default;
 
 protected:
 

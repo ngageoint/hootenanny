@@ -43,7 +43,8 @@ class WordWeightDictionary
 {
 public:
 
-  virtual ~WordWeightDictionary() {}
+  WordWeightDictionary() = default;
+  virtual ~WordWeightDictionary() = default;
 
   /**
    * @brief getMinWeight

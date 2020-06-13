@@ -55,10 +55,8 @@ public:
 
   static std::string className() { return "hoot::ApiDbReader"; }
 
-  static int logWarnCount;
-
   ApiDbReader();
-  virtual ~ApiDbReader() {}
+  virtual ~ApiDbReader() = default;
 
   virtual bool isSupported(const QString& urlStr) override;
 
@@ -118,6 +116,8 @@ public:
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
 
 protected:
+
+  static int logWarnCount;
 
   bool _useDataSourceIds;
   Status _status;

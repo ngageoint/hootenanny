@@ -55,6 +55,9 @@ public:
   // Class name for hoot factory
   static std::string className() { return "hoot::GeometryModifierAction"; }
 
+  GeometryModifierAction() = default;
+  virtual ~GeometryModifierAction() = default;
+
   // Command name and parameter names
   virtual QString getCommandName() const = 0;
   virtual QList<QString> getParameterNames() const = 0;

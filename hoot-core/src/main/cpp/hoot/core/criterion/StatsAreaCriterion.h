@@ -42,7 +42,8 @@ public:
 
   static std::string className() { return "hoot::StatsAreaCriterion"; }
 
-  StatsAreaCriterion() {}
+  StatsAreaCriterion() = default;
+  virtual ~StatsAreaCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

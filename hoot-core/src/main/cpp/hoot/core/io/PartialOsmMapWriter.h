@@ -41,11 +41,10 @@ class PartialOsmMapWriter : public OsmMapWriter, public ElementOutputStream
 {
 public:
 
-  PartialOsmMapWriter();
+  PartialOsmMapWriter() = default;
+  virtual ~PartialOsmMapWriter() = default;
 
-  virtual ~PartialOsmMapWriter() {}
-
-  virtual void initializePartial() {}
+  virtual void initializePartial() { }
 
   /**
    * Finalize the writing of partial data. All records should be flushed and any connections/files

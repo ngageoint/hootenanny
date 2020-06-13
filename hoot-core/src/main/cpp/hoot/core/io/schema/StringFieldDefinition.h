@@ -35,7 +35,9 @@ namespace hoot
 class StringFieldDefinition : public FieldDefinition
 {
 public:
-  StringFieldDefinition();
+
+  StringFieldDefinition() = default;
+  virtual ~StringFieldDefinition() = default;
 
   virtual QVariant::Type getType() const override { return QVariant::String; }
 

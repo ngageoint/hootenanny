@@ -45,7 +45,7 @@ public:
 
   PositiveIdGenerator() { reset(); }
 
-  virtual ~PositiveIdGenerator() {}
+  virtual ~PositiveIdGenerator() = default;
 
   virtual IdGeneratorPtr clone() const;
 

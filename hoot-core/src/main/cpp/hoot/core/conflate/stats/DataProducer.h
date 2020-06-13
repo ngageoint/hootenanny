@@ -38,8 +38,10 @@ namespace hoot
  */
 class DataProducer
 {
-
 public:
+
+  DataProducer() = default;
+  virtual ~DataProducer() = default;
 
   virtual boost::any getData() const = 0;
 };

@@ -46,7 +46,8 @@ class ElementProvider
 {
 public:
 
-  virtual ~ElementProvider() {}
+  ElementProvider() = default;
+  virtual ~ElementProvider() = default;
 
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
 

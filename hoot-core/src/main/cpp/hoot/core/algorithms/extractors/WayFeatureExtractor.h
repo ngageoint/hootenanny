@@ -51,6 +51,7 @@ public:
   WayFeatureExtractor(ValueAggregatorPtr agg);
 
   WayFeatureExtractor();
+  virtual ~WayFeatureExtractor() = default;
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;

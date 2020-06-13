@@ -46,6 +46,7 @@ public:
 
   TagKeyContainsCriterion() : _text(""), _caseSensitive(false) { }
   explicit TagKeyContainsCriterion(const QString& text);
+  virtual ~TagKeyContainsCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

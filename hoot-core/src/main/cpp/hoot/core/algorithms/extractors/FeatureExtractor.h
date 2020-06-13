@@ -51,7 +51,8 @@ class FeatureExtractor
 {
 public:
 
-  virtual ~FeatureExtractor() {}
+  FeatureExtractor() = default;
+  virtual ~FeatureExtractor() = default;
 
   static std::string className() { return "hoot::FeatureExtractor"; }
 

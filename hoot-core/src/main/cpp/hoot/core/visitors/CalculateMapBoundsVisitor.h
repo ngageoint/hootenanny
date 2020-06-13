@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::CalculateMapBoundsVisitor"; }
 
-  CalculateMapBoundsVisitor();
+  CalculateMapBoundsVisitor() = default;
+  virtual ~CalculateMapBoundsVisitor() = default;
 
   OGREnvelope getBounds() { return _envelope; }
 

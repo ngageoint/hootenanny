@@ -59,10 +59,6 @@ using namespace std;
 namespace hoot
 {
 
-BuildingRfClassifier::BuildingRfClassifier()
-{
-}
-
 void BuildingRfClassifier::_createAllExtractors() const
 {
   _extractors.clear();

@@ -36,11 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, ParallelScoreExtractor)
 
-ParallelScoreExtractor::ParallelScoreExtractor():
-  WayFeatureExtractor()
-{
-}
-
 double ParallelScoreExtractor::_extract(const OsmMap& map, const ConstWayPtr& w1,
                                         const ConstWayPtr& w2) const
 {

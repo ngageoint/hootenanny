@@ -49,6 +49,7 @@ public:
   static std::string className() { return "hoot::OsmGeoJsonWriter"; }
 
   OsmGeoJsonWriter(int precision = ConfigOptions().getWriterPrecision());
+  virtual ~OsmGeoJsonWriter() = default;
 
   /**
    * @brief write Write the OsmMap out to a file in GeoJSON format, writer must be "open"

@@ -39,7 +39,10 @@ namespace hoot
 class StringDistanceConsumer
 {
 public:
-  virtual ~StringDistanceConsumer() {}
+
+  StringDistanceConsumer() = default;
+  virtual ~StringDistanceConsumer() = default;
+
   virtual void setStringDistance(const StringDistancePtr& sd) = 0;
 };
 

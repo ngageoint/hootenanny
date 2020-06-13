@@ -53,6 +53,7 @@ public:
   static std::string className() { return "hoot::HootServicesLanguageInfoMockClient"; }
 
   HootServicesLanguageInfoMockClient();
+  virtual ~HootServicesLanguageInfoMockClient() = default;
 
   /**
    * Retrieves available language apps

@@ -44,14 +44,6 @@ HOOT_JS_REGISTER(ElementIdJs)
 
 Persistent<Function> ElementIdJs::_constructor;
 
-ElementIdJs::ElementIdJs()
-{
-}
-
-ElementIdJs::~ElementIdJs()
-{
-}
-
 void ElementIdJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();

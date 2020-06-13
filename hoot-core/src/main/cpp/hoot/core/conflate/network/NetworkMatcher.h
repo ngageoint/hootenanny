@@ -53,7 +53,8 @@ public:
 
   static std::string className() { return "hoot::NetworkMatcher"; }
 
-  virtual ~NetworkMatcher();
+  NetworkMatcher() = default;
+  virtual ~NetworkMatcher() = default;
 
   virtual double getMatchThreshold() const = 0;
 
@@ -65,7 +66,7 @@ public:
 
   virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) = 0;
 
-  virtual void finalize();
+  virtual void finalize() { }
 
   virtual QList<NetworkEdgeScorePtr> getAllEdgeScores() const = 0;
 

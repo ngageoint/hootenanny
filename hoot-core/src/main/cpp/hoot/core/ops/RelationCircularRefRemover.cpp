@@ -38,11 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RelationCircularRefRemover)
 
-RelationCircularRefRemover::RelationCircularRefRemover()
-{
-  _relationIdsToRelationMemberIds.clear();
-}
-
 void RelationCircularRefRemover::apply(OsmMapPtr& map)
 {
   RelationMap relations =  map->getRelations();

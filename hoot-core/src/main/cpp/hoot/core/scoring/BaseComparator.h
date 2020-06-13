@@ -65,7 +65,7 @@ public:
    */
   BaseComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
 
-  virtual ~BaseComparator() {}
+  virtual ~BaseComparator() = default;
 
   void setPixelSize(double pixelSize) { _pixelSize = pixelSize; }
 

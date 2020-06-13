@@ -45,6 +45,7 @@ public:
   static std::string className() { return "hoot::ReviewScoreCriterion"; }
 
   ReviewScoreCriterion();
+  virtual ~ReviewScoreCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

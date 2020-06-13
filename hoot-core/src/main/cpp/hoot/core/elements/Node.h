@@ -58,7 +58,7 @@ public:
        QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
        bool visible = ElementData::VISIBLE_EMPTY);
 
-  virtual ~Node() {}
+  virtual ~Node() = default;
 
   /**
    * Allocate a node as a shared pointer. At this time the allocated node will be allocated as
@@ -145,7 +145,7 @@ protected:
    * parameters passed into the other constructors. However, the pool method requires a default
    * constructor. To work around this, the pool objects are friends (above).
    */
-  Node() {}
+  Node() = default;
 
   NodeData _nodeData;
 

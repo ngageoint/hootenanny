@@ -42,7 +42,8 @@ public:
 
   static std::string className() { return "hoot::ImplicitTagEligiblePoiCriterion"; }
 
-  ImplicitTagEligiblePoiCriterion() {}
+  ImplicitTagEligiblePoiCriterion() = default;
+  virtual ~ImplicitTagEligiblePoiCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

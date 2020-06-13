@@ -43,10 +43,6 @@ using namespace geos::geom;
 namespace hoot
 {
 
-BaseCommand::BaseCommand()
-{
-}
-
 QString BaseCommand::getHelp() const
 {
   QFile fp(_getHelpPath());

@@ -41,9 +41,9 @@ public:
 
   static std::string className() { return "hoot::OsmMapReader"; }
 
-  OsmMapReader() : _ignoreDuplicates(false), _warnOnVersionZeroElement(false) {}
+  OsmMapReader() : _ignoreDuplicates(false), _warnOnVersionZeroElement(false) { }
 
-  virtual ~OsmMapReader() {}
+  virtual ~OsmMapReader() = default;
 
   /**
    * Returns true if the output URL is likely supported. This won't necessarily do an exhaustive

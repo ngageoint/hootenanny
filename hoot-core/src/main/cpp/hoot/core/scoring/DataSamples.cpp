@@ -35,10 +35,6 @@ using namespace Tgs;
 namespace hoot
 {
 
-DataSamples::DataSamples()
-{
-}
-
 vector<string> DataSamples::getUniqueLabels() const
 {
   vector<string> labels;

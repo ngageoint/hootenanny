@@ -47,10 +47,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingOnlyOp)
 
-BuildingOnlyOp::BuildingOnlyOp()
-{
-}
-
 void BuildingOnlyOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _map = map;

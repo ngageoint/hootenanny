@@ -53,6 +53,7 @@ class PertyTestRunner : public Configurable
 public:
 
   PertyTestRunner();
+  virtual ~PertyTestRunner() = default;
 
   /**
     * Runs a PERTY test

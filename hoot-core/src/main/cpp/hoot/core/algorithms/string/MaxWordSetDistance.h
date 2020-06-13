@@ -44,7 +44,8 @@ public:
   static std::string className() { return "hoot::MaxWordSetDistance"; }
 
   MaxWordSetDistance(StringDistancePtr d);
-  MaxWordSetDistance() {}
+  MaxWordSetDistance() = default;
+  virtual ~MaxWordSetDistance() = default;
 
   virtual double compare(const QString& s1, const QString& s2) const override;
 

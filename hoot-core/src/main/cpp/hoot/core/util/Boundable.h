@@ -42,7 +42,8 @@ class Boundable
 {
 public:
 
-  virtual ~Boundable() {}
+  Boundable() = default;
+  virtual ~Boundable() = default;
 
   /**
    * Sets the bounds in WGS84. It is important to note that even if the rest of the operation is

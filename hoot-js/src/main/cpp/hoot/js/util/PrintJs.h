@@ -37,11 +37,12 @@ namespace hoot
 class PrintJs : public node::ObjectWrap
 {
 public:
- static void Init(v8::Handle<v8::Object> target);
+
+  static void Init(v8::Handle<v8::Object> target);
 
 private:
-  PrintJs();
-  ~PrintJs();
+  PrintJs() = default;
+  virtual ~PrintJs() = default;
 
   static void jsPrint(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

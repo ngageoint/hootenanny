@@ -38,6 +38,9 @@ class JsFunctionConsumer
 {
 public:
 
+  JsFunctionConsumer() = default;
+  virtual ~JsFunctionConsumer() = default;
+
   virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) = 0;
 };
 

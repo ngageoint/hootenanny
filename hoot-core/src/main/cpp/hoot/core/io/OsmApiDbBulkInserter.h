@@ -136,8 +136,6 @@ public:
 
   static std::string className() { return "hoot::OsmApiDbBulkInserter"; }
 
-  static int logWarnCount;
-
   OsmApiDbBulkInserter();
   virtual ~OsmApiDbBulkInserter();
 
@@ -196,6 +194,8 @@ public:
   virtual QString supportedFormats() { return MetadataTags::OsmApiDbScheme() + "://"; }
 
 protected:
+
+  static int logWarnCount;
 
   ElementWriteStats _writeStats;
   ChangesetData _changesetData;

@@ -49,7 +49,9 @@ namespace hoot
 class IterativeEdgeMatcher : public VagabondNetworkMatcher
 {
 public:
+
   IterativeEdgeMatcher();
+  virtual ~IterativeEdgeMatcher() = default;
 
   void iterate();
 

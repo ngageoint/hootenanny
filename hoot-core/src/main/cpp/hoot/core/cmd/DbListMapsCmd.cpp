@@ -39,7 +39,7 @@ public:
 
   static std::string className() { return "hoot::DbListMapsCmd"; }
 
-  DbListMapsCmd() {}
+  DbListMapsCmd() = default;
 
   virtual QString getName() const override { return "db-list-maps"; }
 

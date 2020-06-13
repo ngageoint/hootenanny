@@ -41,10 +41,6 @@ int DecomposeBuildingRelationsVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, DecomposeBuildingRelationsVisitor)
 
-DecomposeBuildingRelationsVisitor::DecomposeBuildingRelationsVisitor()
-{
-}
-
 void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Relation)

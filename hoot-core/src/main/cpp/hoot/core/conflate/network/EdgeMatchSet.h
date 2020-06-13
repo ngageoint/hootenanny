@@ -35,7 +35,9 @@ namespace hoot
 class EdgeMatchSet
 {
 public:
-  virtual ~EdgeMatchSet() {}
+
+  EdgeMatchSet() = default;
+  virtual ~EdgeMatchSet() = default;
 
   virtual bool contains(const ConstEdgeMatchPtr &em) const = 0;
 

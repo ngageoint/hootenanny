@@ -75,6 +75,7 @@ class RdpWayGeneralizer : public OsmMapConsumer
 public:
 
   RdpWayGeneralizer(double epsilon);
+  virtual ~RdpWayGeneralizer() = default;
 
   /**
     Generalizes a way to a set of reduced points.  The map the way belongs to is modified.

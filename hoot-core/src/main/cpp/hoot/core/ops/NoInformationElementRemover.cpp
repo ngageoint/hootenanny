@@ -42,11 +42,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, NoInformationElementRemover)
 
-NoInformationElementRemover::NoInformationElementRemover()
-{
-
-}
-
 void NoInformationElementRemover::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;

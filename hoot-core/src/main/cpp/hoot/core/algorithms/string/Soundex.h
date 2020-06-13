@@ -50,7 +50,8 @@ public:
 
   static std::string className() { return "hoot::Soundex"; }
 
-  Soundex();
+  Soundex() = default;
+  virtual ~Soundex() = default;
 
   virtual double compare(const QString& s1, const QString& s2) const override;
 

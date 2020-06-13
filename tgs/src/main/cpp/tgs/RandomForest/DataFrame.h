@@ -79,7 +79,7 @@ namespace Tgs
     /**
     * Destructor
     */
-    ~DataFrame();
+    virtual ~DataFrame();
 
     /**
     * Appends a data vector to the end of the dataframe

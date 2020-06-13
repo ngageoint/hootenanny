@@ -39,9 +39,8 @@ public:
 
   static std::string className() { return "hoot::OsmMapWriter"; }
 
-  OsmMapWriter() : _debug(false) {}
-
-  virtual ~OsmMapWriter() {}
+  OsmMapWriter() : _debug(false) { }
+  virtual ~OsmMapWriter() = default;
 
   /**
    * Returns true if the output URL is likely supported. This won't necessarily do an exhaustive

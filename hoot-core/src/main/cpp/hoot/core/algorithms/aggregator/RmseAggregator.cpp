@@ -35,10 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ValueAggregator, RmseAggregator)
 
-RmseAggregator::RmseAggregator()
-{
-}
-
 double RmseAggregator::aggregate(vector<double>& d) const
 {
   double sum = 0.0;

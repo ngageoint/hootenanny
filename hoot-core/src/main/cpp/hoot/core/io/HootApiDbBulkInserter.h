@@ -56,8 +56,6 @@ public:
 
   static std::string className() { return "hoot::HootApiDbBulkInserter"; }
 
-  static int logWarnCount;
-
   HootApiDbBulkInserter();
   virtual ~HootApiDbBulkInserter();
 
@@ -112,6 +110,8 @@ protected:
   virtual void _incrementChangesInChangeset();
 
 private:
+
+  static int logWarnCount;
 
   QString _userEmail;
   bool _createUserIfNotFound;

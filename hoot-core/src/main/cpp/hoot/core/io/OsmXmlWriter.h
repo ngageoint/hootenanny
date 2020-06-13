@@ -56,8 +56,6 @@ public:
 
   static std::string className() { return "hoot::OsmXmlWriter"; }
 
-  static int logWarnCount;
-
   OsmXmlWriter();
   virtual ~OsmXmlWriter();
 
@@ -122,6 +120,8 @@ public:
   QString removeInvalidCharacters(const QString& s);
 
 private:
+
+  static int logWarnCount;
 
   bool _formatXml;
   bool _includeDebug;

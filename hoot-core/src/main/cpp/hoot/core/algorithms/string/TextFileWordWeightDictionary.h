@@ -65,6 +65,7 @@ class TextFileWordWeightDictionary : public WordWeightDictionary
 {
 public:
   TextFileWordWeightDictionary(const QString& filePath);
+  virtual ~TextFileWordWeightDictionary() = default;
 
   virtual double getMinWeight() const override { return 1.0 / (double)_count; }
 

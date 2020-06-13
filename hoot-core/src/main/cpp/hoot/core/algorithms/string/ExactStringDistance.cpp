@@ -38,10 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, ExactStringDistance)
 
-ExactStringDistance::ExactStringDistance()
-{
-}
-
 double ExactStringDistance::compare(const QString& s1, const QString& s2) const
 {
   if (s1.toLower() == s2.toLower())

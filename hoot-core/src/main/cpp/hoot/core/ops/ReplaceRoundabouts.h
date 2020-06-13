@@ -64,7 +64,8 @@ public:
   /**
    * @brief ReplaceRoundabouts - default constructor
    */
-  ReplaceRoundabouts();
+  ReplaceRoundabouts() = default;
+  virtual ~ReplaceRoundabouts() = default;
 
   /**
    * @brief apply - Apply the ReplaceRoundabouts Op to the map.

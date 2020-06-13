@@ -35,10 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ValueAggregator, MaxAggregator)
 
-MaxAggregator::MaxAggregator()
-{
-}
-
 double MaxAggregator::aggregate(vector<double>& d) const
 {
   double result = d[0];

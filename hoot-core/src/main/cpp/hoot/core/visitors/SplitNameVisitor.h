@@ -45,6 +45,7 @@ public:
   static std::string className() { return "hoot::SplitNameVisitor"; }
 
   SplitNameVisitor();
+  virtual ~SplitNameVisitor() = default;
 
   void setMaxSize(int s) { _maxSize = s; }
 

@@ -29,10 +29,6 @@
 namespace hoot
 {
 
-StringFieldDefinition::StringFieldDefinition()
-{
-}
-
 QString StringFieldDefinition::toString() const
 {
   return QString("String name: %1 default: %2")

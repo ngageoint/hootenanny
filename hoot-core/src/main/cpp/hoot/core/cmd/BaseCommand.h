@@ -42,9 +42,9 @@ class BaseCommand : public Command
 {
 public:
 
-  BaseCommand();
+  BaseCommand() = default;
 
-  virtual ~BaseCommand() {}
+  virtual ~BaseCommand() = default;
 
   virtual QString getHelp() const;
 

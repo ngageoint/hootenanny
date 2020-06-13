@@ -35,10 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ValueAggregator, MinAggregator)
 
-MinAggregator::MinAggregator()
-{
-}
-
 double MinAggregator::aggregate(vector<double>& d) const
 {
   double result = d[0];

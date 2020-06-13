@@ -35,10 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, TagRenameKeyVisitor)
 
-TagRenameKeyVisitor::TagRenameKeyVisitor()
-{
-}
-
 TagRenameKeyVisitor::TagRenameKeyVisitor(const QString& oldKey, const QString& newKey) :
 _oldKey(oldKey),
 _newKey(newKey)

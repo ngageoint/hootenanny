@@ -51,6 +51,7 @@ public:
 
   NamedOp();
   NamedOp(QStringList namedOps);
+  virtual ~NamedOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 

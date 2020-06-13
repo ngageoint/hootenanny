@@ -45,7 +45,8 @@ class ImplicitTagEligibleCriterion : public ElementCriterion
 {
 public:
 
-  virtual ~ImplicitTagEligibleCriterion(){}
+  ImplicitTagEligibleCriterion() = default;
+  virtual ~ImplicitTagEligibleCriterion() = default;
 
   virtual QStringList getEligibleKvps(const Tags& tags) const = 0;
   virtual bool hasEligibleKvp(const Tags& tags) const = 0;

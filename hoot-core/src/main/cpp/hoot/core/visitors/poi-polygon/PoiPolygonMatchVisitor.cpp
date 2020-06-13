@@ -84,10 +84,6 @@ _infoCache(infoCache)
   _timer.start();
 }
 
-PoiPolygonMatchVisitor::~PoiPolygonMatchVisitor()
-{
-}
-
 void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>& e,
                                             const std::set<ElementId>& surroundingPolyIds)
 {

@@ -41,7 +41,8 @@ public:
 
   static std::string className() { return "hoot::HasNameCriterion"; }
 
-  HasNameCriterion() {}
+  HasNameCriterion() = default;
+  virtual ~HasNameCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

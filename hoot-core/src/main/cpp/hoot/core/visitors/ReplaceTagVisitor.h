@@ -58,6 +58,7 @@ public:
    * @brief ReplaceTagVisitor - default constructor
    */
   ReplaceTagVisitor();
+  virtual ~ReplaceTagVisitor() = default;
 
   /**
    * @brief ReplaceTagVisitor - This constructor lets you specify the tag

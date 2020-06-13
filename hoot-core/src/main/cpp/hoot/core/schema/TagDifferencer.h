@@ -41,7 +41,8 @@ class TagDifferencer
 public:
   static std::string className() { return "hoot::TagDifferencer"; }
 
-  virtual ~TagDifferencer() {}
+  TagDifferencer() = default;
+  virtual ~TagDifferencer() = default;
 
   /**
    * Returns a value from 0 to 1. 0 means they're identical as far as this differencer is concerned

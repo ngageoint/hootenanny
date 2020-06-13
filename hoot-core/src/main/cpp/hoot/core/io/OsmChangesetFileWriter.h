@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::OsmChangesetFileWriter"; }
 
-  virtual ~OsmChangesetFileWriter() {}
+  OsmChangesetFileWriter() = default;
+  virtual ~OsmChangesetFileWriter() = default;
 
   /**
    * Write the changeset out to the specified file

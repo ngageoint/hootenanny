@@ -48,8 +48,8 @@ public:
 
   static std::string className() { return "hoot::StringDistance"; }
 
-  StringDistance() {}
-  virtual ~StringDistance() {}
+  StringDistance() = default;
+  virtual ~StringDistance() = default;
 
   /**
    * Returns a value from 1 (very similar) to 0 (very dissimilar) describing the distance between

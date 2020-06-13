@@ -47,7 +47,8 @@ public:
    */
   MinSumWordSetDistance(StringDistance* d);
 
-  MinSumWordSetDistance();
+  MinSumWordSetDistance() = default;
+  virtual ~MinSumWordSetDistance() = default;
 
   static std::string className() { return "hoot::MinSumWordSetDistance"; }
 

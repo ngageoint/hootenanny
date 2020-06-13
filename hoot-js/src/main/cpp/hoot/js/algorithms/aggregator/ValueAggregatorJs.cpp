@@ -45,14 +45,6 @@ HOOT_JS_REGISTER(ValueAggregatorJs)
 
 Persistent<Function> ValueAggregatorJs::_constructor;
 
-ValueAggregatorJs::ValueAggregatorJs()
-{
-}
-
-ValueAggregatorJs::~ValueAggregatorJs()
-{
-}
-
 void ValueAggregatorJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();

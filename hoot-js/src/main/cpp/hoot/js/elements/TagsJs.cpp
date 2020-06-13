@@ -46,14 +46,6 @@ HOOT_JS_REGISTER(TagsJs)
 
 Persistent<Function> TagsJs::_constructor;
 
-TagsJs::TagsJs()
-{
-}
-
-TagsJs::~TagsJs()
-{
-}
-
 void TagsJs::contains(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());

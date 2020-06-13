@@ -79,6 +79,7 @@ public:
   static std::string className() { return "hoot::UnconnectedWaySnapper"; }
 
   UnconnectedWaySnapper();
+  virtual ~UnconnectedWaySnapper() = default;
 
   /**
    * @see OsmMapOperation

@@ -35,7 +35,8 @@ class Configurable
 {
 public:
 
-  virtual ~Configurable() {}
+  Configurable() = default;
+  virtual ~Configurable() = default;
 
   /**
    * Set the configuration for this object.

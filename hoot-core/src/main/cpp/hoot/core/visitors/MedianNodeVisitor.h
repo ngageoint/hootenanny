@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::MedianNodeVisitor"; }
 
-  MedianNodeVisitor();
+  MedianNodeVisitor() = default;
+  virtual ~MedianNodeVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 

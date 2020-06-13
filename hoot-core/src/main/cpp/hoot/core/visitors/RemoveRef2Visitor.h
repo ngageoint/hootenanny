@@ -58,7 +58,7 @@ public:
   static int logWarnCount;
 
   RemoveRef2Visitor();
-  virtual ~RemoveRef2Visitor() {}
+  virtual ~RemoveRef2Visitor() = default;
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 

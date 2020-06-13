@@ -45,6 +45,9 @@ class CentroidDistanceExtractor : public AbstractDistanceExtractor
 public:
   static std::string className() { return "hoot::CentroidDistanceExtractor"; }
 
+  CentroidDistanceExtractor() = default;
+  virtual ~CentroidDistanceExtractor() = default;
+
   virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 

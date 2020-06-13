@@ -39,11 +39,6 @@ DistanceScoreExtractor::DistanceScoreExtractor(ValueAggregatorPtr wayAgg):
 {
 }
 
-DistanceScoreExtractor::DistanceScoreExtractor():
-  WayFeatureExtractor()
-{
-}
-
 double DistanceScoreExtractor::_extract(const OsmMap& map, const ConstWayPtr& w1,
                                         const ConstWayPtr& w2) const
 {

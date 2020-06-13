@@ -61,6 +61,7 @@ public:
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
   CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "",
                    bool inputIsConflatedMapOutput = false);
+  virtual ~CalculateStatsOp() = default;
 
   virtual void apply(const OsmMapPtr& map);
 

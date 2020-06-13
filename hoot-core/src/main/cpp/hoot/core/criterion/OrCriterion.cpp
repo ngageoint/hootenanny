@@ -36,10 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OrCriterion)
 
-OrCriterion::OrCriterion()
-{
-}
-
 OrCriterion::OrCriterion(ElementCriterion* child1, ElementCriterion* child2) :
 ChainCriterion(child1, child2)
 {

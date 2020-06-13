@@ -39,11 +39,6 @@ WeightedShapeDistanceExtractor::WeightedShapeDistanceExtractor(ValueAggregatorPt
 {
 }
 
-WeightedShapeDistanceExtractor::WeightedShapeDistanceExtractor():
-  WayFeatureExtractor()
-{
-}
-
 double WeightedShapeDistanceExtractor::_extract(const OsmMap& map, const ConstWayPtr& w1,
   const ConstWayPtr& w2) const
 {

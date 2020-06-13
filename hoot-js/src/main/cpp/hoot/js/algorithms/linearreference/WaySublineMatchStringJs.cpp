@@ -44,14 +44,6 @@ HOOT_JS_REGISTER(WaySublineMatchStringJs)
 
 Persistent<Function> WaySublineMatchStringJs::_constructor;
 
-WaySublineMatchStringJs::WaySublineMatchStringJs()
-{
-}
-
-WaySublineMatchStringJs::~WaySublineMatchStringJs()
-{
-}
-
 void WaySublineMatchStringJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();

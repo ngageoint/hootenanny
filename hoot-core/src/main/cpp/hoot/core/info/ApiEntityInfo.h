@@ -38,7 +38,8 @@ class ApiEntityInfo
 {
 public:
 
-  virtual ~ApiEntityInfo() {}
+  ApiEntityInfo() = default;
+  virtual ~ApiEntityInfo() = default;
 
   /**
    * Returns a one sentence description for the entity.

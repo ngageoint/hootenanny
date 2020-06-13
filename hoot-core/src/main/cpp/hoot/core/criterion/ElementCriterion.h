@@ -58,7 +58,8 @@ public:
 
   static std::string className() { return "hoot::ElementCriterion"; }
 
-  virtual ~ElementCriterion() {}
+  ElementCriterion() = default;
+  virtual ~ElementCriterion() = default;
 
   /**
    * Returns true if the element satisfies the criterion.

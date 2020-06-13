@@ -57,6 +57,7 @@ public:
   static std::string className() { return "hoot::ShapefileWriter"; }
 
   ShapefileWriter();
+  virtual ~ShapefileWriter() = default;
 
   virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".shp"); }
 

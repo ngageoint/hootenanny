@@ -48,7 +48,8 @@ public:
 
   static std::string className() { return "hoot::ExactStringDistance"; }
 
-  ExactStringDistance();
+  ExactStringDistance() = default;
+  virtual ~ExactStringDistance() = default;
 
   virtual double compare(const QString& s1, const QString& s2) const override;
 

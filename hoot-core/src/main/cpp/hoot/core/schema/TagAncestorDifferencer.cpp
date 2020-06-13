@@ -44,10 +44,6 @@ TagAncestorDifferencer::TagAncestorDifferencer(QString ancestor) :
   }
 }
 
-TagAncestorDifferencer::~TagAncestorDifferencer()
-{
-}
-
 bool TagAncestorDifferencer::isValidTag(const SchemaVertex& sv) const
 {
   if (_ancestor.isEmpty())

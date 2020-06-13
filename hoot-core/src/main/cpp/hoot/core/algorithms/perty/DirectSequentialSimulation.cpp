@@ -45,11 +45,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(PermuteGridCalculator, DirectSequentialSimulation)
 
-DirectSequentialSimulation::DirectSequentialSimulation()
-{
-
-}
-
 Mat DirectSequentialSimulation::permute(geos::geom::Envelope env, int& pointRows, int& pointCols)
 {
   boost::minstd_rand rng;

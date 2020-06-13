@@ -61,7 +61,8 @@ public:
     }
   } TranslatedFeature;
 
-  virtual ~ScriptToOgrSchemaTranslator() {}
+  ScriptToOgrSchemaTranslator() = default;
+  virtual ~ScriptToOgrSchemaTranslator() = default;
 
   virtual std::shared_ptr<const Schema> getOgrOutputSchema() = 0;
 

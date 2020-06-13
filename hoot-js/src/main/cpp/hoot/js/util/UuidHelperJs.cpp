@@ -42,12 +42,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(UuidHelperJs)
 
-UuidHelperJs::UuidHelperJs()
-{
-}
-
-UuidHelperJs::~UuidHelperJs() {}
-
 void UuidHelperJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

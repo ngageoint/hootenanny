@@ -47,10 +47,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingOutlineRemoveOp)
 
-BuildingOutlineRemoveOp::BuildingOutlineRemoveOp()
-{
-}
-
 void BuildingOutlineRemoveOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;

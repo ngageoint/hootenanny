@@ -36,10 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, MultiUseBuildingCriterion)
 
-MultiUseBuildingCriterion::MultiUseBuildingCriterion()
-{
-}
-
 bool MultiUseBuildingCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const OsmSchema& osmSchema = OsmSchema::getInstance();

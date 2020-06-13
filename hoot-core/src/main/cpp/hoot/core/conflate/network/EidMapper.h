@@ -34,6 +34,9 @@ class EidMapper
 {
 public:
 
+  EidMapper() = default;
+  virtual ~EidMapper() = default;
+
   /**
    * Map from one eid to another. This is most useful when EIDs are replaced during the merge
    * process.

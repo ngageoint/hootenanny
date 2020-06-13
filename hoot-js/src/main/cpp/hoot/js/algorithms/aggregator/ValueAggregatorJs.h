@@ -44,6 +44,7 @@ namespace hoot
 class ValueAggregatorJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   ValueAggregatorPtr getValueAggregator() { return _va; }
@@ -51,9 +52,10 @@ public:
   static v8::Handle<v8::Object> New(const ValueAggregatorPtr& va);
 
 private:
-  ValueAggregatorJs();
+
   ValueAggregatorJs(ValueAggregatorPtr va) { _va = va; }
-  ~ValueAggregatorJs();
+  ValueAggregatorJs() = default;
+  virtual ~ValueAggregatorJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

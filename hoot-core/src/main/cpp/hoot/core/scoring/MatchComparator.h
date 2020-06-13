@@ -55,11 +55,10 @@ public:
 
   static std::string className() { return "hoot::MatchComparator"; }
 
-  static int logWarnCount;
-
   typedef QMultiMap<QString, ElementId> UuidToEid;
 
   MatchComparator();
+  virtual ~MatchComparator() = default;
 
   /**
    * Compares the maps and stores the confusion matrix.
@@ -116,6 +115,8 @@ public:
   double getPertyScore() const;
 
 private:
+
+  static int logWarnCount;
 
   typedef std::pair<QString, QString> UuidPair;
 

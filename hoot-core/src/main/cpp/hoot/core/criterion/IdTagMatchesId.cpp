@@ -35,10 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, IdTagMatchesId)
 
-IdTagMatchesId::IdTagMatchesId()
-{
-}
-
 bool IdTagMatchesId::isSatisfied(const ConstElementPtr& e) const
 {
   const QString tagVal = e->getTags().get(MetadataTags::HootId()).trimmed();

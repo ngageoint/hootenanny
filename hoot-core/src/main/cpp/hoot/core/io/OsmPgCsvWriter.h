@@ -47,7 +47,7 @@ public:
   static std::string className() { return "hoot::OsmCsvWriter"; }
 
   OsmPgCsvWriter();
-  virtual ~OsmPgCsvWriter();
+  virtual ~OsmPgCsvWriter() = default;
 
   /**
    * @brief isSupported returns true if the URL is likely supported

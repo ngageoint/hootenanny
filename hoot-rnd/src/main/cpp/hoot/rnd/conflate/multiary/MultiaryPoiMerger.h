@@ -46,7 +46,8 @@ public:
 
   static std::string className() { return "hoot::MultiaryPoiMerger"; }
 
-  MultiaryPoiMerger();
+  MultiaryPoiMerger() = default;
+  virtual ~MultiaryPoiMerger() = default;
   /**
    * Construct with a subgraph of pairs. The links in the set of pairs are used to determine links
    * between elements so it is important that the pairs are represenetative of the matches.

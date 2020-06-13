@@ -35,10 +35,6 @@
 namespace hoot
 {
 
-BoundedCommand::BoundedCommand()
-{
-}
-
 int BoundedCommand::runSimple(QStringList& args)
 {
   if (args.contains("--write-bounds"))

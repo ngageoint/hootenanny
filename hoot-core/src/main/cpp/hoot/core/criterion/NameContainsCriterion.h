@@ -46,6 +46,7 @@ public:
 
   NameContainsCriterion();
   NameContainsCriterion(const QStringList& names, const bool caseSensitive = false);
+  virtual ~NameContainsCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

@@ -35,10 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, TransliterateNameVisitor)
 
-TransliterateNameVisitor::TransliterateNameVisitor()
-{
-}
-
 bool TransliterateNameVisitor::isLatin(const QString& s)
 {
   for (int i = 0; i < s.size(); i++)

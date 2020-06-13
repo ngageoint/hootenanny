@@ -59,6 +59,7 @@ public:
   static double EPSILON;
 
   ConstrainedMatches(const ConstOsmMapPtr& map);
+  virtual ~ConstrainedMatches() = default;
 
   /**
    * Add matches to the list of matches to consider.

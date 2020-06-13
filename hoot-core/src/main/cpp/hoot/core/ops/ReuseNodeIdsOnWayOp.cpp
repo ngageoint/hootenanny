@@ -42,10 +42,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ReuseNodeIdsOnWayOp)
 
-ReuseNodeIdsOnWayOp::ReuseNodeIdsOnWayOp()
-{
-}
-
 ReuseNodeIdsOnWayOp::ReuseNodeIdsOnWayOp(ElementId from, ElementId to)
   : _from(from),
     _to(to)

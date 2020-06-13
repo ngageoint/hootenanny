@@ -42,7 +42,7 @@ public:
 
   static std::string className() { return "hoot::LogoutCmd"; }
 
-  LogoutCmd() { }
+  LogoutCmd() = default;
 
   virtual QString getName() const override { return "logout"; }
 

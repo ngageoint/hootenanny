@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::JsFunctionVisitor"; }
 
   JsFunctionVisitor() : _map(0) {}
+  virtual ~JsFunctionVisitor() = default;
 
   virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func)
   { _func.Reset(isolate, func); }

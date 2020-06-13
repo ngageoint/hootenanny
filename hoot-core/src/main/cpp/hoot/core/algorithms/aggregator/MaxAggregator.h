@@ -38,7 +38,8 @@ public:
 
   static std::string className() { return "hoot::MaxAggregator"; }
 
-  MaxAggregator();
+  MaxAggregator() = default;
+  virtual ~MaxAggregator() = default;
 
   virtual double aggregate(std::vector<double>& d) const override;
 

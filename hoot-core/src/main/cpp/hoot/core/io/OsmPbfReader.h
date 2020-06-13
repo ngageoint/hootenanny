@@ -82,8 +82,6 @@ public:
 
   static std::string className() { return "hoot::OsmPbfReader"; }
 
-  static int logWarnCount;
-
   OsmPbfReader();
   OsmPbfReader(bool useFileId);
 
@@ -94,7 +92,7 @@ public:
    */
   OsmPbfReader(const QString& urlString);
 
-  ~OsmPbfReader();
+  virtual ~OsmPbfReader();
 
   /**
    * @see ElementInputStream
@@ -180,6 +178,8 @@ public:
   virtual QString supportedFormats() { return ".osm.pbf"; }
 
 private:
+
+  static int logWarnCount;
 
   Meters _defaultCircularError;
   std::string _buffer;

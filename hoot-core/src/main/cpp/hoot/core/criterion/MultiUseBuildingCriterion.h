@@ -42,7 +42,8 @@ public:
 
   static std::string className() { return "hoot::MultiUseBuildingCriterion"; }
 
-  MultiUseBuildingCriterion();
+  MultiUseBuildingCriterion() = default;
+  virtual ~MultiUseBuildingCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

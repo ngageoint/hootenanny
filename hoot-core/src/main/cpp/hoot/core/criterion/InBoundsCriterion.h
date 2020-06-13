@@ -52,6 +52,7 @@ public:
 
   InBoundsCriterion();
   InBoundsCriterion(const bool mustCompletelyContain);
+  virtual ~InBoundsCriterion() = default;
 
   /**
    * @see ElementCriterion

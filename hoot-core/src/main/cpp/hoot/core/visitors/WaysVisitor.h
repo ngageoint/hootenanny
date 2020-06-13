@@ -39,7 +39,8 @@ public:
 
   static std::string className() { return "hoot::WaysVisitor"; }
 
-  WaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) {}
+  WaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) { }
+  virtual ~WaysVisitor() = default;
 
   virtual void visit(const std::shared_ptr<const Element>& e) override;
 

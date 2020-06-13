@@ -41,9 +41,9 @@ class StringTokenizer : public Configurable
 {
 public:
 
-  StringTokenizer(const QString& sepRegex);
-
   StringTokenizer();
+  StringTokenizer(const QString& sepRegex);
+  virtual ~StringTokenizer() = default;
 
   void setConfiguration(const Settings& conf);
 

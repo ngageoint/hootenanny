@@ -45,9 +45,8 @@ public:
 
   static std::string className() { return "hoot::BuildingMerger"; }
 
-  static int logWarnCount;
-
-  BuildingMerger();
+  BuildingMerger() = default;
+  virtual ~BuildingMerger() = default;
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -112,6 +111,8 @@ protected:
   virtual const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
+
+  static int logWarnCount;
 
   friend class BuildingMergerTest;
 

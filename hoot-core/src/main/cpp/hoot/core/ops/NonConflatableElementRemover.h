@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::NonConflatableElementRemover"; }
 
-  NonConflatableElementRemover();
+  NonConflatableElementRemover() = default;
+  virtual ~NonConflatableElementRemover() = default;
 
   /**
     @see OsmMapOperation

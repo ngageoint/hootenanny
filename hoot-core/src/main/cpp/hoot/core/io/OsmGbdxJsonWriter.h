@@ -49,6 +49,7 @@ public:
   static std::string className() { return "hoot::OsmGbdxJsonWriter"; }
 
   OsmGbdxJsonWriter(int precision = ConfigOptions().getWriterPrecision());
+  virtual ~OsmGbdxJsonWriter() = default;
 
   /**
    * @brief Create a directory to hold all of the GeoJSON files

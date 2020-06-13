@@ -48,7 +48,8 @@ class DataSamples : public std::vector<Sample>
 {
 public:
 
-  DataSamples();
+  DataSamples() = default;
+  virtual ~DataSamples() = default;
 
   std::vector<std::string> getUniqueLabels() const;
 

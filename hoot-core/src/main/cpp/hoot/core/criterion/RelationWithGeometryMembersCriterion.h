@@ -48,8 +48,7 @@ public:
 
   RelationWithGeometryMembersCriterion();
   RelationWithGeometryMembersCriterion(ConstOsmMapPtr map);
-
-  virtual ~RelationWithGeometryMembersCriterion() {}
+  virtual ~RelationWithGeometryMembersCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

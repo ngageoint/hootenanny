@@ -52,6 +52,7 @@ public:
   static std::string className() { return "hoot::PoiPolygonPhoneNumberScoreExtractor"; }
 
   PoiPolygonPhoneNumberScoreExtractor();
+  virtual ~PoiPolygonPhoneNumberScoreExtractor() = default;
 
   virtual std::string getClassName() const override
   { return PoiPolygonPhoneNumberScoreExtractor::className(); }

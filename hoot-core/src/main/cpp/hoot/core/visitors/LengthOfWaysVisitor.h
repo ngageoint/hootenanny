@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::LengthOfWaysVisitor"; }
 
   LengthOfWaysVisitor();
+  virtual ~LengthOfWaysVisitor() = default;
 
   static Meters getLengthOfWays(const OsmMapPtr& map, ElementPtr e);
 

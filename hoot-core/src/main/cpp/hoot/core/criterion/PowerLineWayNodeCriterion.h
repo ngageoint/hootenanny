@@ -41,6 +41,7 @@ public:
 
   PowerLineWayNodeCriterion();
   PowerLineWayNodeCriterion(ConstOsmMapPtr map);
+  virtual ~PowerLineWayNodeCriterion() = default;
 
   virtual void setOsmMap(const OsmMap* map) override;
 

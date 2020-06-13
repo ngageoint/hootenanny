@@ -51,12 +51,11 @@ public:
 
   static std::string className() { return "hoot::HighwaySnapMerger"; }
 
-  static int logWarnCount;
-
   HighwaySnapMerger();
   HighwaySnapMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
+  virtual ~HighwaySnapMerger() = default;
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
@@ -87,6 +86,8 @@ protected:
   virtual WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2);
 
 private:
+
+  static int logWarnCount;
 
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;

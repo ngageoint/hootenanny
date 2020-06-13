@@ -50,7 +50,7 @@ public:
 
   WayData(const WayData& from);
 
-  virtual ~WayData();
+  virtual ~WayData() = default;
 
   void addNode(long id) { _nodes.push_back(id); }
   void insertNode(long index, long id ) { _nodes.insert(_nodes.begin() + index, id); }

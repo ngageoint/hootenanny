@@ -130,6 +130,7 @@ public:
     }
   };
 
+  virtual ~MultiaryClusterAlgorithm() = default;
   /**
    * @param mergeCache The cache to use when merging POIs. This abstracts the actual merge operation
    *  away from the clustering algorithm.

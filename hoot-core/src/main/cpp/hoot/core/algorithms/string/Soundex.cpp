@@ -41,10 +41,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, Soundex)
 
-Soundex::Soundex()
-{
-}
-
 double Soundex::compare(const QString& s1, const QString& s2) const
 {
   return (double)compareSoundex(s1, s2) / 4.0;

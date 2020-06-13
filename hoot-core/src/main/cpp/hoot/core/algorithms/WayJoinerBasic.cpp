@@ -40,10 +40,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(WayJoiner, WayJoinerBasic)
 
-WayJoinerBasic::WayJoinerBasic()
-{
-}
-
 void WayJoinerBasic::joinWays(const OsmMapPtr& map)
 {
   WayJoinerBasic wayJoiner;

@@ -35,10 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, NormalizePhoneNumbersVisitor)
 
-NormalizePhoneNumbersVisitor::NormalizePhoneNumbersVisitor()
-{
-}
-
 void NormalizePhoneNumbersVisitor::setConfiguration(const Settings& conf)
 {
   _phoneNumberNormalizer.setConfiguration(conf);

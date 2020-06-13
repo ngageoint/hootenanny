@@ -36,10 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ReprojectToGeographicOp)
 
-ReprojectToGeographicOp::ReprojectToGeographicOp()
-{
-}
-
 void ReprojectToGeographicOp::apply(std::shared_ptr<OsmMap>& map)
 {
   if (MapProjector::isGeographic(map) == false)

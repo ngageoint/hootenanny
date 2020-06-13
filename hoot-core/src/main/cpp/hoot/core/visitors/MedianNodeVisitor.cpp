@@ -40,10 +40,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, MedianNodeVisitor)
 
-MedianNodeVisitor::MedianNodeVisitor()
-{
-}
-
 ConstNodePtr MedianNodeVisitor::calculateMedianNode() const
 {
   ConstNodePtr best;

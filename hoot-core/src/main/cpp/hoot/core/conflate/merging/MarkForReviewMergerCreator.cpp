@@ -38,10 +38,6 @@ using namespace std;
 namespace hoot
 {
 
-MarkForReviewMergerCreator::MarkForReviewMergerCreator()
-{
-}
-
 bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
                                                vector<MergerPtr>& mergers) const
 {

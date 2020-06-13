@@ -47,7 +47,8 @@ class MatchDetails
 {
 public:
 
-  virtual ~MatchDetails() {}
+  MatchDetails() = default;
+  virtual ~MatchDetails() = default;
 
   /**
    * Returns a map of features that went into determining this as a match and their values. The

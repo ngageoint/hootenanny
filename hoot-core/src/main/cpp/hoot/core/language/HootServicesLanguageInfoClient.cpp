@@ -50,11 +50,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(LanguageInfoProvider, HootServicesLanguageInfoClient)
 
-HootServicesLanguageInfoClient::HootServicesLanguageInfoClient() :
-_useCookies(true)
-{
-}
-
 QString HootServicesLanguageInfoClient::_getBaseUrl()
 {
   return HootServicesLoginManager::getBaseUrl() + "/language/toEnglishTranslation";

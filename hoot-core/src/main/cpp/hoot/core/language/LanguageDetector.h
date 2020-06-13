@@ -47,6 +47,9 @@ public:
 
   static std::string className() { return "hoot::LanguageDetector"; }
 
+  LanguageDetector() = default;
+  virtual ~LanguageDetector() = default;
+
   /**
    * Detects the source language of text
    *

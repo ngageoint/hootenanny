@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::ToEnglishAddressTranslator"; }
 
-  ToEnglishAddressTranslator();
+  ToEnglishAddressTranslator() = default;
+  virtual ~ToEnglishAddressTranslator() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

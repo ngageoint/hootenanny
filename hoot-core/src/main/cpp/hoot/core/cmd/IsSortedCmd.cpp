@@ -47,7 +47,7 @@ public:
 
   static std::string className() { return "hoot::IsSortedCmd"; }
 
-  IsSortedCmd() {}
+  IsSortedCmd() = default;
 
   virtual QString getName() const override { return "is-sorted"; }
 

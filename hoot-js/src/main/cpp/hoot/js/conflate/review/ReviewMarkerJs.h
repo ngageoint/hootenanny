@@ -49,8 +49,8 @@ public:
 
 private:
 
-  ReviewMarkerJs();
-  ~ReviewMarkerJs();
+  ReviewMarkerJs() = default;
+  virtual ~ReviewMarkerJs() = default;
 
   static void mark(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

@@ -41,11 +41,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, MultiaryPoiMerger)
 
-MultiaryPoiMerger::MultiaryPoiMerger() :
-MergerBase()
-{
-}
-
 MultiaryPoiMerger::MultiaryPoiMerger(std::set<std::pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs)
 {

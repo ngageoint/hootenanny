@@ -48,6 +48,7 @@ public:
 
   TagCriterion();
   TagCriterion(const QString& k, const QString& v);
+  virtual ~TagCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

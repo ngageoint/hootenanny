@@ -46,6 +46,7 @@ namespace hoot
 class HootExceptionJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   static v8::Handle<v8::Object> create(const HootException& e) { return create(std::shared_ptr<HootException>(e.clone())); }
@@ -72,7 +73,9 @@ public:
   static void throwAsHootException(v8::TryCatch& tc);
 
 private:
-  HootExceptionJs();
+
+  HootExceptionJs() = default;
+  virtual ~HootExceptionJs() = default;
 
   std::shared_ptr<HootException> _e;
   QString _className;

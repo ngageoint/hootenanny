@@ -52,6 +52,7 @@ public:
    */
   MeanWordSetDistance(StringDistancePtr d, double portion=1.0);
   MeanWordSetDistance();
+  virtual ~MeanWordSetDistance() = default;
 
   static std::string className() { return "hoot::MeanWordSetDistance"; }
 

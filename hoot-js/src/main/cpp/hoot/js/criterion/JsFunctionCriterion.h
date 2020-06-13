@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::JsFunctionCriterion"; }
 
-  JsFunctionCriterion() {}
+  JsFunctionCriterion() = default;
+  virtual ~JsFunctionCriterion() = default;
 
   virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func)
   { _func.Reset(isolate, func); }

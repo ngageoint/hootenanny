@@ -37,7 +37,8 @@ class ElementVisitorConsumer
 {
 public:
 
-  virtual ~ElementVisitorConsumer(){}
+  ElementVisitorConsumer() = default;
+  virtual ~ElementVisitorConsumer() = default;
 
   virtual void addVisitor(const ElementVisitorPtr& e) = 0;
 };

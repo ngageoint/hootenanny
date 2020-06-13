@@ -35,7 +35,8 @@ class OsmMapConsumer
 {
 public:
 
-  virtual ~OsmMapConsumer() {}
+  OsmMapConsumer() = default;
+  virtual ~OsmMapConsumer() = default;
 
   virtual void setOsmMap(OsmMap* map) = 0;
 };

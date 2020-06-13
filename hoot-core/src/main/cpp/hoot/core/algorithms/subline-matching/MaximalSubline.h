@@ -56,13 +56,12 @@ public:
 
   static std::string className() { return "hoot::MaximalSubline"; }
 
-  static int logWarnCount;
-
   class MatchCriteria
   {
   public:
 
-    virtual ~MatchCriteria() {}
+    MatchCriteria() = default;
+    virtual ~MatchCriteria() = default;
 
     /**
      * Returns a match score for @a index1 way segment matches @a index2. The indexes refer to a
@@ -107,7 +106,7 @@ public:
 
     ThresholdMatchCriteria(Meters maxDistance, Radians maxAngleDiff);
 
-    virtual ~ThresholdMatchCriteria() {}
+    virtual ~ThresholdMatchCriteria() = default;
 
     virtual double match(int index1, int index2) const;
 
@@ -128,6 +127,8 @@ public:
    *  of @a criteria.
    */
   MaximalSubline(MatchCriteria* criteria, Meters minSplitSize);
+
+  virtual ~MaximalSubline() = default;
 
   /**
    * This code is still experimental at best.
@@ -165,6 +166,8 @@ public:
     std::vector<WayLocation>& wl1, std::vector<WayLocation> &wl2);
 
 private:
+
+  static int logWarnCount;
 
   std::shared_ptr<MatchCriteria> _criteria;
   Meters _spacing;

@@ -48,8 +48,10 @@ public:
    */
   PbfElementIterator(QString path);
 
+  virtual ~PbfElementIterator() = default;
+
   // not implemented
-  virtual void resetIterator() {}
+  virtual void resetIterator() { }
 
 private:
 

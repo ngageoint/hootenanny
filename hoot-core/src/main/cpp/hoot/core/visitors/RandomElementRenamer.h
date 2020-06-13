@@ -45,6 +45,7 @@ public:
   static std::string className() { return "hoot::RandomElementRenamer"; }
 
   RandomElementRenamer();
+  virtual ~RandomElementRenamer() = default;
 
   QString permuteName(const QString& s);
 

@@ -49,7 +49,7 @@ public:
 
   static string className() { return "hoot::ExtentCmd"; }
 
-  ExtentCmd() {}
+  ExtentCmd() = default;
 
   virtual QString getName() const override { return "extent"; }
 

@@ -49,10 +49,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, WayBufferCriterion)
 
-WayBufferCriterion::WayBufferCriterion()
-{
-}
-
 WayBufferCriterion::WayBufferCriterion(ConstOsmMapPtr map,
                                        ConstWayPtr baseWay,
                                        Meters buffer,

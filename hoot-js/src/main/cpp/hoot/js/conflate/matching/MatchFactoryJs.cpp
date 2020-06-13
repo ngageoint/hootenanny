@@ -37,12 +37,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(MatchFactoryJs)
 
-MatchFactoryJs::MatchFactoryJs()
-{
-}
-
-MatchFactoryJs::~MatchFactoryJs() {}
-
 void MatchFactoryJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

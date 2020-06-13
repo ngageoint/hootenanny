@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::WayBufferCriterion"; }
 
-  WayBufferCriterion();
+  WayBufferCriterion() = default;
+  virtual ~WayBufferCriterion() = default;
 
   /**
    * Buffer is the buffer in meters to put around the way. The circular

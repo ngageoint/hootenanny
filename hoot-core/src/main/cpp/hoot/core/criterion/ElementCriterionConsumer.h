@@ -38,7 +38,8 @@ public:
 
   static std::string className() { return "hoot::ElementCriterionConsumer"; }
 
-  virtual ~ElementCriterionConsumer() {}
+  ElementCriterionConsumer() = default;
+  virtual ~ElementCriterionConsumer() = default;
 
   virtual void addCriterion(const ElementCriterionPtr& crit) = 0;
 };

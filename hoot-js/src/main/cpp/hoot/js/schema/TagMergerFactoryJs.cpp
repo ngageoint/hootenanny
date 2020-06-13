@@ -38,12 +38,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(TagMergerFactoryJs)
 
-TagMergerFactoryJs::TagMergerFactoryJs()
-{
-}
-
-TagMergerFactoryJs::~TagMergerFactoryJs() {}
-
 void TagMergerFactoryJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

@@ -85,9 +85,8 @@ public:
 
   static std::string className() { return "hoot::HighwayMergerAbstract"; }
 
-  static int logWarnCount;
-
-  virtual ~HighwayMergerAbstract() {}
+  HighwayMergerAbstract() = default;
+  virtual ~HighwayMergerAbstract() = default;
 
   virtual void apply(const OsmMapPtr& map,
                      std::vector<std::pair<ElementId, ElementId>>& replaced) override = 0;
@@ -95,6 +94,8 @@ public:
   virtual QString toString() const override;
 
 protected:
+
+  static int logWarnCount;
 
   virtual PairsSet& _getPairs() override { return _pairs; }
   virtual const PairsSet& _getPairs() const override { return _pairs; }

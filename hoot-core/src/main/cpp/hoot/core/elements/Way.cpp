@@ -63,10 +63,6 @@ Way::Way(const Way& from)
 {
 }
 
-Way::~Way()
-{
-}
-
 void Way::addNode(long id)
 {
   _preGeometryChange();

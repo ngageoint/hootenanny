@@ -42,10 +42,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RecursiveSetTagValueOp)
 
-RecursiveSetTagValueOp::RecursiveSetTagValueOp()
-{
-}
-
 RecursiveSetTagValueOp::RecursiveSetTagValueOp(
   const QStringList& keys, const QStringList& values, ElementCriterionPtr elementCriterion,
   bool appendToExistingValue, const bool overwriteExistingTag) :

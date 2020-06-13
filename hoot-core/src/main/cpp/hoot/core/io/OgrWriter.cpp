@@ -109,11 +109,6 @@ OgrWriter::OgrWriter():
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
 
-OgrWriter::~OgrWriter()
-{
-
-}
-
 void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g)
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );

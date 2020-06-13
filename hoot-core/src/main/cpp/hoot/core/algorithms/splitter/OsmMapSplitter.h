@@ -50,7 +50,9 @@ namespace hoot
 class OsmMapSplitter : public Configurable
 {
 public:
+
   OsmMapSplitter(const OsmMapPtr& map, const OsmMapPtr& tiles);
+  virtual ~OsmMapSplitter() = default;
 
   virtual void setConfiguration(const Settings& conf) override;
 

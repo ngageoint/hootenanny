@@ -50,6 +50,7 @@ public:
   TagContainsCriterion();
   TagContainsCriterion(QString key, QString valueSubstring);
   TagContainsCriterion(QStringList keys, QStringList valueSubstrings);
+  virtual ~TagContainsCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::DirectSequentialSimulation"; }
 
-  DirectSequentialSimulation();
+  DirectSequentialSimulation() = default;
+  virtual ~DirectSequentialSimulation() = default;
 
   /**
    * @see PermuteGridCalculator

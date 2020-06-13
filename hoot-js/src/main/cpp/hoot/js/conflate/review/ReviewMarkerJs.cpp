@@ -45,10 +45,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(ReviewMarkerJs)
 
-ReviewMarkerJs::ReviewMarkerJs() {}
-
-ReviewMarkerJs::~ReviewMarkerJs() {}
-
 void ReviewMarkerJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

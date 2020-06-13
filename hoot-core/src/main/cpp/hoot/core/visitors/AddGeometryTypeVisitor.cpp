@@ -38,10 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddGeometryTypeVisitor)
 
-AddGeometryTypeVisitor::AddGeometryTypeVisitor()
-{
-}
-
 void AddGeometryTypeVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (e->getTags().getNonDebugCount() > 0)

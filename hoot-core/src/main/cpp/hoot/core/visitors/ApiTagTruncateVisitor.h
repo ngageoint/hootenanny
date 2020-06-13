@@ -53,6 +53,7 @@ public:
   static std::string className() { return "hoot::ApiTagTruncateVisitor"; }
 
   ApiTagTruncateVisitor();
+  virtual ~ApiTagTruncateVisitor() = default;
 
   void visit(const ElementPtr& e) override;
 

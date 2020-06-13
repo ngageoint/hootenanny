@@ -46,6 +46,7 @@ public:
   static std::string className() { return "hoot::RandomMapCropper"; }
 
   RandomMapCropper();
+  virtual ~RandomMapCropper() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 

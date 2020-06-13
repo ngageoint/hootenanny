@@ -49,6 +49,8 @@ public:
   // Get point aggregator from ConfigOptions()
   WeightedMetricDistanceExtractor(Meters searchRadius = -1);
 
+  virtual ~WeightedMetricDistanceExtractor() = default;
+
   virtual std::string getClassName() const override { return className(); }
 
   virtual std::string getName() const override;

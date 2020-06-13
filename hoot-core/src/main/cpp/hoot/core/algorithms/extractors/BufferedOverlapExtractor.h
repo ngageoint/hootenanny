@@ -54,6 +54,7 @@ class BufferedOverlapExtractor : public FeatureExtractorBase, public Configurabl
 public:
 
   BufferedOverlapExtractor();
+  virtual ~BufferedOverlapExtractor() = default;
   /**
    * Similar to OverlapExtractor, but the objects are buffered before the overlap is calculated.
    *

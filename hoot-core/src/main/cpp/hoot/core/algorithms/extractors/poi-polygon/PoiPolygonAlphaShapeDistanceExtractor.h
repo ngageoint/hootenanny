@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::PoiPolygonAlphaShapeDistanceExtractor"; }
 
-  PoiPolygonAlphaShapeDistanceExtractor();
+  PoiPolygonAlphaShapeDistanceExtractor() = default;
+  virtual ~PoiPolygonAlphaShapeDistanceExtractor() = default;
 
   virtual std::string getClassName() const
   { return PoiPolygonAlphaShapeDistanceExtractor::className(); }

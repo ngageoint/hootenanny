@@ -52,7 +52,7 @@ public:
   ToEnglishTranslateStringDistance(const StringDistancePtr& d,
                                    const std::shared_ptr<ToEnglishTranslator>& translator);
 
-  virtual ~ToEnglishTranslateStringDistance() {}
+  virtual ~ToEnglishTranslateStringDistance() = default;
 
   virtual void setStringDistance(const StringDistancePtr& sd) override { _d = sd; }
 

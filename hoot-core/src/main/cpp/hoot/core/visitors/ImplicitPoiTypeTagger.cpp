@@ -36,11 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiTypeTagger)
 
-ImplicitPoiTypeTagger::ImplicitPoiTypeTagger() :
-ImplicitTypeTaggerBase()
-{
-}
-
 ImplicitPoiTypeTagger::ImplicitPoiTypeTagger(const QString& databasePath) :
 ImplicitTypeTaggerBase(databasePath)
 {

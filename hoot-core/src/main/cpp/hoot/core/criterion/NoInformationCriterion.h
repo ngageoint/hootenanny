@@ -48,6 +48,7 @@ public:
   NoInformationCriterion() { setConfiguration(conf()); }
   NoInformationCriterion(bool treatReviewTagsAsMetadata) :
     _treatReviewTagsAsMetadata(treatReviewTagsAsMetadata) { }
+  virtual ~NoInformationCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

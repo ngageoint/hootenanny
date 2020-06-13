@@ -39,12 +39,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmWriterJs)
 
-OsmWriterJs::OsmWriterJs()
-{
-}
-
-OsmWriterJs::~OsmWriterJs() {}
-
 void OsmWriterJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

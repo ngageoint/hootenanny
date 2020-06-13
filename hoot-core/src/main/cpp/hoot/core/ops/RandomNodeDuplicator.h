@@ -51,7 +51,7 @@ public:
   static std::string className() { return "hoot::RandomNodeDuplicator"; }
 
   RandomNodeDuplicator();
-  virtual ~RandomNodeDuplicator() {}
+  virtual ~RandomNodeDuplicator() = default;
 
   virtual void apply(OsmMapPtr& map);
 

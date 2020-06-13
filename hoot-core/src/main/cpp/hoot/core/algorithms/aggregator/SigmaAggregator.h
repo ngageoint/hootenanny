@@ -38,7 +38,8 @@ public:
 
   static std::string className() { return "hoot::SigmaAggregator"; }
 
-  SigmaAggregator() {}
+  SigmaAggregator() = default;
+  virtual ~SigmaAggregator() = default;
 
   virtual double aggregate(std::vector<double>& d) const override;
 

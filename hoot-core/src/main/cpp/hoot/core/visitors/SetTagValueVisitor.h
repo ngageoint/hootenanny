@@ -54,6 +54,7 @@ public:
     const QString& key, const QString& value, bool appendToExistingValue = false,
     const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
     const bool negateCriteria = false);
+  virtual ~SetTagValueVisitor() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

@@ -43,7 +43,8 @@ public:
 
   LengthScoreExtractor(ValueAggregatorPtr wayAgg);
 
-  LengthScoreExtractor();
+  LengthScoreExtractor() = default;
+  virtual ~LengthScoreExtractor() = default;
 
   virtual std::string getClassName() const override { return className(); }
 

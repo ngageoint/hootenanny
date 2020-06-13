@@ -39,10 +39,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MergerCreator, BuildingMergerCreator)
 
-BuildingMergerCreator::BuildingMergerCreator()
-{
-}
-
 bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");

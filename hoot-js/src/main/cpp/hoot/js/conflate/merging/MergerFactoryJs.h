@@ -44,8 +44,8 @@ public:
 
 private:
 
-  MergerFactoryJs();
-  ~MergerFactoryJs();
+  MergerFactoryJs() = default;
+  virtual ~MergerFactoryJs() = default;
 
   static void getAllAvailableCreators(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

@@ -55,6 +55,9 @@ public:
 
   static std::string className() { return "hoot::AbstractDistanceExtractor"; }
 
+  AbstractDistanceExtractor() = default;
+  virtual ~AbstractDistanceExtractor() = default;
+
   virtual double combinedEnvelopeDiagonalDistance(const OsmMap& map,
     const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;

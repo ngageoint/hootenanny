@@ -46,6 +46,7 @@ public:
   WayDirectionCriterion(const ConstOsmMapPtr& map,
                         ConstWayPtr baseWay,
                         bool similarDirection = true);
+  virtual ~WayDirectionCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 

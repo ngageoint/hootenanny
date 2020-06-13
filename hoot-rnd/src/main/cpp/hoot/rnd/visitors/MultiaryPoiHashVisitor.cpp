@@ -35,11 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, MultiaryPoiHashVisitor)
 
-MultiaryPoiHashVisitor::MultiaryPoiHashVisitor() :
-ElementHashVisitor()
-{
-}
-
 QString MultiaryPoiHashVisitor::_toJson(const ConstNodePtr& node) const
 {
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"node\",\"tags\":{";

@@ -39,7 +39,7 @@ public:
 
   AttributeComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
 
-  virtual ~AttributeComparator() {}
+  virtual ~AttributeComparator() = default;
 
   virtual double compareMaps() override;
 

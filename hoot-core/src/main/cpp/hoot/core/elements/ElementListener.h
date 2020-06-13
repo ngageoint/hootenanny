@@ -40,7 +40,8 @@ class ElementListener
 {
 public:
 
-  virtual ~ElementListener() {}
+  ElementListener() = default;
+  virtual ~ElementListener() = default;
 
   virtual void preGeometryChange(Element* element) = 0;
 

@@ -50,9 +50,8 @@ public:
 
   static std::string className() { return "hoot::NodeToWayMap"; }
 
-  static int logWarnCount;
-
   NodeToWayMap(const OsmMap& map);
+  virtual ~NodeToWayMap() = default;
 
   void addWay(const std::shared_ptr<const Way>& w);
 
@@ -70,6 +69,8 @@ public:
   bool validate(const OsmMap& map);
 
 private:
+
+  static int logWarnCount;
 
   std::set<long> _emptySet;
 };

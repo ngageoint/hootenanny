@@ -44,6 +44,9 @@ namespace hoot
 class MultiaryHierarchicalClusterAlgorithm : public MultiaryClusterAlgorithm
 {
 public:
+
+  virtual ~MultiaryHierarchicalClusterAlgorithm() = default;
+
   /**
    * Constructor.
    * @param mergeCache Cache to use when merging elements.

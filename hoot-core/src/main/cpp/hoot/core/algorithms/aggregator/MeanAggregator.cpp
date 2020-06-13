@@ -35,10 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ValueAggregator, MeanAggregator)
 
-MeanAggregator::MeanAggregator()
-{
-}
-
 double MeanAggregator::aggregate(vector<double>& d) const
 {
   double sum = 0.0;

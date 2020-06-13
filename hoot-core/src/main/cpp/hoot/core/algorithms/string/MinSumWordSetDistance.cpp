@@ -45,10 +45,6 @@ MinSumWordSetDistance::MinSumWordSetDistance(StringDistance* d)
   _d.reset(d);
 }
 
-MinSumWordSetDistance::MinSumWordSetDistance()
-{
-}
-
 double MinSumWordSetDistance::compare(const QString& s1, const QString& s2) const
 {
   QStringList sl1 = _tokenizer.tokenize(s1);

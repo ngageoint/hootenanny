@@ -44,9 +44,9 @@ public:
 
   static std::string className() { return "hoot::SublineMatcher"; }
 
-  SublineMatcher() {}
+  SublineMatcher() = default;
 
-  virtual ~SublineMatcher() {}
+  virtual ~SublineMatcher() = default;
 
   /**
    * @param maxRelevantDistance This value is set on a per match basis because it tends to vary

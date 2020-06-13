@@ -38,7 +38,8 @@ class TagFilteredDifferencer : public TagDifferencer
 {
 public:
 
-  TagFilteredDifferencer();
+  TagFilteredDifferencer() = default;
+  virtual ~TagFilteredDifferencer() = default;
 
   virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2) const override;

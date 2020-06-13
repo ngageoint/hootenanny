@@ -38,7 +38,9 @@ namespace hoot
 class DoubleFieldDefinition : public FieldDefinition
 {
 public:
+
   DoubleFieldDefinition();
+  virtual ~DoubleFieldDefinition() = default;
 
   void addEnumeratedValue(double v) { _enumeratedValues.insert(v); }
 
@@ -65,6 +67,7 @@ public:
   virtual void validate(const QVariant& v, StrictChecking strict) const;
 
 private:
+
   double _defaultValue;
   double _min;
   double _max;

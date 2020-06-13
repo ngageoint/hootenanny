@@ -52,7 +52,8 @@ class OverlapExtractor : public FeatureExtractorBase
 {
 public:
 
-  OverlapExtractor();
+  OverlapExtractor() = default;
+  virtual ~OverlapExtractor() = default;
 
   static std::string className() { return "hoot::OverlapExtractor"; }
 

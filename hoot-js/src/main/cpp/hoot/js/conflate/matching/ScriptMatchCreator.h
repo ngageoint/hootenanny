@@ -55,9 +55,9 @@ public:
 
   static const QString POINT_POLYGON_SCRIPT_NAME;
 
-  ScriptMatchCreator();
+  ScriptMatchCreator() = default;
 
-  virtual ~ScriptMatchCreator();
+  virtual ~ScriptMatchCreator() = default;
 
   /**
    * @see SearchRadiusProvider

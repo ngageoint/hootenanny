@@ -34,10 +34,6 @@ namespace hoot
 
 int IndexedEdgeMatchSet::logWarnCount = 0;
 
-IndexedEdgeMatchSet::IndexedEdgeMatchSet()
-{
-}
-
 void IndexedEdgeMatchSet::addEdgeMatch(const ConstEdgeMatchPtr& em, double score)
 {
   if (!contains(em))

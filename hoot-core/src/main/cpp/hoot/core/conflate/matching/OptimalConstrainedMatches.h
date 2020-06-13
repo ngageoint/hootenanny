@@ -47,6 +47,7 @@ class OptimalConstrainedMatches : public ConstrainedMatches
 public:
 
   OptimalConstrainedMatches(const ConstOsmMapPtr& map);
+  virtual ~OptimalConstrainedMatches() = default;
 
   /**
    * Calculate a consistent subset of matches while attempting to maximizing the sum of match

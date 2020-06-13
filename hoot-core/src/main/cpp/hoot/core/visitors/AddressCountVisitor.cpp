@@ -36,11 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddressCountVisitor)
 
-AddressCountVisitor::AddressCountVisitor() :
-_totalCount(0)
-{
-}
-
 void AddressCountVisitor::setConfiguration(const Settings& conf)
 {
   _addressParser.setConfiguration(conf);

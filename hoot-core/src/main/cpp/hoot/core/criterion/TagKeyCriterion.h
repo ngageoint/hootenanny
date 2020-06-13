@@ -46,10 +46,11 @@ public:
 
   static std::string className() { return "hoot::TagKeyCriterion"; }
 
-  TagKeyCriterion() {}
+  TagKeyCriterion() = default;
   explicit TagKeyCriterion(QString key);
   TagKeyCriterion(QString key1, QString key2);
   TagKeyCriterion(QString key1, QString key2, QString key3);
+  virtual ~TagKeyCriterion() = default;
 
   void addKey(QString key);
 

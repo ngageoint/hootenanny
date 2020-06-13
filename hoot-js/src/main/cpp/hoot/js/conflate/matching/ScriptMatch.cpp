@@ -57,11 +57,6 @@ HOOT_FACTORY_REGISTER(Match, ScriptMatch)
 
 int ScriptMatch::logWarnCount = 0;
 
-ScriptMatch::ScriptMatch() :
-Match()
-{
-}
-
 ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script,
   const Persistent<Object>& plugin, const ConstOsmMapPtr& map, const v8::Handle<Object>& mapObj,
   const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt) :

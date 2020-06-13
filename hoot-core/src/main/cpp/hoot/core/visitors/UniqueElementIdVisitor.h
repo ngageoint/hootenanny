@@ -42,7 +42,8 @@ public:
 
   static std::string className() { return "hoot::UniqueElementIdVisitor"; }
 
-  UniqueElementIdVisitor();
+  UniqueElementIdVisitor() = default;
+  virtual ~UniqueElementIdVisitor() = default;
 
   /**
    * Returns a set containing all the ElementIds visited.

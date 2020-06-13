@@ -42,7 +42,8 @@ public:
 
   static std::string className() { return "hoot::MultiLineStringCriterion"; }
 
-  MultiLineStringCriterion() {}
+  MultiLineStringCriterion() = default;
+  virtual ~MultiLineStringCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

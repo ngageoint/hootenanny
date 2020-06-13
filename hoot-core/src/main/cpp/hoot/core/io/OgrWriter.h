@@ -62,9 +62,8 @@ public:
 
   static std::string className() { return "hoot::OgrWriter"; }
 
-  static int logWarnCount;
-
   OgrWriter();
+  virtual ~OgrWriter() = default;
 
   /**
    * @brief setCacheCapacity
@@ -77,8 +76,6 @@ public:
    */
   void setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,
                         const unsigned long maxRelations);
-
-  virtual ~OgrWriter();
 
   void close();
 
@@ -139,6 +136,8 @@ public:
   virtual QString supportedFormats() override { return ""; }
 
 protected:
+
+  static int logWarnCount;
 
   bool _createAllLayers;
   bool _appendData;

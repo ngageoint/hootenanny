@@ -41,10 +41,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, CompactnessExtractor)
 
-CompactnessExtractor::CompactnessExtractor()
-{
-}
-
 double CompactnessExtractor::characteristic(Geometry* g) const
 {
   double area = g->getArea();

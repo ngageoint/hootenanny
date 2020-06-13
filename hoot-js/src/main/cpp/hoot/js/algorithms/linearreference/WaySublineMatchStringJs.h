@@ -45,6 +45,7 @@ namespace hoot
 class WaySublineMatchStringJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   WaySublineMatchStringPtr getWaySublineMatchString() { return _sm; }
@@ -52,9 +53,11 @@ public:
   static v8::Handle<v8::Object> New(WaySublineMatchStringPtr sm);
 
 private:
-  WaySublineMatchStringJs(ConstNodePtr n);
-  WaySublineMatchStringJs();
-  ~WaySublineMatchStringJs();
+
+//TODO: DELETE ME
+//  WaySublineMatchStringJs(ConstNodePtr n);
+  WaySublineMatchStringJs() = default;
+  virtual ~WaySublineMatchStringJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);

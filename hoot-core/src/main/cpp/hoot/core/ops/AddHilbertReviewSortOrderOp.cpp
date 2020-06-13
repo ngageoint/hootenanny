@@ -61,10 +61,6 @@ bool reviewLess(const pair<ElementId, int64_t>& p1, const pair<ElementId, int64_
   }
 }
 
-AddHilbertReviewSortOrderOp::AddHilbertReviewSortOrderOp()
-{
-}
-
 void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
 {
   if (!ConfigOptions().getWriterIncludeConflateReviewDetailTags())

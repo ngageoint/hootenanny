@@ -44,6 +44,7 @@ public:
   static std::string className() { return "hoot::OneWayCriterion"; }
 
   OneWayCriterion(bool isOneWay = true);
+  virtual ~OneWayCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

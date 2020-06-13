@@ -35,11 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CountManualMatchesVisitor)
 
-CountManualMatchesVisitor::CountManualMatchesVisitor() :
-_numManualMatches(0)
-{
-}
-
 void CountManualMatchesVisitor::visit(const ConstElementPtr& e)
 {
   const Tags& tags = e->getTags();

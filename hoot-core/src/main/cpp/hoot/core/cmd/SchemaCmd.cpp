@@ -43,7 +43,7 @@ public:
 
   static string className() { return "hoot::SchemaCmd"; }
 
-  SchemaCmd() {}
+  SchemaCmd() = default;
 
   virtual QString getName() const override { return "schema"; }
 

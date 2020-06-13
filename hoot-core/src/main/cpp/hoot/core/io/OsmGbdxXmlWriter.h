@@ -56,8 +56,6 @@ public:
 
   static std::string className() { return "hoot::OsmGbdxXmlWriter"; }
 
-  static int logWarnCount;
-
   OsmGbdxXmlWriter();
   virtual ~OsmGbdxXmlWriter();
 
@@ -103,6 +101,8 @@ public:
   void setFormatXml(const bool format) { _formatXml = format; }
 
 private:
+
+  static int logWarnCount;
 
   bool _formatXml;
   int _precision;

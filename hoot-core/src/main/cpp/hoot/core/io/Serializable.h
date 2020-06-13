@@ -46,7 +46,8 @@ class Serializable
 {
 public:
 
-  virtual ~Serializable() {}
+  Serializable() = default;
+  virtual ~Serializable() = default;
 
   /**
    * Returns the name of the class. Typically just returns the result of className().

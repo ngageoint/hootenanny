@@ -42,6 +42,9 @@ public:
 
   static std::string className() { return "hoot::ExactTagDifferencer"; }
 
+  ExactTagDifferencer() = default;
+  virtual ~ExactTagDifferencer() = default;
+
   virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2) const override;
 };

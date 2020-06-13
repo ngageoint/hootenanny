@@ -49,6 +49,9 @@ public:
 
   static std::string className() { return "hoot::IntersectionOverUnionExtractor"; }
 
+  IntersectionOverUnionExtractor() = default;
+  virtual ~IntersectionOverUnionExtractor() = default;
+
   /**
    * @see FeatureExtractor
    */

@@ -79,8 +79,8 @@ private:
 
  friend class ElementMergerJsTest;
 
-  ElementMergerJs();
-  ~ElementMergerJs();
+  ElementMergerJs() = default;
+  virtual ~ElementMergerJs() = default;
 
   static void _mergeElements(OsmMapPtr map, v8::Isolate* current);
 

@@ -48,6 +48,7 @@ public:
 
   NameCriterion();
   NameCriterion(const QStringList& names, const bool caseSensitive = false);
+  virtual ~NameCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

@@ -40,11 +40,11 @@ class ContainsNodeCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  ContainsNodeCriterion();
-
   static std::string className() { return "hoot::ContainsNodeCriterion"; }
 
-  explicit ContainsNodeCriterion(long nodeId);
+  ContainsNodeCriterion() = default;
+  explicit ContainsNodeCriterion(long nodeId) : _nodeId(nodeId) { }
+  virtual ~ContainsNodeCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

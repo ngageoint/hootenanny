@@ -31,15 +31,6 @@
 namespace hoot
 {
 
-MultipleChangesetProvider::MultipleChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection):
-  _projection(pProjection)
-{
-}
-
-MultipleChangesetProvider::~MultipleChangesetProvider()
-{
-}
-
 void MultipleChangesetProvider::close()
 {
   // nothing to do here

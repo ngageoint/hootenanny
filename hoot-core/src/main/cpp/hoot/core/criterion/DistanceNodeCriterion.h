@@ -50,8 +50,9 @@ public:
 
   static std::string className() { return "hoot::DistanceNodeCriterion"; }
 
-  DistanceNodeCriterion();
+  DistanceNodeCriterion() = default;
   DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
+  virtual ~DistanceNodeCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 

@@ -52,7 +52,7 @@ class GraphComparator : public BaseComparator
 public:
   GraphComparator(OsmMapPtr map1, OsmMapPtr map2);
 
-  virtual ~GraphComparator() {}
+  virtual ~GraphComparator() = default;
 
   double compareMaps();
 

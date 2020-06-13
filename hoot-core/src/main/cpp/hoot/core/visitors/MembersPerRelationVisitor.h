@@ -43,6 +43,7 @@ public:
   static std::string className() { return "hoot::MembersPerRelationVisitor"; }
 
   MembersPerRelationVisitor();
+  virtual ~MembersPerRelationVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e) override;
 

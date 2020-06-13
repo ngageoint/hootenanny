@@ -47,14 +47,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementCriterionJs)
 
-ElementCriterionJs::ElementCriterionJs(ElementCriterion* c) : _c(c)
-{
-}
-
-ElementCriterionJs::~ElementCriterionJs()
-{
-}
-
 void ElementCriterionJs::addCriterion(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();

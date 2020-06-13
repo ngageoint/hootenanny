@@ -36,10 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, MultiUseCriterion)
 
-MultiUseCriterion::MultiUseCriterion()
-{
-}
-
 bool MultiUseCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   return

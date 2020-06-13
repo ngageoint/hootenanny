@@ -40,7 +40,7 @@ public:
 
   static std::string className() { return "hoot::LoginCmd"; }
 
-  LoginCmd() { }
+  LoginCmd() = default;
 
   virtual QString getName() const override { return "login"; }
 

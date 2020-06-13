@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::WayJoinerBasic"; }
 
-  WayJoinerBasic();
+  WayJoinerBasic() = default;
+  virtual ~WayJoinerBasic() = default;
 
   /**
    * Static method to join all joinable ways using WayJoinerBasic

@@ -55,9 +55,7 @@ class RNode : public Node<KeyType, DataType>
 {
 public:
 
-  RNode()
-  {
-  }
+  RNode() = default;
 
   virtual ~RNode()
   {
@@ -130,6 +128,7 @@ public:
     _depth = depth;
     _distanceCount = 0;
   }
+  virtual ~RTreeLayer() = default;
 
   virtual Leaf<KeyType, DataType>* buildLeaf(size_t start, size_t end)
   {

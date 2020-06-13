@@ -36,11 +36,13 @@ namespace hoot
 class TagMergerFactoryJs : public node::ObjectWrap
 {
 public:
- static void Init(v8::Handle<v8::Object> target);
+
+  static void Init(v8::Handle<v8::Object> target);
 
 private:
-  TagMergerFactoryJs();
-  ~TagMergerFactoryJs();
+
+  TagMergerFactoryJs() = default;
+  virtual ~TagMergerFactoryJs() = default;
 
   static void mergeTags(const v8::FunctionCallbackInfo<v8::Value>& args);
 

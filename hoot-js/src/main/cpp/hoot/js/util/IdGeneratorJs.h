@@ -41,6 +41,7 @@ namespace hoot
 class IdGeneratorJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   IdGeneratorPtr getIdGeneratorOp() { return _idGen; }
@@ -48,8 +49,9 @@ public:
   static v8::Handle<v8::Object> New(const IdGeneratorPtr& idGen);
 
 private:
+
   IdGeneratorJs(IdGeneratorPtr idGen);
-  ~IdGeneratorJs();
+  ~IdGeneratorJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

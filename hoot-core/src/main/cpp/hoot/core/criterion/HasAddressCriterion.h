@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::HasAddressCriterion"; }
 
-  HasAddressCriterion();
+  HasAddressCriterion() = default;
+  virtual ~HasAddressCriterion() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

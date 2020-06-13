@@ -65,6 +65,7 @@ public:
   static std::string className() { return "hoot::SuperfluousNodeRemover"; }
 
   SuperfluousNodeRemover();
+  virtual ~SuperfluousNodeRemover() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 

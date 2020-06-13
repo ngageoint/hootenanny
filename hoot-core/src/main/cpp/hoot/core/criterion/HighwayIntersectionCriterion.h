@@ -47,10 +47,9 @@ public:
 
   static std::string className() { return "hoot::HighwayIntersectionCriterion"; }
 
-  HighwayIntersectionCriterion() {}
+  HighwayIntersectionCriterion() = default;
   explicit HighwayIntersectionCriterion(ConstOsmMapPtr map);
-
-  virtual ~HighwayIntersectionCriterion() {}
+  virtual ~HighwayIntersectionCriterion() = default;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new HighwayIntersectionCriterion(_map)); }

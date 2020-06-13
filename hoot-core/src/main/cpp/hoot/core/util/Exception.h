@@ -44,7 +44,7 @@ class Exception : public std::exception
 {
 public:
 
-  Exception() { }
+  Exception() = default;
   Exception(const QString& error)
   {
     _error = error;

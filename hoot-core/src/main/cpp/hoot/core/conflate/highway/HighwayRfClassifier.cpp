@@ -73,11 +73,6 @@ int HighwayRfClassifier::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayRfClassifier)
 
-HighwayRfClassifier::HighwayRfClassifier()
-{
-  // we do a lazy initialization
-}
-
 MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map,
   ElementId eid1, ElementId eid2, const WaySublineMatchString& match)
 {

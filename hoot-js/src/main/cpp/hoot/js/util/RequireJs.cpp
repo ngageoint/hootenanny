@@ -45,12 +45,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(RequireJs)
 
-RequireJs::RequireJs()
-{
-}
-
-RequireJs::~RequireJs() {}
-
 void RequireJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

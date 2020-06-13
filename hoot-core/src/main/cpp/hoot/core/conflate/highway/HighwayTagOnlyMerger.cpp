@@ -46,11 +46,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, HighwayTagOnlyMerger)
 
-HighwayTagOnlyMerger::HighwayTagOnlyMerger()
-  : HighwaySnapMerger()
-{
-}
-
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
                                            std::shared_ptr<PartialNetworkMerger> networkMerger)
   : HighwaySnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
@@ -70,10 +65,6 @@ HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, E
 {
   _removeTagsFromWayMembers = false;
   _markAddedMultilineStringRelations = true;
-}
-
-HighwayTagOnlyMerger::~HighwayTagOnlyMerger()
-{
 }
 
 void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementPtr element2,

@@ -60,15 +60,6 @@ int SublineStringMatcherJs::logWarnCount = 0;
 
 HOOT_JS_REGISTER(SublineStringMatcherJs)
 
-SublineStringMatcherJs::SublineStringMatcherJs(SublineStringMatcherPtr sm) :
-_sm(sm)
-{
-}
-
-SublineStringMatcherJs::~SublineStringMatcherJs()
-{
-}
-
 void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();

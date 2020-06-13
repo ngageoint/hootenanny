@@ -41,7 +41,8 @@ public:
 
   static std::string className() { return "hoot::PowerLineCriterion"; }
 
-  PowerLineCriterion() {}
+  PowerLineCriterion() = default;
+  virtual ~PowerLineCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

@@ -47,9 +47,10 @@ class RelationMemberComparison : public ElementComparison
 {
 public:
 
-  RelationMemberComparison();
+  RelationMemberComparison() = default;
   RelationMemberComparison(ElementPtr element, const OsmMap& sourceMap, const QString& role,
                            const bool ignoreElementId = false);
+  virtual ~RelationMemberComparison() = default;
 
   virtual bool operator==(const RelationMemberComparison& memberComp) const;
 

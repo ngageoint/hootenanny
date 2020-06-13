@@ -33,10 +33,6 @@
 namespace hoot
 {
 
-ElementComparison::ElementComparison()
-{
-}
-
 ElementComparison::ElementComparison(ElementPtr element, const OsmMap& sourceMap,
                                      const bool ignoreElementId) :
 _element(element)

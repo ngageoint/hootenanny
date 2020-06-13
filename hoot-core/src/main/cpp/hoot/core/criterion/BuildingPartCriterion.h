@@ -42,7 +42,8 @@ public:
 
   static std::string className() { return "hoot::BuildingPartCriterion"; }
 
-  BuildingPartCriterion() {}
+  BuildingPartCriterion() = default;
+  virtual ~BuildingPartCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

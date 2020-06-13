@@ -71,7 +71,7 @@ public:
 
   Element();
 
-  virtual ~Element() {}
+  virtual ~Element() = default;
 
   virtual void clear() = 0;
 

@@ -53,14 +53,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmMapOperationJs)
 
-OsmMapOperationJs::OsmMapOperationJs(OsmMapOperation* op) : _op(op)
-{
-}
-
-OsmMapOperationJs::~OsmMapOperationJs()
-{
-}
-
 void OsmMapOperationJs::apply(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();

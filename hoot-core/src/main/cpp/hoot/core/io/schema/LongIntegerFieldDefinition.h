@@ -38,7 +38,9 @@ namespace hoot
 class LongIntegerFieldDefinition : public FieldDefinition
 {
 public:
+
   LongIntegerFieldDefinition();
+  virtual ~LongIntegerFieldDefinition() = default;
 
   void addEnumeratedValue(long long v) { _enumeratedValues.insert(v); }
 
@@ -61,6 +63,7 @@ public:
   virtual void validate(const QVariant& v, StrictChecking strict) const;
 
 private:
+
   long long _min;
   long long _max;
   long long _defaultValue;

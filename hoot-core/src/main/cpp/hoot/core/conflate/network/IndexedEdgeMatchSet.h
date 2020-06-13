@@ -44,11 +44,10 @@ public:
 
   static std::string className() { return "hoot::IndexedEdgeMatchSet"; }
 
-  static int logWarnCount;
-
   typedef QHash<ConstEdgeMatchPtr, double> MatchHash;
 
-  IndexedEdgeMatchSet();
+  IndexedEdgeMatchSet() = default;
+  virtual ~IndexedEdgeMatchSet()  = default;
 
   /**
    * The edge match should not be modified after it has been added to the index.
@@ -131,6 +130,8 @@ public:
   virtual QString toString() const override;
 
 private:
+
+  static int logWarnCount;
 
   typedef QHash<ConstNetworkEdgePtr, QSet<ConstEdgeMatchPtr>> EdgeToMatchMap;
   typedef QHash<ConstNetworkVertexPtr, QSet<ConstEdgeMatchPtr>> VertexToMatchMap;

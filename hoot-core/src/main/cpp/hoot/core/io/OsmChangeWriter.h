@@ -45,6 +45,9 @@ public:
 
   static std::string className() { return "hoot::OsmChangeWriter"; }
 
+  OsmChangeWriter() = default;
+  virtual ~OsmChangeWriter() = default;
+
   /**
    * Writes an OSM change.
    *

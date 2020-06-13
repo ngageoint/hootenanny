@@ -36,11 +36,13 @@ namespace hoot
 class OsmGeoJsonWriterJs : public node::ObjectWrap
 {
 public:
- static void Init(v8::Handle<v8::Object> target);
+
+  static void Init(v8::Handle<v8::Object> target);
 
 private:
-  OsmGeoJsonWriterJs();
-  ~OsmGeoJsonWriterJs();
+
+  OsmGeoJsonWriterJs() = default;
+  virtual ~OsmGeoJsonWriterJs() = default;
 
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

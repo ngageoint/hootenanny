@@ -36,13 +36,13 @@ class NodeData : public ElementData
 {
 public:
 
-  NodeData() {}
+  NodeData() = default;
 
   NodeData(const NodeData& nd);
 
   NodeData(long id, double x, double y);
 
-  virtual ~NodeData() {}
+  virtual ~NodeData() = default;
 
   double getX() const { return _x; }
 
