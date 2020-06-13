@@ -858,6 +858,7 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
     {
       NodePtr n = std::dynamic_pointer_cast<Node, Element>(_element);
       _map->addNode(n);
+      _element.reset();
       LOG_TRACE("Added: " << n->getElementId());
       //LOG_TRACE("Added: " << n);
       _numRead++;
@@ -866,6 +867,7 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
     {
       WayPtr w = std::dynamic_pointer_cast<Way, Element>(_element);
       _map->addWay(w);
+      _element.reset();
       LOG_TRACE("Added: " << w->getElementId());
       //LOG_TRACE("Added: " << w);
       _numRead++;
@@ -874,6 +876,7 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
     {
       RelationPtr r = std::dynamic_pointer_cast<Relation, Element>(_element);
       _map->addRelation(r);
+      _element.reset();
       LOG_TRACE("Added: " << r->getElementId());
       //LOG_TRACE("Added: " << r);
       _numRead++;
