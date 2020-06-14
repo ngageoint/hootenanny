@@ -108,11 +108,10 @@ void HttpTestServer::stop()
 {
   //  Interupt the threads
   _interupt = true;
+  //  Close the acceptor
+  _acceptor->close();
   //  Stop the IO service
   _io_service.stop();
-  //  Cancel the acceptor
-  _acceptor->cancel();
-  _acceptor.reset();
 }
 
 void HttpTestServer::shutdown()
@@ -166,10 +165,7 @@ void HttpTestServer::handle_accept(HttpConnection::HttpConnectionPtr new_connect
   if (continue_processing)
     start_accept();
   else
-  {
-    _interupt = true;
-    _io_service.stop();
-  }
+    stop();
 }
 
 bool HttpTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
@@ -196,9 +192,9 @@ std::string HttpTestServer::read_request_body(const std::string& headers, HttpCo
 {
   //  Parse the headers to get the content length
   long content_length = parse_content_length(headers);
-  std::vector<char> buf(content_length);
+  std::vector<char> buf(content_length + 1, 0);
   //  Read the HTTP request body
-  boost::asio::read(connection->socket(), boost::asio::buffer(buf));
+  boost::asio::read(connection->socket(), boost::asio::buffer(buf, content_length));
   return buf.data();
 }
 

@@ -156,8 +156,6 @@ public:
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
-    //QElapsedTimer timer;
-
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
@@ -190,8 +188,6 @@ public:
       _scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME);
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
-      //timer.restart();
-
       ConstElementPtr e2 = map->getElement(*it);
       LOG_VART(e2->getElementId());
 
@@ -224,26 +220,6 @@ public:
           _result.push_back(m);
         }
       }
-
-//      if (timer.elapsed() > 5000)
-//      {
-//        LOG_DEBUG(
-//          "Compared with neighbor in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
-//        LOG_VARD(e->getElementId());
-//        LOG_VARD(ElementConverter(map).calculateLength(e));
-//        if (e->getElementType() == ElementType::Way)
-//        {
-//          ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
-//          LOG_VARD(way->getNodeCount());
-//        }
-//        LOG_VARD(e2->getElementId());
-//        LOG_VARD(ElementConverter(map).calculateLength(e2));
-//        if (e2->getElementType() == ElementType::Way)
-//        {
-//          ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e2);
-//          LOG_VARD(way->getNodeCount());
-//        }
-//      }
     }
 
     _neighborCountSum += neighbors.size();
@@ -357,7 +333,10 @@ public:
 
   void calculateSearchRadius()
   {
-    // This is meant to run one time when the match creator is initialized.
+    // This is meant to run one time when the match creator is initialized. We're either getting
+    // the search radius from a predefined property linked to a config option in the conflate rules
+    // file or we're calculating it with a function call from the rules file. Either way, then we're
+    // caching it after the first retrieval.
 
     LOG_DEBUG("Checking for existence of search radius export for: " << _scriptPath << "...");
 
@@ -367,7 +346,7 @@ public:
 
     Persistent<Object> plugin(current, getPlugin(_script));
     Handle<String> initStr = String::NewFromUtf8(current, "calculateSearchRadius");
-    //optional method, so don't throw an error
+    // optional method, so don't throw an error
     if (ToLocal(&plugin)->Has(initStr) == false)
     {
       LOG_TRACE("calculateSearchRadius function not present.");
@@ -380,19 +359,19 @@ public:
       return;
     }
 
-    LOG_STATUS("Calculating search radius for: " << _scriptPath << "...");
+    LOG_DEBUG("Getting search radius for: " << _scriptPath << "...");
 
     Handle<Function> func = Handle<Function>::Cast(value);
     Handle<Value> jsArgs[1];
     int argc = 0;
-    HandleScope scope(current);  //  This extra one might not be needed
+    HandleScope scope(current);  // This extra one might not be needed
     assert(getMap().get());
     OsmMapPtr copiedMap(new OsmMap(getMap()));
     jsArgs[argc++] = OsmMapJs::create(copiedMap);
 
     func->Call(ToLocal(&plugin), argc, jsArgs);
 
-    //this is meant to have been set externally in a js rules file
+    // This could be an expensive call.
     _customSearchRadius =
       getNumber(
         ToLocal(&plugin), "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
@@ -602,7 +581,7 @@ public:
     }
     if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
     {
-      MemoryUsageChecker::getInstance()->check();
+      MemoryUsageChecker::getInstance().check();
     }
   }
 
@@ -662,8 +641,8 @@ private:
 
   ElementCriterionPtr _filter;
 
-  //used for automatic search radius calculation; it is expected that this is set from the
-  //Javascript rules file used for the generic conflation
+  // used for automatic search radius calculation; it is expected that this is set from the
+  // Javascript rules file used for the generic conflation
   double _customSearchRadius;
 
   int _neighborCountMax;

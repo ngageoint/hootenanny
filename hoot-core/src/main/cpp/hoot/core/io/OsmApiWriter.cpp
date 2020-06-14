@@ -170,7 +170,8 @@ bool OsmApiWriter::apply()
     if (_allThreadsFailed())
     {
       _changeset.failRemainingChangeset();
-      continue;
+      _threadsCanExit = true;
+      break;
     }
     //  Only queue up enough work to keep all the threads busy with times QUEUE_SIZE_MULTIPLIER
     //  so that results can come back and update the changeset for more atomic changesets instead
@@ -196,7 +197,7 @@ bool OsmApiWriter::apply()
         //  all of the threads are idle and not waiting for something to come back
         //  There are two things that can be done here, first is to put everything that is
         //  "ready to send" in a changeset and send it OR move everything to the error state
-
+/*
         //  Option #1: Get all of the remaining elements as a single changeset
         _changesetMutex.lock();
         _changeset.calculateRemainingChangeset(changeset_info);
@@ -205,13 +206,22 @@ bool OsmApiWriter::apply()
         _pushChangesets(changeset_info);
         //  Let the threads know that the remaining changeset is the "remaining" changeset
         _threadsCanExit = true;
+*/
+        LOG_STATUS("Apply Changeset: Remaining elements unsendable...");
+        //  Option #2: Move everything to the error state and exit
+        _changesetMutex.lock();
+        _changeset.failRemainingChangeset();
+        _changesetMutex.unlock();
+        //  Let the threads know that the remaining changeset has failed
+        _threadsCanExit = true;
+        break;
       }
       else
       {
         //  Indicate to the worker threads that there is work to be done
         _startWork();
         //  Allow time for the worker threads to complete some work
-        this_thread::yield();
+        _yield();
       }
     }
     else
@@ -219,7 +229,7 @@ bool OsmApiWriter::apply()
       //  Indicate to the worker threads that there is work to be done
       _startWork();
       //  Allow time for the worker threads to complete some work
-      this_thread::yield();
+      _yield();
     }
     //  Show the progress
     if (_showProgress)
@@ -313,7 +323,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           //  Reset the network request object and sleep it off
           request = createNetworkRequest(true);
           LOG_DEBUG("Bad changeset ID. Resetting network request object.");
-          this_thread::yield();
+          _yield();
         }
         //  Try a new create changeset request
         continue;
@@ -352,19 +362,17 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         _changesetMutex.unlock();
         //  Update the size of the current changeset that is open
         changesetSize += workInfo->size();
-        //  Remove the "remaining" file if the remaining was successful
-        if (workInfo->getLast())
+        //  When the changeset eclipses the 10k max, the API automatically closes the changeset,
+        //  reset the id and continue
+        if (changesetSize >= _maxChangesetSize)
         {
-          _changeset.updateRemainingChangeset();
-          //  Let the threads know that the remaining changeset is the "remaining" changeset
-          _threadsCanExit = true;
-          //  Looping should end the thread because all of the remaining elements have now been sent
-          stop_thread = true;
-          continue;
+          //  No need to call _closeChangeset() because it was closed by the API
+          //  Signal for a new changeset to be created
+          id = -1;
         }
-        //  When the current changeset is nearing the 50k max (or the specified max), close the changeset
+        //  When the changeset is nearing the 10k max (or the specified max), close the changeset
         //  otherwise keep it open and go again
-        if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
+        else if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
         {
           //  Close the changeset
           _closeChangeset(request, id);
@@ -373,7 +381,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         }
         //  Throttle the input rate if desired
         if (_throttleWriters && !_changeset.isDone())
-          this_thread::sleep_for(chrono::seconds(_throttleTime));
+          _yield(_throttleTime * 1000);
       }
       else
       {
@@ -397,6 +405,9 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           {
             if (_changesetClosed(info->response))
             {
+              //  The changeset was closed already so set the ID to -1 and reprocess
+              id = -1;
+
               if ((int)workInfo->size() > _maxChangesetSize / 2)
               {
                 //  Split the changeset into half so that it is smaller and won't fail
@@ -404,8 +415,6 @@ void OsmApiWriter::_changesetThreadFunc(int index)
               }
               else
               {
-                //  The changeset was closed already so set the ID to -1 and reprocess
-                id = -1;
                 //  Push the changeset back on the queue
                 _pushChangesets(workInfo);
               }
@@ -453,7 +462,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             //  push it back on the queue and give the API a break
             _pushChangesets(workInfo);
             //  Sleep the thread
-            this_thread::sleep_for(chrono::milliseconds(100));
+            _yield();
           }
           break;
         default:
@@ -474,7 +483,12 @@ void OsmApiWriter::_changesetThreadFunc(int index)
     }
     else
     {
-      if (_changeset.hasElementsToSend() && !_changeset.isDone() && queueSize == 0)
+      if (_threadsCanExit)
+      {
+        stop_thread = true;
+        _updateThreadStatus(index, ThreadStatus::Completed);
+      }
+      else if (!_changeset.isDone() && queueSize == 0)
       {
         //  This is a bad state where the producer thread says all elements are sent and
         //  waits for all threads to join but the changeset isn't "done".
@@ -492,24 +506,13 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           id = -1;
         }
         _threadStatusMutex.unlock();
-        //  In this case there are elements that have been sent and not reported back
-        //  BUT there are no threads that are waiting for them either.  Every thread
-        //  except the "first" worker thread will exit here.  The first worker thread
-        //  will wait for the producer thread to calculate the remaining changeset and
-        //  push in on the queue.  It then loops around and picks up the remaining
-        //  changeset and processes it.
-        if (_threadsAreIdle() && index != 0 && _threadsCanExit)
-        {
-          stop_thread = true;
-          _updateThreadStatus(index, ThreadStatus::Completed);
-        }
       }
       else
       {
         //  Set the status to idle
         _updateThreadStatus(index, ThreadStatus::Idle);
         //  Yield the thread
-        this_thread::yield();
+        _yield();
       }
     }
   }
@@ -520,6 +523,15 @@ void OsmApiWriter::_changesetThreadFunc(int index)
   ThreadStatus status = _getThreadStatus(index);
   if (status != ThreadStatus::Failed && status != ThreadStatus::Unknown)
     _updateThreadStatus(index, ThreadStatus::Completed);
+}
+
+void OsmApiWriter::_yield(int milliseconds)
+{
+  //  Sleep for the specified number of milliseconds
+  if (milliseconds != 10)
+    std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+  else
+    std::this_thread::yield();
 }
 
 void OsmApiWriter::setConfiguration(const Settings& conf)

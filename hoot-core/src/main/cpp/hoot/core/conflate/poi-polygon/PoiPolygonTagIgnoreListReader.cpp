@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonTagIgnoreListReader.h"
 
@@ -33,8 +33,6 @@
 
 namespace hoot
 {
-
-std::shared_ptr<PoiPolygonTagIgnoreListReader> PoiPolygonTagIgnoreListReader::_theInstance;
 
 PoiPolygonTagIgnoreListReader::PoiPolygonTagIgnoreListReader()
 {
@@ -49,11 +47,9 @@ PoiPolygonTagIgnoreListReader::PoiPolygonTagIgnoreListReader()
 
 PoiPolygonTagIgnoreListReader& PoiPolygonTagIgnoreListReader::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new PoiPolygonTagIgnoreListReader());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static PoiPolygonTagIgnoreListReader instance;
+  return instance;
 }
 
 }

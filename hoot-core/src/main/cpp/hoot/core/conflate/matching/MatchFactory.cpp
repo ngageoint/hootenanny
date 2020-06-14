@@ -44,12 +44,6 @@ using namespace std;
 namespace hoot
 {
 
-std::shared_ptr<MatchFactory> MatchFactory::_theInstance;
-
-MatchFactory::~MatchFactory()
-{
-}
-
 MatchFactory::MatchFactory()
 {
   setConfiguration(conf());
@@ -149,7 +143,7 @@ void MatchFactory::registerCreator(const QString& c)
       mc->setCriterion(filter);
     }
 
-    _theInstance->registerCreator(mc);
+    registerCreator(mc);
 
     if (args.size() > 0)
     {
@@ -162,9 +156,12 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
 {
   LOG_DEBUG("MatchFactory creators: " << matchCreatorsList);
 
+  //  Setting the match creators replaces the previous creators
+  _creators.clear();
+
   for (int i = 0; i < matchCreatorsList.size(); i++)
   {
-    _theInstance->registerCreator(matchCreatorsList[i]);
+    registerCreator(matchCreatorsList[i]);
   }
 }
 
@@ -175,6 +172,7 @@ void MatchFactory::setConfiguration(const Settings& s)
 
 MatchFactory& MatchFactory::getInstance()
 {
+  static MatchFactory instance;
   if (ConfigOptions().getAutocorrectOptions())
   {
     /* TODO: remove this hack after UI issues are fixed; see OptionsValidator
@@ -192,17 +190,10 @@ MatchFactory& MatchFactory::getInstance()
   // well
   OptionsValidator::validateMatchers();
 
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new MatchFactory());
-  }
-
-  if (_theInstance->_creators.size() == 0)
-  {
-    //only get the match creators that are specified in the config
-    _setMatchCreators(ConfigOptions().getMatchCreators());
-  }
-  return *_theInstance;
+  //only get the match creators that are specified in the config
+  if (instance._creators.size() == 0)
+    instance._setMatchCreators(ConfigOptions().getMatchCreators());
+  return instance;
 }
 
 void MatchFactory::reset()

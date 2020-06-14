@@ -72,6 +72,11 @@ public:
 
   int getMissingCount() const { return _missingCount; }
 
+  int getNumWaysMarkedForReview() const { return _numWaysMarkedForReview; }
+  int getNumRelationsMarkedForReview() const { return _numRelationsMarkedForReview; }
+  int getNumWaysTagged() const { return _numWaysTagged; }
+  int getNumRelationsTagged() const { return _numRelationsTagged; }
+
   void setMaxReport(int maxReport) { _maxReport = maxReport; }
   void setMarkWaysForReview(bool mark) { _markWaysForReview = mark; }
   void setMarkRelationsForReview(bool mark) { _markRelationsForReview = mark; }
@@ -90,12 +95,16 @@ protected:
 
   // allows for marking any elements with missing children as needing review
   bool _markWaysForReview;
+  int _numWaysMarkedForReview;
   bool _markRelationsForReview;
+  int _numRelationsMarkedForReview;
   ReviewMarker _reviewMarker;
 
   // allows for custom tagging any elements with missing children as needing review
   QString _wayKvp;
+  int _numWaysTagged;
   QString _relationKvp;
+  int _numRelationsTagged;
 
   virtual void _reportMissing(ElementId referer, ElementId missing);
   virtual void _visitAndReport(ElementType type, long id);

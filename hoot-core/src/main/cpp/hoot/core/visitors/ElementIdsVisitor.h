@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Used to get a collection of IDs for the elements that satisfy the specified criterion
+ * Used to get a collection of unordered IDs for the elements that satisfy the specified criterion
  *
  * @todo Some of the utility methods may be redundant with related methods in WayUtils and TagUtils.
  * Regardless, they should all be moved to other util classes that then call into this class.

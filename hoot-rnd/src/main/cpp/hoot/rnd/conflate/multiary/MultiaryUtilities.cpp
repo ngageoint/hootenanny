@@ -35,14 +35,12 @@
 #include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 
 #include <hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h>
 
 namespace hoot
 {
-
-std::shared_ptr<MultiaryUtilities> MultiaryUtilities::_theInstance;
 
 void MultiaryUtilities::conflate(OsmMapPtr map)
 {
@@ -104,7 +102,7 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
   conflate(map);
   MapProjector::projectToWgs84(map);
 
-  CalculateHashVisitor hashVisitor;
+  MultiaryPoiHashVisitor hashVisitor;
   hashVisitor.setIncludeCircularError(true);
   map->visitRw(hashVisitor);
 
@@ -207,11 +205,9 @@ SearchBoundsCalculatorPtr MultiaryUtilities::getBoundsCalculator()
 
 MultiaryUtilities& MultiaryUtilities::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new MultiaryUtilities());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static MultiaryUtilities instance;
+  return instance;
 }
 
 }

@@ -71,7 +71,7 @@ function initialize()
   hoot.Settings.set({'ogr.throw.error':'true'});
 
   // Set the schema type for the export
-  hoot.Settings.set({'osm.map.writer.schema':'TDSv40'});
+  hoot.Settings.set({'map.writer.schema':'TDSv40'});
 }
 
 

@@ -34,7 +34,7 @@
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -254,7 +254,7 @@ QByteArray MultiaryReviewCommand::_getElementHashID(ElementPtr e) const
   // Ensure the hash is present
   if (!e->getTags().contains(hashKey))
   {
-    CalculateHashVisitor v;
+    MultiaryPoiHashVisitor v;
     v.setIncludeCircularError(true);
     v.visit(e);
   }

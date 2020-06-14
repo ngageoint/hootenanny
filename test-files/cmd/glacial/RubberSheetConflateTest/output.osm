@@ -5370,6 +5370,7 @@
         <nd ref="-27516"/>
         <nd ref="-180277"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:cc8b0deb6dc28b4eb52ef32295206a5992c4300e;sha1sum:04c3d2631b013e85f3b14af257dc1efa894d0430"/>
         <tag k="name" v="E ST EXPY NW"/>
         <tag k="alt_name" v="E St Expy"/>
         <tag k="error:circular" v="5"/>
@@ -5417,6 +5418,7 @@
         <nd ref="-27555"/>
         <nd ref="-180266"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:cc8b0deb6dc28b4eb52ef32295206a5992c4300e;sha1sum:04c3d2631b013e85f3b14af257dc1efa894d0430"/>
         <tag k="name" v="E ST EXPY NW"/>
         <tag k="alt_name" v="E St Expy"/>
         <tag k="error:circular" v="5"/>
@@ -5473,6 +5475,7 @@
         <nd ref="-27018"/>
         <nd ref="-4080"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:6acf91cfa4870151f30489a7e00369a32a5d45ac;sha1sum:5d873d76d1f49d78382afbba816cb14c4c557e68"/>
         <tag k="name" v="F ST NW"/>
         <tag k="alt_name" v="F St NW"/>
         <tag k="error:circular" v="5"/>
@@ -6099,6 +6102,7 @@
         <nd ref="-76181"/>
         <nd ref="-2377"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:144a00ec085dc8a225435f612d61dff08a9ca0d4;sha1sum:6196332bf076b2c98b702c1fed883011f46a24ba"/>
         <tag k="name" v="NEW YORK AVE NW"/>
         <tag k="alt_name" v="New York Ave NW"/>
         <tag k="error:circular" v="5"/>
@@ -6121,6 +6125,7 @@
         <nd ref="-73965"/>
         <nd ref="-170835"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:ca73fcf4156cf26107fd6f0023896f799fbc642e;sha1sum:656a83966f8404abd806029e082e20fa70411e26"/>
         <tag k="name" v="NEW HAMPSHIRE AVE NW"/>
         <tag k="alt_name" v="New Hampshire Ave NW"/>
         <tag k="error:circular" v="5"/>
@@ -6416,6 +6421,7 @@
         <nd ref="-97511"/>
         <nd ref="-173767"/>
         <tag k="highway" v="unclassified"/>
+        <tag k="hoot:hash" v="sha1sum:9e6b44c5011102101b1dab33c44a5b334228a5f3"/>
         <tag k="name" v="C St SW"/>
         <tag k="error:circular" v="5"/>
     </way>
@@ -6437,6 +6443,7 @@
         <nd ref="-123068"/>
         <nd ref="-97511"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:54ca9be21c01c739e5f8b7379035470c181c6565;sha1sum:9e6b44c5011102101b1dab33c44a5b334228a5f3"/>
         <tag k="name" v="C ST SW"/>
         <tag k="alt_name" v="C St SW"/>
         <tag k="error:circular" v="5"/>
@@ -7700,6 +7707,7 @@
         <nd ref="-76182"/>
         <tag k="foot" v="designated"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:0e13838ac68d36ff620755984be2a0ae4ead00b8;sha1sum:a36fc7fa0bb5a36e5712af2bf4792260adb5c2b1"/>
         <tag k="name" v="STATE PL NW"/>
         <tag k="alt_name" v="State Pl NW"/>
         <tag k="error:circular" v="5"/>
@@ -7784,6 +7792,7 @@
         <nd ref="-10928"/>
         <nd ref="-170819"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:d67fb75b8fcfe5ad1905b26af349784f34df51fe;sha1sum:65c1f5b242a9bd61cf06b8615cc218a4a2d79e5d"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="alt_name" v="17th St NW"/>
         <tag k="error:circular" v="5"/>
@@ -8649,6 +8658,7 @@
         <nd ref="-46155"/>
         <nd ref="-8658"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:2f01b68d1112b2f234187671278006d54dc6b120;sha1sum:0bd7fc24a08d3c75bd6948273733b113fc1a8df4"/>
         <tag k="name" v="C ST NW"/>
         <tag k="alt_name" v="C St NW"/>
         <tag k="error:circular" v="5"/>
@@ -8910,6 +8920,7 @@
         <nd ref="-4962"/>
         <nd ref="-170808"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:e8ac6e0776f828a79688102cc42cd49d354fa418;sha1sum:7233e565728defd704f854c89e088de68f83eda3"/>
         <tag k="name" v="12TH ST NW"/>
         <tag k="alt_name" v="12th St NW"/>
         <tag k="error:circular" v="5"/>
@@ -8947,6 +8958,7 @@
         <nd ref="-173723"/>
         <nd ref="-180277"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:04c3d2631b013e85f3b14af257dc1efa894d0430"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-26102" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -8959,6 +8971,7 @@
         <nd ref="-180277"/>
         <nd ref="-180280"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:cc8b0deb6dc28b4eb52ef32295206a5992c4300e;sha1sum:04c3d2631b013e85f3b14af257dc1efa894d0430"/>
         <tag k="name" v="E ST EXPY NW"/>
         <tag k="alt_name" v="E St Expy"/>
         <tag k="error:circular" v="5"/>
@@ -9250,6 +9263,7 @@
         <nd ref="-4087"/>
         <nd ref="-2377"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:d518c795b3ddbd5a633d9eb4e0f1c0600997f77a;sha1sum:9e0dddae7fa5a657925f0ccfd0a803ae60dbcaa5"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="alt_name" v="Pennsylvania Ave NW"/>
         <tag k="error:circular" v="5"/>
@@ -12314,6 +12328,7 @@
         <nd ref="-9532"/>
         <nd ref="-170831"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:bbe3fb7af3ec2300cc00963662335a68f27e12a9;sha1sum:d2c514649a32288701b38ec0843ea05ec077936e"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="alt_name" v="Pennsylvania Ave NW"/>
         <tag k="error:circular" v="5"/>
@@ -12506,6 +12521,7 @@
         <nd ref="-119110"/>
         <nd ref="-114581"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:54647f2809bcf78065107328c6ba15e91323f930;sha1sum:e07d53820455aaee4a3e6dc9f0a53902488bee3f"/>
         <tag k="name" v="17TH ST SW"/>
         <tag k="alt_name" v="17th St SW"/>
         <tag k="error:circular" v="5"/>
@@ -12757,6 +12773,7 @@
         <nd ref="-15036"/>
         <nd ref="-170853"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:af0895c635baedc7e764a3b772156c05d99bfd3c;sha1sum:7d3e26527de81614f27b5a2fd758326a09755770"/>
         <tag k="name" v="ROCK CREEK &amp; POTOMAC PKWY NW"/>
         <tag k="alt_name" v="Rock Crk and Potomac Pkwy NW"/>
         <tag k="error:circular" v="5"/>

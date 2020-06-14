@@ -296,4 +296,24 @@ bool RelationMemberUtils::hasMemberWithGeometryType(
   return false;
 }
 
+int RelationMemberUtils::getMemberWayNodeCount(const ConstRelationPtr& relation,
+                                               const ConstOsmMapPtr& map)
+{
+  int count = 0;
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (member)
+    {
+      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(member);
+      if (way)
+      {
+        count += (int)way->getNodeCount();
+      }
+    }
+  }
+  return count;
+}
+
 }

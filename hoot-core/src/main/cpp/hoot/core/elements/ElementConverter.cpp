@@ -69,10 +69,12 @@ namespace hoot
 
 int ElementConverter::logWarnCount = 0;
 
-ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
+ElementConverter::ElementConverter(const ConstElementProviderPtr& provider,
+                                   const bool logWarningsForMissingElements) :
 _constProvider(provider),
 _spatialReference(provider->getProjection()),
-_requireAreaForPolygonConversion(true)
+_requireAreaForPolygonConversion(true),
+_logWarningsForMissingElements(logWarningsForMissingElements)
 {
 }
 
@@ -85,7 +87,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   }
 
   // if the element is not a point and is not an area.
-  // NOTE: Originally I was using isLinear. This was a bit too strict in that it wants evidence of
+  // NOTE: Originally, I was using isLinear. This was a bit too strict in that it wants evidence of
   // being linear before the length is calculated. Conversely, this wants evidence that is is not
   // linear before it will assume it doesn't have a length.
   if (e->getElementType() != ElementType::Node && AreaCriterion().isSatisfied(e) == false)
@@ -117,7 +119,6 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
     throw HootException("Unexpected element type: " + e->getElementType().toString());
   }
 }
-
 
 std::shared_ptr<Point> ElementConverter::convertToGeometry(const ConstNodePtr& n) const
 {
@@ -200,15 +201,18 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
     ConstNodePtr n = _constProvider->getNode(ids[i]);
     if (!n.get())
     {
-      if (logWarnCount < Log::getWarnMessageLimit())
+      if (_logWarningsForMissingElements)
       {
-        LOG_WARN("Missing node: " << ids[i] << ". Not creating line string...");
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("Missing node: " << ids[i] << ". Not creating line string...");
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
       return std::shared_ptr<LineString>();
     }
     cs->setAt(n->toCoordinate(), i);
@@ -220,15 +224,18 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
     ConstNodePtr n = _constProvider->getNode(ids[0]);
     if (!n.get())
     {
-      if (logWarnCount < Log::getWarnMessageLimit())
+      if (_logWarningsForMissingElements)
       {
-        LOG_WARN("Missing node: " << ids[0] << ". Not creating line string...");
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("Missing node: " << ids[0] << ". Not creating line string...");
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
       return std::shared_ptr<LineString>();
     }
     cs->setAt(n->toCoordinate(), 1);
@@ -372,7 +379,10 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(
       }
       else
       {
-        if (r->isMultiPolygon() || AreaCriterion().isSatisfied(r))
+        if (r->isMultiPolygon() ||
+            // relation type=site was added to fix BadMatchPairTest crashing in Polygon.js.
+            r->getType() == MetadataTags::RelationSite() ||
+            AreaCriterion().isSatisfied(r))
           return GEOS_MULTIPOLYGON;
         // Restriction relations are empty geometry
         else if (r->isRestriction())

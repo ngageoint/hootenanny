@@ -37,9 +37,13 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 using namespace Tgs;
@@ -109,6 +113,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     bool showConfusion = false;
     if (args.contains("--confusion"))
     {
@@ -166,7 +173,7 @@ public:
       IoUtils::loadMap(map, args[i], false, s);
     }
 
-    CalculateHashVisitor hashVisitor;
+    MultiaryPoiHashVisitor hashVisitor;
     hashVisitor.setIncludeCircularError(true);
     map->visitRw(hashVisitor);
 
@@ -177,6 +184,9 @@ public:
     QString result = evaluateThreshold(map, output, mt, showConfusion);
 
     cout << result;
+
+    LOG_STATUS(
+      "Matches scored in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

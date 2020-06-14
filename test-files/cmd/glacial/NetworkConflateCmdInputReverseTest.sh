@@ -7,6 +7,7 @@ mkdir -p test-output/cmd/glacial/NetworkConflateCmdInputReverseTest
 # Let's see if we can conflate the other way, since that wasn't working at one point.
 # The output is different, which is a little disturbing, but we'll deal with that later.
 hoot conflate --warn -C ReferenceConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
+ -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator \
  test-files/DcTigerRoads.osm test-files/DcGisRoads.osm \
  test-output/cmd/glacial/NetworkConflateCmdInputReverseTest/output.osm
 

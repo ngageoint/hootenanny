@@ -52,7 +52,7 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
 {
   LOG_VART(url);
 
-  QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
+  QString writerOverride = ConfigOptions().getMapFactoryWriter();
   LOG_VART(writerOverride);
 
   std::shared_ptr<OsmMapWriter> writer;
@@ -127,7 +127,7 @@ bool OsmMapWriterFactory::hasElementOutputStream(const QString& url)
 void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QString& url,
                                 const bool silent, const bool is_debug)
 {
-  bool skipEmptyMap = map->isEmpty() && ConfigOptions().getOsmMapWriterSkipEmptyMap();
+  bool skipEmptyMap = map->isEmpty() && ConfigOptions().getMapWriterSkipEmpty();
 
   if (!silent)
   {

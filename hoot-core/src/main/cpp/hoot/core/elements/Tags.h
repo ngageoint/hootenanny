@@ -211,6 +211,17 @@ public:
   bool dataOnlyEqual(const Tags& other) const;
 
   /**
+   * Determines if two sets of tags have the same information values
+   *
+   * This may have overlap with dataOnlyEqual, however the two have differences...worth looking
+   * into at some point.
+   *
+   * @param other tags to compare with
+   * @return true if both sets of tags have the same information values; false otherwise
+   */
+  bool hasSameNonMetadataTags(const Tags& other) const;
+
+  /**
    * Get a list of all non-'hoot::*' tags
    */
   QStringList getDataOnlyValues(const Tags& tags) const;

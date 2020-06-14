@@ -22,13 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/schema/TagDistribution.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -48,6 +52,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     bool nameKeysOnly = false;
     if (args.contains("--names"))
     {
@@ -131,6 +138,10 @@ public:
     // We may want to eventually consider refactoring this to write to a file support very large
     // amounts of output.
     std::cout << tagDist.getTagCountsString(tagDist.getTagCounts(inputs));
+
+    LOG_STATUS(
+      "Tag distribution calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
 
     return 0;
   }

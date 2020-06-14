@@ -34,9 +34,7 @@ namespace hoot
 {
 
 /**
- * Returns a set of the element ids visited.
- *
- * @todo It may be possible to combine this with ElementIdsVisitor.
+ * Returns a unique, ordered set of the element ids visited.
  */
 class UniqueElementIdVisitor : public ConstElementVisitor
 {

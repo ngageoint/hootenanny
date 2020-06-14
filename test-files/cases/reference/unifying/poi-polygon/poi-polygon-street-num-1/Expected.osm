@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="17.1573461" minlon="-89.0704137" maxlat="17.1577308" maxlon="-89.06980470000001"/>
+    <node visible="true" id="-101920417" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1575713000000043" lon="-89.0700456999999943">
+        <tag k="city" v="San Ignacio"/>
+        <tag k="is_in:country" v="Belize"/>
+        <tag k="latitude" v="17.157571300000029"/>
+        <tag k="amenity" v="clinic"/>
+        <tag k="longitude" v="-89.07004569999998"/>
+        <tag k="opening_hours" v="8 AM - 10 PM"/>
+        <tag k="location:confidence" v="medium"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature:description" v="A healthcare facility that is primarily focused on the care of outpatients and typically cover the primary healthcare needs of populations in local communities"/>
+        <tag k="poi:first-order_administrative_division" v="Cayo"/>
+        <tag k="use" v="out-patient_care"/>
+        <tag k="name:type" v="unverified_name"/>
+        <tag k="phone" v="+501 804-4878"/>
+        <tag k="addr:full" v="Hudson Street, San Ignacio, Belize"/>
+        <tag k="condition" v="functional"/>
+        <tag k="feature:name" v="Vida Pharmacy &amp; Clinic"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-101920416" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1574810000000006" lon="-89.0700700999999953"/>
+    <node visible="true" id="-101920415" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1574194999999996" lon="-89.0699091999999837"/>
+    <node visible="true" id="-101920414" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1576692999999985" lon="-89.0698047000000059"/>
+    <node visible="true" id="-101920413" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1577308000000031" lon="-89.0699654999999950"/>
+    <node visible="true" id="-101920124" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1573976999999971" lon="-89.0703443999999820"/>
+    <node visible="true" id="-101920123" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1573886000000009" lon="-89.0701839999999976"/>
+    <node visible="true" id="-101920122" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1574583999999959" lon="-89.0701587999999873"/>
+    <node visible="true" id="-101920121" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1574891000000065" lon="-89.0701575999999875"/>
+    <node visible="true" id="-101920120" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1574935999999951" lon="-89.0703417999999942"/>
+    <node visible="true" id="-101920119" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1574433000000006" lon="-89.0700733000000042"/>
+    <node visible="true" id="-101920118" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1574124999999960" lon="-89.0700793000000033"/>
+    <node visible="true" id="-101920117" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1573768000000015" lon="-89.0700848999999977"/>
+    <node visible="true" id="-101920116" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1573461000000016" lon="-89.0698888000000011"/>
+    <node visible="true" id="-101920115" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1574117000000008" lon="-89.0698775999999981"/>
+    <node visible="true" id="-101920114" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1574288000000017" lon="-89.0699869999999976"/>
+    <node visible="true" id="-101920113" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1573984000000017" lon="-89.0699920999999932"/>
+    <node visible="true" id="-101920112" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1575127999999992" lon="-89.0704137000000031"/>
+    <node visible="true" id="-101920111" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1575082999999999" lon="-89.0701427999999993"/>
+    <node visible="true" id="-101920110" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1576881999999955" lon="-89.0701394999999820"/>
+    <node visible="true" id="-101920109" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1576926999999948" lon="-89.0704104000000001"/>
+    <node visible="true" id="-101920108" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1576042000000015" lon="-89.0702555000000018">
+        <tag k="amenity" v="bar"/>
+        <tag k="addr:street" v="Hudson Street"/>
+        <tag k="level" v="2"/>
+        <tag k="name" v="Blue Angels"/>
+        <tag k="addr:city" v="San Ignacio"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-101920107" timestamp="1970-01-01T00:00:00Z" version="1" lat="17.1576233999999985" lon="-89.0701928999999808">
+        <tag k="amenity" v="pharmacy"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <way visible="true" id="-104044802" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-101920413"/>
+        <nd ref="-101920414"/>
+        <nd ref="-101920415"/>
+        <nd ref="-101920416"/>
+        <nd ref="-101920413"/>
+        <tag k="feature_area" v="550.0"/>
+        <tag k="addr:street" v="Hudson Street"/>
+        <tag k="name" v="Shopper's Choice"/>
+        <tag k="shop" v="furniture"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Ignacio"/>
+        <tag k="width" v="18.4"/>
+        <tag k="angle" v="21.8"/>
+        <tag k="length" v="30.0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-104044730" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-101920120"/>
+        <nd ref="-101920121"/>
+        <nd ref="-101920122"/>
+        <nd ref="-101920123"/>
+        <nd ref="-101920124"/>
+        <nd ref="-101920120"/>
+        <tag k="feature_area" v="204.9"/>
+        <tag k="addr:street" v="Hudson Street"/>
+        <tag k="name" v="Rosa's Hotel"/>
+        <tag k="tourism" v="hotel"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Ignacio"/>
+        <tag k="phone" v="501-804-2265"/>
+        <tag k="width" v="11.3"/>
+        <tag k="angle" v="91.5"/>
+        <tag k="length" v="19.6"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-104044729" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-101920114"/>
+        <nd ref="-101920119"/>
+        <nd ref="-101920118"/>
+        <nd ref="-101920113"/>
+        <nd ref="-101920114"/>
+        <tag k="feature_area" v="32.3"/>
+        <tag k="addr:street" v="Hudson Street"/>
+        <tag k="name" v="Delia's Classified American Clothing"/>
+        <tag k="shop" v="clothes"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Ignacio"/>
+        <tag k="width" v="3.5"/>
+        <tag k="angle" v="99.6"/>
+        <tag k="length" v="9.4"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-104044728" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-101920113"/>
+        <nd ref="-101920114"/>
+        <nd ref="-101920115"/>
+        <nd ref="-101920116"/>
+        <nd ref="-101920117"/>
+        <nd ref="-101920118"/>
+        <nd ref="-101920113"/>
+        <tag k="feature_area" v="124.2"/>
+        <tag k="amenity" v="pharmacy"/>
+        <tag k="addr:street" v="Hudson Street"/>
+        <tag k="name" v="Central Drug Store"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Ignacio"/>
+        <tag k="width" v="7.4"/>
+        <tag k="angle" v="279.3"/>
+        <tag k="length" v="21.2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-104044727" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-101920109"/>
+        <nd ref="-101920110"/>
+        <nd ref="-101920111"/>
+        <nd ref="-101920112"/>
+        <nd ref="-101920109"/>
+        <tag k="feature:name" v="Dr. Jorge Garcia Clínica Medica &amp; Pharmacy"/>
+        <tag k="amenity" v="clinic"/>
+        <tag k="condition" v="functional"/>
+        <tag k="is_in:country" v="Belize"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="length" v="28.8"/>
+        <tag k="imagery_confirmed" v="no"/>
+        <tag k="latitude" v="17.157653160000052"/>
+        <tag k="information_confidence" v="medium"/>
+        <tag k="poi:first-order_administrative_division" v="Cayo"/>
+        <tag k="location:confidence" v="medium"/>
+        <tag k="feature:description" v="A healthcare facility that is primarily focused on the care of outpatients and typically cover the primary healthcare needs of populations in local communities"/>
+        <tag k="width" v="20.0"/>
+        <tag k="name:type" v="unverified_name"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:full" v="Hudson Street, San Ignacio, Belize"/>
+        <tag k="feature_area" v="575.2"/>
+        <tag k="city" v="San Ignacio"/>
+        <tag k="longitude" v="-89.070191855999951"/>
+        <tag k="angle" v="271.0"/>
+        <tag k="use" v="out-patient_care"/>
+    </way>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-101920417" role="reviewee"/>
+        <member type="way" ref="-104044802" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: yes (1m; score: 2/2), type: no (score: 0.14406/1), name: no (score: 0.0985552/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 41.2132m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+</osm>

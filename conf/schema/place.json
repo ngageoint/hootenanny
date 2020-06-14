@@ -211,6 +211,10 @@
     },
     {
         "isA": "place",
+        "geometries": [
+            "node",
+            "area"
+        ],
         "name": "place=island",
         "objectType": "tag",
         "similarTo": {
@@ -220,6 +224,10 @@
     },
     {
         "isA": "place",
+        "geometries": [
+            "node",
+            "area"
+        ],
         "name": "place=islet",
         "objectType": "tag",
         "similarTo": {

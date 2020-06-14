@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOT_H
 #define HOOT_H
@@ -62,13 +62,17 @@ public:
 
 private:
 
-  static std::shared_ptr<Hoot> _theInstance;
-
-  Hoot();
-
   void _init();
 
   long _toBytes(const QString& str) const;
+
+  //  Constructor
+  Hoot();
+  /** Default destructor */
+  ~Hoot() = default;
+  /** Delete copy constructor and assignment operator */
+  Hoot(const Hoot&) = delete;
+  Hoot& operator=(const Hoot&) = delete;
 };
 
 }

@@ -105,6 +105,7 @@ public:
 
   static const QString HOUSE_NUMBER_TAG_NAME;
   static const QString STREET_TAG_NAME;
+  static const QString CITY_TAG_NAME;
   static const QString FULL_ADDRESS_TAG_NAME;
   static const QString FULL_ADDRESS_TAG_NAME_2;
 
@@ -134,6 +135,12 @@ public:
     OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
     Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
 
+  /*
+   * For creating a way where you just need to operate on its tags and
+   * don't care about the geometric aspect of it.
+   */
+  static WayPtr createDummyWay(OsmMapPtr map, Status status = Status::Unknown1);
+
   static RelationPtr createRelation(
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
     Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
@@ -155,7 +162,7 @@ public:
   /**
    * Return the singleton instance.
    */
-  static std::shared_ptr<TestUtils> getInstance();
+  static TestUtils& getInstance();
 
   /**
    * Register a way to reset the environment. This is most useful in plugins to avoid circular
@@ -237,7 +244,7 @@ public:
 
   AutoRegisterResetInstance()
   {
-    TestUtils::getInstance()->registerReset(this);
+    TestUtils::getInstance().registerReset(this);
   }
 
   virtual void reset()

@@ -61,6 +61,7 @@ std::shared_ptr<TestUtils> TestUtils::_theInstance;
 
 const QString TestUtils::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
 const QString TestUtils::STREET_TAG_NAME = "addr:street";
+const QString TestUtils::CITY_TAG_NAME = "addr:city";
 const QString TestUtils::FULL_ADDRESS_TAG_NAME = "address";
 const QString TestUtils::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
 
@@ -97,6 +98,14 @@ NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
   map->addNode(result);
   result->getTags().add(tags);
   return result;
+}
+
+WayPtr TestUtils::createDummyWay(OsmMapPtr map, Status status)
+{
+  geos::geom::Coordinate coords[] =
+  { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(0, 10),
+    geos::geom::Coordinate::getNull() };
+  return createWay(map, status, coords);
 }
 
 WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circularError,
@@ -202,14 +211,11 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString& tagKey,
   return map->getElement(*bag.begin());
 }
 
-std::shared_ptr<TestUtils> TestUtils::getInstance()
+TestUtils& TestUtils::getInstance()
 {
-  if (!_theInstance)
-  {
-    _theInstance.reset(new TestUtils());
-  }
-
-  return _theInstance;
+  //  Local static singleton instance
+  static TestUtils instance;
+  return instance;
 }
 
 std::string TestUtils::readFile(QString f1)
@@ -270,7 +276,7 @@ void TestUtils::resetEnvironment(const QStringList confs)
   // make sure the UUIDs are repeatable
   UuidHelper::resetRepeatableKey();
 
-  foreach (RegisteredReset* rr, getInstance()->_resets)
+  foreach (RegisteredReset* rr, getInstance()._resets)
   {
     rr->reset();
   }
@@ -376,7 +382,7 @@ void TestUtils::runConflateOpReductionTest(
   CPPUNIT_ASSERT_EQUAL(17,  TestUtils::getConflateCmdSnapshotCleaningOps().size());
 
   MatchFactory::getInstance().reset();
-  MatchFactory::_setMatchCreators(matchCreators);
+  MatchFactory::getInstance()._setMatchCreators(matchCreators);
   // This is a snapshot of the ops in order to avoid any changes made to them result in requiring
   // this test's results to change over time. Clearly, any newly added ops could be being filtered
   // incorrectly, and we can update this list periodically if that's deemed important.

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ToEnglishDictionaryTranslator.h"
@@ -33,6 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/conflate/address/Address.h>
 
 // Qt
 #include <QMap>
@@ -58,29 +59,7 @@ _tokenizeInput(true)
   assert(sizeof(UChar) == sizeof(QChar));
   _whiteSpace.setPattern("\\W+");
 
-  _readStreetTypes();
-}
-
-void ToEnglishDictionaryTranslator::_readStreetTypes()
-{
-  // see related note in ImplicitTagUtils::_modifyUndesirableTokens
-  if (_streetTypes.isEmpty())
-  {
-    const QStringList streetTypesRaw =
-      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
-    // This list could be expanded.  See the note in the associated config file.
-    for (int i = 0; i < streetTypesRaw.size(); i++)
-    {
-      const QString streetTypeEntry = streetTypesRaw.at(i);
-      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
-      if (streetTypeEntryParts.size() != 2)
-      {
-        throw HootException("Invalid street type entry: " + streetTypeEntry);
-      }
-      //don't care about the abbreviation here
-      _streetTypes.insert(streetTypeEntryParts.at(0).toLower());
-    }
-  }
+  _streetTypes = Address::getStreetTypes(false);
 }
 
 QString ToEnglishDictionaryTranslator::translate(const QString& textToTranslate)
@@ -271,7 +250,7 @@ QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input
   return result;
 }
 
-QString ToEnglishDictionaryTranslator::_transform(Transliterator* t, const QString& input) const
+QString ToEnglishDictionaryTranslator::_transform(const shared_ptr<Transliterator>& t, const QString& input) const
 {
   UnicodeString str((UChar*)input.constData(), input.size());
 

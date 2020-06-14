@@ -59,19 +59,19 @@ end
 
 Vagrant.configure(2) do |config|
 
-  def aws_provider(config, os)
+  def aws_provider(config, os, vbox)
     # AWS Provider.  Set enviornment variables for values below to use
     config.vm.provider :aws do |aws, override|
       override.nfs.functional = false
+      if vbox == "hoot"
+          aws.region_config ENV['AWS_DEFAULT_REGION'], :ami => ENV['AWS_HOOT_AMI_ID']
+      elsif vbox == "minimal"
+          aws.region_config ENV['AWS_DEFAULT_REGION'], :ami => ENV['AWS_MINIMAL_AMI_ID']
+      end
       aws.subnet_id = ENV['AWS_SUBNET_ID']
-      aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'm5.2xlarge')
-
-      aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 64 }]
-
       if ENV.key?('AWS_KEYPAIR_NAME')
         aws.keypair_name = ENV['AWS_KEYPAIR_NAME']
       end
-
       if ENV.key?('AWS_SECURITY_GROUP')
         $security_grp = ENV['AWS_SECURITY_GROUP']
         if $security_grp.is_a?(String) and $security_grp.include? ',' and $security_grp.split(',').length > 0
@@ -80,6 +80,9 @@ Vagrant.configure(2) do |config|
             aws.security_groups = $security_grp
         end
       end
+
+      aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'm5.2xlarge')
+      aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 64 }]
 
       aws.tags = {
         'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "jenkins-hootenanny-#{os.downcase}"),
@@ -155,9 +158,9 @@ Vagrant.configure(2) do |config|
     set_forwarding(hoot_centos7_prov)
     mount_shares(hoot_centos7_prov)
     set_provisioners(hoot_centos7_prov)
-    aws_provider(hoot_centos7_prov, 'CentOS7')
+    aws_provider(hoot_centos7_prov, 'CentOS7', 'hoot')
   end
-  
+
   # Centos7 box - not preprovisioned
   config.vm.define "hoot_centos7", autostart: false do |hoot_centos7|
     hoot_centos7.vm.box = "hoot/centos7-minimal"
@@ -170,7 +173,7 @@ Vagrant.configure(2) do |config|
     $addRepos = "yes"
     $yumUpdate = "yes"    
     set_provisioners(hoot_centos7)
-    aws_provider(hoot_centos7, 'CentOS7')
+    aws_provider(hoot_centos7, 'CentOS7', 'minimal')
   end
 
   # Centos7 - Hoot core ONLY. No UI
@@ -224,36 +227,6 @@ Vagrant.configure(2) do |config|
     # Customize the amount of memory on the VM:
     vb.memory = $vbRam
     vb.cpus = $vbCpu
-  end
-
-  # VSphere provider
-  config.vm.provider "vsphere" do |vsphere, override|
-    override.vm.box     = 'VSphereDummy'
-    override.vm.box_url = 'VSphereDummy.box'
-    vsphere.insecure    = true
-    vsphere.cpu_count   = 8
-    vsphere.memory_mb   = 16384
-    if ENV.key?('VSPHERE_HOST')
-      vsphere.host = ENV['VSPHERE_HOST']
-    end
-    if ENV.key?('VSPHERE_RESOURCE')
-      vsphere.compute_resource_name = ENV['VSPHERE_RESOURCE']
-    end
-    if ENV.key?('VSPHERE_PATH')
-      vsphere.vm_base_path = ENV['VSPHERE_PATH']
-    end
-    if ENV.key?('VSPHERE_TEMPLATE')
-      vsphere.template_name = ENV['VSPHERE_TEMPLATE']
-    end
-    if ENV.key?('VSPHERE_USER')
-      vsphere.user = ENV['VSPHERE_USER']
-    end
-    if ENV.key?('VSPHERE_PASSWORD')
-      vsphere.password = ENV['VSPHERE_PASSWORD']
-    end
-    if ENV.key?('VSPHERE_NAME')
-      vsphere.name = ENV['VSPHERE_NAME']
-    end
   end
 end
 

@@ -1,0 +1,27 @@
+{
+   Python Import Module - 1
+   Memcheck:Addr1
+   fun:strlen
+   fun:PyString_FromString
+   fun:PyImport_ImportModule
+   fun:_ZN4hoot22PythonSchemaTranslator5_initEv
+   ...
+}
+{
+   Python Import Module - 2
+   Memcheck:Addr2
+   fun:memcpy@@GLIBC_2.14
+   fun:PyString_FromString
+   fun:PyImport_ImportModule
+   fun:_ZN4hoot22PythonSchemaTranslator5_initEv
+   ...
+}
+{
+   malloc[Memcheck:Leak]
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:Py_InitializeEx
+   fun:_ZN4hoot22PythonSchemaTranslator5_initEv
+   ...
+}

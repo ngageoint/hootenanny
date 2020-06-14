@@ -86,6 +86,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 DiffConflator::DiffConflator() :
 _matchFactory(MatchFactory::getInstance()),
 _settings(Settings::getInstance()),
+_intraDatasetElementIdsPopulated(false),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _numSnappedWays(0)
 {
@@ -96,6 +97,7 @@ DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThresho
 _matchFactory(MatchFactory::getInstance()),
 _matchThreshold(matchThreshold),
 _settings(Settings::getInstance()),
+_intraDatasetElementIdsPopulated(false),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _numSnappedWays(0)
 {
@@ -104,6 +106,13 @@ _numSnappedWays(0)
 
 DiffConflator::~DiffConflator()
 {
+  _reset();
+}
+
+void DiffConflator::setConfiguration(const Settings &conf)
+{
+  _settings = conf;
+  _matchThreshold.reset();
   _reset();
 }
 
@@ -144,7 +153,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     LOG_STATUS("Discarding unconflatable elements...");
     const int mapSizeBefore = _pMap->size();
     NonConflatableElementRemover().apply(_pMap);
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
     _stats.append(
       SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
@@ -158,7 +167,9 @@ void DiffConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-projecting-to-planar");
 
-  // find all the matches in this _pMap
+  // find all the matches in this map
+  _intraDatasetMatchOnlyElementIds.clear();
+  _intraDatasetElementIdsPopulated = false;
   if (_matchThreshold.get())
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds, _matchThreshold);
@@ -167,7 +178,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
   LOG_STATUS(
     "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
     " Differential Conflation match conflicts to be removed.");
@@ -186,7 +197,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // because that operation deletes all of the info needed for calculating the tag diff.
     _updateProgress(currentStep - 1, "Storing tag differentials...");
     _calcAndStoreTagChanges();
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
     currentStep++;
   }
 
@@ -201,7 +212,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   // We're eventually getting rid of all matches from the output, but in order to make the road
   // snapping work correctly we'll get rid of secondary elements in matches first.
   _removeMatches(Status::Unknown2);
-  MemoryUsageChecker::getInstance()->check();
+  MemoryUsageChecker::getInstance().check();
 
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
   {
@@ -209,7 +220,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
     // anymore.
     _numSnappedWays = _snapSecondaryRoadsBackToRef();
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
   }
 
   if (ConfigOptions().getDifferentialRemoveReferenceData())
@@ -218,7 +229,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
     // differential that we want.
     _removeMatches(Status::Unknown1);
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
 
     // Now remove input1 elements
     LOG_STATUS("\tRemoving all reference elements...");
@@ -228,7 +239,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     removeRef1Visitor.setRecursive(true);
     removeRef1Visitor.addCriterion(pTagKeyCrit);
     _pMap->visitRw(removeRef1Visitor);
-    MemoryUsageChecker::getInstance()->check();
+    MemoryUsageChecker::getInstance().check();
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
     LOG_STATUS(
       "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
@@ -253,34 +264,53 @@ void DiffConflator::_removeMatches(const Status& status)
 
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
   LOG_VARD(treatReviewsAsMatches);
+
+  if (!_intraDatasetElementIdsPopulated)
+  {
+    _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
+    _intraDatasetElementIdsPopulated = true;
+  }
+
   for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
+    LOG_VART(match);
     if (treatReviewsAsMatches || match->getType() != MatchType::Review)
     {
-      std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
+      std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
       for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
            pit != pairs.end(); ++pit)
-      {
+      {  
+        ElementPtr e1;
+        ElementPtr e2;
+
         if (!pit->first.isNull())
         {
           LOG_VART(pit->first);
-          ElementPtr e = _pMap->getElement(pit->first);
-          if (e && e->getStatus() == status)
-          {
-            //LOG_VART(e->getTags().get("name"));
-            RecursiveElementRemover(pit->first).apply(_pMap);
-          }
+          e1 = _pMap->getElement(pit->first);
+
         }
         if (!pit->second.isNull())
         {
           LOG_VART(pit->second);
-          ElementPtr e = _pMap->getElement(pit->second);
-          if (e && e->getStatus() == status)
-          {
-            //LOG_VART(e->getTags().get("name"));
-            RecursiveElementRemover(pit->second).apply(_pMap);
-          }
+          e2 = _pMap->getElement(pit->second);
+        }
+
+        if (e1 && e1->getStatus() == status &&
+            // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
+            // these to be removed from the diff output.
+            !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
+              _intraDatasetMatchOnlyElementIds.contains(pit->first)))
+        {
+          LOG_VART(e1);
+          RecursiveElementRemover(pit->first).apply(_pMap);
+        }
+        if (e2 && e2->getStatus() == status &&
+            !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
+             _intraDatasetMatchOnlyElementIds.contains(pit->second)))
+        {
+          LOG_VART(e2);
+          RecursiveElementRemover(pit->second).apply(_pMap);
         }
       }
     }
@@ -289,11 +319,70 @@ void DiffConflator::_removeMatches(const Status& status)
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-" + status.toString() + "-matches");
 }
 
-void DiffConflator::setConfiguration(const Settings &conf)
+QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
+  const std::vector<ConstMatchPtr>& matches)
 {
-  _settings = conf;
-  _matchThreshold.reset();
-  _reset();
+  QSet<ElementId> elementIds;
+
+  const bool allowReviews = ConfigOptions().getDifferentialTreatReviewsAsMatches();
+
+  // Go through and record any element's involved in an intra-dataset match, since we don't want
+  // those types of matches from preventing an element from passing through to the diff output.
+
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
+       matchItr != matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    if (match->getType() == MatchType::Match ||
+        (allowReviews && match->getType() == MatchType::Review))
+    {
+      std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr = pairs.begin();
+           pairItr != pairs.end(); ++pairItr)
+      {
+        std::pair<ElementId, ElementId> pair = *pairItr;
+        ConstElementPtr e1 = _pMap->getElement(pair.first);
+        ConstElementPtr e2 = _pMap->getElement(pair.second);
+        // Any match with elements having the same status (came from the same dataset) is an
+        // intra-dataset match.
+        if (e1 && e2 && e1->getStatus() == e2->getStatus())
+        {
+          elementIds.insert(pair.first);
+          elementIds.insert(pair.second);
+        }
+      }
+    }
+  }
+
+  // Now, go back through and exclude any previously added that are also involved in an
+  // inter-dataset match, since we don't want those in the diff output.
+
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
+       matchItr != matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    if (match->getType() == MatchType::Match ||
+        (allowReviews && match->getType() == MatchType::Review))
+    {
+      std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr = pairs.begin();
+           pairItr != pairs.end(); ++pairItr)
+      {
+        std::pair<ElementId, ElementId> pair = *pairItr;
+        ConstElementPtr e1 = _pMap->getElement(pair.first);
+        ConstElementPtr e2 = _pMap->getElement(pair.second);
+        // Any match with elements having a different status (came from different datasets) is an
+        // inter-dataset match.
+        if (e1 && e2 && e1->getStatus() != e2->getStatus())
+        {
+          elementIds.remove(pair.first);
+          elementIds.remove(pair.second);
+        }
+      }
+    }
+  }
+
+  return elementIds;
 }
 
 MemChangesetProviderPtr DiffConflator::getTagDiff()
@@ -516,7 +605,8 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
 
   // Need to merge tags into the new element. Keeps all names, chooses tags1 in event of a conflict.
   Tags newTags =
-    TagComparator::getInstance().overwriteMerge(pNewElement->getTags(), pOldElement->getTags());
+    TagComparator::getInstance().overwriteMerge(pNewElement->getTags(), pOldElement->getTags(), QStringList(),
+                                                ConfigOptions().getDuplicateNameCaseSensitive());
   pChangeElement->setTags(newTags);
 
   // Create the change

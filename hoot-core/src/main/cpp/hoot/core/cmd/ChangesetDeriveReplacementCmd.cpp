@@ -77,7 +77,7 @@ public:
       fullReplacement = true;
       args.removeAll("--full-replacement");
     }
-    LOG_VAR(fullReplacement);
+    LOG_VARD(fullReplacement);
 
     QStringList geometryFilters;
     if (args.contains("--geometry-filters"))
@@ -87,7 +87,7 @@ public:
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
-    LOG_VAR(geometryFilters);
+    LOG_VARD(geometryFilters);
 
     QStringList replacementFilters;
     if (args.contains("--replacement-filters"))
@@ -97,7 +97,7 @@ public:
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
-    LOG_VAR(replacementFilters);
+    LOG_VARD(replacementFilters);
 
     bool chainReplacementFilters = false;
     if (args.contains("--chain-replacement-filters"))
@@ -105,7 +105,7 @@ public:
       chainReplacementFilters = true;
       args.removeAll("--chain-replacement-filters");
     }
-    LOG_VAR(chainReplacementFilters);
+    LOG_VARD(chainReplacementFilters);
 
     QStringList replacementFilterOptions;
     if (args.contains("--replacement-filter-options"))
@@ -115,7 +115,7 @@ public:
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
-    LOG_VAR(replacementFilterOptions);
+    LOG_VARD(replacementFilterOptions);
 
     QStringList retainmentFilters;
     if (args.contains("--retainment-filters"))
@@ -125,7 +125,7 @@ public:
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
-    LOG_VAR(retainmentFilters);
+    LOG_VARD(retainmentFilters);
 
     bool chainRetainmentFilters = false;
     if (args.contains("--chain-retainment-filters"))
@@ -133,7 +133,7 @@ public:
       chainRetainmentFilters = true;
       args.removeAll("--chain-retainment-filters");
     }
-    LOG_VAR(chainRetainmentFilters);
+    LOG_VARD(chainRetainmentFilters);
 
     QStringList retainmentFilterOptions;
     if (args.contains("--retainment-filter-options"))
@@ -143,7 +143,7 @@ public:
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
-    LOG_VAR(retainmentFilterOptions);
+    LOG_VARD(retainmentFilterOptions);
 
     bool lenientBounds = true;
     if (args.contains("--strict-bounds"))
@@ -151,7 +151,7 @@ public:
       lenientBounds = false;
       args.removeAll("--strict-bounds");
     }
-    LOG_VAR(lenientBounds);
+    LOG_VARD(lenientBounds);
 
     bool printStats = false;
     QString outputStatsFile;
@@ -176,8 +176,8 @@ public:
       }
       args.removeAll("--stats");
     }
-    LOG_VAR(printStats);
-    LOG_VAR(outputStatsFile);
+    LOG_VARD(printStats);
+    LOG_VARD(outputStatsFile);
 
     bool enableWaySnapping = true;
     if (args.contains("--disable-way-snapping"))
@@ -185,7 +185,7 @@ public:
       enableWaySnapping = false;
       args.removeAll("--disable-way-snapping");
     }
-    LOG_VAR(enableWaySnapping);
+    LOG_VARD(enableWaySnapping);
 
     bool enableConflation = true;
     if (args.contains("--disable-conflation"))
@@ -193,7 +193,7 @@ public:
       enableConflation = false;
       args.removeAll("--disable-conflation");
     }
-    LOG_VAR(enableConflation);
+    LOG_VARD(enableConflation);
 
     bool enableCleaning = true;
     if (args.contains("--disable-cleaning"))
@@ -210,7 +210,7 @@ public:
       }
       args.removeAll("--disable-cleaning");
     }
-    LOG_VAR(enableCleaning);
+    LOG_VARD(enableCleaning);
 
     bool tagOobConnectedWays = true;
     if (args.contains("--disable-oob-way-handling"))
@@ -218,7 +218,7 @@ public:
       tagOobConnectedWays = false;
       args.removeAll("--disable-oob-way-handling");
     }
-    LOG_VAR(tagOobConnectedWays);
+    LOG_VARD(tagOobConnectedWays);
 
     QString boundsStr = "";
     if (args.size() >= 3)
@@ -233,13 +233,13 @@ public:
 
     // process non-optional params
     const QString input1 = args[0].trimmed();
-    LOG_VAR(input1);
+    LOG_VARD(input1);
     const QString input2 = args[1].trimmed();
-    LOG_VAR(input2);
+    LOG_VARD(input2);
     const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
-    LOG_VAR(bounds);
+    LOG_VARD(bounds);
     const QString output = args[3].trimmed();
-    LOG_VAR(output);
+    LOG_VARD(output);
 
     QString osmApiDbUrl;
     if (output.endsWith(".osc.sql"))
@@ -271,7 +271,7 @@ public:
     changesetCreator.create(input1, input2, bounds, output);
 
     LOG_STATUS(
-      "Changeset generated in " + StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+      "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -31,6 +31,10 @@
 #include <hoot/core/schema/ImplicitTagRawRulesDeriver.h>
 #include <hoot/core/schema/ImplicitTagRulesDatabaseDeriver.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -48,6 +52,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.contains("--create-raw"))
     {
       args.removeAt(args.indexOf("--create-raw"));
@@ -99,6 +106,10 @@ public:
       std::cout << getHelp() << std::endl << std::endl;
       return 1;
     }
+
+    LOG_STATUS(
+      "Implicit type tagging rules generated in " <<
+       StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

@@ -34,23 +34,22 @@
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
 #include <QStringList>
+#include <QElapsedTimer>
 
 // Standard
 #include <fstream>
-
-// Tgs
-#include <tgs/System/Timer.h>
 
 using namespace std;
 using namespace Tgs;
@@ -75,7 +74,8 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    Timer totalTime;
+    QElapsedTimer timer;
+    timer.start();
 
     QStringList inputs;
     QString output;
@@ -102,7 +102,7 @@ public:
       IoUtils::loadMap(map, inputs[i], false, Status::fromInput(i));
     }
 
-    CalculateHashVisitor hashVisitor;
+    MultiaryPoiHashVisitor hashVisitor;
     hashVisitor.setIncludeCircularError(true);
     map->visitRw(hashVisitor);
 
@@ -121,9 +121,8 @@ public:
 
     IoUtils::saveMap(map, output);
 
-    LOG_INFO("Total time elapsed: " << totalTime.getElapsed());
-
-    LOG_INFO("Conflation job completed.");
+    LOG_STATUS(
+      "Conflation completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

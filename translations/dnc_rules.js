@@ -104,7 +104,7 @@ dnc.rules = {
     ['F_CODE','BA010','natural','coastline'], // Coastline/Shoreline, Land Water Boundary
     ['F_CODE','BA020','foreshore','yes'], // Foreshore Region - NFDD BA023
     ['F_CODE','BA030','place','island'], // Island
-    ['F_CODE','BA040','water','tidal'], // Tidal Water
+    ['F_CODE','BA040','natural','water'], // Water, except inland
     ['F_CODE','BB010','seamark:type','anchorage'], // GGDM3/NAS7 Anchorage
     ['F_CODE','BB020','seamark:type','berth'], // GGDM3/NAS7 BERTH
     ['F_CODE','BB030','barrier','bollard'], // Bollard
@@ -219,10 +219,10 @@ dnc.rules = {
     ['F_CODE','AL260','barrier','retaining_wall'], // Wall
     ['F_CODE','AP030','highway','track'], // Cart Track - mapped to Road for this translation
     ['F_CODE','BA030','place','islet'], // Island
-    ['F_CODE','BA040','natural','water'], // Water
     ['F_CODE','BD120','subsea','barrier-reef'], // Reef
     ['F_CODE','BD120','subsea','reef'], // Reef
     ['F_CODE','BD120','subsea','coral_reef'], // Reef
+    ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
     ['F_CODE','BH080','water','pond'], // Lake / Pond
     ['F_CODE','EC030','natural','tree'], // Wood - NFDD EC005
     ['F_CODE','EC030','natural','wood'], // Wood - NFDD EC015

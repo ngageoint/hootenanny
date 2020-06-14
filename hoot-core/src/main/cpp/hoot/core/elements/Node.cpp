@@ -43,9 +43,6 @@ using namespace std;
 namespace hoot
 {
 
-template<class Node>
-SharedPtrPool<Node> SharedPtrPool<Node>::_theInstance;
-
 Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
 Element(s)
 {
@@ -120,16 +117,6 @@ QString Node::toString() const
      << " status: " << getStatus().toString();
   if (hasCircularError())
     ss << endl << " circular error: " << QString::number(getCircularError());
-  return QString::fromUtf8(ss.str().data());
-}
-
-QString Node::nonIdHash() const
-{
-  // can probably eventually use the hash vis for this; also see note in ElementComparison
-  std::stringstream ss(std::stringstream::out);
-  ss << QString::number(getX(), 'f', ConfigOptions().getWriterPrecision())
-     << " " << QString::number(getY(), 'f', ConfigOptions().getWriterPrecision());
-  ss << " " << getTags().toString();
   return QString::fromUtf8(ss.str().data());
 }
 

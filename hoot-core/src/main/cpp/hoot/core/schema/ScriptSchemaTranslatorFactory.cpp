@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptSchemaTranslatorFactory.h"
 
@@ -37,19 +37,11 @@ using namespace std;
 namespace hoot
 {
 
-std::shared_ptr<ScriptSchemaTranslatorFactory> ScriptSchemaTranslatorFactory::_theInstance;
-
-ScriptSchemaTranslatorFactory::ScriptSchemaTranslatorFactory()
-{
-}
-
 ScriptSchemaTranslatorFactory& ScriptSchemaTranslatorFactory::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new ScriptSchemaTranslatorFactory());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static ScriptSchemaTranslatorFactory instance;
+  return instance;
 }
 
 bool CompareSt(ScriptSchemaTranslator* st1, ScriptSchemaTranslator* st2)

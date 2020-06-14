@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.10359999999999" minlon="-94.53959999999999" maxlat="39.1048" maxlon="-94.53789999999999"/>
+    <node visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1040936369806218" lon="-94.5389427097763928">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1045445403752652" lon="-94.5388187680206329"/>
+    <node visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1041546228033638" lon="-94.5388386970869732">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1040402187479543" lon="-94.5388445287447468">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-38" timestamp="2019-07-14T10:29:53Z" version="1" user="sannkc" uid="1561092" lat="39.1040565999999998" lon="-94.5389935000000037">
+        <tag k="water_source" v="main"/>
+        <tag k="emergency" v="fire_hydrant"/>
+        <tag k="fire_hydrant:type" v="pillar"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-37" timestamp="2018-05-20T10:53:34Z" version="1" user="sannkc" uid="1561092" lat="39.1041543999999988" lon="-94.5387824000000023"/>
+    <node visible="true" id="-36" timestamp="2018-05-20T10:53:34Z" version="1" user="sannkc" uid="1561092" lat="39.1041543999999988" lon="-94.5388183999999967"/>
+    <node visible="true" id="-34" timestamp="2018-05-20T10:53:34Z" version="1" user="sannkc" uid="1561092" lat="39.1041572999999971" lon="-94.5389394000000038"/>
+    <node visible="true" id="-33" timestamp="2018-05-20T10:53:34Z" version="1" user="sannkc" uid="1561092" lat="39.1045470999999978" lon="-94.5389176999999989"/>
+    <node visible="true" id="-32" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1045429999999925" lon="-94.5387630999999971"/>
+    <node visible="true" id="-31" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1041315000000012" lon="-94.5387834999999797"/>
+    <node visible="true" id="-29" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040556000000024" lon="-94.5387874999999980"/>
+    <node visible="true" id="-28" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1041387999999941" lon="-94.5389404000000013"/>
+    <node visible="true" id="-26" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040617999999895" lon="-94.5389444000000054"/>
+    <node visible="true" id="-25" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040427999999949" lon="-94.5389456999999993"/>
+    <node visible="true" id="-24" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040399999999977" lon="-94.5387887999999919"/>
+    <node visible="true" id="-23" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040400000000048" lon="-94.5388236999999805"/>
+    <node visible="true" id="-21" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1040419999999855" lon="-94.5389215999999948"/>
+    <node visible="true" id="-20" timestamp="2018-05-20T10:53:33Z" version="1" user="sannkc" uid="1561092" lat="39.1041564999999878" lon="-94.5389162999999968"/>
+    <node visible="true" id="-18" timestamp="2017-06-08T08:56:32Z" version="1" user="sannkc" uid="1561092" lat="39.1045572000000021" lon="-94.5393298999999985"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1041792958899990" lon="-94.5395999999999930"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1040643582600040" lon="-94.5395999999999930"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1036000000000001" lon="-94.5388092513999965"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1036000000000001" lon="-94.5389669287699945"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1047999999999973" lon="-94.5387491297399976"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1047999999999973" lon="-94.5389036106799949"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1041228303800139" lon="-94.5378999999999934"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1045184353800011" lon="-94.5378999999999934"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1035999999999930" lon="-94.5388668904382286"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1047999999999973" lon="-94.5388057111111095"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1040544990253309" lon="-94.5378999999999934"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1041173718815713" lon="-94.5395999999999930"/>
+    <node visible="true" id="191091793" timestamp="2016-02-02T18:28:17Z" version="1" changeset="2773" lat="39.1040899999999922" lon="-94.5388420000000025">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <way visible="true" id="-17" timestamp="2018-05-20T10:53:39Z" version="1">
+        <nd ref="-20"/>
+        <nd ref="-103"/>
+        <nd ref="-36"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:39Z"/>
+        <tag k="footway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-16" timestamp="2018-05-20T10:53:39Z" version="1">
+        <nd ref="-29"/>
+        <nd ref="191091793"/>
+        <nd ref="-31"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:39Z"/>
+        <tag k="footway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-15" timestamp="2018-05-20T10:53:39Z" version="1" user="sannkc" uid="1561092">
+        <nd ref="-24"/>
+        <nd ref="-29"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:39Z"/>
+        <tag k="footway" v="sidewalk"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-14" timestamp="2018-05-20T10:53:39Z" version="1">
+        <nd ref="-26"/>
+        <nd ref="-107"/>
+        <nd ref="-28"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:39Z"/>
+        <tag k="footway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13" timestamp="2018-05-20T10:53:38Z" version="1">
+        <nd ref="-21"/>
+        <nd ref="-101"/>
+        <nd ref="-23"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:38Z"/>
+        <tag k="footway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-14"/>
+        <nd ref="-34"/>
+        <nd ref="-20"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:38Z"/>
+        <tag k="footway" v="sidewalk"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13"/>
+        <nd ref="-25"/>
+        <nd ref="-21"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:38Z"/>
+        <tag k="footway" v="sidewalk"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-23"/>
+        <nd ref="-24"/>
+        <nd ref="-12"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:39Z"/>
+        <tag k="footway" v="sidewalk"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-11"/>
+        <nd ref="-25"/>
+        <nd ref="-26"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:39Z"/>
+        <tag k="footway" v="sidewalk"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-31"/>
+        <nd ref="-37"/>
+        <nd ref="-32"/>
+        <nd ref="-10"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:39Z"/>
+        <tag k="footway" v="sidewalk"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="-33"/>
+        <nd ref="-34"/>
+        <nd ref="-28"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:39Z"/>
+        <tag k="footway" v="sidewalk"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36"/>
+        <nd ref="-37"/>
+        <nd ref="-8"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:39Z"/>
+        <tag k="footway" v="sidewalk"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18"/>
+        <nd ref="-33"/>
+        <nd ref="-105"/>
+        <nd ref="-32"/>
+        <nd ref="-7"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="alley"/>
+        <tag k="source:datetime" v="2018-05-20T10:53:47Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3"/>
+        <nd ref="-105"/>
+        <nd ref="-103"/>
+        <nd ref="191091793"/>
+        <nd ref="-101"/>
+        <nd ref="-4"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:f54300c9d3bfa8ad8eb2452a0b54a527453a9257;sha1sum:505c3420f748266425245058a223b26691bbeee3;sha1sum:52bf94ad44041846fc83d8b193219223812bc8d3;sha1sum:40a5612d74e527f9b0c87c5bb59adbb99ceb91bf;sha1sum:25df8128fffb6dd77e32c68f63eebb394fac3c5a;sha1sum:0180508b1b5f82057867e0587aa5e767b47c7c54;sha1sum:9c398a0b1b304955fbc102b27d207dc624724ab3"/>
+        <tag k="name" v="Monroe Avenue"/>
+        <tag k="tiger:zip_left" v="64124"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-21T00:38:20.000Z;2019-05-02T17:14:34Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tiger:zip_right" v="64124"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Jackson, MO"/>
+        <tag k="tiger:name_base" v="Monroe"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-107"/>
+        <nd ref="191091793"/>
+        <nd ref="-2"/>
+        <tag k="tiger:name_base_1" v="7"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:6d6b6be42cbbba14d3df3f6e2fbcdaec53cdbe8f;sha1sum:4c38ad3aa00abc3b3787b7427733ff3422b313d5;sha1sum:30d33488180f62c9873817f1a515aafe88f41207;sha1sum:ae06110d2f2f1275a23e8ee9893a2e11d34e35c2;sha1sum:459a865beb2637b2aff30ae6c0cde468e81b8768"/>
+        <tag k="name_1" v="East 7 Street"/>
+        <tag k="name" v="East 7th Street"/>
+        <tag k="tiger:zip_left" v="64124"/>
+        <tag k="tiger:name_direction_prefix_1" v="E"/>
+        <tag k="tiger:name_direction_prefix" v="E"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="source:datetime" v="2013-04-21T00:43:18.000Z;2018-07-03T11:35:21Z"/>
+        <tag k="tiger:zip_right" v="64124"/>
+        <tag k="tiger:name_type_1" v="St"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Jackson, MO"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:name_base" v="7th"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

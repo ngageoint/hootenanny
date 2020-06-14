@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -40,6 +40,9 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -62,6 +65,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() < 2 || args.size() > 3)
     {
       LOG_VAR(args);
@@ -95,6 +101,9 @@ public:
     // see note in CountCmd about the preceding endline
     std::cout << std::endl << "Calculated statistic: " <<
                  QString::number(stat, 'g', 3) << std::endl;
+
+    LOG_STATUS(
+      "Statistic calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

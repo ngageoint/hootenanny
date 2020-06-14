@@ -93,9 +93,16 @@ tds40.rules = {
     ['F_CODE','AT042','power','tower'], // OSM
     ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
     ['F_CODE','BA030','place','islet'], // Island - From OSM
+    ['F_CODE','BA040','water','tidal'], // Tidal Water
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
+    ['F_CODE','DB090','embankment','mound'], // Embankment
+    ['F_CODE','DB090','embankment','berm'],
+    ['F_CODE','DB090','man_made','dyke'],
+    ['F_CODE','DB090','embankment','fill'],
+    ['F_CODE','DB090','embankment','levee'],
+    ['F_CODE','DB090','embankment','divider'],
     ['F_CODE','EB070','natural','heath'], // Brush
     ['F_CODE','ED010','natural','wetland'], // Marsh
     ['F_CODE','ED010','wetland','reedbed'], // Marsh
@@ -1453,12 +1460,12 @@ tds40.rules = {
 
     // FIC - Embankment Type
     // ['FIC','-999999',undefined,undefined], // No Information
-    ['FIC','1','embankment:type','mound'], // Mound
-    ['FIC','2','embankment:type','fill'], // Fill
-    ['FIC','3','embankment:type','dyke'], // Dyke
-    ['FIC','5','embankment:type','levee'], // Levee
-    ['FIC','6','embankment:type','divider'], // Divider
-    ['FIC','999','embankment:type','other'], // Other
+    ['FIC','1','embankment','mound'], // Mound
+    ['FIC','2','embankment','fill'], // Fill
+    ['FIC','3','man-made','dyke'], // Dyke
+    ['FIC','5','embankment','levee'], // Levee
+    ['FIC','6','embankment','divider'], // Divider
+    ['FIC','999','embankment','other'], // Other
 
     // FLO - Floating
     // ['FLO','-999999',undefined,undefined], // No Information
@@ -2186,7 +2193,7 @@ tds40.rules = {
     ['IWT','1','water','lake'], // Lake
     ['IWT','2','water','pond'], // Pond
     ['IWT','3','water','undifferentiated_water_body'], // Undifferentiated Water Body
-    ['IWT','4','man_made','reservoir'], // Reservoir
+    ['IWT','4','water','reservoir'], // Reservoir
     ['IWT','5','landuse','basin'], // Basin
     ['IWT','6','water','water-hole'], // Water-hole
     ['IWT','7','water','landlocked_sea'], // Landlocked Sea
@@ -3042,7 +3049,7 @@ tds40.rules = {
     ['TRS','5','transport:type','canal'], // Canal
     ['TRS','6','transport:type','caravan_route'], // Caravan Route
     ['TRS','7','transport:type','maritime'],
-    ['TRS','8',undefined,undefined], // No Transportation System
+    ['TRS','8','transport:type','none'], // No Transportation System
     ['TRS','9','transport:type','pedestrian'], // Pedestrian
     ['TRS','10','transport:type','pipeline'], // Pipeline
     ['TRS','11','transport:type','portage'], // Portage
@@ -3758,7 +3765,7 @@ tds40.rules = {
     // ZI017_RRA - Track Information : Railway Power Method
     // ['ZI017_RRA','-999999',undefined,undefined], // No Information
     ['ZI017_RRA','1','electrified','rail'], // Electrified Track
-    ['ZI017_RRA','3','electrified','overhead'], // Overhead Electrified
+    ['ZI017_RRA','3','electrified','contact_line'], // Overhead Electrified
     ['ZI017_RRA','4','electrified','no'], // Non-electrified
     ['ZI017_RRA','999','electrified','other'], // Other
 
@@ -4256,6 +4263,16 @@ tds40.rules = {
     ['FFN','999','social_facility','other'],
     ['FFN','999','tourism','other'],
 
+    ['FIC','1','embankment:type','mound'], // Mound
+    ['FIC','1','embankment:type','berm'],
+    ['FIC','1','embankment','berm'], // Dyke
+    ['FIC','2','embankment:type','fill'], // Fill
+    ['FIC','3','embankment','dyke'], // Dyke
+    ['FIC','3','embankment:type','dyke'], // Dyke
+    ['FIC','5','embankment:type','levee'], // Levee
+    ['FIC','6','embankment:type','divider'], // Divider
+    ['FIC','999','embankment:type','other'], // Other
+
     // Fix up the building/use tags from FFN
     [undefined,undefined,'building','industrial'], // Industrial
     [undefined,undefined,'man_made','works'], // Works
@@ -4317,7 +4334,7 @@ tds40.rules = {
     //     [undefined,undefined,'amenity','college'], //  converted in pre processing
     [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
-    ['IWT','4','water','reservoir'], // Reservoir
+    ['IWT','4','man_made','reservoir'], // Reservoir
 
     ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
 

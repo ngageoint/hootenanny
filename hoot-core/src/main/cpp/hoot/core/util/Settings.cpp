@@ -174,6 +174,8 @@ Settings::Settings() :
 _dynamicRegex("\\$\\{([\\w\\.]+)\\}"),
 _staticRegex("\\$\\(([\\w\\.]+)\\)")
 {
+  _dynamicRegex.optimize();
+  _staticRegex.optimize();
 }
 
 void Settings::prepend(const QString& key, const QStringList& values)
@@ -831,17 +833,16 @@ QString Settings::_replaceStaticVariables(QString value) const
   {
     done = true;
     int offset = 0;
-    if (_staticRegex.indexIn(value, offset) >= 0)
+    QRegularExpressionMatch match = _staticRegex.match(value, offset);
+    if (match.hasMatch())
     {
-      offset += _staticRegex.matchedLength();
-      QString varStr = _staticRegex.capturedTexts()[0];
-      QString subKey = _staticRegex.capturedTexts()[1];
-      QString expanded;
+      QString varStr = match.captured(0);
+      QString subKey = match.captured(1);
+      QString expanded = "";
       if (hasKey(subKey))
-      {
         expanded = getString(subKey);
-      }
       value.replace(varStr, expanded);
+      offset += expanded.length();
       done = false;
     }
   }
@@ -863,13 +864,14 @@ QString Settings::_replaceVariablesValue(QString value, std::set<QString> used) 
   {
     done = true;
     int offset = 0;
-    if (_dynamicRegex.indexIn(value, offset) >= 0)
+    QRegularExpressionMatch match = _dynamicRegex.match(value, offset);
+    if (match.hasMatch())
     {
-      offset += _dynamicRegex.matchedLength();
-      QString varStr = _dynamicRegex.capturedTexts()[0];
-      QString subKey = _dynamicRegex.capturedTexts()[1];
+      QString varStr = match.captured(0);
+      QString subKey = match.captured(1);
       QString expanded = _replaceVariables(subKey, used);
       value.replace(varStr, expanded);
+      offset += expanded.length();
       done = false;
     }
   }

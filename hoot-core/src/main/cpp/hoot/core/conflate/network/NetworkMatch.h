@@ -78,7 +78,9 @@ public:
   /**
    * Returns true if any of the elements in this are also in other's match pairs.
    */
-  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const override;
+  virtual bool isConflicting(
+    const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   /**
    * Returns true if either of the matched strings contains a non-whole edge.

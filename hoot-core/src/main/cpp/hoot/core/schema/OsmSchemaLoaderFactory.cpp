@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmSchemaLoaderFactory.h"
@@ -36,16 +36,11 @@ using namespace std;
 namespace hoot
 {
 
-std::shared_ptr<OsmSchemaLoaderFactory> OsmSchemaLoaderFactory::_theInstance;
-
 OsmSchemaLoaderFactory& OsmSchemaLoaderFactory::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new OsmSchemaLoaderFactory());
-  }
-
-  return *_theInstance;
+  //  Local static singleton instance
+  static OsmSchemaLoaderFactory instance;
+  return instance;
 }
 
 std::shared_ptr<OsmSchemaLoader> OsmSchemaLoaderFactory::createLoader(QString url)

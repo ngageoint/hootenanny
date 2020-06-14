@@ -30,7 +30,7 @@
 
 // Qt
 #include <QHash>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 #include <QVariant>
@@ -171,9 +171,9 @@ private:
   static std::shared_ptr<Settings> _theInstance;
   SettingsMap _settings;
   /// matches variables in the form ${My_Var_1}
-  QRegExp _dynamicRegex;
+  QRegularExpression _dynamicRegex;
   /// matches variables in the form $(My_Var_1)
-  QRegExp _staticRegex;
+  QRegularExpression _staticRegex;
 
   QString _markup(QString s) const
   {

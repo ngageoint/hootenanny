@@ -22,28 +22,45 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReversedRoadCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ReversedRoadCriterion)
 
+ReversedRoadCriterion::ReversedRoadCriterion()
+{
+}
+
+ReversedRoadCriterion::ReversedRoadCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
+
 bool ReversedRoadCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  bool result = false;
+  // only time reversed road relations have been seen so far is as a result of cropping, but think
+  // that still needs to be supported
+  if (!HighwayCriterion(_map).isSatisfied(e))
+  {
+    return false;
+  }
+
   const QString oneway = e->getTags()["oneway"].toLower();
   if (oneway == "-1" || oneway == "reverse")
   {
-    result = true;
+    return true;
   }
-  return result;
+
+  return false;
 }
 
 }

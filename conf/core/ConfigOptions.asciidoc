@@ -172,14 +172,15 @@ your language translation needs.
 * Data Type: int
 * Default Value: `16`
 
-The number of data bins used by the AngleHistogramExtractor.
+The number of data bins used by the AngleHistogramExtractor and the SampledAngleHistogramExtractor.
 
 === angle.histogram.extractor.smoothing
 
 * Data Type: double
 * Default Value: `0.0`
 
-Smoothing value in radians used by the AngleHistogramExtractor.
+Smoothing value in radians used by the AngleHistogramExtractor and the
+SampledAngleHistogramExtractor.
 
 === api.db.email
 
@@ -504,15 +505,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== calculate.hash.visitor.non.metadata.ignore.keys
-
-* Data Type: list
-* Default Value:
-** ``
-
-List of tag keys for the CalculateHashVisitor to ignore during comparison when calculating element
-hashes.
-
 === changeset.allow.deleting.reference.features
 
 * Data Type: bool
@@ -599,6 +591,14 @@ for conflation campaigns
 
 The maximum allowed element size of an OSM changeset that can be written to an OSM API database
 in a single changeset.
+
+=== changeset.metadata.allowed.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+This allows for writing metadata tags to the changeset output.
 
 === changeset.replacement.allow.deleting.reference.features.outside.bounds
 
@@ -1232,6 +1232,15 @@ all ElementCriterionConsumers. Since this configuration option is shared across 
 ElementCriterionConsumers, there may be undesirable effects in invocations involving multiple
 ElementCriterionConsumers.
 
+=== element.hash.visitor.non.metadata.ignore.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of tag keys for the ElementHashVisitor to ignore during comparison when calculating element
+hashes.
+
 === element.id.criterion.ids
 
 * Data Type: list
@@ -1470,7 +1479,7 @@ If true, road conflation merges tag changes into the reference only and makes no
 * Data Type: double
 * Default Value: `0.999`
 
-The threshold at which a miss is called a miss for roads.
+The threshold at which a miss is called a miss for roads. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -1481,8 +1490,7 @@ See also:
 * Data Type: double
 * Default Value: `0.25`
 
-The threshold at which a review is called a review for roads. See
-`conflate.review.threshold.default`.
+The threshold at which a review is called a review for roads. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -2266,6 +2274,14 @@ The maximum number of warn log messages that will be emitted per class before th
 A value of -1 passed to class will ensure that no warnings are logged by it, if it honors the
 option. A setting of -1 is useful for tests where you do not have granular enough logging control.
 
+=== log.warnings.for.missing.elements
+
+* Data Type: bool
+* Default Value: `true`
+
+Determines whether references in parent elements to child elements which do not exist in the input
+trigger warning log messages.
+
 [[MapCleanerTransforms]]
 === map.cleaner.transforms
 
@@ -2301,7 +2317,7 @@ A list of map operations to be applied to a map for cleaning purposes, in order.
 
 If true, when comparing maps with the Compare command it will print out the details for all elements
 identified as different between the two maps when there is a size difference (up to a default
-limit). This is useful in debugging remote test errors. TODO: set this back to false
+limit). This is useful in debugging remote test errors.
 
 === map.merge.ignore.duplicate.ids
 
@@ -2919,6 +2935,15 @@ If set, the ogr reader will use the value at the specified field to populate nod
 GDAL Option: When reading OGDI datasources (VPF etc), setting this to 'yes' causes the layer names
 to be simplified. For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'
 
+=== ogr.output.format
+
+* Data Type: string
+* Default Value: ``
+
+This is used to pass the output format (file extension: shp, gdb etc) to translation scripts to enable output format specific translations.
+E.g. Setting this to 'shp' would be telling the translation script to shorten attribute names to 10 characters and keep text
+attributes below the 255 character maximum length.
+
 === ogr.split.o2s
 
 * Data Type: bool
@@ -3069,16 +3094,7 @@ as master for determining the sequencing of element ID's.
 
 Add a tag with the bounding box for each element
 
-=== osm.map.reader.xml.add.child.refs.when.missing
-
-* Data Type: bool
-* Default Value: `false`
-
-By default, OsmXmlReader will not add child references (node ref, elements members) to parent
-elements if those elements are not present in the data.  For external sorting and translations,
-where partial chunks of elements only may be present the setting is changed.
-
-=== osm.map.reader.factory.reader
+=== map.factory.reader
 
 * Data Type: string
 * Default Value: ``
@@ -3086,7 +3102,7 @@ where partial chunks of elements only may be present the setting is changed.
 Specifies the reader that the OsmMapReaderFactory will use. This overrides any information derived
 from the URL.
 
-=== osm.map.writer.factory.writer
+=== map.factory.writer
 
 * Data Type: string
 * Default Value: ``
@@ -3094,14 +3110,18 @@ from the URL.
 Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived
 from the URL.
 
-=== osm.map.writer.format.xml
+=== map.reader.add.child.refs.when.missing
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
-Turns on autoformatting (line breaks, indentation etc) for XML output.
+By default, file based readers will not add child references (node ref, elements members) to parent
+elements if those elements are not present in the data.  For external sorting and translations
+where partial chunks of elements only may be present, or workflows where you are working with
+remote sourced data with missing element children, the default value may need to be changed. This
+option is not supported by all file based readers.
 
-=== osm.map.writer.schema
+=== map.writer.schema
 
 * Data Type: string
 * Default Value: ``
@@ -3109,13 +3129,13 @@ Turns on autoformatting (line breaks, indentation etc) for XML output.
 Sets the value for a "schema" attribute when writing a map to OSM XML.  NOTE: this will only be
 written if the value is not empty.
 
-=== osm.map.writer.skip.empty.map
+=== map.writer.skip.empty
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, the OSM map writer will NOT write a file if the map is empty.
-The default is to write a file even if the map is empty.
+If true, the OSM map writer will NOT write a file if the map is empty. The default is to write a
+file even if the map is empty.
 
 === overpass.api.host
 
@@ -3371,14 +3391,21 @@ If true, instances where multiple POIs were matched to a single polygon will res
 POIs being automatically merged into the polygon.  If false, then each matched POI will generate a
 review against the polygon instead.
 
-=== poi.polygon.max.size.per.cache
+=== poi.polygon.disable.intradataset.conflation.1
 
-* Data Type: int
-* Default Value: `100000`
+* Data Type: bool
+* Default Value: `false`
 
-The maximum number of elements to cache information for when using POI/Polygon Conflation. This
-maximum size is repeated across multiple internal element information caches. To disable caching,
-specify a value less than one.
+Enabling this option prevents all POIs and Polygons within the first input dataset from being
+matched. Enabling it causes poi.polygon.disable.same.source.conflation to be ignored.
+
+=== poi.polygon.disable.intradataset.conflation.2
+
+* Data Type: bool
+* Default Value: `false`
+
+Enabling this option prevents all POIs and Polygons within the second input dataset from being
+matched. Enabling it causes poi.polygon.disable.same.source.conflation to be ignored.
 
 === poi.polygon.disable.same.source.conflation
 
@@ -3442,6 +3469,15 @@ If an evidence score for a feature pair falls below this value, the relationship
 features will be classified as a review or miss, depending on the value of
 'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except
 when working with specific POI/Polygon conflation use cases that require it.
+
+=== poi.polygon.max.size.per.cache
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum number of elements to cache information for when using POI/Polygon Conflation. This
+maximum size is repeated across multiple internal element information caches. To disable caching,
+specify a value less than one.
 
 === poi.polygon.name.score.threshold
 
@@ -4654,8 +4690,8 @@ available mergers.
 * Default Value:
 ** ``
 
-A list of tags not to be overwritten on target features during tag merging when using
-OverwriteTagMerger only. Please keep alphabetized.
+A list of tag keys not to be overwritten on target features during tag merging when using
+OverwriteTagMerger or ReplaceTagMerger. Please keep the list alphabetized.
 
 === tag.printing.format
 
@@ -4884,13 +4920,21 @@ Automatically calculates the search radius to be used during conflation of water
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
 
-=== waterway.long.way.threshold
+=== waterway.long.way.length.threshold
 
 * Data Type: int
 * Default Value: `150000`
 
 Way length threshold, in meters, at or above which River Conflation will switch from the configured
 subline matcher to Frechet subline matching to increase runtime performance.
+
+=== waterway.long.way.node.count.threshold
+
+* Data Type: int
+* Default Value: `750`
+
+Way node count threshold at or above which River Conflation will switch from the configured subline
+matcher to Frechet subline matching to increase runtime performance.
 
 === waterway.matcher.heading.delta
 
@@ -5181,3 +5225,10 @@ If true, OSM elements written to XML file output (.osm) are sorted by ID.  Setti
 will require reading the entire source dataset into memory.  Setting it to false may result in
 using smaller amounts of memory during writing if the data source being written is also a streamable
 format (see the "Supported Data Formats" section in README.md).
+
+=== writer.xml.format
+
+* Data Type: bool
+* Default Value: `true`
+
+Turns on autoformatting (line breaks, indentation etc) for XML output.

@@ -398,7 +398,7 @@ def processFile(fileName,enValues):
                                                      'definition':fDefinition + ' ' + fMoreText,
                                                      'optional':'R'
                                                    }
-            
+
             if dataType == 'Local specification':
                 continue
 
@@ -417,7 +417,7 @@ def processFile(fileName,enValues):
             if dataType == 'CodeList':
                 # These are generally the codelists etc that get made into functions in the schema
                 funcName = aName
-                # ZI020_GE4, ZI020_GE42, ZI020_GE43,ZI020_GE44, all have the same lookup table.  
+                # ZI020_GE4, ZI020_GE42, ZI020_GE43,ZI020_GE44, all have the same lookup table.
                 if aName.find('ZI020_GE4') > -1:
                     funcName = 'ZI020_GE4'
 
@@ -461,6 +461,7 @@ def processFile(fileName,enValues):
             continue
         # End dataType
 
+        # Debug
         # print 'aName',aName,'fieldValue:',fieldValue
 
         # Ugly repleated code for building FFN's
@@ -492,7 +493,7 @@ def processFile(fileName,enValues):
 ###########
 # Main Starts Here
 #
-parser = argparse.ArgumentParser(description='Process GGDM files and build a schema')
+parser = argparse.ArgumentParser(description='Process TDS7 files and build a schema')
 parser.add_argument('-q','--quiet', help="Don't print warning messages.",action='store_true')
 parser.add_argument('--attributecsv', help='Dump out attributes as a CSV file',action='store_true')
 parser.add_argument('--attrlist', help='Dump out a list of attributes',action='store_true')
@@ -511,7 +512,7 @@ parser.add_argument('--toenglish', help='Dump out To English translation rules',
 parser.add_argument('--txtlen', help='Dump out the lengths of all of the text attributes',action='store_true')
 parser.add_argument('--txtrules', help='Dump out text rules',action='store_true')
 parser.add_argument('--withdefs', help='Add feature and attribute definitions to the schema',action='store_true')
-parser.add_argument('mainfile', help='The main GGDM spec csv file', action='store')
+parser.add_argument('mainfile', help='The main TDS7 spec csv file', action='store')
 # parser.add_argument('layerfile', help='A csv file with layer information', action='store')
 parser.add_argument('valuesfile', help='A csv file with enumerated values', action='store')
 
@@ -599,7 +600,7 @@ elif args.fullschema:
     printJSFooter('tds70')
 
 elif args.dumpenum:
-    dumpEnumerations(schema,'enumGGDM30')
+    dumpEnumerations(schema,'enumTDS70')
 
 elif args.fieldvalues:
     printFieldValues(schema,'tdsv70FieldValues')

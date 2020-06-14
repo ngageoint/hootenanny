@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ADDRESS_NORMALIZER_H
@@ -68,6 +68,15 @@ public:
 private:
 
   mutable int _numNormalized;
+
+  /*
+   * libpostal has a few weird quirks, so we have to hack the input address a bit (hopefully goes
+   * away at some point)
+   */
+  static void _prepareAddressForLibPostalNormalization(QString& address);
+
+  QSet<QString> _normalizeAddressWithLibPostal(const QString& address) const;
+  QSet<QString> _normalizeAddressIntersection(const QString& address) const;
 
   static bool _isValidNormalizedAddress(const QString& inputAddress,
                                         const QString& normalizedAddress);

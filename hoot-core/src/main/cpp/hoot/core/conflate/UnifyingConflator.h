@@ -145,8 +145,6 @@ private:
    */
   void _reset();
 
-  void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr> matches);
-
   void _printMatches(std::vector<ConstMatchPtr> matches);
   void _printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter);
   QString _matchSetToString(const MatchSet& matchSet) const;

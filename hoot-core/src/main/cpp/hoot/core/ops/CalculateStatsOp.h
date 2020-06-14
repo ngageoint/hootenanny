@@ -66,8 +66,6 @@ public:
 
   QList<SingleStat> getStats() const { return _stats; }
 
-  void printStats();
-
   /**
    * O(n)
    */
@@ -87,12 +85,13 @@ public:
 
   virtual QString getDescription() const { return "Calculates map statistics"; }
 
-  // Configurable
   virtual void setConfiguration(const Settings& conf);
 
   virtual std::string getClassName() const { return className(); }
 
 private:
+
+  friend class CalculateStatsOpTest;
 
   // Enum defining what stat value of the SingleStatistic or NumericStatistic
   // implementation of the specific visitor is being used.
@@ -124,9 +123,9 @@ private:
   QString _mapName;
   std::shared_ptr<const OsmMap> _constMap;
   bool _quick;
-  //We differentiate between maps that are the input to a conflation job vs those that are the
-  //output of a conflation job.  Another option would be to refactor this class for both maps
-  //meant to be input to a conflation job and those that are output from a conflation job.
+  // We differentiate between maps that are the input to a conflation job vs those that are the
+  // output of a conflation job.  Another option would be to refactor this class for both maps
+  // meant to be input to a conflation job and those that are output from a conflation job.
   bool _inputIsConflatedMapOutput;
   QList<SingleStat> _stats;
 
@@ -176,6 +175,7 @@ private:
   double _applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis,
                        const QString& statName, StatCall call = Stat);
   void _applyVisitor(ConstElementVisitor* v, const QString& statName);
+  double _getApplyVisitor(ConstElementVisitor* v, const QString& statName);
 
   static bool _matchDescriptorCompare(const CreatorDescription& m1,
                                       const CreatorDescription& m2);

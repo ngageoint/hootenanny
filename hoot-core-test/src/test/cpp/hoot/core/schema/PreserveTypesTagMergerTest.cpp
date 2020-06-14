@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -211,7 +211,7 @@ public:
     expected["alt_name"] = "Building 2";
     expected["shop"] = "supermarket";
 
-    std::set<QString> keys;
+    QSet<QString> keys;
     keys.insert("amenity");
     PreserveTypesTagMerger uut(keys);
     uut.setOverwrite1(false);

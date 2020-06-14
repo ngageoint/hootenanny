@@ -111,7 +111,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
   rubberSheet->setLogWarningWhenRequirementsNotFound(false);
   try
   {
-    rubberSheet->calculateTransform(/*mapWithOnlyUnknown1And2*/subsetMap);
+    rubberSheet->calculateTransform(subsetMap);
   }
   catch (const HootException& e)
   {

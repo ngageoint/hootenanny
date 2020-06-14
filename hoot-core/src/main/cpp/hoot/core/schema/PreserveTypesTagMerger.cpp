@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/CollectionUtils.h>
 
 // Qt
 #include <QStringBuilder>
@@ -43,11 +44,19 @@ QString PreserveTypesTagMerger::ALT_TYPES_TAG_KEY = "alt_types";
 
 HOOT_FACTORY_REGISTER(TagMerger, PreserveTypesTagMerger)
 
-PreserveTypesTagMerger::PreserveTypesTagMerger(const std::set<QString>& skipTagKeys) :
+PreserveTypesTagMerger::PreserveTypesTagMerger(const QSet<QString>& skipTagKeys) :
 _overwrite1(ConfigOptions().getTagMergerDefault() ==
-            QString::fromStdString(OverwriteTag1Merger::className())),
+              QString::fromStdString(OverwriteTag1Merger::className())),
 _skipTagKeys(skipTagKeys)
 {
+  setConfiguration(conf());
+}
+
+void PreserveTypesTagMerger::setConfiguration(const Settings& conf)
+{
+  TagMerger::setConfiguration(conf);
+  ConfigOptions config = ConfigOptions(conf);
+  setOverwriteExcludeTagKeys(config.getTagMergerOverwriteExclude());
 }
 
 Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
@@ -69,12 +78,15 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     tagsToBeOverwritten = t2;
   }
 
-  // handle name and text tags in the standard fashion
-  TagComparator::getInstance().mergeNames(tagsToOverwriteWith, tagsToBeOverwritten, result);
-  TagComparator::getInstance().mergeText(tagsToOverwriteWith, tagsToBeOverwritten, result);
+  // handle name and text tags in the standard overwrite merge fashion
+  //const QStringList excludeKeysAsList = QStringList::fromSet(_skipTagKeys);
+  TagComparator::getInstance().mergeNames(tagsToOverwriteWith, tagsToBeOverwritten, result,
+                                          _overwriteExcludeTagKeys, _caseSensitive);
+  TagComparator::getInstance().mergeText(tagsToOverwriteWith, tagsToBeOverwritten, result,
+                                         _overwriteExcludeTagKeys, _caseSensitive);
   LOG_TRACE("Tags after name/text merging: " << result);
 
-  //retain any previously set alt_types
+  // retain any previously set alt_types
   if (!tagsToOverwriteWith[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
   {
     result = _preserveAltTypes(tagsToOverwriteWith, result);
@@ -95,8 +107,10 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     LOG_VART(it.value());
 
     bool skippingTagPreservation = false;
-    // ignore tags that we're specified to be explicitly skipped
-    if (_skipTagKeys.find(it.key()) != _skipTagKeys.end())
+    // ignore type tags that either were specified to be explicitly skipped or general tags that
+    // we don't want to be overwritten
+    if (_skipTagKeys.find(it.key()) != _skipTagKeys.end() ||
+        _overwriteExcludeTagKeys.contains(it.key()))
     {
       LOG_TRACE(
         "Explicitly skipping type handling for tag: " << it.key() << "=" <<  it.value() << "...");
@@ -115,7 +129,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     else if (!schema.hasAnyCategory(it.key(), it.value()))
     {
       LOG_TRACE(
-        "Skipping type handling for tag not belonging to any type cateogry: " << it.key() << "=" <<
+        "Skipping type handling for tag not belonging to any type category: " << it.key() << "=" <<
         it.value() << "...");
       skippingTagPreservation = true;
     }
@@ -125,7 +139,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     {
       LOG_VART(tagsToBeOverwrittenOfKey);
       // If one is more specific than the other, add it, but then remove both tags so we don't
-      // try to add them again.)
+      // try to add them again.
       if (_isAncestor(it.key(), tagsToBeOverwrittenOfKey, it.key(), it.value()))
       {
         LOG_TRACE(
