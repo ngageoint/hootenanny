@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Generates an alpha shape
  *
- * https://github.com/ngageoint/hootenanny/files/595246/Hootenanny.-.Alpha.Shape.2013-03-07.pptx
+ * @see AlphaShape
  */
 class AlphaShapeGenerator
 {
@@ -45,6 +45,12 @@ public:
 
   static std::string className() { return "hoot::AlphaShapeGenerator"; }
 
+  /**
+   * TODO
+   *
+   * @param alpha
+   * @param buffer
+   */
   AlphaShapeGenerator(const double alpha, const double buffer = 0.0);
 
   /**
@@ -55,16 +61,36 @@ public:
    */
   OsmMapPtr generateMap(OsmMapPtr inputMap);
 
+  /**
+   * TODO
+   *
+   * @param inputMap
+   * @return
+   */
   std::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
 
   void setRetryOnTooSmallInitialAlpha(bool retry) { _retryOnTooSmallInitialAlpha = retry; }
 
 private:
 
+  // TODO
   double _alpha;
+  // TODO
   double _buffer;
+  // TODO
   bool _retryOnTooSmallInitialAlpha;
+  // TODO
   bool _maxTries;
+
+  // TODO: don't think we need this
+  std::vector<std::pair<double, double>> _inputPoints;
+
+  /*
+   * This is a bit of hack to the alg, if you will, that will alow for covering small groups of
+   * features when a smaller alpha value is selected. This is desirable in certain situations when
+   * using the alpha shape to feed a tasking grid.
+   */
+  void _coverStragglers(std::shared_ptr<geos::geom::Geometry>& geometry);
 };
 
 }

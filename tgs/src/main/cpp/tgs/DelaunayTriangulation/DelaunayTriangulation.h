@@ -271,6 +271,7 @@ public:
   void insert(double x, double y);
 
 private:
+
   Subdivision* _subdivision;
   double _x[3], _y[3];
   int _pointCount;

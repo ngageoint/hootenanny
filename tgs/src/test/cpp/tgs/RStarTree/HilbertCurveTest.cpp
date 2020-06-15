@@ -48,7 +48,9 @@ class HilbertCurveTest : public CppUnit::TestFixture
   CPPUNIT_TEST(sanityCheck);
   CPPUNIT_TEST(sanityCheck2);
   CPPUNIT_TEST_SUITE_END();
+
 public:
+
   void test1()
   {
     int values2[] = {0, 3, 4, 5, 1, 2, 7, 6, 14, 13, 8, 9, 15, 12, 11, 10};

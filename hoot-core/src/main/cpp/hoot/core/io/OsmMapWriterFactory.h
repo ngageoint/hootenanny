@@ -37,6 +37,9 @@
 // Standard
 #include <memory>
 
+// GEOS
+#include <geos/geom/Geometry.h>
+
 namespace hoot
 {
 
@@ -62,6 +65,9 @@ public:
   static bool isSupportedFormat(const QString& url);
 
   static void writeDebugMap(const std::shared_ptr<const OsmMap>& map, const QString& title = "",
+                            NetworkMatcherPtr matcher = NetworkMatcherPtr());
+  static void writeDebugMap(const std::shared_ptr<geos::geom::Geometry>& geometry,
+                            std::shared_ptr<OGRSpatialReference> spatRef, const QString& title = "",
                             NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
 private:

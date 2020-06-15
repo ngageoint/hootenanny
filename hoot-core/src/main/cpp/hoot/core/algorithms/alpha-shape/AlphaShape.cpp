@@ -32,7 +32,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/elements/Way.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // GEOS
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -40,6 +40,7 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/geom/Point.h>
 using namespace geos::geom;
 
 // Qt
@@ -79,9 +80,8 @@ public:
   int getId() { return _id; }
 
 private:
+
   int _id;
-
-
   set<int> _children;
 };
 
@@ -262,7 +262,7 @@ bool AlphaShape::_isTooLong(const Edge& e) const
 
 void AlphaShape::insert(const vector<pair<double, double>>& points)
 {
-  LOG_DEBUG("Inserting points...");
+  LOG_DEBUG("Inserting " << points.size() << " points...");
 
   double minX = numeric_limits<double>::max();
   double maxX = -minX;
@@ -295,7 +295,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
     randomized.push_back(points[i]);
   }
 
-  // randomize the input. By randomizing we take the complexity from O(n^2) to O(n lg(n))
+  // By randomizing the input we take the complexity from O(n^2) to O(n lg(n)).
   for (size_t i = 0; i < points.size() * 3; i++)
   {
     int i1 = Tgs::Random::instance()->generateInt(points.size()) + 3;
@@ -314,7 +314,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
   LOG_VARD(_pDelauneyTriangles->getFaces().size());
 }
 
-std::shared_ptr<OsmMap> AlphaShape::toOsmMap()
+std::shared_ptr<OsmMap> AlphaShape::_toOsmMap()
 {
   std::shared_ptr<OsmMap> result(new OsmMap());
   GeometryConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
@@ -329,7 +329,7 @@ std::shared_ptr<OsmMap> AlphaShape::toOsmMap()
 
 std::shared_ptr<Geometry> AlphaShape::toGeometry()
 {
-  LOG_DEBUG("Traversing faces...");
+  LOG_DEBUG("Traversing " << _pDelauneyTriangles->getFaces().size() << " faces...");
 
   // create a vector of all faces
   vector<std::shared_ptr<Geometry>> tmp, tmp2;
@@ -357,7 +357,7 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
   LOG_DEBUG("Area: " << (long)preUnionArea);
   LOG_VARD(tmp.size());
 
-  // if the result is an empty geometry.
+  // if the result is an empty geometry
   if (tmp.size() == 0)
   {
     if (_longestFaceEdge > _alpha)
@@ -374,13 +374,13 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
     }
   }
 
-  LOG_DEBUG("Joining faces...");
+  LOG_DEBUG("Joining " << tmp.size() << " faces...");
 
   // while there is more than one geometry
   while (tmp.size() > 1)
   {
     LOG_TRACE("Sorting size: " << tmp.size());
-    // sort polygons using the hilbert value. This increases the chances that nearby polygons will
+    // Sort polygons using the Hilbert value. This increases the chances that nearby polygons will
     // be merged early and speed up the union process.
     ComparePolygon compare(e);
     sort(tmp.begin(), tmp.end(), compare);
@@ -388,11 +388,11 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
     LOG_TRACE("Remaining pieces: " << tmp.size());
     tmp2.resize(0);
     tmp2.reserve(tmp.size() / 2 + 1);
-    // merge pairs at a time. This makes the join faster.
+    // Merge pairs at a time. This makes the join faster.
     for (size_t i = 0; i < tmp.size() - 1; i += 2)
     {
       std::shared_ptr<Geometry> g;
-      // sometimes GEOS gives results that are incorrect. In those cases we try cleaning the
+      // Sometimes GEOS gives results that are incorrect. In those cases we try cleaning the
       // geometries and attempting it again.
       bool cleanAndRetry = false;
       try
@@ -418,10 +418,10 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
         {
           g.reset(tmp[i]->Union(tmp[i + 1].get()));
         }
-        // if the cleaning didn't fix the problem.
+        // if the cleaning didn't fix the problem
         catch(const geos::util::GEOSException& e)
         {
-          // report an error.
+          // report an error
           QString error = "Error unioning two geometries. " + QString(e.what()) + "\n" +
               "geom1: " + QString::fromStdString(tmp[i]->toString()) + "\n" +
               "geom2: " + QString::fromStdString(tmp[i + 1]->toString());
@@ -431,7 +431,7 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
 
       tmp2.push_back(g);
     }
-    // if there are an odd number of entries, just add the last one
+    // If there are an odd number of entries, just add the last one.
     if (tmp.size() % 2 == 1)
     {
       tmp2.push_back(tmp[tmp.size() - 1]);
@@ -440,10 +440,9 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
     tmp = tmp2;
   }
 
+  LOG_DEBUG("Creating output geometry...");
+
   std::shared_ptr<Geometry> result;
-
-  LOG_DEBUG("Converting geometry to map...");
-
   if (tmp.size() == 1)
   {
     result = tmp[0];
@@ -452,7 +451,6 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
   {
     result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
-
   result.reset(GeometryUtils::validateGeometry(result.get()));
 
   // I've never seen this happen when the cleaning step above is used, but a check can't hurt.
