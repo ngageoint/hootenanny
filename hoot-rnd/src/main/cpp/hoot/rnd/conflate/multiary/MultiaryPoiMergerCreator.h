@@ -57,7 +57,8 @@ class MultiaryPoiMergerCreator : public MergerCreator
 public:
   static std::string className() { return "hoot::MultiaryPoiMergerCreator"; }
 
-  MultiaryPoiMergerCreator();
+  MultiaryPoiMergerCreator() = default;
+  virtual ~MultiaryPoiMergerCreator() = default;
 
   /**
    * This merger is very aggressive and will merge pretty much any set of matches that are passed

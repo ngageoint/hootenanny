@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SQLITEWORDWEIGHTDICTIONARY_H
@@ -46,6 +46,7 @@ class SqliteWordWeightDictionary : public WordWeightDictionary
 public:
 
   SqliteWordWeightDictionary(const QString& filePath);
+  virtual ~SqliteWordWeightDictionary() = default;
 
   virtual double getMinWeight() const override { return 1.0 / (double)_count; }
 

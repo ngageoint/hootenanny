@@ -48,7 +48,7 @@ public:
 
   static std::string className() { return "hoot::HighwayTagOnlyMerger"; }
 
-  HighwayTagOnlyMerger();
+  HighwayTagOnlyMerger() = default;
   HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
                        const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   // This is definitely not ideal to be passing a Network Conflation merger in here like this to
@@ -58,7 +58,7 @@ public:
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     std::shared_ptr<PartialNetworkMerger> networkMerger);
 
-  ~HighwayTagOnlyMerger();
+  virtual ~HighwayTagOnlyMerger() = default;
 
   virtual QString getDescription() const
   { return "Merges road tags only with minimal geometry exceptions"; }

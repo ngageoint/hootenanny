@@ -60,7 +60,7 @@ public:
 
   JosmMapValidatorAbstract();
 
-  virtual ~JosmMapValidatorAbstract();
+  virtual ~JosmMapValidatorAbstract() = default;
 
   /**
    * @see Configurable

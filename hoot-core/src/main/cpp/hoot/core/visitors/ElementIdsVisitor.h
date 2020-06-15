@@ -48,6 +48,7 @@ public:
 
   ElementIdsVisitor(const ElementType& elementType);
   ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
+  virtual ~ElementIdsVisitor() = default;
 
   void visit(const std::shared_ptr<const Element>& e) override;
 

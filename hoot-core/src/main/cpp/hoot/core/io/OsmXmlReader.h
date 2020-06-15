@@ -57,8 +57,6 @@ public:
 
   static std::string className() { return "hoot::OsmXmlReader"; }
 
-  static int logWarnCount;
-
   OsmXmlReader();
   virtual ~OsmXmlReader();
 
@@ -139,6 +137,8 @@ public:
   void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
 
 protected:
+
+  static int logWarnCount;
 
   bool _osmFound;
 

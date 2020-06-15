@@ -51,6 +51,7 @@ public:
   static std::string className() { return "hoot::SchemaTranslationVisitor"; }
 
   SchemaTranslationVisitor();
+  virtual ~SchemaTranslationVisitor() = default;
 
   /**
    * @see Configurable

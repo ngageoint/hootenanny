@@ -52,8 +52,6 @@ public:
 
   static std::string className() { return "hoot::Relation"; }
 
-  static int logWarnCount;
-
   explicit Relation(const Relation& from);
 
   Relation(Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
@@ -63,7 +61,7 @@ public:
            QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
            bool visible = ElementData::VISIBLE_EMPTY);
 
-  virtual ~Relation() {}
+  virtual ~Relation() = default;
 
   void addElement(const QString& role, const std::shared_ptr<const Element>& e);
   void addElement(const QString& role, ElementType t, long id);
@@ -199,6 +197,8 @@ public:
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
 
 private:
+
+  static int logWarnCount;
 
   std::shared_ptr<RelationData> _relationData;
 

@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::Merger"; }
 
-  virtual ~Merger() {}
+  Merger() = default;
+  virtual ~Merger() = default;
 
   /**
    * Applies the merge to the input map. Any way that is significantly modified should get a new ID.

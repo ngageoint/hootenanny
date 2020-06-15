@@ -35,11 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithPointMembersCriterion)
 
-RelationWithPointMembersCriterion::RelationWithPointMembersCriterion() :
-RelationWithGeometryMembersCriterion()
-{
-}
-
 RelationWithPointMembersCriterion::RelationWithPointMembersCriterion(ConstOsmMapPtr map) :
 RelationWithGeometryMembersCriterion(map)
 {

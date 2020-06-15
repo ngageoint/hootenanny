@@ -50,6 +50,7 @@ public:
   static std::string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 
   PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
+  virtual ~PoiPolygonTypeScoreExtractor() = default;
 
   virtual std::string getClassName() const { return PoiPolygonTypeScoreExtractor::className(); }
 

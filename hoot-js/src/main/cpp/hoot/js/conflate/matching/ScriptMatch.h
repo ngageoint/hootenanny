@@ -51,7 +51,8 @@ public:
 
   static int logWarnCount;
 
-  ScriptMatch();
+  ScriptMatch() = default;
+  virtual ~ScriptMatch() = default;
   /**
    * @param mapObj This could be derived from the map, but destructing an OsmMapJs object is quite
    *  expensive due to the amount of memory cleanup we must do in the general case.

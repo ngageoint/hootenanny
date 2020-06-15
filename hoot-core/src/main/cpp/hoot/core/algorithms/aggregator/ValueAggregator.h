@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VALUEAGGREGATOR_H
 #define VALUEAGGREGATOR_H
@@ -45,8 +45,8 @@ public:
 
   static std::string className() { return "hoot::ValueAggregator"; }
 
-  ValueAggregator() {}
-  virtual ~ValueAggregator() {}
+  ValueAggregator() = default;
+  virtual ~ValueAggregator() = default;
 
   /**
    * Aggregates the values in the vector d into a single value. The aggregation may be something

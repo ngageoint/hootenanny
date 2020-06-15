@@ -113,7 +113,7 @@ private:
   std::vector<std::shared_ptr<MatchCreator>> _creators;
 
   MatchFactory();
-  ~MatchFactory() = default;
+  virtual ~MatchFactory() = default;
 
   void _checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
                                    const geos::geom::Envelope& bounds) const;

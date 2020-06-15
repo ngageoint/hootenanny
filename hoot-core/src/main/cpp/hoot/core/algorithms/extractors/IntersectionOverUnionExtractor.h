@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INTERSECTION_OVER_UNION_EXTRACTOR_H
 #define INTERSECTION_OVER_UNION_EXTRACTOR_H
@@ -48,6 +48,9 @@ class IntersectionOverUnionExtractor : public FeatureExtractorBase
 public:
 
   static std::string className() { return "hoot::IntersectionOverUnionExtractor"; }
+
+  IntersectionOverUnionExtractor() = default;
+  virtual ~IntersectionOverUnionExtractor() = default;
 
   /**
    * @see FeatureExtractor

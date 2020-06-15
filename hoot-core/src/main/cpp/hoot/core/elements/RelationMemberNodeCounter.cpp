@@ -33,10 +33,6 @@
 namespace hoot
 {
 
-RelationMemberNodeCounter::RelationMemberNodeCounter()
-{
-}
-
 int RelationMemberNodeCounter::numNodes(const ConstRelationPtr& relation) const
 {
   int count = 0;

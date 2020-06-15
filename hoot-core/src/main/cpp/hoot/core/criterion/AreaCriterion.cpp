@@ -37,15 +37,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, AreaCriterion)
 
-AreaCriterion::AreaCriterion()
-{
-}
-
-AreaCriterion::AreaCriterion(ConstOsmMapPtr map) :
-_map(map)
-{
-}
-
 bool AreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());

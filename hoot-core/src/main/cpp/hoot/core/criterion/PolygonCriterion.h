@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::PolygonCriterion"; }
 
-  PolygonCriterion();
+  PolygonCriterion() = default;
+  virtual ~PolygonCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

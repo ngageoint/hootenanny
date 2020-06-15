@@ -80,7 +80,7 @@ public:
 
   RelationData(const RelationData& rd);
 
-  virtual ~RelationData() {}
+  virtual ~RelationData() = default;
 
   void addElement(const QString& role, ElementId eid);
 

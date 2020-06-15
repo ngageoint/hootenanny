@@ -62,6 +62,7 @@ public:
   static std::string className() { return "hoot::DuplicateNodeRemover"; }
 
   DuplicateNodeRemover(Meters distanceThreshold = -1.0);
+  virtual ~DuplicateNodeRemover() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 

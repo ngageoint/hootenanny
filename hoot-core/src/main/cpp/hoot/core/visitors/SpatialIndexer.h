@@ -62,6 +62,7 @@ public:
                           const std::shared_ptr<ElementCriterion>& criterion,
                           std::function<Meters (const ConstElementPtr& e)> getSearchRadius,
                           ConstOsmMapPtr pMap);
+  virtual ~SpatialIndexer() = default;
 
   void addCriterion(const ElementCriterionPtr& e);
 

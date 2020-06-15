@@ -63,6 +63,7 @@ public:
   static std::string className() { return "hoot::RandomWaySplitter"; }
 
   RandomWaySplitter();
+  virtual ~RandomWaySplitter() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

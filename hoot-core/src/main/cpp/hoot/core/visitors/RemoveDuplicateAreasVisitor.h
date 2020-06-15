@@ -59,6 +59,7 @@ public:
   static std::string className() { return "hoot::RemoveDuplicateAreasVisitor"; }
 
   RemoveDuplicateAreasVisitor();
+  virtual ~RemoveDuplicateAreasVisitor() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
 

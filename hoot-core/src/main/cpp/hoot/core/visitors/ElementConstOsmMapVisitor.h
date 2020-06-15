@@ -44,8 +44,8 @@ public:
 
   static std::string className() { return "hoot::ElementConstOsmMapVisitor"; }
 
-  ElementConstOsmMapVisitor() {}
-  virtual ~ElementConstOsmMapVisitor() {}
+  ElementConstOsmMapVisitor() = default;
+  virtual ~ElementConstOsmMapVisitor() = default;
 
   void setOsmMap(const OsmMap* map) override { _map = map; }
 

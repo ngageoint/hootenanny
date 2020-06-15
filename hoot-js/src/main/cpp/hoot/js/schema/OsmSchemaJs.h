@@ -44,8 +44,8 @@ public:
 
 private:
 
-  OsmSchemaJs();
-  ~OsmSchemaJs();
+  OsmSchemaJs() = default;
+  virtual ~OsmSchemaJs() = default;
 
   static void getAllTags(const v8::FunctionCallbackInfo<v8::Value>& agrs);
   static void getCategories(const v8::FunctionCallbackInfo<v8::Value>& args);

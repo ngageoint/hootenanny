@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCRITERIONJS_H
 #define ELEMENTCRITERIONJS_H
@@ -49,8 +49,8 @@ public:
 
 private:
 
-  ElementCriterionJs(ElementCriterion* c);
-  ~ElementCriterionJs();
+  ElementCriterionJs(ElementCriterion* c) : _c(c) { }
+  virtual ~ElementCriterionJs() = default;
 
   static void addCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);

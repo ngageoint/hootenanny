@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIPLECHANGESETPROVIDER_H
 #define MULTIPLECHANGESETPROVIDER_H
@@ -41,11 +41,12 @@ class MultipleChangesetProvider : public ChangesetProvider
 
 public:
 
-  explicit MultipleChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection);
+  explicit MultipleChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection)
+    : _projection(pProjection) { }
+
+  virtual ~MultipleChangesetProvider() = default;
 
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
-
-  virtual ~MultipleChangesetProvider();
 
   /**
    * @see ChangeSetProvider

@@ -56,11 +56,12 @@ public:
 
   static const QString MATCH_NAME;
 
-  HighwayMatch();
+  HighwayMatch() = default;
   HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
                const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
                const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
                ConstMatchThresholdPtr mt);
+  virtual ~HighwayMatch() = default;
 
   virtual QString explain() const override;
 

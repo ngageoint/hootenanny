@@ -37,10 +37,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, OneWayRoadStandardizer)
 
-OneWayRoadStandardizer::OneWayRoadStandardizer()
-{
-}
-
 void OneWayRoadStandardizer::visit(const std::shared_ptr<Element>& e)
 {
   if (ReversedRoadCriterion(_map->shared_from_this()).isSatisfied(e))

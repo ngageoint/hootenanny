@@ -92,6 +92,7 @@ public:
   static const QString JOB_SOURCE;
 
   DataConverter();
+  virtual ~DataConverter() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

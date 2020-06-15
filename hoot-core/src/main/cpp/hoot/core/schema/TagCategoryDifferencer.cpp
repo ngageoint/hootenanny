@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagCategoryDifferencer.h"
 
@@ -40,10 +40,6 @@ TagCategoryDifferencer::TagCategoryDifferencer(OsmSchemaCategory category) :
   {
     throw HootException("The TagCategoryDifferencer can only filter on a single category.");
   }
-}
-
-TagCategoryDifferencer::~TagCategoryDifferencer()
-{
 }
 
 bool TagCategoryDifferencer::isValidTag(const SchemaVertex& sv) const

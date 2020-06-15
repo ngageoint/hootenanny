@@ -36,10 +36,6 @@
 namespace hoot
 {
 
-CollectionRelationMerger::CollectionRelationMerger()
-{
-}
-
 void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
 {
   if (elementId1.getType() != ElementType::Relation ||

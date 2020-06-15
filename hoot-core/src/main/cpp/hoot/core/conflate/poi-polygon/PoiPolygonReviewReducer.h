@@ -67,6 +67,7 @@ public:
     double nameScoreThreshold, double nameScore, bool nameMatch, bool exactNameMatch,
     double typeScoreThreshold, double typeScore, bool typeMatch, double matchDistanceThreshold,
     bool addressMatch, bool addressParsingEnabled, PoiPolygonInfoCachePtr infoCache);
+  virtual ~PoiPolygonReviewReducer() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

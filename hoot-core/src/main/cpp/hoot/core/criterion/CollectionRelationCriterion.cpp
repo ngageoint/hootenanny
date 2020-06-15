@@ -38,10 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, CollectionRelationCriterion)
 
-CollectionRelationCriterion::CollectionRelationCriterion()
-{
-}
-
 bool CollectionRelationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());

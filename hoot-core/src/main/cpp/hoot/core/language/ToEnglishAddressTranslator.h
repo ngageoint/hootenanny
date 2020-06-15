@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TO_ENGLISH_ADDRESS_TRANSLATOR_H
 #define TO_ENGLISH_ADDRESS_TRANSLATOR_H
@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::ToEnglishAddressTranslator"; }
 
-  ToEnglishAddressTranslator();
+  ToEnglishAddressTranslator() = default;
+  virtual ~ToEnglishAddressTranslator() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

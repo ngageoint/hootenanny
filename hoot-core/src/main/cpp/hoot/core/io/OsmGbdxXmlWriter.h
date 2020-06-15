@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMGBDXXMLWRITER_H
 #define OSMGBDXXMLWRITER_H
@@ -55,8 +55,6 @@ class OsmGbdxXmlWriter : public QXmlDefaultHandler, public PartialOsmMapWriter
 public:
 
   static std::string className() { return "hoot::OsmGbdxXmlWriter"; }
-
-  static int logWarnCount;
 
   OsmGbdxXmlWriter();
   virtual ~OsmGbdxXmlWriter();
@@ -103,6 +101,8 @@ public:
   void setFormatXml(const bool format) { _formatXml = format; }
 
 private:
+
+  static int logWarnCount;
 
   bool _formatXml;
   int _precision;

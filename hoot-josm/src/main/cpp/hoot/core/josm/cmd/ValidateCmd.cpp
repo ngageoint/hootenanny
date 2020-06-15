@@ -44,7 +44,7 @@ public:
 
   static std::string className() { return "hoot::ValidateCmd"; }
 
-  ValidateCmd() {}
+  ValidateCmd() = default;
 
   virtual QString getName() const override { return "validate"; }
 

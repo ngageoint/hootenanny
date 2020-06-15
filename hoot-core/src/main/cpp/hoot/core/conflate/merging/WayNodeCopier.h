@@ -44,6 +44,7 @@ class WayNodeCopier : public OsmMapConsumer, public ElementCriterionConsumer, pu
 public:
 
   WayNodeCopier();
+  virtual ~WayNodeCopier() = default;
 
   /**
    * Copies all nodes from one way to another based on an optional filtering criterion set

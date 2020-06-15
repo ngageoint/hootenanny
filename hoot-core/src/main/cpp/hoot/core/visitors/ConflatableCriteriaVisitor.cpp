@@ -37,10 +37,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ConflatableCriteriaVisitor)
 
-ConflatableCriteriaVisitor::ConflatableCriteriaVisitor()
-{
-}
-
 void ConflatableCriteriaVisitor::visit(const std::shared_ptr<Element>& e)
 {
   LOG_VART(e->getElementId());

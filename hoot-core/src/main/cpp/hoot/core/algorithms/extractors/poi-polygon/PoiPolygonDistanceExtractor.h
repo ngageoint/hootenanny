@@ -45,6 +45,7 @@ public:
   static std::string className() { return "hoot::PoiPolygonDistanceExtractor"; }
 
   PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
+  virtual ~PoiPolygonDistanceExtractor() = default;
 
   virtual std::string getClassName() const
   { return PoiPolygonDistanceExtractor::className(); }

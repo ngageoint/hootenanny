@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MEANWORDSETDISTANCE_H
 #define MEANWORDSETDISTANCE_H
@@ -52,6 +52,7 @@ public:
    */
   MeanWordSetDistance(StringDistancePtr d, double portion=1.0);
   MeanWordSetDistance();
+  virtual ~MeanWordSetDistance() = default;
 
   static std::string className() { return "hoot::MeanWordSetDistance"; }
 

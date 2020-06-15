@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IN_MEMORY_ELEMENT_SORTER_H
 #define IN_MEMORY_ELEMENT_SORTER_H
@@ -48,7 +48,7 @@ class InMemoryElementSorter : public ElementInputStream
 public:
 
   InMemoryElementSorter(ConstOsmMapPtr map);
-  virtual ~InMemoryElementSorter() {}
+  virtual ~InMemoryElementSorter() = default;
 
   /**
    * @see ElementInputStream

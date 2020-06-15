@@ -66,9 +66,10 @@ public:
   static std::string className() { return "hoot::Tags"; }
   static QString uuidKey() { return "uuid"; }
 
-  Tags();
+  Tags() = default;
   Tags(const QString& key, const QString& value);
   Tags(const QString& kvp);
+  virtual ~Tags() = default;
 
   void addNote(const QString& note);
 

@@ -45,14 +45,6 @@ HOOT_JS_REGISTER(LogJs)
 
 QHash<QString, int> LogJs::_logs;
 
-LogJs::LogJs()
-{
-}
-
-LogJs::~LogJs()
-{
-}
-
 void LogJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

@@ -54,6 +54,7 @@ public:
   static std::string className() { return "hoot::ElementHashVisitor"; }
 
   ElementHashVisitor();
+  virtual ~ElementHashVisitor() = default;
 
   virtual void visit(const ElementPtr &e);
 

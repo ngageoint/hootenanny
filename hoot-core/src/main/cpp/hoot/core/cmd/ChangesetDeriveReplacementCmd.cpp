@@ -56,7 +56,7 @@ public:
 
   static std::string className() { return "hoot::ChangesetDeriveReplacementCmd"; }
 
-  ChangesetDeriveReplacementCmd() {}
+  ChangesetDeriveReplacementCmd() = default;
 
   virtual QString getName() const { return "changeset-derive-replacement"; }
 

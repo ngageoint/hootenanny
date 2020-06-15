@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __SINGLE_SIDED_NETWORK_MATCHER_H__
 #define __SINGLE_SIDED_NETWORK_MATCHER_H__
@@ -69,6 +69,7 @@ public:
    * Always construct with create() to make a shared pointer.
    */
   SingleSidedNetworkMatcher();
+  virtual ~SingleSidedNetworkMatcher() = default;
 
   // Leaving this hardcoded for now, as we don't use this matcher in production conflation jobs.
   // If we ever do end up using it production, then add a config option for it.

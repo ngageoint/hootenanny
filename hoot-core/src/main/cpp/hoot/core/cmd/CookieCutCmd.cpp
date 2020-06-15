@@ -50,7 +50,7 @@ public:
 
   static string className() { return "hoot::CookieCutCmd"; }
 
-  CookieCutCmd() {}
+  CookieCutCmd() = default;
 
   virtual QString getName() const override { return "cookie-cut"; }
 

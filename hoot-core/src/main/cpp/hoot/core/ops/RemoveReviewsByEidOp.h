@@ -55,7 +55,8 @@ public:
    * It is expected that the eid will be populated with addElement after construction. addElement
    * must be called exactly two times.
    */
-  RemoveReviewsByEidOp() {}
+  RemoveReviewsByEidOp() = default;
+  virtual ~RemoveReviewsByEidOp() = default;
 
   /**
    * If the elements aren't specified in the constructor this must be called exactly two times. Once

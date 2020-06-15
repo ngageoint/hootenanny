@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GREEDYCONSTRAINEDMATCHES_H
 #define GREEDYCONSTRAINEDMATCHES_H
@@ -45,6 +45,7 @@ class GreedyConstrainedMatches : public ConstrainedMatches
 public:
 
   GreedyConstrainedMatches(const ConstOsmMapPtr& map);
+  virtual ~GreedyConstrainedMatches() = default;
 
   virtual std::vector<ConstMatchPtr> calculateSubset() override;
 };

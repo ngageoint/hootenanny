@@ -49,6 +49,7 @@ public:
   static std::string className() { return "hoot::UnionPolygonsVisitor"; }
 
   UnionPolygonsVisitor();
+  virtual ~UnionPolygonsVisitor() = default;
 
   const std::shared_ptr<geos::geom::Geometry>& getUnion() const { return _result; }
 

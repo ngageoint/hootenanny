@@ -41,11 +41,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Match, NetworkMatch)
 
-NetworkMatch::NetworkMatch() :
-Match()
-{
-}
-
 NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
   double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
   double scoringFunctionCurveMidpointX, double scoringFunctionCurveSteepness) :

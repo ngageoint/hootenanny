@@ -55,6 +55,7 @@ public:
 
   AverageNumericTagsVisitor();
   explicit AverageNumericTagsVisitor(const QStringList keys);
+  virtual ~AverageNumericTagsVisitor() = default;
 
   /**
    * Given a set of tag keys and for all features having those tags, averages the numerical values

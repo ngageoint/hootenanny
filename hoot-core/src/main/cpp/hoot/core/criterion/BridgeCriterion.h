@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef BRIDGE_CRITERION_H
@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::BridgeCriterion"; }
 
-  BridgeCriterion();
+  BridgeCriterion() = default;
+  virtual ~BridgeCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 

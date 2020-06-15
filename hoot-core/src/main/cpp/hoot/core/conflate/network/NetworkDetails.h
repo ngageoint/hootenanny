@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKDETAILS_H
 #define NETWORKDETAILS_H
@@ -58,9 +58,8 @@ public:
 
   static std::string className() { return "hoot::NetworkDetails"; }
 
-  static int logWarnCount;
-
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
+  virtual ~NetworkDetails() = default;
 
   Meters calculateDistance(ConstEdgeLocationPtr el) const;
   /**
@@ -187,6 +186,8 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
 private:
+
+  static int logWarnCount;
 
   std::shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;

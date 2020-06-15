@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::NormalizePhoneNumbersVisitor"; }
 
-  NormalizePhoneNumbersVisitor();
+  NormalizePhoneNumbersVisitor() = default;
+  virtual ~NormalizePhoneNumbersVisitor() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

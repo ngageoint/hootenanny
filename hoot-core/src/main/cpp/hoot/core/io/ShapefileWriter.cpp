@@ -63,7 +63,8 @@ class ColumnVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
-  ColumnVisitor(ElementType type) : _type(type) {}
+  ColumnVisitor(ElementType type) : _type(type) { }
+  virtual ~ColumnVisitor() = default;
 
   virtual void visit(const std::shared_ptr<const Element>& e)
   {

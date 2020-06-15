@@ -39,7 +39,8 @@ public:
 
   static std::string className() { return "hoot::AddressCountVisitor"; }
 
-  MultiaryMatchTrainingValidator();
+  MultiaryMatchTrainingValidator() = default;
+  virtual ~MultiaryMatchTrainingValidator() = default;
 
   /**
    * @see OsmMapOperation::apply()

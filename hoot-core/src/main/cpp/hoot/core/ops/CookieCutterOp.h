@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::CookieCutterOp"; }
 
   CookieCutterOp();
+  virtual ~CookieCutterOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 

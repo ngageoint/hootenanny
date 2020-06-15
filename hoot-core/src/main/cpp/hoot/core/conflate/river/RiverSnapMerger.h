@@ -55,6 +55,7 @@ public:
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher2);
+  virtual ~RiverSnapMerger() = default;
 
   /**
    * @see Configurable

@@ -60,8 +60,8 @@ public:
 
 private:
 
-  HighwaySnapMergerJs();
-  ~HighwaySnapMergerJs();
+  HighwaySnapMergerJs() = default;
+  virtual ~HighwaySnapMergerJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);

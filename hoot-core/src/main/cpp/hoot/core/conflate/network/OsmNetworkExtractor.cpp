@@ -45,7 +45,8 @@ class OsmNetworkExtractorVisitor : public ConstElementVisitor
 {
 public:
 
-  OsmNetworkExtractorVisitor(OsmNetworkExtractor& parent) : _parent(parent) {}
+  OsmNetworkExtractorVisitor(OsmNetworkExtractor& parent) : _parent(parent) { }
+  virtual ~OsmNetworkExtractorVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -59,10 +60,6 @@ private:
 
   OsmNetworkExtractor& _parent;
 };
-
-OsmNetworkExtractor::OsmNetworkExtractor()
-{
-}
 
 void OsmNetworkExtractor::_addEdge(ConstElementPtr from, ConstElementPtr to,
   QList<ConstElementPtr> members, bool directed)

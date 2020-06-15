@@ -45,7 +45,7 @@ public:
 
   ImplicitTypeTaggerBase();
   ImplicitTypeTaggerBase(const QString& databasePath);
-  ~ImplicitTypeTaggerBase();
+  virtual ~ImplicitTypeTaggerBase();
 
   /**
    * Adds implicitly derived tags to an element

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef VALUEAGGREGATORCONSUMER_H
@@ -40,7 +40,8 @@ class ValueAggregatorConsumer
 {
 public:
 
-  virtual ~ValueAggregatorConsumer() {}
+  ValueAggregatorConsumer() = default;
+  virtual ~ValueAggregatorConsumer() = default;
   virtual void setValueAggregator(const ValueAggregatorPtr& sd) = 0;
 };
 

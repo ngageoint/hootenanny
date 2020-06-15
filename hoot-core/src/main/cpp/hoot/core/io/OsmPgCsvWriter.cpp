@@ -46,10 +46,6 @@ OsmPgCsvWriter::OsmPgCsvWriter()
 {
 }
 
-OsmPgCsvWriter::~OsmPgCsvWriter()
-{
-}
-
 void OsmPgCsvWriter::open(const QString& url)
 {
   QFileInfo path(url);

@@ -123,6 +123,7 @@ public:
 
   PaintVisitor(OsmMapPtr map, GeometryPainter& gp, QPainter& pt, QMatrix& m) :
     _map(map), _gp(gp), _pt(pt), _m(m) { }
+  virtual ~PaintVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {

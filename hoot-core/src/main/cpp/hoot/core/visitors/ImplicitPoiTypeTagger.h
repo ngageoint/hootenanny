@@ -42,8 +42,9 @@ public:
 
   static std::string className() { return "hoot::ImplicitPoiTypeTagger"; }
 
-  ImplicitPoiTypeTagger();
+  ImplicitPoiTypeTagger() = default;
   ImplicitPoiTypeTagger(const QString& databasePath);
+  virtual ~ImplicitPoiTypeTagger() = default;
 
   virtual QString getDescription() const override
   { return "Adds tags to POIs implicitly derived from their names"; }

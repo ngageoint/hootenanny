@@ -46,6 +46,7 @@ public:
 
   RelationMemberRemover();
   RelationMemberRemover(const ElementId& idToReplace, const bool includeReviewRelations = true);
+  virtual ~RelationMemberRemover() = default;
 
   /**
    * @see OsmMapOperation

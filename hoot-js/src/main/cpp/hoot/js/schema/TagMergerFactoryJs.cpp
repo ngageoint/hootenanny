@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagMergerFactoryJs.h"
 
@@ -37,12 +37,6 @@ namespace hoot
 {
 
 HOOT_JS_REGISTER(TagMergerFactoryJs)
-
-TagMergerFactoryJs::TagMergerFactoryJs()
-{
-}
-
-TagMergerFactoryJs::~TagMergerFactoryJs() {}
 
 void TagMergerFactoryJs::Init(Handle<Object> exports)
 {

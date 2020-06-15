@@ -38,7 +38,8 @@ public:
 
   static std::string className() { return "hoot::AddGeometryTypeVisitor"; }
 
-  AddGeometryTypeVisitor();
+  AddGeometryTypeVisitor() = default;
+  virtual ~AddGeometryTypeVisitor() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
 

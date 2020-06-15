@@ -63,7 +63,7 @@ public:
 
   static string className() { return "hoot::ScoreMatchesCmd"; }
 
-  ScoreMatchesCmd() { }
+  ScoreMatchesCmd() = default;
 
   virtual QString getName() const override { return "score-matches"; }
 

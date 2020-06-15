@@ -49,10 +49,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ReplaceRoundabouts)
 
-ReplaceRoundabouts::ReplaceRoundabouts()
-{
-}
-
 void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
 {
   LOG_TRACE("Replacing roundabouts...");

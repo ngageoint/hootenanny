@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::FindIntersectionsVisitor"; }
 
-  FindIntersectionsVisitor() {}
+  FindIntersectionsVisitor() = default;
+  virtual ~FindIntersectionsVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 
@@ -83,6 +84,9 @@ public:
 
   static std::string className() { return "hoot::FindHighwayIntersectionsVisitor"; }
 
+  FindHighwayIntersectionsVisitor() = default;
+  virtual ~FindHighwayIntersectionsVisitor() = default;
+
   virtual QString getDescription() const { return "Identifies road intersections"; }
 
   virtual QString getInitStatusMessage() const
@@ -102,6 +106,9 @@ class FindRailwayIntersectionsVisitor : public FindIntersectionsVisitor
 public:
 
   static std::string className() { return "hoot::FindRailwayIntersectionsVisitor"; }
+
+  FindRailwayIntersectionsVisitor() = default;
+  virtual ~FindRailwayIntersectionsVisitor() = default;
 
   virtual QString getDescription() const { return "Identifies railway intersections"; }
 

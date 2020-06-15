@@ -54,6 +54,7 @@ public:
   } JoinAtNodeMergeType;
 
   WayJoinerAdvanced();
+  virtual ~WayJoinerAdvanced() = default;
 
   /**
    * Static method to join all joinable ways using WayJoinerAdvanced

@@ -45,7 +45,7 @@ public:
 
   static string className() { return "hoot::DbDeleteMapCmd"; }
 
-  DbDeleteMapCmd() {}
+  DbDeleteMapCmd() = default;
 
   virtual QString getName() const override { return "db-delete-map"; }
 

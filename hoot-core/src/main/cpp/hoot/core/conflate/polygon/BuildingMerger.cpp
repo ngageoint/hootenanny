@@ -69,7 +69,8 @@ class DeletableBuildingCriterion : public ElementCriterion
 
 public:
 
-  DeletableBuildingCriterion() {}
+  DeletableBuildingCriterion() = default;
+  virtual ~DeletableBuildingCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const
   {
@@ -104,11 +105,6 @@ private:
 };
 
 int BuildingMerger::logWarnCount = 0;
-
-BuildingMerger::BuildingMerger() :
-MergerBase()
-{
-}
 
 BuildingMerger::BuildingMerger(const set<pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs),

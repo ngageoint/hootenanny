@@ -247,6 +247,8 @@ public:
     TestUtils::getInstance().registerReset(this);
   }
 
+  virtual ~AutoRegisterResetInstance() = default;
+
   virtual void reset()
   {
     T::reset();
@@ -276,6 +278,8 @@ protected:
     if (outputPath != UNUSED_PATH)
       FileUtils::makeDir(_outputPath);
   }
+
+  virtual ~HootTestFixture() = default;
 
   /**
    * @brief setResetType Set the reset type to do basic, all, or none

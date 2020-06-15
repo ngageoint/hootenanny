@@ -41,10 +41,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MergerCreator, ScriptMergerCreator)
 
-ScriptMergerCreator::ScriptMergerCreator()
-{
-}
-
 bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
   LOG_TRACE(

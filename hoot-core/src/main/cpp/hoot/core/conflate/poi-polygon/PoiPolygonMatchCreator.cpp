@@ -46,10 +46,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MatchCreator, PoiPolygonMatchCreator)
 
-PoiPolygonMatchCreator::PoiPolygonMatchCreator()
-{
-}
-
 MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
                                              ElementId eid2)
 {

@@ -43,10 +43,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateWayNodesVisitor)
 
-RemoveDuplicateWayNodesVisitor::RemoveDuplicateWayNodesVisitor()
-{
-}
-
 void RemoveDuplicateWayNodesVisitor::removeDuplicates(const WayPtr& way)
 {
   RemoveDuplicateWayNodesVisitor vis;

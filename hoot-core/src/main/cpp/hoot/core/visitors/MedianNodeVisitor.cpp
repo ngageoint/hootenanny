@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MedianNodeVisitor.h"
 
@@ -39,10 +39,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, MedianNodeVisitor)
-
-MedianNodeVisitor::MedianNodeVisitor()
-{
-}
 
 ConstNodePtr MedianNodeVisitor::calculateMedianNode() const
 {

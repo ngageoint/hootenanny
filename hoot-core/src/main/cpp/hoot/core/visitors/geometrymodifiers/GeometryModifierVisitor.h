@@ -49,6 +49,10 @@ class GeometryModifierVisitor : public ElementVisitor
   friend class GeometryModifierOp;
 
 public:
+
+  GeometryModifierVisitor() = default;
+  virtual ~GeometryModifierVisitor() = default;
+
   virtual void setOsmMap(OsmMap* pMap) { _pMap = pMap; }
 
   void setActionDesc(GeometryModifierActionDesc actionDesc ) { _actionDesc = actionDesc; }

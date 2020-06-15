@@ -56,9 +56,9 @@ public:
 
 private:
 
-  RelationJs(ConstRelationPtr w);
-  RelationJs();
-  ~RelationJs();
+  RelationJs(ConstRelationPtr r) : _constRelation(r) { }
+  RelationJs() = default;
+  virtual ~RelationJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void replaceElement(const v8::FunctionCallbackInfo<v8::Value>& args);

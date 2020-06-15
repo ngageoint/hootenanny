@@ -45,6 +45,7 @@ public:
 
   StatusUpdateVisitor();
   StatusUpdateVisitor(Status status, bool onlyUpdateIfStatusInvalid = false);
+  virtual ~StatusUpdateVisitor() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

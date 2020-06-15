@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONSTELEMENTCONSUMER_H
 #define CONSTELEMENTCONSUMER_H
@@ -35,6 +35,10 @@ namespace hoot
 class ConstElementConsumer : public ElementConsumer
 {
 public:
+
+  ConstElementConsumer() = default;
+  virtual ~ConstElementConsumer() = default;
+
   virtual void addElement(const ConstElementPtr& e) = 0;
   virtual void addElement(const ElementPtr& e)
   {

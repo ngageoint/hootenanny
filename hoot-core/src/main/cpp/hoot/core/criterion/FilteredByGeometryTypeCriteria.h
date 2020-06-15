@@ -44,6 +44,9 @@ class FilteredByGeometryTypeCriteria
 {
 public:
 
+  FilteredByGeometryTypeCriteria() = default;
+  virtual ~FilteredByGeometryTypeCriteria() = default;
+
   /**
    * Returns all associated GeometryTypeCriterion class names. The criteria are logically OR'd
    * together. If a class that doesn't inherit from GeometryTypeCriterion is returned by an

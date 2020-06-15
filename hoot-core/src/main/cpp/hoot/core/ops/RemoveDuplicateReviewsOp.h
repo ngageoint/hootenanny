@@ -49,6 +49,7 @@ public:
   static std::string className() { return "hoot::RemoveDuplicateReviewsOp"; }
 
   RemoveDuplicateReviewsOp();
+  virtual ~RemoveDuplicateReviewsOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 

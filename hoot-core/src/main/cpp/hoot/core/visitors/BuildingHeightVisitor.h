@@ -48,6 +48,7 @@ public:
   static int logWarnCount;
 
   BuildingHeightVisitor();
+  virtual ~BuildingHeightVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e) override;
 

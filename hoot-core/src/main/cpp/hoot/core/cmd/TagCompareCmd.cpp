@@ -46,7 +46,7 @@ public:
 
   static string className() { return "hoot::TagCompareCmd"; }
 
-  TagCompareCmd() { }
+  TagCompareCmd() = default;
 
   virtual QString getName() const override { return "tag-compare"; }
 

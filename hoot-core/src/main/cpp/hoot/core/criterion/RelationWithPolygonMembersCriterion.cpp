@@ -35,11 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithPolygonMembersCriterion)
 
-RelationWithPolygonMembersCriterion::RelationWithPolygonMembersCriterion() :
-RelationWithGeometryMembersCriterion()
-{
-}
-
 RelationWithPolygonMembersCriterion::RelationWithPolygonMembersCriterion(ConstOsmMapPtr map) :
 RelationWithGeometryMembersCriterion(map)
 {

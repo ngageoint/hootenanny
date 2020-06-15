@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::RemoveInvalidMultilineStringMembersVisitor"; }
 
   RemoveInvalidMultilineStringMembersVisitor();
+  virtual ~RemoveInvalidMultilineStringMembersVisitor() = default;
 
   virtual void visit(const ElementPtr& e);
 

@@ -64,7 +64,7 @@ public:
 
   static string className() { return "hoot::EvalPointMovesCmd"; }
 
-  EvalPointMovesCmd() { }
+  EvalPointMovesCmd() = default;
 
   virtual QString getName() const override { return "evaluate-point-moves"; }
 

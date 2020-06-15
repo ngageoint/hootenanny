@@ -50,6 +50,7 @@ public:
   static std::string className() { return "hoot::DuplicateNameRemover"; }
 
   DuplicateNameRemover();
+  virtual ~DuplicateNameRemover() = default;
 
   void apply(std::shared_ptr<OsmMap>& map);
 

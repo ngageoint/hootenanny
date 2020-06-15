@@ -50,7 +50,7 @@ public:
 
   static string className() { return "hoot::ChangesetApplyCmd"; }
 
-  ChangesetApplyCmd() { }
+  ChangesetApplyCmd() = default;
 
   virtual QString getName() const override { return "changeset-apply"; }
 

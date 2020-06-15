@@ -46,6 +46,7 @@ public:
   static std::string className() { return "hoot::TagCountVisitor"; }
 
   TagCountVisitor();
+  virtual ~TagCountVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e) override;
 

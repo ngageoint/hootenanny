@@ -54,6 +54,7 @@ public:
 
   NonConflatableCriterion();
   NonConflatableCriterion(ConstOsmMapPtr map);
+  virtual ~NonConflatableCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

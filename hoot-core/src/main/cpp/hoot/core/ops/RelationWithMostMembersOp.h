@@ -50,6 +50,7 @@ public:
   static std::string className() { return "hoot::RelationWithMostMembersOp"; }
 
   RelationWithMostMembersOp();
+  virtual ~RelationWithMostMembersOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 

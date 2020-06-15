@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NAME_CRITERION_H
 #define NAME_CRITERION_H
@@ -48,6 +48,7 @@ public:
 
   NameCriterion();
   NameCriterion(const QStringList& names, const bool caseSensitive = false);
+  virtual ~NameCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
