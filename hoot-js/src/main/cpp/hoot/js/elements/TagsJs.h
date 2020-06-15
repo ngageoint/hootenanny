@@ -57,8 +57,6 @@ public:
 
 private:
 
-//TODO: REMOVE ME
-//  TagsJs(ConstNodePtr n);
   TagsJs() = default;
   virtual ~TagsJs() = default;
 

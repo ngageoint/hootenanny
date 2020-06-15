@@ -54,8 +54,6 @@ public:
 
 private:
 
-//TODO: DELETE ME
-//  WaySublineMatchStringJs(ConstNodePtr n);
   WaySublineMatchStringJs() = default;
   virtual ~WaySublineMatchStringJs() = default;
 

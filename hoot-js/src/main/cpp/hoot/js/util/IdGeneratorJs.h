@@ -51,7 +51,7 @@ public:
 private:
 
   IdGeneratorJs(IdGeneratorPtr idGen);
-  ~IdGeneratorJs() = default;
+  virtual ~IdGeneratorJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
