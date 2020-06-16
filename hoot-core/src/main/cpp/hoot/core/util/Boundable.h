@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BOUNDABLE_H
 #define BOUNDABLE_H
@@ -42,7 +42,8 @@ class Boundable
 {
 public:
 
-  virtual ~Boundable() {}
+  Boundable() = default;
+  virtual ~Boundable() = default;
 
   /**
    * Sets the bounds in WGS84. It is important to note that even if the rest of the operation is

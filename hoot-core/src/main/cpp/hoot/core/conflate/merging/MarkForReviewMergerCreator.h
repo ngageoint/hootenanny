@@ -39,7 +39,8 @@ public:
 
   static std::string className() { return "hoot::MarkForReviewMergerCreator"; }
 
-  MarkForReviewMergerCreator();
+  MarkForReviewMergerCreator() = default;
+  virtual ~MarkForReviewMergerCreator() = default;
 
   virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 

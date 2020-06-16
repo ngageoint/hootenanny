@@ -44,9 +44,7 @@ public:
 
   static std::string className() { return "hoot::ScoreMatchesDiffCmd"; }
 
-  ScoreMatchesDiffCmd()
-  {
-  }
+  ScoreMatchesDiffCmd() = default;
 
   virtual QString getName() const override { return "score-matches-diff"; }
 

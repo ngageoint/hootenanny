@@ -49,15 +49,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, IntersectionSplitter)
 
-IntersectionSplitter::IntersectionSplitter()
-{
-}
-
-IntersectionSplitter::IntersectionSplitter(const std::shared_ptr<OsmMap>& map) :
-_map(map)
-{
-}
-
 void IntersectionSplitter::_mapNodesToWay(const std::shared_ptr<Way>& way)
 {
   long wId = way->getId();

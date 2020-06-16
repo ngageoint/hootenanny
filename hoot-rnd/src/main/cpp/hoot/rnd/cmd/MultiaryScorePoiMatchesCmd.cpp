@@ -58,7 +58,7 @@ public:
 
   static string className() { return "hoot::MultiaryScorePoiMatchesCmd"; }
 
-  MultiaryScorePoiMatchesCmd() { }
+  MultiaryScorePoiMatchesCmd() = default;
 
   QString evaluateThreshold(OsmMapPtr map, QString output,
     std::shared_ptr<MatchThreshold> mt, bool showConfusion)

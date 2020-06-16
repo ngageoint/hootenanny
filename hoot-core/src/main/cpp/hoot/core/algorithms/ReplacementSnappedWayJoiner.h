@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REPLACEMENT_SNAPPED_WAY_JOINER_H
@@ -46,6 +46,7 @@ public:
 
   ReplacementSnappedWayJoiner();
   ReplacementSnappedWayJoiner(const QMap<ElementId, long>& refIdToVersionMappings);
+  virtual ~ReplacementSnappedWayJoiner() = default;
 
   /**
    * @see WayJoiner

@@ -38,14 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
-HighwayCriterion::HighwayCriterion()
-{
-}
-
-HighwayCriterion::HighwayCriterion(ConstOsmMapPtr map) : _map(map)
-{
-}
-
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   LOG_VART(element->getElementId());

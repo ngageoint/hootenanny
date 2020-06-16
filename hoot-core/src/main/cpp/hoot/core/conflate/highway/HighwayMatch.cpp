@@ -59,10 +59,6 @@ HOOT_FACTORY_REGISTER(Match, HighwayMatch)
 const QString HighwayMatch::MATCH_NAME = "Highway";
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
 
-HighwayMatch::HighwayMatch() : Match()
-{
-}
-
 HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
   const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,

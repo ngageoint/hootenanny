@@ -70,6 +70,8 @@ public:
    * @param element XmlElement object to copy
    */
   ChangesetElement(const ChangesetElement& element);
+
+  virtual ~ChangesetElement() = default;
   /**
    * @brief addTag  Add a tag to the element
    * @param tag XML tag with key and value attributes
@@ -208,7 +210,7 @@ public:
    */
   ChangesetNode(const ChangesetNode& node);
   /** Virtual destructor */
-  virtual ~ChangesetNode() { }
+  virtual ~ChangesetNode() = default;
   /**
    * @brief toString Get the XML string equivalent for the node
    * @param changesetId ID of the changeset to insert into the node
@@ -242,7 +244,7 @@ public:
    */
   ChangesetWay(const ChangesetWay& way);
   /** Virtual destructor */
-  virtual ~ChangesetWay() { }
+  virtual ~ChangesetWay() = default;
   /**
    * @brief addNode Add a node ID to the node (in order)
    * @param id Node ID
@@ -359,7 +361,7 @@ public:
    */
   ChangesetRelation(const ChangesetRelation& relation);
   /** Virtual destructor */
-  virtual ~ChangesetRelation() { }
+  virtual ~ChangesetRelation() = default;
   /**
    * @brief addMember Add relation member
    * @param member XML attributes of the relation member

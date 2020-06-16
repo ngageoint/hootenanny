@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYRFCLASSIFIER_H
 #define HIGHWAYRFCLASSIFIER_H
@@ -43,9 +43,8 @@ public:
 
   static std::string className() { return "hoot::HighwayRfClassifier"; }
 
-  static int logWarnCount;
-
-  HighwayRfClassifier();
+  HighwayRfClassifier() = default;
+  virtual ~HighwayRfClassifier() = default;
 
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
@@ -54,6 +53,8 @@ public:
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;
 
 private:
+
+  static int logWarnCount;
   // these are mutable because we do a lazy load.
   mutable std::shared_ptr<Tgs::RandomForest> _rf;
   mutable QStringList _rfFactorLabels;

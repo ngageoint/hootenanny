@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RFEXTRACTORCLASSIFIER_H
 #define RFEXTRACTORCLASSIFIER_H
@@ -46,9 +46,8 @@ public:
 
   static std::string className() { return "hoot::RfExtractorClassifier"; }
 
-  static int logWarnCount;
-
-  RfExtractorClassifier();
+  RfExtractorClassifier() = default;
+  virtual ~RfExtractorClassifier() = default;
 
   /**
    * Classifies the match type of a building pair and returns the results.
@@ -62,6 +61,8 @@ public:
   void import(QDomElement& docRoot);
 
 protected:
+
+  static int logWarnCount;
 
   mutable std::vector<std::shared_ptr<const FeatureExtractor>> _extractors;
   QStringList _rfFactorLabels;

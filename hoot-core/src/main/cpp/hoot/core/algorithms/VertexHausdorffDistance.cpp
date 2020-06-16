@@ -54,6 +54,7 @@ public:
   {
     _distance = -1;
   }
+  virtual ~VertexHausdorffFilter() = default;
 
   virtual void filter_ro(const Coordinate* c)
   {

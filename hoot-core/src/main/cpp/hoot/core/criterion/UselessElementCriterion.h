@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef USELESSELEMENTCRITERION_H
 #define USELESSELEMENTCRITERION_H
@@ -48,8 +48,9 @@ public:
 
   static std::string className() { return "hoot::UselessElementCriterion"; }
 
-  UselessElementCriterion() { }
-  UselessElementCriterion(ConstOsmMapPtr map) : _map(map) {}
+  UselessElementCriterion() = default;
+  UselessElementCriterion(ConstOsmMapPtr map) : _map(map) { }
+  virtual ~UselessElementCriterion() = default;
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

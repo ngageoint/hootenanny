@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MERGERFACTORYJS_H
@@ -44,8 +44,8 @@ public:
 
 private:
 
-  MergerFactoryJs();
-  ~MergerFactoryJs();
+  MergerFactoryJs() = default;
+  virtual ~MergerFactoryJs() = default;
 
   static void getAllAvailableCreators(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

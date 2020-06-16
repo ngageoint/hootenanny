@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
@@ -36,11 +36,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CalculateMapBoundsVisitor)
-
-CalculateMapBoundsVisitor::CalculateMapBoundsVisitor() :
-_envelope()
-{
-}
 
 void CalculateMapBoundsVisitor::visit(const std::shared_ptr<const Element>& e)
 {

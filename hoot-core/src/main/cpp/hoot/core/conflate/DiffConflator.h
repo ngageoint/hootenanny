@@ -82,8 +82,6 @@ class DiffConflator : public OsmMapOperation, public Serializable, public Bounda
 {
 public:
 
-  static int logWarnCount;
-
   /**
    * @brief className - Get a string that represents this class name
    * @return class name
@@ -101,7 +99,7 @@ public:
    */
   DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
 
-  ~DiffConflator();
+  virtual ~DiffConflator();
 
   /**
    * @brief apply - Applies the differential conflation operation to the supplied
@@ -198,6 +196,8 @@ public:
   QString getUnifiedChangesetStats() const { return _unifiedChangesetStats; }
 
 private:
+
+  static int logWarnCount;
 
   OsmMapPtr _pMap;
   geos::geom::Envelope _bounds;

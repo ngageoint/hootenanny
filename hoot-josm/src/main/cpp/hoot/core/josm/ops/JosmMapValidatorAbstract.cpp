@@ -47,10 +47,6 @@ _numFailingValidators(0)
   _josmInterfaceName = ConfigOptions().getJosmMapValidatorJavaImplementation();
 }
 
-JosmMapValidatorAbstract::~JosmMapValidatorAbstract()
-{
-}
-
 void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);

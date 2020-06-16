@@ -43,12 +43,12 @@ class LogJs : public node::ObjectWrap
 {
 public:
 
- static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Handle<v8::Object> target);
 
 private:
 
-  LogJs();
-  ~LogJs();
+  LogJs() = default;
+  virtual ~LogJs() = default;
 
   static void log(const v8::FunctionCallbackInfo<v8::Value>& args, Log::WarningLevel level);
   static void debug(const v8::FunctionCallbackInfo<v8::Value>& args);

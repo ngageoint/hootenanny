@@ -45,11 +45,12 @@ public:
 
   static std::string className() { return "hoot::ChainCriterion"; }
 
-  ChainCriterion() {}
+  ChainCriterion() = default;
   ChainCriterion(const ElementCriterionPtr& child1, const ElementCriterionPtr& child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3);
+  virtual ~ChainCriterion() = default;
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 

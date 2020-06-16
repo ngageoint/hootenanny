@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDBBULKINSERTER_H
 #define HOOTAPIDBBULKINSERTER_H
@@ -55,8 +55,6 @@ class HootApiDbBulkInserter : public OsmApiDbBulkInserter
 public:
 
   static std::string className() { return "hoot::HootApiDbBulkInserter"; }
-
-  static int logWarnCount;
 
   HootApiDbBulkInserter();
   virtual ~HootApiDbBulkInserter();
@@ -112,6 +110,8 @@ protected:
   virtual void _incrementChangesInChangeset();
 
 private:
+
+  static int logWarnCount;
 
   QString _userEmail;
   bool _createUserIfNotFound;

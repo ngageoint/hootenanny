@@ -41,9 +41,10 @@ public:
 
   static std::string className() { return "hoot::OrCriterion"; }
 
-  OrCriterion();
+  OrCriterion() = default;
   OrCriterion(ElementCriterion* child1, ElementCriterion* child2);
   OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2);
+  virtual ~OrCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

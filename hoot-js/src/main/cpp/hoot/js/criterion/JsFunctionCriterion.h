@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CUSTOMCRITERION_H
@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::JsFunctionCriterion"; }
 
-  JsFunctionCriterion() {}
+  JsFunctionCriterion() = default;
+  virtual ~JsFunctionCriterion() = default;
 
   virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func)
   { _func.Reset(isolate, func); }

@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::BuildingLevelsVisitor"; }
 
   BuildingLevelsVisitor();
+  virtual ~BuildingLevelsVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e) override;
 

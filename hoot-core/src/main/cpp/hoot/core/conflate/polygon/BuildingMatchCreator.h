@@ -48,6 +48,7 @@ public:
   static std::string className() { return "hoot::BuildingMatchCreator"; }
 
   BuildingMatchCreator();
+  virtual ~BuildingMatchCreator() = default;
 
   virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 

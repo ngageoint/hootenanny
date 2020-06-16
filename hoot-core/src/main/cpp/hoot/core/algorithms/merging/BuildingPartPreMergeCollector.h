@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDING_PART_PRE_MERGE_COLLECTOR_H
 #define BUILDING_PART_PRE_MERGE_COLLECTOR_H
@@ -90,6 +90,7 @@ class BuildingPartPreMergeCollector : public QRunnable
 public:
 
   BuildingPartPreMergeCollector();
+  virtual ~BuildingPartPreMergeCollector() = default;
 
   /**
    * Takes building part input from an input queue and adds groups it with a disjoint set as

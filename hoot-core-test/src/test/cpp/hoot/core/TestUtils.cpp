@@ -61,6 +61,7 @@ std::shared_ptr<TestUtils> TestUtils::_theInstance;
 
 const QString TestUtils::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
 const QString TestUtils::STREET_TAG_NAME = "addr:street";
+const QString TestUtils::CITY_TAG_NAME = "addr:city";
 const QString TestUtils::FULL_ADDRESS_TAG_NAME = "address";
 const QString TestUtils::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
 
@@ -381,7 +382,7 @@ void TestUtils::runConflateOpReductionTest(
   CPPUNIT_ASSERT_EQUAL(17,  TestUtils::getConflateCmdSnapshotCleaningOps().size());
 
   MatchFactory::getInstance().reset();
-  MatchFactory::_setMatchCreators(matchCreators);
+  MatchFactory::getInstance()._setMatchCreators(matchCreators);
   // This is a snapshot of the ops in order to avoid any changes made to them result in requiring
   // this test's results to change over time. Clearly, any newly added ops could be being filtered
   // incorrectly, and we can update this list periodically if that's deemed important.

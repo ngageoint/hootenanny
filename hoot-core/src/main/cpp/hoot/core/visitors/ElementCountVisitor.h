@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::ElementCountVisitor"; }
 
-  ElementCountVisitor() : _count(0) {}
+  ElementCountVisitor() : _count(0) { }
+  virtual ~ElementCountVisitor() = default;
 
   int getCount() const { return _count; }
 

@@ -45,6 +45,7 @@ public:
 
   RemoveMissingElementsVisitor(const Log::WarningLevel& logLevel = Log::Trace,
                                const int maxReport = Log::getWarnMessageLimit());
+  virtual ~RemoveMissingElementsVisitor() = default;
 
   virtual void setOsmMap(OsmMap* map) { _v->setOsmMap(map);}
   virtual void setOsmMap(const OsmMap* /*map*/)

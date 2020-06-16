@@ -44,8 +44,9 @@ public:
 
   static std::string className() { return "hoot::BuildingCriterion"; }
 
-  BuildingCriterion();
-  BuildingCriterion(ConstOsmMapPtr map);
+  BuildingCriterion() = default;
+  BuildingCriterion(ConstOsmMapPtr map) : _map(map) { }
+  virtual ~BuildingCriterion() = default;
 
   bool isParentABuilding(ElementId eid) const;
 

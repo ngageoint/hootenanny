@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERMUTE_GRID_CALCULATOR_H
 #define PERMUTE_GRID_CALCULATOR_H
@@ -49,7 +49,8 @@ public:
 
   static std::string className() { return "hoot::PermuteGridCalculator"; }
 
-  virtual ~PermuteGridCalculator() { }
+  PermuteGridCalculator() = default;
+  virtual ~PermuteGridCalculator() = default;
 
   /**
    * Calculates a permutation grid and the values in that grid for a given envelope. The number of

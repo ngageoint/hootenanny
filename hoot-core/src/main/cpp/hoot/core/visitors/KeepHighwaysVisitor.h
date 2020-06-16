@@ -48,7 +48,8 @@ public:
 
   static std::string className() { return "hoot::KeepHighwaysVisitor"; }
 
-  KeepHighwaysVisitor() {}
+  KeepHighwaysVisitor() = default;
+  virtual ~KeepHighwaysVisitor() = default;
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
   /**

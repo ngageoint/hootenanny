@@ -61,6 +61,7 @@ namespace hoot
   public:
 
     GeometryModifierOp();
+    virtual ~GeometryModifierOp() = default;
 
     // OsmMapOperation
     static std::string className() { return "hoot::GeometryModifierOp"; }

@@ -40,6 +40,7 @@ public:
   static std::string className() { return "hoot::UpdateWayParentVisitor"; }
 
   UpdateWayParentVisitor(long oldParentId, long newParentId);
+  virtual ~UpdateWayParentVisitor() = default;
 
   virtual void visit(const ElementPtr& e) override;
 

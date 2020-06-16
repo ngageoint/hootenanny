@@ -72,6 +72,8 @@ public:
    */
   RemoveElementByEid(ElementId eId, bool doCheck = true);
 
+  virtual ~RemoveElementByEid() = default;
+
   /**
    * @brief apply performs the removal operation
    * @param map to operate on

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYINTERSECTIONCRITERION_H
 #define HIGHWAYINTERSECTIONCRITERION_H
@@ -47,10 +47,9 @@ public:
 
   static std::string className() { return "hoot::HighwayIntersectionCriterion"; }
 
-  HighwayIntersectionCriterion() {}
+  HighwayIntersectionCriterion() = default;
   explicit HighwayIntersectionCriterion(ConstOsmMapPtr map);
-
-  virtual ~HighwayIntersectionCriterion() {}
+  virtual ~HighwayIntersectionCriterion() = default;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new HighwayIntersectionCriterion(_map)); }

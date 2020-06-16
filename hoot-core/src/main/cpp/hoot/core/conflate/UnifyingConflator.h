@@ -76,7 +76,7 @@ public:
   UnifyingConflator();
   UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
 
-  ~UnifyingConflator();
+  virtual ~UnifyingConflator();
 
   /**
    * Conflates the specified map. If the map is not in a planar projection it is reprojected. The

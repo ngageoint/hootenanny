@@ -41,7 +41,8 @@ public:
 
   static std::string className() { return "hoot::ElementIdToVersionMapper"; }
 
-  ElementIdToVersionMapper();
+  ElementIdToVersionMapper() = default;
+  virtual ~ElementIdToVersionMapper() = default;
 
   virtual void apply(const OsmMapPtr& map);
 

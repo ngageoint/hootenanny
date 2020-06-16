@@ -46,8 +46,9 @@ public:
 
   static std::string className() { return "hoot::ReversedRoadCriterion"; }
 
-  ReversedRoadCriterion();
-  ReversedRoadCriterion(ConstOsmMapPtr map);
+  ReversedRoadCriterion() = default;
+  ReversedRoadCriterion(ConstOsmMapPtr map) : _map(map) { }
+  virtual ~ReversedRoadCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

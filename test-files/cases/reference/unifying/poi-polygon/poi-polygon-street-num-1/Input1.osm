@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-101920107' action='modify' visible='true' lat='17.1576234' lon='-89.0701929'>
+    <tag k='amenity' v='pharmacy' />
+  </node>
+  <node id='-101920108' action='modify' visible='true' lat='17.1576042' lon='-89.0702555'>
+    <tag k='addr:city' v='San Ignacio' />
+    <tag k='addr:street' v='Hudson Street' />
+    <tag k='amenity' v='bar' />
+    <tag k='level' v='2' />
+    <tag k='name' v='Blue Angels' />
+  </node>
+  <node id='-101920109' action='modify' visible='true' lat='17.1576927' lon='-89.0704104'>
+  </node>
+  <node id='-101920110' action='modify' visible='true' lat='17.1576882' lon='-89.0701395'>
+  </node>
+  <node id='-101920111' action='modify' visible='true' lat='17.1575083' lon='-89.0701428'>
+  </node>
+  <node id='-101920112' action='modify' visible='true' lat='17.1575128' lon='-89.0704137'>
+  </node>
+  <node id='-101920113' action='modify' visible='true' lat='17.1573984' lon='-89.0699921'>
+  </node>
+  <node id='-101920114' action='modify' visible='true' lat='17.1574288' lon='-89.069987'>
+  </node>
+  <node id='-101920115' action='modify' visible='true' lat='17.1574117' lon='-89.0698776'>
+  </node>
+  <node id='-101920116' action='modify' visible='true' lat='17.1573461' lon='-89.0698888'>
+  </node>
+  <node id='-101920117' action='modify' visible='true' lat='17.1573768' lon='-89.0700849'>
+  </node>
+  <node id='-101920118' action='modify' visible='true' lat='17.1574125' lon='-89.0700793'>
+  </node>
+  <node id='-101920119' action='modify' visible='true' lat='17.1574433' lon='-89.0700733'>
+  </node>
+  <node id='-101920120' action='modify' visible='true' lat='17.1574936' lon='-89.0703418'>
+  </node>
+  <node id='-101920121' action='modify' visible='true' lat='17.1574891' lon='-89.0701576'>
+  </node>
+  <node id='-101920122' action='modify' visible='true' lat='17.1574584' lon='-89.0701588'>
+  </node>
+  <node id='-101920123' action='modify' visible='true' lat='17.1573886' lon='-89.070184'>
+  </node>
+  <node id='-101920124' action='modify' visible='true' lat='17.1573977' lon='-89.0703444'>
+  </node>
+  <node id='-101920413' action='modify' visible='true' lat='17.1577308' lon='-89.0699655'>
+  </node>
+  <node id='-101920414' action='modify' visible='true' lat='17.1576693' lon='-89.0698047'>
+  </node>
+  <node id='-101920415' action='modify' visible='true' lat='17.1574195' lon='-89.0699092'>
+  </node>
+  <node id='-101920416' action='modify' visible='true' lat='17.157481' lon='-89.0700701'>
+  </node>
+  <way id='-104044727' action='modify' visible='true'>
+    <nd ref='-101920109' />
+    <nd ref='-101920110' />
+    <nd ref='-101920111' />
+    <nd ref='-101920112' />
+    <nd ref='-101920109' />
+    <tag k='angle' v='271.0' />
+    <tag k='building' v='yes' />
+    <tag k='feature_area' v='575.2' />
+    <tag k='length' v='28.8' />
+    <tag k='width' v='20.0' />
+  </way>
+  <way id='-104044728' action='modify' visible='true'>
+    <nd ref='-101920113' />
+    <nd ref='-101920114' />
+    <nd ref='-101920115' />
+    <nd ref='-101920116' />
+    <nd ref='-101920117' />
+    <nd ref='-101920118' />
+    <nd ref='-101920113' />
+    <tag k='addr:city' v='San Ignacio' />
+    <tag k='addr:street' v='Hudson Street' />
+    <tag k='amenity' v='pharmacy' />
+    <tag k='angle' v='279.3' />
+    <tag k='building' v='yes' />
+    <tag k='feature_area' v='124.2' />
+    <tag k='length' v='21.2' />
+    <tag k='name' v='Central Drug Store' />
+    <tag k='width' v='7.4' />
+  </way>
+  <way id='-104044729' action='modify' visible='true'>
+    <nd ref='-101920114' />
+    <nd ref='-101920119' />
+    <nd ref='-101920118' />
+    <nd ref='-101920113' />
+    <nd ref='-101920114' />
+    <tag k='addr:city' v='San Ignacio' />
+    <tag k='addr:street' v='Hudson Street' />
+    <tag k='angle' v='99.6' />
+    <tag k='building' v='yes' />
+    <tag k='feature_area' v='32.3' />
+    <tag k='length' v='9.4' />
+    <tag k='name' v='Delia&apos;s Classified American Clothing' />
+    <tag k='shop' v='clothes' />
+    <tag k='width' v='3.5' />
+  </way>
+  <way id='-104044730' action='modify' visible='true'>
+    <nd ref='-101920120' />
+    <nd ref='-101920121' />
+    <nd ref='-101920122' />
+    <nd ref='-101920123' />
+    <nd ref='-101920124' />
+    <nd ref='-101920120' />
+    <tag k='addr:city' v='San Ignacio' />
+    <tag k='addr:street' v='Hudson Street' />
+    <tag k='angle' v='91.5' />
+    <tag k='building' v='yes' />
+    <tag k='feature_area' v='204.9' />
+    <tag k='length' v='19.6' />
+    <tag k='name' v='Rosa&apos;s Hotel' />
+    <tag k='phone' v='501-804-2265' />
+    <tag k='tourism' v='hotel' />
+    <tag k='width' v='11.3' />
+  </way>
+  <way id='-104044802' action='modify' visible='true'>
+    <nd ref='-101920413' />
+    <nd ref='-101920414' />
+    <nd ref='-101920415' />
+    <nd ref='-101920416' />
+    <nd ref='-101920413' />
+    <tag k='addr:city' v='San Ignacio' />
+    <tag k='addr:street' v='Hudson Street' />
+    <tag k='angle' v='21.8' />
+    <tag k='building' v='yes' />
+    <tag k='feature_area' v='550.0' />
+    <tag k='length' v='30.0' />
+    <tag k='name' v='Shopper&apos;s Choice' />
+    <tag k='shop' v='furniture' />
+    <tag k='width' v='18.4' />
+  </way>
+</osm>

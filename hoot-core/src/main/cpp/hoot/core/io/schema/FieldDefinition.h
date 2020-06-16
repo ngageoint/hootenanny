@@ -59,6 +59,7 @@ public:
   };
 
   FieldDefinition();
+  virtual ~FieldDefinition() = default;
 
   virtual bool getAllowNull() const { return _allowNull; }
 

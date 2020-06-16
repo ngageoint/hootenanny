@@ -60,7 +60,7 @@ public:
                          ConstMatchThresholdPtr threshold,
                          std::shared_ptr<PoiPolygonRfClassifier> rf, PoiPolygonInfoCachePtr infoCache,
                          ElementCriterionPtr filter = ElementCriterionPtr());
-  ~PoiPolygonMatchVisitor();
+  virtual ~PoiPolygonMatchVisitor() = default;
 
   /**
    * Determines whether an element is a Poi/Polygon conflation match candidate and, if so,

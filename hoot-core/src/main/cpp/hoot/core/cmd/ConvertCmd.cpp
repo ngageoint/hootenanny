@@ -51,7 +51,7 @@ public:
 
   static string className() { return "hoot::ConvertCmd"; }
 
-  ConvertCmd() {}
+  ConvertCmd() = default;
 
   virtual QString getName() const override { return "convert"; }
 

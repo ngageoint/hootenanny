@@ -53,6 +53,7 @@ public:
   ReportMissingElementsVisitor(const bool removeMissing = false,
                                const Log::WarningLevel& logLevel = Log::Trace,
                                const int maxReport = Log::getWarnMessageLimit());
+  virtual ~ReportMissingElementsVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 

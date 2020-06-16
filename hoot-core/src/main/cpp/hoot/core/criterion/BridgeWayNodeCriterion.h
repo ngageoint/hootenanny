@@ -41,6 +41,7 @@ public:
 
   BridgeWayNodeCriterion();
   BridgeWayNodeCriterion(ConstOsmMapPtr map);
+  virtual ~BridgeWayNodeCriterion() = default;
 
   virtual void setOsmMap(const OsmMap* map) override;
 

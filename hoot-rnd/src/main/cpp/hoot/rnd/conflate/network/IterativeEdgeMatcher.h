@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ITERATIVE_EDGE_MATCHER_H__
 #define __ITERATIVE_EDGE_MATCHER_H__
@@ -49,7 +49,9 @@ namespace hoot
 class IterativeEdgeMatcher : public VagabondNetworkMatcher
 {
 public:
+
   IterativeEdgeMatcher();
+  virtual ~IterativeEdgeMatcher() = default;
 
   void iterate();
 

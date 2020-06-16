@@ -42,8 +42,9 @@ public:
 
   static std::string className() { return "hoot::KeepTagsVisitor"; }
 
-  KeepTagsVisitor();
+  KeepTagsVisitor() = default;
   explicit KeepTagsVisitor(const QStringList& keys);
+  virtual ~KeepTagsVisitor() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e);
 

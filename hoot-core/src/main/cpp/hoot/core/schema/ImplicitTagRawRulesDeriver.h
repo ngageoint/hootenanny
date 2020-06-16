@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICITTAGRAWRULESDERIVER_H
 #define IMPLICITTAGRAWRULESDERIVER_H
@@ -62,6 +62,7 @@ class ImplicitTagRawRulesDeriver : public Configurable
 public:
 
   ImplicitTagRawRulesDeriver();
+  virtual ~ImplicitTagRawRulesDeriver() = default;
 
   /**
    * Derives implicit tag rules for POIs given input data and writes the rules to output

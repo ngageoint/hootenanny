@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "NotCriterion.h"
@@ -34,20 +34,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NotCriterion)
-
-NotCriterion::NotCriterion()
-{
-}
-
-NotCriterion::NotCriterion(ElementCriterion* c) :
-_child(c)
-{
-}
-
-NotCriterion::NotCriterion(ElementCriterionPtr c) :
-_child(c)
-{
-}
 
 void NotCriterion::addCriterion(const ElementCriterionPtr& e)
 {

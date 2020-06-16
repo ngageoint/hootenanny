@@ -54,8 +54,8 @@ public:
 
 private:
 
-  SublineStringMatcherJs(SublineStringMatcherPtr sm);
-  ~SublineStringMatcherJs();
+  SublineStringMatcherJs(SublineStringMatcherPtr sm) : _sm(sm) { }
+  virtual ~SublineStringMatcherJs() = default;
 
   static void extractMatchingSublines(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void findMatch(const v8::FunctionCallbackInfo<v8::Value>& args);

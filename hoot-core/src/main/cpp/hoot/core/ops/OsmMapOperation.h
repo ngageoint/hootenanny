@@ -65,7 +65,7 @@ public:
   static std::string className() { return "hoot::OsmMapOperation"; }
 
   OsmMapOperation() : _numAffected(0), _numProcessed(0) {}
-  virtual ~OsmMapOperation() {}
+  virtual ~OsmMapOperation() = default;
 
   /**
    * The operation may make changes to any aspect of the map including creating a new map and

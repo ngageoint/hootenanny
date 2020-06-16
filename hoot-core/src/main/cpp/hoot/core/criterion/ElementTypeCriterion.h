@@ -42,10 +42,9 @@ public:
 
   static std::string className() { return "hoot::ElementTypeCriterion"; }
 
-  ElementTypeCriterion() {}
-  ElementTypeCriterion(ElementType::Type eType) : _elementType(eType) {}
-
-  virtual ~ElementTypeCriterion() {}
+  ElementTypeCriterion() = default;
+  ElementTypeCriterion(ElementType::Type eType) : _elementType(eType) { }
+  virtual ~ElementTypeCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -70,7 +69,8 @@ public:
 
   static std::string className() { return "hoot::NodeCriterion"; }
 
-  NodeCriterion() : ElementTypeCriterion(ElementType::Node) {}
+  NodeCriterion() : ElementTypeCriterion(ElementType::Node) { }
+  virtual ~NodeCriterion() = default;
 
   virtual QString getDescription() const { return "Identifies nodes"; }
 
@@ -84,7 +84,8 @@ public:
 
   static std::string className() { return "hoot::WayCriterion"; }
 
-  WayCriterion() : ElementTypeCriterion(ElementType::Way) {}
+  WayCriterion() : ElementTypeCriterion(ElementType::Way) { }
+  virtual ~WayCriterion() = default;
 
   virtual QString getDescription() const { return "Identifies ways"; }
 
@@ -98,9 +99,10 @@ public:
 
   static std::string className() { return "hoot::RelationCriterion"; }
 
-  RelationCriterion() : ElementTypeCriterion(ElementType::Relation) {}
+  RelationCriterion() : ElementTypeCriterion(ElementType::Relation) { }
   RelationCriterion(const QString& type) :
-    ElementTypeCriterion(ElementType::Relation), _type(type.trimmed()) {}
+    ElementTypeCriterion(ElementType::Relation), _type(type.trimmed()) { }
+  virtual ~RelationCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override
   {

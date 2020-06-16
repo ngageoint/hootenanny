@@ -46,8 +46,9 @@ public:
 
   static std::string className() { return "hoot::PointCriterion"; }
 
-  PointCriterion();
+  PointCriterion() = default;
   PointCriterion(ConstOsmMapPtr map);
+  virtual ~PointCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

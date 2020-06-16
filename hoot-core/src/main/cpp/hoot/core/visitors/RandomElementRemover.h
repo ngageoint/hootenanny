@@ -49,6 +49,7 @@ public:
    * @arg p Probability that any given feature will be removed.
    */
   RandomElementRemover();
+  virtual ~RandomElementRemover() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

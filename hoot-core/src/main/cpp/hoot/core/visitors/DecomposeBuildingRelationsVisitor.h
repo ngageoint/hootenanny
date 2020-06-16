@@ -51,7 +51,8 @@ public:
 
   static int logWarnCount;
 
-  DecomposeBuildingRelationsVisitor();
+  DecomposeBuildingRelationsVisitor() = default;
+  virtual ~DecomposeBuildingRelationsVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 

@@ -58,6 +58,7 @@ public:
   static std::string className() { return "hoot::RandomWayGeneralizer"; }
 
   RandomWayGeneralizer();
+  virtual ~RandomWayGeneralizer() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

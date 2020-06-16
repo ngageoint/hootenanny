@@ -66,6 +66,7 @@ public:
   static std::string className() { return "hoot::SmallHighwayMerger"; }
 
   SmallHighwayMerger(Meters threshold = -1);
+  virtual ~SmallHighwayMerger() = default;
 
   void apply(std::shared_ptr<OsmMap>& map);
 

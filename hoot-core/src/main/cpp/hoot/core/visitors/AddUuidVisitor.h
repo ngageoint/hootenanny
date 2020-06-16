@@ -44,8 +44,9 @@ public:
 
   static std::string className() { return "hoot::AddUuidVisitor"; }
 
-  AddUuidVisitor();
+  AddUuidVisitor() = default;
   AddUuidVisitor(QString key);
+  virtual ~AddUuidVisitor() = default;
 
   /**
    * Adds a tag with a UUID to all valid elements.

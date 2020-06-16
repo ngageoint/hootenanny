@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
@@ -44,7 +44,7 @@ class Exception : public std::exception
 {
 public:
 
-  Exception() { }
+  Exception() = default;
   Exception(const QString& error)
   {
     _error = error;

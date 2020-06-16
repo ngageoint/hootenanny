@@ -45,7 +45,8 @@ class PhoneNumberLocateVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  PhoneNumberLocateVisitor();
+  PhoneNumberLocateVisitor() = default;
+  virtual ~PhoneNumberLocateVisitor() = default;
 
   static std::string className() { return "hoot::PhoneNumberLocateVisitor"; }
 

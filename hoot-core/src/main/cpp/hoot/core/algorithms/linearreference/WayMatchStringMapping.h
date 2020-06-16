@@ -64,7 +64,8 @@ class WayMatchStringMapping
 {
 public:
 
-  WayMatchStringMapping() {}
+  WayMatchStringMapping() = default;
+  virtual ~WayMatchStringMapping() = default;
 
   virtual WayStringPtr getWayString1() = 0;
   virtual WayStringPtr getWayString2() = 0;

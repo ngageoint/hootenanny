@@ -51,11 +51,6 @@ HOOT_FACTORY_REGISTER(Match, BuildingMatch)
 
 const QString BuildingMatch::MATCH_NAME = "Building";
 
-BuildingMatch::BuildingMatch() :
-Match()
-{
-}
-
 BuildingMatch::BuildingMatch(const ConstMatchThresholdPtr& mt) :
 Match(mt)
 {

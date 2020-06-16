@@ -47,9 +47,8 @@ public:
 
   static std::string className() { return "hoot::MaximalSublineStringMatcher"; }
 
-  static int logWarnCount;
-
   MaximalSublineStringMatcher();
+  virtual ~MaximalSublineStringMatcher() = default;
 
   /**
    * @throws NeedsReviewException If the multilinestring situation is too complex to handle with
@@ -72,6 +71,8 @@ public:
   { return "Matches lines based on the maximal subline string found"; }
 
 private:
+
+  static int logWarnCount;
 
   // for white box testing.
   friend class MaximalSublineStringMatcherTest;

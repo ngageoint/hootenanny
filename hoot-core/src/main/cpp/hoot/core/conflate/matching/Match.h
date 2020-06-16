@@ -59,8 +59,8 @@ public:
 
   static std::string className() { return "hoot::Match"; }
 
-  Match();
-  virtual ~Match();
+  Match() = default;
+  virtual ~Match() = default;
 
   virtual QString explain() const;
   virtual void setExplain(const QString& /*explainText*/){ }

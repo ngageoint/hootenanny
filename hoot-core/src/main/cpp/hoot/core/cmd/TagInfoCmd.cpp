@@ -47,7 +47,7 @@ public:
 
   static string className() { return "hoot::TagInfoCmd"; }
 
-  TagInfoCmd() { }
+  TagInfoCmd() = default;
 
   virtual QString getName() const override { return "tag-info"; }
 

@@ -44,9 +44,10 @@ class ElementComparison
 {
 public:
 
-  ElementComparison();
+  ElementComparison() = default;
   ElementComparison(ElementPtr element, const OsmMap& sourceMap,
                     const bool ignoreElementId = false);
+  virtual ~ElementComparison() = default;
 
   ElementPtr getElement() const { return _element; }
 

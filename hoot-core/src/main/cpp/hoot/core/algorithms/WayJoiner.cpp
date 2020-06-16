@@ -171,6 +171,8 @@ void WayJoiner::_joinAtNode()
   {
     WayPtr way = ways[*it];
     Tags pTags = way->getTags();
+    if (way->getNodeCount() < 1)
+      continue;
     //  Check each of the endpoints for ways to merge
     vector<long> endpoints({ way->getFirstNodeId(), way->getLastNodeId() });
     for (vector<long>::const_iterator e = endpoints.begin(); e != endpoints.end(); ++e)

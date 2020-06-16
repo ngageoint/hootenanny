@@ -50,7 +50,7 @@ class Way;
  * when conflating data that is mostly major roads with data that contains a lot of
  * neighborhood-level data.
  */
-class HighwayCornerSplitter : public OsmMapOperation, Configurable
+class HighwayCornerSplitter : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -58,6 +58,7 @@ public:
 
   HighwayCornerSplitter();
   HighwayCornerSplitter(const std::shared_ptr<OsmMap>& map);
+  virtual ~HighwayCornerSplitter() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 

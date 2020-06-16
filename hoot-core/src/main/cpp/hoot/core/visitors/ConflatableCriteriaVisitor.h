@@ -42,7 +42,8 @@ public:
 
   static std::string className() { return "hoot::ConflatableCriteriaVisitor"; }
 
-  ConflatableCriteriaVisitor();
+  ConflatableCriteriaVisitor() = default;
+  virtual ~ConflatableCriteriaVisitor() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e);
 

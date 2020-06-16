@@ -56,9 +56,9 @@ public:
 
 private:
 
-  WayJs(ConstWayPtr w);
-  WayJs();
-  ~WayJs();
+  WayJs(ConstWayPtr w) : _constWay(w) { }
+  WayJs() = default;
+  virtual ~WayJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getNodeCount(const v8::FunctionCallbackInfo<v8::Value>& args);

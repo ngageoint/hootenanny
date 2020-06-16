@@ -41,6 +41,7 @@ public:
   static std::string className() { return "hoot::AddRef2Visitor"; }
 
   AddRef2Visitor();
+  virtual ~AddRef2Visitor() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

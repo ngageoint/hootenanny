@@ -43,11 +43,9 @@ public:
 
   static std::string className() { return "hoot::FindNodesInWayFactory"; }
 
-  static int logWarnCount;
-
-  FindNodesInWayFactory() {}
-
+  FindNodesInWayFactory() = default;
   FindNodesInWayFactory(const ConstWayPtr& w);
+  virtual ~FindNodesInWayFactory() = default;
 
   void addWay(const ConstWayPtr& w);
 
@@ -55,6 +53,8 @@ public:
     Status s, double circularError) override;
 
 private:
+
+  static int logWarnCount;
 
   const ConstWayPtr _way;
   std::set<long> _nodesToSearch;

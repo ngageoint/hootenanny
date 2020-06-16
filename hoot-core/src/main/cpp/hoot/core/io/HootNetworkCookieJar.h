@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HOOT_NETWORK_COOKIE_JAR_H
@@ -44,6 +44,7 @@ class HootNetworkCookieJar : public QNetworkCookieJar
 public:
 
   explicit HootNetworkCookieJar(QObject* parent = 0);
+  virtual ~HootNetworkCookieJar() = default;
 
   int size() const { return allCookies().size(); }
 

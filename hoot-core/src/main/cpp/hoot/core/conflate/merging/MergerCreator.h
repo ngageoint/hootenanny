@@ -51,7 +51,8 @@ public:
 
   static std::string className() { return "hoot::MergerCreator"; }
 
-  virtual ~MergerCreator() {}
+  MergerCreator() = default;
+  virtual ~MergerCreator() = default;
 
   /**
    * Either creates one or more mergers that can merge all the matches in the

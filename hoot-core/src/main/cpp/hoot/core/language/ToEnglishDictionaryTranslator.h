@@ -58,7 +58,7 @@ public:
   static std::string className() { return "hoot::ToEnglishDictionaryTranslator"; }
 
   ToEnglishDictionaryTranslator();
-  virtual ~ToEnglishDictionaryTranslator() {}
+  virtual ~ToEnglishDictionaryTranslator() = default;
 
   /**
    * Translates the given input string into a translation & transliteration of the input.
@@ -108,8 +108,6 @@ private:
   QRegExp _whiteSpace;
 
   QString _transform(const std::shared_ptr<icu::Transliterator>& t, const QString& input) const;
-
-  static void _readStreetTypes();
 };
 
 }

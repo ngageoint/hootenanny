@@ -180,16 +180,18 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
   return duplicateStrings;
 }
 
-bool StringUtils::containsSubstring(const QStringList& input, const QString& substring)
+bool StringUtils::containsSubstring(const QStringList& input, const QString& substring,
+                                    Qt::CaseSensitivity caseSensitivity)
 {
-  return input.filter(substring, Qt::CaseInsensitive).size() > 0;
+  return input.filter(substring, caseSensitivity).size() > 0;
 }
 
-bool StringUtils::containsSubstrings(const QStringList& input, const QStringList& substrings)
+bool StringUtils::containsSubstrings(const QStringList& input, const QStringList& substrings,
+                                     Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < substrings.size(); i++)
   {
-    if (input.filter(substrings.at(i), Qt::CaseInsensitive).size() > 0)
+    if (input.filter(substrings.at(i), caseSensitivity).size() > 0)
     {
       return true;
     }
@@ -197,11 +199,12 @@ bool StringUtils::containsSubstrings(const QStringList& input, const QStringList
   return false;
 }
 
-int StringUtils::indexOfSubstring(const QStringList& input, const QString& substring)
+int StringUtils::indexOfSubstring(const QStringList& input, const QString& substring,
+                                  Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < input.size(); i++)
   {
-    if (input.at(i).contains(substring))
+    if (input.at(i).contains(substring, caseSensitivity))
     {
       return i;
     }
@@ -217,16 +220,34 @@ void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
   }
 }
 
-bool StringUtils::containsAny(const QStringList& input, const QStringList& toCompare)
+void StringUtils::removeAll(QString& input, const QStringList& toRemove,
+                            Qt::CaseSensitivity caseSensitivity)
 {
-  LOG_VART(input);
-  LOG_VART(toCompare);
+  for (int i = 0; i < toRemove.size(); i++)
+  {
+    input.remove(toRemove.at(i), caseSensitivity);
+  }
+}
+
+void StringUtils::removeLastIndexOf(QString& input, const QStringList& toRemove,
+                                    Qt::CaseSensitivity caseSensitivity)
+{
+  for (int i = 0; i < toRemove.size(); i++)
+  {
+    const int index = input.lastIndexOf(toRemove.at(i), -1, caseSensitivity);
+    if (index != -1)
+    {
+      input = input.remove(index, toRemove.at(i).length());
+    }
+  }
+}
+
+bool StringUtils::containsAny(const QStringList& input, const QStringList& toCompare,
+                              Qt::CaseSensitivity caseSensitivity)
+{
   for (int i = 0; i < toCompare.size(); i++)
   {
-    LOG_VART(toCompare.at(i));
-    LOG_VART(input.contains(toCompare.at(i)));
-    // may eventually want a case sensitivity option here
-    if (input.contains(toCompare.at(i)))
+    if (input.contains(toCompare.at(i), caseSensitivity))
     {
       return true;
     }
@@ -234,11 +255,105 @@ bool StringUtils::containsAny(const QStringList& input, const QStringList& toCom
   return false;
 }
 
+bool StringUtils::endsWithAny(const QString& input, const QStringList& toCompare,
+                              Qt::CaseSensitivity caseSensitivity)
+{
+  for (int i = 0; i < toCompare.size(); i++)
+  {
+    if (input.endsWith(toCompare.at(i), caseSensitivity))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+QString StringUtils::endsWithAnyAsStr(const QString& input, const QStringList& toCompare,
+                                      Qt::CaseSensitivity caseSensitivity)
+{
+  for (int i = 0; i < toCompare.size(); i++)
+  {
+    const QString toCompareStr = toCompare.at(i);
+    if (input.endsWith(toCompareStr, caseSensitivity))
+    {
+      return toCompareStr;
+    }
+  }
+  return "";
+}
+
+bool StringUtils::bisectsAny(const QString& input, const QStringList& toCompare,
+                             Qt::CaseSensitivity caseSensitivity)
+{
+  for (int i = 0; i < toCompare.size(); i++)
+  {
+    if (input.split(toCompare.at(i), QString::SkipEmptyParts, caseSensitivity).size() == 2)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool StringUtils::bisectsAny(const QString& input, const QList<QRegExp>& toCompare)
+{
+  for (int i = 0; i < toCompare.size(); i++)
+  {
+    if (input.split(toCompare.at(i), QString::SkipEmptyParts).size() == 2)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+QStringList StringUtils::splitOnAny(const QString& input, const QStringList& tokenList,
+                                    const int numOutputTokens,
+                                    Qt::CaseSensitivity caseSensitivity)
+{
+  for (int i = 0; i < tokenList.size(); i++)
+  {
+    const QStringList inputParts =
+      input.split(tokenList.at(i), QString::SkipEmptyParts, caseSensitivity);
+    if (inputParts.size() == numOutputTokens)
+    {
+      return inputParts;
+    }
+  }
+  return QStringList();
+}
+
+QStringList StringUtils::splitOnAny(const QString& input, const QList<QRegExp>& tokenList,
+                                    const int numOutputTokens)
+{
+  for (int i = 0; i < tokenList.size(); i++)
+  {
+    const QStringList inputParts =
+      input.split(tokenList.at(i), QString::SkipEmptyParts);
+    if (inputParts.size() == numOutputTokens)
+    {
+      return inputParts;
+    }
+  }
+  return QStringList();
+}
+
 void StringUtils::removeAllWithKey(QMap<QString, QString>& input, const QStringList& keysToRemove)
 {
   for (int i = 0; i < keysToRemove.size(); i++)
   {
     input.remove(keysToRemove.at(i));
+  }
+}
+
+void StringUtils::replaceLastIndexOf(QString& input, const QString& strToReplace,
+                                     const QString& replacementStr,
+                                     Qt::CaseSensitivity caseSensitivity)
+{
+  const int index = input.lastIndexOf(strToReplace, -1, caseSensitivity);
+  if (index != -1)
+  {
+    input = input.replace(index, strToReplace.size(), replacementStr);
   }
 }
 

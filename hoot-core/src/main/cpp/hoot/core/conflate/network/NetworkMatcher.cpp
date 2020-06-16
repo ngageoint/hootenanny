@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatcher.h"
 
@@ -42,14 +42,6 @@ namespace hoot
 {
 
 const double NetworkMatcher::EPSILON = 1e-6;
-
-NetworkMatcher::~NetworkMatcher()
-{
-}
-
-void NetworkMatcher::finalize()
-{
-}
 
 void NetworkMatcher::_createEdge2Index()
 {

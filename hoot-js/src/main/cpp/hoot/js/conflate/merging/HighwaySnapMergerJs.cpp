@@ -55,14 +55,6 @@ HOOT_JS_REGISTER(HighwaySnapMergerJs)
 
 Persistent<Function> HighwaySnapMergerJs::_constructor;
 
-HighwaySnapMergerJs::HighwaySnapMergerJs()
-{
-}
-
-HighwaySnapMergerJs::~HighwaySnapMergerJs()
-{
-}
-
 void HighwaySnapMergerJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();

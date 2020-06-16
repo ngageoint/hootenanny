@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMXMLWRITER_H
 #define OSMXMLWRITER_H
@@ -55,8 +55,6 @@ class OsmXmlWriter : public QXmlDefaultHandler, public PartialOsmMapWriter
 public:
 
   static std::string className() { return "hoot::OsmXmlWriter"; }
-
-  static int logWarnCount;
 
   OsmXmlWriter();
   virtual ~OsmXmlWriter();
@@ -122,6 +120,8 @@ public:
   QString removeInvalidCharacters(const QString& s);
 
 private:
+
+  static int logWarnCount;
 
   bool _formatXml;
   bool _includeDebug;

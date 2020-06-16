@@ -55,9 +55,9 @@ public:
 
   static std::string className() { return "hoot::IntersectionSplitter"; }
 
-  IntersectionSplitter();
-
-  IntersectionSplitter(const std::shared_ptr<OsmMap>& map);
+  IntersectionSplitter() = default;
+  IntersectionSplitter(const std::shared_ptr<OsmMap>& map) : _map(map) { }
+  virtual ~IntersectionSplitter() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

@@ -41,8 +41,9 @@ public:
 
   static std::string className() { return "hoot::WayNodeCriterion"; }
 
-  WayNodeCriterion();
-  WayNodeCriterion(ConstOsmMapPtr map);
+  WayNodeCriterion() = default;
+  WayNodeCriterion(ConstOsmMapPtr map) : _map(map) { }
+  virtual ~WayNodeCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

@@ -54,6 +54,7 @@ public:
   static std::string className() { return "hoot::RoadCrossingPolyReviewMarker"; }
 
   RoadCrossingPolyReviewMarker();
+  virtual ~RoadCrossingPolyReviewMarker() = default;
 
   /**
    * @see ConstOsmMapOperation

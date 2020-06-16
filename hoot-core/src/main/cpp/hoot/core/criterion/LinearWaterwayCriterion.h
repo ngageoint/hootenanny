@@ -41,7 +41,8 @@ class LinearWaterwayCriterion : public ConflatableElementCriterion
 public:
   static std::string className() { return "hoot::LinearWaterwayCriterion"; }
 
-  LinearWaterwayCriterion() {}
+  LinearWaterwayCriterion() = default;
+  virtual ~LinearWaterwayCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

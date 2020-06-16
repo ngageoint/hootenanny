@@ -42,8 +42,8 @@ public:
 
   static std::string className() { return "hoot::FeatureExtractorBase"; }
 
-  FeatureExtractorBase() {}
-  virtual ~FeatureExtractorBase() {}
+  FeatureExtractorBase() = default;
+  virtual ~FeatureExtractorBase() = default;
 
   static double nullValue() { return -999999999; }
 

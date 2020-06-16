@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::PoiPolygonMergerCreator"; }
 
   PoiPolygonMergerCreator();
+  virtual ~PoiPolygonMergerCreator() = default;
 
   /**
    * If there is one match and it is a PoiPolygonMatch then a PoiPolygonMerger is created and

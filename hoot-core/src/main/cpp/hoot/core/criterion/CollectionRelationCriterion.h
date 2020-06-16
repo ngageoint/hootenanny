@@ -42,7 +42,8 @@ public:
 
   static std::string className() { return "hoot::CollectionRelationCriterion"; }
 
-  CollectionRelationCriterion();
+  CollectionRelationCriterion() = default;
+  virtual ~CollectionRelationCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

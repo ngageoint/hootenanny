@@ -44,12 +44,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementConverterJs)
 
-ElementConverterJs::ElementConverterJs()
-{
-}
-
-ElementConverterJs::~ElementConverterJs() {}
-
 void ElementConverterJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

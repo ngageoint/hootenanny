@@ -81,11 +81,6 @@ public:
   virtual std::string getClassName() const { return ""; }
 };
 
-
-MultiaryMatchTrainingValidator::MultiaryMatchTrainingValidator()
-{
-}
-
 void MultiaryMatchTrainingValidator::apply(std::shared_ptr<OsmMap>& map)
 {
   CheckRelationshipsVisitor v;

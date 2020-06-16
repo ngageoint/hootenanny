@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BULKINSERT_H
 #define BULKINSERT_H
@@ -40,7 +40,8 @@ class BulkInsert
 {
 public:
 
-  virtual ~BulkInsert() {}
+  BulkInsert() = default;
+  virtual ~BulkInsert() = default;
 
   virtual void flush() = 0;
 

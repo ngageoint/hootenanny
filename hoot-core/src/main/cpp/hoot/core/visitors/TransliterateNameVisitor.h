@@ -39,7 +39,8 @@ public:
 
   static std::string className() { return "hoot::TransliterateNameVisitor"; }
 
-  TransliterateNameVisitor();
+  TransliterateNameVisitor() = default;
+  virtual ~TransliterateNameVisitor() = default;
 
   static bool isLatin(const QString& s);
 

@@ -46,7 +46,8 @@ public:
 
   static std::string className() { return "hoot::NoInformationElementRemover"; }
 
-  NoInformationElementRemover();
+  NoInformationElementRemover() = default;
+  virtual ~NoInformationElementRemover() = default;
 
   /**
     @see OsmMapOperation

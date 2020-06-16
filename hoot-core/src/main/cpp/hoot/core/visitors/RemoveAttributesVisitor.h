@@ -53,6 +53,7 @@ public:
   RemoveAttributesVisitor();
   explicit RemoveAttributesVisitor(const QStringList types);
   explicit RemoveAttributesVisitor(const QList<ElementAttributeType>& types);
+  virtual ~RemoveAttributesVisitor() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e);
 

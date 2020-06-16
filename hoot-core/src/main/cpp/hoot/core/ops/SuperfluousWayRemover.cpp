@@ -42,11 +42,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SuperfluousWayRemover)
 
-SuperfluousWayRemover::SuperfluousWayRemover()
-{
-
-}
-
 SuperfluousWayRemover::SuperfluousWayRemover(const std::shared_ptr<OsmMap>& map) :
 _inputMap(map)
 {

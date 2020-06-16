@@ -53,7 +53,8 @@ public:
 
   static std::string className() { return "hoot::GeometryTypeCriterion"; }
 
-  virtual ~GeometryTypeCriterion() {}
+  GeometryTypeCriterion() = default;
+  virtual ~GeometryTypeCriterion() = default;
 
   virtual GeometryType getGeometryType() const = 0;
 

@@ -35,10 +35,6 @@
 namespace hoot
 {
 
-ConnectedRelationMemberFinder::ConnectedRelationMemberFinder()
-{
-}
-
 bool ConnectedRelationMemberFinder::haveConnectedWayMembers(
   const ConstRelationPtr& relation1, const ConstRelationPtr& relation2) const
 {

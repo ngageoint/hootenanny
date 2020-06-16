@@ -50,6 +50,7 @@ class SampledAngleHistogramExtractor : public AngleHistogramExtractor
 public:
 
   SampledAngleHistogramExtractor();
+  virtual ~SampledAngleHistogramExtractor() = default;
 
   static std::string className() { return "hoot::SampledAngleHistogramExtractor"; }
 

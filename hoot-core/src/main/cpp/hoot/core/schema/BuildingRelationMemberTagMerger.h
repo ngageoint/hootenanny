@@ -41,8 +41,9 @@ public:
 
   static std::string className() { return "hoot::BuildingRelationMemberTagMerger"; }
 
-  BuildingRelationMemberTagMerger();
+  BuildingRelationMemberTagMerger() = default;
   BuildingRelationMemberTagMerger(const QSet<QString>& ignoreTagKeys);
+  virtual ~BuildingRelationMemberTagMerger() = default;
 
   /**
    * Merges tags between a building and a single building part

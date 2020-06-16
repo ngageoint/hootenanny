@@ -51,7 +51,6 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, SparkJsonWriter)
 SparkJsonWriter::SparkJsonWriter() :
   _precision(round(ConfigOptions().getWriterPrecision()))
 {
-
 }
 
 void SparkJsonWriter::open(const QString& fileName)

@@ -48,8 +48,6 @@ class MatchFactory : public Configurable
 {
 public:
 
-  ~MatchFactory();
-
   /**
    * Returns the default MatchFactory with the default creators registered.
    */
@@ -112,16 +110,15 @@ private:
   // allows for matching a subset of the input data
   QString _tagFilter;
 
-  static std::shared_ptr<MatchFactory> _theInstance;
-
   std::vector<std::shared_ptr<MatchCreator>> _creators;
 
   MatchFactory();
+  virtual ~MatchFactory() = default;
 
   void _checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
                                    const geos::geom::Envelope& bounds) const;
-  static void _setMatchCreators(QStringList matchCreatorsList);
-  static void _setTagFilter(QString filter) { _theInstance->_tagFilter = filter; }
+  void _setMatchCreators(QStringList matchCreatorsList);
+  void _setTagFilter(QString filter) { _tagFilter = filter; }
 
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;

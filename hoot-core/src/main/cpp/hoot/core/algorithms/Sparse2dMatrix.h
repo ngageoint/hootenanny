@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SPARSE2DMATRIX_H
 #define SPARSE2DMATRIX_H
@@ -82,6 +82,7 @@ public:
   typedef HashMap<CellId, double>::const_iterator const_iterator;
 
   Sparse2dMatrix();
+  virtual ~Sparse2dMatrix() = default;
 
   double get(const CellId& cid) const;
 

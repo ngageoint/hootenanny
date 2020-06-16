@@ -59,6 +59,7 @@ public:
   static std::string className() { return "hoot::AddressScoreExtractor"; }
 
   AddressScoreExtractor();
+  virtual ~AddressScoreExtractor() = default;
 
   virtual std::string getClassName() const { return AddressScoreExtractor::className(); }
 

@@ -116,9 +116,7 @@ public:
     _timer.start();
   }
 
-  ~ScriptMatchVisitor()
-  {
-  }
+  virtual ~ScriptMatchVisitor() = default;
 
   void initSearchRadiusInfo()
   {
@@ -681,15 +679,6 @@ private:
 
   set<ElementId> _empty;
 };
-
-ScriptMatchCreator::ScriptMatchCreator()
-{
-  _cachedScriptVisitor.reset();
-}
-
-ScriptMatchCreator::~ScriptMatchCreator()
-{
-}
 
 void ScriptMatchCreator::init(const ConstOsmMapPtr& map)
 {

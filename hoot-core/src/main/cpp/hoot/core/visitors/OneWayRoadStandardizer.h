@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::OneWayRoadStandardizer"; }
 
-  OneWayRoadStandardizer();
+  OneWayRoadStandardizer() = default;
+  virtual ~OneWayRoadStandardizer() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e);
 

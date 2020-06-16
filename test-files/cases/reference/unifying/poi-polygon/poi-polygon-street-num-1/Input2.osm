@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-101920078' action='modify' visible='true' lat='17.1575713' lon='-89.0700457'>
+    <tag k='addr:full' v='Hudson Street, San Ignacio, Belize' />
+    <tag k='amenity' v='clinic' />
+    <tag k='building' v='yes' />
+    <tag k='city' v='San Ignacio' />
+    <tag k='condition' v='functional' />
+    <tag k='feature:description' v='A healthcare facility that is primarily focused on the care of outpatients and typically cover the primary healthcare needs of populations in local communities' />
+    <tag k='feature:name' v='Vida Pharmacy &amp; Clinic' />
+    <tag k='is_in:country' v='Belize' />
+    <tag k='latitude' v='17.157571300000029' />
+    <tag k='location:confidence' v='medium' />
+    <tag k='longitude' v='-89.07004569999998' />
+    <tag k='name:type' v='unverified_name' />
+    <tag k='opening_hours' v='8 AM - 10 PM' />
+    <tag k='phone' v='+501 804-4878' />
+    <tag k='poi:first-order_administrative_division' v='Cayo' />
+    <tag k='use' v='out-patient_care' />
+  </node>
+  <node id='-101920079' action='modify' visible='true' lat='17.15765316' lon='-89.070191856'>
+    <tag k='addr:full' v='Hudson Street, San Ignacio, Belize' />
+    <tag k='amenity' v='clinic' />
+    <tag k='building' v='yes' />
+    <tag k='city' v='San Ignacio' />
+    <tag k='condition' v='functional' />
+    <tag k='feature:description' v='A healthcare facility that is primarily focused on the care of outpatients and typically cover the primary healthcare needs of populations in local communities' />
+    <tag k='feature:name' v='Dr. Jorge Garcia Clínica Medica &amp; Pharmacy' />
+    <tag k='imagery_confirmed' v='no' />
+    <tag k='information_confidence' v='medium' />
+    <tag k='is_in:country' v='Belize' />
+    <tag k='latitude' v='17.157653160000052' />
+    <tag k='location:confidence' v='medium' />
+    <tag k='longitude' v='-89.070191855999951' />
+    <tag k='name:type' v='unverified_name' />
+    <tag k='poi:first-order_administrative_division' v='Cayo' />
+    <tag k='use' v='out-patient_care' />
+  </node>
+</osm>

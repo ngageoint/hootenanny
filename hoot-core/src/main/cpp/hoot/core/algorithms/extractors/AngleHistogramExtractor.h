@@ -55,6 +55,7 @@ public:
 
   AngleHistogramExtractor();
   AngleHistogramExtractor(Radians smoothing, unsigned int bins = 16);
+  virtual ~AngleHistogramExtractor() = default;
 
   static std::string className() { return "hoot::AngleHistogramExtractor"; }
 

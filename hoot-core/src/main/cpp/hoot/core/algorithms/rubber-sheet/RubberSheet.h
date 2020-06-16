@@ -57,8 +57,6 @@ public:
 
   static std::string className() { return "hoot::RubberSheet"; }
 
-  static int logWarnCount;
-
   /**
    * If this configuration setting is set to true then the first layer is treated as the reference
    * layer and will not be moved.
@@ -77,6 +75,7 @@ public:
   };
 
   RubberSheet();
+  virtual ~RubberSheet() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -146,6 +145,8 @@ public:
    virtual std::string getClassName() const { return className(); }
 
 private:
+
+   static int logWarnCount;
 
   typedef std::map<long, std::list<Match>> MatchList;
 

@@ -218,6 +218,9 @@ void WayJoinerAdvanced::_joinAtNode()
       WayPtr way = ways[*it];
       LOG_VART(way->getElementId());
 
+      if (way->getNodeCount() < 1)
+        continue;
+
       Tags pTags = way->getTags();
       // Ignoring length here during the parent/child tag equals check, since differing values in
       // that field can cause us to miss a way join.  We'll add that value up after joining the

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PRINTJS_H
 #define PRINTJS_H
@@ -37,11 +37,12 @@ namespace hoot
 class PrintJs : public node::ObjectWrap
 {
 public:
- static void Init(v8::Handle<v8::Object> target);
+
+  static void Init(v8::Handle<v8::Object> target);
 
 private:
-  PrintJs();
-  ~PrintJs();
+  PrintJs() = default;
+  virtual ~PrintJs() = default;
 
   static void jsPrint(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

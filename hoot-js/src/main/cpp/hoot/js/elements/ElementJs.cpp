@@ -49,14 +49,6 @@ using namespace v8;
 namespace hoot
 {
 
-ElementJs::ElementJs()
-{
-}
-
-ElementJs::~ElementJs()
-{
-}
-
 void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
 {
   Isolate* current = v8::Isolate::GetCurrent();

@@ -46,9 +46,9 @@ public:
 
   static std::string className() { return "hoot::CountManualMatchesVisitor"; }
 
-  CountManualMatchesVisitor();
+  CountManualMatchesVisitor() : _numManualMatches(0) { }
 
-  virtual ~CountManualMatchesVisitor() {}
+  virtual ~CountManualMatchesVisitor() = default;
 
   double getStat() const { return _numManualMatches; }
 

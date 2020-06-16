@@ -50,7 +50,8 @@ public:
 
   static std::string className() { return "hoot::RemoveDuplicateWayNodesVisitor"; }
 
-  RemoveDuplicateWayNodesVisitor();
+  RemoveDuplicateWayNodesVisitor() = default;
+  virtual ~RemoveDuplicateWayNodesVisitor() = default;
 
   virtual void visit(const ElementPtr& e);
 

@@ -38,7 +38,8 @@ public:
 
   static std::string className() { return "hoot::AverageTagMerger"; }
 
-  AverageTagMerger();
+  AverageTagMerger() = default;
+  virtual ~AverageTagMerger() = default;
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 

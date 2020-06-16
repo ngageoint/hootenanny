@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::RefRemoveOp"; }
 
-  RefRemoveOp();
+  RefRemoveOp() = default;
+  virtual ~RefRemoveOp() = default;
 
   virtual void addCriterion(const ElementCriterionPtr &e) { assert(!_criterion); _criterion = e; }
 

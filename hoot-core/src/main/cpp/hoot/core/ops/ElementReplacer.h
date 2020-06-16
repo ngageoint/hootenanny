@@ -44,8 +44,9 @@ public:
 
   static std::string className() { return "hoot::ElementReplacer"; }
 
-  ElementReplacer();
-  ElementReplacer(OsmMapPtr mapToReplaceFrom);
+  ElementReplacer() = default;
+  ElementReplacer(OsmMapPtr mapToReplaceFrom) : _mapToReplaceFrom(mapToReplaceFrom) { }
+  virtual ~ElementReplacer() = default;
 
   /**
    * @see OsmMapOperation

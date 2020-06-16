@@ -46,7 +46,8 @@ public:
 
   static std::string className() { return "hoot::RemoveDuplicateRelationMembersVisitor"; }
 
-  RemoveDuplicateRelationMembersVisitor();
+  RemoveDuplicateRelationMembersVisitor() = default;
+  virtual ~RemoveDuplicateRelationMembersVisitor() = default;
 
   virtual void visit(const ElementPtr& e);
 

@@ -41,6 +41,7 @@ public:
   static std::string className() { return "hoot::HighwayMergerCreator"; }
 
   HighwayMergerCreator();
+  virtual ~HighwayMergerCreator() = default;
 
   /**
    * If there is a single HighwayMatch, a single HighwayMergerCreator will be created and returned.

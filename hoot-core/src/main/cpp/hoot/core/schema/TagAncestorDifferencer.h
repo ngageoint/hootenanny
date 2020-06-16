@@ -43,10 +43,9 @@ public:
 
   static std::string className() { return "hoot::TagAncestorDifferencer"; }
 
-  TagAncestorDifferencer() {}
+  TagAncestorDifferencer() = default;
   TagAncestorDifferencer(QString ancestor);
-
-  virtual ~TagAncestorDifferencer();
+  virtual ~TagAncestorDifferencer() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

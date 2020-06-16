@@ -1488,7 +1488,7 @@ If true, road conflation merges tag changes into the reference only and makes no
 * Data Type: double
 * Default Value: `0.999`
 
-The threshold at which a miss is called a miss for roads.
+The threshold at which a miss is called a miss for roads. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -1499,8 +1499,7 @@ See also:
 * Data Type: double
 * Default Value: `0.25`
 
-The threshold at which a review is called a review for roads. See
-`conflate.review.threshold.default`.
+The threshold at which a review is called a review for roads. Valid values are between 0.0 and 1.0.
 
 See also:
 
