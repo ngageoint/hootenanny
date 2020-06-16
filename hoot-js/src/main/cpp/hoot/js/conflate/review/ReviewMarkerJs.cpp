@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #define BUILDING_NODE_EXTENSION
 #include "ReviewMarkerJs.h"
@@ -44,10 +44,6 @@ namespace hoot
 {
 
 HOOT_JS_REGISTER(ReviewMarkerJs)
-
-ReviewMarkerJs::ReviewMarkerJs() {}
-
-ReviewMarkerJs::~ReviewMarkerJs() {}
 
 void ReviewMarkerJs::Init(Handle<Object> exports)
 {

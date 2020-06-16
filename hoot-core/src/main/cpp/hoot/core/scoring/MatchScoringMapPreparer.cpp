@@ -44,6 +44,9 @@ class ConvertUuidToRefVisitor : public ElementOsmMapVisitor
 {
 public:
 
+  ConvertUuidToRefVisitor() = default;
+  virtual ~ConvertUuidToRefVisitor() = default;
+
   virtual void visit(const std::shared_ptr<Element>& e)
   {
     if (!e->getTags().contains(MetadataTags::Ref1()) &&

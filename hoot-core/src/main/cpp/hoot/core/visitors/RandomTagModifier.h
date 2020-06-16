@@ -45,6 +45,7 @@ public:
   static std::string className() { return "hoot::RandomTagModifier"; }
 
   RandomTagModifier();
+  virtual ~RandomTagModifier() = default;
 
   QString permuteName(const QString& s);
 

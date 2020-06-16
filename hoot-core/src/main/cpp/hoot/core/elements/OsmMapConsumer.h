@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPCONSUMER_H
 #define OSMMAPCONSUMER_H
@@ -35,7 +35,8 @@ class OsmMapConsumer
 {
 public:
 
-  virtual ~OsmMapConsumer() {}
+  OsmMapConsumer() = default;
+  virtual ~OsmMapConsumer() = default;
 
   virtual void setOsmMap(OsmMap* map) = 0;
 };

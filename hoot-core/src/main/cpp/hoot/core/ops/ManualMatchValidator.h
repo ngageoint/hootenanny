@@ -56,6 +56,7 @@ public:
   static std::string className() { return "hoot::ManualMatchValidator"; }
 
   ManualMatchValidator();
+  virtual ~ManualMatchValidator() = default;
 
   /**
    * Validates all manual matches in the map and records the first error found for each element

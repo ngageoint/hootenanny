@@ -43,6 +43,9 @@ public:
 
   static std::string className() { return "hoot::RemoveReviewUnknown2Visitor"; }
 
+  RemoveReviewUnknown2Visitor() = default;
+  virtual ~RemoveReviewUnknown2Visitor() = default;
+
   virtual void visit(const std::shared_ptr<Element>& e) override;
 
   virtual QString getDescription() const override

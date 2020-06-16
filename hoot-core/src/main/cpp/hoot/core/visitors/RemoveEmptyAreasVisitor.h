@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::RemoveEmptyAreasVisitor"; }
 
   RemoveEmptyAreasVisitor();
+  virtual ~RemoveEmptyAreasVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 

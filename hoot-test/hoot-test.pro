@@ -44,3 +44,4 @@ SOURCES += src/main/cpp/hoot/test/main.cpp \
 OTHER_FILES = \
     $$files(../test-files/cmd/*.sh, true) \
     $$files(../scripts/core/*.sh, true) \
+    $$files(../scripts/valgrind/*, true) \

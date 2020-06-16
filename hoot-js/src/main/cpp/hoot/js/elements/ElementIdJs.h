@@ -53,8 +53,8 @@ public:
 
 private:
 
-  ElementIdJs();
-  ~ElementIdJs();
+  ElementIdJs() = default;
+  virtual ~ElementIdJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

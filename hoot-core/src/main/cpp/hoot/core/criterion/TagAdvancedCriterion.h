@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TAG_ADVANCED_CRITERION_H
@@ -63,6 +63,7 @@ public:
 
   TagAdvancedCriterion();
   TagAdvancedCriterion(const QString& filterJsonStrOrPath);
+  virtual ~TagAdvancedCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

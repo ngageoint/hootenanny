@@ -51,6 +51,7 @@ public:
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit);
+  virtual ~CopyMapSubsetOp() = default;
 
   /**
    * A new map is created and the eids specified in the constructor and their depedencies will be

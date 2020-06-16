@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::RailwayCriterion"; }
 
-  RailwayCriterion();
+  RailwayCriterion() = default;
+  virtual ~RailwayCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::TagRenameKeyVisitor"; }
 
-  TagRenameKeyVisitor();
+  TagRenameKeyVisitor() = default;
+  virtual ~TagRenameKeyVisitor() = default;
 
   TagRenameKeyVisitor(const QString& oldKey, const QString& newKey);
 

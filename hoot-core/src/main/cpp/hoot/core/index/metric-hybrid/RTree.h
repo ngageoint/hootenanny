@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOT_HYBRID_RTREE_H
 #define HOOT_HYBRID_RTREE_H
@@ -55,9 +55,7 @@ class RNode : public Node<KeyType, DataType>
 {
 public:
 
-  RNode()
-  {
-  }
+  RNode() = default;
 
   virtual ~RNode()
   {
@@ -130,6 +128,7 @@ public:
     _depth = depth;
     _distanceCount = 0;
   }
+  virtual ~RTreeLayer() = default;
 
   virtual Leaf<KeyType, DataType>* buildLeaf(size_t start, size_t end)
   {

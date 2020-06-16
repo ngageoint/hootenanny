@@ -40,7 +40,8 @@ public:
 
   static std::string className() { return "hoot::MultiVisitor"; }
 
-  MultiVisitor();
+  MultiVisitor() = default;
+  virtual ~MultiVisitor() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e);
 

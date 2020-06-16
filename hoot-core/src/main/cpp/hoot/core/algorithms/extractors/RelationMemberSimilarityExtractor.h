@@ -48,7 +48,8 @@ class RelationMemberSimilarityExtractor : public FeatureExtractorBase
 {
 public:
 
-  RelationMemberSimilarityExtractor();
+  RelationMemberSimilarityExtractor() = default;
+  virtual ~RelationMemberSimilarityExtractor() = default;
 
   static std::string className() { return "hoot::RelationMemberSimilarityExtractor"; }
 

@@ -56,7 +56,8 @@ public:
 
   static std::string className() { return "hoot::UnlikelyIntersectionRemover"; }
 
-  UnlikelyIntersectionRemover();
+  UnlikelyIntersectionRemover() = default;
+  virtual ~UnlikelyIntersectionRemover() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

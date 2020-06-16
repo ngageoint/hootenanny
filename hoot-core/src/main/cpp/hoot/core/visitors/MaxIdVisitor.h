@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::MaxIdVisitor"; }
 
-  MaxIdVisitor() : _maxId(-std::numeric_limits<long>::max()) {}
+  MaxIdVisitor() : _maxId(-std::numeric_limits<long>::max()) { }
+  virtual ~MaxIdVisitor() = default;
 
   long getMinId() const { return _maxId; }
 

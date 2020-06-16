@@ -49,7 +49,7 @@ public:
 
   static std::string className() { return "hoot::CropRandomCmd"; }
 
-  CropRandomCmd() {}
+  CropRandomCmd() = default;
 
   virtual QString getName() const override { return "crop-random"; }
 

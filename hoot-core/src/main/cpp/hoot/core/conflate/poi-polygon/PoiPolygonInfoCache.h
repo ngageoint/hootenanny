@@ -79,6 +79,7 @@ class PoiPolygonInfoCache : public Configurable
 public:
 
   PoiPolygonInfoCache(const ConstOsmMapPtr& map);
+  virtual ~PoiPolygonInfoCache() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

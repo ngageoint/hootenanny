@@ -46,7 +46,7 @@ public:
 
   static string className() { return "hoot::ConflateCumulativeCmd"; }
 
-  ConflateCumulativeCmd() { }
+  ConflateCumulativeCmd() = default;
 
   virtual QString getName() const override { return "conflate-cumulative"; }
 

@@ -50,6 +50,7 @@ public:
   static std::string className() { return "hoot::PoiPolygonInvalidReviewNodeRemover"; }
 
   PoiPolygonInvalidReviewNodeRemover();
+  virtual ~PoiPolygonInvalidReviewNodeRemover() = default;
 
   virtual void apply(const std::shared_ptr<OsmMap>& map);
 

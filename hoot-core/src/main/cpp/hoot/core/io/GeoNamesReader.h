@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GEONAMESREADER_H
 #define GEONAMESREADER_H
@@ -43,12 +43,13 @@ public:
   static std::string className() { return "hoot::GeoNamesReader"; }
 
   GeoNamesReader();
+  virtual ~GeoNamesReader() = default;
 
   virtual void close();
 
-  virtual void initializePartial() {}
+  virtual void initializePartial() { }
 
-  virtual void finalizePartial() {}
+  virtual void finalizePartial() { }
 
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 

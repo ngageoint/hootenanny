@@ -45,7 +45,7 @@ public:
   static std::string className() { return "hoot::ProjectToGeographicVisitor"; }
 
   ProjectToGeographicVisitor();
-  ~ProjectToGeographicVisitor();
+  virtual ~ProjectToGeographicVisitor();
 
   void initialize(std::shared_ptr<OGRSpatialReference>& projection);
 

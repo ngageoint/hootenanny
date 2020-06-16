@@ -48,8 +48,9 @@ public:
 
   static std::string className() { return "hoot::SchemaTranslatedTagCountVisitor"; }
 
-  SchemaTranslatedTagCountVisitor() {}
   SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
+  SchemaTranslatedTagCountVisitor() = default;
+  virtual ~SchemaTranslatedTagCountVisitor() = default;
 
   long getPopulatedCount() const { return _populatedCount; }
   long getDefaultCount() const { return _defaultCount; }

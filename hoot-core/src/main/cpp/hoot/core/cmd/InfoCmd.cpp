@@ -52,7 +52,7 @@ public:
 
   static std::string className() { return "hoot::InfoCmd"; }
 
-  InfoCmd() {}
+  InfoCmd() = default;
 
   virtual QString getName() const override { return "info"; }
 

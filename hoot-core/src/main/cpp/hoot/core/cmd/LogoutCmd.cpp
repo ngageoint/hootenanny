@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -42,7 +42,7 @@ public:
 
   static std::string className() { return "hoot::LogoutCmd"; }
 
-  LogoutCmd() { }
+  LogoutCmd() = default;
 
   virtual QString getName() const override { return "logout"; }
 

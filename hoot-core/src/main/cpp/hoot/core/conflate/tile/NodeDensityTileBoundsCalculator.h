@@ -81,8 +81,6 @@ public:
 
   static std::string className() { return "hoot::NodeDensityTileBoundsCalculator"; }
 
-  static int logWarnCount;
-
   /**
    * Specifies the index of a pixel. When specifying a bounding box this represents the lower left
    * pixel relative to the bounding box.
@@ -96,7 +94,7 @@ public:
 
     Pixel(int x, int y) { this->x = x; this->y = y; }
 
-    Pixel() {}
+    Pixel() = default;
   };
 
   /**
@@ -159,6 +157,7 @@ public:
   };
 
   NodeDensityTileBoundsCalculator();
+  virtual ~NodeDensityTileBoundsCalculator() = default;
 
   /**
    * Calculates a set of boundary tiles
@@ -204,6 +203,8 @@ public:
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
 
 private:
+
+  static int logWarnCount;
 
   // used for white box testing.
   friend class NodeDensityTileBoundsCalculatorTest;

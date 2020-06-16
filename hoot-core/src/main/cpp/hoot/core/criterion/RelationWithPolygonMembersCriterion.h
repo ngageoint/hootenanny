@@ -44,8 +44,9 @@ public:
 
   static std::string className() { return "hoot::RelationWithPolygonMembersCriterion"; }
 
-  RelationWithPolygonMembersCriterion();
+  RelationWithPolygonMembersCriterion() = default;
   RelationWithPolygonMembersCriterion(ConstOsmMapPtr map);
+  virtual ~RelationWithPolygonMembersCriterion() = default;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RelationWithPolygonMembersCriterion(_map)); }

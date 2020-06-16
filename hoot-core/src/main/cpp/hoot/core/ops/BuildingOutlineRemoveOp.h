@@ -49,7 +49,8 @@ public:
 
   static std::string className() { return "hoot::BuildingOutlineRemoveOp"; }
 
-  BuildingOutlineRemoveOp();
+  BuildingOutlineRemoveOp() = default;
+  virtual ~BuildingOutlineRemoveOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 

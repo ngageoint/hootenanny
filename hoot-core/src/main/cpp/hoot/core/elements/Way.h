@@ -57,7 +57,7 @@ public:
 
   Way(const Way& way);
 
-  virtual ~Way();
+  virtual ~Way() = default;
 
   void addNode(long id);
   void insertNode(long index, long id);

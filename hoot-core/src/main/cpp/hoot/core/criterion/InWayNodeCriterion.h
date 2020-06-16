@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef INWAYNODECRITERION_H
@@ -49,8 +49,9 @@ public:
 
   static std::string className() { return "hoot::InWayNodeCriterion"; }
 
-  InWayNodeCriterion() {}
+  InWayNodeCriterion() = default;
   InWayNodeCriterion(const OsmMap& map, const std::vector<long>& wayIds);
+  virtual ~InWayNodeCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

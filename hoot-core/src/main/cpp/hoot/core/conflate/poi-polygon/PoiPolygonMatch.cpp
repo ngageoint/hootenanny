@@ -69,11 +69,6 @@ long PoiPolygonMatch::phoneNumberMatchCandidates = 0;
 long PoiPolygonMatch::convexPolyDistanceMatches = 0;
 long PoiPolygonMatch::numReviewReductions = 0;
 
-PoiPolygonMatch::PoiPolygonMatch() :
-Match()
-{
-}
-
 PoiPolygonMatch::PoiPolygonMatch(ConstMatchThresholdPtr threshold) :
 Match(threshold)
 {

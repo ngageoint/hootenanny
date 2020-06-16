@@ -50,10 +50,9 @@ public:
 
   static QString opsKey() { return "map.cleaner.transforms"; }
 
-  MapCleaner();
-  MapCleaner(const Progress& progress);
-
-  virtual ~MapCleaner() {}
+  MapCleaner() = default;
+  MapCleaner(const Progress& progress) : _progress(progress) { }
+  virtual ~MapCleaner() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 

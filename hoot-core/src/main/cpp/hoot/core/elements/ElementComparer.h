@@ -52,6 +52,7 @@ public:
   static const long DEBUG_ID = 0;
 
   ElementComparer();
+  virtual ~ElementComparer() = default;
 
   /**
    * Determines if two elements are the same

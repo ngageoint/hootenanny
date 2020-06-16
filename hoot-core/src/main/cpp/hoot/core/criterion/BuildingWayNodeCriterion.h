@@ -44,6 +44,7 @@ public:
 
   BuildingWayNodeCriterion();
   BuildingWayNodeCriterion(ConstOsmMapPtr map);
+  virtual ~BuildingWayNodeCriterion() = default;
 
   virtual void setOsmMap(const OsmMap* map) override;
 

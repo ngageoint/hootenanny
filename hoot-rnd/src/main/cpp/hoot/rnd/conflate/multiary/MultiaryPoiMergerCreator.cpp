@@ -35,10 +35,6 @@ using namespace std;
 namespace hoot
 {
 
-MultiaryPoiMergerCreator::MultiaryPoiMergerCreator()
-{
-}
-
 bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers)
   const
 {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGFILTEREDDIFFERENCER_H
 #define TAGFILTEREDDIFFERENCER_H
@@ -38,7 +38,8 @@ class TagFilteredDifferencer : public TagDifferencer
 {
 public:
 
-  TagFilteredDifferencer();
+  TagFilteredDifferencer() = default;
+  virtual ~TagFilteredDifferencer() = default;
 
   virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2) const override;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GEOMETRYCONVERTER_H
@@ -67,14 +67,15 @@ public:
 
   static std::string className() { return "hoot::GeometryConverter"; }
 
-  static int logWarnCount;
-
   GeometryConverter(const OsmMapPtr& map);
   GeometryConverter(const ConstOsmMapPtr& map);
+  virtual ~GeometryConverter() = default;
 
   class NodeFactory
   {
   public:
+    NodeFactory() = default;
+    virtual ~NodeFactory() = default;
     virtual NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
       Status s, double circularError) = 0;
   };
@@ -200,6 +201,8 @@ public:
   void setNodeFactory(const std::shared_ptr<NodeFactory>& nf) { _nf = nf; }
 
 protected:
+
+  static int logWarnCount;
 
   NodePtr _createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s,
     double circularError);

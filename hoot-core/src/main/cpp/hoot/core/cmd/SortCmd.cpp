@@ -50,7 +50,7 @@ public:
 
   static std::string className() { return "hoot::SortCmd"; }
 
-  SortCmd() { }
+  SortCmd() = default;
 
   virtual QString getName() const override { return "sort"; }
 

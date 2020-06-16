@@ -99,9 +99,9 @@ public:
 
   static std::string className() { return "hoot::BuildingPartMergeOp"; }
 
-  static int logWarnCount;
 
   BuildingPartMergeOp(bool preserveTypes = false);
+  virtual ~BuildingPartMergeOp() = default;
 
   virtual void apply(OsmMapPtr& map) override;
 
@@ -109,8 +109,8 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual void readObject(QDataStream& /*is*/) {}
-  virtual void writeObject(QDataStream& /*os*/) const {}
+  virtual void readObject(QDataStream& /*is*/) { }
+  virtual void writeObject(QDataStream& /*os*/) const { }
 
   virtual QString getDescription() const override
   { return "Merges individual building parts into a single building"; }
@@ -133,6 +133,8 @@ public:
   void setPreserveTypes(bool preserve) { _preserveTypes = preserve; }
 
 private:
+
+  static int logWarnCount;
 
   // used to keep track of which elements make up a building
   Tgs::DisjointSetMap<ElementPtr> _buildingPartGroups;

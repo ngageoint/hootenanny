@@ -60,6 +60,7 @@ public:
     _gridSpacing(gridSpacing)
   {
   }
+  virtual ~ShiftMapVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {

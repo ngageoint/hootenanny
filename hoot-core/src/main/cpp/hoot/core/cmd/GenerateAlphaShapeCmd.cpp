@@ -52,7 +52,7 @@ public:
 
   static string className() { return "hoot::GenerateAlphaShapeCmd"; }
 
-  GenerateAlphaShapeCmd() {}
+  GenerateAlphaShapeCmd() = default;
 
   virtual QString getName() const override { return "generate-alpha-shape"; }
 

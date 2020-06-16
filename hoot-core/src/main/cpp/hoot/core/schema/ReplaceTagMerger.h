@@ -47,7 +47,7 @@ public:
    */
   ReplaceTagMerger(bool swap = false);
 
-  virtual ~ReplaceTagMerger() {}
+  virtual ~ReplaceTagMerger() = default;
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
@@ -77,7 +77,8 @@ public:
 
   static std::string className() { return "hoot::ReplaceTag2Merger"; }
 
-  ReplaceTag2Merger() : ReplaceTagMerger(false) {}
+  ReplaceTag2Merger() : ReplaceTagMerger(false) { }
+  virtual ~ReplaceTag2Merger() = default;
 
   virtual QString getDescription() const
   {
@@ -98,7 +99,8 @@ public:
 
   static std::string className() { return "hoot::ReplaceTag1Merger"; }
 
-  ReplaceTag1Merger() : ReplaceTagMerger(true) {}
+  ReplaceTag1Merger() : ReplaceTagMerger(true) { }
+  virtual ~ReplaceTag1Merger() = default;
 
   virtual QString getDescription() const
   {

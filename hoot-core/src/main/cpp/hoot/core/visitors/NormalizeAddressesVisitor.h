@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::NormalizeAddressesVisitor"; }
 
-  NormalizeAddressesVisitor();
+  NormalizeAddressesVisitor() = default;
+  virtual ~NormalizeAddressesVisitor() = default;
 
   /**
    * @see ElementVisitor

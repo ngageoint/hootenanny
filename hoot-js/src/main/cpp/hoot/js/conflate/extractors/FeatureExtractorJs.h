@@ -55,8 +55,8 @@ public:
 
 private:
 
-  FeatureExtractorJs(FeatureExtractorPtr fe);
-  ~FeatureExtractorJs();
+  FeatureExtractorJs(FeatureExtractorPtr fe) : _fe(fe) { }
+  virtual ~FeatureExtractorJs() = default;
 
   static void extract(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);

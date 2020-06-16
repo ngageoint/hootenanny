@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MOSTENGLISHNAME_H
 #define MOSTENGLISHNAME_H
@@ -66,9 +66,9 @@ public:
 
   static std::string className() { return "hoot::MostEnglishName"; }
 
-  static int logWarnCount;
-
   static const MostEnglishNamePtr& getInstance();
+
+  virtual ~MostEnglishName() = default;
 
   /**
    * Returns the most English name tag value from a set of tags
@@ -114,6 +114,8 @@ public:
   bool isEnglishText(const QString& text);
 
 private:
+
+  static int logWarnCount;
 
   // This class is unique in that it 1) is a Singleton, 2) is configurable, and 3) and gets called
   // from hoot-js.  hoot-js isn't set up to treat treat configurable classes as Singletons, so

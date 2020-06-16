@@ -52,6 +52,7 @@ public:
   static std::string className() { return "hoot::DuplicateWayRemover"; }
 
   DuplicateWayRemover();
+  virtual ~DuplicateWayRemover() = default;
 
   void apply(OsmMapPtr& map);
 

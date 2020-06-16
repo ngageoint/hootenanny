@@ -52,6 +52,7 @@ public:
 
   SumNumericTagsVisitor();
   explicit SumNumericTagsVisitor(const QStringList keys);
+  virtual ~SumNumericTagsVisitor() = default;
 
   /**
    * Given a set of tag keys and for all features having those tags, sums the numerical values of

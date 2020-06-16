@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::ReprojectToPlanarOp"; }
 
-  ReprojectToPlanarOp();
+  ReprojectToPlanarOp() = default;
+  virtual ~ReprojectToPlanarOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCATEGORYDIFFERENCER_H
 #define TAGCATEGORYDIFFERENCER_H
@@ -43,10 +43,9 @@ class TagCategoryDifferencer : public TagFilteredDifferencer, public Configurabl
 public:
   static std::string className() { return "hoot::TagCategoryDifferencer"; }
 
-  TagCategoryDifferencer() {}
+  TagCategoryDifferencer() = default;
   TagCategoryDifferencer(OsmSchemaCategory category);
-
-  virtual ~TagCategoryDifferencer();
+  virtual ~TagCategoryDifferencer() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

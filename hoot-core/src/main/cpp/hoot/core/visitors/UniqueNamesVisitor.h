@@ -46,7 +46,8 @@ public:
 
   static std::string className() { return "hoot::UniqueNamesVisitor"; }
 
-  UniqueNamesVisitor() {}
+  UniqueNamesVisitor() = default;
+  virtual ~UniqueNamesVisitor() = default;
 
   QSet<QString> getUniqueNames() const { return _names; }
 

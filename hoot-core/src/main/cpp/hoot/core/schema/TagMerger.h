@@ -48,7 +48,7 @@ public:
   static std::string className() { return "hoot::TagMerger"; }
 
   TagMerger() : _caseSensitive(ConfigOptions().getDuplicateNameCaseSensitive()) {}
-  virtual ~TagMerger() {}
+  virtual ~TagMerger() = default;
 
   /**
    * Merges two sets of tags into one set.

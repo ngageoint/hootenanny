@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::ElementIdToTagValueMapper"; }
 
-  ElementIdToTagValueMapper();
+  ElementIdToTagValueMapper() = default;
+  virtual ~ElementIdToTagValueMapper() = default;
 
   virtual void visit(const ConstElementPtr& e);
 

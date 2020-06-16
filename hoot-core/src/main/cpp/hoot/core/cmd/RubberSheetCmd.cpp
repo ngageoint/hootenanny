@@ -45,7 +45,7 @@ public:
 
   static std::string className() { return "hoot::RubberSheetCmd"; }
 
-  RubberSheetCmd() { }
+  RubberSheetCmd() = default;
 
   virtual QString getName() const override { return "rubber-sheet"; }
 

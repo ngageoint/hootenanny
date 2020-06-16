@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::RemoveElementsVisitor"; }
 
   RemoveElementsVisitor(bool negateCriteria = false);
+  virtual ~RemoveElementsVisitor() = default;
 
   virtual void visit(const ElementPtr& e);
 

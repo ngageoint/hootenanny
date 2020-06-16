@@ -49,7 +49,7 @@ public:
   static std::string className() { return "hoot::MultipleCriterionConsumerVisitor"; }
 
   MultipleCriterionConsumerVisitor();
-  virtual ~MultipleCriterionConsumerVisitor() {}
+  virtual ~MultipleCriterionConsumerVisitor() = default;
 
   virtual void addCriterion(const ElementCriterionPtr& crit) override;
 

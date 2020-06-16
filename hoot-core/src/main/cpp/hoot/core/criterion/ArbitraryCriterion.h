@@ -48,14 +48,10 @@ public:
   static std::string className() { return "hoot::ArbitraryCriterion"; }
 
   explicit ArbitraryCriterion(std::function<bool (ConstElementPtr e)> f)
-  {
-    _f = f;
-  }
-
+    : _f(f) { }
   explicit ArbitraryCriterion(std::function<bool (const std::shared_ptr<const Element> &e)> f)
-  {
-    _f = f;
-  }
+    : _f(f) { }
+  virtual ~ArbitraryCriterion() = default;
 
   virtual bool isSatisfied(const std::shared_ptr<const Element>& e) const
   {

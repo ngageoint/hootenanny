@@ -42,10 +42,6 @@ QSet<QString> BuildingRelationMemberTagMerger::_buildingPartTagNames;
 
 HOOT_FACTORY_REGISTER(TagMerger, BuildingRelationMemberTagMerger)
 
-BuildingRelationMemberTagMerger::BuildingRelationMemberTagMerger()
-{
-}
-
 BuildingRelationMemberTagMerger::BuildingRelationMemberTagMerger(
   const QSet<QString>& ignoreTagKeys) :
 _ignoreTagKeys(ignoreTagKeys)

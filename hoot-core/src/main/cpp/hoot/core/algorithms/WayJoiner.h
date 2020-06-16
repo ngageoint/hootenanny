@@ -46,6 +46,7 @@ public:
   static std::string className() { return "hoot::WayJoiner"; }
 
   WayJoiner();
+  virtual ~WayJoiner() = default;
 
   /**
    * @brief join Runs all joining algorithms

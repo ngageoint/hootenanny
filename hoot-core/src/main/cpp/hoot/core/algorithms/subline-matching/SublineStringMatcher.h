@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::SublineStringMatcher"; }
 
-  SublineStringMatcher() {}
+  SublineStringMatcher() = default;
+  virtual ~SublineStringMatcher() = default;
 
   /**
    * Given two elements find one or more collections of sublines that match. The input elements may

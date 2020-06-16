@@ -99,7 +99,7 @@ class VersionCmd : public BaseCommand
 public:
   static string className() { return "hoot::VersionCmd"; }
 
-  VersionCmd() {}
+  VersionCmd() = default;
 
   virtual QString getName() const override { return "version"; }
 

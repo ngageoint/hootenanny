@@ -50,6 +50,7 @@ public:
   static std::string className() { return "hoot::MatchCandidateCountVisitor"; }
 
   MatchCandidateCountVisitor(const std::vector<std::shared_ptr<MatchCreator>>& matchCreators);
+  virtual ~MatchCandidateCountVisitor() = default;
 
   virtual void visit(const std::shared_ptr<const Element>& e);
 

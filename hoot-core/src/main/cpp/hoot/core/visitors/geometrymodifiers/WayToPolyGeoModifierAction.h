@@ -47,6 +47,9 @@ public:
 
   static std::string className() { return "hoot::WayToPolyGeoModifierAction"; }
 
+  WayToPolyGeoModifierAction() = default;
+  virtual ~WayToPolyGeoModifierAction() = default;
+
   virtual QString getCommandName() const override { return "way_to_poly"; }
   virtual QList<QString> getParameterNames() const override { return QList<QString>( { WIDTH_TAG_PARAM, DEFAULT_WIDTH_PARAM } ); }
 

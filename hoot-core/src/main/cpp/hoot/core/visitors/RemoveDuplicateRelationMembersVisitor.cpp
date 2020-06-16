@@ -40,10 +40,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateRelationMembersVisitor)
 
-RemoveDuplicateRelationMembersVisitor::RemoveDuplicateRelationMembersVisitor()
-{
-}
-
 void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
 {
   if (e->getElementType() == ElementType::Relation)

@@ -56,8 +56,6 @@ public:
 
   static std::string className() { return "hoot::DualHighwaySplitter"; }
 
-  static int logWarnCount;
-
   typedef enum DrivingSide
   {
     Left,
@@ -67,6 +65,7 @@ public:
   DualHighwaySplitter();
   DualHighwaySplitter(const std::shared_ptr<const OsmMap>& map, DrivingSide drivingSide,
                       Meters splitSize);
+  virtual ~DualHighwaySplitter() = default;
 
   std::shared_ptr<OsmMap> splitAll();
 
@@ -96,6 +95,8 @@ public:
   virtual std::string getClassName() const { return className(); }
 
 private:
+
+  static int logWarnCount;
 
   Meters _defaultSplitSize;
   DrivingSide _drivingSide;

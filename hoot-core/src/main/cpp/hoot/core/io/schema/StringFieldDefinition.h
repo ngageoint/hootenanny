@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STRINGFIELDDEFINITION_H
 #define STRINGFIELDDEFINITION_H
@@ -35,7 +35,9 @@ namespace hoot
 class StringFieldDefinition : public FieldDefinition
 {
 public:
-  StringFieldDefinition();
+
+  StringFieldDefinition() = default;
+  virtual ~StringFieldDefinition() = default;
 
   virtual QVariant::Type getType() const override { return QVariant::String; }
 

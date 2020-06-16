@@ -55,9 +55,10 @@ class AddMeasurementTagsVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  AddMeasurementTagsVisitor() {}
+  AddMeasurementTagsVisitor() = default;
   AddMeasurementTagsVisitor(bool area, bool length, bool width) :
-    _addArea(area), _addLength(length), _addWidth(width) {}
+    _addArea(area), _addLength(length), _addWidth(width) { }
+  virtual ~AddMeasurementTagsVisitor() = default;
 
   // ElementVisitor
   static std::string className() { return "hoot::AddMeasurementTagsVisitor"; }

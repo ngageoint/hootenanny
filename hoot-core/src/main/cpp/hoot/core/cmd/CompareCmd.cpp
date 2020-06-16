@@ -55,7 +55,7 @@ public:
 
   static string className() { return "hoot::CompareCmd"; }
 
-  CompareCmd() { }
+  CompareCmd() = default;
 
   virtual QString getName() const override { return "compare"; }
 

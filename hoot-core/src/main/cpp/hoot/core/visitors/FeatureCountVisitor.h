@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::FeatureCountVisitor"; }
 
-  FeatureCountVisitor() : _count(0) {}
+  FeatureCountVisitor() : _count(0) { }
+  virtual ~FeatureCountVisitor() = default;
 
   int getCount() const { return _count; }
 

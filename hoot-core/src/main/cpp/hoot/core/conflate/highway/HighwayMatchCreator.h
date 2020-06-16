@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::HighwayMatchCreator"; }
 
   HighwayMatchCreator();
+  virtual ~HighwayMatchCreator() = default;
 
   /**
    * Create the match

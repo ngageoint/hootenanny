@@ -65,7 +65,7 @@ public:
 
   PertyOp();
 
-  virtual ~PertyOp() {}
+  virtual ~PertyOp() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

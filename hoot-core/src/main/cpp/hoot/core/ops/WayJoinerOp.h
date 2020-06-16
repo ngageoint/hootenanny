@@ -42,6 +42,7 @@ class WayJoinerOp : public OsmMapOperation, public Configurable
 public:
 
   WayJoinerOp();
+  virtual ~WayJoinerOp() = default;
 
   static std::string className() { return "hoot::WayJoinerOp"; }
 

@@ -36,9 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PointCriterion)
 
-PointCriterion::PointCriterion()
-{
-}
 
 PointCriterion::PointCriterion(ConstOsmMapPtr map) :
 _map(map)

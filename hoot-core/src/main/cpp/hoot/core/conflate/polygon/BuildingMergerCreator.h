@@ -39,7 +39,8 @@ public:
 
   static std::string className() { return "hoot::BuildingMergerCreator"; }
 
-  BuildingMergerCreator();
+  BuildingMergerCreator() = default;
+  virtual ~BuildingMergerCreator() = default;
 
   /**
    * If all the matches are BuildingMatches, a single BuildingMerge will be created and returned.

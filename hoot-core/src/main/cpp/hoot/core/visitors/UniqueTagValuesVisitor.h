@@ -47,11 +47,10 @@ public:
    * @param split If split is set to true then the values in the tag are split before they're placed
    *  in the bag.
    */
-  UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split=false) :
-    _key(key),
-    _bag(bag),
-    _split(split)
-  {}
+  UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split=false)
+    : _key(key), _bag(bag), _split(split)
+  { }
+  virtual ~UniqueTagValuesVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 

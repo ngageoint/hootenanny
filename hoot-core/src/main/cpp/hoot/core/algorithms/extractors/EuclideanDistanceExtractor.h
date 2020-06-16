@@ -39,6 +39,7 @@ class EuclideanDistanceExtractor : public AbstractDistanceExtractor, public Conf
 public:
 
   EuclideanDistanceExtractor();
+  virtual ~EuclideanDistanceExtractor() = default;
 
   static std::string className() { return "hoot::EuclideanDistanceExtractor"; }
 

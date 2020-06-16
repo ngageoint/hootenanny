@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::ConflatableElementCriterion"; }
 
-  virtual ~ConflatableElementCriterion() {}
+  ConflatableElementCriterion() = default;
+  virtual ~ConflatableElementCriterion() = default;
 
   /**
    * Determines whether the criterion represents an element conflatable by a specific machine

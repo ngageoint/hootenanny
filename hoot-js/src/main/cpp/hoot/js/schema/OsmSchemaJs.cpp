@@ -57,12 +57,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmSchemaJs)
 
-OsmSchemaJs::OsmSchemaJs()
-{
-}
-
-OsmSchemaJs::~OsmSchemaJs() {}
-
 void OsmSchemaJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

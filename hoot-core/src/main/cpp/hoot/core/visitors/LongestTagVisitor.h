@@ -40,7 +40,8 @@ public:
 
   static std::string className() { return "hoot::LongestTagVisitor"; }
 
-  LongestTagVisitor() : _longestTag() {}
+  LongestTagVisitor() : _longestTag(0) { }
+  virtual ~LongestTagVisitor() = default;
 
   double getStat() const { return _longestTag; }
 

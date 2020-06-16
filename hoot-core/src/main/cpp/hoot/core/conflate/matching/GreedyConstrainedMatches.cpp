@@ -46,7 +46,7 @@ class MatchComparator
 {
 public:
 
-  MatchComparator(const vector<ConstMatchPtr>& matches) : _matches(matches) {}
+  MatchComparator(const vector<ConstMatchPtr>& matches) : _matches(matches) { }
 
   bool operator()(size_t i, size_t j)
   {

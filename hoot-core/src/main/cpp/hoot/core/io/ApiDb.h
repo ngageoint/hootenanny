@@ -68,7 +68,6 @@ class TableType;
  */
 class ApiDb
 {
-
 public:
 
   static const int COORDINATE_SCALE = 1e7;

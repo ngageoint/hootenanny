@@ -55,6 +55,7 @@ public:
   static std::string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
+  virtual ~CompletelyContainedByMapElementVisitor() = default;
 
   /**
    * Returns true if all the children of this element are available within the specified map.

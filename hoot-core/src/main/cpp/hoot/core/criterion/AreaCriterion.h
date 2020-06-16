@@ -44,8 +44,9 @@ public:
 
   static std::string className() { return "hoot::AreaCriterion"; }
 
-  AreaCriterion();
-  AreaCriterion(ConstOsmMapPtr map);
+  AreaCriterion() = default;
+  AreaCriterion(ConstOsmMapPtr map) : _map(map) { }
+  virtual ~AreaCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

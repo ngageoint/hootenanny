@@ -73,6 +73,7 @@ public:
    * must be called exactly two times.
    */
   ReplaceElementOp();
+  virtual ~ReplaceElementOp() = default;
 
   /**
    * If the elements aren't specified in the constructor this must be called exactly two times. Once

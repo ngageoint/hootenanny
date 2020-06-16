@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPT_TO_OGR_SCHEMA_TRANSLATOR_H
 #define SCRIPT_TO_OGR_SCHEMA_TRANSLATOR_H
@@ -61,7 +61,8 @@ public:
     }
   } TranslatedFeature;
 
-  virtual ~ScriptToOgrSchemaTranslator() {}
+  ScriptToOgrSchemaTranslator() = default;
+  virtual ~ScriptToOgrSchemaTranslator() = default;
 
   virtual std::shared_ptr<const Schema> getOgrOutputSchema() = 0;
 

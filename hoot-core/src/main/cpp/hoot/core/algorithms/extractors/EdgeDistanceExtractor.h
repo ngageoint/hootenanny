@@ -53,6 +53,7 @@ public:
 
   EdgeDistanceExtractor(ValueAggregatorPtr, Meters spacing = 5.0);
   EdgeDistanceExtractor(Meters spacing = 5.0);
+  virtual ~EdgeDistanceExtractor() = default;
 
   static std::string className() { return "hoot::EdgeDistanceExtractor"; }
 

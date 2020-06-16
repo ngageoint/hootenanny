@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MEMCHANGESETPROVIDER_H
 #define MEMCHANGESETPROVIDER_H
@@ -41,14 +41,15 @@ class MemChangesetProvider : public ChangesetProvider
 
 public:
 
-  explicit MemChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection);
+  explicit MemChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection)
+    : _projection(pProjection) { }
+
+  virtual ~MemChangesetProvider() = default;
 
   /**
    * @see ChangeSetProvider
    */
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
-
-  virtual ~MemChangesetProvider();
 
   /**
    * @see ChangeSetProvider

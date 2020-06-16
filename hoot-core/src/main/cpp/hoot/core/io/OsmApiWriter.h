@@ -68,6 +68,7 @@ public:
   /** Constructors with one or multiple files consisting of one large changeset */
   OsmApiWriter(const QUrl& url, const QString& changeset);
   OsmApiWriter(const QUrl& url, const QList<QString>& changesets);
+  virtual ~OsmApiWriter() = default;
   /**
    * @brief setConfiguration Update the configuration settings with new configuration
    * @param conf - Updated configurations

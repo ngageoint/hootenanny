@@ -45,6 +45,8 @@ public:
 
   static std::string className() { return "hoot::ImplicitTypeTaggingRulesCmd"; }
 
+  ImplicitTypeTaggingRulesCmd()  = default;
+
   virtual QString getName() const override { return "type-tagger-rules"; }
 
   virtual QString getDescription() const override

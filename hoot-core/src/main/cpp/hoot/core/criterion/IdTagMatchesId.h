@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ID_TAG_MATCHES_ID_H
 #define ID_TAG_MATCHES_ID_H
@@ -40,7 +40,8 @@ public:
 
   static std::string className() { return "hoot::IdTagMatchesId"; }
 
-  IdTagMatchesId();
+  IdTagMatchesId() = default;
+  virtual ~IdTagMatchesId() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

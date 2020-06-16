@@ -63,7 +63,7 @@ public:
 
   static string className() { return "hoot::MultiaryConflatePoiCmd"; }
 
-  MultiaryConflatePoiCmd() {}
+  MultiaryConflatePoiCmd() = default;
 
   virtual QString getName() const override { return "multiary-poi-conflate"; }
 

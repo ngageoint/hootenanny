@@ -55,6 +55,7 @@ public:
   static std::string className() { return "hoot::JosmMapCleaner"; }
 
   JosmMapCleaner();
+  virtual ~JosmMapCleaner() = default;
 
   /**
    * @see OsmMapOperation

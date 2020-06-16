@@ -50,14 +50,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(TagDifferencerJs)
 
-TagDifferencerJs::TagDifferencerJs(TagDifferencer* td) : _td(td)
-{
-}
-
-TagDifferencerJs::~TagDifferencerJs()
-{
-}
-
 void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = v8::Isolate::GetCurrent();

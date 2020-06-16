@@ -66,14 +66,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementMergerJs)
 
-ElementMergerJs::ElementMergerJs()
-{
-}
-
-ElementMergerJs::~ElementMergerJs()
-{
-}
-
 void ElementMergerJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();

@@ -47,6 +47,7 @@ public:
   TagKeyCountVisitor();
   TagKeyCountVisitor(const QString& key);
   explicit TagKeyCountVisitor(const QStringList& keys);
+  virtual ~TagKeyCountVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 

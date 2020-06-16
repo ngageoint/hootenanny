@@ -30,11 +30,6 @@
 namespace hoot
 {
 
-RelationMemberComparison::RelationMemberComparison() :
-ElementComparison()
-{
-}
-
 RelationMemberComparison::RelationMemberComparison(ElementPtr element, const OsmMap& sourceMap,
                                                    const QString& role, const bool ignoreElementId) :
 ElementComparison(element, sourceMap, ignoreElementId),

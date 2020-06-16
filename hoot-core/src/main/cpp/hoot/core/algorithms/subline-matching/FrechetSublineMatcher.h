@@ -42,8 +42,8 @@ class FrechetSublineMatcher : public SublineMatcher, public Configurable
 public:
   static std::string className() { return "hoot::FrechetSublineMatcher"; }
 
-  FrechetSublineMatcher();
-  virtual ~FrechetSublineMatcher() { }
+  FrechetSublineMatcher() = default;
+  virtual ~FrechetSublineMatcher() = default;
 
   /**
    * @param maxRelevantDistance This value is set on a per match basis because it tends to vary

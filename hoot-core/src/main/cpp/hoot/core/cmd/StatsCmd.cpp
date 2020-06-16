@@ -53,7 +53,7 @@ public:
 
   static string className() { return "hoot::StatsCmd"; }
 
-  StatsCmd() {}
+  StatsCmd() = default;
 
   virtual QString getName() const override { return "stats"; }
 

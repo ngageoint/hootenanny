@@ -39,15 +39,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NonBuildingAreaCriterion)
 
-NonBuildingAreaCriterion::NonBuildingAreaCriterion()
-{
-}
-
-NonBuildingAreaCriterion::NonBuildingAreaCriterion(ConstOsmMapPtr map) :
-_map(map)
-{
-}
-
 bool NonBuildingAreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const bool isArea = AreaCriterion(_map).isSatisfied(e);

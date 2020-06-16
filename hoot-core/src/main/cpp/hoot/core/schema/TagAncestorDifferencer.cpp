@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagAncestorDifferencer.h"
 
@@ -42,10 +42,6 @@ TagAncestorDifferencer::TagAncestorDifferencer(QString ancestor) :
   {
     throw IllegalArgumentException("Please specify a valid ancestor tag.");
   }
-}
-
-TagAncestorDifferencer::~TagAncestorDifferencer()
-{
 }
 
 bool TagAncestorDifferencer::isValidTag(const SchemaVertex& sv) const
