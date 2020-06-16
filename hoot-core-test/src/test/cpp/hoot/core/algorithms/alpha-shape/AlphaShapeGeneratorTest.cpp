@@ -50,7 +50,9 @@ class AlphaShapeGeneratorTest : public HootTestFixture
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runBufferTest);
   CPPUNIT_TEST(runNegativeBufferTest);
-  // TODO: need a good test dataset for this one; can't find the original data used
+  // TODO: need a good test dataset for this one; can't find the original data used. The dataset
+  // should result in a successful retry of the alpha shape calculation after the starting alpha
+  // value is too small.
   //CPPUNIT_TEST(runAutoRetryTest);
   CPPUNIT_TEST(runManualCoverTest);
   CPPUNIT_TEST_SUITE_END();
