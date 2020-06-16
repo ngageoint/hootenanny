@@ -50,7 +50,7 @@ class AlphaShapeGeneratorTest : public HootTestFixture
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runBufferTest);
   CPPUNIT_TEST(runNegativeBufferTest);
-  // TODO: fix
+  // TODO: need a good test dataset for this one; can't find the original data used
   //CPPUNIT_TEST(runAutoRetryTest);
   CPPUNIT_TEST(runManualCoverTest);
   CPPUNIT_TEST_SUITE_END();
@@ -133,7 +133,6 @@ public:
     AlphaShapeGenerator uut(1000.0, 0.0);
     uut.setManuallyCoverSmallPointClusters(false);
     uut.setRetryOnTooSmallInitialAlpha(true);
-    DisableLog dl; // TODO
     OsmMapPtr cutShapeMap = uut.generateMap(map);
 
     MapProjector::projectToWgs84(cutShapeMap);
@@ -156,6 +155,7 @@ public:
     //Tgs::Random::instance()->seed(1);
     OsmMapPtr cutShapeMap = uut.generateMap(map);
 
+    // TODO
 //    MapProjector::projectToWgs84(cutShapeMap);
 //    OsmXmlWriter().write(cutShapeMap, _outputPath + "AlphaShapeGeneratorManualCoverTest-out.osm");
 
