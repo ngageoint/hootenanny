@@ -76,6 +76,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.ServiceUnavailableException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -164,16 +165,22 @@ public class GrailResource {
         return !replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL);
     }
 
+    private APICapabilities railsOnlineCheck() {
+        APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
+        logger.info("ApplyChangeset: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
+        if (railsPortCapabilities.getApiStatus() == null || railsPortCapabilities.getApiStatus().equals("offline")) {
+            throw new ServiceUnavailableException(Response.status(Response.Status.SERVICE_UNAVAILABLE).type(MediaType.TEXT_PLAIN).entity("The reference OSM API server is offline.").build());
+        }
+
+        return railsPortCapabilities;
+    }
+
     private Command getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
         // Checks to see that the sensitive data was actually replaced meaning there was a value
         if (isPrivateOverpassActive()) {
             params.setPullUrl(PRIVATE_OVERPASS_URL);
         } else {
-            APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
-            if (railsPortCapabilities.getApiStatus() == null
-                    || railsPortCapabilities.getApiStatus().equals("offline")) {
-                throw new UnavailableException("The Rails port API is offline.");
-            }
+            APICapabilities railsPortCapabilities = railsOnlineCheck();
 
             params.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
             params.setPullUrl(RAILSPORT_PULL_URL);
@@ -245,25 +252,21 @@ public class GrailResource {
             FileUtils.forceMkdir(workDir);
         }
         catch (IOException ioe) {
-            logger.error("createDifferentialChangeset: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
+            logger.error("bulkAdd: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
 
         List<Command> workflow = new LinkedList<>();
+        String input1 = "";
+        String input2 = "";
 
-        JSONObject jobInfo = new JSONObject();
-        jobInfo.put("jobid", jobId);
-
-        GrailParams differentialParams = new GrailParams(reqParams);
-        differentialParams.setUser(user);
-        differentialParams.setWorkDir(workDir);
-
+        // Pull reference data from Rails port or private overpass
         if (!deriveType.equals("Adds only")) {
-            // Pull reference data from Rails port OSM API
             GrailParams getRailsParams = new GrailParams(reqParams);
             getRailsParams.setWorkDir(workDir);
 
             try {
+                // cut and replace needs to get connected ways
                 if (deriveType.equals("Cut & Replace")) {
                     workflow.addAll(setupRailsPull(jobId, getRailsParams, null));
                 } else {
@@ -273,7 +276,7 @@ public class GrailResource {
                 return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
             }
 
-            differentialParams.setInput1(getRailsParams.getOutput());
+            input1 = getRailsParams.getOutput();
         }
 
         // Pull secondary data from the Public Overpass API
@@ -282,17 +285,17 @@ public class GrailResource {
 
         Class<? extends GrailCommand> grailCommandClass;
         if (deriveType.equals("Adds only")) {
-            differentialParams.setInput1(getOverpassParams.getOutput());
-            differentialParams.setInput2("\"\"");
+            input1 = getOverpassParams.getOutput();
+            input2 = "\"\"";
             grailCommandClass = DeriveChangesetCommand.class;
         } else {
-            differentialParams.setInput2(getOverpassParams.getOutput());
+            input2 = getOverpassParams.getOutput();
             grailCommandClass = RunDiffCommand.class;
         }
 
+        // create output file
         File geomDiffFile = new File(workDir, "diff.osc");
         if (geomDiffFile.exists()) geomDiffFile.delete();
-
         try {
             geomDiffFile.createNewFile();
         }
@@ -301,6 +304,10 @@ public class GrailResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exc.getMessage()).build();
         }
 
+        GrailParams differentialParams = new GrailParams(reqParams);
+        differentialParams.setWorkDir(workDir);
+        differentialParams.setInput1(input1);
+        differentialParams.setInput2(input2);
         differentialParams.setOutput(geomDiffFile.getAbsolutePath());
 
         ExternalCommand makeDiff = grailCommandFactory.build(jobId, differentialParams, debugLevel, grailCommandClass, this.getClass());
@@ -308,44 +315,16 @@ public class GrailResource {
 
         JobType jobType = JobType.DERIVE_CHANGESET;
         if (uploadResult) {
-            jobType = JobType.UPLOAD_CHANGESET;
-
             GrailParams pushParams = new GrailParams(differentialParams);
-            pushParams.setUser(user);
-            pushParams.setPushUrl(RAILSPORT_PUSH_URL);
+            workflow.add(createApplyWorkflow(jobId, pushParams, debugLevel));
 
-            ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
-            pushParams.setConsumerKey(oauthInfo.getConsumerKey());
-            pushParams.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
-
-            try {
-                APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
-                logger.info("ApplyChangeset: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-                if (railsPortCapabilities.getApiStatus() == null || railsPortCapabilities.getApiStatus().equals("offline")) {
-                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The reference OSM API server is offline.").build();
-                }
-
-                pushParams.setOutput(geomDiffFile.getAbsolutePath());
-
-                ExternalCommand applyGeomChange = grailCommandFactory.build(jobId, pushParams, debugLevel, ApplyChangesetCommand.class, this.getClass());
-                workflow.add(applyGeomChange);
+            if (deriveType.equals("Adds only")) {
+                jobType = JobType.BULK_ADD;
+            } else if (deriveType.equals("Cut & Replace")) {
+                jobType = JobType.BULK_REPLACE;
+            } else {
+                jobType = JobType.BULK_DIFFERENTIAL;
             }
-            catch (WebApplicationException wae) {
-                throw wae;
-            }
-            catch (IllegalArgumentException iae) {
-                throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
-            }
-            catch (Exception e) {
-                String msg = "Error during changeset push! Params: " + pushParams;
-                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-            }
-        }
-
-        if (deriveType.equals("Adds only")) {
-            jobType = JobType.BULK_ADD;
-        } else if (deriveType.equals("Cut & Replace")) {
-            jobType = JobType.BULK_REPLACE;
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();
@@ -355,7 +334,29 @@ public class GrailResource {
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), jobType, jobStatusTags));
 
+        JSONObject jobInfo = new JSONObject();
+        jobInfo.put("jobid", jobId);
+
         return Response.ok(jobInfo.toJSONString()).build();
+    }
+
+    private ExternalCommand createApplyWorkflow(String jobId, GrailParams pushParams, String debugLevel) {
+        pushParams.setPushUrl(RAILSPORT_PUSH_URL);
+
+        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
+        pushParams.setConsumerKey(oauthInfo.getConsumerKey());
+        pushParams.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
+
+        try {
+            railsOnlineCheck();
+
+            ExternalCommand applyGeomChange = grailCommandFactory.build(jobId, pushParams, debugLevel, ApplyChangesetCommand.class, this.getClass());
+            return applyGeomChange;
+        }
+        catch (Exception exc) {
+            String msg = "Error during changeset push! Params: " + pushParams;
+            throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
+        }
     }
 
     /**
