@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -54,15 +55,39 @@ void KeepTagsVisitor::visit(const std::shared_ptr<Element>& e)
   }
   _numAffected++;
 
-  //get a copy of the tags for modifying
+  // get a copy of the tags for modifying
   Tags tags;
   tags.add(e->getTags());
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
-    if (!_keys.contains(it.key()))
+    const QString key = it.key();
+
+    bool keepTag = false;
+
+    LOG_VART(key);
+    LOG_VART(_keys.contains(key));
+    if (_keys.contains(key))
     {
-      tags.remove(it.key());
-      _numTagsRemoved++;
+      keepTag = true;
+    }
+    else
+    {
+      for (int i = 0; i < _keyRegexs.size(); i++)
+      {
+        const QRegExp regex = _keyRegexs.at(i);
+        LOG_VART(regex.pattern());
+        LOG_VART(regex.exactMatch(key));
+        if (regex.exactMatch(key))
+        {
+          keepTag = true;
+          break;
+        }
+      }
+    }
+
+    if (!keepTag)
+    {
+      _numTagsRemoved += tags.remove(key);
     }
   }
   e->setTags(tags);

@@ -32,6 +32,9 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
+// Qt
+#include <QRegExp>
+
 namespace hoot
 {
 
@@ -74,15 +77,23 @@ public:
 
 protected:
 
+  // TODO
   QStringList _keys;
+  // TODO
+  QList<QRegExp> _keyRegexs;
+
+  // TODO
   std::shared_ptr<ElementCriterion> _criterion;
-  //This allows for negating the criterion as an option sent in from the command line.
+
+  // This allows for negating the criterion as an option sent in from the command line.
   bool _negateCriterion;
+
   long _numTagsRemoved;
 
 private:
 
   void _setCriterion(const QString& criterionName);
+  void _setKeys(const QStringList& keys);
 };
 
 }

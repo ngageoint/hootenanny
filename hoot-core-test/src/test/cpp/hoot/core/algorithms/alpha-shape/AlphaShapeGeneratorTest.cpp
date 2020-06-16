@@ -47,17 +47,19 @@ namespace hoot
 class AlphaShapeGeneratorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AlphaShapeGeneratorTest);
-  // TODO: need test for auto alpha retry when initial value is too small
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runBufferTest);
   CPPUNIT_TEST(runNegativeBufferTest);
+  CPPUNIT_TEST(runAutoRetryTest);
+  CPPUNIT_TEST(runManualCoverTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  AlphaShapeGeneratorTest()
-    : HootTestFixture("test-files/algorithms/alpha-shape/",
-                      "test-output/algorithms/alpha-shape/")
+  AlphaShapeGeneratorTest() :
+  HootTestFixture(
+    "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/",
+    "test-output/algorithms/alpha-shape/AlphaShapeGeneratorTest/")
   {
     setResetType(ResetAll);
   }
@@ -69,15 +71,17 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", map);
 
-    OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, 0.0).generateMap(map);
+    AlphaShapeGenerator uut(1000.0, 0.0);
+    uut.setManuallyCoverSmallPointClusters(false);
+    uut.setRetryOnTooSmallInitialAlpha(false);
+    OsmMapPtr cutShapeMap = uut.generateMap(map);
 
     MapProjector::projectToWgs84(cutShapeMap);
-
     OsmXmlWriter writer;
-    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorBasicTest.osm");
+    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorBasicTest-out.osm");
 
-    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorBasicTest.osm",
-                    _outputPath + "AlphaShapeGeneratorBasicTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorBasicTest-out.osm",
+                     _outputPath + "AlphaShapeGeneratorBasicTest-out.osm");
   }
 
   void runBufferTest()
@@ -87,15 +91,17 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", map);
 
-    OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, 500.0).generateMap(map);
+    AlphaShapeGenerator uut(1000.0, 500.0);
+    uut.setManuallyCoverSmallPointClusters(false);
+    uut.setRetryOnTooSmallInitialAlpha(false);
+    OsmMapPtr cutShapeMap = uut.generateMap(map);
 
     MapProjector::projectToWgs84(cutShapeMap);
-
     OsmXmlWriter writer;
-    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorBufferTest.osm");
+    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorBufferTest-out.osm");
 
-    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorBufferTest.osm",
-                    _outputPath + "AlphaShapeGeneratorBufferTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorBufferTest-out.osm",
+                     _outputPath + "AlphaShapeGeneratorBufferTest-out.osm");
   }
 
   void runNegativeBufferTest()
@@ -105,15 +111,57 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", map);
 
-    OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, -500.0).generateMap(map);
+    AlphaShapeGenerator uut(1000.0, -500.0);
+    uut.setManuallyCoverSmallPointClusters(false);
+    uut.setRetryOnTooSmallInitialAlpha(false);
+    OsmMapPtr cutShapeMap = uut.generateMap(map);
 
     MapProjector::projectToWgs84(cutShapeMap);
-
     OsmXmlWriter writer;
-    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorNegativeBufferTest.osm");
+    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorNegativeBufferTest-out.osm");
 
-    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorNegativeBufferTest.osm",
-                    _outputPath + "AlphaShapeGeneratorNegativeBufferTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorNegativeBufferTest-out.osm",
+                     _outputPath + "AlphaShapeGeneratorNegativeBufferTest-out.osm");
+  }
+
+  void runAutoRetryTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + "AlphaShapeGeneratorAutoRetryTest-in.osm", map);
+
+    AlphaShapeGenerator uut(1000.0, 0.0);
+    uut.setManuallyCoverSmallPointClusters(false);
+    uut.setRetryOnTooSmallInitialAlpha(true);
+    OsmMapPtr cutShapeMap = uut.generateMap(map);
+
+    MapProjector::projectToWgs84(cutShapeMap);
+    OsmXmlWriter writer;
+    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorAutoRetryTest-out.osm");
+
+    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorAutoRetryTest-out.osm",
+                     _outputPath + "AlphaShapeGeneratorAutoRetryTest-out.osm");
+  }
+
+  void runManualCoverTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + "AlphaShapeGeneratorManualCoverTest-in.osm", map);
+
+    AlphaShapeGenerator uut(10000.0, 500.0);
+    uut.setManuallyCoverSmallPointClusters(true);
+    uut.setRetryOnTooSmallInitialAlpha(true);
+    OsmMapPtr cutShapeMap = uut.generateMap(map);
+
+    MapProjector::projectToWgs84(cutShapeMap);
+    OsmXmlWriter writer;
+    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorManualCoverTest-out.osm");
+
+    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorManualCoverTest-out.osm",
+                     _outputPath + "AlphaShapeGeneratorManualCoverTest-out.osm");
   }
 };
 

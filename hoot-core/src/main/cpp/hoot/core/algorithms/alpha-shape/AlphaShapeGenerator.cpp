@@ -47,6 +47,7 @@ namespace hoot
 AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer) :
 _alpha(alpha),
 _buffer(buffer),
+_manuallyCoverSmallPointClusters(true),
 _retryOnTooSmallInitialAlpha(true),
 _maxTries(1)
 {
@@ -110,7 +111,6 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
     points.push_back(p);
   }
   LOG_VART(points.size());
-  _inputPoints = points;
 
   // create a complex geometry representing the alpha shape
 
@@ -156,28 +156,29 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
   //OsmMapWriterFactory::writeDebugMap(cutterShape, inputMap->getProjection(), "cutter-shape-map");
 
   // TODO
-  _coverStragglers(cutterShape);
-  //OsmMapWriterFactory::writeDebugMap(geometry, spatRef, "alpha-shape-after-covering-stragglers");
+  if (_manuallyCoverSmallPointClusters)
+  {
+    _coverStragglers(cutterShape, inputMap);
+    //OsmMapWriterFactory::writeDebugMap(geometry, spatRef, "alpha-shape-after-covering-stragglers");
+  }
 
   return cutterShape;
 }
 
-void AlphaShapeGenerator::_coverStragglers(std::shared_ptr<Geometry>& geometry)
+void AlphaShapeGenerator::_coverStragglers(std::shared_ptr<Geometry>& geometry,
+                                           const ConstOsmMapPtr& map)
 {
   LOG_DEBUG("Covering stragglers...");
 
   int addedPointCtr = 0;
-  LOG_VARD(_inputPoints.size());
-  for (std::vector<std::pair<double, double>>::const_iterator itr = _inputPoints.begin();
-       itr != _inputPoints.end(); ++itr)
+  const NodeMap& nodes = map->getNodes();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    std::pair<double, double> rawPoint = *itr;
-    LOG_VART(rawPoint.first);
-    LOG_VART(rawPoint.second);
+    NodePtr node = it->second;
     std::shared_ptr<geos::geom::Geometry> point(
       GeometryFactory::getDefaultInstance()->createPoint(
-        geos::geom::Coordinate(rawPoint.first, rawPoint.second)));
-    if (!geometry->touches(point.get()) && !geometry->contains(point.get()))
+        geos::geom::Coordinate(node->getX(), node->getY())));
+    if (/*!geometry->touches(point.get()) && */!geometry->contains(point.get()))
     {
       LOG_TRACE(
         "Point " << point->toString() << " not covered by alpha shape. Buffering and adding it...");

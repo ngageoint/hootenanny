@@ -70,6 +70,7 @@ public:
   std::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
 
   void setRetryOnTooSmallInitialAlpha(bool retry) { _retryOnTooSmallInitialAlpha = retry; }
+  void setManuallyCoverSmallPointClusters(bool cover) { _manuallyCoverSmallPointClusters = cover; }
 
 private:
 
@@ -78,19 +79,18 @@ private:
   // TODO
   double _buffer;
   // TODO
+  bool _manuallyCoverSmallPointClusters;
+  // TODO
   bool _retryOnTooSmallInitialAlpha;
   // TODO
   bool _maxTries;
-
-  // TODO: don't think we need this
-  std::vector<std::pair<double, double>> _inputPoints;
 
   /*
    * This is a bit of hack to the alg, if you will, that will alow for covering small groups of
    * features when a smaller alpha value is selected. This is desirable in certain situations when
    * using the alpha shape to feed a tasking grid.
    */
-  void _coverStragglers(std::shared_ptr<geos::geom::Geometry>& geometry);
+  void _coverStragglers(std::shared_ptr<geos::geom::Geometry>& geometry, const ConstOsmMapPtr& map);
 };
 
 }
