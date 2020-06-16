@@ -64,14 +64,7 @@ void RemoveTagsVisitor::_setKeys(const QStringList& keys)
   for (int i = 0; i < keys.size(); i++)
   {
     const QString key = keys.at(i);
-    if (key.contains("*"))
-    {
-      _keyRegexs.append(QRegExp(key, Qt::CaseInsensitive, QRegExp::Wildcard));
-    }
-    else
-    {
-      _keys.append(key);
-    }
+    _keyRegexs.append(QRegExp(key, Qt::CaseInsensitive, QRegExp::Wildcard));
   }
 }
 
@@ -108,7 +101,6 @@ void RemoveTagsVisitor::visit(const std::shared_ptr<Element>& e)
   _numAffected++;
 
   Tags tags = e->getTags();
-  _numTagsRemoved += tags.removeKeys(_keys);
   _numTagsRemoved += tags.removeKeys(_keyRegexs);
   e->setTags(tags);
 }

@@ -61,31 +61,19 @@ void KeepTagsVisitor::visit(const std::shared_ptr<Element>& e)
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
     const QString key = it.key();
+    bool removeTag = true;
 
-    bool keepTag = false;
-
-    LOG_VART(key);
-    LOG_VART(_keys.contains(key));
-    if (_keys.contains(key))
+    for (int i = 0; i < _keyRegexs.size(); i++)
     {
-      keepTag = true;
-    }
-    else
-    {
-      for (int i = 0; i < _keyRegexs.size(); i++)
+      const QRegExp regex = _keyRegexs.at(i);
+      if (regex.exactMatch(key))
       {
-        const QRegExp regex = _keyRegexs.at(i);
-        LOG_VART(regex.pattern());
-        LOG_VART(regex.exactMatch(key));
-        if (regex.exactMatch(key))
-        {
-          keepTag = true;
-          break;
-        }
+        removeTag = false;
+        break;
       }
     }
 
-    if (!keepTag)
+    if (removeTag)
     {
       _numTagsRemoved += tags.remove(key);
     }

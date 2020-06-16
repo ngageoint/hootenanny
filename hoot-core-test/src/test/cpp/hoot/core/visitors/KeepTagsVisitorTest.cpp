@@ -44,15 +44,13 @@ namespace hoot
 class KeepTagsVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(KeepTagsVisitorTest);
-  //CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(runWildcardTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  KeepTagsVisitorTest()
-    : HootTestFixture("test-files/visitors/",
-                      UNUSED_PATH)
+  KeepTagsVisitorTest() : HootTestFixture("test-files/visitors/", UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }

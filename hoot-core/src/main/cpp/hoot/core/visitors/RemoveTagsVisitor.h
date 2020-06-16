@@ -78,8 +78,6 @@ public:
 protected:
 
   // TODO
-  QStringList _keys;
-  // TODO
   QList<QRegExp> _keyRegexs;
 
   // TODO
