@@ -78,37 +78,37 @@ public:
   static int logWarnCount;
 
   /**
-   * TODO
+   * Constructor
    *
-   * @param alpha
+   * @param alpha tuning parameter which determines the makeup of the output shape
    */
   AlphaShape(double alpha);
 
   /**
-   * TODO
+   * Converts this shape to a GEOS geometry
    *
-   * @return
+   * @return a GEOS geometry
    */
   std::shared_ptr<geos::geom::Geometry> toGeometry();
 
   /**
-   * TODO
+   * Inserts points which are used to build the shape
    *
-   * @param points
+   * @param points a collection of points
    */
   void insert(const std::vector<std::pair<double, double>>& points);
 
   /**
-   * TODO
+   * Returns a string representation of the shape
    *
-   * @return
+   * @return a string
    */
   QString toString();
 
   /**
-   * TODO
+   * Returns the length of the longest face edge used to create the shape
    *
-   * @return
+   * @return a length
    */
   double getLongestFaceEdge() const { return _longestFaceEdge; }
 
@@ -116,21 +116,20 @@ private:
 
   friend class AlphaShapeTest;
 
-  // TODO
+  // tuning parameter which determines the makeup of the output shape
   double _alpha;
 
-  // TODO
+  // size of the longest face edge
   mutable double _longestFaceEdge;
 
-  // TODO
+  // main data structures used to calculate the shape
   std::shared_ptr<Tgs::DelaunayTriangulation> _pDelauneyTriangles;
-  // TODO
   std::set<std::pair<double, double>> _outsidePoint;
 
   std::shared_ptr<geos::geom::Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
 
   /*
-   * TODO
+   * Returns true if the face is on the boundary of the triangulation
    */
   bool _isBoundary(const Tgs::Edge& e) const;
 
@@ -144,20 +143,11 @@ private:
    */
   bool _isOutsideEdge(const Tgs::Edge& e) const;
 
-  /*
-   * TODO
-   */
   bool _isTooLong(const Tgs::Edge& e) const;
 
-  /*
-   * TODO
-   */
   std::shared_ptr<geos::geom::Geometry> _validateGeometry(
     const std::shared_ptr<geos::geom::Geometry>& g);
 
-  /*
-   * TODO
-   */
   std::shared_ptr<OsmMap> _toOsmMap();
 };
 

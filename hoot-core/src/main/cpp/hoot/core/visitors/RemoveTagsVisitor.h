@@ -78,10 +78,10 @@ public:
 
 protected:
 
-  // TODO
+  // Tag keys that match these get removed.
   QList<QRegExp> _keyRegexs;
 
-  // TODO
+  // Criterion the element whose tags are to be remove must match
   std::shared_ptr<ElementCriterion> _criterion;
 
   // This allows for negating the criterion as an option sent in from the command line.

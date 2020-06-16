@@ -46,26 +46,26 @@ public:
   static std::string className() { return "hoot::AlphaShapeGenerator"; }
 
   /**
-   * TODO
+   * Constructor
    *
-   * @param alpha
-   * @param buffer
+   * @param alpha tuning parameter used to calculate the alpha shape
+   * @param buffer how far out from the calculated alpha shape the output shape should be buffered
    */
   AlphaShapeGenerator(const double alpha, const double buffer = 0.0);
 
   /**
-   * Generates an alpha shape based on the geometry of an input map
+   * Generates an alpha shape as a map based on the geometry of some input map
    *
-   * @param inputMap the geometry to use for generating the alpha shape
+   * @param inputMap the map to use for generating the alpha shape
    * @return a map containing the alpha shape's points
    */
   OsmMapPtr generateMap(OsmMapPtr inputMap);
 
   /**
-   * TODO
+   * Generates an alpha shape as a geometry based on the geometry of some input map
    *
-   * @param inputMap
-   * @return
+   * @param inputMap the map to use for generating the alpha shape
+   * @return a geometry containing the alpha shape's points
    */
   std::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
 
@@ -74,21 +74,26 @@ public:
 
 private:
 
-  // TODO
+  // tuning parameter used to calculate the alpha shape
   double _alpha;
-  // TODO
+  // how far out from the calculated alpha shape the output shape should be buffered
   double _buffer;
-  // TODO
+  // This triggers _coverStragglers (read description).
   bool _manuallyCoverSmallPointClusters;
-  // TODO
+  // If the selected alpha value is too small to calculate the alpha shape, a retry can be done to
+  // compute it based on the input data. This could go away if auto-alpha calculation was ever
+  // implemented (#4085).
   bool _retryOnTooSmallInitialAlpha;
-  // TODO
+  // The maximum number of alpha values retries to. Right now this is hardcoded to 2 as that's all
+  // that has ever been needed.
   bool _maxTries;
 
   /*
    * This is a bit of hack to the alg, if you will, that will alow for covering small groups of
    * features when a smaller alpha value is selected. This is desirable in certain situations when
-   * using the alpha shape to feed a tasking grid.
+   * using the alpha shape to feed a tasking grid. Attempts were made to make this change in
+   * AlphaShape itself, but it wasn't feasible due to relying on the buffering of the shape which
+   * happens in this class. Its possible that part could be moved to AlphaShape, if needed.
    */
   void _coverStragglers(std::shared_ptr<geos::geom::Geometry>& geometry, const ConstOsmMapPtr& map);
 };

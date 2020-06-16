@@ -238,35 +238,35 @@ public:
   int removeEmpty();
 
   /**
-   * Removes all metadata tags (hoot::*)
+   * Removes all metadata tags (hoot::* and those identified in the schema)
    *
-   * @return TODO
+   * @return the number of tags removed
    */
   int removeMetadata();
 
   // A single key removal can be done with the call to parent QHash::remove.
 
   /**
-   * TODO
+   * Removes all tags with keys exactly matching those in the input list
    *
-   * @param keys
-   * @return
+   * @param keys the list of keys to remove
+   * @return the number of tags removed
    */
   int removeKeys(const QStringList& keys);
 
   /**
-   * TODO
+   * Removes any tag who's key matches the input regular expression
    *
-   * @param regex
-   * @return
+   * @param regex regular expression to match
+   * @return the number of tags removed
    */
   int removeKey(const QRegExp& regex);
 
   /**
-   * TODO
+   * Removes all tags who's keys match the input regular expressions
    *
-   * @param regexes
-   * @return
+   * @param regexes regular expressions to match
+   * @return the number of tags removed
    */
   int removeKeys(const QList<QRegExp>& regexes);
 
@@ -274,7 +274,7 @@ public:
    * Removes all tags with keys that contain the input substring
    *
    * @param tagKeySubstring a substring to match
-   * @return TODO
+   * @return the number of tags removed
    */
   int removeByTagKeyContains(const QString& tagKeySubstring);
 
@@ -282,7 +282,7 @@ public:
    * Removes all tags with keys that start with the input substring
    *
    * @param tagKeySubstring a substring to match
-   * @return TODO
+   * @return the number of tags removed
    */
   int removeByTagKeyStartsWith(const QString& tagKeySubstring);
 
