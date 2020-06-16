@@ -42,7 +42,8 @@ public enum JobType {
     DERIVE_CHANGESET,
     UPLOAD_CHANGESET,
     BULK_ADD,
-    BULK_REPLACE;
+    BULK_REPLACE,
+    BULK_DIFFERENTIAL;
 
     public static JobType fromInteger(int value) {
         if ((value >= 0) && (value < JobType.values().length)) {
