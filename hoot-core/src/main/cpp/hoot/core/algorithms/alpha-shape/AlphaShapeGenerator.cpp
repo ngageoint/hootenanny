@@ -171,6 +171,9 @@ void AlphaShapeGenerator::_coverStragglers(std::shared_ptr<Geometry>& geometry,
 {
   LOG_DEBUG("Covering stragglers...");
 
+  // Pretty simple...go through and find any point that wasn't covered by the Alpha Shape and draw
+  // a buffer around it.
+
   int addedPointCtr = 0;
   const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
