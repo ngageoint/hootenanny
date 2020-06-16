@@ -37,6 +37,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
+#include <hoot/core/util/GeometryConverter.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -201,6 +202,18 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     write(copy, debugMapFileName, true, true);
     _debugMapCount++;
   }
+}
+
+void OsmMapWriterFactory::writeDebugMap(
+  const std::shared_ptr<geos::geom::Geometry>& geometry,
+  std::shared_ptr<OGRSpatialReference> spatRef, const QString& title, NetworkMatcherPtr matcher)
+{
+  OsmMapPtr map(new OsmMap(spatRef));
+  //result->appendSource(inputMap->getSource());
+  // add the resulting alpha shape for debugging.
+  GeometryConverter(map).convertGeometryToElement(geometry.get(), Status::Invalid, -1);
+
+  writeDebugMap(map, title, matcher);
 }
 
 }

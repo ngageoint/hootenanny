@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -48,13 +48,14 @@ class RemoveTagsVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runRemoveTest);
   CPPUNIT_TEST(runFilterTest);
   CPPUNIT_TEST(runNegatedFilterTest);
+  CPPUNIT_TEST(runWildcardTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  RemoveTagsVisitorTest()
-    : HootTestFixture("test-files/visitors/RemoveTagsVisitorTest/",
-                      "test-output/visitors/RemoveTagsVisitorTest/")
+  RemoveTagsVisitorTest() :
+  HootTestFixture("test-files/visitors/RemoveTagsVisitorTest/",
+                  "test-output/visitors/RemoveTagsVisitorTest/")
   {
     setResetType(ResetBasic);
   }
@@ -74,7 +75,7 @@ public:
 
     OsmMapWriterFactory::write(map, _outputPath + "RunRemoveTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "RunRemoveTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "RunRemoveTest.osm",
                      _outputPath + "RunRemoveTest.osm");
   }
 
@@ -94,7 +95,7 @@ public:
 
     OsmMapWriterFactory::write(map, _outputPath + "RunFilterTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "RunFilterTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "RunFilterTest.osm",
                      _outputPath + "RunFilterTest.osm");
   }
 
@@ -114,8 +115,27 @@ public:
 
     OsmMapWriterFactory::write(map, _outputPath + "RunNegatedFilterTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "RunNegatedFilterTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "RunNegatedFilterTest.osm",
                      _outputPath + "RunNegatedFilterTest.osm");
+  }
+
+  void runWildcardTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
+
+    QStringList keys;
+    keys.append("key*");
+    keys.append("mykey");
+    RemoveTagsVisitor visitor(keys);
+    visitor.setNegateCriterion(false);
+    map->visitRw(visitor);
+
+    OsmMapWriterFactory::write(map, _outputPath + "RunWildcardTest.osm");
+
+    HOOT_FILE_EQUALS(_inputPath + "RunWildcardTest.osm",
+                     _outputPath + "RunWildcardTest.osm");
   }
 };
 

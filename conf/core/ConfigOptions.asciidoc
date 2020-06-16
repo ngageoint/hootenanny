@@ -4656,9 +4656,9 @@ Hootenanny Javascript interface instead.
 * Default Value:
 ** ``
 
-A list of tag keys the KeepTagsVisitor/RemoveTagsVisitor will keep/remove on/from elements.  From
-the command line, separate list items with a semicolon and surround the entire list in double
-quotes.
+A list of tag keys the KeepTagsVisitor/RemoveTagsVisitor will keep/remove on/from elements.
+Wildcard matching is supported with '*'. From the command line, separate list items with a semicolon
+and surround the entire list in double quotes.
 
 === tag.key.contains.criterion.text
 

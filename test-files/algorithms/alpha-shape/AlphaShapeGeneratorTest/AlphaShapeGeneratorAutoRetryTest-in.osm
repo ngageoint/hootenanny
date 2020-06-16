@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="5.016667" minlon="7.833333" maxlat="5.083333" maxlon="7.9"/>
+    <node visible="true" id="-28828" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0666669999999998" lon="7.8833330000000004">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2020986"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28828"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Nkim"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28827" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0666669999999998" lon="7.8333329999999997">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2011615"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28827"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Ikot Akpabio"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28826" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0499999999999998" lon="7.9000000000000004">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2019374"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28826"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Mbak Itam"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28825" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0166670000000000" lon="7.8666669999999996">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2030198"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28825"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Use Ikot Ebio"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28824" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0833329999999997" lon="7.8499999999999996">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2022710"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28824"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Okobo"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28823" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0333329999999998" lon="7.8333329999999997">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2011825"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28823"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Ikot Obio Nkpong"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28822" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0333329999999998" lon="7.8333329999999997">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2011794"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28822"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Ikot Mpon"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28821" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0333329999999998" lon="7.8333329999999997">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2011794"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28821"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Ikot Mbon"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28820" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0333329999999998" lon="7.8833330000000004">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2019457"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28820"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Mbribit"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28819" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0333329999999998" lon="7.8666669999999996">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2019652"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28819"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Miakpan"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28818" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0499999999999998" lon="7.9000000000000004">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2021240"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28818"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Nung Ukot"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28817" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0499999999999998" lon="7.8833330000000004">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2011787"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28817"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Ikot Mbang"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28816" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0166670000000000" lon="7.8833330000000004">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2011705"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28816"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Ikot Ekpe"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28815" timestamp="2020-03-11T12:19:18Z" version="2" lat="5.0822172999999999" lon="7.8476654000000003">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2011864"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28815"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Ikot Okure"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28814" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0499999999999998" lon="7.8333329999999997">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2011617"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28814"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Ikot Akpadung Itak"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28813" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0166670000000000" lon="7.8499999999999996">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2005778"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28813"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Ediene"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28812" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0666669999999998" lon="7.8499999999999996">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2010539"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28812"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Ibiaku Ikot Ukpong"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28811" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0333329999999998" lon="7.8833330000000004">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-1997506"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28811"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Afaha Offot"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28810" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0833329999999997" lon="7.9000000000000004">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-1997492"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28810"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Afaha"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28809" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0833329999999997" lon="7.8666669999999996">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2011603"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28809"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Ikot Ada Idem"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28808" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0166670000000000" lon="7.8333329999999997">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2019459"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28808"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Mbiabong"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28807" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0333329999999998" lon="7.8833330000000004">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2019457"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28807"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Mbiabit"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28806" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0499999999999998" lon="7.8499999999999996">
+        <tag k="GNS:dsg_string" v="populated place"/>
+        <tag k="fixme" v="no population estimate available, defaulted to village"/>
+        <tag k="GNS:id" v="-2030261"/>
+        <tag k="source" v="GNS"/>
+        <tag k="hoot:id" v="-28806"/>
+        <tag k="GNS:dsg_code" v="PPL"/>
+        <tag k="is_in:country" v="Nigeria"/>
+        <tag k="name" v="Utat"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-28242" timestamp="2020-03-11T12:19:18Z" version="1" lat="5.0554816999999996" lon="7.8842739999999996">
+        <tag k="name:en" v="AKTC Park"/>
+        <tag k="hoot:id" v="-28242"/>
+        <tag k="name" v="AKTC Park"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="amenity" v="bus_station"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+</osm>

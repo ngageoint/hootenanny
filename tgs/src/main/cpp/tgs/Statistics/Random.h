@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__RANDOM_H__
@@ -40,6 +40,7 @@ namespace Tgs
   class TGS_EXPORT Random
   {
   public:
+
     Random(unsigned int seed);
 
     static std::shared_ptr<Random> instance()
@@ -68,17 +69,19 @@ namespace Tgs
     static void randomizeVector(std::vector<_T>& v)
     {
       for (unsigned int i = 0; i < v.size() * 2; i++)
-        std::swap(v[Random::instance()->generateInt(v.size())], v[Random::instance()->generateInt(v.size())]);
+        std::swap(
+          v[Random::instance()->generateInt(v.size())],
+          v[Random::instance()->generateInt(v.size())]);
     }
 
   private:
+
     Random();
 
     static std::shared_ptr<Random> _instance;
 
     unsigned int _seed;
     bool _is_single;
-
   };
 
   typedef std::shared_ptr<Random> RandomPtr;

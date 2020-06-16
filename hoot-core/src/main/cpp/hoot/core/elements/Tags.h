@@ -35,6 +35,7 @@
 #include <QHash>
 #include <QString>
 #include <QStringList>
+#include <QRegExp>
 
 // Standard
 #include <stdint.h>
@@ -234,28 +235,56 @@ public:
   /**
    * Remove all tags with empty strings as values.
    */
-  void removeEmpty();
+  int removeEmpty();
 
   /**
-   * Removes all metadata tags (hoot::*)
+   * Removes all metadata tags (hoot::* and those identified in the schema)
+   *
+   * @return the number of tags removed
    */
-  void removeMetadata();
+  int removeMetadata();
 
-  // QHash::remove can be used for removal by key equal to.
+  // A single key removal can be done with the call to parent QHash::remove.
+
+  /**
+   * Removes all tags with keys exactly matching those in the input list
+   *
+   * @param keys the list of keys to remove
+   * @return the number of tags removed
+   */
+  int removeKeys(const QStringList& keys);
+
+  /**
+   * Removes any tag who's key matches the input regular expression
+   *
+   * @param regex regular expression to match
+   * @return the number of tags removed
+   */
+  int removeKey(const QRegExp& regex);
+
+  /**
+   * Removes all tags who's keys match the input regular expressions
+   *
+   * @param regexes regular expressions to match
+   * @return the number of tags removed
+   */
+  int removeKeys(const QList<QRegExp>& regexes);
 
   /**
    * Removes all tags with keys that contain the input substring
    *
    * @param tagKeySubstring a substring to match
+   * @return the number of tags removed
    */
-  void removeByTagKeyContains(const QString& tagKeySubstring);
+  int removeByTagKeyContains(const QString& tagKeySubstring);
 
   /**
    * Removes all tags with keys that start with the input substring
    *
    * @param tagKeySubstring a substring to match
+   * @return the number of tags removed
    */
-  void removeByTagKeyStartsWith(const QString& tagKeySubstring);
+  int removeByTagKeyStartsWith(const QString& tagKeySubstring);
 
   /**
    * Sets the area tag to either true (is an area element), or false (is not an area element)

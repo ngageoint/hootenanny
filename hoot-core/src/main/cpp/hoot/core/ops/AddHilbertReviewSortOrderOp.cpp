@@ -78,7 +78,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
   const RelationMap& relations = map->getRelations();
 
   vector<pair<ElementId, int64_t>> reviewOrder;
-  // reserves at least as much as we need.
+  // reserves at least as much as we need
   reviewOrder.reserve(relations.size());
 
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
@@ -93,7 +93,6 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
       if (eids.size() > 0)
       {
         int64_t hv = _calculateHilbertValue(map, eids);
-
         pair<ElementId, int64_t> p(r->getElementId(), hv);
         reviewOrder.push_back(p);
       }
@@ -148,7 +147,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
 
   // 31 bits is the most supported for 2 dimensions.
   int order = min(31, max(xorder, yorder));
-  // always 2 dimensions.
+  // always 2 dimensions
   Tgs::HilbertCurve c(2, order);
   int64_t maxRange = 1 << order;
   int point[2];
@@ -158,7 +157,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
   point[1] = max<int64_t>(0, min<int64_t>(maxRange - 1,
     round((center.y - _mapEnvelope->getMinY()) / cellSize)));
 
-  // pad with zeros to make sorting a little easier.
+  // Pad with zeros to make sorting a little easier.
   return c.encode(point);
 }
 
