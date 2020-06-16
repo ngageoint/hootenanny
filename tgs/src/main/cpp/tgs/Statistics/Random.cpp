@@ -35,14 +35,14 @@ namespace Tgs
 {
   std::shared_ptr<Random> Random::_instance;
 
-  Random::Random(unsigned int s)
-    : _is_single(false)
+  Random::Random(unsigned int s) :
+  _is_single(false)
   {
     seed(s);
   }
 
-  Random::Random()
-    : _is_single(true)
+  Random::Random() :
+  _is_single(true)
   {
     seed(0);
   }

@@ -614,7 +614,7 @@ int Tags::removeMetadata()
 {
   int numRemoved = removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
 
-  // there are some other metadata keys that don't start with hoot::
+  // there are some other metadata keys that don't start with 'hoot::'
   QStringList keysToRemove;
   OsmSchema& schema = OsmSchema::getInstance();
   for (Tags::const_iterator it = begin(); it != end(); ++it)

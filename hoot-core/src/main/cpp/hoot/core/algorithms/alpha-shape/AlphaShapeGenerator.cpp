@@ -178,7 +178,7 @@ void AlphaShapeGenerator::_coverStragglers(std::shared_ptr<Geometry>& geometry,
     std::shared_ptr<geos::geom::Geometry> point(
       GeometryFactory::getDefaultInstance()->createPoint(
         geos::geom::Coordinate(node->getX(), node->getY())));
-    if (/*!geometry->touches(point.get()) && */!geometry->contains(point.get()))
+    if (!geometry->contains(point.get()))
     {
       LOG_TRACE(
         "Point " << point->toString() << " not covered by alpha shape. Buffering and adding it...");
