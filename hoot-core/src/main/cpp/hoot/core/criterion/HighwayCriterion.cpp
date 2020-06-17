@@ -85,6 +85,7 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 
   if (!containsHighwayTag && tags.contains("surface"))
   {
+    const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
     if (logWarnCount < logWarnMessageLimit)
     {
       LOG_WARN(
