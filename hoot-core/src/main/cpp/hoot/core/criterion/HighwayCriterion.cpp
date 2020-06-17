@@ -36,8 +36,6 @@
 namespace hoot
 {
 
-int HighwayCriterion::logWarnCount = 0;
-
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
@@ -81,22 +79,6 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   {
     result = !AreaCriterion().isSatisfied(element);
     LOG_VART(result);
-  }
-
-  if (!containsHighwayTag && tags.contains("surface"))
-  {
-    const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
-    if (logWarnCount < logWarnMessageLimit)
-    {
-      LOG_WARN(
-        "'surface' tag encountered on " << element->getElementId() <<
-        " with no 'highway' tag. Are your roads properly tagged?");
-    }
-    else if (logWarnCount == logWarnMessageLimit)
-    {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-    }
-    logWarnCount++;
   }
 
   LOG_TRACE(element->getElementId() << " result: " << result);
