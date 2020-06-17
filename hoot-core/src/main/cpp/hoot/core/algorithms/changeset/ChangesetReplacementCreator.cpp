@@ -1709,13 +1709,7 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
 
 void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
 {
-  LOG_STATUS("Cleaning up missing elements for " << map->getName() << "...");
-
-  // This will handle removing refs in relation members we've cropped out.
-//  RemoveMissingElementsVisitor missingElementsRemover;
-//  LOG_STATUS("\t" << missingElementsRemover.getInitStatusMessage());
-//  map->visitRw(missingElementsRemover);
-//  LOG_STATUS("\t" << missingElementsRemover.getCompletedStatusMessage());
+  LOG_STATUS("Cleaning up duplicated elements for " << map->getName() << "...");
 
   // Due to mixed geometry type relations explained in _getDefaultGeometryFilters, we may have
   // introduced some duplicate relation members.
@@ -1730,8 +1724,8 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
   orphanedNodeRemover.apply(map);
   LOG_STATUS("\t" << orphanedNodeRemover.getCompletedStatusMessage());
 
-  // This will remove any relations that were already empty or became empty after we removed missing
-  // members.
+  // This will remove any relations that were already empty or became empty after we removed
+  // duplicate members.
   RemoveEmptyRelationsOp emptyRelationRemover;
   LOG_STATUS("\t" << emptyRelationRemover.getInitStatusMessage());
   emptyRelationRemover.apply(map);
