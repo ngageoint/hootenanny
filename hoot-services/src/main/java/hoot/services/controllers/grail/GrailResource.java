@@ -248,7 +248,6 @@ public class GrailResource {
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
         File workDir = new File(CHANGESETS_FOLDER, jobId);
-        reqParams.setWorkDir(workDir);
         try {
             FileUtils.forceMkdir(workDir);
         }
@@ -256,6 +255,7 @@ public class GrailResource {
             logger.error("createDifferentialChangeset: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
+        reqParams.setWorkDir(workDir);
 
         Class<? extends GrailCommand> grailCommandClass;
         GrailParams differentialParams = new GrailParams(reqParams);
@@ -330,6 +330,7 @@ public class GrailResource {
         workflow.add(makeDiff);
 
         JobType jobType = JobType.DERIVE_CHANGESET;
+        // Check to see if changeset should be uploaded
         if (uploadResult) {
             GrailParams pushParams = new GrailParams(differentialParams);
             workflow.add(createApplyWorkflow(jobId, pushParams, debugLevel));
@@ -568,104 +569,6 @@ public class GrailResource {
         }
         catch (Exception e) {
             String msg = "Error during changeset push! Params: " + params;
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        return Response.ok(json.toJSONString()).build();
-    }
-
-    /**
-     * Runs changeset-derive on the two input layers
-     *
-     * Takes in a json object
-     * POST hoot-services/grail/derivechangeset
-     *
-     * {
-     *   "input1" : // reference dataset name
-     *
-     *   "input2" : // secondary dataset name
-     * }
-     *
-     * @param reqParams
-     *      JSON input params; see description above
-     *
-     * @param debugLevel
-     *      debug level
-     *
-     * @return Job ID. Can be used to check status of the conflate push
-     */
-    @POST
-    @Path("/derivechangeset")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deriveChangeset(@Context HttpServletRequest request,
-            GrailParams reqParams,
-            @QueryParam("deriveType") String deriveType,
-            @QueryParam("replacement") @DefaultValue("false") Boolean replacement,
-            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
-
-        Users user = Users.fromRequest(request);
-        advancedUserCheck(user);
-
-        String input1 = reqParams.getInput1();
-        String input2 = reqParams.getInput2();
-
-        JSONObject json = new JSONObject();
-        String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-        json.put("jobid", mainJobId);
-
-        List<Command> workflow = new LinkedList<>();
-
-        File workDir = new File(CHANGESETS_FOLDER, mainJobId);
-        try {
-            FileUtils.forceMkdir(workDir);
-        }
-        catch (IOException ioe) {
-            logger.error("deriveChangeset: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
-        }
-
-        GrailParams params = new GrailParams(reqParams);
-        params.setUser(user);
-        params.setWorkDir(workDir);
-
-        try {
-            params.setInput1(HOOTAPI_DB_URL + "/" + input1);
-
-            //If not passed INPUT2 assume an adds only changeset using one input
-            if(params.getInput2() != null) {
-                params.setInput2(HOOTAPI_DB_URL + "/" + input2);
-                params.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
-            } else {
-                params.setInput2("\"\"");
-            }
-
-            File changeSet = new File(workDir, "diff.osc");
-            if (changeSet.exists()) { changeSet.delete(); }
-
-            params.setOutput(changeSet.getAbsolutePath());
-            // Run changeset-derive
-            ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId, params, debugLevel, (replacement) ? DeriveChangesetReplacementCommand.class : DeriveChangesetCommand.class, this.getClass());
-            workflow.add(makeChangeset);
-
-            Map<String, Object> jobStatusTags = new HashMap<>();
-            jobStatusTags.put("bbox", reqParams.getBounds());
-            jobStatusTags.put("input1", input1);
-            jobStatusTags.put("input2", input2);
-            jobStatusTags.put("parentId", reqParams.getParentId());
-            jobStatusTags.put("deriveType", deriveType);
-            jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
-
-            jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (IllegalArgumentException iae) {
-            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
-        }
-        catch (Exception e) {
-            String msg = "Error during derive changeset! Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -967,10 +870,7 @@ public class GrailResource {
             // Do an invert crop of this data to get nodes outside bounds
             workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", InvertCropCommand.class, this.getClass()));
 
-            //read node ids
-            //pull connected ways
-            //pull entire ways
-            //remove cropfile
+            //read node ids, pull connected ways, pull entire ways, remove cropfile
             workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
 
             // merge OOB connected ways osm files and add 'hoot:change:exclude:delete' tag to each
@@ -1019,11 +919,11 @@ public class GrailResource {
             workflow.add(setFolder);
         }
 
-        // // Clean up pulled files
-        // ArrayList<File> deleteFiles = new ArrayList<>();
-        // deleteFiles.add(params.getWorkDir());
-        // InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
-        // workflow.add(cleanFolders);
+        // Clean up pulled files
+        ArrayList<File> deleteFiles = new ArrayList<>();
+        deleteFiles.add(params.getWorkDir());
+        InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+        workflow.add(cleanFolders);
 
         return workflow;
     }
