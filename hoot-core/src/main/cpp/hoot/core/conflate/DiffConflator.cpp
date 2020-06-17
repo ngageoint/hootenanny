@@ -139,7 +139,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   _tagChangesetStats = "";
   _unifiedChangesetStats = "";
 
-  // Store the map - we might need it for tag diff later.
+  // Store the map, as we might need it for tag diff later.
   _pMap = map;
 
   // This status progress reporting could get way more granular, but we'll go with this for now to

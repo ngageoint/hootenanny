@@ -59,7 +59,6 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
-
 private:
 
   Status _status;
