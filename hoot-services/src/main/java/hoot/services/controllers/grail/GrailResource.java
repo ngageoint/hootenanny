@@ -238,6 +238,7 @@ public class GrailResource {
     public Response createDifferentialChangeset(@Context HttpServletRequest request,
             GrailParams reqParams,
             @QueryParam("deriveType") @DefaultValue("") String deriveType,
+            @QueryParam("replacement") @DefaultValue("false") Boolean replacement,
             @QueryParam("uploadResult") @DefaultValue("false") Boolean uploadResult,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
@@ -306,7 +307,8 @@ public class GrailResource {
             } else {
                 input2 = HOOTAPI_DB_URL + "/" + input2;
                 differentialParams.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
-                grailCommandClass = DeriveChangesetReplacementCommand.class;
+
+                grailCommandClass = replacement ? DeriveChangesetReplacementCommand.class : DeriveChangesetCommand.class;
             }
         }
 
