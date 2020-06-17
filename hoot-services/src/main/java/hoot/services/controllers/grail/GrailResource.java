@@ -175,7 +175,7 @@ public class GrailResource {
         return railsPortCapabilities;
     }
 
-    private Command getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
+    private InternalCommand getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
         // Checks to see that the sensitive data was actually replaced meaning there was a value
         if (isPrivateOverpassActive()) {
             params.setPullUrl(PRIVATE_OVERPASS_URL);
@@ -194,14 +194,14 @@ public class GrailResource {
         return command;
     }
 
-    private Command getConnectedWaysApiCommand(String jobId, GrailParams params) throws UnavailableException {
+    private InternalCommand getConnectedWaysApiCommand(String jobId, GrailParams params) throws UnavailableException {
         params.setPullUrl(RAILSPORT_PULL_URL);
 
         InternalCommand command = connectedWaysCommandFactory.build(jobId, params, this.getClass());
         return command;
     }
 
-    private Command getPublicOverpassCommand(String jobId, File workDir, GrailParams params) {
+    private InternalCommand getPublicOverpassCommand(String jobId, File workDir, GrailParams params) {
         params.setPullUrl(PUBLIC_OVERPASS_URL);
 
         File overpassFile = new File(workDir, SECONDARY + ".osm");
@@ -248,49 +248,66 @@ public class GrailResource {
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
         File workDir = new File(CHANGESETS_FOLDER, jobId);
+        reqParams.setWorkDir(workDir);
         try {
             FileUtils.forceMkdir(workDir);
         }
         catch (IOException ioe) {
-            logger.error("bulkAdd: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
+            logger.error("createDifferentialChangeset: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
 
+        Class<? extends GrailCommand> grailCommandClass;
+        GrailParams differentialParams = new GrailParams(reqParams);
         List<Command> workflow = new LinkedList<>();
-        String input1 = "";
-        String input2 = "";
+        String input1 = reqParams.getInput1();
+        String input2 = reqParams.getInput2();
 
-        // Pull reference data from Rails port or private overpass
-        if (!deriveType.equals("Adds only")) {
-            GrailParams getRailsParams = new GrailParams(reqParams);
-            getRailsParams.setWorkDir(workDir);
+        if (input1 == null && input2 == null) {
+            // Generate command for pulling from the Public Overpass API
+            GrailParams getOverpassParams = new GrailParams(reqParams);
+            InternalCommand getOverpassCommand = getPublicOverpassCommand(jobId, workDir, getOverpassParams);
 
-            try {
-                // cut and replace needs to get connected ways
-                if (deriveType.equals("Cut & Replace")) {
-                    workflow.addAll(setupRailsPull(jobId, getRailsParams, null));
-                } else {
-                    workflow.add(getRailsPortApiCommand(jobId, getRailsParams));
+            // Pull reference data from Rails port or private overpass
+            if (deriveType.equals("Adds only")) {
+                input1 = getOverpassParams.getOutput();
+                input2 = "\"\"";
+                grailCommandClass = DeriveChangesetCommand.class;
+            } else {
+                GrailParams getRailsParams = new GrailParams(reqParams);
+                getRailsParams.setWorkDir(workDir);
+
+                try {
+                    // cut and replace needs to get connected ways
+                    if (deriveType.equals("Cut & Replace")) {
+                        workflow.addAll(setupRailsPull(jobId, getRailsParams, null));
+                        grailCommandClass = DeriveChangesetReplacementCommand.class;
+                    } else {
+                        workflow.add(getRailsPortApiCommand(jobId, getRailsParams));
+                        grailCommandClass = RunDiffCommand.class;
+                    }
+                } catch (UnavailableException ex) {
+                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
                 }
-            } catch (UnavailableException ex) {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
+
+                input1 = getRailsParams.getOutput();
+                input2 = getOverpassParams.getOutput();
             }
 
-            input1 = getRailsParams.getOutput();
-        }
-
-        // Pull secondary data from the Public Overpass API
-        GrailParams getOverpassParams = new GrailParams(reqParams);
-        workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams));
-
-        Class<? extends GrailCommand> grailCommandClass;
-        if (deriveType.equals("Adds only")) {
-            input1 = getOverpassParams.getOutput();
-            input2 = "\"\"";
-            grailCommandClass = DeriveChangesetCommand.class;
+            // Pull secondary data from the Public Overpass API
+            workflow.add(getOverpassCommand);
         } else {
-            input2 = getOverpassParams.getOutput();
-            grailCommandClass = RunDiffCommand.class;
+            input1 = HOOTAPI_DB_URL + "/" + input1;
+
+            //If not passed INPUT2 assume an adds only changeset using one input
+            if (input2 == null) {
+                input2 = "\"\"";
+                grailCommandClass = DeriveChangesetCommand.class;
+            } else {
+                input2 = HOOTAPI_DB_URL + "/" + input2;
+                differentialParams.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
+                grailCommandClass = DeriveChangesetReplacementCommand.class;
+            }
         }
 
         // create output file
@@ -304,7 +321,6 @@ public class GrailResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exc.getMessage()).build();
         }
 
-        GrailParams differentialParams = new GrailParams(reqParams);
         differentialParams.setWorkDir(workDir);
         differentialParams.setInput1(input1);
         differentialParams.setInput2(input2);
@@ -329,6 +345,9 @@ public class GrailResource {
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", reqParams.getBounds());
+        jobStatusTags.put("input1", input1);
+        jobStatusTags.put("input2", input2);
+        jobStatusTags.put("parentId", reqParams.getParentId());
         jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
         jobStatusTags.put("deriveType", deriveType);
 
@@ -701,7 +720,6 @@ public class GrailResource {
         GrailParams getOverpassParams = new GrailParams(reqParams);
         workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams));
 
-        // Write the data to the hoot db
         // Write the data to the hoot db
         GrailParams params = new GrailParams(reqParams);
         params.setInput1(getOverpassParams.getOutput());
