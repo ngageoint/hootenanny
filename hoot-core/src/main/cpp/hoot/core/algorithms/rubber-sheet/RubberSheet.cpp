@@ -49,6 +49,9 @@
 #include <tgs/Interpolation/KernelEstimationInterpolator.h>
 #include <tgs/RandomForest/DataFrame.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace geos::geom;
 using namespace std;
 using namespace Tgs;
@@ -286,15 +289,19 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   std::shared_ptr<Interpolator> bestCandidate;
   for (size_t i = 0; i < candidates.size(); i++)
   {
-    PROGRESS_INFO(
+    QElapsedTimer timer;
+    timer.start();
+    LOG_STATUS(
       "Running rubber sheet interpolator: (" << (i + 1) << " / " <<
       candidates.size() << "): " << candidates[i] << "...");
+
     std::shared_ptr<Interpolator> candidate(
       Factory::getInstance().constructObject<Interpolator>(candidates[i]));
-    // Setting this upper limit prevents some runaway optimizations.  Those conditions should be
-    // fixed as part of #2893.  The default config value was determined in a way to be high enough
-    // so as not to affect existing tests, as well as accomodate a reasonable runtime based on the
-    // size of the dataset.  Some tweaking to the value may need to occur over time.
+    // Setting this upper limit prevents some runaway optimizations.  Those conditions were going
+    // to be fixed as part of #2893 at one point. The default config value was determined in a way
+    // to be high enough so as not to affect existing tests, as well as accomodate a reasonable
+    // runtime based on the size of the dataset.  Some tweaking to the value may need to occur over
+    // time.
     int maxOptIterations = ConfigOptions().getRubberSheetMaxInterpolatorIterations();
     if (maxOptIterations == -1)
     {
@@ -320,6 +327,10 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     }
     LOG_DEBUG(
       "Max interpolator loop iterations: " << candidate->getMaxOptimizationLoopIterations());
+
+    LOG_STATUS(
+      "Rubber sheet interpolation complete in " <<
+      StringUtils::millisecondsToDhms(timer.elapsed()) << " total for: " << candidates[i] << ".");
   }
 
   if (bestCandidate.get() == 0)
