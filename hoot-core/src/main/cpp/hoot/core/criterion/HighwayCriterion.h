@@ -44,8 +44,6 @@ public:
 
   static std::string className() { return "hoot::HighwayCriterion"; }
 
-  static int logWarnCount;
-
   HighwayCriterion() = default;
   HighwayCriterion(ConstOsmMapPtr map) : _map(map) { }
   virtual ~HighwayCriterion() = default;
