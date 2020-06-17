@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -48,7 +48,9 @@ class HilbertCurveTest : public CppUnit::TestFixture
   CPPUNIT_TEST(sanityCheck);
   CPPUNIT_TEST(sanityCheck2);
   CPPUNIT_TEST_SUITE_END();
+
 public:
+
   void test1()
   {
     int values2[] = {0, 3, 4, 5, 1, 2, 7, 6, 14, 13, 8, 9, 15, 12, 11, 10};

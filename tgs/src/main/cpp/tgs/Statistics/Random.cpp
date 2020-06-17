@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Random.h"
@@ -35,14 +35,14 @@ namespace Tgs
 {
   std::shared_ptr<Random> Random::_instance;
 
-  Random::Random(unsigned int s)
-    : _is_single(false)
+  Random::Random(unsigned int s) :
+  _is_single(false)
   {
     seed(s);
   }
 
-  Random::Random()
-    : _is_single(true)
+  Random::Random() :
+  _is_single(true)
   {
     seed(0);
   }

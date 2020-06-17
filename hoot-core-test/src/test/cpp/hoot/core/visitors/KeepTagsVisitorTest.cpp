@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -45,13 +45,12 @@ class KeepTagsVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(KeepTagsVisitorTest);
   CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runWildcardTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  KeepTagsVisitorTest()
-    : HootTestFixture("test-files/visitors/",
-                      UNUSED_PATH)
+  KeepTagsVisitorTest() : HootTestFixture("test-files/visitors/", UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -79,6 +78,29 @@ public:
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
   }
 
+  void runWildcardTest()
+  {
+    OsmMapPtr map = _loadMap();
+
+    QStringList keysToKeep;
+    keysToKeep.append("high*");
+    keysToKeep.append("blah");
+    KeepTagsVisitor visitor(keysToKeep);
+    map->visitRw(visitor);
+
+    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor(new TagKeyCountVisitor("source"));
+    map->visitRo(*keyCountVisitor);
+    HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
+
+    keyCountVisitor.reset(new TagKeyCountVisitor("highway"));
+    map->visitRo(*keyCountVisitor);
+    HOOT_STR_EQUALS("6", keyCountVisitor->getStat());
+
+    keyCountVisitor.reset(new TagKeyCountVisitor("blah"));
+    map->visitRo(*keyCountVisitor);
+    HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
+  }
+
 private:
 
   OsmMapPtr _loadMap()
@@ -89,7 +111,6 @@ private:
     reader.read(_inputPath + "TagRenameKeyVisitorTest.osm", map);
     return map;
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(KeepTagsVisitorTest, "quick");

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -93,7 +93,7 @@ public:
     AlphaShape uut(16.0);
     uut.insert(points);
 
-    OsmMapPtr map = uut.toOsmMap();
+    OsmMapPtr map = uut._toOsmMap();
 
     const WayMap ways = map->getWays();
     for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
@@ -138,7 +138,7 @@ public:
     uut.insert(points);
 
     OsmXmlWriter writer;
-    writer.write(uut.toOsmMap(), _outputPath + "AlphaMap.osm");
+    writer.write(uut._toOsmMap(), _outputPath + "AlphaMap.osm");
 
     std::shared_ptr<Geometry> g = uut.toGeometry();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.64, g->getArea(), 0.001);
