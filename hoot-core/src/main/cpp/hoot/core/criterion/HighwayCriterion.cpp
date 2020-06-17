@@ -36,6 +36,8 @@
 namespace hoot
 {
 
+int HighwayCriterion::logWarnCount = 0;
+
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
@@ -54,15 +56,15 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   const Tags& tags = element->getTags();
 
   Tags::const_iterator it = tags.find("highway");
+  const bool containsHighwayTag = it != tags.end() && it.value() != "";
 
   // Is it a legit highway?
-  if ((type == ElementType::Way || type == ElementType::Relation) &&
-      it != tags.end() && it.value() != "")
+  if ((type == ElementType::Way || type == ElementType::Relation) && containsHighwayTag)
   {
     result = true;
     LOG_VART(result);
   }
-  //  Make sure it isn't a building or a part of a building
+  //  Make sure it isn't a building or a part of a building.
   else if (_map && (BuildingCriterion(_map).isSatisfied(element) ||
                     BuildingCriterion(_map).isParentABuilding(element->getElementId())))
   {
@@ -81,7 +83,23 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
     LOG_VART(result);
   }
 
-  LOG_VART(result);
+  if (!containsHighwayTag && tags.contains("surface"))
+  {
+    const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+    if (logWarnCount < logWarnMessageLimit)
+    {
+      LOG_WARN(
+        "'surface' tag encountered on " << element->getElementId() <<
+        " with no 'highway' tag. Are your roads properly tagged?");
+    }
+    else if (logWarnCount == logWarnMessageLimit)
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
+
+  LOG_TRACE(element->getElementId() << " result: " << result);
   return result;
 }
 

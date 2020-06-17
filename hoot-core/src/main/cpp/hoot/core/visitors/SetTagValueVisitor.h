@@ -31,6 +31,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -65,7 +66,7 @@ public:
   virtual QString getInitStatusMessage() const { return "Updating tags..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Updated " + QString::number(_numAffected) + " tags"; }
+  { return "Updated " + StringUtils::formatLargeNumber(_numAffected) + " tags"; }
 
   virtual std::string getClassName() const { return className(); }
 
