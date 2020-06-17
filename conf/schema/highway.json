@@ -308,6 +308,17 @@
         ]
     },
     {
+        "categories": [
+            "poi"
+        ],
+        "geometries": [
+            "node"
+        ],
+        "isA": "highway",
+        "name": "highway=turning_circle",
+        "objectType": "tag"
+    },
+    {
         "isA": "highway=footway",
         "name": "highway=steps",
         "objectType": "tag"

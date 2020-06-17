@@ -48,6 +48,12 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["node"],
+        "isA": "natural",
+        "name": "natural=tree",
+        "objectType": "tag"
+    },
+    {
         "geometries": [
             "node",
             "linestring"
