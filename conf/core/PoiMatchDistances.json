@@ -1,0 +1,179 @@
+{
+  "#": "Keep this list alphabetized. Also, make sure there are schema entries with the 'poi' category added to them for anything added here.",
+  "distances":
+  [
+    {
+      "key": "amenity",
+      "maxMatchDistance": "100",
+      "maxReviewDistance": "200"
+    },
+    {
+      "key": "amenity",
+      "value": "grave_yard",
+      "maxMatchDistance": "500",
+      "maxReviewDistance": "1000"
+    },
+    {
+      "key": "building",
+      "maxMatchDistance": "100",
+      "maxReviewDistance": "200"
+    },
+    {
+      "key": "building",
+      "value": "hospital",
+      "maxMatchDistance": "300",
+      "maxReviewDistance": "500"
+    },
+    {
+      "key": "building",
+      "value": "train_station",
+      "maxMatchDistance": "500",
+      "maxReviewDistance": "1000"
+    },
+    {
+      "key": "barrier",
+      "value": "toll_booth",
+      "maxMatchDistance": "25",
+      "maxReviewDistance": "50"
+    },
+    {
+      "key": "barrier",
+      "value": "border_control",
+      "maxMatchDistance": "50",
+      "maxReviewDistance": "100"
+    },
+    {
+      "key": "historic",
+      "maxMatchDistance": "100",
+      "maxReviewDistance": "200"
+    },
+    {
+      "key": "landuse",
+      "maxMatchDistance": "500",
+      "maxReviewDistance": "1000"
+    },
+    {
+      "key": "landuse",
+      "value": "built_up_area",
+      "maxMatchDistance": "2000",
+      "maxReviewDistance": "3000"
+    },
+    {
+      "key": "leisure",
+      "maxMatchDistance": "250",
+      "maxReviewDistance": "500"
+    },
+    {
+      "key": "man_made",
+      "maxMatchDistance": "100",
+      "maxReviewDistance": "200"
+    },
+    {
+      "key": "natural",
+      "maxMatchDistance": "500",
+      "maxReviewDistance": "1000"
+    },
+    {
+      "key": "natural",
+      "value": "tree",
+      "maxMatchDistance": "5",
+      "maxReviewDistance": "5"
+    },
+    {
+      "key": "place",
+      "maxMatchDistance": "500",
+      "maxReviewDistance": "1000"
+    },
+    {
+      "key": "place",
+      "value": "built_up_area",
+      "maxMatchDistance": "2000",
+      "maxReviewDistance": "3000"
+    },
+    {
+      "key": "place",
+      "value": "locality",
+      "maxMatchDistance": "2000",
+      "maxReviewDistance": "3000"
+    },
+    {
+      "key": "place",
+      "value": "populated",
+      "maxMatchDistance": "2000",
+      "maxReviewDistance": "3000"
+    },
+    {
+      "key": "place",
+      "value": "region",
+      "maxMatchDistance": "1000",
+      "maxReviewDistance": "2000"
+    },
+    {
+      "key": "place",
+      "value": "village",
+      "maxMatchDistance": "2000",
+      "maxReviewDistance": "3000"
+    },
+    {
+      "key": "power",
+      "maxMatchDistance": "25",
+      "maxReviewDistance": "50"
+    },
+    {
+      "key": "railway",
+      "maxMatchDistance": "250",
+      "maxReviewDistance": "500"
+    },
+    {
+      "key": "railway",
+      "value": "level_crossing",
+      "maxMatchDistance": "25",
+      "maxReviewDistance": "50"
+    },
+    {
+      "key": "railway",
+      "value": "station",
+      "maxMatchDistance": "500",
+      "maxReviewDistance": "1000"
+    },
+    {
+      "key": "shop",
+      "maxMatchDistance": "100",
+      "maxReviewDistance": "200"
+    },
+    {
+      "key": "sport",
+      "maxMatchDistance": "50",
+      "maxReviewDistance": "100"
+    },
+    {
+      "key": "station",
+      "maxMatchDistance": "100",
+      "maxReviewDistance": "200"
+    },
+    {
+      "key": "station",
+      "value": "light_rail",
+      "maxMatchDistance": "500",
+      "maxReviewDistance": "1000"
+    },
+    {
+      "key": "tourism",
+      "maxMatchDistance": "100",
+      "maxReviewDistance": "200"
+    },
+    {
+      "#": "Hotel campuses can be quite large.",
+      "key": "tourism",
+      "value": "hotel",
+      "maxMatchDistance": "200",
+      "maxReviewDistance": "400"
+    },
+    {
+      "key": "transport",
+      "value": "station",
+      "maxMatchDistance": "500",
+      "maxReviewDistance": "1000"
+    }
+  ]
+}

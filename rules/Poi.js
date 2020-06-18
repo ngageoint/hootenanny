@@ -54,8 +54,8 @@ var weightedWordDistance = new hoot.NameExtractor(
             new hoot.LevenshteinDistance(
                 {"levenshtein.distance.alpha": 1.5}))));
 
-// Make sure you also have appropriate schema entries with the POI category added for anything added here.
-var distances = [
+// Make sure you also have appropriate schema entries with the POI category added to it for anything added here.
+/*var distances = [
 
     {k:'amenity',                             match:100,      review:200},
     {k:'amenity',  v:'grave_yard',            match:500,      review:1000},
@@ -90,7 +90,7 @@ var distances = [
     {k:'tourism',   v:'hotel',                match:200,      review:400},
     {k:'transport',  v:'station',             match:500,      review:1000},
 
-];
+];*/
 
 function distance(e1, e2) {
     return Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) +
