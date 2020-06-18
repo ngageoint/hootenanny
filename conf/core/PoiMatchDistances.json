@@ -1,5 +1,7 @@
 {
-  "#": "Keep this list alphabetized. Also, make sure there are schema entries with the 'poi' category added to them for anything added here.",
+  "#": "Keep this list alphabetized. Distances are in meters. 'value' is an optional attribute and the rest are required. Contents of this ",
+  "#": "file are replaced by 'poi.match.distances' configuration option, if present. Also, make sure there are schema entries with the ",
+  "#": "'poi' category added to them for anything added here.",
   "distances":
   [
     {

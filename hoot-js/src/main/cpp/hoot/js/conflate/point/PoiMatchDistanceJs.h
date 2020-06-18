@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SETTINGSJS_H
-#define SETTINGSJS_H
+#ifndef POI_MATCH_DISTANCE_JS_H
+#define POI_MATCH_DISTANCE_JS_H
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
@@ -33,25 +33,19 @@
 namespace hoot
 {
 
-class SettingsJs : public node::ObjectWrap
+class PoiMatchDistanceJs : public node::ObjectWrap
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
+  static void getMatchDistances(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 
-  SettingsJs() = default;
-  virtual~SettingsJs() = default;
-
-  static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getAll(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getValue(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void loadJson(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void set(const v8::FunctionCallbackInfo<v8::Value>& args);
+  PoiMatchDistanceJs() = default;
+  virtual ~PoiMatchDistanceJs() = default;
 };
-
 
 }
 
-#endif // SETTINGSJS_H
+#endif // POI_MATCH_DISTANCE_JS_H

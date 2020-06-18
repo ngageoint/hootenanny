@@ -22,36 +22,48 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SETTINGSJS_H
-#define SETTINGSJS_H
 
-// node.js
-#include <hoot/js/SystemNodeJs.h>
+#ifndef POI_MATCH_DISTANCE_H
+#define POI_MATCH_DISTANCE_H
+
+// Qt
+#include <QList>
 
 namespace hoot
 {
 
-class SettingsJs : public node::ObjectWrap
+/**
+ * TODO
+ */
+class PoiMatchDistance
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  PoiMatchDistance(QString key, QString val, int maxMatchDistance, int maxReviewDistance);
+
+  /**
+   * Reads POI to POI conflation matches/review distances
+   *
+   * @param jsonStringOrFile path to a distances file (*.json) or a distances JSON string
+   * @return a collection of match/review distances
+   */
+  static QList<PoiMatchDistance> readDistances(const QString& jsonStringOrFile);
+
+  QString getKey() const { return _key; }
+  QString getValue() const { return _value; }
+  int getMaxMatchDistance() const { return _maxMatchDistance; }
+  int getMaxReviewDistance() const { return _maxReviewDistance; }
 
 private:
 
-  SettingsJs() = default;
-  virtual~SettingsJs() = default;
-
-  static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getAll(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getValue(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void loadJson(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void set(const v8::FunctionCallbackInfo<v8::Value>& args);
+  QString _key;
+  QString _value;
+  int _maxMatchDistance;
+  int _maxReviewDistance;
 };
-
 
 }
 
-#endif // SETTINGSJS_H
+#endif // POI_MATCH_DISTANCE_H

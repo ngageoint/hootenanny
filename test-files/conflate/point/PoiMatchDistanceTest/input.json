@@ -1,0 +1,28 @@
+{
+  "#": "This a stripped down test version of conf/PoiMatchDistances.json.",
+  "distances":
+  [
+    {
+      "key": "amenity",
+      "maxMatchDistance": "100",
+      "maxReviewDistance": "200"
+    },
+    {
+      "key": "amenity",
+      "value": "grave_yard",
+      "maxMatchDistance": "500",
+      "maxReviewDistance": "1000"
+    },
+    {
+      "key": "building",
+      "maxMatchDistance": "100",
+      "maxReviewDistance": "200"
+    },
+    {
+      "key": "building",
+      "value": "hospital",
+      "maxMatchDistance": "300",
+      "maxReviewDistance": "500"
+    }
+  ]
+}

@@ -80,6 +80,8 @@ Some examples of nodes that are not considered to be POIs are below:
 
 ==== Find Match Candidates
 
+TODO: add blurb about user defined distances
+
 A match candidate is a pair of POIs that need to have a relationship assigned.
 If a pair of POIs are not considered a match candidate then they will never be
 marked as a match or review. Two POIs are a match candidate if the distance

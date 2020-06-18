@@ -3351,6 +3351,20 @@ current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 If true, POI to POI conflation will ignore the types of the features being compared completely as
 long as those being compared have a populated name field.
 
+=== poi.match.distances
+
+* Data Type: string
+* Default Value: ``
+
+TODO
+
+=== poi.match.distances.config
+
+* Data Type: string
+* Default Value: ``
+
+TODO
+
 === poi.polygon.additional.search.distance
 
 * Data Type: double
