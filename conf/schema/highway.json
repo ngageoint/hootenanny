@@ -308,7 +308,6 @@
         ]
     },
     {
-        "#": "Adding this to the poi category causes some case test issues...need to look into it...if it should really be a POI at all.",
         "geometries": [
             "node"
         ],
