@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYEXPERTCLASSIFIER_H
 #define HIGHWAYEXPERTCLASSIFIER_H
@@ -40,7 +40,8 @@ public:
 
   static std::string className() { return "hoot::HighwayExpertClassifier"; }
 
-  HighwayExpertClassifier();
+  HighwayExpertClassifier() = default;
+  virtual ~HighwayExpertClassifier() = default;
 
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match);

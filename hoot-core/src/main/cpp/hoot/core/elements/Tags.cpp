@@ -45,11 +45,6 @@ namespace hoot
 QStringList Tags::_nameKeys;
 QStringList Tags::_pseudoNameKeys;
 
-Tags::Tags() :
-QHash<QString, QString>()
-{
-}
-
 Tags::Tags(const QString& key, const QString& value) :
 QHash<QString, QString>()
 {
@@ -610,11 +605,11 @@ bool Tags::hasSameNonMetadataTags(const Tags& other) const
   return otherCopy == thisCopy;
 }
 
-void Tags::removeMetadata()
+int Tags::removeMetadata()
 {
-  removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
+  int numRemoved = removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
 
-  // there are some other metadata keys that don't start with hoot::
+  // there are some other metadata keys that don't start with 'hoot::'
   QStringList keysToRemove;
   OsmSchema& schema = OsmSchema::getInstance();
   for (Tags::const_iterator it = begin(); it != end(); ++it)
@@ -628,11 +623,49 @@ void Tags::removeMetadata()
 
   for (int i = 0; i < keysToRemove.size(); i++)
   {
-    remove(keysToRemove.at(i));
+    numRemoved += remove(keysToRemove.at(i));
   }
+
+  return numRemoved;
 }
 
-void Tags::removeByTagKeyContains(const QString& tagKeySubstring)
+int Tags::removeKeys(const QStringList& keys)
+{
+  int numRemoved = 0;
+  for (int i = 0; i < keys.size(); i++)
+  {
+    LOG_TRACE("Removing " << keys.at(i) << "...");
+    numRemoved += remove(keys.at(i));
+  }
+  return numRemoved;
+}
+
+int Tags::removeKey(const QRegExp& regex)
+{
+  QStringList keysToRemove;
+  for (Tags::const_iterator it = begin(); it != end(); ++it)
+  {
+    const QString key = it.key();
+    if (regex.exactMatch(key))
+    {
+      keysToRemove.append(key);
+    }
+  }
+
+  return removeKeys(keysToRemove);
+}
+
+int Tags::removeKeys(const QList<QRegExp>& regexes)
+{
+  int numRemoved = 0;
+  for (int i = 0; i < regexes.size(); i++)
+  {
+    numRemoved += removeKey(regexes.at(i));
+  }
+  return numRemoved;
+}
+
+int Tags::removeByTagKeyContains(const QString& tagKeySubstring)
 {
   QStringList keysToRemove;
   for (Tags::const_iterator it = begin(); it != end(); ++it)
@@ -644,13 +677,15 @@ void Tags::removeByTagKeyContains(const QString& tagKeySubstring)
     }
   }
 
+  int numRemoved = 0;
   for (int i = 0; i < keysToRemove.size(); i++)
   {
-    remove(keysToRemove.at(i));
+    numRemoved += remove(keysToRemove.at(i));
   }
+  return numRemoved;
 }
 
-void Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
+int Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
 {
   QStringList keysToRemove;
   for (Tags::const_iterator it = begin(); it != end(); ++it)
@@ -662,10 +697,12 @@ void Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
     }
   }
 
+  int numRemoved = 0;
   for (int i = 0; i < keysToRemove.size(); i++)
   {
-    remove(keysToRemove.at(i));
+    numRemoved += remove(keysToRemove.at(i));
   }
+  return numRemoved;
 }
 
 QStringList Tags::getDataOnlyValues(const Tags& tags) const
@@ -738,16 +775,18 @@ void Tags::readValues(const QString &k, QStringList& list) const
   }
 }
 
-void Tags::removeEmpty()
+int Tags::removeEmpty()
 {
-  // remove all the empty tags.
+  // remove all the empty tags
+  int numRemoved = 0;
   for (Tags::const_iterator it = begin(); it != end(); ++it)
   {
     if (get(it.key()).trimmed().isEmpty())
     {
-      remove(it.key());
+      numRemoved += remove(it.key());
     }
   }
+  return numRemoved;
 }
 
 void Tags::set(const QString& key, const QString& value)

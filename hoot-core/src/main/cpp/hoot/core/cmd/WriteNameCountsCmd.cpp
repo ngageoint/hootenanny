@@ -56,7 +56,7 @@ public:
 
   static string className() { return "hoot::WriteNameCountsCmd"; }
 
-  WriteNameCountsCmd() {}
+  WriteNameCountsCmd() = default;
 
   virtual QString getName() const override { return "write-name-counts"; }
 

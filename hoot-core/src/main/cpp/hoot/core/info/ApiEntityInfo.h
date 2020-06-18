@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef API_ENTITY_INFO_H
 #define API_ENTITY_INFO_H
@@ -38,7 +38,8 @@ class ApiEntityInfo
 {
 public:
 
-  virtual ~ApiEntityInfo() {}
+  ApiEntityInfo() = default;
+  virtual ~ApiEntityInfo() = default;
 
   /**
    * Returns a one sentence description for the entity.

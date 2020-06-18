@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::MultiaryPoiHashVisitor"; }
 
-  MultiaryPoiHashVisitor();
+  MultiaryPoiHashVisitor() = default;
+  virtual ~MultiaryPoiHashVisitor() = default;
 
   virtual std::string getClassName() const { return className(); }
 

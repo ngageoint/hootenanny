@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INVERTEDEDGEMATCHSET_H
 #define INVERTEDEDGEMATCHSET_H
@@ -38,7 +38,9 @@ namespace hoot
 class InvertedEdgeMatchSet : public EdgeMatchSet
 {
 public:
-  InvertedEdgeMatchSet();
+
+  InvertedEdgeMatchSet() = default;
+  virtual ~InvertedEdgeMatchSet() = default;
 
   virtual bool contains(const EdgeMatchPtr &em) const = 0;
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TO_ENGLISH_TRANSLATE_STRING_DISTANCE_H
 #define TO_ENGLISH_TRANSLATE_STRING_DISTANCE_H
@@ -52,7 +52,7 @@ public:
   ToEnglishTranslateStringDistance(const StringDistancePtr& d,
                                    const std::shared_ptr<ToEnglishTranslator>& translator);
 
-  virtual ~ToEnglishTranslateStringDistance() {}
+  virtual ~ToEnglishTranslateStringDistance() = default;
 
   virtual void setStringDistance(const StringDistancePtr& sd) override { _d = sd; }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTEXCEPTIONJS_H
 #define HOOTEXCEPTIONJS_H
@@ -46,6 +46,7 @@ namespace hoot
 class HootExceptionJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   static v8::Handle<v8::Object> create(const HootException& e) { return create(std::shared_ptr<HootException>(e.clone())); }
@@ -72,7 +73,9 @@ public:
   static void throwAsHootException(v8::TryCatch& tc);
 
 private:
-  HootExceptionJs();
+
+  HootExceptionJs() = default;
+  virtual ~HootExceptionJs() = default;
 
   std::shared_ptr<HootException> _e;
   QString _className;

@@ -55,8 +55,8 @@ public:
 
   static std::string className() { return "hoot::ElementVisitor"; }
 
-  ElementVisitor() : _numAffected(0), _numProcessed(0) {}
-  virtual ~ElementVisitor() {}
+  ElementVisitor() : _numAffected(0), _numProcessed(0) { }
+  virtual ~ElementVisitor() = default;
 
   /**
    * Performs the visitor's logic on a single element

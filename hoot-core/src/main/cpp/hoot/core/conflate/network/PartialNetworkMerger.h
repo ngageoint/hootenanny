@@ -54,6 +54,7 @@ public:
    */
   PartialNetworkMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
     QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details);
+  virtual ~PartialNetworkMerger() = default;
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 

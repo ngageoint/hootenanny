@@ -118,7 +118,7 @@ public:
     _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   }
 
-  ~HighwayMatchVisitor()
+  virtual ~HighwayMatchVisitor()
   {
     LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
               (double)_neighborCountSum / (double)_elementsEvaluated);

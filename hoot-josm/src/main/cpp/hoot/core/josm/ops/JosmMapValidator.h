@@ -46,7 +46,8 @@ public:
 
   static std::string className() { return "hoot::JosmMapValidator"; }
 
-  JosmMapValidator();
+  JosmMapValidator() = default;
+  virtual ~JosmMapValidator() = default;
 
   /**
    * @see ApiEntityInfo

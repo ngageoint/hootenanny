@@ -36,15 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ReversedRoadCriterion)
 
-ReversedRoadCriterion::ReversedRoadCriterion()
-{
-}
-
-ReversedRoadCriterion::ReversedRoadCriterion(ConstOsmMapPtr map) :
-_map(map)
-{
-}
-
 bool ReversedRoadCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   // only time reversed road relations have been seen so far is as a result of cropping, but think

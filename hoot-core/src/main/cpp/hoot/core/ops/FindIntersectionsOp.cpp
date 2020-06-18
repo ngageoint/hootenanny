@@ -53,10 +53,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, FindHighwayIntersectionsOp)
 HOOT_FACTORY_REGISTER(OsmMapOperation, FindRailwayIntersectionsOp)
 
-FindIntersectionsOp::FindIntersectionsOp()
-{
-}
-
 void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   // remove all relations

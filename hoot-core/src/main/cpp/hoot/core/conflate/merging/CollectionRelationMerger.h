@@ -46,7 +46,8 @@ class CollectionRelationMerger : public OsmMapConsumer
 {
 public:
 
-  CollectionRelationMerger();
+  CollectionRelationMerger() = default;
+  virtual ~CollectionRelationMerger() = default;
 
   /**
    * Merges two collection relations

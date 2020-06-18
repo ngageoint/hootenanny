@@ -51,7 +51,7 @@ public:
 
   static std::string className() { return "hoot::NodeDensityTilesCmd"; }
 
-  NodeDensityTilesCmd() { }
+  NodeDensityTilesCmd() = default;
 
   virtual QString getName() const override { return "node-density-tiles"; }
 

@@ -52,7 +52,7 @@ public:
 
   static string className() { return "hoot::GenerateAlphaShapeCmd"; }
 
-  GenerateAlphaShapeCmd() {}
+  GenerateAlphaShapeCmd() = default;
 
   virtual QString getName() const override { return "generate-alpha-shape"; }
 
@@ -79,7 +79,9 @@ public:
     OsmMapPtr pointsMap(new OsmMap());
     IoUtils::loadMap(pointsMap, pointsPath, false, Status::Unknown1);
 
-    OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generateMap(pointsMap);
+    AlphaShapeGenerator generator(alpha, buffer);
+    //generator.setManuallyCoverSmallPointClusters(false);
+    OsmMapPtr result = generator.generateMap(pointsMap);
 
     // reproject back into lat/lng
     MapProjector::projectToWgs84(result);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef STRINGDISTANCECONSUMER_H
@@ -39,7 +39,10 @@ namespace hoot
 class StringDistanceConsumer
 {
 public:
-  virtual ~StringDistanceConsumer() {}
+
+  StringDistanceConsumer() = default;
+  virtual ~StringDistanceConsumer() = default;
+
   virtual void setStringDistance(const StringDistancePtr& sd) = 0;
 };
 

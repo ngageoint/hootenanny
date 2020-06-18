@@ -50,6 +50,7 @@ public:
   static int logWarnCount;
 
   SplitLongLinearWaysVisitor();
+  virtual ~SplitLongLinearWaysVisitor() = default;
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 

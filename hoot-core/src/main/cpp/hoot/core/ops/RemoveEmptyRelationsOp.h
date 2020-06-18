@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::RemoveEmptyRelationsOp"; }
 
-  RemoveEmptyRelationsOp();
+  RemoveEmptyRelationsOp() = default;
+  virtual ~RemoveEmptyRelationsOp() = default;
 
   virtual void apply(OsmMapPtr& map) override;
 

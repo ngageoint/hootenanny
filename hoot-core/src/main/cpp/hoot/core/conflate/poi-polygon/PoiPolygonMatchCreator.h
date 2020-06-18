@@ -46,7 +46,8 @@ public:
 
   static std::string className() { return "hoot::PoiPolygonMatchCreator"; }
 
-  PoiPolygonMatchCreator();
+  PoiPolygonMatchCreator() = default;
+  virtual ~PoiPolygonMatchCreator() = default;
 
   virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 

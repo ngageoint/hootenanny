@@ -32,6 +32,9 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
+// Qt
+#include <QRegExp>
+
 namespace hoot
 {
 
@@ -49,6 +52,7 @@ public:
 
   RemoveTagsVisitor();
   explicit RemoveTagsVisitor(const QStringList& keys);
+  virtual ~RemoveTagsVisitor()  = default;
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
@@ -74,15 +78,21 @@ public:
 
 protected:
 
-  QStringList _keys;
+  // Tag keys that match these get removed.
+  QList<QRegExp> _keyRegexs;
+
+  // Criterion the element whose tags are to be remove must match
   std::shared_ptr<ElementCriterion> _criterion;
-  //This allows for negating the criterion as an option sent in from the command line.
+
+  // This allows for negating the criterion as an option sent in from the command line.
   bool _negateCriterion;
+
   long _numTagsRemoved;
 
 private:
 
   void _setCriterion(const QString& criterionName);
+  void _setKeys(const QStringList& keys);
 };
 
 }

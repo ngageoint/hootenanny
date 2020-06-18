@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WEIGHTEDMETRICDISTANCEEXTRACTOR_H
 #define WEIGHTEDMETRICDISTANCEEXTRACTOR_H
@@ -48,6 +48,8 @@ public:
 
   // Get point aggregator from ConfigOptions()
   WeightedMetricDistanceExtractor(Meters searchRadius = -1);
+
+  virtual ~WeightedMetricDistanceExtractor() = default;
 
   virtual std::string getClassName() const override { return className(); }
 

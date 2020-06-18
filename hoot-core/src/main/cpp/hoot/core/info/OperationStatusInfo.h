@@ -44,7 +44,8 @@ class OperationStatusInfo
 {
 public:
 
-  virtual ~OperationStatusInfo() {}
+  OperationStatusInfo() = default;
+  virtual ~OperationStatusInfo() = default;
 
   /**
     Returns a user friendly message indicating the visitor has begun its work

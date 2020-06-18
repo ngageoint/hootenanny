@@ -22,23 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "KeepTagsVisitor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, KeepTagsVisitor)
-
-KeepTagsVisitor::KeepTagsVisitor() :
-RemoveTagsVisitor()
-{
-}
 
 KeepTagsVisitor::KeepTagsVisitor(const QStringList& keys) :
 RemoveTagsVisitor(keys)
@@ -54,15 +50,27 @@ void KeepTagsVisitor::visit(const std::shared_ptr<Element>& e)
   }
   _numAffected++;
 
-  //get a copy of the tags for modifying
+  // get a copy of the tags for modifying
   Tags tags;
   tags.add(e->getTags());
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
-    if (!_keys.contains(it.key()))
+    const QString key = it.key();
+    bool removeTag = true;
+
+    for (int i = 0; i < _keyRegexs.size(); i++)
     {
-      tags.remove(it.key());
-      _numTagsRemoved++;
+      const QRegExp regex = _keyRegexs.at(i);
+      if (regex.exactMatch(key))
+      {
+        removeTag = false;
+        break;
+      }
+    }
+
+    if (removeTag)
+    {
+      _numTagsRemoved += tags.remove(key);
     }
   }
   e->setTags(tags);

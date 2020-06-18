@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __REPROJECT_TO_GEOGRAPHIC_OP_H__
@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::ReprojectToGeographicOp"; }
 
-  ReprojectToGeographicOp();
+  ReprojectToGeographicOp() = default;
+  virtual ~ReprojectToGeographicOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 

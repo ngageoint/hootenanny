@@ -35,10 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(TagMerger, GeneralizeTagMerger)
 
-GeneralizeTagMerger::GeneralizeTagMerger()
-{
-}
-
 Tags GeneralizeTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
   return TagComparator::getInstance().generalize(t1, t2, false, _caseSensitive);

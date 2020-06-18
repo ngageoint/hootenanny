@@ -55,7 +55,9 @@ class MetadataOp : public OsmMapOperation, public Configurable
 public:
 
   static std::string className() { return "hoot::MetadataOp"; }
-  MetadataOp() : _pConf(&conf()) {}
+
+  MetadataOp() : _pConf(&conf()) { }
+  virtual ~MetadataOp() = default;
 
   // OsmMapOperation
   virtual void apply(std::shared_ptr<OsmMap>& pMap) override;

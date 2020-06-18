@@ -46,6 +46,7 @@ public:
    */
   ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
                             const ElementVisitorPtr& visitor);
+  virtual ~ElementVisitorInputStream() = default;
 
   /**
    * @brief close

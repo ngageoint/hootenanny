@@ -64,6 +64,9 @@ public:
 
   static std::string className() { return "hoot::MetadataExport"; }
 
+  MetadataExport() = default;
+  virtual ~MetadataExport() = default;
+
   // OsmMapOperation
   virtual QString getDescription() const override { return "Creates and exports metadata"; }
 

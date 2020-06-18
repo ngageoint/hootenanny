@@ -53,6 +53,7 @@ public:
   static std::string className() { return "hoot::WayGeneralizeVisitor"; }
 
   WayGeneralizeVisitor();
+  virtual ~WayGeneralizeVisitor() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

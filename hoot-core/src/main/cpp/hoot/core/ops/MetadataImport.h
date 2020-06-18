@@ -68,6 +68,9 @@ public:
 
   static std::string className() { return "hoot::MetadataImport"; }
 
+  MetadataImport() = default;
+  virtual ~MetadataImport() = default;
+
   // OsmMapOperation
   virtual QString getDescription() const override { return "Imports metadata"; }
 

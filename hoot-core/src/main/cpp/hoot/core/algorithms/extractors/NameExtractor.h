@@ -42,6 +42,7 @@ public:
 
   NameExtractor();
   NameExtractor(StringDistancePtr d);
+  virtual ~NameExtractor() = default;
 
   static std::string className() { return "hoot::NameExtractor"; }
 

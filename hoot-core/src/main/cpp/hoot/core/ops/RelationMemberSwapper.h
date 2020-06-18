@@ -47,6 +47,7 @@ public:
   RelationMemberSwapper();
   RelationMemberSwapper(const ElementId& idToReplace, const ElementId& idToReplaceWith,
                         const bool includeReviewRelations = true);
+  virtual ~RelationMemberSwapper() = default;
 
   /**
    * @see OsmMapOperation

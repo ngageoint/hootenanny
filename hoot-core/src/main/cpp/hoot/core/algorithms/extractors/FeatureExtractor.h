@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FEATUREEXTRACTOR_H
 #define FEATUREEXTRACTOR_H
@@ -51,7 +51,8 @@ class FeatureExtractor
 {
 public:
 
-  virtual ~FeatureExtractor() {}
+  FeatureExtractor() = default;
+  virtual ~FeatureExtractor() = default;
 
   static std::string className() { return "hoot::FeatureExtractor"; }
 

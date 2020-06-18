@@ -41,6 +41,7 @@ public:
 
   AreaWayNodeCriterion();
   AreaWayNodeCriterion(ConstOsmMapPtr map);
+  virtual ~AreaWayNodeCriterion() = default;
 
   virtual void setOsmMap(const OsmMap* map) override;
 

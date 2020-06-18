@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -73,7 +73,8 @@ public:
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
     reader.read(
-      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/AlphaShapeGeneratorNegativeBufferTest-out.osm",
+      cutShapeMap);
 
     CookieCutter(false).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -95,7 +96,8 @@ public:
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
     reader.read(
-      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/AlphaShapeGeneratorNegativeBufferTest-out.osm",
+      cutShapeMap);
 
     CookieCutter(true).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -117,7 +119,8 @@ public:
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
     reader.read(
-      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/AlphaShapeGeneratorNegativeBufferTest-out.osm",
+      cutShapeMap);
 
     CookieCutter(false, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -139,7 +142,8 @@ public:
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
     reader.read(
-      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/AlphaShapeGeneratorNegativeBufferTest-out.osm",
+      cutShapeMap);
 
     CookieCutter(false, -100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -161,7 +165,8 @@ public:
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
     reader.read(
-      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/AlphaShapeGeneratorNegativeBufferTest-out.osm",
+      cutShapeMap);
 
     CookieCutter(true, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;

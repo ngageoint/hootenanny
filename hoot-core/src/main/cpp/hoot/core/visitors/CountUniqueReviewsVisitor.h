@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::CountUniqueReviewsVisitor"; }
 
-  CountUniqueReviewsVisitor() {}
+  CountUniqueReviewsVisitor() = default;
+  virtual ~CountUniqueReviewsVisitor() = default;
 
   double getStat() const { return _reviews.size(); }
 

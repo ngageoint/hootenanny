@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMNETWORKEXTRACTOR_H
 #define OSMNETWORKEXTRACTOR_H
@@ -47,9 +47,8 @@ public:
 
   static std::string className() { return "hoot::OsmNetworkExtractor"; }
 
-  static int logWarnCount;
-
-  OsmNetworkExtractor();
+  OsmNetworkExtractor() = default;
+  virtual ~OsmNetworkExtractor() = default;
 
   OsmNetworkPtr extractNetwork(ConstOsmMapPtr map);
 
@@ -62,6 +61,8 @@ public:
   void setCriterion(ElementCriterionPtr criterion) { _criterion = criterion; }
 
 private:
+
+  static int logWarnCount;
 
   friend class OsmNetworkExtractorVisitor;
 

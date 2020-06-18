@@ -54,7 +54,7 @@ public:
 
   static string className() { return "hoot::DiffCmd"; }
 
-  DiffCmd() { }
+  DiffCmd() = default;
 
   virtual QString getName() const override { return "diff"; }
 

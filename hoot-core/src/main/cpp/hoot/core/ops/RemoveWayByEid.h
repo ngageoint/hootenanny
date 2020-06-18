@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEWAYBYEID_H
 #define REMOVEWAYBYEID_H
@@ -62,6 +62,8 @@ public:
    *                    removed from the map's way collection.
    */
   RemoveWayByEid(long wId, bool removeFully = false);
+
+  virtual ~RemoveWayByEid() = default;
 
   /**
    * @brief apply Apply the operation to the given map

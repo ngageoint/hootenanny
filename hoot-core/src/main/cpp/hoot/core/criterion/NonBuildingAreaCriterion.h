@@ -47,8 +47,9 @@ public:
 
   static std::string className() { return "hoot::NonBuildingAreaCriterion"; }
 
-  NonBuildingAreaCriterion();
-  NonBuildingAreaCriterion(ConstOsmMapPtr map);
+  NonBuildingAreaCriterion() = default;
+  NonBuildingAreaCriterion(ConstOsmMapPtr map) : _map(map) { }
+  virtual ~NonBuildingAreaCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

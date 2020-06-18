@@ -43,7 +43,7 @@ public:
 
   static std::string className() { return "hoot::TagDistributionCmd"; }
 
-  TagDistributionCmd() {}
+  TagDistributionCmd() = default;
 
   virtual QString getName() const override { return "tag-distribution"; }
 

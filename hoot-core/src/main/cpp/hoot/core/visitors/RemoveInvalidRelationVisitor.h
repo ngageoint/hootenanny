@@ -49,6 +49,7 @@ public:
   static std::string className() { return "hoot::RemoveInvalidRelationVisitor"; }
 
   RemoveInvalidRelationVisitor();
+  virtual ~RemoveInvalidRelationVisitor() = default;
 
   virtual void visit(const ElementPtr& e);
 

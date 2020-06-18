@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TAG_KEY_CONTAINS_CRITERION_H
@@ -46,6 +46,7 @@ public:
 
   TagKeyContainsCriterion() : _text(""), _caseSensitive(false) { }
   explicit TagKeyContainsCriterion(const QString& text);
+  virtual ~TagKeyContainsCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

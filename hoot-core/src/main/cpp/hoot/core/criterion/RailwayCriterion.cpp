@@ -37,10 +37,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RailwayCriterion)
 
-RailwayCriterion::RailwayCriterion()
-{
-}
-
 bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   // See similar note in LinearWaterwayCriterion

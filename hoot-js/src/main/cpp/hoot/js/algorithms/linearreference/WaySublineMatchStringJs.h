@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __WAY_SUBLINE_MATCH_STRING_JS_H__
 #define __WAY_SUBLINE_MATCH_STRING_JS_H__
@@ -45,6 +45,7 @@ namespace hoot
 class WaySublineMatchStringJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   WaySublineMatchStringPtr getWaySublineMatchString() { return _sm; }
@@ -52,9 +53,9 @@ public:
   static v8::Handle<v8::Object> New(WaySublineMatchStringPtr sm);
 
 private:
-  WaySublineMatchStringJs(ConstNodePtr n);
-  WaySublineMatchStringJs();
-  ~WaySublineMatchStringJs();
+
+  WaySublineMatchStringJs() = default;
+  virtual ~WaySublineMatchStringJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);

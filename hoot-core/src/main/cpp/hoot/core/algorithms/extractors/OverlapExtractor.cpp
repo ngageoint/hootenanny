@@ -47,10 +47,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, OverlapExtractor)
 
-OverlapExtractor::OverlapExtractor()
-{
-}
-
 double OverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
   const ConstElementPtr& candidate) const
 {

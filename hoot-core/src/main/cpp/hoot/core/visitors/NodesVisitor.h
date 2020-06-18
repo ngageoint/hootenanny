@@ -43,7 +43,8 @@ public:
 
   static std::string className() { return "hoot::NodesVisitor"; }
 
-  NodesVisitor(QList<ConstNodePtr>& n) : _n(n) {}
+  NodesVisitor(QList<ConstNodePtr>& n) : _n(n) { }
+  virtual ~NodesVisitor() = default;
 
   virtual void visit(const std::shared_ptr<const Element>& e);
 

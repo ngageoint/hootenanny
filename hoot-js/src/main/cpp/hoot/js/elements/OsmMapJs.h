@@ -55,7 +55,7 @@ private:
 
   OsmMapJs();
   OsmMapJs(OsmMapPtr map);
-  ~OsmMapJs();
+  virtual ~OsmMapJs() = default;
 
   static void clone(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);

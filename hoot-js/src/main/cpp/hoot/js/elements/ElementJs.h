@@ -57,8 +57,8 @@ public:
 
 protected:
 
-  ElementJs();
-  virtual ~ElementJs();
+  ElementJs() = default;
+  virtual ~ElementJs() = default;
   static void _addBaseFunctions(v8::Local<v8::FunctionTemplate> tpl);
 
   static void getCircularError(const v8::FunctionCallbackInfo<v8::Value>& args);

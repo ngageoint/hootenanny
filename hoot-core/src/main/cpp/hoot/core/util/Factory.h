@@ -49,9 +49,9 @@ class ObjectCreator
 {
 public:
 
-  ObjectCreator() {}
+  ObjectCreator() = default;
 
-  virtual ~ObjectCreator() { }
+  virtual ~ObjectCreator() = default;
 
   virtual boost::any create() = 0;
 
@@ -75,7 +75,7 @@ public:
   {
   }
 
-  virtual ~ObjectCreatorTemplate() { }
+  virtual ~ObjectCreatorTemplate() = default;
 
   /**
    * We cast it to "Base" so that the any pointer works as expected.

@@ -37,15 +37,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, WayNodeCriterion)
 
-WayNodeCriterion::WayNodeCriterion()
-{
-}
-
-WayNodeCriterion::WayNodeCriterion(ConstOsmMapPtr map) :
-_map(map)
-{
-}
-
 bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() != ElementType::Node)

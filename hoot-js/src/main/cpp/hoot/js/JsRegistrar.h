@@ -40,9 +40,9 @@ class ClassInitializer
 {
 public:
 
-  ClassInitializer() {}
+  ClassInitializer() = default;
 
-  virtual ~ClassInitializer() { }
+  virtual ~ClassInitializer() = default;
 
   virtual void Init(v8::Handle<v8::Object> exports) = 0;
 
@@ -56,9 +56,9 @@ class ClassInitializerTemplate : public ClassInitializer
 {
 public:
 
-  ClassInitializerTemplate() { }
+  ClassInitializerTemplate() = default;
 
-  virtual ~ClassInitializerTemplate() { }
+  virtual ~ClassInitializerTemplate() = default;
 
   virtual void Init(v8::Handle<v8::Object> exports) override
   {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGKEYCRITERION_H
 #define TAGKEYCRITERION_H
@@ -46,10 +46,11 @@ public:
 
   static std::string className() { return "hoot::TagKeyCriterion"; }
 
-  TagKeyCriterion() {}
+  TagKeyCriterion() = default;
   explicit TagKeyCriterion(QString key);
   TagKeyCriterion(QString key1, QString key2);
   TagKeyCriterion(QString key1, QString key2, QString key3);
+  virtual ~TagKeyCriterion() = default;
 
   void addKey(QString key);
 

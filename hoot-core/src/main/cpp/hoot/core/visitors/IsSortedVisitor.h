@@ -49,6 +49,7 @@ public:
   static std::string className() { return "hoot::IsSortedVisitor"; }
 
   IsSortedVisitor();
+  virtual ~IsSortedVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 

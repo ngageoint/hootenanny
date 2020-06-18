@@ -59,7 +59,7 @@ public:
   static bool VISIBLE_EMPTY;
   static double CIRCULAR_ERROR_EMPTY;
 
-  virtual ~ElementData() {}
+  virtual ~ElementData() = default;
 
   virtual void clear() { _tags.clear(); }
 

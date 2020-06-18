@@ -48,7 +48,8 @@ public:
 
   static std::string className() { return "hoot::RelationCircularRefRemover"; }
 
-  RelationCircularRefRemover();
+  RelationCircularRefRemover() = default;
+  virtual ~RelationCircularRefRemover() = default;
 
   void apply(OsmMapPtr& map);
 

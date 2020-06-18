@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCOMPARATOR_H
 #define MATCHCOMPARATOR_H
@@ -55,11 +55,10 @@ public:
 
   static std::string className() { return "hoot::MatchComparator"; }
 
-  static int logWarnCount;
-
   typedef QMultiMap<QString, ElementId> UuidToEid;
 
   MatchComparator();
+  virtual ~MatchComparator() = default;
 
   /**
    * Compares the maps and stores the confusion matrix.
@@ -116,6 +115,8 @@ public:
   double getPertyScore() const;
 
 private:
+
+  static int logWarnCount;
 
   typedef std::pair<QString, QString> UuidPair;
 

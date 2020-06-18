@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ATTRIBUTE_VALUE_CRITERION_H
 #define ATTRIBUTE_VALUE_CRITERION_H
@@ -41,8 +41,6 @@ class AttributeValueCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static int logWarnCount;
-
   static std::string className() { return "hoot::AttributeValueCriterion"; }
 
   AttributeValueCriterion();
@@ -52,6 +50,7 @@ public:
   AttributeValueCriterion(const ElementAttributeType& attributeType,
                           const double comparisonVal,
                           const NumericComparisonType& comparisonType);
+  virtual ~AttributeValueCriterion() = default;
 
   /**
    * @see ElementCriterion
@@ -74,6 +73,8 @@ public:
   { return QString::fromStdString(className()).remove("hoot::"); }
 
 private:
+
+  static int logWarnCount;
 
   // attribute to examine
   ElementAttributeType _attributeType;

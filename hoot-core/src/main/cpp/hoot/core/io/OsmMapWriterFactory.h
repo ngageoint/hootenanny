@@ -37,6 +37,9 @@
 // Standard
 #include <memory>
 
+// GEOS
+#include <geos/geom/Geometry.h>
+
 namespace hoot
 {
 
@@ -61,7 +64,27 @@ public:
 
   static bool isSupportedFormat(const QString& url);
 
+  /**
+   * Writes a map useful for debugging
+   *
+   * @param map the map to write
+   * @param title a descriptive title
+   * @param matcher If the Network conflation algorithm was used to generate the input data, pass
+   * in the matcher used to write additional debugging information.
+   */
   static void writeDebugMap(const std::shared_ptr<const OsmMap>& map, const QString& title = "",
+                            NetworkMatcherPtr matcher = NetworkMatcherPtr());
+
+  /**
+   * Writes a feature geometry useful for debugging
+   *
+   * @param geometry the geometry to write
+   * @param title a descriptive title
+   * @param matcher If the Network conflation algorithm was used to generate the input data, pass
+   * in the matcher used to write additional debugging information.
+   */
+  static void writeDebugMap(const std::shared_ptr<geos::geom::Geometry>& geometry,
+                            std::shared_ptr<OGRSpatialReference> spatRef, const QString& title = "",
                             NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
 private:

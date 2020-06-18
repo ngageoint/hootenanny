@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSM_SCHEMAFILELOADER_H
 #define OSM_SCHEMAFILELOADER_H
@@ -37,9 +37,9 @@ class OsmSchemaLoader
 public:
   static std::string className() { return "hoot::OsmSchemaLoader"; }
 
-  OsmSchemaLoader() {}
+  OsmSchemaLoader() = default;
 
-  virtual ~OsmSchemaLoader() {}
+  virtual ~OsmSchemaLoader() = default;
 
   /**
    * Returns true if the specified path is likely supported. This should be a quick operation like

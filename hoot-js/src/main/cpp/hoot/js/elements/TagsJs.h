@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_JS_H
 #define TAGS_JS_H
@@ -57,9 +57,8 @@ public:
 
 private:
 
-  TagsJs(ConstNodePtr n);
-  TagsJs();
-  ~TagsJs();
+  TagsJs() = default;
+  virtual ~TagsJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

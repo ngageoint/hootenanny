@@ -56,9 +56,8 @@ public:
 
   static std::string className() { return "hoot::PoiPolygonMerger"; }
 
-  static int logWarnCount;
-
   PoiPolygonMerger();
+  virtual ~PoiPolygonMerger() = default;
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -92,6 +91,8 @@ protected:
   virtual const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
+
+  static int logWarnCount;
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
 

@@ -51,17 +51,16 @@ public:
 
   static std::string className() { return "hoot::BuildingOutlineUpdateOp"; }
 
-  static int logWarnCount;
-
-  BuildingOutlineUpdateOp();
+  BuildingOutlineUpdateOp() = default;
+  virtual ~BuildingOutlineUpdateOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual void readObject(QDataStream& /*is*/) {}
+  virtual void readObject(QDataStream& /*is*/) { }
 
-  virtual void writeObject(QDataStream& /*os*/) const {}
+  virtual void writeObject(QDataStream& /*os*/) const { }
 
   virtual QString getInitStatusMessage() const
   { return "Updating building outlines..."; }
@@ -79,6 +78,8 @@ public:
   { return QStringList(QString::fromStdString(BuildingCriterion::className())); }
 
 private:
+
+  static int logWarnCount;
 
   std::shared_ptr<OsmMap> _map;
   ReviewMarker _reviewMarker;

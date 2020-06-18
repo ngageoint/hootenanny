@@ -35,14 +35,13 @@ namespace hoot
 {
 
 /**
- * @brief The ReplaceTagVisitor class replaces matching tags with the
- * specified replacement tag.
+ * The ReplaceTagVisitor class replaces matching tags with the specified replacement tag.
  *
- * This was written for the building outline project: the input data had tag
- * BUILDING=yes, but the output data needed to have tag building=yes
+ * This was written for the building outline project: the input data had tag BUILDING=yes, but the
+ * output data needed to have tag building=yes.
  *
- * Feel free to extend this class. Maybe add a flag for case-insensitive
- * matching. Or support for wildcards.
+ * Feel free to extend this class. Maybe add a flag for case-insensitive matching. Or support for
+ * wildcards.
  */
 class ReplaceTagVisitor : public ElementVisitor, public Configurable
 {
@@ -58,6 +57,7 @@ public:
    * @brief ReplaceTagVisitor - default constructor
    */
   ReplaceTagVisitor();
+  virtual ~ReplaceTagVisitor() = default;
 
   /**
    * @brief ReplaceTagVisitor - This constructor lets you specify the tag

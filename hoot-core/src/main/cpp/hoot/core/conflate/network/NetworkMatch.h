@@ -46,10 +46,11 @@ public:
 
   static std::string className() { return "hoot::NetworkMatch"; }
 
-  NetworkMatch();
+  NetworkMatch() = default;
   NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
     double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
     double scoringFunctionCurveMidpointX, double scoringFunctionCurveSteepness);
+  virtual ~NetworkMatch() = default;
 
   /**
    * Classifies the match and returns a classification object.

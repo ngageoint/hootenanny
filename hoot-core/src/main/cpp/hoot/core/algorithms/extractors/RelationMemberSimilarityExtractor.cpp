@@ -37,10 +37,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, RelationMemberSimilarityExtractor)
 
-RelationMemberSimilarityExtractor::RelationMemberSimilarityExtractor()
-{
-}
-
 double RelationMemberSimilarityExtractor::extract(
   const OsmMap& map, const std::shared_ptr<const Element>& target,
   const std::shared_ptr<const Element>& candidate) const

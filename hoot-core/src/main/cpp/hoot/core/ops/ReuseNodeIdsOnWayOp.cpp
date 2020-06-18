@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReuseNodeIdsOnWayOp.h"
 
@@ -41,10 +41,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ReuseNodeIdsOnWayOp)
-
-ReuseNodeIdsOnWayOp::ReuseNodeIdsOnWayOp()
-{
-}
 
 ReuseNodeIdsOnWayOp::ReuseNodeIdsOnWayOp(ElementId from, ElementId to)
   : _from(from),

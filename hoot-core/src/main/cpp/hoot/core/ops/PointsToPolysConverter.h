@@ -46,6 +46,7 @@ public:
   static std::string className() { return "hoot::PointsToPolysConverter"; }
 
   PointsToPolysConverter(const double bufferSize = 1.0);
+  virtual ~PointsToPolysConverter() = default;
 
   virtual void apply(OsmMapPtr& map);
 

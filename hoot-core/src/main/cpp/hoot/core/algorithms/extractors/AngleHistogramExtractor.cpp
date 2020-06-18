@@ -51,7 +51,8 @@ public:
 
   static std::string className() { return "hoot::HistogramVisitor"; }
 
-  HistogramVisitor(Histogram& h) : _h(h) {}
+  HistogramVisitor(Histogram& h) : _h(h) { }
+  virtual ~HistogramVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {

@@ -49,6 +49,7 @@ public:
   static std::string className() { return "hoot::PhoneNumberCountVisitor"; }
 
   PhoneNumberCountVisitor();
+  virtual ~PhoneNumberCountVisitor() = default;
 
   /**
    * @see Configurable

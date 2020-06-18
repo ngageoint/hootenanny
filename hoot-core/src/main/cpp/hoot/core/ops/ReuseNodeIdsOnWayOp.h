@@ -49,7 +49,8 @@ public:
   static std::string className() { return "hoot::ReuseNodeIdsOnWayOp"; }
 
   ReuseNodeIdsOnWayOp(ElementId from, ElementId to);
-  ReuseNodeIdsOnWayOp();
+  ReuseNodeIdsOnWayOp() = default;
+  virtual ~ReuseNodeIdsOnWayOp() = default;
 
   virtual void apply(const std::shared_ptr<OsmMap> &map) override;
   virtual void addElement(const ConstElementPtr& e) override;

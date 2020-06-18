@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::AddressCountVisitor"; }
 
-  AddressCountVisitor();
+  AddressCountVisitor() : _totalCount(0) { }
+  virtual ~AddressCountVisitor() = default;
 
   virtual void setConfiguration(const Settings& conf);
 

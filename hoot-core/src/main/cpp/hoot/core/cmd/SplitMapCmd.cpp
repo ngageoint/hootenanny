@@ -46,7 +46,7 @@ public:
 
   static string className() { return "hoot::SplitMapCmd"; }
 
-  SplitMapCmd() { }
+  SplitMapCmd() = default;
 
   virtual QString getName() const override { return "split-map"; }
 

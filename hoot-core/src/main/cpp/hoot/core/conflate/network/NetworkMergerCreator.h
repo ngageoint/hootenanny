@@ -43,6 +43,7 @@ public:
   static std::string className() { return "hoot::NetworkMergerCreator"; }
 
   NetworkMergerCreator();
+  virtual ~NetworkMergerCreator() = default;
 
   virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 

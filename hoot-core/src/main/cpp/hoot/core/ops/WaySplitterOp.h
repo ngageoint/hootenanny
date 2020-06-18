@@ -56,6 +56,7 @@ public:
   static QString maxLengthKey() { return "way.splitter.max.length"; }
 
   WaySplitterOp();
+  virtual ~WaySplitterOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 

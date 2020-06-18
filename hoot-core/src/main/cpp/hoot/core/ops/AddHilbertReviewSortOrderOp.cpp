@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddHilbertReviewSortOrderOp.h"
 
@@ -61,10 +61,6 @@ bool reviewLess(const pair<ElementId, int64_t>& p1, const pair<ElementId, int64_
   }
 }
 
-AddHilbertReviewSortOrderOp::AddHilbertReviewSortOrderOp()
-{
-}
-
 void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
 {
   if (!ConfigOptions().getWriterIncludeConflateReviewDetailTags())
@@ -82,7 +78,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
   const RelationMap& relations = map->getRelations();
 
   vector<pair<ElementId, int64_t>> reviewOrder;
-  // reserves at least as much as we need.
+  // reserves at least as much as we need
   reviewOrder.reserve(relations.size());
 
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
@@ -97,9 +93,11 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
       if (eids.size() > 0)
       {
         int64_t hv = _calculateHilbertValue(map, eids);
-
-        pair<ElementId, int64_t> p(r->getElementId(), hv);
-        reviewOrder.push_back(p);
+        if (hv != -1)
+        {
+          pair<ElementId, int64_t> p(r->getElementId(), hv);
+          reviewOrder.push_back(p);
+        }
       }
       else
       {
@@ -120,21 +118,30 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
   }
 }
 
-int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr &map,
-  const set<ElementId> eids)
+int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
+  const ConstOsmMapPtr& map, const set<ElementId> eids)
 {
   std::shared_ptr<Envelope> env;
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
   {
-    Envelope::AutoPtr te(map->getElement(*it)->getEnvelope(map));
-    if (env.get() == 0)
+    ConstElementPtr element = map->getElement(*it);
+    if (element)
     {
-      env.reset(new Envelope(*te));
+      Envelope::AutoPtr te(element->getEnvelope(map));
+      LOG_VART(env.get());
+      if (env.get() == 0)
+      {
+        env.reset(new Envelope(*te));
+      }
+      else
+      {
+        env->expandToInclude(te.get());
+      }
     }
-    else
-    {
-      env->expandToInclude(te.get());
-    }
+  }
+  if (!env)
+  {
+    return -1;
   }
   LOG_VART(env->toString());
 
@@ -152,7 +159,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
 
   // 31 bits is the most supported for 2 dimensions.
   int order = min(31, max(xorder, yorder));
-  // always 2 dimensions.
+  // always 2 dimensions
   Tgs::HilbertCurve c(2, order);
   int64_t maxRange = 1 << order;
   int point[2];
@@ -162,7 +169,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
   point[1] = max<int64_t>(0, min<int64_t>(maxRange - 1,
     round((center.y - _mapEnvelope->getMinY()) / cellSize)));
 
-  // pad with zeros to make sorting a little easier.
+  // Pad with zeros to make sorting a little easier.
   return c.encode(point);
 }
 

@@ -63,6 +63,7 @@ public:
   _headingDelta(headingDelta)
   {
   }
+  virtual ~SampledAngleHistogramVisitor() = default;
 
   virtual void visit(const std::shared_ptr<const Element>& e)
   {

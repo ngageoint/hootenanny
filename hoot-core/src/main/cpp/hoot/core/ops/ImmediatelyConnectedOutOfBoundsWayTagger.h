@@ -54,6 +54,7 @@ public:
   ImmediatelyConnectedOutOfBoundsWayTagger();
   ImmediatelyConnectedOutOfBoundsWayTagger(const geos::geom::Envelope& bounds,
                                            const bool strictBounds);
+  virtual ~ImmediatelyConnectedOutOfBoundsWayTagger() = default;
 
   /**
    * @see OsmMapOperation

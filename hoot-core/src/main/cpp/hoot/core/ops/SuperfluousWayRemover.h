@@ -52,8 +52,9 @@ public:
 
   static std::string className() { return "hoot::SuperfluousWayRemover"; }
 
-  SuperfluousWayRemover();
+  SuperfluousWayRemover() = default;
   SuperfluousWayRemover(const std::shared_ptr<OsmMap>& map);
+  virtual ~SuperfluousWayRemover() = default;
 
   void apply(std::shared_ptr<OsmMap>& map);
 

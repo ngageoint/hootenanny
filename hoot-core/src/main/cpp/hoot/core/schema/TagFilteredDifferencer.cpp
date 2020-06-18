@@ -33,10 +33,6 @@ using namespace std;
 namespace hoot
 {
 
-TagFilteredDifferencer::TagFilteredDifferencer()
-{
-}
-
 double TagFilteredDifferencer::diff(const ConstOsmMapPtr&, const ConstElementPtr& e1,
   const ConstElementPtr& e2) const
 {

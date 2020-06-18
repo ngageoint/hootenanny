@@ -45,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::FilteredVisitor"; }
 
-  FilteredVisitor() : _criterion(0), _visitor(0) {}
+  FilteredVisitor() : _criterion(0), _visitor(0) { }
+  virtual ~FilteredVisitor() = default;
 
   /**
    * Calls the visit method on visitor whenever ElementCriterion::isSatisfied == true.

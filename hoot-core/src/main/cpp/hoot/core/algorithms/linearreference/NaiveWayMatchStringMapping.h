@@ -39,6 +39,7 @@ class NaiveWayMatchStringMapping : public WayMatchStringMapping
 public:
 
   NaiveWayMatchStringMapping(WayStringPtr str1, WayStringPtr str2);
+  virtual ~NaiveWayMatchStringMapping() = default;
 
   virtual WayStringPtr getWayString1() { return _ws1; }
   virtual WayStringPtr getWayString2() { return _ws2; }

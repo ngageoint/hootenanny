@@ -39,10 +39,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveEmptyRelationsOp)
 
-RemoveEmptyRelationsOp::RemoveEmptyRelationsOp()
-{
-}
-
 void RemoveEmptyRelationsOp::apply(OsmMapPtr& map)
 {
   //Deleting twice in opposite directions catches child relations that are encountered after their

@@ -48,8 +48,6 @@ public:
 
   static std::string className() { return "hoot::HootApiDb"; }
 
-  static int logWarnCount;
-
   HootApiDb();
 
   virtual ~HootApiDb();
@@ -580,6 +578,8 @@ protected:
   virtual void _resetQueries();
 
 private:
+
+  static int logWarnCount;
 
   friend class ServiceHootApiDbReaderTest;
   friend class ServiceHootApiDbWriterTest;

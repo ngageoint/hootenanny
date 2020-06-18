@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LEVENSHTEINDISTANCE_H
@@ -52,6 +52,7 @@ public:
    * @param alph See the levenshtein.distance.alpha configuration option for an explanation.
    */
   LevenshteinDistance(double alpha = -1);
+  virtual ~LevenshteinDistance() = default;
 
   virtual double compare(const QString& s1, const QString& s2) const override;
 

@@ -39,15 +39,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, BuildingCriterion)
 
-BuildingCriterion::BuildingCriterion()
-{
-}
-
-BuildingCriterion::BuildingCriterion(ConstOsmMapPtr map) :
-_map(map)
-{
-}
-
 bool BuildingCriterion::isParentABuilding(ElementId eid) const
 {
   bool result = false;

@@ -95,6 +95,7 @@ public:
       _errorLimit(errorLimit)
   {
   }
+  virtual ~CompareVisitor() = default;
 
   bool isMatch() { return _matches; }
 

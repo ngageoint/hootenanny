@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCONSUMER_H
 #define ELEMENTCONSUMER_H
@@ -35,6 +35,9 @@ namespace hoot
 class ElementConsumer
 {
 public:
+
+  ElementConsumer() = default;
+  virtual ~ElementConsumer() = default;
 
   virtual void addElement(const ElementPtr& e) = 0;
 };

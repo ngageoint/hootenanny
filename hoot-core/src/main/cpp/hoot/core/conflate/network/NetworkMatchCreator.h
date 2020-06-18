@@ -44,6 +44,7 @@ public:
   static std::string className() { return "hoot::NetworkMatchCreator"; }
 
   NetworkMatchCreator();
+  virtual ~NetworkMatchCreator() = default;
 
   virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2);
 

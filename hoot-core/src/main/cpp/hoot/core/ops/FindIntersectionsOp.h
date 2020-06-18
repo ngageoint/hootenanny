@@ -50,7 +50,8 @@ public:
 
   static QString opsKey() { return "map.cleaner.transforms"; }
 
-  FindIntersectionsOp();
+  FindIntersectionsOp() = default;
+  virtual ~FindIntersectionsOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -71,6 +72,9 @@ class FindHighwayIntersectionsOp : public FindIntersectionsOp
 {
 public:
 
+  FindHighwayIntersectionsOp() = default;
+  virtual ~FindHighwayIntersectionsOp() = default;
+
   static std::string className() { return "hoot::FindHighwayIntersectionsOp"; }
 
   virtual QString getDescription() const override { return "Identifies highway intersections"; }
@@ -86,6 +90,9 @@ public:
 class FindRailwayIntersectionsOp : public FindIntersectionsOp
 {
 public:
+
+  FindRailwayIntersectionsOp() = default;
+  virtual ~FindRailwayIntersectionsOp() = default;
 
   static std::string className() { return "hoot::FindRailwayIntersectionsOp"; }
 

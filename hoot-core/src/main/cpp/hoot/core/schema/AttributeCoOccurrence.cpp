@@ -59,7 +59,7 @@ public:
 
   explicit RefToEidVisitor(QString ref) : _ref(ref) {}
 
-  virtual ~RefToEidVisitor() {}
+  virtual ~RefToEidVisitor() = default;
 
   const RefToEid& getRefToEid() const { return _ref2Eid; }
 
@@ -101,7 +101,7 @@ public:
   CoOccurrenceVisitor(RefToEidVisitor::RefToEid refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
   _refSet(refSet), _coOccurrence(h) {}
 
-  virtual ~CoOccurrenceVisitor() {}
+  virtual ~CoOccurrenceVisitor() = default;
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 

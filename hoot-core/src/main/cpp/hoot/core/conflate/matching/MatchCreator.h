@@ -50,7 +50,8 @@ public:
 
   static std::string className() { return "hoot::MatchCreator"; }
 
-  virtual ~MatchCreator() {}
+  MatchCreator() = default;
+  virtual ~MatchCreator() = default;
 
   /**
    * Given two elements, create a match if it is appropriate. If it is not appropriate then return

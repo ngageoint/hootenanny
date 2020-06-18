@@ -46,6 +46,7 @@ public:
     _exempt(exempt)
   {
   }
+  virtual ~AddAllVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {

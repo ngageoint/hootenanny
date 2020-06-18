@@ -53,6 +53,7 @@ public:
   static std::string className() { return "hoot::NodesPerWayVisitor"; }
 
   NodesPerWayVisitor();
+  virtual ~NodesPerWayVisitor() = default;
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 

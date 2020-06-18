@@ -42,7 +42,8 @@ public:
 
   static std::string className() { return "hoot::ScriptMergerCreator"; }
 
-  ScriptMergerCreator();
+  ScriptMergerCreator() = default;
+  virtual ~ScriptMergerCreator() = default;
 
   /**
    * If all the matches are CustomPoiMatches, a single CustomPoiMerger will be created and returned.

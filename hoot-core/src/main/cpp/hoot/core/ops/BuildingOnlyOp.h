@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGONLYOP_H
 #define BUILDINGONLYOP_H
@@ -65,7 +65,8 @@ public:
   /**
    * @brief BuildingOnlyOp - default constructor
    */
-  BuildingOnlyOp();
+  BuildingOnlyOp() = default;
+  virtual ~BuildingOnlyOp() = default;
 
   /**
    * @brief apply - perform the operation on the map (see class description)

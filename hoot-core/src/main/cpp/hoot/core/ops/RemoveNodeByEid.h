@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVENODEBYEID_H
 #define REMOVENODEBYEID_H
@@ -72,6 +72,8 @@ public:
    */
   RemoveNodeByEid(long nId, bool doCheck = true, bool removeFully = false,
                   bool removeOnlyUnused = false);
+
+  virtual ~RemoveNodeByEid() = default;
 
   /**
    * @brief apply Peform the op on the given map

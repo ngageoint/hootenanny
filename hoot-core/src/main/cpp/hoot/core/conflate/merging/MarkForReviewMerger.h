@@ -45,7 +45,9 @@ public:
 
   static std::string className() { return "hoot::MarkForReviewMerger"; }
 
-  MarkForReviewMerger();
+  MarkForReviewMerger() = default;
+  virtual ~MarkForReviewMerger() = default;
+
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.

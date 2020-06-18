@@ -61,10 +61,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ScriptSchemaTranslator, PythonSchemaTranslator)
 
-PythonSchemaTranslator::PythonSchemaTranslator()
-{
-}
-
 PythonSchemaTranslator::~PythonSchemaTranslator()
 {
   close();

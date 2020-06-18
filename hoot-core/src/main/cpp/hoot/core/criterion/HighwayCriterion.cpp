@@ -38,14 +38,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
-HighwayCriterion::HighwayCriterion()
-{
-}
-
-HighwayCriterion::HighwayCriterion(ConstOsmMapPtr map) : _map(map)
-{
-}
-
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   LOG_VART(element->getElementId());
@@ -62,15 +54,15 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   const Tags& tags = element->getTags();
 
   Tags::const_iterator it = tags.find("highway");
+  const bool containsHighwayTag = it != tags.end() && it.value() != "";
 
   // Is it a legit highway?
-  if ((type == ElementType::Way || type == ElementType::Relation) &&
-      it != tags.end() && it.value() != "")
+  if ((type == ElementType::Way || type == ElementType::Relation) && containsHighwayTag)
   {
     result = true;
     LOG_VART(result);
   }
-  //  Make sure it isn't a building or a part of a building
+  //  Make sure it isn't a building or a part of a building.
   else if (_map && (BuildingCriterion(_map).isSatisfied(element) ||
                     BuildingCriterion(_map).isParentABuilding(element->getElementId())))
   {
@@ -89,7 +81,7 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
     LOG_VART(result);
   }
 
-  LOG_VART(result);
+  LOG_TRACE(element->getElementId() << " result: " << result);
   return result;
 }
 

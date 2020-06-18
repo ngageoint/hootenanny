@@ -47,6 +47,9 @@ public:
 
   static std::string className() { return "hoot::CollapsePolyGeoModifierAction"; }
 
+  CollapsePolyGeoModifierAction() = default;
+  virtual ~CollapsePolyGeoModifierAction() = default;
+
   virtual QString getCommandName() const override { return "collapse_poly"; }
   virtual QList<QString> getParameterNames() const override { return QList<QString> { MAX_AREA_PARAM, MAX_LENGTH_PARAM }; }
 

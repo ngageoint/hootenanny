@@ -48,6 +48,7 @@ public:
   static std::string className() { return "hoot::ToEnglishTranslationComparisonVisitor"; }
 
   ToEnglishTranslationComparisonVisitor();
+  virtual ~ToEnglishTranslationComparisonVisitor() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
 

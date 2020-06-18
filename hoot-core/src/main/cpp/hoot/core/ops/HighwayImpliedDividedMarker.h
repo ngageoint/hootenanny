@@ -57,8 +57,9 @@ public:
 
   static std::string className() { return "hoot::HighwayImpliedDividedMarker"; }
 
-  HighwayImpliedDividedMarker();
-  HighwayImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map);
+  HighwayImpliedDividedMarker() = default;
+  HighwayImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map) : _inputMap(map) { }
+  virtual ~HighwayImpliedDividedMarker() = default;
 
   void apply(std::shared_ptr<OsmMap>& map);
 

@@ -46,7 +46,9 @@ public:
 
   static std::string className() { return "hoot::RecursiveSetTagValueOp"; }
 
-  RecursiveSetTagValueOp();
+  RecursiveSetTagValueOp() = default;
+  virtual ~RecursiveSetTagValueOp() = default;
+
   // We have the constructor signatures from SetTagValueVisitor here, as well as a signature that
   // allows passing in an already configured, possibly complex, criterion. We may want to extend
   // that capability to SetTagValueVisitor at some point.
