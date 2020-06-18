@@ -93,8 +93,11 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
       if (eids.size() > 0)
       {
         int64_t hv = _calculateHilbertValue(map, eids);
-        pair<ElementId, int64_t> p(r->getElementId(), hv);
-        reviewOrder.push_back(p);
+        if (hv != -1)
+        {
+          pair<ElementId, int64_t> p(r->getElementId(), hv);
+          reviewOrder.push_back(p);
+        }
       }
       else
       {
@@ -115,21 +118,30 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
   }
 }
 
-int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr &map,
-  const set<ElementId> eids)
+int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
+  const ConstOsmMapPtr& map, const set<ElementId> eids)
 {
   std::shared_ptr<Envelope> env;
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
   {
-    Envelope::AutoPtr te(map->getElement(*it)->getEnvelope(map));
-    if (env.get() == 0)
+    ConstElementPtr element = map->getElement(*it);
+    if (element)
     {
-      env.reset(new Envelope(*te));
+      Envelope::AutoPtr te(element->getEnvelope(map));
+      LOG_VART(env.get());
+      if (env.get() == 0)
+      {
+        env.reset(new Envelope(*te));
+      }
+      else
+      {
+        env->expandToInclude(te.get());
+      }
     }
-    else
-    {
-      env->expandToInclude(te.get());
-    }
+  }
+  if (!env)
+  {
+    return -1;
   }
   LOG_VART(env->toString());
 
