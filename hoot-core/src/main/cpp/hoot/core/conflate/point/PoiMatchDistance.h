@@ -41,6 +41,7 @@ class PoiMatchDistance
 {
 public:
 
+  PoiMatchDistance();
   PoiMatchDistance(QString key, QString val, int maxMatchDistance, int maxReviewDistance);
 
   /**

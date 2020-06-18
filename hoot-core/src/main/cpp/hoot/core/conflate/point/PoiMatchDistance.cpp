@@ -43,6 +43,12 @@
 namespace hoot
 {
 
+PoiMatchDistance::PoiMatchDistance() :
+_maxMatchDistance(-1),
+_maxReviewDistance(-1)
+{
+}
+
 PoiMatchDistance::PoiMatchDistance(
   QString key, QString val, int maxMatchDistance, int maxReviewDistance) :
 _key(key),

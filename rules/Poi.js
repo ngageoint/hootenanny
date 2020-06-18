@@ -54,44 +54,7 @@ var weightedWordDistance = new hoot.NameExtractor(
             new hoot.LevenshteinDistance(
                 {"levenshtein.distance.alpha": 1.5}))));
 
-// Make sure you also have appropriate schema entries with the POI category added to it for anything added here.
-var distances = [
-
-    {k:'amenity',                             match:100,      review:200},
-    {k:'amenity',   v:'grave_yard',           match:500,      review:1000},
-    {k:'building',                            match:100,      review:200},
-    {k:'building',  v:'hospital',             match:300,      review:500},
-    {k:'building',  v:'train_station',        match:500,      review:1000},
-    {k:'barrier',   v:'toll_booth',           match:25,       review:50},
-    {k:'barrier',   v:'border_control',       match:50,       review:100},
-    {k:'historic',                            match:100,      review:200},
-    {k:'landuse',                             match:500,      review:1000},
-    {k:'landuse',   v:'built_up_area',        match:2000,     review:3000},
-    {k:'leisure',                             match:250,      review:500},
-    {k:'man_made',                            match:100,      review:200},
-    {k:'natural',                             match:500,      review:1000},
-    {k:'natural',   v:'tree',                 match:5,        review:5},
-    {k:'place',                               match:500,      review:1000},
-    {k:'place',     v:'built_up_area',        match:2000,     review:3000},
-    {k:'place',     v:'locality',             match:2000,     review:3000},
-    {k:'place',     v:'populated',            match:2000,     review:3000},
-    {k:'place',     v:'region',               match:1000,     review:2000},
-    {k:'place',     v:'village',              match:2000,     review:3000},
-    {k:'power',                               match:25,       review:50},
-    {k:'railway',                             match:250,      review:500},
-    {k:'railway',   v:'level_crossing',       match:25,       review:50},
-    {k:'railway',   v:'station',              match:500,      review:1000},
-    {k:'shop',                                match:100,      review:200},
-    {k:'sport',                               match:50,       review:100},
-    {k:'station',                             match:100,      review:200},
-    {k:'station',   v:'light_rail',           match:500,      review:1000},
-    {k:'tourism',                             match:100,      review:200},
-    // hotel campuses can be quite large
-    {k:'tourism',   v:'hotel',                match:200,      review:400},
-    {k:'transport', v:'station',              match:500,      review:1000},
-
-];
-//var distances = getPoiMatchDistances();
+var distances = getPoiMatchDistances();
 
 function distance(e1, e2) {
     return Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) +

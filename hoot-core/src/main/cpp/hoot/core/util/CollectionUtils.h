@@ -76,8 +76,8 @@ public:
    * Converts a stdlib set to a Qt set
    *
    * @param set the set to convert
-   * @return
-   * @note std::set is ordered and QSet
+   * @return a Qt set
+   * @note std::set is ordered and QSet is not
    */
   template<typename T>
   static QSet<T> stdSetToQSet(const std::set<T>& set)
@@ -91,6 +91,13 @@ public:
     return qSet;
   }
 
+  /**
+   * Converts a Qt set to a stdlib set
+   *
+   * @param set the set to convert
+   * @return a stdlib set
+   * @note std::set is ordered and QSet is not
+   */
   template<typename T>
   static std::set<T> qSetToStdSet(const QSet<T>& set)
   {

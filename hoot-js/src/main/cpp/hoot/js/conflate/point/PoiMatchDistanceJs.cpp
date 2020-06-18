@@ -28,6 +28,8 @@
 
 // hoot
 #include <hoot/core/conflate/point/PoiMatchDistance.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>
 
@@ -51,7 +53,7 @@ void PoiMatchDistanceJs::Init(Handle<Object> exports)
                FunctionTemplate::New(current, getMatchDistances)->GetFunction());
 }
 
-void PoiMatchDistanceJs::getMatchDistances(const FunctionCallbackInfo<Value>& /*args*/)
+void PoiMatchDistanceJs::getMatchDistances(const FunctionCallbackInfo<Value>& args)
 {
   ConfigOptions opts;
   QString matchDistancesData = opts.getPoiMatchDistances().trimmed();
@@ -62,14 +64,34 @@ void PoiMatchDistanceJs::getMatchDistances(const FunctionCallbackInfo<Value>& /*
   if (matchDistancesData.isEmpty())
   {
     throw IllegalArgumentException(
-      "Either a POI matches distances file must be specified with " +
-      ConfigOptions::getPoiMatchDistancesConfigKey() + " or custom JSON specified with " +
+      "Either a POI matches distances file must be specified by " +
+      ConfigOptions::getPoiMatchDistancesConfigKey() + " or custom JSON specified by " +
       ConfigOptions::getPoiMatchDistancesKey() + ".");
   }
 
-//  Handle<Array> distances =
-//    Handle<Array>::Cast(toV8(PoiMatchDistance::readDistances(matchDistancesData)));
-//  args.GetReturnValue().Set(distances);
+  const QList<PoiMatchDistance> matchDistancesList =
+    PoiMatchDistance::readDistances(matchDistancesData);
+
+  Isolate* current = v8::Isolate::GetCurrent();
+  Local<Array> matchDistances = Array::New(current, matchDistancesList.size());
+  matchDistances->Set(
+    String::NewFromUtf8(current, "length"), Integer::New(current, matchDistancesList.size()));
+  for (int i = 0 ; i < matchDistancesList.size(); i++)
+  {
+    const PoiMatchDistance matchDist = matchDistancesList.at(i);
+
+    Local<Object> matchDistObj = Object::New(current);
+    matchDistObj->Set(toV8(QString("k")), toV8(matchDist.getKey()));
+    if (!matchDist.getValue().isEmpty())
+    {
+      matchDistObj->Set(toV8(QString("v")), toV8(matchDist.getValue()));
+    }
+    matchDistObj->Set(toV8(QString("match")), toV8(matchDist.getMaxMatchDistance()));
+    matchDistObj->Set(toV8(QString("review")), toV8(matchDist.getMaxReviewDistance()));
+
+    matchDistances->Set((uint32_t)i, matchDistObj);
+  }
+  args.GetReturnValue().Set(matchDistances);
 }
 
 }

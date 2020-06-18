@@ -3361,7 +3361,7 @@ TODO
 === poi.match.distances.config
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `conf/core/PoiMatchDistances.json`
 
 TODO
 
