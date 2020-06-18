@@ -305,8 +305,8 @@ public class GrailResource {
                 input2 = "\"\"";
                 grailCommandClass = DeriveChangesetCommand.class;
             } else {
-                input2 = HOOTAPI_DB_URL + "/" + input2;
                 differentialParams.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
+                input2 = HOOTAPI_DB_URL + "/" + input2;
 
                 grailCommandClass = replacement ? DeriveChangesetReplacementCommand.class : DeriveChangesetCommand.class;
             }
