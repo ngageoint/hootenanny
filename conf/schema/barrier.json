@@ -37,5 +37,16 @@
         "isA": "barrier",
         "name": "barrier=wall",
         "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi"
+        ],
+        "geometries": [
+            "node"
+        ],
+        "isA": "barrier",
+        "name": "barrier=border_control",
+        "objectType": "tag"
     }
 ]

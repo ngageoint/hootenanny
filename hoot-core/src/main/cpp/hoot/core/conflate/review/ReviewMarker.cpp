@@ -50,14 +50,16 @@ set<ElementId> ReviewMarker::getReviewElements(const ConstOsmMapPtr& map, Review
   set<ElementId> result;
 
   ConstRelationPtr r = map->getRelation(uid.getId());
-
   if (r)
   {
     const vector<RelationData::Entry>& entries = r->getMembers();
-
     for (size_t i = 0; i < entries.size(); i++)
     {
-      result.insert(entries[i].getElementId());
+      const ElementId elementId = entries[i].getElementId();
+      if (map->containsElement(elementId))
+      {
+        result.insert(elementId);
+      }
     }
   }
 
