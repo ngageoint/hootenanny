@@ -79,6 +79,7 @@ void PoiMatchDistanceJs::getMatchDistances(const FunctionCallbackInfo<Value>& ar
   for (int i = 0 ; i < matchDistancesList.size(); i++)
   {
     const PoiMatchDistance matchDist = matchDistancesList.at(i);
+    LOG_VART(matchDist);
 
     Local<Object> matchDistObj = Object::New(current);
     matchDistObj->Set(toV8(QString("k")), toV8(matchDist.getKey()));

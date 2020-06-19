@@ -57,6 +57,8 @@ public:
   int getMaxMatchDistance() const { return _maxMatchDistance; }
   int getMaxReviewDistance() const { return _maxReviewDistance; }
 
+  QString toString() const;
+
 private:
 
   QString _key;

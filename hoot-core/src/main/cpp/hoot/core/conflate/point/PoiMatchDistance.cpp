@@ -100,6 +100,7 @@ QList<PoiMatchDistance> PoiMatchDistance::readDistances(const QString& jsonStrin
   {
     const QString key =
       QString::fromStdString(distProp.second.get<std::string>("key", "")).trimmed();
+    LOG_VART(key);
     if (key.isEmpty())
     {
       throw IllegalArgumentException("TODO");
@@ -107,19 +108,22 @@ QList<PoiMatchDistance> PoiMatchDistance::readDistances(const QString& jsonStrin
 
     // value is optional
     boost::optional<std::string> valProp = distProp.second.get_optional<std::string>("value");
-    QString val;
+    QString val = "";
     if (valProp)
     {
       val = QString::fromStdString(valProp.get()).trimmed();
     }
+    LOG_VART(val);
 
     const int maxMatchDistance = distProp.second.get<int>("maxMatchDistance");
+    LOG_VART(maxMatchDistance);
     if (maxMatchDistance < 0)
     {
       throw IllegalArgumentException("TODO");
     }
 
     const int maxReviewDistance = distProp.second.get<int>("maxReviewDistance");
+    LOG_VART(maxReviewDistance);
     if (maxReviewDistance < 0)
     {
       throw IllegalArgumentException("TODO");
@@ -130,6 +134,13 @@ QList<PoiMatchDistance> PoiMatchDistance::readDistances(const QString& jsonStrin
 
   LOG_VARD(distances.size());
   return distances;
+}
+
+QString PoiMatchDistance::toString() const
+{
+  return
+    "Key: " + _key + ", Value: " + _value + ", match: " + QString::number(_maxMatchDistance) +
+    ", review: " + QString::number(_maxReviewDistance);
 }
 
 }

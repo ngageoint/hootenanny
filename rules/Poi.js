@@ -86,13 +86,16 @@ exports.getSearchRadius = function(e)
     var radius = e.getCircularError();
     //hoot.trace("radius start: " + radius);
 
-    for (var i = 0; i < distances.length; i++) {
-        if (tags.contains(distances[i].k) &&
-            (distances[i].v == undefined ||
-             tags.get(distances[i].k) == distances[i].v)) {
-            //hoot.debug("distances[i].review: " + distances[i].review);
-            radius = Math.max(radius, distances[i].review);
-        }
+    for (var i = 0; i < distances.length; i++) 
+    {
+      hoot.trace("distances[i].k: " + distances[i].k);
+      hoot.trace("distances[i].v: " + distances[i].v);
+      if (tags.contains(distances[i].k) &&
+          (distances[i].v == undefined || tags.get(distances[i].k) == distances[i].v)) 
+      {
+        hoot.trace("distances[i].review: " + distances[i].review);
+        radius = Math.max(radius, distances[i].review);
+      }
     }
 
     hoot.trace("calculated search radius: " + radius);
