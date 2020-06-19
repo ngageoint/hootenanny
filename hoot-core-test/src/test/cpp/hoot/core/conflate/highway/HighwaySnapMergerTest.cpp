@@ -52,7 +52,6 @@
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 
-
 // Tgs
 #include <tgs/StreamUtils.h>
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DATACONVERTJS_H
 #define DATACONVERTJS_H
@@ -38,7 +38,6 @@
 
 // v8
 #include <hoot/js/HootJsStable.h>
-
 
 namespace hoot
 {
@@ -127,7 +126,6 @@ inline void toCpp(v8::Handle<v8::Value> v, QString& s)
   {
     throw IllegalArgumentException("Expected a string. Got: (" + toJson(v) + ")");
   }
-
 }
 
 inline void toCpp(v8::Handle<v8::Value> v, QStringList& o)
@@ -278,7 +276,9 @@ inline v8::Handle<v8::Value> toV8(double v)
 
 inline v8::Handle<v8::Value> toV8(const std::string& s)
 {
-  return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), s.data(), v8::NewStringType::kNormal, s.length()).ToLocalChecked();
+  return
+    v8::String::NewFromUtf8(
+      v8::Isolate::GetCurrent(), s.data(), v8::NewStringType::kNormal, s.length()).ToLocalChecked();
 }
 
 template<typename T, typename U>
@@ -294,12 +294,10 @@ template<typename T>
 v8::Handle<v8::Value> toV8(const std::vector<T>& v)
 {
   v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
-
   for (uint32_t i = 0; i < v.size(); i++)
   {
     result->Set(i, toV8(v[i]));
   }
-
   return result;
 }
 
@@ -310,13 +308,11 @@ template<typename T>
 v8::Handle<v8::Value> toV8(const std::set<T>& v)
 {
   v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
-
   uint32_t i = 0;
   for (typename std::set<T>::const_iterator it = v.begin(); it != v.end(); ++it)
   {
     result->Set(i++, toV8(*it));
   }
-
   return result;
 }
 
@@ -328,7 +324,10 @@ inline v8::Handle<v8::Value> toV8(const char* s)
 inline v8::Handle<v8::Value> toV8(const QString& s)
 {
   QByteArray utf8 = s.toUtf8();
-  return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), utf8.data(), v8::NewStringType::kNormal, utf8.length()).ToLocalChecked();
+  return
+    v8::String::NewFromUtf8(
+      v8::Isolate::GetCurrent(), utf8.data(), v8::NewStringType::kNormal,
+      utf8.length()).ToLocalChecked();
 }
 
 inline v8::Handle<v8::Value> toV8(const QStringList& v)
@@ -338,7 +337,6 @@ inline v8::Handle<v8::Value> toV8(const QStringList& v)
   {
     result->Set(i, toV8(v[i]));
   }
-
   return result;
 }
 
@@ -360,37 +358,33 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
   case QVariant::StringList:
     return toV8(v.toStringList());
   case QVariant::List:
+  {
+    QVariantList l = v.toList();
+    v8::Handle<v8::Array> result = v8::Array::New(current, l.size());
+    for (int i = 0; i < l.size(); i++)
     {
-      QVariantList l = v.toList();
-      v8::Handle<v8::Array> result = v8::Array::New(current, l.size());
-      for (int i = 0; i < l.size(); i++)
-      {
-        result->Set(i, toV8(l[i]));
-      }
-      return result;
+      result->Set(i, toV8(l[i]));
     }
+    return result;
+  }
   case QVariant::Hash:
   {
     v8::Handle<v8::Object> result = v8::Object::New(current);
     QVariantHash m = v.toHash();
-
     for (QVariantHash::const_iterator i = m.begin(); i != m.end(); i++)
     {
       result->Set(toV8(i.key()),toV8(i.value()));
     }
-
     return result;
   }
   case QVariant::Map:
   {
     v8::Handle<v8::Object> result = v8::Object::New(current);
     QVariantMap m = v.toMap();
-
     for (QVariantMap::const_iterator i = m.begin(); i != m.end(); i++)
     {
       result->Set(toV8(i.key()),toV8(i.value()));
     }
-
     return result;
   }
   default:
@@ -403,13 +397,11 @@ template<typename T, typename U>
 inline v8::Handle<v8::Value> toV8(const QHash<T, U>& m)
 {
   v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
-
   typename QHash<T, U>::const_iterator i;
   for (i = m.begin(); i != m.end(); i++)
   {
     result->Set(toV8(i.key()),toV8(i.value()));
   }
-
   return result;
 }
 

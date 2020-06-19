@@ -114,7 +114,7 @@ public:
   std::deque<ElementId> getIndexToEid() const { return _indexToEid; }
   void setIndexToEid(const std::deque<ElementId>& indexToEid) { _indexToEid = indexToEid; }
 
- private:
+private:
 
   ConstOsmMapPtr _map;
 
