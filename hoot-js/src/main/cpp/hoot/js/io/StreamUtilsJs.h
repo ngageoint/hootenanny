@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STREAMUTILSJS_H
 #define STREAMUTILSJS_H
@@ -51,10 +51,13 @@ inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
   v8::Handle<v8::Object> global = context->Global();
 
   QByteArray utf8 = qstr.toUtf8();
-  v8::Handle<v8::Value> str = v8::String::NewFromUtf8(current, utf8.data(), v8::NewStringType::kNormal, utf8.length()).ToLocalChecked();
+  v8::Handle<v8::Value> str =
+    v8::String::NewFromUtf8(
+      current, utf8.data(), v8::NewStringType::kNormal, utf8.length()).ToLocalChecked();
 
   v8::Handle<v8::Object> JSON = global->Get(v8::String::NewFromUtf8(current, "JSON"))->ToObject();
-  v8::Handle<v8::Function> JSON_parse = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::NewFromUtf8(current, "parse")));
+  v8::Handle<v8::Function> JSON_parse =
+    v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::NewFromUtf8(current, "parse")));
 
   v8::Handle<v8::Value> args[1];
   args[0] = str;
@@ -117,7 +120,8 @@ QString toJson(const v8::Local<T> object)
     v8::Local<v8::Object> global = context->Global();
 
     v8::Local<v8::Object> JSON = global->Get(v8::String::NewFromUtf8(current, "JSON"))->ToObject();
-    v8::Handle<v8::Function> JSON_stringify = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::NewFromUtf8(current, "stringify")));
+    v8::Handle<v8::Function> JSON_stringify =
+      v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::NewFromUtf8(current, "stringify")));
 
     v8::Handle<v8::Value> args[1];
     args[0] = object;

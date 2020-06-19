@@ -1,0 +1,24 @@
+{
+  "#": "This a stripped down test version of conf/core/PoiSearchRadii.json.",
+  "search_radii":
+  [
+    {
+      "key": "amenity",
+      "distance": "200"
+    },
+    {
+      "key": "amenity",
+      "value": "grave_yard",
+      "distance": "1000"
+    },
+    {
+      "key": "building",
+      "distance": "200"
+    },
+    {
+      "key": "building",
+      "value": "hospital",
+      "distance": "500"
+    }
+  ]
+}

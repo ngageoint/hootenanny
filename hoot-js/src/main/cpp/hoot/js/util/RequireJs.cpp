@@ -54,9 +54,9 @@ void RequireJs::Init(Handle<Object> exports)
 
 void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 {
-    Isolate* current = v8::Isolate::GetCurrent();
-    HandleScope scope(current);
-    Context::Scope context_scope(current->GetCurrentContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope scope(current);
+  Context::Scope context_scope(current->GetCurrentContext());
   try
   {
 
