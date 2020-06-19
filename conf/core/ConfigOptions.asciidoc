@@ -3351,23 +3351,6 @@ current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 If true, POI to POI conflation will ignore the types of the features being compared completely as
 long as those being compared have a populated name field.
 
-=== poi.search.radii
-
-* Data Type: string
-* Default Value: ``
-
-This allows for overriding the match/review distances for POI to POI Conflation defined in the file
-specified by +poi.search.radii.config+. Its JSON format matches that in the file referenced by
-+poi.search.radii.config+.
-
-=== poi.search.radii.config
-
-* Data Type: string
-* Default Value: `conf/core/PoiSearchRadii.json`
-
-Points to a JSON file defining the default search radii distance configuration for POI to POI
-Conflation. Use of this file is overridden when +poi.search.radii+ is specified.
-
 === poi.polygon.additional.search.distance
 
 * Data Type: double
@@ -3630,6 +3613,23 @@ If true, Hootenanny will attempt to translate to English the value of any tag ha
 schema.  This can have significant impact on the runtime performance of conflation when enabled
 and should only be enabled if the source data is known to have non-English type values.  The
 configuration option, 'language.translation.translator', controls which translator is used.
+
+=== poi.search.radii
+
+* Data Type: string
+* Default Value: ``
+
+This allows for overriding the match/review distances for POI to POI Conflation defined in the file
+specified by +poi.search.radii.config+. Its JSON format matches that in the file referenced by
++poi.search.radii.config+.
+
+=== poi.search.radii.config
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/PoiSearchRadii.json`
+
+Points to a JSON file defining the default search radii distance configuration for POI to POI
+Conflation. Use of this file is overridden when +poi.search.radii+ is specified.
 
 === power.line.auto.calc.search.radius
 
