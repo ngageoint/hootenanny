@@ -28,21 +28,22 @@
 #define UUIDHELPERJS_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class UuidHelperJs : public node::ObjectWrap
+class UuidHelperJs : public HootBaseJs
 {
 public:
 
  static void Init(v8::Handle<v8::Object> target);
 
+ virtual ~UuidHelperJs() = default;
+
 private:
 
   UuidHelperJs() = default;
-  virtual ~UuidHelperJs() = default;
 
   static void createUuid(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void createUuid5(const v8::FunctionCallbackInfo<v8::Value>& args);

@@ -28,7 +28,7 @@
 #define IDGENERATORJS_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/core/util/IdGenerator.h>
 #include <hoot/js/io/DataConvertJs.h>
 
@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-class IdGeneratorJs : public node::ObjectWrap
+class IdGeneratorJs : public HootBaseJs
 {
 public:
 
@@ -48,10 +48,11 @@ public:
 
   static v8::Handle<v8::Object> New(const IdGeneratorPtr& idGen);
 
+  virtual ~IdGeneratorJs() = default;
+
 private:
 
   IdGeneratorJs(IdGeneratorPtr idGen);
-  virtual ~IdGeneratorJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

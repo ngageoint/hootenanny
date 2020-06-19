@@ -28,21 +28,22 @@
 #define SETTINGSJS_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class SettingsJs : public node::ObjectWrap
+class SettingsJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
+  virtual ~SettingsJs() = default;
+
 private:
 
   SettingsJs() = default;
-  virtual~SettingsJs() = default;
 
   static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getAll(const v8::FunctionCallbackInfo<v8::Value>& args);

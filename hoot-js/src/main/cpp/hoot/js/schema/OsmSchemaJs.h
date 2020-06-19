@@ -30,22 +30,23 @@
 #include <hoot/core/schema/SchemaVertex.h>
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot
 {
 
-class OsmSchemaJs : public node::ObjectWrap
+class OsmSchemaJs : public HootBaseJs
 {
 public:
 
- static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Handle<v8::Object> target);
+
+  virtual ~OsmSchemaJs() = default;
 
 private:
 
   OsmSchemaJs() = default;
-  virtual ~OsmSchemaJs() = default;
 
   static void getAllTags(const v8::FunctionCallbackInfo<v8::Value>& agrs);
   static void getCategories(const v8::FunctionCallbackInfo<v8::Value>& args);

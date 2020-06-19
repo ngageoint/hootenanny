@@ -28,7 +28,7 @@
 #define VISITORJS_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -38,7 +38,7 @@ namespace hoot
 
 class ElementVisitor;
 
-class ElementVisitorJs : public node::ObjectWrap
+class ElementVisitorJs : public HootBaseJs
 {
 public:
 
@@ -46,11 +46,12 @@ public:
 
   std::shared_ptr<ElementVisitor> getVisitor() { return _v; }
 
+  virtual ~ElementVisitorJs() = default;
+
 private:
 
-  ElementVisitorJs(ElementVisitor* v) : _v(v) {}
+  ElementVisitorJs(ElementVisitor* v) : _v(v) { }
   ElementVisitorJs() = default;
-  virtual ~ElementVisitorJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

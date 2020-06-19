@@ -32,7 +32,7 @@
 #include <hoot/core/util/Log.h>
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -43,7 +43,7 @@
 namespace hoot
 {
 
-class HootExceptionJs : public node::ObjectWrap
+class HootExceptionJs : public HootBaseJs
 {
 public:
 
@@ -72,10 +72,11 @@ public:
    */
   static void throwAsHootException(v8::TryCatch& tc);
 
+  virtual ~HootExceptionJs() = default;
+
 private:
 
   HootExceptionJs() = default;
-  virtual ~HootExceptionJs() = default;
 
   std::shared_ptr<HootException> _e;
   QString _className;

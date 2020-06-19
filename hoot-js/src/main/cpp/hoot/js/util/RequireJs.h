@@ -31,21 +31,21 @@
 #include <QString>
 
 // node.js
-#include <hoot/js/HootJsStable.h>
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class RequireJs : public node::ObjectWrap
+class RequireJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
+  virtual ~RequireJs() = default;
+
 private:
   RequireJs() = default;
-  ~RequireJs() = default;
 
   static void jsRequire(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

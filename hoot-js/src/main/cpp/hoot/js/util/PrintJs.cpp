@@ -52,16 +52,13 @@ void PrintJs::jsPrint(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-//  Context::Scope context_scope(current->GetCurrentContext());
 
   QString result;
 
   for (int i = 0; i < args.Length(); i++)
   {
     if (i > 0)
-    {
       result.append(" ");
-    }
 
     result.append(toCpp<QString>(args[i]));
   }
