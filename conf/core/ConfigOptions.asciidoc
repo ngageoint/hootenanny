@@ -3356,14 +3356,17 @@ long as those being compared have a populated name field.
 * Data Type: string
 * Default Value: ``
 
-TODO
+This allows for overriding the match/review distances for POI to POI Conflation defined in the file
+specified by +poi.match.distances.config+. Its JSON format matches that in the file referenced by
++poi.match.distances.config+.
 
 === poi.match.distances.config
 
 * Data Type: string
 * Default Value: `conf/core/PoiMatchDistances.json`
 
-TODO
+Points to a JSON file defining the default match/review distance configuration for POI to POI
+Conflation. Use of this file is overridden when +poi.match.distances+ is specified.
 
 === poi.polygon.additional.search.distance
 

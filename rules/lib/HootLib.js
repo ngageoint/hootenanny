@@ -541,7 +541,7 @@ function getLength(map, e)
 }
 
 /*
- * TODO
+ * Returns the POI match/review distances used by POI to POI Conflation
  */
 function getPoiMatchDistances()
 {

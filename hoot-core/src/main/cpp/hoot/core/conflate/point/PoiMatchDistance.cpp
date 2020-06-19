@@ -103,7 +103,7 @@ QList<PoiMatchDistance> PoiMatchDistance::readDistances(const QString& jsonStrin
     LOG_VART(key);
     if (key.isEmpty())
     {
-      throw IllegalArgumentException("TODO");
+      throw IllegalArgumentException("Missing 'key' in POI match distance entry.");
     }
 
     // value is optional
@@ -119,14 +119,14 @@ QList<PoiMatchDistance> PoiMatchDistance::readDistances(const QString& jsonStrin
     LOG_VART(maxMatchDistance);
     if (maxMatchDistance < 0)
     {
-      throw IllegalArgumentException("TODO");
+      throw IllegalArgumentException("Missing 'maxMatchDistance' in POI match distance entry.");
     }
 
     const int maxReviewDistance = distProp.second.get<int>("maxReviewDistance");
     LOG_VART(maxReviewDistance);
     if (maxReviewDistance < 0)
     {
-      throw IllegalArgumentException("TODO");
+      throw IllegalArgumentException("Missing 'maxReviewDistance' in POI match distance entry.");
     }
 
     distances.append(PoiMatchDistance(key, val, maxMatchDistance, maxReviewDistance));

@@ -35,7 +35,11 @@ namespace hoot
 {
 
 /**
- * TODO
+ * POI to POI Conflation defines both a maximum distance at which two features of the same type
+ * are able to match and a maximum distance at which two features of the same type are allowed to
+ * be reviewed. Separate distances are used for each tag kvp or key wildcard that POI to POI
+ * supports. By default, these are defined in the file pointed to by the poi.match.distances.config
+ * configuration option.
  */
 class PoiMatchDistance
 {
