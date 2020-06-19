@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef POI_MATCH_DISTANCE_H
-#define POI_MATCH_DISTANCE_H
+#ifndef POI_SEARCH_RADIUS_H
+#define POI_SEARCH_RADIUS_H
 
 // Qt
 #include <QList>
@@ -35,31 +35,29 @@ namespace hoot
 {
 
 /**
- * POI to POI Conflation defines both a maximum distance at which two features of the same type
- * are able to match and a maximum distance at which two features of the same type are allowed to
- * be reviewed. Separate distances are used for each tag kvp or key wildcard that POI to POI
- * supports. By default, these are defined in the file pointed to by the poi.match.distances.config
+ * POI to POI Conflation defines a maximum distance at which two features of the same type are
+ * allowed to be compared. Separate distances are used for each tag kvp or key wildcard that POI to
+ * POI supports. By default, these are defined in the file pointed to by the poi.search.radii.config
  * configuration option.
  */
-class PoiMatchDistance
+class PoiSearchRadius
 {
 public:
 
-  PoiMatchDistance();
-  PoiMatchDistance(QString key, QString val, int maxMatchDistance, int maxReviewDistance);
+  PoiSearchRadius();
+  PoiSearchRadius(QString key, QString val, int distance);
 
   /**
    * Reads POI to POI conflation matches/review distances
    *
-   * @param jsonStringOrFile path to a distances file (*.json) or a distances JSON string
-   * @return a collection of match/review distances
+   * @param jsonStringOrFile path to a search radii file (*.json) or a search radii JSON string
+   * @return a collection of search radii
    */
-  static QList<PoiMatchDistance> readDistances(const QString& jsonStringOrFile);
+  static QList<PoiSearchRadius> readSearchRadii(const QString& jsonStringOrFile);
 
   QString getKey() const { return _key; }
   QString getValue() const { return _value; }
-  int getMaxMatchDistance() const { return _maxMatchDistance; }
-  int getMaxReviewDistance() const { return _maxReviewDistance; }
+  int getDistance() const { return _distance; }
 
   QString toString() const;
 
@@ -67,10 +65,9 @@ private:
 
   QString _key;
   QString _value;
-  int _maxMatchDistance;
-  int _maxReviewDistance;
+  int _distance;
 };
 
 }
 
-#endif // POI_MATCH_DISTANCE_H
+#endif // POI_SEARCH_RADIUS_H

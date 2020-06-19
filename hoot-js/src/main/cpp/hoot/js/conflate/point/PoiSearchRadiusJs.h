@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POI_MATCH_DISTANCE_JS_H
-#define POI_MATCH_DISTANCE_JS_H
+#ifndef POI_SEARCH_RADIUS_JS_H
+#define POI_SEARCH_RADIUS_JS_H
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
@@ -33,19 +33,19 @@
 namespace hoot
 {
 
-class PoiMatchDistanceJs : public node::ObjectWrap
+class PoiSearchRadiusJs : public node::ObjectWrap
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
-  static void getMatchDistances(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getSearchRadii(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 
-  PoiMatchDistanceJs() = default;
-  virtual ~PoiMatchDistanceJs() = default;
+  PoiSearchRadiusJs() = default;
+  virtual ~PoiSearchRadiusJs() = default;
 };
 
 }
 
-#endif // POI_MATCH_DISTANCE_JS_H
+#endif // POI_SEARCH_RADIUS_JS_H

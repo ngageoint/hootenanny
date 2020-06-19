@@ -543,7 +543,7 @@ function getLength(map, e)
 /*
  * Returns the POI match/review distances used by POI to POI Conflation
  */
-function getPoiMatchDistances()
+function getPoiSearchRadii()
 {
-  return hoot.PoiMatchDistance.getMatchDistances();
+  return hoot.PoiSearchRadius.getSearchRadii();
 }

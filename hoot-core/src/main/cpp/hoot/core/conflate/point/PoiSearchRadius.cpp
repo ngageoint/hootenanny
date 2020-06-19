@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "PoiMatchDistance.h"
+#include "PoiSearchRadius.h"
 
 // Hoot
 #include <hoot/core/util/Log.h>
@@ -43,24 +43,21 @@
 namespace hoot
 {
 
-PoiMatchDistance::PoiMatchDistance() :
-_maxMatchDistance(-1),
-_maxReviewDistance(-1)
+PoiSearchRadius::PoiSearchRadius() :
+_distance(-1)
 {
 }
 
-PoiMatchDistance::PoiMatchDistance(
-  QString key, QString val, int maxMatchDistance, int maxReviewDistance) :
+PoiSearchRadius::PoiSearchRadius(QString key, QString val, int distance) :
 _key(key),
 _value(val),
-_maxMatchDistance(maxMatchDistance),
-_maxReviewDistance(maxReviewDistance)
+_distance(distance)
 {
 }
 
-QList<PoiMatchDistance> PoiMatchDistance::readDistances(const QString& jsonStringOrFile)
+QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStringOrFile)
 { 
-  LOG_DEBUG("Reading distances...");
+  LOG_DEBUG("Reading search radii...");
 
   std::shared_ptr<boost::property_tree::ptree> propTree;
   if (!jsonStringOrFile.toLower().endsWith(".json"))
@@ -94,16 +91,16 @@ QList<PoiMatchDistance> PoiMatchDistance::readDistances(const QString& jsonStrin
     }
   }
 
-  QList<PoiMatchDistance> distances;
+  QList<PoiSearchRadius> radii;
 
-  for (boost::property_tree::ptree::value_type& distProp : propTree->get_child("distances"))
+  for (boost::property_tree::ptree::value_type& distProp : propTree->get_child("search_radii"))
   {
     const QString key =
       QString::fromStdString(distProp.second.get<std::string>("key", "")).trimmed();
     LOG_VART(key);
     if (key.isEmpty())
     {
-      throw IllegalArgumentException("Missing 'key' in POI match distance entry.");
+      throw IllegalArgumentException("Missing 'key' in POI search radius entry.");
     }
 
     // value is optional
@@ -115,32 +112,23 @@ QList<PoiMatchDistance> PoiMatchDistance::readDistances(const QString& jsonStrin
     }
     LOG_VART(val);
 
-    const int maxMatchDistance = distProp.second.get<int>("maxMatchDistance");
-    LOG_VART(maxMatchDistance);
-    if (maxMatchDistance < 0)
+    const int distance = distProp.second.get<int>("distance");
+    LOG_VART(distance);
+    if (distance < 0)
     {
-      throw IllegalArgumentException("Missing 'maxMatchDistance' in POI match distance entry.");
+      throw IllegalArgumentException("Missing 'distance' in POI search radius entry.");
     }
 
-    const int maxReviewDistance = distProp.second.get<int>("maxReviewDistance");
-    LOG_VART(maxReviewDistance);
-    if (maxReviewDistance < 0)
-    {
-      throw IllegalArgumentException("Missing 'maxReviewDistance' in POI match distance entry.");
-    }
-
-    distances.append(PoiMatchDistance(key, val, maxMatchDistance, maxReviewDistance));
+    radii.append(PoiSearchRadius(key, val, distance));
   }
 
-  LOG_VARD(distances.size());
-  return distances;
+  LOG_VARD(radii.size());
+  return radii;
 }
 
-QString PoiMatchDistance::toString() const
+QString PoiSearchRadius::toString() const
 {
-  return
-    "Key: " + _key + ", Value: " + _value + ", match: " + QString::number(_maxMatchDistance) +
-    ", review: " + QString::number(_maxReviewDistance);
+  return "Key: " + _key + ", Value: " + _value + ", distance: " + QString::number(_distance);
 }
 
 }

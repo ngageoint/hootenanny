@@ -3351,22 +3351,22 @@ current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 If true, POI to POI conflation will ignore the types of the features being compared completely as
 long as those being compared have a populated name field.
 
-=== poi.match.distances
+=== poi.search.radii
 
 * Data Type: string
 * Default Value: ``
 
 This allows for overriding the match/review distances for POI to POI Conflation defined in the file
-specified by +poi.match.distances.config+. Its JSON format matches that in the file referenced by
-+poi.match.distances.config+.
+specified by +poi.search.radii.config+. Its JSON format matches that in the file referenced by
++poi.search.radii.config+.
 
-=== poi.match.distances.config
+=== poi.search.radii.config
 
 * Data Type: string
-* Default Value: `conf/core/PoiMatchDistances.json`
+* Default Value: `conf/core/PoiSearchRadii.json`
 
-Points to a JSON file defining the default match/review distance configuration for POI to POI
-Conflation. Use of this file is overridden when +poi.match.distances+ is specified.
+Points to a JSON file defining the default search radii distance configuration for POI to POI
+Conflation. Use of this file is overridden when +poi.search.radii+ is specified.
 
 === poi.polygon.additional.search.distance
 

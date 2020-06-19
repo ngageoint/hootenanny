@@ -32,9 +32,8 @@ finding match candidates, labeling match candidates and merging matched
 features.
 
 The POI to POI conflation code uses the Hootenanny JavaScript
-interface (See _JavaScript Overview_ in <<hootuser>> for details). The script is
-only a few hundred lines of code and primarily contains the business logic for
-conflating POIs. The code can be found and modified in the Hootenanny source
+interface (See _JavaScript Overview_ in <<hootuser>> for details). The script contains
+the business logic for conflating POIs. The code can be found and modified in the Hootenanny source
 tree under `rules/Poi.js`.
 
 The conflation flow is similar to the other conflation operations and happens in
@@ -86,10 +85,17 @@ marked as a match or review. Two POIs are a match candidate if the distance
 between the two nodes is less than or equal to either of the search radii and
 they come from two different inputs.
 
-The search radius is determined by the elements circular error (`error:circular`
-tag) and customizable search radii that are defined on a per tag basis. The search radii are defined
-in the `conf/core/PoiMatchDistances.json` file and can be modified there for custom use cases. Some
-example search radii are below:
+The search radius is determined in order of priority
+
+1) by the 'search.radius.poi' configuration option (turned off by default)
+2) by the elements circular error (`error:circular` tag) if the circular error is larger than the
+configured search radius for the feature
+3) by the aforementioned customizable search radii passed in as JSON in the configuration option:
+`poi.search.radii`
+4) by the aforementioned customizable search radii defined in a file whose location is defined by
+the `poi.search.radii.config` configuration option
+
+Some example search radii are below:
 
 * `historic` - 200m
 * `place=city` - 5000m
@@ -302,13 +308,16 @@ POI pair is relatively quick at about 12-20 seconds per review.
 In this section we discuss some areas of possible improvement.
 
 In many cases Hoot relies very heavily on name comparisons for making matches.
-Great promise was found by the PLACES team in use skip-grams as a name
+Great promise was found by the PLACES team in using skip-grams for name
 comparison. We would like to investigate using skip-grams to improve
-performance. Also, Hootenanny uses a global dictionary of word frequencies to
-determine the relevance of a word in a name. However, if you're looking at the
-word "Pennsylvania" in Pittsburgh the weight should be low, but the same word in
-Indonesia would have a very high weight. We would like to investigate using a
-weight that dynamically changes with the region.
+performance (Note: skip-grams have been implemented, I believe, but not sure they've ever been
+tested with POI to POI - BDW).
+
+Also, Hootenanny uses a global dictionary of word frequencies to determine the relevance of a word
+in a name. However, if you're looking at the word "Pennsylvania" in Pittsburgh the weight should be
+low, but the same word in Indonesia would have a very high weight. We would like to investigate
+using a weight that dynamically changes with the region (Note: There seems to be evidence this
+has been done for POI to POI, but that needs to be verified - BDW).
 
 In building and road matching we have had good success training supervised
 models for matching data. We would like to explore using the same techniques for

@@ -54,7 +54,7 @@ var weightedWordDistance = new hoot.NameExtractor(
             new hoot.LevenshteinDistance(
                 {"levenshtein.distance.alpha": 1.5}))));
 
-var distances = getPoiMatchDistances();
+var searchRadii = getPoiSearchRadii();
 
 function distance(e1, e2) {
     return Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) +
@@ -86,15 +86,16 @@ exports.getSearchRadius = function(e)
     var radius = e.getCircularError();
     //hoot.trace("radius start: " + radius);
 
-    for (var i = 0; i < distances.length; i++) 
+    for (var i = 0; i < searchRadii.length; i++)
     {
-      hoot.trace("distances[i].k: " + distances[i].k);
-      hoot.trace("distances[i].v: " + distances[i].v);
-      if (tags.contains(distances[i].k) &&
-          (distances[i].v == undefined || tags.get(distances[i].k) == distances[i].v)) 
+      hoot.trace("searchRadii[i].key: " + searchRadii[i].key);
+      hoot.trace("searchRadii[i].value: " + searchRadii[i].value);
+      if (tags.contains(searchRadii[i].key) &&
+          (searchRadii[i].value == undefined ||
+           tags.get(searchRadii[i].key) == searchRadii[i].value))
       {
-        hoot.trace("distances[i].review: " + distances[i].review);
-        radius = Math.max(radius, distances[i].review);
+        hoot.trace("searchRadii[i].distance: " + searchRadii[i].distance);
+        radius = Math.max(radius, searchRadii[i].distance);
       }
     }
 
