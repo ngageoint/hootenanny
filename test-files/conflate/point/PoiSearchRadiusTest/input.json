@@ -1,28 +1,24 @@
 {
-  "#": "This a stripped down test version of conf/PoiMatchDistances.json.",
-  "distances":
+  "#": "This a stripped down test version of conf/core/PoiSearchRadii.json.",
+  "search_radii":
   [
     {
       "key": "amenity",
-      "maxMatchDistance": "100",
-      "maxReviewDistance": "200"
+      "distance": "200"
     },
     {
       "key": "amenity",
       "value": "grave_yard",
-      "maxMatchDistance": "500",
-      "maxReviewDistance": "1000"
+      "distance": "1000"
     },
     {
       "key": "building",
-      "maxMatchDistance": "100",
-      "maxReviewDistance": "200"
+      "distance": "200"
     },
     {
       "key": "building",
       "value": "hospital",
-      "maxMatchDistance": "300",
-      "maxReviewDistance": "500"
+      "distance": "500"
     }
   ]
 }
