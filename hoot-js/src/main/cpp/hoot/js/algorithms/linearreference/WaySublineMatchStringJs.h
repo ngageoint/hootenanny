@@ -29,9 +29,7 @@
 
 // hoot
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
-
-// node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -42,7 +40,7 @@ namespace hoot
 /**
  *
  */
-class WaySublineMatchStringJs : public node::ObjectWrap
+class WaySublineMatchStringJs : public HootBaseJs
 {
 public:
 
@@ -52,10 +50,11 @@ public:
 
   static v8::Handle<v8::Object> New(WaySublineMatchStringPtr sm);
 
+  virtual ~WaySublineMatchStringJs() = default;
+
 private:
 
   WaySublineMatchStringJs() = default;
-  virtual ~WaySublineMatchStringJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);

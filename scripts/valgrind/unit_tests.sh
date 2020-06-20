@@ -18,6 +18,7 @@ logs that can be opened in QtCreator
     -l --list <tests>               Run a quoted, space separated list of jobs
     -g --generate-suppression-logs  Generate suppresion logs instead of XML
     -j --jobs <count>               Run <count> number of jobs in parallel, default is 16
+    -u --update                     Update the current logs (don't delete directory, overwrite existing)
 EOF
 
   exit
@@ -25,6 +26,7 @@ EOF
 
 DEBUG="no"
 GENERATE_SUPPRESSION_LOGS="no"
+UPDATE="no"
 while [[ $# -gt 0 ]]
 do
   if [[ ("$1" == "--debug" || "$1" == "-d") ]]; then
@@ -48,6 +50,9 @@ do
   elif [[ ("$1" == "--jobs" || "$1" == "-j") && $# -ge 2 ]]; then
     PARALLEL_JOBS="$2"
     shift; shift
+  elif [[ ("$1" == "--update" || "$1" == "-u") ]]; then
+    UPDATE="yes"
+    shift
   else
     echo "Unknown parameter"
     print_usage
@@ -69,12 +74,13 @@ fi
 echo ":"
 
 # Valgrind common parameters
-NUM_CALLERS="--num-callers=128"
+NUM_CALLERS="--num-callers=${PARALLEL_JOBS}"
 SUPPRESSIONS="--suppressions=${HOOT_HOME}/scripts/valgrind/hoot_valgrind.supp"
 ERROR_LIMIT="--error-limit=no"
 USE_XML="--xml=yes"
 READ_INLINE="--read-inline-info=yes"
 USE_FAIR_SCHED="--fair-sched=try"
+DEMANGLE="--demangle=no"
 
 # Function to merge the two lists into one list of valgrind commands
 merge_lists() {
@@ -92,6 +98,7 @@ merge_lists() {
     if [[ "$GENERATE_SUPPRESSION_LOGS" == "no" ]]; then
       cat << EOF
 valgrind -s --trace-children=yes --vgdb=no --track-origins=yes \
+${DEMANGLE} \
 ${NUM_CALLERS} \
 ${ERROR_LIMIT} \
 ${SUPPRESSIONS} \
@@ -105,7 +112,8 @@ ${ECHO_CMD}
 EOF
     else
       cat << EOF
-valgrind  --demangle=no --gen-suppressions=all\
+valgrind --gen-suppressions=all \
+${DEMANGLE} \
 ${NUM_CALLERS} \
 ${ERROR_LIMIT} \
 ${SUPPRESSIONS} \
@@ -119,9 +127,11 @@ EOF
   done
 }
 
-# Cleanout and create the valgrind output directory
-rm -f $HOOT_HOME/tmp/valgrind/*
-mkdir -p $HOOT_HOME/tmp/valgrind
+# Cleanout and create the valgrind output directory when not updating
+if [[ "$UPDATE" == "no" ]]; then
+  rm -f $HOOT_HOME/tmp/valgrind/*
+  mkdir -p $HOOT_HOME/tmp/valgrind
+fi
 
 # Run the merged list of valgrind commands in parallel
 merge_lists "$UNIT_TEST_LIST" "$TEST_XML_LIST" | parallel --jobs $PARALLEL_JOBS "{}"

@@ -29,10 +29,8 @@
 
 // hoot
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
-
-// node.js
-#include <hoot/js/SystemNodeJs.h>
 
 // Qt
 #include <QString>
@@ -40,7 +38,7 @@
 namespace hoot
 {
 
-class SublineStringMatcherJs : public node::ObjectWrap
+class SublineStringMatcherJs : public HootBaseJs
 {
 public:
 
@@ -52,10 +50,11 @@ public:
 
   SublineStringMatcherPtr getSublineStringMatcher() { return _sm; }
 
+  virtual ~SublineStringMatcherJs() = default;
+
 private:
 
   SublineStringMatcherJs(SublineStringMatcherPtr sm) : _sm(sm) { }
-  virtual ~SublineStringMatcherJs() = default;
 
   static void extractMatchingSublines(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void findMatch(const v8::FunctionCallbackInfo<v8::Value>& args);

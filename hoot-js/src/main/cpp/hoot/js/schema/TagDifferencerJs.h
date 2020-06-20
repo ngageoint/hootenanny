@@ -28,7 +28,7 @@
 #define __TAG_DIFFERENCER_JS_H__
 
 // hoot
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -41,7 +41,7 @@ namespace hoot
 
 class TagDifferencer;
 
-class TagDifferencerJs : public node::ObjectWrap
+class TagDifferencerJs : public HootBaseJs
 {
 public:
 
@@ -49,10 +49,11 @@ public:
 
   TagDifferencer* getDifferencer() { return _td.get(); }
 
+  virtual ~TagDifferencerJs() = default;
+
 private:
 
   TagDifferencerJs(TagDifferencer *op) : _td(op) { }
-  virtual ~TagDifferencerJs() = default;
 
   static void diff(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);

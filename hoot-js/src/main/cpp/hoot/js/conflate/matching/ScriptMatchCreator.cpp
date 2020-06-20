@@ -116,7 +116,17 @@ public:
     _timer.start();
   }
 
-  virtual ~ScriptMatchVisitor() = default;
+  virtual ~ScriptMatchVisitor()
+  {
+    //  Free the perisistent object
+    if (_mapJs.IsEmpty())
+      return;
+    Local<Object> mapJs(ToLocal(&_mapJs));
+    OsmMapJs* object = node::ObjectWrap::Unwrap<OsmMapJs>(mapJs);
+    _mapJs.ClearWeak();
+    _mapJs.Reset();
+    delete object;
+  }
 
   void initSearchRadiusInfo()
   {
