@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Element.h>
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -45,7 +45,7 @@ namespace hoot
  * This class is a bit interesting in that it exposes non-const methods if it is wrapping a non-
  * const object, otherwise it exposes only const methods.
  */
-class ElementJs : public node::ObjectWrap
+class ElementJs : public HootBaseJs
 {
 public:
 
@@ -55,10 +55,11 @@ public:
   static v8::Handle<v8::Object> New(ConstElementPtr e);
   static v8::Handle<v8::Object> New(ElementPtr e);
 
+  virtual ~ElementJs() = default;
+
 protected:
 
   ElementJs() = default;
-  virtual ~ElementJs() = default;
   static void _addBaseFunctions(v8::Local<v8::FunctionTemplate> tpl);
 
   static void getCircularError(const v8::FunctionCallbackInfo<v8::Value>& args);

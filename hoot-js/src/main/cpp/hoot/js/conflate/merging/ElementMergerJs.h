@@ -29,7 +29,7 @@
 #define ELEMENTMERGERJS_H
 
 // Hoot
-#include <hoot/js/HootJsStable.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/PluginContext.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -59,7 +59,7 @@ namespace hoot
  * scripts have their own merge functions already defined that users may want to customize, for
  * consistency's sake it makes more sense to use this hybrid approach.
  */
-class ElementMergerJs : public node::ObjectWrap
+class ElementMergerJs : public HootBaseJs
 {
 
 public:
@@ -75,12 +75,13 @@ public:
  static void Init(v8::Handle<v8::Object> target);
  static void mergeElements(const v8::FunctionCallbackInfo<v8::Value>& args);
 
+ virtual ~ElementMergerJs() = default;
+
 private:
 
  friend class ElementMergerJsTest;
 
   ElementMergerJs() = default;
-  virtual ~ElementMergerJs() = default;
 
   static void _mergeElements(OsmMapPtr map, v8::Isolate* current);
 

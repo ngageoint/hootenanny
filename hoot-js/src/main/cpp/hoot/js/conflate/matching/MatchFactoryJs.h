@@ -30,22 +30,23 @@
 
 // node.js
 #include <hoot/core/conflate/matching/MatchCreator.h>
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot
 {
 
-class MatchFactoryJs : public node::ObjectWrap
+class MatchFactoryJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
+  virtual ~MatchFactoryJs() = default;
+
 private:
 
   MatchFactoryJs() = default;
-  virtual ~MatchFactoryJs() = default;
 
   static void getAllAvailableCreators(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

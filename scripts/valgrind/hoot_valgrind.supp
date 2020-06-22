@@ -17,7 +17,7 @@
    ...
 }
 {
-   malloc[Memcheck:Leak]
+   Python InitializeEx
    Memcheck:Leak
    fun:malloc
    ...

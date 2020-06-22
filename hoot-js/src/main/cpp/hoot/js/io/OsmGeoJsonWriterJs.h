@@ -28,21 +28,22 @@
 #define OSMGEOJSONWRITER_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class OsmGeoJsonWriterJs : public node::ObjectWrap
+class OsmGeoJsonWriterJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
+  virtual ~OsmGeoJsonWriterJs() = default;
+
 private:
 
   OsmGeoJsonWriterJs() = default;
-  virtual ~OsmGeoJsonWriterJs() = default;
 
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

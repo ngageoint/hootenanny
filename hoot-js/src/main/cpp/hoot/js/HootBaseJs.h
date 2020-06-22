@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,34 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef UUIDHELPERJS_H
-#define UUIDHELPERJS_H
+#ifndef HOOT_BASE_JS_H
+#define HOOT_BASE_JS_H
 
 // node.js
-#include <hoot/js/HootBaseJs.h>
+#include <hoot/js/SystemNodeJs.h>
 
 namespace hoot
 {
 
-class UuidHelperJs : public HootBaseJs
+/**
+ * @brief The HootBaseJs class is a base class for all Hootenanny v8 Javascript
+ * classes that cleans itself up correctly
+ */
+class HootBaseJs : public node::ObjectWrap
 {
 public:
 
- static void Init(v8::Handle<v8::Object> target);
+  /** Virtual destructor for cleaning up the v8 objects */
+  virtual ~HootBaseJs();
 
- virtual ~UuidHelperJs() = default;
+protected:
 
-private:
+  HootBaseJs() = default;
 
-  UuidHelperJs() = default;
-
-  static void createUuid(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void createUuid5(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
-
 
 }
 
-#endif // UUIDHELPERJS_H
+#endif // HOOT_BASE_JS_H

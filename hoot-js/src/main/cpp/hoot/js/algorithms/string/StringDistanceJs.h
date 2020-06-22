@@ -33,7 +33,7 @@
 #include <hoot/js/io/DataConvertJs.h>
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
@@ -41,7 +41,7 @@ namespace hoot
 /**
  *
  */
-class StringDistanceJs : public node::ObjectWrap
+class StringDistanceJs : public HootBaseJs
 {
 public:
 
@@ -51,11 +51,12 @@ public:
 
   static v8::Handle<v8::Object> New(const StringDistancePtr& sd);
 
+  virtual ~StringDistanceJs() = default;
+
 private:
 
   StringDistanceJs(StringDistancePtr sd) : _sd(sd) { }
   StringDistanceJs() = default;
-  virtual ~StringDistanceJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);

@@ -28,7 +28,7 @@
 #define OSMMAPOPERATIONJS_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -41,7 +41,7 @@ namespace hoot
 
 class OsmMapOperation;
 
-class OsmMapOperationJs : public node::ObjectWrap
+class OsmMapOperationJs : public HootBaseJs
 {
 public:
 
@@ -49,10 +49,11 @@ public:
 
   OsmMapOperation* getMapOp() { return _op.get(); }
 
+  virtual ~OsmMapOperationJs() = default;
+
 private:
 
   OsmMapOperationJs(OsmMapOperation *op) : _op(op) { }
-  virtual ~OsmMapOperationJs() = default;
 
   static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void applyAndGetResult(const v8::FunctionCallbackInfo<v8::Value>& args);

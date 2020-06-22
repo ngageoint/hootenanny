@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/Node.h>
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
@@ -45,7 +45,7 @@ namespace hoot
  * way). At some point it may make sense to make all references to tags pointers, but that isn't
  * strictly necessary yet.
  */
-class TagsJs : public node::ObjectWrap
+class TagsJs : public HootBaseJs
 {
 public:
 
@@ -55,10 +55,11 @@ public:
 
   static v8::Handle<v8::Object> New(const Tags& t);
 
+  virtual ~TagsJs() = default;
+
 private:
 
   TagsJs() = default;
-  virtual ~TagsJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
