@@ -22,9 +22,9 @@ Hootenanny conflation occurs at the dataset level, where the user’s workflow d
 * Create up-to-date routable transportation networks from multiple sources
 
 # When To Use
-No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to combine them manually yourself, given you are looking for a perfect result and want to avoid any potential time spent configuring Hootenanny software options. 
+No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to combine them manually yourself, given you are looking for a perfect result and want to avoid any potential time spent configuring software options to get the best conflated output. 
 
-For larger datasets, however, Hootenanny can be utilized standalone or as an inital step in conjunction with a crowd sourced [mapping campaign](https://tasks.hotosm.org/) to add new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which often end up being flagged for human review so that they may be manually corrected.
+For larger datasets, however, Hootenanny is a valuable tool that can be utilized standalone or as an inital step in conjunction with a crowd sourced [mapping campaign](https://tasks.hotosm.org/) to add new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which often end up being flagged for human review so that they may be manually corrected.
 
 # Conflatable Feature Types
 
@@ -99,8 +99,8 @@ Hootenanny has a variety of map cleaning capabilities to automatically correct e
 # Scalability
 Hootenanny currently does not strive to conflate data at the global level. An earlier implementation of Hootenanny supported a map-reduce 
 architecture that was capable of global conflation for some data types but was shelved due to general lack of interest and the maintenance 
-costs to support the seldom used capability (so some of the conflation algorithms are actually capable of supporting distributed 
-computing, if you want to go that route...with limitations). 
+costs to support the seldomly used capability (so some of the conflation algorithms are actually capable of supporting distributed 
+computing, if you want to go that route...but they're probably out of date with the rest of the codebase and may have some limitations). 
 
 Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the 
 density of the data being conflated and the RAM available on the machine. Beyond that, new conflation algorithms and/or parallelization of
