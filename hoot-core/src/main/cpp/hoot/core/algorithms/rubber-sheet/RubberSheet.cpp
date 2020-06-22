@@ -64,7 +64,7 @@ int RubberSheet::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RubberSheet)
 
-// register the interpolators that exist in TGS.
+// register the interpolators that exist in TGS
 HOOT_FACTORY_REGISTER(Interpolator, DelaunayInterpolator)
 HOOT_FACTORY_REGISTER(Interpolator, KernelEstimationInterpolator)
 HOOT_FACTORY_REGISTER(Interpolator, IdwInterpolator)
@@ -178,8 +178,8 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
 
 void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
 {
-  //if (!_criteria)
-  //{
+  if (!_criteria)
+  {
     // check our way limit first
     if (_maxAllowedWays != -1 && map->getWayCount() > _maxAllowedWays)
     {
@@ -193,12 +193,12 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
 
     // no filtering criteria, so rubbersheet everything
     _calcAndApplyTransform(map);
-//  }
-//  else
-//  {
-//    // rubbersheet a filtered subset of the input
-//    _filterCalcAndApplyTransform(map);
-//  }
+  }
+  else
+  {
+    // rubbersheet a filtered subset of the input
+    _filterCalcAndApplyTransform(map);
+  }
 }
 
 bool RubberSheet::_calcAndApplyTransform(OsmMapPtr& map)
