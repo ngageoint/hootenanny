@@ -123,6 +123,7 @@ protected:
   Status _status;
   bool _open;
   QString _email;
+  // the CE value used if no CE tag is found
   double _defaultCircularError;
 
   Tgs::BigMap<long, long> _nodeIdMap;
@@ -161,6 +162,7 @@ protected:
 
 private:
 
+  // keys for tags containing CE data
   QStringList _circularErrorTagKeys;
 
   bool _firstPartialReadCompleted;

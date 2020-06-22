@@ -194,8 +194,8 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         logWarnCount++;
       }
     }
-    //We don't need to carry this tag around once the value is set on the element...it will
-    //be reinstated by some writers, though.
+    // We don't need to carry this tag around once the value is set on the element...it will
+    // be reinstated by some writers, though.
     if (!_keepStatusTag) { tags.remove(MetadataTags::HootStatus()); }
   }
 
@@ -209,6 +209,8 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
   }
 
+  // Arbitrarily pick the first error tag found. If the element has both, the last one parsed will
+  // be used. We're not expecting elements to have more than one CE tag.
   const QString ceKey = tags.getFirstKey(_circularErrorTagKeys);
   if (!ceKey.isEmpty())
   {
@@ -239,6 +241,9 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         logWarnCount++;
       }
     }
+    // Preserving original behavior of the reader here. Not all readers remove this key, so we may
+    // want to unify their behavior. It may be ok, since its a hoot specific key. We wouldn't,
+    // however, want to remove other error tags.
     if (ceKey == MetadataTags::ErrorCircular())
     {
       // We don't need to carry this tag around once the value is set on the element...it will

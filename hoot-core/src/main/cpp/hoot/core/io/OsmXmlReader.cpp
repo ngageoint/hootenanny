@@ -778,6 +778,8 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
 
           if (_preserveAllTags) { _element->setTag(key, value); }
         }
+        // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
+        // will be used. We're not expecting elements to have more than one CE tag.
         else if (_circularErrorTagKeys.contains(key))
         {
           bool ok;

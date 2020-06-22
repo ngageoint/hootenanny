@@ -79,6 +79,7 @@ private:
   ScriptToOgrSchemaTranslator* _ogrTranslator;
   bool _toOgr;
 
+  // keys for tags containing CE data
   QStringList _circularErrorTagKeys;
 };
 

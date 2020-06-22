@@ -248,7 +248,9 @@ protected:
   Status _defaultStatus;
   bool _useDataSourceIds;
 
+  // the CE value used if no CE tag is found
   Meters _defaultCircErr;
+  // keys for tags containing CE data
   QStringList _circularErrorTagKeys;
 
   // Our property tree that holds JSON

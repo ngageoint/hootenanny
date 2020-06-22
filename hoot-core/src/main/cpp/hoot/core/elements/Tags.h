@@ -364,10 +364,10 @@ public:
   bool hasAnyKey(const QStringList& keys);
 
   /**
-   * TODO
+   * Returns the first tag key found from an input list of keys
    *
-   * @param keys
-   * @return
+   * @param keys tag keys to search for
+   * @return a non-empty string if any key in the list was found; otherwise an empty string
    */
   QString getFirstKey(const QStringList& keys) const;
 

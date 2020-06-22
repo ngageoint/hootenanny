@@ -159,6 +159,8 @@ void OsmPbfReader::_addTag(const std::shared_ptr<Element>& e, const QString& key
       e->setStatus(_status);
     }
   }
+  // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
+  // will be used. We're not expecting elements to have more than one CE tag.
   else if (_circularErrorTagKeys.contains(k))
   {
     bool ok;

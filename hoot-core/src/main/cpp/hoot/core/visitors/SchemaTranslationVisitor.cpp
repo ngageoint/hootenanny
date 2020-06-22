@@ -166,10 +166,16 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
 
       _translator->translateToOsm(tags, layerName.data(), geomType);
 
+      // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
+      // will be used. We're not expecting elements to have more than one CE tag.
       const QString ceKey = tags.getFirstKey(_circularErrorTagKeys);
       if (!ceKey.isEmpty())
       {
         e->setCircularError(tags.getDouble(ceKey));
+
+        // Preserving original behavior of the class here. Not completely sure why we need to remove
+        // them. Removing 'error:circular' seems ok, since its a hoot specific key. Not as sure
+        // about 'accuracy', though, as that may be OSM specific.
         tags.remove(MetadataTags::ErrorCircular());
         tags.remove(MetadataTags::Accuracy());
       }
