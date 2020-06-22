@@ -181,7 +181,11 @@ private:
 
   static int logWarnCount;
 
+  // the CE value used if no CE tag is found
   Meters _defaultCircularError;
+  // keys for tags containing CE data
+  QStringList _circularErrorTagKeys;
+
   std::string _buffer;
   std::istream* _in;
   bool _needToCloseInput;

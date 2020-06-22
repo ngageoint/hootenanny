@@ -664,6 +664,19 @@ purposes.
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
 
+=== circular.error.tag.keys
+
+* Data Type: list
+* Default Value:
+** `error:circular`
+** `accuracy`
+
+A list of tag keys whose values are known to contain circular error (CE; accuracy) data. Multiple
+values may be specified for situations where input data uses different circular error tag keys. If
+a feature contains more than one tag key from this list, only one of the values will be used. If
+this list is empty, no circular error will be parsed from input features and a the value defined by
++circular.error.default.value+ will be used for all features.
+
 === collection.relation.name.threshold
 
 * Data Type: double
@@ -3189,7 +3202,7 @@ A list of operations that should be applied after the geometries have been shift
 
 Distance parameter (in meters) that determines how far out to search when trying to match features
 during conflation of reference and perturbed datasets.  This is equivalent in nature to the
-'error:circular' tag used in Hootenanny conflation, however this setting is used instead for
+circular error tag used in Hootenanny conflation, however this setting is used instead for
 PERTY scoring only.
 
 === perty.systematic.error.x
@@ -4254,9 +4267,8 @@ The search radius, in meters, to use when conflating collection relations. See
 
 The default search radius, in meters, to use when conflating features. If two features are within
 the search radius then they will be considered for matching. If the value is set to the default
-value of -1.0, then the circular error will be used to calculate an appropriate search radius
-('error:circular' or 'accuracy' tag). Some feature matching routines may not strictly honor the
-default value.
+value of -1.0, then the circular error will be used to calculate an appropriate search radius. Some
+feature matching routines may not strictly honor the default value.
 
 === search.radius.generic.line
 

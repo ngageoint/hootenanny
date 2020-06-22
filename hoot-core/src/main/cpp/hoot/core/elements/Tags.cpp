@@ -269,7 +269,7 @@ Length Tags::getLength(const QString& k) const
 
   Length result;
   bool ok;
-  //feet and inch are special case, do check and calculation.
+  // feet and inch are special case, do check and calculation.
   if (v.contains("'", Qt::CaseInsensitive) || v.contains("\"", Qt::CaseInsensitive))
   {
     QString vf = "";
@@ -937,6 +937,19 @@ bool Tags::hasAnyKey(const QStringList& keys)
     }
   }
   return false;
+}
+
+QString Tags::getFirstKey(const QStringList& keys) const
+{
+  for (int i = 0; i < keys.size(); i++)
+  {
+    const QString key = keys.at(i);
+    if (contains(key))
+    {
+      return key;
+    }
+  }
+  return "";
 }
 
 Tags Tags::kvpListToTags(const QStringList& kvps)

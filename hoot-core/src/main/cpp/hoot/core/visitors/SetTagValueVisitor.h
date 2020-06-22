@@ -77,6 +77,8 @@ private:
   bool _appendToExistingValue;
   //overwrites any tag with a matching key
   bool _overwriteExistingTag;
+  // keys for tags containing CE data
+  QStringList _circularErrorTagKeys;
 
   void _setTag(const ElementPtr& e, const QString& k, const QString& v);
 };
