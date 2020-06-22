@@ -114,6 +114,7 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
       }
     }
   }
+  _circularErrorTagKeys = configOptions.getCircularErrorTagKeys();
 }
 
 void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QString& v)
@@ -140,7 +141,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QS
     return;
   }
 
-  if (k == MetadataTags::ErrorCircular())
+  if (_circularErrorTagKeys.contains(k))
   {
     bool ok;
     double vDouble = v.toDouble(&ok);

@@ -67,6 +67,7 @@ void SchemaTranslationVisitor::setConfiguration(const Settings& conf)
     setTranslationScript(c.getSchemaTranslationScript());
   }
   LOG_VARD(_toOgr);
+  _circularErrorTagKeys = c.getCircularErrorTagKeys();
 }
 
 void SchemaTranslationVisitor::setTranslationDirection(QString direction)
@@ -165,15 +166,10 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
 
       _translator->translateToOsm(tags, layerName.data(), geomType);
 
-      if (tags.contains(MetadataTags::ErrorCircular()))
+      const QString ceKey = tags.getFirstKey(_circularErrorTagKeys);
+      if (!ceKey.isEmpty())
       {
-        e->setCircularError(tags.getDouble(MetadataTags::ErrorCircular()));
-        tags.remove(MetadataTags::ErrorCircular());
-        tags.remove(MetadataTags::Accuracy());
-      }
-      else if (tags.contains(MetadataTags::Accuracy()))
-      {
-        e->setCircularError(tags.getDouble(MetadataTags::Accuracy()));
+        e->setCircularError(tags.getDouble(ceKey));
         tags.remove(MetadataTags::ErrorCircular());
         tags.remove(MetadataTags::Accuracy());
       }

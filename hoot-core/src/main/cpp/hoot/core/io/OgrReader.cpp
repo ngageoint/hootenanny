@@ -141,6 +141,8 @@ public:
 protected:
 
   Meters _defaultCircularError;
+  QStringList _circularErrorTagKeys;
+
   Status _status;
   OsmMapPtr _map;
   OGRLayer* _layer;
@@ -513,6 +515,7 @@ OgrReaderInternal::OgrReaderInternal()
   _transform = NULL;
   _status = Status::Invalid;
   _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
+  _circularErrorTagKeys = ConfigOptions().getCircularErrorTagKeys();
   _limit = -1;
   _featureCount = 0;
   _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
@@ -1035,16 +1038,17 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
 {
   Meters circularError = _defaultCircularError;
 
-  // parse the circularError out of the tags.
-  if (t.contains(MetadataTags::ErrorCircular()))
+  // parse the circularError out of the tags
+  const QString ceKey = t.getFirstKey(_circularErrorTagKeys);
+  if (!ceKey.isEmpty())
   {
     bool ok;
-    double a = t[MetadataTags::ErrorCircular()].toDouble(&ok);
+    double a = t[ceKey].toDouble(&ok);
     if (!ok)
     {
       try
       {
-        a = t.getLength(MetadataTags::ErrorCircular()).value();
+        a = t.getLength(ceKey).value();
         ok = true;
       }
       catch (const HootException&)
@@ -1055,29 +1059,10 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
     if (ok)
     {
       circularError = a;
-      t.remove(MetadataTags::ErrorCircular());
-    }
-  }
-  else if (t.contains(MetadataTags::Accuracy()))
-  {
-    bool ok;
-    double a = t[MetadataTags::Accuracy()].toDouble(&ok);
-    if (!ok)
-    {
-      try
+      if (ceKey == MetadataTags::ErrorCircular() || ceKey == MetadataTags::Accuracy())
       {
-        a = t.getLength(MetadataTags::Accuracy()).value();
-        ok = true;
+        t.remove(ceKey);
       }
-      catch (const HootException&)
-      {
-        ok = false;
-      }
-    }
-    if (ok)
-    {
-      circularError = a;
-      t.remove(MetadataTags::Accuracy());
     }
   }
 

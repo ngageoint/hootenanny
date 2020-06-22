@@ -78,6 +78,8 @@ private:
   //overwrites any tag with a matching key
   bool _overwriteExistingTag;
 
+  QStringList _circularErrorTagKeys;
+
   void _setTag(const ElementPtr& e, const QString& k, const QString& v);
 };
 

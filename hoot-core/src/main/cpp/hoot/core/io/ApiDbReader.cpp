@@ -56,6 +56,7 @@ _open(false),
 _defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
 _returnNodesOnly(false),
 _keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
+_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _totalNumMapNodes(0),
 _totalNumMapWays(0),
@@ -208,14 +209,15 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
   }
 
-  if (tags.contains(MetadataTags::ErrorCircular()))
+  const QString ceKey = tags.getFirstKey(_circularErrorTagKeys);
+  if (!ceKey.isEmpty())
   {
-    element->setCircularError(tags.get(MetadataTags::ErrorCircular()).toDouble(&ok));
+    element->setCircularError(tags.get(ceKey).toDouble(&ok));
     if (!ok)
     {
       try
       {
-        double tv = tags.getLength(MetadataTags::ErrorCircular()).value();
+        double tv = tags.getLength(ceKey).value();
         element->setCircularError(tv);
         ok = true;
       }
@@ -228,7 +230,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Error parsing " + MetadataTags::ErrorCircular() + ".");
+          LOG_WARN("Error parsing " + ceKey + ".");
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
@@ -237,39 +239,11 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         logWarnCount++;
       }
     }
-    //We don't need to carry this tag around once the value is set on the element...it will
-    //be reinstated by some writers, though.
-    tags.remove(MetadataTags::ErrorCircular());
-  }
-  else if (tags.contains(MetadataTags::Accuracy()))
-  {
-    element->setCircularError(tags.get(MetadataTags::Accuracy()).toDouble(&ok));
-
-    if (!ok)
+    if (ceKey == MetadataTags::ErrorCircular())
     {
-      try
-      {
-        double tv = tags.getLength(MetadataTags::Accuracy()).value();
-        element->setCircularError(tv);
-        ok = true;
-      }
-      catch (const HootException&)
-      {
-        ok = false;
-      }
-
-      if (!ok)
-      {
-        if (logWarnCount < Log::getWarnMessageLimit())
-        {
-          LOG_WARN("Error parsing " + MetadataTags::Accuracy() + ".");
-        }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
-      }
+      // We don't need to carry this tag around once the value is set on the element...it will
+      // be reinstated by some writers, though.
+      tags.remove(ceKey);
     }
   }
 }

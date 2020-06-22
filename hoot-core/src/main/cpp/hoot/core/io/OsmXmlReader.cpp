@@ -115,6 +115,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
     configOptions.getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
   setWarnOnVersionZeroElement(configOptions.getReaderWarnOnZeroVersionElement());
   setLogWarningsForMissingElements(configOptions.getLogWarningsForMissingElements());
+  setCircularErrorTagKeys(configOptions.getCircularErrorTagKeys());
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
@@ -777,7 +778,7 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
 
           if (_preserveAllTags) { _element->setTag(key, value); }
         }
-        else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
+        else if (_circularErrorTagKeys.contains(key))
         {
           bool ok;
           Meters circularError = value.toDouble(&ok);

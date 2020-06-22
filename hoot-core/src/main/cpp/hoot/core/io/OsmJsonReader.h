@@ -247,7 +247,9 @@ protected:
   // Items to conform to OsmMapReader ifc
   Status _defaultStatus;
   bool _useDataSourceIds;
+
   Meters _defaultCircErr;
+  QStringList _circularErrorTagKeys;
 
   // Our property tree that holds JSON
   boost::property_tree::ptree _propTree;

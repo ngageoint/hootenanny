@@ -364,6 +364,14 @@ public:
   bool hasAnyKey(const QStringList& keys);
 
   /**
+   * TODO
+   *
+   * @param keys
+   * @return
+   */
+  QString getFirstKey(const QStringList& keys) const;
+
+  /**
    * Converts a list of KVPs into tags
    *
    * @param kvps kvps to convert

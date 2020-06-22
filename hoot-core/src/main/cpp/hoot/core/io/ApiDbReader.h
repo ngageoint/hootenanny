@@ -161,6 +161,8 @@ protected:
 
 private:
 
+  QStringList _circularErrorTagKeys;
+
   bool _firstPartialReadCompleted;
 
   //the maximum ID for each element present in the table; since the results coming back are sorted

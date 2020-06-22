@@ -182,6 +182,8 @@ private:
   static int logWarnCount;
 
   Meters _defaultCircularError;
+  QStringList _circularErrorTagKeys;
+
   std::string _buffer;
   std::istream* _in;
   bool _needToCloseInput;

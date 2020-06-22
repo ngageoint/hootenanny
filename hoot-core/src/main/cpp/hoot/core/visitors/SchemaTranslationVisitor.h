@@ -78,6 +78,8 @@ private:
   ScriptSchemaTranslatorPtr _translator;
   ScriptToOgrSchemaTranslator* _ogrTranslator;
   bool _toOgr;
+
+  QStringList _circularErrorTagKeys;
 };
 
 }

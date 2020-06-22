@@ -68,6 +68,7 @@ OsmJsonReader::OsmJsonReader() : ParallelBoundedApiReader(false, true),
 _defaultStatus(Status::Invalid),
 _useDataSourceIds(true),
 _defaultCircErr(ConfigOptions().getCircularErrorDefaultValue()),
+_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
 _propTree(),
 _version(""),
 _generator(""),
@@ -953,9 +954,8 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, hoot::Elem
       const QString value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
       //LOG_VART(value);
 
-      // If we are "error:circular", need to set it on the element object,
-      // rather than add it as a tag
-      if (key == MetadataTags::ErrorCircular())
+      // If we are a CE key, need to set it on the element object rather than add it as a tag.
+      if (_circularErrorTagKeys.contains(key))
       {
         pElement->setCircularError(Meters(value.toInt()));
       }

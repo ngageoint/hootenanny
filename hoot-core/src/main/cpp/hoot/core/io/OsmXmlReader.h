@@ -123,6 +123,7 @@ public:
    */
   void setAddChildRefsWhenMissing(bool addChildRefsWhenMissing)
   { _addChildRefsWhenMissing = addChildRefsWhenMissing; }
+  void setCircularErrorTagKeys(const QStringList& keys) { _circularErrorTagKeys = keys; }
 
   virtual QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
 
@@ -152,7 +153,9 @@ protected:
   std::shared_ptr<Element> _element;
 
   Status _status;
+
   Meters _defaultCircularError;
+  QStringList _circularErrorTagKeys;
 
   int _missingNodeCount;
   int _missingWayCount;

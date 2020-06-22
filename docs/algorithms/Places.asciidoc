@@ -112,7 +112,7 @@ end of the document as well as some potential solutions to the problems.
 With regards to an exact geometry match, Hootenanny defines an exact geometry
 match as any two points that are within \~1mm to avoid minor floating point
 precision errors. Rather than explicitly specifying _inaccurate_ and _accurate_
-data types, Hootenanny supports anerror:circularcolumn that specifies the
+data types, Hootenanny supports an error:circular column that specifies the
 circular error (CE) of a feature in meters. Hootenanny uses that to define the
 threshold of a geometry match. Typically Hootenanny uses the sum of the two
 circular error values as the threshold, but for PLACES compatibility it uses the
