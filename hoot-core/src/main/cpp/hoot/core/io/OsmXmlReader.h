@@ -123,6 +123,7 @@ public:
    */
   void setAddChildRefsWhenMissing(bool addChildRefsWhenMissing)
   { _addChildRefsWhenMissing = addChildRefsWhenMissing; }
+  void setCircularErrorTagKeys(const QStringList& keys) { _circularErrorTagKeys = keys; }
 
   virtual QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
 
@@ -131,7 +132,7 @@ public:
   virtual void setConfiguration(const Settings& conf) override;
 
   // Its possible we may want to move this method and the ones for all other classes using it up
-  // to OsmMapReader;
+  // to OsmMapReader.
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
   void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
@@ -152,7 +153,11 @@ protected:
   std::shared_ptr<Element> _element;
 
   Status _status;
+
+  // the CE value used if no CE tag is found
   Meters _defaultCircularError;
+  // keys for tags containing CE data
+  QStringList _circularErrorTagKeys;
 
   int _missingNodeCount;
   int _missingWayCount;

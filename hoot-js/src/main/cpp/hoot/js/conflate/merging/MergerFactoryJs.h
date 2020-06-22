@@ -30,22 +30,23 @@
 
 // node.js
 #include <hoot/core/conflate/merging/MergerCreator.h>
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot
 {
 
-class MergerFactoryJs : public node::ObjectWrap
+class MergerFactoryJs : public HootBaseJs
 {
 public:
 
  static void Init(v8::Handle<v8::Object> target);
 
+ virtual ~MergerFactoryJs() = default;
+
 private:
 
   MergerFactoryJs() = default;
-  virtual ~MergerFactoryJs() = default;
 
   static void getAllAvailableCreators(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

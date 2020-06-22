@@ -27,7 +27,7 @@
 #ifndef OSMMAPJS_H
 #define OSMMAPJS_H
 
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-class OsmMapJs : public node::ObjectWrap
+class OsmMapJs : public HootBaseJs
 {
 public:
 
@@ -51,11 +51,12 @@ public:
 
   bool isConst() const { return !_map.get() && _constMap.get(); }
 
+  virtual ~OsmMapJs() = default;
+
 private:
 
   OsmMapJs();
   OsmMapJs(OsmMapPtr map);
-  virtual ~OsmMapJs() = default;
 
   static void clone(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);

@@ -28,12 +28,10 @@
 #define __ELEMENT_ID_JS_H__
 
 // hoot
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
-
-// node.js
-#include <hoot/js/SystemNodeJs.h>
 
 // Qt
 #include <QString>
@@ -41,7 +39,7 @@
 namespace hoot
 {
 
-class ElementIdJs : public node::ObjectWrap
+class ElementIdJs : public HootBaseJs
 {
 public:
 
@@ -51,10 +49,11 @@ public:
 
   static v8::Handle<v8::Object> New(ElementId eid);
 
+  virtual ~ElementIdJs() = default;
+
 private:
 
   ElementIdJs() = default;
-  virtual ~ElementIdJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

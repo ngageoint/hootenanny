@@ -57,7 +57,7 @@ _distance(distance)
 
 QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStringOrFile)
 { 
-  LOG_DEBUG("Reading search radii...");
+  LOG_DEBUG("Reading search radii from: " << jsonStringOrFile << "...");
 
   std::shared_ptr<boost::property_tree::ptree> propTree;
   if (!jsonStringOrFile.toLower().endsWith(".json"))
@@ -69,7 +69,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
     QFileInfo distancesFileInfo(jsonStringOrFile);
     if (!distancesFileInfo.exists())
     {
-      throw IllegalArgumentException("POI to POI match distances file does not exist.");
+      throw IllegalArgumentException("POI to POI search radii file does not exist.");
     }
 
     propTree.reset(new boost::property_tree::ptree());

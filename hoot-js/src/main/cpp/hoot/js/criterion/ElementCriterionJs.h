@@ -29,9 +29,7 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
-
-// node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -39,7 +37,7 @@
 namespace hoot
 {
 
-class ElementCriterionJs : public node::ObjectWrap
+class ElementCriterionJs : public HootBaseJs
 {
 public:
 
@@ -47,10 +45,11 @@ public:
 
   ElementCriterionPtr getCriterion() { return _c; }
 
+  virtual ~ElementCriterionJs() = default;
+
 private:
 
   ElementCriterionJs(ElementCriterion* c) : _c(c) { }
-  virtual ~ElementCriterionJs() = default;
 
   static void addCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);

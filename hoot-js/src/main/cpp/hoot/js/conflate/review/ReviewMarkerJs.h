@@ -27,7 +27,7 @@
 #ifndef REVIEWMARKERJS_H
 #define REVIEWMARKERJS_H
 
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // hoot
 #include <hoot/js/io/DataConvertJs.h>
@@ -41,16 +41,17 @@ namespace hoot
  * This class is a bit interesting in that it exposes non-const methods if it is wrapping a non-
  * const object, otherwise it exposes only const methods.
  */
-class ReviewMarkerJs : public node::ObjectWrap
+class ReviewMarkerJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
+  virtual ~ReviewMarkerJs() = default;
+
 private:
 
   ReviewMarkerJs() = default;
-  virtual ~ReviewMarkerJs() = default;
 
   static void mark(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

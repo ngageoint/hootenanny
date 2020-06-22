@@ -31,9 +31,7 @@
 // hoot
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/js/io/DataConvertJs.h>
-
-// node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
@@ -41,7 +39,7 @@ namespace hoot
 /**
  *
  */
-class ValueAggregatorJs : public node::ObjectWrap
+class ValueAggregatorJs : public HootBaseJs
 {
 public:
 
@@ -51,11 +49,12 @@ public:
 
   static v8::Handle<v8::Object> New(const ValueAggregatorPtr& va);
 
+  virtual ~ValueAggregatorJs() = default;
+
 private:
 
   ValueAggregatorJs(ValueAggregatorPtr va) { _va = va; }
   ValueAggregatorJs() = default;
-  virtual ~ValueAggregatorJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

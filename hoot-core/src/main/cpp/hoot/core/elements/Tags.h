@@ -364,6 +364,14 @@ public:
   bool hasAnyKey(const QStringList& keys);
 
   /**
+   * Returns the first tag key found from an input list of keys
+   *
+   * @param keys tag keys to search for
+   * @return a non-empty string if any key in the list was found; otherwise an empty string
+   */
+  QString getFirstKey(const QStringList& keys) const;
+
+  /**
    * Converts a list of KVPs into tags
    *
    * @param kvps kvps to convert

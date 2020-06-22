@@ -32,7 +32,7 @@
 #include <hoot/js/io/DataConvertJs.h>
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -48,7 +48,7 @@ class OsmMapOperation;
 /**
  * @todo rename this to SnapMergerJs or MergerJs, as it does more than roads now
  */
-class HighwaySnapMergerJs : public node::ObjectWrap
+class HighwaySnapMergerJs : public HootBaseJs
 {
 public:
 
@@ -58,10 +58,11 @@ public:
 
   static v8::Handle<v8::Object> New(const HighwaySnapMergerPtr& ptr);
 
+  virtual ~HighwaySnapMergerJs() = default;
+
 private:
 
   HighwaySnapMergerJs() = default;
-  virtual ~HighwaySnapMergerJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);

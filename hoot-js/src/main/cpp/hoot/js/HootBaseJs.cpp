@@ -22,34 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef UUIDHELPERJS_H
-#define UUIDHELPERJS_H
-
-// node.js
-#include <hoot/js/HootBaseJs.h>
+#include "HootBaseJs.h"
 
 namespace hoot
 {
 
-class UuidHelperJs : public HootBaseJs
+HootBaseJs::~HootBaseJs()
 {
-public:
-
- static void Init(v8::Handle<v8::Object> target);
-
- virtual ~UuidHelperJs() = default;
-
-private:
-
-  UuidHelperJs() = default;
-
-  static void createUuid(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void createUuid5(const v8::FunctionCallbackInfo<v8::Value>& args);
-};
-
-
+  if (persistent().IsEmpty())
+    return;
+  persistent().ClearWeak();
+  persistent().Reset();
 }
 
-#endif // UUIDHELPERJS_H
+}

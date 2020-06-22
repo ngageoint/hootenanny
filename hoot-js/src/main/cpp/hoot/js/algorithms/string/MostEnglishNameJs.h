@@ -30,10 +30,8 @@
 
 // hoot
 #include <hoot/core/algorithms/string/MostEnglishName.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
-
-// node.js
-#include <hoot/js/SystemNodeJs.h>
 
 namespace hoot
 {
@@ -43,7 +41,7 @@ class OsmMapOperation;
 /**
  *
  */
-class MostEnglishNameJs : public node::ObjectWrap
+class MostEnglishNameJs : public HootBaseJs
 {
 public:
 
@@ -53,11 +51,12 @@ public:
 
   static v8::Handle<v8::Object> New(const MostEnglishNamePtr& sd);
 
+  virtual ~MostEnglishNameJs() = default;
+
 private:
 
   MostEnglishNameJs(MostEnglishNamePtr sd) : _sd(sd) { }
   MostEnglishNameJs() = default;
-  virtual ~MostEnglishNameJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getMostEnglishName(const v8::FunctionCallbackInfo<v8::Value>& args);

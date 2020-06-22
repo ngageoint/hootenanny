@@ -140,7 +140,11 @@ public:
 
 protected:
 
+  // the CE value used if no CE tag is found
   Meters _defaultCircularError;
+  // keys for tags containing CE data
+  QStringList _circularErrorTagKeys;
+
   Status _status;
   OsmMapPtr _map;
   OGRLayer* _layer;
@@ -513,6 +517,7 @@ OgrReaderInternal::OgrReaderInternal()
   _transform = NULL;
   _status = Status::Invalid;
   _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
+  _circularErrorTagKeys = ConfigOptions().getCircularErrorTagKeys();
   _limit = -1;
   _featureCount = 0;
   _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
@@ -1035,16 +1040,18 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
 {
   Meters circularError = _defaultCircularError;
 
-  // parse the circularError out of the tags.
-  if (t.contains(MetadataTags::ErrorCircular()))
+  // Arbitrarily pick the first error tag found. If the element has both, the last one parsed will
+  // be used. We're not expecting elements to have more than one CE tag.
+  const QString ceKey = t.getFirstKey(_circularErrorTagKeys);
+  if (!ceKey.isEmpty())
   {
     bool ok;
-    double a = t[MetadataTags::ErrorCircular()].toDouble(&ok);
+    double a = t[ceKey].toDouble(&ok);
     if (!ok)
     {
       try
       {
-        a = t.getLength(MetadataTags::ErrorCircular()).value();
+        a = t.getLength(ceKey).value();
         ok = true;
       }
       catch (const HootException&)
@@ -1055,29 +1062,14 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
     if (ok)
     {
       circularError = a;
-      t.remove(MetadataTags::ErrorCircular());
-    }
-  }
-  else if (t.contains(MetadataTags::Accuracy()))
-  {
-    bool ok;
-    double a = t[MetadataTags::Accuracy()].toDouble(&ok);
-    if (!ok)
-    {
-      try
+
+      // Preserving original behavior of the reader here. Not all readers remove these keys, so we
+      // may want to unify their behavior. Removing 'error:circular' seems ok, since its a hoot
+      // specific key. Not as sure about 'accuracy', though, as that may be OSM specific.
+      if (ceKey == MetadataTags::ErrorCircular() || ceKey == MetadataTags::Accuracy())
       {
-        a = t.getLength(MetadataTags::Accuracy()).value();
-        ok = true;
+        t.remove(ceKey);
       }
-      catch (const HootException&)
-      {
-        ok = false;
-      }
-    }
-    if (ok)
-    {
-      circularError = a;
-      t.remove(MetadataTags::Accuracy());
     }
   }
 

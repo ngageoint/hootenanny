@@ -28,21 +28,22 @@
 #define PRINTJS_H
 
 // node.js
-#include <hoot/js/HootJsStable.h>
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class PrintJs : public node::ObjectWrap
+class PrintJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-private:
-  PrintJs() = default;
   virtual ~PrintJs() = default;
+
+private:
+
+  PrintJs() = default;
 
   static void jsPrint(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

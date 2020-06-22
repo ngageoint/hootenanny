@@ -47,7 +47,8 @@ namespace hoot
 
 CreatorDescription::CreatorDescription() :
 experimental(),
-baseFeatureType(BaseFeatureType::Unknown)
+baseFeatureType(BaseFeatureType::Unknown),
+geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
@@ -56,7 +57,8 @@ CreatorDescription::CreatorDescription(std::string className, QString descriptio
 experimental(experimental),
 className(className),
 description(description),
-baseFeatureType(BaseFeatureType::Unknown)
+baseFeatureType(BaseFeatureType::Unknown),
+geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
@@ -65,7 +67,8 @@ CreatorDescription::CreatorDescription(std::string className, QString descriptio
 experimental(experimental),
 className(className),
 description(description),
-baseFeatureType(featureType)
+baseFeatureType(featureType),
+geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
