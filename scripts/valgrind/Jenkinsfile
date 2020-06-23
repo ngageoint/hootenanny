@@ -1,0 +1,103 @@
+#!/usr/bin/env groovy
+// Load shared libraries
+@Library('radiant-pipeline-library')_
+
+pipeline {
+    agent { label 'master' }
+
+    environment {
+        SYS_URL = 'UNKOWN'
+        SYS_VER = 'UNKOWN'
+    }
+
+    triggers {
+        // Set nightly trigger
+        cron((BRANCH_NAME == "master") ? "H H(17-20) * * 0" : "")
+    }
+
+    // Configurable parameters for users to skip steps and control pipeline behavior
+    parameters {
+        booleanParam(name: 'Destroy_VM', defaultValue: true)
+        booleanParam(name: 'Hoot_provision', defaultValue: true)
+        booleanParam(name: 'Build', defaultValue: true)
+        booleanParam(name: 'Valgrind_tests', defaultValue: true)
+        string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
+    }
+
+    options { disableConcurrentBuilds() }
+
+    stages {
+        stage("Destroy VM") {
+            when { expression { return params.Destroy_VM } }
+            steps {
+                // Existing VM may or may not exist depending on previous runs
+                sh "vagrant destroy -f ${params.Box} || true"
+            }
+        }
+        stage("Setup") {
+            steps {
+                // Make sure we have the tags info because figuring out the version is required in the build process
+                sh '''
+                    git fetch --tags
+                    git submodule update --init
+                '''
+            }
+        }
+        stage("Hoot Provision") {
+            when { expression { return params.Hoot_provision } }
+            steps {
+                // NOTE: Only installs hoot build dependencies
+                sh "vagrant up ${params.Box} --provision-with software,hoot --provider aws"
+                script {
+                    SYS_VER = sh(returnStdout: true, script: "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/git/GitVersion.sh'")
+                    SYS_URL = sh(returnStdout: true, script: "vagrant ssh-config ${params.Box} | grep HostName | awk '{print \$2}'")
+                    SYS_URL = SYS_URL.trim()
+                    echo "System under test version ${SYS_VER}  http://${SYS_URL}:8080/hootenanny-id/"
+                }
+            }
+        }
+        stage("Build") {
+            when { expression { return params.Build } }
+            steps {
+                // Set debug/release build
+                sh "vagrant ssh ${params.Box} -c 'echo \"export BUILD_DEBUG=yes\" | sudo tee -a /etc/environment'"
+                // Perform remainder of provisioning
+                sh "vagrant provision ${params.Box} --provision-with build"
+            }
+        }
+        stage("Valgrind Tests") {
+            when { expression { return params.Valgrind_tests } }
+            steps {
+                // Set debug/release build
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/valgrind/unit_tests.sh -j \$(nproc)'"
+            }
+        }
+    }
+    post {
+        aborted {
+            script {
+                notifySlack("ABORTED", "#builds_hoot")
+            }
+        }
+        success {
+            script {
+                notifySlack("SUCCESS", "#builds_hoot")
+            }
+        }
+        failure {
+            script {
+                notifySlack("FAILURE", "#builds_hoot")
+                // Copy over the output files and send to slack
+                sh "vagrant scp ${params.Box}:~/hoot/test-output/valgrind_error_findings.tar.gz ./test-output/"
+                postSlack("${env.WORKSPACE}/test-output/", "valgrind_error_findings.tar.gz", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
+                sh "vagrant destroy -f ${params.Box}"
+            }
+        }
+        cleanup {
+            script {
+                sh "vagrant destroy -f ${params.Box}"
+                cleanWs()
+            }
+        }
+    }
+}
