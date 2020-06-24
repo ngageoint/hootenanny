@@ -124,8 +124,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
             // only contains one member that is the original multilinestring
             if (rev->getMembers().size() > 1)
             {
-              // TODO: change back
-              LOG_TRACE("Removing: " << r/*->getElementId()*/ << "...");
+              LOG_TRACE("Removing: " << r->getElementId() << "...");
               rev->removeElement(r->getElementId());
               _numAffected++;
             }
@@ -151,8 +150,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
         LOG_TRACE("Removing: " << id << "...");
         r->removeElement(id);
       }
-      // TODO: change back
-      LOG_TRACE("Removing: " << r/*->getElementId()*/ << "...");
+      LOG_TRACE("Removing: " << r->getElementId() << "...");
       RemoveRelationByEid::removeRelation(map, r->getId());
       _numAffected++;
     }
