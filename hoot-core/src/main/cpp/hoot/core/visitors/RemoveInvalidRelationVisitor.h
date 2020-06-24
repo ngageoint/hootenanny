@@ -39,7 +39,9 @@ namespace hoot
  * Remove all duplicate linestrings from multilinestring relations and multilinestring relations
  * that have less than two members, thus making them not "multi" linestrings.
  *
- * TODO: split out duplicate review relation vis into its own class; rename this class to
+ * TODO: split out duplicate review relation vis into its own class and call it
+ * RemoveDuplicateReviewRelationMembers OR maybe it can be replaced with
+ * RemoveDuplicateRelationMembersVisitor; rename this class to
  * RemoveDuplicateMultilineStringRelationVisitor
  */
 class RemoveInvalidRelationVisitor : public ElementOsmMapVisitor

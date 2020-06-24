@@ -65,6 +65,11 @@ function typeMismatch(e1, e2)
   var type1 = e1.getType();
   var type2 = e2.getType();
 
+  hoot.trace("type1: " + type1);
+  hoot.trace("type2: " + type2);
+  hoot.trace("mostSpecificType(e1): " + mostSpecificType(e1));
+  hoot.trace("mostSpecificType(e2): " + mostSpecificType(e2));
+
   // If the collection relations aren't filtered out properly by type beforehand the
   // geometry checks afterward can become very expensive.
 
@@ -125,6 +130,7 @@ function nameMismatch(map, e1, e2)
     nameScore = nameExtractor.extract(map, e1, e2);
   }
 
+  hoot.trace("nameScore: " + nameScore);
   if (nameScore < exports.nameThreshold)
   {
     hoot.trace("name mismatch; score: " + nameScore);
@@ -140,16 +146,18 @@ function geometryMismatch(map, e1, e2)
   // for this but gets expensive as the relations get larger. Angle hist is a little less accurate
   // overall but runs faster and seems to be working ok for the largeer relations. For matching
   // of disjointed relations (relations with different but connecting ways) a further check is
-  // needed (which also has the potential to be very expensive O(n^2)) and is only done for the
+  // needed (which also has the potential to be very expensive at O(n^2)) and is only done for the
   // larger relations when the geometry check fails.
 
   // TODO: Should we be extracting sublines first and passing those to the extractors?
 
   var numRelationMemberNodes = getNumRelationMemberNodes(map, e1.getElementId()) + getNumRelationMemberNodes(map, e2.getElementId());
+  hoot.trace("numRelationMemberNodes: " + numRelationMemberNodes);
   if (numRelationMemberNodes < 2000) // Threshold determined off of one dataset...may need tweaking.
   {
     // This can become a fairly expensive check for relations with a lot of total nodes.
     var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+    hoot.trace("edgeDist: " + edgeDist);
     if (edgeDist < 0.97)
     { 
       hoot.trace("match failed on edgeDist: " + edgeDist);
@@ -158,8 +166,8 @@ function geometryMismatch(map, e1, e2)
   }
   else
   {
-    //hoot.trace("numRelationMemberNodes: " + numRelationMemberNodes);
     var angleHist = angleHistExtractor.extract(map, e1, e2);
+    hoot.trace("angleHist: " + angleHist);
     if (angleHist < 0.73)
     { 
       if (relationsHaveConnectedWayMembers(map, e1.getElementId(), e2.getElementId()))
@@ -183,6 +191,7 @@ function memberSimilarityMismatch(map, e1, e2)
   // identify them beforehand and makes this check unnecessary.
 
   var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
+  hoot.trace("memberSim: " + memberSim);
   if (memberSim < 0.75)
   {
     hoot.trace("match failed on memberSim: " + memberSim);

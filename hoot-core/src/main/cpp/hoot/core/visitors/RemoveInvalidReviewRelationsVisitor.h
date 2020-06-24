@@ -34,6 +34,11 @@ namespace hoot
 
 /**
  * Remove all empty review relations
+ *
+ * This runs in conflate.pre.ops, among other places. Its debatablewhether input conflation data
+ * should allow reviews at all, but maybe there are some uses cases for it. If we ever find that
+ * there aren't, then maybe we should replace this entry in conflate.pre.ops with a
+ * 'RemoveReviewRelationsVisitor' that removes them all.
  */
 class RemoveInvalidReviewRelationsVisitor : public ElementOsmMapVisitor
 {

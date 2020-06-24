@@ -174,7 +174,7 @@ function geometryMismatch(map, e1, e2)
     var weightedShapeDist = -1;
     hoot.trace("Getting angleHist...");
     var angleHist = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    hoot.debug("angleHist: " + angleHist);
+    hoot.trace("angleHist: " + angleHist);
     if (angleHist == 0)
     {
       hoot.trace("Getting weightedShapeDist...");

@@ -129,6 +129,9 @@ void NamedOp::apply(OsmMapPtr& map)
       statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(vis);
 
       _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
+      // I swear the init status isn't being logged all the time with the above statement. Need to
+      // make sure and then remove the line below.
+      //LOG_STATUS(_getInitMessage(s, statusInfo));
 
       // The ordering of setting the config before the map here seems to make sense, but all
       // ElementVisitors implementing OsmMapConsumer will need to be aware of it.

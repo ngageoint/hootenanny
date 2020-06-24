@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveInvalidRelationVisitor.h"
@@ -116,7 +116,7 @@ void RemoveInvalidRelationVisitor::_removeDuplicates(const RelationPtr& r)
       _numMembersRemoved++;
     }
   }
-  //  Reinsert the members that were duplicates but all instances were deleted
+  //  Re-insert the members that were duplicates but all instances were deleted
   if (membersMap.size() > 0)
   {
     for (unordered_map<long, RelationData::Entry>::iterator it = membersMap.begin();
