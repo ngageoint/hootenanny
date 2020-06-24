@@ -54,7 +54,6 @@ public:
   virtual QString getInitStatusMessage() const
   { return "Removing invalid multiline string relation members..."; }
 
-  // finish; wasn't obvious how to count the total affected - #2933
   virtual QString getCompletedStatusMessage() const
   {
     return

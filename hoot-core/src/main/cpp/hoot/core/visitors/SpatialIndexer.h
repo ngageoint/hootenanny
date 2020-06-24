@@ -55,6 +55,8 @@ class SpatialIndexer : public ElementConstOsmMapVisitor, public ElementCriterion
 {
 public:
 
+  static int logWarnCount;
+
   static std::string className() { return "hoot::SpatialIndexer"; }
 
   explicit SpatialIndexer(std::shared_ptr<Tgs::HilbertRTree>& index,

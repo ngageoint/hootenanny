@@ -53,6 +53,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
     Relation* r = dynamic_cast<Relation*>(e.get());
     LOG_VART(r->getElementId());
     assert(r != 0);
+    LOG_VART(r->getType());
     // Only multilinestring relations
     if (r->getType() == MetadataTags::RelationMultilineString())
     {
@@ -149,6 +150,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
         LOG_TRACE("Removing: " << id << "...");
         r->removeElement(id);
       }
+      LOG_TRACE("Removing: " << r->getElementId() << "...");
       RemoveRelationByEid::removeRelation(map, r->getId());
       _numAffected++;
     }
