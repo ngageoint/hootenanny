@@ -90,11 +90,12 @@ pipeline {
                 archiveArtifacts artifacts: '~/hoot/test-output/valgrind_error_*', fingerprint: true
             }
         }
-        cleanup {
-            script {
-                sh "vagrant destroy -f ${params.Box}"
-                cleanWs()
-            }
-        }
+//TODO: Enable after pipeline is all working
+//        cleanup {
+//            script {
+//                sh "vagrant destroy -f ${params.Box}"
+//                cleanWs()
+//            }
+//        }
     }
 }
