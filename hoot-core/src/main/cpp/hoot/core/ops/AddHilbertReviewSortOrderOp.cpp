@@ -43,6 +43,8 @@ using namespace std;
 namespace hoot
 {
 
+int AddHilbertReviewSortOrderOp::logWarnCount = 0;
+
 HOOT_FACTORY_REGISTER(OsmMapOperation, AddHilbertReviewSortOrderOp)
 
 bool reviewLess(const pair<ElementId, int64_t>& p1, const pair<ElementId, int64_t>& p2)
@@ -101,8 +103,19 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
       }
       else
       {
-        throw HootException(
-          "No review elements returned for relation with ID: " + r->getElementId().toString());
+        // don't think this really needs to be an exceptional situation
+//        throw HootException(
+//          "No review elements returned for relation with ID: " + r->getElementId().toString());
+        LOG_WARN("No review elements returned for relation with ID: " << r->getElementId());
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("No review elements returned for relation with ID: " << r->getElementId());
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
   }

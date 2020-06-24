@@ -56,11 +56,31 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
       {
         invalidRelation = true;
       }
-      //in case the review member count tag didn't get added for some reason, go ahead and at least
-      //remove empty relations
+      // in case the review member count tag didn't get added for some reason, go ahead and at least
+      // remove empty relations
       else if (!hasMemberCountTag && r->getMembers().size() == 0)
       {
         invalidRelation = true;
+      }
+      else
+      {
+        // In the cut and replace workflow (ChangesetReplacementCreator), there's a possibility that
+        // we could have a relation with all references to members not actually in the data. If all
+        // the members don't exist, let's drop the review.
+        int nullMemberCount = 0;
+        const std::vector<RelationData::Entry> relationMembers = r->getMembers();
+        for (size_t i = 0; i < relationMembers.size(); i++)
+        {
+          ConstElementPtr member = _map->getElement(relationMembers[i].getElementId());
+          if (!member)
+          {
+            nullMemberCount++;
+          }
+        }
+        if (nullMemberCount == (int)relationMembers.size())
+        {
+          invalidRelation = true;
+        }
       }
 
       if (invalidRelation)
