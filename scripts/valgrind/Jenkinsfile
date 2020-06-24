@@ -47,7 +47,7 @@ pipeline {
             when { expression { return params.Hoot_provision } }
             steps {
                 // NOTE: Only installs hoot build dependencies
-                sh "vagrant up ${params.Box} --provision-with software,hoot --provider aws"
+                sh "vagrant up ${params.Box} --provision-with software,hoot,valgrind --provider aws"
                 script {
                     SYS_VER = sh(returnStdout: true, script: "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/git/GitVersion.sh'")
                     SYS_URL = sh(returnStdout: true, script: "vagrant ssh-config ${params.Box} | grep HostName | awk '{print \$2}'")
@@ -87,10 +87,7 @@ pipeline {
         failure {
             script {
                 notifySlack("FAILURE", "#builds_hoot")
-                // Copy over the output files and send to slack
-                sh "vagrant scp ${params.Box}:~/hoot/test-output/valgrind_error_findings.tar.gz ./test-output/"
-                postSlack("${env.WORKSPACE}/test-output/", "valgrind_error_findings.tar.gz", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
-                sh "vagrant destroy -f ${params.Box}"
+                archiveArtifacts artifacts: '~/hoot/test-output/valgrind_error_*', fingerprint: true
             }
         }
         cleanup {
