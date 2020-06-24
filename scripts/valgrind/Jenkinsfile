@@ -69,7 +69,7 @@ pipeline {
             when { expression { return params.Valgrind_tests } }
             steps {
                 // Set debug/release build
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/valgrind/unit_tests.sh -j \$(nproc)'"
+                sh "vagrant ssh ${params.Box} -c 'cd ~/hoot; source ./SetupEnv.sh; ./scripts/valgrind/unit_tests.sh -j \$(nproc)'"
             }
         }
     }
