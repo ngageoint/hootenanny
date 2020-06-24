@@ -80,7 +80,9 @@ public:
 
   virtual void tearDown()
   {
-    conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), ConfigOptions::getTestForceOrthographicProjectionDefaultValue());
+    conf().set(
+      ConfigOptions::getTestForceOrthographicProjectionKey(),
+      ConfigOptions::getTestForceOrthographicProjectionDefaultValue());
   }
 
   Radians calculateAngle(Coordinate p1, Coordinate p2, Coordinate p3)

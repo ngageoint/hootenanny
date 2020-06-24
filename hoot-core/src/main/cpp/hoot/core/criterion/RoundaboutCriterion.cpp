@@ -39,7 +39,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, RoundaboutCriterion)
 
 bool RoundaboutCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  // If it's not a highway, it's not a roundabout
+  // If it's not a highway, it's not a roundabout.
   if (!HighwayCriterion().isSatisfied(e))
   {
     return false;

@@ -272,9 +272,9 @@ public:
    * @param map
    * @param throwOutDupes if true, and elements in the map being appended from have the same IDs as
    * elements in this map, those elements are ignored
-   * @throws If there is element ID overlap.
-   * @throws If the map being appended to is the same as the map being appended from.
-   * @throws If the map being appended to does not have the same projection as the map being
+   * @throws if there is element ID overlap and throwOutDupes = false
+   * @throws if the map being appended to is the same as the map being appended from
+   * @throws if the map being appended to does not have the same projection as the map being
    * appended from
    */
   void append(const std::shared_ptr<const OsmMap>& map, const bool throwOutDupes = false);

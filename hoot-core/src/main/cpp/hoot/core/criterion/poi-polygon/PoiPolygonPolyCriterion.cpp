@@ -69,8 +69,8 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
     return false;
   }
 
-  //types we don't care about at all - see #1172 as to why this can't be handled in the schema
-  //files
+  // types we don't care about at all - see #1172 as to why this can't be handled in the schema
+  // files
   if (OsmSchema::getInstance().containsTagFromList(tags, _tagIgnoreList))
   {
     LOG_TRACE("Contains tag from tag ignore list");
@@ -84,7 +84,7 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(inABuildingOrPoiCategory);
   LOG_VART(tags.getNames().size());
   LOG_VART(AreaCriterion().isSatisfied(e));
-  //isArea includes building too
+  // isArea includes building too
   const bool isPoly =
     AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 

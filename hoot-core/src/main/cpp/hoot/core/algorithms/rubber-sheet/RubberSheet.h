@@ -34,6 +34,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/StringUtils.h>
 
 // tgs
 #include <tgs/Interpolation/Interpolator.h>
@@ -77,7 +78,10 @@ public:
   RubberSheet();
   virtual ~RubberSheet() = default;
 
-  void apply(std::shared_ptr<OsmMap>& map) override;
+  /**
+   * @see OsmMapOperation
+   */
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * @see Configurable
@@ -144,9 +148,24 @@ public:
 
    virtual std::string getClassName() const { return className(); }
 
+   /**
+    * @see OperationStatusInfo
+    */
+   virtual QString getInitStatusMessage() const override { return "Rubbersheeting data..."; }
+
+   /**
+    * @see OperationStatusInfo
+    */
+   virtual QString getCompletedStatusMessage() const override
+   {
+     return
+       "Rubbersheeted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
+       StringUtils::formatLargeNumber(_numProcessed) + " linear features.";
+   }
+
 private:
 
-   static int logWarnCount;
+  static int logWarnCount;
 
   typedef std::map<long, std::list<Match>> MatchList;
 
@@ -171,10 +190,12 @@ private:
   // A map of nids to the list of matches.
   MatchList _matches;
   std::vector<Match> _finalPairs;
+
   // Set this to true if Unknown1 is a reference dataset and Unknown2 should be moved toward it. If
   // this is false, then the two data sets are moved toward one another.
   bool _ref;
   bool _debug;
+
   // The minimum number of tie points that will be used when calculating a rubber sheeting solution.
   int _minimumTies;
   std::vector<Tie> _ties;

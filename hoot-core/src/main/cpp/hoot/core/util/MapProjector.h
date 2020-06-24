@@ -90,7 +90,7 @@ public:
   /**
    * Returns a vector of all candidate planar projections for a given envelope.
    */
-  std::vector<std::shared_ptr<OGRSpatialReference>> createAllPlanarProjections(const OGREnvelope& env);
+  QList<std::shared_ptr<OGRSpatialReference>> createAllPlanarProjections(const OGREnvelope& env);
 
   /**
    * Using a predefined set of projections this method evaluates each one of them for both distance
@@ -171,6 +171,13 @@ private:
     Meters distanceError;
     Radians angleError;
     double score;
+
+    QString toString() const
+    {
+      return
+        "Distance Error: " + QString::number(distanceError) + ", Angle Error: " +
+        QString::number(angleError) + ", Score: " + QString::number(score);
+    }
   };
 
   static std::shared_ptr<MapProjector> _theInstance;

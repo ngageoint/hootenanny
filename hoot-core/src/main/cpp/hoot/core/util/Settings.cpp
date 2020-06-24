@@ -129,7 +129,10 @@ private:
       const QStringList baseConfigs =
         base.trimmed().split(",", QString::SplitBehavior::SkipEmptyParts);
       for (const QString value : baseConfigs)
+      {
+        LOG_DEBUG("Loading base config: " << value << "...");
         load(ConfPath::search(value));
+      }
     }
 
     //  Iterate all of the children key/value pairs
