@@ -61,6 +61,8 @@ do
   fi
 done
 
+mkdir -p ${OUTPUT_DIR}
+
 # Remove any paths and make test names into valid filenames
 TEST_XML_LIST=`echo ${UNIT_TEST_LIST} | sed "s|${HOOT_HOME}/test-files/cases/||g" | sed 's|[/:]|_|g'`
 
@@ -144,7 +146,6 @@ if [[ "$DEBUG" == "no" ]]; then
 fi
 
 # Clear out previous error count log
-mkdir -p ${HOOT_HOME}/test-output/
 rm -f ${HOOT_HOME}/test-output/valgrind_error_count.log
 rm -f ${HOOT_HOME}/test-output/valgrind_error_findings.tar.gz
 
