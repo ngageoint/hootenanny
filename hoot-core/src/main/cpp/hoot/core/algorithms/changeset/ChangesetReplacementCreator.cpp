@@ -806,10 +806,6 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   ConfigUtils::removeListOpEntry(
     ConfigOptions::getConflatePostOpsKey(),
     QString::fromStdString(RemoveMissingElementsVisitor::className()));
-  // TODO
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getMapCleanerTransformsKey(),
-    QString::fromStdString(RemoveInvalidMultilineStringMembersVisitor::className()));
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
@@ -823,6 +819,22 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   {
     QStringList metadataAllowTagKeys(MetadataTags::HootMissingChild());
     conf().set(ConfigOptions::getChangesetMetadataAllowedTagKeysKey(), metadataAllowTagKeys);
+  }
+
+  // Came across a very odd bug in #4101, where if RemoveInvalidMultilineStringMembersVisitor ran
+  // as part of the pre-conflate map cleaning during replacement with conflation enabled, the match
+  // conflict resolution would slow down to a crawl. When it was removed from the cleaning ops, the
+  // conflate operation ran very quickly. So as a not so great workaround (aka hack), removing that
+  // pre-op here when running conflation. It still will run post conflate, though. This change had
+  // a very minor affect on changeset replacement test output where one test got slightly better
+  // output after the change and another slightly worse. See more details in #4101, which is closed,
+  // but if we can figure out what's going on at some point maybe this situation can be handled
+  // properly.
+  if (_conflationEnabled)
+  {
+    ConfigUtils::removeListOpEntry(
+      ConfigOptions::getMapCleanerTransformsKey(),
+      QString::fromStdString(RemoveInvalidMultilineStringMembersVisitor::className()));
   }
 
   // These don't change between scenarios (or at least we haven't needed to change them yet).
@@ -839,7 +851,9 @@ void ChangesetReplacementCreator::_parseConfigOpts(
 {
   if (!_cleaningEnabled && _conflationEnabled)
   {
-    throw IllegalArgumentException("If conflation is enabled, cleaning cannot be disabled.");
+    throw IllegalArgumentException(
+      "If conflation is enabled during changeset replacement derivation, cleaning cannot be "
+      "disabled.");
   }
 
   // These settings have been are customized for each geometry type and bounds handling preference.
@@ -1717,17 +1731,11 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
   LOG_STATUS("Cleaning up duplicated elements for " << map->getName() << "...");
 
   // Due to mixed geometry type relations explained in _getDefaultGeometryFilters, we may have
-  // introduced some duplicate relation members.
+  // introduced some duplicate relation members by this point.
   RemoveDuplicateRelationMembersVisitor dupeMembersRemover;
   LOG_STATUS("\t" << dupeMembersRemover.getInitStatusMessage());
   map->visitRw(dupeMembersRemover);
   LOG_STATUS("\t" << dupeMembersRemover.getCompletedStatusMessage());
-
-  // TODO
-  RemoveInvalidMultilineStringMembersVisitor invalidMultilineStringRemover;
-  LOG_STATUS("\t" << invalidMultilineStringRemover.getInitStatusMessage());
-  map->visitRw(invalidMultilineStringRemover);
-  LOG_STATUS("\t" << invalidMultilineStringRemover.getCompletedStatusMessage());
 
   // get rid of straggling nodes
   SuperfluousNodeRemover orphanedNodeRemover;
@@ -1736,12 +1744,13 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
   LOG_STATUS("\t" << orphanedNodeRemover.getCompletedStatusMessage());
 
   // This will remove any relations that were already empty or became empty after we removed
-  // duplicate members.
+  // duplicated members.
   RemoveEmptyRelationsOp emptyRelationRemover;
   LOG_STATUS("\t" << emptyRelationRemover.getInitStatusMessage());
   emptyRelationRemover.apply(map);
   LOG_STATUS("\t" << emptyRelationRemover.getCompletedStatusMessage());
 
+  // get out of orthographic
   MapProjector::projectToWgs84(map);
 }
 
