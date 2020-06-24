@@ -68,7 +68,6 @@ pipeline {
         stage("Valgrind Tests") {
             when { expression { return params.Valgrind_tests } }
             steps {
-                // Set debug/release build
                 sh "vagrant ssh ${params.Box} -c 'cd ~/hoot; source ./SetupEnv.sh; ./scripts/valgrind/unit_tests.sh -j \$(nproc)'"
             }
         }
@@ -87,15 +86,16 @@ pipeline {
         failure {
             script {
                 notifySlack("FAILURE", "#builds_hoot")
-                archiveArtifacts artifacts: '~/hoot/test-output/valgrind_error_*', fingerprint: true
             }
         }
-//TODO: Enable after pipeline is all working
-//        cleanup {
-//            script {
-//                sh "vagrant destroy -f ${params.Box}"
-//                cleanWs()
-//            }
-//        }
+        cleanup {
+            script {
+                //  Always store the artifacts, they will be cleaned up later
+                archiveArtifacts artifacts: '~/hoot/test-output/valgrind_error_*', fingerprint: true
+                //  Destroy the VM
+                sh "vagrant destroy -f ${params.Box}"
+                cleanWs()
+            }
+        }
     }
 }
