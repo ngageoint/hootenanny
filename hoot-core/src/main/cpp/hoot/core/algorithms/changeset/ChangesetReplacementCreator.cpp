@@ -90,6 +90,7 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
+#include <hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
@@ -805,6 +806,10 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   ConfigUtils::removeListOpEntry(
     ConfigOptions::getConflatePostOpsKey(),
     QString::fromStdString(RemoveMissingElementsVisitor::className()));
+  // TODO
+  ConfigUtils::removeListOpEntry(
+    ConfigOptions::getMapCleanerTransformsKey(),
+    QString::fromStdString(RemoveInvalidMultilineStringMembersVisitor::className()));
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
@@ -820,7 +825,7 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
     conf().set(ConfigOptions::getChangesetMetadataAllowedTagKeysKey(), metadataAllowTagKeys);
   }
 
-  // These don't change between scenarios (or at least we haven't needed to yet).
+  // These don't change between scenarios (or at least we haven't needed to change them yet).
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
   _boundsOpts.cookieCutKeepOnlyInsideBounds = false;
   _boundsOpts.changesetRefKeepOnlyInsideBounds = false;
@@ -1717,6 +1722,12 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
   LOG_STATUS("\t" << dupeMembersRemover.getInitStatusMessage());
   map->visitRw(dupeMembersRemover);
   LOG_STATUS("\t" << dupeMembersRemover.getCompletedStatusMessage());
+
+  // TODO
+  RemoveInvalidMultilineStringMembersVisitor invalidMultilineStringRemover;
+  LOG_STATUS("\t" << invalidMultilineStringRemover.getInitStatusMessage());
+  map->visitRw(invalidMultilineStringRemover);
+  LOG_STATUS("\t" << invalidMultilineStringRemover.getCompletedStatusMessage());
 
   // get rid of straggling nodes
   SuperfluousNodeRemover orphanedNodeRemover;

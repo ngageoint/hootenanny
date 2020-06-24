@@ -116,7 +116,7 @@ void RemoveInvalidRelationVisitor::_removeDuplicates(const RelationPtr& r)
       _numMembersRemoved++;
     }
   }
-  //  Reinsert the members that were duplicates but all instances were deleted
+  //  Re-insert the members that were duplicates but all instances were deleted
   if (membersMap.size() > 0)
   {
     for (unordered_map<long, RelationData::Entry>::iterator it = membersMap.begin();

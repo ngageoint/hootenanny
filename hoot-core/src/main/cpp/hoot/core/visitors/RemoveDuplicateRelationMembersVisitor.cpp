@@ -45,6 +45,7 @@ void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
   if (e->getElementType() == ElementType::Relation)
   {
     RelationPtr relation = std::dynamic_pointer_cast<Relation>(e);
+    LOG_VART(relation->getElementId());
     const std::vector<RelationData::Entry>& members = relation->getMembers();
     if (members.size() > 1)
     {
@@ -63,6 +64,7 @@ void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
       // no point in updating the members if there were no dupes
       if (uniqueMembers.size() < (int)members.size())
       {
+        LOG_TRACE("Updating " << relation->getElementId() << "...");
         _numAffected += (members.size() - uniqueMembers.size());
         relation->setMembers(uniqueMembers.toVector().toStdVector());
       }
