@@ -41,6 +41,8 @@ public:
 
   static std::string className() { return "hoot::AddHilbertReviewSortOrderOp"; }
 
+  static int logWarnCount;
+
   AddHilbertReviewSortOrderOp() = default;
   virtual ~AddHilbertReviewSortOrderOp() = default;
 
