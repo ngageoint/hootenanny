@@ -43,6 +43,8 @@
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/criterion/HighwayWayNodeCriterion.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -93,7 +95,6 @@ void RubberSheet::setConfiguration(const Settings& conf)
   setFailWhenMinimumTiePointsNotFound(config.getRubberSheetFailWhenMinimumTiePointsNotFound());
   setLogWarningWhenRequirementsNotFound(config.getRubberSheetLogMissingRequirementsAsWarning());
   setMaxAllowedWays(config.getRubberSheetMaxAllowedWays());
-  setCriteria(config.getRubberSheetElementCriteria());
 
   LOG_VARD(_ref);
   LOG_VARD(_minimumTies);
@@ -101,7 +102,7 @@ void RubberSheet::setConfiguration(const Settings& conf)
   LOG_VARD(_logWarningWhenRequirementsNotFound);
 }
 
-void RubberSheet::setCriteria(const QStringList& criteria)
+void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
 {
   LOG_VARD(criteria.size());
 
@@ -118,20 +119,40 @@ void RubberSheet::setCriteria(const QStringList& criteria)
         ElementCriterionPtr crit =
           std::shared_ptr<ElementCriterion>(
             Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
+        LOG_VART(crit.get());
 
         std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
           std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
-        if (!conflatableCrit)
+        LOG_VART(conflatableCrit.get());
+        std::shared_ptr<WayNodeCriterion> wayNodeCrit =
+          std::dynamic_pointer_cast<WayNodeCriterion>(crit);
+        LOG_VART(wayNodeCrit.get());
+        if (!conflatableCrit && !wayNodeCrit)
         {
           throw IllegalArgumentException(
-            "RubberSheet ElementCrition must be a ConflatableElementCriterion.");
+            "RubberSheet ElementCrition must be a ConflatableElementCriterion or WayNodeCriterion.");
         }
-        const GeometryTypeCriterion::GeometryType geometryType = conflatableCrit->getGeometryType();
-        if (geometryType != GeometryTypeCriterion::GeometryType::Line &&
-            geometryType != GeometryTypeCriterion::GeometryType::Polygon)
+        if (conflatableCrit)
         {
-          throw IllegalArgumentException(
-            "RubberSheet element criterion must have a linear geometry type.");
+          const GeometryTypeCriterion::GeometryType geometryType = conflatableCrit->getGeometryType();
+          if (geometryType != GeometryTypeCriterion::GeometryType::Line &&
+              geometryType != GeometryTypeCriterion::GeometryType::Polygon)
+          {
+            throw IllegalArgumentException(
+              "RubberSheet element criterion must have a linear geometry type.");
+          }
+        }
+
+        std::shared_ptr<OsmMapConsumer> mapConsumer =
+          std::dynamic_pointer_cast<OsmMapConsumer>(crit);
+        LOG_VART(mapConsumer.get());
+        if (mapConsumer)
+        {
+          if (!map)
+          {
+            throw IllegalArgumentException("No map available to pass to map consumer.");
+          }
+          mapConsumer->setOsmMap(map.get());
         }
 
         _criteria->addCriterion(crit);
@@ -203,6 +224,10 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
 void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
+
+  // This has to be done here vs setConfiguration, b/c we may need a map to pass to some criteria.
+  setCriteria(ConfigOptions().getRubberSheetElementCriteria(), map);
+
   if (!_criteria)
   {
     // check our way limit first
@@ -233,15 +258,18 @@ bool RubberSheet::_calcAndApplyTransform(OsmMapPtr& map)
     "Rubber sheeting map having " <<
     StringUtils::formatLargeNumber(map->getWayCount()) << " ways out of a " <<
     StringUtils::formatLargeNumber(_maxAllowedWays) << " maximum allowed for rubber sheeting.");
+  OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-before-transform-calc");
 
   std::shared_ptr<OGRSpatialReference> oldSrs = _projection;
   bool success = calculateTransform(map);
   _projection = oldSrs;
+  OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-after-calculate-transform");
 
   if (success)
   {
     success = applyTransform(map);
     _numAffected = map->getWayCount();
+    OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-after-apply-transform");
   }
 
   return success;
@@ -252,6 +280,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   // Potentially filtering out potentially multiple feature types here. Not sure if it would be
   // beneficial to rubbersheet each criterion separately...
   LOG_DEBUG("Filtering map before rubbersheeting...");
+  OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-before-filtering");
 
   _projection = map->getProjection();
 
@@ -283,6 +312,8 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
     return;
   }
 
+  OsmMapWriterFactory::writeDebugMap(toModify, "rubbersheet-to-modify");
+
   // copy out elements not meeting filter criteria into another map
   OsmMapPtr toNotModify(new OsmMap());
   mapCopier.reset(new CopyMapSubsetOp(map, NotCriterionPtr(new NotCriterion(_criteria))));
@@ -290,6 +321,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   LOG_DEBUG(
     "Element count for map not being modified: " <<
     StringUtils::formatLargeNumber(toNotModify->getElementCount()));
+  OsmMapWriterFactory::writeDebugMap(toNotModify, "rubbersheet-to-not-modify");
 
   // run the rubbersheeting on just the elements we want to modify
   if (_calcAndApplyTransform(toModify))
@@ -301,12 +333,15 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
       MapProjector::project(toNotModify, _projection);
       MapProjector::project(toModify, _projection);
     }
+    OsmMapWriterFactory::writeDebugMap(toNotModify, "rubbersheet-to-not-modify-after-reproject");
+    OsmMapWriterFactory::writeDebugMap(toModify, "rubbersheet-to-modify-after-reproject");
 
     // append what we rubbersheeted back to what we didn't rubbersheet to become the final map
     toNotModify->append(toModify, true);
     map = toNotModify;
     LOG_DEBUG(
       "Element count for result map: " << StringUtils::formatLargeNumber(map->getElementCount()));
+    OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-result-map");
   }
 }
 

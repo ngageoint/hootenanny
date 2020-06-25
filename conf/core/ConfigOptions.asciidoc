@@ -830,7 +830,9 @@ See also:
 * Data Type: list
 * Default Value:
 ** `hoot::LinearWaterwayCriterion`
+** `hoot::LinearWaterwayWayNodeCriterion`
 ** `hoot::PowerLineCriterion`
+** `hoot::PowerLineWayNodeCriterion`
 
 TODO
 

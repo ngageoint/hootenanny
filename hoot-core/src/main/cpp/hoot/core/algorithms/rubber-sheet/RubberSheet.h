@@ -137,7 +137,7 @@ public:
    void setLogWarningWhenRequirementsNotFound(bool logWarning)
    { _logWarningWhenRequirementsNotFound = logWarning; }
    void setMaxAllowedWays(int max) { _maxAllowedWays = max; }
-   void setCriteria(const QStringList& criteria);
+   void setCriteria(const QStringList& criteria, OsmMapPtr map = OsmMapPtr());
 
    virtual QString getDescription() const override { return "Applies rubber sheeting to a map"; }
 
