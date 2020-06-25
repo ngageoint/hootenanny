@@ -2440,7 +2440,7 @@
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
         <tag k="name" v="PG&amp;E 60kV"/>
         <tag k="tiger:cfcc" v="C20"/>
-        <tag k="REF1" v="000281;00027e"/>
+        <tag k="REF1" v="000281;00027e;00027f"/>
         <tag k="REF2" v="todo"/>
         <tag k="tiger:county" v="Contra Costa, CA"/>
         <tag k="power" v="line"/>
@@ -4316,29 +4316,6 @@
         <tag k="REF1" v="00006f"/>
         <tag k="Type" v="OH"/>
     </way>
-    <way visible="true" id="-2386440" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2368485"/>
-        <nd ref="-2368486"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1236"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
-        <tag k="REF1" v="000070"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="266.18490287"/>
-        <tag k="wires" v="single"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.00090148772428400004"/>
-    </way>
     <way visible="true" id="-2386439" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368422"/>
         <nd ref="-2368423"/>
@@ -5101,21 +5078,27 @@
         <nd ref="-2367864"/>
         <nd ref="-2368026"/>
         <tag k="owner" v="PG&amp;E"/>
+        <tag k="tiger:upload_uuid" v="bulk_upload.pl-c06aeebd-526f-4861-b1a6-aa2b0d38e820"/>
+        <tag k="OBJECTID" v="2397"/>
         <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.911Z"/>
-        <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.026473919768262001"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="60000"/>
-        <tag k="Length_Fee" v="7641.75913657"/>
-        <tag k="OBJECTID" v="2397"/>
+        <tag k="Legend" v="PG&amp;E_60_70kV"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="tiger:cfcc" v="C20"/>
         <tag k="REF1" v="00027f"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="tiger:county" v="Contra Costa, CA"/>
+        <tag k="power" v="line"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.911Z"/>
+        <tag k="circuits" v="1"/>
+        <tag k="location" v="overhead"/>
+        <tag k="Length_Fee" v="7641.75913657"/>
         <tag k="Type" v="OH"/>
+        <tag k="tiger:tlid" v="192077615:192090945:192117152"/>
+        <tag k="Shape__Len" v="0.026473919768262001"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070809"/>
     </way>
     <way visible="true" id="-2386417" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367850"/>
@@ -6638,6 +6621,29 @@
         <tag k="Length_Fee" v="73305.37694486"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.21578742515570001"/>
+    </way>
+    <way visible="true" id="92513905" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2368485"/>
+        <nd ref="-2368486"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="OBJECTID" v="1236"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
+        <tag k="Legend" v="PG&amp;E_115kV"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="cables" v="3"/>
+        <tag k="REF1" v="000070"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="power" v="line"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z"/>
+        <tag k="circuits" v="1"/>
+        <tag k="location" v="overhead"/>
+        <tag k="Length_Fee" v="266.18490287"/>
+        <tag k="wires" v="single"/>
+        <tag k="Type" v="OH"/>
+        <tag k="Shape__Len" v="0.00090148772428400004"/>
     </way>
     <way visible="true" id="92513913" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368991"/>

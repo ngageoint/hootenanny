@@ -1533,48 +1533,8 @@
         <tag k="hoot:id" v="-1973886"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF1" v="001952"/>
-        <tag k="REF2" v="001f4a;001952"/>
+        <tag k="REF2" v="001952"/>
         <tag k="z_order" v="0"/>
-        <tag k="intermittent" v="yes"/>
-    </way>
-    <way visible="true" id="-1973885" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1974223"/>
-        <nd ref="-1974126"/>
-        <nd ref="-1974127"/>
-        <nd ref="-1974128"/>
-        <nd ref="-1974129"/>
-        <nd ref="-1974130"/>
-        <nd ref="-1974131"/>
-        <nd ref="-1974132"/>
-        <nd ref="-1974133"/>
-        <nd ref="-1974134"/>
-        <nd ref="-1974135"/>
-        <nd ref="-1974136"/>
-        <nd ref="-1974137"/>
-        <nd ref="-1974138"/>
-        <nd ref="-1974139"/>
-        <nd ref="-1974140"/>
-        <nd ref="-1974141"/>
-        <nd ref="-1974142"/>
-        <nd ref="-1974143"/>
-        <nd ref="-1974144"/>
-        <nd ref="-1974145"/>
-        <nd ref="-1974146"/>
-        <nd ref="-1974147"/>
-        <nd ref="-1974148"/>
-        <nd ref="-1974149"/>
-        <nd ref="-1974150"/>
-        <nd ref="-1974151"/>
-        <nd ref="-1974152"/>
-        <nd ref="-1974153"/>
-        <nd ref="-1974154"/>
-        <nd ref="-1974155"/>
-        <tag k="river_flow" v="temporary"/>
-        <tag k="source" v="CNIGS"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-1973885"/>
-        <tag k="REF1" v="001f4a"/>
         <tag k="intermittent" v="yes"/>
     </way>
     <way visible="true" id="-1973884" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1686,6 +1646,49 @@
         <tag k="waterway" v="stream"/>
         <tag k="REF1" v="002876"/>
         <tag k="REF2" v="002876"/>
+        <tag k="z_order" v="0"/>
+        <tag k="intermittent" v="yes"/>
+    </way>
+    <way visible="true" id="-1973880" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1974223"/>
+        <nd ref="-1974126"/>
+        <nd ref="-1974127"/>
+        <nd ref="-1974128"/>
+        <nd ref="-1974129"/>
+        <nd ref="-1974130"/>
+        <nd ref="-1974131"/>
+        <nd ref="-1974132"/>
+        <nd ref="-1974133"/>
+        <nd ref="-1974134"/>
+        <nd ref="-1974135"/>
+        <nd ref="-1974136"/>
+        <nd ref="-1974137"/>
+        <nd ref="-1974138"/>
+        <nd ref="-1974139"/>
+        <nd ref="-1974140"/>
+        <nd ref="-1974141"/>
+        <nd ref="-1974142"/>
+        <nd ref="-1974143"/>
+        <nd ref="-1974144"/>
+        <nd ref="-1974145"/>
+        <nd ref="-1974146"/>
+        <nd ref="-1974147"/>
+        <nd ref="-1974148"/>
+        <nd ref="-1974149"/>
+        <nd ref="-1974150"/>
+        <nd ref="-1974151"/>
+        <nd ref="-1974152"/>
+        <nd ref="-1974153"/>
+        <nd ref="-1974154"/>
+        <nd ref="-1974155"/>
+        <tag k="river_flow" v="temporary"/>
+        <tag k="source" v="CNIGS"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="river_type" v="secondary"/>
+        <tag k="hoot:id" v="-1973880"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF1" v="001f4a"/>
+        <tag k="REF2" v="001f4a"/>
         <tag k="z_order" v="0"/>
         <tag k="intermittent" v="yes"/>
     </way>

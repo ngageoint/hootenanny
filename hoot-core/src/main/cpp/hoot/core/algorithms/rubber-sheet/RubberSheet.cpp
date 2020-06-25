@@ -44,10 +44,7 @@
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
-#include <hoot/core/criterion/RoundaboutCriterion.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -228,8 +225,11 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
 
-  // This has to be done here vs setConfiguration, b/c we may need a map to pass to some criteria.
-  setCriteria(ConfigOptions().getRubberSheetElementCriteria(), map);
+  if (!_criteria)
+  {
+    // This has to be done here vs setConfiguration, b/c we may need a map to pass to some criteria.
+    setCriteria(ConfigOptions().getRubberSheetElementCriteria(), map);
+  }
 
   if (!_criteria)
   {
@@ -287,19 +287,12 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
 
   _projection = map->getProjection();
 
-  ElementCriterionPtr roundaboutFilter(
-    OrCriterionPtr(
-      new OrCriterion(
-        std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion()),
-        std::shared_ptr<TagKeyCriterion>(new TagKeyCriterion(MetadataTags::HootSpecial())))));
   std::shared_ptr<CopyMapSubsetOp> mapCopier;
 
   // copy out elements meeting the filter criteria into a map
   OsmMapPtr toModify(new OsmMap());
-  ElementCriterionPtr toModifyFilter(
-    new ChainCriterion(_criteria, NotCriterionPtr(new NotCriterion(roundaboutFilter))));
   LOG_VARD(_criteria->toString());
-  mapCopier.reset(new CopyMapSubsetOp(map, toModifyFilter));
+  mapCopier.reset(new CopyMapSubsetOp(map, _criteria));
   mapCopier->apply(toModify);
   LOG_DEBUG(
     "Element count for map being modified: " <<
@@ -324,9 +317,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
 
   // copy out elements not meeting filter criteria into another map
   OsmMapPtr toNotModify(new OsmMap());
-  ElementCriterionPtr toNotModifyFilter(
-    new OrCriterion(NotCriterionPtr(new NotCriterion(_criteria)), roundaboutFilter));
-  mapCopier.reset(new CopyMapSubsetOp(map, toNotModifyFilter));
+  mapCopier.reset(new CopyMapSubsetOp(map, NotCriterionPtr(new NotCriterion(_criteria))));
   mapCopier->apply(toNotModify);
   LOG_DEBUG(
     "Element count for map not being modified: " <<
@@ -336,7 +327,9 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   // run the rubbersheeting on just the elements we want to modify
   if (_calcAndApplyTransform(toModify))
   {
-    map.reset(); // possibly reduce some memory consumption
+    // preserve any roundabouts that may have been removed and temporarily stored on the map
+    std::vector<std::shared_ptr<Roundabout>> roundabouts = map->getRoundabouts();
+    map.reset(); // reduce some unnecessary memory consumption
 
     if (_projection.get() != 0)
     {
@@ -349,6 +342,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
     // append what we rubbersheeted back to what we didn't rubbersheet to become the final map
     toNotModify->append(toModify, true);
     map = toNotModify;
+    map->setRoundabouts(roundabouts);
     LOG_DEBUG(
       "Element count for result map: " << StringUtils::formatLargeNumber(map->getElementCount()));
     OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-result-map");
