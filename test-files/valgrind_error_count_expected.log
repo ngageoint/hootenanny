@@ -1,12 +1,10 @@
-** Changing file temporarily to test artifacts and failing in Jenkins **
-* 17		attribute_network_highway-2888-reviews-by-score.xml
-* 17		attribute_network_highway-2888.xml
-* 23		attribute_network_highway-2927-bridge-2.xml
-* 23		attribute_network_highway-2927-multiple-types-1.xml
-* 17		attribute_network_highway-2927-name-preservation-1.xml
-* 23		attribute_network_highway-2927-unmarked-ref-divided-road-1.xml
-* 17		attribute_network_highway-3784-roundabouts-1.xml
-** End changes **
+ 17		attribute_network_highway-2888-reviews-by-score.xml
+ 17		attribute_network_highway-2888.xml
+ 23		attribute_network_highway-2927-bridge-2.xml
+ 23		attribute_network_highway-2927-multiple-types-1.xml
+ 17		attribute_network_highway-2927-name-preservation-1.xml
+ 23		attribute_network_highway-2927-unmarked-ref-divided-road-1.xml
+ 17		attribute_network_highway-3784-roundabouts-1.xml
   1		attribute_unifying_building_building-3022-duplicate-relation-member-ways-1.xml
   0		attribute_unifying_building_building-3037-dropped-multipoly-relations-1.xml
  15		attribute_unifying_building_building-3136-many-to-many-auto-merge-1.xml
