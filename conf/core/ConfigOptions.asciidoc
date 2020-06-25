@@ -4108,10 +4108,10 @@ points are found.  Otherwise, a warning will be logged and rubber sheeting will 
 === rubber.sheet.log.missing.requirements.as.warning
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If set to true, rubber sheeting will log a warning if any requirement for rubber sheeting is not
-met.  e.g less than rubber.sheet.minimum.ties tie points are found.  Otherwise, an info level log
+met. e.g less than rubber.sheet.minimum.ties tie points are found.  Otherwise, an info level log
 statement will be logged instead.  This setting is completely ignored if
 rubber.sheet.fail.when.minimum.tie.points.not.found is set to true.
 

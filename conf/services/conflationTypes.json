@@ -11,15 +11,11 @@
             "overwrite.tag.merger.exclude": "Tag overwrite exclude list"
         }
     },
-    "Cleaning": {
-        "members": {
-            "hoot::DualHighwaySplitter": "Split divided highways"
-        }
-    },
     "RubberSheeting": {
         "members": {
             "rubber.sheet.max.allowed.ways": "Maximum number of ways allowed",
-            "rubber.sheet.minimum.ties": "Minimum number of tie points required."
+            "rubber.sheet.minimum.ties": "Minimum number of tie points required.",
+	    "rubber.sheet.log.missing.requirements.as.warning": "Log a warning if enough tie points are not found."
         }
     },
     "Attribute": {
