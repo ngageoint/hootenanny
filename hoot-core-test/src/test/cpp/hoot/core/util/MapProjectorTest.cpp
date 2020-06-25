@@ -75,14 +75,14 @@ public:
   {
     HootTestFixture::setUp();
     // we are testing the map reprojector so we don't want to force to a single projection.
-    //conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), false);
+    conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), false);
   }
 
   virtual void tearDown()
   {
-//    conf().set(
-//      ConfigOptions::getTestForceOrthographicProjectionKey(),
-//      ConfigOptions::getTestForceOrthographicProjectionDefaultValue());
+    conf().set(
+      ConfigOptions::getTestForceOrthographicProjectionKey(),
+      ConfigOptions::getTestForceOrthographicProjectionDefaultValue());
   }
 
   Radians calculateAngle(Coordinate p1, Coordinate p2, Coordinate p3)

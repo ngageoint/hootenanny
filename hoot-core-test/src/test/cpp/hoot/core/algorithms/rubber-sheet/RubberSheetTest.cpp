@@ -61,7 +61,6 @@ class RubberSheetTest : public HootTestFixture
   CPPUNIT_TEST(runCalculateTiePointDistancesTest);
   CPPUNIT_TEST(runCalculateTiePointDistancesNotEnoughTiePointsTest1);
   CPPUNIT_TEST(runCalculateTiePointDistancesNotEnoughTiePointsTest2);
-  CPPUNIT_TEST(runNoFilterTest);
   CPPUNIT_TEST(runFilterTest1);
   CPPUNIT_TEST(runFilterTest2);
   CPPUNIT_TEST_SUITE_END();
@@ -230,29 +229,6 @@ public:
     }
     CPPUNIT_ASSERT(
       exceptionMsg.contains("Error rubbersheeting due to not finding enough tie points"));
-  }
-
-  void runNoFilterTest()
-  {
-    OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/cmd/glacial/CollectionRelationMergeTest/input1.osm", map);
-    reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/cmd/glacial/CollectionRelationMergeTest/input2.osm", map);
-
-    RubberSheet uut;
-    uut.setReference(true);
-    uut.setDebug(true);
-    uut.apply(map);
-
-    MapProjector::projectToWgs84(map);
-    OsmXmlWriter().write(map, _outputPath + "runNoFilterTest-out.osm");
-
-    CPPUNIT_ASSERT_EQUAL(5419L, uut.getNumFeaturesProcessed());
-    CPPUNIT_ASSERT_EQUAL(5419L, uut.getNumFeaturesAffected());
-    HOOT_FILE_EQUALS(
-      _inputPath + "runNoFilterTest-out.osm", _outputPath + "runNoFilterTest-out.osm");
   }
 
   void runFilterTest1()
