@@ -40,6 +40,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/NotCriterion.h>
 
@@ -110,13 +111,29 @@ void RubberSheet::setCriteria(const QStringList& criteria)
     _criteria.reset(new OrCriterion());
     for (int i = 0; i < criteria.size(); i++)
     {
-      const QString critName = criteria.at(i);
-      if (!critName.trimmed().isEmpty())
+      const QString critName = criteria.at(i).trimmed();
+      if (!critName.isEmpty())
       {
         LOG_VART(critName);
         ElementCriterionPtr crit =
           std::shared_ptr<ElementCriterion>(
             Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
+
+        std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+          std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+        if (!conflatableCrit)
+        {
+          throw IllegalArgumentException(
+            "RubberSheet ElementCrition must be a ConflatableElementCriterion.");
+        }
+        const GeometryTypeCriterion::GeometryType geometryType = conflatableCrit->getGeometryType();
+        if (geometryType != GeometryTypeCriterion::GeometryType::Line &&
+            geometryType != GeometryTypeCriterion::GeometryType::Polygon)
+        {
+          throw IllegalArgumentException(
+            "RubberSheet element criterion must have a linear geometry type.");
+        }
+
         _criteria->addCriterion(crit);
       }
     }

@@ -151,10 +151,10 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createAeacProjection(const OG
   return srs;
 }
 
-QList<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjections(
+vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjections(
   const OGREnvelope& env)
 {
-  QList<std::shared_ptr<OGRSpatialReference>> result;
+  vector<std::shared_ptr<OGRSpatialReference>> result;
 
   double centerLat = (env.MaxY + env.MinY) / 2.0;
   double centerLon = (env.MaxX + env.MinX) / 2.0;
@@ -291,7 +291,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
 {
   LOG_DEBUG("Selecting best planar projection...");
 
-  QList<std::shared_ptr<OGRSpatialReference>> projs = createAllPlanarProjections(env);
+  vector<std::shared_ptr<OGRSpatialReference>> projs = createAllPlanarProjections(env);
   LOG_VARD(projs.size());
 
   QString deg = QChar(0x00B0);
@@ -304,21 +304,17 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
   vector<PlanarTestResult> testResults;
   vector<PlanarTestResult> passingResults;
 
-  // if the envelope has zero size then return an orthographic projection.
+  // If the envelope has zero size, then return an orthographic projection.
   if (env.MaxX == env.MinX || env.MaxY == env.MinY)
   {
     return createOrthographic(env);
   }
 
-  int i = 0;
-  for (QList<std::shared_ptr<OGRSpatialReference>>::iterator it = projs.begin(); it != projs.end();
-       ++it)
+  for (size_t i = 0; i < projs.size(); ++i)
   {
-    std::shared_ptr<OGRSpatialReference> proj = *it;
-
     PlanarTestResult tr;
     tr.i = i;
-    if (_evaluateProjection(env, proj, testDistance, tr.distanceError, tr.angleError))
+    if (_evaluateProjection(env, projs[i], testDistance, tr.distanceError, tr.angleError))
     {
       // create a score that is weighted by the user's threshold values.
       tr.score = tr.distanceError / maxDistanceError + tr.angleError / maxAngleError;
@@ -337,7 +333,6 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
       testResults.push_back(tr);
     }
     LOG_TRACE("dis: " << tr.distanceError << "m angle: " << toDegrees(tr.angleError) << deg);
-    i++;
   }
 
   //  |<---                       80 cols                                         -->|
@@ -354,11 +349,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
   {
     bestIndex = _findBestScore(passingResults);
     LOG_VARD(bestIndex);
-
-//    char* wkt = 0;
-//    projs.at(bestIndex)->exportToWkt(&wkt);
-//    LOG_DEBUG("Projection: " << wkt);
-//    OGRFree(wkt);
+    LOG_VARD(toWkt(projs[bestIndex]));
   }
   else if (warnOnFail == false)
   {
@@ -391,7 +382,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
   }
 
   LOG_VARD(toWkt(projs[bestIndex].get()));
-  return projs.at(bestIndex);
+  return projs[bestIndex];
 }
 
 std::shared_ptr<OGRSpatialReference> MapProjector::createSinusoidalProjection(const OGREnvelope& env)
@@ -506,7 +497,6 @@ size_t MapProjector::_findBestScore(vector<PlanarTestResult>& results)
 {
   vector<PlanarTestResult> orderByScore = results;
   sort(orderByScore.begin(), orderByScore.end(), _scoreLessThan);
-
   return orderByScore[0].i;
 }
 

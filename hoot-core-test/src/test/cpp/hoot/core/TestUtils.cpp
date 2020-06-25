@@ -266,7 +266,8 @@ void TestUtils::resetEnvironment(const QStringList confs)
 
   // Sometimes we add new projections to the MapProjector, when this happens it may pick a new
   // projection and subtly change the results.
-  //conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), true);
+  // TODO: explain
+  conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), true);
 
   // these factories cache the creators. Flush them so they get any config changes.
   MatchFactory::getInstance().reset();

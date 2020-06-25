@@ -90,7 +90,8 @@ public:
   /**
    * Returns a vector of all candidate planar projections for a given envelope.
    */
-  QList<std::shared_ptr<OGRSpatialReference>> createAllPlanarProjections(const OGREnvelope& env);
+  std::vector<std::shared_ptr<OGRSpatialReference>> createAllPlanarProjections(
+    const OGREnvelope& env);
 
   /**
    * Using a predefined set of projections this method evaluates each one of them for both distance
@@ -191,8 +192,6 @@ private:
 
   bool _evaluateProjection(const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs,
     Meters testDistance, Meters& maxDistanceError, Radians& maxAngleError);
-
-  size_t _findBestResult(std::vector<PlanarTestResult>& results);
 
   size_t _findBestScore(std::vector<PlanarTestResult>& results);
 
