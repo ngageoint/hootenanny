@@ -44,7 +44,10 @@
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/HighwayWayNodeCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/criterion/RoundaboutCriterion.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -284,14 +287,19 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
 
   _projection = map->getProjection();
 
-  LOG_VARD(_criteria->toString());
-  LOG_VARD(NotCriterionPtr(new NotCriterion(_criteria)));
-
+  ElementCriterionPtr roundaboutFilter(
+    OrCriterionPtr(
+      new OrCriterion(
+        std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion()),
+        std::shared_ptr<TagKeyCriterion>(new TagKeyCriterion(MetadataTags::HootSpecial())))));
   std::shared_ptr<CopyMapSubsetOp> mapCopier;
 
   // copy out elements meeting the filter criteria into a map
   OsmMapPtr toModify(new OsmMap());
-  mapCopier.reset(new CopyMapSubsetOp(map, _criteria));
+  ElementCriterionPtr toModifyFilter(
+    new ChainCriterion(_criteria, NotCriterionPtr(new NotCriterion(roundaboutFilter))));
+  LOG_VARD(_criteria->toString());
+  mapCopier.reset(new CopyMapSubsetOp(map, toModifyFilter));
   mapCopier->apply(toModify);
   LOG_DEBUG(
     "Element count for map being modified: " <<
@@ -316,7 +324,9 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
 
   // copy out elements not meeting filter criteria into another map
   OsmMapPtr toNotModify(new OsmMap());
-  mapCopier.reset(new CopyMapSubsetOp(map, NotCriterionPtr(new NotCriterion(_criteria))));
+  ElementCriterionPtr toNotModifyFilter(
+    new OrCriterion(NotCriterionPtr(new NotCriterion(_criteria)), roundaboutFilter));
+  mapCopier.reset(new CopyMapSubsetOp(map, toNotModifyFilter));
   mapCopier->apply(toNotModify);
   LOG_DEBUG(
     "Element count for map not being modified: " <<
