@@ -108,9 +108,9 @@ public:
   virtual unsigned int getNumSteps() const override { return 3; }
 
   /**
-   * TODO
+   * Determines if conflation is configured with the Network Roads algorithm
    *
-   * @return
+   * @return true if conflation is configured with the Network Roads algorithm; false otherwise
    */
   static bool isNetworkConflate();
 

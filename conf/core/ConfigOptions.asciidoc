@@ -834,7 +834,8 @@ See also:
 ** `hoot::PowerLineCriterion`
 ** `hoot::PowerLineWayNodeCriterion`
 
-TODO
+Determines which type of features are rubbersheeted during conflation when rubbersheeting is part
+of the conflation pre-operations.
 
 === conflate.stats.types
 
@@ -4097,7 +4098,7 @@ be used during serious conflation.
 * Data Type: list
 * Default Value: ``
 
-TODO
+Determines which type of features are rubbersheeted.
 
 === rubber.sheet.fail.when.minimum.tie.points.not.found
 

@@ -89,16 +89,18 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * Applies a perviously calculated or loaded transform to the specified map.
+   * Applies a perviously calculated or loaded transform to the specified map
    *
-   * TODO
+   * @param map the map to apply the transform to
+   * @return true if the operation succeeded; false otherwise
    */
   bool applyTransform(std::shared_ptr<OsmMap>& map);
 
   /**
-   * Calculates an appropriate transform for the specified map, but does not change any data.
+   * Calculates an appropriate transform for the specified map, but does not change any data
    *
-   * TODO
+   * @param map the map to calculate the transform for
+   * @return true if the operation succeeded; false otherwise
    */
   bool calculateTransform(std::shared_ptr<OsmMap>& map);
 
