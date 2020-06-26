@@ -216,7 +216,7 @@ public class GrailResource {
      * Pull the Public Overpass and Private Rails Port data for a bounding box and run differential on it
      *
      * Takes in a json object
-     * POST hoot-services/grail/createdifferentialchangeset
+     * POST hoot-services/grail/createchangeset
      *
      * {
      *   //The upper left (UL) and lower right (LR) of the bounding box to clip the dataset
@@ -232,10 +232,10 @@ public class GrailResource {
      * @return Job ID Internally, this is the directory that the files are kept in
      */
     @POST
-    @Path("/createdifferentialchangeset")
+    @Path("/createchangeset")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createDifferentialChangeset(@Context HttpServletRequest request,
+    public Response createChangeset(@Context HttpServletRequest request,
             GrailParams reqParams,
             @QueryParam("deriveType") @DefaultValue("") String deriveType,
             @QueryParam("replacement") @DefaultValue("false") Boolean replacement,
@@ -253,7 +253,7 @@ public class GrailResource {
             FileUtils.forceMkdir(workDir);
         }
         catch (IOException ioe) {
-            logger.error("createDifferentialChangeset: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
+            logger.error("createChangeset: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
         reqParams.setWorkDir(workDir);
@@ -319,7 +319,7 @@ public class GrailResource {
             geomDiffFile.createNewFile();
         }
         catch(IOException exc) {
-            logger.error("createDifferentialChangeset: Error creating file: {} ", geomDiffFile.getAbsolutePath(), exc);
+            logger.error("createChangeset: Error creating file: {} ", geomDiffFile.getAbsolutePath(), exc);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exc.getMessage()).build();
         }
 

@@ -158,8 +158,6 @@ public final class HootProperties {
     private static final String RAILSPORT_PORT;
     private static final String RAILSPORT_API;
 
-    public static final String TASKING_MANAGER_URL;
-
     public static final String OAUTH_REDIRECTURL;
     public static final String OAUTH_PROVIDERURL;
     public static final String OAUTH_PATHS_USER;
@@ -352,8 +350,6 @@ public final class HootProperties {
             RAILSPORT_PULL_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT + RAILSPORT_API;
             RAILSPORT_CAPABILITIES_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT  + "/api/capabilities";
         }
-
-        TASKING_MANAGER_URL = replaceSensitiveData("${TASKING_MANAGER_URL}").endsWith("/") ? "${TASKING_MANAGER_URL}" : "${TASKING_MANAGER_URL}/";
 
     }
 

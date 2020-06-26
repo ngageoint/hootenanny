@@ -48,7 +48,6 @@
 		<oauth:url pattern="/ingest/**" resources="openStreetMap" />
 		<oauth:url pattern="/grail/**" resources="openStreetMap" />
 		<oauth:url pattern="/language/**" resources="openStreetMap" />
-		<oauth:url pattern="/taskingmanager/**" resources="openStreetMap" />
 		<!--  pattern="/auth/**" not listed intentionally -->
 	</oauth:consumer>
 
