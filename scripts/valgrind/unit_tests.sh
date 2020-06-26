@@ -159,4 +159,6 @@ done
 
 diff ${HOOT_HOME}/test-files/valgrind_error_count_expected.log ${HOOT_HOME}/test-output/valgrind_error_count.log
 
-tar -czf ${HOOT_HOME}/test-output/valgrind_error_findings.tar.gz ${OUTPUT_DIR}/*.log
+pushd ${OUTPUT_DIR} > /dev/null
+tar -czf ../valgrind_error_findings.tar.gz *.xml
+popd > /dev/null

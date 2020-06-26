@@ -25,3 +25,17 @@
    fun:_ZN4hoot22PythonSchemaTranslator5_initEv
    ...
 }
+{
+   CreateJavaVM Invalid Write
+   Memcheck:Addr4
+   ...
+   fun:JNI_CreateJavaVM
+   fun:_ZN4hoot15JavaEnvironment7_initVmEv
+   ...
+}
+{
+   CreateJavaVM Conditional Jump
+   Memcheck:Cond
+   fun:_ZN7Monitor7TrySpinEP6Thread
+   ...
+}
