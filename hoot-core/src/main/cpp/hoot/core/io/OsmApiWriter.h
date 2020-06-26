@@ -158,10 +158,11 @@ private:
    * @param description - Text description of the changeset to create
    * @param source - Text specifying the source for the edits for this changeset
    * @param hashtags - Semicolon delimited list of hashtags for changeset
+   * @param http_status - HTTP status of the request
    * @return ID of the changeset that was created on the server
    */
   long _createChangeset(HootNetworkRequestPtr request, const QString& description,
-                        const QString& source, const QString& hashtags);
+                        const QString& source, const QString& hashtags, int& http_status);
   /**
    * @brief _closeChangeset End the changeset
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
@@ -244,6 +245,8 @@ private:
   void _changesetThreadFunc(int index);
   /** Yield or sleep this thread */
   void _yield(int milliseconds = 10);
+  /** Yield or sleep this thread for a random amount of time between minimum and maximum */
+  void _yield(int minimum_ms, int maximum_ms);
   /**
    * @brief createNetworkRequest Create a network request object
    * @param requiresAuthentication Authentication flag set to true will cause OAuth credentials,
