@@ -36,10 +36,6 @@
 namespace hoot
 {
 
-class JavaEnvironment;
-
-typedef std::shared_ptr<JavaEnvironment> JavaEnvironmentPtr;
-
 /**
  * Creates a Java Virtual Machine for use by Hootenanny C++ code that calls Java code in the
  * hoot-josm library via JNI (Singleton)
@@ -55,22 +51,20 @@ public:
 
   static std::string className() { return "hoot::JavaEnvironment"; }
 
-  ~JavaEnvironment();
+  virtual ~JavaEnvironment();
+
+  static JavaEnvironment& getInstance();
 
   /**
-   * Creates a single instance of a JNI environment if none yet exists and returns it.
-   *
+   * Returns single instance of a JNI environment
    * @return a pointer to a JNI environment
    */
-  static JNIEnv* getEnvironment() { return getInstance()->_env; }
-
-  static const JavaEnvironmentPtr& getInstance();
+  JNIEnv* getEnvironment() { return _env; }
 
 private:
 
   JavaEnvironment();
 
-  static JavaEnvironmentPtr _theInstance;
   // A Java VM; is destroyed by this class in the destructor
   JavaVM* _vm;
   // A JNI environment
