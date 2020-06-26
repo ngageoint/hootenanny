@@ -42,6 +42,7 @@ namespace HttpResponseCode
   const int HTTP_PRECONDITION_FAILED    = 412;
   const int HTTP_INTERNAL_SERVER_ERROR  = 500;
   const int HTTP_BAD_GATEWAY            = 502;
+  const int HTTP_SERVICE_UNAVAILABLE    = 503;
   const int HTTP_GATEWAY_TIMEOUT        = 504;
 }
 

@@ -39,6 +39,7 @@
 #include <hoot/core/util/OsmApiUtils.h>
 
 //  Tgs
+#include <tgs/Statistics/Random.h>
 #include <tgs/System/Timer.h>
 
 //  Qt
@@ -300,10 +301,11 @@ void OsmApiWriter::_changesetThreadFunc(int index)
     {
       //  Set the status to working
       _updateThreadStatus(index, ThreadStatus::Working);
+      int create_changeset_status = HttpResponseCode::HTTP_OK;
       //  Create the changeset ID if required
       if (id < 1)
       {
-        id = _createChangeset(request, _description, _source, _hashtags);
+        id = _createChangeset(request, _description, _source, _hashtags, create_changeset_status);
         changesetSize = 0;
       }
       //  An ID of less than 1 isn't valid, try to fix it
@@ -323,7 +325,9 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           //  Reset the network request object and sleep it off
           request = createNetworkRequest(true);
           LOG_DEBUG("Bad changeset ID. Resetting network request object.");
-          _yield();
+          //  Sleep between 30 and 60 seconds to allow the database server to recover on service unavailable
+          if (create_changeset_status == HttpResponseCode::HTTP_SERVICE_UNAVAILABLE)
+            _yield(30 * 1000, 60 * 1000);
         }
         //  Try a new create changeset request
         continue;
@@ -478,6 +482,22 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           else
             _changeset.updateFailedChangeset(workInfo, true);
           break;
+        case HttpResponseCode::HTTP_SERVICE_UNAVAILABLE:
+          _pushChangesets(workInfo);
+          //  Multiple changeset failures
+          changeset_failures++;
+          if (changeset_failures >= 3)
+          {
+            //  Set the thread status to failed and report the error message in the main thread
+            _updateThreadStatus(index, ThreadStatus::Failed);
+            stop_thread = true;
+          }
+          else
+          {
+            //  Sleep between 30 and 60 seconds to allow the database server to recover
+            _yield(30 * 1000, 60 * 1000);
+          }
+          break;
         }
       }
     }
@@ -532,6 +552,12 @@ void OsmApiWriter::_yield(int milliseconds)
     std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
   else
     std::this_thread::yield();
+}
+
+void OsmApiWriter::_yield(int minimum_ms, int maximum_ms)
+{
+  //  Yield for a random amount of time between minimum_ms and maximum_ms
+  _yield((minimum_ms + Tgs::Random::instance()->generateInt(maximum_ms - minimum_ms)));
 }
 
 void OsmApiWriter::setConfiguration(const Settings& conf)
@@ -688,7 +714,8 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions)
 long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
                                     const QString& description,
                                     const QString& source,
-                                    const QString& hashtags)
+                                    const QString& hashtags,
+                                    int& http_status)
 {
   try
   {
@@ -713,9 +740,10 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
     request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, content);
 
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
+    http_status = request->getHttpStatus();
 
     //  Only return the parsed response from HTTP 200 OK
-    if (request->getHttpStatus() == HttpResponseCode::HTTP_OK)
+    if (http_status == HttpResponseCode::HTTP_OK)
       return responseXml.toLong();
   }
   catch (const HootException& ex)
