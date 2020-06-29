@@ -49,6 +49,7 @@ JavaEnvironment::~JavaEnvironment()
 {
   if (_vm != 0)
   {
+    _vm->DetachCurrentThread();
     _vm->DestroyJavaVM();
   }
 }
