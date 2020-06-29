@@ -91,14 +91,14 @@ void ChangesetElement::addTag(const XmlObject& tag)
   }
 }
 
-QString ChangesetElement::getTagKey(int index)
+QString ChangesetElement::getTagKey(int index) const
 {
   if (index < 0 || index >= (int)_tags.size())
     throw IllegalArgumentException();
   return _tags[index].first;
 }
 
-QString ChangesetElement::getTagValue(int index)
+QString ChangesetElement::getTagValue(int index) const
 {
   if (index < 0 || index >= (int)_tags.size())
     throw IllegalArgumentException();
@@ -424,10 +424,10 @@ ChangesetRelation::ChangesetRelation(const ChangesetRelation &relation)
 {
 }
 
-bool ChangesetRelation::hasMember(ElementType::Type type, long id)
+bool ChangesetRelation::hasMember(ElementType::Type type, long id) const
 {
   //  Iterate all of the members
-  for (QList<ChangesetRelationMember>::iterator it = _members.begin(); it != _members.end(); ++it)
+  for (QList<ChangesetRelationMember>::const_iterator it = _members.begin(); it != _members.end(); ++it)
   {
     switch (type)
     {
