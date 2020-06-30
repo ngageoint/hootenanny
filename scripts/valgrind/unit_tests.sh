@@ -1,6 +1,7 @@
 #!/bin/bash
 
 PARALLEL_JOBS=16
+STACK_DEPTH=128
 
 # Get all names from HootTest, remove all of the script test, remove the test count line
 UNIT_TEST_LIST=`HootTest --all-names | grep -v "test-files/cmd" | tail -n +2`
@@ -17,7 +18,8 @@ logs that can be opened in QtCreator
     -i --include <pattern>          Run script against unit tests that match <pattern> i.e. HootTest --include=<pattern>
     -l --list <tests>               Run a quoted, space separated list of jobs
     -g --generate-suppression-logs  Generate suppresion logs instead of XML
-    -j --jobs <count>               Run <count> number of jobs in parallel, default is 16
+    -j --jobs <count>               Run <count> number of jobs in parallel, default is ${PARALLEL_JOBS}
+    -t --stack-depth <depth>        Run analysis with <depth> stack frames, default is ${STACK_DEPTH}
     -r --replace                    Replace the current logs (delete entire directory)
 EOF
 
@@ -52,11 +54,14 @@ do
   elif [[ ("$1" == "--jobs" || "$1" == "-j") && $# -ge 2 ]]; then
     PARALLEL_JOBS="$2"
     shift; shift
+  elif [[ ("$1" == "--stack-depth" || "$1" == "-t") && $# -ge 2 ]]; then
+    STACK_DEPTH="$2"
+    shift; shift
   elif [[ ("$1" == "--replace" || "$1" == "-r") ]]; then
     REPLACE="yes"
     shift
   else
-    echo "Unknown parameter"
+    echo "Unknown parameter ${1}"
     print_usage
   fi
 done
@@ -72,13 +77,19 @@ echo -n "Running ${#TEST_COUNT_LIST[@]} test"
 if [[ ${#TEST_COUNT_LIST[@]} -gt 1 ]]; then
   echo -n "s"
 fi
+if [[ ${PARALLEL_JOBS} -gt ${#TEST_COUNT_LIST[@]} ]]; then
+  PARALLEL_JOBS=${#TEST_COUNT_LIST[@]}
+fi
+if [[ ${PARALLEL_JOBS} -lt 1 ]]; then
+  PARALLEL_JOBS=1
+fi
 if [[ ${PARALLEL_JOBS} -gt 1 ]]; then
   echo -n " in ${PARALLEL_JOBS} jobs"
 fi
 echo ":"
 
 # Valgrind common parameters
-NUM_CALLERS="--num-callers=64"
+NUM_CALLERS="--num-callers=${STACK_DEPTH}"
 SUPPRESSIONS="--suppressions=${HOOT_HOME}/scripts/valgrind/hoot_valgrind.supp"
 ERROR_LIMIT="--error-limit=no"
 USE_XML="--xml=yes"
