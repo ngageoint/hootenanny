@@ -91,7 +91,7 @@ pipeline {
         cleanup {
             script {
                 //  Always store the artifacts, they will be cleaned up later
-                archiveArtifacts artifacts: '~/hoot/test-output/valgrind_error_*', fingerprint: true
+                archiveArtifacts '**/valgrind_error_*'
                 //  Destroy the VM
                 sh "vagrant destroy -f ${params.Box}"
                 cleanWs()
