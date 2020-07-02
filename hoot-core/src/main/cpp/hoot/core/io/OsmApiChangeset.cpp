@@ -2387,9 +2387,8 @@ void ChangesetInfo::retryFailure()
 {
   //  Increment the failure retry count
   _numFailureRetries++;
-  //  Once the failure retry count reaches MAX_FAILURE_RETRIES set the attempted resolved flag
-  if (_numFailureRetries > MAX_FAILURE_RETRIES)
-    _attemptedResolveChangesetIssues = true;
+  //  A retry was attempted, set the attempted flag
+  _attemptedResolveChangesetIssues = true;
 }
 
 bool ChangesetInfo::canRetryVersion()
