@@ -252,7 +252,7 @@ bool OsmApiWriter::apply()
   //  Check for failed threads
   if (_hasFailedThread())
   {
-    LOG_ERROR("Multiple bad changeset ID errors in a row, is the API functioning correctly?");
+    LOG_ERROR(_errorMessage);
     _changeset.failRemainingChangeset();
   }
   //  Final write for the error file
@@ -319,6 +319,8 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           //  Set the thread status to failed and report the error message in the main thread
           _updateThreadStatus(index, ThreadStatus::Failed);
           stop_thread = true;
+          //  Set the error message
+          _errorMessage = "Multiple bad changeset ID errors in a row, is the API functioning correctly?";
         }
         else
         {
@@ -427,7 +429,21 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             }
             else if (_fixConflict(request, workInfo, info->response))
             {
-              _pushChangesets(workInfo);
+              //  If this changeset has version failed enough times, don't attempt to fix it
+              if (!workInfo->canRetryVersion())
+              {
+                //  Fail the entire changeset
+                _changeset.updateFailedChangeset(workInfo, true);
+                //  Let the threads know that the remaining changeset is the "remaining" changeset
+                _threadsCanExit = true;
+                stop_thread = true;
+                _updateThreadStatus(index, ThreadStatus::Failed);
+                _changeset.failChangeset(workInfo);
+                //  Set the error message
+                _errorMessage = "Multiple version failures in a row, please refresh your data";
+              }
+              else
+                _pushChangesets(workInfo);
               //  Loop back around to work on the next changeset
               continue;
             }
@@ -476,8 +492,8 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         case HttpResponseCode::HTTP_METHOD_NOT_ALLOWED:
         case HttpResponseCode::HTTP_UNAUTHORIZED:
           //  This shouldn't ever happen, push back on the queue, only process a certain amount of times
-          workInfo->retry();
-          if (workInfo->canRetry())
+          workInfo->retryFailure();
+          if (workInfo->canRetryFailure())
             _pushChangesets(workInfo);
           else
             _changeset.updateFailedChangeset(workInfo, true);
@@ -866,8 +882,12 @@ bool OsmApiWriter::_fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr 
   ElementType::Type element_type = ElementType::Unknown;
   long version_old = 0;
   long version_new = 0;
+  //  Match the error and parse the error information
   if (_changeset.matchesChangesetConflictVersionMismatchFailure(conflictExplanation, element_id, element_type, version_old, version_new))
   {
+    //  Increment the retry version count
+    changeset->retryVersion();
+    //  Iterate the changeset types looking for the element, no need to check XmlChangeset::TypeCreate
     for (int changesetType = XmlChangeset::TypeModify; changesetType < XmlChangeset::TypeMax; ++changesetType)
     {
       ChangesetInfo::iterator element = changeset->begin((ElementType::Type)element_type, (XmlChangeset::ChangesetType)changesetType);

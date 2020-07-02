@@ -2297,7 +2297,8 @@ QString XmlChangeset::getRemainingFilename()
 
 ChangesetInfo::ChangesetInfo()
   : _attemptedResolveChangesetIssues(false),
-    _numRetries(0),
+    _numFailureRetries(0),
+    _numVersionRetries(0),
     _last(false),
     _isError(false)
 {
@@ -2307,7 +2308,7 @@ void ChangesetInfo::add(ElementType::Type element_type, XmlChangeset::ChangesetT
 {
   _changeset[element_type][changeset_type].insert(id);
   //  Changes in the changeset cause the retries to start over
-  _numRetries = 0;
+  _numFailureRetries = 0;
 }
 
 void ChangesetInfo::remove(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
@@ -2316,7 +2317,7 @@ void ChangesetInfo::remove(ElementType::Type element_type, XmlChangeset::Changes
   if (selectedSet.find(id) != selectedSet.end())
     selectedSet.erase(id);
   //  Changes in the changeset cause the retries to start over
-  _numRetries = 0;
+  _numFailureRetries = 0;
 }
 
 long ChangesetInfo::getFirst(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
@@ -2331,7 +2332,7 @@ void ChangesetInfo::clear()
     for (int j = 0; j < (int)XmlChangeset::TypeMax; ++j)
       _changeset[i][j].clear();
   }
-  _numRetries = 0;
+  _numFailureRetries = 0;
 }
 
 bool ChangesetInfo::contains(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
@@ -2377,17 +2378,29 @@ void ChangesetInfo::setAttemptedResolveChangesetIssues(bool attempted)
   _attemptedResolveChangesetIssues = attempted;
 }
 
-bool ChangesetInfo::canRetry()
+bool ChangesetInfo::canRetryFailure()
 {
-  return _numRetries < MAX_RETRIES;
+  return _numFailureRetries < MAX_FAILURE_RETRIES;
 }
 
-void ChangesetInfo::retry()
+void ChangesetInfo::retryFailure()
 {
-  //  Increment the retry count
-  _numRetries++;
-  //  Once the retry count reaches MAX_RETRIES set the attempted resolved flag
+  //  Increment the failure retry count
+  _numFailureRetries++;
+  //  A retry was attempted, set the attempted flag
   _attemptedResolveChangesetIssues = true;
 }
+
+bool ChangesetInfo::canRetryVersion()
+{
+  return _numVersionRetries < MAX_VERSION_RETRIES;
+}
+
+void ChangesetInfo::retryVersion()
+{
+  //  Increment the version retry count
+  _numVersionRetries++;
+}
+
 
 }

@@ -86,7 +86,7 @@ bool RetryConflictsTestServer::respond(HttpConnection::HttpConnectionPtr& connec
     response.reset(new HttpResponse(HttpResponseCode::HTTP_METHOD_NOT_ALLOWED));
     response->add_header("Allow", "GET");
   }
-  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response.reset(new HttpResponse(HttpResponseCode::HTTP_OK));
     continue_processing = false;
@@ -145,7 +145,7 @@ bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
   else if (headers.find(QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(1).toStdString()) != std::string::npos)
     response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_ELEMENT_1_GET_RESPONSE));
   //  Close changeset
-  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response.reset(new HttpResponse(HttpResponseCode::HTTP_OK));
     continue_processing = false;
@@ -185,7 +185,7 @@ bool ChangesetOutputTestServer::respond(HttpConnection::HttpConnectionPtr& conne
     else
       response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SUCCESS_2_RESPONSE));
   }
-  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response.reset(new HttpResponse(HttpResponseCode::HTTP_OK));
     continue_processing = false;
@@ -256,7 +256,7 @@ bool CreateWaysFailNodesTestServer::respond(HttpConnection::HttpConnectionPtr& c
     else
       response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_FAILURE_RESPONSE_2));
   }
-  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     response.reset(new HttpResponse(HttpResponseCode::HTTP_OK));
     continue_processing = false;
@@ -273,6 +273,52 @@ bool CreateWaysFailNodesTestServer::respond(HttpConnection::HttpConnectionPtr& c
   return continue_processing && !get_interupt();
 }
 
+bool VersionFailureTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+{
+  static int version = 1;
+  //  Stop processing by setting this to false
+  bool continue_processing = true;
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
+  //  Determine the response message's HTTP header
+  HttpResponsePtr response;
+  if (headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, "1"));
+  else if (headers.find("POST") != std::string::npos)
+  {
+    //  Increment the ID each time so that it will constantly fail until OsmApiWriter gives up
+    int v = version;
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_CONFLICT,
+                   QString(OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_RESPONSE).arg(v).arg(++version).toStdString()));
+  }
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(1).toStdString()) != std::string::npos)
+  {
+    //  Update the GET response with a different ID
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK,
+                   QString(OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_GET_RESPONSE).arg(++version).toStdString()));
+  }
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  {
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK));
+    continue_processing = false;
+  }
+  else
+  {
+    //  Error out here
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
+    continue_processing = false;
+  }
+  //  Write out the response
+  write_response(connection, response->to_string());
+  //  Return true if we should continue listening and processing requests
+  return continue_processing && !get_interupt();
+}
+
+/** OsmApiSampleRequestResponse values */
 const char* OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE =
     "<?xml version='1.0' encoding='UTF-8'?>\n"
     "<osm version='0.6' generator='OpenStreetMap server'>\n"
@@ -405,4 +451,32 @@ const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_FAILURE_RESPONSE_2 =
     " <node old_id='-31' new_id='30' new_version='1'/>\n"
     " <way old_id='-2' new_id='1' new_version='1'/>\n"
     "</diffResult>";
+const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_CHANGESET =
+    "<?xml version='1.0' encoding='UTF-8'?>\n"
+    "<osmChange version='0.6' generator='hootenanny'>\n"
+    " <modify>\n"
+    "  <way id='1' version='2' timestamp=''>\n"
+    "   <nd ref='1'/>\n"
+    "   <nd ref='2'/>\n"
+    "   <nd ref='3'/>\n"
+    "   <tag k='amenity' v='restaurant'/>\n"
+    "   <tag k='name' v='Pizza Shop'/>\n"
+    "   <tag k='building' v='yes'/>\n"
+    "  </way>\n"
+    " </modify>\n"
+    "</osmChange>";
+const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_RESPONSE =
+    "Changeset conflict: Version mismatch: Provided %1, server had: %2 of Way 1";
+const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_GET_RESPONSE =
+    "<?xml version='1.0' encoding='UTF-8'?>\n"
+    "<osm version='0.6' generator='hootenanny'>\n"
+    " <way id='1' version='%1' timestamp=''>\n"
+    "  <nd ref='1'/>\n"
+    "  <nd ref='2'/>\n"
+    "  <nd ref='3'/>\n"
+    "  <tag k='amenity' v='restaurant'/>\n"
+    "  <tag k='name' v='Pizza Shop'/>\n"
+    "  <tag k='building' v='yes'/>\n"
+    " </way>\n"
+    "</osm>";
 }
