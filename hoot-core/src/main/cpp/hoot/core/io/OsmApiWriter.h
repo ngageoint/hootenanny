@@ -402,6 +402,8 @@ private:
   std::mutex _apiIdMutex;
   /** Flag to tell threads that they can exit when idle */
   bool _threadsCanExit;
+  /** Error message for why the process failed */
+  QString _errorMessage;
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */

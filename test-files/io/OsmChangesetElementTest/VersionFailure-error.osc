@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+	<modify>
+		<way id="1" version="51" timestamp="" changeset="0">
+			<nd ref="1"/>
+			<nd ref="2"/>
+			<nd ref="3"/>
+			<tag k="amenity" v="restaurant"/>
+			<tag k="name" v="Pizza Shop"/>
+			<tag k="building" v="yes"/>
+		</way>
+	</modify>
+</osmChange>

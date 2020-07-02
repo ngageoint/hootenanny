@@ -628,8 +628,11 @@ public:
   bool getAttemptedResolveChangesetIssues();
   void setAttemptedResolveChangesetIssues(bool attempted);
   /** Set/get _numRetries member */
-  bool canRetry();
-  void retry();
+  bool canRetryFailure();
+  void retryFailure();
+  /** Set/get _versionRetries member */
+  bool canRetryVersion();
+  void retryVersion();
   /** Set/get _last member for final error checking */
   void setLast() { _last = true; }
   bool getLast() { return _last; }
@@ -642,9 +645,12 @@ private:
   std::array<std::array<container, XmlChangeset::TypeMax>, ElementType::Unknown> _changeset;
   /** Flag set after attempt to resolve changeset issues has completed. */
   bool _attemptedResolveChangesetIssues;
-  /** Number of times this exact changeset has been retried unsuccessfully */
-  int _numRetries;
-  const int MAX_RETRIES = 5;
+  /** Number of times this exact changeset has been retried from failures unsuccessfully */
+  int _numFailureRetries;
+  const int MAX_FAILURE_RETRIES = 5;
+  /** Number of times this exact changeset has had version errors */
+  int _numVersionRetries;
+  const int MAX_VERSION_RETRIES = 25;
   /** Flag set when this is the last changeset because of error */
   bool _last;
   /** When `true` this entire changeset consists of elements that cannot be pushed without an error.

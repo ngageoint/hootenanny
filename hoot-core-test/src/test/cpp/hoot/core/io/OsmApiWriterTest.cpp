@@ -57,6 +57,7 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runChangesetOutputTest);
   CPPUNIT_TEST(runChangesetCreateFailureTest);
   CPPUNIT_TEST(runChangesetFailNodesWithWaysTest);
+  CPPUNIT_TEST(runChangesetVersionFailureTest);
 #endif
   /* These tests are for local testing and require additional resources to complete */
 #ifdef RUN_LOCAL_OSM_API_SERVER
@@ -85,6 +86,7 @@ public:
   const int PORT_DEBUG_OUTPUT = 9804;
   const int PORT_CREATE_FAIL =  9805;
   const int PORT_FAIL_WAYS =    9806;
+  const int PORT_FAIL_VERSION = 9807;
 
   OsmApiWriterTest()
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
@@ -515,6 +517,49 @@ public:
 
     HOOT_FILE_EQUALS(_inputPath + "FailWayWithNodes-error.osc",
                      _outputPath + "FailWayWithNodes-error.osc");
+#endif
+  }
+
+  void runChangesetVersionFailureTest()
+  {
+#ifdef RUN_LOCAL_TEST_SERVER
+    //  Suppress the OsmApiWriter errors by temporarily changing the log level
+    //  when the log level is Info or above because we expect the all of the errors.
+    //  Below Info is Debug and Trace, those are set because we want to see everything
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Fatal);
+
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_FAIL_VERSION));
+    osm.setUserInfo(TEST_USER_INFO);
+
+    //  Kick off the changeset create failure test server
+    VersionFailureTestServer server(PORT_FAIL_VERSION);
+    server.start();
+
+    OsmApiWriter writer(osm, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_CHANGESET);
+    writer.setErrorPathname(_outputPath + "VersionFailure-error.osc");
+
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+    writer.setConfiguration(s);
+    writer.apply();
+
+    //  Wait for the test server to finish
+    server.shutdown();
+
+    Log::getInstance().setLevel(logLevel);
+
+    //  Make sure that the changes failed
+    CPPUNIT_ASSERT(writer.containsFailed());
+
+    //  Check the stats, 1 way, 1 modify, 1 error
+    checkStats(writer.getStats(), 0, 1, 0, 0, 1, 0, 1);
+
+    HOOT_FILE_EQUALS(_inputPath + "VersionFailure-error.osc",
+                     _outputPath + "VersionFailure-error.osc");
 #endif
   }
 

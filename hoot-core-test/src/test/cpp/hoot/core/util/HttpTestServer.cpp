@@ -109,7 +109,8 @@ void HttpTestServer::stop()
   //  Interupt the threads
   _interupt = true;
   //  Close the acceptor
-  _acceptor->close();
+  boost::system::error_code ec;
+  _acceptor->close(ec);
   //  Stop the IO service
   _io_service.stop();
 }
