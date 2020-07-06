@@ -37,12 +37,11 @@
 namespace hoot
 {
 
-JavaEnvironmentPtr JavaEnvironment::_theInstance;
-
 JavaEnvironment::JavaEnvironment() :
 _vm(0),
 _env(0)
 {
+  _initVm();
 }
 
 JavaEnvironment::~JavaEnvironment()
@@ -53,14 +52,10 @@ JavaEnvironment::~JavaEnvironment()
   }
 }
 
-const JavaEnvironmentPtr& JavaEnvironment::getInstance()
+JavaEnvironment& JavaEnvironment::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new JavaEnvironment());
-    _theInstance->_initVm();
-  }
-  return _theInstance;
+  static JavaEnvironment instance;
+  return instance;
 }
 
 void JavaEnvironment::_initVm()

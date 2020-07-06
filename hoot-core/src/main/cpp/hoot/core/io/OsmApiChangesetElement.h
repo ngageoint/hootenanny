@@ -82,8 +82,8 @@ public:
    * @param index
    * @return
    */
-  QString getTagKey(int index);
-  QString getTagValue(int index);
+  QString getTagKey(int index) const;
+  QString getTagValue(int index) const;
   /**
    * @brief getTagCount
    * @return Number of tags in this element
@@ -113,7 +113,7 @@ public:
   /**
    *  Getter/setter for the element version
    */
-  long getVersion() { return _version; }
+  long getVersion() const { return _version; }
   void setVersion(long version) { _version = version; }
   /** Enumeration of the element status, described below */
   enum ElementStatus
@@ -127,7 +127,7 @@ public:
   /**
    *  Getter/setter for the element status
    */
-  ElementStatus getStatus() { return _status; }
+  ElementStatus getStatus() const { return _status; }
   void setStatus(ElementStatus status) { _status = status; }
 
 protected:
@@ -255,7 +255,7 @@ public:
    * @param index Index in the node vector
    * @return Node ID
    */
-  long getNode(int index) { return _nodes[index]; }
+  long getNode(int index) const { return _nodes[index]; }
   /**
    * @brief removeNodes
    * @param position
@@ -266,7 +266,7 @@ public:
    * @brief getNodeCount Get the number of nodes in the way
    * @return number of nodes
    */
-  int getNodeCount() { return _nodes.size(); }
+  int getNodeCount() const { return _nodes.size(); }
   /**
    * @brief toString Get the XML string equivalent for the way
    * @param changesetId ID of the changeset to insert into the way
@@ -302,24 +302,24 @@ public:
    * @brief isNode/Way/Relation
    * @return true if relation member is node/way/relation
    */
-  bool isNode()     { return _type == ElementType::Node; }
-  bool isWay()      { return _type == ElementType::Way; }
-  bool isRelation() { return _type == ElementType::Relation; }
+  bool isNode() const     { return _type == ElementType::Node; }
+  bool isWay() const      { return _type == ElementType::Way; }
+  bool isRelation() const { return _type == ElementType::Relation; }
   /**
    * @brief getType Get the relation member type
    * @return relation type as an enumeration
    */
-  ElementType::Type getType() { return _type; }
+  ElementType::Type getType() const { return _type; }
   /**
    * @brief getRef ID of the member referenced
    * @return Element ID
    */
-  long getRef()     { return _ref; }
+  long getRef() const { return _ref; }
   /**
    * @brief getRole Get the member roll as a string
    * @return role string
    */
-  QString getRole() { return _role; }
+  QString getRole() const { return _role; }
   /**
    * @brief toString Get the XML string equivalent for the relation member
    * @return XML string
@@ -377,14 +377,14 @@ public:
    * @brief getMemberCount Get the number of relation members
    * @return relation member count
    */
-  int getMemberCount() { return _members.size(); }
+  int getMemberCount() const { return _members.size(); }
   /**
    * @brief hasMember Search the relation for a specific element type with the given ID
    * @param type Element type to search for (node/way/relation)
    * @param id ID of the element to search for
    * @return True if the given element is a member of this relation
    */
-  bool hasMember(ElementType::Type type, long id);
+  bool hasMember(ElementType::Type type, long id) const;
   /**
    * @brief toString Get the XML string equivalent for the relation
    * @param changesetId ID of the changeset to insert into the relation
@@ -459,7 +459,7 @@ public:
   /**
    * @brief getId Get the new or old ID from the ID passed in
    * @param type Element type (node/way/relation)
-   * @param id ID
+   * @param id ID of element
    * @return new or old ID
    */
   long getId(ElementType::Type type, long id)
@@ -470,12 +470,12 @@ public:
       return _idToId[type][id];
   }
   /**
-   * @brief containsId
-   * @param type
-   * @param id
-   * @return
+   * @brief containsId Query if the type/id combination exists in the map
+   * @param type Element type (node/way/relation)
+   * @param id ID of element
+   * @return True if the type/id exists in map
    */
-  bool containsId(ElementType::Type type, long id)
+  bool containsId(ElementType::Type type, long id) const
   {
     return _idToId[type].find(id) != _idToId[type].end();
   }

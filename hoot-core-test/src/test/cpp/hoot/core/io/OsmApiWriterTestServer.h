@@ -149,8 +149,28 @@ protected:
    *   - Capabilities
    *   - Permissions
    *   - Changeset Create
-   *   - Changeset Upload Failure - responds with HTTP
+   *   - Changeset Upload Failure - responds with HTTP 412
    *   - Changeset Upload - responds with HTTP 200
+   *   - Changeset Close
+   */
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+};
+
+class VersionFailureTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  VersionFailureTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate an element version failure over and over.
+   *  Requests, in order:
+   *   - Capabilities
+   *   - Permissions
+   *   - Changeset Create
+   *   - Changeset Upload Version Failure - responds with HTTP 409
+   *   - Element Get - responds with HTTP 200
    *   - Changeset Close
    */
   bool respond(HttpConnection::HttpConnectionPtr &connection) override;
@@ -181,6 +201,12 @@ public:
   /** Sample Changeset upload response bodies for a failed response to '/api/0.6/changeset/1/upload' */
   static const char* SAMPLE_CHANGESET_FAILURE_RESPONSE_1;
   static const char* SAMPLE_CHANGESET_FAILURE_RESPONSE_2;
+  /** Sample Changeset upload request */
+  static const char* SAMPLE_CHANGESET_VERSION_FAILURE_CHANGESET;
+  /** Sample Changeset upload conflict response body for a version conflict response to '/api/0.6/changeset/1/upload' */
+  static const char* SAMPLE_CHANGESET_VERSION_FAILURE_RESPONSE;
+  /** Sample Element GET response body for version conflict resolution */
+  static const char* SAMPLE_CHANGESET_VERSION_FAILURE_GET_RESPONSE;
 };
 
 }
