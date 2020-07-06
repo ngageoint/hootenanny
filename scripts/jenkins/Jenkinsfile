@@ -91,10 +91,10 @@ pipeline {
                     expression { return params.Sonar }
 //  UNCOMMENT AFTER SONAR IS FIXED
 //                    changeRequest()
-                    allOf {
-                        triggeredBy 'TimerTrigger'
-                        branch 'master'
-                    }
+//                    allOf {
+//                        triggeredBy 'TimerTrigger'
+//                        branch 'master'
+//                    }
                 }
             }
             steps {
@@ -154,10 +154,10 @@ pipeline {
                     expression { return params.Sonar }
 //  UNCOMMENT AFTER SONAR IS FIXED
 //                    changeRequest()
-                    allOf {
-                        triggeredBy 'TimerTrigger'
-                        branch 'master'
-                    }
+//                    allOf {
+//                        triggeredBy 'TimerTrigger'
+//                        branch 'master'
+//                    }
                 }
             }
             steps{
