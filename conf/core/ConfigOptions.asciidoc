@@ -835,7 +835,7 @@ See also:
 ** `hoot::PowerLineWayNodeCriterion`
 
 Determines which type of features are rubbersheeted during conflation when rubbersheeting is part
-of the conflation pre-operations.
+of the conflation pre-operations. An empty list will rubbersheet all types of features.
 
 === conflate.stats.types
 
@@ -905,13 +905,13 @@ ID of the node that ContainsNodeCriterion should search for.
 If specified, supporting readers will limit data read from the data source to only features that
 intersect the given bounding box. The format is "minx,miny,maxx,maxy" or
 "min_lon,min_lat,max_lon,max_lat" specified in the projection of the input data source.  This
-setting can be used with both the convert and conflate commands. See the documentation for more
-details.
+setting can be used with both the convert and conflate commands. See the command documentation for
+more details.
 
 Example Usage:
 
 ----
-hoot convert -D convert.bounding.box=106.851,-6.160,107.052,-5.913 input output
+hoot convert -D convert.bounding.box=106.851,-6.160,107.052,-5.913 input.osm output.osm
 ----
 
 === convert.bounding.box.hoot.api.database
@@ -3172,14 +3172,6 @@ file even if the map is empty.
 Overpass API URL host name. Used by the JSON readers to distinguish Overpass JSON web sources from
 GeoJSON web sources.
 
-=== perty.apply.rubber.sheet
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the data is rubbersheeted before conflation, moving perturbed data closer to reference
-data.
-
 === perty.csm.D
 
 * Data Type: double
@@ -4098,7 +4090,8 @@ be used during serious conflation.
 * Data Type: list
 * Default Value: ``
 
-Determines which type of features are rubbersheeted.
+Determines which type of features are rubbersheeted. An empty list will rubbersheet all types of
+features.
 
 === rubber.sheet.fail.when.minimum.tie.points.not.found
 

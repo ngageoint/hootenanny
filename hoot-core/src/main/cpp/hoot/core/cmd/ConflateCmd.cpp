@@ -425,7 +425,8 @@ int ConflateCmd::runSimple(QStringList& args)
 
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
-    // By default rubbersheeting has no filters. When conflating, we need to add some.
+    // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
+    // config.
     conf().set(
       ConfigOptions::getRubberSheetElementCriteriaKey(),
       ConfigOptions().getConflateRubberSheetElementCriteria());

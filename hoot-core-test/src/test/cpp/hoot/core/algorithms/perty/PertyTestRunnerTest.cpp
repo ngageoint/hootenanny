@@ -75,7 +75,6 @@ public:
     Settings testSettings = conf();
     testSettings.set("perty.seed", QString::number(2));
     testSettings.set("perty.search.distance", QString::number(15.0));
-    testSettings.set("perty.apply.rubber.sheet", "true");
     testSettings.set("conflate.enable.old.roads", "false");
 
     PertyTestRunner testRunner;
@@ -192,7 +191,6 @@ public:
     Settings testSettings = conf();
     testSettings.set("perty.seed", QString::number(2));
     testSettings.set("perty.search.distance", QString::number(15.0));
-    testSettings.set("perty.apply.rubber.sheet", "true");
     testSettings.set("conflate.enable.old.roads", "false");
 
     PertyTestRunner testRunner;
@@ -294,7 +292,6 @@ public:
     Settings testSettings = conf();
     testSettings.set("perty.seed", QString::number(2));
     testSettings.set("perty.search.distance", QString::number(15.0));
-    testSettings.set("perty.apply.rubber.sheet", "true");
     testSettings.set("conflate.enable.old.roads", "false");
 
     PertyTestRunner testRunner;

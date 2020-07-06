@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -60,7 +60,6 @@ public:
   {
     PertyMatchScorer matchScorer;
     matchScorer.setSearchDistance(15.0);
-    matchScorer.setApplyRubberSheet(true);
     matchScorer._loadReferenceMap(
       _inputPath + "PertyMatchScorerTest-reference-in-1.osm",
       _outputPath + "PertyMatchScorerTest-reference-out-1.osm");
@@ -78,7 +77,6 @@ public:
     PertyMatchScorer matchScorer;
     matchScorer.setConfiguration(testSettings);
     matchScorer.setSearchDistance(15.0);
-    matchScorer.setApplyRubberSheet(true);
     matchScorer._loadPerturbedMap(
       _inputPath + "PertyMatchScorerTest-reference-out-1.osm",
       _outputPath + "PertyMatchScorerTest-perturbed-out-1.osm");
@@ -99,7 +97,6 @@ public:
 
     PertyMatchScorer matchScorer;
     matchScorer.setSearchDistance(15.0);
-    matchScorer.setApplyRubberSheet(false);
     OsmMapPtr combinedMap =
       matchScorer._combineMapsAndPrepareForConflation(
         referenceMap,
@@ -131,8 +128,6 @@ public:
     PertyMatchScorer matchScorer;
     matchScorer.setConfiguration(testSettings);
     matchScorer.setSearchDistance(15.0);
-    matchScorer.setApplyRubberSheet(true);
-    //matchScorer.setConfiguration(testSettings);
     /*std::shared_ptr<MatchComparator> result =*/
     matchScorer._conflateAndScoreMatches(
       combinedMap,
@@ -144,7 +139,6 @@ public:
       _inputPath + "PertyMatchScorerTest-conflated-out-1.osm",
       _outputPath + "PertyMatchScorerTest-conflated-out-1.osm");
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyMatchScorerTest, "slow");

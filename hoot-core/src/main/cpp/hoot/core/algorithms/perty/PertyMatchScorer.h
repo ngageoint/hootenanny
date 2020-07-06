@@ -86,15 +86,6 @@ public:
   void setSearchDistance(double searchDistance) { _searchDistance = searchDistance; }
 
   /**
-    Returns whether rubbersheeting is applied to the input pre-conflation
-    */
-  bool getApplyRubberSheet() { return _applyRubberSheet; }
-  /**
-    Sets whether rubbersheeting is applied to the input pre-conflation
-    */
-  void setApplyRubberSheet(bool applyRubberSheet) { _applyRubberSheet = applyRubberSheet; }
-
-  /**
     Returns a string representation of the object
     */
   QString toString();
@@ -125,8 +116,6 @@ private:
   QString _conflatedMapOutput;
 
   double _searchDistance;
-  bool _applyRubberSheet;
-
 };
 
 }
