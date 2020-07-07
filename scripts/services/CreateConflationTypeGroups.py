@@ -81,7 +81,35 @@ def createUiJSON(groups, options):
                         memberConfig.update(configOptions[match])
                         del memberConfig['key']
                         templateDefault = re.findall(r'(?<=\${).*(?=})', memberConfig['default'])
-                        if len(templateDefault) == 1:
+
+                        # If default points to file of values
+                        if 'HOOT_HOME' in memberConfig['default']:
+                            filePath = os.path.expandvars(memberConfig['default'])
+                            if os.path.isfile(filePath):
+                                with open(filePath, 'r') as jsonFile:
+                                    data = json.load(jsonFile)
+                                    for (key, value) in data.items():
+                                        category = key.replace('_', ' ').capitalize()
+                                        if key != '#' and isinstance(value, list):
+                                            for categoryObj in value:
+                                                categoryKey = categoryObj['key'] if 'key' in categoryObj else ''
+                                                categoryVal = categoryObj['value'] if 'value' in categoryObj else '*'
+                                                categoryDefault = categoryObj['distance'] if 'distance' in categoryObj else ''
+                                                
+                                                label = category + ' [' + categoryKey + '=' + categoryVal + ']'
+                                                description = category + ' for ' + categoryKey
+
+                                                memberObject = {
+                                                    'default': categoryDefault,
+                                                    'description': description,
+                                                    'id': match,
+                                                    'input': 'text',
+                                                    'label': label,
+                                                    'type': 'text'
+                                                }
+
+                                                members.append(memberObject)
+                        elif len(templateDefault) == 1:
                             defaultKey = templateDefault[0]
                             memberConfig['default'] = next(
                             (m['member']['default'] for m in configMembers if m['member']['key'] == defaultKey),

@@ -69,9 +69,9 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
 
         List<String> options = new LinkedList<>();
         options.add("api.db.email=" + params.getUser().getEmail());
-	options.add("reader.add.source.datetime=false");
-	options.add("writer.include.circular.error.tags=false");
-	options.add("convert.bounding.box.remove.missing.elements=false");
+        options.add("reader.add.source.datetime=false");
+        options.add("writer.include.circular.error.tags=false");
+        options.add("convert.bounding.box.remove.missing.elements=false");
 
         List<String> hootOptions = toHootOptions(options);
 

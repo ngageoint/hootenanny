@@ -3636,7 +3636,7 @@ configuration option, 'language.translation.translator', controls which translat
 === poi.search.radii
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `${HOOT_HOME}/conf/core/PoiSearchRadii.json`
 
 This allows for overriding the match/review distances for POI to POI Conflation defined in the file
 specified by +poi.search.radii.config+. Its JSON format matches that in the file referenced by
