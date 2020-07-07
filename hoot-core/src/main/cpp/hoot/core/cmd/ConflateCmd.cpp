@@ -66,6 +66,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 
 // Standard
 #include <fstream>
@@ -293,6 +294,7 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     _disableRoundaboutRemoval();
   }
+
   if (_filterOps)
   {
     // Let's see if we can remove any ops in the configuration that will have no effect on the
@@ -423,6 +425,12 @@ int ConflateCmd::runSimple(QStringList& args)
 
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
+    // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
+    // config.
+    conf().set(
+      ConfigOptions::getRubberSheetElementCriteriaKey(),
+      ConfigOptions().getConflateRubberSheetElementCriteria());
+
     // apply any user specified pre-conflate operations
     LOG_STATUS("Running pre-conflate operations...");
     QElapsedTimer timer;

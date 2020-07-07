@@ -7,7 +7,7 @@ OUTPUT_DIR=test-output/cmd/slow/DiffConflateTagChangeDifferingGeometriesTest
 mkdir -p $OUTPUT_DIR
 LOG_LEVEL=--warn
 
-# We run with the Network alg, which can generate node/way match pairs. Then we check to make sure tags changes based on node/way match pairs
+# We run with the Network alg, which can generate node/way match pairs. Then we check to make sure tag changes based on node/way match pairs
 # don't exist in the tags changeset. Particularly, you should not see any highway nodes in the output with the following tags transferred to
 # them from ways: access=permissive, highway=service, and surface=asphalt.
 

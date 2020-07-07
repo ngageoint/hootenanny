@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="37.759" minlon="-122.338" maxlat="38.046" maxlon="-122.077"/>
-    <node visible="true" id="-2367902" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0054174684899948" lon="-122.2507123631200017">
+    <node visible="true" id="-2368014" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0054174684899948" lon="-122.2507123631200017">
         <tag k="power" v="pole"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -215,10 +215,6 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2367475" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9580599999999961" lon="-122.2679774000000066">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-2367466" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7884860999999930" lon="-122.2901190000000042"/>
     <node visible="true" id="-2367465" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7885169999999917" lon="-122.2886432999999897"/>
     <node visible="true" id="-2367464" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7889006999999921" lon="-122.2886561999999913"/>
@@ -267,7 +263,7 @@
     <node visible="true" id="-2367393" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8052138999999983" lon="-122.2313010999999960"/>
     <node visible="true" id="-2367385" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9952090000000027" lon="-122.2294803999999999"/>
     <node visible="true" id="-2367384" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0108500999999990" lon="-122.1996695999999787"/>
-    <node visible="true" id="-2367378" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0370690000000025" lon="-122.2335830999999899"/>
+    <node visible="true" id="-2367378" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0370771397838112" lon="-122.2335537876713119"/>
     <node visible="true" id="-2367368" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7962184984722711" lon="-122.1285546224039109">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
@@ -465,47 +461,50 @@
     <node visible="true" id="-2367060" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0118156999999854" lon="-122.2641730999999794"/>
     <node visible="true" id="-2367059" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0121870999999985" lon="-122.2639151999999996"/>
     <node visible="true" id="-2367058" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0124197999999893" lon="-122.2644549000000040"/>
-    <node visible="true" id="-2367052" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9935412999999897" lon="-122.1298287000000045">
+    <node visible="true" id="-2367052" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9935253790897391" lon="-122.1297867900641592">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2367049" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9940512000000012" lon="-122.1300022000000070">
+    <node visible="true" id="-2367049" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9940352791509639" lon="-122.1299602897354788">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-2367046" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8467559999999921" lon="-122.1611686000000105"/>
     <node visible="true" id="-2367041" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0139818999999974" lon="-122.1160503000000119"/>
-    <node visible="true" id="-2367040" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9044337234864557" lon="-122.2063291372179918">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-2367034" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0445278999999985" lon="-122.2567980999999833"/>
     <node visible="true" id="-2367030" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0451046000000019" lon="-122.2570560999999856"/>
     <node visible="true" id="-2367022" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0138936999999970" lon="-122.1156016000000051"/>
-    <node visible="true" id="-2367020" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9058413999999928" lon="-122.2071535999999981"/>
-    <node visible="true" id="-2367016" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9061636999999862" lon="-122.2094857999999817"/>
-    <node visible="true" id="-2367013" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8482454999999902" lon="-122.1601373000000024"/>
-    <node visible="true" id="-2367011" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8514380000000017" lon="-122.1607479000000183">
+    <node visible="true" id="-2367020" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9057925388241870" lon="-122.2071670353025752"/>
+    <node visible="true" id="-2367013" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8482567576176194" lon="-122.1601146861991225"/>
+    <node visible="true" id="-2367011" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8514492577339468" lon="-122.1607252853128216">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2367007" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9942400999999919" lon="-122.1301634000000007">
+    <node visible="true" id="-2367010" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9066093678233287" lon="-122.2072268199634806">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2367007" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9942241792079614" lon="-122.1301214895927103">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-2367003" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8473856000000026" lon="-122.1616173000000032"/>
-    <node visible="true" id="-2366998" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8486612999999963" lon="-122.1625148000000110"/>
-    <node visible="true" id="-2366996" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9941800000000001" lon="-122.1302138999999869">
+    <node visible="true" id="-2366998" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8486725580727352" lon="-122.1624921864350171"/>
+    <node visible="true" id="-2366996" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9941640792258681" lon="-122.1301719896161018">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-2366985" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0443685999999985" lon="-122.2580602000000027"/>
-    <node visible="true" id="-2366983" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9595579000000072" lon="-122.2040566999999953">
+    <node visible="true" id="-2366983" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9595407316492626" lon="-122.2040636710661374">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-2366981" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0439664000000022" lon="-122.2568208999999939"/>
-    <node visible="true" id="-2366976" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0044122000000115" lon="-122.2321564999999879">
+    <node visible="true" id="-2366977" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9265582944104906" lon="-122.1975919325260236">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2366976" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0044318159090508" lon="-122.2321689497543105">
         <tag k="power" v="pole"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -513,12 +512,19 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366963" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9047059000000033" lon="-122.2088178000000198">
+    <node visible="true" id="-2366967" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9066231787743462" lon="-122.2073875366293692">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366959" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9055583999999968" lon="-122.2095431000000048"/>
-    <node visible="true" id="-2366954" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8791749439209227" lon="-122.1837073375430407">
+    <node visible="true" id="-2366965" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8492199574874277" lon="-122.1594356857997639">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2366963" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9046793951650258" lon="-122.2088252550993985">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2366955" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9039233183075908" lon="-122.2068502092665483">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -527,16 +533,20 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-2366944" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0144390999999899" lon="-122.1160347999999800"/>
-    <node visible="true" id="-2366938" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9056938000000017" lon="-122.2069680000000034"/>
-    <node visible="true" id="-2366936" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8481163000000009" lon="-122.1600715000000008"/>
+    <node visible="true" id="-2366938" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9056439651847512" lon="-122.2069814790352922"/>
+    <node visible="true" id="-2366936" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8481275576050535" lon="-122.1600488862287079"/>
     <node visible="true" id="-2366929" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9406166999999925" lon="-122.2041512999999924">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366919" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9940511999999941" lon="-122.1302296000000069"/>
+    <node visible="true" id="-2366919" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9940352792314897" lon="-122.1301876896862382"/>
+    <node visible="true" id="-2366914" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9048271917300568" lon="-122.2096314729110986">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-2366905" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0447732000000016" lon="-122.2565477999999928"/>
     <node visible="true" id="-2366900" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0450439000000031" lon="-122.2579286999999795"/>
-    <node visible="true" id="-2366898" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9059079000000025" lon="-122.2092228999999861"/>
+    <node visible="true" id="-2366898" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9058770531619516" lon="-122.2092324041534113"/>
     <node visible="true" id="-2366897" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9773568000000026" lon="-122.2156633999999968">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
@@ -545,43 +555,50 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366879" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9039565808267795" lon="-122.2056501258775540">
+    <node visible="true" id="-2366887" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9054575116041477" lon="-122.2094475523573180"/>
+    <node visible="true" id="-2366879" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9039144575110925" lon="-122.2056327395849280">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366875" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9051959999999823" lon="-122.2090860999999933"/>
+    <node visible="true" id="-2366875" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9051683106231607" lon="-122.2090941945586309"/>
     <node visible="true" id="-2366868" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0143337000000017" lon="-122.1160670000000010"/>
     <node visible="true" id="-2366861" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0440523999999840" lon="-122.2574961999999914"/>
     <node visible="true" id="-2366854" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0142155999999929" lon="-122.1156064999999984"/>
+    <node visible="true" id="-2366849" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9060346702523745" lon="-122.2094274895662238"/>
     <node visible="true" id="-2366848" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8478272999999916" lon="-122.1619369000000006"/>
-    <node visible="true" id="-2366844" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9941450999999830" lon="-122.1304906999999957">
+    <node visible="true" id="-2366847" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9118127270514407" lon="-122.2041830457496872">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366838" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9059071999999944" lon="-122.2099991999999986"/>
+    <node visible="true" id="-2366844" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9941291793239060" lon="-122.1304487895761071">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2366838" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9058800995290568" lon="-122.2100076613381390"/>
     <node visible="true" id="-2366829" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9966630999999992" lon="-122.2306863000000021">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366826" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9040556246711731" lon="-122.2069122587803207">
+    <node visible="true" id="-2366826" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9040540944537057" lon="-122.2069065892581676">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-2366820" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0144380999999996" lon="-122.1157994000000002"/>
     <node visible="true" id="-2366819" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8470591000000027" lon="-122.1614153000000016"/>
     <node visible="true" id="-2366808" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0138936999999899" lon="-122.1158772999999798"/>
-    <node visible="true" id="-2366801" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8484310999999920" lon="-122.1623644000000013"/>
-    <node visible="true" id="-2366798" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8484498999999843" lon="-122.1603369999999842"/>
-    <node visible="true" id="-2366796" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8477685999999949" lon="-122.1598295000000007"/>
+    <node visible="true" id="-2366801" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8484423580439682" lon="-122.1623417864826564"/>
+    <node visible="true" id="-2366798" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8484611576558052" lon="-122.1603143861669167"/>
+    <node visible="true" id="-2366796" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8477798575587769" lon="-122.1598068862984121"/>
     <node visible="true" id="-2366788" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0447757999999894" lon="-122.2567374000000200"/>
     <node visible="true" id="-2366778" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0450412999999941" lon="-122.2572811999999800"/>
-    <node visible="true" id="-2366773" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9059847999999846" lon="-122.2093122999999935"/>
-    <node visible="true" id="-2366768" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9939935000000020" lon="-122.1304100999999918"/>
-    <node visible="true" id="-2366767" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8504931000000013" lon="-122.1628512999999998">
+    <node visible="true" id="-2366773" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9059540281954099" lon="-122.2093218539999100"/>
+    <node visible="true" id="-2366771" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8487289576854380" lon="-122.1604693861084456"/>
+    <node visible="true" id="-2366768" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9939775792954322" lon="-122.1303681896801265"/>
+    <node visible="true" id="-2366767" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8505043581368241" lon="-122.1628286859243673">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366766" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9043294324729345" lon="-122.2079267485908645">
+    <node visible="true" id="-2366766" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9043282397026005" lon="-122.2079223291515149">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -592,7 +609,7 @@
         <tag k="power" v="pole"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366753" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0260916999999949" lon="-122.1078880999999967">
+    <node visible="true" id="-2366753" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0261160828784384" lon="-122.1078821640275720">
         <tag k="power" v="pole"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -602,7 +619,7 @@
         <tag k="power" v="pole"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366747" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0261181999999920" lon="-122.1069760000000031">
+    <node visible="true" id="-2366747" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0261425828327262" lon="-122.1069700637217608">
         <tag k="power" v="pole"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -661,7 +678,15 @@
         <tag k="ref" v="12-74;40746158"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366593" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8780328046044232" lon="-122.1821457517980747">
+    <node visible="true" id="-2366596" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8756356201124547" lon="-122.1783090251194466">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2366595" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8765320518525925" lon="-122.1795763110545181">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2366594" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8771113853106556" lon="-122.1801120789245090">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -669,7 +694,7 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366586" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8759574971929567" lon="-122.1834360019734760">
+    <node visible="true" id="-2366586" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8759197810512802" lon="-122.1833646322509139">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -679,14 +704,6 @@
     <node visible="true" id="-2366580" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8759502999999995" lon="-122.1867914000000042"/>
     <node visible="true" id="-2366579" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8757342999999906" lon="-122.1870428000000004"/>
     <node visible="true" id="-2366578" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8759619000000001" lon="-122.1873600999999923"/>
-    <node visible="true" id="-2366560" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8881659999999982" lon="-122.1946200999999945">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2366559" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8860401000000024" lon="-122.1926069999999811">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-2366541" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8073881377205439" lon="-122.1337879812288207">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
@@ -764,39 +781,35 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366439" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9652446999999924" lon="-122.2054976999999951">
+    <node visible="true" id="-2366439" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9652306058395794" lon="-122.2054993598679999">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366438" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9635529999999974" lon="-122.2041157999999967">
+    <node visible="true" id="-2366438" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9635389058594228" lon="-122.2041174600949631">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366437" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9615701999999970" lon="-122.2038582999999790">
+    <node visible="true" id="-2366437" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9615555593742542" lon="-122.2038609042519255">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366436" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9596550999999991" lon="-122.2036436999999864">
+    <node visible="true" id="-2366436" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9596380523218855" lon="-122.2036504627360358">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366435" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9577737999999982" lon="-122.2034548999999970">
+    <node visible="true" id="-2366435" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9577543694012860" lon="-122.2034657793472547">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366434" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9555269999999823" lon="-122.2032316999999892">
+    <node visible="true" id="-2366434" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9555070032473836" lon="-122.2032435571695999">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366403" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9047940999999966" lon="-122.2061173999999824">
+    <node visible="true" id="-2366403" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9047419185099272" lon="-122.2061305159816271">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366395" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9070222000000001" lon="-122.2070872999999978">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2366393" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9080514999999920" lon="-122.2094562000000053">
+    <node visible="true" id="-2366395" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9069639565292817" lon="-122.2071036012430199">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -876,15 +889,11 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366373" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9525099999999966" lon="-122.2042978000000062">
+    <node visible="true" id="-2366373" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9524900031414703" lon="-122.2043096563923399">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366372" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9083353999999986" lon="-122.2099848999999949">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2366371" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9084505000000007" lon="-122.2097188999999844">
+    <node visible="true" id="-2366372" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9082966538000434" lon="-122.2099989783422558">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -924,7 +933,11 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366341" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9069055999999875" lon="-122.2085498000000001">
+    <node visible="true" id="-2366346" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0002790254098244" lon="-122.2335586138909918">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2366341" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9068634280506700" lon="-122.2085630230223501">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -988,23 +1001,23 @@
     <node visible="true" id="-2366102" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9060406999999984" lon="-122.2091844999999921"/>
     <node visible="true" id="-2366101" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9064674000000039" lon="-122.2096822999999830"/>
     <node visible="true" id="-2366100" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9059661999999946" lon="-122.2103345999999817"/>
-    <node visible="true" id="-2366082" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9596069999999983" lon="-122.2038960999999802">
+    <node visible="true" id="-2366082" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9595898982787858" lon="-122.2039029560140904">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366081" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9615383000000008" lon="-122.2041128000000043">
+    <node visible="true" id="-2366081" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9615236507420022" lon="-122.2041154191039993">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366080" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9634127999999933" lon="-122.2043179000000066">
+    <node visible="true" id="-2366080" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9633987058566262" lon="-122.2043195600530083">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366070" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9526592999999934" lon="-122.2045066999999960">
+    <node visible="true" id="-2366070" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9526393031204776" lon="-122.2045185563595453">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2366069" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9555695000000100" lon="-122.2034767999999900">
+    <node visible="true" id="-2366069" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9555495032228052" lon="-122.2034886571097303">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -1115,11 +1128,11 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2365922" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9577389000000025" lon="-122.2036971999999793">
+    <node visible="true" id="-2365922" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9577194583146493" lon="-122.2037080983926103">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2365921" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9653382999999991" lon="-122.2058858999999984">
+    <node visible="true" id="-2365921" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9653242058341078" lon="-122.2058875597955847">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -1143,12 +1156,7 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2365908" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8561053916218597" lon="-122.0790384479076209">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-2365882" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9849418288101646" lon="-122.3379999999999939"/>
-    <node visible="true" id="-2365876" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0085511239944793" lon="-122.0769999999999982"/>
     <node visible="true" id="-2365874" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0348874552017335" lon="-122.3379999999999939"/>
     <node visible="true" id="-2365873" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0459999999999994" lon="-122.3096367819083525"/>
     <node visible="true" id="-2365872" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0459999999999994" lon="-122.1725156319254211"/>
@@ -1894,56 +1902,191 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2350939" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8560770902700057" lon="-122.0788605141100049"/>
-    <node visible="true" id="-2350685" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0083701476300035" lon="-122.0781942234199846"/>
-    <node visible="true" id="-2350683" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0065261676000006" lon="-122.0825047688799998"/>
-    <node visible="true" id="-2350681" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0047705953699904" lon="-122.0865915788200056"/>
-    <node visible="true" id="-2350679" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0028307467999866" lon="-122.0898623121699842"/>
-    <node visible="true" id="-2350677" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0012615121800010" lon="-122.0901433093799966"/>
+    <node visible="true" id="-2350939" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8560770902700057" lon="-122.0788605141100049">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350685" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0083701476300035" lon="-122.0781942234199846">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350683" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0065261676000006" lon="-122.0825047688799998">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350681" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0047705953699904" lon="-122.0865915788200056">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350679" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0028307467999866" lon="-122.0898623121699842">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350677" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0012615121800010" lon="-122.0901433093799966">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-2350675" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9998947333800032" lon="-122.0901870256799810"/>
-    <node visible="true" id="-2350673" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9974216752399911" lon="-122.0902873836599980"/>
-    <node visible="true" id="-2350671" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9948055610199944" lon="-122.0906690170499900"/>
-    <node visible="true" id="-2350669" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9936500136099937" lon="-122.0898430252599951"/>
-    <node visible="true" id="-2350667" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9902192555699898" lon="-122.0902979165299911"/>
-    <node visible="true" id="-2350665" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9885435164999947" lon="-122.0902962728999910"/>
-    <node visible="true" id="-2350663" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9858957285699930" lon="-122.0903211222399989"/>
-    <node visible="true" id="-2350661" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9839286510099896" lon="-122.0902859187900020"/>
-    <node visible="true" id="-2350659" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9819911352199924" lon="-122.0918810349999859"/>
+    <node visible="true" id="-2350673" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9974216752399911" lon="-122.0902873836599980">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350671" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9948055610199944" lon="-122.0906690170499900">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350669" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9936500136099937" lon="-122.0898430252599951">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350667" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9902192555699898" lon="-122.0902979165299911">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350665" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9885435164999947" lon="-122.0902962728999910">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350663" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9858957285699930" lon="-122.0903211222399989">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350661" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9839286510099896" lon="-122.0902859187900020">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350659" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9819911352199924" lon="-122.0918810349999859">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-2350657" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9808013541899925" lon="-122.0936607905500040"/>
-    <node visible="true" id="-2350655" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9793198285399924" lon="-122.0955565728999943"/>
-    <node visible="true" id="-2350653" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9766819112099938" lon="-122.0991000656799912"/>
-    <node visible="true" id="-2350651" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9739688549899910" lon="-122.1027287376499970"/>
-    <node visible="true" id="-2350649" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9722801496999907" lon="-122.1049938964199981"/>
-    <node visible="true" id="-2350647" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9698508808499966" lon="-122.1083138985700032"/>
-    <node visible="true" id="-2350645" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9678721581800005" lon="-122.1109715732600023"/>
-    <node visible="true" id="-2350643" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9655902893099935" lon="-122.1140101839499863"/>
-    <node visible="true" id="-2350641" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9626300636699909" lon="-122.1179808915100011"/>
-    <node visible="true" id="-2350639" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9597114282099994" lon="-122.1219863462799822"/>
-    <node visible="true" id="-2350637" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9583913549500025" lon="-122.1273242979399924"/>
-    <node visible="true" id="-2350635" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9571352582600028" lon="-122.1328106962500044"/>
-    <node visible="true" id="-2350633" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9564814414499949" lon="-122.1354938066399853"/>
-    <node visible="true" id="-2350631" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9555198082399912" lon="-122.1431903911900037"/>
-    <node visible="true" id="-2350629" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9558336912299978" lon="-122.1454550593599890"/>
-    <node visible="true" id="-2350627" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9563822747899948" lon="-122.1490477175800038"/>
-    <node visible="true" id="-2350625" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9567243429500039" lon="-122.1512257310100011"/>
-    <node visible="true" id="-2350623" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9535277359900007" lon="-122.1598485730899881"/>
-    <node visible="true" id="-2350621" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9504231225399948" lon="-122.1634598284799864"/>
-    <node visible="true" id="-2350619" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9478783627999903" lon="-122.1655541973999846"/>
-    <node visible="true" id="-2350617" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9441214007299834" lon="-122.1686294861600004"/>
-    <node visible="true" id="-2350615" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9422350941499928" lon="-122.1701667881399942"/>
-    <node visible="true" id="-2350613" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9383502647300048" lon="-122.1737741750999788"/>
-    <node visible="true" id="-2350611" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9353583510699934" lon="-122.1787647304200135"/>
-    <node visible="true" id="-2350609" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9331959765999898" lon="-122.1823651257199828"/>
-    <node visible="true" id="-2350607" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9319897188699926" lon="-122.1843619763999982"/>
-    <node visible="true" id="-2350605" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9301455400199998" lon="-122.1873674048899971"/>
-    <node visible="true" id="-2350603" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9282630394699964" lon="-122.1906368458499941"/>
+    <node visible="true" id="-2350655" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9793198285399924" lon="-122.0955565728999943">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350653" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9766819112099938" lon="-122.0991000656799912">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350651" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9739688549899910" lon="-122.1027287376499970">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350649" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9722801496999907" lon="-122.1049938964199981">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350647" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9698508808499966" lon="-122.1083138985700032">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350645" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9678721581800005" lon="-122.1109715732600023">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350643" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9655902893099935" lon="-122.1140101839499863">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350641" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9626300636699909" lon="-122.1179808915100011">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350639" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9597114282099994" lon="-122.1219863462799822">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350637" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9583913549500025" lon="-122.1273242979399924">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350635" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9571352582600028" lon="-122.1328106962500044">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350633" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9564814414499949" lon="-122.1354938066399853">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350631" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9555198082399912" lon="-122.1431903911900037">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350629" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9558336912299978" lon="-122.1454550593599890">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350627" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9563822747899948" lon="-122.1490477175800038">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350625" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9567243429500039" lon="-122.1512257310100011">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350623" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9535277359900007" lon="-122.1598485730899881">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350621" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9504231225399948" lon="-122.1634598284799864">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350619" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9478783627999903" lon="-122.1655541973999846">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350617" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9441214007299834" lon="-122.1686294861600004">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350615" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9422350941499928" lon="-122.1701667881399942">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350613" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9383502647300048" lon="-122.1737741750999788">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350611" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9353583510699934" lon="-122.1787647304200135">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350609" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9331959765999898" lon="-122.1823651257199828">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350607" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9319897188699926" lon="-122.1843619763999982">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350605" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9301455400199998" lon="-122.1873674048899971">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350603" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9282630394699964" lon="-122.1906368458499941">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-2350601" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9265820472799859" lon="-122.1975045101000177"/>
-    <node visible="true" id="-2350599" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9263789402699985" lon="-122.1982520358600084"/>
+    <node visible="true" id="-2350599" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9263789402699985" lon="-122.1982520358600084">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-2350597" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9246656584000021" lon="-122.1994462176500065"/>
-    <node visible="true" id="-2350595" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9218251285400001" lon="-122.2013493631500012"/>
-    <node visible="true" id="-2350593" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9169379169199985" lon="-122.2031808428500028"/>
+    <node visible="true" id="-2350595" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9218251285400001" lon="-122.2013493631500012">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2350593" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9169379169199985" lon="-122.2031808428500028">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-2350591" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9120579306700023" lon="-122.2041319837099991"/>
-    <node visible="true" id="-2350589" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9096956302799981" lon="-122.2046239028699972"/>
+    <node visible="true" id="-2350589" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9096956302799981" lon="-122.2046239028699972">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-2350583" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9056486098999912" lon="-122.2069338585699825"/>
     <node visible="true" id="-2350581" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9068412544499935" lon="-122.2054567847099804">
         <tag k="power" v="tower"/>
@@ -2169,27 +2312,15 @@
     <node visible="true" id="-2349083" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0238785971500022" lon="-122.1933820994599813"/>
     <node visible="true" id="-2349081" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0249275875399988" lon="-122.1956444970399929"/>
     <node visible="true" id="-2349079" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0256851326799961" lon="-122.1972744104500066"/>
-    <node visible="true" id="-2349077" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0306868612099933" lon="-122.2091612029999936">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2349077" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0306868612099933" lon="-122.2091612029999936"/>
     <node visible="true" id="-2349075" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0314979407299987" lon="-122.2113680543499896"/>
     <node visible="true" id="-2349073" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0324514643199905" lon="-122.2139413597100059"/>
     <node visible="true" id="-2349071" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0332131891999907" lon="-122.2160293865299820"/>
     <node visible="true" id="-2349069" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0339216815699928" lon="-122.2203020966099842"/>
     <node visible="true" id="-2349067" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0342749367300001" lon="-122.2224890312299834"/>
-    <node visible="true" id="-2349065" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0346732701499946" lon="-122.2248796385399885">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2349063" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0353016062099911" lon="-122.2288792976199971">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2349061" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0369867132699824" lon="-122.2316640731399957">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2349065" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0346732701499946" lon="-122.2248796385399885"/>
+    <node visible="true" id="-2349063" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0353016062099911" lon="-122.2288792976199971"/>
+    <node visible="true" id="-2349061" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0369867132699824" lon="-122.2316640731399957"/>
     <node visible="true" id="-2349059" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0383258186999882" lon="-122.2337957789900003"/>
     <node visible="true" id="-2349057" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0388429207200076" lon="-122.2338053418099975"/>
     <node visible="true" id="-2349055" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0394156734099909" lon="-122.2388054678000060">
@@ -2971,7 +3102,10 @@
     <node visible="true" id="-2347119" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8919230324999958" lon="-122.1991082100099959"/>
     <node visible="true" id="-2347117" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8908488794699920" lon="-122.1978388319100048"/>
     <node visible="true" id="-2347115" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8895459467999913" lon="-122.1962547270099861"/>
-    <node visible="true" id="-2347113" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8881643072099976" lon="-122.1946179633900016"/>
+    <node visible="true" id="-2347113" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8881643072099976" lon="-122.1946179633900016">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-2347111" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8876271647200014" lon="-122.1940937626299899"/>
     <node visible="true" id="-2347109" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8838126941999960" lon="-122.1898728129499858"/>
     <node visible="true" id="-2347107" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8820768277199917" lon="-122.1884863641999885"/>
@@ -3029,10 +3163,7 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2347015" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8494526646599994" lon="-122.1595643133799882">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2347015" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8494526646599994" lon="-122.1595643133799882"/>
     <node visible="true" id="-2347013" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8499319520499995" lon="-122.1585994490300067">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
@@ -3111,21 +3242,18 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2346965" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8757116148899868" lon="-122.1784051106999982">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2346963" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8766066008300015" lon="-122.1796827342499938">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2346961" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8771622043599976" lon="-122.1801553034899825">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2346965" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8757116148899868" lon="-122.1784051106999982"/>
+    <node visible="true" id="-2346963" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8766066008300015" lon="-122.1796827342499938"/>
+    <node visible="true" id="-2346961" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8771622043599976" lon="-122.1801553034899825"/>
     <node visible="true" id="-2346959" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8776317332099950" lon="-122.1812245797499941"/>
-    <node visible="true" id="-2346957" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8779662129999863" lon="-122.1820547321400028"/>
-    <node visible="true" id="-2346955" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8790672139000009" lon="-122.1835596508600190"/>
+    <node visible="true" id="-2346957" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8779662129999863" lon="-122.1820547321400028">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2346955" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8790672139000009" lon="-122.1835596508600190">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-2346953" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8802915183799911" lon="-122.1852380856399947">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
@@ -3325,10 +3453,7 @@
     </node>
     <node visible="true" id="-2346751" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9051813401000004" lon="-122.2088471757199954"/>
     <node visible="true" id="-2346749" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9048468735699871" lon="-122.2096326840700016"/>
-    <node visible="true" id="-2346747" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9047057336799824" lon="-122.2097921955400182">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2346747" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9047057336799824" lon="-122.2097921955400182"/>
     <node visible="true" id="-2346745" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9047604496099950" lon="-122.2097303570800051">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
@@ -3337,8 +3462,14 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2346741" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9044679894199845" lon="-122.2062839475100020"/>
-    <node visible="true" id="-2346739" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9040388064799885" lon="-122.2068499467199985"/>
+    <node visible="true" id="-2346741" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9044679894199845" lon="-122.2062839475100020">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2346739" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9040388064799885" lon="-122.2068499467199985">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-2346737" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9043474388199897" lon="-122.2079934655999978"/>
     <node visible="true" id="-2346735" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9046886776699878" lon="-122.2088074317299800">
         <tag k="power" v="tower"/>
@@ -3350,10 +3481,7 @@
     </node>
     <node visible="true" id="-2346731" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9047120961699946" lon="-122.2058502054299964"/>
     <node visible="true" id="-2346729" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9042965436600028" lon="-122.2063748478499861"/>
-    <node visible="true" id="-2346727" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9039532857400019" lon="-122.2068082106699904">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2346727" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9039532857400019" lon="-122.2068082106699904"/>
     <node visible="true" id="-2346725" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9043000227599833" lon="-122.2080452874499912"/>
     <node visible="true" id="-2346723" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9046329816099927" lon="-122.2088281977499946"/>
     <node visible="true" id="-2346721" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9045705774799941" lon="-122.2094537924599820">
@@ -3412,7 +3540,10 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-2346671" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8852234111299992" lon="-122.1911597815600032"/>
-    <node visible="true" id="-2346669" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8860693174800005" lon="-122.1925735032200038"/>
+    <node visible="true" id="-2346669" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8860693174800005" lon="-122.1925735032200038">
+        <tag k="power" v="tower"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-2346667" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8875909223099967" lon="-122.1936962075899800">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
@@ -3575,10 +3706,7 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2345869" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0043572463799961" lon="-122.2338903992900043">
-        <tag k="power" v="pole"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2345869" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0043572463799961" lon="-122.2338903992900043"/>
     <node visible="true" id="-2345867" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0044763153900007" lon="-122.2339173936299943">
         <tag k="power" v="pole"/>
         <tag k="error:circular" v="15"/>
@@ -3614,15 +3742,9 @@
     <node visible="true" id="-2345833" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0433260262599902" lon="-122.2337389703899788"/>
     <node visible="true" id="-2345831" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0453916809899937" lon="-122.2337488246900108"/>
     <node visible="true" id="-2345713" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9062063482899987" lon="-122.2079409927399922"/>
-    <node visible="true" id="-2345711" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9066660040199963" lon="-122.2073306738899987">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2345711" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9066660040199963" lon="-122.2073306738899987"/>
     <node visible="true" id="-2345709" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9060390160500020" lon="-122.2076615560900024"/>
-    <node visible="true" id="-2345707" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9066812417199941" lon="-122.2071720353499984">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2345707" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9066812417199941" lon="-122.2071720353499984"/>
     <node visible="true" id="-2345705" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9070711121299979" lon="-122.2078105245000046">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
@@ -4009,14 +4131,8 @@
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2338847" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0044858274799964" lon="-122.2342538377399848">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2338845" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0043755945100017" lon="-122.2342549150199886">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2338847" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0044858274799964" lon="-122.2342538377399848"/>
+    <node visible="true" id="-2338845" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0043755945100017" lon="-122.2342549150199886"/>
     <node visible="true" id="-2338843" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0028033778399958" lon="-122.2342702698900041">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
@@ -4072,10 +4188,7 @@
     <node visible="true" id="-2338769" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9837986119699949" lon="-122.3303717006200060"/>
     <node visible="true" id="-2338767" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9822927369299990" lon="-122.3332649237299989"/>
     <node visible="true" id="-2338765" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9811098263200009" lon="-122.3355294569000051"/>
-    <node visible="true" id="-2338291" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0002722669699935" lon="-122.2335398869199850">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2338291" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0002722669699935" lon="-122.2335398869199850"/>
     <node visible="true" id="-2338289" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0002129538099993" lon="-122.2350404342499957">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
@@ -4102,10 +4215,7 @@
     <node visible="true" id="-2338255" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9640646783999998" lon="-122.2639231109200040"/>
     <node visible="true" id="-2338253" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9626798391600033" lon="-122.2649080887800039"/>
     <node visible="true" id="-2338251" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9611974995399919" lon="-122.2659463097699870"/>
-    <node visible="true" id="-2338249" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9596451549699907" lon="-122.2659897552500041">
-        <tag k="power" v="tower"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-2338249" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9596451549699907" lon="-122.2659897552500041"/>
     <node visible="true" id="-2338247" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9571401299199920" lon="-122.2683513341600019">
         <tag k="power" v="tower"/>
         <tag k="error:circular" v="15"/>
@@ -4785,19 +4895,7 @@
     <node visible="true" id="-2327883" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0344977674699933" lon="-122.1417930222499848"/>
     <node visible="true" id="-2327881" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0387746001800053" lon="-122.1312831457699986"/>
     <node visible="true" id="-2327879" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0434940675299984" lon="-122.1218678729700144"/>
-    <way visible="true" id="-2379135" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2365859"/>
-        <nd ref="-2365876"/>
-        <tag k="owner" v="Pacific"/>
-        <tag k="power" v="line"/>
-        <tag k="voltage" v="230000"/>
-        <tag k="cables" v="6"/>
-        <tag k="wires" v="double"/>
-        <tag k="ref" v="Pittsburg - Sobrante"/>
-        <tag k="REF2" v="00008c"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2379133" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379096" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365859"/>
         <nd ref="-2350685"/>
         <nd ref="-2350683"/>
@@ -4842,11 +4940,13 @@
         <nd ref="-2350605"/>
         <nd ref="-2350603"/>
         <nd ref="-2350601"/>
+        <nd ref="-2366977"/>
         <nd ref="-2350599"/>
         <nd ref="-2350597"/>
         <nd ref="-2350595"/>
         <nd ref="-2350593"/>
         <nd ref="-2350591"/>
+        <nd ref="-2366847"/>
         <nd ref="-2350589"/>
         <nd ref="-2350581"/>
         <tag k="owner" v="PG&amp;E"/>
@@ -4871,7 +4971,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.39549692137577402"/>
     </way>
-    <way visible="true" id="-2379129" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379092" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365860"/>
         <nd ref="-2350357"/>
         <nd ref="-2350355"/>
@@ -4912,7 +5012,7 @@
         <tag k="Shape__Len" v="0.051991888445569998"/>
         <tag k="hoot:hash" v="sha1sum:c2447bfc016eb058c4f22afe04024bc5bc56df02;sha1sum:549a0fd0ec95c78b1930fa8f7aed0f7cdf906be8"/>
     </way>
-    <way visible="true" id="-2379124" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379087" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346539"/>
         <nd ref="-2346533"/>
         <nd ref="-2346531"/>
@@ -4943,7 +5043,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.039390861959535999"/>
     </way>
-    <way visible="true" id="-2379119" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379082" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2366919"/>
         <nd ref="-2366996"/>
         <nd ref="-2349033"/>
@@ -4953,7 +5053,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2379117" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379080" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349035"/>
         <nd ref="-2349033"/>
         <tag k="owner" v="PG&amp;E"/>
@@ -4977,7 +5077,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.00090148772428400004"/>
     </way>
-    <way visible="true" id="-2379113" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379076" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349161"/>
         <nd ref="-2349159"/>
         <nd ref="-2349157"/>
@@ -5056,9 +5156,9 @@
         <tag k="wires" v="single"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.18038848370772501"/>
-        <tag k="hoot:hash" v="sha1sum:661e7162c24c2800e59584f7908e3503e45b56e5;sha1sum:c2e5fb5bcecb036558bb01b5948bfbfce7f1ca44"/>
+        <tag k="hoot:hash" v="sha1sum:661e7162c24c2800e59584f7908e3503e45b56e5;sha1sum:20a1674a1ff29181ba7abc4746e4e0ad4d0fb62b"/>
     </way>
-    <way visible="true" id="-2379109" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379072" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349167"/>
         <nd ref="-2349165"/>
         <nd ref="-2349163"/>
@@ -5081,9 +5181,9 @@
         <tag k="Length_Fee" v="2732.35842856"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0076626932828919997"/>
-        <tag k="hoot:hash" v="sha1sum:45ebdfb24b336ccef94918271f771755a6090e77;sha1sum:a84542e703db97d9539cc322619b4a03fd062338"/>
+        <tag k="hoot:hash" v="sha1sum:45ebdfb24b336ccef94918271f771755a6090e77;sha1sum:91fd2541434fafa79561ede90b9186759c4ff621"/>
     </way>
-    <way visible="true" id="-2379105" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379068" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2338247"/>
         <nd ref="-2349025"/>
         <nd ref="-2349023"/>
@@ -5113,7 +5213,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.01619272216101"/>
     </way>
-    <way visible="true" id="-2379088" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379051" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349013"/>
         <nd ref="-2349011"/>
         <nd ref="-2349009"/>
@@ -5139,7 +5239,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.006880524642741"/>
     </way>
-    <way visible="true" id="-2379080" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379043" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365987"/>
         <nd ref="-2346695"/>
         <tag k="power" v="line"/>
@@ -5148,7 +5248,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2379078" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379041" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346697"/>
         <nd ref="-2346695"/>
         <nd ref="-2346693"/>
@@ -5176,7 +5276,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.073990390109161003"/>
     </way>
-    <way visible="true" id="-2379060" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379023" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346705"/>
         <nd ref="-2367255"/>
         <tag k="power" v="line"/>
@@ -5186,7 +5286,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2379044" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2379007" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2348747"/>
         <nd ref="-2348745"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
@@ -5196,7 +5296,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2379000" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378963" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349183"/>
         <nd ref="-2349179"/>
         <tag k="power" v="line"/>
@@ -5208,7 +5308,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378997" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378960" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365861"/>
         <nd ref="-2349261"/>
         <nd ref="-2349259"/>
@@ -5284,7 +5384,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.122685915835216"/>
     </way>
-    <way visible="true" id="-2378964" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378927" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349175"/>
         <nd ref="-2366767"/>
         <tag k="power" v="line"/>
@@ -5296,7 +5396,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378929" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378892" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347011"/>
         <nd ref="-2347009"/>
         <nd ref="-2347007"/>
@@ -5320,14 +5420,15 @@
         <nd ref="-2346971"/>
         <nd ref="-2346969"/>
         <nd ref="-2346967"/>
+        <nd ref="-2366596"/>
         <nd ref="-2346965"/>
+        <nd ref="-2366595"/>
         <nd ref="-2346963"/>
+        <nd ref="-2366594"/>
         <nd ref="-2346961"/>
         <nd ref="-2346959"/>
         <nd ref="-2346957"/>
-        <nd ref="-2366593"/>
         <nd ref="-2346955"/>
-        <nd ref="-2366954"/>
         <nd ref="-2346953"/>
         <nd ref="-2366592"/>
         <nd ref="-2346951"/>
@@ -5366,17 +5467,17 @@
         <tag k="frequency" v="60"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.092586216840936"/>
-        <tag k="hoot:hash" v="sha1sum:4eef1651dd79caafef95954f4253189e6bd0c174;sha1sum:02faaf90082258eba1c03d1dafa425fc47f56a2e;sha1sum:d97468b69b93e831b598ae275f8cd79ecd10ae79;sha1sum:3563482d68f46a469ff731f28285f71f77716da8;sha1sum:c4055fcf2922b668d0248706a4fe7aad68bfcb7d;sha1sum:fb3ee31b1c11ce96fffcc2330dfd5c2aab6671f4;sha1sum:d0b47bbf9e8b431db230750a7ef1bb3b87a52e8e"/>
+        <tag k="hoot:hash" v="sha1sum:4eef1651dd79caafef95954f4253189e6bd0c174;sha1sum:2a82265124ff56ea0bee3964091bd71989398462;sha1sum:d97468b69b93e831b598ae275f8cd79ecd10ae79;sha1sum:3563482d68f46a469ff731f28285f71f77716da8;sha1sum:e6aefa42163d27b0a1dd8c7febf7df53dd0608a3;sha1sum:a80558f105c3c9f799494492852a27f07a667eae;sha1sum:1bce8c5eb450cf9fbb01c9e335985d80ec1a0f85"/>
     </way>
-    <way visible="true" id="-2378926" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378889" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347013"/>
         <nd ref="-2347017"/>
         <tag k="power" v="line"/>
-        <tag k="hoot:hash" v="sha1sum:0d86efecaf8287010fe5e35f7f1bbb2e53d53111"/>
+        <tag k="hoot:hash" v="sha1sum:101718368523df1cdf5ca9c2b7f6970a3c27ec31"/>
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378910" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378873" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347029"/>
         <nd ref="-2347027"/>
         <nd ref="-2347025"/>
@@ -5405,14 +5506,14 @@
         <tag k="Length_Fee" v="2582.92098913"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0080791688186990004"/>
-        <tag k="hoot:hash" v="sha1sum:97e65d8ebfc93b6911031fbd6f4974d8d18c334e;sha1sum:0d86efecaf8287010fe5e35f7f1bbb2e53d53111;sha1sum:5a3cddf083bf9ce6973235881b9436e69d029a7c"/>
+        <tag k="hoot:hash" v="sha1sum:6ea2fb4b9ad0bdef0eb02ea100897eb749d46db5;sha1sum:101718368523df1cdf5ca9c2b7f6970a3c27ec31"/>
     </way>
-    <way visible="true" id="-2378903" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378866" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349099"/>
         <nd ref="-2366723"/>
         <nd ref="-2349093"/>
         <tag k="power" v="line"/>
-        <tag k="hoot:hash" v="sha1sum:c2e5fb5bcecb036558bb01b5948bfbfce7f1ca44"/>
+        <tag k="hoot:hash" v="sha1sum:20a1674a1ff29181ba7abc4746e4e0ad4d0fb62b"/>
         <tag k="name" v="Oleum - Martinez 115kV transmission line"/>
         <tag k="voltage" v="115000"/>
         <tag k="cables" v="6"/>
@@ -5420,11 +5521,11 @@
         <tag k="REF2" v="000071"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378902" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378865" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367052"/>
         <nd ref="-2349131"/>
         <tag k="power" v="line"/>
-        <tag k="hoot:hash" v="sha1sum:c2e5fb5bcecb036558bb01b5948bfbfce7f1ca44"/>
+        <tag k="hoot:hash" v="sha1sum:20a1674a1ff29181ba7abc4746e4e0ad4d0fb62b"/>
         <tag k="name" v="Oleum - Martinez 115kV transmission line"/>
         <tag k="voltage" v="115000"/>
         <tag k="cables" v="6"/>
@@ -5432,7 +5533,7 @@
         <tag k="REF2" v="000071"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378879" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378842" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345253"/>
         <nd ref="-2367378"/>
         <nd ref="-2345249"/>
@@ -5446,7 +5547,7 @@
         <tag k="REF2" v="000003"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378864" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378827" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346537"/>
         <nd ref="-2346539"/>
         <tag k="alt_name" v="Oleum - North Tower - Christie 115kV transmission line"/>
@@ -5470,7 +5571,59 @@
         <tag k="Shape__Len" v="0.137410656126703"/>
         <tag k="hoot:hash" v="sha1sum:41d2d1749beed7ae77baf4b832154491f5bb746c;sha1sum:0240ccbdbbd3d661268dcb9f59a2bb9f93ab7d57"/>
     </way>
-    <way visible="true" id="-2378848" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378823" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2366454"/>
+        <nd ref="-2366829"/>
+        <nd ref="-2367385"/>
+        <nd ref="-2366453"/>
+        <nd ref="-2366452"/>
+        <nd ref="-2366451"/>
+        <nd ref="-2366450"/>
+        <nd ref="-2366449"/>
+        <nd ref="-2366448"/>
+        <nd ref="-2366447"/>
+        <nd ref="-2366446"/>
+        <nd ref="-2366445"/>
+        <nd ref="-2366444"/>
+        <nd ref="-2366443"/>
+        <nd ref="-2366442"/>
+        <nd ref="-2366441"/>
+        <nd ref="-2366440"/>
+        <nd ref="-2366439"/>
+        <nd ref="-2366438"/>
+        <nd ref="-2366437"/>
+        <nd ref="-2366436"/>
+        <nd ref="-2366435"/>
+        <nd ref="-2366434"/>
+        <nd ref="-2366373"/>
+        <nd ref="-2366379"/>
+        <nd ref="-2366378"/>
+        <nd ref="-2366377"/>
+        <nd ref="-2366376"/>
+        <nd ref="-2366929"/>
+        <nd ref="-2366375"/>
+        <nd ref="-2366380"/>
+        <nd ref="-2366381"/>
+        <nd ref="-2366382"/>
+        <nd ref="-2366383"/>
+        <nd ref="-2366384"/>
+        <nd ref="-2366385"/>
+        <nd ref="-2366370"/>
+        <nd ref="-2366362"/>
+        <nd ref="-2366364"/>
+        <nd ref="-2366368"/>
+        <nd ref="-2366365"/>
+        <nd ref="-2339937"/>
+        <tag k="owner" v="Pacific Gas &amp; Electric"/>
+        <tag k="power" v="line"/>
+        <tag k="frequency" v="60"/>
+        <tag k="voltage" v="115000"/>
+        <tag k="ref" v="Standard Oil - Sobrante"/>
+        <tag k="cables" v="6"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2378805" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349031"/>
         <nd ref="-2346535"/>
         <nd ref="-2346539"/>
@@ -5496,14 +5649,14 @@
         <tag k="wires" v="single"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.004831019352687"/>
-        <tag k="hoot:hash" v="sha1sum:bb6250ea4876097b8dcbb79f80640f0cf58e8390;sha1sum:d17994045709971ef6c9ae01c815928c142fe965"/>
+        <tag k="hoot:hash" v="sha1sum:5ae91e802058874cf4ddb9c9431e85b8ca8e09cb;sha1sum:abcbbfed4d209c11395b20c95bcdc001eef57387"/>
     </way>
-    <way visible="true" id="-2378845" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378802" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2338839"/>
         <nd ref="-2338289"/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="power" v="line"/>
-        <tag k="hoot:hash" v="sha1sum:b6f68e92f261bc024d3e40f1b01156163345c072"/>
+        <tag k="hoot:hash" v="sha1sum:cce4a1fa36e060b1a6ccb1e71917753605d71b01"/>
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="115000"/>
         <tag k="ref" v="Standard Oil - Sobrante"/>
@@ -5513,14 +5666,14 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378844" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378801" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2338777"/>
         <nd ref="-2366658"/>
         <nd ref="-2366656"/>
         <nd ref="-2338783"/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="power" v="line"/>
-        <tag k="hoot:hash" v="sha1sum:b6f68e92f261bc024d3e40f1b01156163345c072"/>
+        <tag k="hoot:hash" v="sha1sum:cce4a1fa36e060b1a6ccb1e71917753605d71b01"/>
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="115000"/>
         <tag k="ref" v="Standard Oil - Sobrante"/>
@@ -5530,7 +5683,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378840" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378797" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2338841"/>
         <nd ref="-2338839"/>
         <nd ref="-2338837"/>
@@ -5594,9 +5747,9 @@
         <tag k="Length_Fee" v="58645.62823076"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.187034405899031"/>
-        <tag k="hoot:hash" v="sha1sum:b7f46c3dbeb030f60ee82da9326f194015eba0d2;sha1sum:b6f68e92f261bc024d3e40f1b01156163345c072"/>
+        <tag k="hoot:hash" v="sha1sum:99bb0b5746d07963029a796a79e74ebe39fe8d10;sha1sum:cce4a1fa36e060b1a6ccb1e71917753605d71b01"/>
     </way>
-    <way visible="true" id="-2378773" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378730" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2338841"/>
         <nd ref="-2338287"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
@@ -5606,7 +5759,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378772" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378729" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2338849"/>
         <nd ref="-2338843"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
@@ -5616,12 +5769,13 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378763" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378722" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2338291"/>
+        <nd ref="-2366346"/>
         <nd ref="-2366454"/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="power" v="line"/>
-        <tag k="hoot:hash" v="sha1sum:b6f68e92f261bc024d3e40f1b01156163345c072"/>
+        <tag k="hoot:hash" v="sha1sum:cce4a1fa36e060b1a6ccb1e71917753605d71b01"/>
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="115000"/>
         <tag k="ref" v="Standard Oil - Sobrante"/>
@@ -5631,46 +5785,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378759" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2338291"/>
-        <nd ref="-2338289"/>
-        <nd ref="-2338287"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1899"/>
-        <tag k="Length_Mil" v="7"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="6"/>
-        <tag k="tiger:cfcc" v="C20"/>
-        <tag k="ref" v="Standard Oil - Sobrante"/>
-        <tag k="REF1" v="0002ab"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="tiger:county" v="Contra Costa, CA"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.230Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Length_Fee" v="38790.08417009"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.11587733916562"/>
-    </way>
-    <way visible="true" id="-2378750" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2338249"/>
-        <nd ref="-2367475"/>
-        <nd ref="-2338247"/>
-        <tag k="owner" v="Pacific Gas &amp; Electric"/>
-        <tag k="power" v="line"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="ref" v="Oleum - El Cerrito"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2378732" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378699" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346557"/>
         <nd ref="-2346561"/>
         <tag k="power" v="line"/>
@@ -5679,7 +5794,7 @@
         <tag k="REF2" v="000026"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378731" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378698" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346551"/>
         <nd ref="-2366476"/>
         <nd ref="-2366477"/>
@@ -5691,7 +5806,7 @@
         <tag k="REF2" v="000026"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378727" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378694" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346559"/>
         <nd ref="-2346557"/>
         <nd ref="-2346555"/>
@@ -5723,7 +5838,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.137410656126703"/>
     </way>
-    <way visible="true" id="-2378705" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378672" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347163"/>
         <nd ref="-2365982"/>
         <nd ref="-2365983"/>
@@ -5740,7 +5855,7 @@
         <tag k="REVIEW" v="000037"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378688" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378655" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347087"/>
         <nd ref="-2367247"/>
         <tag k="power" v="line"/>
@@ -5751,7 +5866,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378679" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378646" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365864"/>
         <nd ref="-2347583"/>
         <nd ref="-2347581"/>
@@ -5825,7 +5940,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.17128387068380199"/>
     </way>
-    <way visible="true" id="-2378663" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378630" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365865"/>
         <nd ref="-2347427"/>
         <nd ref="-2347425"/>
@@ -5901,7 +6016,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.171340978803453"/>
     </way>
-    <way visible="true" id="-2378648" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378615" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367255"/>
         <nd ref="-2367249"/>
         <nd ref="-2367252"/>
@@ -5918,7 +6033,28 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378627" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378595" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2338111"/>
+        <nd ref="-2338097"/>
+        <tag k="power" v="line"/>
+        <tag k="cables" v="3"/>
+        <tag k="wires" v="single"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2378594" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2367198"/>
+        <nd ref="-2367202"/>
+        <nd ref="-2367200"/>
+        <nd ref="-2367199"/>
+        <nd ref="-2338105"/>
+        <tag k="power" v="line"/>
+        <tag k="cables" v="3"/>
+        <tag k="wires" v="single"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2378578" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2360821"/>
         <nd ref="-2360951"/>
         <nd ref="-2360949"/>
@@ -5944,30 +6080,9 @@
         <tag k="Length_Fee" v="2660.78913489"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0092071043745129994"/>
-        <tag k="hoot:hash" v="sha1sum:e790b83e055b98cf36376b66c475674ce1bc9dca;sha1sum:153b8fbf1863c3c02914da799a8ebb4356f1a8e1"/>
+        <tag k="hoot:hash" v="sha1sum:e790b83e055b98cf36376b66c475674ce1bc9dca;sha1sum:609c1ad4ceaca75957e984d0dde232b4a4094eec"/>
     </way>
-    <way visible="true" id="-2378624" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2338111"/>
-        <nd ref="-2338097"/>
-        <tag k="power" v="line"/>
-        <tag k="cables" v="3"/>
-        <tag k="wires" v="single"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2378623" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2367198"/>
-        <nd ref="-2367202"/>
-        <nd ref="-2367200"/>
-        <nd ref="-2367199"/>
-        <nd ref="-2338105"/>
-        <tag k="power" v="line"/>
-        <tag k="cables" v="3"/>
-        <tag k="wires" v="single"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2378608" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378575" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2366748"/>
         <nd ref="-2366756"/>
         <nd ref="-2366747"/>
@@ -5979,8 +6094,9 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378601" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378568" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345709"/>
+        <nd ref="-2367010"/>
         <nd ref="-2345707"/>
         <nd ref="-2345705"/>
         <tag k="owner" v="PG&amp;E"/>
@@ -6005,10 +6121,11 @@
         <tag k="wires" v="double"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0015556265734830001"/>
-        <tag k="hoot:hash" v="sha1sum:5b4b95cdbeb1fe79b94fbc62de06bbb79007e472;sha1sum:6b7a3eae4e14ced3285e91806ece4d32a0aeb2f9"/>
+        <tag k="hoot:hash" v="sha1sum:5b4b95cdbeb1fe79b94fbc62de06bbb79007e472;sha1sum:519cf31acb14823ce20c52923c0561a41d80b511"/>
     </way>
-    <way visible="true" id="-2378597" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378564" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345713"/>
+        <nd ref="-2366967"/>
         <nd ref="-2345711"/>
         <nd ref="-2345705"/>
         <tag k="owner" v="PG&amp;E"/>
@@ -6033,9 +6150,9 @@
         <tag k="wires" v="double"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.001392038258421"/>
-        <tag k="hoot:hash" v="sha1sum:7c80f5acd1b066846e037bef3066739be63e6b95;sha1sum:6edda006b1aada5eac696d60ebc75efa1643916a"/>
+        <tag k="hoot:hash" v="sha1sum:7c80f5acd1b066846e037bef3066739be63e6b95;sha1sum:6bbbfe0f2304e565ead1f2a9c3059b25833dcd71"/>
     </way>
-    <way visible="true" id="-2378557" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378513" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367250"/>
         <nd ref="-2346709"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
@@ -6048,7 +6165,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378532" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378497" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347075"/>
         <nd ref="-2366892"/>
         <nd ref="-2347079"/>
@@ -6061,7 +6178,7 @@
         <tag k="REF2" v="000035"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378531" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378496" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365922"/>
         <nd ref="-2366069"/>
         <nd ref="-2366070"/>
@@ -6095,7 +6212,7 @@
         <tag k="REF2" v="000035"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378528" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378493" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346893"/>
         <nd ref="-2347075"/>
         <nd ref="-2347073"/>
@@ -6139,7 +6256,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.099957525011448001"/>
     </way>
-    <way visible="true" id="-2378518" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378483" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347085"/>
         <nd ref="-2366971"/>
         <nd ref="-2347089"/>
@@ -6152,39 +6269,10 @@
         <tag k="REF2" v="000035"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378514" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2347087"/>
-        <nd ref="-2347085"/>
-        <nd ref="-2347083"/>
-        <nd ref="-2347081"/>
-        <nd ref="-2347079"/>
-        <nd ref="-2347077"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1295"/>
-        <tag k="Length_Mil" v="6"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
-        <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="cables" v="6"/>
-        <tag k="ref" v="Parkway - Moraga/Bahia - Moraga"/>
-        <tag k="REF1" v="000035"/>
-        <tag k="REF2" v="000035"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="REVIEW" v="0002d5"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="32315.51980185"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.099957525011448001"/>
-    </way>
-    <way visible="true" id="-2378508" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378473" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347095"/>
         <nd ref="-2367011"/>
-        <nd ref="-2347015"/>
+        <nd ref="-2366965"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
         <tag k="power" v="line"/>
         <tag k="voltage" v="230000"/>
@@ -6194,55 +6282,7 @@
         <tag k="REF2" v="000035"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378500" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2346721"/>
-        <nd ref="-2346733"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1307"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
-        <tag k="REF1" v="000029"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="61.87193626"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.000198593838851"/>
-        <tag k="hoot:hash" v="sha1sum:3f1bfc6dd34e05c0782e89afc66e1ab476905f94;sha1sum:ad4ef87c0ecde9051246dec124edd450f431fb71"/>
-    </way>
-    <way visible="true" id="-2378496" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2346721"/>
-        <nd ref="-2346747"/>
-        <nd ref="-2346745"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1305"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
-        <tag k="REF1" v="00002b"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="135.99512327"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.00044696531921799998"/>
-    </way>
-    <way visible="true" id="-2378491" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378466" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346883"/>
         <nd ref="-2365950"/>
         <nd ref="-2365951"/>
@@ -6258,31 +6298,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378475" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2346733"/>
-        <nd ref="-2346751"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1302"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
-        <tag k="REF1" v="00002e"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="289.53575539"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.00092524724585700004"/>
-        <tag k="hoot:hash" v="sha1sum:6f5e837ab5b42f991283dd84340a6ce99776cbb5;sha1sum:163ce0e5a0966af7e224a17fb1c190a13814137e"/>
-    </way>
-    <way visible="true" id="-2378471" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378444" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347649"/>
         <nd ref="-2347647"/>
         <nd ref="-2347645"/>
@@ -6309,7 +6325,7 @@
         <tag k="Shape__Len" v="0.0036052084460860001"/>
         <tag k="hoot:hash" v="sha1sum:e72412f9f97947d124e7ca2208648cf100021392;sha1sum:23e07663c1cb34a933cee17e3b9fc39ab078ca90"/>
     </way>
-    <way visible="true" id="-2378466" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378439" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365863"/>
         <nd ref="-2347655"/>
         <nd ref="-2347649"/>
@@ -6337,7 +6353,7 @@
         <tag k="source" v="Yahoo"/>
         <tag k="Shape__Len" v="0.107089847915945"/>
     </way>
-    <way visible="true" id="-2378462" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378435" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365862"/>
         <nd ref="-2347809"/>
         <nd ref="-2347807"/>
@@ -6366,7 +6382,31 @@
         <tag k="Shape__Len" v="0.114548422810257"/>
         <tag k="hoot:hash" v="sha1sum:e969cf31a0f89d59e64d67f219af6029aa2cecf4;sha1sum:9db7596726a3a5d14dbcd871bdb2a9cc7a8b443e"/>
     </way>
-    <way visible="true" id="-2378448" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378426" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2346733"/>
+        <nd ref="-2346751"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="OBJECTID" v="1302"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
+        <tag k="Legend" v="PG&amp;E_115kV"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="cables" v="3"/>
+        <tag k="REF1" v="00002e"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="power" v="line"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
+        <tag k="circuits" v="2"/>
+        <tag k="location" v="overhead"/>
+        <tag k="Length_Fee" v="289.53575539"/>
+        <tag k="Type" v="OH"/>
+        <tag k="Shape__Len" v="0.00092524724585700004"/>
+        <tag k="hoot:hash" v="sha1sum:6f5e837ab5b42f991283dd84340a6ce99776cbb5;sha1sum:b7006097b892a1ca3275359409971e5215169df9"/>
+    </way>
+    <way visible="true" id="-2378423" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346613"/>
         <nd ref="-2346615"/>
         <tag k="power" v="line"/>
@@ -6376,7 +6416,7 @@
         <tag k="REF2" v="000026"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378395" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378370" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345163"/>
         <nd ref="-2366341"/>
         <tag k="power" v="line"/>
@@ -6386,7 +6426,7 @@
         <tag k="REF2" v="000026"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378392" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378367" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345163"/>
         <nd ref="-2346645"/>
         <nd ref="-2346643"/>
@@ -6454,43 +6494,20 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.137410656126703"/>
     </way>
-    <way visible="true" id="-2378388" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2346919"/>
-        <nd ref="-2346917"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1298"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="ref" v="Sobrante - East Portal/East Portal - Claremont"/>
-        <tag k="REF1" v="000032"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="850.09915195"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.0029216124809159998"/>
-        <tag k="hoot:hash" v="sha1sum:57e1ab1fe46be7520c74d49a52e1cd8d778c3bfa;sha1sum:6ee2adbc58432c0094bda52ac63eac793eb3af69"/>
-    </way>
-    <way visible="true" id="-2378385" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2346721"/>
+    <way visible="true" id="-2378353" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2346733"/>
         <nd ref="-2366963"/>
         <nd ref="-2346923"/>
         <tag k="power" v="line"/>
-        <tag k="hoot:hash" v="sha1sum:d0b47bbf9e8b431db230750a7ef1bb3b87a52e8e"/>
+        <tag k="hoot:hash" v="sha1sum:1bce8c5eb450cf9fbb01c9e335985d80ec1a0f85"/>
         <tag k="voltage" v="115000"/>
         <tag k="cables" v="3"/>
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378377" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378345" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346727"/>
+        <nd ref="-2366955"/>
         <nd ref="-2347131"/>
         <tag k="power" v="line"/>
         <tag k="voltage" v="115000"/>
@@ -6498,10 +6515,8 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378372" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378328" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346669"/>
-        <nd ref="-2366559"/>
-        <nd ref="-2366560"/>
         <nd ref="-2347113"/>
         <tag k="power" v="line"/>
         <tag k="voltage" v="115000"/>
@@ -6509,7 +6524,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378329" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378285" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346847"/>
         <nd ref="-2346683"/>
         <tag k="power" v="line"/>
@@ -6519,7 +6534,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378326" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378282" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346849"/>
         <nd ref="-2346847"/>
         <nd ref="-2346845"/>
@@ -6551,7 +6566,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.070849254504722001"/>
     </way>
-    <way visible="true" id="-2378316" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378272" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346673"/>
         <nd ref="-2346667"/>
         <tag k="power" v="line"/>
@@ -6561,12 +6576,12 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378276" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378246" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345169"/>
         <nd ref="-2345071"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
         <tag k="power" v="line"/>
-        <tag k="hoot:hash" v="sha1sum:062de006d1325d48d8952de8e4bf33afde778d79"/>
+        <tag k="hoot:hash" v="sha1sum:33f6fdbe707638dac76437995c0405cadbcdfe2f"/>
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="230000"/>
         <tag k="cables" v="3"/>
@@ -6574,12 +6589,11 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378270" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378240" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345177"/>
         <nd ref="-2345183"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
         <tag k="power" v="line"/>
-        <tag k="hoot:hash" v="sha1sum:2ef226f3ae9510c70fb75eb4fc72ec8d42255b37"/>
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="230000"/>
         <tag k="cables" v="3"/>
@@ -6587,7 +6601,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378262" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378232" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345071"/>
         <nd ref="-2345183"/>
         <nd ref="-2345181"/>
@@ -6615,9 +6629,8 @@
         <tag k="frequency" v="60"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0038305885618780001"/>
-        <tag k="hoot:hash" v="sha1sum:70a758f2fdde3ebc6c495aee9b91ccd31a42c713;sha1sum:2ef226f3ae9510c70fb75eb4fc72ec8d42255b37"/>
     </way>
-    <way visible="true" id="-2378259" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378229" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345871"/>
         <nd ref="-2345865"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
@@ -6630,7 +6643,7 @@
         <tag k="REF2" v="000017"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378258" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378228" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345927"/>
         <nd ref="-2345923"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
@@ -6643,7 +6656,7 @@
         <tag k="REF2" v="000017"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378244" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378214" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345705"/>
         <nd ref="-2345953"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
@@ -6656,7 +6669,7 @@
         <tag k="REF2" v="000017"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378241" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378211" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345955"/>
         <nd ref="-2345953"/>
         <nd ref="-2345951"/>
@@ -6747,7 +6760,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.316891218278267"/>
     </way>
-    <way visible="true" id="-2378235" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378205" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345839"/>
         <nd ref="-2345835"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
@@ -6760,43 +6773,7 @@
         <tag k="REF2" v="000017"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378220" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2347101"/>
-        <nd ref="-2347099"/>
-        <nd ref="-2347015"/>
-        <nd ref="-2346997"/>
-        <nd ref="-2347097"/>
-        <nd ref="-2347095"/>
-        <nd ref="-2347093"/>
-        <nd ref="-2347091"/>
-        <nd ref="-2347089"/>
-        <nd ref="-2346707"/>
-        <nd ref="-2347087"/>
-        <tag k="alt_name" v="Parkway - Moraga/Bahia - Moraga"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1295"/>
-        <tag k="Length_Mil" v="6"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
-        <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="cables" v="3"/>
-        <tag k="ref" v="Parkway - Moraga"/>
-        <tag k="REF1" v="000035"/>
-        <tag k="REF2" v="todo;000035"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="REVIEW" v="0002d5"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="32315.51980185"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.099957525011448001"/>
-    </way>
-    <way visible="true" id="-2378215" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378191" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2347203"/>
         <nd ref="-2366693"/>
         <nd ref="-2366692"/>
@@ -6808,7 +6785,19 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378193" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378170" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2367245"/>
+        <nd ref="-2367269"/>
+        <nd ref="-2367270"/>
+        <nd ref="-2347189"/>
+        <tag k="power" v="line"/>
+        <tag k="frequency" v="60"/>
+        <tag k="voltage" v="115000"/>
+        <tag k="cables" v="6"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2378158" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367151"/>
         <nd ref="-2367170"/>
         <nd ref="-2347267"/>
@@ -6819,7 +6808,7 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378157" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378119" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2361067"/>
         <nd ref="-2361279"/>
         <nd ref="-2361277"/>
@@ -6887,16 +6876,16 @@
         <tag k="Length_Fee" v="16005.3039981"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.050269877773390002"/>
-        <tag k="hoot:hash" v="sha1sum:d14bbf0c3e642ac7d972bbb7b2c2aebb16e5dab6;sha1sum:bff3a80cdc28d6d4c0e721be6ef723e9d843834e"/>
+        <tag k="hoot:hash" v="sha1sum:d14bbf0c3e642ac7d972bbb7b2c2aebb16e5dab6;sha1sum:cf749f1dc5f608559384dc955ff53f04c65c34aa"/>
     </way>
-    <way visible="true" id="-2378143" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378101" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2366976"/>
         <nd ref="-2361181"/>
         <tag k="power" v="line"/>
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2378140" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378098" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345179"/>
         <nd ref="-2361181"/>
         <nd ref="-2361179"/>
@@ -6929,7 +6918,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.026473919768262001"/>
     </way>
-    <way visible="true" id="-2378133" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378091" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2361189"/>
         <nd ref="-2361185"/>
         <nd ref="-2361187"/>
@@ -6952,7 +6941,7 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0013714918582190001"/>
     </way>
-    <way visible="true" id="-2378126" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378084" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2361185"/>
         <nd ref="-2338847"/>
         <nd ref="-2345867"/>
@@ -6975,7 +6964,31 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.026473919768262001"/>
     </way>
-    <way visible="true" id="-2378104" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378068" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2365843"/>
+        <nd ref="-2339943"/>
+        <nd ref="-2365842"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="OBJECTID" v="1735"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
+        <tag k="Legend" v="PG&amp;E_230kV"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="REF1" v="0002d9"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="power" v="line"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.189Z"/>
+        <tag k="circuits" v="1"/>
+        <tag k="location" v="overhead"/>
+        <tag k="Length_Fee" v="1742.69254932"/>
+        <tag k="Type" v="OH"/>
+        <tag k="Shape__Len" v="0.0054850473304100004"/>
+        <tag k="hoot:hash" v="sha1sum:78a61392d1db2fbe74ae4e5633a4fb999d3c06ca;sha1sum:bd4a6ed445bb6bdb687322e5224d2acb48690280;sha1sum:42e503849c0ef4bbc0b6a156fb97988e628d0538;sha1sum:e7c810394f85ee6851cb3988b8195789bc63eb5e"/>
+    </way>
+    <way visible="true" id="-2378058" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2360821"/>
         <nd ref="-2361159"/>
         <nd ref="-2361157"/>
@@ -7008,7 +7021,7 @@
         <nd ref="-2361111"/>
         <nd ref="-2361109"/>
         <nd ref="-2361107"/>
-        <nd ref="-2367902"/>
+        <nd ref="-2368014"/>
         <nd ref="-2361105"/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-c06aeebd-526f-4861-b1a6-aa2b0d38e820"/>
@@ -7032,49 +7045,13 @@
         <tag k="tiger:tlid" v="192077615:192090945:192117152"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.061870607572109"/>
-        <tag k="hoot:hash" v="sha1sum:8a72b9a969f2b53e82a4a5e3ec83f3341cf8296c;sha1sum:6e813d944eba7f0e1876c0308a652e90d026de65"/>
+        <tag k="hoot:hash" v="sha1sum:16fd4416523441ef1c4183d83fe985fd8c8f03c3;sha1sum:9efe679bb1871058cd8657a4172d44d9e4297ef8"/>
         <tag k="tiger:source" v="tiger_import_dch_v0.6_20070809"/>
     </way>
-    <way visible="true" id="-2378066" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2365843"/>
-        <nd ref="-2339943"/>
-        <nd ref="-2365842"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1735"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
-        <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="REF1" v="0002d9"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.189Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="1742.69254932"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.0054850473304100004"/>
-        <tag k="hoot:hash" v="sha1sum:78a61392d1db2fbe74ae4e5633a4fb999d3c06ca;sha1sum:f8ac7c200a914efdc964d6d24958698e9fc42178;sha1sum:42e503849c0ef4bbc0b6a156fb97988e628d0538;sha1sum:de8cb08188c514bda29361abbdff88dc843df544"/>
-    </way>
-    <way visible="true" id="-2378063" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2378013" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2360957"/>
         <nd ref="-2367486"/>
         <tag k="power" v="line"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2378057" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2367245"/>
-        <nd ref="-2367269"/>
-        <nd ref="-2367270"/>
-        <nd ref="-2347189"/>
-        <tag k="power" v="line"/>
-        <tag k="frequency" v="60"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="cables" v="6"/>
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -7242,6 +7219,38 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.18038848370772501"/>
     </way>
+    <way visible="true" id="-2367967" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2347037"/>
+        <nd ref="-2346729"/>
+        <nd ref="-2346741"/>
+        <nd ref="-2346929"/>
+        <nd ref="-2347035"/>
+        <nd ref="-2347033"/>
+        <nd ref="-2347031"/>
+        <nd ref="-2345955"/>
+        <nd ref="-2346645"/>
+        <nd ref="-2345161"/>
+        <nd ref="-2339937"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="OBJECTID" v="1295"/>
+        <tag k="Length_Mil" v="6"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
+        <tag k="Legend" v="PG&amp;E_230kV"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="cables" v="3"/>
+        <tag k="REF1" v="000035"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="power" v="line"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
+        <tag k="circuits" v="2"/>
+        <tag k="location" v="overhead"/>
+        <tag k="Length_Fee" v="32315.51980185"/>
+        <tag k="Type" v="OH"/>
+        <tag k="Shape__Len" v="0.099957525011448001"/>
+    </way>
     <way visible="true" id="-2367913" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2349035"/>
         <nd ref="-2367052"/>
@@ -7314,36 +7323,6 @@
         <tag k="Length_Fee" v="24947.68210708"/>
         <tag k="OBJECTID" v="1309"/>
         <tag k="REF1" v="000027"/>
-        <tag k="Type" v="OH"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2367887" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2347037"/>
-        <nd ref="-2346729"/>
-        <nd ref="-2346741"/>
-        <nd ref="-2346929"/>
-        <nd ref="-2347035"/>
-        <nd ref="-2347033"/>
-        <nd ref="-2347031"/>
-        <nd ref="-2345955"/>
-        <nd ref="-2346645"/>
-        <nd ref="-2345161"/>
-        <nd ref="-2339937"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="6"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
-        <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="2"/>
-        <tag k="Shape__Len" v="0.099957525011448001"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
-        <tag k="Length_Fee" v="32315.51980185"/>
-        <tag k="OBJECTID" v="1295"/>
-        <tag k="REF1" v="000035"/>
         <tag k="Type" v="OH"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -7946,60 +7925,6 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2367821" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2366454"/>
-        <nd ref="-2366829"/>
-        <nd ref="-2367385"/>
-        <nd ref="-2366453"/>
-        <nd ref="-2366452"/>
-        <nd ref="-2366451"/>
-        <nd ref="-2366450"/>
-        <nd ref="-2366449"/>
-        <nd ref="-2366448"/>
-        <nd ref="-2366447"/>
-        <nd ref="-2366446"/>
-        <nd ref="-2366445"/>
-        <nd ref="-2366444"/>
-        <nd ref="-2366443"/>
-        <nd ref="-2366442"/>
-        <nd ref="-2366441"/>
-        <nd ref="-2366440"/>
-        <nd ref="-2366439"/>
-        <nd ref="-2366438"/>
-        <nd ref="-2366437"/>
-        <nd ref="-2366436"/>
-        <nd ref="-2366435"/>
-        <nd ref="-2366434"/>
-        <nd ref="-2366373"/>
-        <nd ref="-2366379"/>
-        <nd ref="-2366378"/>
-        <nd ref="-2366377"/>
-        <nd ref="-2366376"/>
-        <nd ref="-2366929"/>
-        <nd ref="-2366375"/>
-        <nd ref="-2366380"/>
-        <nd ref="-2366381"/>
-        <nd ref="-2366382"/>
-        <nd ref="-2366383"/>
-        <nd ref="-2366384"/>
-        <nd ref="-2366385"/>
-        <nd ref="-2366370"/>
-        <nd ref="-2366362"/>
-        <nd ref="-2366364"/>
-        <nd ref="-2366368"/>
-        <nd ref="-2366365"/>
-        <nd ref="-2366371"/>
-        <nd ref="-2366393"/>
-        <nd ref="-2339939"/>
-        <tag k="owner" v="Pacific Gas &amp; Electric"/>
-        <tag k="power" v="line"/>
-        <tag k="frequency" v="60"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="cables" v="6"/>
-        <tag k="ref" v="Standard Oil - Sobrante"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-2367820" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345075"/>
         <nd ref="-2365916"/>
@@ -8194,14 +8119,41 @@
         <tag k="power" v="substation"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2367801" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2366875"/>
-        <nd ref="-2346745"/>
+    <way visible="true" id="-2367804" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2366849"/>
+        <nd ref="-2339939"/>
         <tag k="power" v="line"/>
+        <tag k="frequency" v="60"/>
         <tag k="voltage" v="115000"/>
         <tag k="cables" v="3"/>
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2367801" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2366875"/>
+        <nd ref="-2346745"/>
+        <nd ref="-2346749"/>
+        <nd ref="-2366914"/>
+        <nd ref="-2346733"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="OBJECTID" v="1303"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
+        <tag k="Legend" v="PG&amp;E_115kV"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="cables" v="3"/>
+        <tag k="REF1" v="00002d"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="power" v="line"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
+        <tag k="circuits" v="2"/>
+        <tag k="location" v="overhead"/>
+        <tag k="Length_Fee" v="104.68721825"/>
+        <tag k="Type" v="OH"/>
+        <tag k="Shape__Len" v="0.00030172434563199998"/>
     </way>
     <way visible="true" id="-2367799" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367013"/>
@@ -8281,7 +8233,7 @@
     </way>
     <way visible="true" id="-2367786" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2366798"/>
-        <nd ref="-2347015"/>
+        <nd ref="-2366965"/>
         <tag k="owner" v="Pacific Gas &amp; Electric"/>
         <tag k="power" v="line"/>
         <tag k="frequency" v="60"/>
@@ -8296,6 +8248,15 @@
         <nd ref="-2347195"/>
         <tag k="power" v="line"/>
         <tag k="frequency" v="60"/>
+        <tag k="voltage" v="115000"/>
+        <tag k="cables" v="3"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2367783" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2366887"/>
+        <nd ref="-2348819"/>
+        <tag k="power" v="line"/>
         <tag k="voltage" v="115000"/>
         <tag k="cables" v="3"/>
         <tag k="REF2" v="todo"/>
@@ -8340,29 +8301,10 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2367774" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2367016"/>
-        <nd ref="-2339939"/>
-        <tag k="power" v="line"/>
-        <tag k="frequency" v="60"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="cables" v="3"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-2367773" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367034"/>
         <nd ref="-2339855"/>
         <tag k="power" v="line"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2367769" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2366959"/>
-        <nd ref="-2348819"/>
-        <tag k="power" v="line"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="cables" v="3"/>
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -8428,6 +8370,18 @@
         <tag k="frequency" v="60"/>
         <tag k="voltage" v="115000"/>
         <tag k="cables" v="3"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2367755" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2366771"/>
+        <nd ref="-2366965"/>
+        <tag k="owner" v="Pacific Gas &amp; Electric"/>
+        <tag k="power" v="line"/>
+        <tag k="frequency" v="60"/>
+        <tag k="voltage" v="230000"/>
+        <tag k="cables" v="3"/>
+        <tag k="ref" v="Parkway - Moraga"/>
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -8721,7 +8675,6 @@
         <nd ref="-2350945"/>
         <nd ref="-2350943"/>
         <nd ref="-2350941"/>
-        <nd ref="-2365908"/>
         <nd ref="-2350939"/>
         <nd ref="-2365858"/>
         <tag k="owner" v="PG&amp;E"/>
@@ -9151,7 +9104,7 @@
         <tag k="Length_Fee" v="5333.34877055"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.014630481680501999"/>
-        <tag k="hoot:hash" v="sha1sum:34a5b15db93152fc7491c5c19648dcba3e3f4bc7;sha1sum:c395f26db3d31e23786f746d7a3901174e04c809"/>
+        <tag k="hoot:hash" v="sha1sum:34a5b15db93152fc7491c5c19648dcba3e3f4bc7;sha1sum:820db83112c0b85de789544e2e639bbc76072c4f"/>
     </way>
     <way visible="true" id="-2367671" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2365841"/>
@@ -10062,7 +10015,7 @@
         <tag k="Length_Fee" v="28164.38775402"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.095780580340901006"/>
-        <tag k="hoot:hash" v="sha1sum:62b05fa4d03f24720a1be99146f464ec12251da8;sha1sum:4f849b4ede49b47c37582fbbefa4c1f9cd72ce52"/>
+        <tag k="hoot:hash" v="sha1sum:62b05fa4d03f24720a1be99146f464ec12251da8;sha1sum:01c37fe1f08e6b419d08b1a0734c124f66a9e59c"/>
     </way>
     <way visible="true" id="-2366943" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2348821"/>
@@ -10364,6 +10317,66 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.038454877708572997"/>
     </way>
+    <way visible="true" id="-2366847" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2347101"/>
+        <nd ref="-2347099"/>
+        <nd ref="-2347015"/>
+        <nd ref="-2346997"/>
+        <nd ref="-2347097"/>
+        <nd ref="-2347095"/>
+        <nd ref="-2347093"/>
+        <nd ref="-2347091"/>
+        <nd ref="-2347089"/>
+        <nd ref="-2346707"/>
+        <nd ref="-2347087"/>
+        <nd ref="-2347085"/>
+        <nd ref="-2347083"/>
+        <nd ref="-2347081"/>
+        <nd ref="-2347079"/>
+        <nd ref="-2347077"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="OBJECTID" v="1295"/>
+        <tag k="Length_Mil" v="6"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
+        <tag k="Legend" v="PG&amp;E_230kV"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="cables" v="6"/>
+        <tag k="ref" v="Parkway - Moraga/Bahia - Moraga"/>
+        <tag k="REF1" v="000035"/>
+        <tag k="REF2" v="000035"/>
+        <tag k="power" v="line"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="REVIEW" v="0002d5"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
+        <tag k="circuits" v="2"/>
+        <tag k="location" v="overhead"/>
+        <tag k="Length_Fee" v="32315.51980185"/>
+        <tag k="Type" v="OH"/>
+        <tag k="Shape__Len" v="0.099957525011448001"/>
+    </way>
+    <way visible="true" id="-2366841" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2346919"/>
+        <nd ref="-2346917"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
+        <tag k="Shape__Len" v="0.0029216124809159998"/>
+        <tag k="circuits" v="1"/>
+        <tag k="Legend" v="PG&amp;E_115kV"/>
+        <tag k="power" v="line"/>
+        <tag k="location" v="overhead"/>
+        <tag k="status" v="operational"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="voltage" v="115000"/>
+        <tag k="Length_Fee" v="850.09915195"/>
+        <tag k="OBJECTID" v="1298"/>
+        <tag k="REF1" v="000032"/>
+        <tag k="Type" v="OH"/>
+        <tag k="error:circular" v="15"/>
+    </way>
     <way visible="true" id="-2366839" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346915"/>
         <nd ref="-2346913"/>
@@ -10399,7 +10412,7 @@
         <nd ref="-2346855"/>
         <nd ref="-2346853"/>
         <nd ref="-2346851"/>
-        <tag k="alt_name" v="Sobrante - Claremont"/>
+        <tag k="alt_name" v="East Portal-Claremont;Sobrante - Claremont"/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="OBJECTID" v="1299"/>
         <tag k="Length_Mil" v="4"/>
@@ -10409,7 +10422,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="name" v="PG&amp;E 115kV"/>
         <tag k="cables" v="6"/>
-        <tag k="ref" v="East Portal-Claremont"/>
+        <tag k="ref" v="Sobrante - East Portal/East Portal - Claremont"/>
         <tag k="REF1" v="000031"/>
         <tag k="REF2" v="todo"/>
         <tag k="power" v="line"/>
@@ -10484,28 +10497,6 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.054506509548506998"/>
     </way>
-    <way visible="true" id="-2366831" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2346745"/>
-        <nd ref="-2346749"/>
-        <nd ref="-2346733"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1303"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="REF1" v="00002d"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="104.68721825"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.00030172434563199998"/>
-    </way>
     <way visible="true" id="-2366829" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346745"/>
         <nd ref="-2346733"/>
@@ -10527,11 +10518,32 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.00013731764811100001"/>
     </way>
+    <way visible="true" id="-2366827" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2346721"/>
+        <nd ref="-2346747"/>
+        <nd ref="-2346745"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="OBJECTID" v="1305"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
+        <tag k="Legend" v="PG&amp;E_115kV"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="REF1" v="00002b"/>
+        <tag k="power" v="line"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
+        <tag k="circuits" v="2"/>
+        <tag k="location" v="overhead"/>
+        <tag k="Length_Fee" v="135.99512327"/>
+        <tag k="Type" v="OH"/>
+        <tag k="Shape__Len" v="0.00044696531921799998"/>
+    </way>
     <way visible="true" id="-2366825" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346647"/>
         <nd ref="-2346743"/>
         <nd ref="-2346741"/>
-        <nd ref="-2367040"/>
         <nd ref="-2346739"/>
         <nd ref="-2366826"/>
         <nd ref="-2366766"/>
@@ -10546,7 +10558,7 @@
         <tag k="Legend" v="PG&amp;E_115kV"/>
         <tag k="error:circular" v="15"/>
         <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="cables" v="6"/>
         <tag k="ref" v="Sobrante - Claremont"/>
         <tag k="REF1" v="00002a"/>
         <tag k="REF2" v="todo"/>
@@ -10558,6 +10570,28 @@
         <tag k="Length_Fee" v="1342.66646523"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0043703082411"/>
+        <tag k="hoot:hash" v="sha1sum:10e511f48aa5f7499ee9552d9f1f496fed8537bb;sha1sum:17ce78fc3239d156e29e4d0e3e7d76dca2f45d49"/>
+    </way>
+    <way visible="true" id="-2366823" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2346721"/>
+        <nd ref="-2346733"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="OBJECTID" v="1307"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
+        <tag k="Legend" v="PG&amp;E_115kV"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="REF1" v="000029"/>
+        <tag k="power" v="line"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
+        <tag k="circuits" v="2"/>
+        <tag k="location" v="overhead"/>
+        <tag k="Length_Fee" v="61.87193626"/>
+        <tag k="Type" v="OH"/>
+        <tag k="Shape__Len" v="0.000198593838851"/>
     </way>
     <way visible="true" id="-2366821" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346647"/>
@@ -10672,7 +10706,7 @@
         <tag k="frequency" v="60"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.003818398744309"/>
-        <tag k="hoot:hash" v="sha1sum:bf539aa7976a0a3d3b3ebb8f15559c2c6e4ad1ef;sha1sum:062de006d1325d48d8952de8e4bf33afde778d79"/>
+        <tag k="hoot:hash" v="sha1sum:bf539aa7976a0a3d3b3ebb8f15559c2c6e4ad1ef;sha1sum:33f6fdbe707638dac76437995c0405cadbcdfe2f"/>
     </way>
     <way visible="true" id="-2366741" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2345165"/>
@@ -10798,6 +10832,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="name" v="PG&amp;E 115kV"/>
         <tag k="cables" v="3"/>
+        <tag k="ref" v="Standard Oil - Sobrante"/>
         <tag k="REF1" v="0002d5"/>
         <tag k="REF2" v="todo"/>
         <tag k="power" v="line"/>
@@ -10844,6 +10879,8 @@
         <tag k="Shape__Len" v="0.026611604306196"/>
     </way>
     <way visible="true" id="-2366393" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2338291"/>
+        <nd ref="-2338289"/>
         <nd ref="-2338287"/>
         <nd ref="-2338285"/>
         <nd ref="-2338283"/>
@@ -10888,6 +10925,7 @@
         <nd ref="-2338207"/>
         <nd ref="-2338205"/>
         <nd ref="-2338203"/>
+        <tag k="alt_name" v="Standard Oil - Sobrante"/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="OBJECTID" v="1899"/>
         <tag k="Length_Mil" v="7"/>
@@ -10896,15 +10934,19 @@
         <tag k="Legend" v="PG&amp;E_115kV"/>
         <tag k="error:circular" v="15"/>
         <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="cables" v="6"/>
+        <tag k="tiger:cfcc" v="C20"/>
         <tag k="ref" v="Oleum - El Cerrito"/>
         <tag k="REF1" v="0002ab"/>
         <tag k="REF2" v="todo"/>
+        <tag k="tiger:county" v="Contra Costa, CA"/>
         <tag k="power" v="line"/>
         <tag k="kV_Sort" v="115"/>
         <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.230Z"/>
         <tag k="circuits" v="2"/>
         <tag k="location" v="overhead"/>
         <tag k="Length_Fee" v="38790.08417009"/>
+        <tag k="frequency" v="60"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.11587733916562"/>
     </way>
@@ -12002,8 +12044,8 @@
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.01074336131559"/>
     </way>
-    <relation visible="true" id="-687" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-2379078" role=""/>
+    <relation visible="true" id="-673" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-2379041" role=""/>
         <member type="way" ref="-2366819" role=""/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="OBJECTID" v="1309"/>
@@ -12024,9 +12066,9 @@
         <tag k="Shape__Len" v="0.073990390109161003"/>
         <tag k="type" v="multilinestring"/>
     </relation>
-    <relation visible="true" id="-677" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-662" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-2367675" role=""/>
-        <member type="way" ref="-2378840" role=""/>
+        <member type="way" ref="-2378797" role=""/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="OBJECTID" v="1875"/>
         <tag k="Length_Mil" v="11"/>
@@ -12044,33 +12086,11 @@
         <tag k="Length_Fee" v="58645.62823076"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.187034405899031"/>
-        <tag k="hoot:hash" v="sha1sum:b7f46c3dbeb030f60ee82da9326f194015eba0d2"/>
+        <tag k="hoot:hash" v="sha1sum:99bb0b5746d07963029a796a79e74ebe39fe8d10"/>
         <tag k="type" v="multilinestring"/>
     </relation>
-    <relation visible="true" id="-672" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-2378759" role=""/>
-        <member type="way" ref="-2366393" role=""/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1899"/>
-        <tag k="Length_Mil" v="7"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="REF1" v="0002ab"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.230Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="38790.08417009"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.11587733916562"/>
-        <tag k="type" v="multilinestring"/>
-    </relation>
-    <relation visible="true" id="-634" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-2378104" role=""/>
+    <relation visible="true" id="-623" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-2378058" role=""/>
         <member type="way" ref="-2367982" role=""/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="OBJECTID" v="2398"/>
@@ -12089,10 +12109,10 @@
         <tag k="Length_Fee" v="18258.84326879"/>
         <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.061870607572109"/>
-        <tag k="hoot:hash" v="sha1sum:8a72b9a969f2b53e82a4a5e3ec83f3341cf8296c"/>
+        <tag k="hoot:hash" v="sha1sum:16fd4416523441ef1c4183d83fe985fd8c8f03c3"/>
         <tag k="type" v="multilinestring"/>
     </relation>
-    <relation visible="true" id="-631" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-620" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-2366439" role="reviewee"/>
         <member type="way" ref="-2367820" role="reviewee"/>
         <tag k="hoot:review:type" v="PowerLine"/>

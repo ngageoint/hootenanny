@@ -107,6 +107,13 @@ public:
   virtual void setProgress(Progress progress) override { _progress = progress; }
   virtual unsigned int getNumSteps() const override { return 3; }
 
+  /**
+   * Determines if conflation is configured with the Network Roads algorithm
+   *
+   * @return true if conflation is configured with the Network Roads algorithm; false otherwise
+   */
+  static bool isNetworkConflate();
+
 private:
 
   geos::geom::Envelope _bounds;

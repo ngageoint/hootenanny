@@ -1,31 +1,19 @@
 
 Running diff...
 
-17:41:54.421 WARN   ...s/rubber-sheet/RubberSheet.cpp( 503) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:41:54.421 WARN   ...s/rubber-sheet/RubberSheet.cpp( 179) No appropriate interpolator was specified, skipping rubber sheet transform.
 
 Running diff changeset with tags...
 
-17:41:56.890 WARN   ...oot/core/elements/OsmUtils.cpp( 608) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
-17:41:57.065 WARN   ...s/rubber-sheet/RubberSheet.cpp( 503) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:41:57.065 WARN   ...s/rubber-sheet/RubberSheet.cpp( 179) No appropriate interpolator was specified, skipping rubber sheet transform.
-17:41:59.645 WARN   ...oot/core/elements/OsmUtils.cpp( 608) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
-17:41:59.815 WARN   ...s/rubber-sheet/RubberSheet.cpp( 503) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:41:59.815 WARN   ...s/rubber-sheet/RubberSheet.cpp( 179) No appropriate interpolator was specified, skipping rubber sheet transform.
+16:00:09.090 WARN   ...core/elements/VersionUtils.cpp(  61) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
+16:00:11.870 WARN   ...core/elements/VersionUtils.cpp(  61) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
 
 Running diff with tags...
 
-17:42:02.502 WARN   ...s/rubber-sheet/RubberSheet.cpp( 503) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:42:02.502 WARN   ...s/rubber-sheet/RubberSheet.cpp( 179) No appropriate interpolator was specified, skipping rubber sheet transform.
 
 Running diff changeset with tags, separate outputs...
 
-17:42:05.158 WARN   ...oot/core/elements/OsmUtils.cpp( 608) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
-17:42:05.337 WARN   ...s/rubber-sheet/RubberSheet.cpp( 503) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:42:05.337 WARN   ...s/rubber-sheet/RubberSheet.cpp( 179) No appropriate interpolator was specified, skipping rubber sheet transform.
-17:42:08.208 WARN   ...oot/core/elements/OsmUtils.cpp( 608) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
-17:42:08.385 WARN   ...s/rubber-sheet/RubberSheet.cpp( 503) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:42:08.385 WARN   ...s/rubber-sheet/RubberSheet.cpp( 179) No appropriate interpolator was specified, skipping rubber sheet transform.
+16:00:17.478 WARN   ...core/elements/VersionUtils.cpp(  61) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
+16:00:20.184 WARN   ...core/elements/VersionUtils.cpp(  61) 66 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
 
 Checking differential output...
 
@@ -65,14 +53,13 @@ Changeset Stats Files Match
 
 Checking conflation of empty files...
 
-17:42:11.618 WARN   ...s/rubber-sheet/RubberSheet.cpp( 503) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 0 tie points were found.
-17:42:11.619 WARN   ...s/rubber-sheet/RubberSheet.cpp( 179) No appropriate interpolator was specified, skipping rubber sheet transform.
-17:42:12.367 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...test-files/Empty.osm...
-17:42:12.369 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
-17:42:12.369 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 0 elements from input in: 00:00.
-17:42:12.369 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...test-output/cmd/slow/DiffConflateCmdTest/Empty.osm...
-17:42:12.370 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
-17:42:12.370 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 0 elements from input in: 00:00.
+16:00:24.517 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...test-files/Empty.osm...
+16:00:24.519 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+16:00:24.519 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 0 elements from input in: 00:00.
+16:00:24.519 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...test-output/cmd/slow/DiffConflateCmdTest/Empty.osm...
+16:00:24.520 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+16:00:24.520 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 0 elements from input in: 00:00.
+16:00:24.520 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
 
 Checking conflation with road snapping...
 
@@ -82,5 +69,3 @@ Checking conflation with road snapping and keeping ref data...
 
 Running diff and passing unconflatable data through to output...
 
-17:42:22.744 WARN   ...s/rubber-sheet/RubberSheet.cpp( 503) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-17:42:22.745 WARN   ...s/rubber-sheet/RubberSheet.cpp( 179) No appropriate interpolator was specified, skipping rubber sheet transform.

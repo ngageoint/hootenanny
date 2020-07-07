@@ -36,10 +36,10 @@
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
@@ -1488,7 +1488,9 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
   {
     conf().set(ConfigOptions::getWayJoinerKey(), WayJoinerBasic::className());
   }
-  conf().set(ConfigOptions::getWayJoinerAdvancedStrictNameMatchKey(), !_isNetworkConflate());
+  conf().set(
+    ConfigOptions::getWayJoinerAdvancedStrictNameMatchKey(),
+    !UnifyingConflator::isNetworkConflate());
 
   if (ConfigOptions().getConflateRemoveSuperfluousOps())
   {
@@ -1752,13 +1754,6 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
 
   // get out of orthographic
   MapProjector::projectToWgs84(map);
-}
-
-bool ChangesetReplacementCreator::_isNetworkConflate() const
-{
-  return
-    ConfigOptions().getMatchCreators().contains(
-      QString::fromStdString(NetworkMatchCreator::className()));
 }
 
 }

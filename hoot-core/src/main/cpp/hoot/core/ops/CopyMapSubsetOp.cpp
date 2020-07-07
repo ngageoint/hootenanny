@@ -128,7 +128,7 @@ _from(from),
 _crit(crit)
 {
   std::shared_ptr<UniqueElementIdVisitor> getIdVis(new UniqueElementIdVisitor());
-  FilteredVisitor idVis(crit, getIdVis);
+  FilteredVisitor idVis(_crit, getIdVis);
   _from->visitRo(idVis);
   _eids = getIdVis->getElementSet();
   LOG_VARD(_eids.size());

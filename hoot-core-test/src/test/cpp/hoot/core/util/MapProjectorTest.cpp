@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // boost
@@ -80,7 +80,9 @@ public:
 
   virtual void tearDown()
   {
-    conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), ConfigOptions::getTestForceOrthographicProjectionDefaultValue());
+    conf().set(
+      ConfigOptions::getTestForceOrthographicProjectionKey(),
+      ConfigOptions::getTestForceOrthographicProjectionDefaultValue());
   }
 
   Radians calculateAngle(Coordinate p1, Coordinate p2, Coordinate p3)

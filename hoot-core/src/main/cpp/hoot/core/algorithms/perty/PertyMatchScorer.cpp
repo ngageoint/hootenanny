@@ -35,6 +35,8 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -58,28 +60,11 @@ _settings(conf())
 {
   ConfigOptions configOptions;
   setSearchDistance(configOptions.getPertySearchDistance());
-  if (ConfigOptions().getConflatePreOps().contains("hoot::RubberSheet"))
-  {
-    setApplyRubberSheet(false);
-  }
-  else
-  {
-    setApplyRubberSheet(configOptions.getPertyApplyRubberSheet());
-  }
 }
 
 QString PertyMatchScorer::toString()
 {
-  QString str = "_searchDistance: " + QString::number(_searchDistance) + ", _applyRubberSheet: ";
-  if (_applyRubberSheet)
-  {
-    str += "true";
-  }
-  else
-  {
-    str += "false";
-  }
-  return str;
+  return "_searchDistance: " + QString::number(_searchDistance);
 }
 
 std::shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString& referenceMapInputPath,
@@ -115,8 +100,9 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString& r
 OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPath,
                                               const QString& referenceMapOutputPath)
 {
-  LOG_DEBUG("Loading the reference data with status " << MetadataTags::Unknown1() << " and adding " << MetadataTags::Ref1() <<
-            " tags to it; Saving a copy to " << referenceMapOutputPath << "...");
+  LOG_DEBUG(
+    "Loading the reference data with status " << MetadataTags::Unknown1() << " and adding " <<
+    MetadataTags::Ref1() << " tags to it; Saving a copy to " << referenceMapOutputPath << "...");
 
   OsmMapPtr referenceMap(new OsmMap());
   IoUtils::loadMap(referenceMap, referenceMapInputPath, false, Status::Unknown1);
@@ -193,13 +179,10 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   IoUtils::saveMap(perturbedMap, perturbedMapOutputPath);
 }
 
-OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(const OsmMapPtr& referenceMap, const QString& perturbedMapInputPath)
+OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
+  const OsmMapPtr& referenceMap, const QString& perturbedMapInputPath)
 {
   LOG_DEBUG("Combining the reference and perturbed data into a single file ...");
-
-//  QFileInfo fileInfo(perturbedMapInputPath);
-//  QString combinedOutputPath = fileInfo.path() + "/ref-after-combination.osm";
-//  LOG_DEBUG("saving a debug copy to " << combinedOutputPath << " ...");
 
   OsmMapPtr combinedMap(referenceMap);
   IoUtils::loadMap(combinedMap, perturbedMapInputPath, false, Status::Unknown2);
@@ -213,14 +196,6 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(const OsmMapPtr&
     LOG_VARD(numTotalTags);
   }
 
-// OsmMapPtr combinedMapCopy(combinedMap);
-//  MapProjector::reprojectToWgs84(combinedMapCopy);
-//  IoUtils::saveMap(combinedMapCopy, combinedOutputPath);
-
-//  LOG_DEBUG("Preparing the reference data for conflation ...");
-//  QString combinedOutputPath2 = fileInfo.path() + "/ref-after-prep.osm";
-//  LOG_DEBUG("saving a debug copy to " << combinedOutputPath2 << " ...");
-
   MatchScoringMapPreparer().prepMap(combinedMap, true);
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());
@@ -232,20 +207,12 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(const OsmMapPtr&
     LOG_VARD(numTotalTags);
   }
 
-// OsmMapPtr combinedMapCopy2(combinedMap);
-//  MapProjector::reprojectToWgs84(combinedMapCopy2);
-//  IoUtils::saveMap(combinedMapCopy2, combinedOutputPath2);
-
-  if (_applyRubberSheet)
+  if (ConfigOptions().getConflatePreOps().contains(QString::fromStdString(RubberSheet::className())))
   {
-    //  LOG_DEBUG("Applying rubber sheet to pre-conflated data to move perturbed data towards " <<
-    //            "reference data ...");
-    //  QString combinedOutputPath3 = fileInfo.path() + "/ref-after-rubber-sheet.osm";
-    //  LOG_DEBUG("saving a debug copy to " << combinedOutputPath3 << " ...");
-
-    //move Unknown2 toward Unknown1
+    // move Unknown2 toward Unknown1
     conf().set(RubberSheet::refKey(), true);
     std::shared_ptr<RubberSheet> rubberSheetOp(new RubberSheet());
+    rubberSheetOp->setConfiguration(conf());
     rubberSheetOp->apply(combinedMap);
 
     LOG_VARD(combinedMap->getNodes().size());
@@ -257,10 +224,6 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(const OsmMapPtr&
       const long numTotalTags = (long)tagCountVisitor.getStat();
       LOG_VARD(numTotalTags);
     }
-
-    // OsmMapPtr combinedMapCopy3(combinedMapCopy2);
-    //  MapProjector::reprojectToWgs84(combinedMapCopy3);
-    //  IoUtils::saveMap(combinedMapCopy3, combinedOutputPath3);
   }
 
   return combinedMap;
@@ -273,13 +236,19 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
             "saving the conflated output to: " << conflatedMapOutputPath);
 
   std::shared_ptr<MatchComparator> comparator(new MatchComparator());
-  //shared_ptr<MatchThreshold> matchThreshold;
   OsmMapPtr conflationCopy(new OsmMap(combinedDataToConflate));
 
-  // TODO: We're not applying pre/post conflate ops here. Should we be?
-  UnifyingConflator conflator/*(matchThreshold)*/;
+  // TODO: We're not applying pre/post conflate ops here, since they tank scores. Should we be?
+
+  //NamedOp preOps(ConfigOptions().getConflatePreOps());
+  //preOps.apply(conflationCopy);
+
+  UnifyingConflator conflator;
   conflator.setConfiguration(_settings);
   conflator.apply(conflationCopy);
+
+  //NamedOp postOps(ConfigOptions().getConflatePostOps());
+  //postOps.apply(conflationCopy);
 
   try
   {
@@ -288,7 +257,7 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   catch (const HootException&)
   {
     // save map modifies the map so we want to make sure comparator runs first. 'finally' would be
-    // nice.
+    // nice here.
     _saveMap(conflationCopy, conflatedMapOutputPath);
     throw;
   }

@@ -792,6 +792,7 @@ List of operations to run in the conflate command after data is conflated, but b
 ** `hoot::MapCleaner`
 ** `hoot::HighwayCornerSplitter`
 ** `hoot::RemoveInvalidReviewRelationsVisitor`
+** `hoot::RubberSheet`
 
 Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
 about the available operations.
@@ -808,9 +809,9 @@ Enabling this option allows Hootenanny to remove any operators defined in `confl
 with the feature types being conflated as specified in the `match.creators` option. Doing so can
 increase runtime performance for some inputs. e.g. If you're only conflating buildings, then any
 operators used strictly for road data cleaning will be automatically disabled. This is primarily
-used for debugging purposes and should normally be left enabled. See the `FilteredByGeometryTypeCriteria`
-interface for information about determining which feature types are associated with conflate
-operators.
+used for debugging purposes and should normally be left enabled. See the
+`FilteredByGeometryTypeCriteria` interface for information about determining which feature types are
+associated with conflate operators.
 
 === conflate.review.threshold.default
 
@@ -823,6 +824,18 @@ other situations when the relationship is not clear. Valid values are between 0.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== conflate.rubber.sheet.element.criteria
+
+* Data Type: list
+* Default Value:
+** `hoot::LinearWaterwayCriterion`
+** `hoot::LinearWaterwayWayNodeCriterion`
+** `hoot::PowerLineCriterion`
+** `hoot::PowerLineWayNodeCriterion`
+
+Determines which type of features are rubbersheeted during conflation when rubbersheeting is part
+of the conflation pre-operations. An empty list will rubbersheet all types of features.
 
 === conflate.stats.types
 
@@ -892,13 +905,13 @@ ID of the node that ContainsNodeCriterion should search for.
 If specified, supporting readers will limit data read from the data source to only features that
 intersect the given bounding box. The format is "minx,miny,maxx,maxy" or
 "min_lon,min_lat,max_lon,max_lat" specified in the projection of the input data source.  This
-setting can be used with both the convert and conflate commands. See the documentation for more
-details.
+setting can be used with both the convert and conflate commands. See the command documentation for
+more details.
 
 Example Usage:
 
 ----
-hoot convert -D convert.bounding.box=106.851,-6.160,107.052,-5.913 input output
+hoot convert -D convert.bounding.box=106.851,-6.160,107.052,-5.913 input.osm output.osm
 ----
 
 === convert.bounding.box.hoot.api.database
@@ -2259,9 +2272,9 @@ option.
 Raise the Levenshtein score to this power before returning this result. If alpha is greater than
 1 then this makes low scores even lower. Valid values are > 0.
 
-The default alpha value of 1.15 was determined through experimentation with a Jakarta data set
-using MeanWordSetDistance as the container classes. See Redmine ticket #2349 for some experiment
-details.  The "best" value varies depending on the input data as well as how the data is being used.
+The default value was determined through experimentation with a Jakarta data set using
+MeanWordSetDistance as the container classes. See Redmine ticket #2349 for some experiment details.
+The "best" value varies depending on the input data as well as how the data is being used.
 
 === libpostal.data.dir
 
@@ -3159,14 +3172,6 @@ file even if the map is empty.
 Overpass API URL host name. Used by the JSON readers to distinguish Overpass JSON web sources from
 GeoJSON web sources.
 
-=== perty.apply.rubber.sheet
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the data is rubbersheeted before conflation, moving perturbed data closer to reference
-data.
-
 === perty.csm.D
 
 * Data Type: double
@@ -3651,8 +3656,7 @@ Conflation. Use of this file is overridden when +poi.search.radii+ is specified.
 * Default Value: `true`
 
 Automatically calculates the search radius to be used during conflation of power lines using rubber
-sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
-pre-conflation operation on the input data to be conflated.
+sheet tie point distances.
 
 === power.line.match.threshold
 
@@ -4081,6 +4085,14 @@ If set to true, then debug symbols will be added to nodes and additional tags wi
 matched nodes. This is a destructive operation that is only useful when debugging and should not
 be used during serious conflation.
 
+=== rubber.sheet.element.criteria
+
+* Data Type: list
+* Default Value: ``
+
+Determines which type of features are rubbersheeted. An empty list will rubbersheet all types of
+features.
+
 === rubber.sheet.fail.when.minimum.tie.points.not.found
 
 * Data Type: bool
@@ -4092,10 +4104,10 @@ points are found.  Otherwise, a warning will be logged and rubber sheeting will 
 === rubber.sheet.log.missing.requirements.as.warning
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If set to true, rubber sheeting will log a warning if any requirement for rubber sheeting is not
-met.  e.g less than rubber.sheet.minimum.ties tie points are found.  Otherwise, an info level log
+met. e.g less than rubber.sheet.minimum.ties tie points are found.  Otherwise, an info level log
 statement will be logged instead.  This setting is completely ignored if
 rubber.sheet.fail.when.minimum.tie.points.not.found is set to true.
 
@@ -4947,8 +4959,7 @@ SampledAngleHistogramExtractor
 * Default Value: `true`
 
 Automatically calculates the search radius to be used during conflation of waterways using rubber
-sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
-pre-conflation operation on the input data to be conflated.
+sheet tie point distances.
 
 === waterway.long.way.length.threshold
 

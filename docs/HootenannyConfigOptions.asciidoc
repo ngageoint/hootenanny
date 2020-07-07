@@ -1,13 +1,14 @@
 [[Configuration]]
 == Configuration Options
 
-Configuration settings can dramatically change the operation of Hootenanny. The
-configuration options can be set in a configuration file
-(+$HOOT_HOME/conf/hoot.json+), environment variables or specified on the
-command line. Most of the configuration values are documented in more
-detail in the following sections.
+Configuration settings can dramatically change the operation of Hootenanny. The configuration
+options can be set in the configuration file (+$HOOT_HOME/conf/hoot.json+), with environment
+variables, or specified from the command line. Several of the configuration options are documented
+in more detail in the following sections.
 
-These configuration options are advanced manipulations of the Hootenanny engine and may result in unexpected results. Please create an issue at https://github.com/ngageoint/hootenanny if you have specific questions.
+These configuration options are advanced manipulations of the Hootenanny engine and may result in
+unexpected results. Please create an issue at https://github.com/ngageoint/hootenanny if you have
+specific questions.
 
 === Specifying Configuration Options
 
