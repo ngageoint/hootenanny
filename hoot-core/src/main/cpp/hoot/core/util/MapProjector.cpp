@@ -480,9 +480,9 @@ bool MapProjector::_evaluateProjection(const OGREnvelope& env,
     }
   }
 
-  LOG_VARD(maxDistanceError);
-  LOG_VARD(maxAngleError);
-  LOG_VARD(success);
+  LOG_VART(maxDistanceError);
+  LOG_VART(maxAngleError);
+  LOG_VART(success);
 
   return success;
 }

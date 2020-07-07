@@ -56,10 +56,21 @@ void PoiSearchRadiusJs::Init(Handle<Object> exports)
 void PoiSearchRadiusJs::getSearchRadii(const FunctionCallbackInfo<Value>& args)
 {
   ConfigOptions opts;
+  // This should be a JSON string, not a file.
   QString searchRadiiData = opts.getPoiSearchRadii().trimmed();
+  if (searchRadiiData.toLower().endsWith(".json") && !searchRadiiData.trimmed().startsWith("{") &&
+      !searchRadiiData.trimmed().endsWith("}"))
+  {
+    throw IllegalArgumentException("poi.search.radii should contain a JSON string.");
+  }
   if (searchRadiiData.isEmpty())
   {
+    // This should be a JSON file.
     searchRadiiData = opts.getPoiSearchRadiiConfig().trimmed();
+    if (!searchRadiiData.toLower().endsWith(".json"))
+    {
+      throw IllegalArgumentException("poi.search.radii.config should point to a JSON file.");
+    }
   }
   if (searchRadiiData.isEmpty())
   {

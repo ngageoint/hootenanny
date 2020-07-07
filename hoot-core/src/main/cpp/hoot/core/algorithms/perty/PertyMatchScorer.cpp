@@ -136,8 +136,8 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   LOG_DEBUG("Loading the reference data to be used by the data to be perturbed; renaming " <<
             MetadataTags::Ref1() << " tags to " << MetadataTags::Ref2() << "...");
 
-  //load from the modified reference data output to get the added ref1 tags; don't copy the map,
-  //since updates to the names of the ref tags on this map will propagate to the map copied from
+  // load from the modified reference data output to get the added ref1 tags; don't copy the map,
+  // since updates to the names of the ref tags on this map will propagate to the map copied from
   OsmMapPtr perturbedMap(new OsmMap());
   IoUtils::loadMap(perturbedMap, perturbedMapInputPath, false, Status::Unknown2);
   MapCleaner().apply(perturbedMap);

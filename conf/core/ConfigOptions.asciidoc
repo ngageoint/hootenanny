@@ -3827,13 +3827,11 @@ pseudo-random results in the output.
 
 * Data Type: list
 * Default Value:
-** `REF1`
-** `REF2`
-** `hoot:status`
-** `uuid`
+** ``
 
-A list of tag keys which are exempt from the tag removal done by RandomTagModifier.  This is
-useful for preventing the removal of tags Hootenanny relies on during conflation.
+A list of tag keys which are exempt from the tag removal done by RandomTagModifier. This is useful
+for preventing the removal of custom tags which are needed in the output. By default, all metadata
+and ref tags are exempted.
 
 === random.tag.modifier.probability
 
@@ -3848,7 +3846,7 @@ Set the probability that a tag will be removed.
 * Default Value:
 ** `highway`
 
-A list of tag keys which, rather than being removed by the PertyRemoveTagVisitor, will have their
+A list of tag keys which, rather than being removed by the RandomTagModifier, will have their
 values replaced instead.  The tag keys in the list match one to one with the replacement values in
 random.tag.modifier.subsitution.values.
 
@@ -3858,7 +3856,7 @@ random.tag.modifier.subsitution.values.
 * Default Value:
 ** `road`
 
-A list of tag values which, should be substituted by PertyRemoveTagVisitor.  The tag values in the
+A list of tag values which, should be substituted by RandomTagModifier.  The tag values in the
 list match one to one with the replacement values in random.tag.modifier.subsitution.keys.
 
 === random.way.generalizer.epsilon
