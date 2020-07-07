@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PARALLEL_BOUNDED_API_READER_H
@@ -164,6 +164,8 @@ protected:
   int _threadCount;
   /** Processing thread pool */
   std::vector<std::thread> _threads;
+  /** Mutex guarding error processing code */
+  std::mutex _errorMutex;
   /** Set to true if there was a fatal error in the query */
   bool _fatalError;
   /** Flag set to true if the bounding box is to be output in the x1,y1,x2,y2 format and

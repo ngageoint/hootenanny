@@ -170,6 +170,9 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url,
       _error.replace(request.url().toString(), tempUrl.toString(QUrl::RemoveUserInfo), Qt::CaseInsensitive);
     //  Replace the IP address in the error string with <host-ip>
     HootNetworkRequest::removeIpFromUrlString(_error, request.url());
+    //  Negate the connection error as the status
+    if (_status == 0)
+      _status = -1 * (int)reply->error();
     return false;
   }
 
@@ -214,7 +217,7 @@ int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
     if (status.isValid())
       return status.toInt();
   }
-  return -1;
+  return 0;
 }
 
 void HootNetworkRequest::_setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request)
