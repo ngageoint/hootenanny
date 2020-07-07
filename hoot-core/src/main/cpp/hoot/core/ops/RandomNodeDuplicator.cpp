@@ -47,7 +47,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, RandomNodeDuplicator)
 
 RandomNodeDuplicator::RandomNodeDuplicator()
 {
-  _localRng.reset(new boost::minstd_rand(1));
+  _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
 }
 
