@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.jobs;
 
@@ -293,7 +293,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
         }
         Assert.assertEquals(JobType.IMPORT.toString(), jobs.get(0).getJobType());
-        Assert.assertEquals(JobType.BULK_REPLACE.toString(), jobs.get(jobs.size() - 1).getJobType());
+        Assert.assertEquals(JobType.BULK_DIFFERENTIAL.toString(), jobs.get(jobs.size() - 1).getJobType());
     }
 
     @Test
