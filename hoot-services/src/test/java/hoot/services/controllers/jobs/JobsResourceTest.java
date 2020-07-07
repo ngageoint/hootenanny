@@ -293,7 +293,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
         }
         Assert.assertEquals(JobType.IMPORT.toString(), jobs.get(0).getJobType());
-        Assert.assertEquals(JobType.BULK_REPLACE.toString(), jobs.get(50).getJobType());
+        Assert.assertEquals(JobType.BULK_REPLACE.toString(), jobs.get(jobs.size() - 1).getJobType());
     }
 
     @Test
