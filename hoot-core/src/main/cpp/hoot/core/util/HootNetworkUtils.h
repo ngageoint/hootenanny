@@ -44,6 +44,7 @@ namespace HttpResponseCode
   const int HTTP_BAD_GATEWAY            = 502;
   const int HTTP_SERVICE_UNAVAILABLE    = 503;
   const int HTTP_GATEWAY_TIMEOUT        = 504;
+  const int HTTP_BANDWIDTH_EXCEEDED     = 509;
 }
 
 class HootNetworkUtils
