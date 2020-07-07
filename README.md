@@ -205,8 +205,9 @@ As there are lot of different data scenarios out in the wild, there is no one-si
 attempts to provide a useful set of conflation workflows with pre-configured options that capture most conflation requirements. However, you
 may require a new conflation scenario for your purposes (let us know), or you may need to custom modify configuration options for an existing scenario in order to get the best results.
 
-Also, the availability of new software features to the user interface may lag their initial availability from the CLI by multiple 
-development cycles. If you find a conflation feature you wish to use that is mentioned in the CLI documentation but is not present within the UI, let us know.
+Also, the availability of new software features to the user interface may lag their initial availability from the command line interface (CLI)
+by one or more development cycles. If you find a conflation feature you wish to use that is mentioned in the CLI documentation but is not 
+present within the UI, let us know.
 
 # Development
 * [Contributing](https://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md)
