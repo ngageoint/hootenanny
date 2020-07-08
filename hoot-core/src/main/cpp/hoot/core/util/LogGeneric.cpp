@@ -30,7 +30,6 @@
 // Qt
 #include <QDateTime>
 #include <QDebug>
-#include <Qt>
 
 // Standard
 #include <iomanip>
