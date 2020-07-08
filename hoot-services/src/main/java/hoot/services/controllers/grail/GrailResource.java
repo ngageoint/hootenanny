@@ -919,13 +919,13 @@ public class GrailResource {
             // Move the data to the folder
             InternalCommand setFolder = updateParentCommandFactory.build(jobId, parentFolderId, layerName, params.getUser(), this.getClass());
             workflow.add(setFolder);
-        }
 
-        // Clean up pulled files
-        ArrayList<File> deleteFiles = new ArrayList<>();
-        deleteFiles.add(params.getWorkDir());
-        InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
-        workflow.add(cleanFolders);
+            // Clean up pulled files
+            ArrayList<File> deleteFiles = new ArrayList<>();
+            deleteFiles.add(params.getWorkDir());
+            InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+            workflow.add(cleanFolders);
+        }
 
         return workflow;
     }
