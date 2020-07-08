@@ -47,6 +47,7 @@
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/TagCountVisitor.h>
 #include <hoot/core/visitors/TagRenameKeyVisitor.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Qt
 #include <QFileInfo>
@@ -87,12 +88,15 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString& r
   _conflatedMapOutput = conflatedMapOutputPath;
 
   OsmMapPtr referenceMap = _loadReferenceMap(referenceMapInputPath, referenceMapOutputPath);
+  OsmMapWriterFactory::writeDebugMap(referenceMap, "perty-ref-map");
   _loadPerturbedMap(referenceMapOutputPath, perturbedMapOutputPath);
   OsmMapPtr combinedMap =
     _combineMapsAndPrepareForConflation(referenceMap, perturbedMapOutputPath);
+  OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-combined-map-1");
 
   MapProjector::projectToWgs84(combinedMap);
   IoUtils::saveMap(combinedMap, combinedMapOutputPath);
+  OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-combined-map-2");
 
   return _conflateAndScoreMatches(combinedMap, conflatedMapOutputPath);
 }
@@ -106,10 +110,13 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPa
 
   OsmMapPtr referenceMap(new OsmMap());
   IoUtils::loadMap(referenceMap, referenceMapInputPath, false, Status::Unknown1);
+  OsmMapWriterFactory::writeDebugMap(referenceMap, "perty-ref-map-initial");
   MapCleaner().apply(referenceMap);
+  OsmMapWriterFactory::writeDebugMap(referenceMap, "perty-cleaned-ref-map");
 
   std::shared_ptr<AddRef1Visitor> addRef1Visitor(new AddRef1Visitor());
   referenceMap->visitRw(*addRef1Visitor);
+
   std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
     new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   referenceMap->visitRw(*setAccuracyVisitor);
@@ -122,6 +129,7 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPa
     const long numTotalTags = (long)tagCountVisitor.getStat();
     LOG_VARD(numTotalTags);
   }
+  OsmMapWriterFactory::writeDebugMap(referenceMap, "perty-tagged-ref-map");
 
   OsmMapPtr referenceMapCopy(referenceMap);
   MapProjector::projectToWgs84(referenceMapCopy);
@@ -140,13 +148,14 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   // since updates to the names of the ref tags on this map will propagate to the map copied from
   OsmMapPtr perturbedMap(new OsmMap());
   IoUtils::loadMap(perturbedMap, perturbedMapInputPath, false, Status::Unknown2);
+  OsmMapWriterFactory::writeDebugMap(perturbedMap, "perty-pre-perturbed-map");
   MapCleaner().apply(perturbedMap);
+  OsmMapWriterFactory::writeDebugMap(perturbedMap, "perty-pre-perturbed-cleaned-map");
 
   std::shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(
     new TagRenameKeyVisitor(MetadataTags::Ref1(), MetadataTags::Ref2()));
   perturbedMap->visitRw(*tagRenameKeyVisitor);
-  // This could be replaced with a SetTagValueVisitor passed in from the command line
-  // instead.
+
   std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
     new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   perturbedMap->visitRw(*setAccuracyVisitor);
@@ -159,6 +168,7 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
     const long numTotalTags = (long)tagCountVisitor.getStat();
     LOG_VARD(numTotalTags);
   }
+  OsmMapWriterFactory::writeDebugMap(perturbedMap, "perty-pre-perturbed-tagged-map");
 
   LOG_DEBUG("Perturbing the copied reference data and saving it to: " << perturbedMapOutputPath);
 
@@ -177,6 +187,7 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
 
   MapProjector::projectToWgs84(perturbedMap);
   IoUtils::saveMap(perturbedMap, perturbedMapOutputPath);
+  OsmMapWriterFactory::writeDebugMap(perturbedMap, "perty-perturbed-map");
 }
 
 OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
@@ -197,6 +208,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
   }
 
   MatchScoringMapPreparer().prepMap(combinedMap, true);
+  OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-after-prepped-map");
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());
   if (Log::getInstance().getLevel() <= Log::Debug)
@@ -212,8 +224,9 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
     // move Unknown2 toward Unknown1
     conf().set(RubberSheet::refKey(), true);
     std::shared_ptr<RubberSheet> rubberSheetOp(new RubberSheet());
-    rubberSheetOp->setConfiguration(conf());
+    rubberSheetOp->setConfiguration(/*conf()*/_settings);
     rubberSheetOp->apply(combinedMap);
+    OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-after-rubber-sheet");
 
     LOG_VARD(combinedMap->getNodes().size());
     LOG_VARD(combinedMap->getWays().size());
@@ -238,7 +251,8 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   std::shared_ptr<MatchComparator> comparator(new MatchComparator());
   OsmMapPtr conflationCopy(new OsmMap(combinedDataToConflate));
 
-  // TODO: We're not applying pre/post conflate ops here, since they tank scores. Should we be?
+  // TODO: We're not applying pre/post conflate ops here, since they tank scores. Should we be? We
+  // are cleaning each input map with MapCleaner beforehand, though.
 
   //NamedOp preOps(ConfigOptions().getConflatePreOps());
   //preOps.apply(conflationCopy);
@@ -246,6 +260,7 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   UnifyingConflator conflator;
   conflator.setConfiguration(_settings);
   conflator.apply(conflationCopy);
+  OsmMapWriterFactory::writeDebugMap(conflationCopy, "perty-conflated-map");
 
   //NamedOp postOps(ConfigOptions().getConflatePostOps());
   //postOps.apply(conflationCopy);
@@ -263,6 +278,7 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   }
 
   _saveMap(conflationCopy, conflatedMapOutputPath);
+  OsmMapWriterFactory::writeDebugMap(conflationCopy, "perty-after-eval-matches");
 
   return comparator;
 }

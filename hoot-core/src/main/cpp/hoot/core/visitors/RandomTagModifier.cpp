@@ -92,14 +92,14 @@ void RandomTagModifier::visit(const std::shared_ptr<Element>& e)
     {
       if (!_replacementTagKeys.contains(tagKey))
       {
-        LOG_DEBUG("Removing tag with key: " << tagKey << " ...");
+        LOG_TRACE("Removing tag with key: " << tagKey << " ...");
         e->getTags().remove(tagKey);
       }
       else
       {
         const int tagIndex = _replacementTagKeys.indexOf(tagKey);
         const QString tagValue = _replacementTagValues.at(tagIndex);
-        LOG_DEBUG("Substituting value: " << tagValue << " for tag with key: " << tagKey);
+        LOG_TRACE("Substituting value: " << tagValue << " for tag with key: " << tagKey);
         e->getTags().set(tagKey, tagValue);
       }
     }
