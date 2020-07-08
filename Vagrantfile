@@ -139,6 +139,7 @@ Vagrant.configure(2) do |config|
     config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"   
     config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
     config.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+    config.vm.provision "valgrind", type: "shell", :privileged => false, :path => "scripts/valgrind/valgrind_install.sh"
   end
 
   def set_forwarding(config)

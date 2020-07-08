@@ -37,7 +37,9 @@ OTHER_FILES = \
     ../conf/core/*Conflation.conf \
     ../conf/core/*Algorithm.conf \
     ../scripts/jenkins/Jenkinsfile \
-    $$files(../scripts/copyright/*, true)
+    $$files(../scripts/copyright/*, true) \
+    ../sonar-project.properties \
+    $$files(../Vagrant*)
 
 include(../Configure.pri)
 
@@ -60,6 +62,3 @@ PRECOMPILED_HEADER = src/main/cpp/hoot/core/HootCoreStable.h
 
 SOURCES += $$files(src/*.cpp, true)
 HEADERS += $$files(src/*.h, true)
-
-DISTFILES += \
-    ../sonar-project.properties
