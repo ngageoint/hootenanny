@@ -37,6 +37,7 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/algorithms/perty/DirectSequentialSimulation.h>
 #include <hoot/core/algorithms/perty/PermuteGridCalculator.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 //Qt
 #include <QVector>
@@ -203,8 +204,9 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
 
   // permute the data first
   permute(map);
+  OsmMapWriterFactory::writeDebugMap(map, "perty-after-perty-op");
 
-  // Apply any user specified operations.
+  // apply any custom perturbation ops
   NamedOp namedOps(_namedOps);
   namedOps.setConfiguration(_settings);
   namedOps.apply(map);

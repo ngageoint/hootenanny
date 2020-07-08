@@ -701,10 +701,10 @@ void Settings::parseCommonArguments(QStringList& args)
         }
       }
 
-      LOG_VARD(append);
-      LOG_VARD(remove);
-      LOG_VARD(prepend);
-      LOG_VARD(replace);
+      LOG_VART(append);
+      LOG_VART(remove);
+      LOG_VART(prepend);
+      LOG_VART(replace);
 
       if (kvl.size() != 2)
       {
@@ -712,9 +712,9 @@ void Settings::parseCommonArguments(QStringList& args)
       }
 
       const QString optionName = kvl[0];
-      LOG_VARD(optionName);
+      LOG_VART(optionName);
       const QString optionVal = kvl[1];
-      LOG_VARD(optionVal);
+      LOG_VART(optionVal);
 
       if (!conf().hasKey(optionName))
       {
