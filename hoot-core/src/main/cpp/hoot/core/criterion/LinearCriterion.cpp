@@ -73,7 +73,10 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
     LOG_VART(g & OsmGeometries::LineString);
     LOG_VART(g & OsmGeometries::Area);
 
-    if (g & OsmGeometries::LineString && !(g & OsmGeometries::Area))
+    // We don't want to fail here if the associated schema type supports both a line and a poly. We
+    // only care by this point that it does support a line. The previous closed area check will take
+    // care of weeding out any polys.
+    if (g & OsmGeometries::LineString)
     {
       result = true;
       break;
