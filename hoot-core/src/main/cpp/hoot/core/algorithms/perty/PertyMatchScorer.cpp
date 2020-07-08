@@ -224,7 +224,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
     // move Unknown2 toward Unknown1
     conf().set(RubberSheet::refKey(), true);
     std::shared_ptr<RubberSheet> rubberSheetOp(new RubberSheet());
-    rubberSheetOp->setConfiguration(conf());
+    rubberSheetOp->setConfiguration(/*conf()*/_settings);
     rubberSheetOp->apply(combinedMap);
     OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-after-rubber-sheet");
 
