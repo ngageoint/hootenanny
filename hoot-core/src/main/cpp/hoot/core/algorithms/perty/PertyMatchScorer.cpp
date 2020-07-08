@@ -116,6 +116,7 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPa
 
   std::shared_ptr<AddRef1Visitor> addRef1Visitor(new AddRef1Visitor());
   referenceMap->visitRw(*addRef1Visitor);
+
   std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
     new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   referenceMap->visitRw(*setAccuracyVisitor);
@@ -154,8 +155,7 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   std::shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(
     new TagRenameKeyVisitor(MetadataTags::Ref1(), MetadataTags::Ref2()));
   perturbedMap->visitRw(*tagRenameKeyVisitor);
-  // This could be replaced with a SetTagValueVisitor passed in from the command line
-  // instead.
+
   std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
     new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   perturbedMap->visitRw(*setAccuracyVisitor);

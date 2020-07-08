@@ -83,8 +83,7 @@ void RandomNodeDuplicator::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
   boost::normal_distribution<> nd;
   boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> N(*_rng, nd);
 
-  // TODO: change to trace
-  LOG_VARD(n->getCircularError());
+  LOG_VART(n->getCircularError());
   Meters sigma = n->getCircularError() / 2.0;
   double x = n->getX() + N() * sigma * _moveMultiplier;
   double y = n->getY() + N() * sigma * _moveMultiplier;

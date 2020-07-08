@@ -52,7 +52,8 @@ SetTagValueVisitor::SetTagValueVisitor(
 _keys(keys),
 _vals(values),
 _appendToExistingValue(appendToExistingValue),
-_overwriteExistingTag(overwriteExistingTag)
+_overwriteExistingTag(overwriteExistingTag),
+_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys())
 {
   if (_keys.size() != _vals.size())
   {
@@ -71,7 +72,8 @@ SetTagValueVisitor::SetTagValueVisitor(
   const QStringList& criteriaClassNames, const bool overwriteExistingTag,
   const bool negateCriteria) :
 _appendToExistingValue(appendToExistingValue),
-_overwriteExistingTag(overwriteExistingTag)
+_overwriteExistingTag(overwriteExistingTag),
+_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys())
 {
   _keys.append(key);
   _vals.append(value);
