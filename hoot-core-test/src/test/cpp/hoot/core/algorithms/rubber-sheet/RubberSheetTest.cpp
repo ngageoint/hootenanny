@@ -250,7 +250,7 @@ public:
     OsmXmlWriter().write(map, _outputPath + "runFilterTest1-out.osm");
 
     CPPUNIT_ASSERT_EQUAL(5419L, uut.getNumFeaturesProcessed());
-    CPPUNIT_ASSERT_EQUAL(139L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(141L, uut.getNumFeaturesAffected());
     HOOT_FILE_EQUALS(_inputPath + "runFilterTest1-out.osm", _outputPath + "runFilterTest1-out.osm");
   }
 
@@ -276,7 +276,7 @@ public:
     OsmXmlWriter().write(map, _outputPath + "runFilterTest2-out.osm");
 
     CPPUNIT_ASSERT_EQUAL(5419L, uut.getNumFeaturesProcessed());
-    CPPUNIT_ASSERT_EQUAL(4024L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(4026L, uut.getNumFeaturesAffected());
     HOOT_FILE_EQUALS(_inputPath + "runFilterTest2-out.osm", _outputPath + "runFilterTest2-out.osm");
   }
 };
