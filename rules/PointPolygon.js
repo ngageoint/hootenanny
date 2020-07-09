@@ -40,6 +40,11 @@ exports.isMatchCandidate = function(map, e)
   // We follow the same convention as POI/Polygon conflation here where all the match candidates are just points (not polys) and
   // we find polygon neighbors to match with inside of ScriptMatchCreator. We're not getting the geometry type from 
   // exports.geometryType for the reason described above.
+
+  //hoot.trace("e: " + e.getId());
+  //hoot.trace("isPoint(map, e): " + isPoint(map, e));
+  //hoot.trace("isSpecificallyConflatable(map, e, point): " + isSpecificallyConflatable(map, e, "point"));
+
   return isPoint(map, e) && !isSpecificallyConflatable(map, e, "point");
 };
 
@@ -74,6 +79,16 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("same statuses: miss");
     return result;
   }
+  /*else if (isPoint(map, e1) && isPoint(map, e2))
+  {
+    hoot.trace("both points: miss");
+    return result;
+  }
+  else if (isPolygon(e1) && isPolygon(e2))
+  {
+    hoot.trace("both polys: miss");
+    return result;
+  }*/
 
   hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
   if (e1.getTags().get("note"))
