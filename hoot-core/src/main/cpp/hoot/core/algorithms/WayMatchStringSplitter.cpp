@@ -59,10 +59,19 @@ QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> WayMatchStringSplitte
   WayNumber wn, OsmMapPtr map, QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
 {
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> result;
-
   foreach (WayMatchStringMerger::SublineMappingPtr sm, mappings)
-    result.insert(map->getWay(sm->getStart(wn).getWay()->getElementId()), sm);
-
+  {
+    const ElementId startElementId = sm->getStart(wn).getWay()->getElementId();
+    WayPtr way = map->getWay(startElementId);
+    if (!way)
+    {
+      LOG_TRACE(startElementId << " not found.");
+    }
+    else
+    {
+      result.insert(way, sm);
+    }
+  }
   return result;
 }
 
@@ -77,7 +86,7 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> wayMapping =
     _buildWayIndex(wn, map, mappings);
 
-  // split each way in the subline mapping.
+  // Split each way in the subline mapping.
   foreach (WayPtr way, wayMapping.uniqueKeys())
   {
     LOG_VART(way->getElementId());
@@ -98,7 +107,7 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
 
     vector<WayLocation> wls;
 
-    // push them all on. This will inevitably create some empty ways, but it is predictable.
+    // Push them all on. This will inevitably create some empty ways, but it is predictable.
     for (int i = 0; i < sm.size(); ++i)
     {
       // make sure the split points are sorted.
