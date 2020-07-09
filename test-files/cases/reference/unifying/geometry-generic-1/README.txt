@@ -1,5 +1,3 @@
-# TODO: the point polygon parts need fixing - #3853
-
 This tests generic geometry conflation, which is conflation meant to occur against features that are not conflatable by any specific conflation
 routine (e.g. Road, Building, etc.). You can check the hoot:MatchedBy tag to ensure generic geometry scripts are not conflating features that
 specific routines are meant to.
