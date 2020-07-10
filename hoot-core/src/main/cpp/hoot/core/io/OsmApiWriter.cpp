@@ -487,7 +487,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           break;
         default:
           //  This is a big problem, report it and try again
-          LOG_ERROR("Changeset upload responded with HTTP status response: " << request->getHttpStatus());
+          request->logConnectionError();
           //  Fall through
         case HttpResponseCode::HTTP_METHOD_NOT_ALLOWED:
         case HttpResponseCode::HTTP_UNAUTHORIZED:
@@ -793,7 +793,7 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
       _changesetCountMutex.unlock();
       break;
     default:
-      LOG_WARN("Uknown HTTP response code: " << request->getHttpStatus());
+      request->logConnectionError();
       break;
     }
   }
@@ -864,7 +864,7 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
       LOG_WARN("Changeset precondition failed: " << info->response);
       break;
     default:
-      LOG_WARN("Uknown HTTP response code: " << info->status);
+      request->logConnectionError();
       break;
     }
   }
@@ -883,7 +883,7 @@ bool OsmApiWriter::_fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr 
   long version_old = 0;
   long version_new = 0;
   //  Match the error and parse the error information
-  if (_changeset.matchesChangesetConflictVersionMismatchFailure(conflictExplanation, element_id, element_type, version_old, version_new))
+  if (_changeset.getFailureCheck().matchesChangesetConflictVersionMismatchFailure(conflictExplanation, element_id, element_type, version_old, version_new))
   {
     //  Increment the retry version count
     changeset->retryVersion();
@@ -911,7 +911,7 @@ bool OsmApiWriter::_fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr 
 
 bool OsmApiWriter::_changesetClosed(const QString &conflictExplanation)
 {
-  return _changeset.matchesChangesetClosedFailure(conflictExplanation);
+  return _changeset.getFailureCheck().matchesChangesetClosedFailure(conflictExplanation);
 }
 
 bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset)

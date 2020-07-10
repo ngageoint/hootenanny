@@ -44,6 +44,7 @@
 
 //  Hoot
 #include <hoot/core/io/OsmApiChangesetElement.h>
+#include <hoot/core/io/OsmApiMatchFailure.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
 
 namespace hoot
@@ -207,75 +208,6 @@ public:
    */
   long getProcessedCount()      { return _processedCount; }
   /**
-   * @brief matchesPlaceholderFailure Checks the return from the API to see if it is similar to the following error message:
-   *        "Placeholder node not found for reference -145213 in way -5687"
-   * @param hint Error message from OSM API
-   * @param member_id ID of the member element that caused the element to fail
-   * @param member_type Type of the member element that caused the element to fail
-   * @param element_id ID of the element that failed
-   * @param element_type Type of the element that failed
-   * @return True if the message matches and was parsed
-   */
-  static bool matchesPlaceholderFailure(const QString& hint,
-                                        long& member_id, ElementType::Type& member_type,
-                                        long& element_id, ElementType::Type& element_type);
-  /**
-   * @brief matchesRelationFailure Checks the return from the API to see if it is similar to the following error message:
-   *        "Relation with id  cannot be saved due to Relation with id 1707699"
-   * @param hint Error message from OSM API
-   * @param element_id ID of the element that failed
-   * @param member_id ID of the member element that caused the element to fail
-   * @param member_type Type of the member element that caused the element to fail
-   * @return True if the message matches and was parsed
-   */
-  static bool matchesRelationFailure(const QString& hint, long& element_id,
-                                     long& member_id, ElementType::Type& member_type);
-  /**
-   * @brief matchesMultiElementFailure Checks the return from the API to see if it is similar to the following error message:
-   *        "Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible."
-   * @param hint Error message from OSM API
-   * @param element_id ID of the element that failed
-   * @param element_type Type of the element that failed
-   * @param member_ids IDs of the member elements that caused the element to fail
-   * @param member_type Type of the member elements that caused the element to fail
-   * @return True if the message matches and was parsed
-   */
-  static bool matchesMultiElementFailure(const QString& hint, long& element_id, ElementType::Type& element_type,
-                                         std::vector<long>& member_ids, ElementType::Type& member_type);
-  /**
-   * @brief matchesChangesetDeletePreconditionFailure Checks the return from the API to see if it is similar to the following error message:
-   *        "Precondition failed: Node 55 is still used by ways 123"
-   * @param hint Error message from OSM API
-   * @param member_id ID of the member element that caused the element to fail
-   * @param member_type Type of the member element that caused the element to fail
-   * @param element_id ID of the element that failed
-   * @param element_type Type of the element that failed
-   * @return True if the message matches and was parsed
-   */
-  static bool matchesChangesetDeletePreconditionFailure(const QString& hint,
-                                                        long& member_id, ElementType::Type& member_type,
-                                                        long& element_id, ElementType::Type& element_type);
-  /**
-   * @brief matchesChangesetConflictVersionMismatchFailure Checks the return from the API to see if it is similar to the following error message:
-   *        "Changeset conflict: Version mismatch: Provided 2, server had: 1 of Node 4869875616"
-   * @param hint Error message from OSM API
-   * @param member_id ID of the member element that caused the element to fail
-   * @param member_type Type of the member element that caused the element to fail
-   * @param element_id ID of the element that failed
-   * @param element_type Type of the element that failed
-   * @return True if the message matches and was parsed
-   */
-  static bool matchesChangesetConflictVersionMismatchFailure(const QString& hint,
-                                                             long& element_id, ElementType::Type& element_type,
-                                                             long& version_old, long& version_new);
-  /**
-   * @brief matchesChangesetClosed FailureChecks the return from the API to see if it is similar to the following error message:
-   *        "Changeset conflict: The changeset 49514098 was closed at 2020-01-08 16:28:56 UTC"
-   * @param hint Error message from OSM API
-   * @return True if the message matches
-   */
-  static bool matchesChangesetClosedFailure(const QString& hint);
-  /**
    * @brief setErrorPathname Record the pathname of the error changeset
    * @param path Pathname
    */
@@ -311,6 +243,8 @@ public:
    * @param changeset ChangesetInfo pointer of elements that all failed
    */
   void failChangeset(const ChangesetInfoPtr& changeset);
+
+  const OsmApiMatchFailure& getFailureCheck() const { return _failureCheck; }
 
 private:
   /**
@@ -552,6 +486,8 @@ private:
   /** Full pathname of the error file changeset, if any errors occur */
   QString _errorPathname;
   std::mutex _errorMutex;
+  /** OSM API error matching object */
+  OsmApiMatchFailure _failureCheck;
 };
 
 /** Atomic subset of IDs that are sent to the OSM API, header only class */
