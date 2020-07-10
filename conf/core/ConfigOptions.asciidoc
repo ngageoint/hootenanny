@@ -3598,6 +3598,13 @@ controlled by the Hootenanny schema.
 
 The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
 
+=== poi.polygon.string.comparer
+
+* Data Type: string
+* Default Value: `hoot::MeanWordSetDistance`
+
+TODO
+
 === poi.polygon.tag.merger
 
 * Data Type: string

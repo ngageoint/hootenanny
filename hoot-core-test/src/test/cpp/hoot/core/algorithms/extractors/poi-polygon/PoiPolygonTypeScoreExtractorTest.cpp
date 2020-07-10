@@ -48,6 +48,7 @@ class PoiPolygonTypeScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(PoiPolygonTypeScoreExtractorTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(translateTagValueTest);
+  //CPPUNIT_TEST(miscTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -101,6 +102,22 @@ public:
     uut.setConfiguration(settings);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
+
+  // for misc type debug testing only
+//  void miscTest()
+//  {
+//    OsmMapPtr map(new OsmMap());
+//    PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
+//    infoCache->setConfiguration(conf());
+//    PoiPolygonTypeScoreExtractor uut(infoCache);
+//    uut.setConfiguration(conf());
+//    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+//    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+
+//    node1->getTags().set("amenity", "arts_centre");
+//    way1->getTags().set("amenity", "fountain");
+//    LOG_VARW(uut.extract(*map, node1, way1));
+//  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonTypeScoreExtractorTest, "quick");

@@ -46,7 +46,6 @@ public:
   virtual void setStringDistance(const StringDistancePtr& sd) = 0;
 };
 
-
 }
 
 #endif // STRINGDISTANCECONSUMER_H

@@ -40,9 +40,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, MinSumWordSetDistance)
 
-MinSumWordSetDistance::MinSumWordSetDistance(StringDistance* d)
+MinSumWordSetDistance::MinSumWordSetDistance(StringDistancePtr d) :
+_d(d)
 {
-  _d.reset(d);
 }
 
 double MinSumWordSetDistance::compare(const QString& s1, const QString& s2) const

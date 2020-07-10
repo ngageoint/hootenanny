@@ -45,7 +45,7 @@ public:
   /**
    * @param d Takes ownership of d.
    */
-  MinSumWordSetDistance(StringDistance* d);
+  MinSumWordSetDistance(StringDistancePtr d);
 
   MinSumWordSetDistance() = default;
   virtual ~MinSumWordSetDistance() = default;

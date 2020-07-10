@@ -50,6 +50,7 @@ class PoiPolygonNameScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(PoiPolygonNameScoreExtractorTest);
   CPPUNIT_TEST(scoreTest);
   CPPUNIT_TEST(translateTest);
+  //CPPUNIT_TEST(miscTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -57,6 +58,7 @@ public:
   void scoreTest()
   {
     PoiPolygonNameScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -96,6 +98,25 @@ public:
     uut.setConfiguration(settings);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.203, uut.extract(*map, node1, way1), 0.001);
   }
+
+  // for misc name debug testing only
+//  void miscTest()
+//  {
+//    //conf().set(ConfigOptions::getPoiPolygonStringComparerKey(), "hoot::KskipBigramDistance");
+//    PoiPolygonNameScoreExtractor uut;
+//    uut.setConfiguration(conf());
+//    OsmMapPtr map(new OsmMap());
+//    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+//    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+
+//    node1->getTags().set("name", "54 Mint");
+//    way1->getTags().set("name", "San Francisco Mint");
+//    LOG_VARW(uut.extract(*map, node1, way1));
+
+//    node1->getTags().set("name", "Rincon hill Dog Park");
+//    way1->getTags().set("name", "Rincon Hill");
+//    LOG_VARW(uut.extract(*map, node1, way1));
+//  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonNameScoreExtractorTest, "quick");

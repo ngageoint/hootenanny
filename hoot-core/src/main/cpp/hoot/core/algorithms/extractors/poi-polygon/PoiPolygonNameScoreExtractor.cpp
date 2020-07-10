@@ -46,6 +46,11 @@ _translateTagValuesToEnglish(false),
 _namesProcessed(0),
 _matchAttemptMade(false)
 {
+  // default string comp
+  _stringComp.reset(
+    new MeanWordSetDistance(
+      StringDistancePtr(
+        new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))));
 }
 
 void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
@@ -54,6 +59,32 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
 
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
   setLevDist(config.getLevenshteinDistanceAlpha());
+
+  const QString stringCompClassName = config.getPoiPolygonStringComparer().trimmed();
+  if (stringCompClassName.isEmpty())
+  {
+    throw IllegalArgumentException(
+      "No POI/Polygon string comparer specified (must implement StringDistance).");
+  }
+  else
+  {
+    _stringComp =
+      StringDistancePtr(
+        Factory::getInstance().constructObject<StringDistance>(stringCompClassName));
+    if (!_stringComp)
+    {
+      throw IllegalArgumentException(
+        "Invalid POI/Polygon string comparer (must implement StringDistance): " +
+        stringCompClassName);
+    }
+    std::shared_ptr<StringDistanceConsumer> strDistConsumer =
+      std::dynamic_pointer_cast<StringDistanceConsumer>(_stringComp);
+    if (strDistConsumer)
+    {
+      strDistConsumer->setStringDistance(
+        StringDistancePtr(new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())));
+    }
+  }
 
   setTranslateTagValuesToEnglish(config.getPoiPolygonNameTranslateToEnglish());
   if (_translateTagValuesToEnglish && !_translator)
@@ -69,31 +100,17 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
 
 std::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor() const
 {
+  assert(_stringComp);
   if (_translateTagValuesToEnglish)
   {
     ToEnglishTranslateStringDistance* translateStringDist =
-      new ToEnglishTranslateStringDistance(
-        StringDistancePtr(
-          new MeanWordSetDistance(
-            StringDistancePtr(
-              new LevenshteinDistance(
-                //why does this fail when the mem var is used?
-                /*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha())))),
-        _translator);
+      new ToEnglishTranslateStringDistance(_stringComp, _translator);
     translateStringDist->setTranslateAll(false);
-    return
-      std::shared_ptr<NameExtractor>(new NameExtractor(StringDistancePtr(translateStringDist)));
+    return std::shared_ptr<NameExtractor>(new NameExtractor(StringDistancePtr(translateStringDist)));
   }
   else
   {
-    return
-      std::shared_ptr<NameExtractor>(
-        new NameExtractor(
-          StringDistancePtr(
-            new MeanWordSetDistance(
-              StringDistancePtr(
-                new LevenshteinDistance(
-                  ConfigOptions().getLevenshteinDistanceAlpha()))))));
+    return std::shared_ptr<NameExtractor>(new NameExtractor(_stringComp));
   }
 }
 
