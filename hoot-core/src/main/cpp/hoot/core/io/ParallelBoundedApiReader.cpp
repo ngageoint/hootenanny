@@ -246,15 +246,7 @@ void ParallelBoundedApiReader::_process()
         break;
       default:
         _errorMutex.lock();
-        if (status < 0)
-        {
-          //  Negative status error messages are connection errors from the socket and not from the HTTP server
-          LOG_ERROR("Connection Error: " << request.getErrorString() << " (" << (status * -1) << ")");
-        }
-        else
-        {
-          LOG_ERROR("Unexpected Error: HTTP " << status << " : " << request.getErrorString());
-        }
+        request.logConnectionError();
         _fatalError = true;
         _errorMutex.unlock();
         break;

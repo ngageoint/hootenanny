@@ -245,4 +245,17 @@ void HootNetworkRequest::removeIpFromUrlString(QString& endpointUrl, const QUrl&
     endpointUrl.replace(url.host(), "<host-ip>");
 }
 
+void HootNetworkRequest::logConnectionError()
+{
+  if (_status < 0)
+  {
+    //  Negative status error messages are connection errors from the socket and not from the HTTP server
+    LOG_ERROR("Connection Error: " << getErrorString() << " (" << (_status * -1) << ")");
+  }
+  else
+  {
+    LOG_ERROR("Unexpected Error: HTTP " << _status << " : " << getErrorString());
+  }
+}
+
 }
