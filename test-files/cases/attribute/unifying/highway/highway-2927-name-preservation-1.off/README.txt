@@ -4,3 +4,5 @@ The secondary roads named Bulevar Panteón should not lose its original name whe
 "Bulevar Panteón" was being pushed to alt_name and one of the other names was promoted to "name".
 
 Note that there is a bug where the Southern portion of Bulevar Panteón overwrites the road named Av. Sur.
+
+TODO: This test fails intermittently on Jenkins (not my local env). Fix as part of #3633.
