@@ -31,7 +31,6 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
-#include <hoot/core/conflate/address/AddressTagKeys.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -65,8 +64,7 @@ class AddressScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(translateTagValueTest);
   CPPUNIT_TEST(invalidFullAddressTest);
   CPPUNIT_TEST(invalidComponentAddressTest);
-  // TODO: need to get this test back into the mix after reworking its Singleton access
-  //CPPUNIT_TEST(additionalTagsTest);
+  CPPUNIT_TEST(additionalTagsTest);
   CPPUNIT_TEST(noStreetNumberTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -74,6 +72,7 @@ public:
 
   AddressScoreExtractorTest()
   {
+    setResetType(ResetAll);
   }
 
   void runTagTest()
@@ -572,46 +571,46 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
   }
 
-//  void additionalTagsTest()
-//  {
-//    AddressScoreExtractor uut;
-//    uut.setConfiguration(conf());
-//    uut.setCacheEnabled(false);
-//    QSet<QString> additionalTagKeys;
-//    additionalTagKeys.insert("note");
-//    additionalTagKeys.insert("description");
-//    AddressTagKeysPtr addressTagKeys = AddressTagKeys::getInstance();
-//    addressTagKeys->_additionalTagKeys = additionalTagKeys;
+  void additionalTagsTest()
+  {
+    QStringList additionalTagKeys;
+    additionalTagKeys.append("note");
+    additionalTagKeys.append("description");
+    conf().set(ConfigOptions::getAddressAdditionalTagKeysKey(), additionalTagKeys);
 
-//     OsmMapPtr map(new OsmMap());
-//    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-//    map->addNode(node1);
-//    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-//    map->addWay(way1);
+    AddressScoreExtractor uut;
+    uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
 
-//     node1->getTags().set("note", "123 Main Street");
-//    way1->getTags().set("note", "123 main St");
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+    OsmMapPtr map(new OsmMap());
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    map->addNode(node1);
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    map->addWay(way1);
 
-//     node1->getTags().clear();
-//    node1->getTags().set("description", "123 Main Street");
-//    way1->getTags().clear();
-//    way1->getTags().set("description", "123 main St");
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+    node1->getTags().set("note", "123 Main Street");
+    way1->getTags().set("note", "123 main St");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-//     node1->getTags().clear();
-//    node1->getTags().set("blah", "123 Main Street");
-//    way1->getTags().clear();
-//    way1->getTags().set("blah", "123 main St");
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
+    node1->getTags().clear();
+    node1->getTags().set("description", "123 Main Street");
+    way1->getTags().clear();
+    way1->getTags().set("description", "123 main St");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-//     // name gets parsed by default
-//    node1->getTags().clear();
-//    node1->getTags().set("name", "123 Main Street");
-//    way1->getTags().clear();
-//    way1->getTags().set("name", "123 main St");
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
-//  }
+    node1->getTags().clear();
+    node1->getTags().set("blah", "123 Main Street");
+    way1->getTags().clear();
+    way1->getTags().set("blah", "123 main St");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
+
+    // name gets parsed by default
+    node1->getTags().clear();
+    node1->getTags().set("name", "123 Main Street");
+    way1->getTags().clear();
+    way1->getTags().set("name", "123 main St");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+  }
 
   void noStreetNumberTest()
   {

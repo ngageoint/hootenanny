@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/conflate/address/AddressTagKeys.h>
 
 // Qt
 #include <QSet>
@@ -65,9 +66,13 @@ public:
 
   int getNumNormalized() const { return _numNormalized; }
 
+  AddressTagKeysPtr getAddressTagKeys() const { return _addressTagKeys; }
+
 private:
 
   mutable int _numNormalized;
+
+  AddressTagKeysPtr _addressTagKeys;
 
   /*
    * libpostal has a few weird quirks, so we have to hack the input address a bit (hopefully goes
