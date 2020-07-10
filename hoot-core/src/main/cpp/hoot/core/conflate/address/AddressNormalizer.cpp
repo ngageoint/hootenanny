@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/address/LibPostalInit.h>
-#include <hoot/core/conflate/address/AddressTagKeys.h>
 #include <hoot/core/conflate/address/Address.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -43,11 +42,12 @@ namespace hoot
 AddressNormalizer::AddressNormalizer() :
 _numNormalized(0)
 {
+  _addressTagKeys.reset(new AddressTagKeys());
 }
 
 void AddressNormalizer::normalizeAddresses(const ElementPtr& e)
 {
-  const QSet<QString> addressTagKeys = AddressTagKeys::getInstance().getAddressTagKeys(*e);
+  const QSet<QString> addressTagKeys = _addressTagKeys->getAddressTagKeys(*e);
   LOG_VART(addressTagKeys);
   for (QSet<QString>::const_iterator addressTagKeyItr = addressTagKeys.begin();
        addressTagKeyItr != addressTagKeys.end(); ++addressTagKeyItr)

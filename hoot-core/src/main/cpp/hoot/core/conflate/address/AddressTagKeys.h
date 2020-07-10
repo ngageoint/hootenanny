@@ -42,13 +42,13 @@ class AddressTagKeys;
 typedef std::shared_ptr<AddressTagKeys> AddressTagKeysPtr;
 
 /**
- * Allows for mapping an address part type to a range of valid OSM tag keys (Singleton)
+ * Allows for mapping an address part type to a range of valid OSM tag keys
  */
 class AddressTagKeys
 {
 public:
 
-  static AddressTagKeys& getInstance();
+  AddressTagKeys();
 
   /**
    * Returns the tag keys of all address tags on an element
@@ -90,20 +90,10 @@ private:
 
   QString _getAddressTag(const Tags& tags, const QString& addressTagType, bool key) const;
 
-  friend class AddressScoreExtractorTest;
-
-  //extra tags to search for addresses in
+  // extra tags to search for addresses in
   QSet<QString> _additionalTagKeys;
-  //maps address tag types to valid address tag keys
-  QMultiMap<QString, QString> _addressTypeToTagKeys;
-
-  AddressTagKeys();
-  /**  Default destructor */
-  ~AddressTagKeys() = default;
-  /** Delete copy constructor and assignment operator */
-  AddressTagKeys(const AddressTagKeys&) = delete;
-  AddressTagKeys& operator=(const AddressTagKeys&) = delete;
-
+  // maps address tag types to valid address tag keys
+  static QMultiMap<QString, QString> _addressTypeToTagKeys;
 };
 
 }

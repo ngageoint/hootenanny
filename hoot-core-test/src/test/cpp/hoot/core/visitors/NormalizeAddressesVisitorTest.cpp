@@ -68,7 +68,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(21, uut._addressNormalizer.getNumNormalized());
     HOOT_FILE_EQUALS(_inputPath + "gold.osm", outputFile);
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NormalizeAddressesVisitorTest, "slow");
