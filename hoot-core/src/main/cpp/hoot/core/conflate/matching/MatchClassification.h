@@ -51,10 +51,6 @@ class MatchClassification
 public:
 
   MatchClassification();
-
-  /**
-   * Construct the object with predefined values.
-   */
   MatchClassification(double match, double miss, double review);
 
   /**
@@ -63,9 +59,7 @@ public:
   void clear() { _match = 0.0; _miss = 0.0; _review = 0.0; }
 
   double getMatchP() const { return _match; }
-
   double getMissP() const { return _miss; }
-
   double getReviewP() const { return _review; }
 
   /**
@@ -80,15 +74,12 @@ public:
   void normalize();
 
   void setMatch() { _miss = 0; _match = 1; _review = 0; }
-
   void setMatchP(double match) { _match = match; }
 
   void setMiss() { _miss = 1; _match = 0; _review = 0; }
-
   void setMissP(double miss) { _miss = miss; }
 
   void setReview() { _miss = 0; _match = 0; _review = 1; }
-
   void setReviewP(double review) { _review = review; }
 
   QString toString() const

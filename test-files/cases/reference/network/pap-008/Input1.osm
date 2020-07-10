@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<osm version='0.6' upload='true' generator='JOSM'>
+<osm version='0.6' generator='JOSM'>
   <node id='1' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.5399484' lon='-72.326883' />
   <node id='2' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.5398337' lon='-72.3264584' />
   <node id='3' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.5400682' lon='-72.326105' />
@@ -72,8 +72,8 @@
     <tag k='uuid' v='{5222d046-2242-41a7-bc54-932aa215d72a}' />
   </node>
   <node id='44' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.5402105' lon='-72.3184166' />
-  <node id='45' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.5395493' lon='-72.3147512' />
-  <node id='46' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.537291' lon='-72.314394' />
+  <node id='45' action='delete' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.5395493' lon='-72.3147512' />
+  <node id='46' action='delete' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.537291' lon='-72.314394' />
   <node id='47' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.5373088' lon='-72.3160573' />
   <node id='48' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.5371' lon='-72.3153242' />
   <node id='49' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.5368275' lon='-72.3148954' />
@@ -472,8 +472,8 @@
   <node id='347' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.53707562184' lon='-72.314108' />
   <node id='348' action='delete' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.540399' lon='-72.32874158209' />
   <node id='349' action='delete' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.54005174395' lon='-72.328871' />
-  <node id='350' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.53903488327' lon='-72.314108' />
-  <node id='351' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.53814846169' lon='-72.314108' />
+  <node id='350' action='delete' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.53903488327' lon='-72.314108' />
+  <node id='351' action='delete' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.53814846169' lon='-72.314108' />
   <node id='352' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.540399' lon='-72.31833140226' />
   <node id='353' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.540399' lon='-72.32151530481' />
   <node id='354' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121' lat='18.540399' lon='-72.32289676401' />
@@ -2304,17 +2304,10 @@
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{1cf10d9e-c2dd-4ecb-9e18-2956d69f5363}' />
   </way>
-  <way id='107' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121'>
-    <nd ref='350' />
-    <nd ref='45' />
-    <nd ref='232' />
+  <way id='107' action='delete' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121'>
     <tag k='error:circular' v='15' />
   </way>
-  <way id='108' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121'>
-    <nd ref='262' />
-    <nd ref='46' />
-    <nd ref='130' />
-    <nd ref='351' />
+  <way id='108' action='delete' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121'>
     <tag k='error:circular' v='15' />
   </way>
   <way id='109' timestamp='2017-06-07T15:19:30Z' visible='true' version='1' changeset='121'>

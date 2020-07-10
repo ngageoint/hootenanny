@@ -95,8 +95,8 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   // Unfortunately, this can be a very coarse estimate. Something like Frechet distance may
   // improve this matching. - see #3158
 
-  // Its not why we would allow node/way match pairs here, but forcing way/way match pairs does
-  // lead to worse snapping at some road intersections as was found while working on #3386.
+  // Its not obvious why we would allow node/way match pairs here, but forcing way/way match pairs
+  // does lead to worse snapping at some road intersections as was found while working on #3386.
   // NetworkMatchCreator does have a candidate check for highways, so its also not completely
   // clear when nodes would be getting into the mix here.
 

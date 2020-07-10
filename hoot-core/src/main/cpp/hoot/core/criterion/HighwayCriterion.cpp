@@ -41,6 +41,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   LOG_VART(element->getElementId());
+  //LOG_VART(element);
 
   const ElementType type = element->getElementType();
 
