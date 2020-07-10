@@ -35,6 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/ops/MapCropper.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -71,6 +72,17 @@ public:
     {
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
+    }
+
+    ConfigOptions configOpts(conf());
+
+    if (configOpts.getConvertOps().contains(QString::fromStdString(MapCropper::className())) &&
+        configOpts.getCropBounds().trimmed().isEmpty())
+    {
+      throw IllegalArgumentException(
+        "When using " + QString::fromStdString(MapCropper::className()) +
+        " with the convert command, the " + configOpts.getCropBoundsKey() +
+        " option must be specified.");
     }
 
     QStringList inputs;

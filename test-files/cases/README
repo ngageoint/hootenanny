@@ -1,3 +1,7 @@
+test-files/cases contains a set of conflate case tests meant to test a specific aspect of a conflation algorithm against two small input
+datasets. Basically if you find something hoot can't conflate, create one of these tests and try to fix the problem. Creating conflate case
+tests is preferred for this type of testing over command tests, when possible.
+
 Test configuration options inherit from each other from the top level parent directory on down.
 
 If you want to base your test configuration off one or more of the default configuration files, add the option "base.config" with the name(s) 
