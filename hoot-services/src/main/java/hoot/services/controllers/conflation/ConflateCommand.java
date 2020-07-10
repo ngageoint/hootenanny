@@ -252,7 +252,20 @@ class ConflateCommand extends ExternalCommand {
                             optionValue = optionValue.replaceAll("\\[|\\]", "").replaceAll(",", ";");
                         }
 
-                        options.add("\"" + optionConfig.get("key") + "=" + optionValue + "\"");
+                        // if value is json string
+                        if (optionValue.matches("\\{(.*)\\}")) {
+                            JSONParser parser = new JSONParser();
+                            try {
+                                JSONObject json = (JSONObject) parser.parse(optionValue);
+                                options.add(optionConfig.get("key") + "=\"" + json.toJSONString().replace("\"","\\\"") + "\"");
+                            }
+                            catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                        } else {
+                            options.add("\"" + optionConfig.get("key") + "=" + optionValue + "\"");
+                        }
                     }
                 }
             }
@@ -335,7 +348,7 @@ class ConflateCommand extends ExternalCommand {
         // "hoot::HighwayMatchCreator", in the "match.creators" config option the json snippet would look like:
         //
         // "match.creators": "hoot::HighwayMatchCreator->hoot::NetworkMatchCreator",
-        // 
+        //
         // where '->' means replace the first item with the second item.
 
         String creatorsStr = config.get(optionName).toString();
