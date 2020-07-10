@@ -35,19 +35,18 @@
 namespace hoot
 {
 
+QMultiMap<QString, QString> AddressTagKeys::_addressTypeToTagKeys;
+
 AddressTagKeys::AddressTagKeys()
 {
   ConfigOptions config = ConfigOptions(conf());
-  _readAddressTagKeys(config.getAddressTagKeysFile());
+  // only read the config file in once
+  if (_addressTypeToTagKeys.isEmpty())
+  {
+    _readAddressTagKeys(config.getAddressTagKeysFile());
+  }
   _additionalTagKeys = config.getAddressAdditionalTagKeys().toSet();
   LOG_VART(_additionalTagKeys);
-}
-
-AddressTagKeys& AddressTagKeys::getInstance()
-{
-  //  Local static singleton instance
-  static AddressTagKeys instance;
-  return instance;
 }
 
 void AddressTagKeys::_readAddressTagKeys(const QString& configFile)
@@ -118,7 +117,8 @@ QString AddressTagKeys::getAddressTagValue(const Tags& tags, const QString& addr
   return _getAddressTag(tags, addressTagType, false);
 }
 
-QString AddressTagKeys::_getAddressTag(const Tags& tags, const QString& addressTagType, bool key) const
+QString AddressTagKeys::_getAddressTag(const Tags& tags, const QString& addressTagType,
+                                       bool key) const
 {
   const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
   for (int i = 0; i < tagKeys.size(); i++)
