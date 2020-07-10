@@ -48,7 +48,6 @@ class PoiPolygonTypeScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(PoiPolygonTypeScoreExtractorTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(translateTagValueTest);
-  //CPPUNIT_TEST(miscTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

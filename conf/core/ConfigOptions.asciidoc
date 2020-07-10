@@ -3601,9 +3601,10 @@ The source tag key to be used in conjunction with poi.polygon.disable.same.sourc
 === poi.polygon.string.comparer
 
 * Data Type: string
-* Default Value: `hoot::MeanWordSetDistance`
+* Default Value: `hoot::KskipBigramDistance`
 
-TODO
+String comparison algorithm to use for name comparison with POI/Polygon conflation. Must be an
+implementation of `StringDistance`.
 
 === poi.polygon.tag.merger
 
