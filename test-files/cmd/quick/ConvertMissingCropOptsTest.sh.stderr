@@ -1,0 +1,2 @@
+Error running convert:
+When using hoot::MapCropper with the convert command, the crop.bounds option must be specified.
