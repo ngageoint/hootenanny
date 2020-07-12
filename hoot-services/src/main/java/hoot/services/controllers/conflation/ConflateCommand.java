@@ -206,8 +206,8 @@ class ConflateCommand extends ExternalCommand {
                     JSONParser parser = new JSONParser();
                     try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, NETWORK_CONFLATION_PATH))) {
                         JSONObject networkConfigJson = (JSONObject) parser.parse(fileReader);
-			matchCreators = getCreatorsFromJson("match.creators", "MatchCreators", networkConfigJson);
-			mergerCreators = getCreatorsFromJson("merger.creators", "MergerCreators", networkConfigJson);
+                        matchCreators = getCreatorsFromJson("match.creators", "MatchCreators", networkConfigJson);
+                        mergerCreators = getCreatorsFromJson("merger.creators", "MergerCreators", networkConfigJson);
                     }
                     catch (IOException | ParseException ioe) {
                         throw new RuntimeException("Error reading NetworkAlgorithm.conf file", ioe);
@@ -254,15 +254,7 @@ class ConflateCommand extends ExternalCommand {
 
                         // if value is json string
                         if (optionValue.matches("\\{(.*)\\}")) {
-                            JSONParser parser = new JSONParser();
-                            try {
-                                JSONObject json = (JSONObject) parser.parse(optionValue);
-                                options.add(optionConfig.get("key") + "=\"" + json.toJSONString().replace("\"","\\\"") + "\"");
-                            }
-                            catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
+                            options.add(optionConfig.get("key") + "=" + optionValue);
                         } else {
                             options.add("\"" + optionConfig.get("key") + "=" + optionValue + "\"");
                         }
