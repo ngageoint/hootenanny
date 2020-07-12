@@ -76,6 +76,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.ServiceUnavailableException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -164,34 +165,48 @@ public class GrailResource {
         return !replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL);
     }
 
-    private Command getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
+    private APICapabilities railsOnlineCheck() {
+        APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
+        logger.info("ApplyChangeset: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
+        if (railsPortCapabilities.getApiStatus() == null || railsPortCapabilities.getApiStatus().equals("offline")) {
+            throw new ServiceUnavailableException(Response.status(Response.Status.SERVICE_UNAVAILABLE).type(MediaType.TEXT_PLAIN).entity("The reference OSM API server is offline.").build());
+        }
+
+        return railsPortCapabilities;
+    }
+
+    private InternalCommand getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
         // Checks to see that the sensitive data was actually replaced meaning there was a value
         if (isPrivateOverpassActive()) {
             params.setPullUrl(PRIVATE_OVERPASS_URL);
         } else {
-            APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
-            if (railsPortCapabilities.getApiStatus() == null
-                    || railsPortCapabilities.getApiStatus().equals("offline")) {
-                throw new UnavailableException("The Rails port API is offline.");
-            }
+            APICapabilities railsPortCapabilities = railsOnlineCheck();
 
             params.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
             params.setPullUrl(RAILSPORT_PULL_URL);
         }
 
+        File referenceOSMFile = new File(params.getWorkDir(), REFERENCE + ".osm");
+        params.setOutput(referenceOSMFile.getAbsolutePath());
+        if (referenceOSMFile.exists()) referenceOSMFile.delete();
+
         InternalCommand command = apiCommandFactory.build(jobId, params, this.getClass());
         return command;
     }
 
-    private Command getConnectedWaysApiCommand(String jobId, GrailParams params) throws UnavailableException {
+    private InternalCommand getConnectedWaysApiCommand(String jobId, GrailParams params) throws UnavailableException {
         params.setPullUrl(RAILSPORT_PULL_URL);
 
         InternalCommand command = connectedWaysCommandFactory.build(jobId, params, this.getClass());
         return command;
     }
 
-    private Command getPublicOverpassCommand(String jobId, GrailParams params) {
+    private InternalCommand getPublicOverpassCommand(String jobId, File workDir, GrailParams params) {
         params.setPullUrl(PUBLIC_OVERPASS_URL);
+
+        File overpassFile = new File(workDir, SECONDARY + ".osm");
+        params.setOutput(overpassFile.getAbsolutePath());
+        if (overpassFile.exists()) overpassFile.delete();
 
         InternalCommand command = overpassCommandFactory.build(jobId, params, this.getClass());
         return command;
@@ -201,7 +216,7 @@ public class GrailResource {
      * Pull the Public Overpass and Private Rails Port data for a bounding box and run differential on it
      *
      * Takes in a json object
-     * POST hoot-services/grail/createdifferentialchangeset
+     * POST hoot-services/grail/createchangeset
      *
      * {
      *   //The upper left (UL) and lower right (LR) of the bounding box to clip the dataset
@@ -217,12 +232,14 @@ public class GrailResource {
      * @return Job ID Internally, this is the directory that the files are kept in
      */
     @POST
-    @Path("/createdifferentialchangeset")
+    @Path("/createchangeset")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createDifferentialChangeset(@Context HttpServletRequest request,
+    public Response createChangeset(@Context HttpServletRequest request,
             GrailParams reqParams,
-            @QueryParam("deriveType") String deriveType,
+            @QueryParam("deriveType") @DefaultValue("") String deriveType,
+            @QueryParam("replacement") @DefaultValue("false") Boolean replacement,
+            @QueryParam("uploadResult") @DefaultValue("false") Boolean uploadResult,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
@@ -236,66 +253,142 @@ public class GrailResource {
             FileUtils.forceMkdir(workDir);
         }
         catch (IOException ioe) {
-            logger.error("createDifferentialChangeset: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
+            logger.error("createChangeset: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
+        reqParams.setWorkDir(workDir);
 
+        Class<? extends GrailCommand> grailCommandClass;
+        GrailParams differentialParams = new GrailParams(reqParams);
         List<Command> workflow = new LinkedList<>();
+        String input1 = reqParams.getInput1();
+        String input2 = reqParams.getInput2();
 
-        JSONObject jobInfo = new JSONObject();
-        jobInfo.put("jobid", jobId);
+        if (input1 == null && input2 == null) {
+            // Generate command for pulling from the Public Overpass API
+            GrailParams getOverpassParams = new GrailParams(reqParams);
+            InternalCommand getOverpassCommand = getPublicOverpassCommand(jobId, workDir, getOverpassParams);
 
-        // Pull reference data from Rails port OSM API
-        File referenceOSMFile = new File(workDir, REFERENCE + ".osm");
-        GrailParams getRailsParams = new GrailParams(reqParams);
-        getRailsParams.setOutput(referenceOSMFile.getAbsolutePath());
+            // Pull reference data from Rails port or private overpass
+            if (deriveType.equals("Adds only")) {
+                input1 = getOverpassParams.getOutput();
+                input2 = "\"\"";
+                grailCommandClass = DeriveChangesetCommand.class;
+            } else {
+                GrailParams getRailsParams = new GrailParams(reqParams);
+                getRailsParams.setWorkDir(workDir);
 
-        if (referenceOSMFile.exists()) referenceOSMFile.delete();
-        try {
-            workflow.add(getRailsPortApiCommand(jobId, getRailsParams));
-        } catch (UnavailableException ex) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
+                try {
+                    // cut and replace needs to get connected ways
+                    if (deriveType.equals("Cut & Replace")) {
+                        workflow.addAll(setupRailsPull(jobId, getRailsParams, null));
+                        grailCommandClass = DeriveChangesetReplacementCommand.class;
+                    } else {
+                        workflow.add(getRailsPortApiCommand(jobId, getRailsParams));
+                        grailCommandClass = RunDiffCommand.class;
+                    }
+                } catch (UnavailableException ex) {
+                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
+                }
+
+                input1 = getRailsParams.getOutput();
+                input2 = getOverpassParams.getOutput();
+            }
+
+            // Pull secondary data from the Public Overpass API
+            workflow.add(getOverpassCommand);
+        } else {
+            input1 = HOOTAPI_DB_URL + "/" + input1;
+
+            //If not passed INPUT2 assume an adds only changeset using one input
+            if (input2 == null) {
+                input2 = "\"\"";
+                grailCommandClass = DeriveChangesetCommand.class;
+            } else {
+                differentialParams.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
+                input2 = HOOTAPI_DB_URL + "/" + input2;
+
+                grailCommandClass = replacement ? DeriveChangesetReplacementCommand.class : DeriveChangesetCommand.class;
+            }
         }
 
-        // Pull secondary data from the Public Overpass API
-        File secondaryOSMFile = new File(workDir, SECONDARY + ".osm");
-        GrailParams getOverpassParams = new GrailParams(reqParams);
-        getOverpassParams.setOutput(secondaryOSMFile.getAbsolutePath());
-
-        if (secondaryOSMFile.exists()) secondaryOSMFile.delete();
-        workflow.add(getPublicOverpassCommand(jobId, getOverpassParams));
-
-        // Run the differential conflate command.
-        GrailParams params = new GrailParams(reqParams);
-        params.setUser(user);
-        params.setWorkDir(workDir);
-        params.setInput1(referenceOSMFile.getAbsolutePath());
-        params.setInput2(secondaryOSMFile.getAbsolutePath());
-
+        // create output file
         File geomDiffFile = new File(workDir, "diff.osc");
         if (geomDiffFile.exists()) geomDiffFile.delete();
-
         try {
             geomDiffFile.createNewFile();
         }
         catch(IOException exc) {
-            logger.error("createDifferentialChangeset: Error creating file: {} ", geomDiffFile.getAbsolutePath(), exc);
+            logger.error("createChangeset: Error creating file: {} ", geomDiffFile.getAbsolutePath(), exc);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exc.getMessage()).build();
         }
 
-        params.setOutput(geomDiffFile.getAbsolutePath());
+        differentialParams.setWorkDir(workDir);
+        differentialParams.setInput1(input1);
+        differentialParams.setInput2(input2);
+        differentialParams.setOutput(geomDiffFile.getAbsolutePath());
 
-        ExternalCommand makeDiff = grailCommandFactory.build(jobId, params, debugLevel, RunDiffCommand.class, this.getClass());
+        ExternalCommand makeDiff = grailCommandFactory.build(jobId, differentialParams, debugLevel, grailCommandClass, this.getClass());
         workflow.add(makeDiff);
+
+        JobType jobType = JobType.DERIVE_CHANGESET;
+        // Check to see if changeset should be uploaded
+        if (uploadResult) {
+            GrailParams pushParams = new GrailParams(differentialParams);
+            workflow.add(createApplyWorkflow(jobId, pushParams, debugLevel));
+
+            if (deriveType.equals("Adds only")) {
+                jobType = JobType.BULK_ADD;
+            } else if (deriveType.equals("Cut & Replace")) {
+                jobType = JobType.BULK_REPLACE;
+            } else {
+                jobType = JobType.BULK_DIFFERENTIAL;
+            }
+
+            // Clean up pulled files
+            ArrayList<File> deleteFiles = new ArrayList<>();
+            deleteFiles.add(workDir);
+            InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+            workflow.add(cleanFolders);
+        }
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", reqParams.getBounds());
+        jobStatusTags.put("input1", input1);
+        jobStatusTags.put("input2", input2);
+        jobStatusTags.put("parentId", reqParams.getParentId());
         jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
         jobStatusTags.put("deriveType", deriveType);
 
-        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
+        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), jobType, jobStatusTags));
+
+        JSONObject jobInfo = new JSONObject();
+        jobInfo.put("jobid", jobId);
 
         return Response.ok(jobInfo.toJSONString()).build();
+    }
+
+    private ExternalCommand createApplyWorkflow(String jobId, GrailParams pushParams, String debugLevel) {
+        pushParams.setPushUrl(RAILSPORT_PUSH_URL);
+
+        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
+        pushParams.setConsumerKey(oauthInfo.getConsumerKey());
+        pushParams.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
+
+        try {
+            railsOnlineCheck();
+
+            ExternalCommand applyGeomChange = grailCommandFactory.build(jobId, pushParams, debugLevel, ApplyChangesetCommand.class, this.getClass());
+            return applyGeomChange;
+        }
+        catch (ServiceUnavailableException exc) {
+            String msg = "Error during changeset push! Error connecting to railsport";
+            throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
+        }
+        catch (Exception exc) {
+            String msg = "Error during changeset push! Params: " + pushParams;
+            throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
+        }
     }
 
     /**
@@ -495,104 +588,6 @@ public class GrailResource {
     }
 
     /**
-     * Runs changeset-derive on the two input layers
-     *
-     * Takes in a json object
-     * POST hoot-services/grail/derivechangeset
-     *
-     * {
-     *   "input1" : // reference dataset name
-     *
-     *   "input2" : // secondary dataset name
-     * }
-     *
-     * @param reqParams
-     *      JSON input params; see description above
-     *
-     * @param debugLevel
-     *      debug level
-     *
-     * @return Job ID. Can be used to check status of the conflate push
-     */
-    @POST
-    @Path("/derivechangeset")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deriveChangeset(@Context HttpServletRequest request,
-            GrailParams reqParams,
-            @QueryParam("deriveType") String deriveType,
-            @QueryParam("replacement") @DefaultValue("false") Boolean replacement,
-            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
-
-        Users user = Users.fromRequest(request);
-        advancedUserCheck(user);
-
-        String input1 = reqParams.getInput1();
-        String input2 = reqParams.getInput2();
-
-        JSONObject json = new JSONObject();
-        String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-        json.put("jobid", mainJobId);
-
-        List<Command> workflow = new LinkedList<>();
-
-        File workDir = new File(CHANGESETS_FOLDER, mainJobId);
-        try {
-            FileUtils.forceMkdir(workDir);
-        }
-        catch (IOException ioe) {
-            logger.error("deriveChangeset: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
-        }
-
-        GrailParams params = new GrailParams(reqParams);
-        params.setUser(user);
-        params.setWorkDir(workDir);
-
-        try {
-            params.setInput1(HOOTAPI_DB_URL + "/" + input1);
-
-            //If not passed INPUT2 assume an adds only changeset using one input
-            if(params.getInput2() != null) {
-                params.setInput2(HOOTAPI_DB_URL + "/" + input2);
-                params.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
-            } else {
-                params.setInput2("\"\"");
-            }
-
-            File changeSet = new File(workDir, "diff.osc");
-            if (changeSet.exists()) { changeSet.delete(); }
-
-            params.setOutput(changeSet.getAbsolutePath());
-            // Run changeset-derive
-            ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId, params, debugLevel, (replacement) ? DeriveChangesetReplacementCommand.class : DeriveChangesetCommand.class, this.getClass());
-            workflow.add(makeChangeset);
-
-            Map<String, Object> jobStatusTags = new HashMap<>();
-            jobStatusTags.put("bbox", reqParams.getBounds());
-            jobStatusTags.put("input1", input1);
-            jobStatusTags.put("input2", input2);
-            jobStatusTags.put("parentId", reqParams.getParentId());
-            jobStatusTags.put("deriveType", deriveType);
-            jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
-
-            jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (IllegalArgumentException iae) {
-            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
-        }
-        catch (Exception e) {
-            String msg = "Error during derive changeset! Params: " + params;
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        return Response.ok(json.toJSONString()).build();
-    }
-
-    /**
      * Pull the remote data for a bounding box
      * from public Overpass API
      * and write to a Hoot map dataset
@@ -620,6 +615,7 @@ public class GrailResource {
 
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
+        reqParams.setUser(user);
 
         String bbox = reqParams.getBounds();
         String layerName = reqParams.getInput1();
@@ -636,18 +632,12 @@ public class GrailResource {
 
         List<Command> workflow = new LinkedList<>();
 
+        GrailParams getOverpassParams = new GrailParams(reqParams);
+        workflow.add(getPublicOverpassCommand(jobId, workDir, getOverpassParams));
+
         // Write the data to the hoot db
         GrailParams params = new GrailParams(reqParams);
-        params.setUser(user);
-        params.setPullUrl(PUBLIC_OVERPASS_URL);
-
-        File overpassOSMFile = new File(workDir, SECONDARY + ".osm");
-        GrailParams getOverpassParams = new GrailParams(params);
-        getOverpassParams.setOutput(overpassOSMFile.getAbsolutePath());
-        if (overpassOSMFile.exists()) overpassOSMFile.delete();
-        workflow.add(getPublicOverpassCommand(jobId, getOverpassParams));
-
-        params.setInput1(overpassOSMFile.getAbsolutePath());
+        params.setInput1(getOverpassParams.getOutput());
         params.setOutput(layerName);
         ExternalCommand importOverpass = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importOverpass);
@@ -840,7 +830,7 @@ public class GrailResource {
         GrailParams params = new GrailParams(reqParams);
         params.setUser(user);
         params.setWorkDir(workDir);
-        params.setOutput(layerName);
+        params.setInput1(layerName);
 
         List<Command> workflow;
         try {
@@ -861,16 +851,12 @@ public class GrailResource {
 
     private List<Command> setupRailsPull(String jobId, GrailParams params, Long parentFolderId) throws UnavailableException {
         List<Command> workflow = new LinkedList<>();
-        Users user = params.getUser();
         boolean usingPrivateOverpass = isPrivateOverpassActive();
+        String layerName = params.getInput1();
 
         // Pull data from the reference OSM API or private Overpass API
         // Until hoot can read API url directly, download to file first
-        File referenceOSMFile = new File(params.getWorkDir(), REFERENCE +".osm");
-        if (referenceOSMFile.exists()) { referenceOSMFile.delete(); }
-
         GrailParams getRailsParams = new GrailParams(params);
-        getRailsParams.setOutput(referenceOSMFile.getAbsolutePath());
 
         // have to add the query for getting connected ways before calling getRailsPortApiCommand
         if (usingPrivateOverpass) {
@@ -885,21 +871,18 @@ public class GrailResource {
         }
 
         // if not using private overpass then this will be changed to the merge file
-        File ingestFile = referenceOSMFile;
+        File ingestFile = new File(getRailsParams.getOutput());
 
         // private overpass query result file should handle getting the connected ways so just use that as the ingest file
         if (!usingPrivateOverpass) {
             GrailParams connectedWaysParams = new GrailParams(params);
-            connectedWaysParams.setInput1(referenceOSMFile.getAbsolutePath());
+            connectedWaysParams.setInput1(ingestFile.getAbsolutePath());
             File cropFile = new File(params.getWorkDir(), "crop.osm");
             connectedWaysParams.setOutput(cropFile.getAbsolutePath());
             // Do an invert crop of this data to get nodes outside bounds
             workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", InvertCropCommand.class, this.getClass()));
 
-            //read node ids
-            //pull connected ways
-            //pull entire ways
-            //remove cropfile
+            //read node ids, pull connected ways, pull entire ways, remove cropfile
             workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
 
             // merge OOB connected ways osm files and add 'hoot:change:exclude:delete' tag to each
@@ -918,40 +901,47 @@ public class GrailResource {
             // merge OOB connected ways merge file and the reference osm file
             GrailParams mergeRefParams = new GrailParams(params);
             ingestFile = new File(params.getWorkDir(), "merge.osm");
-            mergeRefParams.setInput1("(" + mergeOobWaysFile.getName() + "|" + referenceOSMFile.getName() + ")"); //this is the file filter
+            mergeRefParams.setInput1("(" + mergeOobWaysFile.getName() + "|" + ingestFile.getName() + ")"); //this is the file filter
             mergeRefParams.setOutput(ingestFile.getAbsolutePath());
             workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
         }
 
-        // Write the data to the hoot db
-        GrailParams pushParams = new GrailParams(params);
-        pushParams.setInput1(ingestFile.getAbsolutePath());
-        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, pushParams, "info", PushToDbCommand.class, this.getClass());
-        workflow.add(importRailsPort);
+        // set output so the output file can be used outside this function
+        params.setOutput(ingestFile.getAbsolutePath());
 
-        // Set map tags marking dataset as eligible for derive changeset
-        Map<String, String> tags = new HashMap<>();
-        tags.put("grailReference", "true");
-        tags.put("bbox", params.getBounds());
-        if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
-        InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
-        workflow.add(setMapTags);
+        // let parentFolderId decide if data should be written to database
+        if ( parentFolderId != null ) {
+            // Write the data to the hoot db
+            GrailParams pushParams = new GrailParams(params);
+            pushParams.setInput1(ingestFile.getAbsolutePath());
+            pushParams.setOutput(layerName);
+            ExternalCommand importRailsPort = grailCommandFactory.build(jobId, pushParams, "info", PushToDbCommand.class, this.getClass());
+            workflow.add(importRailsPort);
 
-        // Move the data to the folder
-        InternalCommand setFolder = updateParentCommandFactory.build(jobId, parentFolderId, params.getOutput(), user, this.getClass());
-        workflow.add(setFolder);
+            // Set map tags marking dataset as eligible for derive changeset
+            Map<String, String> tags = new HashMap<>();
+            tags.put("grailReference", "true");
+            tags.put("bbox", params.getBounds());
+            if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
+            InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
+            workflow.add(setMapTags);
 
-        // Clean up pulled files
-        ArrayList<File> deleteFiles = new ArrayList<>();
-        deleteFiles.add(params.getWorkDir());
-        InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
-        workflow.add(cleanFolders);
+            // Move the data to the folder
+            InternalCommand setFolder = updateParentCommandFactory.build(jobId, parentFolderId, layerName, params.getUser(), this.getClass());
+            workflow.add(setFolder);
+
+            // Clean up pulled files
+            ArrayList<File> deleteFiles = new ArrayList<>();
+            deleteFiles.add(params.getWorkDir());
+            InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+            workflow.add(cleanFolders);
+        }
 
         return workflow;
     }
 
     // throws forbidden exception is user does not have advanced privileges
-    private static void advancedUserCheck(Users user) {
+    public static void advancedUserCheck(Users user) {
         HashMap privileges = ((HashMap) user.getPrivileges());
         if(privileges == null || !privileges.get("advanced").equals("true")) {
             throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build());

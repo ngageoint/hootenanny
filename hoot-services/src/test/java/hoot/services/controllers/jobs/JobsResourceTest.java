@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.jobs;
 
@@ -292,9 +292,8 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
         }
-        //IMPORT is the first job type enum but those are all set to RUNNING
-        Assert.assertEquals(JobType.EXPORT.toString(), jobs.get(0).getJobType());
-        Assert.assertEquals(JobType.UPLOAD_CHANGESET.toString(), jobs.get(jobs.size() - 1).getJobType());
+        Assert.assertEquals(JobType.IMPORT.toString(), jobs.get(0).getJobType());
+        Assert.assertEquals(JobType.BULK_DIFFERENTIAL.toString(), jobs.get(jobs.size() - 1).getJobType());
     }
 
     @Test
@@ -314,9 +313,8 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
         }
-        //IMPORT is the first job type enum but those are all set to RUNNING
-        Assert.assertEquals(JobType.UPLOAD_CHANGESET.toString(), jobs.get(0).getJobType());
-        Assert.assertEquals(JobType.EXPORT.toString(), jobs.get(jobs.size() - 1).getJobType());
+        Assert.assertEquals(JobType.BULK_DIFFERENTIAL.toString(), jobs.get(0).getJobType());
+        Assert.assertEquals(JobType.IMPORT.toString(), jobs.get(jobs.size() - 1).getJobType());
     }
 
     @Test
@@ -375,7 +373,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(5, jobs.size());
+        Assert.assertEquals(4, jobs.size());
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
             Assert.assertTrue(("conflate").equalsIgnoreCase(j.getJobType()));
@@ -414,8 +412,8 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(13, jobs.size());
-        Assert.assertEquals(13L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals(7, jobs.size());
+        Assert.assertEquals(7L, history.getTotal().longValue()); //non-running total owned by test user
         List<String> expectedJobTypes = new ArrayList<>();
         expectedJobTypes.add("export");
         expectedJobTypes.add("conflate");
