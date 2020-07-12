@@ -344,6 +344,12 @@ public class GrailResource {
             } else {
                 jobType = JobType.BULK_DIFFERENTIAL;
             }
+
+            // Clean up pulled files
+            ArrayList<File> deleteFiles = new ArrayList<>();
+            deleteFiles.add(workDir);
+            InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+            workflow.add(cleanFolders);
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();
@@ -374,6 +380,10 @@ public class GrailResource {
 
             ExternalCommand applyGeomChange = grailCommandFactory.build(jobId, pushParams, debugLevel, ApplyChangesetCommand.class, this.getClass());
             return applyGeomChange;
+        }
+        catch (ServiceUnavailableException exc) {
+            String msg = "Error during changeset push! Error connecting to railsport";
+            throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
         }
         catch (Exception exc) {
             String msg = "Error during changeset push! Params: " + pushParams;
