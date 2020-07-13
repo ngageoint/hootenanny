@@ -1,9 +1,11 @@
  17		attribute_network_highway-2888-reviews-by-score.xml
  17		attribute_network_highway-2888.xml
+473		attribute_network_highway-2927-bridge-1.xml
  23		attribute_network_highway-2927-bridge-2.xml
  23		attribute_network_highway-2927-multiple-types-1.xml
  17		attribute_network_highway-2927-name-preservation-1.xml
  23		attribute_network_highway-2927-unmarked-ref-divided-road-1.xml
+ 17		attribute_network_highway-2927-way-member-tags-1.xml
  17		attribute_network_highway-3784-roundabouts-1.xml
   1		attribute_unifying_building_building-3022-duplicate-relation-member-ways-1.xml
   0		attribute_unifying_building_building-3037-dropped-multipoly-relations-1.xml
@@ -13,9 +15,9 @@
   1		attribute_unifying_building_building-3406-adjoining-buildings-1.xml
   1		attribute_unifying_building_building-3406-adjoining-buildings-2.xml
   1		attribute_unifying_building_building-3441-townhouses.xml
-160		attribute_unifying_geometry-generic-1.xml
- 13		attribute_unifying_highway_highway-2888.xml
- 29		attribute_unifying_highway_highway-2927-bridge-1.xml
+ 79		attribute_unifying_geometry-generic-1.xml
+ 15		attribute_unifying_highway_highway-2888.xml
+ 37		attribute_unifying_highway_highway-2927-bridge-1.xml
   8		attribute_unifying_highway_highway-2927-bridge-2.xml
   2		attribute_unifying_highway_highway-2927-multiple-types-1.xml
   8		attribute_unifying_highway_highway-2927-unmarked-ref-divided-road-1.xml
@@ -29,7 +31,7 @@
  13		differential_unifying_area_area-3978.xml
   0		differential_unifying_building_building-3323-relation-roles-1.xml
   1		differential_unifying_building_building-3782-relation-member-conflatable-1.xml
- 23		differential_unifying_generic-geometry_generic-3894-1.xml
+114		differential_unifying_generic-geometry_generic-3894-1.xml
   2		differential_unifying_highway_roundabout-3580.xml
   0		differential_unifying_poi-polygon_poi-polygon-4052-1.xml
   0		differential_unifying_poi-polygon_poi-polygon-4052-2.xml
@@ -51,7 +53,7 @@
   0		hoot-rnd_network_iterative_highway-004.xml
  15		hoot-rnd_network_iterative_highway-005.xml
   0		hoot-rnd_network_iterative_highway-006.xml
-  9		hoot-rnd_network_iterative_highway-007.xml
+  8		hoot-rnd_network_iterative_highway-007.xml
   0		hoot-rnd_network_iterative_highway-008.xml
   0		hoot-rnd_network_iterative_highway-009.xml
   6		hoot-rnd_network_iterative_highway-010.xml
@@ -64,15 +66,15 @@
   0		hoot-rnd_network_single-sided_highway-004.xml
  15		hoot-rnd_network_single-sided_highway-005.xml
   0		hoot-rnd_network_single-sided_highway-006.xml
- 10		hoot-rnd_network_single-sided_highway-007.xml
+  8		hoot-rnd_network_single-sided_highway-007.xml
   0		hoot-rnd_network_vagabond_highway-001.xml
   0		hoot-rnd_network_vagabond_highway-003.xml
   0		hoot-rnd_network_vagabond_highway-004.xml
  15		hoot-rnd_network_vagabond_highway-005.xml
   0		hoot-rnd_network_vagabond_highway-006.xml
-  9		hoot-rnd_network_vagabond_highway-007.xml
+  8		hoot-rnd_network_vagabond_highway-007.xml
   0		KnnIteratorNdTest__test1.xml
-415		misc_network_roundabout-connector-conflate-merged-1.xml
+ 96		misc_network_roundabout-connector-conflate-merged-1.xml
   0		N3tbs17TDistributionTestE__runTest1D.xml
   0		N3tbs17TDistributionTestE__runTest2D.xml
   0		N3tbs23GoldenSectionSearchTestE__runEqualTest.xml
@@ -195,8 +197,8 @@
   0		N4hoot13OsmSchemaTestE__mostSpecificTypeTest.xml
   0		N4hoot13OsmSchemaTestE__religionTest.xml
   0		N4hoot13TrivialOpTestE__runTest.xml
-105		N4hoot13WayJoinerTestE__runAdvancedConflateTest.xml
- 22		N4hoot13WayJoinerTestE__runConflateTest.xml
+ 22		N4hoot13WayJoinerTestE__runAdvancedConflateTest.xml
+ 20		N4hoot13WayJoinerTestE__runConflateTest.xml
   6		N4hoot13WayJoinerTestE__runCornerSplitterTest.xml
   6		N4hoot13WayJoinerTestE__runIntersectionSplitterTest.xml
   6		N4hoot13WayJoinerTestE__runSimpleTest.xml
@@ -210,21 +212,21 @@
   0		N4hoot14ArffReaderTestE__runBasicTest.xml
   0		N4hoot14ArffReaderTestE__runBz2Test.xml
   0		N4hoot14ArffWriterTestE__runBasicTest.xml
-  4		N4hoot14EdgeStringTestE__addDisconnectedEdgeTest.xml
-  4		N4hoot14EdgeStringTestE__appendSublineTest.xml
-  5		N4hoot14EdgeStringTestE__basicTest.xml
-  4		N4hoot14EdgeStringTestE__calculateLengthTest.xml
-  4		N4hoot14EdgeStringTestE__containsEdgeStringTest.xml
- 83		N4hoot14EdgeStringTestE__edgeWithInvalidNumMembersTest.xml
+  6		N4hoot14EdgeStringTestE__addDisconnectedEdgeTest.xml
+  5		N4hoot14EdgeStringTestE__appendSublineTest.xml
+  6		N4hoot14EdgeStringTestE__basicTest.xml
+  5		N4hoot14EdgeStringTestE__calculateLengthTest.xml
+  5		N4hoot14EdgeStringTestE__containsEdgeStringTest.xml
+  5		N4hoot14EdgeStringTestE__edgeWithInvalidNumMembersTest.xml
   5		N4hoot14EdgeStringTestE__equalsTest.xml
-  4		N4hoot14EdgeStringTestE__getEdgeAtOffsetTest.xml
-  6		N4hoot14EdgeStringTestE__hashTest.xml
-  4		N4hoot14EdgeStringTestE__overlapEdgeTest.xml
-  6		N4hoot14EdgeStringTestE__overlapSublineTest.xml
-  5		N4hoot14EdgeStringTestE__overlapTest.xml
-  4		N4hoot14EdgeStringTestE__partialTest.xml
-  4		N4hoot14EdgeStringTestE__reverseTest.xml
-  4		N4hoot14EdgeStringTestE__stubTest.xml
+  5		N4hoot14EdgeStringTestE__getEdgeAtOffsetTest.xml
+  5		N4hoot14EdgeStringTestE__hashTest.xml
+  5		N4hoot14EdgeStringTestE__overlapEdgeTest.xml
+  5		N4hoot14EdgeStringTestE__overlapSublineTest.xml
+  6		N4hoot14EdgeStringTestE__overlapTest.xml
+  6		N4hoot14EdgeStringTestE__partialTest.xml
+  5		N4hoot14EdgeStringTestE__reverseTest.xml
+  5		N4hoot14EdgeStringTestE__stubTest.xml
   7		N4hoot14MapCleanerTestE__runBasicTest.xml
   0		N4hoot14MapCropperTestE__runConfigurationTest.xml
   0		N4hoot14MapCropperTestE__runDontSplitCrossingFeaturesTest.xml
@@ -251,11 +253,13 @@
   0		N4hoot15NodeMatcherTestE__runAnglesTest.xml
   0		N4hoot15NodeMatcherTestE__runSimpleAnglesTest.xml
   0		N4hoot15RefRemoveOpTestE__runToyTest.xml
-  7		N4hoot15RubberSheetTestE__runCalculateTiePointDistancesNotEnoughTiePointsTest1.xml
-  7		N4hoot15RubberSheetTestE__runCalculateTiePointDistancesNotEnoughTiePointsTest2.xml
-  4		N4hoot15RubberSheetTestE__runCalculateTiePointDistancesTest.xml
-  8		N4hoot15RubberSheetTestE__runIoTest.xml
-  7		N4hoot15RubberSheetTestE__runSimpleTest.xml
+  6		N4hoot15RubberSheetTestE__runCalculateTiePointDistancesNotEnoughTiePointsTest1.xml
+ 85		N4hoot15RubberSheetTestE__runCalculateTiePointDistancesNotEnoughTiePointsTest2.xml
+  6		N4hoot15RubberSheetTestE__runCalculateTiePointDistancesTest.xml
+  6		N4hoot15RubberSheetTestE__runFilterTest1.xml
+  6		N4hoot15RubberSheetTestE__runFilterTest2.xml
+ 10		N4hoot15RubberSheetTestE__runIoTest.xml
+  6		N4hoot15RubberSheetTestE__runSimpleTest.xml
   0		N4hoot15ScoreMatrixTestE__runTest.xml
   0		N4hoot15ScriptMatchTestE__cacheTest.xml
  52		N4hoot15ScriptMatchTestE__conflictTest.xml
@@ -264,11 +268,11 @@
   0		N4hoot15WayLocationTestE__runDistanceOnWayTest.xml
   0		N4hoot15WayLocationTestE__runMoveTest.xml
   0		N4hoot15WayLocationTestE__runTest.xml
-134		N4hoot16CookieCutterTestE__runBufferTest.xml
-  4		N4hoot16CookieCutterTestE__runCropAndBufferTest.xml
-  4		N4hoot16CookieCutterTestE__runCropTest.xml
-  4		N4hoot16CookieCutterTestE__runNegativeBufferTest.xml
-  6		N4hoot16CookieCutterTestE__runTest.xml
+  5		N4hoot16CookieCutterTestE__runBufferTest.xml
+  5		N4hoot16CookieCutterTestE__runCropAndBufferTest.xml
+  5		N4hoot16CookieCutterTestE__runCropTest.xml
+  5		N4hoot16CookieCutterTestE__runNegativeBufferTest.xml
+  5		N4hoot16CookieCutterTestE__runTest.xml
   0		N4hoot16EdgeLocationTestE__basicTest.xml
   0		N4hoot16EdgeLocationTestE__hashTest.xml
   0		N4hoot16EdgeLocationTestE__invalidTest.xml
@@ -279,61 +283,62 @@
   0		N4hoot16HighwayMatchTestE__runRealWorld1Test.xml
   0		N4hoot16HighwayMatchTestE__runRealWorld2Test.xml
   0		N4hoot16HighwayMatchTestE__runSimpleConflictTest.xml
-  4		N4hoot16MapProjectorTestE__runCreatePlanarProjectionTest.xml
-  8		N4hoot16MapProjectorTestE__runErrorTest.xml
+  6		N4hoot16MapProjectorTestE__runCreatePlanarProjectionTest.xml
+  7		N4hoot16MapProjectorTestE__runErrorTest.xml
   0		N4hoot16OsmApiReaderTestE__runFailureTest.xml
   1		N4hoot16OsmApiReaderTestE__runSimpleTest.xml
   1		N4hoot16OsmApiReaderTestE__runSplitElementsTest.xml
   1		N4hoot16OsmApiReaderTestE__runSplitGeographicTest.xml
-  1		N4hoot16OsmApiWriterTestE__runCapabilitesTest.xml
-  1		N4hoot16OsmApiWriterTestE__runChangesetCreateFailureTest.xml
-  2		N4hoot16OsmApiWriterTestE__runChangesetFailNodesWithWaysTest.xml
-  1		N4hoot16OsmApiWriterTestE__runChangesetOutputTest.xml
+  0		N4hoot16OsmApiWriterTestE__runCapabilitesTest.xml
+  0		N4hoot16OsmApiWriterTestE__runChangesetCreateFailureTest.xml
+  0		N4hoot16OsmApiWriterTestE__runChangesetFailNodesWithWaysTest.xml
+  0		N4hoot16OsmApiWriterTestE__runChangesetOutputTest.xml
+  0		N4hoot16OsmApiWriterTestE__runChangesetVersionFailureTest.xml
   0		N4hoot16OsmApiWriterTestE__runParseCapabilitiesTest.xml
   0		N4hoot16OsmApiWriterTestE__runParsePermissionsTest.xml
   0		N4hoot16OsmApiWriterTestE__runParseStatusTest.xml
-  1		N4hoot16OsmApiWriterTestE__runPermissionsTest.xml
-  1		N4hoot16OsmApiWriterTestE__runRetryConflictsTest.xml
-  1		N4hoot16OsmApiWriterTestE__runVersionConflictResolutionTest.xml
+  0		N4hoot16OsmApiWriterTestE__runPermissionsTest.xml
+  0		N4hoot16OsmApiWriterTestE__runRetryConflictsTest.xml
+  0		N4hoot16OsmApiWriterTestE__runVersionConflictResolutionTest.xml
   5		N4hoot16OsmPbfReaderTestE__runFactoryReadMapTest.xml
-  4		N4hoot16OsmPbfReaderTestE__runHasMoreElementsTest.xml
-  6		N4hoot16OsmPbfReaderTestE__runIsSupportedUrlBadExtensionTest.xml
-  4		N4hoot16OsmPbfReaderTestE__runIsSupportedUrlDoesntExistTest.xml
- 15		N4hoot16OsmPbfReaderTestE__runIsSupportedUrlExistsTest.xml
-  6		N4hoot16OsmPbfReaderTestE__runIsSupportedUrlIsDirTest.xml
-  4		N4hoot16OsmPbfReaderTestE__runOffsetsTest.xml
-  5		N4hoot16OsmPbfReaderTestE__runOpenUrlDoesntExistTest.xml
- 83		N4hoot16OsmPbfReaderTestE__runOpenUrlExistsTest.xml
- 83		N4hoot16OsmPbfReaderTestE__runReadIncrementalTest.xml
-  5		N4hoot16OsmPbfReaderTestE__runReadMapPartialMultipleBlobsTest.xml
-  4		N4hoot16OsmPbfReaderTestE__runReadMapPartialTest.xml
-  4		N4hoot16OsmPbfReaderTestE__runReadMapTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runHasMoreElementsTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runIsSupportedUrlBadExtensionTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runIsSupportedUrlDoesntExistTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runIsSupportedUrlExistsTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runIsSupportedUrlIsDirTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runOffsetsTest.xml
+  4		N4hoot16OsmPbfReaderTestE__runOpenUrlDoesntExistTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runOpenUrlExistsTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runReadIncrementalTest.xml
+  6		N4hoot16OsmPbfReaderTestE__runReadMapPartialMultipleBlobsTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runReadMapPartialTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runReadMapTest.xml
   5		N4hoot16OsmPbfReaderTestE__runReadNextElementTest.xml
-  4		N4hoot16OsmPbfReaderTestE__runReadNodeTest.xml
-  4		N4hoot16OsmPbfReaderTestE__runReadRelationTest.xml
-  4		N4hoot16OsmPbfReaderTestE__runReadSortTypeTest.xml
-  4		N4hoot16OsmPbfReaderTestE__runReadWayTest.xml
-  4		N4hoot16OsmPbfReaderTestE__runToyRelationTest.xml
-  4		N4hoot16OsmPbfReaderTestE__runToyTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runReadNodeTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runReadRelationTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runReadSortTypeTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runReadWayTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runToyRelationTest.xml
+  5		N4hoot16OsmPbfReaderTestE__runToyTest.xml
   0		N4hoot16OsmPbfWriterTestE__runToyTest.xml
   0		N4hoot16OsmPbfWriterTestE__runWriteIncrementalTest.xml
   0		N4hoot16OsmPbfWriterTestE__runWriteNodeTest.xml
   0		N4hoot16OsmPbfWriterTestE__runWriteRelationTest.xml
   0		N4hoot16OsmPbfWriterTestE__runWriteWayTest.xml
- 83		N4hoot16OsmXmlReaderTestE__runBoundsLeaveConnectedOobWaysTest.xml
+  6		N4hoot16OsmXmlReaderTestE__runBoundsLeaveConnectedOobWaysTest.xml
   5		N4hoot16OsmXmlReaderTestE__runBoundsTest.xml
-  6		N4hoot16OsmXmlReaderTestE__runDecodeCharsTest.xml
-  6		N4hoot16OsmXmlReaderTestE__runIgnoreDuplicateMergeTest.xml
-  4		N4hoot16OsmXmlReaderTestE__runTest.xml
+  5		N4hoot16OsmXmlReaderTestE__runDecodeCharsTest.xml
+  5		N4hoot16OsmXmlReaderTestE__runIgnoreDuplicateMergeTest.xml
+  5		N4hoot16OsmXmlReaderTestE__runTest.xml
   5		N4hoot16OsmXmlReaderTestE__runUncompressTest.xml
-  4		N4hoot16OsmXmlReaderTestE__runUseIdTest.xml
-  4		N4hoot16OsmXmlReaderTestE__runUseStatusTest.xml
+  5		N4hoot16OsmXmlReaderTestE__runUseIdTest.xml
+  5		N4hoot16OsmXmlReaderTestE__runUseStatusTest.xml
   0		N4hoot16OsmXmlWriterTestE__runChangesetIdTest.xml
   0		N4hoot16OsmXmlWriterTestE__runEncodeCharsTest.xml
   4		N4hoot16ReviewMarkerTestE__runAddReviewTagsToFeaturesTest.xml
-136		N4hoot16ReviewMarkerTestE__runMultipleScoresTest.xml
-  4		N4hoot16ReviewMarkerTestE__runNeedsReviewTest.xml
-  4		N4hoot16ReviewMarkerTestE__runSimpleTest.xml
+  5		N4hoot16ReviewMarkerTestE__runMultipleScoresTest.xml
+  5		N4hoot16ReviewMarkerTestE__runNeedsReviewTest.xml
+  5		N4hoot16ReviewMarkerTestE__runSimpleTest.xml
   0		N4hoot16TagCriterionTestE__runBasicTest.xml
   0		N4hoot16TagCriterionTestE__runCaseSensitivityTest.xml
   0		N4hoot16TagCriterionTestE__runInvalidKvpDelimiterTest.xml
@@ -392,7 +397,7 @@
   0		N4hoot17TagComparatorTestE__nonNameTagsExactlyMatchTest.xml
   0		N4hoot17TagComparatorTestE__railwayBusStopTest.xml
  15		N4hoot17TagComparatorTestE__realWorldTest.xml
-  4		N4hoot17WaySplitterOpTestE__runTest.xml
+  5		N4hoot17WaySplitterOpTestE__runTest.xml
   2		N4hoot18BuildingMergerTestE__runChangedTest.xml
   0		N4hoot18BuildingMergerTestE__runKeepMoreComplexGeometryWhenAutoMergingTest1.xml
   0		N4hoot18BuildingMergerTestE__runKeepMoreComplexGeometryWhenAutoMergingTest2.xml
@@ -401,25 +406,25 @@
   0		N4hoot18BuildingMergerTestE__runTagTest.xml
   0		N4hoot18ClosePointHashTestE__runBasicTest.xml
   0		N4hoot18ClosePointHashTestE__runRandomTest.xml
-  6		N4hoot18CookieCutterOpTestE__runTest.xml
-21229		N4hoot18JosmMapCleanerTestE__runCleanFileTest.xml
-30146		N4hoot18JosmMapCleanerTestE__runCleanNoDetailTagsTest.xml
-33540		N4hoot18JosmMapCleanerTestE__runCleanNoErrorsTest.xml
-32044		N4hoot18JosmMapCleanerTestE__runCleanTest.xml
-  4		N4hoot18MaximalSublineTestE__runCircleTest.xml
-  4		N4hoot18MaximalSublineTestE__runDiagonalOffsetTest.xml
-  4		N4hoot18MaximalSublineTestE__runJoinTest.xml
-  4		N4hoot18MaximalSublineTestE__runRealWorld3Test.xml
-  4		N4hoot18MaximalSublineTestE__runSmallLengthDiffTest.xml
-  4		N4hoot18MaximalSublineTestE__runToyTest.xml
-  4		N4hoot18MaximalSublineTestE__runUTest.xml
-  4		N4hoot18MaximalSublineTestE__runUTopTest.xml
-  4		N4hoot18MaximalSublineTestE__runVTest.xml
-  7		N4hoot18NetworkDetailsTestE__calculateDistanceTest.xml
-  6		N4hoot18NetworkDetailsTestE__calculateHeadingTest.xml
+  7		N4hoot18CookieCutterOpTestE__runTest.xml
+26659		N4hoot18JosmMapCleanerTestE__runCleanFileTest.xml
+26411		N4hoot18JosmMapCleanerTestE__runCleanNoDetailTagsTest.xml
+17253		N4hoot18JosmMapCleanerTestE__runCleanNoErrorsTest.xml
+18203		N4hoot18JosmMapCleanerTestE__runCleanTest.xml
+  5		N4hoot18MaximalSublineTestE__runCircleTest.xml
+  5		N4hoot18MaximalSublineTestE__runDiagonalOffsetTest.xml
+  5		N4hoot18MaximalSublineTestE__runJoinTest.xml
+  5		N4hoot18MaximalSublineTestE__runRealWorld3Test.xml
+  5		N4hoot18MaximalSublineTestE__runSmallLengthDiffTest.xml
+  5		N4hoot18MaximalSublineTestE__runToyTest.xml
+  5		N4hoot18MaximalSublineTestE__runUTest.xml
+  5		N4hoot18MaximalSublineTestE__runUTopTest.xml
+  5		N4hoot18MaximalSublineTestE__runVTest.xml
+  6		N4hoot18NetworkDetailsTestE__calculateDistanceTest.xml
+  5		N4hoot18NetworkDetailsTestE__calculateHeadingTest.xml
   5		N4hoot18NetworkDetailsTestE__calculateNearestLocationTest.xml
-  6		N4hoot18NetworkDetailsTestE__calculateStringDistanceTest.xml
-  8		N4hoot18NetworkDetailsTestE__extendEdgeMatchTest.xml
+  5		N4hoot18NetworkDetailsTestE__calculateStringDistanceTest.xml
+  5		N4hoot18NetworkDetailsTestE__extendEdgeMatchTest.xml
   6		N4hoot18NetworkDetailsTestE__extendEdgeStringTest.xml
   0		N4hoot18OsmMapSplitterTestE__runTestBoston.xml
   0		N4hoot18OsmMapSplitterTestE__runTestSmall.xml
@@ -451,55 +456,55 @@
   0		N4hoot19ElementComparerTestE__runWayDifferentTagsTest.xml
   0		N4hoot19ElementComparerTestE__runWayDifferentVersionsTest.xml
   0		N4hoot19ElementComparerTestE__runWaySameTest.xml
- 15		N4hoot19ElementMergerJsTestE__areaToAreaInputWithConflatedStatusTest.xml
+ 17		N4hoot19ElementMergerJsTestE__areaToAreaInputWithConflatedStatusTest.xml
   5		N4hoot19ElementMergerJsTestE__areaToAreaMergeDuplicateTargetTagTest.xml
- 15		N4hoot19ElementMergerJsTestE__areaToAreaMergeExtraNonAreaRelationTest.xml
- 14		N4hoot19ElementMergerJsTestE__areaToAreaMergeExtraNonAreaWayTest.xml
-  4		N4hoot19ElementMergerJsTestE__areaToAreaMergeMissingTargetTagTest.xml
- 17		N4hoot19ElementMergerJsTestE__areaToAreaMergeMoreThanTwoAreasNoConstituentsTest.xml
- 15		N4hoot19ElementMergerJsTestE__areaToAreaMergeMoreThanTwoAreasTest.xml
- 16		N4hoot19ElementMergerJsTestE__areaToAreaMergeOneWayOneRelationTargetAsRelationNoConstituentsTest.xml
+ 16		N4hoot19ElementMergerJsTestE__areaToAreaMergeExtraNonAreaRelationTest.xml
+ 16		N4hoot19ElementMergerJsTestE__areaToAreaMergeExtraNonAreaWayTest.xml
+  5		N4hoot19ElementMergerJsTestE__areaToAreaMergeMissingTargetTagTest.xml
+ 46		N4hoot19ElementMergerJsTestE__areaToAreaMergeMoreThanTwoAreasNoConstituentsTest.xml
+ 17		N4hoot19ElementMergerJsTestE__areaToAreaMergeMoreThanTwoAreasTest.xml
+ 17		N4hoot19ElementMergerJsTestE__areaToAreaMergeOneWayOneRelationTargetAsRelationNoConstituentsTest.xml
  15		N4hoot19ElementMergerJsTestE__areaToAreaMergeOneWayOneRelationTargetAsRelationTest.xml
- 18		N4hoot19ElementMergerJsTestE__areaToAreaMergeOneWayOneRelationTargetAsWayNoConstituentsTest.xml
- 14		N4hoot19ElementMergerJsTestE__areaToAreaMergeOneWayOneRelationTargetAsWayTest.xml
+ 16		N4hoot19ElementMergerJsTestE__areaToAreaMergeOneWayOneRelationTargetAsWayNoConstituentsTest.xml
+ 17		N4hoot19ElementMergerJsTestE__areaToAreaMergeOneWayOneRelationTargetAsWayTest.xml
   5		N4hoot19ElementMergerJsTestE__areaToAreaMergeTooFewAreasTest.xml
  15		N4hoot19ElementMergerJsTestE__areaToAreaMergeTwoRelationsNoConstituentsTest.xml
- 14		N4hoot19ElementMergerJsTestE__areaToAreaMergeTwoRelationsTest.xml
- 15		N4hoot19ElementMergerJsTestE__areaToAreaMergeTwoWaysNoConstituentsTest.xml
+ 15		N4hoot19ElementMergerJsTestE__areaToAreaMergeTwoRelationsTest.xml
+ 17		N4hoot19ElementMergerJsTestE__areaToAreaMergeTwoWaysNoConstituentsTest.xml
  15		N4hoot19ElementMergerJsTestE__areaToAreaMergeTwoWaysTest.xml
   5		N4hoot19ElementMergerJsTestE__buildingToBuildingInputWithConflatedStatusTest.xml
-  4		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeDuplicateTargetTagTest.xml
-  5		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeExtraNonBuildingRelationTest.xml
+  5		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeDuplicateTargetTagTest.xml
+  6		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeExtraNonBuildingRelationTest.xml
   5		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeExtraNonBuildingWayTest.xml
-  6		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeMissingTargetTagTest.xml
-  4		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeMoreThanTwoBuildingsNoConstituentsTest.xml
-  4		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeMoreThanTwoBuildingsTest.xml
-  4		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest.xml
-  6		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest.xml
-  4		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest.xml
+  5		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeMissingTargetTagTest.xml
+  5		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeMoreThanTwoBuildingsNoConstituentsTest.xml
+  6		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeMoreThanTwoBuildingsTest.xml
+  5		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest.xml
+  5		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest.xml
+  7		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest.xml
   5		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeOneWayOneRelationTargetAsWayTest.xml
   5		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeTooFewBuildingsTest.xml
  15		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeTwoRelationsNoConstituentsTest.xml
- 16		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeTwoRelationsTest.xml
-  5		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeTwoWaysNoConstituentsTest.xml
-  4		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeTwoWaysTest.xml
-  5		N4hoot19ElementMergerJsTestE__invalidFeatureCombinationTest1.xml
+ 15		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeTwoRelationsTest.xml
+  6		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeTwoWaysNoConstituentsTest.xml
+  5		N4hoot19ElementMergerJsTestE__buildingToBuildingMergeTwoWaysTest.xml
+  4		N4hoot19ElementMergerJsTestE__invalidFeatureCombinationTest1.xml
   5		N4hoot19ElementMergerJsTestE__invalidFeatureCombinationTest2.xml
   5		N4hoot19ElementMergerJsTestE__invalidFeatureCombinationTest3.xml
- 83		N4hoot19ElementMergerJsTestE__invalidFeatureCombinationTest4.xml
- 16		N4hoot19ElementMergerJsTestE__poiToPoiInputWithConflatedStatusTest.xml
+  5		N4hoot19ElementMergerJsTestE__invalidFeatureCombinationTest4.xml
+ 15		N4hoot19ElementMergerJsTestE__poiToPoiInputWithConflatedStatusTest.xml
   5		N4hoot19ElementMergerJsTestE__poiToPoiMergeDuplicateTargetTagTest.xml
  14		N4hoot19ElementMergerJsTestE__poiToPoiMergeExtraNonPoiNodeTest.xml
-  4		N4hoot19ElementMergerJsTestE__poiToPoiMergeMissingTargetTagTest.xml
+  5		N4hoot19ElementMergerJsTestE__poiToPoiMergeMissingTargetTagTest.xml
  17		N4hoot19ElementMergerJsTestE__poiToPoiMergeMoreThanTwoPoisTest.xml
- 12		N4hoot19ElementMergerJsTestE__poiToPoiMergeTooFewPoisTest.xml
- 15		N4hoot19ElementMergerJsTestE__poiToPoiMergeTwoPoisTest.xml
+  5		N4hoot19ElementMergerJsTestE__poiToPoiMergeTooFewPoisTest.xml
+ 16		N4hoot19ElementMergerJsTestE__poiToPoiMergeTwoPoisTest.xml
   5		N4hoot19ElementMergerJsTestE__poiToPolyMergeExtraNonPoiNodeTest.xml
   5		N4hoot19ElementMergerJsTestE__poiToPolyMergeExtraNonPolyRelationTest.xml
   5		N4hoot19ElementMergerJsTestE__poiToPolyMergeExtraNonPolyWayTest.xml
   5		N4hoot19ElementMergerJsTestE__poiToPolyMergeMissingPoiInputTest.xml
   5		N4hoot19ElementMergerJsTestE__poiToPolyMergeMissingPolyInputTest.xml
-  5		N4hoot19ElementMergerJsTestE__poiToPolyMergeMoreThanOnePoiInputTest.xml
+  4		N4hoot19ElementMergerJsTestE__poiToPolyMergeMoreThanOnePoiInputTest.xml
   5		N4hoot19ElementMergerJsTestE__poiToPolyMergeMoreThanOnePolyInputTest.xml
   5		N4hoot19ElementMergerJsTestE__poiToPolyMergeRelationAsPolyNoConstituentsTest.xml
   5		N4hoot19ElementMergerJsTestE__poiToPolyMergeRelationAsPolyTest.xml
@@ -514,26 +519,25 @@
   0		N4hoot19KeepTagsVisitorTestE__runTest.xml
   0		N4hoot19KeepTagsVisitorTestE__runWildcardTest.xml
   0		N4hoot19LocationOfPointTestE__runLocateAfterTest.xml
-111		N4hoot19MatchComparatorTestE__runTest.xml
+ 35		N4hoot19MatchComparatorTestE__runTest.xml
   0		N4hoot19MostEnglishNameTestE__runTest.xml
   0		N4hoot19OsmApiChangesetTestE__runNonAsciiXmlChangesetTest.xml
   0		N4hoot19OsmApiChangesetTestE__runXmlChangesetErrorFixTest.xml
-  0		N4hoot19OsmApiChangesetTestE__runXmlChangesetFailureMatchesTest.xml
   0		N4hoot19OsmApiChangesetTestE__runXmlChangesetJoinTest.xml
   0		N4hoot19OsmApiChangesetTestE__runXmlChangesetSplitDeleteTest.xml
   0		N4hoot19OsmApiChangesetTestE__runXmlChangesetSplitTest.xml
   0		N4hoot19OsmApiChangesetTestE__runXmlChangesetSplitWayTest.xml
   0		N4hoot19OsmApiChangesetTestE__runXmlChangesetTest.xml
   0		N4hoot19OsmApiChangesetTestE__runXmlChangesetUpdateTest.xml
-  6		N4hoot19PertyTestRunnerTestE__runBadDynamicVariableTest.xml
- 14		N4hoot19PertyTestRunnerTestE__runDynamicVariablesTest.xml
+  4		N4hoot19PertyTestRunnerTestE__runBadDynamicVariableTest.xml
+ 13		N4hoot19PertyTestRunnerTestE__runDynamicVariablesTest.xml
  13		N4hoot19PertyTestRunnerTestE__runHigherScoresOutsideOfVarianceAllowedToPassTest.xml
-114		N4hoot19PertyTestRunnerTestE__runInvalidAllowedScoreVarianceTest.xml
-  4		N4hoot19PertyTestRunnerTestE__runInvalidExpectedScoreTest.xml
-  5		N4hoot19PertyTestRunnerTestE__runInvalidNumExpectedScoresTest.xml
-  6		N4hoot19PertyTestRunnerTestE__runInvalidNumTestRunsTest.xml
-  5		N4hoot19PertyTestRunnerTestE__runInvalidNumTestSimulationsTest.xml
-155		N4hoot19PertyTestRunnerTestE__runNoDynamicVariablesTest.xml
+  5		N4hoot19PertyTestRunnerTestE__runInvalidAllowedScoreVarianceTest.xml
+  7		N4hoot19PertyTestRunnerTestE__runInvalidExpectedScoreTest.xml
+ 83		N4hoot19PertyTestRunnerTestE__runInvalidNumExpectedScoresTest.xml
+  5		N4hoot19PertyTestRunnerTestE__runInvalidNumTestRunsTest.xml
+  6		N4hoot19PertyTestRunnerTestE__runInvalidNumTestSimulationsTest.xml
+ 18		N4hoot19PertyTestRunnerTestE__runNoDynamicVariablesTest.xml
   0		N4hoot19PoiPolygonMatchTestE__badMatchDistanceInputsTest.xml
   0		N4hoot19PoiPolygonMatchTestE__badNameScoreThresholdInputsTest.xml
   0		N4hoot19PoiPolygonMatchTestE__badReviewDistanceInputsTest.xml
@@ -555,34 +559,34 @@
   0		N4hoot19StringTokenizerTestE__runTest.xml
   0		N4hoot19TagCountVisitorTestE__informationTagCountTest.xml
   0		N4hoot19TagCountVisitorTestE__totalTagCountTest.xml
- 21		N4hoot20CalculateStatsOpTestE__runStatsNumTest.xml
+ 24		N4hoot20CalculateStatsOpTestE__runStatsNumTest.xml
  23		N4hoot20CalculateStatsOpTestE__runStatsTestWithReviews.xml
- 21		N4hoot20CalculateStatsOpTestE__runStatsTest.xml
+ 26		N4hoot20CalculateStatsOpTestE__runStatsTest.xml
   0		N4hoot20ChangesetCreatorTestE__runUpdateVersionTest.xml
   0		N4hoot20ChangesetDeriverTestE__disableRefDeleteTest.xml
   0		N4hoot20ChangesetDeriverTestE__runTest.xml
-  5		N4hoot20EdgeSublineMatchTestE__basicTest.xml
+  7		N4hoot20EdgeSublineMatchTestE__basicTest.xml
   0		N4hoot20ElementConverterTestE__calculateLengthTest.xml
   0		N4hoot20ElementConverterTestE__convertToGeometryTest.xml
   0		N4hoot20ElementConverterTestE__convertToLinestringTest.xml
   0		N4hoot20ElementConverterTestE__convertToPolygonTest.xml
   0		N4hoot20ElementConverterTestE__getGeometryTypeTest.xml
   0		N4hoot20HasNameCriterionTestE__runBasicTest.xml
-43882		N4hoot20JosmMapValidatorTestE__runEmptyValidatorsTest.xml
-48817		N4hoot20JosmMapValidatorTestE__runGetAvailableValidatorsTest.xml
-10641		N4hoot20JosmMapValidatorTestE__runValidateFileTest.xml
-31353		N4hoot20JosmMapValidatorTestE__runValidateTest.xml
-  5		N4hoot20JosmMapValidatorTestE__runValidatorExclusionTest.xml
-  8		N4hoot20JosmMapValidatorTestE__runValidatorInclusionTest.xml
-134		N4hoot20LargeWaySplitterTestE__runToyTest.xml
+45162		N4hoot20JosmMapValidatorTestE__runEmptyValidatorsTest.xml
+43280		N4hoot20JosmMapValidatorTestE__runGetAvailableValidatorsTest.xml
+22427		N4hoot20JosmMapValidatorTestE__runValidateFileTest.xml
+36359		N4hoot20JosmMapValidatorTestE__runValidateTest.xml
+ 25		N4hoot20JosmMapValidatorTestE__runValidatorExclusionTest.xml
+ 25		N4hoot20JosmMapValidatorTestE__runValidatorInclusionTest.xml
+  5		N4hoot20LargeWaySplitterTestE__runToyTest.xml
   0		N4hoot20NodeReplacementsTestE__runIoTest.xml
   0		N4hoot20NodeReplacementsTestE__runSimplifyTest.xml
- 83		N4hoot20OptionsValidatorTestE__runAutoCorrectClassifierTest.xml
-  5		N4hoot20OptionsValidatorTestE__runAutoCorrectCollectionRelationTest.xml
+  5		N4hoot20OptionsValidatorTestE__runAutoCorrectClassifierTest.xml
+  6		N4hoot20OptionsValidatorTestE__runAutoCorrectCollectionRelationTest.xml
   5		N4hoot20OptionsValidatorTestE__runAutoCorrectGenericTest.xml
-  4		N4hoot20OptionsValidatorTestE__runAutoCorrectMatcherOrderingTest.xml
- 25		N4hoot20OptionsValidatorTestE__runAutoCorrectSublineMatcherTest.xml
-  4		N4hoot20OptionsValidatorTestE__runValidateScriptMismatchTest.xml
+  7		N4hoot20OptionsValidatorTestE__runAutoCorrectMatcherOrderingTest.xml
+ 23		N4hoot20OptionsValidatorTestE__runAutoCorrectSublineMatcherTest.xml
+  6		N4hoot20OptionsValidatorTestE__runValidateScriptMismatchTest.xml
   5		N4hoot20OptionsValidatorTestE__runValidateSizeUnequalTest.xml
   0		N4hoot20OsmGeoJsonReaderTestE__isSupportedTest.xml
   0		N4hoot20OsmGeoJsonReaderTestE__runAllDataTypesTest.xml
@@ -598,9 +602,9 @@
   0		N4hoot20OsmGeoJsonWriterTestE__runObjectGeoJsonHootTest.xml
   0		N4hoot20OsmGeoJsonWriterTestE__runObjectGeoJsonTest.xml
   5		N4hoot20PertyMatchScorerTestE__runCombineMapTest.xml
- 39		N4hoot20PertyMatchScorerTestE__runConflateTest.xml
-  5		N4hoot20PertyMatchScorerTestE__runLoadPerturbedMapTest.xml
-  7		N4hoot20PertyMatchScorerTestE__runLoadReferenceMapTest.xml
+ 18		N4hoot20PertyMatchScorerTestE__runConflateTest.xml
+  6		N4hoot20PertyMatchScorerTestE__runLoadPerturbedMapTest.xml
+  8		N4hoot20PertyMatchScorerTestE__runLoadReferenceMapTest.xml
   0		N4hoot20PoiPolygonMergerTestE__basicTest.xml
   0		N4hoot20PoiPolygonMergerTestE__toyScenario1Test.xml
   0		N4hoot20PoiPolygonMergerTestE__toyScenario2Test.xml
@@ -645,18 +649,18 @@
   0		N4hoot21InBoundsCriterionTestE__runInBoundsStrictTest.xml
   0		N4hoot21InBoundsCriterionTestE__runOutOfBoundsLenientTest.xml
   0		N4hoot21InBoundsCriterionTestE__runOutOfBoundsStrictTest.xml
-  6		N4hoot21MedianNodeVisitorTestE__runTest.xml
-134		N4hoot21MultiaryPoiMergerTestE__basicTest.xml
- 91		N4hoot21MultiaryUtilitiesTestE__conflateClusterTest.xml
+  4		N4hoot21MedianNodeVisitorTestE__runTest.xml
+132		N4hoot21MultiaryPoiMergerTestE__basicTest.xml
+ 95		N4hoot21MultiaryUtilitiesTestE__conflateClusterTest.xml
  38		N4hoot21MultiaryUtilitiesTestE__findMatchesTest.xml
   0		N4hoot21ObjectInputStreamTestE__runToyTest.xml
   0		N4hoot21RandomTagModifierTestE__runBasicTest.xml
   0		N4hoot21RandomTagModifierTestE__runExemptTagKeysTest.xml
   0		N4hoot21RandomTagModifierTestE__runSubstituteValuesTest.xml
-  4		N4hoot21RandomWaySplitterTestE__runInvalidMinNodeSpacingTest.xml
-  4		N4hoot21RandomWaySplitterTestE__runInvalidProbabilityTest.xml
+  5		N4hoot21RandomWaySplitterTestE__runInvalidMinNodeSpacingTest.xml
+  5		N4hoot21RandomWaySplitterTestE__runInvalidProbabilityTest.xml
   5		N4hoot21RandomWaySplitterTestE__runMultiLineStringSplitTest.xml
-  4		N4hoot21RandomWaySplitterTestE__runWaySplitTest.xml
+  5		N4hoot21RandomWaySplitterTestE__runWaySplitTest.xml
   0		N4hoot21RdpWayGeneralizerTestE__runCalcPointsInput1aTest.xml
   0		N4hoot21RdpWayGeneralizerTestE__runCalcPointsInput1bTest.xml
   0		N4hoot21RdpWayGeneralizerTestE__runCalcPointsInput2aTest.xml
@@ -665,25 +669,26 @@
   0		N4hoot21RdpWayGeneralizerTestE__runGeneralizeWayInput1WithInformationNodesTest.xml
   0		N4hoot21RdpWayGeneralizerTestE__runInvalidEpsilonTest.xml
   0		N4hoot21RdpWayGeneralizerTestE__runPerpendicularDistanceTest.xml
-  6		N4hoot21RemoveRef2VisitorTestE__runToyTest.xml
+  5		N4hoot21RemoveRef2VisitorTestE__runToyTest.xml
   0		N4hoot21RemoveTagsVisitorTestE__runFilterTest.xml
   0		N4hoot21RemoveTagsVisitorTestE__runNegatedFilterTest.xml
   0		N4hoot21RemoveTagsVisitorTestE__runRemoveTest.xml
   0		N4hoot21RemoveTagsVisitorTestE__runWildcardTest.xml
  20		N4hoot22EdgeMatchSetFinderTestE__partialTest1.xml
- 19		N4hoot22EdgeMatchSetFinderTestE__partialTest2.xml
- 19		N4hoot22EdgeMatchSetFinderTestE__partialTest3.xml
- 19		N4hoot22EdgeMatchSetFinderTestE__partialTest4.xml
- 19		N4hoot22EdgeMatchSetFinderTestE__partialTest5.xml
+ 20		N4hoot22EdgeMatchSetFinderTestE__partialTest2.xml
+ 20		N4hoot22EdgeMatchSetFinderTestE__partialTest3.xml
+ 21		N4hoot22EdgeMatchSetFinderTestE__partialTest4.xml
+ 20		N4hoot22EdgeMatchSetFinderTestE__partialTest5.xml
   0		N4hoot22ElementHashVisitorTestE__runNodeCeTest.xml
   0		N4hoot22ElementHashVisitorTestE__runNodeTest.xml
   0		N4hoot22ElementHashVisitorTestE__runRelationTest.xml
   0		N4hoot22ElementHashVisitorTestE__runWayTest.xml
- 59		N4hoot22MultiaryPoiGenericTestE__basicTest.xml
- 94		N4hoot22MultiaryScoreCacheTestE__basicTest.xml
+ 64		N4hoot22MultiaryPoiGenericTestE__basicTest.xml
+166		N4hoot22MultiaryScoreCacheTestE__basicTest.xml
   0		N4hoot22NodesPerWayVisitorTestE__runBasicTest.xml
   0		N4hoot22NodesPerWayVisitorTestE__runCritTest.xml
   0		N4hoot22ObjectOutputStreamTestE__runToyTest.xml
+  0		N4hoot22OsmApiMatchFailureTestE__runXmlChangesetFailureMatchesTest.xml
   0		N4hoot22OverwriteTagMergerTestE__overwriteExcludeTest.xml
   0		N4hoot22OverwriteTagMergerTestE__overwriteSwapTest.xml
   0		N4hoot22OverwriteTagMergerTestE__overwriteTest.xml
@@ -697,27 +702,27 @@
   0		N4hoot22SmallHighwayMergerTestE__runBasicTest.xml
   0		N4hoot22TagKeyCountVisitorTestE__tagKeyCountTest.xml
   1		N4hoot23AddressCountVisitorTestE__runBasicTest.xml
-  4		N4hoot23AlphaShapeGeneratorTestE__runBasicTest.xml
+  6		N4hoot23AlphaShapeGeneratorTestE__runBasicTest.xml
   4		N4hoot23AlphaShapeGeneratorTestE__runBufferTest.xml
-  6		N4hoot23AlphaShapeGeneratorTestE__runManualCoverTest.xml
-  4		N4hoot23AlphaShapeGeneratorTestE__runNegativeBufferTest.xml
+  4		N4hoot23AlphaShapeGeneratorTestE__runManualCoverTest.xml
+  5		N4hoot23AlphaShapeGeneratorTestE__runNegativeBufferTest.xml
  15		N4hoot23AttributeComparatorTestE__runTest.xml
   5		N4hoot23BuildingPartMergeOpTestE__runPreserveTypesTest.xml
   5		N4hoot23BuildingPartMergeOpTestE__runToyMultithreadTest.xml
-  4		N4hoot23BuildingPartMergeOpTestE__runToyTest.xml
+  5		N4hoot23BuildingPartMergeOpTestE__runToyTest.xml
   0		N4hoot23ConflateStatsHelperTestE__runTest.xml
- 69		N4hoot23CumulativeConflatorTestE__basicTest.xml
+ 72		N4hoot23CumulativeConflatorTestE__basicTest.xml
   0		N4hoot23DualHighwaySplitterTestE__allTest.xml
   0		N4hoot23DualHighwaySplitterTestE__simpleTest.xml
-  4		N4hoot23DuplicateWayRemoverTestE__runStrictTagMatchingOffTest.xml
- 83		N4hoot23DuplicateWayRemoverTestE__runStrictTagMatchingOnTest.xml
-  4		N4hoot23DuplicateWayRemoverTestE__runTest.xml
-  6		N4hoot23FindIntersectionsOpTestE__runRailwayTest.xml
-  6		N4hoot23FindIntersectionsOpTestE__runToyTest.xml
+  5		N4hoot23DuplicateWayRemoverTestE__runStrictTagMatchingOffTest.xml
+  5		N4hoot23DuplicateWayRemoverTestE__runStrictTagMatchingOnTest.xml
+  5		N4hoot23DuplicateWayRemoverTestE__runTest.xml
+  7		N4hoot23FindIntersectionsOpTestE__runRailwayTest.xml
+  7		N4hoot23FindIntersectionsOpTestE__runToyTest.xml
   0		N4hoot23HasAddressCriterionTestE__runBasicTest.xml
   0		N4hoot23HighwayMatchCreatorTestE__runIsCandidateTest.xml
  18		N4hoot23KskipBigramDistanceTestE__runTest.xml
-  6		N4hoot23LegacyVertexMatcherTestE__toyTest.xml
+  5		N4hoot23LegacyVertexMatcherTestE__toyTest.xml
  15		N4hoot23LevenshteinDistanceTestE__runTest.xml
  18		N4hoot23LevenshteinDistanceTestE__scriptTest.xml
   0		N4hoot23MeanWordSetDistanceTestE__runLevenshteinTest.xml
@@ -726,9 +731,9 @@
   0		N4hoot23MultiPolygonCreatorTestE__runMultipleWaysFormingARing.xml
   0		N4hoot23MultiPolygonCreatorTestE__runMultiPolygonExample1Test.xml
   0		N4hoot23MultiPolygonCreatorTestE__runMultiPolygonExample7Test.xml
-  6		N4hoot23OsmMapReaderFactoryTestE__runUnsupportedBoundingBoxRead.xml
+  5		N4hoot23OsmMapReaderFactoryTestE__runUnsupportedBoundingBoxRead.xml
   0		N4hoot23OsmNetworkExtractorTestE__toyTest.xml
-  6		N4hoot23ReprojectToPlanarOpTestE__runTest.xml
+  5		N4hoot23ReprojectToPlanarOpTestE__runTest.xml
   0		N4hoot23StatusUpdateVisitorTestE__runUpdateOnlyIfInvalidTest.xml
   0		N4hoot23StatusUpdateVisitorTestE__runUpdateTest.xml
   0		N4hoot23TagRenameKeyVisitorTestE__tagRenameKeyTest.xml
@@ -741,14 +746,14 @@
   0		N4hoot24AddAttributesVisitorTestE__runAddMissingAttributeValueTest.xml
   0		N4hoot24AddAttributesVisitorTestE__runMultipleCriteriaTest.xml
   0		N4hoot24AddAttributesVisitorTestE__runNegatedFilterTest.xml
-  4		N4hoot24BuildingMatchCreatorTestE__runIsCandidateTest.xml
- 19		N4hoot24BuildingMatchCreatorTestE__runMatchTest.xml
- 19		N4hoot24BuildingMatchCreatorTestE__runReviewIfSecondaryNewer2Test.xml
+  5		N4hoot24BuildingMatchCreatorTestE__runIsCandidateTest.xml
+ 20		N4hoot24BuildingMatchCreatorTestE__runMatchTest.xml
+ 20		N4hoot24BuildingMatchCreatorTestE__runReviewIfSecondaryNewer2Test.xml
  21		N4hoot24BuildingMatchCreatorTestE__runReviewIfSecondaryNewerBadDateFormatTest.xml
  21		N4hoot24BuildingMatchCreatorTestE__runReviewIfSecondaryNewerMismatchingDateKeyTest.xml
- 20		N4hoot24BuildingMatchCreatorTestE__runReviewIfSecondaryNewerTest.xml
- 20		N4hoot24BuildingMatchCreatorTestE__runReviewNonOneToOneMatches2Test.xml
-129		N4hoot24BuildingMatchCreatorTestE__runReviewNonOneToOneMatchesTest.xml
+ 21		N4hoot24BuildingMatchCreatorTestE__runReviewIfSecondaryNewerTest.xml
+ 22		N4hoot24BuildingMatchCreatorTestE__runReviewNonOneToOneMatches2Test.xml
+ 19		N4hoot24BuildingMatchCreatorTestE__runReviewNonOneToOneMatchesTest.xml
   0		N4hoot24DuplicateNameRemoverTestE__runCaseInsensitiveTest.xml
   0		N4hoot24DuplicateNameRemoverTestE__runCaseSensitiveTest.xml
   0		N4hoot24DuplicateNameRemoverTestE__runExtraNamesTest.xml
@@ -785,10 +790,10 @@
   0		N4hoot24ReviewScoreCriterionTestE__invalidThresholdTest.xml
   0		N4hoot24ReviewScoreCriterionTestE__runBasicTest.xml
   0		N4hoot24ReviewScoreCriterionTestE__runInvertTest.xml
-  5		N4hoot24SparkChangesetWriterTestE__elementAsJsonTest.xml
- 83		N4hoot24SparkChangesetWriterTestE__missingHashTest.xml
+  4		N4hoot24SparkChangesetWriterTestE__elementAsJsonTest.xml
+  5		N4hoot24SparkChangesetWriterTestE__missingHashTest.xml
   5		N4hoot24SparkChangesetWriterTestE__missingPreviousHashTest.xml
-  5		N4hoot24SparkChangesetWriterTestE__wrongElementTypeTest.xml
+  4		N4hoot24SparkChangesetWriterTestE__wrongElementTypeTest.xml
   0		N4hoot24TagAdvancedCriterionTestE__runAliasTest.xml
   0		N4hoot24TagAdvancedCriterionTestE__runAncestorTest.xml
   0		N4hoot24TagAdvancedCriterionTestE__runAssociatedWithTest.xml
@@ -818,23 +823,24 @@
   0		N4hoot24WayGeneralizeVisitorTestE__runBasicTest.xml
   0		N4hoot24WayGeneralizeVisitorTestE__runCritTest.xml
   0		N4hoot24WayGeneralizeVisitorTestE__runRemoveSharedNodeTest.xml
-  4		N4hoot24WayMatchStringMergerTestE__runMergeNodeTest.xml
-  4		N4hoot24WayMatchStringMergerTestE__runMergeTagsTest.xml
-  4		N4hoot24WayMatchStringMergerTestE__runSplitTest.xml
+  5		N4hoot24WayMatchStringMergerTestE__runMergeNodeTest.xml
+  5		N4hoot24WayMatchStringMergerTestE__runMergeTagsTest.xml
+  5		N4hoot24WayMatchStringMergerTestE__runSplitTest.xml
   0		N4hoot24WeightedWordDistanceTestE__runRealWorldTest.xml
   0		N4hoot24WeightedWordDistanceTestE__runTest.xml
-  0		N4hoot25AddressScoreExtractorTestE__invalidComponentAddressTest.xml
-  0		N4hoot25AddressScoreExtractorTestE__invalidFullAddressTest.xml
-  3		N4hoot25AddressScoreExtractorTestE__noStreetNumberTest.xml
-  0		N4hoot25AddressScoreExtractorTestE__runAltFormatTest.xml
-  0		N4hoot25AddressScoreExtractorTestE__runCombinedTagTest.xml
-  0		N4hoot25AddressScoreExtractorTestE__runIntersectionTest.xml
-  0		N4hoot25AddressScoreExtractorTestE__runRangeTest.xml
-  0		N4hoot25AddressScoreExtractorTestE__runRelationTest.xml
-  0		N4hoot25AddressScoreExtractorTestE__runSubLetterTest.xml
-  0		N4hoot25AddressScoreExtractorTestE__runTagTest.xml
-  0		N4hoot25AddressScoreExtractorTestE__runWayTest.xml
- 15		N4hoot25AddressScoreExtractorTestE__translateTagValueTest.xml
+  6		N4hoot25AddressScoreExtractorTestE__additionalTagsTest.xml
+  5		N4hoot25AddressScoreExtractorTestE__invalidComponentAddressTest.xml
+  5		N4hoot25AddressScoreExtractorTestE__invalidFullAddressTest.xml
+  9		N4hoot25AddressScoreExtractorTestE__noStreetNumberTest.xml
+  4		N4hoot25AddressScoreExtractorTestE__runAltFormatTest.xml
+  5		N4hoot25AddressScoreExtractorTestE__runCombinedTagTest.xml
+  5		N4hoot25AddressScoreExtractorTestE__runIntersectionTest.xml
+  6		N4hoot25AddressScoreExtractorTestE__runRangeTest.xml
+  6		N4hoot25AddressScoreExtractorTestE__runRelationTest.xml
+  7		N4hoot25AddressScoreExtractorTestE__runSubLetterTest.xml
+  5		N4hoot25AddressScoreExtractorTestE__runTagTest.xml
+  5		N4hoot25AddressScoreExtractorTestE__runWayTest.xml
+ 20		N4hoot25AddressScoreExtractorTestE__translateTagValueTest.xml
   0		N4hoot25ApiTagTruncateVisitorTestE__runArabicTest.xml
   0		N4hoot25ApiTagTruncateVisitorTestE__runDatesTest.xml
   0		N4hoot25ApiTagTruncateVisitorTestE__runListTest.xml
@@ -842,42 +848,42 @@
   0		N4hoot25ApiTagTruncateVisitorTestE__runUUIDTest.xml
   0		N4hoot25BuildingHeightVisitorTestE__runBasicTest.xml
   0		N4hoot25BuildingLevelsVisitorTestE__runBasicTest.xml
-  4		N4hoot25EdgeDistanceExtractorTestE__runBuildingsTest.xml
-  4		N4hoot25EdgeDistanceExtractorTestE__runRoadsTest.xml
+  5		N4hoot25EdgeDistanceExtractorTestE__runBuildingsTest.xml
+  5		N4hoot25EdgeDistanceExtractorTestE__runRoadsTest.xml
   0		N4hoot25FrechetSublineMatcherTestE__doubleSublineTest.xml
   0		N4hoot25FrechetSublineMatcherTestE__runCircleTest.xml
   0		N4hoot25FrechetSublineMatcherTestE__singleSublineTest.xml
   0		N4hoot25HighwayCornerSplitterTestE__runDogLegTest.xml
   0		N4hoot25HighwayCornerSplitterTestE__runRoundedTest.xml
   0		N4hoot25HighwayCornerSplitterTestE__runTest.xml
- 19		N4hoot25ImplicitPoiTypeTaggerTestE__runBasicTest.xml
- 98		N4hoot25ImplicitPoiTypeTaggerTestE__runDuplicateTagKeyTest.xml
+ 20		N4hoot25ImplicitPoiTypeTaggerTestE__runBasicTest.xml
+ 20		N4hoot25ImplicitPoiTypeTaggerTestE__runDuplicateTagKeyTest.xml
  20		N4hoot25ImplicitPoiTypeTaggerTestE__runLessSpecificImplicitTagTest.xml
- 19		N4hoot25ImplicitPoiTypeTaggerTestE__runMoreSpecificImplicitTagTest.xml
+ 20		N4hoot25ImplicitPoiTypeTaggerTestE__runMoreSpecificImplicitTagTest.xml
   0		N4hoot25InMemoryElementSorterTestE__runTest.xml
- 34		N4hoot25MatchFeatureExtractorTestE__runBuildingTest.xml
-  4		N4hoot25MaximalNearestSublineTestE__funnyCurveTest.xml
-  4		N4hoot25MaximalNearestSublineTestE__oneShortTest.xml
-  4		N4hoot25MaximalNearestSublineTestE__runTest.xml
- 52		N4hoot25MultiaryPoiMergeCacheTestE__basicTest.xml
-  5		N4hoot25MultiaryReviewCommandTestE__basicTest.xml
-  4		N4hoot25MultiaryReviewCommandTestE__hashTest.xml
+ 35		N4hoot25MatchFeatureExtractorTestE__runBuildingTest.xml
+  5		N4hoot25MaximalNearestSublineTestE__funnyCurveTest.xml
+  5		N4hoot25MaximalNearestSublineTestE__oneShortTest.xml
+  5		N4hoot25MaximalNearestSublineTestE__runTest.xml
+ 58		N4hoot25MultiaryPoiMergeCacheTestE__basicTest.xml
+  6		N4hoot25MultiaryReviewCommandTestE__basicTest.xml
+  6		N4hoot25MultiaryReviewCommandTestE__hashTest.xml
   0		N4hoot25NameContainsCriterionTestE__runTest.xml
   0		N4hoot25RemoveElementsVisitorTestE__runMultipleCriteriaTest.xml
   0		N4hoot25RemoveElementsVisitorTestE__runNegatedFilterTest.xml
   0		N4hoot25RemoveElementsVisitorTestE__runRecursiveTest.xml
   0		N4hoot25RemoveElementsVisitorTestE__runReviewRelationTest.xml
   0		N4hoot25RemoveElementsVisitorTestE__runTest.xml
-  6		N4hoot25ServiceOsmApiDbReaderTestE__readByBoundsLeaveConnectedOobWaysTest.xml
-  1		N4hoot25ServiceOsmApiDbReaderTestE__runPartialReadTest.xml
+  1		N4hoot25ServiceOsmApiDbReaderTestE__readByBoundsLeaveConnectedOobWaysTest.xml
+  6		N4hoot25ServiceOsmApiDbReaderTestE__runPartialReadTest.xml
   6		N4hoot25ServiceOsmApiDbReaderTestE__runReadByBoundsTest.xml
   1		N4hoot25ServiceOsmApiDbReaderTestE__runReadOsmApiTest.xml
   0		N4hoot25SumNumericTagsVisitorTestE__runBasicTest.xml
-  6		N4hoot25UnconnectedWaySnapperTestE__runConfigOptionsValidationTest.xml
-  4		N4hoot25UnconnectedWaySnapperTestE__runMarkOnlyTest.xml
- 83		N4hoot25UnconnectedWaySnapperTestE__runReviewSnappedTest.xml
-  4		N4hoot25UnconnectedWaySnapperTestE__runSnapTest.xml
- 83		N4hoot25UnconnectedWaySnapperTestE__runStaticSnapTest.xml
+  5		N4hoot25UnconnectedWaySnapperTestE__runConfigOptionsValidationTest.xml
+  5		N4hoot25UnconnectedWaySnapperTestE__runMarkOnlyTest.xml
+  5		N4hoot25UnconnectedWaySnapperTestE__runReviewSnappedTest.xml
+  5		N4hoot25UnconnectedWaySnapperTestE__runSnapTest.xml
+  5		N4hoot25UnconnectedWaySnapperTestE__runStaticSnapTest.xml
   0		N4hoot25WaySublineMatchStringTestE__runTest.xml
   0		N4hoot25WaySublineMatchStringTestE__runTouchesTest.xml
   0		N4hoot26AddGeometryTypeVisitorTestE__runBasicTest.xml
@@ -888,8 +894,8 @@
   0		N4hoot26OsmApiChangesetElementTestE__runChangesetWayTest.xml
   0		N4hoot26OsmApiChangesetElementTestE__runNonAsciiChangesetNodeTest.xml
   0		N4hoot26OsmApiChangesetElementTestE__runTagTruncateTest.xml
-  4		N4hoot26PoiPolygonMatchCreatorTestE__basicTest.xml
-  6		N4hoot26PoiPolygonMatchCreatorTestE__runIsCandidateTest.xml
+  5		N4hoot26PoiPolygonMatchCreatorTestE__basicTest.xml
+  5		N4hoot26PoiPolygonMatchCreatorTestE__runIsCandidateTest.xml
   0		N4hoot26PoiPolygonMatchVisitorTestE__runIsCandidateTest.xml
   0		N4hoot26PoiPolygonPoiCriterionTestE__runBasicTest.xml
   0		N4hoot26PreserveTypesTagMergerTestE__ancestorGenericTest.xml
@@ -905,19 +911,19 @@
   2		N4hoot26SearchRadiusCalculatorTestE__runCalcResultTest.xml
   0		N4hoot26SearchRadiusCalculatorTestE__runNotEnoughTiePointsTest.xml
   2		N4hoot26SearchRadiusCalculatorTestE__runPreviouslyConflatedDataTest.xml
-  7		N4hoot26ServiceHootApiDbReaderTestE__readByBoundsLeaveConnectedOobWaysTest.xml
-114		N4hoot26ServiceHootApiDbReaderTestE__runAccessPrivateMapWithoutEmailTest.xml
-  6		N4hoot26ServiceHootApiDbReaderTestE__runAccessPublicMapWithoutEmailTest.xml
+  6		N4hoot26ServiceHootApiDbReaderTestE__readByBoundsLeaveConnectedOobWaysTest.xml
+  4		N4hoot26ServiceHootApiDbReaderTestE__runAccessPrivateMapWithoutEmailTest.xml
+  4		N4hoot26ServiceHootApiDbReaderTestE__runAccessPublicMapWithoutEmailTest.xml
   4		N4hoot26ServiceHootApiDbReaderTestE__runCalculateBoundsTest.xml
-  4		N4hoot26ServiceHootApiDbReaderTestE__runElementIdTest.xml
-  9		N4hoot26ServiceHootApiDbReaderTestE__runFactoryReadTest.xml
+  5		N4hoot26ServiceHootApiDbReaderTestE__runElementIdTest.xml
+  8		N4hoot26ServiceHootApiDbReaderTestE__runFactoryReadTest.xml
   5		N4hoot26ServiceHootApiDbReaderTestE__runInvalidUserTest.xml
- 12		N4hoot26ServiceHootApiDbReaderTestE__runMultipleMapsSameNameDifferentUsersPrivateTest.xml
-  5		N4hoot26ServiceHootApiDbReaderTestE__runMultipleMapsSameNameDifferentUsersPublicTest.xml
+  6		N4hoot26ServiceHootApiDbReaderTestE__runMultipleMapsSameNameDifferentUsersPrivateTest.xml
+  4		N4hoot26ServiceHootApiDbReaderTestE__runMultipleMapsSameNameDifferentUsersPublicTest.xml
   5		N4hoot26ServiceHootApiDbReaderTestE__runPartialReadTest.xml
   5		N4hoot26ServiceHootApiDbReaderTestE__runReadByBoundsTest.xml
-  4		N4hoot26ServiceHootApiDbReaderTestE__runReadTest.xml
- 22		N4hoot26ServiceHootApiDbReaderTestE__runReadWithElemTest.xml
+  6		N4hoot26ServiceHootApiDbReaderTestE__runReadTest.xml
+  5		N4hoot26ServiceHootApiDbReaderTestE__runReadWithElemTest.xml
   5		N4hoot26ServiceHootApiDbReaderTestE__runUrlInvalidMapIdTest.xml
   0		N4hoot26ServiceHootApiDbWriterTestE__jobIdTest.xml
   0		N4hoot26ServiceHootApiDbWriterTestE__preserveVersionOnInsertTest.xml
@@ -929,7 +935,7 @@
   0		N4hoot26ServiceHootApiDbWriterTestE__writeTwoMapsSameNameDifferentUsers.xml
   0		N4hoot26TagAncestorDifferencerTestE__compareRailwaysTest.xml
   0		N4hoot26TagCategoryDifferencerTestE__compareRailwaysTest.xml
- 12		N4hoot26VagabondNetworkMatcherTestE__toyTest.xml
+  6		N4hoot26VagabondNetworkMatcherTestE__toyTest.xml
   0		N4hoot27AttributeValueCriterionTestE__runInvalidNumericAttributeTypeTest.xml
   0		N4hoot27AttributeValueCriterionTestE__runInvalidTextAttributeTypeTest.xml
   0		N4hoot27AttributeValueCriterionTestE__runNumericEqualToTest.xml
@@ -951,7 +957,7 @@
   0		N4hoot27HighwayExpertClassifierTestE__runSimpleIntersectionTest.xml
   0		N4hoot27HighwayExpertClassifierTestE__runSimpleOverlapTest.xml
   0		N4hoot27HighwayExpertClassifierTestE__runSmallOverlapTest.xml
-  7		N4hoot27IterativeNetworkMatcherTestE__toyTest.xml
+  5		N4hoot27IterativeNetworkMatcherTestE__toyTest.xml
   0		N4hoot27LongestCommonNodeStringTestE__runTest.xml
   0		N4hoot27MultiaryMatchComparatorTestE__runEmptyTest.xml
   0		N4hoot27MultiaryMatchComparatorTestE__runMatchMissTest1.xml
@@ -978,8 +984,8 @@
   0		N4hoot27MultiLineStringSplitterTestE__runTest.xml
   0		N4hoot27NonConflatableCriterionTestE__runBasicTest.xml
   0		N4hoot27PhoneNumberCountVisitorTestE__runBasicTest.xml
-  7		N4hoot27PoiPolygonMergerCreatorTestE__basicTest.xml
- 86		N4hoot27PoiPolygonMergerCreatorTestE__crossConflateMergeTest.xml
+  5		N4hoot27PoiPolygonMergerCreatorTestE__basicTest.xml
+125		N4hoot27PoiPolygonMergerCreatorTestE__crossConflateMergeTest.xml
  21		N4hoot27PoiPolygonMergerCreatorTestE__reviewTest.xml
   0		N4hoot27PoiPolygonPolyCriterionTestE__runBasicTest.xml
   0		N4hoot27RecursiveElementRemoverTestE__removeRelationTest.xml
@@ -990,8 +996,8 @@
   0		N4hoot27TagKeyContainsCriterionTestE__runTest.xml
   1		N4hoot27TranslateTagDifferencerTestE__runTestMulti.xml
   2		N4hoot27TranslateTagDifferencerTestE__runTest.xml
-  6		N4hoot28BufferedOverlapExtractorTestE__runBuildingsTest.xml
-  4		N4hoot28BufferedOverlapExtractorTestE__runRoadsTest.xml
+  5		N4hoot28BufferedOverlapExtractorTestE__runBuildingsTest.xml
+  5		N4hoot28BufferedOverlapExtractorTestE__runRoadsTest.xml
   0		N4hoot28BuildingWayNodeCriterionTestE__runBasicTest.xml
   0		N4hoot28CollectionRelationMergerTestE__runTest.xml
   0		N4hoot28ElementIdToVersionMapperTestE__runBasicTest.xml
@@ -1010,7 +1016,7 @@
   0		N4hoot29OptimalConstrainedMatchesTestE__runFindSubgraphsTest.xml
   0		N4hoot29OsmXmlChangesetFileWriterTestE__runSimpleTest.xml
   0		N4hoot29RelationWithMostMembersOpTestE__runBasicTest.xml
-  5		N4hoot29SingleSidedNetworkMatcherTestE__toyTest.xml
+  6		N4hoot29SingleSidedNetworkMatcherTestE__toyTest.xml
   0		N4hoot30ConflatableCriteriaVisitorTestE__runBasicTest.xml
   0		N4hoot30ExternalMergeElementSorterTestE__runTest.xml
   5		N4hoot30HausdorffDistanceExtractorTestE__runRoadsTest.xml
@@ -1022,14 +1028,14 @@
   1		N4hoot30JavaScriptSchemaTranslatorTestE__runLayerNameFilterTest.xml
   1		N4hoot30JavaScriptSchemaTranslatorTestE__runSchemaTest.xml
   1		N4hoot30JavaScriptSchemaTranslatorTestE__runToOsmTest.xml
- 19		N4hoot30MatchCandidateCountVisitorTestE__runBuildingMatchCandidateCountTest.xml
- 22		N4hoot30MatchCandidateCountVisitorTestE__runCombinedMatchCandidateCountTest.xml
- 18		N4hoot30MatchCandidateCountVisitorTestE__runDualPoiScriptMatchCreatorTest.xml
- 39		N4hoot30MatchCandidateCountVisitorTestE__runFilteredMultipleMatchCreatorTest.xml
- 30		N4hoot30MatchCandidateCountVisitorTestE__runFilteredPoiMatchCreatorTest.xml
- 16		N4hoot30MatchCandidateCountVisitorTestE__runHighwayMatchCandidateCountTest.xml
- 23		N4hoot30MatchCandidateCountVisitorTestE__runMultipleScriptMatchCreatorTest.xml
- 20		N4hoot30MatchCandidateCountVisitorTestE__runScriptMatchCreatorTest.xml
+ 16		N4hoot30MatchCandidateCountVisitorTestE__runBuildingMatchCandidateCountTest.xml
+ 24		N4hoot30MatchCandidateCountVisitorTestE__runCombinedMatchCandidateCountTest.xml
+ 23		N4hoot30MatchCandidateCountVisitorTestE__runDualPoiScriptMatchCreatorTest.xml
+ 37		N4hoot30MatchCandidateCountVisitorTestE__runFilteredMultipleMatchCreatorTest.xml
+ 36		N4hoot30MatchCandidateCountVisitorTestE__runFilteredPoiMatchCreatorTest.xml
+ 17		N4hoot30MatchCandidateCountVisitorTestE__runHighwayMatchCandidateCountTest.xml
+ 27		N4hoot30MatchCandidateCountVisitorTestE__runMultipleScriptMatchCreatorTest.xml
+ 24		N4hoot30MatchCandidateCountVisitorTestE__runScriptMatchCreatorTest.xml
   0		N4hoot30RelationCircularRefRemoverTestE__runBasicTest.xml
   0		N4hoot30SplitLongLinearWaysVisitorTestE__defaultConstructorModifyTest.xml
   0		N4hoot30SplitLongLinearWaysVisitorTestE__defaultConstructorNoOpTest.xml
@@ -1065,9 +1071,9 @@
   6		N4hoot31ServiceOsmApiDbBulkInserterTestE__runPsqlCustomStartingIdsDbOfflineTest.xml
   6		N4hoot31ServiceOsmApiDbBulkInserterTestE__runPsqlDbOfflineStxxlTest.xml
   6		N4hoot31ServiceOsmApiDbBulkInserterTestE__runPsqlDbOfflineTest.xml
-  6		N4hoot31ServiceOsmApiDbBulkInserterTestE__runPsqlDbOfflineValidateOffTest.xml
+  1		N4hoot31ServiceOsmApiDbBulkInserterTestE__runPsqlDbOfflineValidateOffTest.xml
   1		N4hoot31ServiceOsmApiDbBulkInserterTestE__runPsqlDbOnlineTest.xml
-  6		N4hoot31ServiceOsmApiDbBulkInserterTestE__runPsqlLargeCustomStartingIdsDbOfflineTest.xml
+  1		N4hoot31ServiceOsmApiDbBulkInserterTestE__runPsqlLargeCustomStartingIdsDbOfflineTest.xml
   1		N4hoot31ServiceOsmApiDbBulkInserterTestE__runSqlFileOutputTest.xml
   6		N4hoot31ServiceOsmApiDbBulkInserterTestE__runUserDoesntExistTest.xml
   0		N4hoot31ToEnglishTranslationVisitorTestE__runIgnorePreTranslatedTagsTest.xml
@@ -1091,10 +1097,10 @@
  15		N4hoot32PoiPolygonTypeScoreExtractorTestE__translateTagValueTest.xml
   6		N4hoot32ServiceHootApiDbBulkInserterTestE__runPsqlDbOfflineTest.xml
  16		N4hoot32SuperfluousConflateOpRemoverTestE__runOpFilter1Test.xml
- 12		N4hoot32SuperfluousConflateOpRemoverTestE__runOpFilter2Test.xml
- 17		N4hoot32SuperfluousConflateOpRemoverTestE__runOpFilter3Test.xml
+ 17		N4hoot32SuperfluousConflateOpRemoverTestE__runOpFilter2Test.xml
+ 16		N4hoot32SuperfluousConflateOpRemoverTestE__runOpFilter3Test.xml
  16		N4hoot32SuperfluousConflateOpRemoverTestE__runOpFilter4Test.xml
- 20		N4hoot32SuperfluousConflateOpRemoverTestE__runOpFilterCombinedTest.xml
+ 16		N4hoot32SuperfluousConflateOpRemoverTestE__runOpFilterCombinedTest.xml
   0		N4hoot32TextFileWordWeightDictionaryTestE__runTest.xml
   0		N4hoot33MultiaryIngestChangesetReaderTestE__elementAsJsonTest.xml
   0		N4hoot33MultiaryIngestChangesetReaderTestE__elementAsXmlTest.xml
@@ -1125,16 +1131,16 @@
   0		N4hoot34RemoveDuplicateWayNodesVisitorTestE__runValidStartAndEndNodeSameTest.xml
   0		N4hoot34RemoveDuplicateWayNodesVisitorTestE__runValidUnclosedWayTest.xml
   0		N4hoot34SampledAngleHistogramExtractorTestE__runTest.xml
- 16		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter1Test.xml
- 17		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter2Test.xml
- 16		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter3Test.xml
- 13		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter4Test.xml
- 15		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter5Test.xml
- 14		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter6Test.xml
- 17		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter7Test.xml
- 16		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter8Test.xml
- 17		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter9Test.xml
- 20		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilterCombinedTest.xml
+ 21		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter1Test.xml
+ 20		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter2Test.xml
+ 20		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter3Test.xml
+ 16		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter4Test.xml
+ 18		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter5Test.xml
+ 18		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter6Test.xml
+ 22		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter7Test.xml
+ 20		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter8Test.xml
+ 22		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilter9Test.xml
+ 18		N4hoot34SuperfluousConflateOpRemoverJsTestE__runOpFilterCombinedTest.xml
   5		N4hoot34WayMatchStringMappingConverterTestE__runTest.xml
   0		N4hoot35ImplicitTagRulesDatabaseDeriverTestE__runBadInputsTest.xml
   0		N4hoot35ImplicitTagRulesDatabaseDeriverTestE__runBasicTest.xml
@@ -1162,8 +1168,8 @@
   0		N4hoot38NonEnglishLanguageDetectionVisitorTestE__runNamesTestWithAdditionalTagKeys.xml
   0		N4hoot38NonEnglishLanguageDetectionVisitorTestE__runNamesTest.xml
   0		N4hoot38NonEnglishLanguageDetectionVisitorTestE__runNoTagKeysTest.xml
-  4		N4hoot38RemoveRef2VisitorMultipleCriterionTestE__runToyTest1.xml
-  5		N4hoot38RemoveRef2VisitorMultipleCriterionTestE__runToyTest2.xml
+  5		N4hoot38RemoveRef2VisitorMultipleCriterionTestE__runToyTest1.xml
+  6		N4hoot38RemoveRef2VisitorMultipleCriterionTestE__runToyTest2.xml
   0		N4hoot38ServiceOsmApiDbSqlChangesetApplierTestE__runConflictBadTimeTest.xml
   6		N4hoot38ServiceOsmApiDbSqlChangesetApplierTestE__runConflictCreatedAtAfterTimeTest.xml
   6		N4hoot38ServiceOsmApiDbSqlChangesetApplierTestE__runConflictNonIntersectingBoundsTest.xml
@@ -1178,7 +1184,7 @@
   0		N4hoot39PoiPolygonPhoneNumberScoreExtractorTestE__tagKeyTest.xml
   0		N4hoot39RemoveInvalidReviewRelationsVisitorTestE__runEmptyRelationNoMemberCountTagTest.xml
   0		N4hoot39RemoveInvalidReviewRelationsVisitorTestE__runInvalidMemberCountTest.xml
-116		N4hoot40MultiaryHierarchicalClusterAlgorithmTestE__basicTest.xml
+114		N4hoot40MultiaryHierarchicalClusterAlgorithmTestE__basicTest.xml
   0		N4hoot41PoiPolygonAlphaShapeDistanceExtractorTestE__runBasicTest.xml
   0		N4hoot41RemoveDuplicateRelationMembersVisitorTestE__runTest.xml
   6		N4hoot41ServiceOsmApiDbSqlChangesetFileWriterTestE__runBasicTest.xml
@@ -1214,7 +1220,7 @@
   0		reference_network_highway-004.xml
  15		reference_network_highway-005.xml
   0		reference_network_highway-006.xml
-  9		reference_network_highway-007.xml
+  8		reference_network_highway-007.xml
   6		reference_network_highway-008.xml
   0		reference_network_highway-009.xml
   6		reference_network_highway-010.xml
@@ -1246,6 +1252,7 @@
  17		reference_network_pap-005.xml
  17		reference_network_pap-006.xml
  17		reference_network_pap-007.xml
+ 17		reference_network_pap-008.xml
  17		reference_network_pap-009.xml
  17		reference_network_pap-010.xml
  17		reference_network_roundabout-001.xml
@@ -1260,7 +1267,7 @@
  15		reference_unifying_building_building-4.xml
   1		reference_unifying_building_building-5.xml
   1		reference_unifying_building_stadium-1.xml
- 84		reference_unifying_geometry-generic-1.xml
+ 78		reference_unifying_geometry-generic-1.xml
   4		reference_unifying_highway_highway-3829.xml
   0		reference_unifying_highway_highway-3922.xml
   0		reference_unifying_highway_highway-5534.xml
@@ -1271,43 +1278,43 @@
   0		reference_unifying_highway_roundabout-002.xml
   0		reference_unifying_highway_roundabout-003.xml
   1		reference_unifying_highway_sidewalk-3895.xml
- 67		reference_unifying_multiple_highway-3815.xml
-201		reference_unifying_multiple_highway-3906.xml
+ 65		reference_unifying_multiple_highway-3815.xml
+107		reference_unifying_multiple_highway-3906.xml
  62		reference_unifying_multiple_way-join-missing-parent-1.xml
- 41		reference_unifying_poi_poi-generic-10.xml
- 42		reference_unifying_poi_poi-generic-11.xml
+ 43		reference_unifying_poi_poi-generic-10.xml
+ 43		reference_unifying_poi_poi-generic-11.xml
  42		reference_unifying_poi_poi-generic-12.xml
  46		reference_unifying_poi_poi-generic-13.xml
- 20		reference_unifying_poi_poi-generic-14.xml
- 35		reference_unifying_poi_poi-generic-15.xml
- 18		reference_unifying_poi_poi-generic-16.xml
+ 19		reference_unifying_poi_poi-generic-14.xml
+ 36		reference_unifying_poi_poi-generic-15.xml
+ 19		reference_unifying_poi_poi-generic-16.xml
  18		reference_unifying_poi_poi-generic-17.xml
  42		reference_unifying_poi_poi-generic-18.xml
- 36		reference_unifying_poi_poi-generic-19.xml
- 43		reference_unifying_poi_poi-generic-1.xml
- 34		reference_unifying_poi_poi-generic-20.xml
+ 34		reference_unifying_poi_poi-generic-19.xml
+ 41		reference_unifying_poi_poi-generic-1.xml
+ 35		reference_unifying_poi_poi-generic-20.xml
  42		reference_unifying_poi_poi-generic-21.xml
- 34		reference_unifying_poi_poi-generic-22.xml
+ 35		reference_unifying_poi_poi-generic-22.xml
  18		reference_unifying_poi_poi-generic-23.xml
- 19		reference_unifying_poi_poi-generic-24.xml
- 19		reference_unifying_poi_poi-generic-25.xml
- 33		reference_unifying_poi_poi-generic-26.xml
- 33		reference_unifying_poi_poi-generic-27.xml
- 34		reference_unifying_poi_poi-generic-28.xml
+ 18		reference_unifying_poi_poi-generic-24.xml
+ 16		reference_unifying_poi_poi-generic-25.xml
+ 34		reference_unifying_poi_poi-generic-26.xml
+ 34		reference_unifying_poi_poi-generic-27.xml
+125		reference_unifying_poi_poi-generic-28.xml
  34		reference_unifying_poi_poi-generic-29.xml
- 34		reference_unifying_poi_poi-generic-2.xml
- 56		reference_unifying_poi_poi-generic-30.xml
- 19		reference_unifying_poi_poi-generic-31.xml
- 16		reference_unifying_poi_poi-generic-32.xml
- 41		reference_unifying_poi_poi-generic-33.xml
- 34		reference_unifying_poi_poi-generic-34.xml
+ 35		reference_unifying_poi_poi-generic-2.xml
+ 58		reference_unifying_poi_poi-generic-30.xml
+ 17		reference_unifying_poi_poi-generic-31.xml
+ 18		reference_unifying_poi_poi-generic-32.xml
+ 44		reference_unifying_poi_poi-generic-33.xml
+ 33		reference_unifying_poi_poi-generic-34.xml
  34		reference_unifying_poi_poi-generic-3.xml
- 36		reference_unifying_poi_poi-generic-4.xml
- 42		reference_unifying_poi_poi-generic-5.xml
- 40		reference_unifying_poi_poi-generic-6.xml
- 43		reference_unifying_poi_poi-generic-7.xml
+ 34		reference_unifying_poi_poi-generic-4.xml
+ 43		reference_unifying_poi_poi-generic-5.xml
+ 42		reference_unifying_poi_poi-generic-6.xml
+ 41		reference_unifying_poi_poi-generic-7.xml
  42		reference_unifying_poi_poi-generic-8.xml
- 42		reference_unifying_poi_poi-generic-9.xml
+ 41		reference_unifying_poi_poi-generic-9.xml
   0		reference_unifying_poi-polygon_poi-polygon-10.xml
   1		reference_unifying_poi-polygon_poi-polygon-1.xml
   7		reference_unifying_poi-polygon_poi-polygon-2.xml
@@ -1346,7 +1353,7 @@
   0		reference_unifying_poi-polygon_poi-polygon-keep-closest-match-only-8.xml
   0		reference_unifying_poi-polygon_poi-polygon-keep-closest-match-only-9.xml
   0		reference_unifying_poi-polygon_poi-polygon-street-num-1.xml
-190		reference_unifying_railway_railway-3855.xml
+193		reference_unifying_railway_railway-3855.xml
   0		RStarTreeTest__test1.xml
   0		RStarTreeTest__test2.xml
   0		RTreeNodeStoreTest__test1.xml

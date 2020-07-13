@@ -68,7 +68,8 @@ pipeline {
         stage("Valgrind Tests") {
             when { expression { return params.Valgrind_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd ~/hoot; source ./SetupEnv.sh; ./scripts/valgrind/unit_tests.sh -j \$(nproc)'"
+//                sh "vagrant ssh ${params.Box} -c 'cd ~/hoot; source ./SetupEnv.sh; ./scripts/valgrind/unit_tests.sh -j \$(nproc)'"
+                sh "vagrant ssh ${params.Box} -c 'cd ~/hoot; source ./SetupEnv.sh; ./scripts/valgrind/unit_tests.sh -j \$(nproc) --single N4hoot38RemoveRef2VisitorMultipleCriterionTestE::runToyTest1'"
             }
         }
     }
@@ -90,8 +91,9 @@ pipeline {
         }
         cleanup {
             script {
+                //TODO: I think that archiveArtifacts will only archive files available to Dockson and not the AWS VM, I may have to scp the files back first
                 //  Always store the artifacts, they will be cleaned up later
-                archiveArtifacts '**/valgrind_error_*'
+                archiveArtifacts '**/test-output/valgrind_error_*'
                 //  Destroy the VM
                 sh "vagrant destroy -f ${params.Box}"
                 cleanWs()
