@@ -354,11 +354,11 @@ public class GrailResource {
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", reqParams.getBounds());
-        jobStatusTags.put("input1", new File(input1).getName());
-        jobStatusTags.put("input2", new File(input2).getName());
         jobStatusTags.put("parentId", reqParams.getParentId());
         jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
         jobStatusTags.put("deriveType", deriveType);
+        if (reqParams.getInput1() != null) jobStatusTags.put("input1", reqParams.getInput1());
+        if (reqParams.getInput2() != null) jobStatusTags.put("input2", reqParams.getInput2());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), jobType, jobStatusTags));
 
