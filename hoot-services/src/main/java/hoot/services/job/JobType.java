@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
@@ -40,7 +40,10 @@ public enum JobType {
     DELETE,
     UNKNOWN,
     DERIVE_CHANGESET,
-    UPLOAD_CHANGESET;
+    UPLOAD_CHANGESET,
+    BULK_ADD,
+    BULK_REPLACE,
+    BULK_DIFFERENTIAL;
 
     public static JobType fromInteger(int value) {
         if ((value >= 0) && (value < JobType.values().length)) {

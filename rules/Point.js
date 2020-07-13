@@ -38,6 +38,10 @@ function distance(e1, e2)
  */
 exports.isMatchCandidate = function(map, e)
 {
+  //hoot.trace("e: " + e.getId());
+  //hoot.trace("isPoint(map, e): " + isPoint(map, e));
+  //hoot.trace("isSpecificallyConflatable(map, e, exports.geometryType): " + isSpecificallyConflatable(map, e, exports.geometryType));
+
   return isPoint(map, e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 

@@ -1,4 +1,4 @@
-The output for this test is very bad, and that is why its turned off. - see #3135
+TODO: The output for this test is very bad (see the poorly snapped highway=level_crossing on the East end). Fix it as part of #3135.
 
 Attribute Conflation test with the Network Roads Algorithm for bridge merging into a reference dataset without bridges identified.  The 
 reference geometry will potentially be changed where there are bridges (see option attribute.conflation.allow.ref.geometry.changes.for.bridges).

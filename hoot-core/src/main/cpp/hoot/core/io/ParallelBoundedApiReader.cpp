@@ -237,13 +237,18 @@ void ParallelBoundedApiReader::_process()
           _bboxMutex.unlock();
         }
         break;
-      case 509:
+      case HttpResponseCode::HTTP_BANDWIDTH_EXCEEDED:
+        //  Bandwidth for downloads has been exceeded, fail immediately
+        _errorMutex.lock();
         LOG_ERROR(request.getErrorString());
         _fatalError = true;
+        _errorMutex.unlock();
         break;
       default:
-        LOG_ERROR("Unexpected Error: HTTP " << status << " : " << request.getErrorString());
+        _errorMutex.lock();
+        request.logConnectionError();
         _fatalError = true;
+        _errorMutex.unlock();
         break;
       }
     }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RandomNodeDuplicator.h"
 
@@ -47,7 +47,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, RandomNodeDuplicator)
 
 RandomNodeDuplicator::RandomNodeDuplicator()
 {
-  _localRng.reset(new boost::minstd_rand(1));
+  _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
 }
 
@@ -83,13 +83,13 @@ void RandomNodeDuplicator::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
   boost::normal_distribution<> nd;
   boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> N(*_rng, nd);
 
+  LOG_VART(n->getCircularError());
   Meters sigma = n->getCircularError() / 2.0;
   double x = n->getX() + N() * sigma * _moveMultiplier;
   double y = n->getY() + N() * sigma * _moveMultiplier;
 
   NodePtr newNode(
     new Node(n->getStatus(), map->createNextNodeId(), x, y, n->getCircularError()));
-
   map->addNode(newNode);
 
   _numAffected++;

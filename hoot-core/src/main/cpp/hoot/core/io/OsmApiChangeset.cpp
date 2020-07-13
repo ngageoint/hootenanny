@@ -1281,141 +1281,6 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
   return changeset->size() > 0;
 }
 
-bool XmlChangeset::matchesPlaceholderFailure(const QString& hint,
-                                             long& member_id, ElementType::Type& member_type,
-                                             long& element_id, ElementType::Type& element_type)
-{
-  //  Placeholder node not found for reference -145213 in way -5687
-  //  Placeholder Way not found for reference -12257 in Relation -51
-  QRegularExpression reg("Placeholder (node|way|relation) not found for reference (-?[0-9]+) in (node|way|relation) (-?[0-9]+)",
-                         QRegularExpression::CaseInsensitiveOption);
-  QRegularExpressionMatch match = reg.match(hint);
-  if (match.hasMatch())
-  {
-    //  Get the node/way/relation type and id that caused the failure
-    member_type = ElementType::fromString(match.captured(1).toLower());
-    bool success = false;
-    member_id = match.captured(2).toLong(&success);
-    if (!success)
-      return success;
-    //  Get the node/way/relation type and id that failed
-    element_type = ElementType::fromString(match.captured(3));
-    element_id = match.captured(4).toLong(&success);
-    return success;
-  }
-  return false;
-}
-
-bool XmlChangeset::matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type)
-{
-  //  Relation with id  cannot be saved due to Relation with id 1707699
-  QRegularExpression reg("Relation with id (-?[0-9]+)? cannot be saved due to (nodes|way|relation) with id (-?[0-9]+)",
-                         QRegularExpression::CaseInsensitiveOption);
-  QRegularExpressionMatch match = reg.match(hint);
-  if (match.hasMatch())
-  {
-    QString error = match.captured(1);
-    if (error != "")
-      element_id = error.toLong();
-    //  Get the node/way/relation type and id that failed
-    member_type = ElementType::fromString(match.captured(2));
-    bool success = false;
-    member_id = match.captured(3).toLong(&success);
-    return success;
-  }
-  return false;
-}
-
-bool XmlChangeset::matchesMultiElementFailure(const QString& hint,
-                                              long& element_id,
-                                              ElementType::Type& element_type,
-                                              std::vector<long>& member_ids,
-                                              ElementType::Type& member_type)
-{
-  //  Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible.
-  QRegularExpression reg("(Relation|Way) (-?[0-9]+) requires the (nodes|ways|relations) with id in ((-?[0-9]+,)+) (.*)", //-?[0-9]+,).*", //+ which either do not exist, or are not visible.",
-                         QRegularExpression::CaseInsensitiveOption);
-  QRegularExpressionMatch match = reg.match(hint);
-  if (match.hasMatch())
-  {
-    element_type = ElementType::fromString(match.captured(1));
-    QString error = match.captured(2);
-    if (error != "")
-      element_id = error.toLong();
-    //  Get the node/way/relation type (remove the 's') and id that failed
-    member_type = ElementType::fromString(match.captured(3).left(match.captured(3).length() - 1));
-    bool success = false;
-    QStringList ids = match.captured(4).split(",", QString::SkipEmptyParts);
-    for (int i = 0; i < ids.size(); ++i)
-    {
-      long id = ids[i].toLong(&success);
-      if (success)
-        member_ids.push_back(id);
-    }
-    return success;
-  }
-  return false;
-}
-
-bool XmlChangeset::matchesChangesetDeletePreconditionFailure(
-    const QString& hint,
-    long& member_id, ElementType::Type& member_type,
-    long& element_id, ElementType::Type& element_type)
-{
-  //  Precondition failed: Node 55 is still used by ways 123
-  QRegularExpression reg(
-        "Precondition failed: (Node|Way|Relation) (-?[0-9]+) is still used by (node|way|relation)s (-?[0-9]+)",
-        QRegularExpression::CaseInsensitiveOption);
-  QRegularExpressionMatch match = reg.match(hint);
-  if (match.hasMatch())
-  {
-    bool success = false;
-    member_type = ElementType::fromString(match.captured(1).toLower());
-    member_id = match.captured(2).toLong(&success);
-    if (!success)
-      return success;
-    element_type = ElementType::fromString(match.captured(3).toLower());
-    element_id = match.captured(4).toLong(&success);
-    return success;
-  }
-  return false;
-}
-
-bool XmlChangeset::matchesChangesetConflictVersionMismatchFailure(const QString& hint,
-                                                                  long& element_id, ElementType::Type& element_type,
-                                                                  long& version_old, long& version_new)
-{
-  //  Changeset conflict: Version mismatch: Provided 2, server had: 1 of Node 4869875616
-  QRegularExpression reg(
-        "Changeset conflict: Version mismatch: Provided ([0-9]+), server had: ([0-9]+) of (Node|Way|Relation) ([0-9]+)",
-        QRegularExpression::CaseInsensitiveOption);
-  QRegularExpressionMatch match = reg.match(hint);
-  if (match.hasMatch())
-  {
-    bool success = false;
-    version_old = match.captured(1).toLong(&success);
-    if (!success)
-      return success;
-    version_new = match.captured(2).toLong(&success);
-    if (!success)
-      return success;
-    element_type = ElementType::fromString(match.captured(3).toLower());
-    element_id = match.captured(4).toLong(&success);
-    return success;
-  }
-  return false;
-}
-
-bool XmlChangeset::matchesChangesetClosedFailure(const QString& hint)
-{
-  //  Changeset conflict: The changeset 49514098 was closed at 2020-01-08 16:28:56 UTC
-  QRegularExpression reg(
-        ".*The changeset ([0-9]+) was closed.*",
-        QRegularExpression::CaseInsensitiveOption);
-  QRegularExpressionMatch match = reg.match(hint);
-  return match.hasMatch();
-}
-
 bool XmlChangeset::writeErrorFile()
 {
   //  Validate the pathname
@@ -1455,7 +1320,7 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset,
     ElementType::Type element_type = ElementType::Unknown;
     //  See if the hint is something like:
     //   Placeholder node not found for reference -145213 in way -5687
-    if (matchesPlaceholderFailure(splitHint, member_id, member_type, element_id, element_type))
+    if (_failureCheck.matchesPlaceholderFailure(splitHint, member_id, member_type, element_id, element_type))
     {
       //  Use the type and id to split the changeset
       for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
@@ -1468,14 +1333,15 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset,
             //  Add the way to the split and remove from the changeset
             if (current_type == ChangesetType::TypeCreate)
             {
+              //  Move all nodes to be created with this way to the split
               moveWay(changeset, split, (ChangesetType)current_type, way, true);
-              split->setError();
             }
             else
             {
               split->add(element_type, (ChangesetType)current_type, way->id());
               changeset->remove(element_type, (ChangesetType)current_type, way->id());
             }
+            split->setError();
             return split;
           }
           else if (element_type == ElementType::Relation)
@@ -1484,6 +1350,8 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset,
             //  Add the relation to the split and remove from the changeset
             split->add(element_type, (ChangesetType)current_type, relation->id());
             changeset->remove(element_type, (ChangesetType)current_type, relation->id());
+            //  If one element doesn't exist, fail the relation
+            split->setError();
             return split;
           }
         }
@@ -1491,7 +1359,7 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset,
     }
     //  See if the hint is something like:
     //   Relation with id  cannot be saved due to Relation with id 1707699
-    else if (matchesRelationFailure(splitHint, element_id, member_id, member_type))
+    else if (_failureCheck.matchesRelationFailure(splitHint, element_id, member_id, member_type))
     {
       if (element_id != 0)
       {
@@ -1531,7 +1399,7 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset,
     }
     //  See if the hint is something like:
     //   Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible.
-    else if (matchesMultiElementFailure(splitHint, element_id, element_type, member_ids, member_type))
+    else if (_failureCheck.matchesMultiElementFailure(splitHint, element_id, element_type, member_ids, member_type))
     {
       //  If there is a relation id, move just that relation to the split
       for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
@@ -1567,39 +1435,62 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset,
       }
     }
     //  See if the hint is something like:
-    //   Changeset precondition failed: Precondition failed: Node 5 is still used by ways 67
-    else if (matchesChangesetDeletePreconditionFailure(splitHint, member_id, member_type, element_id, element_type))
+    //   Changeset precondition failed: Precondition failed: Node 5 is still used by ways 67,91
+    else if (_failureCheck.matchesChangesetDeletePreconditionFailure(splitHint, element_id, element_type, member_ids, member_type))
     {
-      //  In this case the node 5 cannot be deleted because way 67 is still using it.  Way 67 must be modified or deleted first
-      //  here we figure out how to make that happen
+      //  In this case the node 5 cannot be deleted because ways 67 and 91 are still using it.  Ways 67 and 91
+      //  must be modified or deleted first here we figure out how to make that happen
       for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
       {
-        if (changeset->contains(member_type, (ChangesetType)current_type, member_id))
+        if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
         {
           //  Remove the offending change from this changeset
-          split->add(member_type, (ChangesetType)current_type, member_id);
-          changeset->remove(member_type, (ChangesetType)current_type, member_id);
+          split->add(element_type, (ChangesetType)current_type, element_id);
+          changeset->remove(element_type, (ChangesetType)current_type, element_id);
           //  Try to add the blocking element to the split changeset
           for (int blocking_type = ChangesetType::TypeCreate; blocking_type != ChangesetType::TypeMax; ++blocking_type)
           {
-            if (element_type == ElementType::Way)
+            if (member_type == ElementType::Way)
             {
-              //  Add the way to the split so that they can be processed together
-              if (_allWays.find(element_id) != _allWays.end())
+              for (size_t i = 0; i < member_ids.size(); ++i)
               {
-                ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[element_id].get());
-                addWay(split, (ChangesetType)blocking_type, way);
+                //  Add the way to the split so that they can be processed together
+                if (_allWays.find(member_ids[i]) != _allWays.end())
+                {
+                  ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[member_ids[i]].get());
+                  moveWay(changeset, split, (ChangesetType)blocking_type, way);
+                }
               }
             }
-            else if (element_type == ElementType::Relation)
+            else if (member_type == ElementType::Relation)
             {
-              //  Add the relation to the split so that they can be processed together
-              if (_allRelations.find(element_id) != _allRelations.end())
+              for (size_t i = 0; i < member_ids.size(); ++i)
               {
-                ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
-                addRelation(split, (ChangesetType)blocking_type, relation);
+                //  Add the relation to the split so that they can be processed together
+                if (_allRelations.find(member_ids[i]) != _allRelations.end())
+                {
+                  ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[member_ids[i]].get());
+                  moveRelation(changeset, split, (ChangesetType)blocking_type, relation);
+                }
               }
             }
+          }
+          //  Don't send the element again if the blocking elements aren't in the split
+          if (split->size() != member_ids.size() + 1) //  +1 includes element reported
+          {
+            if (split->size() != 1)
+            {
+              //  When some of the containing elements but not all are present,
+              //  move the element to a new changeset info object to fail it
+              ChangesetInfoPtr failing(new ChangesetInfo());
+              failing->add(element_type, (ChangesetType)current_type, element_id);
+              split->remove(element_type, (ChangesetType)current_type, element_id);
+              //  Fail only the element, but not the other elements in split
+              failing->setError();
+              failChangeset(failing);
+            }
+            else
+              split->setError();
           }
           //  Split out the offending element and the associated blocking element if possible
           return split;
@@ -2277,12 +2168,16 @@ void XmlChangeset::failRemainingElements(const ChangesetElementMap& elements)
   for (ChangesetElementMap::const_iterator it = elements.begin(); it != elements.end(); ++it)
   {
     ChangesetElementPtr element = it->second;
-    //  Anything that isn't finalized or failed is now failed
-    ChangesetElement::ElementStatus status = element->getStatus();
-    if (status != ChangesetElement::Finalized && status != ChangesetElement::Failed)
+    //  Validate elements before using them
+    if (element)
     {
-      element->setStatus(ChangesetElement::Failed);
-      ++_failedCount;
+      //  Anything that isn't finalized or failed is now failed
+      ChangesetElement::ElementStatus status = element->getStatus();
+      if (status != ChangesetElement::Finalized && status != ChangesetElement::Failed)
+      {
+        element->setStatus(ChangesetElement::Failed);
+        ++_failedCount;
+      }
     }
   }
 }

@@ -44,6 +44,7 @@
 
 // Qt
 #include <QLibrary>
+#include <QNetworkSession>
 
 // System
 #include <memory>
@@ -124,6 +125,12 @@ void Hoot::_init()
 # endif
 
   Log::getInstance().setLevel(Log::Info);
+  //  Registering these metatypes here removes warning messages
+  //  in threads that use QNetworkAccessManager whose initialization
+  //  routine isn't thread safe
+  qRegisterMetaType<QPair<QByteArray, QByteArray>>();
+  qRegisterMetaType<QList<QPair<QByteArray,QByteArray>>>();
+  qRegisterMetaType<QSharedPointer<QNetworkSession>>();
 }
 
 void Hoot::loadLibrary(const QString& name)

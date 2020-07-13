@@ -106,12 +106,13 @@ public:
     // Calls to script functions/var are expensive, both memory-wise and processing-wise. Since this
     // constructor gets called repeatedly by createMatch, keep those calls out of this constructor.
 
-    // Point/Polygon is not meant to conflate any polygons that are conflatable by other conflation
-    // routines, hence the use of NonConflatableCriterion.
+    // Point/Polygon is not meant to conflate any polygons that are conflatable by other *specific*
+    // alg conflation routines (generic geometry algs should be ignored here), hence the use of
+    // NonConflatableCriterion.
+    std::shared_ptr<NonConflatableCriterion> nonConflatableCrit(new NonConflatableCriterion(map));
+    nonConflatableCrit->setIgnoreGenericConflators(true);
     _pointPolyCrit.reset(
-      new ChainCriterion(
-        ElementCriterionPtr(new PolygonCriterion()),
-        ElementCriterionPtr(new NonConflatableCriterion(map))));
+      new ChainCriterion(ElementCriterionPtr(new PolygonCriterion()), nonConflatableCrit));
 
     _timer.start();
   }
@@ -414,7 +415,7 @@ public:
 
       // Point/Polygon conflation behaves diferently than all other generic scripts in that it
       // conflates geometries of different types. This class wasn't really originally designed to
-      // handle that, so we add a logic path here to accommodate Point/Polygon.
+      // handle that, so we add a logic path here to accommodate it.
       long numElementsIndexed = 0;
       if (!_scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME))
       {

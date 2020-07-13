@@ -64,7 +64,6 @@ public:
   static std::string className() { return "hoot::PertyOp"; }
 
   PertyOp();
-
   virtual ~PertyOp() = default;
 
   virtual void setConfiguration(const Settings& conf);

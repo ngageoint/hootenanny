@@ -32,7 +32,8 @@
     },
     {
         "geometries": [
-            "linestring"
+            "linestring",
+            "area"
         ],
         "isA": "barrier",
         "name": "barrier=wall",

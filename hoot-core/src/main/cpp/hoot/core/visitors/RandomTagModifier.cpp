@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RandomTagModifier.h"
 
@@ -37,6 +37,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // Standard
 #include <algorithm>
@@ -66,7 +68,13 @@ void RandomTagModifier::setConfiguration(const Settings& conf)
   {
     _rng->seed(seed);
   }
+
   _exemptTagKeys = configOptions.getRandomTagModifierExemptTagKeys();
+  // hardcode adding REF1/REF2 here since they aren't metadata tags; TODO: should they
+  // be?
+  _exemptTagKeys.append(MetadataTags::Ref1());
+  _exemptTagKeys.append(MetadataTags::Ref2());
+
   _replacementTagKeys = configOptions.getRandomTagModifierSubstitutionKeys();
   _replacementTagValues = configOptions.getRandomTagModifierSubstitutionValues();
 }
@@ -75,22 +83,23 @@ void RandomTagModifier::visit(const std::shared_ptr<Element>& e)
 {
   boost::uniform_real<> uni(0.0, 1.0);
 
+  OsmSchema& schema = OsmSchema::getInstance();
   Tags t = e->getTags();
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
     const QString tagKey = it.key();
-    if (uni(*_rng) <= _p && !_exemptTagKeys.contains(tagKey))
+    if (uni(*_rng) <= _p && !_exemptTagKeys.contains(tagKey) && !schema.isMetaData(tagKey, ""))
     {
       if (!_replacementTagKeys.contains(tagKey))
       {
-        LOG_DEBUG("Removing tag with key: " << tagKey << " ...");
+        LOG_TRACE("Removing tag with key: " << tagKey << " ...");
         e->getTags().remove(tagKey);
       }
       else
       {
         const int tagIndex = _replacementTagKeys.indexOf(tagKey);
         const QString tagValue = _replacementTagValues.at(tagIndex);
-        LOG_DEBUG("Substituting value: " << tagValue << " for tag with key: " << tagKey);
+        LOG_TRACE("Substituting value: " << tagValue << " for tag with key: " << tagKey);
         e->getTags().set(tagKey, tagValue);
       }
     }

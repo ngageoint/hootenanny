@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -57,6 +57,7 @@ public:
   void scoreTest()
   {
     PoiPolygonNameScoreExtractor uut;
+    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -67,7 +68,7 @@ public:
 
     WayPtr way2(new Way(Status::Unknown2, -1, 15.0));
     way2->getTags().set("name", "dfghdgf");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.10669, uut.extract(*map, node1, way2), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way2), 0.001);
   }
 
   void translateTest()
@@ -84,8 +85,8 @@ public:
         PoiPolygonNameScoreExtractor::_translator);
     dictTranslator->setTokenizeInput(false);
 
-    //ToEnglishDictionaryTranslator has some support for acronyms in the same manner that it
-    //supports to English translations.
+    // ToEnglishDictionaryTranslator has some support for acronyms in the same manner that it
+    // supports to English translations.
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set("name", "Kentucky Fried Chicken");
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
@@ -94,8 +95,27 @@ public:
 
     settings.set("poi.polygon.name.translate.to.english", "false");
     uut.setConfiguration(settings);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.203, uut.extract(*map, node1, way1), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.001);
   }
+
+  // for misc name debug testing only
+//  void miscTest()
+//  {
+//    //conf().set(ConfigOptions::getPoiPolygonStringComparerKey(), "hoot::KskipBigramDistance");
+//    PoiPolygonNameScoreExtractor uut;
+//    uut.setConfiguration(conf());
+//    OsmMapPtr map(new OsmMap());
+//    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+//    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+
+//    node1->getTags().set("name", "54 Mint");
+//    way1->getTags().set("name", "San Francisco Mint");
+//    LOG_VARW(uut.extract(*map, node1, way1));
+
+//    node1->getTags().set("name", "Rincon hill Dog Park");
+//    way1->getTags().set("name", "Rincon Hill");
+//    LOG_VARW(uut.extract(*map, node1, way1));
+//  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonNameScoreExtractorTest, "quick");

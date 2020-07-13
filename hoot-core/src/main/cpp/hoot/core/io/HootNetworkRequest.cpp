@@ -170,6 +170,9 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url,
       _error.replace(request.url().toString(), tempUrl.toString(QUrl::RemoveUserInfo), Qt::CaseInsensitive);
     //  Replace the IP address in the error string with <host-ip>
     HootNetworkRequest::removeIpFromUrlString(_error, request.url());
+    //  Negate the connection error as the status
+    if (_status == 0)
+      _status = -1 * (int)reply->error();
     return false;
   }
 
@@ -214,7 +217,7 @@ int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
     if (status.isValid())
       return status.toInt();
   }
-  return -1;
+  return 0;
 }
 
 void HootNetworkRequest::_setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request)
@@ -240,6 +243,19 @@ void HootNetworkRequest::removeIpFromUrlString(QString& endpointUrl, const QUrl&
   QHostAddress host(url.host());
   if (!host.isNull())
     endpointUrl.replace(url.host(), "<host-ip>");
+}
+
+void HootNetworkRequest::logConnectionError()
+{
+  if (_status < 0)
+  {
+    //  Negative status error messages are connection errors from the socket and not from the HTTP server
+    LOG_ERROR("Connection Error: " << getErrorString() << " (" << (_status * -1) << ")");
+  }
+  else
+  {
+    LOG_ERROR("Unexpected Error: HTTP " << _status << " : " << getErrorString());
+  }
 }
 
 }

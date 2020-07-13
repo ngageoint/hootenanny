@@ -60,6 +60,7 @@ void NonConflatableCriterion::setConfiguration(const Settings& conf)
 
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e->getElementId());
   const QMap<QString, ElementCriterionPtr> conflatableCriteria =
     ConflatableElementCriterion::getConflatableCriteria();
   for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
@@ -83,6 +84,9 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
       assert(conflatableCrit);
       if (!conflatableCrit->supportsSpecificConflation())
       {
+        LOG_TRACE(
+          "Element: " << e->getElementId() << " does not support specific conflation and " <<
+          "generic conflators are being ignored.");
         continue;
       }
     }
@@ -93,8 +97,11 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
       std::shared_ptr<GeometryTypeCriterion> geometryCrit =
         std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
       satisfiesGeometryFilter = geometryCrit->getGeometryType() == _geometryTypeFilter;
+      LOG_VART(_geometryTypeFilter);
+      LOG_VART(satisfiesGeometryFilter);
     }
 
+    LOG_VART(itr.key());
     if (crit->isSatisfied(e) && satisfiesGeometryFilter)
     {
       // It is something we can conflate.
@@ -131,7 +138,7 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 
   // It is not something we can conflate.
   LOG_TRACE("Element: " << e->getElementId() << " is not conflatable.");
-  LOG_VART(e);
+  //LOG_VART(e);
   return true;
 }
 

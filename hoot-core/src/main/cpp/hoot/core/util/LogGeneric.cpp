@@ -87,8 +87,7 @@ bool Log::notFiltered(const string& prettyFunction)
   // init here instead of in init() since some logs are being produced before the init() call
 //  if (!_classFilterInitialized)
 //  {
-//    _classFilter = ConfigOptions().getLogClassFilter().split(";");
-//    _classFilter.removeAll(QString(""));
+//    _classFilter = ConfigOptions().getLogClassFilter().split(";", QString::SkipEmptyParts);
 //    _classFilterInitialized = true;
 //  }
 //  if (_classFilter.isEmpty())
@@ -99,17 +98,10 @@ bool Log::notFiltered(const string& prettyFunction)
   // The unnecessary extra calls to this initialization will have to remain until the above problem
   // is fixed for trace logging.
   if (_classFilter.isEmpty())
-  {
-    _classFilter = ConfigOptions().getLogClassFilter().split(";");
-    if (!_classFilter.isEmpty())
-    {
-      _classFilter.removeAll(QString(""));
-    }
-  }
+    _classFilter = ConfigOptions().getLogClassFilter().split(";", QString::SkipEmptyParts);
+
   if (_classFilter.isEmpty())
-  {
     return true;
-  }
 
   const QString prettyFunctionQt = QString::fromStdString(prettyFunction);
   if (!prettyFunctionQt.endsWith(".js"))    // call from C++
@@ -119,7 +111,7 @@ bool Log::notFiltered(const string& prettyFunction)
     if (nameParts.length() < 1) return true;
 
     // split class name from function name
-    nameParts = nameParts[0].split("::");
+    nameParts = nameParts[0].split("::", QString::SkipEmptyParts);
     const int listLen = nameParts.length();
 
     // Is there any way we can throw here if the class name isn't recognized, so we don't wonder
@@ -130,7 +122,7 @@ bool Log::notFiltered(const string& prettyFunction)
   else  // call from a JS generic conflate script
   {
     // split arguments from script path
-    const QStringList nameParts = prettyFunctionQt.split("/");
+    const QStringList nameParts = prettyFunctionQt.split("/", QString::SkipEmptyParts);
     if (nameParts.length() < 1) return true;
 
     const QString scriptName = nameParts[nameParts.size() - 1];

@@ -133,6 +133,11 @@ public:
    */
   static void removeIpFromUrlString(QString& endpointUrl, const QUrl& url);
 
+  /**
+   * @brief logConnectionError Log an error with the connection based on the reponse error, not an HTTP error code
+   */
+  void logConnectionError();
+
 private:
   /**
    * @brief _networkRequest Function to make the actual request
