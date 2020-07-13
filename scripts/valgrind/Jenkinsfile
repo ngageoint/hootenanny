@@ -91,6 +91,7 @@ pipeline {
         }
         cleanup {
             script {
+                sh "vagrant scp ${params.Box}:~/hoot/test-output/valgrind_error_* test-ouput/"
                 //TODO: I think that archiveArtifacts will only archive files available to Dockson and not the AWS VM, I may have to scp the files back first
                 //  Always store the artifacts, they will be cleaned up later
                 archiveArtifacts '**/test-output/valgrind_error_*'
