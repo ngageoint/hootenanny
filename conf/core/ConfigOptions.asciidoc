@@ -3646,17 +3646,9 @@ configuration option, 'language.translation.translator', controls which translat
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/PoiSearchRadii.json`
 
-This allows for overriding the match/review distances for POI to POI Conflation defined in the file
-specified by +poi.search.radii.config+. Its JSON format matches that in the file referenced by
-+poi.search.radii.config+.
-
-=== poi.search.radii.config
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/PoiSearchRadii.json`
-
-Points to a JSON file defining the default search radii distance configuration for POI to POI
-Conflation. Use of this file is overridden when +poi.search.radii+ is specified.
+This specifies per feature search radius distances to use during POI to POI conflation. It may
+either by a path to a JSON file or a JSON string. See ${HOOT_HOME}/conf/core/PoiSearchRadii.json
+for details on the JSON format.
 
 === power.line.auto.calc.search.radius
 
