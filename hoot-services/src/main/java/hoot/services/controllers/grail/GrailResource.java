@@ -354,8 +354,8 @@ public class GrailResource {
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", reqParams.getBounds());
-        jobStatusTags.put("input1", input1);
-        jobStatusTags.put("input2", input2);
+        jobStatusTags.put("input1", new File(input1).getName());
+        jobStatusTags.put("input2", new File(input2).getName());
         jobStatusTags.put("parentId", reqParams.getParentId());
         jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
         jobStatusTags.put("deriveType", deriveType);
