@@ -110,7 +110,7 @@
         "members": {
             "poi.ignore.type.if.name.present": "Ignore type if name present",
             "search.radius.poi": "Search radius (m); -1 for default",
-            "poi.search.radii": "The search radii distance configuration for POI to POI Conflation"
+            "poi.search.radii": "The search radii distance (m) configuration for POI to POI Conflation"
         }
     },
     "PoiPolygon": {
