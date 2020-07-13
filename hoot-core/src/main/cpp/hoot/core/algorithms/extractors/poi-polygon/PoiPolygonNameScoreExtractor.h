@@ -85,6 +85,7 @@ private:
 
   double _nameScoreThreshold;
   double _levDist;
+  StringDistancePtr _stringComp;
 
   //when enabled, will attempt to translate address tags to English
   bool _translateTagValuesToEnglish;

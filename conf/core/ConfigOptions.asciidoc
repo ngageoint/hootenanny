@@ -3598,6 +3598,14 @@ controlled by the Hootenanny schema.
 
 The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
 
+=== poi.polygon.string.comparer
+
+* Data Type: string
+* Default Value: `hoot::KskipBigramDistance`
+
+String comparison algorithm to use for name comparison with POI/Polygon conflation. Must be an
+implementation of `StringDistance`.
+
 === poi.polygon.tag.merger
 
 * Data Type: string

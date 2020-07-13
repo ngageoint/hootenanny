@@ -50,7 +50,7 @@ public:
   /**
    * @param portion The portion parameter passed off to ScoreMatrix.
    */
-  MeanWordSetDistance(StringDistancePtr d, double portion=1.0);
+  MeanWordSetDistance(StringDistancePtr d, double portion = 1.0);
   MeanWordSetDistance();
   virtual ~MeanWordSetDistance() = default;
 
