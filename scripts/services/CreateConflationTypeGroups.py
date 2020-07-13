@@ -82,7 +82,8 @@ def createUiJSON(groups, options):
                         del memberConfig['key']
                         templateDefault = re.findall(r'(?<=\${).*(?=})', memberConfig['default'])
                         # If default points to file of values
-                        if 'HOOT_HOME' in memberConfig['default']:
+                        if 'HOOT_HOME' in memberConfig['default'] and memberConfig['default'].endswith('.json'):
+                            print memberConfig['default']
                             filePath = os.path.expandvars(memberConfig['default'])
                             if os.path.isfile(filePath):
                                 with open(filePath, 'r') as jsonFile:
