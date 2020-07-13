@@ -91,10 +91,12 @@ pipeline {
         }
         cleanup {
             script {
-                sh "vagrant scp ${params.Box}:~/hoot/test-output/valgrind_error_* test-output/"
+                //  Where are we?!  `test-output/` doesn't exist to copy into
+                sh "pwd"
+                sh "vagrant scp ${params.Box}:~/hoot/test-output/valgrind_error_* ./"
                 //TODO: I think that archiveArtifacts will only archive files available to Dockson and not the AWS VM, I may have to scp the files back first
                 //  Always store the artifacts, they will be cleaned up later
-                archiveArtifacts '**/test-output/valgrind_error_*'
+                archiveArtifacts '**/valgrind_error_*'
                 //  Destroy the VM
                 sh "vagrant destroy -f ${params.Box}"
                 cleanWs()
