@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSVISITOR_H
 #define WAYSVISITOR_H
@@ -37,7 +37,10 @@ class WaysVisitor : public ConstElementVisitor
 {
 public:
 
-  WaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) {}
+  static std::string className() { return "hoot::WaysVisitor"; }
+
+  WaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) { }
+  virtual ~WaysVisitor() = default;
 
   virtual void visit(const std::shared_ptr<const Element>& e) override;
 
@@ -47,6 +50,8 @@ public:
   static std::vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Collects the ways visited"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

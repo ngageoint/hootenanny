@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REVIEWMARKERJS_H
 #define REVIEWMARKERJS_H
 
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // hoot
 #include <hoot/js/io/DataConvertJs.h>
@@ -41,16 +41,17 @@ namespace hoot
  * This class is a bit interesting in that it exposes non-const methods if it is wrapping a non-
  * const object, otherwise it exposes only const methods.
  */
-class ReviewMarkerJs : public node::ObjectWrap
+class ReviewMarkerJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
+  virtual ~ReviewMarkerJs() = default;
+
 private:
 
-  ReviewMarkerJs();
-  ~ReviewMarkerJs();
+  ReviewMarkerJs() = default;
 
   static void mark(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

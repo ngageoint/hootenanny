@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -58,7 +58,7 @@ eggdm30_osm = {
     // This function converts the "English" GGDMv30 to GGDMv30 and then to OSM+
     toOSM : function(attrs, elementType, geometryType)
     {
-        // Strip out the junk - this is also done in the toOsmPreProcessing but this 
+        // Strip out the junk - this is also done in the toOsmPreProcessing but this
         // means that there is less to convert later
         var ignoreList = { '-999999':1, '-999999.0':1, 'noinformation':1, 'No Information':1, 'noInformation':1 };
 
@@ -121,7 +121,7 @@ eggdm30_osm = {
         }
 
         // Use a lookup table to convert the remaining attribute names from "English" to GGDMv30
-        translate.applyOne2One(attrs, nAttrs, eggdm30_osm_rules.enumValues, {'k':'v'});
+        translate.applyOne2One(attrs, nAttrs, eggdm30_osm_rules.enumValues, {'k':'v'},[]);
         var tags = {};
 
         // Now convert the attributes to tags.

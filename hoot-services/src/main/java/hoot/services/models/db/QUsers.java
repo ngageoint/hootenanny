@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.db;
 
@@ -74,6 +74,8 @@ public class QUsers extends com.querydsl.sql.RelationalPathBase<Users> {
 
     public final SimplePath<Object> privileges = createSimple("privileges", Object.class);
 
+    public final SimplePath<Object> favoriteOpts = createSimple("favorite_opts", Object.class);
+
     public final com.querydsl.sql.PrimaryKey<Users> usersPk = createPrimaryKey(id);
 
     public QUsers(String variable) {
@@ -113,6 +115,7 @@ public class QUsers extends com.querydsl.sql.RelationalPathBase<Users> {
         addMetadata(provider_created_at, ColumnMetadata.named("provider_created_at").withIndex(8)
                 .ofType(Types.TIMESTAMP).withSize(29).withDigits(6).notNull());
         addMetadata(privileges, ColumnMetadata.named("privileges").withIndex(9).ofType(Types.OTHER).withSize(2147483647));
+        addMetadata(favoriteOpts, ColumnMetadata.named("favorite_opts").withIndex(10).ofType(Types.OTHER).withSize(2147483647));
     }
 
 }

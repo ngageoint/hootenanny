@@ -33,7 +33,6 @@
 #include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -183,10 +182,8 @@ void NetworkMatchCreator::createMatches(
   const int matchesSizeAfter = matches.size();
 
   LOG_STATUS(
-    "Found " << StringUtils::formatLargeNumber(matches.size()) <<
-    " highway match candidates and " <<
-    StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
-    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    "Found " << StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
+    " total highway matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
@@ -201,7 +198,9 @@ vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
 
 bool NetworkMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
-  if (_filter && !_filter->isSatisfied(element))
+  // special tag is currently only used by roundabout processing to mark temporary features
+  if (element->getTags().contains(MetadataTags::HootSpecial()) ||
+      (_filter && !_filter->isSatisfied(element)))
   {
     return false;
   }

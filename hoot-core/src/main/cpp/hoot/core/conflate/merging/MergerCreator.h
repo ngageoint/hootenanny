@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGECREATOR_H
 #define MERGECREATOR_H
@@ -51,7 +51,8 @@ public:
 
   static std::string className() { return "hoot::MergerCreator"; }
 
-  virtual ~MergerCreator() {}
+  MergerCreator() = default;
+  virtual ~MergerCreator() = default;
 
   /**
    * Either creates one or more mergers that can merge all the matches in the
@@ -74,8 +75,17 @@ public:
   /**
    * Returns true if m1 and m2 are conflicting. If the MergerCreator has no information on the two
    * input matches then false is returned.
+   *
+   * @param map map owning the elements involved in the matches
+   * @param m1 the first match
+   * @param m2 the second match
+   * @param matches an optional set of all matches found during conflation; this allows match
+   * caching to be used in situations where duplicated match calculation is prohibitively expensive
+   * @return true if the two matches are conflicting; false otherwise
    */
-  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const = 0;
+  virtual bool isConflicting(
+    const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const = 0;
 
   virtual void setArguments(QStringList /*args*/) { throw IllegalArgumentException(); }
 };

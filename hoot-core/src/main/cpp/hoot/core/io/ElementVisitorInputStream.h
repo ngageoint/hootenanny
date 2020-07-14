@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTVISITORINPUTSTREAM_H
 #define ELEMENTVISITORINPUTSTREAM_H
@@ -39,13 +39,14 @@ class ElementVisitorInputStream : public ElementInputStream
 public:
 
   /**
-   * @brief ElementVisitorInputStream
-   * @param elementSource The stream used to read elements from
-   * @param visitor The operation that should be performed on elements that are read from the input
-   * source before being returned
+   * Creates a filtered stream of elements
+   *
+   * @param elementSource source of the element stream
+   * @param visitor an element visitor to filter the stream with
    */
   ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
                             const ElementVisitorPtr& visitor);
+  virtual ~ElementVisitorInputStream() = default;
 
   /**
    * @brief close

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiPolygonCreator.h"
 
@@ -416,10 +416,10 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing*>&
         //See #2287.
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_VART(e.getElementId());
-          LOG_TRACE("A multipolygon relation contains a way that is not a ring. While likely valid, "
-                   "this is currently unsupported by Hoot. Will attempt to deal with it. " <<
-                   e.getElementId());
+          LOG_TRACE(
+            "A multipolygon relation contains a way that is not a ring. While likely a valid " <<
+            "feature, fixing it is currently unsupported by Hoot and it will be dealt with as " <<
+            "is: " << e.getElementId());
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {

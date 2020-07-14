@@ -21,6 +21,12 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["area"],
+        "isA": "natural",
+        "name": "natural=desert",
+        "objectType": "tag"
+    },
+    {
         "geometries": ["linestring"],
         "aliases":[
         "natural=land_water_boundary"
@@ -33,6 +39,18 @@
         "geometries": ["linestring"],
         "isA": "natural",
         "name": "natural=hedgerow",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["linestring"],
+        "isA": "natural",
+        "name": "natural=tree_row",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["node"],
+        "isA": "natural",
+        "name": "natural=tree",
         "objectType": "tag"
     },
     {

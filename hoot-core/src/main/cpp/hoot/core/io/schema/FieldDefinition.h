@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COLUMN_H
 #define COLUMN_H
@@ -40,21 +40,26 @@ namespace hoot
 class FieldDefinition
 {
 public:
+
   class InvalidValueException : public HootException
   {
   public:
+
     InvalidValueException(QString fieldName, QString message) :
       HootException(message),
       _fieldName(fieldName)
-    { }
+    {
+    }
 
     virtual ~InvalidValueException() throw() {}
 
   private:
+
     QString _fieldName;
   };
 
   FieldDefinition();
+  virtual ~FieldDefinition() = default;
 
   virtual bool getAllowNull() const { return _allowNull; }
 
@@ -87,15 +92,16 @@ public:
   virtual QString toString() const = 0;
 
 protected:
+
   void _reportError(const QString& field, const QString& error, StrictChecking strict) const;
 
   bool _allowNull;
   bool _defaultIsNull;
 
 private:
+
   int _width;
   QString _name;
-
 };
 
 }

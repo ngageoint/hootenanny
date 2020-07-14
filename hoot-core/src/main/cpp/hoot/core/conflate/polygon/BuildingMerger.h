@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGMERGER_H
 #define BUILDINGMERGER_H
@@ -45,9 +45,8 @@ public:
 
   static std::string className() { return "hoot::BuildingMerger"; }
 
-  static int logWarnCount;
-
-  BuildingMerger();
+  BuildingMerger() = default;
+  virtual ~BuildingMerger() = default;
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -97,6 +96,8 @@ public:
 
   virtual QString getDescription() const { return "Merges buildings"; }
 
+  virtual QString getName() const { return QString::fromStdString(className()); }
+
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)
   { _keepMoreComplexGeometryWhenAutoMerging = keepMoreComplex; }
   void setMergeManyToManyMatches(bool merge) { _mergeManyToManyMatches = merge; }
@@ -110,6 +111,8 @@ protected:
   virtual const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
+
+  static int logWarnCount;
 
   friend class BuildingMergerTest;
 

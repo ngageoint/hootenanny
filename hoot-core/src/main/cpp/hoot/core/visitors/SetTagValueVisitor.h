@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SETTAGVALUEVISITOR_H
 #define SETTAGVALUEVISITOR_H
@@ -31,6 +31,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -39,8 +40,7 @@ namespace hoot
  * Sets tags on any elements with the specified key to the specified value or adds a new tag, if
  * the tag doesn't exist on the element.
  */
-class SetTagValueVisitor : public MultipleCriterionConsumerVisitor, public Configurable,
-  public OperationStatusInfo
+class SetTagValueVisitor : public MultipleCriterionConsumerVisitor, public Configurable
 {
 public:
 
@@ -55,6 +55,7 @@ public:
     const QString& key, const QString& value, bool appendToExistingValue = false,
     const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
     const bool negateCriteria = false);
+  virtual ~SetTagValueVisitor() = default;
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -65,7 +66,9 @@ public:
   virtual QString getInitStatusMessage() const { return "Updating tags..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Updated " + QString::number(_numAffected) + " tags"; }
+  { return "Updated " + StringUtils::formatLargeNumber(_numAffected) + " tags"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 
@@ -74,6 +77,8 @@ private:
   bool _appendToExistingValue;
   //overwrites any tag with a matching key
   bool _overwriteExistingTag;
+  // keys for tags containing CE data
+  QStringList _circularErrorTagKeys;
 
   void _setTag(const ElementPtr& e, const QString& k, const QString& v);
 };

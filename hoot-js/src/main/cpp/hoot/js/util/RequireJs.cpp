@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RequireJs.h"
 
@@ -45,12 +45,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(RequireJs)
 
-RequireJs::RequireJs()
-{
-}
-
-RequireJs::~RequireJs() {}
-
 void RequireJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
@@ -60,9 +54,9 @@ void RequireJs::Init(Handle<Object> exports)
 
 void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 {
-    Isolate* current = v8::Isolate::GetCurrent();
-    HandleScope scope(current);
-    Context::Scope context_scope(current->GetCurrentContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope scope(current);
+  Context::Scope context_scope(current->GetCurrentContext());
   try
   {
 

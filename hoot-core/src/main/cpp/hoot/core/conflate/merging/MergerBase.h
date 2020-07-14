@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGERBASE_H
 #define MERGERBASE_H
@@ -40,8 +40,8 @@ public:
 
   typedef std::set<std::pair<ElementId, ElementId>> PairsSet;
 
-  MergerBase();
-  virtual ~MergerBase();
+  MergerBase() = default;
+  virtual ~MergerBase() = default;
 
   virtual std::set<ElementId> getImpactedElementIds() const override;
 

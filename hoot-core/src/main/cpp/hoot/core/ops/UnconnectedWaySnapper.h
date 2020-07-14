@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNCONNECTED_WAY_SNAPPER
@@ -31,9 +31,9 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -53,6 +53,9 @@ namespace hoot
  * should focus on trying to fix the lack of snapping in the conflation routines themselves rather
  * than relying on this as a cleanup utility.
  *
+ * Additionally, this class can be configured to mark any snapped roads as needing review or mark
+ * them for review without snapping them.
+ *
  * *Possible* future enhancements:
  *
  * - If a way is snapped to another way and the ways end up being parallel and overlap, snapping
@@ -69,14 +72,14 @@ namespace hoot
  * yet if/whether that can be addressed or not. Technically, the way joiner (I think) run later on
  * could fix the problem.
  */
-class UnconnectedWaySnapper : public OsmMapOperation, public OperationStatusInfo,
-  public Configurable
+class UnconnectedWaySnapper : public OsmMapOperation, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::UnconnectedWaySnapper"; }
 
   UnconnectedWaySnapper();
+  virtual ~UnconnectedWaySnapper() = default;
 
   /**
    * @see OsmMapOperation
@@ -121,10 +124,12 @@ public:
   void setSnapWayStatuses(const QStringList& statuses);
   void setSnapToWayStatuses(const QStringList& statuses);
   void setMarkSnappedWays(bool mark) { _markSnappedWays = mark; }
+  void setReviewSnappedWays(bool review) { _reviewSnappedWays = review; }
+  void setMarkOnly(bool markOnly) { _markOnly = markOnly; }
 
   /**
-   * @brief snapClosestEndpointToWay Finds the closest endpont on 'disconnected' and snaps it to
-   *   the closest node in 'connectTo'
+   * Finds the closest endpont on 'disconnected' and snaps it to the closest node in 'connectTo'
+   *
    * @param map Map containing ways
    * @param disconnected Disconnected way that needs to be connected
    * @param connectTo Way to connect the disconnected way to
@@ -133,15 +138,15 @@ public:
   static bool snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected,
                                        const WayPtr& connectTo);
 
-protected:
-
-  // if true, will attempt to snap nodes to existing way nodes instead of adding them to the way as
-  // a new way node
-  bool _snapToExistingWayNodes;
+  virtual std::string getClassName() const { return className(); }
 
 private:
 
   friend class UnconnectedWaySnapperTest;
+
+  // if true, will attempt to snap nodes to existing way nodes instead of adding them to the way as
+  // a new way node
+  bool _snapToExistingWayNodes;
 
   // furthest away a way node can be from a unconnected node for us to consider snapping to it
   double _maxNodeReuseDistance;
@@ -156,6 +161,10 @@ private:
   bool _markSnappedNodes;
   // allow for optionally tagging snapped ways; useful for debugging
   bool _markSnappedWays;
+  // mark anything snapped as needing review
+  bool _reviewSnappedWays;
+  // don't actually snap ways; this allows for marking w/o snapping
+  bool _markOnly;
 
   // the feature criterion to be used for way snap target candidates
   QString _wayToSnapToCriterionClassName;
@@ -185,6 +194,7 @@ private:
   int _taskStatusUpdateInterval;
   OsmMapPtr _map;
   Settings _conf;
+  ReviewMarker _reviewMarker;
 
   /*
    * The radius around the end node to look for ways to snap to.
@@ -262,23 +272,26 @@ private:
    */
   bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap);
 
-  /**
-   * @brief _snapUnconnectedNodeToWay Snap a particular node into a way at its closest intersecting
-   * point
+  /*
+   * Snap a particular node into a way at its closest intersecting point
+   *
    * @param nodeToSnap Node to snap/add into the way
    * @param wayToSnapTo Way to connect/add the node into
    * @return True if successful
    */
   bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap, const WayPtr& wayToSnapTo);
 
-  /**
-   * @brief snapClosestEndpointToWay Finds the closest endpont on 'disconnected' and snaps it to
-   *   the closest node in 'connectTo'
+  /*
+   * Finds the closest endpont on 'disconnected' and snaps it to the closest node in 'connectTo'
+   *
    * @param disconnected Disconnected way that needs to be connected
    * @param connectTo Way to connect the disconnected way to
    * @return True if successful
    */
   bool _snapClosestEndpointToWay(const WayPtr& disconnected, const WayPtr& connectTo);
+
+  void _markSnappedWay(const long idOfNodeBeingSnapped);
+  void _reviewSnappedWay(const long idOfNodeBeingSnapped);
 
   /*
    * @see WayJoinerAdvanced

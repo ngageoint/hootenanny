@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ChangesetCreator.h"
 
@@ -51,20 +51,28 @@
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
+#include <hoot/core/util/FileUtils.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
+
+// Qt
+#include <QFileInfo>
+#include <QDir>
 
 namespace hoot
 {
 
 const QString ChangesetCreator::JOB_SOURCE = "Derive Changeset";
 
-ChangesetCreator::ChangesetCreator(const bool printDetailedStats, const QString osmApiDbUrl) :
+ChangesetCreator::ChangesetCreator(
+  const bool printDetailedStats, const QString& statsOutputFile, const QString osmApiDbUrl) :
 _osmApiDbUrl(osmApiDbUrl),
 _numTotalTasks(0),
 _currentTaskNum(0),
+_includeReviews(false),
 _printDetailedStats(printDetailedStats),
+_statsOutputFile(statsOutputFile),
 _singleInput(false),
 _numCreateChanges(0),
 _numModifyChanges(0),
@@ -92,6 +100,10 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   LOG_DEBUG(
     "Creating changeset from inputs: " << input1 << " and " << input2 << " to output: " <<
     output << "...");
+
+  // write the output dir now so we don't get a nasty surprise at the end of a long job that it
+  // can't be written
+  IoUtils::writeOutputDir(output);
 
   _singleInput = input2.trimmed().isEmpty();
   LOG_VARD(_singleInput);
@@ -121,6 +133,10 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
         _numTotalTasks++;
       }
     }
+    if (!_includeReviews)
+    {
+      _numTotalTasks--;
+    }
   }
 
   _currentTaskNum = 1;
@@ -137,8 +153,8 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   //sortedElements2 is the newer state of the data
   ElementInputStreamPtr sortedElements2;
 
-  // TODO: We could use OsmUtils::checkVersionLessThanOneCountAndLogWarning() somewhere in here like
-  // we do with ChangesetDeriveReplacementCommand and ConflateCmd.
+  // TODO: We could use VersionUtils::checkVersionLessThanOneCountAndLogWarning() somewhere in here
+  // like we do with ChangesetDeriveReplacementCommand and ConflateCmd.
 
   // If we have two inputs, we'll determine the difference between them as the changeset.
   // Otherwise, we're passing all the input data through to the output changeset, so put it in
@@ -226,31 +242,27 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
   for (int i = 0; i < map1Inputs.size(); i++)
   {
     OsmMapPtr map1 = map1Inputs.at(i);
+    // If map2 is empty, we'll end up deleting features from map1 in the resultant changeset.
     OsmMapPtr map2 = map2Inputs.at(i);
-    if (map2->isEmpty())
-    {
-      // An empty map2 makes no sense, b/c you would just have an empty changeset.
-      LOG_INFO(
-        "Second map is empty. Skipping changeset generation for maps at index: " << i + 1 << "...");
-      continue;
-    }
     LOG_DEBUG(
-      "Creating changeset from inputs: " << map1->getName() << " and " << map2->getName() <<
-      " to output: " << output << "...");
-    OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation");
-    OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation");
+      "Creating changeset from inputs: " << map1->getName() << " of size: " << map1->size() <<
+      " and " << map2->getName() << " of size: " << map2->size() << " to output: " <<
+      output.right(25) << "...");
+    OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation-" + map1->getName());
+    OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation-" + map2->getName());
 
-    // don't want to include review relations - may need to remove this depending on what happens
-    // with #3361
-    std::shared_ptr<TagKeyCriterion> elementCriterion(
-      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
-    RemoveElementsVisitor removeElementsVisitor;
-    removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.addCriterion(elementCriterion);
-    map1->visitRw(removeElementsVisitor);
-    map2->visitRw(removeElementsVisitor);
+    if (!_includeReviews)
+    {
+      std::shared_ptr<TagKeyCriterion> elementCriterion(
+        new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+      RemoveElementsVisitor removeElementsVisitor;
+      removeElementsVisitor.setRecursive(false);
+      removeElementsVisitor.addCriterion(elementCriterion);
+      map1->visitRw(removeElementsVisitor);
+      map2->visitRw(removeElementsVisitor);
+    }
 
-    // Truncate tags over 255 characters to push into OSM API.
+    // Truncate tags over max tag length characters to push into OSM API.
     ApiTagTruncateVisitor truncateTags;
     map1->visitRw(truncateTags);
     map2->visitRw(truncateTags);
@@ -359,7 +371,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(const QString& inpu
           QString("(OsmMapOperation) on two data sources with overlapping element IDs: ") +
           e.what());
       }
-      //  Rethrow the original exception
+      //  rethrow the original exception
       throw;
     }
   }
@@ -514,24 +526,26 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
     _currentTaskNum++;
   }
 
-  // We don't want to include review relations.
-  progress.set(
-    (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Removing review relations...");
-  std::shared_ptr<TagKeyCriterion> elementCriterion(
-    new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
-  RemoveElementsVisitor removeElementsVisitor;
-  removeElementsVisitor.setRecursive(false);
-  removeElementsVisitor.addCriterion(elementCriterion);
-  map1->visitRw(removeElementsVisitor);
-  if (!_singleInput)
+  if (!_includeReviews)
   {
-    map2->visitRw(removeElementsVisitor);
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Removing review relations...");
+    std::shared_ptr<TagKeyCriterion> elementCriterion(
+      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+    RemoveElementsVisitor removeElementsVisitor;
+    removeElementsVisitor.setRecursive(false);
+    removeElementsVisitor.addCriterion(elementCriterion);
+    map1->visitRw(removeElementsVisitor);
+    if (!_singleInput)
+    {
+      map2->visitRw(removeElementsVisitor);
+    }
+    OsmMapWriterFactory::writeDebugMap(map1, "after-remove-reviews-map-1");
+    OsmMapWriterFactory::writeDebugMap(map2, "after-remove-reviews-map-2");
+    _currentTaskNum++;
   }
-  OsmMapWriterFactory::writeDebugMap(map1, "after-remove-reviews-map-1");
-  OsmMapWriterFactory::writeDebugMap(map2, "after-remove-reviews-map-2");
-  _currentTaskNum++;
 
-  // Truncate tags over 255 characters to push into OSM API.
+  // Truncate tags over max tag length characters to push into OSM API.
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Preparing tags for changeset...");
   ApiTagTruncateVisitor truncateTags;
@@ -585,12 +599,15 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
   LOG_DEBUG("Retrieving filtered input stream for: " << input.right(25) << "...");
 
   QList<ElementVisitorPtr> visitors;
-  // We don't want to include review relations.
-  std::shared_ptr<ElementCriterion> elementCriterion(
-    new NotCriterion(
-      std::shared_ptr<TagKeyCriterion>(
-        new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
-  // Tags need to be truncated if they are over 255 characters.
+  std::shared_ptr<ElementCriterion> elementCriterion;
+  if (!_includeReviews)
+  {
+    elementCriterion.reset(
+      new NotCriterion(
+        std::shared_ptr<TagKeyCriterion>(
+          new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
+  }
+  // Tags need to be truncated if they are over max tag length characters.
   visitors.append(std::shared_ptr<ApiTagTruncateVisitor>(new ApiTagTruncateVisitor()));
 
   // open a stream to the input data
@@ -600,8 +617,16 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
   reader->setUseDataSourceIds(true);
   reader->open(input);
   ElementInputStreamPtr inputStream = std::dynamic_pointer_cast<ElementInputStream>(reader);
-  ElementInputStreamPtr filteredInputStream(
-    new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
+  ElementInputStreamPtr filteredInputStream;
+  if (elementCriterion)
+  {
+    filteredInputStream.reset(
+      new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
+  }
+  else
+  {
+    filteredInputStream.reset(new ElementVisitorInputStream(inputStream, visitors.at(0)));
+  }
 
   // Add convert ops supporting streaming into the pipeline, if there are any. TODO: Any
   // OsmMapOperations in the bunch need to operate on the entire map made up of both inputs to
@@ -654,7 +679,19 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   {
     if (output.endsWith(".osc")) // detailed stats currently only implemented for xml output
     {
-      detailedStats = writer->getStatsTable();
+      // Get the stats output format from the file extension, or if no extension is there assume a
+      // text table output to the display.
+      ChangesetStatsFormat statsFormat;
+      if (!_statsOutputFile.isEmpty())
+      {
+        QFileInfo statsFileInfo(_statsOutputFile);
+        statsFormat.setFormat(ChangesetStatsFormat::fromString(statsFileInfo.completeSuffix()));
+      }
+      else
+      {
+        statsFormat.setFormat(ChangesetStatsFormat::Text);
+      }
+      detailedStats = writer->getStatsTable(statsFormat);
     }
     else
     {
@@ -673,14 +710,17 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     _numModifyChanges += changesetDeriver->getNumModifyChanges();
     _numDeleteChanges += changesetDeriver->getNumDeleteChanges();
 
-    LOG_VARD(changesetDeriver->getNumCreateChanges());
-    LOG_VARD(changesetDeriver->getNumModifyChanges());
-    LOG_VARD(changesetDeriver->getNumDeleteChanges());
-    LOG_VARD(changesetDeriver->getNumFromElementsParsed());
-    LOG_VARD(changesetDeriver->getNumToElementsParsed());
+    LOG_VART(changesetDeriver->getNumFromElementsParsed());
+    LOG_VART(changesetDeriver->getNumToElementsParsed());
     if (changesetDeriver->getNumChanges() == 0)
     {
-      LOG_WARN("No changes written to changeset.");
+      LOG_DEBUG("No changes written to changeset.");
+    }
+    else
+    {
+      LOG_VARD(changesetDeriver->getNumCreateChanges());
+      LOG_VARD(changesetDeriver->getNumModifyChanges());
+      LOG_VARD(changesetDeriver->getNumDeleteChanges());
     }
 
     // close the output stream
@@ -702,16 +742,23 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     input2->close();
   }
 
-  LOG_VARD(_printDetailedStats);
+  LOG_VART(_printDetailedStats);
   if (_printDetailedStats && !detailedStats.isEmpty())
   {
-    LOG_STATUS("Changeset Stats:\n" << detailedStats);
+    if (_statsOutputFile.isEmpty())
+    {
+      LOG_STATUS("Changeset Stats:\n" << detailedStats);
+    }
+    else
+    {
+      FileUtils::writeFully(_statsOutputFile, detailedStats);
+    }
   }
   else
   {
-    LOG_VARD(_numCreateChanges);
-    LOG_VARD(_numModifyChanges);
-    LOG_VARD(_numDeleteChanges);
+    LOG_DEBUG("Total create changes: " << _numCreateChanges);
+    LOG_DEBUG("Total modify changes: " << _numModifyChanges);
+    LOG_DEBUG("Total delete changes: " <<_numDeleteChanges);
   }
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmPbfWriter.h"
@@ -238,7 +238,8 @@ void OsmPbfWriter::_open(const QString& url)
 void OsmPbfWriter::open(const QString& url)
 {
   _open(url);
-  initializePartial();
+  //  OsmPbfWriter::open() shouldn't call OsmPbfWriter::initializePartial()
+  //  or it will cause duplicate headers
 }
 
 void OsmPbfWriter::close()

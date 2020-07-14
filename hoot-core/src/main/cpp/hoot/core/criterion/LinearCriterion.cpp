@@ -39,12 +39,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, LinearCriterion)
 
-LinearCriterion::LinearCriterion()
-{
-}
-
 bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e->getElementId());
+  //LOG_VART(e);
   bool result = false;
 
   if (e->getElementType() == ElementType::Node)
@@ -53,16 +51,15 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   else if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-    result |= r->getType() == MetadataTags::RelationMultilineString();
-    result |= r->getType() == MetadataTags::RelationRoute();
-    result |= r->getType() == MetadataTags::RelationBoundary();
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
+    result = isLinearRelation(relation);
   }
   else if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
     if (way->isClosedArea())
     {
+      LOG_TRACE("Way is a closed area, so fails LinearCriterion.");
       return false;
     }
   }
@@ -72,14 +69,32 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
     uint16_t g = tv.geometries;
-    if (g & OsmGeometries::LineString && !(g & OsmGeometries::Area))
+
+    LOG_VART(g & OsmGeometries::LineString);
+    LOG_VART(g & OsmGeometries::Area);
+
+    // We don't want to fail here if the associated schema type supports both a line and a poly. We
+    // only care by this point that it does support a line. The previous closed area check will take
+    // care of weeding out any polys.
+    if (g & OsmGeometries::LineString)
     {
       result = true;
       break;
     }
   }
+  LOG_VART(result);
 
   return result;
+}
+
+bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
+{
+  return relation->getType() == MetadataTags::RelationMultilineString() ||
+         relation->getType() == MetadataTags::RelationRoute() ||
+         relation->getType() == MetadataTags::RelationBoundary() ||
+         relation->getType() == MetadataTags::RelationRouteMaster() ||
+         relation->getType() == MetadataTags::RelationSuperRoute() ||
+         relation->getType() == MetadataTags::RelationRestriction();
 }
 
 }

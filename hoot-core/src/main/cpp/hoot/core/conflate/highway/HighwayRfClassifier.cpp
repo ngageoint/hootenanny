@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayRfClassifier.h"
 
@@ -44,7 +44,6 @@
 #include <hoot/core/algorithms/extractors/LengthScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/WeightedMetricDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/WeightedShapeDistanceExtractor.h>
-#include <hoot/core/algorithms/extractors/BufferedOverlapExtractor.h>
 #include <hoot/core/algorithms/extractors/CentroidDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/CompactnessExtractor.h>
 #include <hoot/core/algorithms/extractors/EdgeDistanceExtractor.h>
@@ -73,11 +72,6 @@ namespace hoot
 int HighwayRfClassifier::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayRfClassifier)
-
-HighwayRfClassifier::HighwayRfClassifier()
-{
-  // we do a lazy initialization
-}
 
 MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map,
   ElementId eid1, ElementId eid2, const WaySublineMatchString& match)

@@ -28,6 +28,9 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/highway/HighwayTagOnlyMerger.h>
+#include <hoot/core/conflate/river/RiverSnapMerger.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/algorithms/subline-matching//SublineStringMatcherJs.h>
@@ -52,14 +55,6 @@ HOOT_JS_REGISTER(HighwaySnapMergerJs)
 
 Persistent<Function> HighwaySnapMergerJs::_constructor;
 
-HighwaySnapMergerJs::HighwaySnapMergerJs()
-{
-}
-
-HighwaySnapMergerJs::~HighwaySnapMergerJs()
-{
-}
-
 void HighwaySnapMergerJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
@@ -78,7 +73,7 @@ void HighwaySnapMergerJs::Init(Handle<Object> target)
   target->Set(String::NewFromUtf8(current, "HighwaySnapMerger"), ToLocal(&_constructor));
 }
 
-Handle<Object> HighwaySnapMergerJs::New(const HighwaySnapMergerPtr &ptr)
+Handle<Object> HighwaySnapMergerJs::New(const HighwaySnapMergerPtr& ptr)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
@@ -96,7 +91,7 @@ void HighwaySnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   HighwaySnapMergerJs* obj = new HighwaySnapMergerJs();
-  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
+  // node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   args.GetReturnValue().Set(args.This());
@@ -111,11 +106,42 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   OsmMapPtr map = toCpp<OsmMapPtr>(args[1]);
   MergerBase::PairsSet pairs = toCpp<MergerBase::PairsSet>(args[2]);
   vector<pair<ElementId, ElementId>> replaced =
-      toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
+    toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
   const QString matchedBy = toCpp<QString>(args[4]);
+  SublineStringMatcherPtr sublineMatcher2;
+  if (args.Length() > 5)
+  {
+    // This is little unusual, but we're allowing an extra subline matcher to be passed info for
+    // river conflation only and the actual one used will be determined based on the input data.
+    // See RiverSnapMerger for more info.
+    if (matchedBy != "Waterway")
+    {
+      throw IllegalArgumentException(
+        "Only river merging allows passing in multiple subline matchers.");
+    }
+    sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
+  }
 
-  HighwaySnapMergerPtr snapMerger(new HighwaySnapMerger(pairs, sublineMatcher));
+  // see explanation in ConflateCmd as to why we use this option to identify Attribute Conflation
+  const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
+  HighwaySnapMergerPtr snapMerger;
+  if (isAttributeConflate)
+  {
+    // HighwayTagOnlyMerger inherits from HighwaySnapMerger, so this works.
+    snapMerger.reset(new HighwayTagOnlyMerger(pairs, sublineMatcher));
+  }
+  else if (matchedBy == "Waterway")
+  {
+    // see note above about multiple subline matchers here
+    snapMerger.reset(new RiverSnapMerger(pairs, sublineMatcher, sublineMatcher2));
+  }
+  else
+  {
+    snapMerger.reset(new HighwaySnapMerger(pairs, sublineMatcher));
+  }
   snapMerger->setMatchedBy(matchedBy);
+  // Some attempts were made to use cached subline matches from SublineStringMatcherJst for
+  // performance reasons, but the results were unstable. See branch 3969b.
   snapMerger->apply(map, replaced);
 
   // modify the parameter that was passed in

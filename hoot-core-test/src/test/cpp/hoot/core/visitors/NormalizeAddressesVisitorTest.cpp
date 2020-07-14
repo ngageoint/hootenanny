@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
@@ -65,10 +65,9 @@ public:
     const QString outputFile = _outputPath + "out.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
-    CPPUNIT_ASSERT_EQUAL(25, uut._addressNormalizer.getNumNormalized());
+    CPPUNIT_ASSERT_EQUAL(21, uut._addressNormalizer.getNumNormalized());
     HOOT_FILE_EQUALS(_inputPath + "gold.osm", outputFile);
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NormalizeAddressesVisitorTest, "slow");

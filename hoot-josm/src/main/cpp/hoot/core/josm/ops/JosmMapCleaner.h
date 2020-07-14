@@ -55,6 +55,7 @@ public:
   static std::string className() { return "hoot::JosmMapCleaner"; }
 
   JosmMapCleaner();
+  virtual ~JosmMapCleaner() = default;
 
   /**
    * @see OsmMapOperation
@@ -81,6 +82,8 @@ public:
   int getNumElementsDeleted() const { return _deletedElementIds.size(); }
   void setAddDetailTags(const bool add) { _addDetailTags = add; }
   int getNumFailedCleaningOperations() const { return _numFailedCleaningOperations; }
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

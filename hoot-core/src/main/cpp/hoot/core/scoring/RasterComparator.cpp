@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RasterComparator.h"
@@ -123,6 +123,7 @@ public:
 
   PaintVisitor(OsmMapPtr map, GeometryPainter& gp, QPainter& pt, QMatrix& m) :
     _map(map), _gp(gp), _pt(pt), _m(m) { }
+  virtual ~PaintVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -135,6 +136,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
 private:
 

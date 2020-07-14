@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmApiChangesetElement.h"
@@ -30,8 +30,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 
-//  Qt
-#include <QTextStream>
+#include <QRegularExpression>
 
 namespace hoot
 {
@@ -44,6 +43,9 @@ bool id_sort_order(long lhs, long rhs)
   else                          return lhs < rhs; //  Negative numbers come before positive
 }
 
+/**  Global regular expression for truncating tag keys/values at max tag length */
+QRegularExpression truncateTags("&[^;]+$", QRegularExpression::UseUnicodePropertiesOption);
+
 ChangesetElement::ChangesetElement(const XmlObject& object, ElementIdToIdMap* idMap)
   : _type(ElementType::Unknown),
     _id(object.second.value("id").toString().toLong()),
@@ -52,7 +54,11 @@ ChangesetElement::ChangesetElement(const XmlObject& object, ElementIdToIdMap* id
     _status(ChangesetElement::Available)
 {
   for (QXmlStreamAttributes::const_iterator it = object.second.begin(); it != object.second.end(); ++it)
-    _object.push_back(std::make_pair(it->name().toString(), it->value().toString()));
+  {
+    //  Ignore the changeset attribute because it will be replaced later even if it does exist
+    if (it->name().compare(QString("changeset")) != 0)
+      _object.push_back(std::make_pair(it->name().toString(), it->value().toString()));
+  }
 }
 
 ChangesetElement::ChangesetElement(const ChangesetElement& element)
@@ -85,14 +91,14 @@ void ChangesetElement::addTag(const XmlObject& tag)
   }
 }
 
-QString ChangesetElement::getTagKey(int index)
+QString ChangesetElement::getTagKey(int index) const
 {
   if (index < 0 || index >= (int)_tags.size())
     throw IllegalArgumentException();
   return _tags[index].first;
 }
 
-QString ChangesetElement::getTagValue(int index)
+QString ChangesetElement::getTagValue(int index) const
 {
   if (index < 0 || index >= (int)_tags.size())
     throw IllegalArgumentException();
@@ -132,14 +138,19 @@ QString ChangesetElement::toString(const ElementAttributes& attributes, long cha
   return ts.readAll();
 }
 
-QString& ChangesetElement::escapeString(QString& value) const
+QString ChangesetElement::escapeString(const QString& value) const
 {
+  int max = ConfigOptions().getMaxTagLength();
   //  Simple XML encoding of some problematic characters
-  return value.replace("&", "&amp;")
-              .replace("\"", "&quot;")
-              .replace("\n", "&#10;")
-              .replace(">", "&gt;")
-              .replace("<", "&lt;");
+  QString escape = value.toHtmlEscaped();
+  //  Check if the encoding process made the string too long
+  if (escape.length() > max)
+  {
+    escape = escape.left(max);
+    escape.replace(truncateTags, "");
+  }
+  //  Return the final escaped string
+  return escape;
 }
 
 QString ChangesetElement::toTagString(const ElementTag& tag) const
@@ -149,17 +160,110 @@ QString ChangesetElement::toTagString(const ElementTag& tag) const
   ts.setCodec("UTF-8");
   QString key(tag.first);
   QString value(tag.second);
-  //  Tag values of length 255 need to be truncated
+  //  Tag values of max length need to be truncated
   QString newValue(ApiTagTruncateVisitor::truncateTag(key, value));
 
   //  Make sure to XML encode the value
-  ts << "\t\t\t<tag k=\"" << key << "\" v=\"";
+  ts << "\t\t\t<tag k=\"" << escapeString(key) << "\" v=\"";
   if (newValue != "")
     ts << escapeString(newValue);
   else
     ts << escapeString(value);
   ts << "\"/>\n";
   return ts.readAll();
+}
+
+bool ChangesetElement::diffElement(const ChangesetElement* element, QTextStream& ts1, QTextStream& ts2) const
+{
+  bool success = true;
+  //  Compare the IDs
+  if (_id != element->_id)
+  {
+    ts1 << "< id = " << _id << "\n";
+    ts2 << "> id = " << element->_id << "\n";
+    success = false;
+  }
+  //  Compare the attributes
+  if (!diffAttributes(element->_object, ts1, ts2))
+    success = false;
+  //  Compare the tags
+  if (!diffTags(element->_tags, ts1, ts2))
+    success = false;
+  return success;
+}
+
+bool ChangesetElement::diffAttributes(const ElementAttributes& attributes, QTextStream& ts1, QTextStream& ts2) const
+{
+  bool success = true;
+  //  Compare the attributes by count first
+  if (_object.size() != attributes.size())
+  {
+    ts1 << "< attribute count = " << _object.size() << "\n";
+    for (size_t index = 0; index < _object.size(); ++index)
+      ts1 << "< " << _object[index].first << " = " << _object[index].second << "\n";
+    ts2 << "> attribute count = " << attributes.size() << "\n";
+    for (size_t index = 0; index < attributes.size(); ++index)
+      ts2 << "> " << attributes[index].first << " = " << attributes[index].second << "\n";
+    success = false;
+  }
+  else
+  {
+    //  Compare attributes one by one
+    for (size_t index = 0; index < _object.size(); ++index)
+    {
+      QString name1 = _object[index].first;
+      QString value1 = _object[index].second;
+      QString name2 = attributes[index].first;
+      QString value2 = attributes[index].second;
+      //  Some attributes can have different values and still be equivalent
+      if (name1 == "action" || name1 == "version" || name1 == "changeset")
+        continue;
+      //  Compare names and values
+      if (name1 != name2 && value1 != value2)
+      {
+        ts1 << "< " << name1 << " = " << value1 << "\n";
+        ts2 << "> " << name2 << " = " << value2 << "\n";
+        success = false;
+      }
+    }
+  }
+  return success;
+}
+
+bool ChangesetElement::diffTags(const ElementTags& tags,  QTextStream& ts1, QTextStream& ts2) const
+{
+  bool success = true;
+  //  Compare the tags by count first
+  if (_tags.size() != tags.size())
+  {
+    ts1 << "< tag count = " << _tags.size() << "\n";
+    for (size_t index = 0; index < _tags.size(); ++index)
+      ts1 << "< " << _tags[index].first << " = " << _tags[index].second << "\n";
+    ts2 << "> tag count = " << tags.size() << "\n";
+    for (size_t index = 0; index < tags.size(); ++index)
+      ts2 << "> " << tags[index].first << " = " << tags[index].second << "\n";
+    success = false;
+  }
+  else
+  {
+    //  Compare tags one by one
+    for (size_t index = 0; index < _tags.size(); ++index)
+    {
+      QString key1 = _tags[index].first;
+      QString value1 = _tags[index].second;
+      QString key2 = tags[index].first;
+      QString value2 = tags[index].second;
+      //  Ignore any tags here?
+      //  Compare keys and values
+      if (key1 != key2 && value1 != value2)
+      {
+        ts1 << "< " << key1 << " = " << value1 << "\n";
+        ts2 << "> " << key2 << " = " << value2 << "\n";
+        success = false;
+      }
+    }
+  }
+  return success;
 }
 
 ChangesetNode::ChangesetNode(const XmlObject& node, ElementIdToIdMap* idMap)
@@ -190,6 +294,28 @@ QString ChangesetNode::toString(long changesetId) const
   else
     ts << "/>\n";
   return ts.readAll();
+}
+
+bool ChangesetNode::diff(const ChangesetNode& node, QString& diffOutput) const
+{
+  bool success = true;
+  QString buffer1;
+  QTextStream ts1(&buffer1);
+  ts1.setCodec("UTF-8");
+  QString buffer2;
+  QTextStream ts2(&buffer2);
+  ts2.setCodec("UTF-8");
+  //  Compare the common element data
+  if (!diffElement(&node, ts1, ts2))
+    success = false;
+  //  Create the diff when the two nodes are different
+  if (!success)
+  {
+    ts1 << "--------------------\n" << ts2.readAll();
+    diffOutput = ts1.readAll();
+  }
+  //  Return success variable
+  return success;
 }
 
 ChangesetWay::ChangesetWay(const XmlObject& way, ElementIdToIdMap* idMap)
@@ -231,6 +357,60 @@ QString ChangesetWay::toString(long changesetId) const
   return ts.readAll();
 }
 
+bool ChangesetWay::diff(const ChangesetWay& way, QString& diffOutput) const
+{
+  bool success = true;
+  QString buffer1;
+  QTextStream ts1(&buffer1);
+  ts1.setCodec("UTF-8");
+  QString buffer2;
+  QTextStream ts2(&buffer2);
+  ts2.setCodec("UTF-8");
+  //  Compare the common element data
+  if (!diffElement(&way, ts1, ts2))
+    success = false;
+  //  Compare the way nodes
+  if (_nodes.size() != way._nodes.size())
+  {
+    ts1 << "< node count = " << _nodes.size() << "\n";
+    for (int index = 0; index < _nodes.size(); ++index)
+      ts1 << "< " << _nodes[index] << "\n";
+    ts2 << "> node count = " << way._nodes.size() << "\n";
+    for (int index = 0; index < way._nodes.size(); ++index)
+      ts2 << "> " << way._nodes[index] << "\n";
+    success = false;
+  }
+  else
+  {
+    //  Compare node IDs one by one
+    for (int index = 0; index < _nodes.size(); ++index)
+    {
+      //  Node IDs
+      if (_nodes[index] != way._nodes[index] && _nodes[index] != way._idMap->getId(ElementType::Node, way._nodes[index]))
+      {
+        ts1 << "< nodes = ";
+        for (QVector<long>::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
+          ts1 << *it << " ";
+        ts1 << "\n";
+        ts2 << "> nodes = ";
+        for (QVector<long>::const_iterator it = way._nodes.begin(); it != way._nodes.end(); ++it)
+          ts2 << *it << " ";
+        ts2 << "\n";
+        success = false;
+        break;
+      }
+    }
+  }
+  //  Create the diff when the two nodes are different
+  if (!success)
+  {
+    ts1 << "--------------------\n" << ts2.readAll();
+    diffOutput = ts1.readAll();
+  }
+  //  Return success variable
+  return success;
+}
+
 ChangesetRelation::ChangesetRelation(const XmlObject& relation, ElementIdToIdMap* idMap)
   : ChangesetElement(relation, idMap)
 {
@@ -244,10 +424,10 @@ ChangesetRelation::ChangesetRelation(const ChangesetRelation &relation)
 {
 }
 
-bool ChangesetRelation::hasMember(ElementType::Type type, long id)
+bool ChangesetRelation::hasMember(ElementType::Type type, long id) const
 {
   //  Iterate all of the members
-  for (QList<ChangesetRelationMember>::iterator it = _members.begin(); it != _members.end(); ++it)
+  for (QList<ChangesetRelationMember>::const_iterator it = _members.begin(); it != _members.end(); ++it)
   {
     switch (type)
     {
@@ -290,6 +470,44 @@ QString ChangesetRelation::toString(long changesetId) const
   return ts.readAll();
 }
 
+bool ChangesetRelation::diff(const ChangesetRelation& relation, QString& diffOutput) const
+{
+  bool success = true;
+  QString buffer1;
+  QTextStream ts1(&buffer1);
+  ts1.setCodec("UTF-8");
+  QString buffer2;
+  QTextStream ts2(&buffer2);
+  ts2.setCodec("UTF-8");
+  //  Compare the common element data
+  if (!diffElement(&relation, ts1, ts2))
+    success = false;
+  //  Compare the members
+  if (_members.size() != relation._members.size())
+  {
+    ts1 << "< member count = " << _members.size() << "\n";
+    ts2 << "> member count = " << relation._members.size() << "\n";
+    success = false;
+  }
+  else
+  {
+    //  Compare members one by one
+    for (int index = 0; index < _members.size(); ++index)
+    {
+      if (!_members[index].diff(relation._members[index], ts1, ts2))
+        success = false;
+    }
+  }
+  //  Create the diff when the two nodes are different
+  if (!success)
+  {
+    ts1 << "--------------------\n" << ts2.readAll();
+    diffOutput = ts1.readAll();
+  }
+  //  Return success variable
+  return success;
+}
+
 ChangesetRelationMember::ChangesetRelationMember(const QXmlStreamAttributes& member, ElementIdToIdMap* idMap)
   : _type(ElementType::fromString(member.value("type").toString().toLower())),
     _ref(member.value("ref").toString().toLong()),
@@ -307,6 +525,33 @@ QString ChangesetRelationMember::toString() const
      << (_idMap ? _idMap->getId(_type, _ref) : _ref)
      << "\" role=\"" << _role << "\"/>\n";
   return ts.readAll();
+}
+
+bool ChangesetRelationMember::diff(const ChangesetRelationMember& member, QTextStream& ts1, QTextStream& ts2) const
+{
+  bool success = true;
+  //  Compare the ref IDs
+  if (_ref != member._ref && _ref != member._idMap->getId(member._type, member._ref))
+  {
+    ts1 << "< ref = " << _ref << "\n";
+    ts2 << "> ref = " << member._ref << "\n";
+    success = false;
+  }
+  //  Compare the member type
+  if (_type != member._type)
+  {
+    ts1 << "< type = " << _type << "\n";
+    ts2 << "> type = " << member._type << "\n";
+    success = false;
+  }
+  //  Compare the member role
+  if (_role != member._role)
+  {
+    ts1 << "< role = " << _role << "\n";
+    ts2 << "> role = " << member._role << "\n";
+    success = false;
+  }
+  return success;
 }
 
 }

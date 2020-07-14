@@ -44,6 +44,7 @@
 
 // Qt
 #include <QLibrary>
+#include <QNetworkSession>
 
 // System
 #include <memory>
@@ -60,8 +61,6 @@ using namespace std;
 namespace hoot
 {
 
-std::shared_ptr<Hoot> Hoot::_theInstance;
-
 Hoot::Hoot()
 {
   _init();
@@ -69,11 +68,9 @@ Hoot::Hoot()
 
 Hoot& Hoot::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new Hoot());
-  }
-  return *_theInstance;
+  /** Hootenanny singletons follow the Meyers' Singleton pattern seen below */
+  static Hoot instance;
+  return instance;
 }
 
 void Hoot::_init()
@@ -92,7 +89,7 @@ void Hoot::_init()
   Tgs::Stxxl::getInstance().setConfig(stxxlConf);
 # endif
 
-  SignalCatcher::getInstance()->registerDefaultHandlers();
+  SignalCatcher::getInstance().registerDefaultHandlers();
 
   // All streams will default to UTF-8. This makes supporting other scripts much easier.
   setlocale(LC_ALL, "en_US.UTF-8");
@@ -128,6 +125,12 @@ void Hoot::_init()
 # endif
 
   Log::getInstance().setLevel(Log::Info);
+  //  Registering these metatypes here removes warning messages
+  //  in threads that use QNetworkAccessManager whose initialization
+  //  routine isn't thread safe
+  qRegisterMetaType<QPair<QByteArray, QByteArray>>();
+  qRegisterMetaType<QList<QPair<QByteArray,QByteArray>>>();
+  qRegisterMetaType<QSharedPointer<QNetworkSession>>();
 }
 
 void Hoot::loadLibrary(const QString& name)

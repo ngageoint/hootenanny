@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "JsRegistrar.h"
 
@@ -41,19 +41,11 @@ void Method(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(String::NewFromUtf8(current, "world"));
 }
 
-std::shared_ptr<JsRegistrar> JsRegistrar::_theInstance = NULL;
-
-JsRegistrar::JsRegistrar()
-{
-}
-
 JsRegistrar& JsRegistrar::getInstance()
 {
-  if (_theInstance == NULL)
-  {
-    _theInstance.reset(new JsRegistrar());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static JsRegistrar instance;
+  return instance;
 }
 
 void JsRegistrar::Init(Handle<Object> exports)
@@ -65,8 +57,7 @@ void JsRegistrar::Init(Handle<Object> exports)
 
 void JsRegistrar::initAll(Handle<Object> exports)
 {
-  // Got this from the NodeJS docs. Seems to be a bit simpler than
-  // what we were doing.
+  // Got this from the NodeJS docs. Seems to be a bit simpler than what we were doing.
   NODE_SET_METHOD(exports,"hello",Method);
 //  Isolate* current = exports->GetIsolate();
 //  exports->Set(String::NewFromUtf8("hello"),

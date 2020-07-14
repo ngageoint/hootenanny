@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OPTIMALCONSTRAINEDMATCHES_H
 #define OPTIMALCONSTRAINEDMATCHES_H
@@ -47,6 +47,7 @@ class OptimalConstrainedMatches : public ConstrainedMatches
 public:
 
   OptimalConstrainedMatches(const ConstOsmMapPtr& map);
+  virtual ~OptimalConstrainedMatches() = default;
 
   /**
    * Calculate a consistent subset of matches while attempting to maximizing the sum of match

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INTEGERFIELDDEFINITION_H
 #define INTEGERFIELDDEFINITION_H
@@ -38,7 +38,9 @@ namespace hoot
 class IntegerFieldDefinition : public FieldDefinition
 {
 public:
+
   IntegerFieldDefinition();
+  virtual ~IntegerFieldDefinition() = default;
 
   void addEnumeratedValue(int v) { _enumeratedValues.insert(v); }
 
@@ -61,6 +63,7 @@ public:
   virtual void validate(const QVariant& v, StrictChecking strict) const;
 
 private:
+
   int _min;
   int _max;
   int _defaultValue;

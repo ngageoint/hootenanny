@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTMERGER_H
 #define SCRIPTMERGER_H
@@ -45,11 +45,14 @@ public:
 
   static int logWarnCount;
 
-  ScriptMerger();
+  ScriptMerger() = default;
+  virtual ~ScriptMerger() = default;
+
   ScriptMerger(const std::shared_ptr<PluginContext>& script, v8::Persistent<v8::Object>& plugin,
     const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  virtual void apply(const OsmMapPtr& map,
+                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Returns true if the plugin has a function with the specified name.
@@ -61,12 +64,17 @@ public:
   virtual QString getDescription() const
   { return "Merges elements matched with Generic Conflation"; }
 
+  virtual QString getName() const { return QString::fromStdString(className()) + "-" + _matchType; }
+
+  void setMatchType(const QString& matchType) { _matchType = matchType; }
+
 protected:
 
   PairsSet _pairs;
   v8::Persistent<v8::Object> _plugin;
   std::shared_ptr<PluginContext> _script;
   ElementId _eid1, _eid2;
+  QString _matchType;
 
   /**
    * Calls mergePair in the JS.
@@ -81,7 +89,7 @@ protected:
 
   v8::Handle<v8::Value> _callMergePair(const OsmMapPtr& map) const;
   void _callMergeSets(const OsmMapPtr& map,
-                      std::vector<std::pair<ElementId, ElementId>> &replaced) const;
+                      std::vector<std::pair<ElementId, ElementId>>& replaced) const;
   virtual PairsSet& _getPairs() override { return _pairs; }
   virtual const PairsSet& _getPairs() const override { return _pairs; }
 };

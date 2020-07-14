@@ -35,7 +35,6 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/util/StringUtils.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -49,6 +48,8 @@ using namespace Tgs;
 
 namespace hoot
 {
+
+int SpatialIndexer::logWarnCount = 0;
 
 SpatialIndexer::SpatialIndexer(
   std::shared_ptr<HilbertRTree>& index, deque<ElementId>& indexToEid,
@@ -177,14 +178,22 @@ QList<ElementId> SpatialIndexer::findSortedNodeNeighbors(
     ConstNodePtr neighborNode = pMap->getNode(*neighborIdsItr);
     if (!neighborNode)
     {
-      // This really shouldn't happen unless the geospatial indices were set up improperly for the
-      // query node. However, it does happen from time to time and haven't been able to track down
-      // the cause yet, so logging as an error instead of throwing for the time being.
-      const QString errorMsg =
-        QString("Map does not contain neighbor node: %1. Skipping neighbor...")
-          .arg((*neighborIdsItr).toString());
-      //throw HootException(errorMsg);
-      LOG_ERROR(errorMsg);
+      // This could happen either if the geospatial indices were set up improperly for the query
+      // node or if we're in the cut and replace scenario and allowing missing relation member ref
+      // (maybe?). Outside of the cut and replace workflow, it does happen from time to time and
+      // haven't been able to track down the cause yet.
+      const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+      if (logWarnCount < logWarnMessageLimit)
+      {
+        LOG_WARN(
+          "Map does not contain neighbor node: " << *neighborIdsItr << ". Skipping neighbor...");
+      }
+      else if (logWarnCount == logWarnMessageLimit)
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+
       continue;
     }
     else

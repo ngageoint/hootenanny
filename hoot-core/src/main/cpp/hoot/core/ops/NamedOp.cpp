@@ -38,6 +38,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -128,6 +129,9 @@ void NamedOp::apply(OsmMapPtr& map)
       statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(vis);
 
       _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
+      // I swear the init status isn't being logged all the time with the above statement. Need to
+      // make sure and then remove the line below.
+      //LOG_STATUS(_getInitMessage(s, statusInfo));
 
       // The ordering of setting the config before the map here seems to make sense, but all
       // ElementVisitors implementing OsmMapConsumer will need to be aware of it.
@@ -151,6 +155,8 @@ void NamedOp::apply(OsmMapPtr& map)
       throw HootException("Unexpected operation: " + s);
     }
 
+    MemoryUsageChecker::getInstance().check();
+
     LOG_DEBUG(
       "\tElement count after operation " << s << ": " <<
       StringUtils::formatLargeNumber(map->getElementCount()));
@@ -172,8 +178,8 @@ void NamedOp::_updateProgress(const int currentStep, const QString& message)
 {
   // Always check for a valid task weight and that the job was set to running. Otherwise, this is
   // just an empty progress object, and we shouldn't log progress.
-  LOG_VARD(_progress.getTaskWeight());
-  LOG_VARD(_progress.getState());
+  LOG_VART(_progress.getTaskWeight());
+  LOG_VART(_progress.getState());
   if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
   {
     _progress.setFromRelative(
@@ -193,7 +199,7 @@ QString NamedOp::_getInitMessage(const QString& message,
   {
     initMessage += message + "...";
   }
-  LOG_VARD(initMessage);
+  LOG_VART(initMessage);
   return initMessage;
 }
 

@@ -1,89 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326" schema="TDSv61">
-    <bounds minlat="19.6980449" minlon="-73.4219114" maxlat="19.7378082" maxlon="-73.38699879999999"/>
-    <node visible="true" id="-480075" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7005272524498061" lon="-73.3931636746741987">
+    <bounds minlat="19.6980449" minlon="-73.4219114" maxlat="19.73796707204734" maxlon="-73.38699879999999"/>
+    <node visible="true" id="-480066" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.6994991760221616" lon="-73.3933846980588669">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480075"/>
+        <tag k="hoot:id" v="-480066"/>
     </node>
-    <node visible="true" id="-480074" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7026343696791457" lon="-73.3931280918447584">
+    <node visible="true" id="-480058" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7279836325002762" lon="-73.4089407582260662">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480074"/>
+        <tag k="hoot:id" v="-480058"/>
     </node>
-    <node visible="true" id="-480068" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7302593656767264" lon="-73.3932186356416736">
+    <node visible="true" id="-480052" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7274595926663601" lon="-73.3932290620836056">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480068"/>
+        <tag k="hoot:id" v="-480052"/>
     </node>
-    <node visible="true" id="-480067" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7244304237253978" lon="-73.3938731923094565">
+    <node visible="true" id="-480045" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7030752505836766" lon="-73.3982112141141840">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480067"/>
+        <tag k="hoot:id" v="-480045"/>
     </node>
-    <node visible="true" id="-480065" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7196619563175233" lon="-73.3948018497815724">
+    <node visible="true" id="-480043" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7124219918126649" lon="-73.4112052584136165">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480065"/>
+        <tag k="hoot:id" v="-480043"/>
     </node>
-    <node visible="true" id="-480061" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7375961731880984" lon="-73.4008886125798909">
+    <node visible="true" id="-480036" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7304297416032668" lon="-73.4020398532708498">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480061"/>
+        <tag k="hoot:id" v="-480036"/>
     </node>
-    <node visible="true" id="-480060" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7375767538554925" lon="-73.4009226584579011">
+    <node visible="true" id="-480028" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7186775252212172" lon="-73.3972667928966871">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480060"/>
+        <tag k="hoot:id" v="-480028"/>
     </node>
-    <node visible="true" id="-480056" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7296334591087614" lon="-73.4038954883372838">
+    <node visible="true" id="-480027" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7236511670933012" lon="-73.3945854314300448">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480056"/>
+        <tag k="hoot:id" v="-480027"/>
     </node>
-    <node visible="true" id="-480054" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7126529663524011" lon="-73.4101828650655364">
+    <node visible="true" id="-480022" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7170062380533295" lon="-73.4084258301079302">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480054"/>
+        <tag k="hoot:id" v="-480022"/>
     </node>
-    <node visible="true" id="-480053" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7261469857332408" lon="-73.4067025018936334">
+    <node visible="true" id="-480021" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7213854495491958" lon="-73.4074200710885520">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480053"/>
+        <tag k="hoot:id" v="-480021"/>
     </node>
-    <node visible="true" id="-480051" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7274485291723245" lon="-73.4057881874015834">
+    <node visible="true" id="-480020" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7236015318273132" lon="-73.4069399501377262">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480051"/>
+        <tag k="hoot:id" v="-480020"/>
     </node>
-    <node visible="true" id="-480050" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7266692748644559" lon="-73.4061417106525766">
+    <node visible="true" id="-480018" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7276055282247178" lon="-73.4057729792037748">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480050"/>
+        <tag k="hoot:id" v="-480018"/>
     </node>
-    <node visible="true" id="-480047" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7037801836242501" lon="-73.4049962036186514">
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480047"/>
-    </node>
-    <node visible="true" id="-480040" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7297632008689128" lon="-73.4018138767622617">
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480040"/>
-    </node>
-    <node visible="true" id="-480039" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7303354766637398" lon="-73.4019535765682178">
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480039"/>
-    </node>
-    <node visible="true" id="-480032" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7236280675884785" lon="-73.3945225469524445">
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480032"/>
-    </node>
-    <node visible="true" id="-480031" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7090408726721300" lon="-73.4025535617804366">
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480031"/>
-    </node>
-    <node visible="true" id="-480017" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7170636470040925" lon="-73.4149962324569003">
+    <node visible="true" id="-480017" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7266701088075713" lon="-73.4061323805427577">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-480017"/>
     </node>
-    <node visible="true" id="-480016" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7146294318121988" lon="-73.4173628043825062">
+    <node visible="true" id="-480000" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7169843160962621" lon="-73.4150386842183309">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480016"/>
+        <tag k="hoot:id" v="-480000"/>
     </node>
-    <node visible="true" id="-480015" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7217153755617360" lon="-73.4105986572024278">
+    <node visible="true" id="-479999" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7145746641901241" lon="-73.4173728418958973">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480015"/>
+        <tag k="hoot:id" v="-479999"/>
     </node>
-    <node visible="true" id="-480014" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7247517848795617" lon="-73.4100104476099204">
+    <node visible="true" id="-479998" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7217388443527888" lon="-73.4105866149356103">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-480014"/>
+        <tag k="hoot:id" v="-479998"/>
+    </node>
+    <node visible="true" id="-479997" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7248637092459624" lon="-73.4099459752040531">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-479997"/>
+    </node>
+    <node visible="true" id="-479744" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7379670720473399" lon="-73.4010317258709790">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-479744"/>
     </node>
     <node visible="true" id="-479743" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7378081999999999" lon="-73.3945693778307344">
         <tag k="hoot:status" v="2"/>
@@ -93,45 +81,37 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479741"/>
     </node>
-    <node visible="true" id="-479740" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.6980448999999993" lon="-73.3956167037642899">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479740"/>
-    </node>
-    <node visible="true" id="-479736" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7376256605432125" lon="-73.4013210244914944">
+    <node visible="true" id="-479736" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7377845325795391" lon="-73.4013276320347217">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479736"/>
     </node>
-    <node visible="true" id="-479735" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7075517667001421" lon="-73.4015264691969804">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479735"/>
-    </node>
-    <node visible="true" id="-479733" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7300889458369539" lon="-73.4028940643855208">
+    <node visible="true" id="-479733" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7302478178098255" lon="-73.4029006731824580">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479733"/>
     </node>
-    <node visible="true" id="-479732" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7099667221365209" lon="-73.4021219623988230">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479732"/>
-    </node>
-    <node visible="true" id="-479731" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7224990244184148" lon="-73.4075976432131796">
+    <node visible="true" id="-479731" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7226142047099664" lon="-73.4076015942581108">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479731"/>
     </node>
-    <node visible="true" id="-479728" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7214350638016001" lon="-73.4035247715465005">
+    <node visible="true" id="-479728" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7215528152457225" lon="-73.4035288762174929">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479728"/>
     </node>
-    <node visible="true" id="-479726" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7236699479324997" lon="-73.4106359251671279">
+    <node visible="true" id="-479726" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7237951548602055" lon="-73.4106404895513975">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479726"/>
     </node>
-    <node visible="true" id="-479722" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7035868341600882" lon="-73.3919224008314046">
+    <node visible="true" id="-479725" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7117455179522132" lon="-73.3950806047145932">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-479725"/>
+    </node>
+    <node visible="true" id="-479722" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7036258154163377" lon="-73.3921101353132173">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479722"/>
     </node>
-    <node visible="true" id="-479718" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7203028537739691" lon="-73.4080988133101755">
+    <node visible="true" id="-479717" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7289893386070183" lon="-73.4070888926443956">
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479718"/>
+        <tag k="hoot:id" v="-479717"/>
     </node>
     <node visible="true" id="-479716" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7033429287814705" lon="-73.3872657140615843">
         <tag k="hoot:status" v="2"/>
@@ -141,55 +121,31 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479713"/>
     </node>
-    <node visible="true" id="-479712" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7043985526416421" lon="-73.4114300358782970">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479712"/>
-    </node>
-    <node visible="true" id="-479708" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7084419453697528" lon="-73.4101694300400851">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479708"/>
-    </node>
-    <node visible="true" id="-479704" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7198594893380807" lon="-73.3971474516814908">
+    <node visible="true" id="-479704" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7200183615178410" lon="-73.3971540543445684">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479704"/>
     </node>
-    <node visible="true" id="-479697" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7313435253426945" lon="-73.4035031221481518">
+    <node visible="true" id="-479697" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7315023972940295" lon="-73.4035097316026111">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479697"/>
     </node>
-    <node visible="true" id="-479695" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7190662842084947" lon="-73.4040280077686589">
+    <node visible="true" id="-479695" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7190394894202292" lon="-73.4040233090168641">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479695"/>
     </node>
-    <node visible="true" id="-479693" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7212780313415443" lon="-73.4115664001384118">
+    <node visible="true" id="-479693" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7212585942979430" lon="-73.4115719002436293">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479693"/>
     </node>
-    <node visible="true" id="-479691" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7225208413717432" lon="-73.3948212642532667">
+    <node visible="true" id="-479685" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7145988974375683" lon="-73.4175220445000463">
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479691"/>
+        <tag k="hoot:id" v="-479685"/>
     </node>
-    <node visible="true" id="-479690" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7139093401361620" lon="-73.4093603174636797">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479690"/>
-    </node>
-    <node visible="true" id="-479688" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7004871615492654" lon="-73.3930676629871215">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479688"/>
-    </node>
-    <node visible="true" id="-479686" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7094734334953294" lon="-73.4118479321484614">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479686"/>
-    </node>
-    <node visible="true" id="-479684" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7303122628935874" lon="-73.3934606759239188">
+    <node visible="true" id="-479684" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7304711352119000" lon="-73.3934672753488400">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479684"/>
     </node>
-    <node visible="true" id="-479682" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7185296423438245" lon="-73.4082543116858801">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479682"/>
-    </node>
-    <node visible="true" id="-479678" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7182460146362928" lon="-73.4148946582660784">
+    <node visible="true" id="-479678" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7181665843241696" lon="-73.4149431073827827">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479678"/>
     </node>
@@ -197,83 +153,67 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479677"/>
     </node>
-    <node visible="true" id="-479676" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7030184257994314" lon="-73.4121043113305518">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479676"/>
-    </node>
-    <node visible="true" id="-479675" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7249880828064050" lon="-73.4151344186154233">
+    <node visible="true" id="-479675" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7251469543280820" lon="-73.4151410393710790">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479675"/>
     </node>
-    <node visible="true" id="-479673" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7350490307746718" lon="-73.4020399462133923">
+    <node visible="true" id="-479673" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7352079027823599" lon="-73.4020465543655547">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479673"/>
     </node>
-    <node visible="true" id="-479669" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7115623520522227" lon="-73.4004728352002331">
+    <node visible="true" id="-479669" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7115588694774715" lon="-73.4006131267197475">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479669"/>
     </node>
-    <node visible="true" id="-479668" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7234913545343424" lon="-73.4070792254627094">
+    <node visible="true" id="-479668" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7236335132776048" lon="-73.4070848198715993">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479668"/>
     </node>
-    <node visible="true" id="-479664" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7248153255638599" lon="-73.4101349347331791">
+    <node visible="true" id="-479662" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7298651085950816" lon="-73.4041429546084316">
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479664"/>
+        <tag k="hoot:id" v="-479662"/>
     </node>
-    <node visible="true" id="-479661" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7032836438187786" lon="-73.3893099203221198">
+    <node visible="true" id="-479661" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7033226277940443" lon="-73.3894976538135069">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479661"/>
     </node>
-    <node visible="true" id="-479656" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7113797704448217" lon="-73.4095283024218048">
+    <node visible="true" id="-479649" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7231850542879776" lon="-73.3959014423969052">
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479656"/>
+        <tag k="hoot:id" v="-479649"/>
     </node>
-    <node visible="true" id="-479650" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.6995100811458101" lon="-73.3932823603400379">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479650"/>
-    </node>
-    <node visible="true" id="-479648" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7055991239162154" lon="-73.4101254125911709">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479648"/>
-    </node>
-    <node visible="true" id="-479646" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7129599950891610" lon="-73.4048668545809875">
+    <node visible="true" id="-479646" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7128810160851344" lon="-73.4049223741144488">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479646"/>
     </node>
-    <node visible="true" id="-479644" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7160225555458162" lon="-73.4161830220465674">
+    <node visible="true" id="-479644" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7159642534381092" lon="-73.4162532435921946">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479644"/>
     </node>
-    <node visible="true" id="-479643" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7172317497187208" lon="-73.3984357256304349">
+    <node visible="true" id="-479643" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7171728313975159" lon="-73.3985128031779368">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479643"/>
     </node>
-    <node visible="true" id="-479642" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7092793481422852" lon="-73.4095578569946383">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479642"/>
-    </node>
-    <node visible="true" id="-479638" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7321341328300228" lon="-73.4034086193802864">
+    <node visible="true" id="-479638" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7322930047853475" lon="-73.4034152287734400">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479638"/>
     </node>
-    <node visible="true" id="-479637" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7205669438119244" lon="-73.3966106184677045">
+    <node visible="true" id="-479637" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7207258160114165" lon="-73.3966172206261831">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479637"/>
     </node>
-    <node visible="true" id="-479631" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7213277540757979" lon="-73.4074248073525126">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479631"/>
-    </node>
-    <node visible="true" id="-479629" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7204875392642478" lon="-73.4035247715465005">
+    <node visible="true" id="-479629" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7205632100876755" lon="-73.4035263133392277">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479629"/>
     </node>
-    <node visible="true" id="-479624" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7164472417501244" lon="-73.4093949026021164">
+    <node visible="true" id="-479625" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7097240007310646" lon="-73.3967626082888671">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-479625"/>
+    </node>
+    <node visible="true" id="-479624" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7163323754666280" lon="-73.4094085241754186">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479624"/>
     </node>
-    <node visible="true" id="-479619" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7258259908352933" lon="-73.4101349347331791">
+    <node visible="true" id="-479619" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7259848625406882" lon="-73.4101415505532628">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479619"/>
     </node>
@@ -281,51 +221,43 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479618"/>
     </node>
-    <node visible="true" id="-479617" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7192291537278592" lon="-73.4079951477263961">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479617"/>
-    </node>
     <node visible="true" id="-479615" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7034507580082412" lon="-73.3882964410185821">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479615"/>
+    </node>
+    <node visible="true" id="-479612" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7190665257441857" lon="-73.4134556013524389">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-479612"/>
     </node>
     <node visible="true" id="-479611" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7361907755344532" lon="-73.3923984181004556">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479611"/>
     </node>
-    <node visible="true" id="-479610" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7039844904675725" lon="-73.4117818161435451">
+    <node visible="true" id="-479609" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7245759168708155" lon="-73.3939286502971129">
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479610"/>
+        <tag k="hoot:id" v="-479609"/>
     </node>
-    <node visible="true" id="-479607" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7358559389924224" lon="-73.4016390281020819">
+    <node visible="true" id="-479607" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7360148110154796" lon="-73.4016456358886984">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479607"/>
     </node>
-    <node visible="true" id="-479605" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7068687799731315" lon="-73.4100081824465889">
+    <node visible="true" id="-479603" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7187381535356785" lon="-73.3975119434570331">
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479605"/>
+        <tag k="hoot:id" v="-479603"/>
     </node>
-    <node visible="true" id="-479602" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7022732589158167" lon="-73.4125734115719126">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479602"/>
-    </node>
-    <node visible="true" id="-479597" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7293832246806282" lon="-73.4020709380906879">
+    <node visible="true" id="-479597" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7295420966832395" lon="-73.4020775460399335">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479597"/>
     </node>
-    <node visible="true" id="-479593" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7283304716551804" lon="-73.4026301393550540">
+    <node visible="true" id="-479593" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7284893436367490" lon="-73.4026367478169419">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479593"/>
     </node>
-    <node visible="true" id="-479590" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7208364454277500" lon="-73.3946422300171406">
+    <node visible="true" id="-479583" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7237577041798460" lon="-73.3952572598897035">
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479590"/>
+        <tag k="hoot:id" v="-479583"/>
     </node>
-    <node visible="true" id="-479589" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7121636267382812" lon="-73.4101030445405911">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479589"/>
-    </node>
-    <node visible="true" id="-479582" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7171142894088014" lon="-73.4083580671011902">
+    <node visible="true" id="-479582" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7170018156522033" lon="-73.4083667028120459">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479582"/>
     </node>
@@ -333,15 +265,15 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479576"/>
     </node>
-    <node visible="true" id="-479575" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7100830883077052" lon="-73.4093702887633270">
+    <node visible="true" id="-479574" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7248310358348640" lon="-73.4169304851828173">
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-479575"/>
+        <tag k="hoot:id" v="-479574"/>
     </node>
-    <node visible="true" id="-479571" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7338909585820481" lon="-73.4024961107146652">
+    <node visible="true" id="-479571" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7340498305720971" lon="-73.4025027192727748">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479571"/>
     </node>
-    <node visible="true" id="-479570" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7215439801399235" lon="-73.3966106184677045">
+    <node visible="true" id="-479570" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7217028523395612" lon="-73.3966172206661724">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-479570"/>
     </node>
@@ -1697,7 +1629,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-10142"/>
     </node>
-    <way visible="true" id="-13467" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13400" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-479561"/>
         <nd ref="-477660"/>
         <nd ref="-479562"/>
@@ -1705,7 +1637,7 @@
         <tag k="source" v="CNIGS"/>
         <tag k="hoot:status" v="3"/>
         <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-13467"/>
+        <tag k="hoot:id" v="-13400"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF1" v="000042"/>
         <tag k="REF2" v="000042"/>
@@ -1713,33 +1645,152 @@
         <tag k="intermittent" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13466" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-480074"/>
+    <way visible="true" id="-13399" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-391135"/>
         <nd ref="-479722"/>
         <nd ref="-479661"/>
         <nd ref="-479615"/>
         <nd ref="-479716"/>
         <nd ref="-479741"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13466"/>
+        <tag k="hoot:id" v="-13399"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="0010da"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13465" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-479740"/>
-        <nd ref="-479650"/>
-        <nd ref="-479688"/>
-        <nd ref="-480075"/>
+    <way visible="true" id="-13398" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-391141"/>
+        <nd ref="-480066"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13465"/>
+        <tag k="hoot:id" v="-13398"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="0010da"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13460" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13394" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-479563"/>
+        <nd ref="-391126"/>
+        <nd ref="-391127"/>
+        <nd ref="-391128"/>
+        <nd ref="-391129"/>
+        <nd ref="-391130"/>
+        <nd ref="-391131"/>
+        <nd ref="-391132"/>
+        <nd ref="-391133"/>
+        <nd ref="-391134"/>
+        <nd ref="-391135"/>
+        <nd ref="-391136"/>
+        <nd ref="-391137"/>
+        <nd ref="-391138"/>
+        <nd ref="-391139"/>
+        <nd ref="-480066"/>
+        <nd ref="-391140"/>
+        <nd ref="-391141"/>
+        <nd ref="-479564"/>
+        <tag k="source" v="CNIGS"/>
+        <tag k="river_flow" v="temporary"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="name" v="Ravine Solage"/>
+        <tag k="river_type" v="secondary"/>
+        <tag k="hoot:id" v="-13394"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF1" v="0010da"/>
+        <tag k="REF2" v="0010da"/>
+        <tag k="z_order" v="0"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13391" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-185983"/>
+        <nd ref="-479717"/>
+        <nd ref="-185986"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13391"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="001f4a"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13390" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-480058"/>
+        <nd ref="-185982"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13390"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="001f4a"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13389" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-185968"/>
+        <nd ref="-479675"/>
+        <nd ref="-185969"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13389"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="001f4a"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13388" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-185966"/>
+        <nd ref="-479574"/>
+        <nd ref="-185967"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13388"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="001f4a"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13375" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-479566"/>
+        <nd ref="-185958"/>
+        <nd ref="-185959"/>
+        <nd ref="-185960"/>
+        <nd ref="-185961"/>
+        <nd ref="-185962"/>
+        <nd ref="-185963"/>
+        <nd ref="-185964"/>
+        <nd ref="-185965"/>
+        <nd ref="-185966"/>
+        <nd ref="-185967"/>
+        <nd ref="-185968"/>
+        <nd ref="-185969"/>
+        <nd ref="-185970"/>
+        <nd ref="-185971"/>
+        <nd ref="-185972"/>
+        <nd ref="-185973"/>
+        <nd ref="-185974"/>
+        <nd ref="-185975"/>
+        <nd ref="-185976"/>
+        <nd ref="-185977"/>
+        <nd ref="-185978"/>
+        <nd ref="-185979"/>
+        <nd ref="-185980"/>
+        <nd ref="-480058"/>
+        <nd ref="-185981"/>
+        <nd ref="-185982"/>
+        <nd ref="-185983"/>
+        <nd ref="-185984"/>
+        <nd ref="-185985"/>
+        <nd ref="-185986"/>
+        <nd ref="-185987"/>
+        <tag k="source" v="CNIGS"/>
+        <tag k="river_flow" v="temporary"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="river_type" v="secondary"/>
+        <tag k="hoot:id" v="-13375"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF1" v="001f4a"/>
+        <tag k="REF2" v="001f4a"/>
+        <tag k="z_order" v="0"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13373" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77198"/>
         <nd ref="-479576"/>
         <nd ref="-479677"/>
@@ -1748,48 +1799,119 @@
         <nd ref="-479743"/>
         <tag k="hoot:status" v="2"/>
         <tag k="name" v="Ravine Christ"/>
-        <tag k="hoot:id" v="-13460"/>
+        <tag k="hoot:id" v="-13373"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="002876"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13459" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-480068"/>
+    <way visible="true" id="-13372" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-77203"/>
         <nd ref="-479684"/>
         <nd ref="-479618"/>
         <nd ref="-77199"/>
         <tag k="hoot:status" v="2"/>
         <tag k="name" v="Ravine Christ"/>
-        <tag k="hoot:id" v="-13459"/>
+        <tag k="hoot:id" v="-13372"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="002876"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13458" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-77207"/>
+    <way visible="true" id="-13371" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-480052"/>
         <nd ref="-77204"/>
         <tag k="hoot:status" v="2"/>
         <tag k="name" v="Ravine Christ"/>
-        <tag k="hoot:id" v="-13458"/>
+        <tag k="hoot:id" v="-13371"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="002876"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13457" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-480032"/>
-        <nd ref="-480067"/>
+    <way visible="true" id="-13358" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170479"/>
+        <nd ref="-170480"/>
+        <nd ref="-170481"/>
+        <nd ref="-170482"/>
+        <nd ref="-170483"/>
+        <nd ref="-170484"/>
+        <nd ref="-170485"/>
+        <nd ref="-170486"/>
+        <nd ref="-170487"/>
+        <nd ref="-170488"/>
+        <nd ref="-170489"/>
+        <nd ref="-170490"/>
+        <nd ref="-170491"/>
+        <nd ref="-170492"/>
+        <tag k="river_flow" v="temporary"/>
+        <tag k="source" v="CNIGS"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
+        <tag k="river_type" v="secondary"/>
+        <tag k="hoot:id" v="-13358"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF1" v="0020fa"/>
+        <tag k="REF2" v="0020fa"/>
+        <tag k="z_order" v="0"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13357" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-302250"/>
+        <nd ref="-479697"/>
+        <nd ref="-479638"/>
+        <nd ref="-479571"/>
+        <nd ref="-479673"/>
+        <nd ref="-479607"/>
+        <nd ref="-479736"/>
+        <nd ref="-479744"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
+        <tag k="hoot:id" v="-13357"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="001952"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13356" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-302247"/>
+        <nd ref="-479662"/>
+        <nd ref="-302249"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13356"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13349" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-77216"/>
+        <nd ref="-480027"/>
+        <nd ref="-479609"/>
+        <nd ref="-77213"/>
         <tag k="hoot:status" v="2"/>
         <tag k="name" v="Ravine Christ"/>
-        <tag k="hoot:id" v="-13457"/>
+        <tag k="hoot:id" v="-13349"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="002876"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13450" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13348" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-77237"/>
+        <nd ref="-479625"/>
+        <nd ref="-479725"/>
+        <nd ref="-77232"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13348"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13347" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-77249"/>
+        <nd ref="-480045"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13347"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13341" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-479568"/>
         <nd ref="-77191"/>
         <nd ref="-77192"/>
@@ -1804,10 +1926,10 @@
         <nd ref="-77201"/>
         <nd ref="-77202"/>
         <nd ref="-77203"/>
-        <nd ref="-480068"/>
         <nd ref="-77204"/>
         <nd ref="-77205"/>
         <nd ref="-77206"/>
+        <nd ref="-480052"/>
         <nd ref="-77207"/>
         <nd ref="-77208"/>
         <nd ref="-77209"/>
@@ -1815,7 +1937,6 @@
         <nd ref="-77211"/>
         <nd ref="-77212"/>
         <nd ref="-77213"/>
-        <nd ref="-480067"/>
         <nd ref="-77214"/>
         <nd ref="-77215"/>
         <nd ref="-77216"/>
@@ -1823,7 +1944,6 @@
         <nd ref="-77218"/>
         <nd ref="-77219"/>
         <nd ref="-77220"/>
-        <nd ref="-480065"/>
         <nd ref="-77221"/>
         <nd ref="-77222"/>
         <nd ref="-77223"/>
@@ -1851,6 +1971,7 @@
         <nd ref="-77245"/>
         <nd ref="-77246"/>
         <nd ref="-77247"/>
+        <nd ref="-480045"/>
         <nd ref="-77248"/>
         <nd ref="-77249"/>
         <nd ref="-77250"/>
@@ -1861,10 +1982,10 @@
         <nd ref="-77255"/>
         <tag k="source" v="CNIGS"/>
         <tag k="river_flow" v="temporary"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="Ravine Christ"/>
         <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-13450"/>
+        <tag k="hoot:id" v="-13341"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF1" v="002876"/>
         <tag k="REF2" v="002876"/>
@@ -1872,264 +1993,17 @@
         <tag k="intermittent" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13441" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-480065"/>
-        <nd ref="-479590"/>
-        <nd ref="-479691"/>
-        <nd ref="-480032"/>
+    <way visible="true" id="-13337" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-480043"/>
+        <nd ref="-170472"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13441"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="002876"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13437" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-436829"/>
-        <nd ref="-479686"/>
-        <nd ref="-436830"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13437"/>
+        <tag k="hoot:id" v="-13337"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="000766"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13433" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-436817"/>
-        <nd ref="-436818"/>
-        <nd ref="-436819"/>
-        <nd ref="-436820"/>
-        <nd ref="-436821"/>
-        <nd ref="-436822"/>
-        <nd ref="-436823"/>
-        <nd ref="-436824"/>
-        <nd ref="-436825"/>
-        <nd ref="-436826"/>
-        <nd ref="-436827"/>
-        <nd ref="-436828"/>
-        <nd ref="-436829"/>
-        <nd ref="-436830"/>
-        <nd ref="-436831"/>
-        <nd ref="-436832"/>
-        <nd ref="-436833"/>
-        <nd ref="-170472"/>
-        <tag k="source" v="CNIGS"/>
-        <tag k="river_flow" v="temporary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-13433"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF1" v="000766"/>
-        <tag k="REF2" v="000766"/>
-        <tag k="z_order" v="0"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13426" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-185968"/>
-        <nd ref="-479675"/>
-        <nd ref="-185969"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13426"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="001f4a"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13421" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-479566"/>
-        <nd ref="-185958"/>
-        <nd ref="-185959"/>
-        <nd ref="-185960"/>
-        <nd ref="-185961"/>
-        <nd ref="-185962"/>
-        <nd ref="-185963"/>
-        <nd ref="-185964"/>
-        <nd ref="-185965"/>
-        <nd ref="-185966"/>
-        <nd ref="-185967"/>
-        <nd ref="-185968"/>
-        <nd ref="-185969"/>
-        <nd ref="-185970"/>
-        <nd ref="-185971"/>
-        <nd ref="-185972"/>
-        <nd ref="-185973"/>
-        <nd ref="-185974"/>
-        <nd ref="-185975"/>
-        <nd ref="-185976"/>
-        <nd ref="-185977"/>
-        <nd ref="-185978"/>
-        <nd ref="-185979"/>
-        <nd ref="-185980"/>
-        <nd ref="-185981"/>
-        <nd ref="-185982"/>
-        <nd ref="-185983"/>
-        <nd ref="-185984"/>
-        <nd ref="-185985"/>
-        <nd ref="-185986"/>
-        <nd ref="-185987"/>
-        <tag k="source" v="CNIGS"/>
-        <tag k="river_flow" v="temporary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-13421"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF1" v="001f4a"/>
-        <tag k="REF2" v="001f4a"/>
-        <tag k="z_order" v="0"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13417" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-302250"/>
-        <nd ref="-479697"/>
-        <nd ref="-479638"/>
-        <nd ref="-479571"/>
-        <nd ref="-479673"/>
-        <nd ref="-479607"/>
-        <nd ref="-479736"/>
-        <nd ref="-480060"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="name" v="Ravine Pichomblaise"/>
-        <tag k="hoot:id" v="-13417"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="001952"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13416" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-302247"/>
-        <nd ref="-480056"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13416"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13410" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-185987"/>
-        <nd ref="-302247"/>
-        <nd ref="-302248"/>
-        <nd ref="-480056"/>
-        <nd ref="-302249"/>
-        <nd ref="-302250"/>
-        <nd ref="-185814"/>
-        <nd ref="-302252"/>
-        <nd ref="-302253"/>
-        <nd ref="-302254"/>
-        <nd ref="-302255"/>
-        <nd ref="-302256"/>
-        <nd ref="-302257"/>
-        <nd ref="-302258"/>
-        <nd ref="-302259"/>
-        <nd ref="-480060"/>
-        <nd ref="-480061"/>
-        <nd ref="-479565"/>
-        <tag k="source" v="CNIGS"/>
-        <tag k="river_flow" v="temporary"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Ravine Pichomblaise"/>
-        <tag k="hoot:id" v="-13410"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF1" v="001952"/>
-        <tag k="REF2" v="001952"/>
-        <tag k="z_order" v="0"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13403" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-53419"/>
-        <nd ref="-480053"/>
-        <nd ref="-170456"/>
-        <nd ref="-170457"/>
-        <nd ref="-170458"/>
-        <nd ref="-170459"/>
-        <nd ref="-170460"/>
-        <nd ref="-170461"/>
-        <nd ref="-170462"/>
-        <nd ref="-170463"/>
-        <nd ref="-170464"/>
-        <nd ref="-170465"/>
-        <nd ref="-170466"/>
-        <nd ref="-170467"/>
-        <nd ref="-170468"/>
-        <nd ref="-170469"/>
-        <nd ref="-170470"/>
-        <nd ref="-170471"/>
-        <nd ref="-480054"/>
-        <nd ref="-170472"/>
-        <tag k="source" v="CNIGS"/>
-        <tag k="river_flow" v="temporary"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Ravine Pichomblaise"/>
-        <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-13403"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF1" v="0020fa"/>
-        <tag k="REF2" v="001952;001f53;0020fa"/>
-        <tag k="z_order" v="0"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13402" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-480051"/>
-        <nd ref="-185987"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="name" v="Ravine Pichomblaise"/>
-        <tag k="hoot:id" v="-13402"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="001952"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13401" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-480050"/>
-        <nd ref="-302243"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="name" v="Ravine Pichomblaise"/>
-        <tag k="hoot:id" v="-13401"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="001952"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13395" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-170454"/>
-        <nd ref="-480050"/>
-        <nd ref="-302242"/>
-        <nd ref="-302243"/>
-        <nd ref="-480051"/>
-        <nd ref="-302244"/>
-        <nd ref="-302245"/>
-        <nd ref="-185987"/>
-        <tag k="source" v="CNIGS"/>
-        <tag k="river_flow" v="temporary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="name" v="Ravine Pichomblaise"/>
-        <tag k="hoot:id" v="-13395"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF1" v="001952"/>
-        <tag k="REF2" v="001952"/>
-        <tag k="z_order" v="0"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13391" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-170454"/>
-        <nd ref="-53419"/>
-        <tag k="river_flow" v="temporary"/>
-        <tag k="source" v="CNIGS"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Ravine Pichomblaise"/>
-        <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-13391"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF1" v="0020fa"/>
-        <tag k="REF2" v="001952"/>
-        <tag k="z_order" v="0"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13389" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13332" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-363529"/>
         <nd ref="-363530"/>
         <nd ref="-363531"/>
@@ -2141,7 +2015,7 @@
         <tag k="source" v="CNIGS"/>
         <tag k="hoot:status" v="3"/>
         <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-13389"/>
+        <tag k="hoot:id" v="-13332"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF1" v="00165b"/>
         <tag k="REF2" v="00165b"/>
@@ -2149,60 +2023,79 @@
         <tag k="intermittent" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13385" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-480039"/>
+    <way visible="true" id="-13330" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-355324"/>
+        <nd ref="-355325"/>
+        <nd ref="-355326"/>
+        <nd ref="-355327"/>
+        <nd ref="-355328"/>
+        <nd ref="-355329"/>
+        <nd ref="-185938"/>
+        <tag k="river_flow" v="temporary"/>
+        <tag k="source" v="CNIGS"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="river_type" v="secondary"/>
+        <tag k="hoot:id" v="-13330"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF1" v="001710"/>
+        <tag k="REF2" v="001710"/>
+        <tag k="z_order" v="0"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13329" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-480036"/>
         <nd ref="-479733"/>
         <nd ref="-479697"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13385"/>
+        <tag k="hoot:id" v="-13329"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="001f4e"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13384" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13328" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185819"/>
         <nd ref="-479593"/>
         <nd ref="-479597"/>
-        <nd ref="-480040"/>
+        <nd ref="-185817"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13384"/>
+        <tag k="hoot:id" v="-13328"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="001f4e"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13383" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13327" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185830"/>
         <nd ref="-479695"/>
         <nd ref="-479629"/>
         <nd ref="-479728"/>
         <nd ref="-185826"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13383"/>
+        <tag k="hoot:id" v="-13327"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="001f4e"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13382" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13326" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185839"/>
         <nd ref="-479646"/>
         <nd ref="-185837"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13382"/>
+        <tag k="hoot:id" v="-13326"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="001f4e"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13374" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13318" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185814"/>
         <nd ref="-185815"/>
-        <nd ref="-480039"/>
+        <nd ref="-480036"/>
         <nd ref="-185816"/>
         <nd ref="-185817"/>
-        <nd ref="-480040"/>
         <nd ref="-185818"/>
         <nd ref="-185819"/>
         <nd ref="-185820"/>
@@ -2237,7 +2130,7 @@
         <tag k="river_flow" v="temporary"/>
         <tag k="hoot:status" v="1"/>
         <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-13374"/>
+        <tag k="hoot:id" v="-13318"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF1" v="001f4e"/>
         <tag k="REF2" v="001f4e"/>
@@ -2245,56 +2138,57 @@
         <tag k="intermittent" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13366" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13311" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185915"/>
         <nd ref="-479704"/>
         <nd ref="-479637"/>
         <nd ref="-479570"/>
-        <nd ref="-185911"/>
+        <nd ref="-479649"/>
+        <nd ref="-479583"/>
+        <nd ref="-185910"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13366"/>
+        <tag k="hoot:id" v="-13311"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="001f4b"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13365" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13310" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185919"/>
         <nd ref="-479643"/>
-        <nd ref="-185916"/>
+        <nd ref="-479603"/>
+        <nd ref="-480028"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13365"/>
+        <tag k="hoot:id" v="-13310"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="001f4b"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13364" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-480031"/>
-        <nd ref="-479732"/>
+    <way visible="true" id="-13309" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-185922"/>
+        <nd ref="-185920"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13309"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="001f4b"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13308" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-185928"/>
         <nd ref="-479669"/>
         <nd ref="-185926"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13364"/>
+        <tag k="hoot:id" v="-13308"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="001f4b"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13363" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-185934"/>
-        <nd ref="-479735"/>
-        <nd ref="-185933"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13363"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="001f4b"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13353" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13298" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77215"/>
-        <nd ref="-480032"/>
+        <nd ref="-480027"/>
         <nd ref="-185909"/>
         <nd ref="-185910"/>
         <nd ref="-185911"/>
@@ -2302,6 +2196,7 @@
         <nd ref="-185913"/>
         <nd ref="-185914"/>
         <nd ref="-185915"/>
+        <nd ref="-480028"/>
         <nd ref="-185916"/>
         <nd ref="-185917"/>
         <nd ref="-185918"/>
@@ -2317,7 +2212,6 @@
         <nd ref="-185928"/>
         <nd ref="-185929"/>
         <nd ref="-185930"/>
-        <nd ref="-480031"/>
         <nd ref="-185931"/>
         <nd ref="-185932"/>
         <nd ref="-185933"/>
@@ -2341,7 +2235,7 @@
         <tag k="river_flow" v="temporary"/>
         <tag k="hoot:status" v="3"/>
         <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-13353"/>
+        <tag k="hoot:id" v="-13298"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF1" v="001f4b"/>
         <tag k="REF2" v="001f4b"/>
@@ -2349,17 +2243,7 @@
         <tag k="intermittent" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13347" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-10146"/>
-        <nd ref="-10148"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13347"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="002fc1"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13342" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13291" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-10142"/>
         <nd ref="-10143"/>
         <nd ref="-10144"/>
@@ -2368,232 +2252,18 @@
         <nd ref="-10147"/>
         <nd ref="-10148"/>
         <nd ref="-10149"/>
-        <tag k="source" v="CNIGS"/>
         <tag k="river_flow" v="permanent"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="source" v="CNIGS"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-13342"/>
+        <tag k="hoot:id" v="-13291"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF1" v="002fc1"/>
         <tag k="REF2" v="002fc1"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-13341" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-53420"/>
-        <nd ref="-480053"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13341"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="002a64"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13340" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-480014"/>
-        <nd ref="-479664"/>
-        <nd ref="-479619"/>
-        <nd ref="-53422"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13340"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="002a64"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13339" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-53426"/>
-        <nd ref="-479726"/>
-        <nd ref="-53424"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13339"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="002a64"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13338" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-53429"/>
-        <nd ref="-479693"/>
-        <nd ref="-480015"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13338"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="002a64"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13337" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-53432"/>
-        <nd ref="-53430"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13337"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="002a64"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13336" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-480017"/>
-        <nd ref="-479678"/>
-        <nd ref="-53433"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13336"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="002a64"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13335" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-53439"/>
-        <nd ref="-479644"/>
-        <nd ref="-53437"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13335"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="002a64"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13334" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-53444"/>
-        <nd ref="-480016"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-13334"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="002a64"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-13318" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-53419"/>
-        <nd ref="-53420"/>
-        <nd ref="-53421"/>
-        <nd ref="-53422"/>
-        <nd ref="-53423"/>
-        <nd ref="-480014"/>
-        <nd ref="-53424"/>
-        <nd ref="-53425"/>
-        <nd ref="-53426"/>
-        <nd ref="-53427"/>
-        <nd ref="-480015"/>
-        <nd ref="-53428"/>
-        <nd ref="-53429"/>
-        <nd ref="-53430"/>
-        <nd ref="-53431"/>
-        <nd ref="-53432"/>
-        <nd ref="-53433"/>
-        <nd ref="-53434"/>
-        <nd ref="-53435"/>
-        <nd ref="-53436"/>
-        <nd ref="-480017"/>
-        <nd ref="-53437"/>
-        <nd ref="-53438"/>
-        <nd ref="-53439"/>
-        <nd ref="-53440"/>
-        <nd ref="-53441"/>
-        <nd ref="-480016"/>
-        <nd ref="-53442"/>
-        <nd ref="-53443"/>
-        <nd ref="-53444"/>
-        <nd ref="-53445"/>
-        <nd ref="-53446"/>
-        <nd ref="-53447"/>
-        <nd ref="-53448"/>
-        <nd ref="-53449"/>
-        <nd ref="-53450"/>
-        <nd ref="-53451"/>
-        <nd ref="-53452"/>
-        <tag k="source" v="CNIGS"/>
-        <tag k="river_flow" v="temporary"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-13318"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF1" v="002a64"/>
-        <tag k="REF2" v="002a64"/>
-        <tag k="z_order" v="0"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-12665" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-10149"/>
-        <nd ref="-479602"/>
-        <nd ref="-479676"/>
-        <nd ref="-479610"/>
-        <nd ref="-479712"/>
-        <nd ref="-479648"/>
-        <nd ref="-479605"/>
-        <nd ref="-170479"/>
-        <nd ref="-479708"/>
-        <nd ref="-479642"/>
-        <nd ref="-479575"/>
-        <nd ref="-479656"/>
-        <nd ref="-479589"/>
-        <nd ref="-170472"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-12665"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="001f53;0020fa"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-12662" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-170472"/>
-        <nd ref="-170473"/>
-        <nd ref="-170474"/>
-        <nd ref="-170475"/>
-        <nd ref="-170476"/>
-        <nd ref="-170477"/>
-        <nd ref="-170478"/>
-        <nd ref="-170479"/>
-        <nd ref="-170480"/>
-        <nd ref="-170481"/>
-        <nd ref="-170482"/>
-        <nd ref="-170483"/>
-        <nd ref="-170484"/>
-        <nd ref="-170485"/>
-        <nd ref="-170486"/>
-        <nd ref="-170487"/>
-        <nd ref="-170488"/>
-        <nd ref="-170489"/>
-        <nd ref="-170490"/>
-        <nd ref="-170491"/>
-        <nd ref="-170492"/>
-        <tag k="source" v="CNIGS"/>
-        <tag k="river_flow" v="temporary"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Ravine Pichomblaise"/>
-        <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-12662"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF1" v="0020fa"/>
-        <tag k="REF2" v="0020fa"/>
-        <tag k="z_order" v="0"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-12651" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-170472"/>
-        <nd ref="-479690"/>
-        <nd ref="-479624"/>
-        <nd ref="-479582"/>
-        <nd ref="-479682"/>
-        <nd ref="-479617"/>
-        <nd ref="-479718"/>
-        <nd ref="-479631"/>
-        <nd ref="-479731"/>
-        <nd ref="-479668"/>
-        <nd ref="-480053"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="name" v="Ravine Pichomblaise"/>
-        <tag k="hoot:id" v="-12651"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF2" v="001952"/>
-        <tag k="z_order" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-12642" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13287" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170479"/>
         <nd ref="-185659"/>
         <nd ref="-185660"/>
@@ -2619,7 +2289,7 @@
         <tag k="river_flow" v="temporary"/>
         <tag k="hoot:status" v="3"/>
         <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-12642"/>
+        <tag k="hoot:id" v="-13287"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF1" v="001f53"/>
         <tag k="REF2" v="001f53;0020fa"/>
@@ -2627,82 +2297,352 @@
         <tag k="intermittent" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-12639" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-479563"/>
-        <nd ref="-391126"/>
-        <nd ref="-391127"/>
-        <nd ref="-391128"/>
-        <nd ref="-391129"/>
-        <nd ref="-391130"/>
-        <nd ref="-391131"/>
-        <nd ref="-391132"/>
-        <nd ref="-391133"/>
-        <nd ref="-391134"/>
-        <nd ref="-391135"/>
-        <nd ref="-480074"/>
-        <nd ref="-391136"/>
-        <nd ref="-391137"/>
-        <nd ref="-480075"/>
-        <nd ref="-391138"/>
-        <nd ref="-391139"/>
-        <nd ref="-391140"/>
-        <nd ref="-391141"/>
-        <nd ref="-479564"/>
-        <tag k="source" v="CNIGS"/>
+    <way visible="true" id="-13285" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170472"/>
+        <nd ref="-170473"/>
+        <nd ref="-170474"/>
+        <nd ref="-170475"/>
+        <nd ref="-170476"/>
+        <nd ref="-170477"/>
+        <nd ref="-170478"/>
+        <nd ref="-170479"/>
         <tag k="river_flow" v="temporary"/>
+        <tag k="source" v="CNIGS"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Ravine Solage"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
         <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-12639"/>
+        <tag k="hoot:id" v="-13285"/>
         <tag k="waterway" v="stream"/>
-        <tag k="REF1" v="0010da"/>
-        <tag k="REF2" v="0010da"/>
+        <tag k="REF1" v="0020fa"/>
+        <tag k="REF2" v="001f53;0020fa"/>
         <tag k="z_order" v="0"/>
         <tag k="intermittent" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-6733" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-355324"/>
-        <nd ref="-480047"/>
-        <nd ref="-355325"/>
-        <nd ref="-355326"/>
-        <nd ref="-355327"/>
-        <nd ref="-355328"/>
-        <nd ref="-355329"/>
-        <nd ref="-185938"/>
-        <tag k="source" v="CNIGS"/>
-        <tag k="river_flow" v="temporary"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="river_type" v="secondary"/>
-        <tag k="hoot:id" v="-6733"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="REF1" v="001710"/>
-        <tag k="REF2" v="001710"/>
-        <tag k="z_order" v="0"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <relation visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-12662" role="reviewee"/>
-        <member type="way" ref="-12665" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:review:sort_order" v="0"/>
-        <tag k="hoot:id" v="-159"/>
-        <tag k="hoot:review:note" v="Complex conflict causes an empty match"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="-1"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-13416" role=""/>
-        <member type="way" ref="-13417" role=""/>
+    <way visible="true" id="-13282" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-480021"/>
+        <nd ref="-479731"/>
+        <nd ref="-479668"/>
+        <nd ref="-480020"/>
         <tag k="hoot:status" v="2"/>
         <tag k="name" v="Ravine Pichomblaise"/>
-        <tag k="hoot:id" v="-158"/>
+        <tag k="hoot:id" v="-13282"/>
         <tag k="waterway" v="stream"/>
         <tag k="REF2" v="001952"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13281" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170466"/>
+        <nd ref="-479624"/>
+        <nd ref="-479582"/>
+        <nd ref="-480022"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
+        <tag k="hoot:id" v="-13281"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="001952"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13273" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-53419"/>
+        <nd ref="-170456"/>
+        <nd ref="-170457"/>
+        <nd ref="-480020"/>
+        <nd ref="-170458"/>
+        <nd ref="-170459"/>
+        <nd ref="-480021"/>
+        <nd ref="-170460"/>
+        <nd ref="-170461"/>
+        <nd ref="-170462"/>
+        <nd ref="-170463"/>
+        <nd ref="-480022"/>
+        <nd ref="-170464"/>
+        <nd ref="-170465"/>
+        <nd ref="-170466"/>
+        <nd ref="-170467"/>
+        <nd ref="-170468"/>
+        <nd ref="-170469"/>
+        <nd ref="-170470"/>
+        <nd ref="-170471"/>
+        <nd ref="-170472"/>
+        <tag k="source" v="CNIGS"/>
+        <tag k="river_flow" v="temporary"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
+        <tag k="river_type" v="secondary"/>
+        <tag k="hoot:id" v="-13273"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF1" v="0020fa"/>
+        <tag k="REF2" v="001952"/>
+        <tag k="z_order" v="0"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13272" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-480018"/>
+        <nd ref="-185987"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
+        <tag k="hoot:id" v="-13272"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="001952"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13271" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-480017"/>
+        <nd ref="-302243"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
+        <tag k="hoot:id" v="-13271"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="001952"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13265" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170454"/>
+        <nd ref="-480017"/>
+        <nd ref="-302242"/>
+        <nd ref="-302243"/>
+        <nd ref="-480018"/>
+        <nd ref="-302244"/>
+        <nd ref="-302245"/>
+        <nd ref="-185987"/>
+        <nd ref="-302247"/>
+        <nd ref="-302248"/>
+        <nd ref="-302249"/>
+        <nd ref="-302250"/>
+        <nd ref="-185814"/>
+        <nd ref="-302252"/>
+        <nd ref="-302253"/>
+        <nd ref="-302254"/>
+        <nd ref="-302255"/>
+        <nd ref="-302256"/>
+        <nd ref="-302257"/>
+        <nd ref="-302258"/>
+        <nd ref="-302259"/>
+        <nd ref="-479565"/>
+        <tag k="source" v="CNIGS"/>
+        <tag k="river_flow" v="temporary"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
+        <tag k="hoot:id" v="-13265"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF1" v="001952"/>
+        <tag k="REF2" v="001952"/>
+        <tag k="z_order" v="0"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13262" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170454"/>
+        <nd ref="-53419"/>
+        <tag k="river_flow" v="temporary"/>
+        <tag k="source" v="CNIGS"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
+        <tag k="river_type" v="secondary"/>
+        <tag k="hoot:id" v="-13262"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF1" v="0020fa"/>
+        <tag k="REF2" v="001952"/>
+        <tag k="z_order" v="0"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13261" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-479997"/>
+        <nd ref="-479619"/>
+        <nd ref="-53422"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13261"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="002a64"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13260" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-53426"/>
+        <nd ref="-479726"/>
+        <nd ref="-53424"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13260"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="002a64"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13259" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-53429"/>
+        <nd ref="-479693"/>
+        <nd ref="-479998"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13259"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="002a64"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13258" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-53432"/>
+        <nd ref="-53430"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13258"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="002a64"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13257" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-53434"/>
+        <nd ref="-479612"/>
+        <nd ref="-53433"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13257"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="002a64"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13256" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-480000"/>
+        <nd ref="-479678"/>
+        <nd ref="-53435"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13256"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="002a64"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13255" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-53439"/>
+        <nd ref="-479644"/>
+        <nd ref="-53437"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13255"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="002a64"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13254" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-53444"/>
+        <nd ref="-479685"/>
+        <nd ref="-479999"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13254"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="002a64"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13228" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-53419"/>
+        <nd ref="-53420"/>
+        <nd ref="-53421"/>
+        <nd ref="-53422"/>
+        <nd ref="-53423"/>
+        <nd ref="-479997"/>
+        <nd ref="-53424"/>
+        <nd ref="-53425"/>
+        <nd ref="-53426"/>
+        <nd ref="-53427"/>
+        <nd ref="-479998"/>
+        <nd ref="-53428"/>
+        <nd ref="-53429"/>
+        <nd ref="-53430"/>
+        <nd ref="-53431"/>
+        <nd ref="-53432"/>
+        <nd ref="-53433"/>
+        <nd ref="-53434"/>
+        <nd ref="-53435"/>
+        <nd ref="-53436"/>
+        <nd ref="-480000"/>
+        <nd ref="-53437"/>
+        <nd ref="-53438"/>
+        <nd ref="-53439"/>
+        <nd ref="-53440"/>
+        <nd ref="-53441"/>
+        <nd ref="-479999"/>
+        <nd ref="-53442"/>
+        <nd ref="-53443"/>
+        <nd ref="-53444"/>
+        <nd ref="-53445"/>
+        <nd ref="-53446"/>
+        <nd ref="-53447"/>
+        <nd ref="-53448"/>
+        <nd ref="-53449"/>
+        <nd ref="-53450"/>
+        <nd ref="-53451"/>
+        <nd ref="-53452"/>
+        <tag k="source" v="CNIGS"/>
+        <tag k="river_flow" v="temporary"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="river_type" v="secondary"/>
+        <tag k="hoot:id" v="-13228"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF1" v="002a64"/>
+        <tag k="REF2" v="002a64"/>
+        <tag k="z_order" v="0"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-10743" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-436817"/>
+        <nd ref="-436818"/>
+        <nd ref="-436819"/>
+        <nd ref="-436820"/>
+        <nd ref="-436821"/>
+        <nd ref="-436822"/>
+        <nd ref="-436823"/>
+        <nd ref="-436824"/>
+        <nd ref="-436825"/>
+        <nd ref="-436826"/>
+        <nd ref="-436827"/>
+        <nd ref="-436828"/>
+        <nd ref="-436829"/>
+        <nd ref="-436830"/>
+        <nd ref="-436831"/>
+        <nd ref="-436832"/>
+        <nd ref="-480043"/>
+        <nd ref="-436833"/>
+        <nd ref="-170472"/>
+        <tag k="source" v="CNIGS"/>
+        <tag k="river_flow" v="temporary"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="river_type" v="secondary"/>
+        <tag k="hoot:id" v="-10743"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF1" v="000766"/>
+        <tag k="REF2" v="000766"/>
+        <tag k="z_order" v="0"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-13356" role=""/>
+        <member type="way" ref="-13357" role=""/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
+        <tag k="hoot:id" v="-124"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="001952"/>
+        <tag k="z_order" v="0"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="multilinestring"/>
+    </relation>
+    <relation visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-13347" role=""/>
+        <member type="way" ref="-13348" role=""/>
+        <member type="way" ref="-13349" role=""/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-120"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="REF2" v="002876"/>
         <tag k="z_order" v="0"/>
         <tag k="error:circular" v="15"/>
         <tag k="type" v="multilinestring"/>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMPGCSVWRITER_H
 #define OSMPGCSVWRITER_H
@@ -47,7 +47,7 @@ public:
   static std::string className() { return "hoot::OsmCsvWriter"; }
 
   OsmPgCsvWriter();
-  virtual ~OsmPgCsvWriter();
+  virtual ~OsmPgCsvWriter() = default;
 
   /**
    * @brief isSupported returns true if the URL is likely supported

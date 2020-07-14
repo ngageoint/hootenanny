@@ -48,7 +48,8 @@ OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter() :
 _changesetId(0),
 _changesetUserId(ConfigOptions().getChangesetUserId()),
 _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
+_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
 {
 }
 
@@ -56,7 +57,8 @@ OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(const QUrl& url) 
 _changesetId(0),
 _changesetUserId(ConfigOptions().getChangesetUserId()),
 _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
+_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
 {
   _db.open(url);
 }
@@ -152,7 +154,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
 void OsmApiDbSqlChangesetFileWriter::_updateChangeset(const int numChanges)
 {
   //update the changeset's bounds
-  LOG_DEBUG("Updating changeset: " << _changesetBounds.toString());
+  LOG_DEBUG("Updating changeset's bounds: " << _changesetBounds.toString());
   LOG_VARD(numChanges);
   _outputSql.write(
     QString("UPDATE %1 SET min_lat=%2, max_lat=%3, min_lon=%4, max_lon=%5, num_changes=%6 WHERE id=%7;\n")
@@ -526,10 +528,12 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
 
     if (key.isEmpty() == false && val.isEmpty() == false)
     {
-      //  Ignore 'hoot:hash' for nodes
-      if (key == MetadataTags::HootHash() && element->getElementType() == ElementType::Node)
+      //  always ignore 'hoot:hash'
+      if (key == MetadataTags::HootHash())
         continue;
-      else if (!_includeDebugTags && key.toLower().startsWith("hoot:"))
+      else if (!_includeDebugTags && key.toLower().startsWith("hoot:") &&
+               // There are some instances where we want to explicitly allow some metadata tags.
+               !_metadataAllowKeys.contains(key))
         continue;
       //  Don't include the hoot hash, also don't include the circular error tag
       //  unless circular error tags AND debug tags are turned on

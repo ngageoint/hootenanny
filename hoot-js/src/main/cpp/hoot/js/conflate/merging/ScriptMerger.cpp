@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMerger.h"
 
@@ -49,11 +49,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(Merger, ScriptMerger)
 
 int ScriptMerger::logWarnCount = 0;
-
-ScriptMerger::ScriptMerger() :
-MergerBase()
-{
-}
 
 ScriptMerger::ScriptMerger(const std::shared_ptr<PluginContext>& script, Persistent<Object>& plugin,
                            const set<pair<ElementId, ElementId>>& pairs) :
@@ -95,8 +90,8 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
 
   const bool mapContainsElement1 = map->containsElement(_eid1);
   const bool mapContainsElement2 = map->containsElement(_eid2);
-  //This contains check was put in place as the result of changing MergerFactory not throw an
-  //exception when a merger cannot be found for a set of match pairs.
+  // This contains and following pair size checks were put in place as the result of changing
+  // MergerFactory to not throw an exception when a merger cannot be found for a set of match pairs.
   if (!mapContainsElement1 || !mapContainsElement2)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
@@ -118,8 +113,6 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
     logWarnCount++;
     return;
   }
-  //This pair size check was put in place as the result of changing MergerFactory not throw an
-  //exception when a merger cannot be found for a set of match pairs.
   else if (_pairs.size() == 0)
   {
     if (logWarnCount < Log::getWarnMessageLimit())

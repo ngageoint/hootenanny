@@ -22,31 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LOGJS_H
 #define LOGJS_H
 
-// Hoot
-#include <hoot/core/util/Log.h>
+//  Hoot
+#include <hoot/js/HootBaseJs.h>
 
-// node.js
-#include <hoot/js/SystemNodeJs.h>
-
-// v8
-#include <hoot/js/HootJsStable.h>
+//  Qt
+#include <QHash>
+#include <QString>
 
 namespace hoot
 {
 
-class LogJs : public node::ObjectWrap
+class LogJs : public HootBaseJs
 {
 public:
- static void Init(v8::Handle<v8::Object> target);
+
+  static void Init(v8::Handle<v8::Object> target);
+
+  virtual ~LogJs() = default;
 
 private:
-  LogJs();
-  ~LogJs();
+
+  LogJs() = default;
 
   static void log(const v8::FunctionCallbackInfo<v8::Value>& args, Log::WarningLevel level);
   static void debug(const v8::FunctionCallbackInfo<v8::Value>& args);

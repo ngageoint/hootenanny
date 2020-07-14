@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultipleCriterionConsumerVisitor.h"
 
@@ -39,7 +39,6 @@ _negateCriteria(false),
 _chainCriteria(false),
 _configureChildren(true)
 {
-
 }
 
 void MultipleCriterionConsumerVisitor::addCriterion(const ElementCriterionPtr& crit)
@@ -68,7 +67,7 @@ void MultipleCriterionConsumerVisitor::_addCriteria(
       const QString critName = criteriaClassNames.at(i);
       if (!critName.trimmed().isEmpty())
       {
-        LOG_VARD(critName);
+        LOG_VART(critName);
         ElementCriterionPtr crit =
           std::shared_ptr<ElementCriterion>(
             Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
@@ -88,6 +87,7 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
          it != _criteria.end(); ++it)
     {
       ElementCriterionPtr crit = *it;
+      LOG_VART(crit->toString());
       if (crit->isSatisfied(e))
       {
         criteriaSatisfied = true;
@@ -110,6 +110,7 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
          it != _criteria.end(); ++it)
     {
       ElementCriterionPtr crit = *it;
+      LOG_VART(crit->toString());
       if (!crit->isSatisfied(e))
       {
         criteriaSatisfied = false;

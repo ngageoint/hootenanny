@@ -105,7 +105,6 @@ void OsmPbfReader::_init(bool useFileId)
   _d = new OsmPbfReaderData();
   _useFileId = useFileId;
   _status = hoot::Status::Invalid;
-  _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
   _useFileStatus = false;
   _permissive = true;
   _in = NULL;
@@ -134,9 +133,12 @@ void OsmPbfReader::setConfiguration(const Settings &conf)
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   _addSourceDateTime = configOptions.getReaderAddSourceDatetime();
+  _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
+  _circularErrorTagKeys = ConfigOptions().getCircularErrorTagKeys();
 }
 
-void OsmPbfReader::_addTag(const std::shared_ptr<Element>& e, const QString& key, const QString& value)
+void OsmPbfReader::_addTag(const std::shared_ptr<Element>& e, const QString& key,
+                           const QString& value)
 {
   QString k = key.trimmed();
   QString v = value.trimmed();
@@ -157,7 +159,9 @@ void OsmPbfReader::_addTag(const std::shared_ptr<Element>& e, const QString& key
       e->setStatus(_status);
     }
   }
-  else if (k == MetadataTags::Accuracy() || k == MetadataTags::ErrorCircular())
+  // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
+  // will be used. We're not expecting elements to have more than one CE tag.
+  else if (_circularErrorTagKeys.contains(k))
   {
     bool ok;
     Meters circularError = v.toDouble(&ok);
@@ -1126,6 +1130,7 @@ void OsmPbfReader::parse(istream* strm, const OsmMapPtr& map)
     // if we don't recognize the type
     else
     {
+      LOG_WARN("Skipping PBF blob type " << _d->blobHeader.type());
       // skip ahead to the next blob
       strm->seekg(_d->blobHeader.datasize(), ios_base::cur);
     }

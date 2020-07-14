@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NAMEDOP_H
 #define NAMEDOP_H
@@ -51,6 +51,7 @@ public:
 
   NamedOp();
   NamedOp(QStringList namedOps);
+  virtual ~NamedOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -60,6 +61,8 @@ public:
 
   virtual void setProgress(Progress progress) override { _progress = progress; }
   virtual unsigned int getNumSteps() const override { return _namedOps.size(); }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

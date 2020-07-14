@@ -33,7 +33,6 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Polygon.h>
-#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -123,7 +122,6 @@ void Relation::clear()
 bool Relation::contains(ElementId eid) const
 {
   const vector<RelationData::Entry>& members = getMembers();
-
   for (size_t i = 0; i < members.size(); i++)
   {
     if (members[i].getElementId() == eid)
@@ -134,33 +132,64 @@ bool Relation::contains(ElementId eid) const
   return false;
 }
 
-int Relation::numElementsByRole(const QString& role) const
+size_t Relation::indexOf(ElementId eid) const
 {
   const vector<RelationData::Entry>& members = getMembers();
-  int roleCtr = 0;
+  for (size_t i = 0; i < members.size(); i++)
+  {
+    if (members[i].getElementId() == eid)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
+void Relation::insertElement(const QString& role, const ElementId& elementId, size_t pos)
+{
+  _preGeometryChange();
+  _makeWritable();
+
+  vector<RelationData::Entry> members = getMembers();
+  RelationData::Entry newMember(role, elementId);
+  members.insert(members.begin() + pos, newMember);
+  setMembers(members);
+
+  _postGeometryChange();
+}
+
+int Relation::numElementsByRole(const QString& role)
+{
+  return getElementsByRole(role).size();
+}
+
+const std::vector<RelationData::Entry> Relation::getElementsByRole(const QString& role)
+{
+  const vector<RelationData::Entry>& members = getMembers();
+  std::vector<RelationData::Entry> membersByRole;
   for (size_t i = 0; i < members.size(); i++)
   {
     if (members[i].getRole() == role)
     {
-      roleCtr++;
+      membersByRole.push_back(members[i]);
     }
   }
-  return roleCtr;
+  return membersByRole;
 }
 
-std::set<ElementId> Relation::getWayMemberIds() const
+std::set<ElementId> Relation::getMemberIds(const ElementType& elementType) const
 {
-  std::set<ElementId> wayMemberIds;
+  std::set<ElementId> memberIds;
   const vector<RelationData::Entry>& members = getMembers();
   for (size_t i = 0; i < members.size(); i++)
   {
     RelationData::Entry member = members[i];
-    if (member.getElementId().getType() == ElementType::Way)
+    if (elementType == ElementType::Unknown || member.getElementId().getType() == elementType)
     {
-      wayMemberIds.insert(member.getElementId());
+      memberIds.insert(member.getElementId());
     }
   }
-  return wayMemberIds;
+  return memberIds;
 }
 
 Envelope* Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const

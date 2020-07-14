@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveTagsVisitor.h"
 
@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/NotCriterion.h>
 
 namespace hoot
@@ -44,19 +45,27 @@ _numTagsRemoved(0)
 }
 
 RemoveTagsVisitor::RemoveTagsVisitor(const QStringList& keys) :
-_keys(keys),
 _negateCriterion(false),
 _numTagsRemoved(0)
 {
+  _setKeys(keys);
 }
 
 void RemoveTagsVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  _keys = configOptions.getTagFilterKeys();
-  LOG_VART(_keys);
+  _setKeys(configOptions.getTagFilterKeys());
   _negateCriterion = configOptions.getElementCriterionNegate();
   _setCriterion(configOptions.getTagFilterElementCriterion());
+}
+
+void RemoveTagsVisitor::_setKeys(const QStringList& keys)
+{
+  for (int i = 0; i < keys.size(); i++)
+  {
+    const QString key = keys.at(i);
+    _keyRegexs.append(QRegExp(key, Qt::CaseInsensitive, QRegExp::Wildcard));
+  }
 }
 
 void RemoveTagsVisitor::addCriterion(const ElementCriterionPtr& e)
@@ -91,12 +100,9 @@ void RemoveTagsVisitor::visit(const std::shared_ptr<Element>& e)
   }
   _numAffected++;
 
-  for (int i = 0; i < _keys.size(); i++)
-  {
-    LOG_TRACE("Removing tag " << _keys[i] << "...");
-    e->getTags().remove(_keys[i]);
-    _numTagsRemoved++;
-  }
+  Tags tags = e->getTags();
+  _numTagsRemoved += tags.removeKeys(_keyRegexs);
+  e->setTags(tags);
 }
 
 }

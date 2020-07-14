@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONSTOSMMAPCONSUMER_H
 #define CONSTOSMMAPCONSUMER_H
 
+// Hoot
 #include <hoot/core/elements/OsmMapConsumer.h>
 
 namespace hoot
@@ -37,9 +38,12 @@ class ConstOsmMapConsumer : public OsmMapConsumer
 {
 public:
 
+  ConstOsmMapConsumer() = default;
+  virtual ~ConstOsmMapConsumer() = default;
+
   virtual void setOsmMap(const OsmMap* map) = 0;
 
-  virtual void setOsmMap(OsmMap* map)
+  void setOsmMap(OsmMap* map) override
   {
     setOsmMap((const OsmMap*)map);
   }

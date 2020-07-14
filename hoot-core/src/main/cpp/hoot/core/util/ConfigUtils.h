@@ -22,11 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFIGUTILS_H
 #define CONFIGUTILS_H
+
+#include <QStringList>
 
 namespace hoot
 {
@@ -51,6 +53,20 @@ public:
    * activated
    */
   static void checkForTagValueTruncationOverride();
+
+  /**
+   * If DuplicateNodeRemover is in the chain, this allows the reader to read the duplicate elements
+   * in so they can be removed by DuplicateNodeRemover.
+   */
+  static void checkForDuplicateElementCorrectionMismatch(const QStringList& ops);
+
+  /**
+   * Removes an entry from a list configuration option globally
+   *
+   * @param opKey key of the configuration option to remove a member from
+   * @param entryToRemove value of the list member from the configuration option to remove
+   */
+  static void removeListOpEntry(const QString& opName, const QString& entryToRemove);
 };
 
 }

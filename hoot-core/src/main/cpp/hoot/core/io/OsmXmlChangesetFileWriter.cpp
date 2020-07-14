@@ -30,7 +30,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 
@@ -50,8 +50,14 @@ OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
 _precision(ConfigOptions().getWriterPrecision()),
 _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
 _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
+_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
 {
+}
+
+void OsmXmlChangesetFileWriter::_initStats()
+{
+  _stats.clear();
   _stats.resize(Change::Unknown, ElementType::Unknown);
   vector<QString> rows({"Create", "Modify", "Delete"});
   vector<QString> columns({"Node", "Way", "Relation"});
@@ -87,6 +93,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   QString filepath = path;
 
   _initIdCounters();
+  _initStats();
   _parsedChanges.clear();
 
   long changesetProgress = 1;
@@ -173,14 +180,13 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         switch (type)
         {
           case ElementType::Node:
-            _writeNode(writer, std::dynamic_pointer_cast<const Node>(_change.getElement()));
+            _writeNode(writer, _change.getElement(), _change.getPreviousElement());
             break;
           case ElementType::Way:
-            _writeWay(writer, std::dynamic_pointer_cast<const Way>(_change.getElement()));
+            _writeWay(writer, _change.getElement(), _change.getPreviousElement());
             break;
           case ElementType::Relation:
-            _writeRelation(
-              writer, std::dynamic_pointer_cast<const Relation>(_change.getElement()));
+            _writeRelation(writer, _change.getElement(), _change.getPreviousElement());
             break;
           default:
             throw IllegalArgumentException("Unexpected element type.");
@@ -210,8 +216,11 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   LOG_DEBUG("Changeset written to: " << path << "...");
 }
 
-void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
+void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElementPtr node,
+                                           ConstElementPtr previous)
 {
+  ConstNodePtr n = dynamic_pointer_cast<const Node>(node);
+  ConstNodePtr pn = dynamic_pointer_cast<const Node>(previous);
   LOG_TRACE("Writing change for " << n << "...");
 
   writer.writeStartElement("node");
@@ -238,6 +247,11 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
       QString("Elements being modified or deleted in an .osc changeset must always have a ") +
       QString("version greater than zero: ") + n->getElementId().toString());
   }
+  else if (pn && pn->getVersion() < n->getVersion())
+  {
+    //  Previous node contains a version from the API and should be preserved
+    version = pn->getVersion();
+  }
   else
     version = n->getVersion();
   LOG_VART(version);
@@ -249,7 +263,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   if (_addTimestamp)
   {
     if (n->getTimestamp() != 0)
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(n->getTimestamp()));
+      writer.writeAttribute("timestamp", DateTimeUtils::toTimeString(n->getTimestamp()));
     else
       writer.writeAttribute("timestamp", "");
   }
@@ -260,8 +274,11 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   writer.writeEndElement();
 }
 
-void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
+void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElementPtr way,
+                                          ConstElementPtr previous)
 {
+  ConstWayPtr w = dynamic_pointer_cast<const Way>(way);
+  ConstWayPtr pw = dynamic_pointer_cast<const Way>(previous);
   LOG_TRACE("Writing change for " << w << "...");
 
   writer.writeStartElement("way");
@@ -287,6 +304,11 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
       QString("Elements being modified or deleted in an .osc changeset must always have a ") +
       QString("version greater than zero: ")  + w->getElementId().toString());
   }
+  else if (pw && pw->getVersion() < w->getVersion())
+  {
+    //  Previous way contains a version from the API and should be preserved
+    version = pw->getVersion();
+  }
   else
     version = w->getVersion();
   LOG_VART(version);
@@ -294,7 +316,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   if (_addTimestamp)
   {
     if (w->getTimestamp() != 0)
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(w->getTimestamp()));
+      writer.writeAttribute("timestamp", DateTimeUtils::toTimeString(w->getTimestamp()));
     else
       writer.writeAttribute("timestamp", "");
   }
@@ -321,8 +343,11 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   writer.writeEndElement();
 }
 
-void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r)
+void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstElementPtr relation,
+                                               ConstElementPtr previous)
 {
+  ConstRelationPtr r = dynamic_pointer_cast<const Relation>(relation);
+  ConstRelationPtr pr = dynamic_pointer_cast<const Relation>(previous);
   LOG_TRACE("Writing change for " << r << "...");
 
   writer.writeStartElement("relation");
@@ -348,6 +373,11 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
       QString("Elements being modified or deleted in an .osc changeset must always have a ") +
       QString("version greater than zero: ") + r->getElementId().toString());
   }
+  else if (pr && pr->getVersion() < r->getVersion())
+  {
+    //  Previous relation contains a version from the API and should be preserved
+    version = pr->getVersion();
+  }
   else
     version = r->getVersion();
   LOG_VART(version);
@@ -355,7 +385,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   if (_addTimestamp)
   {
     if (r->getTimestamp() != 0)
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(r->getTimestamp()));
+      writer.writeAttribute("timestamp", DateTimeUtils::toTimeString(r->getTimestamp()));
     else
       writer.writeAttribute("timestamp", "");
   }
@@ -428,10 +458,12 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
     const QString val = it.value();
     if (key.isEmpty() == false && val.isEmpty() == false)
     {
-      //  Ignore 'hoot:hash' for nodes
-      if (key == MetadataTags::HootHash() && element->getElementType() == ElementType::Node)
+      // always ignore 'hoot:hash'
+      if (key == MetadataTags::HootHash())
         continue;
-      else if (!_includeDebugTags && key.toLower().startsWith("hoot:"))
+      else if (!_includeDebugTags && key.toLower().startsWith("hoot:") &&
+               // There are some instances where we want to explicitly allow some metadata tags.
+               !_metadataAllowKeys.contains(key))
         continue;
 
       writer.writeStartElement("tag");
@@ -453,6 +485,20 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
     writer.writeAttribute("k", MetadataTags::ErrorCircular());
     writer.writeAttribute("v", QString("%1").arg(element->getCircularError()));
     writer.writeEndElement();
+  }
+}
+
+QString OsmXmlChangesetFileWriter::getStatsTable(const ChangesetStatsFormat& format) const
+{
+  switch (format.getEnum())
+  {
+    case ChangesetStatsFormat::Text:
+      return _stats.toTableString();
+    case ChangesetStatsFormat::Json:
+      return _stats.toJsonString();
+      break;
+    default:
+      return "";
   }
 }
 

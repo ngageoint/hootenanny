@@ -36,8 +36,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/schema/ExactTagDifferencer.h>
 
 // Qt
@@ -114,6 +114,8 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const NodePtr& n = it->second;
+    // We don't need to check for existence of the nodes parent here, b/c if it ends up being a dupe
+    // we'll replace it with another node instead of removing it from the map.
     cph.addPoint(n->getX(), n->getY(), n->getId());
     startNodeCount++;
 
@@ -222,13 +224,6 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         StringUtils::formatLargeNumber(startNodeCount) << " total nodes.");
     }
   }
-
-  // Due to how Way::replaceNode is being called, we could end up with some duplicate way nodes, so
-  // let's remove those here.
-  RemoveDuplicateWayNodesVisitor dupeNodesRemover;
-  LOG_INFO("\t" << dupeNodesRemover.getInitStatusMessage());
-  map->visitWaysRw(dupeNodesRemover);
-  LOG_DEBUG("\t" << dupeNodesRemover.getCompletedStatusMessage());
 }
 
 bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long nodeId2,
@@ -241,23 +236,23 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long 
   kvps.append("OBJECTID=76174");
 
   std::set<ElementId> wayIdsOwning1;
-  const std::set<long> waysOwning1 = OsmUtils::getContainingWayIdsByNodeId(nodeId1, map);
+  const std::set<long> waysOwning1 = WayUtils::getContainingWayIdsByNodeId(nodeId1, map);
   for (std::set<long>::const_iterator it = waysOwning1.begin(); it != waysOwning1.end(); ++it)
   {
     wayIdsOwning1.insert(ElementId(ElementType::Way, *it));
   }
-  if (OsmUtils::anyElementsHaveAnyKvp(kvps, wayIdsOwning1, map))
+  if (TagUtils::anyElementsHaveAnyKvp(kvps, wayIdsOwning1, map))
   {
     return true;
   }
 
   std::set<ElementId> wayIdsOwning2;
-  const std::set<long> waysOwning2 = OsmUtils::getContainingWayIdsByNodeId(nodeId2, map);
+  const std::set<long> waysOwning2 = WayUtils::getContainingWayIdsByNodeId(nodeId2, map);
   for (std::set<long>::const_iterator it = waysOwning2.begin(); it != waysOwning2.end(); ++it)
   {
     wayIdsOwning2.insert(ElementId(ElementType::Way, *it));
   }
-  if (OsmUtils::anyElementsHaveAnyKvp(kvps, wayIdsOwning2, map))
+  if (TagUtils::anyElementsHaveAnyKvp(kvps, wayIdsOwning2, map))
   {
     return true;
   }
@@ -287,11 +282,11 @@ void DuplicateNodeRemover::_logMergeResult(const long nodeId1, const long nodeId
     LOG_TRACE(msg);
     LOG_TRACE(
       "Node " << nodeId1 << " belongs to ways: " <<
-      OsmUtils::getContainingWayIdsByNodeId(nodeId1, map));
+      WayUtils::getContainingWayIdsByNodeId(nodeId1, map));
     LOG_TRACE(
       "Node " << nodeId2 << " belongs to ways: " <<
-      OsmUtils::getContainingWayIdsByNodeId(nodeId2, map));
-    LOG_VART(OsmUtils::nodesAreContainedInTheSameWay(nodeId1, nodeId2, map));
+      WayUtils::getContainingWayIdsByNodeId(nodeId2, map));
+    LOG_VART(WayUtils::nodesAreContainedInTheSameWay(nodeId1, nodeId2, map));
   }
 }
 

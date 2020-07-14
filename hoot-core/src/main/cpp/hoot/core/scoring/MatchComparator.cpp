@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchComparator.h"
 
@@ -62,13 +62,14 @@ public:
 
   typedef map<QString, set<QString>> RefToUuid;
 
-  GetRefUuidVisitor(QString ref) : _ref(ref) {}
+  GetRefUuidVisitor(QString ref) : _ref(ref) { }
 
-  virtual ~GetRefUuidVisitor() {}
+  virtual ~GetRefUuidVisitor() = default;
 
   const RefToUuid& getRefToUuid() const { return _ref2Uuid; }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -116,13 +117,13 @@ class UuidToEidVisitor : public ConstElementVisitor
 {
 public:
 
-  UuidToEidVisitor() {}
-
-  virtual ~UuidToEidVisitor() {}
+  UuidToEidVisitor() = default;
+  virtual ~UuidToEidVisitor() = default;
 
   const MatchComparator::UuidToEid& getUuidToEid() const { return _uuidToEid; }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   virtual void visit(const ConstElementPtr& e)
   {

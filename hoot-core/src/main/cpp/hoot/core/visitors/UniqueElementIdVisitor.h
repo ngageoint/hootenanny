@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIQUE_ELEMENT_ID_VISITOR_H
 #define UNIQUE_ELEMENT_ID_VISITOR_H
@@ -34,9 +34,7 @@ namespace hoot
 {
 
 /**
- * Returns a set of the element ids visited.
- *
- * @todo It may be possible to combine this with ElementIdsVisitor.
+ * Returns a unique, ordered set of the element ids visited.
  */
 class UniqueElementIdVisitor : public ConstElementVisitor
 {
@@ -44,7 +42,8 @@ public:
 
   static std::string className() { return "hoot::UniqueElementIdVisitor"; }
 
-  UniqueElementIdVisitor();
+  UniqueElementIdVisitor() = default;
+  virtual ~UniqueElementIdVisitor() = default;
 
   /**
    * Returns a set containing all the ElementIds visited.
@@ -53,7 +52,9 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Returns the unqiue element IDs visited"; }
+  virtual QString getDescription() const { return "Returns the unique element IDs visited"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -35,9 +35,11 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QImage>
+#include <QElapsedTimer>
 
 // Standard
 #include <fstream>
@@ -55,7 +57,7 @@ class NodeDensityPlotCmd : public BaseCommand
 
     static string className() { return "hoot::NodeDensityPlotCmd"; }
 
-    NodeDensityPlotCmd() { }
+    NodeDensityPlotCmd() = default;
 
     virtual QString getName() const override { return "node-density-plot"; }
 
@@ -169,6 +171,9 @@ class NodeDensityPlotCmd : public BaseCommand
 
     virtual int runSimple(QStringList& args) override
     {
+      QElapsedTimer timer;
+      timer.start();
+
       if (args.size() < 3 || args.size() > 5)
       {
         cout << getHelp() << endl << endl;
@@ -183,6 +188,7 @@ class NodeDensityPlotCmd : public BaseCommand
       {
         throw HootException("Expected a number > 0 for max size.");
       }
+
       // initialize to black
       QRgb baseColors = qRgba(0, 0, 0, 255);
       if (args.size() >= 4)
@@ -275,6 +281,9 @@ class NodeDensityPlotCmd : public BaseCommand
 
       pngw.close();
 
+      LOG_STATUS(
+        "Node density plotted in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+         " total.");
 
       return 0;
     }

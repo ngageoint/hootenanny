@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef POLYGON_CRITERION_H
 #define POLYGON_CRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -37,12 +37,14 @@ namespace hoot
 /**
  * Identifies polygon features
  */
-class PolygonCriterion : public GeometryTypeCriterion
+class PolygonCriterion : public ConflatableElementCriterion
 {
 public:
+
   static std::string className() { return "hoot::PolygonCriterion"; }
 
-  PolygonCriterion();
+  PolygonCriterion() = default;
+  virtual ~PolygonCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -55,6 +57,8 @@ public:
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
+
+  virtual bool supportsSpecificConflation() const { return false; }
 };
 
 }

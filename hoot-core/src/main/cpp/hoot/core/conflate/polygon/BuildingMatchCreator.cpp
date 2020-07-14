@@ -44,6 +44,7 @@
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
 
 // Standard
 #include <fstream>
@@ -103,17 +104,20 @@ public:
     _maxGroupSize = 0;
     _numElementsVisited = 0;
     _numMatchCandidatesVisited = 0;
-    _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
-    _searchRadius = ConfigOptions().getSearchRadiusBuilding();
+    ConfigOptions opts;
+    _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
+    _searchRadius = opts.getSearchRadiusBuilding();
+    _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   }
 
-  ~BuildingMatchVisitor()
+  virtual ~BuildingMatchVisitor()
   {
     LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
               (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -215,8 +219,9 @@ public:
       {
         PROGRESS_DEBUG(
           "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
-          " match candidates / " << StringUtils::formatLargeNumber(_map->getElementCount()) <<
-          " total elements.");
+          " match candidates / " <<
+          StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
+          " elements.");
       }
     }
 
@@ -225,7 +230,12 @@ public:
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
-        StringUtils::formatLargeNumber(_map->getElementCount()) << " elements.");
+        StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
+        " elements.");
+    }
+    if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
+    {
+      MemoryUsageChecker::getInstance().check();
     }
   }
 
@@ -242,7 +252,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating building feature index...");
+      LOG_STATUS("Creating building feature index...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -256,14 +266,17 @@ public:
 
       // Instantiate our visitor
       SpatialIndexer v(_index,
-                             _indexToEid,
-                             pCrit,
-                             std::bind(
-                               &BuildingMatchVisitor::getSearchRadius, this, placeholders::_1),
-                             getMap());
+                       _indexToEid,
+                       pCrit,
+                       std::bind(&BuildingMatchVisitor::getSearchRadius, this, placeholders::_1),
+                       getMap());
 
       getMap()->visitRo(v);
       v.finalizeIndex();
+
+      LOG_STATUS(
+        "Building feature index created with " << StringUtils::formatLargeNumber(v.getSize()) <<
+        " elements.");
     }
 
     return _index;
@@ -297,14 +310,15 @@ private:
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
+  int _memoryCheckUpdateInterval;
 
   void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches)
   {      
     for (std::vector<MatchPtr>::iterator it = matches.begin(); it != matches.end(); ++it)
     {
       MatchPtr match = *it;
-      //Not proud of this, but not sure what else to do at this point w/o having to change the
-      //Match interface.
+      // Not proud of this, but not sure what else to do at this point w/o having to change the
+      // Match interface.
       MatchClassification& matchClass =
         const_cast<MatchClassification&>(match->getClassification());
       matchClass.setReview();

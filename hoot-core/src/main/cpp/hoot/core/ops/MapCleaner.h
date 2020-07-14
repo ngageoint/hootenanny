@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MAPCLEANER_H
@@ -50,14 +50,15 @@ public:
 
   static QString opsKey() { return "map.cleaner.transforms"; }
 
-  MapCleaner();
-  MapCleaner(const Progress& progress);
-
-  virtual ~MapCleaner() {}
+  MapCleaner() = default;
+  MapCleaner(const Progress& progress) : _progress(progress) { }
+  virtual ~MapCleaner() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual QString getDescription() const override { return "Cleans map data"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+	<create>
+		<node id="-21" version="0" lat="38.8535508780501431" lon="-104.8988321216391171" timestamp="" changeset="2"/>
+		<node id="-22" version="0" lat="38.8535689160700528" lon="-104.8990568001256065" timestamp="" changeset="2"/>
+		<node id="-23" version="0" lat="38.8535166057996975" lon="-104.8992698972467963" timestamp="" changeset="2"/>
+		<node id="-24" version="0" lat="38.8533470481072030" lon="-104.8993671807151884" timestamp="" changeset="2"/>
+		<node id="-30" version="0" lat="38.8542618470630714" lon="-104.8997171368440888" timestamp="" changeset="2"/>
+		<node id="-34" version="0" lat="38.8542471187715179" lon="-104.9010788637033329" timestamp="" changeset="2"/>
+		<node id="-35" version="0" lat="38.8540851073630833" lon="-104.9014476647277121" timestamp="" changeset="2"/>
+		<way id="-4" version="0" timestamp="" changeset="2">
+			<nd ref="-35"/>
+			<nd ref="-34"/>
+			<nd ref="42"/>
+			<nd ref="-30"/>
+			<tag k="note" v="2"/>
+			<tag k="highway" v="road"/>
+		</way>
+	</create>
+</osmChange>

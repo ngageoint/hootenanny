@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MapCropper.h"
@@ -55,9 +55,11 @@
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 // Standard
 #include <limits>
@@ -81,13 +83,15 @@ _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
 _removeSuperfluousFeatures(true),
+_removeMissingElements(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
 _numCrossingWaysKept(0),
 _numCrossingWaysRemoved(0),
-_numNodesRemoved(0)
+_numNodesRemoved(0),
+_logWarningsForMissingElements(true)
 {
 }
 
@@ -98,13 +102,15 @@ _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
 _removeSuperfluousFeatures(true),
+_removeMissingElements(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
 _numCrossingWaysKept(0),
 _numCrossingWaysRemoved(0),
-_numNodesRemoved(0)
+_numNodesRemoved(0),
+_logWarningsForMissingElements(true)
 {
 }
 
@@ -114,13 +120,15 @@ _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
 _removeSuperfluousFeatures(true),
+_removeMissingElements(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
 _numCrossingWaysKept(0),
 _numCrossingWaysRemoved(0),
-_numNodesRemoved(0)
+_numNodesRemoved(0),
+_logWarningsForMissingElements(true)
 {
 }
 
@@ -203,6 +211,8 @@ void MapCropper::setConfiguration(const Settings& conf)
   setKeepEntireFeaturesCrossingBounds(confOpts.getCropKeepEntireFeaturesCrossingBounds());
   setKeepOnlyFeaturesInsideBounds(confOpts.getCropKeepOnlyFeaturesInsideBounds());
 
+  setLogWarningsForMissingElements(confOpts.getLogWarningsForMissingElements());
+
   _statusUpdateInterval = confOpts.getTaskStatusUpdateInterval();
 }
 
@@ -215,7 +225,7 @@ void MapCropper::apply(OsmMapPtr& map)
 
   LOG_DEBUG("Cropping ways...");
   LOG_VARD(map->size());
-  LOG_VART(OsmUtils::allElementIdsPositive(map));
+  LOG_VART(ElementIdUtils::allElementIdsPositive(map));
 
   _numProcessed = 0;
   _numAffected = 0;
@@ -230,6 +240,7 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(_invert);
   LOG_VARD(_keepEntireFeaturesCrossingBounds);
   LOG_VARD(_keepOnlyFeaturesInsideBounds);
+  LOG_VARD(_envelope.isNull());
   LOG_VARD(_envelope);
   if (_envelopeG)
   {
@@ -243,23 +254,28 @@ void MapCropper::apply(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& w = it->second;
+    LOG_VART(w.get());
     LOG_TRACE("Checking " << w->getElementId() << " for cropping...");
     LOG_VART(w->getNodeIds());
     LOG_VART(w);
 
-    std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+    std::shared_ptr<LineString> ls =
+      ElementConverter(map, _logWarningsForMissingElements).convertToLineString(w);
     if (!ls.get())
     {
-      if (logWarnCount < Log::getWarnMessageLimit())
+      if (_logWarningsForMissingElements)
       {
-        LOG_WARN("Couldn't convert " << w->getElementId() << " to line string. Keeping way...");
-        LOG_VARW(w);
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("Couldn't convert " << w->getElementId() << " to line string. Keeping way...");
+          LOG_VARW(w);
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
 
       _numProcessed++;
       wayCtr++;
@@ -350,10 +366,10 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_VART(_explicitlyIncludedWayIds.size());
     if (_explicitlyIncludedWayIds.size() > 0)
     {
-      LOG_VART(OsmUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
+      LOG_VART(WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
     }
     if (_inclusionCrit && _explicitlyIncludedWayIds.size() > 0 &&
-        OsmUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
+        WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
     {
       LOG_TRACE(
         "Skipping delete for: " << node->getElementId() <<
@@ -437,11 +453,6 @@ void MapCropper::apply(OsmMapPtr& map)
     }
   }
 
-  RemoveEmptyRelationsOp emptyRelationRemover;
-  LOG_INFO(emptyRelationRemover.getInitStatusMessage());
-  emptyRelationRemover.apply(map);
-  LOG_DEBUG(emptyRelationRemover.getCompletedStatusMessage());
-
   // Remove dangling features here now, which used to be done in CropCmd only. Haven't seen any
   // bad side effects yet.
   long numSuperfluousWaysRemoved = 0;
@@ -452,9 +463,27 @@ void MapCropper::apply(OsmMapPtr& map)
     numSuperfluousNodesRemoved = SuperfluousNodeRemover::removeNodes(map);
   }
 
+  // Most of the time we want to remove missing refs in order for the output to be clean, but in
+  // some workflows, like cut and replace, we need to keep them around to prevent the resulting
+  // changeset from being too heavy handed.
+  if (_removeMissingElements)
+  {
+    // This will handle removing refs in relation members we've cropped out.
+    RemoveMissingElementsVisitor missingElementsRemover;
+    LOG_INFO("\t" << missingElementsRemover.getInitStatusMessage());
+    map->visitRw(missingElementsRemover);
+    LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
+  }
+
+  // This will remove any relations that were already empty or became empty after the previous step.
+  RemoveEmptyRelationsOp emptyRelationRemover;
+  LOG_INFO("\t" << emptyRelationRemover.getInitStatusMessage());
+  emptyRelationRemover.apply(map);
+  LOG_DEBUG("\t" << emptyRelationRemover.getCompletedStatusMessage());
+
   LOG_VARD(_numAffected);
   LOG_VARD(map->size());
-  LOG_VART(OsmUtils::allElementIdsPositive(map));
+  LOG_VART(ElementIdUtils::allElementIdsPositive(map));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysInBounds));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysOutOfBounds));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysCrossingThreshold));
@@ -470,7 +499,8 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   LOG_TRACE("Cropping way crossing bounds: " << wid << "...");
 
   std::shared_ptr<Way> way = map->getWay(wid);
-  std::shared_ptr<Geometry> fg = ElementConverter(map).convertToGeometry(way);
+  std::shared_ptr<Geometry> fg =
+    ElementConverter(map, _logWarningsForMissingElements).convertToGeometry(way);
 
   // perform the intersection with the geometry
   std::shared_ptr<Geometry> g;
@@ -628,6 +658,8 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
   {
     if (_invert == false)
     {
+      LOG_VART(_envelopeG);
+      LOG_VART(_envelopeG->getEnvelopeInternal());
       result = !_envelopeG->getEnvelopeInternal()->intersects(e);
       //result = !_envelopeG->intersects(GeometryFactory::getDefaultInstance()->toGeometry(&e));
       LOG_TRACE(

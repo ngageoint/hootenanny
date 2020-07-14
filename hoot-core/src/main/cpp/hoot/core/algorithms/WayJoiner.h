@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYJOINER_H
@@ -46,6 +46,7 @@ public:
   static std::string className() { return "hoot::WayJoiner"; }
 
   WayJoiner();
+  virtual ~WayJoiner() = default;
 
   /**
    * @brief join Runs all joining algorithms
@@ -69,12 +70,6 @@ protected:
   virtual void _joinParentChild();
 
   /**
-   * @brief joinSiblings Joining algorithm that searches for all ways that have the same parent id,
-   *    attempts to order them into adjoining way order, then joins them
-   */
-  virtual void _joinSiblings();
-
-  /**
    * @brief joinAtNode Joining algorithm that searches all ways that have a parent id and tries
    *    to join them with adjacent ways that have the same tags
    */
@@ -85,12 +80,6 @@ protected:
    * a node; essentially UNKNOWN1 and UNKNOWN2 ways aren't joinable together
    */
   virtual bool _areJoinable(const WayPtr& w1, const WayPtr& w2) const;
-
-  /**
-   * @brief resetParents Resets parent id for all ways after joining operation has completed
-   *    does nothing if _leavePid is true
-   */
-  virtual void _resetParents();
 
   /**
    * @brief rejoinSiblings Function that rejoins ways that all have the same parent id
@@ -111,7 +100,26 @@ protected:
   bool _leavePid;
   /** Pointer to the map to work on */
   OsmMapPtr _map;
+
   int _numJoined;
+  int _numProcessed;
+  int _totalWays;
+
+  int _taskStatusUpdateInterval;
+
+private:
+
+  /**
+   * @brief joinSiblings Joining algorithm that searches for all ways that have the same parent id,
+   *    attempts to order them into adjoining way order, then joins them
+   */
+  void _joinSiblings();
+
+  /**
+   * @brief resetParents Resets parent id for all ways after joining operation has completed
+   *    does nothing if _leavePid is true
+   */
+  void _resetParents();
 };
 
 }

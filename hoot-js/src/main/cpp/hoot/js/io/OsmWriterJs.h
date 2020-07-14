@@ -22,26 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMWRITERJS_H
 #define OSMWRITERJS_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class OsmWriterJs : public node::ObjectWrap
+class OsmWriterJs : public HootBaseJs
 {
 public:
- static void Init(v8::Handle<v8::Object> target);
+
+  static void Init(v8::Handle<v8::Object> target);
+
+  virtual ~OsmWriterJs() = default;
 
 private:
-  OsmWriterJs();
-  ~OsmWriterJs();
+
+  OsmWriterJs() = default;
 
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

@@ -1,0 +1,102 @@
+{
+  Python Import Module - 1
+  Memcheck:Addr1
+  fun:strlen
+  fun:PyString_FromString
+  fun:PyImport_ImportModule
+  fun:_ZN4hoot22PythonSchemaTranslator5_initEv
+  ...
+}
+{
+  Python Import Module - 2
+  Memcheck:Addr2
+  fun:memcpy@@GLIBC_2.14
+  fun:PyString_FromString
+  fun:PyImport_ImportModule
+  fun:_ZN4hoot22PythonSchemaTranslator5_initEv
+  ...
+}
+{
+  Python InitializeEx
+  Memcheck:Leak
+  fun:malloc
+  ...
+  fun:Py_InitializeEx
+  fun:_ZN4hoot22PythonSchemaTranslator5_initEv
+  ...
+}
+{
+  CreateJavaVM Invalid Write (Invalid write of size 4)
+  Memcheck:Addr4
+  ...
+  fun:JNI_CreateJavaVM
+  fun:_ZN4hoot15JavaEnvironment7_initVmEv
+  ...
+}
+{
+  CreateJavaVM Conditional Jump (Conditional jump or move depends on uninitialised value(s))
+  Memcheck:Cond
+  fun:_ZN7Monitor7TrySpinEP6Thread
+  ...
+}
+{
+  DetachCurrentThread Invalid Write (Invalid write of size 4)
+  Memcheck:Addr4
+  ...
+  fun:_ZN7JavaVM_19DetachCurrentThreadEv
+  fun:_ZN4hoot15JavaEnvironmentD1Ev
+  ...
+}
+{
+  initVM Memory Leaks
+  Memcheck:Leak
+  ...
+  fun:_ZN4hoot15JavaEnvironment7_initVmEv
+  ...
+}
+{
+  libjvm JavaThread::run
+  Memcheck:Leak
+  ...
+  fun:_ZL10java_startP6Thread
+  ...
+}
+{
+  libjvm JNIEnv::FindClass (Invalid write of size 4)
+  Memcheck:Addr4
+  ...
+  fun:_ZN7JNIEnv_9FindClassEPKc
+  fun:_ZN4hoot24JosmMapValidatorAbstract23_initJosmImplementationEv
+  ...
+}
+{
+  DestroyJavaVM Invalid Write (Invalid write of size 4)
+  Memcheck:Addr4
+  ...
+  fun:_ZN7JavaVM_13DestroyJavaVMEv
+  fun:_ZN4hoot15JavaEnvironmentD1Ev
+  ...
+}
+{
+  FindClassFromCaller Invalid Write (Invalid write of size 4)
+  Memcheck:Addr4
+  ...
+  fun:JVM_FindClassFromCaller
+  ...
+}
+{
+  initJosmImplementation Invalid Write (Invalid write of size 4)
+  Memcheck:Addr4
+  ...
+  fun:_ZN7JNIEnv_9NewObjectEP7_jclassP10_jmethodIDz
+  fun:_ZN4hoot24JosmMapValidatorAbstract23_initJosmImplementationEv
+  ...
+}
+{
+  jni_CallVoidMethodV Invalid Write (Invalid write of size 4)
+  Memcheck:Addr4
+  ...
+  fun:jni_CallVoidMethodV
+  fun:_ZN7JNIEnv_14CallVoidMethodEP8_jobjectP10_jmethodIDz
+  ...
+}

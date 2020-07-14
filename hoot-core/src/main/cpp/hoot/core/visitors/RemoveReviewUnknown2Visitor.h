@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVE_REVIEW_UKNOWN2_VISITOR_H
 #define REMOVE_REVIEW_UKNOWN2_VISITOR_H
 
 //  Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
@@ -38,11 +37,14 @@ namespace hoot
  * Removes all review relations and the UNKNOWN2 elements of those relations leaving only
  * geometries from the ref data and no reviews.
  */
-class RemoveReviewUnknown2Visitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class RemoveReviewUnknown2Visitor : public ElementOsmMapVisitor
 {
 public:
 
   static std::string className() { return "hoot::RemoveReviewUnknown2Visitor"; }
+
+  RemoveReviewUnknown2Visitor() = default;
+  virtual ~RemoveReviewUnknown2Visitor() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
 
@@ -59,7 +61,10 @@ public:
       QString::number(_numElements) + " UNKNOWN2 elements.";
   }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
+
   /** Total number of elements removed along with review relations */
   int _numElements;
 };

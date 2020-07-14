@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef VALUEAGGREGATORJS_H
@@ -31,9 +31,7 @@
 // hoot
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/js/io/DataConvertJs.h>
-
-// node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
@@ -41,19 +39,22 @@ namespace hoot
 /**
  *
  */
-class ValueAggregatorJs : public node::ObjectWrap
+class ValueAggregatorJs : public HootBaseJs
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   ValueAggregatorPtr getValueAggregator() { return _va; }
 
   static v8::Handle<v8::Object> New(const ValueAggregatorPtr& va);
 
+  virtual ~ValueAggregatorJs() = default;
+
 private:
-  ValueAggregatorJs();
+
   ValueAggregatorJs(ValueAggregatorPtr va) { _va = va; }
-  ~ValueAggregatorJs();
+  ValueAggregatorJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

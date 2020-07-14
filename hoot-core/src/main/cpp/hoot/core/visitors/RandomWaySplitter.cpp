@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RandomWaySplitter.h"
 
@@ -100,7 +100,8 @@ void RandomWaySplitter::visit(const std::shared_ptr<Element>& e)
 
 vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
 {
-  //randomly select elements and split them into two parts
+  // randomly select elements and split them into two parts
+
   boost::uniform_real<> randomSplitDistribution(0.0, 1.0);
   const double randomSplitNum = randomSplitDistribution(*_rng);
   if (randomSplitNum <= _waySplitProbability)
@@ -122,7 +123,7 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
     QList<long> nodeIdsBeforeSplit;
     int segmentIndex = -1;
     ElementId wayId;
-    //determine where to split the element
+    // determine where to split the element
     if (element->getElementType() == ElementType::Way)
     {
       WayPtr way = std::dynamic_pointer_cast<Way>(element);
@@ -158,7 +159,8 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
       LOG_VART(segmentIndex);
     }
 
-    //split the element
+    // split the element
+
     vector<ElementPtr> newElementsAfterSplit;
     if (element->getElementType() == ElementType::Way)
     {
@@ -202,7 +204,7 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
       }
     }
 
-    //recursive call
+    // recursive call
     for (vector<ElementPtr>::const_iterator it = newElementsAfterSplit.begin();
          it != newElementsAfterSplit.end(); ++it)
     {
@@ -264,7 +266,8 @@ MultiLineStringLocation RandomWaySplitter::_calcSplitPoint(ConstRelationPtr rela
   if (element->getElementType() != ElementType::Way)
   {
     throw HootException(
-      "PERTY feature splitting for multi-line string relations may only occur on relations which contain only ways.");
+      "PERTY feature splitting for multi-line string relations may only occur on relations "
+      "which contain only ways.");
   }
   WayPtr way = std::dynamic_pointer_cast<Way>(element);
   LOG_VART(way->getNodeCount());

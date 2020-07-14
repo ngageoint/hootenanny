@@ -28,9 +28,9 @@
 #define DUPLICATEREVIEWSOP_H
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <set>
@@ -42,14 +42,14 @@ class OsmMap;
 /**
  * Goes through all relations and check if there are any duplicate reviews.
  */
-class RemoveDuplicateReviewsOp : public OsmMapOperation, public Serializable,
-  public OperationStatusInfo
+class RemoveDuplicateReviewsOp : public OsmMapOperation, public Serializable
 {
 public:
 
   static std::string className() { return "hoot::RemoveDuplicateReviewsOp"; }
 
   RemoveDuplicateReviewsOp();
+  virtual ~RemoveDuplicateReviewsOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -63,7 +63,11 @@ public:
   { return "Removing duplicate conflation review relations..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Removed " + QString::number(_numAffected) + " duplicate conflation review relations"; }
+  {
+    return
+      "Removed " + StringUtils::formatLargeNumber(_numAffected) +
+      " duplicate conflation review relations";
+  }
 
   virtual QString getDescription() const override { return "Removes duplicate conflation reviews"; }
 

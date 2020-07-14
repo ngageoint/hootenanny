@@ -39,16 +39,12 @@ namespace hoot
 
 JosmMapValidatorAbstract::JosmMapValidatorAbstract() :
 _maxElementsForMapString(2000000),
-_javaEnv(JavaEnvironment::getEnvironment()),
+_javaEnv(JavaEnvironment::getInstance().getEnvironment()),
 _josmInterfaceInitialized(false),
 _numValidationErrors(0),
 _numFailingValidators(0)
 {
   _josmInterfaceName = ConfigOptions().getJosmMapValidatorJavaImplementation();
-}
-
-JosmMapValidatorAbstract::~JosmMapValidatorAbstract()
-{
 }
 
 void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)

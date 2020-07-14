@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OGRUTILITIES_H
 #define OGRUTILITIES_H
@@ -71,8 +71,6 @@ class OgrUtilities
 {
 public:
 
-  virtual ~OgrUtilities();
-
   static OgrUtilities& getInstance();
 
   /**
@@ -115,10 +113,12 @@ public:
 
 private:
 
-  /**
-   * Use getInstance() instead of the constructor.
-   */
+  /** Use getInstance() instead of the constructor */
   OgrUtilities();
+  ~OgrUtilities();
+  /** Delete copy constructor and assignment operator */
+  OgrUtilities(const OgrUtilities&) = delete;
+  OgrUtilities& operator=(const OgrUtilities&) = delete;
 
   /**
    * @brief loadDriverInfo Loads a hard-coded set of GDAL driver information with file
@@ -126,7 +126,6 @@ private:
    */
   void loadDriverInfo();
 
-  static std::shared_ptr<OgrUtilities> _theInstance;
   std::vector<OgrDriverInfo> _drivers;
 };
 

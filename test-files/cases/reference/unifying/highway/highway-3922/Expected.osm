@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.1021875" minlon="-94.5420268" maxlat="39.10601339999999" maxlon="-94.5418408"/>
+    <node visible="true" id="-471772" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1032599013484869" lon="-94.5419745501488507">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-471771" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1041402983158903" lon="-94.5419352373694863">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-471769" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1042572988124917" lon="-94.5419294638231236">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-471768" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1050431009436892" lon="-94.5418866287489266">
+        <tag k="highway" v="crossing"/>
+        <tag k="crossing" v="unmarked"/>
+        <tag k="tactile_paving" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-471766" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1051653008184772" lon="-94.5418804290892325">
+        <tag k="highway" v="crossing"/>
+        <tag k="crossing" v="unmarked"/>
+        <tag k="tactile_paving" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-471765" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1059106999693356" lon="-94.5418455989101290">
+        <tag k="highway" v="crossing"/>
+        <tag k="crossing" v="unmarked"/>
+        <tag k="tactile_paving" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-471762" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1022653994996787" lon="-94.5420229830445180">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-471761" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1031216977925808" lon="-94.5419810251909354">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-471759" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1021874999999994" lon="-94.5420268000000021"/>
+    <node visible="true" id="-471758" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1031916000000024" lon="-94.5419775999999956"/>
+    <node visible="true" id="-471757" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1042016000000032" lon="-94.5419324999999873"/>
+    <node visible="true" id="-471756" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1051059999999922" lon="-94.5418832000000009"/>
+    <node visible="true" id="-471755" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.1060133999999948" lon="-94.5418408000000028"/>
+    <way visible="true" id="-471754" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-471755"/>
+        <nd ref="-471765"/>
+        <nd ref="-471766"/>
+        <nd ref="-471756"/>
+        <nd ref="-471768"/>
+        <nd ref="-471769"/>
+        <nd ref="-471757"/>
+        <nd ref="-471771"/>
+        <nd ref="-471772"/>
+        <nd ref="-471758"/>
+        <nd ref="-471761"/>
+        <nd ref="-471762"/>
+        <nd ref="-471759"/>
+        <tag k="maxspeed" v="25 mph"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Indiana Avenue"/>
+        <tag k="lit" v="yes"/>
+        <tag k="tiger:zip_left" v="64124"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2013-04-21T00:23:00.000Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tiger:zip_right" v="64124"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Jackson, MO"/>
+        <tag k="tiger:name_base" v="Indiana"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

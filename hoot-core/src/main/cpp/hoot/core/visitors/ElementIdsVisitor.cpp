@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ElementIdsVisitor.h"
@@ -36,29 +36,48 @@ using namespace std;
 namespace hoot
 {
 
+ElementIdsVisitor::ElementIdsVisitor(const ElementType& elementType) :
+_elementType(elementType)
+{
+}
+
 ElementIdsVisitor::ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit) :
 _elementType(elementType),
 _pCrit(pCrit)
 {
-  if (_elementType == ElementType::Relation)
-  {
-    // why is this?
-    throw NotImplementedException("ElementIdsVisitor does not currently support relations.");
-  }
 }
 
 void ElementIdsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
-  if (e->getElementType() == _elementType)
+  if (e->getElementType() == ElementType::Unknown || e->getElementType() == _elementType)
   {
-    if (_pCrit->isSatisfied(e))
+    if (_pCrit == 0 || _pCrit->isSatisfied(e))
     {
       _elementIds.push_back(e->getId());
     }
   }
 }
 
-// Convenience method for finding elements that match the given criterion
+vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
+                                             const ElementType& elementType)
+{
+  ElementIdsVisitor v(elementType);
+  if (elementType == ElementType::Node)
+  {
+    map->visitNodesRo(v);
+  }
+  else if (elementType == ElementType::Way)
+  {
+    map->visitWaysRo(v);
+  }
+  else
+  {
+    map->visitRelationsRo(v);
+  }
+  LOG_TRACE(v.getIds());
+  return v.getIds();
+}
+
 vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
                                              const ElementType& elementType,
                                              ElementCriterion* pCrit)
@@ -68,14 +87,16 @@ vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
   {
     map->visitNodesRo(v);
   }
-  else
+  else if (elementType == ElementType::Way)
   {
     map->visitWaysRo(v);
   }
+  else
+  {
+    map->visitRelationsRo(v);
+  }
   return v.getIds();
 }
-
-// TODO: Some of these may be redundant with related methods in OsmUtils.
 
 vector<long> ElementIdsVisitor::_findCloseNodes(const ConstOsmMapPtr& map,
                                                 const Coordinate& refCoord, Meters maxDistance)
@@ -84,7 +105,8 @@ vector<long> ElementIdsVisitor::_findCloseNodes(const ConstOsmMapPtr& map,
 }
 
 vector<long> ElementIdsVisitor::_findCloseWays(const ConstOsmMapPtr& map,
-                                               ConstWayPtr refWay, Meters maxDistance, bool addError)
+                                               ConstWayPtr refWay, Meters maxDistance,
+                                               bool addError)
 {
   return map->getIndex().findWayNeighbors(refWay, maxDistance, addError);
 }
@@ -131,7 +153,6 @@ vector<long> ElementIdsVisitor::findElementsByTag(const ConstOsmMapPtr& map,
   return v.getIds();
 }
 
-// Convenience method for finding ways that contain the given node
 vector<long> ElementIdsVisitor::findWaysByNode(const ConstOsmMapPtr& map, long nodeId)
 {
   ContainsNodeCriterion crit(nodeId);

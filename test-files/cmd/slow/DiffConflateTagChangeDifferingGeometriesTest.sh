@@ -7,13 +7,13 @@ OUTPUT_DIR=test-output/cmd/slow/DiffConflateTagChangeDifferingGeometriesTest
 mkdir -p $OUTPUT_DIR
 LOG_LEVEL=--warn
 
-# We run with the Network alg, which can generate node/way match pairs. Then we check to make sure tags changes based on node/way match pairs
+# We run with the Network alg, which can generate node/way match pairs. Then we check to make sure tag changes based on node/way match pairs
 # don't exist in the tags changeset. Particularly, you should not see any highway nodes in the output with the following tags transferred to
 # them from ways: access=permissive, highway=service, and surface=asphalt.
 
 # Run changeset w/tags to produce separate outputs for geometry and tags
 echo "Running diff changeset with tags, separate outputs..."
-hoot conflate -C Testing.conf $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf \
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
  $INPUT_DIR/Input1.osm $INPUT_DIR/Input2.osm \
  $OUTPUT_DIR/output.osc --differential --include-tags --separate-output
 

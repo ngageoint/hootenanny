@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNLIKELYINTERSECTIONREMOVER_H
 #define UNLIKELYINTERSECTIONREMOVER_H
 
 // Hoot
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 
 // Standard
 #include <set>
@@ -50,13 +50,14 @@ class Way;
  * For example, a motorway overpass intersecting a residential street at a 90° is considered
  * unlikely and "unsnapped". The geometry location is not modified.
  */
-class UnlikelyIntersectionRemover : public OsmMapOperation, public OperationStatusInfo
+class UnlikelyIntersectionRemover : public OsmMapOperation
 {
 public:
 
   static std::string className() { return "hoot::UnlikelyIntersectionRemover"; }
 
-  UnlikelyIntersectionRemover();
+  UnlikelyIntersectionRemover() = default;
+  virtual ~UnlikelyIntersectionRemover() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -74,14 +75,21 @@ public:
   virtual QString getDescription() const override
   { return "Removes road intersections that are likely mistakes"; }
 
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(LinearCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
+
 protected:
 
   std::shared_ptr<OsmMap> _result;
 
   void _evaluateAndSplit(long intersectingNode, const std::set<long>& wayIds);
-
-  double _pIntersection(long intersectingNode, const std::shared_ptr<Way>& w1, const std::shared_ptr<Way>& w2);
-
+  double _pIntersection(long intersectingNode, const std::shared_ptr<Way>& w1,
+                        const std::shared_ptr<Way>& w2);
   void _splitIntersection(long intersectingNode, const std::vector<std::shared_ptr<Way>>& g2);
 };
 

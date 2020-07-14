@@ -22,27 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEINVALIDREVIEWRELATIONSVISITOR_H
 #define REMOVEINVALIDREVIEWRELATIONSVISITOR_H
 
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
 /**
  * Remove all empty review relations
+ *
+ * This runs in conflate.pre.ops, among other places. Its debatablewhether input conflation data
+ * should allow reviews at all, but maybe there are some uses cases for it. If we ever find that
+ * there aren't, then maybe we should replace this entry in conflate.pre.ops with a
+ * 'RemoveReviewRelationsVisitor' that removes them all.
  */
-class RemoveInvalidReviewRelationsVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class RemoveInvalidReviewRelationsVisitor : public ElementOsmMapVisitor
 {
 public:
 
   static std::string className() { return "hoot::RemoveInvalidReviewRelationsVisitor"; }
 
-  RemoveInvalidReviewRelationsVisitor();
+  RemoveInvalidReviewRelationsVisitor() = default;
+  virtual ~RemoveInvalidReviewRelationsVisitor() = default;
 
   virtual void visit(const ElementPtr& e);
 
@@ -53,6 +58,8 @@ public:
   { return "Removed " + QString::number(_numAffected) + " empty review relations"; }
 
   virtual QString getDescription() const { return "Removes empty review relations"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

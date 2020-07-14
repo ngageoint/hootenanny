@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REPLACETAGVISITOR_H
 #define REPLACETAGVISITOR_H
@@ -30,22 +30,20 @@
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
 /**
- * @brief The ReplaceTagVisitor class replaces matching tags with the
- * specified replacement tag.
+ * The ReplaceTagVisitor class replaces matching tags with the specified replacement tag.
  *
- * This was written for the building outline project: the input data had tag
- * BUILDING=yes, but the output data needed to have tag building=yes
+ * This was written for the building outline project: the input data had tag BUILDING=yes, but the
+ * output data needed to have tag building=yes.
  *
- * Feel free to extend this class. Maybe add a flag for case-insensitive
- * matching. Or support for wildcards.
+ * Feel free to extend this class. Maybe add a flag for case-insensitive matching. Or support for
+ * wildcards.
  */
-class ReplaceTagVisitor : public ElementVisitor, public Configurable, public OperationStatusInfo
+class ReplaceTagVisitor : public ElementVisitor, public Configurable
 {
 public:
 
@@ -59,6 +57,7 @@ public:
    * @brief ReplaceTagVisitor - default constructor
    */
   ReplaceTagVisitor();
+  virtual ~ReplaceTagVisitor() = default;
 
   /**
    * @brief ReplaceTagVisitor - This constructor lets you specify the tag
@@ -103,6 +102,8 @@ public:
   {
     return "Replaced " + QString::number(_numAffected) + " element tags";
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

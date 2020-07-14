@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIQUE_TAG_VALUES_VISITOR_H
 #define UNIQUE_TAG_VALUES_VISITOR_H
@@ -41,19 +41,22 @@ class UniqueTagValuesVisitor : public ConstElementVisitor
 {
 public:
 
+  static std::string className() { return "hoot::UniqueTagValuesVisitor"; }
+
   /**
    * @param split If split is set to true then the values in the tag are split before they're placed
    *  in the bag.
    */
-  UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split=false) :
-    _key(key),
-    _bag(bag),
-    _split(split)
-  {}
+  UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split=false)
+    : _key(key), _bag(bag), _split(split)
+  { }
+  virtual ~UniqueTagValuesVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Returns all the unique element IDs visited"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

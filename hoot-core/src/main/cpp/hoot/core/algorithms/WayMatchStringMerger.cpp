@@ -174,7 +174,7 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
       ConstWayPtr w = subline.getWay();
       // go through all the segments that are part of this subline
       for (int j = subline.getFormer().getSegmentIndex();
-        j <= subline.getLatter().getSegmentIndex(); ++j)
+           j <= subline.getLatter().getSegmentIndex(); ++j)
       {
         WayLocation wl(_map, w, j, 0.0);
         if (subline.contains(wl))

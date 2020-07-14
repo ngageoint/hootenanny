@@ -41,19 +41,20 @@
 #endif
 
 // Hoot
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/Way.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/OsmSchemaLoader.h>
 #include <hoot/core/schema/OsmSchemaLoaderFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/schema/OsmSchemaLoader.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/FileUtils.h>
-#include <hoot/core/conflate/address/AddressParser.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDomDocument>
@@ -479,32 +480,6 @@ public:
       result.insert(it.key());
     }\
     return result;
-  }
-
-  QSet<QString> getAllTypeKeys()
-  {
-    QSet<QString> typeTagKeys;
-
-    QSet<QString> allTagKeysTemp = OsmSchema::getInstance().getAllTagKeys();
-    // not completely sure what should be in this list; would be nice to have access to isMetadata
-    // here
-    allTagKeysTemp.remove(MetadataTags::Ref1());
-    allTagKeysTemp.remove(MetadataTags::Ref2());
-    allTagKeysTemp.remove("uuid");
-    allTagKeysTemp.remove("name");
-    allTagKeysTemp.remove("ele");
-    for (QSet<QString>::const_iterator it = allTagKeysTemp.begin(); it != allTagKeysTemp.end();
-         ++it)
-    {
-      const QString tagKey = *it;
-      //address tags aren't really type tags
-      if (!tagKey.startsWith("addr:"))
-      {
-        typeTagKeys.insert(tagKey);
-      }
-    }
-
-    return typeTagKeys;
   }
 
   vector<SchemaVertex> getAssociatedTags(QString name)
@@ -1411,6 +1386,8 @@ private:
 
 std::shared_ptr<OsmSchema> OsmSchema::_theInstance = NULL;
 
+QStringList _genericKvps;
+
 OsmSchema::OsmSchema()
 {
   d = new OsmSchemaData();
@@ -1470,8 +1447,20 @@ QSet<QString> OsmSchema::getAllTagKeys()
 QSet<QString> OsmSchema::getAllTypeKeys()
 {
   if (_allTypeKeysCache.isEmpty())
-  {
-    _allTypeKeysCache = d->getAllTypeKeys();
+  {  
+    QSet<QString> allTypeKeysCacheTemp = d->getAllTagKeys();
+    for (QSet<QString>::const_iterator typeKeyItr = allTypeKeysCacheTemp.constBegin();
+         typeKeyItr != allTypeKeysCacheTemp.constEnd(); ++typeKeyItr)
+    {
+      const QString typeKey = *typeKeyItr;
+      // All we care about for type comparison are tags of schema type "tag". We definitely don't
+      // care about metadata tags, but its possible we may care about some text or numeric tags
+      // at some point.
+      if (!isMetaData(typeKey, "") && !isTextTag(typeKey) && !isNumericTag(typeKey))
+      {
+        _allTypeKeysCache.insert(typeKey);
+      }
+    }
     //LOG_VART(_allTypeKeysCache);
   }
   return _allTypeKeysCache;
@@ -1602,7 +1591,7 @@ OsmSchema& OsmSchema::getInstance()
       const QString errorMsg = "Unable to write schema graphviz file to " + graphvizPath;
       try
       {
-        if (QDir().mkpath("tmp"))
+        if (FileUtils::makeDir("tmp"))
         {
           FileUtils::writeFully(graphvizPath, _theInstance->toGraphvizString());
           LOG_TRACE("Wrote schema graph viz file to: " << graphvizPath);
@@ -1782,6 +1771,17 @@ bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
   }
 }
 
+bool OsmSchema::isTextTag(const QString& key)
+{
+  return getTagVertex(key).valueType == Text;
+}
+
+bool OsmSchema::isNumericTag(const QString& key)
+{
+  TagValueType valueType = getTagVertex(key).valueType;
+  return valueType == Real || valueType == Int;
+}
+
 void OsmSchema::loadDefault()
 {
   QString path = ConfPath::search("schema.json");
@@ -1814,7 +1814,6 @@ double OsmSchema::score(const QString& kvp, const Tags& tags)
     const QString value = tagItr.value().trimmed();
     if (!key.isEmpty() && !value.isEmpty())
     {
-      //QString kvp2 = tagItr.key() + "=" + tagItr.value();
       QString kvp2 = "";
       kvp2.append(key);
       kvp2.append("=");
@@ -1825,50 +1824,208 @@ double OsmSchema::score(const QString& kvp, const Tags& tags)
         maxScore = scoreVal;
       }
     }
-
   }
   return maxScore;
 }
 
-double OsmSchema::scoreTypes(const Tags& tags1, const Tags& tags2)
+bool OsmSchema::isGeneric(const Tags& tags)
 {
-  double maxScore = 0.0;
-  for (Tags::const_iterator tags1Itr = tags1.begin(); tags1Itr != tags1.end(); ++tags1Itr)
+  return
+    !hasMoreThanOneType(tags) &&
+    StringUtils::containsAny(tags.toKvps(), getGenericKvps().toList());
+}
+
+bool OsmSchema::isGenericKvp(const QString& kvp)
+{
+  return getGenericKvps().contains(kvp);
+}
+
+QSet<QString> OsmSchema::getGenericKvps() const
+{
+  // There may be a better way to manage these in the schema itself.
+  if (_genericKvps.isEmpty())
   {
-    const QString key1 = tags1Itr.key().trimmed();
-    const QString val1 = tags1Itr.value().trimmed();
-    const QString kvp1 = toKvp(key1, val1);
-    LOG_VART(key1);
-    LOG_VART(val1);
-    LOG_VART(kvp1);
-    LOG_VART(isMetaData(key1, val1));
-    LOG_VART(isTypeKey(key1));
-    if (!key1.isEmpty() && !val1.isEmpty() && !isMetaData(key1, val1) &&
-        (isTypeKey(key1) || isTypeKey(kvp1)))
+    _genericKvps.insert("poi=yes");
+    _genericKvps.insert("building=yes");
+    _genericKvps.insert("area=yes");
+    //_genericKvps.insert("type=route");
+  }
+  return _genericKvps;
+}
+
+QString OsmSchema::getFirstType(const Tags& tags, const bool allowGeneric)
+{
+  QStringList keys = tags.keys();
+  keys.sort();
+  for (int i = 0; i < keys.size(); i++)
+  {
+    const QString key = keys.at(i);
+    const QString val = tags[key];
+    const QString kvp = toKvp(key, val);
+    if (isTypeKey(key) && (allowGeneric || !isGenericKvp(kvp)))
     {
-      for (Tags::const_iterator tags2Itr = tags2.begin(); tags2Itr != tags2.end(); ++tags2Itr)
+      return kvp;
+    }
+  }
+  return "";
+}
+
+bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
+                                     const double minTypeScore)
+{
+  // TODO: We may need to take category into account here as well.
+
+  LOG_VART(tags1);
+  LOG_VART(tags2);
+
+  bool featuresHaveExplicitTypeMismatch = false;
+
+  const bool feature1HasType = hasType(tags1);
+  if (feature1HasType)
+  {
+    const bool feature2HasType = hasType(tags2);
+    if (feature2HasType)
+    {
+      const bool feature1Generic = isGeneric(tags1);
+      if (!feature1Generic)
       {
-        const QString key2 = tags2Itr.key().trimmed();
-        const QString val2 = tags2Itr.value().trimmed();
-        const QString kvp2 = toKvp(key2, val2);
-        LOG_VART(key2);
-        LOG_VART(val2);
-        LOG_VART(kvp2);
-        LOG_VART(isMetaData(key2, val2));
-        LOG_VART(isTypeKey(key2));
-        if (!key2.isEmpty() && !val2.isEmpty() && !isMetaData(key2, val2) &&
-            (isTypeKey(key2) || isTypeKey(kvp2)))
+        const bool feature2Generic = isGeneric(tags2);
+        if (!feature2Generic)
         {
-          const double score = OsmSchema::getInstance().score(kvp1, kvp2);
-          LOG_VART(score);
-          if (score > maxScore)
+          const double typeScore = scoreTypes(tags1, tags2, true);
+          if (typeScore < minTypeScore)
           {
-            maxScore = score;
+            featuresHaveExplicitTypeMismatch = true;
+            LOG_TRACE(
+              "explicit type mismatch: " << getFirstType(tags1, false) << " and " <<
+              getFirstType(tags2, false));
+          }
+          else
+          {
+            LOG_TRACE(
+              "explicit type match: " << getFirstType(tags1, false) << " and " <<
+              getFirstType(tags2, false));
           }
         }
       }
     }
   }
+
+  LOG_VART(featuresHaveExplicitTypeMismatch);
+  return featuresHaveExplicitTypeMismatch;
+}
+
+bool OsmSchema::hasType(const Tags& tags)
+{
+  for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
+  {
+    LOG_VART(tagsItr.key());
+    LOG_VART(isTypeKey(tagsItr.key()));
+    if (isTypeKey(tagsItr.key()))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+QString OsmSchema::mostSpecificType(const Tags& tags)
+{
+  QString mostSpecificType;
+  for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
+  {
+    const QString key = tagsItr.key();
+    const QString val = tagsItr.value();
+    const QString kvp = toKvp(key, val);
+    LOG_VART(kvp);
+    LOG_VART(isTypeKey(tagsItr.key()));
+
+    if (isTypeKey(key) && (mostSpecificType.isEmpty() || !isAncestor(kvp, mostSpecificType)))
+    {
+      mostSpecificType = kvp;
+    }
+  }
+  return mostSpecificType;
+}
+
+bool OsmSchema::hasMoreThanOneType(const Tags& tags)
+{
+  int count = 0;
+  for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
+  {
+    LOG_VART(tagsItr.key());
+    LOG_VART(isTypeKey(tagsItr.key()));
+    if (isTypeKey(tagsItr.key()))
+    {
+      count++;
+      if (count > 1)
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+double OsmSchema::scoreTypes(const Tags& tags1, const Tags& tags2, const bool ignoreGenericTypes)
+{  
+  double maxScore = 0.0;
+
+  for (Tags::const_iterator tags1Itr = tags1.begin(); tags1Itr != tags1.end(); ++tags1Itr)
+  {
+    const QString key1 = tags1Itr.key().trimmed();
+    const QString val1 = tags1Itr.value().trimmed();
+    if (!key1.isEmpty() && !val1.isEmpty())
+    {
+      const QString kvp1 = toKvp(key1, val1);
+
+      LOG_VART(key1);
+      LOG_VART(val1);
+      LOG_VART(kvp1);
+      LOG_VART(isMetaData(key1, val1));
+      LOG_VART(isTypeKey(key1));
+
+      if (ignoreGenericTypes && getGenericKvps().contains(kvp1))
+      {
+        continue;
+      }
+
+      if (!isMetaData(key1, val1) && (isTypeKey(key1) || isTypeKey(kvp1)))
+      {
+        for (Tags::const_iterator tags2Itr = tags2.begin(); tags2Itr != tags2.end(); ++tags2Itr)
+        {
+          const QString key2 = tags2Itr.key().trimmed();
+          const QString val2 = tags2Itr.value().trimmed();
+          if (!key2.isEmpty() && !val2.isEmpty())
+          {
+            const QString kvp2 = toKvp(key2, val2);
+
+            LOG_VART(key2);
+            LOG_VART(val2);
+            LOG_VART(kvp2);
+            LOG_VART(isMetaData(key2, val2));
+            LOG_VART(isTypeKey(key2));
+
+            if (ignoreGenericTypes && getGenericKvps().contains(kvp2))
+            {
+              continue;
+            }
+
+            if (!isMetaData(key2, val2) && (isTypeKey(key2) || isTypeKey(kvp2)))
+            {
+              const double calculatedScore = score(kvp1, kvp2);
+              LOG_VART(calculatedScore);
+              if (calculatedScore > maxScore)
+              {
+                maxScore = calculatedScore;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   LOG_VART(maxScore);
   return maxScore;
 }

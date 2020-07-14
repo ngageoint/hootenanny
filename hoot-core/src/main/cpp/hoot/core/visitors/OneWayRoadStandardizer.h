@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ONE_WAY_ROAD_STANDARDIZER_H
 #define ONE_WAY_ROAD_STANDARDIZER_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -38,14 +38,15 @@ namespace hoot
 /**
  * Replaces all reversed one way roads with regular one way roads
  */
-class OneWayRoadStandardizer : public ElementVisitor, public OperationStatusInfo
+class OneWayRoadStandardizer : public ElementOsmMapVisitor
 {
 
 public:
 
   static std::string className() { return "hoot::OneWayRoadStandardizer"; }
 
-  OneWayRoadStandardizer();
+  OneWayRoadStandardizer() = default;
+  virtual ~OneWayRoadStandardizer() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e);
 
@@ -57,6 +58,14 @@ public:
 
   virtual QString getDescription() const
   { return "Replaces all reversed one way roads with regular one way roads"; }
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

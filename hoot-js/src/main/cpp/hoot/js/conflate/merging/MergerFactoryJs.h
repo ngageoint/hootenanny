@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MERGERFACTORYJS_H
@@ -30,22 +30,23 @@
 
 // node.js
 #include <hoot/core/conflate/merging/MergerCreator.h>
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot
 {
 
-class MergerFactoryJs : public node::ObjectWrap
+class MergerFactoryJs : public HootBaseJs
 {
 public:
 
  static void Init(v8::Handle<v8::Object> target);
 
+ virtual ~MergerFactoryJs() = default;
+
 private:
 
-  MergerFactoryJs();
-  ~MergerFactoryJs();
+  MergerFactoryJs() = default;
 
   static void getAllAvailableCreators(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

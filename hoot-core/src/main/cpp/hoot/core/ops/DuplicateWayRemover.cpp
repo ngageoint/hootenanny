@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DuplicateWayRemover.h"
@@ -42,6 +42,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 // Standard
 #include <iostream>
@@ -133,7 +134,8 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
           if (_strictTagMatching)
           {
             nonNameTagsIdentical =
-              TagComparator::getInstance().nonNameTagsExactlyMatch(w->getTags(), w2->getTags());
+              TagComparator::getInstance().nonNameTagsExactlyMatch(w->getTags(), w2->getTags(),
+                                                                   ConfigOptions().getDuplicateNameCaseSensitive());
           }
 
           if (nonNameTagsIdentical || !_strictTagMatching)
@@ -153,10 +155,11 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
 
 bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
 {
-  // is this a linear way
-  return (LinearCriterion().isSatisfied(w) &&
-      // if this is not part of a relation
-      _map->getIndex().getParents(w->getElementId()).size() == 0);
+  return
+    // is this a linear way
+    (LinearCriterion().isSatisfied(w) &&
+     // if this is not part of a relation
+     _map->getIndex().getParents(w->getElementId()).size() == 0);
 }
 
 void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, bool rev2)
@@ -171,7 +174,7 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
       TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
     const vector<long>& nodes1 = w1->getNodeIds();
     const vector<long>& nodes2 = w2->getNodeIds();
-    //  _splitDuplicateWays is always called where num_nodes(w1) >= num_nodes(w2) so the following
+    // _splitDuplicateWays is always called where num_nodes(w1) >= num_nodes(w2), so the following
     // logic works
     if (nodes1.size() == nodes2.size() &&
         nodes1.size() == static_cast<vector<long>::size_type>(length))
@@ -309,9 +312,11 @@ WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes
   }
 }
 
-void DuplicateWayRemover::_replaceMultiple(const ConstWayPtr& oldWay,
-  const std::vector<WayPtr>& ways)
+void DuplicateWayRemover::_replaceMultiple(
+  const ConstWayPtr& oldWay, const std::vector<WayPtr>& ways)
 {
+  _numAffected += ways.size(); // *think* this is right...not sure
+
   if (ways.size() < 1)
   {
     RemoveWayByEid::removeWay(_map, oldWay->getId());
@@ -333,6 +338,14 @@ void DuplicateWayRemover::_replaceMultiple(const ConstWayPtr& oldWay,
     if (r)
       r->replaceElements(old, newValues.begin(), newValues.end());
   }
+}
+
+QStringList DuplicateWayRemover::getCriteria() const
+{
+  QStringList criteria;
+  criteria.append(QString::fromStdString(LinearCriterion::className()));
+  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  return criteria;
 }
 
 }

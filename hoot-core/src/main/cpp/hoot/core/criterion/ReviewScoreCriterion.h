@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REVIEW_SCORE_CRITERION_H
@@ -45,6 +45,7 @@ public:
   static std::string className() { return "hoot::ReviewScoreCriterion"; }
 
   ReviewScoreCriterion();
+  virtual ~ReviewScoreCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

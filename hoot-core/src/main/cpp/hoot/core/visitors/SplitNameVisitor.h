@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SPLITNAMEVISITOR_H
 #define SPLITNAMEVISITOR_H
 
 // Hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -39,28 +38,31 @@ namespace hoot
  * Sometimes name fields have more characters than we'd like. This method takes all names beyond
  * the a specified character limit and puts them into fields named 'name:0', 'name:1', etc.
  */
-class SplitNameVisitor : public ElementVisitor, public OperationStatusInfo, public Configurable
+class SplitNameVisitor : public ElementVisitor, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::SplitNameVisitor"; }
 
   SplitNameVisitor();
+  virtual ~SplitNameVisitor() = default;
 
   void setMaxSize(int s) { _maxSize = s; }
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const
-  { return "Splits name tags over 255 characters"; }
+  QString getDescription() const override
+  { return QString("Splits name tags over %1 characters").arg(_maxSize); }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " building outlines"; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
+
+  std::string getClassName() const override { return className(); }
 
 private:
 

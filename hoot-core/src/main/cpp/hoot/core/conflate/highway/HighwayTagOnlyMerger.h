@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAY_TAG_ONLY_MERGER_H
 #define HIGHWAY_TAG_ONLY_MERGER_H
@@ -48,7 +48,7 @@ public:
 
   static std::string className() { return "hoot::HighwayTagOnlyMerger"; }
 
-  HighwayTagOnlyMerger();
+  HighwayTagOnlyMerger() = default;
   HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
                        const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   // This is definitely not ideal to be passing a Network Conflation merger in here like this to
@@ -58,10 +58,10 @@ public:
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     std::shared_ptr<PartialNetworkMerger> networkMerger);
 
-  ~HighwayTagOnlyMerger();
+  virtual ~HighwayTagOnlyMerger() = default;
 
   virtual QString getDescription() const
-  { return "Merges road tags only (some geometry exceptions)"; }
+  { return "Merges road tags only with minimal geometry exceptions"; }
 
 protected:
 

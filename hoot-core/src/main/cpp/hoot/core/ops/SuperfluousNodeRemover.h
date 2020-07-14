@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SUPERFLUOUSNODEREMOVER_H
@@ -36,7 +36,8 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <set>
@@ -47,20 +48,24 @@ namespace hoot
 class OsmMap;
 
 /**
- * Removes all the nodes from a map that aren't part of a way and have no information in them.
+ * Removes all the nodes from a map that aren't part of a way or a relation and have no information
+ * in them.
  *
  * If the bounds have been set via Boundable's setBounds then only nodes that are both not part
  * of a way and inside the bounds will be removed. This is most useful when performing tile based
  * operations such as the FourPassDriver.
+ *
+ * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
+ * with no nodes.
  */
-class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable,
-  public OperationStatusInfo
+class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable
 {
 public:
 
   static std::string className() { return "hoot::SuperfluousNodeRemover"; }
 
   SuperfluousNodeRemover();
+  virtual ~SuperfluousNodeRemover() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
@@ -79,7 +84,7 @@ public:
   static long removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
                           const geos::geom::Envelope& e = geos::geom::Envelope());
 
-  virtual void setBounds(const geos::geom::Envelope &bounds);
+  virtual void setBounds(const geos::geom::Envelope& bounds);
 
   void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
 
@@ -90,13 +95,20 @@ public:
   virtual QString getInitStatusMessage() const { return "Removing superfluous nodes..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Removed " + QString::number(_numAffected) + " superfluous nodes"; }
+  { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " superfluous nodes"; }
 
 protected:
 
   geos::geom::Envelope _bounds;
+
   std::set<long> _usedNodes;
+
+  // if true, a node can be removed even if it has information tags (non-metadata)
   bool _ignoreInformationTags;
+  // configurable set of tags where if found on a node, we always want to remove it
+  QStringList _unallowedOrphanKvps;
+
+  int _taskStatusUpdateInterval;
 };
 
 }

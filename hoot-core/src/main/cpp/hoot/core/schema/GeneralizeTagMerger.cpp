@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "GeneralizeTagMerger.h"
 
@@ -35,13 +35,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(TagMerger, GeneralizeTagMerger)
 
-GeneralizeTagMerger::GeneralizeTagMerger()
-{
-}
-
 Tags GeneralizeTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
-  return TagComparator::getInstance().generalize(t1, t2);
+  return TagComparator::getInstance().generalize(t1, t2, false, _caseSensitive);
 }
 
 }

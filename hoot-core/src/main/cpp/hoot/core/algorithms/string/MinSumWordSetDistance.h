@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MINSUMWORDSETDISTANCE_H
 #define MINSUMWORDSETDISTANCE_H
@@ -45,9 +45,10 @@ public:
   /**
    * @param d Takes ownership of d.
    */
-  MinSumWordSetDistance(StringDistance* d);
+  MinSumWordSetDistance(StringDistancePtr d);
 
-  MinSumWordSetDistance();
+  MinSumWordSetDistance() = default;
+  virtual ~MinSumWordSetDistance() = default;
 
   static std::string className() { return "hoot::MinSumWordSetDistance"; }
 

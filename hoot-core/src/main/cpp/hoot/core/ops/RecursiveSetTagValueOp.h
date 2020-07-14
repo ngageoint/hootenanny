@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RECURSIVE_SET_TAG_VALUE_OP_H
@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 
@@ -40,14 +39,16 @@ namespace hoot
 /**
  * Allows for setting tags on elements and their children (way nodes, relation members)
  */
-class RecursiveSetTagValueOp : public OsmMapOperation, public OperationStatusInfo,
-  public ElementCriterionConsumer, public Configurable
+class RecursiveSetTagValueOp : public OsmMapOperation, public ElementCriterionConsumer,
+  public Configurable
 {
 public:
 
   static std::string className() { return "hoot::RecursiveSetTagValueOp"; }
 
-  RecursiveSetTagValueOp();
+  RecursiveSetTagValueOp() = default;
+  virtual ~RecursiveSetTagValueOp() = default;
+
   // We have the constructor signatures from SetTagValueVisitor here, as well as a signature that
   // allows passing in an already configured, possibly complex, criterion. We may want to extend
   // that capability to SetTagValueVisitor at some point.
@@ -98,6 +99,8 @@ public:
    * @see OperationStatusInfo
    */
   virtual QString getCompletedStatusMessage() const { return _tagger->getCompletedStatusMessage(); }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

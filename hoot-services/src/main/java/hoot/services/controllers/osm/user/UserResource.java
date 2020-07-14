@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -54,6 +55,8 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -230,13 +233,13 @@ public class UserResource {
                 }
 
                 userInfo = createQuery()
-                        .select(users.id, users.displayName, users.hootservices_last_authorize, users.privileges)
+                        .select(users.id, users.displayName, users.hootservices_last_authorize, users.privileges, users.favoriteOpts)
                         .from(users)
                         .orderBy(sorter)
                         .fetch();
             } else {
                 userInfo = createQuery()
-                        .select(users.id, users.displayName)
+                        .select(users.id, users.displayName, users.favoriteOpts)
                         .from(users)
                         .orderBy(sorter)
                         .fetch();
@@ -253,17 +256,18 @@ public class UserResource {
                             .stream().filter(map -> substitutionMap.get(map).equals("true"))
                             .collect(Collectors.toSet());
 
-                    if (activePrivileges.size() == 0 || filterPrivileges.containsAll(activePrivileges)) {
+                    if (activePrivileges.size() == 0 || filterPrivileges.containsAll(activePrivileges) ) {
                         user.setId(tuple.get(users.id));
                         user.setDisplayName(tuple.get(users.displayName));
                         user.setHootservicesLastAuthorize(tuple.get(users.hootservices_last_authorize));
                         user.setPrivileges(tuple.get(users.privileges));
+                        user.setFavoriteOpts(tuple.get(users.favoriteOpts));
                         userList.add(user);
                     }
-
                 } else {
                     user.setId(tuple.get(users.id));
                     user.setDisplayName(tuple.get(users.displayName));
+                    user.setFavoriteOpts(tuple.get(users.favoriteOpts));
                     userList.add(user);
                 }
             }
@@ -338,6 +342,141 @@ public class UserResource {
         Map<String, String> json = PostgresUtils.postgresObjToHStore(user.getPrivileges());
 
         return Response.ok(json).build();
+    }
+
+    /**
+    *
+    * Saves the favorite adv opts for the specified users list
+    *
+    * POST hoot-services/osm/api/0.6/user/saveFavoriteOpts
+    *
+    * @param request
+    * @param favoriteOpts list of objects containing the users id and favorite
+    *  looks like:
+    *      [
+    *        {
+    *        	favorites:
+    *        		{
+    *                   description:  "If true, not only will....",
+    *                   value: true,
+    *                   input: opt.input,
+    *                   type: "boolean",
+    *                   id: AddReviewTagsToFeatures,
+    *                   label: Add Review Tags
+    *        		}
+    *        },
+    *
+    *      ]
+    * @return success status if everything is updated.
+    */
+    @POST
+    @Path("/saveFavoriteOpts")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response saveFavoriteOpts(@Context HttpServletRequest request, String favoriteOpts) {
+        Users user = Users.fromRequest(request);
+        Long userId = user.getId();
+
+        try {
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(favoriteOpts);
+
+            Object favoritesColumn = createQuery()
+                    .select(users.favoriteOpts)
+                    .from(users)
+                    .where(users.id.eq(userId))
+                    .fetchOne();
+
+            Map<String, String> tags = PostgresUtils.postgresObjToHStore(favoritesColumn);
+
+            String getName = (String) json.get("name");
+            String getFavorites = json.get("members").toString();
+	        tags.put(getName, getFavorites);
+
+            createQuery().update(users)
+                .where(users.id.eq(userId))
+                .set(users.favoriteOpts, tags)
+                .execute();
+
+        } catch (Exception e) {
+            Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
+        }
+
+        userManager.clearCachedUser(userId);
+
+        return Response.ok().build();
+   }
+
+    /**
+     * Gets the current users favorite adv opts
+     *
+     * GET hoot-services/osm/api/0.6/user/getFavoriteOpts
+     *
+     * @param request
+     * @return the current user's favorite adv opts
+     */
+    @GET
+    @Path("/getFavoriteOpts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFavoriteOpts(@Context HttpServletRequest request) {
+        Users user = Users.fromRequest(request);
+        Long userId = user.getId();
+
+        Object favoritesColumn = createQuery()
+                .select(users.favoriteOpts)
+                .from(users)
+                .where(users.id.eq(userId))
+                .fetchOne();
+
+        Map<String, String> json = PostgresUtils.postgresObjToHStore(favoritesColumn);
+
+        return Response.ok(json).build();
+    }
+
+    /**
+     * To delete saved favorite opts
+     *
+     * DELETE hoot-services/osm/api/0.6/user/deleteFavoriteOpts
+     * {
+     * 	"name":favOptName,
+     * }
+     *
+     * @param favoriteOpts favorite adv opt name
+     *            name of the opt to delete
+     * @return json containing total numbers of deleted
+     */
+    @DELETE
+    @Path("/deleteFavoriteOpts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteFavOpt(@Context HttpServletRequest request, String favoriteOpts) {
+
+        try {
+            Users user = Users.fromRequest(request);
+            Long userId = user.getId();
+
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(favoriteOpts);
+
+            String getName = (String) json.get("name");
+
+            Object favoritesColumn = createQuery()
+                .select(users.favoriteOpts)
+                .from(users)
+                .where(users.id.eq(userId))
+                .fetchOne();
+
+            Map<String, String> tags = PostgresUtils.postgresObjToHStore(favoritesColumn);
+
+            tags.remove(getName);
+
+            createQuery().update(users)
+                .where(users.id.eq(userId))
+                .set(users.favoriteOpts, tags)
+                .execute();
+
+        } catch (Exception e) {
+            Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
+        }
+        return Response.ok().build();
     }
 
     /**

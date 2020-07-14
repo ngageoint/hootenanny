@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGESET_CREATOR_H
 #define CHANGESET_CREATOR_H
@@ -71,10 +71,13 @@ public:
    * Constructor
    *
    * @param printStats prints statistics for the output changeset
+   * @param statsOutputFile optional file to output the changeset statistics to
    * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
    * the output changeset is of type .osc.sql.
    */
-  ChangesetCreator(const bool printDetailedStats = false, const QString osmApiDbUrl = "");
+  ChangesetCreator(
+    const bool printDetailedStats = false, const QString& statsOutputFile = "",
+    const QString osmApiDbUrl = "");
 
   /**
    * Writes a changeset between one or two inputs to an output file. If only one input is
@@ -110,6 +113,8 @@ public:
   int getNumModifyChanges() const { return _numModifyChanges; }
   int getNumDeleteChanges() const { return _numDeleteChanges; }
 
+  void setIncludeReviews(bool include) { _includeReviews = include; }
+
 private:
 
   friend class ChangesetReplacementCreatorTest;
@@ -119,7 +124,11 @@ private:
   int _numTotalTasks;
   int _currentTaskNum;
 
+  // allows element reviews to be in the changeset
+  bool _includeReviews;
+
   bool _printDetailedStats;
+  QString _statsOutputFile;
 
   // If true, we are generating a changeset that will be made up of everything in the single input
   // provided.

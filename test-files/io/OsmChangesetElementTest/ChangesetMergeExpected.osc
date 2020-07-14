@@ -25,7 +25,7 @@
 			<tag k="error:circular" v="15"/>
 		</way>
 	</modify>
-	<delete if-unused="true">
+	<delete>
 		<relation id="1" version="1" timestamp="" changeset="1">
 			<member type="node" ref="7" role="role1"/>
 			<member type="way" ref="3" role="role2"/>

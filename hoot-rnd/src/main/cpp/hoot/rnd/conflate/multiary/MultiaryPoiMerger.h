@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __MULTIARY_POI_MERGER_H__
 #define __MULTIARY_POI_MERGER_H__
@@ -46,7 +46,8 @@ public:
 
   static std::string className() { return "hoot::MultiaryPoiMerger"; }
 
-  MultiaryPoiMerger();
+  MultiaryPoiMerger() = default;
+  virtual ~MultiaryPoiMerger() = default;
   /**
    * Construct with a subgraph of pairs. The links in the set of pairs are used to determine links
    * between elements so it is important that the pairs are represenetative of the matches.
@@ -63,6 +64,8 @@ public:
 
   virtual QString getDescription() const
   { return "Merges POIs matched with Multiary Conflation (experimental)"; }
+
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 protected:
 

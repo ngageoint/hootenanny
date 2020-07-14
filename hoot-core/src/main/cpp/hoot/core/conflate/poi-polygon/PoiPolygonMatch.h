@@ -63,13 +63,14 @@ public:
 
   static const QString MATCH_NAME;
 
-  PoiPolygonMatch();
+  PoiPolygonMatch() = default;
   // this constructor added primarily for testing purposes
   PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
     PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr(),
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>());
+  virtual ~PoiPolygonMatch() = default;
 
   virtual void setConfiguration(const Settings& conf) override;
 
@@ -87,9 +88,10 @@ public:
 
   virtual double getProbability() const override { return _class.getMatchP(); }
 
-  // Is the right implementation for this?
+  // Is this the right implementation?
   virtual bool isConflicting(const ConstMatchPtr& /*other*/,
-                             const ConstOsmMapPtr& /*map*/) const override
+                             const ConstOsmMapPtr& /*map*/,
+                             const QHash<QString, ConstMatchPtr>& /*matches*/) const override
   { return false; }
 
   virtual bool isWholeGroup() const override { return true; }
@@ -127,6 +129,10 @@ public:
   void setDisableSameSourceConflationMatchTagKeyPrefixOnly(const bool disabled)
   { _disableSameSourceConflationMatchTagKeyPrefixOnly = disabled; }
   void setSourceTagKey(const QString& key) { _sourceTagKey = key; }
+  void setDisableIntradatasetConflation1(const bool disabled)
+  { _disableIntradatasetConflation1 = disabled; }
+  void setDisableIntradatasetConflation2(const bool disabled)
+  { _disableIntradatasetConflation2 = disabled; }
   void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
   void setAddressMatchingEnabled(const bool enabled) { _addressMatchEnabled = enabled; }
 
@@ -151,6 +157,7 @@ public:
 private:
 
   friend class PoiPolygonMergerCreatorTest;
+  friend class PoiPolygonMatchTest;
 
   ConstOsmMapPtr _map;
 
@@ -211,6 +218,11 @@ private:
   bool _disableSameSourceConflationMatchTagKeyPrefixOnly;
   QString _sourceTagKey;
 
+  // prevents elements with the same status from matching (same input dataset); this is a simpler
+  // way to prevent intra-dataset matches than using _disableSameSourceConflation
+  bool _disableIntradatasetConflation1;
+  bool _disableIntradatasetConflation2;
+
   bool _reviewMultiUseBuildings;
 
   std::shared_ptr<const PoiPolygonRfClassifier> _rf;
@@ -241,6 +253,8 @@ private:
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
 
   bool _skipForReviewTypeDebugging() const;
+
+  void _clearCache();
 };
 
 }

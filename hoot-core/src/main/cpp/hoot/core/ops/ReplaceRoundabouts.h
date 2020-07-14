@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REPLACEROUNDABOUTS_H
@@ -30,8 +30,8 @@
 
 // Hoot
 #include <hoot/core/conflate/highway/Roundabout.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QMultiHash>
@@ -51,7 +51,7 @@ class Way;
  * replace them with simple intersections. Post conflation, if the roundabout
  * is in the reference data, it will be put back.
  */
-class ReplaceRoundabouts : public OsmMapOperation, public OperationStatusInfo
+class ReplaceRoundabouts : public OsmMapOperation
 {
 public:
 
@@ -64,7 +64,8 @@ public:
   /**
    * @brief ReplaceRoundabouts - default constructor
    */
-  ReplaceRoundabouts();
+  ReplaceRoundabouts() = default;
+  virtual ~ReplaceRoundabouts() = default;
 
   /**
    * @brief apply - Apply the ReplaceRoundabouts Op to the map.
@@ -88,6 +89,14 @@ public:
 
   virtual QString getDescription() const override
   { return "Replaces road roundabouts with simple intersections"; }
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

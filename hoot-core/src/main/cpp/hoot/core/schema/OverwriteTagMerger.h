@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OVERWRITETAGMERGER_H
 #define OVERWRITETAGMERGER_H
 
 // Hoot
 #include <hoot/core/schema/TagMerger.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -38,7 +37,7 @@ namespace hoot
  * Combine all names in a fashion where no unique names will be lost and then favor t1 tags over
  * t2 tags. See TagComparator::overwriteMerge.
  */
-class OverwriteTagMerger : public TagMerger, public Configurable
+class OverwriteTagMerger : public TagMerger
 {
 public:
 
@@ -49,12 +48,13 @@ public:
    */
   OverwriteTagMerger(bool swap = false);
 
-  virtual ~OverwriteTagMerger() {}
+  virtual ~OverwriteTagMerger() = default;
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   // leave empty to avoid duplicate tag mergers displayed by the info command
   virtual QString getDescription() const { return ""; }
+  virtual QString getClassName() const { return ""; }
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -78,10 +78,13 @@ public:
 
   static std::string className() { return "hoot::OverwriteTag2Merger"; }
 
-  OverwriteTag2Merger() : OverwriteTagMerger(false) {}
+  OverwriteTag2Merger() : OverwriteTagMerger(false) { }
+  virtual ~OverwriteTag2Merger() = default;
 
   virtual QString getDescription() const
-  { return "Overwrites tags in the secondary feature with tags from the reference feature"; }
+  {  return "Overwrites conflicting tags with those from the reference feature"; }
+
+  virtual QString getClassName() const { return QString::fromStdString(className()); }
 };
 
 /**
@@ -93,12 +96,15 @@ public:
 
   static std::string className() { return "hoot::OverwriteTag1Merger"; }
 
-  OverwriteTag1Merger() : OverwriteTagMerger(true) {}
+  OverwriteTag1Merger() : OverwriteTagMerger(true) { }
+  virtual ~OverwriteTag1Merger() = default;
 
   virtual QString getDescription() const
-  { return "Overwrites tags in the reference feature with tags from the secondary feature"; }
+  {  return "Overwrites conflicting tags with those from the secondary feature"; }
+
+  virtual QString getClassName() const { return QString::fromStdString(className()); }
 };
 
 }
 
-#endif // AVERAGETAGMERGER_H
+#endif // OVERWRITETAGMERGER_H

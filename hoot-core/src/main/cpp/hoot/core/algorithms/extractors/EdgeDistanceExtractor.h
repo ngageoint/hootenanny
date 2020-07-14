@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGEDISTANCEEXTRACTOR_H
 #define EDGEDISTANCEEXTRACTOR_H
@@ -52,26 +52,25 @@ class EdgeDistanceExtractor : public AbstractDistanceExtractor, public ValueAggr
 public:
 
   EdgeDistanceExtractor(ValueAggregatorPtr, Meters spacing = 5.0);
-
-  // Use default MeanAggregator
   EdgeDistanceExtractor(Meters spacing = 5.0);
+  virtual ~EdgeDistanceExtractor() = default;
 
   static std::string className() { return "hoot::EdgeDistanceExtractor"; }
 
-  virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const;
+  double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual std::string getClassName() const { return EdgeDistanceExtractor::className(); }
+  std::string getClassName() const override { return EdgeDistanceExtractor::className(); }
 
-  virtual std::string getName() const;
+  std::string getName() const override;
 
-  virtual void setValueAggregator(const ValueAggregatorPtr& va) { _aggregator = va; }
+  void setValueAggregator(const ValueAggregatorPtr& va) override { _aggregator = va; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  void setSpacing(const double spacing);
+  void setSpacing(const double spacing) { _spacing = spacing; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the distance from one set of lines to another"; }
 
 private:
@@ -82,9 +81,11 @@ private:
   double _oneDistance(const OsmMap& map, const std::shared_ptr<const Element>& e1,
     const std::shared_ptr<const Element>& e2) const;
 
-  std::vector<geos::geom::Coordinate> _discretize(const OsmMap& map, const std::shared_ptr<const Element>& e) const;
+  std::vector<geos::geom::Coordinate> _discretize(const OsmMap& map,
+                                                  const std::shared_ptr<const Element>& e) const;
 
-  std::shared_ptr<geos::geom::Geometry> _toLines(const OsmMap& map, const std::shared_ptr<const Element>& e) const;
+  std::shared_ptr<geos::geom::Geometry> _toLines(const OsmMap& map,
+                                                 const std::shared_ptr<const Element>& e) const;
 };
 
 }

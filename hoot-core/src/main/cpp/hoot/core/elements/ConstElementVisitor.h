@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONSTELEMENTVISITOR_H
@@ -39,19 +39,21 @@ namespace hoot
  * class. See hoot::AddRefVisitor for an example implementation.
  *
  * This is also used by hoot::VisitorOp and hoot::NamedOp.
+ *
+ * @todo move this to the visitors folder
  */
 class ConstElementVisitor : public ElementVisitor
 {
 public:
 
-  ConstElementVisitor() {}
-  virtual ~ConstElementVisitor() {}
+  ConstElementVisitor() = default;
+  virtual ~ConstElementVisitor() = default;
 
   static std::string className() { return "hoot::ConstElementVisitor"; }
 
   virtual void visit(const ConstElementPtr& e) = 0;
 
-  virtual void visit(const ElementPtr& e) override
+  void visit(const ElementPtr& e) override
   {
     visit(std::dynamic_pointer_cast<const Element>(e));
   }

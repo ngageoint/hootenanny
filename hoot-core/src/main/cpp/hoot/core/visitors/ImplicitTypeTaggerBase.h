@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICITTYPETAGGERBASE_H
 #define IMPLICITTYPETAGGERBASE_H
@@ -45,7 +45,7 @@ public:
 
   ImplicitTypeTaggerBase();
   ImplicitTypeTaggerBase(const QString& databasePath);
-  ~ImplicitTypeTaggerBase();
+  virtual ~ImplicitTypeTaggerBase();
 
   /**
    * Adds implicitly derived tags to an element
@@ -61,6 +61,8 @@ public:
   void setAddTopTagOnly(bool add) { _ruleReader->setAddTopTagOnly(add); }
   void setAllowWordsInvolvedInMultipleRules(bool allow)
   { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
+
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

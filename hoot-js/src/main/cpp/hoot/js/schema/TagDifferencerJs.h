@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __TAG_DIFFERENCER_JS_H__
 #define __TAG_DIFFERENCER_JS_H__
 
 // hoot
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -41,16 +41,19 @@ namespace hoot
 
 class TagDifferencer;
 
-class TagDifferencerJs : public node::ObjectWrap
+class TagDifferencerJs : public HootBaseJs
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   TagDifferencer* getDifferencer() { return _td.get(); }
 
+  virtual ~TagDifferencerJs() = default;
+
 private:
-  TagDifferencerJs(TagDifferencer *op);
-  ~TagDifferencerJs();
+
+  TagDifferencerJs(TagDifferencer *op) : _td(op) { }
 
   static void diff(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);

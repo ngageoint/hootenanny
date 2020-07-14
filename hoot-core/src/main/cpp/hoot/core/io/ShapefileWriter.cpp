@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ShapefileWriter.h"
@@ -44,6 +44,7 @@ using namespace geos::geom;
 #include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
@@ -62,7 +63,8 @@ class ColumnVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
-  ColumnVisitor(ElementType type) : _type(type) {}
+  ColumnVisitor(ElementType type) : _type(type) { }
+  virtual ~ColumnVisitor() = default;
 
   virtual void visit(const std::shared_ptr<const Element>& e)
   {
@@ -89,6 +91,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
 private:
 
@@ -131,7 +134,7 @@ void ShapefileWriter::open(const QString& url)
 {
   if (QDir(url).exists() == false)
   {
-    if (QDir(".").mkpath(url) == false)
+    if (FileUtils::makeDir(url) == false)
     {
       throw HootException("Error creating directory for writing: " + url);
     }

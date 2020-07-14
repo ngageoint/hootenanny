@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONNAMESCOREEXTRACTOR_H
 #define POIPOLYGONNAMESCOREEXTRACTOR_H
@@ -47,6 +47,7 @@ public:
   static std::string className() { return "hoot::PoiPolygonNameScoreExtractor"; }
 
   PoiPolygonNameScoreExtractor();
+  virtual ~PoiPolygonNameScoreExtractor() = default;
 
   virtual std::string getClassName() const { return PoiPolygonNameScoreExtractor::className(); }
 
@@ -84,6 +85,7 @@ private:
 
   double _nameScoreThreshold;
   double _levDist;
+  StringDistancePtr _stringComp;
 
   //when enabled, will attempt to translate address tags to English
   bool _translateTagValuesToEnglish;

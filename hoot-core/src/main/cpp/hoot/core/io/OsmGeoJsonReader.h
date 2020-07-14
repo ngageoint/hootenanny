@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_GEOJSON_READER_H
@@ -63,8 +63,8 @@ public:
 
   static std::string className() { return "hoot::OsmGeoJsonReader"; }
 
-  OsmGeoJsonReader();
-  virtual ~OsmGeoJsonReader();
+  OsmGeoJsonReader() = default;
+  virtual ~OsmGeoJsonReader() = default;
 
   /**
    * @brief isSupported returns true if the URL is likely supported. This isn't
@@ -203,6 +203,11 @@ private:
   std::queue<std::string> _roles;
 
   std::shared_ptr<geos::geom::Coordinate> ReadCoordinate(const boost::property_tree::ptree& coordsIt);
+
+  /*
+   * For use with older data not necessarily in WGS84.
+   */
+  void _parseCoordSys();
 };
 
 }

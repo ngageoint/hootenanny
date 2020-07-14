@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REMOVE_DUPLICATE_RELATION_MEMBER_VISITOR_H
@@ -40,13 +40,14 @@ namespace hoot
  *
  * See notes on RelationData::_members.
  */
-class RemoveDuplicateRelationMembersVisitor : public ElementVisitor, public OperationStatusInfo
+class RemoveDuplicateRelationMembersVisitor : public ElementVisitor
 {
 public:
 
   static std::string className() { return "hoot::RemoveDuplicateRelationMembersVisitor"; }
 
-  RemoveDuplicateRelationMembersVisitor();
+  RemoveDuplicateRelationMembersVisitor() = default;
+  virtual ~RemoveDuplicateRelationMembersVisitor() = default;
 
   virtual void visit(const ElementPtr& e);
 
@@ -56,6 +57,8 @@ public:
   { return "Removed " + QString::number(_numAffected) + " duplicate relation members"; }
 
   virtual QString getDescription() const { return "Removes duplicate relation members"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

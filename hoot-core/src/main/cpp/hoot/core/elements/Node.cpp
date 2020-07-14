@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Node.h"
@@ -42,9 +42,6 @@ using namespace std;
 
 namespace hoot
 {
-
-template<class Node>
-SharedPtrPool<Node> SharedPtrPool<Node>::_theInstance;
 
 Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
 Element(s)

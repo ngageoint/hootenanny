@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveInvalidMultilineStringMembersVisitor.h"
 
 //  hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -41,7 +40,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidMultilineStringMembersVisitor)
 
-RemoveInvalidMultilineStringMembersVisitor::RemoveInvalidMultilineStringMembersVisitor()
+RemoveInvalidMultilineStringMembersVisitor::RemoveInvalidMultilineStringMembersVisitor() :
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -53,6 +53,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
     Relation* r = dynamic_cast<Relation*>(e.get());
     LOG_VART(r->getElementId());
     assert(r != 0);
+    LOG_VART(r->getType());
     // Only multilinestring relations
     if (r->getType() == MetadataTags::RelationMultilineString())
     {
@@ -68,7 +69,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
 
       const double expansion = r->getCircularError() / 2.0;
       OsmMapPtr map(_map->shared_from_this());
-      // Multiline strings that are a part of a review relation are what we are targetting for
+      // Multiline strings that are a part of a review relation are what we are targeting for
       // replacement
       set<ElementId> parents = map->getParents(r->getElementId());
       for (set<ElementId>::iterator it = parents.begin(); it != parents.end(); ++it)
@@ -125,6 +126,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
             {
               LOG_TRACE("Removing: " << r->getElementId() << "...");
               rev->removeElement(r->getElementId());
+              _numAffected++;
             }
           }
         }
@@ -148,8 +150,19 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
         LOG_TRACE("Removing: " << id << "...");
         r->removeElement(id);
       }
+      LOG_TRACE("Removing: " << r->getElementId() << "...");
       RemoveRelationByEid::removeRelation(map, r->getId());
+      _numAffected++;
     }
+  }
+
+  _numProcessed++;
+  if (_numProcessed % (_taskStatusUpdateInterval * 10) == 0)
+  {
+    PROGRESS_INFO(
+      "\tRemoved " << StringUtils::formatLargeNumber(_numAffected) << " invalid " <<
+      "relations / " << StringUtils::formatLargeNumber(_map->getRelationCount()) <<
+      " total relations.");
   }
 }
 

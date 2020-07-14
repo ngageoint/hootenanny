@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIVISITOR_H
 #define MULTIVISITOR_H
@@ -40,13 +40,16 @@ public:
 
   static std::string className() { return "hoot::MultiVisitor"; }
 
-  MultiVisitor();
+  MultiVisitor() = default;
+  virtual ~MultiVisitor() = default;
 
   virtual void visit(const std::shared_ptr<Element>& e);
 
   void addVisitor(ElementOsmMapVisitor *v) { _visitors.push_back(v); }
 
   virtual QString getDescription() const { return "Allows for combining multiple visitors"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEREVIEWSBYEIDOP_H
 #define REMOVEREVIEWSBYEIDOP_H
@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -39,8 +38,10 @@
 namespace hoot
 {
 
-class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementConsumer,
-  public OperationStatusInfo
+/**
+ * Removes all review relations that an element is involved in and optionally the element itself
+ */
+class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
 
@@ -54,7 +55,8 @@ public:
    * It is expected that the eid will be populated with addElement after construction. addElement
    * must be called exactly two times.
    */
-  RemoveReviewsByEidOp() {}
+  RemoveReviewsByEidOp() = default;
+  virtual ~RemoveReviewsByEidOp() = default;
 
   /**
    * If the elements aren't specified in the constructor this must be called exactly two times. Once
@@ -72,6 +74,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " conflation reviews"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -59,10 +59,6 @@ HOOT_FACTORY_REGISTER(Match, HighwayMatch)
 const QString HighwayMatch::MATCH_NAME = "Highway";
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
 
-HighwayMatch::HighwayMatch() : Match()
-{
-}
-
 HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
   const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
@@ -178,7 +174,9 @@ double HighwayMatch::getProbability() const
   return _c.getMatchP();
 }
 
-bool HighwayMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const
+bool HighwayMatch::isConflicting(
+  const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+  const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(other.get());
   // if the other match isn't a highway match then this is a conflict.

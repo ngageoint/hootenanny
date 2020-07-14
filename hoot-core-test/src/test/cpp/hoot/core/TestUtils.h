@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TESTUTILS_H
@@ -37,6 +37,8 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QString>
@@ -60,11 +62,11 @@ inline QString toQString(const std::string& s)
   return QString::fromStdString(s);
 }
 
-#define HOOT_STR_EQUALS(v1, v2) \
+#define HOOT_STR_EQUALS(expected, actual) \
 { \
   std::stringstream ss1, ss2; \
-  ss1 << v1; \
-  ss2 << v2; \
+  ss1 << expected; \
+  ss2 << actual; \
   CPPUNIT_ASSERT_EQUAL(ss1.str(), ss2.str()); \
 } \
 
@@ -103,6 +105,7 @@ public:
 
   static const QString HOUSE_NUMBER_TAG_NAME;
   static const QString STREET_TAG_NAME;
+  static const QString CITY_TAG_NAME;
   static const QString FULL_ADDRESS_TAG_NAME;
   static const QString FULL_ADDRESS_TAG_NAME_2;
 
@@ -132,6 +135,12 @@ public:
     OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
     Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
 
+  /*
+   * For creating a way where you just need to operate on its tags and
+   * don't care about the geometric aspect of it.
+   */
+  static WayPtr createDummyWay(OsmMapPtr map, Status status = Status::Unknown1);
+
   static RelationPtr createRelation(
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
     Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
@@ -153,7 +162,7 @@ public:
   /**
    * Return the singleton instance.
    */
-  static std::shared_ptr<TestUtils> getInstance();
+  static TestUtils& getInstance();
 
   /**
    * Register a way to reset the environment. This is most useful in plugins to avoid circular
@@ -183,11 +192,40 @@ public:
     const QString& stdFilePath, const QString& outFilePath);
 
   /**
-   * Creates a folder path using QDir::mkpath in a more thread-safe way
-   * @param path relative or absolute path to create (think `mkdir -p`)
-   * @return true if successful
+   * This is a snapshot of the option, conflate.pre.ops (circa 2/12/20), for testing purposes.
+   *
+   * @return a list of operator class names
    */
-  static bool mkpath(const QString& path);
+  static QStringList getConflateCmdSnapshotPreOps();
+
+  /**
+   * This is a snapshot of the option, conflate.post.ops (circa 2/12/20), for testing purposes.
+   *
+   * @return a list of operator class names
+   */
+  static QStringList getConflateCmdSnapshotPostOps();
+
+  /**
+   * This is a snapshot of the option, map.cleaner.transforms (circa 2/12/20), for testing purposes.
+   *
+   * @return a list of operator class names
+   */
+  static QStringList getConflateCmdSnapshotCleaningOps();
+
+  /**
+   * Runs a conflate op reduction test which tests for which superfluous conflate pre/post/cleaning
+   * ops are removed by SuperfluousConflateOpRemover. This is in TestUtils b/c it is shared by
+   * SuperfluousConflateOpRemoveTest in hoot-core and SuperfluousConflateOpRemoveJsTest in hoot-js.
+   *
+   * @param matchCreators the match creator class names involved in the conflation job
+   * @param expectedPreOpSize the expected number of conflation pre ops after op reduction
+   * @param expectedPostOpsSize the expected number of conflation post ops after op reduction
+   * @param expectedCleaningOpsSize the expected number of conflation cleaning ops after op
+   * reduction
+   */
+  static void runConflateOpReductionTest(
+    const QStringList& matchCreators, const int expectedPreOpSize, const int expectedPostOpsSize,
+    const int expectedCleaningOpsSize);
 
 private:
 
@@ -206,8 +244,10 @@ public:
 
   AutoRegisterResetInstance()
   {
-    TestUtils::getInstance()->registerReset(this);
+    TestUtils::getInstance().registerReset(this);
   }
+
+  virtual ~AutoRegisterResetInstance() = default;
 
   virtual void reset()
   {
@@ -236,8 +276,10 @@ protected:
       _reset(ResetNone)
   {
     if (outputPath != UNUSED_PATH)
-      TestUtils::mkpath(_outputPath);
+      FileUtils::makeDir(_outputPath);
   }
+
+  virtual ~HootTestFixture() = default;
 
   /**
    * @brief setResetType Set the reset type to do basic, all, or none
@@ -257,10 +299,22 @@ public:
    */
   virtual void setUp()
   {
-    if (_reset == ResetBasic)
-      TestUtils::resetBasic();
-    else if (_reset == ResetAll)
+    if (_reset == ResetAll)
+    {
+      // resetEnvironment reloads Testing.conf, so we don't need to do it here.
       TestUtils::resetEnvironment();
+    }
+    else
+    {
+      if (_reset == ResetBasic)
+      {
+        TestUtils::resetBasic();
+      }
+
+      // We require that all tests use Testing.conf as a starting point and any conf values
+      // specified by it may be overridden when necessary.
+      conf().loadJson(ConfPath::search("Testing.conf"));
+    }
   }
 
   static const QString UNUSED_PATH;

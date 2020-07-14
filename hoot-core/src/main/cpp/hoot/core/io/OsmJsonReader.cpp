@@ -64,25 +64,27 @@ int OsmJsonReader::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
 // TODO: implement Configurable to help simplify this
-OsmJsonReader::OsmJsonReader()
-  : ParallelBoundedApiReader(false, true),
-    _defaultStatus(Status::Invalid),
-    _useDataSourceIds(true),
-    _defaultCircErr(ConfigOptions().getCircularErrorDefaultValue()),
-    _propTree(),
-    _version(""),
-    _generator(""),
-    _timestamp_base(""),
-    _copyright(""),
-    _isFile(false),
-    _isWeb(false),
-    _numRead(0),
-    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
-    _bounds(GeometryUtils::envelopeFromConfigString(ConfigOptions().getConvertBoundingBox())),
-    _keepImmediatelyConnectedWaysOutsideBounds(
-      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds()),
-    _missingNodeCount(0),
-    _missingWayCount(0)
+OsmJsonReader::OsmJsonReader() : ParallelBoundedApiReader(false, true),
+_defaultStatus(Status::Invalid),
+_useDataSourceIds(true),
+_defaultCircErr(ConfigOptions().getCircularErrorDefaultValue()),
+_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
+_propTree(),
+_version(""),
+_generator(""),
+_timestamp_base(""),
+_copyright(""),
+_isFile(false),
+_isWeb(false),
+_numRead(0),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
+_bounds(GeometryUtils::envelopeFromConfigString(ConfigOptions().getConvertBoundingBox())),
+_keepImmediatelyConnectedWaysOutsideBounds(
+  ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds()),
+_missingNodeCount(0),
+_missingWayCount(0),
+_addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
+_logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements())
 {
 }
 
@@ -384,20 +386,31 @@ void OsmJsonReader::_parseOverpassJson()
     _updateChildRefs();
   }
 
-  // Now that we've corrected all child refs (or didn't need to), if we find any remaining missing
-  // child refs we're going to remove them from their parents and log a warning, as they never
-  // actually existed in the input.
-  RemoveMissingElementsVisitor visitor(Log::Warn);
-  LOG_INFO("\t" << visitor.getInitStatusMessage());
-  _map->visitRw(visitor);
-  LOG_DEBUG("\t" << visitor.getCompletedStatusMessage());
+  if (!_addChildRefsWhenMissing)
+  {
+    // Now that we've corrected all child refs (or didn't need to), if we find any remaining missing
+    // child refs we're going to remove them from their parents and log a warning, as they never
+    // actually existed in the input.
+    Log::WarningLevel logLevel;
+    if (_logWarningsForMissingElements)
+    {
+      logLevel = Log::Warn;
+    }
+    else
+    {
+      logLevel = Log::Debug;
+    }
+    RemoveMissingElementsVisitor visitor(logLevel);
+    LOG_INFO("\t" << visitor.getInitStatusMessage());
+    _map->visitRw(visitor);
+    LOG_DEBUG("\t" << visitor.getCompletedStatusMessage());
+  }
 
   // The previous two final load steps correspond to effectively the same behavior that the XML
   // reader uses, except with that reader we simply don't add a missing ref in the first place b/c
-  // we're guaranteed element type ordering (unless
-  // osm.map.reader.xml.add.child.refs.when.missing=true). Because of that, we know at the time a
-  // parent element is loaded any missing child refs mean the child itself is definitely absent
-  // from the input.
+  // we're guaranteed element type ordering (unless map.reader.add.child.refs.when.missing=true).
+  // Because of that, we know at the time a parent element is loaded any missing child refs mean
+  // the child itself is definitely absent from the input.
 }
 
 void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType)
@@ -937,13 +950,12 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, hoot::Elem
     for (pt::ptree::const_iterator tagIt = tags.begin(); tagIt != tags.end(); ++tagIt)
     {
       const QString key = QString::fromStdString(tagIt->first).trimmed();
-      //LOG_VART(key);
       const QString value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
-      //LOG_VART(value);
 
-      // If we are "error:circular", need to set it on the element object,
-      // rather than add it as a tag
-      if (key == MetadataTags::ErrorCircular())
+      // If we are a CE key, need to set it on the element object rather than add it as a tag.
+      // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
+      // will be used. We're not expecting elements to have more than one CE tag.
+      if (_circularErrorTagKeys.contains(key))
       {
         pElement->setCircularError(Meters(value.toInt()));
       }

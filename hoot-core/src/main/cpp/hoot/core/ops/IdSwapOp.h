@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef IDSWAPOP_H
@@ -30,7 +30,6 @@
 
 #include <hoot/core/conflate/IdSwap.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 
 namespace hoot
@@ -40,7 +39,7 @@ namespace hoot
  * @brief The IdSwapOp class is used to swap node and way IDs with each other
  *  It is used to preserve node IDs within ways when merging ways
  */
-class IdSwapOp : public ConstOsmMapOperation, public OperationStatusInfo
+class IdSwapOp : public ConstOsmMapOperation
 {
 public:
   /**
@@ -52,7 +51,7 @@ public:
   /**
    * @brief IdSwapOp - Default constructor
    */
-  IdSwapOp() { }
+  IdSwapOp() = default;
 
   /**
    * @brief IdSwapOp - Constructor taking a swap object with the IDs to swap
@@ -63,6 +62,8 @@ public:
    * @brief IdSwapOp - Constructor taking two elements to swap IDs
    */
   IdSwapOp(ElementId e1, ElementId e2) : _idSwap(new IdSwap(e1,e2)) { }
+
+  virtual ~IdSwapOp() = default;
 
   /**
    * @brief apply - Apply the IdSwap op
@@ -78,6 +79,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const override
   { return "Swapped " + QString::number(_numAffected) + " IDs."; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
   /**

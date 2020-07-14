@@ -49,10 +49,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveRoundabouts)
 
-RemoveRoundabouts::RemoveRoundabouts()
-{
-}
-
 void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
 {
   LOG_TRACE("Removing roundabouts...");

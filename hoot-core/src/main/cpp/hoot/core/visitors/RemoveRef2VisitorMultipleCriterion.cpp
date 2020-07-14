@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveRef2VisitorMultipleCriterion.h"
@@ -38,11 +38,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveRef2VisitorMultipleCriterion)
-
-RemoveRef2VisitorMultipleCriterion::RemoveRef2VisitorMultipleCriterion() :
-RemoveRef2Visitor()
-{
-}
 
 void RemoveRef2VisitorMultipleCriterion::addCriterion(const ElementCriterionPtr& e)
 {

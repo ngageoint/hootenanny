@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGVALUENUMERICRANGECRITERION_H
 #define TAGVALUENUMERICRANGECRITERION_H
@@ -48,6 +48,7 @@ public:
   TagValueNumericRangeCriterion();
   TagValueNumericRangeCriterion(const QStringList tagKeys, const long rangeMin,
                                 const long rangeMax);
+  virtual ~TagValueNumericRangeCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

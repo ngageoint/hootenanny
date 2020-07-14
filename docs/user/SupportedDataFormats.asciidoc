@@ -41,3 +41,6 @@
 All Hootenanny commands can be passed any supported input/output format unless otherwise stated in the command's documentation. See the Hootenanny User Guide for details.
 
 Additional data types can be be made importable/exportable using Hootenanny's pluggable I/O architecture.  See the Hootenanny Developer Guide for details.
+
+The Hootenanny API database format is a slightly optimized version of the OSM API database with extra features added for use with conflation.
+The format is meant for internal use by Hootenanny only.

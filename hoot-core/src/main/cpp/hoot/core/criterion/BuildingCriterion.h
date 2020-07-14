@@ -44,8 +44,9 @@ public:
 
   static std::string className() { return "hoot::BuildingCriterion"; }
 
-  BuildingCriterion();
-  BuildingCriterion(ConstOsmMapPtr map);
+  BuildingCriterion() = default;
+  BuildingCriterion(ConstOsmMapPtr map) : _map(map) { }
+  virtual ~BuildingCriterion() = default;
 
   bool isParentABuilding(ElementId eid) const;
 
@@ -64,6 +65,8 @@ public:
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
+
+  virtual bool supportsSpecificConflation() const { return true; }
 
 private:
 

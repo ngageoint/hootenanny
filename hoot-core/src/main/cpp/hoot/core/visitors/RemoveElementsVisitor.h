@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEELEMENTSVISITOR_H
 #define REMOVEELEMENTSVISITOR_H
@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -41,13 +40,14 @@ namespace hoot
  * Removes any elements where that satisfy a criterion
  */
 class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public OsmMapConsumer,
-  public Configurable, public OperationStatusInfo
+  public Configurable
 {
 public:
 
   static std::string className() { return "hoot::RemoveElementsVisitor"; }
 
   RemoveElementsVisitor(bool negateCriteria = false);
+  virtual ~RemoveElementsVisitor() = default;
 
   virtual void visit(const ElementPtr& e);
 
@@ -70,11 +70,15 @@ public:
   {
     return
       "Removed " + StringUtils::formatLargeNumber(_count) + " / " +
-      StringUtils::formatLargeNumber(_startElementCount) + " elements."; }
+      StringUtils::formatLargeNumber(_startElementCount) + " elements.";
+  }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 
   OsmMap* _map;
+
   bool _recursive;
   int _count;
   long _startElementCount;

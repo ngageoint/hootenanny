@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PROGRESS_REPORTER_H
@@ -41,7 +41,8 @@ class ProgressReporter
 {
 public:
 
-  virtual ~ProgressReporter() {}
+  ProgressReporter() = default;
+  virtual ~ProgressReporter() = default;
 
   /**
    * Allows for passing in progress info for status updates.

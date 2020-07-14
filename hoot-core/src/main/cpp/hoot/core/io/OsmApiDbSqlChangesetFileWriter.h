@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBSQLCHANGESETFILEWRITER_H
 #define OSMAPIDBSQLCHANGESETFILEWRITER_H
@@ -47,9 +47,6 @@ namespace hoot
 /**
  * Writes out a set of SQL commands, that when executed, will update the contents of
  * an OSM API database with an OSM changeset.
- *
- * TODO: add a method that tells you whether sql output from this is equivalent to that in an xml
- * changeset - see #3372
  */
 class OsmApiDbSqlChangesetFileWriter : public OsmChangesetFileWriter
 {
@@ -74,10 +71,10 @@ public:
 
   /**
    * @see ChangesetFileWriter
-   *
-   * not currently implemented
    */
-  virtual QString getStatsTable() const { return ""; }
+  virtual QString getStatsTable(
+    const ChangesetStatsFormat& /*format = StatisticsFormat::Text*/) const
+  { throw NotImplementedException("Changeset statistics not implemented for SQL changesets."); }
 
   /**
    * @see ChangesetFileWriter
@@ -144,6 +141,9 @@ private:
   QMap<ElementId, ElementId> _remappedIds;
 
   QList<Change> _parsedChanges;
+
+  // list of metadata tag keys allowed to be written to the changeset
+  QStringList _metadataAllowKeys;
 
   friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 };

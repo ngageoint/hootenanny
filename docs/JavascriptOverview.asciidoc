@@ -156,10 +156,10 @@ further filter each candidate based on distance in the matchScore method.
 
 By default if no parameters are specified the circular error of the
 points in question are used to determine if two features are a candidate for
-matching. As a reminder, the circular error (CE) is stored in the
-+error:circular+ tag on all features. This values is stored as the CE95 in
-meters. In other words, the 95% of the well defined points fall within this
-distance of the actual location.
+matching. As a reminder, the circular error (CE) is stored in any of the tags
+specified in the +circular.error.tag.keys+ configuration option on all features.
+The value is stored as the CE95 in meters. In other words, the 95% of the well
+defined points fall within this distance of the actual location.
 
 By default all features where the distance between the feature pair is less
 than or equal to the sum of the CEs is considered a candidate for match. See

@@ -221,13 +221,13 @@ public class JobResourceTest extends OSMResourceTestAbstract {
         createQuery().insert(QJobStatus.jobStatus).populate(jobStatus).execute();
 
         CommandStatus listCommandStatus = new CommandStatus();
-        listCommandStatus.setCommand("hoot foo");
+        listCommandStatus.setCommand("hoot.bin foo");
         listCommandStatus.setExitCode(0);
         listCommandStatus.setStart(new Timestamp(System.currentTimeMillis()));
         listCommandStatus.setFinish(new Timestamp(System.currentTimeMillis() + 1000));
         listCommandStatus.setJobId(jobId);
         listCommandStatus.setStderr("The command returned an error. Command not found.");
-        listCommandStatus.setStdout("Running command hoot foo...");
+        listCommandStatus.setStdout("Running command hoot.bin foo...");
 
         createQuery().insert(QCommandStatus.commandStatus).populate(listCommandStatus).execute();
 

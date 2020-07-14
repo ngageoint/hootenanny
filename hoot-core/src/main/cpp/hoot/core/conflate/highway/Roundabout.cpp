@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Roundabout.h"
@@ -37,6 +37,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/NodeUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -113,7 +115,7 @@ RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr& pMap, WayPtr pWay)
   LOG_VART(rnd->getCenter());
 
   LOG_TRACE("Created roundabout: " << rnd->toDetailedString(pMap));
-  LOG_VART(OsmUtils::getWayNodesDetailedString(rnd->getRoundaboutWay(), pMap));
+  LOG_VART(WayUtils::getWayNodesDetailedString(rnd->getRoundaboutWay(), pMap));
   return rnd;
 }
 
@@ -160,8 +162,8 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
       GeomPtr pIntersect(pRndGeo->intersection(pWayGeo.get()));
       std::shared_ptr<CoordinateSequence> pCoords(pIntersect->getCoordinates());
 
-      // We are only interested in ways that intersect the geometry once or
-      // twice. More than that is situation we are not prepared to handle.
+      // We are only interested in ways that intersect the geometry once or twice. More than that
+      // is situation we are not prepared to handle.
       size_t numIntersects = pCoords->getSize();
       if (numIntersects > 0 && numIntersects < 3)
       {
@@ -181,8 +183,7 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
         WaySplitter splitter(pMap, pWay);
         std::vector<WayPtr> newWays = splitter.createSplits(splitPoints);
 
-        // Now what? Need to throw away the "interior" splits, and replace
-        // with wheel spokes.
+        // Now what? Need to throw away the "interior" splits, and replace with wheel spokes.
         bool replace = false;
         for (size_t j = 0; j < newWays.size(); j++)
         {
@@ -190,8 +191,8 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
           {
             geos::geom::Coordinate midpoint = getCentroid(pMap, newWays[j]);
 
-            // If the midpoint of the split way is outside of our roundabout
-            // geometry, we want to keep it. Otherwise, let it disappear.
+            // If the midpoint of the split way is outside of our roundabout geometry, we want to
+            // keep it. Otherwise, let it disappear.
             if (!rndEnv.contains(midpoint))
             {
               pMap->addWay(newWays[j]);
@@ -284,7 +285,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
 
   // Remove roundabout way & extra nodes
   LOG_TRACE("Removing roundabout way: " << _roundaboutWay->getId() << "...");
-  LOG_VART(OsmUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
+  LOG_VART(WayUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
   RemoveWayByEid::removeWayFully(pMap, _roundaboutWay->getId());
   for (std::set<long>::iterator it = extraNodeIDs.begin(); it != extraNodeIDs.end(); ++it)
   {
@@ -313,7 +314,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
 
     pMap->addWay(pWay);
     LOG_TRACE("Adding temp way: " << pWay->getId());
-    LOG_VART(OsmUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
+    LOG_VART(WayUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
     _tempWays.push_back(pWay);
   }
   LOG_VART(_tempWays.size());
@@ -395,7 +396,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
 //    OsmUtils::logElementDetail(
 //      pRoundabout, pMap, Log::Trace,
 //      "Roundabout::replaceRoundabout: roundabout after updating nodes");
-    LOG_VART(OsmUtils::getWayNodesDetailedString(pRoundabout, pMap));
+    LOG_VART(WayUtils::getWayNodesDetailedString(pRoundabout, pMap));
 
     //  Convert the roundabout to a geometry for distance checking later
     ElementConverter converter(pMap);
@@ -514,7 +515,7 @@ QString Roundabout::toDetailedString(OsmMapPtr map) const
 
   bool nodeIdsMatch = false;
   const std::vector<ConstNodePtr> originalNodes = _roundaboutNodes;
-  const std::vector<long> originalNodeIds = OsmUtils::nodesToNodeIds(originalNodes);
+  const std::vector<long> originalNodeIds = NodeUtils::nodesToNodeIds(originalNodes);
   if (_roundaboutWay)
   {
     nodeIdsMatch = (originalNodeIds == _roundaboutWay->getNodeIds());
@@ -533,8 +534,8 @@ QString Roundabout::toDetailedString(OsmMapPtr map) const
   if (nodeIdsMatch)
   {
     const std::vector<ConstNodePtr> currentNodes =
-      OsmUtils::nodeIdsToNodes(_roundaboutWay->getNodeIds(), map);
-    if (OsmUtils::nodeCoordsMatch(originalNodes, currentNodes))
+      NodeUtils::nodeIdsToNodes(_roundaboutWay->getNodeIds(), map);
+    if (NodeUtils::nodeCoordsMatch(originalNodes, currentNodes))
     {
       str += ", original and current node coordinates match.";
     }
@@ -542,8 +543,8 @@ QString Roundabout::toDetailedString(OsmMapPtr map) const
     {
       str +=
         ", original and current node coordinates do not match. original node coords: " +
-        OsmUtils::nodeCoordsToString(originalNodes) + ", current node coords: " +
-        OsmUtils::nodeCoordsToString(currentNodes);
+        NodeUtils::nodeCoordsToString(originalNodes) + ", current node coords: " +
+        NodeUtils::nodeCoordsToString(currentNodes);
     }
   }
 

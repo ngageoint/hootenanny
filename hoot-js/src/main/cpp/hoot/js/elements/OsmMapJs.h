@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPJS_H
 #define OSMMAPJS_H
 
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-class OsmMapJs : public node::ObjectWrap
+class OsmMapJs : public HootBaseJs
 {
 public:
 
@@ -51,11 +51,12 @@ public:
 
   bool isConst() const { return !_map.get() && _constMap.get(); }
 
+  virtual ~OsmMapJs() = default;
+
 private:
 
   OsmMapJs();
   OsmMapJs(OsmMapPtr map);
-  ~OsmMapJs();
 
   static void clone(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -65,6 +66,12 @@ private:
   static void removeElement(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void setIdGenerator(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void visit(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationType(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationInCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationWithTagKey(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void mergeCollectionRelations(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getNumRelationMemberNodes(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void relationsHaveConnectedWayMembers(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   OsmMapPtr _map;
   ConstOsmMapPtr _constMap;

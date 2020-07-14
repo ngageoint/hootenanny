@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementToRelationMap.h"
 
@@ -48,14 +48,12 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
   {
   public:
 
-    HashMap<ElementId, set<long>>& _mapping;
-    long _rid;
-
     AddMemberVisitor(HashMap<ElementId, set<long>>& mapping, long rid) : _mapping(mapping)
     {
       _rid = rid;
       LOG_VART(_rid);
     }
+    virtual ~AddMemberVisitor() = default;
 
     virtual void visit(const ConstElementPtr& e)
     {
@@ -69,6 +67,11 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
     }
 
     virtual QString getDescription() const { return ""; }
+    virtual std::string getClassName() const { return ""; }
+
+  protected:
+    HashMap<ElementId, set<long>>& _mapping;
+    long _rid;
   };
 
   AddMemberVisitor filter(_mapping, r->getId());
@@ -107,15 +110,14 @@ void ElementToRelationMap::removeRelation(const OsmMap& map,
   {
   public:
 
-    HashMap<ElementId, set<long>>& _mapping;
-    long _rid;
-
     RemoveMemberVisitor(HashMap<ElementId, set<long>>& mapping, long rid) : _mapping(mapping)
     {
       _rid = rid;
     }
+    virtual ~RemoveMemberVisitor() = default;
 
     virtual QString getDescription() const { return ""; }
+    virtual std::string getClassName() const { return ""; }
 
     virtual void visit(const ConstElementPtr& e)
     {
@@ -127,6 +129,11 @@ void ElementToRelationMap::removeRelation(const OsmMap& map,
         _mapping.erase(ep);
       }
     }
+
+  private:
+
+    HashMap<ElementId, set<long>>& _mapping;
+    long _rid;
   };
 
   RemoveMemberVisitor filter(_mapping, r->getId());
@@ -145,8 +152,10 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     {
       _found = false;
     }
+    virtual ~ContainsElementVisitor() = default;
 
     virtual QString getDescription() const { return ""; }
+    virtual std::string getClassName() const { return ""; }
 
     virtual void visit(const ConstElementPtr& e)
     {
@@ -176,8 +185,10 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     {
       _good = true;
     }
+    virtual ~CheckVisitor() = default;
 
     virtual QString getDescription() const { return ""; }
+    virtual std::string getClassName() const { return ""; }
 
     bool containsRecursive(const ConstRelationPtr& r, ElementId eid)
     {

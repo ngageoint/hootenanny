@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __VAGABOND_NETWORK_MATCHER_H__
 #define __VAGABOND_NETWORK_MATCHER_H__
@@ -72,6 +72,7 @@ public:
    * Use create instead.
    */
   VagabondNetworkMatcher();
+  virtual ~VagabondNetworkMatcher() = default;
 
   // Leaving this hardcoded for now, as we don't use this matcher in production conflation jobs.
   // If we ever do end up using it production, then add a config option for it.

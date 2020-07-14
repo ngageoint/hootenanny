@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="42.4761628" minlon="-71.4732369" maxlat="42.4766752" maxlon="-71.471452"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4762854000000019" lon="-71.4715554999999938"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4762847000000008" lon="-71.4714519999999993"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4761649000000006" lon="-71.4714538000000061"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4761627999999973" lon="-71.4715541000000059"/>
+    <node visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4762902000000011" lon="-71.4728934999999979"/>
+    <node visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4763336999999979" lon="-71.4731613999999951"/>
+    <node visible="true" id="8" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765030000000010" lon="-71.4732369000000034"/>
+    <node visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764982000000018" lon="-71.4730308999999977"/>
+    <node visible="true" id="10" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4763240999999994" lon="-71.4729621999999978"/>
+    <node visible="true" id="11" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4763231000000019" lon="-71.4729738000000054"/>
+    <node visible="true" id="12" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4761895999999979" lon="-71.4728848000000028"/>
+    <node visible="true" id="13" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4763191999999989" lon="-71.4729118999999997"/>
+    <node visible="true" id="14" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4763202000000035" lon="-71.4731285999999955"/>
+    <node visible="true" id="15" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4761954000000017" lon="-71.4730792000000008"/>
+    <node visible="true" id="16" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4766345000000030" lon="-71.4726260000000053"/>
+    <node visible="true" id="17" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765858000000023" lon="-71.4726000999999940"/>
+    <node visible="true" id="18" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765733999999995" lon="-71.4726423000000040"/>
+    <node visible="true" id="19" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765294999999981" lon="-71.4726189000000005"/>
+    <node visible="true" id="20" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764947000000035" lon="-71.4727378999999985"/>
+    <node visible="true" id="21" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765423999999996" lon="-71.4727632999999969"/>
+    <node visible="true" id="22" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765176000000011" lon="-71.4728479000000050"/>
+    <node visible="true" id="23" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765656000000007" lon="-71.4728735000000057"/>
+    <node visible="true" id="24" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765828000000027" lon="-71.4728680999999995"/>
+    <node visible="true" id="25" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765924000000012" lon="-71.4728347000000070"/>
+    <node visible="true" id="26" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765766000000013" lon="-71.4728259000000037"/>
+    <node visible="true" id="27" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765885999999995" lon="-71.4727848999999935"/>
+    <node visible="true" id="28" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4766294000000002" lon="-71.4728044999999952"/>
+    <node visible="true" id="29" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4766632999999985" lon="-71.4726883000000015"/>
+    <node visible="true" id="30" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4766225999999989" lon="-71.4726665999999966"/>
+    <node visible="true" id="31" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4766568000000007" lon="-71.4723276999999939"/>
+    <node visible="true" id="32" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764691999999968" lon="-71.4722550999999982"/>
+    <node visible="true" id="33" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764604000000006" lon="-71.4721361999999942"/>
+    <node visible="true" id="34" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4766752000000025" lon="-71.4722318999999970"/>
+    <node visible="true" id="38" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4762883000000002" lon="-71.4721215999999941"/>
+    <node visible="true" id="39" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4762746999999976" lon="-71.4717995999999971"/>
+    <node visible="true" id="40" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4761779999999973" lon="-71.4718053999999938"/>
+    <node visible="true" id="41" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4761827999999966" lon="-71.4721226000000058"/>
+    <node visible="true" id="42" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765742000000017" lon="-71.4715802000000053"/>
+    <node visible="true" id="43" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765562999999986" lon="-71.4715800000000030"/>
+    <node visible="true" id="44" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765566000000021" lon="-71.4715338000000031"/>
+    <node visible="true" id="45" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764598000000007" lon="-71.4715326000000033"/>
+    <node visible="true" id="46" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764558999999977" lon="-71.4721109000000041"/>
+    <node visible="true" id="47" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4766077999999965" lon="-71.4721126999999967"/>
+    <node visible="true" id="48" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4766096999999974" lon="-71.4718227999999982"/>
+    <node visible="true" id="49" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4765725000000032" lon="-71.4718222999999995"/>
+    <node visible="true" id="50" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4762861000000029" lon="-71.4726983000000047"/>
+    <node visible="true" id="51" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4763586999999987" lon="-71.4726952000000040"/>
+    <node visible="true" id="52" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4763519999999986" lon="-71.4724046000000044"/>
+    <node visible="true" id="53" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4762794000000028" lon="-71.4724075999999968"/>
+    <node visible="true" id="54" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4762873000000027" lon="-71.4727948999999967"/>
+    <node visible="true" id="55" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764081000000004" lon="-71.4727898999999951"/>
+    <node visible="true" id="56" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764063000000007" lon="-71.4728142000000020"/>
+    <node visible="true" id="57" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764297999999982" lon="-71.4728152999999935"/>
+    <node visible="true" id="58" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764333999999977" lon="-71.4728905999999995"/>
+    <node visible="true" id="63" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764411000000024" lon="-71.4714591000000041"/>
+    <node visible="true" id="64" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764478999999966" lon="-71.4721255000000042"/>
+    <node visible="true" id="65" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4764023999999978" lon="-71.4721322999999984"/>
+    <node visible="true" id="66" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4763260000000002" lon="-71.4721265000000017"/>
+    <node visible="true" id="67" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4762902000000011" lon="-71.4715712999999937"/>
+    <node visible="true" id="68" timestamp="1970-01-01T00:00:00Z" version="1" lat="42.4762970000000024" lon="-71.4714532999999932"/>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-1"/>
+        <tag k="feature_area" v="112.5"/>
+        <tag k="name" v="Twin Seafood"/>
+        <tag k="building" v="yes"/>
+        <tag k="length" v="13.6"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="width" v="8.5"/>
+        <tag k="angle" v="179.5"/>
+        <tag k="addr:housenumber" v="541"/>
+        <tag k="addr:street" v="Massachusetts Avenue"/>
+        <tag k="addr:state" v="MA"/>
+        <tag k="addr:country" v="US"/>
+        <tag k="addr:city" v="Acton"/>
+    </way>
+    <way visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="2">
+        <nd ref="7"/>
+        <nd ref="8"/>
+        <nd ref="9"/>
+        <nd ref="10"/>
+        <nd ref="11"/>
+        <nd ref="7"/>
+        <tag k="feature_area" v="313.5"/>
+        <tag k="name" v="New London Style Pizza"/>
+        <tag k="building" v="yes"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="length" v="25.4"/>
+        <tag k="width" v="16.1"/>
+        <tag k="angle" v="163.8"/>
+    </way>
+    <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="12"/>
+        <nd ref="13"/>
+        <nd ref="14"/>
+        <nd ref="15"/>
+        <nd ref="12"/>
+        <tag k="feature_area" v="237.0"/>
+        <tag k="access" v="customers"/>
+        <tag k="length" v="20.1"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="width" v="14.4"/>
+        <tag k="angle" v="270.4"/>
+    </way>
+    <way visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="16"/>
+        <nd ref="17"/>
+        <nd ref="18"/>
+        <nd ref="19"/>
+        <nd ref="20"/>
+        <nd ref="21"/>
+        <nd ref="22"/>
+        <nd ref="23"/>
+        <nd ref="24"/>
+        <nd ref="25"/>
+        <nd ref="26"/>
+        <nd ref="27"/>
+        <nd ref="28"/>
+        <nd ref="29"/>
+        <nd ref="30"/>
+        <nd ref="16"/>
+        <tag k="feature_area" v="235.3"/>
+        <tag k="building" v="yes"/>
+        <tag k="length" v="21.7"/>
+        <tag k="width" v="16.0"/>
+        <tag k="angle" v="248.4"/>
+        <tag k="addr:housenumber" v="10"/>
+        <tag k="addr:street" v="Spruce Street"/>
+        <tag k="addr:state" v="MA"/>
+        <tag k="addr:country" v="US"/>
+        <tag k="addr:city" v="Acton"/>
+    </way>
+    <way visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="31"/>
+        <nd ref="32"/>
+        <nd ref="33"/>
+        <nd ref="34"/>
+        <nd ref="31"/>
+        <tag k="feature_area" v="200.4"/>
+        <tag k="building" v="yes"/>
+        <tag k="length" v="25.7"/>
+        <tag k="width" v="9.0"/>
+        <tag k="angle" v="341.8"/>
+        <tag k="addr:housenumber" v="5"/>
+        <tag k="addr:street" v="Spruce Street"/>
+        <tag k="addr:state" v="MA"/>
+        <tag k="addr:country" v="US"/>
+        <tag k="addr:city" v="Acton"/>
+    </way>
+    <way visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="2">
+        <nd ref="38"/>
+        <nd ref="39"/>
+        <nd ref="40"/>
+        <nd ref="41"/>
+        <nd ref="38"/>
+        <tag k="feature_area" v="294.6"/>
+        <tag k="name" v="Office of Michael Rosenfeld, Inc., Architects"/>
+        <tag k="shop" v="architect"/>
+        <tag k="building" v="yes"/>
+        <tag k="length" v="26.5"/>
+        <tag k="width" v="11.7"/>
+        <tag k="angle" v="271.2"/>
+        <tag k="addr:housenumber" v="543"/>
+        <tag k="addr:street" v="Massachusetts Avenue"/>
+        <tag k="addr:state" v="MA"/>
+        <tag k="addr:country" v="US"/>
+        <tag k="addr:city" v="Acton"/>
+    </way>
+    <way visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="42"/>
+        <nd ref="43"/>
+        <nd ref="44"/>
+        <nd ref="45"/>
+        <nd ref="46"/>
+        <nd ref="47"/>
+        <nd ref="48"/>
+        <nd ref="49"/>
+        <nd ref="42"/>
+        <tag k="feature_area" v="694.7"/>
+        <tag k="building" v="yes"/>
+        <tag k="length" v="47.5"/>
+        <tag k="width" v="16.9"/>
+        <tag k="angle" v="269.5"/>
+    </way>
+    <way visible="true" id="8" timestamp="1970-01-01T00:00:00Z" version="2">
+        <nd ref="50"/>
+        <nd ref="51"/>
+        <nd ref="52"/>
+        <nd ref="53"/>
+        <nd ref="50"/>
+        <tag k="feature_area" v="192.4"/>
+        <tag k="name" v="West Acton Mobil"/>
+        <tag k="building" v="roof"/>
+        <tag k="amenity" v="fuel"/>
+        <tag k="length" v="23.9"/>
+        <tag k="width" v="8.1"/>
+        <tag k="angle" v="271.8"/>
+    </way>
+    <way visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="2">
+        <nd ref="54"/>
+        <nd ref="55"/>
+        <nd ref="56"/>
+        <nd ref="57"/>
+        <nd ref="58"/>
+        <nd ref="4"/>
+        <nd ref="54"/>
+        <tag k="feature_area" v="124.7"/>
+        <tag k="shop" v="convenience"/>
+        <tag k="building" v="yes"/>
+        <tag k="length" v="16.1"/>
+        <tag k="width" v="8.3"/>
+        <tag k="angle" v="180.9"/>
+    </way>
+    <way visible="true" id="11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="63"/>
+        <nd ref="64"/>
+        <nd ref="65"/>
+        <nd ref="66"/>
+        <nd ref="67"/>
+        <nd ref="68"/>
+        <nd ref="63"/>
+        <tag k="feature_area" v="851.0"/>
+        <tag k="access" v="customers"/>
+        <tag k="length" v="55.9"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="width" v="16.9"/>
+        <tag k="angle" v="270.8"/>
+    </way>
+</osm>

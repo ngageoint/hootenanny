@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYSNAPMERGERJS_H
 #define HIGHWAYSNAPMERGERJS_H
@@ -32,7 +32,7 @@
 #include <hoot/js/io/DataConvertJs.h>
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -46,9 +46,9 @@ namespace hoot
 class OsmMapOperation;
 
 /**
- *
+ * @todo rename this to SnapMergerJs or MergerJs, as it does more than roads now
  */
-class HighwaySnapMergerJs : public node::ObjectWrap
+class HighwaySnapMergerJs : public HootBaseJs
 {
 public:
 
@@ -58,10 +58,11 @@ public:
 
   static v8::Handle<v8::Object> New(const HighwaySnapMergerPtr& ptr);
 
+  virtual ~HighwaySnapMergerJs() = default;
+
 private:
 
-  HighwaySnapMergerJs();
-  ~HighwaySnapMergerJs();
+  HighwaySnapMergerJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);

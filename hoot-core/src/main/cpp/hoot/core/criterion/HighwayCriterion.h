@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYCRITERION_H
 #define HIGHWAYCRITERION_H
 
+// Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
@@ -43,8 +44,9 @@ public:
 
   static std::string className() { return "hoot::HighwayCriterion"; }
 
-  HighwayCriterion() {}
-  HighwayCriterion(ConstOsmMapPtr map) : _map(map) {}
+  HighwayCriterion() = default;
+  HighwayCriterion(ConstOsmMapPtr map) : _map(map) { }
+  virtual ~HighwayCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -59,6 +61,8 @@ public:
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
+
+  virtual bool supportsSpecificConflation() const { return true; }
 
 private:
 

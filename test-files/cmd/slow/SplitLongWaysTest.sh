@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-export HOOT_OPTS=--warn
+export HOOT_OPTS="--warn -C Testing.conf"
 export ADDITIONAL_VISITORS="hoot::SchemaTranslationVisitor;hoot::SplitLongLinearWaysVisitor"
 export TRANSLATION="TDSv40.js"
 export OUTPUT_DIR=$HOOT_HOME/test-output/cmd/slow/SplitLongWaysTest

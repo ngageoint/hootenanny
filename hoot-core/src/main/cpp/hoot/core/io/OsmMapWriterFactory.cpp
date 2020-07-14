@@ -36,6 +36,8 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
+#include <hoot/core/util/GeometryConverter.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -51,7 +53,7 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
 {
   LOG_VART(url);
 
-  QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
+  QString writerOverride = ConfigOptions().getMapFactoryWriter();
   LOG_VART(writerOverride);
 
   std::shared_ptr<OsmMapWriter> writer;
@@ -126,7 +128,7 @@ bool OsmMapWriterFactory::hasElementOutputStream(const QString& url)
 void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QString& url,
                                 const bool silent, const bool is_debug)
 {
-  bool skipEmptyMap = map->isEmpty() && ConfigOptions().getOsmMapWriterSkipEmptyMap();
+  bool skipEmptyMap = map->isEmpty() && ConfigOptions().getMapWriterSkipEmpty();
 
   if (!silent)
   {
@@ -163,10 +165,10 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
       throw IllegalArgumentException("Debug maps must be written to an .osm file.");
     }
 
-    LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
-    LOG_VARD(StringUtils::formatLargeNumber(map->getNodeCount()));
-    LOG_VARD(StringUtils::formatLargeNumber(map->getWayCount()));
-    LOG_VARD(StringUtils::formatLargeNumber(map->getRelationCount()));
+    LOG_VART(StringUtils::formatLargeNumber(map->getElementCount()));
+    LOG_VART(StringUtils::formatLargeNumber(map->getNodeCount()));
+    LOG_VART(StringUtils::formatLargeNumber(map->getWayCount()));
+    LOG_VART(StringUtils::formatLargeNumber(map->getRelationCount()));
 
     const QString fileNumberStr = StringUtils::getNumberStringPaddedWithZeroes(_debugMapCount, 3);
     if (!title.isEmpty())
@@ -178,7 +180,7 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     {
       debugMapFileName = debugMapFileName.replace(".osm", "-" + fileNumberStr + ".osm");
     }
-    LOG_DEBUG("Writing debug output to: " << debugMapFileName);
+    LOG_INFO("Writing debug output to: ..." << debugMapFileName.right(30));
     OsmMapPtr copy(new OsmMap(map));
 
     if (matcher)
@@ -188,9 +190,30 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     }
 
     MapProjector::projectToWgs84(copy);
+    if (ConfigOptions().getDebugMapsRemoveMissingElements())
+    {
+      // Don't remove elements recursively here. You can end up with a map unreadable in JOSM if
+      // you don't remove missing elements here. However, in some cases (like debugging cut and
+      // replace), you want to see them in the raw output to know things are working the way they
+      // should be.
+      RemoveMissingElementsVisitor missingElementsRemover;
+      copy->visitRw(missingElementsRemover);
+    }
     write(copy, debugMapFileName, true, true);
     _debugMapCount++;
   }
+}
+
+void OsmMapWriterFactory::writeDebugMap(
+  const std::shared_ptr<geos::geom::Geometry>& geometry,
+  std::shared_ptr<OGRSpatialReference> spatRef, const QString& title, NetworkMatcherPtr matcher)
+{
+  OsmMapPtr map(new OsmMap(spatRef));
+  //result->appendSource(inputMap->getSource());
+  // add the resulting alpha shape for debugging.
+  GeometryConverter(map).convertGeometryToElement(geometry.get(), Status::Invalid, -1);
+
+  writeDebugMap(map, title, matcher);
 }
 
 }

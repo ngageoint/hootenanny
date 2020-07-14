@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NOTCRITERION_H
 #define NOTCRITERION_H
@@ -42,9 +42,10 @@ public:
 
   static std::string className() { return "hoot::NotCriterion"; }
 
-  NotCriterion();
-  NotCriterion(ElementCriterion* c);
-  NotCriterion(ElementCriterionPtr c);
+  NotCriterion() = default;
+  NotCriterion(ElementCriterion* c) : _child(c) { }
+  NotCriterion(ElementCriterionPtr c) : _child(c) { }
+  virtual ~NotCriterion() = default;
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
@@ -68,6 +69,8 @@ private:
 
   ElementCriterionPtr _child;
 };
+
+typedef std::shared_ptr<NotCriterion> NotCriterionPtr;
 
 }
 

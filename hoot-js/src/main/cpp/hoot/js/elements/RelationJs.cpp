@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RelationJs.h"
 
@@ -48,18 +48,6 @@ HOOT_JS_REGISTER(RelationJs)
 
 Persistent<Function> RelationJs::_constructor;
 
-RelationJs::RelationJs(ConstRelationPtr r) : _constRelation(r)
-{
-}
-
-RelationJs::RelationJs()
-{
-}
-
-RelationJs::~RelationJs()
-{
-}
-
 void RelationJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
@@ -72,6 +60,8 @@ void RelationJs::Init(Handle<Object> target)
   ElementJs::_addBaseFunctions(tpl);
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "replaceElement"),
       FunctionTemplate::New(current, replaceElement));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getType"),
+      FunctionTemplate::New(current, getType));
 
   _constructor.Reset(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, "Relation"), ToLocal(&_constructor));
@@ -133,6 +123,16 @@ void RelationJs::replaceElement(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
+}
+
+void RelationJs::getType(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstRelationPtr relation = ObjectWrap::Unwrap<RelationJs>(args.This())->getConstRelation();
+
+  args.GetReturnValue().Set(String::NewFromUtf8(current, relation->getType().toUtf8().data()));
 }
 
 }

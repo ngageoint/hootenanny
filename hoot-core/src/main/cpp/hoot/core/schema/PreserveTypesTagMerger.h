@@ -53,7 +53,8 @@ public:
    * @param skipTagKeys optional; Any additional type tags found during merging with a key in this
    * list will be not be preserved.
    */
-  PreserveTypesTagMerger(const std::set<QString>& skipTagKeys = std::set<QString>());
+  PreserveTypesTagMerger(const QSet<QString>& skipTagKeys = QSet<QString>());
+  virtual ~PreserveTypesTagMerger() = default;
 
   /**
    * @see TagMerger
@@ -63,8 +64,14 @@ public:
   virtual QString getDescription() const
   { return "Keeps tags from both features and preserves overlapping type tags"; }
 
+  virtual QString getClassName() const { return QString::fromStdString(className()); }
+
+  virtual void setConfiguration(const Settings& conf);
+
   void setOverwrite1(bool overwrite) { _overwrite1 = overwrite; }
-  void setSkipTagKeys(const std::set<QString>& keys) { _skipTagKeys = keys; }
+  void setSkipTagKeys(const QSet<QString>& keys) { _skipTagKeys = keys; }
+  void setOverwriteExcludeTagKeys(const QStringList& overwriteExcludeTagKeys)
+  { _overwriteExcludeTagKeys = overwriteExcludeTagKeys; }
 
 private:
 
@@ -72,7 +79,9 @@ private:
   // is overwritten
   bool _overwrite1;
   // any type tag that would otherwise be preserved will be skipped if in this list
-  std::set<QString> _skipTagKeys;
+  QSet<QString> _skipTagKeys;
+  // keys of general tags not to be overwritten (see OverwriteTagMerger)
+  QStringList _overwriteExcludeTagKeys;
 
   Tags _preserveAltTypes(const Tags& source, const Tags& target) const;
   // can probably eventually get rid of this by correcting logic that's duplicating tags in

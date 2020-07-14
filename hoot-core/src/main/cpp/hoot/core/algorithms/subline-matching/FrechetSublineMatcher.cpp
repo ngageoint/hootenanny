@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FrechetSublineMatcher.h"
@@ -43,12 +43,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(SublineMatcher, FrechetSublineMatcher)
 
-FrechetSublineMatcher::FrechetSublineMatcher()
-{
-}
-
-WaySublineMatchString FrechetSublineMatcher::findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
-  const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
+WaySublineMatchString FrechetSublineMatcher::findMatch(
+  const ConstOsmMapPtr& map, const ConstWayPtr& way1, const ConstWayPtr& way2, double& score,
+  Meters maxRelevantDistance) const
 {
   score = 0;
   Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :

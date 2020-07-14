@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGE_H
 #define MERGE_H
@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::Merger"; }
 
-  virtual ~Merger() {}
+  Merger() = default;
+  virtual ~Merger() = default;
 
   /**
    * Applies the merge to the input map. Any way that is significantly modified should get a new ID.
@@ -82,6 +83,13 @@ public:
    * @see ApiEntityInfo
    */
   virtual QString getDescription() const = 0;
+
+  /**
+   * Returns the name of this merger
+   *
+   * @return a name string
+   */
+  virtual QString getName() const = 0;
 };
 
 typedef std::shared_ptr<Merger> MergerPtr;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagMergerFactory.h"
 
@@ -35,24 +35,11 @@
 namespace hoot
 {
 
-std::shared_ptr<TagMergerFactory> TagMergerFactory::_theInstance;
-
-TagMergerFactory::TagMergerFactory()
-{
-}
-
-TagMergerFactory::~TagMergerFactory()
-{
-  reset();
-}
-
 TagMergerFactory& TagMergerFactory::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new TagMergerFactory());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static TagMergerFactory instance;
+  return instance;
 }
 
 std::shared_ptr<TagMerger> TagMergerFactory::getDefaultPtr()

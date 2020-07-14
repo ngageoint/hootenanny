@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -37,7 +37,6 @@
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
@@ -64,7 +63,7 @@ public:
 
   static string className() { return "hoot::ScoreMatchesCmd"; }
 
-  ScoreMatchesCmd() { }
+  ScoreMatchesCmd() = default;
 
   virtual QString getName() const override { return "score-matches"; }
 
@@ -73,6 +72,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     bool showConfusion = false;
     if (args.contains("--confusion"))
     {
@@ -102,6 +104,9 @@ public:
     }
 
     ConfigUtils::checkForTagValueTruncationOverride();
+    QStringList allOps = ConfigOptions().getConflatePreOps();
+    allOps += ConfigOptions().getConflatePostOps();
+    ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
 
     vector<OsmMapPtr> maps;
     QString output = args.last();
@@ -135,6 +140,9 @@ public:
       const QString result = evaluateThreshold(maps, output, mt, showConfusion, score);
       cout << result;
     }
+
+    LOG_STATUS(
+      "Match scoring ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -30,6 +30,10 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/CumulativeConflator.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -42,7 +46,7 @@ public:
 
   static string className() { return "hoot::ConflateCumulativeCmd"; }
 
-  ConflateCumulativeCmd() { }
+  ConflateCumulativeCmd() = default;
 
   virtual QString getName() const override { return "conflate-cumulative"; }
 
@@ -53,6 +57,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     // doesn't work with stats yet
     if (args.contains("--stats"))
     {
@@ -73,6 +80,9 @@ public:
     const QString output = args.last();
 
     CumulativeConflator::conflate(inputs, output);
+
+    LOG_STATUS(
+      "Conflation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

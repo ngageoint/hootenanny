@@ -38,6 +38,12 @@
 #include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 
+// Tgs
+#include <tgs/LruCache.h>
+
+// Qt
+#include <QCache>
+
 namespace hoot
 {
 
@@ -58,14 +64,14 @@ typedef std::shared_ptr<PoiPolygonInfoCache> PoiPolygonInfoCachePtr;
  * africom/somalia/229_Mogadishu_SOM_Translated. Further caching could be deemed necessary
  * given performance with other datasets.
  *
- * Note: I did notice later in the second round of performance testing that largely differing
- * runtimes were being returned on a vagrant instance with the same configuration. I'm not sure
- * what could be causing this, but that means the results are suspect. Going to go ahead and use
- * the caching config from the best runtime, but it still may need to be tweaked.
+ * Its worth noting that if you are doing performance tweaks on a Vagrant VM, the runtimes may vary
+ * with subsequent executions of the exact same conflate job. So in that case, its best to look for
+ * tweaks with fairly large improvements and ignore the smaller performance improvements.
  *
  * Some of the geometry comparisons in this class could be abstracted out beyond poi/poly geoms and
- * moved into a class like OsmUtils if we ever need them to be used with other conflation algs. If
- * that's done there will be some work to make any caching being performed work across unit tests.
+ * moved into a class like OsmGeometryUtils if we ever need them to be used with other conflation
+ * algs. If that's done there will be some work to make any caching being performed work across unit
+ * tests.
  */
 class PoiPolygonInfoCache : public Configurable
 {
@@ -73,6 +79,7 @@ class PoiPolygonInfoCache : public Configurable
 public:
 
   PoiPolygonInfoCache(const ConstOsmMapPtr& map);
+  virtual ~PoiPolygonInfoCache() = default;
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -199,34 +206,39 @@ private:
 
   AddressParser _addressParser;
 
-  // Using QHash here for all of these instead of QCache, since we're mostly just storing primitives
-  // for values and they all take up the same amount of space. Tried to use QCache with the
-  // geometries, but since ElementConverter returns a shared pointer and QCache takes ownership, had
-  // trouble making it work. Also, not doing any management of the size of these caches, which may
-  // eventually end up being needed to control memory usage.
+  bool _cacheEnabled;
 
-  // Also, didn't see any performance improvement by reserving initial sizes for these caches.
+  // Didn't see any performance improvement by reserving initial sizes for these caches.
 
   // key is "elementID 1;elementID 2"; ordering of the ID keys doesn't matter here, since we check
   // in both directions
-  QHash<QString, bool> _elementIntersectsCache;
+  QCache<QString, bool> _elementIntersectsCache;
 
   // key is "elementId;type string"
-  QHash<QString, bool> _isTypeCache;
+  QCache<QString, bool> _isTypeCache;
 
   // key is "elementId;criterion class name"
-  QHash<QString, bool> _hasCriterionCache;
+  QCache<QString, bool> _hasCriterionCache;
 
-  // key is element criterion class name
+  // key is element criterion class name; leaving this as a hash, since it shouldn't ever get big
+  // enough to require any cache size management
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
-  QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
-  QHash<ElementId, bool> _hasMoreThanOneTypeCache;
-  QHash<ElementId, int> _numAddressesCache;
-  QHash<ElementId, double> _reviewDistanceCache;
+  // QCache doesn't play nicely with shared pointers created elsewhere...tried using them with it
+  // for _geometryCache but failed. Another alternative was to modify ElementConverter to also
+  // allow for returing Geometry raw pointers in addition to shared pointers...tried that and failed
+  // as well. Decided to use LruCache for this one instead.
+  std::shared_ptr<Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>> _geometryCache;
+
+  QCache<ElementId, bool> _hasMoreThanOneTypeCache;
+  QCache<ElementId, int> _numAddressesCache;
+  QCache<ElementId, double> _reviewDistanceCache;
 
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
+
+  static const int CACHE_SIZE_UPDATE_INTERVAL = 100000;
+  static const int CACHE_SIZE_DEFAULT = 10000;
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element);
   ElementCriterionPtr _getCrit(const QString& criterionClassName);

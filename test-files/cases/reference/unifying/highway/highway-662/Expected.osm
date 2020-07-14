@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="30.01684461113999" minlon="-90.01600402754001" maxlat="30.01829381982" maxlon="-90.0150384323"/>
+    <node visible="true" id="-99148" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0168446111399909" lon="-90.0150384323000026"/>
+    <node visible="true" id="-99147" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0182380814100043" lon="-90.0160040275400064"/>
+    <node visible="true" id="-99141" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0182938198199984" lon="-90.0150920764800020"/>
+    <way visible="true" id="-99162" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-99147"/>
+        <nd ref="-99141"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:4f48316af6a122752093eb783dcc50900b03d037;sha1sum:6ac389414a8ebbf3706eb119b329216370fe56c6"/>
+        <tag k="note" v="2c;2a"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-99159" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-99141"/>
+        <nd ref="-99148"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="2a"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

@@ -42,11 +42,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, JosmMapValidator)
 
-JosmMapValidator::JosmMapValidator() :
-JosmMapValidatorAbstract()
-{
-}
-
 OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
 {
   LOG_DEBUG("Retrieving validated map...");

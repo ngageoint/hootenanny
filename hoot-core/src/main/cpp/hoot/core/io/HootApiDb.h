@@ -48,8 +48,6 @@ public:
 
   static std::string className() { return "hoot::HootApiDb"; }
 
-  static int logWarnCount;
-
   HootApiDb();
 
   virtual ~HootApiDb();
@@ -192,21 +190,19 @@ public:
    */
   long insertMap(QString mapName);
 
-  bool insertNode(const double lat, const double lon, const Tags &tags, long& assignedId);
+  bool insertNode(const double lat, const double lon, const Tags &tags, long& assignedId,
+                  long version = 0);
+  bool insertNode(const long id, const double lat, const double lon, const Tags &tags,
+                  long version = 0);
+  bool insertNode(ConstNodePtr node, long version = 0);
 
-  bool insertNode(const long id, const double lat, const double lon, const Tags &tags);
-
-  bool insertNode(ConstNodePtr node);
-
-  bool insertWay(const Tags& tags, long& assignedId);
-
-  bool insertWay( const long wayId, const Tags& tags);
+  bool insertWay(const Tags& tags, long& assignedId, long version = 0);
+  bool insertWay( const long wayId, const Tags& tags, long version = 0);
 
   void insertWayNodes(long wayId, const std::vector<long>& nodeIds);
 
-  bool insertRelation(const Tags& tags, long& assignedId);
-
-  bool insertRelation(const long relationId, const Tags& tags);
+  bool insertRelation(const Tags& tags, long& assignedId, long version = 0);
+  bool insertRelation(const long relationId, const Tags& tags, long version = 0);
 
   /**
    * Insert a new member into an existing relation
@@ -582,6 +578,8 @@ protected:
   virtual void _resetQueries();
 
 private:
+
+  static int logWarnCount;
 
   friend class ServiceHootApiDbReaderTest;
   friend class ServiceHootApiDbWriterTest;

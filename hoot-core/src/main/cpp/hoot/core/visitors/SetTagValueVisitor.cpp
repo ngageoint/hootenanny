@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SetTagValueVisitor.h"
 
@@ -52,7 +52,8 @@ SetTagValueVisitor::SetTagValueVisitor(
 _keys(keys),
 _vals(values),
 _appendToExistingValue(appendToExistingValue),
-_overwriteExistingTag(overwriteExistingTag)
+_overwriteExistingTag(overwriteExistingTag),
+_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys())
 {
   if (_keys.size() != _vals.size())
   {
@@ -71,7 +72,8 @@ SetTagValueVisitor::SetTagValueVisitor(
   const QStringList& criteriaClassNames, const bool overwriteExistingTag,
   const bool negateCriteria) :
 _appendToExistingValue(appendToExistingValue),
-_overwriteExistingTag(overwriteExistingTag)
+_overwriteExistingTag(overwriteExistingTag),
+_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys())
 {
   _keys.append(key);
   _vals.append(value);
@@ -114,6 +116,7 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
       }
     }
   }
+  _circularErrorTagKeys = configOptions.getCircularErrorTagKeys();
 }
 
 void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QString& v)
@@ -140,7 +143,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QS
     return;
   }
 
-  if (k == MetadataTags::ErrorCircular())
+  if (_circularErrorTagKeys.contains(k))
   {
     bool ok;
     double vDouble = v.toDouble(&ok);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RoundaboutCriterion.h"
 
@@ -39,7 +39,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, RoundaboutCriterion)
 
 bool RoundaboutCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  // If it's not a highway, it's not a roundabout
+  // If it's not a highway, it's not a roundabout.
   if (!HighwayCriterion().isSatisfied(e))
   {
     return false;

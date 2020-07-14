@@ -26,6 +26,8 @@
  */
 package hoot.services.job;
 
+import static hoot.services.HootProperties.CHANGESETS_FOLDER;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.job.JobStatus.CANCELLED;
 import static hoot.services.job.JobStatus.COMPLETE;
 import static hoot.services.job.JobStatus.FAILED;
@@ -34,10 +36,15 @@ import static hoot.services.models.db.QCommandStatus.commandStatus;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.utils.DbUtils.createQuery;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -51,6 +58,7 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.models.db.CommandStatus;
 import hoot.services.utils.DbUtils;
+import hoot.services.utils.PostgresUtils;
 
 
 @Component
@@ -97,19 +105,71 @@ public class JobStatusManagerImpl implements JobStatusManager {
 
 
     @Override
-    public void deleteJob(String jobId, Long userId) {
+    public void deleteJob(String jobId, Long userId) throws IOException {
         try {
-            hoot.services.models.db.JobStatus js = createQuery().select(jobStatus).from(jobStatus)
-                .where(jobStatus.jobId.eq(jobId).and(jobStatus.userId.eq(userId))).fetchFirst();
+            hoot.services.models.db.JobStatus js = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId).and(jobStatus.userId.eq(userId)))
+                .fetchFirst();
+
             //hack to check that user owns this job before deleting commands
             //no cascade delete in querydsl
             if (js != null) {
 
                 createQuery().delete(commandStatus)
-                    .where(commandStatus.jobId.eq(jobId)).execute();
+                    .where(commandStatus.jobId.eq(jobId))
+                    .execute();
 
                 createQuery().delete(jobStatus)
-                    .where(jobStatus.jobId.eq(jobId).and(jobStatus.userId.eq(userId))).execute();
+                    .where(jobStatus.jobId.eq(jobId).and(jobStatus.userId.eq(userId)))
+                    .execute();
+
+                File workDir;
+                Integer jobType = js.getJobType();
+
+                // Clean up left over data related to specific jobs
+                if (jobType == JobType.DERIVE_CHANGESET.ordinal() || jobType == JobType.UPLOAD_CHANGESET.ordinal()) {
+                    List<String> fileFilters;
+
+                    if (jobType == JobType.DERIVE_CHANGESET.ordinal()) {
+                        // these are the files that can be produced from a derive changeset job
+                        fileFilters = Arrays.asList("diff.osc", "diff.tags.osc", "reference.osm", "secondary.osm", "stats.json", "stats.tags.json");
+
+                        workDir = new File(CHANGESETS_FOLDER, js.getJobId());
+                    } else {
+                        // these are the files that can be produced from a upload changeset job
+                        fileFilters = Arrays.asList("diff-error.osc", "diff-remaining.osc");
+
+                        // An upload jobs work directory is actually the parents(derive changeset) directory
+                        Map<String, String> tags = PostgresUtils.postgresObjToHStore(js.getTags());
+                        workDir = new File(CHANGESETS_FOLDER, tags.get("parentId"));
+                    }
+
+
+                    if (workDir.exists()) {
+                        // Only delete the files that are in the fileFilters list
+                        File[] files = workDir.listFiles(pathname -> fileFilters.contains(pathname.getName()));
+
+                        if (files != null && files.length > 0) {
+                            for(File file : files) {
+                                file.delete();
+                            }
+                        }
+
+                        // only delete if empty.
+                        // this is due to a case where if user deletes a derive changeset, we still want to keep upload changeset files if they exist. if not delete. Same for deleting an upload job if the changeset job still exists
+                        if (workDir.list().length == 0) {
+                            FileUtils.deleteDirectory(workDir);
+                        }
+                    }
+                } else if (jobType == JobType.EXPORT.ordinal()) {
+                    workDir = new File(TEMP_OUTPUT_PATH, js.getJobId());
+
+                    if (workDir.exists()) {
+                        FileUtils.deleteDirectory(workDir);
+                    }
+                }
             }
 
         }
@@ -154,7 +214,6 @@ public class JobStatusManagerImpl implements JobStatusManager {
 
     @Override
     public void setFailed(String jobId, String statusDetail) {
-        logger.error("Job with ID: {} failed: {}", jobId, statusDetail);
         try {
             this.updateJob(jobId, FAILED, statusDetail, null);
         }

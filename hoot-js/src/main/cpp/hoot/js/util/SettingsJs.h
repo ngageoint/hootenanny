@@ -22,32 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SETTINGSJS_H
 #define SETTINGSJS_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class SettingsJs : public node::ObjectWrap
+class SettingsJs : public HootBaseJs
 {
 public:
- static void Init(v8::Handle<v8::Object> target);
+
+  static void Init(v8::Handle<v8::Object> target);
+
+  virtual ~SettingsJs() = default;
 
 private:
-  SettingsJs();
-  ~SettingsJs();
+
+  SettingsJs() = default;
 
   static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getAll(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getValue(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void loadJson(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void set(const v8::FunctionCallbackInfo<v8::Value>& args);
-
 };
 
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMERGER_H
 #define POIPOLYGONMERGER_H
@@ -43,9 +43,11 @@ class TagMerger;
  *
  * The default tag merging behavior is to keep all poly type tags over poi type tags when there are
  * conflicts (OverwriteTagMerger), so by default poi type tags may be dropped.  When
- * _autoMergeManyPoiToOnePolyMatches is set to true tag merging uses the PreserveTypesTagMerger,
- * which will put all poi type tags that are unrelated to the poly type tag into an alt_tags field,
- * so none of the types are lost.
+ * _autoMergeManyPoiToOnePolyMatches is set to true tag merging uses the PreserveTypesTagMerger
+ * instead, which will put all poi type tags that are unrelated to the poly type tag into an
+ * alt_tags field, so none of the types are lost. The exception to this is when the Attribute
+ * Conflation workflow is being run. For AC, we favor the POI tags during conflicts instead of the
+ * building tags (with some configurable exceptions).
  */
 class PoiPolygonMerger : public MergerBase
 {
@@ -54,9 +56,8 @@ public:
 
   static std::string className() { return "hoot::PoiPolygonMerger"; }
 
-  static int logWarnCount;
-
   PoiPolygonMerger();
+  virtual ~PoiPolygonMerger() = default;
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -82,12 +83,16 @@ public:
 
   void setTagMergerClass(const QString& className) { _tagMergerClass = className; }
 
+  virtual QString getName() const { return QString::fromStdString(className()); }
+
 protected:
 
   virtual PairsSet& _getPairs() override { return _pairs; }
   virtual const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
+
+  static int logWarnCount;
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
 
@@ -96,13 +101,15 @@ private:
   // Allows for setting the tag merger from unit tests. Mergers are set up to support Configurable,
   // so easier to specify the tag merge this way for now.
   QString _tagMergerClass;
+  // this is the tag merger that is used throughout poi/poly merging
+  std::shared_ptr<TagMerger> _tagMerger;
 
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
                             std::vector<ElementId>& buildings2,
-                            std::vector<std::pair<ElementId, ElementId>>& replaced) const;
+                            std::vector<std::pair<ElementId, ElementId>>& replaced);
 
-  Tags _mergePoiTags(const OsmMapPtr& map, Status s) const;
-  std::shared_ptr<const TagMerger> _getTagMerger();
+  Tags _mergePoiTags(const OsmMapPtr& map, Status s);
+  std::shared_ptr<TagMerger> _getTagMerger();
 
   std::vector<ElementId> _getBuildingParts(const OsmMapPtr& map, Status s) const;
 

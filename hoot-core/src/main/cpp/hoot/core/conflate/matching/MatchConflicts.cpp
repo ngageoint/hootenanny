@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchConflicts.h"
 
@@ -31,6 +31,9 @@
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 // Standard
 #include <map>
@@ -41,11 +44,12 @@ namespace hoot
 using namespace std;
 
 MatchConflicts::MatchConflicts(const ConstOsmMapPtr& map) :
-  _map(map)
+_map(map)
 {
 }
 
-MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(const std::vector<ConstMatchPtr>& matches) const
+MatchConflicts::EidIndexMap MatchConflicts::_calculateEidIndexMap(
+  const std::vector<ConstMatchPtr>& matches) const
 {
   LOG_TRACE("Calculating element ID to index map...");
   EidIndexMap eidToMatches;
@@ -69,27 +73,34 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(const std::vect
   return eidToMatches;
 }
 
-void MatchConflicts::calculateMatchConflicts(const std::vector<ConstMatchPtr>& matches,
-  ConflictMap& conflicts)
+void MatchConflicts::calculateMatchConflicts(
+  const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts)
 {
-  LOG_VART(matches.size());
+  QElapsedTimer timer;
+  timer.start();
+  LOG_DEBUG(
+    "Calculating match conflicts for " << StringUtils::formatLargeNumber(matches.size()) <<
+    " matches...");
+
   conflicts.clear();
-  // go through all the matches and map from eid to the match index.
-  EidIndexMap eidToMatches = calculateEidIndexMap(matches);
+  // Go through all the matches and map from eid to the match index.
+  EidIndexMap eidToMatches = _calculateEidIndexMap(matches);
+  const QHash<QString, ConstMatchPtr> idIndexedMatches = Match::getIdIndexedMatches(matches);
+  LOG_VARD(idIndexedMatches.size());
+  //LOG_VART(idIndexedMatches.keys());
 
   // go through all the eids with matches ordered by eid
   ElementId lastEid;
   // the set of indexes to all the matches that use a common ElementId
   vector<int> matchSet;
   long eidToMatchCount = 0;
-  LOG_DEBUG("Calculating match subset conflicts...");
   for (EidIndexMap::iterator it = eidToMatches.begin(); it != eidToMatches.end(); ++it)
   {
-    // if we got a new Eid.
+    // If we got a new Eid,
     if (it->first != lastEid)
     {
-      calculateSubsetConflicts(matches, conflicts, matchSet);
-      // start over with a new match set
+      _calculateSubsetConflicts(matches, conflicts, matchSet, idIndexedMatches);
+      // start over with a new match set.
       matchSet.clear();
     }
 
@@ -97,7 +108,7 @@ void MatchConflicts::calculateMatchConflicts(const std::vector<ConstMatchPtr>& m
     lastEid = it->first;
 
     eidToMatchCount++;
-    if (eidToMatchCount % 100 == 0)
+    if (eidToMatchCount % 10 == 0)
     {
       PROGRESS_INFO(
         "Processed matches for " << StringUtils::formatLargeNumber(eidToMatchCount) << " / " <<
@@ -105,29 +116,36 @@ void MatchConflicts::calculateMatchConflicts(const std::vector<ConstMatchPtr>& m
         StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts.");
     }
   }
-  LOG_DEBUG("Found " << StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts.");
 
-  calculateSubsetConflicts(matches, conflicts, matchSet);
+  _calculateSubsetConflicts(matches, conflicts, matchSet, idIndexedMatches);
+
+  LOG_INFO(
+    "Found " << StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts in " <<
+    StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
-void MatchConflicts::calculateSubsetConflicts(const std::vector<ConstMatchPtr>& matches,
-                                              ConflictMap& conflicts, const vector<int>& matchSet)
+void MatchConflicts::_calculateSubsetConflicts(
+  const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts, const vector<int>& matchSet,
+  const QHash<QString, ConstMatchPtr>& idIndexedMatches)
 {
+  LOG_TRACE("Calculating subset conflicts...");
   LOG_VART(matches.size());
   LOG_VART(conflicts.size());
   LOG_VART(matchSet.size());
 
-  // search for all possible match pair conflicts within a set.
+  // search for all possible match pair conflicts within a set
   for (size_t i = 0; i < matchSet.size(); i++)
   {
     size_t m1 = matchSet[i];
     for (size_t j = i + 1; j < matchSet.size(); j++)
     {
       size_t m2 = matchSet[j];
-      // if these aren't the same match and it is conflicting in one direction or the other
+      // If these aren't the same match and it is conflicting in one direction or the other,
       if (m1 != m2 &&
-          (MergerFactory::getInstance().isConflicting(_map, matches[m1], matches[m2]) ||
-           MergerFactory::getInstance().isConflicting(_map, matches[m2], matches[m1])))
+          (MergerFactory::getInstance().isConflicting(
+             _map, matches[m1], matches[m2], idIndexedMatches) ||
+           MergerFactory::getInstance().isConflicting(
+             _map, matches[m2], matches[m1], idIndexedMatches)))
       {
         // make sure we're consistent and put the smaller one first.
         if (m2 < m1)

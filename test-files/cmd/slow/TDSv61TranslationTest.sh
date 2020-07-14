@@ -12,7 +12,7 @@ mkdir -p $outputDir
 rm -rf $outputDir/*
 
 # Normal Hoot options
-HOOT_OPT="--warn"
+HOOT_OPT="--warn -C Testing.conf"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
@@ -29,11 +29,11 @@ hoot convert $HOOT_OPT -D schema.translation.script=$TRANS $inputDir/*.shp $outp
 #cp $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm
 
 # compareFiles. Test taken from MGCP test
-hoot diff $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm || diff $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm
+hoot diff  -C Testing.conf $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm || diff $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm
 
 # Make shapefiles
 # NOTE: These are 1 x FCODE / file and it assumes that the output dir doesn't have any shapefiles in it
-hoot convert --debug -D schema.translation.script=$TRANS -D ogr.thematic.structure=false $outputDir/new_TDSv61.osm $outputDir".shp" # > tmp/TDSv61_to_TDS.txt
+hoot convert --debug  -C Testing.conf -D schema.translation.script=$TRANS -D ogr.thematic.structure=false $outputDir/new_TDSv61.osm $outputDir".shp" # > tmp/TDSv61_to_TDS.txt
 
 # Make shapefiles - Thematic
 # hoot convert-osm2ogr $HOOT_OPT $TRANS $outputDir/new_TDSv61.osm $outputDir/"new_files.shp" > tmp/TDSv61_to_TDS2.txt

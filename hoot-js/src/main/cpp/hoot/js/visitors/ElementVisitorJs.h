@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VISITORJS_H
 #define VISITORJS_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -38,7 +38,7 @@ namespace hoot
 
 class ElementVisitor;
 
-class ElementVisitorJs : public node::ObjectWrap
+class ElementVisitorJs : public HootBaseJs
 {
 public:
 
@@ -46,11 +46,12 @@ public:
 
   std::shared_ptr<ElementVisitor> getVisitor() { return _v; }
 
+  virtual ~ElementVisitorJs() = default;
+
 private:
 
-  ElementVisitorJs(ElementVisitor* v) : _v(v) {}
-  ElementVisitorJs() {}
-  ~ElementVisitorJs() {}
+  ElementVisitorJs(ElementVisitor* v) : _v(v) { }
+  ElementVisitorJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

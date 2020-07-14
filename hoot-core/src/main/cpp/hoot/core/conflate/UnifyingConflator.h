@@ -76,7 +76,7 @@ public:
   UnifyingConflator();
   UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
 
-  ~UnifyingConflator();
+  virtual ~UnifyingConflator();
 
   /**
    * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
@@ -106,6 +106,13 @@ public:
 
   virtual void setProgress(Progress progress) override { _progress = progress; }
   virtual unsigned int getNumSteps() const override { return 3; }
+
+  /**
+   * Determines if conflation is configured with the Network Roads algorithm
+   *
+   * @return true if conflation is configured with the Network Roads algorithm; false otherwise
+   */
+  static bool isNetworkConflate();
 
 private:
 
@@ -144,8 +151,6 @@ private:
    * might be thrown during apply() clean up the leftovers nicely (albeit delayed).
    */
   void _reset();
-
-  void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr> matches);
 
   void _printMatches(std::vector<ConstMatchPtr> matches);
   void _printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter);

@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IDGENERATORJS_H
 #define IDGENERATORJS_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/core/util/IdGenerator.h>
 #include <hoot/js/io/DataConvertJs.h>
 
@@ -38,18 +38,21 @@
 namespace hoot
 {
 
-class IdGeneratorJs : public node::ObjectWrap
+class IdGeneratorJs : public HootBaseJs
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   IdGeneratorPtr getIdGeneratorOp() { return _idGen; }
 
   static v8::Handle<v8::Object> New(const IdGeneratorPtr& idGen);
 
+  virtual ~IdGeneratorJs() = default;
+
 private:
+
   IdGeneratorJs(IdGeneratorPtr idGen);
-  ~IdGeneratorJs();
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

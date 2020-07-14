@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.74020563419" minlon="-77.58210987120999" maxlat="38.74045425152" maxlon="-77.58186579018999"/>
+    <node visible="true" id="-85812" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7404542515199992" lon="-77.5820248521099955">
+        <tag k="amenity" v="community_centre"/>
+        <tag k="name" v="poi1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-85810" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403395284699954" lon="-77.5820696380699957"/>
+    <node visible="true" id="-85808" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403269758899924" lon="-77.5820106294799814"/>
+    <node visible="true" id="-85806" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403939229499912" lon="-77.5819677141300019"/>
+    <node visible="true" id="-85804" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403478968600012" lon="-77.5818657901899940"/>
+    <node visible="true" id="-85802" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402788576599946" lon="-77.5819221165799888"/>
+    <node visible="true" id="-85800" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402683971699915" lon="-77.5818952944899962"/>
+    <node visible="true" id="-85798" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402056341899979" lon="-77.5819382098299997"/>
+    <node visible="true" id="-85797" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402746734599859" lon="-77.5821098712099939"/>
+    <way visible="true" id="-85799" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-85797"/>
+        <nd ref="-85798"/>
+        <nd ref="-85800"/>
+        <nd ref="-85802"/>
+        <nd ref="-85804"/>
+        <nd ref="-85806"/>
+        <nd ref="-85808"/>
+        <nd ref="-85810"/>
+        <nd ref="-85797"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="amenity" v="arts_centre"/>
+        <tag k="name" v="poly1"/>
+        <tag k="alt_types" v="amenity=theatre"/>
+        <tag k="alt_name" v="poi2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-85812" role="reviewee"/>
+        <member type="way" ref="-85799" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Similarity score: 1; less than match threshold: 3; meets review threshold: 1. distance: no (8m; score: 2/2), type: yes (score: 0.7/1), name: no (score: 0.153846/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+</osm>

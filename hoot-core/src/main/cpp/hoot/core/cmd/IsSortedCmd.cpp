@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -31,10 +31,12 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/IsSortedVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFile>
 #include <QFileInfo>
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -45,7 +47,7 @@ public:
 
   static std::string className() { return "hoot::IsSortedCmd"; }
 
-  IsSortedCmd() {}
+  IsSortedCmd() = default;
 
   virtual QString getName() const override { return "is-sorted"; }
 
@@ -54,6 +56,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() != 1)
     {
       std::cout << getHelp() << std::endl << std::endl;
@@ -109,6 +114,9 @@ public:
     {
       std::cout << input << " is not sorted." << std::endl;
     }
+
+    LOG_STATUS(
+      "Map sorted check ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

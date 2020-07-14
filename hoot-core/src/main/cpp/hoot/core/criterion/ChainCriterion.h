@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHAINCRITERION_H
 #define CHAINCRITERION_H
@@ -45,11 +45,12 @@ public:
 
   static std::string className() { return "hoot::ChainCriterion"; }
 
-  ChainCriterion() {}
+  ChainCriterion() = default;
   ChainCriterion(const ElementCriterionPtr& child1, const ElementCriterionPtr& child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3);
+  virtual ~ChainCriterion() = default;
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
@@ -78,6 +79,8 @@ private:
 
   friend class RemoveRef2VisitorMultipleCriterion;
 };
+
+typedef std::shared_ptr<ChainCriterion> ChainCriterionPtr;
 
 }
 #endif // CHAINCRITERION_H

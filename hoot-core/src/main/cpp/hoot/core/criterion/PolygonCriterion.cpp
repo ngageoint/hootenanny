@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/Way.h>
@@ -39,13 +38,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PolygonCriterion)
 
-PolygonCriterion::PolygonCriterion()
-{
-}
-
 bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
+  //LOG_VARD(e);
 
   bool result = false;
 
@@ -55,13 +51,16 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   else if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-    result |= r->getType() == MetadataTags::RelationBuilding();
-    result |= r->getType() == MetadataTags::RelationMultiPolygon();
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
+    result |= relation->getType() == MetadataTags::RelationBuilding();
+    result |= relation->getType() == MetadataTags::RelationMultiPolygon();
+    result |= relation->getType() == MetadataTags::RelationSite();
   }
   else if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
+    LOG_VART(way->isValidPolygon());
+    LOG_VART(way->isClosedArea());
     if (way->isValidPolygon() && way->isClosedArea())
     {
       LOG_TRACE("Way is valid closed area; crit satisfied.");

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCOUNTVISITOR_H
 #define TAGCOUNTVISITOR_H
@@ -39,14 +39,14 @@ namespace hoot
  * A visitor for counting element tags.  It distinguishes between metadata and information tags,
  * and both are included in the total count.  Debug tags are not included in the total count.
  */
-class TagCountVisitor : public ConstElementVisitor, public NumericStatistic,
-  public OperationStatusInfo
+class TagCountVisitor : public ConstElementVisitor, public NumericStatistic
 {
 public:
 
   static std::string className() { return "hoot::TagCountVisitor"; }
 
   TagCountVisitor();
+  virtual ~TagCountVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e) override;
 
@@ -79,6 +79,8 @@ public:
         (double)_informationCount / (double)_numInformationAffected;
     return average;
   }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

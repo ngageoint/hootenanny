@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNION_POLYGONS_OP_H
 #define UNION_POLYGONS_OP_H
@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>
 
 namespace hoot
@@ -41,13 +40,14 @@ class OsmMap;
 /**
  * A map operation making use of UnionPolyonsVisitor
  */
-class UnionPolygonsOp : public OsmMapOperation, public OperationStatusInfo
+class UnionPolygonsOp : public OsmMapOperation
 {
 public:
 
   static std::string className() { return "hoot::UnionPolygonsOp"; }
 
   UnionPolygonsOp();
+  virtual ~UnionPolygonsOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 

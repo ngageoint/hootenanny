@@ -29,8 +29,9 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/HootNetworkUtils.h>
+#include <hoot/core/util/Log.h>
 
 #include "OsmApiWriterTestServer.h"
 
@@ -53,6 +54,10 @@ class OsmApiWriterTest : public HootTestFixture
 #ifdef RUN_LOCAL_TEST_SERVER
   CPPUNIT_TEST(runRetryConflictsTest);
   CPPUNIT_TEST(runVersionConflictResolutionTest);
+  CPPUNIT_TEST(runChangesetOutputTest);
+  CPPUNIT_TEST(runChangesetCreateFailureTest);
+  CPPUNIT_TEST(runChangesetFailNodesWithWaysTest);
+  CPPUNIT_TEST(runChangesetVersionFailureTest);
 #endif
   /* These tests are for local testing and require additional resources to complete */
 #ifdef RUN_LOCAL_OSM_API_SERVER
@@ -61,7 +66,6 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runChangesetConflictTest);
   CPPUNIT_TEST(oauthTest);
 #endif
-  CPPUNIT_TEST(runApplyTestTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -79,6 +83,10 @@ public:
   const int PORT_PERMISSIONS =  9801;
   const int PORT_CONFLICTS =    9802;
   const int PORT_VERSION =      9803;
+  const int PORT_DEBUG_OUTPUT = 9804;
+  const int PORT_CREATE_FAIL =  9805;
+  const int PORT_FAIL_WAYS =    9806;
+  const int PORT_FAIL_VERSION = 9807;
 
   OsmApiWriterTest()
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
@@ -124,7 +132,7 @@ public:
     HootNetworkRequestPtr request(new HootNetworkRequest());
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.queryCapabilities(request));
-    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
+    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), HttpResponseCode::HTTP_OK);
     HOOT_STR_EQUALS(writer._capabilities.getVersion(), QString("0.6"));
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getTracepoints(), static_cast<long>(5000));
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getWayNodes(), static_cast<long>(2000));
@@ -160,7 +168,7 @@ public:
     HootNetworkRequestPtr request(new HootNetworkRequest());
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.validatePermissions(request));
-    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
+    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), HttpResponseCode::HTTP_OK);
 #ifdef RUN_LOCAL_TEST_SERVER
     server.shutdown();
 #endif
@@ -310,8 +318,7 @@ public:
     HOOT_STR_EQUALS(
           FileUtils::readFully(_inputPath + "ToyTestAConflicts.osc")
             .replace("timestamp=\"\"", "timestamp=\"\" changeset=\"0\"")
-            .replace("    ", "\t")
-            .replace("<delete>", "<delete if-unused=\"true\">"),
+            .replace("    ", "\t"),
       writer.getFailedChangeset());
     //  Check the stats
     checkStats(writer.getStats(), 3, 2, 0, 2, 1, 2, 5);
@@ -386,31 +393,174 @@ public:
 #endif
   }
 
-  void runApplyTestTest()
+  void runChangesetOutputTest()
   {
-    QString toyInputFilename = _inputPath + "ToyTestA.osc";
-    QString toyOutputFilename = _outputPath + "ApplyChangesetTest-Output-1.osc";
-    std::shared_ptr<OsmApiWriter> writer(new OsmApiWriter(toyOutputFilename, toyInputFilename));
-    QStringList files = writer->testApply();
+#ifdef RUN_LOCAL_TEST_SERVER
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_DEBUG_OUTPUT));
+    osm.setUserInfo(TEST_USER_INFO);
 
-    CPPUNIT_ASSERT_EQUAL(1, files.size());
-    //  Check the changeset error file
-    HOOT_FILE_EQUALS( _inputPath + "ApplyChangesetTest-Expected-1-0001.osc",
-                     files[0]);
+    //  Kick off the file output test server
+    ChangesetOutputTestServer server(PORT_DEBUG_OUTPUT);
+    server.start();
 
-    toyOutputFilename = _outputPath + "ApplyChangesetTest-Output-2.osc";
-    writer.reset(new OsmApiWriter(toyOutputFilename, toyInputFilename));
+    OsmApiWriter writer(osm, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_REQUEST);
+
     Settings s;
-    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 20);
-    writer->setConfiguration(s);
-    files = writer->testApply();
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 2);
+    s.set(ConfigOptions::getChangesetApidbWriterDebugOutputKey(), true);
+    s.set(ConfigOptions::getChangesetApidbWriterDebugOutputPathKey(), _outputPath);
+    writer.setConfiguration(s);
+    writer.apply();
 
-    CPPUNIT_ASSERT_EQUAL(2, files.size());
-    //  Check the changeset error file
-    HOOT_FILE_EQUALS( _inputPath + "ApplyChangesetTest-Expected-2-0001.osc",
-                     files[0]);
-    HOOT_FILE_EQUALS( _inputPath + "ApplyChangesetTest-Expected-2-0002.osc",
-                     files[1]);
+    //  Wait for the test server to finish
+    server.shutdown();
+
+    //  Make sure that none of the changes failed
+    CPPUNIT_ASSERT(!writer.containsFailed());
+    //  Check the stats
+    checkStats(writer.getStats(), 0, 4, 0, 0, 4, 0, 0);
+    //  Compare the files
+    HOOT_FILE_EQUALS( _inputPath + "ChangesetOutput-Request--1.osc",
+                     _outputPath + "OsmApiWriter-000001-00001-Request--000.osc");
+    HOOT_FILE_EQUALS( _inputPath + "ChangesetOutput-Response-1.osc",
+                     _outputPath + "OsmApiWriter-000001-00001-Response-200.osc");
+    HOOT_FILE_EQUALS( _inputPath + "ChangesetOutput-Request--2.osc",
+                     _outputPath + "OsmApiWriter-000002-00001-Request--000.osc");
+    HOOT_FILE_EQUALS( _inputPath + "ChangesetOutput-Response-2.osc",
+                     _outputPath + "OsmApiWriter-000002-00001-Response-200.osc");
+#endif
+  }
+
+  void runChangesetCreateFailureTest()
+  {
+#ifdef RUN_LOCAL_TEST_SERVER
+    //  Suppress the OsmApiWriter errors by temporarily changing the log level
+    //  when the log level is Info or above because we expect the all of the errors.
+    //  Below Info is Debug and Trace, those are set because we want to see everything
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Fatal);
+
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_CREATE_FAIL));
+    osm.setUserInfo(TEST_USER_INFO);
+
+    //  Kick off the changeset create failure test server
+    ChangesetCreateFailureTestServer server(PORT_CREATE_FAIL);
+    server.start();
+
+    OsmApiWriter writer(osm, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_REQUEST);
+
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 2);
+    writer.setConfiguration(s);
+    writer.apply();
+
+    //  Wait for the test server to finish
+    server.shutdown();
+
+    Log::getInstance().setLevel(logLevel);
+
+    //  Make sure that the changes failed
+    CPPUNIT_ASSERT(writer.containsFailed());
+
+    //  Check the stats, 4 ways, 4 modifies, 4 errors
+    checkStats(writer.getStats(), 0, 4, 0, 0, 4, 0, 4);
+#endif
+  }
+
+  void runChangesetFailNodesWithWaysTest()
+  {
+#ifdef RUN_LOCAL_TEST_SERVER
+    //  Suppress the OsmApiWriter errors by temporarily changing the log level
+    //  when the log level is Info or above because we expect the all of the errors.
+    //  Below Info is Debug and Trace, those are set because we want to see everything
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Fatal);
+
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_FAIL_WAYS));
+    osm.setUserInfo(TEST_USER_INFO);
+
+    //  Kick off the changeset create failure test server
+    CreateWaysFailNodesTestServer server(PORT_FAIL_WAYS);
+    server.start();
+
+    QList<QString> changesets;
+    changesets.append(_inputPath + "ToyTestAFailure.osc");
+
+    OsmApiWriter writer(osm, changesets);
+    writer.setErrorPathname(_outputPath + "FailWayWithNodes-error.osc");
+
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+    writer.setConfiguration(s);
+    writer.apply();
+
+    //  Wait for the test server to finish
+    server.shutdown();
+
+    Log::getInstance().setLevel(logLevel);
+
+    //  Make sure that the changes failed
+    CPPUNIT_ASSERT(writer.containsFailed());
+
+    //  Check the stats, 31 nodes, 2 ways, 33 creates, 2 errors
+    checkStats(writer.getStats(), 31, 2, 0, 33, 0, 0, 2);
+
+    HOOT_FILE_EQUALS(_inputPath + "FailWayWithNodes-error.osc",
+                     _outputPath + "FailWayWithNodes-error.osc");
+#endif
+  }
+
+  void runChangesetVersionFailureTest()
+  {
+#ifdef RUN_LOCAL_TEST_SERVER
+    //  Suppress the OsmApiWriter errors by temporarily changing the log level
+    //  when the log level is Info or above because we expect the all of the errors.
+    //  Below Info is Debug and Trace, those are set because we want to see everything
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Fatal);
+
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_FAIL_VERSION));
+    osm.setUserInfo(TEST_USER_INFO);
+
+    //  Kick off the changeset create failure test server
+    VersionFailureTestServer server(PORT_FAIL_VERSION);
+    server.start();
+
+    OsmApiWriter writer(osm, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_CHANGESET);
+    writer.setErrorPathname(_outputPath + "VersionFailure-error.osc");
+
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+    writer.setConfiguration(s);
+    writer.apply();
+
+    //  Wait for the test server to finish
+    server.shutdown();
+
+    Log::getInstance().setLevel(logLevel);
+
+    //  Make sure that the changes failed
+    CPPUNIT_ASSERT(writer.containsFailed());
+
+    //  Check the stats, 1 way, 1 modify, 1 error
+    checkStats(writer.getStats(), 0, 1, 0, 0, 1, 0, 1);
+
+    HOOT_FILE_EQUALS(_inputPath + "VersionFailure-error.osc",
+                     _outputPath + "VersionFailure-error.osc");
+#endif
   }
 
   void checkStats(QList<SingleStat> stats,
@@ -444,6 +594,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
 
 }

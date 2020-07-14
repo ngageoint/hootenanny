@@ -35,6 +35,8 @@
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/ElementIdUtils.h>
+#include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/IdSwapOp.h>
@@ -67,7 +69,8 @@ class DeletableBuildingCriterion : public ElementCriterion
 
 public:
 
-  DeletableBuildingCriterion() {}
+  DeletableBuildingCriterion() = default;
+  virtual ~DeletableBuildingCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const
   {
@@ -102,11 +105,6 @@ private:
 };
 
 int BuildingMerger::logWarnCount = 0;
-
-BuildingMerger::BuildingMerger() :
-MergerBase()
-{
-}
 
 BuildingMerger::BuildingMerger(const set<pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs),
@@ -150,7 +148,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     // many match.
     _markedReviewText =
       "Merging multiple buildings from each data source is error prone and requires a human eye.";
-    reviewMarker.mark(map, combined, _markedReviewText, "Building", 1.0);
+    reviewMarker.mark(map, combined, _markedReviewText, BuildingMatch::MATCH_NAME, 1.0);
     return;
   }
 
@@ -188,7 +186,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
       "Identified as changed with an IoU score of: " + QString::number(iou) +
       ", which is less than the specified threshold of: " +
       QString::number(_changedReviewIouThreshold);
-    reviewMarker.mark(map, combined, _markedReviewText, "Building", 1.0);
+    reviewMarker.mark(map, combined, _markedReviewText, BuildingMatch::MATCH_NAME, 1.0);
     return;
   }
 
@@ -246,6 +244,9 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   ReuseNodeIdsOnWayOp(scrap->getElementId(), keeper->getElementId()).apply(map);
   // Replace the scrap with the keeper in any parents
   ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
+  // Favor the positive ID over the negative ID
+  if (keeper->getId() < 0 && scrap->getId() > 0)
+    preserveBuildingId = true;
   // Swap the IDs of the two elements if keeper isn't UNKNOWN1
   if (preserveBuildingId)
   {
@@ -254,7 +255,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     IdSwapOp swapOp(oldScrapId, oldKeeperId);
     swapOp.apply(map);
     // Now swap the pointers so that the wrong one isn't deleted
-    if (swapOp.getNumAffected() > 0)
+    if (swapOp.getNumFeaturesAffected() > 0)
     {
       scrap = map->getElement(oldKeeperId);
       keeper = map->getElement(oldScrapId);
@@ -581,12 +582,12 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   threeDBuildingKeys.append(MetadataTags::BuildingLevels());
   threeDBuildingKeys.append(MetadataTags::BuildingHeight());
   const bool allAreBuildingParts =
-    OsmUtils::allElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings);
+    TagUtils::allElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings);
   LOG_VART(allAreBuildingParts);
   // Here, we're skipping a building relation and doing a multipoly if only some of the buildings
   // have height tags. This behavior is debatable...
   if (!allAreBuildingParts &&
-      OsmUtils::anyElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings))
+      TagUtils::anyElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings))
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
@@ -595,7 +596,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
       LOG_DEBUG(
         "Merging building group where some buildings have 3D tags and others do not. A " <<
         "multipolygon relation will be created instead of a building relation. Buildings: " <<
-        OsmUtils::elementsToElementIds(constituentBuildings));
+        ElementIdUtils::elementsToElementIds(constituentBuildings));
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
@@ -619,7 +620,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
 
   TagMergerPtr tagMerger;
   LOG_VART(preserveTypes);
-  std::set<QString> overwriteExcludeTags;
+  QSet<QString> overwriteExcludeTags;
   if (allAreBuildingParts)
   {
     // exclude building part type tags from the type tag preservation by passing them in to be

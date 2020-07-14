@@ -86,9 +86,11 @@ public:
 
   inline static const QString HootLayername()           { return "hoot:layername"; }
 
+  // These are used by rubbersheeting only...could be a little better named.
   inline static const QString HootMatchOrder()          { return "hoot:match:order"; }
   inline static const QString HootMatchP()              { return "hoot:match:p"; }
   inline static const QString HootMatchScore()          { return "hoot:match:score"; }
+
   inline static const QString HootMatchedBy()           { return "hoot:matchedBy"; }
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
@@ -105,11 +107,14 @@ public:
   inline static const QString HootReviewSortOrder()     { return "hoot:review:sort_order"; }
   inline static const QString HootReviewType()          { return "hoot:review:type"; }
   inline static const QString HootReviewUuid()          { return "hoot:review:uuid"; }
+  inline static const QString HootReviewRoadCrossingPolygon() { return "road_crossing_polygon"; }
 
   inline static const QString HootScoreMatch()          { return "hoot:score:match"; }
   inline static const QString HootScoreMiss()           { return "hoot:score:miss"; }
   inline static const QString HootScoreReview()         { return "hoot:score:review"; }
   inline static const QString HootScoreUuid()           { return "hoot:score:uuid"; }
+  inline static const QString HootUserName()            { return "hoot:user_name"; }
+  inline static const QString HootUserId()              { return "hoot:user_id"; }
 
   // used with JOSM validation interop; match those used in JosmValidator.java
   inline static const QString HootValidationError()     { return "hoot:validation:error"; }
@@ -155,6 +160,7 @@ public:
   inline static const QString RelationReview()          { return "review"; }
   inline static const QString RelationRoute()           { return "route"; }
   inline static const QString RelationRouteMaster()     { return "route_master"; }
+  inline static const QString RelationSite()            { return "site"; }
   inline static const QString RelationSuperRoute()      { return "superroute"; }
   inline static const QString RelationWaterway()        { return "waterway"; }
   inline static const QString RelationType()            { return "type"; }
@@ -172,6 +178,13 @@ public:
   inline static const QString Source()                  { return "source"; }
   inline static const QString OsmApiDbScheme()          { return "osmapidb"; }
   inline static const QString HootApiDbScheme()         { return "hootapidb"; }
+
+  /**
+   * This is used by ChangesetReplacementCreator to focus attention on input elements with missing
+   * child references so that they may later be cleaned up.
+   */
+  inline static const QString HootMissingChild()        { return "hoot:missing_child"; }
+
   /**
    * Identifies features snapped with UnconnectedWaySnapper
    */

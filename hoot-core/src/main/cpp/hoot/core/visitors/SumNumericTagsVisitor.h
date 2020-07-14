@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SUM_NUMERIC_TAGS_VISITOR_H
 #define SUM_NUMERIC_TAGS_VISITOR_H
@@ -31,6 +31,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -51,6 +52,7 @@ public:
 
   SumNumericTagsVisitor();
   explicit SumNumericTagsVisitor(const QStringList keys);
+  virtual ~SumNumericTagsVisitor() = default;
 
   /**
    * Given a set of tag keys and for all features having those tags, sums the numerical values of
@@ -66,6 +68,17 @@ public:
   virtual QString getDescription() const { return "Sums numeric tag values with specified keys"; }
 
   virtual void setConfiguration(const Settings& conf);
+
+  virtual std::string getClassName() const { return className(); }
+
+  virtual QString getInitStatusMessage() const { return "Summing values of numeric tags..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  {
+    return
+      "Summed " + StringUtils::formatLargeNumber(_numAffected) + " numeric tags on " +
+      StringUtils::formatLargeNumber(_numProcessed) + " features.";
+  }
 
 private:
 

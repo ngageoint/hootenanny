@@ -22,16 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCRITERIONJS_H
 #define ELEMENTCRITERIONJS_H
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
-
-// node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -39,7 +37,7 @@
 namespace hoot
 {
 
-class ElementCriterionJs : public node::ObjectWrap
+class ElementCriterionJs : public HootBaseJs
 {
 public:
 
@@ -47,10 +45,11 @@ public:
 
   ElementCriterionPtr getCriterion() { return _c; }
 
+  virtual ~ElementCriterionJs() = default;
+
 private:
 
-  ElementCriterionJs(ElementCriterion* c);
-  ~ElementCriterionJs();
+  ElementCriterionJs(ElementCriterion* c) : _c(c) { }
 
   static void addCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);

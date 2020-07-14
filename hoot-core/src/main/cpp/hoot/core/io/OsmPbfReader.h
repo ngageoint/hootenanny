@@ -82,8 +82,6 @@ public:
 
   static std::string className() { return "hoot::OsmPbfReader"; }
 
-  static int logWarnCount;
-
   OsmPbfReader();
   OsmPbfReader(bool useFileId);
 
@@ -94,7 +92,7 @@ public:
    */
   OsmPbfReader(const QString& urlString);
 
-  ~OsmPbfReader();
+  virtual ~OsmPbfReader();
 
   /**
    * @see ElementInputStream
@@ -181,7 +179,13 @@ public:
 
 private:
 
+  static int logWarnCount;
+
+  // the CE value used if no CE tag is found
   Meters _defaultCircularError;
+  // keys for tags containing CE data
+  QStringList _circularErrorTagKeys;
+
   std::string _buffer;
   std::istream* _in;
   bool _needToCloseInput;

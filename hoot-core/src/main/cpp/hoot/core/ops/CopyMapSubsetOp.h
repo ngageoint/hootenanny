@@ -51,6 +51,7 @@ public:
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit);
+  virtual ~CopyMapSubsetOp() = default;
 
   /**
    * A new map is created and the eids specified in the constructor and their depedencies will be
@@ -64,6 +65,8 @@ public:
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
 
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

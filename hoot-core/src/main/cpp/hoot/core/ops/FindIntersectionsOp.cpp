@@ -27,10 +27,10 @@
 #include "FindIntersectionsOp.h"
 
 // Hoot
-#include <hoot/core/algorithms/splitter/DualWaySplitter.h>
+#include <hoot/core/algorithms/splitter/DualHighwaySplitter.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/ElementInIdListCriterion.h>
+#include <hoot/core/criterion/ElementIdCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
@@ -53,10 +53,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, FindHighwayIntersectionsOp)
 HOOT_FACTORY_REGISTER(OsmMapOperation, FindRailwayIntersectionsOp)
 
-FindIntersectionsOp::FindIntersectionsOp()
-{
-}
-
 void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   // remove all relations
@@ -76,8 +72,8 @@ void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 
   DuplicateWayRemover::removeDuplicates(map);
   SuperfluousWayRemover::removeWays(map);
-  // split ways up on intersections. This must come before DualWaySplitter. The DualWaySplitter
-  // assumes that all intersections are on end nodes.
+  // split ways up on intersections. This must come before DualHighwaySplitter. The
+  // DualHighwaySplitter assumes that all intersections are on end nodes.
   IntersectionSplitter::splitIntersections(map);
   UnlikelyIntersectionRemover::removeIntersections(map);
   LOG_INFO("Assuming drives on right.");
@@ -93,11 +89,13 @@ void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
   VisitorOp(removeWaysVis).apply(map);
 
   // remove anything that is not a node and in the list of intersections found
+  std::vector<long> intersectionIds = v->getIntersections();
+  std::set<long> intersectionIdsSet(intersectionIds.begin(), intersectionIds.end());
   std::shared_ptr<NotCriterion> intersectionCrit(
     new NotCriterion(
       new ChainCriterion(
-        std::shared_ptr<ElementInIdListCriterion>(
-          new ElementInIdListCriterion(ElementType::Node, v->getIntersections())),
+        std::shared_ptr<ElementIdCriterion>(
+          new ElementIdCriterion(ElementType::Node, intersectionIdsSet)),
         std::shared_ptr<NodeCriterion>(new NodeCriterion()))));
   std::shared_ptr<RemoveElementsVisitor> removeIntersectionsVis(new RemoveElementsVisitor());
   removeIntersectionsVis->addCriterion(intersectionCrit);

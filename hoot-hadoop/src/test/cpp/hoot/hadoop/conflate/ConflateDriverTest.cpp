@@ -67,7 +67,7 @@ public:
       fs.mkdirs(outDir + "input.pbf");
       //fs.copyFromLocal("test-files/hadoop/conflate/ConflateDriverTest/input.pbf",
       //                 outDir + "input.pbf/input.pbf");
-      fs.copyFromLocal("test-files/ToyTestCombined.pbf", outDir + "input.pbf/ToyTestCombined.pbf");
+      fs.copyFromLocal("test-files/ToyTestCombined.osm.pbf", outDir + "input.pbf/ToyTestCombined.osm.pbf");
       fs.copyFromLocal("test-files/hadoop/conflate/ConflateDriverTest/input1.stats",
                        outDir + "input.pbf/input1.stats");
       fs.copyFromLocal("test-files/hadoop/conflate/ConflateDriverTest/input2.stats",

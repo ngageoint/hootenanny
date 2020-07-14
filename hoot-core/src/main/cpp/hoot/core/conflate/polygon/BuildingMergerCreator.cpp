@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMergerCreator.h"
 
@@ -38,10 +38,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(MergerCreator, BuildingMergerCreator)
-
-BuildingMergerCreator::BuildingMergerCreator()
-{
-}
 
 bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
@@ -94,7 +90,7 @@ vector<CreatorDescription> BuildingMergerCreator::getAllCreators() const
 }
 
 bool BuildingMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
-  ConstMatchPtr m2) const
+  ConstMatchPtr m2, const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const BuildingMatch* bm1 = dynamic_cast<const BuildingMatch*>(m1.get());
   const BuildingMatch* bm2 = dynamic_cast<const BuildingMatch*>(m2.get());

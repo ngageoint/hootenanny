@@ -46,7 +46,8 @@ public:
 
   static std::string className() { return "hoot::JosmMapValidator"; }
 
-  JosmMapValidator();
+  JosmMapValidator() = default;
+  virtual ~JosmMapValidator() = default;
 
   /**
    * @see ApiEntityInfo
@@ -65,6 +66,8 @@ protected:
    * @see JosmMapValidatorAbstract
    */
   virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

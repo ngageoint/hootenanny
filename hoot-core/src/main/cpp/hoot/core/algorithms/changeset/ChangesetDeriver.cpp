@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ChangesetDeriver.h"
 
@@ -40,10 +40,11 @@ _from(from),
 _to(to),
 _numFromElementsParsed(0),
 _numToElementsParsed(0),
-_allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferenceFeatures())
+_allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferenceFeatures()),
+_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
 {
-  LOG_VARD(_from.get());
-  LOG_VARD(_to.get());
+  LOG_VART(_from.get());
+  LOG_VART(_to.get());
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
   {
@@ -58,7 +59,7 @@ _allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferen
   _changesByType[Change::ChangeType::Modify] = 0;
   _changesByType[Change::ChangeType::Delete] = 0;
 
-  LOG_VARD(_allowDeletingReferenceFeatures);
+  LOG_VART(_allowDeletingReferenceFeatures);
 }
 
 ChangesetDeriver::~ChangesetDeriver()
@@ -88,7 +89,7 @@ bool ChangesetDeriver::hasMoreChanges()
 
 Change ChangesetDeriver::_nextChange()
 {
-  // TODO: this method is a bit of mess now...refactor into smaller chunks
+  // TODO: this method is a bit of a mess now...refactor into smaller chunks
 
   LOG_TRACE("Reading next change...");
 
@@ -202,7 +203,12 @@ Change ChangesetDeriver::_nextChange()
   {
     // while the elements are exactly the same, there is nothing to do.
     while (_fromE.get() && _toE.get() && _fromE->getElementId() == _toE->getElementId() &&
-           _elementComparer.isSame(_fromE, _toE))
+           _elementComparer.isSame(_fromE, _toE) &&
+           // ElementComparer always ignores metadata tags during comparison. So, if there is a
+           // specific metadata tag in the target element that isn't in the original element and we
+           // want to allow in the changeset output, this allows that to happen.
+           !(!_fromE->getTags().hasAnyKey(_metadataAllowKeys) &&
+             _toE->getTags().hasAnyKey(_metadataAllowKeys)))
     {
       LOG_TRACE(
         "skipping identical elements - 'from' element: " << _fromE->getElementId() <<

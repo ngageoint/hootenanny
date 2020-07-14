@@ -26,9 +26,6 @@
  */
 #include "PoiPolygonMatch.h"
 
-// geos
-#include <geos/util/TopologyException.h>
-
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h>
@@ -72,11 +69,6 @@ long PoiPolygonMatch::phoneNumberMatchCandidates = 0;
 long PoiPolygonMatch::convexPolyDistanceMatches = 0;
 long PoiPolygonMatch::numReviewReductions = 0;
 
-PoiPolygonMatch::PoiPolygonMatch() :
-Match()
-{
-}
-
 PoiPolygonMatch::PoiPolygonMatch(ConstMatchThresholdPtr threshold) :
 Match(threshold)
 {
@@ -102,7 +94,7 @@ _reviewIfMatchedTypes(QStringList()),
 _nameScore(-1.0),
 _nameScoreThreshold(-1.0),
 _addressScore(-1.0),
-//leaving this false by default due to libpostals startup time
+// leaving this false by default due to libpostal's startup time
 _addressMatchEnabled(false),
 _phoneNumberScore(-1.0),
 _phoneNumberMatchEnabled(true),
@@ -111,11 +103,13 @@ _enableReviewReduction(true),
 _disableSameSourceConflation(false),
 _disableSameSourceConflationMatchTagKeyPrefixOnly(true),
 _sourceTagKey(""),
+_disableIntradatasetConflation1(false),
+_disableIntradatasetConflation2(false),
 _reviewMultiUseBuildings(false),
 _rf(rf),
 _explainText(""),
 _infoCache(infoCache),
-_timingThreshold(1000000)    //nanoseconds
+_timingThreshold(1000000)    // nanoseconds
 {
   LOG_VART(_infoCache.get());
 
@@ -206,6 +200,9 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   setDisableSameSourceConflationMatchTagKeyPrefixOnly(
     config.getPoiPolygonDisableSameSourceConflationMatchTagKeyPrefixOnly());
   setSourceTagKey(config.getPoiPolygonSourceTagKey());
+
+  setDisableIntradatasetConflation1(config.getPoiPolygonDisableIntradatasetConflation1());
+  setDisableIntradatasetConflation2(config.getPoiPolygonDisableIntradatasetConflation2());
 
   setReviewMultiUseBuildings(config.getPoiPolygonReviewMultiuseBuildings());
 
@@ -340,7 +337,8 @@ bool PoiPolygonMatch::_inputFeaturesHaveSameSource() const
     if (!e1SourceVal.contains(":") || !e2SourceVal.contains(":"))
     {
       LOG_TRACE(
-        "Source prefix match enabled and at least one feature has no source prefix.  No feature source match.");
+        "Source prefix match enabled and at least one feature has no source prefix. "
+        "No feature source match.");
       return false;
     }
     else
@@ -384,7 +382,7 @@ bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
 
 void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {  
-  //for testing only
+  // for testing only
 //  ConstElementPtr e1 = _map->getElement(eid1);
 //  ConstElementPtr e2 = _map->getElement(eid2);
 //  const bool oneElementIsRelation =
@@ -397,13 +395,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   _eid1 = eid1;
   _eid2 = eid2;
 
-  //if the options was activated to not conflate features with the same source tag, then exit
-  //out with a miss now
-  if (_disableSameSourceConflation && _inputFeaturesHaveSameSource())
-  {
-    return;
-  }
-
   _categorizeElementsByGeometryType();
 
   //FOR REDUCING REVIEWS DURING REVIEW TYPE DEBUGGING ONLY!
@@ -412,7 +403,26 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //    return;
 //  }
 
-  //allow for auto marking features with certain types for review if they get matched
+  // don't conflate features from within the same input dataset when this option is enabled
+  if (_disableIntradatasetConflation1 &&
+      _poi->getStatus() == Status::Unknown1 && _poly->getStatus() == Status::Unknown1)
+  {
+    return;
+  }
+  if (_disableIntradatasetConflation2 &&
+      _poi->getStatus() == Status::Unknown2 && _poly->getStatus() == Status::Unknown2)
+  {
+    return;
+  }
+
+  // if the options was activated to not conflate features with the same source tag, then exit
+  // out with a miss now
+  if (_disableSameSourceConflation && _inputFeaturesHaveSameSource())
+  {
+    return;
+  }
+
+  // allow for auto marking features with certain types for review if they get matched
   const bool foundReviewIfMatchedType =
     _featureHasReviewIfMatchedType(_poi) || _featureHasReviewIfMatchedType(_poly);
   LOG_VART(foundReviewIfMatchedType);
@@ -830,6 +840,14 @@ QString PoiPolygonMatch::toString() const
         .arg(_typeScore)
         .arg(_nameScore)
         .arg(_addressScore);
+  }
+}
+
+void PoiPolygonMatch::_clearCache()
+{
+  if (_infoCache)
+  {
+    _infoCache->clear();
   }
 }
 

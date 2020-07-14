@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AverageTagMerger.h"
 
@@ -35,14 +35,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(TagMerger, AverageTagMerger)
 
-AverageTagMerger::AverageTagMerger()
-{
-}
-
 Tags AverageTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
   Tags result;
-  TagComparator::getInstance().averageTags(t1, 1.0, t2, 1.0, result, false);
+  TagComparator::getInstance().averageTags(t1, 1.0, t2, 1.0, result, false, _caseSensitive);
   return result;
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PrintJs.h"
 
@@ -40,12 +40,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(PrintJs)
 
-PrintJs::PrintJs()
-{
-}
-
-PrintJs::~PrintJs() {}
-
 void PrintJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
@@ -58,16 +52,13 @@ void PrintJs::jsPrint(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-//  Context::Scope context_scope(current->GetCurrentContext());
 
   QString result;
 
   for (int i = 0; i < args.Length(); i++)
   {
     if (i > 0)
-    {
       result.append(" ");
-    }
 
     result.append(toCpp<QString>(args[i]));
   }

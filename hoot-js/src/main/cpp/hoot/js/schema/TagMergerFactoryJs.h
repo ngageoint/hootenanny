@@ -22,25 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGMERGERFACTORYJS_H
 #define TAGMERGERFACTORYJS_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class TagMergerFactoryJs : public node::ObjectWrap
+class TagMergerFactoryJs : public HootBaseJs
 {
 public:
- static void Init(v8::Handle<v8::Object> target);
+
+  static void Init(v8::Handle<v8::Object> target);
+
+  virtual ~TagMergerFactoryJs() = default;
 
 private:
-  TagMergerFactoryJs();
-  ~TagMergerFactoryJs();
+
+  TagMergerFactoryJs() = default;
 
   static void mergeTags(const v8::FunctionCallbackInfo<v8::Value>& args);
 

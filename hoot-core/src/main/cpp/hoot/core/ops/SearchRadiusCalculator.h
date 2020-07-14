@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SEARCH_RADIUS_CALCULATOR_H
@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Std
 #include <vector>
@@ -38,10 +39,8 @@
 namespace hoot
 {
 
-class OsmMap;
-
 /**
- * Calculates a conflation search radius using tie points from rubbersheeting.  If there
+ * Calculates a conflation search radius using tie points from rubbersheeting. If there
  * are not enough tie points to perform the calculation, the default search radius will be used.
  */
 class SearchRadiusCalculator : public OsmMapOperation, public Configurable
@@ -51,6 +50,7 @@ public:
   static std::string className() { return "hoot::SearchRadiusCalculator"; }
 
   SearchRadiusCalculator();
+  virtual ~SearchRadiusCalculator() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -59,20 +59,18 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   void setCircularError(double val) { _circularError = val; }
-
   void setRubberSheetRef(bool val) { _rubberSheetRef = val; }
-
   void setRubberSheetMinTies(int minTies) { _minTies = minTies; }
-
   void setPrecision(int precision) { _precision = precision; }
 
   virtual QString getDescription() const override
   { return "Calculates a search radius using tie points found by rubbersheeting"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
-  void _calculateSearchRadius(const std::vector<double>& tiePointDistances);
-  double _calculateStandardDeviation(const std::vector<double>& samples);
+  friend class SearchRadiusCalculatorTest;
 
   double _result;
 
@@ -85,7 +83,12 @@ private:
 
   QString _elementCriterion;
 
-  friend class SearchRadiusCalculatorTest;
+  OsmMapPtr _getFilteredMap(const ConstOsmMapPtr& map);
+
+  std::vector<double> _getTiePointDistances(OsmMapPtr& map);
+
+  void _calculateSearchRadius(const std::vector<double>& tiePointDistances);
+  double _calculateStandardDeviation(const std::vector<double>& samples);
 };
 
 }

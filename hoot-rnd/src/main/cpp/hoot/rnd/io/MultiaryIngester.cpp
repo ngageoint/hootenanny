@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryIngester.h"
 
@@ -35,7 +35,7 @@
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
-#include <hoot/core/visitors/CalculateHashVisitor2.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmChangeWriterFactory.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
@@ -224,7 +224,9 @@ std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream
     conf().getString(ConfigOptions::getSchemaTranslationScriptKey()));
 
   visitors.append(translationVisitor);
-  visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
+  std::shared_ptr<MultiaryPoiHashVisitor> hashVis(new MultiaryPoiHashVisitor());
+  hashVis->setIncludeCircularError(true);
+  visitors.append(hashVis);
   std::shared_ptr<ElementInputStream> filteredNewInputStream(
     new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
   return filteredNewInputStream;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDREF1VISITOR_H
 #define ADDREF1VISITOR_H
@@ -41,6 +41,7 @@ public:
   static std::string className() { return "hoot::AddRef1Visitor"; }
 
   AddRef1Visitor();
+  virtual ~AddRef1Visitor() = default;
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -52,6 +53,8 @@ public:
   virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const { return "Adds REF1 tags"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -34,6 +34,8 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/ops/MapCropper.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -50,7 +52,7 @@ public:
 
   static string className() { return "hoot::ConvertCmd"; }
 
-  ConvertCmd() {}
+  ConvertCmd() = default;
 
   virtual QString getName() const override { return "convert"; }
 
@@ -58,6 +60,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     LOG_VART(args.size());
     LOG_VART(args);
 
@@ -69,8 +74,16 @@ public:
       throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
     }
 
-    QElapsedTimer timer;
-    timer.start();
+    ConfigOptions configOpts(conf());
+
+    if (configOpts.getConvertOps().contains(QString::fromStdString(MapCropper::className())) &&
+        configOpts.getCropBounds().trimmed().isEmpty())
+    {
+      throw IllegalArgumentException(
+        "When using " + QString::fromStdString(MapCropper::className()) +
+        " with the convert command, the " + configOpts.getCropBoundsKey() +
+        " option must be specified.");
+    }
 
     QStringList inputs;
     QString output;
@@ -102,12 +115,14 @@ public:
     LOG_VART(inputs);
     LOG_VART(output);  
 
+    ConfigUtils::checkForDuplicateElementCorrectionMismatch(ConfigOptions().getConvertOps());
+
     DataConverter converter;
     converter.setConfiguration(conf());
     converter.convert(inputs, output);
 
-    LOG_INFO(
-      "Convert operation completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    LOG_STATUS(
+      "Data conversion completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
     return 0;
   }

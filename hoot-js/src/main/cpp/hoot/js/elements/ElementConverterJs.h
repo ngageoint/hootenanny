@@ -22,28 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCONVERTERJS_H
 #define ELEMENTCONVERTERJS_H
 
-// node.js
-#include <hoot/js/HootJsStable.h>
-#include <hoot/js/SystemNodeJs.h>
+//  Hoot
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class ElementConverterJs : public node::ObjectWrap
+class ElementConverterJs : public HootBaseJs
 {
 public:
 
  static void Init(v8::Handle<v8::Object> target);
 
+ virtual ~ElementConverterJs() = default;
+
 private:
 
-  ElementConverterJs();
-  ~ElementConverterJs();
+  ElementConverterJs() = default;
 
   static void calculateLength(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

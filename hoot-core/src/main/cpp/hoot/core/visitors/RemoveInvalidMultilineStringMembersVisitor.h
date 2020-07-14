@@ -22,38 +22,52 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEINVALIDMULTILINESTRINGMEMBERSVISITOR_H
 #define REMOVEINVALIDMULTILINESTRINGMEMBERSVISITOR_H
 
 //  hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
 
-class RemoveInvalidMultilineStringMembersVisitor : public ElementOsmMapVisitor,
-  public OperationStatusInfo
+/**
+ * Removes invalid multiline string relation members
+ *
+ * These are sometimes produced as an artifact from cropping or conflation
+ */
+class RemoveInvalidMultilineStringMembersVisitor : public ElementOsmMapVisitor
 {
 public:
 
   static std::string className() { return "hoot::RemoveInvalidMultilineStringMembersVisitor"; }
 
   RemoveInvalidMultilineStringMembersVisitor();
+  virtual ~RemoveInvalidMultilineStringMembersVisitor() = default;
 
   virtual void visit(const ElementPtr& e);
 
   virtual QString getInitStatusMessage() const
   { return "Removing invalid multiline string relation members..."; }
 
-  // finish; wasn't obvious how to count the total affected - #2933
   virtual QString getCompletedStatusMessage() const
-  { return ""; }
+  {
+    return
+      "\tRemoved " + StringUtils::formatLargeNumber(_numAffected) + " invalid relations / " +
+      StringUtils::formatLargeNumber(_map->getRelationCount()) + " total relations."; }
 
   virtual QString getDescription() const
   { return "Removes invalid multiline string relation members"; }
+
+  virtual std::string getClassName() const { return className(); }
+
+private:
+
+  int _taskStatusUpdateInterval;
 };
 
 }

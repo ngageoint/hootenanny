@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LONGINTEGERFIELDDEFINITION_H
 #define LONGINTEGERFIELDDEFINITION_H
@@ -38,7 +38,9 @@ namespace hoot
 class LongIntegerFieldDefinition : public FieldDefinition
 {
 public:
+
   LongIntegerFieldDefinition();
+  virtual ~LongIntegerFieldDefinition() = default;
 
   void addEnumeratedValue(long long v) { _enumeratedValues.insert(v); }
 
@@ -61,6 +63,7 @@ public:
   virtual void validate(const QVariant& v, StrictChecking strict) const;
 
 private:
+
   long long _min;
   long long _max;
   long long _defaultValue;

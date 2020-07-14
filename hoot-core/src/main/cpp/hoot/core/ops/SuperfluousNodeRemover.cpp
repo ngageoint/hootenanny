@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SuperfluousNodeRemover.h"
@@ -32,6 +32,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 
 // Standard
@@ -50,14 +51,43 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, SuperfluousNodeRemover)
 
 SuperfluousNodeRemover::SuperfluousNodeRemover() :
-_ignoreInformationTags(false)
+_ignoreInformationTags(false),
+_unallowedOrphanKvps(ConfigOptions().getSuperfluousNodeRemoverUnallowedOrphanKvps()),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
 void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 {
-  _numAffected = 0;
+  _numAffected = 0;     // _numAffected reflects the actual number of nodes removed
+  _numProcessed = 0;    // _numProcessed reflects total elements processed
   _usedNodes.clear();
+
+  // Let's collect the IDs of all the nodes we can't remove first.
+
+  const RelationMap& relations = map->getRelations();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  {
+    ConstRelationPtr relation = it->second;
+    const vector<RelationData::Entry>& members = relation->getMembers();
+    for (size_t i = 0; i < members.size(); i++)
+    {
+      const RelationData::Entry member = members[i];
+      if (member.getElementId().getType() == ElementType::Node)
+      {
+        _usedNodes.insert(member.getElementId().getId());
+      }
+    }
+
+    _numProcessed++;
+    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        " nodes from removal after processing " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " total elements.");
+    }
+  }
 
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
@@ -66,6 +96,16 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     const vector<long>& nodeIds = w->getNodeIds();
     LOG_VART(nodeIds);
     _usedNodes.insert(nodeIds.begin(), nodeIds.end());
+    _numProcessed += nodeIds.size();
+
+    _numProcessed++;
+    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        " nodes from removal after processing " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " total elements.");
+    }
   }
 
   const NodeMap nodes = map->getNodes();
@@ -74,12 +114,39 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     const Node* n = it->second.get();
     LOG_VART(n->getElementId());
     LOG_VART(n->getTags().getNonDebugCount());
-    if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
+
+    // There original reason behind adding this is that there a potential bug in
+    // HighwaySnapMerger::_snapEnds that will leave turning circle nodes orphaned from roads.
+    // Turning circles are always expected to be a road way node. If its an actual bug, it should
+    // eventually be fixed, but this logic will clean them up for the time being. The types we allow
+    // to be orphaned are configurable in case we ever need to add others.
+    if (_usedNodes.find(n->getId()) == _usedNodes.end() &&
+        n->getTags().hasAnyKvp(_unallowedOrphanKvps))
     {
+      LOG_TRACE("Skipping " << n->getElementId() << " with unallowed orphan kvp...");
+    }
+    else if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
+    {
+      LOG_TRACE(
+        "Not marking " << n->getElementId() << " for removal due to having non-metadata tags...");
       _usedNodes.insert(n->getId());
+    }
+    else
+    {
+      LOG_TRACE("Marking " << n->getElementId() << " for removal...");
+    }
+    _numProcessed++;
+
+    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        " nodes from removal after processing " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " total elements.");
     }
   }
   LOG_VART(_usedNodes.size());
+  //LOG_VART(_usedNodes);
 
   std::shared_ptr<OsmMap> reprojected;
   const NodeMap* nodesWgs84 = &nodes;
@@ -91,13 +158,18 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     reprojected.reset(new OsmMap(map));
     MapProjector::projectToWgs84(reprojected);
     nodesWgs84 = &reprojected->getNodes();
+    LOG_VART(nodesWgs84->size());
   }
 
+  // Now, let's remove any that aren't in our do not remove list.
+
+  _numProcessed = 0;
   for (NodeMap::const_iterator it = nodesWgs84->begin(); it != nodesWgs84->end(); ++it)
   {
     const Node* n = it->second.get();
     LOG_VART(n->getElementId());
     const long nodeId = n->getId();
+    LOG_VART(_usedNodes.find(nodeId) == _usedNodes.end());
     if (_usedNodes.find(nodeId) == _usedNodes.end())
     {
       if (_bounds.isNull() || _bounds.contains(n->getX(), n->getY()))
@@ -112,18 +184,24 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         LOG_VART(_bounds);
       }
     }
-  }
-}
+    else
+    {
+      LOG_TRACE("Not removing node: " << n->getElementId() << "...");
+    }
+    _numProcessed++;
 
-void SuperfluousNodeRemover::readObject(QDataStream& is)
-{
-  bool hasBounds;
-  is >> hasBounds;
-  if (hasBounds)
-  {
-    double minx, miny, maxx, maxy;
-    is >> minx >> miny >> maxx >> maxy;
-    _bounds = Envelope(minx, maxx, miny, maxy);
+    if (_numAffected > 0 && _numAffected % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Removed " << StringUtils::formatLargeNumber(_numAffected) <<
+        " nodes / " << StringUtils::formatLargeNumber(_usedNodes.size()) << " total nodes.");
+    }
+    else if (_numProcessed % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(_numProcessed) <<
+        " nodes / " << StringUtils::formatLargeNumber(nodesWgs84->size()) << " total nodes.");
+    }
   }
 }
 
@@ -139,13 +217,25 @@ long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
   }
   LOG_INFO(nodeRemover.getInitStatusMessage());
   nodeRemover.apply(map);
-  LOG_DEBUG(nodeRemover.getCompletedStatusMessage());
-  return nodeRemover.getNumAffected();
+  LOG_INFO(nodeRemover.getCompletedStatusMessage());
+  return nodeRemover.getNumFeaturesAffected();
 }
 
 void SuperfluousNodeRemover::setBounds(const Envelope &bounds)
 {
   _bounds = bounds;
+}
+
+void SuperfluousNodeRemover::readObject(QDataStream& is)
+{
+  bool hasBounds;
+  is >> hasBounds;
+  if (hasBounds)
+  {
+    double minx, miny, maxx, maxy;
+    is >> minx >> miny >> maxx >> maxy;
+    _bounds = Envelope(minx, maxx, miny, maxy);
+  }
 }
 
 void SuperfluousNodeRemover::writeObject(QDataStream& os) const

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementConverterJs.h"
 
@@ -43,12 +43,6 @@ namespace hoot
 {
 
 HOOT_JS_REGISTER(ElementConverterJs)
-
-ElementConverterJs::ElementConverterJs()
-{
-}
-
-ElementConverterJs::~ElementConverterJs() {}
 
 void ElementConverterJs::Init(Handle<Object> exports)
 {
@@ -74,7 +68,7 @@ void ElementConverterJs::calculateLength(const FunctionCallbackInfo<Value>& args
 
     args.GetReturnValue().Set(toV8(ElementConverter(m).calculateLength(e)));
   }
-  catch ( const HootException& err )
+  catch (const HootException& err)
   {
     LOG_VAR(err.getWhat());
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));

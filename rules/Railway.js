@@ -10,6 +10,9 @@ exports.baseFeatureType = "Railway";
 exports.geometryType = "line";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
+
+exports.searchRadius = parseFloat(hoot.get("search.radius.railway"));
+
 // This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
 // If that ever changes, then the generic score threshold configuration options used below should 
 // be replaced with custom score threshold configuration options.
@@ -17,43 +20,28 @@ exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default")
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
+// This is needed for disabling superfluous conflate ops. In the future, it may also
+// be used to replace exports.isMatchCandidate (see #3047).
+exports.matchCandidateCriterion = "hoot::RailwayCriterion";
+
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("railway.matcher.max.angle"),
       "way.subline.matcher": hoot.get("railway.subline.matcher") });
 
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
-
 // Use default spacing, 5 meters
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
-
-
 var euclideanDistanceExtractor = new hoot.EuclideanDistanceExtractor();
-
 var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
-
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
-
 var parallelScoreExtractor = new hoot.ParallelScoreExtractor();
-
 var lengthScoreExtractor = new hoot.LengthScoreExtractor();
-
-/**
- * Runs before match creation occurs and provides an opportunity to perform custom initialization.
- */
-exports.calculateSearchRadius = function(map)
-{
-  exports.searchRadius = parseFloat(hoot.get("search.radius.railway"));
-  hoot.log("Using specified search radius for railway conflation: " + exports.searchRadius);
-}
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
- *
- * exports.matchCandidateCriterion takes precedence over this function and must
- * be commented out before using it.
  */
 exports.isMatchCandidate = function(map, e)
 {

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -79,7 +79,7 @@ etds70 = {
                 }
 
                 // Apply the English one2one rules
-                translate.applyOne2One(tdsData[fNum]['attrs'], eAttrs, etds70.rules.engEnum, {'k':'v'});
+                translate.applyOne2One(tdsData[fNum]['attrs'], eAttrs, etds70.rules.engEnum, {'k':'v'},[]);
 
                 // Find an FCODE
                 if (tFCODE in etds70.rules.fcodeLookup)

@@ -22,26 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PRINTJS_H
 #define PRINTJS_H
 
 // node.js
-#include <hoot/js/HootJsStable.h>
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class PrintJs : public node::ObjectWrap
+class PrintJs : public HootBaseJs
 {
 public:
- static void Init(v8::Handle<v8::Object> target);
+
+  static void Init(v8::Handle<v8::Object> target);
+
+  virtual ~PrintJs() = default;
 
 private:
-  PrintJs();
-  ~PrintJs();
+
+  PrintJs() = default;
 
   static void jsPrint(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

@@ -32,6 +32,7 @@
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -50,18 +51,20 @@ namespace hoot
  */
 class ElementCriterion;
 
-class SpatialIndexer : public ElementConstOsmMapVisitor, public ElementCriterionConsumer,
-  public OperationStatusInfo
+class SpatialIndexer : public ElementConstOsmMapVisitor, public ElementCriterionConsumer
 {
 public:
 
-  static std::string className() { return "hoot::CreateIndexVisitor"; }
+  static int logWarnCount;
+
+  static std::string className() { return "hoot::SpatialIndexer"; }
 
   explicit SpatialIndexer(std::shared_ptr<Tgs::HilbertRTree>& index,
                           std::deque<ElementId>& indexToEid,
                           const std::shared_ptr<ElementCriterion>& criterion,
                           std::function<Meters (const ConstElementPtr& e)> getSearchRadius,
                           ConstOsmMapPtr pMap);
+  virtual ~SpatialIndexer() = default;
 
   void addCriterion(const ElementCriterionPtr& e);
 
@@ -108,7 +111,11 @@ public:
   { return "Indexing elements..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Indexed " + QString::number(_numAffected) + " elements."; }
+  { return "Indexed " + StringUtils::formatLargeNumber(_numAffected) + " elements."; }
+
+  long getSize() const { return _numAffected; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

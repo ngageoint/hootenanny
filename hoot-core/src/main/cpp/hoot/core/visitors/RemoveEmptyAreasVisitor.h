@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEEMPTYAREASVISITOR_H
 #define REMOVEEMPTYAREASVISITOR_H
@@ -31,7 +31,7 @@
 #include <memory>
 
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -40,13 +40,14 @@ class ElementConverter;
 /**
  * Removes all "area" elements that have an area of zero.
  */
-class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::RemoveEmptyAreasVisitor"; }
 
   RemoveEmptyAreasVisitor();
+  virtual ~RemoveEmptyAreasVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 
@@ -59,9 +60,22 @@ public:
 
   virtual QString getDescription() const { return "Removes empty areas"; }
 
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
+
+  /**
+   * @see Configurable
+   */
+  virtual void setConfiguration(const Settings& conf);
+
 private:
 
   std::shared_ptr<ElementConverter> _ec;
+  bool _requireAreaForPolygonConversion;
 };
 
 }

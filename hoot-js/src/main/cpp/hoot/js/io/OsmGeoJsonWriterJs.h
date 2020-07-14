@@ -22,25 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMGEOJSONWRITER_H
 #define OSMGEOJSONWRITER_H
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class OsmGeoJsonWriterJs : public node::ObjectWrap
+class OsmGeoJsonWriterJs : public HootBaseJs
 {
 public:
- static void Init(v8::Handle<v8::Object> target);
+
+  static void Init(v8::Handle<v8::Object> target);
+
+  virtual ~OsmGeoJsonWriterJs() = default;
 
 private:
-  OsmGeoJsonWriterJs();
-  ~OsmGeoJsonWriterJs();
+
+  OsmGeoJsonWriterJs() = default;
 
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

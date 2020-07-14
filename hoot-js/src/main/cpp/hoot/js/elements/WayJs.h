@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYJS_H
 #define WAYJS_H
@@ -56,11 +56,12 @@ public:
 
 private:
 
-  WayJs(ConstWayPtr w);
-  WayJs();
-  ~WayJs();
+  WayJs(ConstWayPtr w) : _constWay(w) { }
+  WayJs() = default;
+  virtual ~WayJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getNodeCount(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   ConstWayPtr _constWay;
   WayPtr _way;

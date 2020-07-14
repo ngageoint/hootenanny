@@ -30,19 +30,21 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
 
-class AddHilbertReviewSortOrderOp : public OsmMapOperation, public OperationStatusInfo
+class AddHilbertReviewSortOrderOp : public OsmMapOperation
 {
 public:
 
   static std::string className() { return "hoot::AddHilbertReviewSortOrderOp"; }
 
-  AddHilbertReviewSortOrderOp();
+  static int logWarnCount;
+
+  AddHilbertReviewSortOrderOp() = default;
+  virtual ~AddHilbertReviewSortOrderOp() = default;
 
   virtual void apply(OsmMapPtr& map);
 

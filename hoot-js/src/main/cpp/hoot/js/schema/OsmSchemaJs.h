@@ -30,22 +30,23 @@
 #include <hoot/core/schema/SchemaVertex.h>
 
 // node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot
 {
 
-class OsmSchemaJs : public node::ObjectWrap
+class OsmSchemaJs : public HootBaseJs
 {
 public:
 
- static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Handle<v8::Object> target);
+
+  virtual ~OsmSchemaJs() = default;
 
 private:
 
-  OsmSchemaJs();
-  ~OsmSchemaJs();
+  OsmSchemaJs() = default;
 
   static void getAllTags(const v8::FunctionCallbackInfo<v8::Value>& agrs);
   static void getCategories(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -54,6 +55,10 @@ private:
   static void getTagByCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getTagVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isGeneric(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void hasType(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void explicitTypeMismatch(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void mostSpecificType(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void score(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void scoreTypes(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -74,6 +79,8 @@ private:
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isNonBuildingArea(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isCollectionRelation(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   /**
    * See description in rules/HootLib.js isSpecificallyConflatable method
@@ -81,6 +88,8 @@ private:
   static void isSpecificallyConflatable(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+  static void isLongRiverPair(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)

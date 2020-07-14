@@ -35,6 +35,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 // Std
 #include <float.h>
@@ -43,10 +45,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(MatchCreator, PoiPolygonMatchCreator)
-
-PoiPolygonMatchCreator::PoiPolygonMatchCreator()
-{
-}
 
 MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
                                              ElementId eid2)
@@ -84,8 +82,6 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   QElapsedTimer timer;
   timer.start();
 
-  //poi.polygon.additional.search.distance
-  //poi.polygon.match.distance.threshold
   QString searchRadiusStr;
   const double additionalDistance = ConfigOptions().getPoiPolygonAdditionalSearchDistance();
   if (additionalDistance <= 0)
@@ -95,8 +91,15 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   else
   {
     searchRadiusStr =
-      "within a feature dependent search radius plus an additional distance of " +
-      QString::number(additionalDistance, 'g', 2) + " meters";
+      "within a feature dependent search radius plus an additional distance of ";
+    if (additionalDistance < 1000)
+    {
+      searchRadiusStr += QString::number(additionalDistance, 'g', 3) + " meters";
+    }
+    else
+    {
+      searchRadiusStr += QString::number(additionalDistance / 1000.0, 'g', 3) + " kilometers";
+    }
   }
   LOG_STATUS("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
@@ -567,6 +570,14 @@ std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
     _rf.reset(new PoiPolygonRfClassifier());
   }
   return _rf;
+}
+
+QStringList PoiPolygonMatchCreator::getCriteria() const
+{
+  QStringList criteria;
+  criteria.append(QString::fromStdString(PoiCriterion::className()));
+  criteria.append(QString::fromStdString(BuildingCriterion::className()));
+  return criteria;
 }
 
 }

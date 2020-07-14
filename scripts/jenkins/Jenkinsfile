@@ -9,7 +9,7 @@ pipeline {
         SYS_URL = 'UNKOWN'
         SYS_VER = 'UNKOWN'
         BUILD_VERBOSE = 'no'
-        BUILD_DEBUG = 'yes'
+        BUILD_DEBUG = 'no'
     }
 
     triggers {
@@ -89,11 +89,12 @@ pipeline {
                 anyOf {
                     // Configure for sonar if user selected it, pull-request, or nightly run of master
                     expression { return params.Sonar }
-                    changeRequest()
-                    allOf {
-                        triggeredBy 'TimerTrigger'
-                        branch 'master'
-                    }
+//  UNCOMMENT AFTER SONAR IS FIXED
+//                    changeRequest()
+//                    allOf {
+//                        triggeredBy 'TimerTrigger'
+//                        branch 'master'
+//                    }
                 }
             }
             steps {
@@ -125,7 +126,7 @@ pipeline {
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel 6'"
             }
         }
         stage("Services Tests") {
@@ -151,11 +152,12 @@ pipeline {
             when {
                 anyOf {
                     expression { return params.Sonar }
-                    changeRequest()
-                    allOf {
-                        triggeredBy 'TimerTrigger'
-                        branch 'master'
-                    }
+//  UNCOMMENT AFTER SONAR IS FIXED
+//                    changeRequest()
+//                    allOf {
+//                        triggeredBy 'TimerTrigger'
+//                        branch 'master'
+//                    }
                 }
             }
             steps{

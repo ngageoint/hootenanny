@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyTestRunner.h"
 
 // hoot
-#include <hoot/core/io/MapStatsWriter.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/perty/PertyTestRunResult.h>
 #include <hoot/core/algorithms/perty/PertyMatchScorer.h>
+#include <hoot/core/io/MapStatsWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QFileInfo>
@@ -70,8 +70,8 @@ void PertyTestRunner::_writeStatsForOutputFiles(const QString& inputMapPath, con
   MapStatsWriter().writeStats(inputMapPath, statsOutputPath, sep);
 }
 
-QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(const QString& referenceMapInputPath,
-                                                                          const QString& outputPath)
+QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
+  const QString& referenceMapInputPath, const QString& outputPath)
 {
   if (_expectedScores.size() != _numTestRuns)
   {
@@ -84,7 +84,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(const 
     "Running PERTY test with " << _numTestRuns << " test runs and " << _numTestSimulations <<
     " simulations per test run on input: " << referenceMapInputPath << " ...");
 
-  QDir().mkpath(outputPath);
+  FileUtils::makeDir(outputPath);
 
   const QString sep = "\t";
   if (_generateMapStats)

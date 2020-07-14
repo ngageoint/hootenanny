@@ -29,8 +29,8 @@
 #define CONFLATECMD_H
 
 // Hoot
-#include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/cmd/BoundedCommand.h>
 
 // Standard
 #include <fstream>
@@ -43,7 +43,14 @@ namespace hoot
 
 class SingleStat;
 
-class ConflateCmd : public BaseCommand
+/**
+ * Executes conflation
+ *
+ * @todo move the input parsing to a separate method and assign the parsed inputs to member
+ * variables
+ * @todo command needs some input error handling tests
+ */
+class ConflateCmd : public BoundedCommand
 {
 
 public:
@@ -63,9 +70,12 @@ public:
 
   virtual int runSimple(QStringList& args) override;
 
+  void setFilterOps(bool filter) { _filterOps = filter; }
+
 private:
 
   int _numTotalTasks;
+  bool _filterOps;
 
   void _updateConfigOptionsForAttributeConflation();
   void _disableRoundaboutRemoval();
@@ -73,6 +83,8 @@ private:
 
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
+
+  friend class TestUtils;
 };
 
 }

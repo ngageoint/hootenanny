@@ -34,6 +34,9 @@
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
 #include <hoot/core/conflate/address/AddressParser.h>
 
+// Qt
+#include <QCache>
+
 namespace hoot
 {
 
@@ -56,6 +59,7 @@ public:
   static std::string className() { return "hoot::AddressScoreExtractor"; }
 
   AddressScoreExtractor();
+  virtual ~AddressScoreExtractor() = default;
 
   virtual std::string getClassName() const { return AddressScoreExtractor::className(); }
 
@@ -90,14 +94,17 @@ private:
 
   friend class AddressScoreExtractorTest;
 
+  const OsmMap* _map;
+
   mutable long _addressesProcessed;
   mutable bool _matchAttemptMade;
 
   AddressParser _addressParser;
 
-  static QHash<ElementId, QList<Address>> _addressesCache;
+  static QCache<ElementId, QList<Address>> _addressesCache;
   static int _addressCacheHits;
   bool _cacheEnabled;
+  static const int CACHE_SIZE_DEFAULT = 10000;
 
   /*
    * Searches for an address on element. Will look also look for address way nodes and address

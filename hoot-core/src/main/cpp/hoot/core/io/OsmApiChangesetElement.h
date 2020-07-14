@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_API_CHANGESET_ELEMENT_H
@@ -36,6 +36,7 @@
 #include <QMap>
 #include <QPair>
 #include <QString>
+#include <QTextStream>
 #include <QVector>
 #include <QXmlStreamReader>
 
@@ -69,6 +70,8 @@ public:
    * @param element XmlElement object to copy
    */
   ChangesetElement(const ChangesetElement& element);
+
+  virtual ~ChangesetElement() = default;
   /**
    * @brief addTag  Add a tag to the element
    * @param tag XML tag with key and value attributes
@@ -79,18 +82,18 @@ public:
    * @param index
    * @return
    */
-  QString getTagKey(int index);
-  QString getTagValue(int index);
+  QString getTagKey(int index) const;
+  QString getTagValue(int index) const;
   /**
    * @brief getTagCount
    * @return Number of tags in this element
    */
-  int getTagCount() { return _tags.size(); }
+  int getTagCount() const { return _tags.size(); }
   /**
    * @brief id Get the element ID
    * @return Element ID
    */
-  long id() { return _id; }
+  long id() const { return _id; }
   /**
    * @brief changeId Change the ID of the element
    * @param id ID to change to
@@ -110,7 +113,7 @@ public:
   /**
    *  Getter/setter for the element version
    */
-  long getVersion() { return _version; }
+  long getVersion() const { return _version; }
   void setVersion(long version) { _version = version; }
   /** Enumeration of the element status, described below */
   enum ElementStatus
@@ -124,7 +127,7 @@ public:
   /**
    *  Getter/setter for the element status
    */
-  ElementStatus getStatus() { return _status; }
+  ElementStatus getStatus() const { return _status; }
   void setStatus(ElementStatus status) { _status = status; }
 
 protected:
@@ -146,7 +149,33 @@ protected:
    * @param value String value
    * @return XML ecoded string
    */
-  QString& escapeString(QString& value) const;
+  QString escapeString(const QString& value) const;
+  /**
+   * @brief diffElement Compare (diff) two elements, this and element, adding diff output to the
+   *   text streams
+   * @param element Element to compare to this
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for element
+   * @return true if the elements are equivalent
+   */
+  bool diffElement(const ChangesetElement* element, QTextStream& ts1, QTextStream& ts2) const;
+  /**
+   * @brief diffAttributes Compare (diff) the attributes of two elements adding diff output to the
+   *   text streams
+   * @param attributes Set of attributes to compare to this element's attributes
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for attributes
+   * @return true if the element's attributes are equivalent
+   */
+  bool diffAttributes(const ElementAttributes& attributes, QTextStream& ts1, QTextStream& ts2) const;
+  /**
+   * @brief diffTags Compare (diff) the tags of two elements adding diff output to the text streams
+   * @param tags Set of tags to compare to this element's tags
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for tags
+   * @return true if the element's tags are equivalent
+   */
+  bool diffTags(const ElementTags& tags, QTextStream& ts1, QTextStream& ts2) const;
   /** Element type node/way/relation */
   ElementType::Type _type;
   /** Element ID */
@@ -181,13 +210,20 @@ public:
    */
   ChangesetNode(const ChangesetNode& node);
   /** Virtual destructor */
-  virtual ~ChangesetNode() { }
+  virtual ~ChangesetNode() = default;
   /**
    * @brief toString Get the XML string equivalent for the node
    * @param changesetId ID of the changeset to insert into the node
    * @return XML string
    */
   virtual QString toString(long changesetId) const;
+  /**
+   * @brief diff Compare two nodes and build a 'diff' style string
+   * @param node Node to compare this node against
+   * @param diffOutput Output of the diff between the two nodes
+   * @return True if they are equivalent
+   */
+  bool diff(const ChangesetNode& node, QString& diffOutput) const;
 };
 /** Handy typedef for node shared pointer */
 typedef std::shared_ptr<ChangesetNode> ChangesetNodePtr;
@@ -208,7 +244,7 @@ public:
    */
   ChangesetWay(const ChangesetWay& way);
   /** Virtual destructor */
-  virtual ~ChangesetWay() { }
+  virtual ~ChangesetWay() = default;
   /**
    * @brief addNode Add a node ID to the node (in order)
    * @param id Node ID
@@ -219,7 +255,7 @@ public:
    * @param index Index in the node vector
    * @return Node ID
    */
-  long getNode(int index) { return _nodes[index]; }
+  long getNode(int index) const { return _nodes[index]; }
   /**
    * @brief removeNodes
    * @param position
@@ -230,13 +266,20 @@ public:
    * @brief getNodeCount Get the number of nodes in the way
    * @return number of nodes
    */
-  int getNodeCount() { return _nodes.size(); }
+  int getNodeCount() const { return _nodes.size(); }
   /**
    * @brief toString Get the XML string equivalent for the way
    * @param changesetId ID of the changeset to insert into the way
    * @return XML string
    */
   virtual QString toString(long changesetId) const;
+  /**
+   * @brief diff Compare two ways and build a 'diff' style string
+   * @param way Way to compare this way against
+   * @param diffOutput Output of the diff between the two way
+   * @return True if they are equivalent
+   */
+  bool diff(const ChangesetWay& way, QString& diffOutput) const;
 
 private:
   /** Vector of node ID in the way */
@@ -259,29 +302,37 @@ public:
    * @brief isNode/Way/Relation
    * @return true if relation member is node/way/relation
    */
-  bool isNode()     { return _type == ElementType::Node; }
-  bool isWay()      { return _type == ElementType::Way; }
-  bool isRelation() { return _type == ElementType::Relation; }
+  bool isNode() const     { return _type == ElementType::Node; }
+  bool isWay() const      { return _type == ElementType::Way; }
+  bool isRelation() const { return _type == ElementType::Relation; }
   /**
    * @brief getType Get the relation member type
    * @return relation type as an enumeration
    */
-  ElementType::Type getType() { return _type; }
+  ElementType::Type getType() const { return _type; }
   /**
    * @brief getRef ID of the member referenced
    * @return Element ID
    */
-  long getRef()     { return _ref; }
+  long getRef() const { return _ref; }
   /**
    * @brief getRole Get the member roll as a string
    * @return role string
    */
-  QString getRole() { return _role; }
+  QString getRole() const { return _role; }
   /**
    * @brief toString Get the XML string equivalent for the relation member
    * @return XML string
    */
   QString toString() const;
+  /**
+   * @brief diff Compare two relation members and build a 'diff' style string in the text streams
+   * @param member Relation member to compare against this
+   * @param ts1 Text stream for diff lines for this
+   * @param ts2 Text stream for diff lines for member
+   * @return true if the relation members are equivalent
+   */
+  bool diff(const ChangesetRelationMember& member, QTextStream& ts1, QTextStream& ts2) const;
 
 private:
   /** Member type (node/way/relation) */
@@ -310,7 +361,7 @@ public:
    */
   ChangesetRelation(const ChangesetRelation& relation);
   /** Virtual destructor */
-  virtual ~ChangesetRelation() { }
+  virtual ~ChangesetRelation() = default;
   /**
    * @brief addMember Add relation member
    * @param member XML attributes of the relation member
@@ -326,20 +377,27 @@ public:
    * @brief getMemberCount Get the number of relation members
    * @return relation member count
    */
-  int getMemberCount() { return _members.size(); }
+  int getMemberCount() const { return _members.size(); }
   /**
    * @brief hasMember Search the relation for a specific element type with the given ID
    * @param type Element type to search for (node/way/relation)
    * @param id ID of the element to search for
    * @return True if the given element is a member of this relation
    */
-  bool hasMember(ElementType::Type type, long id);
+  bool hasMember(ElementType::Type type, long id) const;
   /**
    * @brief toString Get the XML string equivalent for the relation
    * @param changesetId ID of the changeset to insert into the relation
    * @return XML string
    */
   virtual QString toString(long changesetId) const;
+  /**
+   * @brief diff Compare two relations and build a 'diff' style string
+   * @param relation Relation to compare this relation against
+   * @param diffOutput Output of the diff between the two relations
+   * @return True if they are equivalent
+   */
+  bool diff(const ChangesetRelation& relation, QString& diffOutput) const;
 
 private:
   /** List of relation members */
@@ -401,7 +459,7 @@ public:
   /**
    * @brief getId Get the new or old ID from the ID passed in
    * @param type Element type (node/way/relation)
-   * @param id ID
+   * @param id ID of element
    * @return new or old ID
    */
   long getId(ElementType::Type type, long id)
@@ -412,12 +470,12 @@ public:
       return _idToId[type][id];
   }
   /**
-   * @brief containsId
-   * @param type
-   * @param id
-   * @return
+   * @brief containsId Query if the type/id combination exists in the map
+   * @param type Element type (node/way/relation)
+   * @param id ID of element
+   * @return True if the type/id exists in map
    */
-  bool containsId(ElementType::Type type, long id)
+  bool containsId(ElementType::Type type, long id) const
   {
     return _idToId[type].find(id) != _idToId[type].end();
   }

@@ -35,6 +35,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 
 // Std
@@ -47,53 +48,91 @@ namespace hoot
 {
 
 PoiPolygonInfoCache::PoiPolygonInfoCache(const ConstOsmMapPtr& map) :
-_map(map)
+_map(map),
+_cacheEnabled(true),
+_elementIntersectsCache(CACHE_SIZE_DEFAULT),
+_isTypeCache(CACHE_SIZE_DEFAULT),
+_hasCriterionCache(CACHE_SIZE_DEFAULT),
+_hasMoreThanOneTypeCache(CACHE_SIZE_DEFAULT),
+_numAddressesCache(CACHE_SIZE_DEFAULT),
+_reviewDistanceCache(CACHE_SIZE_DEFAULT)
 {
+  _geometryCache.reset(
+    new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(CACHE_SIZE_DEFAULT));
 }
 
 void PoiPolygonInfoCache::setConfiguration(const Settings& conf)
 {
   _addressParser.setConfiguration(conf);
+
+  const int maxCacheSize = ConfigOptions(conf).getPoiPolygonMaxSizePerCache();
+  if (maxCacheSize > 0)
+  {
+    _elementIntersectsCache.setMaxCost(maxCacheSize);
+    _isTypeCache.setMaxCost(maxCacheSize);
+    _hasCriterionCache.setMaxCost(maxCacheSize);
+    _hasMoreThanOneTypeCache.setMaxCost(maxCacheSize);
+    _numAddressesCache.setMaxCost(maxCacheSize);
+    _reviewDistanceCache.setMaxCost(maxCacheSize);
+    _geometryCache.reset(
+        new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(maxCacheSize));
+  }
+  else
+  {
+    _cacheEnabled = false;
+  }
 }
 
 void PoiPolygonInfoCache::clear()
 {
-  _numCacheHitsByCacheType.clear();
-  _numCacheEntriesByCacheType.clear();
+  if (_cacheEnabled)
+  {
+    LOG_DEBUG("Clearing cache...");
 
-  _isTypeCache.clear();
-  _hasCriterionCache.clear();
-  _criterionCache.clear();
-  _geometryCache.clear();
-  _hasMoreThanOneTypeCache.clear();
-  _numAddressesCache.clear();
-  _elementIntersectsCache.clear();
-  _numAddressesCache.clear();
+    _numCacheHitsByCacheType.clear();
+    _numCacheEntriesByCacheType.clear();
+
+    _isTypeCache.clear();
+    _hasCriterionCache.clear();
+    _criterionCache.clear();
+    _geometryCache->clear();
+    _hasMoreThanOneTypeCache.clear();
+    _numAddressesCache.clear();
+    _elementIntersectsCache.clear();
+    _numAddressesCache.clear();
+  }
 }
 
 void PoiPolygonInfoCache::printCacheInfo()
 {
-  // Add one for the address cache on AddressScoreExtractor.
-  LOG_VARD(_numCacheHitsByCacheType.size());
-  LOG_DEBUG("POI/Polygon caches used: " <<  (_numCacheHitsByCacheType.size() + 1));
-  for (QMap<QString, int>::const_iterator numCacheHitsByCacheTypeItr = _numCacheHitsByCacheType.begin();
-       numCacheHitsByCacheTypeItr != _numCacheHitsByCacheType.end(); ++numCacheHitsByCacheTypeItr)
+  if (_cacheEnabled)
   {
+    // Add one for the address cache on AddressScoreExtractor.
+    LOG_VARD(_numCacheHitsByCacheType.size());
+    LOG_DEBUG("POI/Polygon caches used: " <<  (_numCacheHitsByCacheType.size() + 1));
+    for (QMap<QString, int>::const_iterator numCacheHitsByCacheTypeItr = _numCacheHitsByCacheType.begin();
+         numCacheHitsByCacheTypeItr != _numCacheHitsByCacheType.end(); ++numCacheHitsByCacheTypeItr)
+    {
+      const QString line =
+        QString("%1:\t%2 hits     entries: %3")
+          .arg(numCacheHitsByCacheTypeItr.key())
+          .arg(StringUtils::formatLargeNumber(numCacheHitsByCacheTypeItr.value()))
+          .arg(
+            StringUtils::formatLargeNumber(
+              _numCacheEntriesByCacheType[numCacheHitsByCacheTypeItr.key()]));
+      LOG_DEBUG(line);
+    }
     const QString line =
       QString("%1:\t%2 hits     entries: %3")
-        .arg(numCacheHitsByCacheTypeItr.key())
-        .arg(StringUtils::formatLargeNumber(numCacheHitsByCacheTypeItr.value()))
-        .arg(
-          StringUtils::formatLargeNumber(
-            _numCacheEntriesByCacheType[numCacheHitsByCacheTypeItr.key()]));
+        .arg("address")
+        .arg(StringUtils::formatLargeNumber(AddressScoreExtractor::getNumAddressCacheHits()))
+        .arg(StringUtils::formatLargeNumber(AddressScoreExtractor::getAddressCacheSize()));
     LOG_DEBUG(line);
   }
-  const QString line =
-    QString("%1:\t%2 hits     entries: %3")
-      .arg("address")
-      .arg(StringUtils::formatLargeNumber(AddressScoreExtractor::getNumAddressCacheHits()))
-      .arg(StringUtils::formatLargeNumber(AddressScoreExtractor::getAddressCacheSize()));
-  LOG_DEBUG(line);
+  else
+  {
+    LOG_DEBUG("POI/Polygon caching disabled.")
+  }
 }
 
 void PoiPolygonInfoCache::_incrementCacheHitCount(const QString& cacheTypeKey)
@@ -130,12 +169,11 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
     throw IllegalArgumentException("The input element is null.");
   }
 
-  QHash<ElementId, std::shared_ptr<geos::geom::Geometry>>::const_iterator itr =
-    _geometryCache.find(element->getElementId());
-  if (itr != _geometryCache.end())
+  std::shared_ptr<geos::geom::Geometry> cachedVal;
+  if (_cacheEnabled && _geometryCache->get(element->getElementId(), cachedVal))
   {
     _incrementCacheHitCount("geometry");
-    return itr.value();
+    return cachedVal;
   }
 
   std::shared_ptr<geos::geom::Geometry> newGeom;
@@ -147,6 +185,8 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
   }
   catch (const geos::util::TopologyException& e)
   {
+    // try to clean it
+    newGeom.reset(GeometryUtils::validateGeometry(newGeom.get()));
     if (_badGeomCount <= Log::getWarnMessageLimit())
     {
       LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());
@@ -171,8 +211,13 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
     }
     newGeom.reset();
   }
-  _geometryCache[element->getElementId()] = newGeom;
-  _incrementCacheSizeCount("geometry");
+
+  if (_cacheEnabled)
+  {
+    _geometryCache->insert(element->getElementId(), newGeom);
+    _incrementCacheSizeCount("geometry");
+  }
+
   return newGeom;
 }
 
@@ -219,16 +264,24 @@ int PoiPolygonInfoCache::numAddresses(const ConstElementPtr& element)
     throw IllegalArgumentException("The input element is null.");
   }
 
-  QHash<ElementId, int>::const_iterator itr = _numAddressesCache.find(element->getElementId());
-  if (itr != _numAddressesCache.end())
+  if (_cacheEnabled)
   {
-    _incrementCacheHitCount("numAddresses");
-    return itr.value();
+    const int* cachedVal = _numAddressesCache[element->getElementId()];
+    if (cachedVal != 0)
+    {
+      _incrementCacheHitCount("numAddresses");
+      return *cachedVal;
+    }
   }
 
   const int numAddresses = _addressParser.numAddressesRecursive(element, *_map);
-  _numAddressesCache[element->getElementId()] = numAddresses;
-  _incrementCacheSizeCount("numAddresses");
+
+  if (_cacheEnabled)
+  {
+    _numAddressesCache.insert(element->getElementId(), new int(numAddresses));
+    _incrementCacheSizeCount("numAddresses");
+  }
+
   return numAddresses;
 }
 
@@ -272,25 +325,30 @@ bool PoiPolygonInfoCache::elementsIntersect(
     throw IllegalArgumentException("One of the input elements is null.");
   }
 
-  const QString key1 =
-    element1->getElementId().toString() % ";" % element2->getElementId().toString();
-  const QString key2 =
-    element2->getElementId().toString() % ";" % element1->getElementId().toString();
-  QHash<QString, bool>::const_iterator itr = _elementIntersectsCache.find(key1);
-  if (itr != _elementIntersectsCache.end())
+  QString key1;
+  QString key2;
+
+  if (_cacheEnabled)
   {
-    _incrementCacheHitCount("intersects");
-    const bool intersects = itr.value();
-    LOG_TRACE("Found cached intersects: " << intersects << " for key: " << key1);
-    return intersects;
-  }
-  itr = _elementIntersectsCache.find(key2);
-  if (itr != _elementIntersectsCache.end())
-  {
-    _incrementCacheHitCount("intersects");
-    const bool intersects = itr.value();
-    LOG_TRACE("Found cached intersects: " << intersects << " for key: " << key2);
-    return intersects;
+    key1 = element1->getElementId().toString() % ";" % element2->getElementId().toString();
+    key2 = element2->getElementId().toString() % ";" % element1->getElementId().toString();
+
+    bool* cachedVal = _elementIntersectsCache[key1];
+    if (cachedVal != 0)
+    {
+      _incrementCacheHitCount("intersects");
+      const bool intersects = *cachedVal;
+      LOG_TRACE("Found cached intersects: " << intersects << " for key: " << key1);
+      return intersects;
+    }
+    cachedVal = _elementIntersectsCache[key2];
+    if (cachedVal != 0)
+    {
+      _incrementCacheHitCount("intersects");
+      const bool intersects = *cachedVal;
+      LOG_TRACE("Found cached intersects: " << intersects << " for key: " << key2);
+      return intersects;
+    }
   }
 
   std::shared_ptr<geos::geom::Geometry> geom1 = _getGeometry(element1);
@@ -299,6 +357,10 @@ bool PoiPolygonInfoCache::elementsIntersect(
   if (geom1 && geom2)
   {
     intersects = geom1->intersects(geom2.get());
+
+    LOG_TRACE(
+      "Calculated intersects: " << intersects << " for elements: " <<
+      element1->getElementId() << " and " << element2->getElementId() << ".");
   }
   else
   {
@@ -306,8 +368,13 @@ bool PoiPolygonInfoCache::elementsIntersect(
       "Unable to calculate intersects for: " << element1->getElementId() <<
       " and: " << element2->getElementId() << ".");
   }
-  _elementIntersectsCache[key1] = intersects;
-  _incrementCacheSizeCount("intersects");
+
+  if (_cacheEnabled)
+  {
+    _elementIntersectsCache.insert(key1, new bool(intersects));
+    _incrementCacheSizeCount("intersects");
+  }
+
   return intersects;
 }
 
@@ -371,18 +438,28 @@ bool PoiPolygonInfoCache::hasCriterion(const ConstElementPtr& element,
       "The input element is null or the criterion class name is empty.");
   }
 
-  const QString key = element->getElementId().toString() % ";" % criterionClassName;
-  QHash<QString, bool>::const_iterator itr = _hasCriterionCache.find(key);
-  if (itr != _hasCriterionCache.end())
+  QString key;
+
+  if (_cacheEnabled)
   {
-    _incrementCacheHitCount("hasCrit");
-    return itr.value();
+    key = element->getElementId().toString() % ";" % criterionClassName;
+    const bool* cachedVal = _hasCriterionCache[key];
+    if (cachedVal != 0)
+    {
+      _incrementCacheHitCount("hasCrit");
+      return *cachedVal;
+    }
   }
 
   ElementCriterionPtr crit = _getCrit(criterionClassName);
   const bool hasCrit = crit->isSatisfied(element);
-  _hasCriterionCache[key] = hasCrit;
-  _incrementCacheSizeCount("hasCrit");
+
+  if (_cacheEnabled)
+  {
+    _hasCriterionCache.insert(key, new bool(hasCrit));
+    _incrementCacheSizeCount("hasCrit");
+  }
+
   return hasCrit;
 }
 
@@ -393,11 +470,14 @@ ElementCriterionPtr PoiPolygonInfoCache::_getCrit(const QString& criterionClassN
     throw IllegalArgumentException("The criterion class name is empty.");
   }
 
-  QHash<QString, ElementCriterionPtr>::const_iterator itr =
-    _criterionCache.find(criterionClassName);
-  if (itr != _criterionCache.end())
+  if (_cacheEnabled)
   {
-    return itr.value();
+    QHash<QString, ElementCriterionPtr>::const_iterator itr =
+      _criterionCache.find(criterionClassName);
+    if (itr != _criterionCache.end())
+    {
+      return itr.value();
+    }
   }
 
   ElementCriterionPtr crit =
@@ -408,7 +488,12 @@ ElementCriterionPtr PoiPolygonInfoCache::_getCrit(const QString& criterionClassN
     throw IllegalArgumentException(
       "Invalid criterion passed to PoiPolygonInfoCache::hasCriterion: " + criterionClassName);
   }
-  _criterionCache[criterionClassName] = crit;
+
+  if (_cacheEnabled)
+  {
+     _criterionCache[criterionClassName] = crit;
+  }
+
   return crit;
 }
 
@@ -421,13 +506,19 @@ bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygo
     throw IllegalArgumentException("The input element is null.");
   }
 
-  const QString key = element->getElementId().toString() % ";" % type.toString().toLower();
-  QHash<QString, bool>::const_iterator itr = _isTypeCache.find(key);
-  if (itr != _isTypeCache.end())
+  QString key;
+
+  if (_cacheEnabled)
   {
-    _incrementCacheHitCount("isType");
-    return itr.value();
+    key = element->getElementId().toString() % ";" % type.toString().toLower();
+    const bool* cachedVal = _isTypeCache[key];
+    if (cachedVal != 0)
+    {
+      _incrementCacheHitCount("isType");
+      return *cachedVal;
+    }
   }
+
 
   // A re-design is needed to make this a little less maintenance prone...possiby add custom
   // schema lookup files for poi/poly?
@@ -471,8 +562,11 @@ bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygo
       throw IllegalArgumentException("Unsupported POI/Polygon schema type.");
   }
 
-  _isTypeCache[key] = isType;
-  _incrementCacheSizeCount("isType");
+  if (_cacheEnabled)
+  {
+    _isTypeCache.insert(key, new bool(isType));
+    _incrementCacheSizeCount("isType");
+  }
 
   return isType;
 }
@@ -484,17 +578,24 @@ bool PoiPolygonInfoCache::hasMoreThanOneType(const ConstElementPtr& element)
     throw IllegalArgumentException("The input element is null.");
   }
 
-  QHash<ElementId, bool>::const_iterator itr =
-    _hasMoreThanOneTypeCache.find(element->getElementId());
-  if (itr != _hasMoreThanOneTypeCache.end())
+  if (_cacheEnabled)
   {
-    _incrementCacheHitCount("hasMoreThanOneType");
-    return itr.value();
+    const bool* cachedVal = _hasMoreThanOneTypeCache[element->getElementId()];
+    if (cachedVal != 0)
+    {
+      _incrementCacheHitCount("hasMoreThanOneType");
+      return *cachedVal;
+    }
   }
 
   const bool hasMoreThanOneType = PoiPolygonSchema::hasMoreThanOneType(element);
-  _hasMoreThanOneTypeCache[element->getElementId()] = hasMoreThanOneType;
-  _incrementCacheSizeCount("hasMoreThanOneType");
+
+  if (_cacheEnabled)
+  {
+    _hasMoreThanOneTypeCache.insert(element->getElementId(), new bool(hasMoreThanOneType));
+    _incrementCacheSizeCount("hasMoreThanOneType");
+  }
+
   return hasMoreThanOneType;
 }
 
@@ -513,38 +614,44 @@ double PoiPolygonInfoCache::getReviewDistance(const ConstElementPtr& element,
                                           const Tags& polyTags,
                                           const double reviewDistanceThresholdDefault)
 {
-  QHash<ElementId, double>::const_iterator itr = _reviewDistanceCache.find(element->getElementId());
-  if (itr != _reviewDistanceCache.end())
+  if (_cacheEnabled)
   {
-    _incrementCacheHitCount("reviewDistance");
-    double distance = itr.value();
-    LOG_TRACE("Found review distance: " << distance << " for: " << element->getElementId());
-    return distance;
+    const double* cachedVal = _reviewDistanceCache[element->getElementId()];
+    if (cachedVal != 0)
+    {
+      _incrementCacheHitCount("reviewDistance");
+      double distance = *cachedVal;
+      LOG_TRACE("Found review distance: " << distance << " for: " << element->getElementId());
+      return distance;
+    }
+  }
+
+  double distance;
+  const Tags& tags = element->getTags();
+  //these distances could be moved to a config
+  if (tags.get("leisure") == "park")
+  {
+    distance = 25.0;
+  }
+  else if ((tags.get("station").toLower() == "light_rail" ||
+            tags.get("railway").toLower() == "platform") &&
+           (polyTags.get("subway").toLower() == "yes" ||
+            polyTags.get("tunnel").toLower() == "yes"))
+  {
+    distance = 150.0;
   }
   else
   {
-    double distance;
-    const Tags& tags = element->getTags();
-    //these distances could be moved to a config
-    if (tags.get("leisure") == "park")
-    {
-      distance = 25.0;
-    }
-    else if ((tags.get("station").toLower() == "light_rail" ||
-              tags.get("railway").toLower() == "platform") &&
-             (polyTags.get("subway").toLower() == "yes" ||
-              polyTags.get("tunnel").toLower() == "yes"))
-    {
-      distance = 150.0;
-    }
-    else
-    {
-      distance = reviewDistanceThresholdDefault;
-    }
-    _reviewDistanceCache[element->getElementId()] = distance;
-    _incrementCacheSizeCount("reviewDistance");
-    return distance;
+    distance = reviewDistanceThresholdDefault;
   }
+
+  if (_cacheEnabled)
+  {
+    _reviewDistanceCache.insert(element->getElementId(), new double(distance));
+    _incrementCacheSizeCount("reviewDistance");
+  }
+
+  return distance;
 }
 
 }

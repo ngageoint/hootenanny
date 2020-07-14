@@ -22,17 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __SUBLINE_STRING_MATCHER_JS_H__
 #define __SUBLINE_STRING_MATCHER_JS_H__
 
 // hoot
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
-
-// node.js
-#include <hoot/js/SystemNodeJs.h>
 
 // Qt
 #include <QString>
@@ -40,7 +38,7 @@
 namespace hoot
 {
 
-class SublineStringMatcherJs : public node::ObjectWrap
+class SublineStringMatcherJs : public HootBaseJs
 {
 public:
 
@@ -52,10 +50,11 @@ public:
 
   SublineStringMatcherPtr getSublineStringMatcher() { return _sm; }
 
+  virtual ~SublineStringMatcherJs() = default;
+
 private:
 
-  SublineStringMatcherJs(SublineStringMatcherPtr sm);
-  ~SublineStringMatcherJs();
+  SublineStringMatcherJs(SublineStringMatcherPtr sm) : _sm(sm) { }
 
   static void extractMatchingSublines(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void findMatch(const v8::FunctionCallbackInfo<v8::Value>& args);

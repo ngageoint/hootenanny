@@ -55,10 +55,8 @@ public:
 
   static std::string className() { return "hoot::ApiDbReader"; }
 
-  static int logWarnCount;
-
   ApiDbReader();
-  virtual ~ApiDbReader() {}
+  virtual ~ApiDbReader() = default;
 
   virtual bool isSupported(const QString& urlStr) override;
 
@@ -119,10 +117,13 @@ public:
 
 protected:
 
+  static int logWarnCount;
+
   bool _useDataSourceIds;
   Status _status;
   bool _open;
   QString _email;
+  // the CE value used if no CE tag is found
   double _defaultCircularError;
 
   Tgs::BigMap<long, long> _nodeIdMap;
@@ -160,6 +161,9 @@ protected:
   bool _hasBounds();
 
 private:
+
+  // keys for tags containing CE data
+  QStringList _circularErrorTagKeys;
 
   bool _firstPartialReadCompleted;
 

@@ -32,7 +32,12 @@
 namespace hoot
 {
 
-QStringList GeometryTypeCriterion::getCriterionClassNamesByType(const GeometryType& type)
+QStringList GeometryTypeCriterion::getCriterionClassNames()
+{
+  return getCriterionClassNamesByGeometryType(GeometryType::Unknown);
+}
+
+QStringList GeometryTypeCriterion::getCriterionClassNamesByGeometryType(const GeometryType& type)
 {
   QStringList classNamesByType;
   std::vector<std::string> classNames =
@@ -40,16 +45,16 @@ QStringList GeometryTypeCriterion::getCriterionClassNamesByType(const GeometryTy
   for (size_t i = 0; i < classNames.size(); i++)
   {
     const std::string className = classNames[i];
-    if (Factory::getInstance().hasBase<GeometryTypeCriterion>(className))
+
+    ElementCriterionPtr crit(
+      Factory::getInstance().constructObject<ElementCriterion>(className));
+    std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit =
+      std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+    if (geometryTypeCrit &&
+       (geometryTypeCrit->getGeometryType() == type ||
+        (geometryTypeCrit->getGeometryType() == GeometryType::Unknown)))
     {
-      std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit =
-        std::dynamic_pointer_cast<GeometryTypeCriterion>(
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(className)));
-      if (geometryTypeCrit && geometryTypeCrit->getGeometryType() == type)
-      {
-        classNamesByType.append(QString::fromStdString(className));
-      }
+      classNamesByType.append(QString::fromStdString(className));
     }
   }
   return classNamesByType;
@@ -88,7 +93,7 @@ GeometryTypeCriterion::GeometryType GeometryTypeCriterion::typeFromString(
   }
   else
   {
-    throw GeometryType::Unknown;
+    return GeometryType::Unknown;
   }
 }
 

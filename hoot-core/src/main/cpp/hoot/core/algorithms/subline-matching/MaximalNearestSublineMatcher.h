@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXIMALNEARESTSUBLINEMATCHER_H
 #define MAXIMALNEARESTSUBLINEMATCHER_H
@@ -39,6 +39,7 @@ public:
   static std::string className() { return "hoot::MaximalNearestSublineMatcher"; }
 
   MaximalNearestSublineMatcher();
+  virtual ~MaximalNearestSublineMatcher() = default;
 
   virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const override;

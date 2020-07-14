@@ -37,7 +37,11 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ProgressReporter.h>
 
+//  Tgs
+#include <tgs/System/Timer.h>
+
 //  Standard
+#include <condition_variable>
 #include <mutex>
 #include <queue>
 #include <thread>
@@ -55,29 +59,16 @@ class OsmApiWriterTest;
 class OsmApiWriter : public Configurable, public ProgressReporter
 {
 public:
-  /** OSM API URL paths */
-  const static char* API_PATH_CAPABILITIES;
-  const static char* API_PATH_PERMISSIONS;
-  const static char* API_PATH_CREATE_CHANGESET;
-  const static char* API_PATH_CLOSE_CHANGESET;
-  const static char* API_PATH_UPLOAD_CHANGESET;
-  const static char* API_PATH_GET_ELEMENT;
-  /** Default content type */
-  const static char* CONTENT_TYPE_XML;
   /**
    *  Max number of jobs waiting in the work queue = multiplier * number of threads,
    *  this keeps the producer thread from creating too many sub-changesets too early
    *  that only consist of nodes after ways are blocked.
    */
   const int QUEUE_SIZE_MULTIPLIER = 2;
-  /** Constructor with one or multiple files consisting of one large changeset to run
-   *  the test apply
-   */
-  OsmApiWriter(const QString& output_file, const QString& changeset);
-  OsmApiWriter(const QString& output_file, const QList<QString>& changesets);
   /** Constructors with one or multiple files consisting of one large changeset */
   OsmApiWriter(const QUrl& url, const QString& changeset);
   OsmApiWriter(const QUrl& url, const QList<QString>& changesets);
+  virtual ~OsmApiWriter() = default;
   /**
    * @brief setConfiguration Update the configuration settings with new configuration
    * @param conf - Updated configurations
@@ -94,11 +85,6 @@ public:
    * @return success
    */
   bool apply();
-  /**
-   * @brief testApply Actually load, divide, and write the changesets to files instead of OSM API
-   * @return list of filepaths for output files
-   */
-  QStringList testApply();
   /**
    * @brief containsFailed
    * @return true if there are failed changes in the changeset
@@ -172,10 +158,11 @@ private:
    * @param description - Text description of the changeset to create
    * @param source - Text specifying the source for the edits for this changeset
    * @param hashtags - Semicolon delimited list of hashtags for changeset
+   * @param http_status - HTTP status of the request
    * @return ID of the changeset that was created on the server
    */
   long _createChangeset(HootNetworkRequestPtr request, const QString& description,
-                        const QString& source, const QString& hashtags);
+                        const QString& source, const QString& hashtags, int& http_status);
   /**
    * @brief _closeChangeset End the changeset
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
@@ -256,6 +243,10 @@ private:
    * @param index Index into the thread status vector to report the status
    */
   void _changesetThreadFunc(int index);
+  /** Yield or sleep this thread */
+  void _yield(int milliseconds = 10);
+  /** Yield or sleep this thread for a random amount of time between minimum and maximum */
+  void _yield(int minimum_ms, int maximum_ms);
   /**
    * @brief createNetworkRequest Create a network request object
    * @param requiresAuthentication Authentication flag set to true will cause OAuth credentials,
@@ -275,9 +266,39 @@ private:
    * @param response String response from the server to help in the splitting process
    * @return True if the changeset was split
    */
-  bool _splitChangeset(const ChangesetInfoPtr& workInfo, const QString& response);
+  bool _splitChangeset(const ChangesetInfoPtr& workInfo, const QString& response = "");
+  /**
+   * @brief _writeDebugFile Write out the request or response file for debugging uploads
+   * @param type "request" or "response" output file
+   * @param data Contents of the file to write
+   * @param file_id File ID for unique filenames
+   * @param changeset_id Changeset ID that is currently open
+   * @param status HTTP status code returned for response, 000 for request
+   */
+  void _writeDebugFile(const QString& type, const QString& data, int file_id, long changeset_id, int status = 0);
+  /**
+   * @brief _getNextApiId Get the next API ID from the counter for unique debug filenames
+   * @return next ID
+   */
+  int _getNextApiId();
+  /**
+   * @brief _allThreadsFailed Check if all threads are in the failed state
+   * @return true if all threads are in the failed state
+   */
+  bool _allThreadsFailed();
+  /**
+   * @brief _hasFailedThread Check if any thread is in a failed state
+   * @return true if any thread is in a failed state
+   */
+  bool _hasFailedThread();
   /** Changeset processing thread pool */
   std::vector<std::thread> _threadPool;
+  /**
+   * @brief _pushChangesets Push one or more changesets on to the work queue
+   * @param changeset Required changeset info object
+   * @param changeset2 Optional changeset info object
+   */
+  void _pushChangesets(ChangesetInfoPtr changeset, ChangesetInfoPtr changeset2 = ChangesetInfoPtr());
   /** Queue for producer/consumer work model */
   std::queue<ChangesetInfoPtr> _workQueue;
   /** Mutex protecting work queue */
@@ -286,16 +307,47 @@ private:
   XmlChangeset _changeset;
   /** Mutex protecting large changeset */
   std::mutex _changesetMutex;
+  /**
+   * @brief _startWork Tell the worker threads to begin processing work
+   */
+  void _startWork();
+  /**
+   * @brief _waitForStart Wait for the producer to signal to the consumers to begin work
+   */
+  void _waitForStart();
+  /** Mutex protecting start flag */
+  std::mutex _startMutex;
+  /** Condition variable to notify worker threads */
+  std::condition_variable _start;
+  /** Flag to tell worker threads to start processing */
+  bool _startFlag;
   /** Status of each working thread, working or idle */
   enum ThreadStatus
   {
     Idle,
-    Working
+    Working,
+    Completed,
+    Failed,
+    Unknown
   };
+  /**
+   * @brief _getThreadStatus Safely get the status of the thread
+   * @param thread_index Index of calling thread in _threadStatus vector
+   * @return  Status of the thread
+   */
+  ThreadStatus _getThreadStatus(int thread_index);
+  /**
+   * @brief _updateThreadStatus Update the thread status
+   * @param thread_index Index of calling thread in _threadStatus vector
+   * @param status Status to update to
+   */
+  void _updateThreadStatus(int thread_index, ThreadStatus status);
   /** Vector of statuses for each running thread */
   std::vector<ThreadStatus> _threadStatus;
   /** Mutex protecting status vector */
   std::mutex _threadStatusMutex;
+  /** Vector of idle times for thread monitoring */
+  std::vector<Tgs::Timer> _threadIdle;
   /** Base URL for the target OSM API, including authentication information */
   QUrl _url;
   /** List of pathnames for changeset divided across files */
@@ -336,14 +388,22 @@ private:
   QString _accessToken;
   /** OAuth 1.0 secret token granted through OAuth authorization */
   QString _secretToken;
-  /** Full pathname of the error file changeset, if any errors occur */
-  QString _errorPathname;
   /** Number of changesets written to API */
   int _changesetCount;
   /** Mutex for changeset count */
   std::mutex _changesetCountMutex;
-  /** Full pathname of the output file created during --test-apply */
-  QString _testApplyPathname;
+  /** Output requests and responses for debugging  */
+  bool _debugOutput;
+  /** Path for the output requests and responses */
+  QString _debugOutputPath;
+  /** API ID counter used in debug output */
+  int _apiId;
+  /** Mutex for API ID counter */
+  std::mutex _apiIdMutex;
+  /** Flag to tell threads that they can exit when idle */
+  bool _threadsCanExit;
+  /** Error message for why the process failed */
+  QString _errorMessage;
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */

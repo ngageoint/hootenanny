@@ -31,24 +31,27 @@
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/info/CreatorDescription.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
 
 // Standard
 #include <string>
 #include <vector>
 
-// QT
+// Qt
 #include <QString>
 
 namespace hoot
 {
 
-class MatchCreator
+class MatchCreator : public FilteredByGeometryTypeCriteria
 {
 public:
 
   static std::string className() { return "hoot::MatchCreator"; }
 
-  virtual ~MatchCreator() {}
+  MatchCreator() = default;
+  virtual ~MatchCreator() = default;
 
   /**
    * Given two elements, create a match if it is appropriate. If it is not appropriate then return
@@ -102,6 +105,11 @@ public:
    * @return a name string
    */
   virtual QString getName() const = 0;
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const = 0;
 
 protected:
 

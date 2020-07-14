@@ -81,14 +81,14 @@ public class JobStatusManagerImplTest {
         jobMgr.addJob(new Job(jobId, userId, comms, JobType.UNKNOWN));
 
         CommandStatus cmdStatus = new CommandStatus();
-        cmdStatus.setCommand("hoot version");
+        cmdStatus.setCommand("hoot.bin version");
         cmdStatus.setExitCode(-1);
         cmdStatus.setFinish(new Timestamp(System.currentTimeMillis()));
         cmdStatus.setStart(new Timestamp(System.currentTimeMillis() + 1000));
         cmdStatus.setJobId(jobId);
         String expectedError = "This command returned error.\nNo such command.";
         cmdStatus.setStderr(expectedError);
-        cmdStatus.setStdout("Running hoot version command...");
+        cmdStatus.setStdout("Running hoot.bin version command...");
 
         Long id = createQuery().insert(commandStatus).populate(cmdStatus).executeWithKey(commandStatus.id);
 

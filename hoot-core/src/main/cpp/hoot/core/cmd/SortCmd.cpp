@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -36,6 +36,10 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -46,7 +50,7 @@ public:
 
   static std::string className() { return "hoot::SortCmd"; }
 
-  SortCmd() { }
+  SortCmd() = default;
 
   virtual QString getName() const override { return "sort"; }
 
@@ -54,6 +58,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() != 2)
     {
       std::cout << getHelp() << std::endl << std::endl;
@@ -80,6 +87,8 @@ public:
     {
       _sortInMemory(input, output);
     }
+
+    LOG_STATUS("Map sorted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

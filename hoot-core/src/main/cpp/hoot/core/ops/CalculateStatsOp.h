@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATESTATSOP_H
 #define CALCULATESTATSOP_H
@@ -61,12 +61,11 @@ public:
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
   CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "",
                    bool inputIsConflatedMapOutput = false);
+  virtual ~CalculateStatsOp() = default;
 
   virtual void apply(const OsmMapPtr& map);
 
   QList<SingleStat> getStats() const { return _stats; }
-
-  void printStats();
 
   /**
    * O(n)
@@ -87,10 +86,13 @@ public:
 
   virtual QString getDescription() const { return "Calculates map statistics"; }
 
-  // Configurable
   virtual void setConfiguration(const Settings& conf);
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
+
+  friend class CalculateStatsOpTest;
 
   // Enum defining what stat value of the SingleStatistic or NumericStatistic
   // implementation of the specific visitor is being used.
@@ -122,9 +124,9 @@ private:
   QString _mapName;
   std::shared_ptr<const OsmMap> _constMap;
   bool _quick;
-  //We differentiate between maps that are the input to a conflation job vs those that are the
-  //output of a conflation job.  Another option would be to refactor this class for both maps
-  //meant to be input to a conflation job and those that are output from a conflation job.
+  // We differentiate between maps that are the input to a conflation job vs those that are the
+  // output of a conflation job.  Another option would be to refactor this class for both maps
+  // meant to be input to a conflation job and those that are output from a conflation job.
   bool _inputIsConflatedMapOutput;
   QList<SingleStat> _stats;
 
@@ -133,7 +135,23 @@ private:
 
   QList<StatData> _quickStatData;
   QList<StatData> _slowStatData;
+  // the index of the stat calculation we are currently doing
+  int _currentStatCalcIndex;
+  // total number of stat calculations made with a visitor; basically any time _applyVisitor is
+  // called; any time a stat is added that results in another manual call to _applyVisitor (done
+  // outside of _interpretStatData), this total needs to be incremented.
+  int _totalStatCalcs;
+  QStringList _featureTypesToSkip;
 
+  // These are here for debugging purposes only.
+  int _numInterpresetStatDataCalls;
+  int _numInterpretStatVisCacheHits;
+  int _numGenerateFeatureStatCalls;
+
+  QMap<CreatorDescription::BaseFeatureType, double> _conflatableFeatureCounts;
+
+  void _initStatCalc();
+  void _initConflatableFeatureCounts();
   void _readGenericStatsData();
   void _addStat(const QString& name, double value);
   void _addStat(const char* name, double value);
@@ -149,12 +167,16 @@ private:
    */
   std::shared_ptr<MatchCreator> getMatchCreator(
     const std::vector<std::shared_ptr<MatchCreator>>& matchCreators,
-    const QString &matchCreatorName, CreatorDescription::BaseFeatureType &featureType);
+    const QString &matchCreatorName, CreatorDescription::BaseFeatureType& featureType);
 
-  double _applyVisitor(const hoot::FilteredVisitor &v, StatCall call = Stat);
-  double _applyVisitor(const hoot::FilteredVisitor &v, boost::any& visitorData, StatCall call = Stat);
-  double _applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis, StatCall call = Stat);
-  void _applyVisitor(ConstElementVisitor *v);
+  double _applyVisitor(const hoot::FilteredVisitor& v, const QString& statName,
+                       StatCall call = Stat);
+  double _applyVisitor(const hoot::FilteredVisitor& v, boost::any& visitorData, const
+                       QString& statName, StatCall call = Stat);
+  double _applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis,
+                       const QString& statName, StatCall call = Stat);
+  void _applyVisitor(ConstElementVisitor* v, const QString& statName);
+  double _getApplyVisitor(ConstElementVisitor* v, const QString& statName);
 
   static bool _matchDescriptorCompare(const CreatorDescription& m1,
                                       const CreatorDescription& m2);

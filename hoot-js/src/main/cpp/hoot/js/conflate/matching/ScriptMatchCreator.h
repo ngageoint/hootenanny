@@ -55,9 +55,9 @@ public:
 
   static const QString POINT_POLYGON_SCRIPT_NAME;
 
-  ScriptMatchCreator();
+  ScriptMatchCreator() = default;
 
-  virtual ~ScriptMatchCreator();
+  virtual ~ScriptMatchCreator() = default;
 
   /**
    * @see SearchRadiusProvider
@@ -109,10 +109,16 @@ public:
    */
   virtual QString getName() const override;
 
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const;
+
 private:
 
   std::shared_ptr<PluginContext> _script;
   QString _scriptPath;
+  CreatorDescription _scriptInfo;
 
   std::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
   std::shared_ptr<MatchThreshold> _matchThreshold;

@@ -92,6 +92,7 @@ public:
   static const QString JOB_SOURCE;
 
   DataConverter();
+  virtual ~DataConverter() = default;
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -117,6 +118,8 @@ public:
   void setConvertOps(const QStringList& ops) { _convertOps = ops; }
 
 private:
+
+  friend class DataConverterTest;
 
   QString _translation;
   QString _translationDirection;

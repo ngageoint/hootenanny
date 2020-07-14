@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ALPHASHAPEGENERATOR_H
@@ -36,6 +36,8 @@ namespace hoot
 
 /**
  * Generates an alpha shape
+ *
+ * @see AlphaShape
  */
 class AlphaShapeGenerator
 {
@@ -43,22 +45,57 @@ public:
 
   static std::string className() { return "hoot::AlphaShapeGenerator"; }
 
+  /**
+   * Constructor
+   *
+   * @param alpha tuning parameter used to calculate the alpha shape
+   * @param buffer how far out from the calculated alpha shape the output shape should be buffered
+   */
   AlphaShapeGenerator(const double alpha, const double buffer = 0.0);
 
   /**
-   * Generates an alpha shape based on the geometry of an input map
+   * Generates an alpha shape as a map based on the geometry of some input map
    *
-   * @param inputMap the geometry to use for generating the alpha shape
+   * @param inputMap the map to use for generating the alpha shape
    * @return a map containing the alpha shape's points
    */
   OsmMapPtr generateMap(OsmMapPtr inputMap);
 
+  /**
+   * Generates an alpha shape as a geometry based on the geometry of some input map
+   *
+   * @param inputMap the map to use for generating the alpha shape
+   * @return a geometry containing the alpha shape's points
+   */
   std::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
+
+  void setRetryOnTooSmallInitialAlpha(bool retry) { _retryOnTooSmallInitialAlpha = retry; }
+  void setManuallyCoverSmallPointClusters(bool cover) { _manuallyCoverSmallPointClusters = cover; }
 
 private:
 
+  // tuning parameter used to calculate the alpha shape
   double _alpha;
+  // how far out from the calculated alpha shape the output shape should be buffered
   double _buffer;
+  // This triggers _coverStragglers (read description).
+  bool _manuallyCoverSmallPointClusters;
+  // If the selected alpha value is too small to calculate the alpha shape, a retry can be done to
+  // compute it based on the input data. This could go away if auto-alpha calculation was ever
+  // implemented (#4085).
+  bool _retryOnTooSmallInitialAlpha;
+  // The maximum number of alpha values retries to. Right now this is hardcoded to 2 as that's all
+  // that has ever been needed.
+  bool _maxTries;
+
+  /*
+   * This is a bit of hack to the alg, if you will, that will alow for covering small groups of
+   * features when a smaller alpha value is selected. This is desirable in certain situations when
+   * using the alpha shape to feed a tasking grid. Attempts were made to make this change in
+   * AlphaShape itself, but it wasn't feasible due to relying on the buffering of the shape which
+   * happens in this class. Its possible that part could be moved to AlphaShape, if needed.
+   */
+  void _coverStragglers(std::shared_ptr<geos::geom::Geometry>& geometry, const ConstOsmMapPtr& map);
 };
 
 }

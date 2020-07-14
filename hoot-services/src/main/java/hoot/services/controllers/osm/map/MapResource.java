@@ -443,7 +443,7 @@ public class MapResource {
         long nodeCnt = 0;
         for (Object aParamsArray : paramsArray) {
             JSONObject param = (JSONObject) aParamsArray;
-            mapId = (String) param.get("mapId");
+            mapId = param.get("mapId").toString();
             bbox = (String) param.get("tile");
 
             // OSM API database data can't be displayed on a hoot map, due to
@@ -773,6 +773,16 @@ public class MapResource {
         logger.debug(String.format("getTags(): retrieved tags for map with id: '%s': '%s'", mapId, tags));
 
         ret.putAll(tags);
+
+        if (tags.containsKey("params")) {
+            JSONParser jp = new JSONParser();
+            String unescaped = tags.get("params").replace("\\\"", "\"").replace("\\\\", "").replace("\"{", "{").replace("}\"", "}");
+            try {
+                ret.put("params", jp.parse(unescaped));
+            } catch (ParseException ex) {
+                logger.error(unescaped, ex);
+            }
+        }
 
         Object oInput1 = ret.get("input1");
         if (oInput1 != null) {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SIGMAAGGREGATOR_H
 #define SIGMAAGGREGATOR_H
@@ -38,7 +38,8 @@ public:
 
   static std::string className() { return "hoot::SigmaAggregator"; }
 
-  SigmaAggregator() {}
+  SigmaAggregator() = default;
+  virtual ~SigmaAggregator() = default;
 
   virtual double aggregate(std::vector<double>& d) const override;
 

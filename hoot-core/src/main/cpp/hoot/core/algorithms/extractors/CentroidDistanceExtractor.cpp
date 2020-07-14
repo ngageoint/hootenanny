@@ -23,12 +23,9 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CentroidDistanceExtractor.h"
-
-// geos
-#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -43,9 +40,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, CentroidDistanceExtractor)
 
-double CentroidDistanceExtractor::distance(const OsmMap &map,
+double CentroidDistanceExtractor::distance(const OsmMap& map,
   const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element> &candidate) const
+  const std::shared_ptr<const Element>& candidate) const
 {
   ElementConverter ec(map.shared_from_this());
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);

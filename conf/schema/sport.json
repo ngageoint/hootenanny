@@ -1,7 +1,8 @@
 [
     {
         "categories": [
-            "use"
+            "use",
+            "poi"
         ],
         "dataType": "enumeration",
         "geometries": [

@@ -36,69 +36,69 @@
 
 geonames = {
 
-    // Process the Alt Names
-    // In the spec, these are "varchar(8000)". We are just passing them through but we could
-    // split them if needed.
-    processAltName : function (nameIn)
+  // Process the Alt Names
+  // In the spec, these are "varchar(8000)". We are just passing them through but we could
+  // split them if needed.
+  processAltName : function (nameIn)
+  {
+    var nameOut = '';
+
+    if (nameIn !== '')
     {
-        var nameOut = '';
+      nameOut = nameIn.split(',').join(';');
+    }
 
-        if (nameIn !== '')
-        {
-            nameOut = nameIn.split(',').join(';');
-        }
-
-        return nameOut;
-    },
+    return nameOut;
+  },
 
 
-    // toOsm - Translate Attrs to Tags
-    // This is the main routine to convert TO OSM
-    toOsm : function(attrs, layerName, geometryType)
+  // toOsm - Translate Attrs to Tags
+  // This is the main routine to convert TO OSM
+  toOsm : function(attrs, layerName, geometryType)
+  {
+    tags = {};  // The final output Tag list
+
+    if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+
+    // Names
+    tags.name = attrs.name;
+    if (attrs.alternatenames) tags.alt_name = geonames.processAltName(attrs.alternatenames);
+
+    // Populations
+    // var pop = Number(attrs.population);
+    // if (pop > 0) tags.population = pop;
+    if (Number(attrs.population) > 0) tags.population = attrs.population;
+
+    // Elevations
+    if (attrs.elevation && attrs.elevation !== '-9999')
     {
-        tags = {};  // The final output Tag list
+      tags.ele = attrs.elevation;
+    }
+    else if (attrs.dem && attrs.dem !== '-9999')
+    {
+      tags.ele = attrs.dem;
+    }
 
-        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+    // Where are we?
+    if (attrs.country_code) tags['is_in:country_code'] = attrs.country_code;
 
-        // Names
-        tags.name = attrs.name;
-        if (attrs.alternatenames) tags.alt_name = geonames.processAltName(attrs.alternatenames);
+    // Feature Code
+    if (geonames.rules.one2one[attrs.feature_code])
+    {
+      for (i in geonames.rules.one2one[attrs.feature_code]) tags[i] = geonames.rules.one2one[attrs.feature_code][i];
 
-        // Populations
-        // var pop = Number(attrs.population);
-        // if (pop > 0) tags.population = pop;
-        if (Number(attrs.population) > 0) tags.population = attrs.population;
+      // If it's just a POI, add "poi=yes"
+      if (tags['poi:type']) tags.poi = 'yes';
+    }
 
-        // Elevations
-        if (attrs.elevation && attrs.elevation !== '-9999')
-        {
-            tags.ele = attrs.elevation;
-        }
-        else if (attrs.dem && attrs.dem !== '-9999')
-        {
-            tags.ele = attrs.dem;
-        }
+    // Metadata
+    tags.source = 'geonames';
+    // tags.uuid = attrs.geonameid;
+    tags.uuid = 'GeoNames.org:' + attrs['geonameid'];
 
-        // Where are we?
-        if (attrs.country_code) tags['is_in:country_code'] = attrs.country_code;
+    if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
 
-        // Feature Code
-        if (geonames.rules.one2one[attrs.feature_code])
-        {
-            for (i in geonames.rules.one2one[attrs.feature_code]) tags[i] = geonames.rules.one2one[attrs.feature_code][i];
+    return tags;
+  }, // End of toOsm
 
-            // If it's just a POI, add "poi=yes"
-            if (tags['poi:type']) tags.poi = 'yes';
-        }
-
-        // Metadata
-        tags.source = 'geonames';
-        // tags.uuid = attrs.geonameid;
-        tags.uuid = "GeoNames.org:" + attrs['geonameid'];
-
-        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
-
-        return tags;
-    }, // End of toOsm
-
-} // End of geonames
+}; // End of geonames

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ProbabilityOfMatch.h"
@@ -56,8 +56,6 @@ using namespace Tgs;
 
 namespace hoot
 {
-
-std::shared_ptr<ProbabilityOfMatch> ProbabilityOfMatch::_theInstance;
 
 ProbabilityOfMatch::ProbabilityOfMatch()
 {
@@ -137,14 +135,12 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 
 ProbabilityOfMatch& ProbabilityOfMatch::getInstance()
 {
-  if (!_theInstance.get())
-  {
-    _theInstance.reset(new ProbabilityOfMatch());
-  }
-  return *_theInstance;
+  //  Local static singleton instance
+  static ProbabilityOfMatch instance;
+  return instance;
 }
 
-double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
+double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
   const ConstWayPtr &w2)
 {
   Meters l1 = ElementConverter(map).convertToLineString(w1)->getLength();
@@ -184,8 +180,7 @@ double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const Co
   return ds * ps * as * zs * ls;
 }
 
-double ProbabilityOfMatch::zipperScore(const ConstWayPtr& w1,
-                                       const ConstWayPtr& w2)
+double ProbabilityOfMatch::zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2)
 {
   double result = 1.0;
 

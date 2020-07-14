@@ -22,15 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmPgCsvWriter.h"
 
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmUtils.h>
-
+#include <hoot/core/util/DateTimeUtils.h>
 #include <QFileInfo>
 
 using namespace std;
@@ -44,10 +43,6 @@ OsmPgCsvWriter::OsmPgCsvWriter()
   : _precision(ConfigOptions().getWriterPrecision()),
     _separator(","),
     _endl("\n")
-{
-}
-
-OsmPgCsvWriter::~OsmPgCsvWriter()
 {
 }
 
@@ -197,7 +192,7 @@ void OsmPgCsvWriter::writePartial(const hoot::ConstNodePtr& n)
       << QString::number(n->getX(), 'f', _precision) << _separator
       << n->getChangeset() << _separator
       << (n->getVisible() ? 't' : 'f') << _separator
-      << (n->getTimestamp() != ElementData::TIMESTAMP_EMPTY ? OsmUtils::toTimeString(n->getTimestamp()) : "") << _separator
+      << (n->getTimestamp() != ElementData::TIMESTAMP_EMPTY ? DateTimeUtils::toTimeString(n->getTimestamp()) : "") << _separator
       << n->getVersion() << _separator
       << _getTags(n) << _endl;
 }
@@ -209,7 +204,7 @@ void OsmPgCsvWriter::writePartial(const hoot::ConstWayPtr& w)
   _streams[FileType::Ways]
       << w->getId() << _separator
       << w->getChangeset() << _separator
-      << (w->getTimestamp() != ElementData::TIMESTAMP_EMPTY ? OsmUtils::toTimeString(w->getTimestamp()) : "") << _separator
+      << (w->getTimestamp() != ElementData::TIMESTAMP_EMPTY ? DateTimeUtils::toTimeString(w->getTimestamp()) : "") << _separator
       << w->getVersion() << _separator
       << (w->getVisible() ? 't' : 'f') << _separator
       << _getTags(w) << _endl;
@@ -232,7 +227,7 @@ void OsmPgCsvWriter::writePartial(const hoot::ConstRelationPtr& r)
   _streams[FileType::Relations]
       << r->getId() << _separator
       << r->getChangeset() << _separator
-      << (r->getTimestamp() != ElementData::TIMESTAMP_EMPTY ? OsmUtils::toTimeString(r->getTimestamp()) : "") << _separator
+      << (r->getTimestamp() != ElementData::TIMESTAMP_EMPTY ? DateTimeUtils::toTimeString(r->getTimestamp()) : "") << _separator
       << r->getVersion() << _separator
       << (r->getVisible() ? 't' : 'f') << _separator
       << _getTags(r) << _endl;

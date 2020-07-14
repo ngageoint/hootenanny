@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef COLLECTION_UTILS_H
@@ -76,8 +76,8 @@ public:
    * Converts a stdlib set to a Qt set
    *
    * @param set the set to convert
-   * @return
-   * @note std::set is ordered and QSet
+   * @return a Qt set
+   * @note std::set is ordered and QSet is not
    */
   template<typename T>
   static QSet<T> stdSetToQSet(const std::set<T>& set)
@@ -89,6 +89,25 @@ public:
       qSet.insert(*itr);
     }
     return qSet;
+  }
+
+  /**
+   * Converts a Qt set to a stdlib set
+   *
+   * @param set the set to convert
+   * @return a stdlib set
+   * @note std::set is ordered and QSet is not
+   */
+  template<typename T>
+  static std::set<T> qSetToStdSet(const QSet<T>& set)
+  {
+    // There's probably a more efficient way to do this...
+    std::set<T> stdSet;
+    for (typename QSet<T>::const_iterator itr = set.begin(); itr != set.end(); ++itr)
+    {
+      stdSet.insert(*itr);
+    }
+    return stdSet;
   }
 
 private:

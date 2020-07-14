@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ParallelBoundedApiReader.h"
@@ -31,6 +31,7 @@
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 //  Qt
@@ -206,7 +207,7 @@ void ParallelBoundedApiReader::_process()
       QString result = QString::fromUtf8(request.getResponseContent().data());
       switch (status)
       {
-      case 200:
+      case HttpResponseCode::HTTP_OK:
         //  Store the result and increment the number of results received
         _resultsMutex.lock();
         _resultsList.append(result);
@@ -215,7 +216,7 @@ void ParallelBoundedApiReader::_process()
         //  Write out a "debug map" for each result that comes in
         writeDebugMap(result, "bounded-reader-result");
         break;
-      case 400:
+      case HttpResponseCode::HTTP_BAD_REQUEST:
         //  Split the envelope in quarters and push them all back on the queue
         {
           double lon1 = envelope.getMinX();
@@ -236,13 +237,18 @@ void ParallelBoundedApiReader::_process()
           _bboxMutex.unlock();
         }
         break;
-      case 509:
+      case HttpResponseCode::HTTP_BANDWIDTH_EXCEEDED:
+        //  Bandwidth for downloads has been exceeded, fail immediately
+        _errorMutex.lock();
         LOG_ERROR(request.getErrorString());
         _fatalError = true;
+        _errorMutex.unlock();
         break;
       default:
-        LOG_ERROR("Unexpected Error: HTTP " << status << " : " << request.getErrorString());
+        _errorMutex.lock();
+        request.logConnectionError();
         _fatalError = true;
+        _errorMutex.unlock();
         break;
       }
     }

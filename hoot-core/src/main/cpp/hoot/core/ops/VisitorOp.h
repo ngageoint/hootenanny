@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VISITOROP_H
 #define VISITOROP_H
@@ -46,8 +46,9 @@ public:
 
   static std::string className() { return "hoot::VisitorOp"; }
 
-  VisitorOp() {}
+  VisitorOp() = default;
   VisitorOp(const ElementVisitorPtr& v) { _visitor = v; }
+  virtual ~VisitorOp() = default;
 
   /**
    * Takes ownership of the visitor.
@@ -59,6 +60,8 @@ public:
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual QString getDescription() const { return ""; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

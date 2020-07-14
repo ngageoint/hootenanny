@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DECOMPOSEBUILDINGRELATIONSVISITOR_H
 #define DECOMPOSEBUILDINGRELATIONSVISITOR_H
@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -44,8 +43,7 @@ class Relation;
  *
  * http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings
  */
-class DecomposeBuildingRelationsVisitor : public ConstElementVisitor, public OsmMapConsumer,
-  public OperationStatusInfo
+class DecomposeBuildingRelationsVisitor : public ConstElementVisitor, public OsmMapConsumer
 {
 public:
 
@@ -53,7 +51,8 @@ public:
 
   static int logWarnCount;
 
-  DecomposeBuildingRelationsVisitor();
+  DecomposeBuildingRelationsVisitor() = default;
+  virtual ~DecomposeBuildingRelationsVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 
@@ -67,6 +66,8 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   { return "Decomposed " + QString::number(_numAffected) + " complex buildings"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

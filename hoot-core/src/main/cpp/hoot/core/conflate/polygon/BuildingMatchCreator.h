@@ -48,6 +48,7 @@ public:
   static std::string className() { return "hoot::BuildingMatchCreator"; }
 
   BuildingMatchCreator();
+  virtual ~BuildingMatchCreator() = default;
 
   virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 
@@ -68,6 +69,12 @@ public:
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
   virtual QString getName() const { return QString::fromStdString(className()); }
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(BuildingCriterion::className())); }
 
 private:
 

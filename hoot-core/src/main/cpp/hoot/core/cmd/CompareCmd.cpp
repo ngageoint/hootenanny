@@ -36,9 +36,13 @@
 #include <hoot/core/visitors/KeepHighwaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -51,7 +55,7 @@ public:
 
   static string className() { return "hoot::CompareCmd"; }
 
-  CompareCmd() { }
+  CompareCmd() = default;
 
   virtual QString getName() const override { return "compare"; }
 
@@ -200,6 +204,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() < 2 || args.size() > 3)
     {
       LOG_VAR(args);
@@ -212,7 +219,12 @@ public:
     QString base2 = args.size() == 3 ? args[1] : QString();
     QString uut = args.last();
 
-    return compareMaps(base1, base2, uut);
+    const int status = compareMaps(base1, base2, uut);
+
+    LOG_STATUS(
+      "Maps compared in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+
+    return status;
   }
 };
 

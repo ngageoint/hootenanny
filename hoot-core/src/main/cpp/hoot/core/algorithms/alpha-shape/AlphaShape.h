@@ -22,16 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __ALPHASHAPE_H__
 #define __ALPHASHAPE_H__
 
-// Geos
+// GEOS
 #include <geos/geom/Geometry.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Polygon.h>
+
+// GDAL
+#include <ogr_core.h>
+class OGRSpatialReference;
 
 // Qt
 #include <QString>
@@ -58,9 +62,12 @@ class OsmMap;
 class Way;
 
 /**
- * Technically a Alpha complex, not an Alpha Shape, but the literature seems to alternate between
- * the terms.
+ * Representation of an Alpha Shape. Technically an Alpha complex, not an Alpha Shape, but the
+ * literature seems to alternate between the terms.
  *
+ * https://github.com/ngageoint/hootenanny/files/595246/Hootenanny.-.Alpha.Shape.2013-03-07.pptx
+ * https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AlphaShape.asciidoc
+ * https://github.com/ngageoint/hootenanny/wiki/files/2010-B-01-AlphaShapes.pdf
  */
 class AlphaShape
 {
@@ -70,49 +77,78 @@ public:
 
   static int logWarnCount;
 
+  /**
+   * Constructor
+   *
+   * @param alpha tuning parameter which determines the makeup of the output shape
+   */
   AlphaShape(double alpha);
 
+  /**
+   * Converts this shape to a GEOS geometry
+   *
+   * @return a GEOS geometry
+   */
   std::shared_ptr<geos::geom::Geometry> toGeometry();
 
+  /**
+   * Inserts points which are used to build the shape
+   *
+   * @param points a collection of points
+   */
   void insert(const std::vector<std::pair<double, double>>& points);
 
+  /**
+   * Returns a string representation of the shape
+   *
+   * @return a string
+   */
   QString toString();
 
-  std::shared_ptr<OsmMap> toOsmMap();
+  /**
+   * Returns the length of the longest face edge used to create the shape
+   *
+   * @return a length
+   */
+  double getLongestFaceEdge() const { return _longestFaceEdge; }
 
 private:
 
+  friend class AlphaShapeTest;
+
+  // tuning parameter which determines the makeup of the output shape
   double _alpha;
 
+  // size of the longest face edge
+  mutable double _longestFaceEdge;
+
+  // main data structures used to calculate the shape
   std::shared_ptr<Tgs::DelaunayTriangulation> _pDelauneyTriangles;
   std::set<std::pair<double, double>> _outsidePoint;
 
-  std::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face* face, const std::shared_ptr<OsmMap>& map);
-
   std::shared_ptr<geos::geom::Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
 
-  // The root group represents empty space
-  // first level children represent filled space
-  // second level children are empty
-  // third filled
-  // etc, alternating at each level between filled and empty
-  std::shared_ptr<OsmMap> _groupFaces();
-
+  /*
+   * Returns true if the face is on the boundary of the triangulation
+   */
   bool _isBoundary(const Tgs::Edge& e) const;
 
-  /**
+  /*
    * Returns true if the face is inside an alpha shape.
    */
-  bool _isInside(const Tgs::Face &face) const;
+  bool _isInside(const Tgs::Face& face) const;
 
-  /**
+  /*
    * Returns true if this edge is part of the artificial outer bounds of the triangulation.
    */
   bool _isOutsideEdge(const Tgs::Edge& e) const;
 
   bool _isTooLong(const Tgs::Edge& e) const;
 
-  std::shared_ptr<geos::geom::Geometry> _validateGeometry(const std::shared_ptr<geos::geom::Geometry>& g);
+  std::shared_ptr<geos::geom::Geometry> _validateGeometry(
+    const std::shared_ptr<geos::geom::Geometry>& g);
+
+  std::shared_ptr<OsmMap> _toOsmMap();
 };
 
 }

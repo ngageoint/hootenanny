@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveElementsVisitor.h"
 
@@ -106,7 +106,7 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
 
   if (_criteriaSatisfied(e))
   {
-    LOG_TRACE("Removing element: " << e);
+    LOG_TRACE("Removing element: " << e->getElementId() << "...");
     _count++;
     if (_recursive)
     {
@@ -114,6 +114,8 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     }
     else
     {
+      // TODO: explain
+      //RemoveElementByEid::removeUnusedElementsOnly(_map->shared_from_this(), e->getElementId());
       RemoveElementByEid::removeElement(_map->shared_from_this(), e->getElementId());
     }
   }

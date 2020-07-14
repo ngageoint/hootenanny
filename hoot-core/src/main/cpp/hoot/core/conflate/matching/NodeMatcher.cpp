@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "NodeMatcher.h"
@@ -33,12 +33,15 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -61,16 +64,22 @@ _delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
 {
 }
 
+QStringList NodeMatcher::getNetworkCriterionClassNames()
+{
+  // TODO: Should LinearCriterion be added here?
+  QStringList critClasses;
+  critClasses.append(QString::fromStdString(HighwayCriterion::className()));
+  critClasses.append(QString::fromStdString(LinearWaterwayCriterion::className()));
+  critClasses.append(QString::fromStdString(PowerLineCriterion::className()));
+  critClasses.append(QString::fromStdString(RailwayCriterion::className()));
+  return critClasses;
+}
+
 bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
 {
   if (_networkFeatureTypeCriteria.isEmpty())
   {
-    QStringList critClasses;
-    critClasses.append("hoot::HighwayCriterion");
-    critClasses.append("hoot::LinearWaterwayCriterion");
-    critClasses.append("hoot::PowerLineCriterion");
-    critClasses.append("hoot::RailwayCriterion");
-
+    const QStringList critClasses = getNetworkCriterionClassNames();
     for (int i = 0; i < critClasses.size(); i++)
     {
       _networkFeatureTypeCriteria.append(
@@ -84,7 +93,7 @@ bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
     if (_networkFeatureTypeCriteria.at(i)->isSatisfied(element))
     {
       LOG_TRACE(
-        element/*->getElementId()*/ << " recognized as network feature types by " <<
+        element->getElementId() << " recognized as network feature types by " <<
         _networkFeatureTypeCriteria.at(i)->toString() << ".");
       return true;
     }
@@ -99,6 +108,8 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
   result.reserve(wids.size());
 
   LOG_VART(nid);
+  ConstNodePtr node = map->getNode(nid);
+  LOG_VART(node);
   QSet<long> badWayIds;
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
@@ -215,10 +226,14 @@ int NodeMatcher::getDegree(ElementId nid)
 double NodeMatcher::scorePair(long nid1, long nid2)
 {
   ConstNodePtr n1 = _map->getNode(nid1);
+  LOG_VART(n1->getElementId());
   ConstNodePtr n2 = _map->getNode(nid2);
+  LOG_VART(n2->getElementId());
 
   const set<long>& wids1 = _map->getIndex().getNodeToWayMap()->at(nid1);
+  LOG_VART(wids1);
   const set<long>& wids2 = _map->getIndex().getNodeToWayMap()->at(nid2);
+  LOG_VART(wids2);
 
   double acc = 0;
   for (set<long>::const_iterator it = wids1.begin(); it != wids1.end(); ++it)
@@ -229,12 +244,17 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   {
     acc = max(acc, _map->getWay(*it)->getCircularError());
   }
+  LOG_VART(acc);
 
   vector<Radians> theta1 = calculateAngles(_map.get(), nid1, wids1, _delta);
+  LOG_VART(theta1);
   vector<Radians> theta2 = calculateAngles(_map.get(), nid2, wids2, _delta);
+  LOG_VART(theta2);
 
   int s1 = theta1.size();
+  LOG_VART(s1);
   int s2 = theta2.size();
+  LOG_VART(s2);
 
   if (s1 < 3 || s2 < 3)
   {

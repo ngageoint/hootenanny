@@ -28,19 +28,19 @@
 #include "IoUtils.h"
 
 // Hoot
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
+#include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
-#include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
-#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QFileInfo>
@@ -147,6 +147,7 @@ void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
   {
     OgrReader reader;
     reader.setDefaultStatus(defaultStatus);
+    reader.setConfiguration(conf());
     reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map);
     reader.close();
   }
@@ -191,6 +192,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   const bool strictBoundsHandling =
     ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds();
   cropper.setKeepOnlyFeaturesInsideBounds(strictBoundsHandling);
+  cropper.setRemoveMissingElements(ConfigOptions().getConvertBoundingBoxRemoveMissingElements());
 
   // If we want to keep ways that are outside of the crop bounds but connected to a way that's
   // inside the bounds, we need to tag them before cropping and then tell the cropper to leave
@@ -219,7 +221,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 }
 
-std::shared_ptr<ElementVisitorInputStream> getVisitorInputStream(
+std::shared_ptr<ElementVisitorInputStream> IoUtils::getVisitorInputStream(
   const QString& input, const QString& visitorClassName, const bool useDataSourceIds)
 {
   std::shared_ptr<PartialOsmMapReader> reader =
@@ -235,6 +237,24 @@ std::shared_ptr<ElementVisitorInputStream> getVisitorInputStream(
         std::dynamic_pointer_cast<ElementInputStream>(reader),
         ElementVisitorPtr(
           Factory::getInstance().constructObject<ElementVisitor>(visitorClassName.toStdString()))));
+}
+
+bool IoUtils::isUrl(const QString& str)
+{
+  // this works in the hoot world
+  return str.contains("://");
+}
+
+void IoUtils::writeOutputDir(const QString& dirName)
+{
+  QFileInfo outputInfo(dirName);
+  LOG_VART(outputInfo.dir().absolutePath());
+  const bool outputDirSuccess = FileUtils::makeDir(outputInfo.dir().absolutePath());
+  LOG_VART(outputDirSuccess);
+  if (!outputDirSuccess)
+  {
+    throw IllegalArgumentException("Unable to create output path for: " + dirName);
+  }
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -37,9 +37,13 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 using namespace Tgs;
@@ -54,7 +58,7 @@ public:
 
   static string className() { return "hoot::MultiaryScorePoiMatchesCmd"; }
 
-  MultiaryScorePoiMatchesCmd() { }
+  MultiaryScorePoiMatchesCmd() = default;
 
   QString evaluateThreshold(OsmMapPtr map, QString output,
     std::shared_ptr<MatchThreshold> mt, bool showConfusion)
@@ -109,6 +113,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     bool showConfusion = false;
     if (args.contains("--confusion"))
     {
@@ -166,7 +173,8 @@ public:
       IoUtils::loadMap(map, args[i], false, s);
     }
 
-    CalculateHashVisitor hashVisitor;
+    MultiaryPoiHashVisitor hashVisitor;
+    hashVisitor.setIncludeCircularError(true);
     map->visitRw(hashVisitor);
 
     OsmMapWriterFactory::write(map, "/tmp/score-matches-after-prep.osm");
@@ -176,6 +184,9 @@ public:
     QString result = evaluateThreshold(map, output, mt, showConfusion);
 
     cout << result;
+
+    LOG_STATUS(
+      "Matches scored in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

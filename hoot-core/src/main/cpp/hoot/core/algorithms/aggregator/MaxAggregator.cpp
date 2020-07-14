@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaxAggregator.h"
 
@@ -34,10 +34,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ValueAggregator, MaxAggregator)
-
-MaxAggregator::MaxAggregator()
-{
-}
 
 double MaxAggregator::aggregate(vector<double>& d) const
 {

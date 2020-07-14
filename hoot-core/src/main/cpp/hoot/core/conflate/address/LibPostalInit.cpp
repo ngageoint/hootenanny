@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "LibPostalInit.h"
 
@@ -35,8 +35,6 @@
 
 namespace hoot
 {
-
-LibPostalInitPtr LibPostalInit::_theInstance;
 
 LibPostalInit::LibPostalInit()
 {
@@ -57,13 +55,11 @@ LibPostalInit::~LibPostalInit()
   libpostal_teardown_language_classifier();
 }
 
-const LibPostalInitPtr& LibPostalInit::getInstance()
+LibPostalInit& LibPostalInit::getInstance()
 {
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new LibPostalInit());
-  }
-  return _theInstance;
+  //  Local static singleton instance
+  static LibPostalInit instance;
+  return instance;
 }
 
 }

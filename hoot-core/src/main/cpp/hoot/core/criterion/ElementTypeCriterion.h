@@ -22,13 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTTYPECRITERION_H
 #define ELEMENTTYPECRITERION_H
 
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementType.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -40,10 +42,9 @@ public:
 
   static std::string className() { return "hoot::ElementTypeCriterion"; }
 
-  ElementTypeCriterion() {}
-  ElementTypeCriterion(ElementType::Type eType) : _elementType(eType) {}
-
-  virtual ~ElementTypeCriterion() {}
+  ElementTypeCriterion() = default;
+  ElementTypeCriterion(ElementType::Type eType) : _elementType(eType) { }
+  virtual ~ElementTypeCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -68,7 +69,8 @@ public:
 
   static std::string className() { return "hoot::NodeCriterion"; }
 
-  NodeCriterion() : ElementTypeCriterion(ElementType::Node) {}
+  NodeCriterion() : ElementTypeCriterion(ElementType::Node) { }
+  virtual ~NodeCriterion() = default;
 
   virtual QString getDescription() const { return "Identifies nodes"; }
 
@@ -82,7 +84,8 @@ public:
 
   static std::string className() { return "hoot::WayCriterion"; }
 
-  WayCriterion() : ElementTypeCriterion(ElementType::Way) {}
+  WayCriterion() : ElementTypeCriterion(ElementType::Way) { }
+  virtual ~WayCriterion() = default;
 
   virtual QString getDescription() const { return "Identifies ways"; }
 
@@ -90,18 +93,47 @@ public:
   { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
-class RelationCriterion : public ElementTypeCriterion
+class RelationCriterion : public ElementTypeCriterion, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::RelationCriterion"; }
 
-  RelationCriterion() : ElementTypeCriterion(ElementType::Relation) {}
+  RelationCriterion() : ElementTypeCriterion(ElementType::Relation) { }
+  RelationCriterion(const QString& type) :
+    ElementTypeCriterion(ElementType::Relation), _type(type.trimmed()) { }
+  virtual ~RelationCriterion() = default;
+
+  virtual bool isSatisfied(const ConstElementPtr& e) const override
+  {
+    const bool typeMatch = ElementTypeCriterion::isSatisfied(e);
+    if (typeMatch)
+    {
+      if (_type.isEmpty())
+      {
+        return true;
+      }
+      else
+      {
+        return std::dynamic_pointer_cast<const Relation>(e)->getType() == _type;
+      }
+    }
+    return false;
+  }
 
   virtual QString getDescription() const { return "Identifies relations"; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
+
+  virtual void setConfiguration(const Settings& conf)
+  {
+    _type = ConfigOptions(conf).getRelationCriterionType();
+  }
+
+private:
+
+  QString _type;
 };
 
 }

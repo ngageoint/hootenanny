@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="jack.grossman" id="30" context="default">
+        <comment>
+            This change adds a hstore favorite adv. opts column to the users table
+        </comment>
+
+        <addColumn tableName="users">
+            <column name="favorite_opts" type="hstore" />
+        </addColumn>
+
+        <!-- sets a default value for future rows inserted into the column -->
+        <addDefaultValue tableName="users" columnName="favorite_opts" defaultValue="" />
+
+        <!-- change the value of already existing rows to '' -->
+        <addNotNullConstraint tableName="users" columnName="favorite_opts" defaultNullValue="" />
+
+    </changeSet>
+</databaseChangeLog>

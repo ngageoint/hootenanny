@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Tags.h"
@@ -45,15 +45,32 @@ namespace hoot
 QStringList Tags::_nameKeys;
 QStringList Tags::_pseudoNameKeys;
 
-Tags::Tags() :
-QHash<QString, QString>()
-{
-}
-
 Tags::Tags(const QString& key, const QString& value) :
 QHash<QString, QString>()
 {
   set(key, value);
+}
+
+Tags::Tags(const QString& kvp)
+{
+  const QString errorMsg = "Invalid key/value pair passed to Tags: " + kvp;
+  if (!kvp.contains("="))
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+  const QStringList kvpParts = kvp.split("=");
+  if (kvpParts.size() != 2)
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+  const QString key = kvpParts[0];
+  const QString val = kvpParts[1];
+  if (key.trimmed().isEmpty() || val.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+
+  set(key, val);
 }
 
 void Tags::add(const Tags& t)
@@ -252,7 +269,7 @@ Length Tags::getLength(const QString& k) const
 
   Length result;
   bool ok;
-  //feet and inch are special case, do check and calculation.
+  // feet and inch are special case, do check and calculation.
   if (v.contains("'", Qt::CaseInsensitive) || v.contains("\"", Qt::CaseInsensitive))
   {
     QString vf = "";
@@ -579,12 +596,76 @@ bool Tags::operator==(const Tags& other) const
   return true;
 }
 
-void Tags::removeMetadata()
+bool Tags::hasSameNonMetadataTags(const Tags& other) const
 {
-  removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
+  Tags otherCopy = other;
+  otherCopy.removeMetadata();
+  Tags thisCopy = *this;
+  thisCopy.removeMetadata();
+  return otherCopy == thisCopy;
 }
 
-void Tags::removeByTagKeyContains(const QString& tagKeySubstring)
+int Tags::removeMetadata()
+{
+  int numRemoved = removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
+
+  // there are some other metadata keys that don't start with 'hoot::'
+  QStringList keysToRemove;
+  OsmSchema& schema = OsmSchema::getInstance();
+  for (Tags::const_iterator it = begin(); it != end(); ++it)
+  {
+    const QString key = it.key();
+    if (schema.isMetaData(key, it.value()))
+    {
+      keysToRemove.append(key);
+    }
+  }
+
+  for (int i = 0; i < keysToRemove.size(); i++)
+  {
+    numRemoved += remove(keysToRemove.at(i));
+  }
+
+  return numRemoved;
+}
+
+int Tags::removeKeys(const QStringList& keys)
+{
+  int numRemoved = 0;
+  for (int i = 0; i < keys.size(); i++)
+  {
+    LOG_TRACE("Removing " << keys.at(i) << "...");
+    numRemoved += remove(keys.at(i));
+  }
+  return numRemoved;
+}
+
+int Tags::removeKey(const QRegExp& regex)
+{
+  QStringList keysToRemove;
+  for (Tags::const_iterator it = begin(); it != end(); ++it)
+  {
+    const QString key = it.key();
+    if (regex.exactMatch(key))
+    {
+      keysToRemove.append(key);
+    }
+  }
+
+  return removeKeys(keysToRemove);
+}
+
+int Tags::removeKeys(const QList<QRegExp>& regexes)
+{
+  int numRemoved = 0;
+  for (int i = 0; i < regexes.size(); i++)
+  {
+    numRemoved += removeKey(regexes.at(i));
+  }
+  return numRemoved;
+}
+
+int Tags::removeByTagKeyContains(const QString& tagKeySubstring)
 {
   QStringList keysToRemove;
   for (Tags::const_iterator it = begin(); it != end(); ++it)
@@ -596,13 +677,15 @@ void Tags::removeByTagKeyContains(const QString& tagKeySubstring)
     }
   }
 
+  int numRemoved = 0;
   for (int i = 0; i < keysToRemove.size(); i++)
   {
-    remove(keysToRemove.at(i));
+    numRemoved += remove(keysToRemove.at(i));
   }
+  return numRemoved;
 }
 
-void Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
+int Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
 {
   QStringList keysToRemove;
   for (Tags::const_iterator it = begin(); it != end(); ++it)
@@ -614,10 +697,12 @@ void Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
     }
   }
 
+  int numRemoved = 0;
   for (int i = 0; i < keysToRemove.size(); i++)
   {
-    remove(keysToRemove.at(i));
+    numRemoved += remove(keysToRemove.at(i));
   }
+  return numRemoved;
 }
 
 QStringList Tags::getDataOnlyValues(const Tags& tags) const
@@ -690,16 +775,18 @@ void Tags::readValues(const QString &k, QStringList& list) const
   }
 }
 
-void Tags::removeEmpty()
+int Tags::removeEmpty()
 {
-  // remove all the empty tags.
+  // remove all the empty tags
+  int numRemoved = 0;
   for (Tags::const_iterator it = begin(); it != end(); ++it)
   {
     if (get(it.key()).trimmed().isEmpty())
     {
-      remove(it.key());
+      numRemoved += remove(it.key());
     }
   }
+  return numRemoved;
 }
 
 void Tags::set(const QString& key, const QString& value)
@@ -775,7 +862,6 @@ QStringList Tags::split(const QString& values)
 QString Tags::toString() const
 {
   QString result;
-
   for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
   {
     result += it.key() + " = " + it.value() + "\n";
@@ -796,6 +882,11 @@ void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) c
   QRegExp sRegExp("(\\d+(\\.\\d+)?)");
   QString copyStr = str;
   units = copyStr.replace(sRegExp, QString("")).trimmed();
+}
+
+bool Tags::hasKvp(const QString& kvp) const
+{
+  return hasAnyKvp(QStringList(kvp));
 }
 
 bool Tags::hasAnyKvp(const QStringList& kvps) const
@@ -826,6 +917,16 @@ bool Tags::hasAnyKvp(const QStringList& kvps) const
   return false;
 }
 
+QStringList Tags::toKvps() const
+{
+  QStringList kvps;
+  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
+  {
+    kvps.append(it.key() + "=" + it.value());
+  }
+  return kvps;
+}
+
 bool Tags::hasAnyKey(const QStringList& keys)
 {
   for (int i = 0; i < keys.size(); i++)
@@ -836,6 +937,19 @@ bool Tags::hasAnyKey(const QStringList& keys)
     }
   }
   return false;
+}
+
+QString Tags::getFirstKey(const QStringList& keys) const
+{
+  for (int i = 0; i < keys.size(); i++)
+  {
+    const QString key = keys.at(i);
+    if (contains(key))
+    {
+      return key;
+    }
+  }
+  return "";
 }
 
 Tags Tags::kvpListToTags(const QStringList& kvps)
@@ -870,6 +984,30 @@ Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
   return tags;
 }
 
+bool Tags::intersects(const Tags& other) const
+{
+  for (Tags::const_iterator tagItr = other.begin(); tagItr != other.end(); ++tagItr)
+  {
+    if (get(tagItr.key()) == other.get(tagItr.key()))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Tags::bothContainKvp(const Tags& tags1, const Tags& tags2, const QString& kvp)
+{
+  return tags1.hasKvp(kvp) && tags2.hasKvp(kvp);
+}
+
+bool Tags::onlyOneContainsKvp(const Tags& tags1, const Tags& tags2, const QString& kvp)
+{
+  const bool firstHasKvp = tags1.hasKvp(kvp);
+  const bool secondHasKvp = tags2.hasKvp(kvp);
+  return (!firstHasKvp && secondHasKvp) || (firstHasKvp && !secondHasKvp);
+}
+
 QString Tags::getDiffString(const Tags& other) const
 {
   if (this->operator ==(other))
@@ -893,6 +1031,16 @@ QString Tags::getDiffString(const Tags& other) const
     }
   }
   return diffStr.trimmed();
+}
+
+bool Tags::bothHaveInformation(const Tags& tags1, const Tags& tags2)
+{
+  return tags1.hasInformationTag() && tags2.hasInformationTag();
+}
+
+bool Tags::onlyOneHasInformation(const Tags& tags1, const Tags& tags2)
+{
+  return tags1.hasInformationTag() || tags2.hasInformationTag();
 }
 
 }

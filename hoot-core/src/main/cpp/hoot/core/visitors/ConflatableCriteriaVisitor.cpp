@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflatableCriteriaVisitor.h"
 
@@ -30,20 +30,19 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ConflatableCriteriaVisitor)
 
-ConflatableCriteriaVisitor::ConflatableCriteriaVisitor()
-{
-}
-
 void ConflatableCriteriaVisitor::visit(const std::shared_ptr<Element>& e)
 {
+  LOG_VART(e->getElementId());
+
   const QStringList conflatableCriteria =
-    ConflatableElementCriterion::getConflatableCriteriaForElement(e);
+    ConflatableElementCriterion::getConflatableCriteriaForElement(e, _map);
   LOG_VART(conflatableCriteria.size());
   QString conflatableCriteriaStr;
   for (int i = 0; i < conflatableCriteria.size(); i++)
@@ -52,7 +51,7 @@ void ConflatableCriteriaVisitor::visit(const std::shared_ptr<Element>& e)
   }
   conflatableCriteriaStr.chop(1);
   LOG_VART(conflatableCriteriaStr);
-  e->getTags()[MetadataTags::HootConflatableCriteria()] =  conflatableCriteriaStr;
+  e->getTags()[MetadataTags::HootConflatableCriteria()] = conflatableCriteriaStr;
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "InBoundsCriterion.h"
@@ -56,7 +56,7 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   _mustCompletelyContain = config.getInBoundsCriterionStrict();
-  LOG_VARD(_mustCompletelyContain);
+  LOG_VART(_mustCompletelyContain);
   const geos::geom::Envelope bounds =
     GeometryUtils::envelopeFromConfigString(config.getInBoundsCriterionBounds());
   if (!bounds.isNull())
@@ -67,9 +67,9 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
 
 void InBoundsCriterion::setBounds(const geos::geom::Envelope& bounds)
 {
-  LOG_VARD(bounds);
+  LOG_VART(bounds);
   _boundsGeom.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
-  LOG_VARD(_boundsGeom->toString());
+  LOG_VART(_boundsGeom->toString());
 }
 
 void InBoundsCriterion::setOsmMap(const OsmMap* map)

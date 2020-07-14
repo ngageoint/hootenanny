@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __REMOVE_EMPTY_RELATIONS_OP_H__
 #define __REMOVE_EMPTY_RELATIONS_OP_H__
@@ -30,23 +30,23 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
 
 /**
- * Removes all relations that have no members.  This needs to be an op, rather than a visitor, so
+ * Removes all relations that have no members. This needs to be an op, rather than a visitor, so
  * that we can delete relations that are children of other relations.
  */
-class RemoveEmptyRelationsOp : public OsmMapOperation, public OperationStatusInfo
+class RemoveEmptyRelationsOp : public OsmMapOperation
 {
 public:
 
   static std::string className() { return "hoot::RemoveEmptyRelationsOp"; }
 
-  RemoveEmptyRelationsOp();
+  RemoveEmptyRelationsOp() = default;
+  virtual ~RemoveEmptyRelationsOp() = default;
 
   virtual void apply(OsmMapPtr& map) override;
 

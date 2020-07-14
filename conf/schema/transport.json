@@ -16,6 +16,7 @@
         "objectType": "tag"
     },
     {
+        "categories": ["poi"],
         "isA": "transport",
         "name": "transport=station",
         "objectType": "tag"

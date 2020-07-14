@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDING_RELATION_MEMBER_TAG_MERGER_H
 #define BUILDING_RELATION_MEMBER_TAG_MERGER_H
@@ -41,8 +41,9 @@ public:
 
   static std::string className() { return "hoot::BuildingRelationMemberTagMerger"; }
 
-  BuildingRelationMemberTagMerger();
-  BuildingRelationMemberTagMerger(const std::set<QString>& ignoreTagKeys);
+  BuildingRelationMemberTagMerger() = default;
+  BuildingRelationMemberTagMerger(const QSet<QString>& ignoreTagKeys);
+  virtual ~BuildingRelationMemberTagMerger() = default;
 
   /**
    * Merges tags between a building and a single building part
@@ -58,14 +59,16 @@ public:
   virtual QString getDescription() const
   { return "Merges building and building part tags together"; }
 
-  static std::set<QString> getBuildingPartTagNames();
+  static QSet<QString> getBuildingPartTagNames();
+
+  virtual QString getClassName() const { return QString::fromStdString(className()); }
 
 private:
 
   // tag keys that identify building parts
-  static std::set<QString> _buildingPartTagNames;
+  static QSet<QString> _buildingPartTagNames;
   // a set of tag keys, which will be ignored during tag merging
-  std::set<QString> _ignoreTagKeys;
+  QSet<QString> _ignoreTagKeys;
 };
 
 }

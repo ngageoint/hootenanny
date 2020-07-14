@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GEOS
@@ -37,6 +37,10 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -48,7 +52,7 @@ public:
 
   static string className() { return "hoot::GenerateAlphaShapeCmd"; }
 
-  GenerateAlphaShapeCmd() {}
+  GenerateAlphaShapeCmd() = default;
 
   virtual QString getName() const override { return "generate-alpha-shape"; }
 
@@ -57,11 +61,15 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() != 4)
     {
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes four parameters.").arg(getName()));
     }
+
     int i = 0;
     QString pointsPath = args[i++];
     double alpha = args[i++].toDouble();
@@ -71,7 +79,9 @@ public:
     OsmMapPtr pointsMap(new OsmMap());
     IoUtils::loadMap(pointsMap, pointsPath, false, Status::Unknown1);
 
-    OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generateMap(pointsMap);
+    AlphaShapeGenerator generator(alpha, buffer);
+    //generator.setManuallyCoverSmallPointClusters(false);
+    OsmMapPtr result = generator.generateMap(pointsMap);
 
     // reproject back into lat/lng
     MapProjector::projectToWgs84(result);
@@ -96,7 +106,10 @@ public:
     {
       IoUtils::saveMap(result, outputPath);
     }
-    LOG_INFO("Alpha-shape writen to " << outputPath);
+
+    LOG_STATUS(
+      "Alpha shape written to " << outputPath << " in " <<
+       StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

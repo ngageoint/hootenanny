@@ -22,10 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ import hoot.services.models.db.JobStatus;
 public interface JobStatusManager {
     void addJob(Job job);
 
-    void deleteJob(String jobId, Long userId);
+    void deleteJob(String jobId, Long userId) throws IOException;
 
     void updateJob(String jobId, String statusDetail, Integer percentComplete);
 

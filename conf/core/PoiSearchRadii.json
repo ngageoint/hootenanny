@@ -1,0 +1,153 @@
+{
+  "#": "This file contains the search radius to be used for each feature type that POI to POI",
+  "#": "conflation supports. Keep this list alphabetized. Distances are in meters. 'value' is an",
+  "#": "optional attribute and the rest are required. See the 'Find Match Candidates' section in ",
+  "#": "the POI to POI Conflation Algorithms documentation for more details on how the configuration ",
+  "#": "uses this file. Make sure there are schema entries with the 'poi' category added to them for ",
+  "#": "every feature type added here.",
+  "search_radii":
+  [
+    {
+      "key": "amenity",
+      "distance": "200"
+    },
+    {
+      "key": "amenity",
+      "value": "grave_yard",
+      "distance": "1000"
+    },
+    {
+      "key": "building",
+      "distance": "200"
+    },
+    {
+      "key": "building",
+      "value": "hospital",
+      "distance": "500"
+    },
+    {
+      "key": "building",
+      "value": "train_station",
+      "distance": "1000"
+    },
+    {
+      "key": "barrier",
+      "value": "toll_booth",
+      "distance": "50"
+    },
+    {
+      "key": "barrier",
+      "value": "border_control",
+      "distance": "100"
+    },
+    {
+      "key": "historic",
+      "distance": "200"
+    },
+    {
+      "key": "landuse",
+      "distance": "1000"
+    },
+    {
+      "key": "landuse",
+      "value": "built_up_area",
+      "distance": "3000"
+    },
+    {
+      "key": "leisure",
+      "distance": "500"
+    },
+    {
+      "key": "man_made",
+      "distance": "200"
+    },
+    {
+      "key": "natural",
+      "distance": "1000"
+    },
+    {
+      "key": "natural",
+      "value": "tree",
+      "distance": "5"
+    },
+    {
+      "key": "place",
+      "distance": "1000"
+    },
+    {
+      "key": "place",
+      "value": "built_up_area",
+      "distance": "3000"
+    },
+    {
+      "key": "place",
+      "value": "locality",
+      "distance": "3000"
+    },
+    {
+      "key": "place",
+      "value": "populated",
+      "distance": "3000"
+    },
+    {
+      "key": "place",
+      "value": "region",
+      "distance": "2000"
+    },
+    {
+      "key": "place",
+      "value": "village",
+      "distance": "3000"
+    },
+    {
+      "key": "power",
+      "distance": "50"
+    },
+    {
+      "key": "railway",
+      "distance": "500"
+    },
+    {
+      "key": "railway",
+      "value": "level_crossing",
+      "distance": "50"
+    },
+    {
+      "key": "railway",
+      "value": "station",
+      "distance": "1000"
+    },
+    {
+      "key": "shop",
+      "distance": "200"
+    },
+    {
+      "key": "sport",
+      "distance": "100"
+    },
+    {
+      "key": "station",
+      "distance": "200"
+    },
+    {
+      "key": "station",
+      "value": "light_rail",
+      "distance": "1000"
+    },
+    {
+      "key": "tourism",
+      "distance": "200"
+    },
+    {
+      "#": "Hotel campuses can be quite large.",
+      "key": "tourism",
+      "value": "hotel",
+      "distance": "400"
+    },
+    {
+      "key": "transport",
+      "value": "station",
+      "distance": "1000"
+    }
+  ]
+}

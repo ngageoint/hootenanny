@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_H
 #define TAGS_H
@@ -35,9 +35,9 @@
 #include <QHash>
 #include <QString>
 #include <QStringList>
+#include <QRegExp>
 
 // Standard
-// needed by some dev environments
 #include <stdint.h>
 #include <string>
 
@@ -67,8 +67,10 @@ public:
   static std::string className() { return "hoot::Tags"; }
   static QString uuidKey() { return "uuid"; }
 
-  Tags();
+  Tags() = default;
   Tags(const QString& key, const QString& value);
+  Tags(const QString& kvp);
+  virtual ~Tags() = default;
 
   void addNote(const QString& note);
 
@@ -211,6 +213,17 @@ public:
   bool dataOnlyEqual(const Tags& other) const;
 
   /**
+   * Determines if two sets of tags have the same information values
+   *
+   * This may have overlap with dataOnlyEqual, however the two have differences...worth looking
+   * into at some point.
+   *
+   * @param other tags to compare with
+   * @return true if both sets of tags have the same information values; false otherwise
+   */
+  bool hasSameNonMetadataTags(const Tags& other) const;
+
+  /**
    * Get a list of all non-'hoot::*' tags
    */
   QStringList getDataOnlyValues(const Tags& tags) const;
@@ -222,28 +235,56 @@ public:
   /**
    * Remove all tags with empty strings as values.
    */
-  void removeEmpty();
+  int removeEmpty();
 
   /**
-   * Removes all metadata tags (hoot::*)
+   * Removes all metadata tags (hoot::* and those identified in the schema)
+   *
+   * @return the number of tags removed
    */
-  void removeMetadata();
+  int removeMetadata();
 
-  // QHash::remove can be used for removal by key equal to.
+  // A single key removal can be done with the call to parent QHash::remove.
+
+  /**
+   * Removes all tags with keys exactly matching those in the input list
+   *
+   * @param keys the list of keys to remove
+   * @return the number of tags removed
+   */
+  int removeKeys(const QStringList& keys);
+
+  /**
+   * Removes any tag who's key matches the input regular expression
+   *
+   * @param regex regular expression to match
+   * @return the number of tags removed
+   */
+  int removeKey(const QRegExp& regex);
+
+  /**
+   * Removes all tags who's keys match the input regular expressions
+   *
+   * @param regexes regular expressions to match
+   * @return the number of tags removed
+   */
+  int removeKeys(const QList<QRegExp>& regexes);
 
   /**
    * Removes all tags with keys that contain the input substring
    *
    * @param tagKeySubstring a substring to match
+   * @return the number of tags removed
    */
-  void removeByTagKeyContains(const QString& tagKeySubstring);
+  int removeByTagKeyContains(const QString& tagKeySubstring);
 
   /**
    * Removes all tags with keys that start with the input substring
    *
    * @param tagKeySubstring a substring to match
+   * @return the number of tags removed
    */
-  void removeByTagKeyStartsWith(const QString& tagKeySubstring);
+  int removeByTagKeyStartsWith(const QString& tagKeySubstring);
 
   /**
    * Sets the area tag to either true (is an area element), or false (is not an area element)
@@ -299,6 +340,14 @@ public:
   QString toString() const;
 
   /**
+   * Returns true if the tags have the specified kvp
+   *
+   * @param kvp kvp to search for
+   * @return true if tags contain the kvp; false otherwise
+   */
+  bool hasKvp(const QString& kvp) const;
+
+  /**
    * Returns true if the tags have any key=value in the input list
    *
    * @param kvps kvps to search for
@@ -315,12 +364,27 @@ public:
   bool hasAnyKey(const QStringList& keys);
 
   /**
+   * Returns the first tag key found from an input list of keys
+   *
+   * @param keys tag keys to search for
+   * @return a non-empty string if any key in the list was found; otherwise an empty string
+   */
+  QString getFirstKey(const QStringList& keys) const;
+
+  /**
    * Converts a list of KVPs into tags
    *
    * @param kvps kvps to convert
    * @return a set of tags
    */
   static Tags kvpListToTags(const QStringList& kvps);
+
+  /**
+   * Returns the tags as key/value pair strings
+   *
+   * @return a list of key/value pairs
+   */
+  QStringList toKvps() const;
 
   /**
    * Converts a collection of schema vertices to tags
@@ -355,6 +419,52 @@ public:
    * @return a tag diff string
    */
   QString getDiffString(const Tags& other) const;
+
+  /**
+   * Determines if another set of tags intersects with this one
+   *
+   * @param other tags to compare against
+   * @return true if the tags being compared against have at least one tag in similar
+   */
+  bool intersects(const Tags& other) const;
+
+  /**
+   * Determines if two sets of tags contain a particular key/value pair
+   *
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @param kvp key/value pair to search for
+   * @return true if both sets of tags contain the key/value pair; false otherwise
+   */
+  static bool bothContainKvp(const Tags& tags1, const Tags& tags2, const QString& kvp);
+
+  /**
+   * Determines if either one of two sets of tags contain a particular key/value pair
+   *
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @param kvp key/value pair to search for
+   * @return true if exactly one of the sets of tags contain the key/value pair; false otherwise
+   */
+  static bool onlyOneContainsKvp(const Tags& tags1, const Tags& tags2, const QString& kvp);
+
+  /**
+   * Determines if two sets of tags contain non-metadata information
+   *
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @return true if both sets of tags contain non-metadata information; false otherwise
+   */
+  static bool bothHaveInformation(const Tags& tags1, const Tags& tags2);
+
+  /**
+   * Determines if one of two sets of tags contain non-metadata information
+   *
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @return true if exactly one of sets of tags contain non-metadata information; false otherwise
+   */
+  static bool onlyOneHasInformation(const Tags& tags1, const Tags& tags2);
 
 private:
 

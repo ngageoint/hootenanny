@@ -5,13 +5,11 @@
 
 The +generate-alpha-shape+ command provides a way to generate a "concave hull" for a set of points.  Specifically, it reads data from
 one input, calculates the alpha shape and writes the resulting multipolygon to output. This is most useful when seeding the
-+cookie-cut+ command.  The degree of the concaveness is determined by the alpha parameters. A small alpha parameter creates a
++cookie-cut+ command. The degree of the concaveness is determined by the alpha parameters. A small alpha parameter creates a
 shape with a large number of holes and concave sections. A large alpha value creates a shape closer to a convex hull. An alpha
 value equal to the maximum distance between any two points in the data or larger will create a convex hull. Additional details
-can be found in the _Cookie Cutter_ section of <<hootalgo, Hootenanny - Algorithms>>.
-
-There is a brief PowerPoint available on the subject
-https://insightcloud.digitalglobe.com/redmine/attachments/download/1144/Hootenanny%20-%20Alpha%20Shape%202013-03-07.pptx[here].
+can be found in the _Cookie Cutter_ section of <<hootalgo, Hootenanny - Algorithms>> and in the following documents:
+https://github.com/ngageoint/hootenanny/files/595246/Hootenanny.-.Alpha.Shape.2013-03-07.pptx[here].
 
 * +points+ - The input data to use for deriving the alpha shape; may be any supported input format (e.g. OSM file). The alpha shape algorithm 
              is used to derive a polygon representing the bounds.
@@ -42,7 +40,11 @@ hoot generate-alpha-shape CapitalHeightsBuildings.shp 200 0 CapitalHeightsShape.
 
 === See Also
 
-* `cookie.cutter.*` configuration options
+* https://github.com/ngageoint/hootenanny/files/595246/Hootenanny.-.Alpha.Shape.2013-03-07.pptx[Alpha Shape Presentation]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AlphaShape.asciidoc[Alpha Shape Documentation]
+* https://github.com/ngageoint/hootenanny/wiki/files/2010-B-01-AlphaShapes.pdf[Alpha Shape Research Paper]
 * _Horizontal Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+* _Cookie Cutter_ section of <<hootalgo, Hootenanny - Algorithms>>
+* `cookie.cutter.*` configuration options
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

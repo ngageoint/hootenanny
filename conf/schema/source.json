@@ -28,6 +28,16 @@
     },
     {
         "isA": "source",
+        "name": "source:datetime",
+        "objectType": "tag"
+    },
+    {
+        "isA": "source",
+        "name": "source:ingest:datetime",
+        "objectType": "tag"
+    },
+    {
+        "isA": "source",
         "name": "source:en",
         "objectType": "tag"
     },
@@ -49,6 +59,11 @@
         "description": "The sensor used to collect the source imagery.",
         "isA": "source",
         "name": "source:geometry:sensor",
+        "objectType": "tag"
+    },
+    {
+        "isA": "source",
+        "name": "source:imagery",
         "objectType": "tag"
     },
     {

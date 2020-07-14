@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ogr;
 
@@ -59,7 +59,7 @@ class ExtractAttributesCommand extends ExternalCommand {
 
         //Technically this command now works for all data source, not just OGR, so we could move this class and associated classes out of the
         //hoot.services.controllers.ogr namespace.
-        String command = "hoot tag-info --${DEBUG_LEVEL} --tag-values-limit 30 ${INPUT_FILES}";
+        String command = "hoot.bin tag-info --${DEBUG_LEVEL} --tag-values-limit 30 ${INPUT_FILES}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FEATUREEXTRACTORBASE_H
 #define FEATUREEXTRACTORBASE_H
@@ -34,8 +34,7 @@ namespace hoot
 {
 
 /**
- * Similar to Shape Distance as described in [1].
- * 1. Savary & Zeitouni, 2005
+ * Base class for feature extractors, which compare two feature and provide a metric score
  */
 class FeatureExtractorBase : public FeatureExtractor, public ApiEntityInfo
 {
@@ -43,21 +42,21 @@ public:
 
   static std::string className() { return "hoot::FeatureExtractorBase"; }
 
-  FeatureExtractorBase() {}
-  virtual ~FeatureExtractorBase() {}
+  FeatureExtractorBase() = default;
+  virtual ~FeatureExtractorBase() = default;
 
   static double nullValue() { return -999999999; }
 
   /**
    * Returns the factor type for this feature/factor (Nominal or Numeric).
    */
-  virtual Tgs::DataFrame::FactorType getFactorType() const override
+  Tgs::DataFrame::FactorType getFactorType() const override
   { return Tgs::DataFrame::Numerical; }
 
   /**
    * Returns the null treatment for this feature/factor (NullAsValue or NullAsMissingValue).
    */
-  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const override
+  Tgs::DataFrame::NullTreatment getNullTreatment() const override
   {
     return Tgs::DataFrame::NullAsMissingValue;
   }

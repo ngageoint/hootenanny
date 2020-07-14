@@ -51,10 +51,11 @@ public:
 
   static const QString MATCH_NAME;
 
-  BuildingMatch();
+  BuildingMatch() = default;
   BuildingMatch(const ConstMatchThresholdPtr& mt);
   BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
                 const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
+  virtual ~BuildingMatch() = default;
 
   virtual const MatchClassification& getClassification() const override { return _p; }
 
@@ -69,7 +70,9 @@ public:
   /**
    * Building matches never conflict other building matches, but conflict with everything else.
    */
-  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const override;
+  virtual bool isConflicting(
+    const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   /**
    * Simply returns the two elements that were matched.

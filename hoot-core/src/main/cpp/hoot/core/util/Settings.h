@@ -30,7 +30,7 @@
 
 // Qt
 #include <QHash>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 #include <QVariant>
@@ -154,14 +154,26 @@ public:
 
   int size() const { return _settings.size(); }
 
+  /**
+   * Replace individual list entries in the current value of a configuration option with new list
+   * entries
+   *
+   * @param settings settings configuration owning the list option to modify
+   * @param optionName name of the list option to modify
+   * @param listReplacementEntryValues list of value replacement entries of the form:
+   * "<old optionValueEntry 1>-><new optionValueEntry 1>;<old optionValueEntry 2>-><new optionValueEntry 2>..."
+   */
+  static void replaceListOptionEntryValues(Settings& settings, const QString& optionName,
+                                           const QStringList& listReplacementEntryValues);
+
 private:
 
   static std::shared_ptr<Settings> _theInstance;
   SettingsMap _settings;
   /// matches variables in the form ${My_Var_1}
-  QRegExp _dynamicRegex;
+  QRegularExpression _dynamicRegex;
   /// matches variables in the form $(My_Var_1)
-  QRegExp _staticRegex;
+  QRegularExpression _staticRegex;
 
   QString _markup(QString s) const
   {

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_JS_H
 #define TAGS_JS_H
 
 // hoot
 #include <hoot/core/elements/Node.h>
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
@@ -45,7 +45,7 @@ namespace hoot
  * way). At some point it may make sense to make all references to tags pointers, but that isn't
  * strictly necessary yet.
  */
-class TagsJs : public node::ObjectWrap
+class TagsJs : public HootBaseJs
 {
 public:
 
@@ -55,11 +55,11 @@ public:
 
   static v8::Handle<v8::Object> New(const Tags& t);
 
+  virtual ~TagsJs() = default;
+
 private:
 
-  TagsJs(ConstNodePtr n);
-  TagsJs();
-  ~TagsJs();
+  TagsJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

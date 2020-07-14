@@ -51,7 +51,7 @@ public:
 
   static string className() { return "hoot::CropCmd"; }
 
-  CropCmd() {}
+  CropCmd() = default;
 
   virtual QString getName() const override { return "crop"; }
 
@@ -82,7 +82,7 @@ public:
 
     IoUtils::saveMap(map, out);
 
-    LOG_INFO("Cropping completed in: " + StringUtils::millisecondsToDhms(timer.elapsed()) + ".");
+    LOG_STATUS("Map cropped in: " << StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
 
     return 0;
   }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RELATION_WITH_MOST_MEMBERS_OP_H
@@ -33,7 +33,6 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -44,14 +43,14 @@ namespace hoot
  * satisfying some other criterion. This is useful when you have a large map file from which you
  * want to find a single large relation meeting some specified criteria.
  */
-class RelationWithMostMembersOp : public OsmMapOperation, public Configurable,
-  public OperationStatusInfo
+class RelationWithMostMembersOp : public OsmMapOperation, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::RelationWithMostMembersOp"; }
 
   RelationWithMostMembersOp();
+  virtual ~RelationWithMostMembersOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -66,6 +65,8 @@ public:
   { return "Collecting relation info by criterion..."; }
 
   virtual QString getCompletedStatusMessage() const;
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

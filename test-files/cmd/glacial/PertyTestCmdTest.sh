@@ -6,7 +6,7 @@ mkdir -p $HOOT_HOME/test-output/cmd/glacial/RndPertyTestCmdTest
 infile=$HOOT_HOME/test-files/DcGisRoads.osm
 outdir=$HOOT_HOME/test-output/cmd/glacial/RndPertyTestCmdTest
 
-myCmd="hoot perty \
+myCmd="hoot perty -C Testing.conf \
         -D perty.test.num.runs=1 \
         -D perty.test.num.simulations=1 \
         -D perty.test.expected.scores=0.5 \

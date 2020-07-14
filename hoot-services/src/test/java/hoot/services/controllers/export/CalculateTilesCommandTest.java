@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -79,7 +79,7 @@ public class CalculateTilesCommandTest {
         assertNotNull(command.getWorkDir());
         assertNotNull(command.getCommand());
 
-        String expectedCommand = "hoot node-density-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
+        String expectedCommand = "hoot.bin node-density-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} --maxNodesPerTile ${MAX_NODE_COUNT_PER_TILE} --pixelSize ${PIXEL_SIZE}";
         assertEquals(expectedCommand, command.getCommand());
 
         assertTrue(command.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -137,7 +137,7 @@ public class CalculateTilesCommandTest {
         assertNotNull(command.getWorkDir());
         assertNotNull(command.getCommand());
 
-        String expectedCommand = "hoot node-density-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
+        String expectedCommand = "hoot.bin node-density-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
         assertEquals(expectedCommand, command.getCommand());
 
         assertTrue(command.getSubstitutionMap().containsKey("DEBUG_LEVEL"));

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REMOVEREF2VISITORMULTIPLECRITERION_H
@@ -47,8 +47,8 @@ public:
 
   static std::string className() { return "hoot::RemoveRef2VisitorMultipleCriterion"; }
 
-  RemoveRef2VisitorMultipleCriterion();
-  virtual ~RemoveRef2VisitorMultipleCriterion() {}
+  RemoveRef2VisitorMultipleCriterion() = default;
+  virtual ~RemoveRef2VisitorMultipleCriterion() = default;
 
   virtual void addCriterion(const ElementCriterionPtr& e) override;
 

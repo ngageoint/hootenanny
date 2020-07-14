@@ -106,9 +106,9 @@ public:
     inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
                            const WayMatchStringMerger::SublineMappingPtr &t2) const
     {
-        return
-          std::min(t1->getStart(_way), t1->getEnd(_way)) <
-          std::min(t2->getStart(_way), t2->getEnd(_way));
+      return
+        std::min(t1->getStart(_way), t1->getEnd(_way)) <
+        std::min(t2->getStart(_way), t2->getEnd(_way));
     }
 
   private:

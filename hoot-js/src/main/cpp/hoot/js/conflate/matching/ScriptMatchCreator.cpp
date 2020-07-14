@@ -46,6 +46,8 @@
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/elements/ElementConverter.h>
 
 // Qt
 #include <QFileInfo>
@@ -90,29 +92,41 @@ public:
     _mt(mt),
     _script(script),
     _filter(filter),
-    _customSearchRadius(-1.0)
+    _customSearchRadius(-1.0),
+    _neighborCountMax(-1),
+    _neighborCountSum(0),
+    _elementsEvaluated(0),
+    _maxGroupSize(0),
+    _numElementsVisited(0),
+    _numMatchCandidatesVisited(0),
+    _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+    _memoryCheckUpdateInterval(ConfigOptions().getMemoryUsageCheckerInterval()),
+    _totalElementsToProcess(0)
   {
-    _neighborCountMax = -1;
-    _neighborCountSum = 0;
-    _elementsEvaluated = 0;
-    _maxGroupSize = 0;
-    _numElementsVisited = 0;
-    _numMatchCandidatesVisited = 0;
-    _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
-
     // Calls to script functions/var are expensive, both memory-wise and processing-wise. Since this
-    // constructor gets called repeatedly by createMatch, keep them out of this constructor.
+    // constructor gets called repeatedly by createMatch, keep those calls out of this constructor.
 
-    // Point/Polygon is not meant to conflate any polygons that are conflatable by other conflation
-    // routines, hence the use of NonConflatableCriterion.
+    // Point/Polygon is not meant to conflate any polygons that are conflatable by other *specific*
+    // alg conflation routines (generic geometry algs should be ignored here), hence the use of
+    // NonConflatableCriterion.
+    std::shared_ptr<NonConflatableCriterion> nonConflatableCrit(new NonConflatableCriterion(map));
+    nonConflatableCrit->setIgnoreGenericConflators(true);
     _pointPolyCrit.reset(
-      new ChainCriterion(
-        ElementCriterionPtr(new PolygonCriterion()),
-        ElementCriterionPtr(new NonConflatableCriterion(map))));
+      new ChainCriterion(ElementCriterionPtr(new PolygonCriterion()), nonConflatableCrit));
+
+    _timer.start();
   }
 
-  ~ScriptMatchVisitor()
+  virtual ~ScriptMatchVisitor()
   {
+    //  Free the perisistent object
+    if (_mapJs.IsEmpty())
+      return;
+    Local<Object> mapJs(ToLocal(&_mapJs));
+    OsmMapJs* object = node::ObjectWrap::Unwrap<OsmMapJs>(mapJs);
+    _mapJs.ClearWeak();
+    _mapJs.Reset();
+    delete object;
   }
 
   void initSearchRadiusInfo()
@@ -147,6 +161,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -327,7 +342,10 @@ public:
 
   void calculateSearchRadius()
   {
-    // This is meant to run one time when the match creator is initialized.
+    // This is meant to run one time when the match creator is initialized. We're either getting
+    // the search radius from a predefined property linked to a config option in the conflate rules
+    // file or we're calculating it with a function call from the rules file. Either way, then we're
+    // caching it after the first retrieval.
 
     LOG_DEBUG("Checking for existence of search radius export for: " << _scriptPath << "...");
 
@@ -337,7 +355,7 @@ public:
 
     Persistent<Object> plugin(current, getPlugin(_script));
     Handle<String> initStr = String::NewFromUtf8(current, "calculateSearchRadius");
-    //optional method, so don't throw an error
+    // optional method, so don't throw an error
     if (ToLocal(&plugin)->Has(initStr) == false)
     {
       LOG_TRACE("calculateSearchRadius function not present.");
@@ -350,19 +368,19 @@ public:
       return;
     }
 
-    LOG_STATUS("Calculating search radius for: " << _scriptPath << "...");
+    LOG_DEBUG("Getting search radius for: " << _scriptPath << "...");
 
     Handle<Function> func = Handle<Function>::Cast(value);
     Handle<Value> jsArgs[1];
     int argc = 0;
-    HandleScope scope(current);  //  This extra one might not be needed
+    HandleScope scope(current);  // This extra one might not be needed
     assert(getMap().get());
     OsmMapPtr copiedMap(new OsmMap(getMap()));
     jsArgs[argc++] = OsmMapJs::create(copiedMap);
 
     func->Call(ToLocal(&plugin), argc, jsArgs);
 
-    //this is meant to have been set externally in a js rules file
+    // This could be an expensive call.
     _customSearchRadius =
       getNumber(
         ToLocal(&plugin), "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
@@ -382,7 +400,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating script feature index for: " << _scriptPath << "...");
+      LOG_STATUS("Creating script feature index for: " << _scriptPath << "...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -397,7 +415,8 @@ public:
 
       // Point/Polygon conflation behaves diferently than all other generic scripts in that it
       // conflates geometries of different types. This class wasn't really originally designed to
-      // handle that, so we add a logic path here to accommodate Point/Polygon.
+      // handle that, so we add a logic path here to accommodate it.
+      long numElementsIndexed = 0;
       if (!_scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME))
       {
         std::function<bool (ConstElementPtr)> f =
@@ -428,6 +447,7 @@ public:
             break;
         }
         v.finalizeIndex();
+        numElementsIndexed = v.getSize();
       }
       else
       {
@@ -440,10 +460,12 @@ public:
         getMap()->visitWaysRo(v);
         getMap()->visitRelationsRo(v);
         v.finalizeIndex();
+        numElementsIndexed = v.getSize();
       }
-      LOG_VART(_indexToEid.size());
 
-      LOG_DEBUG("Script feature index created for: " << _scriptPath << ".");
+      LOG_STATUS(
+        "Script feature index created for: " << _scriptPath << " with " <<
+        StringUtils::formatLargeNumber(numElementsIndexed) << " elements.");
     }
     return _index;
   }
@@ -502,60 +524,30 @@ public:
 
     bool result = false;
 
-    // Prioritize exports.matchCandidateCriterion over the isMatchCandidate function
-    // TODO: this is crashing; see #3047
-//    Handle<String> matchCandidateCriterionStrHandle =
-//      String::NewFromUtf8(current, "matchCandidateCriterion");
-//    QString matchCandidateCriterionStr;
-//    if (ToLocal(&plugin)->Has(matchCandidateCriterionStrHandle))
-//    {
-//      Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStrHandle);
-//      matchCandidateCriterionStr = toCpp<QString>(value);
-//    }
-//    matchCandidateCriterionStr = matchCandidateCriterionStr.trimmed();
-//    LOG_VART(matchCandidateCriterionStr);
+    // TODO: Prioritize exports.matchCandidateCriterion over the isMatchCandidate function and use
+    // the crit instead of the function; doing so causes this to crash; see #3047 and the history
+    // of this file for the failing code that needs to be re-enabled
 
-//    if (!matchCandidateCriterionStr.isEmpty())
-//    {
-//      std::shared_ptr<ElementCriterion> matchCandidateCriterion;
-//      if (_matchCandidateCriterionCache.contains(matchCandidateCriterionStr))
-//      {
-//        LOG_TRACE("Getting " << matchCandidateCriterionStr << " from cache...");
-//        matchCandidateCriterion = _matchCandidateCriterionCache[matchCandidateCriterionStr];
-//      }
-//      else
-//      {
-//        LOG_TRACE("Creating " << matchCandidateCriterionStr << "...");
-//        matchCandidateCriterion.reset(
-//          Factory::getInstance().constructObject<ElementCriterion>(matchCandidateCriterionStr));
-//        _matchCandidateCriterionCache[matchCandidateCriterionStr] = matchCandidateCriterion;
-//      }
-//      result = matchCandidateCriterion->isSatisfied(e);
-//      LOG_VART(result);
-//    }
-//    else
-//    {
-      Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
-      if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
-      {
-        throw HootException("Error finding 'isMatchCandidate' function.");
-      }
-      Handle<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
-      if (value->IsFunction() == false)
-      {
-        throw HootException("isMatchCandidate is not a function.");
-      }
-      Handle<Function> func = Handle<Function>::Cast(value);
-      Handle<Value> jsArgs[2];
+    Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
+    if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
+    {
+      throw HootException("Error finding 'isMatchCandidate' function.");
+    }
+    Handle<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
+    if (value->IsFunction() == false)
+    {
+      throw HootException("isMatchCandidate is not a function.");
+    }
+    Handle<Function> func = Handle<Function>::Cast(value);
+    Handle<Value> jsArgs[2];
 
-      int argc = 0;
-      jsArgs[argc++] = getOsmMapJs();
-      jsArgs[argc++] = ElementJs::New(e);
+    int argc = 0;
+    jsArgs[argc++] = getOsmMapJs();
+    jsArgs[argc++] = ElementJs::New(e);
 
-      Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
+    Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
 
-      result = f->BooleanValue();
-    //}
+    result = f->BooleanValue();
 
     _matchCandidateCache[e->getElementId()] = result;
 
@@ -573,16 +565,32 @@ public:
       {
         PROGRESS_DEBUG(
           "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
-          " match candidates / " << StringUtils::formatLargeNumber(getMap()->getElementCount()) <<
+          " match candidates / " << StringUtils::formatLargeNumber(_totalElementsToProcess) <<
           " total elements.");
       }
     }
+
+    // if matching gets slow, throttle the log update interval accordingly.
+    if (_timer.elapsed() > 3000 && _taskStatusUpdateInterval >= 10)
+    {
+      _taskStatusUpdateInterval /= 10;
+    }
+    else if (_timer.elapsed() < 250 && _taskStatusUpdateInterval < 10000)
+    {
+      _taskStatusUpdateInterval *= 10;
+    }
+
     _numElementsVisited++;
-    if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
+    if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
-        StringUtils::formatLargeNumber(getMap()->getElementCount()) << " elements.");
+        StringUtils::formatLargeNumber(_totalElementsToProcess) << " elements.");
+       _timer.restart();
+    }
+    if (_numElementsVisited % _memoryCheckUpdateInterval == 0)
+    {
+      MemoryUsageChecker::getInstance().check();
     }
   }
 
@@ -596,7 +604,34 @@ public:
   void setCandidateDistanceSigma(double sigma) { _candidateDistanceSigma = sigma; }
 
   CreatorDescription getCreatorDescription() const { return _scriptInfo; }
-  void setCreatorDescription(const CreatorDescription& description) { _scriptInfo = description; }
+  void setCreatorDescription(const CreatorDescription& description)
+  {
+    _scriptInfo = description;
+
+    if (_scriptPath.toLower().contains("relation")) // hack
+    {
+      _totalElementsToProcess = getMap()->getRelationCount();
+    }
+    else
+    {
+      switch (_scriptInfo.geometryType)
+      {
+        case GeometryTypeCriterion::GeometryType::Point:
+          _totalElementsToProcess = getMap()->getNodeCount();
+          break;
+        case GeometryTypeCriterion::GeometryType::Line:
+          _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
+          break;
+        case GeometryTypeCriterion::GeometryType::Polygon:
+          _totalElementsToProcess = getMap()->getWayCount() + getMap()->getRelationCount();
+          break;
+        default:
+          // visit all geometry types if the script didn't identify its geometry
+          _totalElementsToProcess = getMap()->size();
+          break;
+      }
+    }
+  }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
@@ -607,17 +642,38 @@ private:
   // don't hold on to the map.
   std::weak_ptr<const OsmMap> _map;
   Persistent<Object> _mapJs;
+
   vector<ConstMatchPtr>& _result;
-  set<ElementId> _empty;
+  ConstMatchThresholdPtr _mt;
+
+  std::shared_ptr<PluginContext> _script;
+
+  ElementCriterionPtr _filter;
+
+  // used for automatic search radius calculation; it is expected that this is set from the
+  // Javascript rules file used for the generic conflation
+  double _customSearchRadius;
+
   int _neighborCountMax;
   int _neighborCountSum;
-  long _elementCount;
   int _elementsEvaluated;
   size_t _maxGroupSize;
-  ConstMatchThresholdPtr _mt;
-  std::shared_ptr<PluginContext> _script;
+  long _numElementsVisited;
+  long _numMatchCandidatesVisited;
+
+  int _taskStatusUpdateInterval;
+  int _memoryCheckUpdateInterval;
+
+  long _totalElementsToProcess;
+
+  std::shared_ptr<ChainCriterion> _pointPolyCrit;
+
+  QElapsedTimer _timer;
+
+  long _elementCount;
+
   CreatorDescription _scriptInfo;
-  ElementCriterionPtr _filter;
+
   Persistent<Function> _getSearchRadius;
 
   QHash<ElementId, bool> _matchCandidateCache;
@@ -629,26 +685,11 @@ private:
   deque<ElementId> _indexToEid;
 
   double _candidateDistanceSigma;
-  //used for automatic search radius calculation; it is expected that this is set from the
-  //Javascript rules file used for the generic conflation
-  double _customSearchRadius;
+
   QString _scriptPath;
 
-  long _numElementsVisited;
-  long _numMatchCandidatesVisited;
-  int _taskStatusUpdateInterval;
-
-  std::shared_ptr<ChainCriterion> _pointPolyCrit;
+  set<ElementId> _empty;
 };
-
-ScriptMatchCreator::ScriptMatchCreator()
-{
-  _cachedScriptVisitor.reset();
-}
-
-ScriptMatchCreator::~ScriptMatchCreator()
-{
-}
 
 void ScriptMatchCreator::init(const ConstOsmMapPtr& map)
 {
@@ -677,6 +718,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   //bit of a hack...see MatchCreator.h...need to refactor
   _description = QString::fromStdString(className()) + "," + args[0];
   _cachedScriptVisitor.reset();
+  _scriptInfo = _getScriptDescription(_scriptPath);
 
   LOG_DEBUG(
     "Set arguments for: " << className() << " - rules: " << QFileInfo(_scriptPath).fileName());
@@ -756,9 +798,8 @@ void ScriptMatchCreator::createMatches(
 
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
-  const CreatorDescription scriptInfo = _getScriptDescription(_scriptPath);
-  _descriptionCache[_scriptPath] = scriptInfo;
-  v.setCreatorDescription(scriptInfo);
+  _descriptionCache[_scriptPath] = _scriptInfo;
+  v.setCreatorDescription(_scriptInfo);
   v.initSearchRadiusInfo();
   v.calculateSearchRadius();
 
@@ -781,36 +822,43 @@ void ScriptMatchCreator::createMatches(
       "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
   }
   LOG_STATUS(
-    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << " " <<
-     searchRadiusStr << "...");
+    "Looking for matches with: " << scriptFileInfo.fileName() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
   const int matchesSizeBefore = matches.size();
 
   _cachedCustomSearchRadii[_scriptPath] = searchRadius;
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
-  LOG_VARD(GeometryTypeCriterion::typeToString(scriptInfo.geometryType));
-  switch (scriptInfo.geometryType)
+  LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.geometryType));
+  if (scriptFileInfo.fileName().toLower().contains("relation")) // hack
   {
-    case GeometryTypeCriterion::GeometryType::Point:
-      map->visitNodesRo(v);
-      break;
-    case GeometryTypeCriterion::GeometryType::Line:
-      map->visitWaysRo(v);
-      map->visitRelationsRo(v);
-      break;
-    case GeometryTypeCriterion::GeometryType::Polygon:
-      map->visitWaysRo(v);
-      map->visitRelationsRo(v);
-      break;
-    default:
-      // visit all geometry types if the script didn't identify its geometry
-      map->visitRo(v);
-      break;
+    map->visitRelationsRo(v);
   }
+  else
+  {
+    switch (_scriptInfo.geometryType)
+    {
+      case GeometryTypeCriterion::GeometryType::Point:
+        map->visitNodesRo(v);
+        break;
+      case GeometryTypeCriterion::GeometryType::Line:
+        map->visitWaysRo(v);
+        map->visitRelationsRo(v);
+        break;
+      case GeometryTypeCriterion::GeometryType::Polygon:
+        map->visitWaysRo(v);
+        map->visitRelationsRo(v);
+        break;
+      default:
+        // visit all geometry types if the script didn't identify its geometry
+        map->visitRo(v);
+        break;
+    }
+  }
+
   const int matchesSizeAfter = matches.size();
 
-  QString matchType = CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType);
+  QString matchType = CreatorDescription::baseFeatureTypeToString(_scriptInfo.baseFeatureType);
   // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
   // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
   if (_scriptPath.contains(POINT_POLYGON_SCRIPT_NAME))
@@ -949,6 +997,24 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     Handle<Value> value = ToLocal(&plugin)->Get(geometryTypeStr);
     result.geometryType = GeometryTypeCriterion::typeFromString(toCpp<QString>(value));
   }
+  // This controls which feature types a script conflates and is required. It allows for disabling
+  // superfluous conflate ops. It should probably be integrated with isMatchCandidate somehow at
+  // some point, if possible.
+  Handle<String> matchCandidateCriterionStr =
+    String::NewFromUtf8(current, "matchCandidateCriterion");
+  if (ToLocal(&plugin)->Has(matchCandidateCriterionStr))
+  {
+    Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStr);
+    const QString valueStr = toCpp<QString>(value);
+    if (valueStr.contains(";"))
+    {
+      result.matchCandidateCriteria = valueStr.split(";");
+    }
+    else
+    {
+      result.matchCandidateCriteria = QStringList(valueStr);
+    }
+  }
 
   QFileInfo fi(path);
   result.className = (QString::fromStdString(className()) + "," + fi.fileName()).toStdString();
@@ -1009,6 +1075,11 @@ QString ScriptMatchCreator::getName() const
 {
   QFileInfo scriptFileInfo(_scriptPath);
   return QString::fromStdString(className()) + ";" + scriptFileInfo.fileName();
+}
+
+QStringList ScriptMatchCreator::getCriteria() const
+{
+  return _scriptInfo.matchCandidateCriteria;
 }
 
 }

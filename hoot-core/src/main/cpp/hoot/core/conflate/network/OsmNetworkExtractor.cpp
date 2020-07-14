@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmNetworkExtractor.h"
 
@@ -45,7 +45,8 @@ class OsmNetworkExtractorVisitor : public ConstElementVisitor
 {
 public:
 
-  OsmNetworkExtractorVisitor(OsmNetworkExtractor& parent) : _parent(parent) {}
+  OsmNetworkExtractorVisitor(OsmNetworkExtractor& parent) : _parent(parent) { }
+  virtual ~OsmNetworkExtractorVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -53,15 +54,12 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
 private:
 
   OsmNetworkExtractor& _parent;
 };
-
-OsmNetworkExtractor::OsmNetworkExtractor()
-{
-}
 
 void OsmNetworkExtractor::_addEdge(ConstElementPtr from, ConstElementPtr to,
   QList<ConstElementPtr> members, bool directed)
@@ -193,8 +191,8 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
       {
         const vector<RelationData::Entry>& members = r->getMembers();
         from = ElementId::node(_map->getWay(members[0].getElementId())->getFirstNodeId());
-        to = ElementId::node(_map->getWay(members[members.size() - 1].getElementId())->
-          getLastNodeId());
+        to =
+          ElementId::node(_map->getWay(members[members.size() - 1].getElementId())->getLastNodeId());
       }
       // if this is a bad multi-linestring then don't include it in the network.
       else

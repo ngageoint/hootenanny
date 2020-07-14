@@ -22,14 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-//  Hoot
-#include <hoot/core/algorithms/WayJoiner.h>
-#include <hoot/core/util/Factory.h>
-
 #include "WayJoinerOp.h"
+
+//  Hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 namespace hoot
 {
@@ -51,6 +52,14 @@ void WayJoinerOp::setConfiguration(const Settings& conf)
 void WayJoinerOp::apply(OsmMapPtr& map)
 {
   _wayJoiner->join(map);
+}
+
+QStringList WayJoinerOp::getCriteria() const
+{
+  QStringList criteria;
+  criteria.append(QString::fromStdString(LinearCriterion::className()));
+  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  return criteria;
 }
 
 }

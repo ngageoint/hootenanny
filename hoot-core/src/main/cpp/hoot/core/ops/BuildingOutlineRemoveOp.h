@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGOUTLINEREMOVEOP_H
 #define BUILDINGOUTLINEREMOVEOP_H
@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 // Standard
 #include <set>
@@ -43,14 +43,14 @@ class Relation;
 /**
  * Goes through all building relations and removes features with the outline role.
  */
-class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable,
-  public OperationStatusInfo
+class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable
 {
 public:
 
   static std::string className() { return "hoot::BuildingOutlineRemoveOp"; }
 
-  BuildingOutlineRemoveOp();
+  BuildingOutlineRemoveOp() = default;
+  virtual ~BuildingOutlineRemoveOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -66,6 +66,12 @@ public:
   { return "Removed " + QString::number(_numAffected) + " building outlines"; }
 
   virtual QString getDescription() const override { return "Removes the outline around buildings"; }
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const
+  { return QStringList(QString::fromStdString(BuildingCriterion::className())); }
 
 private:
 

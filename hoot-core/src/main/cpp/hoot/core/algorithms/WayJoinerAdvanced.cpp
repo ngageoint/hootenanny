@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayJoinerAdvanced.h"
@@ -34,7 +34,8 @@
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/conflate/highway/HighwayUtils.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -43,6 +44,7 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/StringUtils.h>
 
 #include <unordered_set>
 #include <vector>
@@ -81,9 +83,10 @@ void WayJoinerAdvanced::join(const OsmMapPtr& map)
 
 void WayJoinerAdvanced::_joinParentChild()
 {
-  LOG_TRACE("Joining parents to children...");
+  LOG_INFO("\tJoining parent ways to children...");
 
   WayMap ways = _map->getWays();
+  _totalWays = ways.size();
   vector<long> ids;
   //  Find all ways that have a split parent id
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
@@ -125,7 +128,7 @@ void WayJoinerAdvanced::_joinParentChild()
 
     // don't try to join if there are explicitly conflicting names; fix for #2888
     Tags wayTags = way->getTags();
-    // TODO: use OsmUtils::nameConflictExists here instead
+    // TODO: use TagUtils::nameConflictExists here instead
     const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
     if (parent && parentTags.hasName() && wayTags.hasName() &&
         !Tags::haveMatchingName(parentTags, wayTags, strictNameMatch))
@@ -142,6 +145,13 @@ void WayJoinerAdvanced::_joinParentChild()
       _callingMethod = "_joinParentChild";
       _joinWays(parent, way);
     }
+
+    if (_numProcessed % (_taskStatusUpdateInterval / 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
+        StringUtils::formatLargeNumber(_totalWays) << " total ways.");
+    }
   }
 }
 
@@ -157,7 +167,7 @@ long WayJoinerAdvanced::_getPid(const ConstWayPtr& way) const
 
 void WayJoinerAdvanced::_joinAtNode()
 {
-  LOG_TRACE("Joining ways at node...");
+  LOG_TRACE("\tJoining ways at node...");
 
   unordered_set<long> ids;
   unordered_set<long>::size_type currentNumSplitParentIds = ids.max_size();
@@ -208,6 +218,9 @@ void WayJoinerAdvanced::_joinAtNode()
       WayPtr way = ways[*it];
       LOG_VART(way->getElementId());
 
+      if (way->getNodeCount() < 1)
+        continue;
+
       Tags pTags = way->getTags();
       // Ignoring length here during the parent/child tag equals check, since differing values in
       // that field can cause us to miss a way join.  We'll add that value up after joining the
@@ -245,7 +258,7 @@ void WayJoinerAdvanced::_joinAtNode()
             // don't try to join if there are explicitly conflicting names; fix for #2888
             const bool parentHasName = pTags.hasName();
             const bool childHasName = cTags.hasName();
-            // TODO: use OsmUtils::nameConflictExists here instead
+            // TODO: use TagUtils::nameConflictExists here instead
             const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
             if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
                 Tags::haveMatchingName(pTags, cTags, strictNameMatch))
@@ -265,6 +278,13 @@ void WayJoinerAdvanced::_joinAtNode()
           }
         }
       }
+
+      if (_numProcessed % (_taskStatusUpdateInterval / 10) == 0)
+      {
+        PROGRESS_INFO(
+          "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
+          StringUtils::formatLargeNumber(_totalWays) << " total ways.");
+      }
     }
     numIterations++;
   }
@@ -274,7 +294,7 @@ void WayJoinerAdvanced::_joinAtNode()
 
 void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
 {
-  LOG_TRACE("Rejoining siblings...");
+  LOG_TRACE("\tRejoining siblings...");
   LOG_VART(way_ids);
 
   WayMap ways = _map->getWays();
@@ -398,7 +418,7 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
       }
       const Tags parentTags = parent->getTags();
       const bool parentHasName = parentTags.hasName();
-      // TODO: use OsmUtils::nameConflictExists here instead
+      // TODO: use TagUtils::nameConflictExists here instead
       const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
       if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
           Tags::haveMatchingName(parentTags, childTags, strictNameMatch))
@@ -423,6 +443,8 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
 
 bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
 {
+  _numProcessed++;
+
   if (!parent || !child)
     return false;
 
@@ -511,7 +533,8 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   std::vector<ConstElementPtr> elements;
   elements.push_back(wayWithTagsToKeep);
   elements.push_back(wayWithTagsToLose);
-  const bool onlyOneIsABridge = OsmUtils::isSatisfied<BridgeCriterion>(elements, 1, true);
+  const bool onlyOneIsABridge =
+    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, 1, true);
   if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
       onlyOneIsABridge)
   {
@@ -522,7 +545,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
 
   // don't try to join streets with conflicting one way info
-  if (OsmUtils::oneWayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
+  if (HighwayUtils::oneWayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_TRACE(
       "Conflicting one way street tags between " << wayWithIdToKeep->getElementId() << " and " <<
@@ -533,7 +556,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   // If two roads disagree in highway type and aren't generic, don't join back up.
   HighwayCriterion highwayCrit(_map);
   if (highwayCrit.isSatisfied(wayWithTagsToKeep) && highwayCrit.isSatisfied(wayWithTagsToLose) &&
-      OsmUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
+      HighwayUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_TRACE(
       "Conflicting highway type tags between " << wayWithIdToKeep->getElementId() << " and " <<
@@ -673,6 +696,13 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
           }
         }
       }
+    }
+
+    if (_numProcessed % (_taskStatusUpdateInterval / 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tRejoined " << StringUtils::formatLargeNumber(_numJoined) << " pairs of ways / " <<
+        StringUtils::formatLargeNumber(_totalWays) << " total ways.");
     }
   }
   LOG_TRACE(

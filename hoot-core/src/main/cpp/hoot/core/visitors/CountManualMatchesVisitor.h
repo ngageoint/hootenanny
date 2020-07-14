@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COUNTMANUALMATCHESVISITOR_H
 #define COUNTMANUALMATCHESVISITOR_H
@@ -46,15 +46,17 @@ public:
 
   static std::string className() { return "hoot::CountManualMatchesVisitor"; }
 
-  CountManualMatchesVisitor();
+  CountManualMatchesVisitor() : _numManualMatches(0) { }
 
-  virtual ~CountManualMatchesVisitor() {}
+  virtual ~CountManualMatchesVisitor() = default;
 
   double getStat() const { return _numManualMatches; }
 
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Counts manual matches"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

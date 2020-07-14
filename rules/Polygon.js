@@ -6,19 +6,24 @@
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches polygons";
+
 // This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
 // If that ever changes, then the generic score threshold configuration options used below should 
 // be replaced with custom score threshold configuration options.
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.polygon"));
 exports.tagThreshold = parseFloat(hoot.get("generic.polygon.tag.threshold"));
 exports.experimental = false;
 exports.baseFeatureType = "Polygon";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "polygon";
-exports.matchCandidateCriterion = "hoot::PolygonCriterion"; // See #3047
+
+// This is needed for disabling superfluous conflate ops. In the future, it may also
+// be used to replace exports.isMatchCandidate (see #3047).
+exports.matchCandidateCriterion = "hoot::PolygonCriterion";
 
 var overlapExtractor = 
   new hoot.SmallerOverlapExtractor({ "convert.require.area.for.polygon": "false" });
@@ -27,13 +32,21 @@ var overlapExtractor =
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
- *
- * exports.matchCandidateCriterion takes precedence over this function and must
- * be commented out before using it.
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPolygon(e) && !isSpecificallyConflatable(map, e);
+  // If the poly is generic but part of a building relation we want Building Conflation to handle 
+  // it instead.
+  if (isMemberOfRelationInCategory(map, e.getElementId(), "building"))
+  {
+    return false;
+  }
+
+  //hoot.trace("e: " + e.getId());
+  //hoot.trace("isPolygon(e): " + isPolygon(e));
+  //hoot.trace("isSpecificallyConflatable(map, e, exports.geometryType): " + isSpecificallyConflatable(map, e, exports.geometryType));
+
+  return isPolygon(e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**
@@ -78,14 +91,16 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
 
-  var typeScore = getTypeScore(map, e1, e2);
-  var typeScorePassesThreshold = false;
-  if (typeScore >= exports.tagThreshold)
-  {
-    typeScorePassesThreshold = true;
-  }
-  hoot.trace("typeScore: " + typeScore);
+  // TODO: Should we do anything with names?
+
+  // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
+  // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
+  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.tagThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
+  if (!typeScorePassesThreshold)
+  {
+    return result;
+  }
 
   // These geometry rules were derived by using training data in Weka with the
   // REPTree model w/ maxDepth set to 3. Note: This was taken directly from Building.js.

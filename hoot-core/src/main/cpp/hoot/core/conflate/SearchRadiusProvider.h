@@ -40,7 +40,8 @@ class SearchRadiusProvider
 {
 public:
 
-  ~SearchRadiusProvider() {}
+  SearchRadiusProvider() = default;
+  virtual ~SearchRadiusProvider() = default;
 
   /**
    * Optional init

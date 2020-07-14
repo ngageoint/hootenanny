@@ -44,6 +44,10 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 
+// Qt
+#include <QFileInfo>
+#include <QElapsedTimer>
+
 namespace hoot
 {
 
@@ -66,6 +70,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() < 1 || args.size() > 3)
     {
       LOG_VAR(args);
@@ -84,6 +91,15 @@ public:
 
     const QStringList inputs = args[0].trimmed().split(";");
     LOG_VART(inputs.size());
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      const QString input = inputs.at(i);
+      QFileInfo fileInfo(input);
+      if (!fileInfo.exists())
+      {
+        throw IllegalArgumentException("Input file does not exist: " + input);
+      }
+    }
 
     QString criterionClassName = "";
     if (args.size() > 1)
@@ -105,7 +121,7 @@ public:
       for (int i = 0; i < inputs.size(); i++)
       {
         LOG_INFO(
-          "Counting " << dataType << " satisfying " << criterionClassName << " from " <<
+          "Counting " << dataType << " satisfying " << criterionClassName << " from ..." <<
           inputs.at(i).right(25) << "...");
         _total += _countStreaming(inputs.at(i), countFeaturesOnly, crit);
       }
@@ -115,10 +131,17 @@ public:
       _total += _countMemoryBound(inputs, countFeaturesOnly, crit);
     }
 
-    LOG_VART(_total);
+    LOG_STATUS(
+      "Features counted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     //putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
-    std::cout << std::endl << "Total: " << StringUtils::formatLargeNumber(_total) << std::endl;
+    QString displayStr = "Total count ";
+    if (!criterionClassName.isEmpty())
+    {
+      displayStr += "(" + criterionClassName + ")";
+    }
+    displayStr += ": " + StringUtils::formatLargeNumber(_total);
+    std::cout << std::endl << displayStr << std::endl;
 
     return 0;
   }
@@ -283,7 +306,6 @@ private:
       std::dynamic_pointer_cast<SingleStatistic>(countVis);
     LOG_VART(counter.get());
 
-    LOG_TRACE("Counting...");
     while (filteredInputStream->hasMoreElements())
     {
       /*ConstElementPtr element = */filteredInputStream->readNextElement();
@@ -298,12 +320,15 @@ private:
         QString msg = "Counted " + StringUtils::formatLargeNumber(runningTotal);
         if (countFeaturesOnly)
         {
-          msg += " features.";
+          msg += " features";
         }
         else
         {
-          msg += " elements.";
+          msg += " elements";
         }
+        msg += " total.";
+        // TODO: We could do a sliding interval here, like we do for poi/poly match counting. Would
+        // help give better status for datasets with sparser number of features satisfying the crit.
         PROGRESS_INFO(msg);
       }
     }

@@ -36,6 +36,7 @@ import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
 import static hoot.services.models.db.QUsers.users;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,6 +44,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -56,7 +58,6 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 
-import com.querydsl.sql.dml.SQLUpdateClause;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -76,6 +77,7 @@ import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
+import com.querydsl.sql.dml.SQLUpdateClause;
 import com.querydsl.sql.namemapping.PreConfiguredNameMapping;
 import com.querydsl.sql.spring.SpringConnectionProvider;
 import com.querydsl.sql.spring.SpringExceptionTranslator;
@@ -202,19 +204,22 @@ public class DbUtils {
         return createQuery()
                 .select(jobStatus.resourceId)
                 .from(jobStatus)
-                .where(jobStatus.jobId.eq(jobId)).fetchOne();
+                .where(jobStatus.jobId.eq(jobId))
+                .fetchOne();
     }
 
     /**
-     * Gets the job type for the specified jobId
-     * @param jobId
-     * @return
+     * Gets the job id using the map id
+     *
+     * @param mapId map id which was created from a job
+     * @return job id
      */
-    public static Integer getJobTypeByJobId(String jobId) {
+    public static String getJobIdByMapId(Long mapId) {
         return createQuery()
-                .select(jobStatus.jobType)
-                .from(jobStatus)
-                .where(jobStatus.jobId.eq(jobId)).fetchOne();
+            .select(jobStatus.jobId)
+            .from(jobStatus)
+            .where(jobStatus.resourceId.eq(mapId))
+            .fetchOne();
     }
 
     /**
@@ -820,31 +825,6 @@ NOT EXISTS
         return -1;
     }
 
-    // Gets tags column from job status table for specified job id row
-    public static Map<String, String> getJobTags(String jobId) {
-        Map<String, String> tags = new HashMap<>();
-
-        List<Object> results = createQuery()
-                .select(jobStatus.tags)
-                .from(jobStatus)
-                .where(jobStatus.jobId.eq(jobId))
-                .fetch();
-
-        if (!results.isEmpty()) {
-            Object oTag = results.get(0);
-            tags = PostgresUtils.postgresObjToHStore(oTag);
-        }
-
-        return tags;
-    }
-
-    // Returns the parentId for the specified jobId job
-    public static String getParentId(String jobId) {
-        Map<String, String> tags = getJobTags(jobId);
-
-        return tags.get("parentId");
-    }
-
     // Sets the specified job to a status detail of stale and recurses up to the parent jobs to do the same
     public static void setStale(String jobId) {
         // Find the job
@@ -861,20 +841,41 @@ NOT EXISTS
                 .set(jobStatus.statusDetail, "STALE")
                 .execute();
 
-            String parentId = getParentId(jobId);
-            // If it has a parent, make the parent stale too
-            if(parentId != null) {
-                setStale(parentId);
+            Map<String, String> tags = PostgresUtils.postgresObjToHStore(job.getTags());
+
+            String parentId = tags.get("parentId");
+            if (parentId != null) {
+                ArrayList<String> parentIds = new ArrayList<>(Arrays.asList(parentId.split(",")));
+
+                // If it has parent(s), make the parent(s) stale too
+                for(String id : parentIds) {
+                    if (id != null) {
+                        setStale(id);
+                    }
+                }
             }
         }
     }
+
+    private static final FilenameFilter filter = new FilenameFilter() {
+        @Override
+        public boolean accept(File f, String name) {
+            // We want to find only OsmApiWriter*.osc files
+            return name.startsWith("OsmApiWriter") && name.endsWith(".osc");
+        }
+    };
 
     // Sets the specified upload changeset job to a status detail of CONFLICTS
     // if a diff-error.osc file is present in the parent job workspace
     public static void checkConflicted(String jobId, String parentId) {
         File workDir = new File(CHANGESETS_FOLDER, parentId);
         File diffError = new File(workDir, "diff-error.osc");
-        if (diffError.exists()) {
+        File diffRemaining = new File(workDir, "diff-remaining.osc");
+        File[] diffDebugfiles = workDir.listFiles(filter);
+        if (diffError.exists()
+                || diffRemaining.exists()
+                || diffDebugfiles.length > 0
+                ) {
             // Find the job
             JobStatus job = createQuery()
                     .select(jobStatus)

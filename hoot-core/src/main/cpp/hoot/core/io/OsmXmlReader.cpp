@@ -31,7 +31,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/IoUtils.h>
@@ -76,6 +76,7 @@ _wayId(0),
 _relationId(0),
 _inputCompressed(false),
 _addChildRefsWhenMissing(false),
+_logWarningsForMissingElements(true),
 _numRead(0),
 _statusUpdateInterval(1000),
 _keepImmediatelyConnectedWaysOutsideBounds(false)
@@ -91,18 +92,30 @@ OsmXmlReader::~OsmXmlReader()
 void OsmXmlReader::setConfiguration(const Settings& conf)
 {
   PartialOsmMapReader::setConfiguration(conf);
+
   ConfigOptions configOptions(conf);
   setDefaultAccuracy(configOptions.getCircularErrorDefaultValue());
   setKeepStatusTag(configOptions.getReaderKeepStatusTag());
   setUseFileStatus(configOptions.getReaderUseFileStatus()),
   setAddSourceDateTime(configOptions.getReaderAddSourceDatetime());
   setPreserveAllTags(configOptions.getReaderPreserveAllTags());
-  setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
   setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
+  // If a bounds was set and we don't want to remove missing elements as a result of cropping, we
+  // need to modify the reader to allow reading in the missing refs.
+  if (!_bounds.isNull() && !configOptions.getConvertBoundingBoxRemoveMissingElements())
+  {
+    setAddChildRefsWhenMissing(true);
+  }
+  else
+  {
+    setAddChildRefsWhenMissing(configOptions.getMapReaderAddChildRefsWhenMissing());
+  }
   setKeepImmediatelyConnectedWaysOutsideBounds(
     configOptions.getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
   setWarnOnVersionZeroElement(configOptions.getReaderWarnOnZeroVersionElement());
+  setLogWarningsForMissingElements(configOptions.getLogWarningsForMissingElements());
+  setCircularErrorTagKeys(configOptions.getCircularErrorTagKeys());
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
@@ -149,8 +162,8 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
   double x = _parseDouble(attributes.value("lon"));
   double y = _parseDouble(attributes.value("lat"));
 
-  // check the next 3 attributes to see if a value exists, if not, assign a default since these
-  // are not officially required by the DTD
+  // Check the next 3 attributes to see if a value exists, if not, assign a default since these
+  // are not officially required by the DTD.
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
   {
@@ -164,7 +177,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
   unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
   if (attributes.value("timestamp") != "")
   {
-    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+    timestamp = DateTimeUtils::fromTimeString(attributes.value("timestamp"));
   }
   QString user = ElementData::USER_EMPTY;
   if (attributes.value("user") != "")
@@ -246,7 +259,7 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
   unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
   if (attributes.value("timestamp") != "")
   {
-    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+    timestamp = DateTimeUtils::fromTimeString(attributes.value("timestamp"));
   }
   QString user = ElementData::USER_EMPTY;
   if (attributes.value("user") != "")
@@ -315,7 +328,7 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
   unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
   if (attributes.value("timestamp") != "")
   {
-    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+    timestamp = DateTimeUtils::fromTimeString(attributes.value("timestamp"));
   }
   QString user = ElementData::USER_EMPTY;
   if (attributes.value("user") != "")
@@ -406,10 +419,9 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
-  //  Reusing the reader for multiple files has two options, the first is the
-  //  default where the reader is reset and duplicates error out.  The second
-  //  is where duplicates are ignored in the same file and across files so the
-  //  ID maps aren't reset
+  // Reusing the reader for multiple files has two options, the first is the default where the
+  // reader is reset and duplicates error out.  The second is where duplicates are ignored in the
+  // same file and across files so the ID maps aren't reset.
   if (!_ignoreDuplicates)
   {
     _nodeIdMap.clear();
@@ -459,7 +471,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 
-  // Should we be using RemoveMissingElementsVisitor here instead?
+  // If cropping was run with missing element being removed, then this shouldn't be necessary.
   ReportMissingElementsVisitor visitor;
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
@@ -615,17 +627,20 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
         else
         {
           _missingNodeCount++;
-          if (logWarnCount < Log::getWarnMessageLimit())
+          if (_logWarningsForMissingElements)
           {
-            LOG_WARN(
-              "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
-              ElementId(ElementType::Way, _wayId) << "...");
+            if (logWarnCount < Log::getWarnMessageLimit())
+            {
+              LOG_WARN(
+                "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
+                ElementId(ElementType::Way, _wayId) << "...");
+            }
+            else if (logWarnCount == Log::getWarnMessageLimit())
+            {
+              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            }
+            logWarnCount++;
           }
-          else if (logWarnCount == Log::getWarnMessageLimit())
-          {
-            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-          }
-          logWarnCount++;
         }
       }
       else
@@ -657,17 +672,20 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           else
           {
             _missingNodeCount++;
-            if (logWarnCount < Log::getWarnMessageLimit())
+            if (_logWarningsForMissingElements)
             {
-              LOG_WARN(
-                "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
-                ElementId(ElementType::Relation, _relationId) << "...");
+              if (logWarnCount < Log::getWarnMessageLimit())
+              {
+                LOG_WARN(
+                  "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
+                  ElementId(ElementType::Relation, _relationId) << "...");
+              }
+              else if (logWarnCount == Log::getWarnMessageLimit())
+              {
+                LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+              }
+              logWarnCount++;
             }
-            else if (logWarnCount == Log::getWarnMessageLimit())
-            {
-              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-            }
-            logWarnCount++;
           }
         }
         else
@@ -690,17 +708,20 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           else
           {
             _missingWayCount++;
-            if (logWarnCount < Log::getWarnMessageLimit())
+            if (_logWarningsForMissingElements)
             {
-              LOG_WARN(
-                "Skipping missing " << ElementId(ElementType::Way, ref) << " in " <<
-                ElementId(ElementType::Relation, _relationId) << "...");
+              if (logWarnCount < Log::getWarnMessageLimit())
+              {
+                LOG_WARN(
+                  "Skipping missing " << ElementId(ElementType::Way, ref) << " in " <<
+                  ElementId(ElementType::Relation, _relationId) << "...");
+              }
+              else if (logWarnCount == Log::getWarnMessageLimit())
+              {
+                LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+              }
+              logWarnCount++;
             }
-            else if (logWarnCount == Log::getWarnMessageLimit())
-            {
-              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-            }
-            logWarnCount++;
           }
         }
         else
@@ -719,16 +740,19 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
       }
       else
       {
-        if (logWarnCount < Log::getWarnMessageLimit())
+        if (_logWarningsForMissingElements)
         {
-          LOG_WARN("Found a relation member with unexpected type: " << type << " in relation ("
-                     << _relationId << ")");
+          if (logWarnCount < Log::getWarnMessageLimit())
+          {
+            LOG_WARN("Found a relation member with unexpected type: " << type << " in relation ("
+                       << _relationId << ")");
+          }
+          else if (logWarnCount == Log::getWarnMessageLimit())
+          {
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
         }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
       }
     }
     else if (qName == QLatin1String("tag") && _element)
@@ -754,7 +778,9 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
 
           if (_preserveAllTags) { _element->setTag(key, value); }
         }
-        else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
+        // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
+        // will be used. We're not expecting elements to have more than one CE tag.
+        else if (_circularErrorTagKeys.contains(key))
         {
           bool ok;
           Meters circularError = value.toDouble(&ok);
@@ -835,6 +861,7 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
     {
       NodePtr n = std::dynamic_pointer_cast<Node, Element>(_element);
       _map->addNode(n);
+      _element.reset();
       LOG_TRACE("Added: " << n->getElementId());
       //LOG_TRACE("Added: " << n);
       _numRead++;
@@ -843,6 +870,7 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
     {
       WayPtr w = std::dynamic_pointer_cast<Way, Element>(_element);
       _map->addWay(w);
+      _element.reset();
       LOG_TRACE("Added: " << w->getElementId());
       //LOG_TRACE("Added: " << w);
       _numRead++;
@@ -851,6 +879,7 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
     {
       RelationPtr r = std::dynamic_pointer_cast<Relation, Element>(_element);
       _map->addRelation(r);
+      _element.reset();
       LOG_TRACE("Added: " << r->getElementId());
       //LOG_TRACE("Added: " << r);
       _numRead++;

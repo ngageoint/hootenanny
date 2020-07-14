@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTY_MAP_SCORER_H
 #define PERTY_MAP_SCORER_H
@@ -45,6 +45,7 @@ class PertyMatchScorer : public Configurable
 public:
 
   PertyMatchScorer();
+  virtual ~PertyMatchScorer() = default;
 
   /**
     Takes a single file as input, runs PERTY on the file, and then conflates the unmodified data
@@ -85,15 +86,6 @@ public:
   void setSearchDistance(double searchDistance) { _searchDistance = searchDistance; }
 
   /**
-    Returns whether rubbersheeting is applied to the input pre-conflation
-    */
-  bool getApplyRubberSheet() { return _applyRubberSheet; }
-  /**
-    Sets whether rubbersheeting is applied to the input pre-conflation
-    */
-  void setApplyRubberSheet(bool applyRubberSheet) { _applyRubberSheet = applyRubberSheet; }
-
-  /**
     Returns a string representation of the object
     */
   QString toString();
@@ -124,8 +116,6 @@ private:
   QString _conflatedMapOutput;
 
   double _searchDistance;
-  bool _applyRubberSheet;
-
 };
 
 }

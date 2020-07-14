@@ -16,7 +16,7 @@ TRANSLATION_OUTPUT_FILE=$OUTPUT_DIR/ServiceLanguageConvertCmdTest-translate-out.
 
 mkdir -p $OUTPUT_DIR
 
-HOOT_OPTS="-D language.ignore.pre.translated.tags=true -D language.translation.source.languages=de;es -D language.tag.keys=name;alt_name -D language.translation.perform.exhaustive.search.with.no.detection=false -D language.translation.detected.language.overrides.specified.source.languages=false -D language.detection.write.detected.lang.tags=true -D hoot.services.auth.user.name= -D hoot.services.auth.access.token= -D hoot.services.auth.access.token.secret="
+HOOT_OPTS="-C Testing.conf -D language.ignore.pre.translated.tags=true -D language.translation.source.languages=de;es -D language.tag.keys=name;alt_name -D language.translation.perform.exhaustive.search.with.no.detection=false -D language.translation.detected.language.overrides.specified.source.languages=false -D language.detection.write.detected.lang.tags=true -D hoot.services.auth.user.name= -D hoot.services.auth.access.token= -D hoot.services.auth.access.token.secret="
 
 # These can change per installation, but are unlikely to change often.
 hoot info $HOOT_OPTS --languages --detectable
@@ -29,8 +29,8 @@ hoot info $HOOT_OPTS --languages --translators
 echo ""
 
 hoot convert $HOOT_OPTS -D convert.ops="hoot::NonEnglishLanguageDetectionVisitor" $INPUT_FILE $DETECTION_OUTPUT_FILE
-hoot diff $DETECTION_GOLD_FILE $DETECTION_OUTPUT_FILE
+hoot diff $HOOT_OPTS $DETECTION_GOLD_FILE $DETECTION_OUTPUT_FILE
 
 hoot convert $HOOT_OPTS -D convert.ops="hoot::ToEnglishTranslationVisitor" $INPUT_FILE $TRANSLATION_OUTPUT_FILE
-hoot diff $TRANSLATION_GOLD_FILE $TRANSLATION_OUTPUT_FILE
+hoot diff $HOOT_OPTS $TRANSLATION_GOLD_FILE $TRANSLATION_OUTPUT_FILE
 

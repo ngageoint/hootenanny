@@ -1,0 +1,1789 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="13.2921269" minlon="12.5845476" maxlat="13.3438904" maxlon="12.6200802"/>
+    <node visible="true" id="-31156677" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3174161000000009" lon="12.6108121999999998"/>
+    <node visible="true" id="-31156676" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3174249000000007" lon="12.6109129000000006"/>
+    <node visible="true" id="-31156675" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3174884999999996" lon="12.6109071000000004"/>
+    <node visible="true" id="-31156674" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3174796999999998" lon="12.6108063000000001"/>
+    <node visible="true" id="-31156673" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3175858999999992" lon="12.6110588999999997"/>
+    <node visible="true" id="-31156672" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3176435000000009" lon="12.6110550000000003"/>
+    <node visible="true" id="-31156671" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3175810000000006" lon="12.6108238000000004"/>
+    <node visible="true" id="-31156670" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3176304000000005" lon="12.6108212999999996"/>
+    <node visible="true" id="-31156669" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3178113000000007" lon="12.6108708000000007"/>
+    <node visible="true" id="-31156668" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3177990000000008" lon="12.6108717000000006"/>
+    <node visible="true" id="-31156667" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3178049999999999" lon="12.6109647999999996"/>
+    <node visible="true" id="-31156666" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3176880999999998" lon="12.6109729000000002"/>
+    <node visible="true" id="-31156665" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3176907000000000" lon="12.6110211999999997"/>
+    <node visible="true" id="-31156664" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3176416999999994" lon="12.6110264999999995"/>
+    <node visible="true" id="-31156663" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3176390999999992" lon="12.6109849999999994"/>
+    <node visible="true" id="-31156662" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3175814999999993" lon="12.6109889000000006"/>
+    <node visible="true" id="-31156661" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3175621000000000" lon="12.6109883000000007"/>
+    <node visible="true" id="-31156660" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3175477999999998" lon="12.6109760000000009"/>
+    <node visible="true" id="-31156659" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3175463000000001" lon="12.6109498000000002"/>
+    <node visible="true" id="-31156658" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3175568000000002" lon="12.6109390999999995"/>
+    <node visible="true" id="-31156657" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3175866999999997" lon="12.6109332999999992"/>
+    <node visible="true" id="-31156656" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3176360000000003" lon="12.6109305999999997"/>
+    <node visible="true" id="-31156655" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3176308999999993" lon="12.6108317999999997"/>
+    <node visible="true" id="-31156654" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3176807999999998" lon="12.6109092000000000"/>
+    <node visible="true" id="-31156653" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3177272000000002" lon="12.6109074000000003"/>
+    <node visible="true" id="-31156652" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3177239000000007" lon="12.6108574000000004"/>
+    <node visible="true" id="-31156651" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3178099999999997" lon="12.6108515000000008"/>
+    <node visible="true" id="-31156650" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3373489999999997" lon="12.5987349999999996"/>
+    <node visible="true" id="-31156649" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3374263000000006" lon="12.5986481999999995"/>
+    <node visible="true" id="-31156648" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3368663000000005" lon="12.5975438000000004"/>
+    <node visible="true" id="-31156647" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3368888999999999" lon="12.5975178999999997"/>
+    <node visible="true" id="-31156646" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3369172999999996" lon="12.5975456999999995"/>
+    <node visible="true" id="-31156645" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3370685000000009" lon="12.5978615000000005"/>
+    <node visible="true" id="-31156644" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3370402000000006" lon="12.5978949999999994"/>
+    <node visible="true" id="-31156643" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3367698000000008" lon="12.5976537000000004"/>
+    <node visible="true" id="-31156642" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3368471000000000" lon="12.5975669999999997"/>
+    <node visible="true" id="-31156641" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3369412000000001" lon="12.5975689000000006"/>
+    <node visible="true" id="-31156640" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3371559000000008" lon="12.5977537999999996"/>
+    <node visible="true" id="-31156639" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3371239999999993" lon="12.5977944999999991"/>
+    <node visible="true" id="-31156638" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3280601000000001" lon="12.6142123999999995"/>
+    <node visible="true" id="-31156637" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279115000000008" lon="12.6142181999999998"/>
+    <node visible="true" id="-31156636" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3082284000000008" lon="12.6182117999999992"/>
+    <node visible="true" id="-31156635" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3082346000000005" lon="12.6189405000000008"/>
+    <node visible="true" id="-31156634" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3084656999999993" lon="12.6194310999999999"/>
+    <node visible="true" id="-31156633" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3092027000000002" lon="12.6200802000000003"/>
+    <node visible="true" id="-31156632" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3099608000000007" lon="12.6191002000000001"/>
+    <node visible="true" id="-31156631" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3095061000000001" lon="12.6186647999999995"/>
+    <node visible="true" id="-31156630" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3093796999999991" lon="12.6185039000000003">
+        <tag k="source:datetime" v="2015-01-23T16:19:57.000Z"/>
+        <tag k="barrier" v="gate"/>
+    </node>
+    <node visible="true" id="-31156629" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3093477000000000" lon="12.6184630999999996"/>
+    <node visible="true" id="-31156628" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3276140999999999" lon="12.6143257000000002"/>
+    <node visible="true" id="-31156627" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3278368999999994" lon="12.6143181999999996"/>
+    <node visible="true" id="-31156626" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3174831999999999" lon="12.6108463999999998"/>
+    <node visible="true" id="-31156625" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3175816999999999" lon="12.6108378999999999"/>
+    <node visible="true" id="-31156624" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3176781999999996" lon="12.6108305000000005"/>
+    <node visible="true" id="-31156623" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3177427000000002" lon="12.6108288999999996"/>
+    <node visible="true" id="-31156622" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3177427999999995" lon="12.6108560999999995"/>
+    <node visible="true" id="-31156621" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3277085999999994" lon="12.6137589999999999"/>
+    <node visible="true" id="-31156620" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279016000000006" lon="12.6137508999999994"/>
+    <node visible="true" id="-31156619" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3275834999999994" lon="12.6137640999999991"/>
+    <node visible="true" id="-31156618" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3276898999999993" lon="12.6137610000000002"/>
+    <node visible="true" id="-31156617" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3280335000000001" lon="12.6137478999999999"/>
+    <node visible="true" id="-31156616" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279212999999999" lon="12.6137488999999992"/>
+    <node visible="true" id="-31156615" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3138023000000008" lon="12.5942883000000005"/>
+    <node visible="true" id="-31156614" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3138465999999998" lon="12.5937357999999993"/>
+    <node visible="true" id="-31156613" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3135829999999995" lon="12.5937116000000007"/>
+    <node visible="true" id="-31156612" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3133481000000007" lon="12.5959271000000008"/>
+    <node visible="true" id="-31156611" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3151568999999999" lon="12.5960128999999998"/>
+    <node visible="true" id="-31156610" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3152925999999994" lon="12.5946610999999997"/>
+    <node visible="true" id="-31156609" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3123585000000002" lon="12.6091432999999995"/>
+    <node visible="true" id="-31156608" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3129396000000000" lon="12.6096581000000008"/>
+    <node visible="true" id="-31156607" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3120782000000002" lon="12.6106987999999998"/>
+    <node visible="true" id="-31156606" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3107994999999999" lon="12.6095462000000005"/>
+    <node visible="true" id="-31156605" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3109301999999996" lon="12.6093968000000007"/>
+    <node visible="true" id="-31156604" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3107703999999991" lon="12.6092174999999997"/>
+    <node visible="true" id="-31156603" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3114615000000001" lon="12.6084265999999996"/>
+    <node visible="true" id="-31156602" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3115410000000001" lon="12.6084195999999995"/>
+    <node visible="true" id="-31156601" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3116114999999997" lon="12.6084849999999999"/>
+    <node visible="true" id="-31156600" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3116000999999997" lon="12.6085434000000003"/>
+    <node visible="true" id="-31156599" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3118434000000008" lon="12.6087545999999993"/>
+    <node visible="true" id="-31156598" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3118578000000003" lon="12.6087009000000005"/>
+    <node visible="true" id="-31156597" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3119531000000002" lon="12.6087773999999992"/>
+    <node visible="true" id="-31156596" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2928160000000002" lon="12.5954710999999993"/>
+    <node visible="true" id="-31156595" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2927272999999992" lon="12.5953263000000000"/>
+    <node visible="true" id="-31156594" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3133534000000004" lon="12.5908818000000000"/>
+    <node visible="true" id="-31156593" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3133324999999996" lon="12.5914161999999994"/>
+    <node visible="true" id="-31156592" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3124607000000008" lon="12.5912766999999999"/>
+    <node visible="true" id="-31156591" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3124268000000008" lon="12.5912150000000000"/>
+    <node visible="true" id="-31156590" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3122779999999992" lon="12.5911901999999998"/>
+    <node visible="true" id="-31156589" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3122127999999993" lon="12.5912278000000004"/>
+    <node visible="true" id="-31156588" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3115550000000002" lon="12.5911177999999992"/>
+    <node visible="true" id="-31156587" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3118368999999994" lon="12.5892966000000008"/>
+    <node visible="true" id="-31156586" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3125181999999995" lon="12.5894039000000006"/>
+    <node visible="true" id="-31156585" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3125468999999992" lon="12.5894601999999995"/>
+    <node visible="true" id="-31156584" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3126955999999996" lon="12.5894896999999997"/>
+    <node visible="true" id="-31156583" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3127531000000001" lon="12.5894495000000006"/>
+    <node visible="true" id="-31156582" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3134420999999996" lon="12.5895674999999994"/>
+    <node visible="true" id="-31156581" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3134055999999994" lon="12.5900697000000008"/>
+    <node visible="true" id="-31156580" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3133690999999992" lon="12.5900663999999995"/>
+    <node visible="true" id="-31156579" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3132567999999996" lon="12.5908469000000007"/>
+    <node visible="true" id="-31156578" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3173990999999994" lon="12.6005778999999993"/>
+    <node visible="true" id="-31156577" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3174799999999998" lon="12.6005752999999991"/>
+    <node visible="true" id="-31156576" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3186648999999999" lon="12.6016159999999999"/>
+    <node visible="true" id="-31156575" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3186727999999999" lon="12.6016990999999994"/>
+    <node visible="true" id="-31156574" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3179472000000008" lon="12.6025440000000000"/>
+    <node visible="true" id="-31156573" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3178584000000004" lon="12.6025633999999993"/>
+    <node visible="true" id="-31156572" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3166838999999992" lon="12.6015248000000000"/>
+    <node visible="true" id="-31156571" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3172607000000003" lon="12.6004921000000003"/>
+    <node visible="true" id="-31156570" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3172685000000008" lon="12.6003795000000007"/>
+    <node visible="true" id="-31156569" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3163263000000001" lon="12.5995325999999999"/>
+    <node visible="true" id="-31156568" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3154363000000000" lon="12.5993233000000000"/>
+    <node visible="true" id="-31156567" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3153527000000000" lon="12.5993683000000001"/>
+    <node visible="true" id="-31156566" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3152562000000003" lon="12.5997740000000000"/>
+    <node visible="true" id="-31156565" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3153004999999993" lon="12.5997839999999997"/>
+    <node visible="true" id="-31156564" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2927142000000007" lon="12.5952967999999998"/>
+    <node visible="true" id="-31156563" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2926751000000003" lon="12.5952190000000002"/>
+    <node visible="true" id="-31156562" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2928446999999998" lon="12.5951573000000003"/>
+    <node visible="true" id="-31156561" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2929344000000000" lon="12.5953876000000005"/>
+    <node visible="true" id="-31156560" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2930066000000000" lon="12.5953611999999993"/>
+    <node visible="true" id="-31156559" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2931422999999995" lon="12.5955864999999996"/>
+    <node visible="true" id="-31156558" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2929543999999993" lon="12.5956829999999993"/>
+    <node visible="true" id="-31156557" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2928368999999993" lon="12.5955086999999999"/>
+    <node visible="true" id="-31156556" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3150355999999999" lon="12.6009975999999995"/>
+    <node visible="true" id="-31156555" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3165195000000001" lon="12.6013476999999998"/>
+    <node visible="true" id="-31156554" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3156268000000004" lon="12.6024239999999992"/>
+    <node visible="true" id="-31156553" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3155406999999997" lon="12.6024346999999999"/>
+    <node visible="true" id="-31156552" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3148541999999992" lon="12.6018358999999993"/>
+    <node visible="true" id="-31156551" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3150081999999994" lon="12.6010901999999998"/>
+    <node visible="true" id="-31156550" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3149691000000008" lon="12.6010795000000009"/>
+    <node visible="true" id="-31156549" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3149847000000001" lon="12.6009855999999996"/>
+    <node visible="true" id="-31156548" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3035964999999994" lon="12.6033921000000007"/>
+    <node visible="true" id="-31156547" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3033199000000000" lon="12.6033411999999991"/>
+    <node visible="true" id="-31156546" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3032936999999993" lon="12.6035289000000006"/>
+    <node visible="true" id="-31156545" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3035756999999997" lon="12.6035717999999992"/>
+    <node visible="true" id="-31156544" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3003546000000004" lon="12.6031829000000002"/>
+    <node visible="true" id="-31156543" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3004303000000004" lon="12.6032580000000003"/>
+    <node visible="true" id="-31156542" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3001614000000004" lon="12.6036307999999995"/>
+    <node visible="true" id="-31156541" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2995245000000004" lon="12.6029710000000001"/>
+    <node visible="true" id="-31156540" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2997776999999999" lon="12.6026062000000003"/>
+    <node visible="true" id="-31156539" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3003233000000005" lon="12.6031560999999996"/>
+    <node visible="true" id="-31156538" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3019995000000009" lon="12.5923143999999994"/>
+    <node visible="true" id="-31156537" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3021957000000004" lon="12.5935135000000002"/>
+    <node visible="true" id="-31156536" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3022401000000006" lon="12.5938168000000008"/>
+    <node visible="true" id="-31156535" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3018221000000008" lon="12.5938745999999995"/>
+    <node visible="true" id="-31156534" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3015389000000006" lon="12.5939341999999996"/>
+    <node visible="true" id="-31156533" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3013040000000000" lon="12.5939850000000000"/>
+    <node visible="true" id="-31156532" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3012796000000009" lon="12.5939902999999997"/>
+    <node visible="true" id="-31156531" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3007080000000002" lon="12.5940534999999993"/>
+    <node visible="true" id="-31156530" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3003719000000000" lon="12.5934258000000003"/>
+    <node visible="true" id="-31156529" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3001999000000009" lon="12.5930955000000004"/>
+    <node visible="true" id="-31156528" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3001775000000002" lon="12.5930523999999995"/>
+    <node visible="true" id="-31156527" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2999232000000003" lon="12.5925545000000003"/>
+    <node visible="true" id="-31156526" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2997338999999997" lon="12.5921670999999993"/>
+    <node visible="true" id="-31156525" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2995189000000007" lon="12.5917621000000004"/>
+    <node visible="true" id="-31156524" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3002303000000008" lon="12.5915096999999996"/>
+    <node visible="true" id="-31156523" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3002389000000001" lon="12.5915073999999994"/>
+    <node visible="true" id="-31156522" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3008769000000004" lon="12.5913413999999992"/>
+    <node visible="true" id="-31156521" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3015799000000001" lon="12.5911661000000006"/>
+    <node visible="true" id="-31156520" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3019671000000006" lon="12.5921093000000006"/>
+    <node visible="true" id="-31156519" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3019926999999996" lon="12.5922669999999997"/>
+    <node visible="true" id="-31156514" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3284566000000009" lon="12.6133609000000000"/>
+    <node visible="true" id="-31156513" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3286061999999994" lon="12.6133608000000006"/>
+    <node visible="true" id="-31156512" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3286558999999993" lon="12.6132606999999997"/>
+    <node visible="true" id="-31156511" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3284193000000002" lon="12.6132667999999999"/>
+    <node visible="true" id="-31156510" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3286061000000000" lon="12.6132606999999997"/>
+    <node visible="true" id="-31156509" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3281568999999998" lon="12.6134202999999996"/>
+    <node visible="true" id="-31156508" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3281559000000005" lon="12.6133731999999998"/>
+    <node visible="true" id="-31156507" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3283746999999995" lon="12.6133661000000004"/>
+    <node visible="true" id="-31156506" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3283734999999997" lon="12.6133918999999999"/>
+    <node visible="true" id="-31156505" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3281656000000002" lon="12.6135547999999993"/>
+    <node visible="true" id="-31156504" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3282947000000007" lon="12.6135529999999996"/>
+    <node visible="true" id="-31156503" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3129749000000004" lon="12.5937920000000005"/>
+    <node visible="true" id="-31156502" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3130296999999995" lon="12.5938671000000006"/>
+    <node visible="true" id="-31156501" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3129905999999991" lon="12.5945275999999993"/>
+    <node visible="true" id="-31156500" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3128574999999998" lon="12.5946213999999994"/>
+    <node visible="true" id="-31156499" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3128235000000004" lon="12.5948037999999993"/>
+    <node visible="true" id="-31156498" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3129592999999993" lon="12.5949861999999992"/>
+    <node visible="true" id="-31156497" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3129174999999993" lon="12.5955864000000002"/>
+    <node visible="true" id="-31156496" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3128495999999998" lon="12.5956480000000006"/>
+    <node visible="true" id="-31156495" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3113983999999999" lon="12.5954013000000007"/>
+    <node visible="true" id="-31156494" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3116933000000000" lon="12.5935801000000005"/>
+    <node visible="true" id="-31156493" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3283746999999995" lon="12.6132016999999994"/>
+    <node visible="true" id="-31156492" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3283746999999995" lon="12.6131773999999997"/>
+    <node visible="true" id="-31156491" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3286558999999993" lon="12.6131734000000009"/>
+    <node visible="true" id="-31156490" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3280033000000007" lon="12.6128809999999998"/>
+    <node visible="true" id="-31156489" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3278938000000000" lon="12.6130326999999998"/>
+    <node visible="true" id="-31156488" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3278929999999995" lon="12.6130156000000007"/>
+    <node visible="true" id="-31156487" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3280063000000002" lon="12.6130156000000007"/>
+    <node visible="true" id="-31156486" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3280013999999998" lon="12.6128496999999999"/>
+    <node visible="true" id="-31156485" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3280013999999998" lon="12.6128354999999992"/>
+    <node visible="true" id="-31156484" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279184999999991" lon="12.6128368999999996"/>
+    <node visible="true" id="-31156483" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3281607999999991" lon="12.6134424000000003"/>
+    <node visible="true" id="-31156482" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3282924000000005" lon="12.6134655000000002"/>
+    <node visible="true" id="-31156481" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3280022999999996" lon="12.6127524999999991"/>
+    <node visible="true" id="-31156480" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279973999999992" lon="12.6126006999999998"/>
+    <node visible="true" id="-31156479" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279560999999998" lon="12.6126027999999994"/>
+    <node visible="true" id="-31156478" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279698000000000" lon="12.6127151000000008"/>
+    <node visible="true" id="-31156477" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279113999999996" lon="12.6127161000000001"/>
+    <node visible="true" id="-31156476" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3281627000000000" lon="12.6135035999999996"/>
+    <node visible="true" id="-31156475" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3281607999999991" lon="12.6134655000000002"/>
+    <node visible="true" id="-31156474" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3277999000000005" lon="12.6130347000000000"/>
+    <node visible="true" id="-31156473" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3277867000000008" lon="12.6130317999999999"/>
+    <node visible="true" id="-31156472" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3277836999999995" lon="12.6128394999999998"/>
+    <node visible="true" id="-31156471" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3277947999999995" lon="12.6128400000000003"/>
+    <node visible="true" id="-31156470" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3276527999999992" lon="12.6122481999999998"/>
+    <node visible="true" id="-31156469" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3275383999999999" lon="12.6122519000000004"/>
+    <node visible="true" id="-31156468" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3275407999999995" lon="12.6123727999999993"/>
+    <node visible="true" id="-31156467" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3276014000000007" lon="12.6124290000000006"/>
+    <node visible="true" id="-31156466" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3277608000000001" lon="12.6123177000000002"/>
+    <node visible="true" id="-31156465" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3278884000000009" lon="12.6124270000000003"/>
+    <node visible="true" id="-31156464" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279460000000007" lon="12.6124273999999996"/>
+    <node visible="true" id="-31156463" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3277789000000002" lon="12.6124290000000006"/>
+    <node visible="true" id="-31156462" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3277629999999991" lon="12.6124264999999998"/>
+    <node visible="true" id="-31156461" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3285263999999994" lon="12.6128142000000008"/>
+    <node visible="true" id="-31156460" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3286949999999997" lon="12.6128084000000005"/>
+    <node visible="true" id="-31156459" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3138780000000008" lon="12.5910407000000006"/>
+    <node visible="true" id="-31156458" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3147759000000008" lon="12.5911258000000004"/>
+    <node visible="true" id="-31156457" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3149376999999998" lon="12.5897532000000005"/>
+    <node visible="true" id="-31156456" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3140084999999999" lon="12.5896667000000004"/>
+    <node visible="true" id="-31156455" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3283623000000002" lon="12.6124130000000001"/>
+    <node visible="true" id="-31156454" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3142765999999995" lon="12.5868202999999994"/>
+    <node visible="true" id="-31156453" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3141364000000006" lon="12.5882620999999997"/>
+    <node visible="true" id="-31156452" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3149127000000007" lon="12.5883968999999993"/>
+    <node visible="true" id="-31156451" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3169220999999993" lon="12.5866728999999999"/>
+    <node visible="true" id="-31156450" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3169143000000005" lon="12.5865764000000002"/>
+    <node visible="true" id="-31156449" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3144875999999996" lon="12.5856969999999997"/>
+    <node visible="true" id="-31156448" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3144138999999999" lon="12.5857472999999995"/>
+    <node visible="true" id="-31156447" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3142952999999995" lon="12.5867363999999995"/>
+    <node visible="true" id="-31156446" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3286917999999996" lon="12.6122055999999994"/>
+    <node visible="true" id="-31156445" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3286809000000002" lon="12.6123949000000000"/>
+    <node visible="true" id="-31156444" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3284853999999999" lon="12.6126915999999998"/>
+    <node visible="true" id="-31156443" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3284836999999996" lon="12.6125822000000003"/>
+    <node visible="true" id="-31156442" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3287060000000004" lon="12.6125720000000001"/>
+    <node visible="true" id="-31156441" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3275982000000006" lon="12.6140340999999996"/>
+    <node visible="true" id="-31156440" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3275894000000008" lon="12.6139614000000009"/>
+    <node visible="true" id="-31156439" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3277514000000004" lon="12.6139627999999995"/>
+    <node visible="true" id="-31156438" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3278174000000007" lon="12.6139620000000008"/>
+    <node visible="true" id="-31156437" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3337532000000003" lon="12.6107596999999991"/>
+    <node visible="true" id="-31156436" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3337088999999995" lon="12.6105858000000008"/>
+    <node visible="true" id="-31156435" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3332703000000006" lon="12.6106832999999998"/>
+    <node visible="true" id="-31156434" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3333633999999996" lon="12.6111308999999991"/>
+    <node visible="true" id="-31156433" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3338146000000002" lon="12.6110357000000004"/>
+    <node visible="true" id="-31156432" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3337714999999992" lon="12.6108294999999995"/>
+    <node visible="true" id="-31156431" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3276011000000008" lon="12.6140746000000004"/>
+    <node visible="true" id="-31156430" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3276050999999995" lon="12.6141342999999999"/>
+    <node visible="true" id="-31156429" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3277681999999995" lon="12.6141322999999996"/>
+    <node visible="true" id="-31156428" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279305000000008" lon="12.6130662000000004"/>
+    <node visible="true" id="-31156427" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3278943999999999" lon="12.6130642999999996"/>
+    <node visible="true" id="-31156426" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279599999999991" lon="12.6131138000000007"/>
+    <node visible="true" id="-31156425" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3278953999999992" lon="12.6131129000000008"/>
+    <node visible="true" id="-31156424" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279610000000002" lon="12.6131572999999992"/>
+    <node visible="true" id="-31156423" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3278963000000008" lon="12.6131572999999992"/>
+    <node visible="true" id="-31156422" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3279945000000009" lon="12.6132068999999998"/>
+    <node visible="true" id="-31156421" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3278973999999995" lon="12.6132106999999998"/>
+    <node visible="true" id="-31156420" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3275798999999999" lon="12.6126401999999995"/>
+    <node visible="true" id="-31156419" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3275621999999991" lon="12.6126655000000003"/>
+    <node visible="true" id="-31156418" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3276182999999993" lon="12.6135529999999996"/>
+    <node visible="true" id="-31156417" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3276842999999996" lon="12.6135792999999996"/>
+    <node visible="true" id="-31156416" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3277946000000007" lon="12.6135722000000001"/>
+    <node visible="true" id="-31156415" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2945834999999999" lon="12.5930429999999998"/>
+    <node visible="true" id="-31156414" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2946618999999995" lon="12.5932110000000002"/>
+    <node visible="true" id="-31156413" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2945443999999995" lon="12.5932580999999999"/>
+    <node visible="true" id="-31156412" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2944542000000006" lon="12.5930380000000000"/>
+    <node visible="true" id="-31156411" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2944391999999993" lon="12.5929985999999996"/>
+    <node visible="true" id="-31156410" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2944350999999994" lon="12.5929924000000000"/>
+    <node visible="true" id="-31156409" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3351339000000007" lon="12.6124548999999995"/>
+    <node visible="true" id="-31156408" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3350874000000008" lon="12.6124690000000008"/>
+    <node visible="true" id="-31156407" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3350185000000003" lon="12.6120991999999994"/>
+    <node visible="true" id="-31156406" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3352561999999999" lon="12.6120248999999998"/>
+    <node visible="true" id="-31156405" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3353560000000009" lon="12.6123823000000002"/>
+    <node visible="true" id="-31156404" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3352027999999994" lon="12.6124390000000002"/>
+    <node visible="true" id="-31156403" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3253053000000001" lon="12.5922257000000002"/>
+    <node visible="true" id="-31156402" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3252466999999992" lon="12.5921752999999992"/>
+    <node visible="true" id="-31156401" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3253500999999996" lon="12.5920585000000003"/>
+    <node visible="true" id="-31156400" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3254061999999998" lon="12.5921116000000008"/>
+    <node visible="true" id="-31156399" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3252980000000001" lon="12.5921173000000000"/>
+    <node visible="true" id="-31156398" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3254292000000003" lon="12.5922356000000004"/>
+    <node visible="true" id="-31156397" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3246561000000003" lon="12.6117621999999994"/>
+    <node visible="true" id="-31156396" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3246461000000007" lon="12.6114330999999993"/>
+    <node visible="true" id="-31156395" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3253193999999997" lon="12.6114052000000001"/>
+    <node visible="true" id="-31156394" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3255853000000002" lon="12.6113934000000008"/>
+    <node visible="true" id="-31156393" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3256967999999993" lon="12.6113949000000005"/>
+    <node visible="true" id="-31156392" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3268348000000003" lon="12.6113567000000000"/>
+    <node visible="true" id="-31156391" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3273194000000004" lon="12.6113316999999991"/>
+    <node visible="true" id="-31156390" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3333420999999994" lon="12.6128795999999994"/>
+    <node visible="true" id="-31156389" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3334603999999999" lon="12.6128522000000007"/>
+    <node visible="true" id="-31156388" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3334983000000005" lon="12.6130317999999999"/>
+    <node visible="true" id="-31156387" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3333247000000004" lon="12.6130707999999991"/>
+    <node visible="true" id="-31156386" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3332850000000001" lon="12.6128929000000003"/>
+    <node visible="true" id="-31156385" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3333013000000005" lon="12.6128905000000007"/>
+    <node visible="true" id="-31156384" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3343729000000000" lon="12.6125611000000006"/>
+    <node visible="true" id="-31156383" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3344254000000006" lon="12.6128152999999994"/>
+    <node visible="true" id="-31156382" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3346982000000001" lon="12.6126878999999992"/>
+    <node visible="true" id="-31156381" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3345812000000006" lon="12.6123543999999992"/>
+    <node visible="true" id="-31156380" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3343413999999996" lon="12.6124261000000004"/>
+    <node visible="true" id="-31156379" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3254446000000009" lon="12.5921483999999992"/>
+    <node visible="true" id="-31156378" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3255134999999996" lon="12.5922114000000001"/>
+    <node visible="true" id="-31156377" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3255029999999994" lon="12.5922242999999998"/>
+    <node visible="true" id="-31156376" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3127683000000001" lon="12.6023619999999994"/>
+    <node visible="true" id="-31156375" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3127109000000008" lon="12.6023405999999998"/>
+    <node visible="true" id="-31156374" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3128048000000003" lon="12.6017504999999996"/>
+    <node visible="true" id="-31156373" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3123819999999995" lon="12.6016431999999998"/>
+    <node visible="true" id="-31156372" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3194552999999996" lon="12.6133161999999999"/>
+    <node visible="true" id="-31156371" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3194397000000002" lon="12.6132249999999999"/>
+    <node visible="true" id="-31156370" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3190168999999994" lon="12.6128280000000004"/>
+    <node visible="true" id="-31156369" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3189071999999999" lon="12.6128441000000002"/>
+    <node visible="true" id="-31156368" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3187192999999997" lon="12.6130586999999998"/>
+    <node visible="true" id="-31156367" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3188811000000005" lon="12.6132249999999999"/>
+    <node visible="true" id="-31156366" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3184582999999996" lon="12.6137613999999996"/>
+    <node visible="true" id="-31156365" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3185991999999995" lon="12.6138525999999995"/>
+    <node visible="true" id="-31156364" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3188654999999994" lon="12.6139598999999993"/>
+    <node visible="true" id="-31156363" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3191577999999993" lon="12.6140510999999993"/>
+    <node visible="true" id="-31156362" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3192570000000003" lon="12.6139866999999999"/>
+    <node visible="true" id="-31156361" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3254921999999993" lon="12.5942284000000004"/>
+    <node visible="true" id="-31156360" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3253751999999999" lon="12.5941151999999992"/>
+    <node visible="true" id="-31156359" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3251647999999996" lon="12.5943427999999997"/>
+    <node visible="true" id="-31156358" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3253445999999993" lon="12.5944990000000008"/>
+    <node visible="true" id="-31156357" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3255143999999994" lon="12.5943048999999991"/>
+    <node visible="true" id="-31156356" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3247403999999996" lon="12.6141921000000004"/>
+    <node visible="true" id="-31156355" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3247046999999998" lon="12.6129669000000000"/>
+    <node visible="true" id="-31156354" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3246588999999993" lon="12.6118164999999998"/>
+    <node visible="true" id="-31156353" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3273793999999999" lon="12.6133194999999994"/>
+    <node visible="true" id="-31156352" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3274065999999998" lon="12.6140834000000002"/>
+    <node visible="true" id="-31156351" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3144638999999998" lon="12.5854558999999995"/>
+    <node visible="true" id="-31156350" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3153568999999994" lon="12.5855657000000001"/>
+    <node visible="true" id="-31156349" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3154523999999999" lon="12.5846549999999997"/>
+    <node visible="true" id="-31156348" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3145752999999996" lon="12.5845476000000005"/>
+    <node visible="true" id="-31156347" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3273708000000006" lon="12.6126275000000003"/>
+    <node visible="true" id="-31156346" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3273779999999995" lon="12.6132813000000006"/>
+    <node visible="true" id="-31156345" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3289977000000004" lon="12.6112558000000003"/>
+    <node visible="true" id="-31156344" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3289532000000008" lon="12.6129721000000004"/>
+    <node visible="true" id="-31156343" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3289363999999999" lon="12.6133462000000005"/>
+    <node visible="true" id="-31156342" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3289364999999993" lon="12.6133769999999998"/>
+    <node visible="true" id="-31156341" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3289048000000001" lon="12.6145368999999992"/>
+    <node visible="true" id="-31156340" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3308795999999994" lon="12.6144590000000001"/>
+    <node visible="true" id="-31156339" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3330085000000000" lon="12.6142448999999992"/>
+    <node visible="true" id="-31156338" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3326855000000002" lon="12.6142734999999995"/>
+    <node visible="true" id="-31156337" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3323905000000007" lon="12.6142827000000004"/>
+    <node visible="true" id="-31156336" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3323827000000001" lon="12.6142724000000008"/>
+    <node visible="true" id="-31156335" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3323380999999994" lon="12.6142746999999993"/>
+    <node visible="true" id="-31156334" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3323280999999998" lon="12.6142873000000009"/>
+    <node visible="true" id="-31156333" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3318893999999997" lon="12.6143158999999994"/>
+    <node visible="true" id="-31156332" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3318604000000001" lon="12.6143239000000005"/>
+    <node visible="true" id="-31156331" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3316923000000003" lon="12.6143318999999998"/>
+    <node visible="true" id="-31156330" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3332612000000008" lon="12.6142198000000008"/>
+    <node visible="true" id="-31156329" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3329862000000006" lon="12.6142175000000005"/>
+    <node visible="true" id="-31156328" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3329842000000003" lon="12.6142471000000000"/>
+    <node visible="true" id="-31156327" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3295176000000009" lon="12.6144222999999993"/>
+    <node visible="true" id="-31156326" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3290565999999995" lon="12.6144359999999995"/>
+    <node visible="true" id="-31156325" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3316210000000002" lon="12.6143284999999992"/>
+    <node visible="true" id="-31156324" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3314483999999993" lon="12.6143365000000003"/>
+    <node visible="true" id="-31156323" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3308917000000005" lon="12.6143674000000008"/>
+    <node visible="true" id="-31156322" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3304440000000000" lon="12.6143856999999997"/>
+    <node visible="true" id="-31156321" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3300231000000000" lon="12.6144073999999993"/>
+    <node visible="true" id="-31156320" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3296278000000008" lon="12.6144154000000004"/>
+    <node visible="true" id="-31156319" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3333337000000007" lon="12.6142120000000002"/>
+    <node visible="true" id="-31156318" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3334907999999999" lon="12.6142047999999996"/>
+    <node visible="true" id="-31156317" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3338367000000009" lon="12.6141875999999993"/>
+    <node visible="true" id="-31156316" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3341835000000000" lon="12.6141585999999997"/>
+    <node visible="true" id="-31156315" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3344296000000000" lon="12.6141459000000005"/>
+    <node visible="true" id="-31156314" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3274080000000001" lon="12.6141465999999998"/>
+    <node visible="true" id="-31156313" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3274237000000007" lon="12.6145520999999992"/>
+    <node visible="true" id="-31156312" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3269447999999997" lon="12.6145712000000003"/>
+    <node visible="true" id="-31156311" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3262801000000000" lon="12.6145990999999995"/>
+    <node visible="true" id="-31156310" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3255338000000005" lon="12.6146151999999994"/>
+    <node visible="true" id="-31156309" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3247461000000005" lon="12.6146490000000000"/>
+    <node visible="true" id="-31156308" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3247389999999992" lon="12.6142450000000004"/>
+    <node visible="true" id="-31156307" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3121104999999993" lon="12.6036066000000009"/>
+    <node visible="true" id="-31156306" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3121001000000003" lon="12.6036816999999992"/>
+    <node visible="true" id="-31156305" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3127160999999994" lon="12.6041538000000006"/>
+    <node visible="true" id="-31156304" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3129719000000009" lon="12.6029789999999995"/>
+    <node visible="true" id="-31156303" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3126730999999996" lon="12.6029093000000003"/>
+    <node visible="true" id="-31156302" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3120740000000009" lon="12.6027696999999996"/>
+    <node visible="true" id="-31156301" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3118599999999994" lon="12.6034831999999994"/>
+    <node visible="true" id="-31156300" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3119644000000008" lon="12.6035690000000002"/>
+    <node visible="true" id="-31156299" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3120478999999996" lon="12.6035637000000005"/>
+    <node visible="true" id="-31156298" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3365620000000007" lon="12.6013301999999996"/>
+    <node visible="true" id="-31156297" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3364662000000003" lon="12.6012477000000001"/>
+    <node visible="true" id="-31156296" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3363449999999997" lon="12.6013826000000009"/>
+    <node visible="true" id="-31156295" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3364914999999993" lon="12.6015058999999994"/>
+    <node visible="true" id="-31156294" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3365706999999993" lon="12.6014230999999999"/>
+    <node visible="true" id="-31156293" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3121104999999993" lon="12.6015949000000003"/>
+    <node visible="true" id="-31156292" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3094429000000005" lon="12.6009834000000005"/>
+    <node visible="true" id="-31156291" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3093489999999992" lon="12.6010317000000001"/>
+    <node visible="true" id="-31156290" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3089887999999998" lon="12.6026945999999995"/>
+    <node visible="true" id="-31156289" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3090410000000006" lon="12.6027857999999995"/>
+    <node visible="true" id="-31156288" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3115258999999995" lon="12.6033598999999992"/>
+    <node visible="true" id="-31156287" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3116249999999994" lon="12.6033007999999995"/>
+    <node visible="true" id="-31156286" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3345012000000001" lon="12.6141439000000002"/>
+    <node visible="true" id="-31156285" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3352024000000000" lon="12.6141006000000004"/>
+    <node visible="true" id="-31156284" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3353309000000007" lon="12.6140874000000007"/>
+    <node visible="true" id="-31156283" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3356692999999993" lon="12.6140506999999999"/>
+    <node visible="true" id="-31156282" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3366644000000001" lon="12.6012918999999997"/>
+    <node visible="true" id="-31156281" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3367199999999997" lon="12.6012243000000002"/>
+    <node visible="true" id="-31156280" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3366556000000003" lon="12.6011672000000008"/>
+    <node visible="true" id="-31156279" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3365366000000005" lon="12.6013082999999995"/>
+    <node visible="true" id="-31156278" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3004747000000005" lon="12.5904216000000009"/>
+    <node visible="true" id="-31156277" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3004160999999996" lon="12.5904339000000007"/>
+    <node visible="true" id="-31156276" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3004122999999996" lon="12.5902776000000003"/>
+    <node visible="true" id="-31156275" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3004701999999995" lon="12.5902589999999996"/>
+    <node visible="true" id="-31156274" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3004811000000007" lon="12.5903255000000005"/>
+    <node visible="true" id="-31156273" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3005066000000003" lon="12.5904346000000000"/>
+    <node visible="true" id="-31156272" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3005718000000002" lon="12.5904187000000007"/>
+    <node visible="true" id="-31156271" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3374489999999994" lon="12.5985712000000003"/>
+    <node visible="true" id="-31156270" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3373424000000007" lon="12.5984736999999996"/>
+    <node visible="true" id="-31156269" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3324543999999996" lon="12.6143604000000007"/>
+    <node visible="true" id="-31156268" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3325695000000000" lon="12.6143488999999995"/>
+    <node visible="true" id="-31156267" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3326440000000002" lon="12.6143400999999997"/>
+    <node visible="true" id="-31156266" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3351629999999997" lon="12.6141819000000002"/>
+    <node visible="true" id="-31156265" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3356822000000008" lon="12.6141486999999994"/>
+    <node visible="true" id="-31156264" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3367535000000004" lon="12.6140802000000001"/>
+    <node visible="true" id="-31156263" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3438903999999994" lon="12.6136239999999997"/>
+    <node visible="true" id="-31156262" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3435144999999995" lon="12.6069291999999997"/>
+    <node visible="true" id="-31156261" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3291184999999999" lon="12.6065965999999996"/>
+    <node visible="true" id="-31156260" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3289913999999996" lon="12.6107733999999994"/>
+    <node visible="true" id="-31156259" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3290007999999993" lon="12.6111368000000006"/>
+    <node visible="true" id="-31156258" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3005905999999996" lon="12.5904095999999992"/>
+    <node visible="true" id="-31156257" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3005486000000008" lon="12.5902425000000004"/>
+    <node visible="true" id="-31156256" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3005022000000004" lon="12.5902534999999993"/>
+    <node visible="true" id="-31156255" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3373656000000000" lon="12.5984949000000004"/>
+    <node visible="true" id="-31156254" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3373410999999997" lon="12.5985010000000006"/>
+    <node visible="true" id="-31156253" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3372881000000003" lon="12.5985230000000001"/>
+    <node visible="true" id="-31156252" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2997718000000003" lon="12.5906714999999991"/>
+    <node visible="true" id="-31156251" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2999414999999992" lon="12.5906339999999997"/>
+    <node visible="true" id="-31156250" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2999234000000008" lon="12.5905477000000001"/>
+    <node visible="true" id="-31156249" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2997092000000006" lon="12.5905951999999992"/>
+    <node visible="true" id="-31156248" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2997140999999992" lon="12.5906186000000009"/>
+    <node visible="true" id="-31156247" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3372198999999991" lon="12.5985411999999997"/>
+    <node visible="true" id="-31156246" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3370835999999997" lon="12.5987358000000000"/>
+    <node visible="true" id="-31156245" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3372325000000007" lon="12.5988667999999997"/>
+    <node visible="true" id="-31156244" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3373051000000000" lon="12.5987860000000005"/>
+    <node visible="true" id="-31156243" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3373568999999996" lon="12.5987261000000004"/>
+    <node visible="true" id="-31156242" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3371913000000006" lon="12.5985820999999998"/>
+    <node visible="true" id="-31156241" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2927429999999998" lon="12.5972682999999996"/>
+    <node visible="true" id="-31156240" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2934944999999995" lon="12.5968225000000000"/>
+    <node visible="true" id="-31156239" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2928630999999999" lon="12.5957554999999992"/>
+    <node visible="true" id="-31156238" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.2921268999999995" lon="12.5962060999999999"/>
+    <node visible="true" id="-31156237" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3335934999999992" lon="12.6121922000000009"/>
+    <node visible="true" id="-31156236" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3335817999999993" lon="12.6121976999999994"/>
+    <node visible="true" id="-31156235" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3336245000000009" lon="12.6123563000000001"/>
+    <node visible="true" id="-31156234" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3337628000000006" lon="12.6121608999999992"/>
+    <node visible="true" id="-31156233" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3337983999999992" lon="12.6123139999999996"/>
+    <node visible="true" id="-31156232" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3337122000000008" lon="12.6123370999999995"/>
+    <node visible="true" id="-31156231" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3336983999999994" lon="12.6122809999999994"/>
+    <node visible="true" id="-31156230" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3336790999999995" lon="12.6122014000000000"/>
+    <node visible="true" id="-31156229" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3336679999999994" lon="12.6121522000000006"/>
+    <node visible="true" id="-31156228" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3337388000000008" lon="12.6121385999999998"/>
+    <node visible="true" id="-31156227" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3332697000000007" lon="12.6124310000000008"/>
+    <node visible="true" id="-31156226" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3332376999999997" lon="12.6124396999999995"/>
+    <node visible="true" id="-31156225" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3332181999999992" lon="12.6123505999999992"/>
+    <node visible="true" id="-31156224" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3332463000000008" lon="12.6123448000000007"/>
+    <node visible="true" id="-31156223" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3333232000000006" lon="12.6123241000000004"/>
+    <node visible="true" id="-31156222" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3333414999999995" lon="12.6123189999999994"/>
+    <node visible="true" id="-31156221" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3333598000000002" lon="12.6124075999999992"/>
+    <node visible="true" id="-31156220" timestamp="2020-03-10T13:11:13Z" version="1" lat="13.3333265999999995" lon="12.6124168999999995"/>
+    <way visible="true" id="-31156518" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156674"/>
+        <nd ref="-31156626"/>
+        <nd ref="-31156675"/>
+        <nd ref="-31156676"/>
+        <nd ref="-31156677"/>
+        <nd ref="-31156674"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:39:26.000Z"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-31156517" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156662"/>
+        <nd ref="-31156663"/>
+        <nd ref="-31156664"/>
+        <nd ref="-31156672"/>
+        <nd ref="-31156673"/>
+        <nd ref="-31156662"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:39:25.000Z"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-31156516" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156657"/>
+        <nd ref="-31156656"/>
+        <nd ref="-31156655"/>
+        <nd ref="-31156670"/>
+        <nd ref="-31156671"/>
+        <nd ref="-31156625"/>
+        <nd ref="-31156657"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:39:25.000Z"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-31156515" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156651"/>
+        <nd ref="-31156622"/>
+        <nd ref="-31156652"/>
+        <nd ref="-31156653"/>
+        <nd ref="-31156654"/>
+        <nd ref="-31156624"/>
+        <nd ref="-31156655"/>
+        <nd ref="-31156656"/>
+        <nd ref="-31156657"/>
+        <nd ref="-31156658"/>
+        <nd ref="-31156659"/>
+        <nd ref="-31156660"/>
+        <nd ref="-31156661"/>
+        <nd ref="-31156662"/>
+        <nd ref="-31156663"/>
+        <nd ref="-31156664"/>
+        <nd ref="-31156665"/>
+        <nd ref="-31156666"/>
+        <nd ref="-31156667"/>
+        <nd ref="-31156668"/>
+        <nd ref="-31156669"/>
+        <nd ref="-31156651"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:39:26.000Z"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-31156219" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156649"/>
+        <nd ref="-31156243"/>
+        <nd ref="-31156650"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156218" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156646"/>
+        <nd ref="-31156647"/>
+        <nd ref="-31156648"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156217" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156642"/>
+        <nd ref="-31156643"/>
+        <nd ref="-31156644"/>
+        <nd ref="-31156645"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156216" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156639"/>
+        <nd ref="-31156640"/>
+        <nd ref="-31156641"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156215" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156637"/>
+        <nd ref="-31156638"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156214" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156629"/>
+        <nd ref="-31156630"/>
+        <nd ref="-31156631"/>
+        <nd ref="-31156632"/>
+        <nd ref="-31156633"/>
+        <nd ref="-31156634"/>
+        <nd ref="-31156635"/>
+        <nd ref="-31156636"/>
+        <nd ref="-31156629"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="source_1" v="Atlas Urbain pour lews Communes du Niger"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="amenity" v="school"/>
+        <tag k="source:datetime" v="2015-01-23T16:19:57.000Z"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2017-08-12 09:34:49"/>
+        <tag k="source:imagery:id" v="e7e3d355c780ce791bd4182477f2fb78"/>
+        <tag k="source:imagery:sensor" v="GE01"/>
+    </way>
+    <way visible="true" id="-31156213" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156627"/>
+        <nd ref="-31156628"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156212" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156625"/>
+        <nd ref="-31156626"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:39:26.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156211" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156622"/>
+        <nd ref="-31156623"/>
+        <nd ref="-31156624"/>
+        <tag k="source:datetime" v="2015-11-28T22:39:26.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156210" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156620"/>
+        <nd ref="-31156621"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156209" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156618"/>
+        <nd ref="-31156619"/>
+        <nd ref="-31156440"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156208" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156616"/>
+        <nd ref="-31156617"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156207" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156610"/>
+        <nd ref="-31156611"/>
+        <nd ref="-31156612"/>
+        <nd ref="-31156613"/>
+        <nd ref="-31156614"/>
+        <nd ref="-31156615"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2017-08-12 09:34:49"/>
+        <tag k="source:imagery:id" v="e7e3d355c780ce791bd4182477f2fb78"/>
+        <tag k="source:imagery:sensor" v="GE01"/>
+    </way>
+    <way visible="true" id="-31156206" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156597"/>
+        <nd ref="-31156598"/>
+        <nd ref="-31156599"/>
+        <nd ref="-31156600"/>
+        <nd ref="-31156601"/>
+        <nd ref="-31156602"/>
+        <nd ref="-31156603"/>
+        <nd ref="-31156604"/>
+        <nd ref="-31156605"/>
+        <nd ref="-31156606"/>
+        <nd ref="-31156607"/>
+        <nd ref="-31156608"/>
+        <nd ref="-31156609"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2015-01-31T00:14:40.000Z"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2017-08-12 09:34:49"/>
+        <tag k="source:imagery:id" v="e7e3d355c780ce791bd4182477f2fb78"/>
+        <tag k="source:imagery:sensor" v="GE01"/>
+    </way>
+    <way visible="true" id="-31156205" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156595"/>
+        <nd ref="-31156596"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-06-04T19:36:31.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156204" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156579"/>
+        <nd ref="-31156580"/>
+        <nd ref="-31156581"/>
+        <nd ref="-31156582"/>
+        <nd ref="-31156583"/>
+        <nd ref="-31156584"/>
+        <nd ref="-31156585"/>
+        <nd ref="-31156586"/>
+        <nd ref="-31156587"/>
+        <nd ref="-31156588"/>
+        <nd ref="-31156589"/>
+        <nd ref="-31156590"/>
+        <nd ref="-31156591"/>
+        <nd ref="-31156592"/>
+        <nd ref="-31156593"/>
+        <nd ref="-31156594"/>
+        <nd ref="-31156579"/>
+        <tag k="source:datetime" v="2013-06-18T10:40:33.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156203" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156572"/>
+        <nd ref="-31156573"/>
+        <nd ref="-31156574"/>
+        <nd ref="-31156575"/>
+        <nd ref="-31156576"/>
+        <nd ref="-31156577"/>
+        <nd ref="-31156578"/>
+        <nd ref="-31156572"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:datetime" v="2013-06-18T11:53:20.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156202" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156556"/>
+        <nd ref="-31156565"/>
+        <nd ref="-31156566"/>
+        <nd ref="-31156567"/>
+        <nd ref="-31156568"/>
+        <nd ref="-31156569"/>
+        <nd ref="-31156570"/>
+        <nd ref="-31156571"/>
+        <nd ref="-31156555"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:datetime" v="2013-06-18T11:53:20.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156201" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156557"/>
+        <nd ref="-31156558"/>
+        <nd ref="-31156559"/>
+        <nd ref="-31156560"/>
+        <nd ref="-31156561"/>
+        <nd ref="-31156562"/>
+        <nd ref="-31156563"/>
+        <nd ref="-31156564"/>
+        <tag k="source:datetime" v="2015-06-04T19:36:33.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156200" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156549"/>
+        <nd ref="-31156550"/>
+        <nd ref="-31156551"/>
+        <nd ref="-31156552"/>
+        <nd ref="-31156553"/>
+        <nd ref="-31156554"/>
+        <nd ref="-31156555"/>
+        <nd ref="-31156556"/>
+        <nd ref="-31156549"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:datetime" v="2013-06-18T11:53:20.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156199" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156545"/>
+        <nd ref="-31156546"/>
+        <nd ref="-31156547"/>
+        <nd ref="-31156548"/>
+        <nd ref="-31156545"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-02-28T22:28:04.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156198" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156539"/>
+        <nd ref="-31156540"/>
+        <nd ref="-31156541"/>
+        <nd ref="-31156542"/>
+        <nd ref="-31156543"/>
+        <nd ref="-31156544"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-02-28T22:28:04.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156197" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156519"/>
+        <nd ref="-31156520"/>
+        <nd ref="-31156521"/>
+        <nd ref="-31156522"/>
+        <nd ref="-31156523"/>
+        <nd ref="-31156524"/>
+        <nd ref="-31156525"/>
+        <nd ref="-31156526"/>
+        <nd ref="-31156527"/>
+        <nd ref="-31156528"/>
+        <nd ref="-31156529"/>
+        <nd ref="-31156530"/>
+        <nd ref="-31156531"/>
+        <nd ref="-31156532"/>
+        <nd ref="-31156533"/>
+        <nd ref="-31156534"/>
+        <nd ref="-31156535"/>
+        <nd ref="-31156536"/>
+        <nd ref="-31156537"/>
+        <nd ref="-31156538"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156195" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156512"/>
+        <nd ref="-31156510"/>
+        <nd ref="-31156513"/>
+        <nd ref="-31156514"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156194" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156510"/>
+        <nd ref="-31156511"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156193" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156506"/>
+        <nd ref="-31156507"/>
+        <nd ref="-31156508"/>
+        <nd ref="-31156509"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156192" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156504"/>
+        <nd ref="-31156505"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156191" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156494"/>
+        <nd ref="-31156495"/>
+        <nd ref="-31156496"/>
+        <nd ref="-31156497"/>
+        <nd ref="-31156498"/>
+        <nd ref="-31156499"/>
+        <nd ref="-31156500"/>
+        <nd ref="-31156501"/>
+        <nd ref="-31156502"/>
+        <nd ref="-31156503"/>
+        <nd ref="-31156494"/>
+        <tag k="source:datetime" v="2013-06-18T10:40:37.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156190" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156491"/>
+        <nd ref="-31156492"/>
+        <nd ref="-31156493"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156189" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156487"/>
+        <nd ref="-31156490"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156188" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156487"/>
+        <nd ref="-31156488"/>
+        <nd ref="-31156489"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156187" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156484"/>
+        <nd ref="-31156485"/>
+        <nd ref="-31156486"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156186" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156482"/>
+        <nd ref="-31156475"/>
+        <nd ref="-31156483"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156185" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156479"/>
+        <nd ref="-31156480"/>
+        <nd ref="-31156481"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156184" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156477"/>
+        <nd ref="-31156478"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156183" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156475"/>
+        <nd ref="-31156476"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156182" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156471"/>
+        <nd ref="-31156472"/>
+        <nd ref="-31156473"/>
+        <nd ref="-31156474"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156181" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156466"/>
+        <nd ref="-31156462"/>
+        <nd ref="-31156467"/>
+        <nd ref="-31156468"/>
+        <nd ref="-31156469"/>
+        <nd ref="-31156470"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156180" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156464"/>
+        <nd ref="-31156465"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156179" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156462"/>
+        <nd ref="-31156463"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156178" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156460"/>
+        <nd ref="-31156461"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156177" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156456"/>
+        <nd ref="-31156457"/>
+        <nd ref="-31156458"/>
+        <nd ref="-31156459"/>
+        <nd ref="-31156456"/>
+        <tag k="source:datetime" v="2013-06-18T11:37:36.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156176" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156445"/>
+        <nd ref="-31156455"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156175" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156447"/>
+        <nd ref="-31156448"/>
+        <nd ref="-31156449"/>
+        <nd ref="-31156450"/>
+        <nd ref="-31156451"/>
+        <nd ref="-31156452"/>
+        <nd ref="-31156453"/>
+        <nd ref="-31156454"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2013-06-18T11:37:36.000Z"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156174" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156445"/>
+        <nd ref="-31156446"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156173" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156442"/>
+        <nd ref="-31156443"/>
+        <nd ref="-31156444"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156172" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156438"/>
+        <nd ref="-31156439"/>
+        <nd ref="-31156440"/>
+        <nd ref="-31156441"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156171" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156432"/>
+        <nd ref="-31156433"/>
+        <nd ref="-31156434"/>
+        <nd ref="-31156435"/>
+        <nd ref="-31156436"/>
+        <nd ref="-31156437"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2017-08-12 09:34:49"/>
+        <tag k="source:imagery:id" v="e7e3d355c780ce791bd4182477f2fb78"/>
+        <tag k="source:imagery:sensor" v="GE01"/>
+    </way>
+    <way visible="true" id="-31156170" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156429"/>
+        <nd ref="-31156430"/>
+        <nd ref="-31156431"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156169" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156427"/>
+        <nd ref="-31156428"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156168" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156425"/>
+        <nd ref="-31156426"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156167" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156423"/>
+        <nd ref="-31156424"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156166" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156421"/>
+        <nd ref="-31156422"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156165" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156419"/>
+        <nd ref="-31156420"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156164" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156416"/>
+        <nd ref="-31156417"/>
+        <nd ref="-31156418"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156163" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156410"/>
+        <nd ref="-31156411"/>
+        <nd ref="-31156412"/>
+        <nd ref="-31156413"/>
+        <nd ref="-31156414"/>
+        <nd ref="-31156415"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2018-12-19 09:56:56 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2018-12-19 09:56:56"/>
+        <tag k="source:imagery:id" v="024c03c05639841a460bc994dd6edb47"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156162" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156404"/>
+        <nd ref="-31156405"/>
+        <nd ref="-31156406"/>
+        <nd ref="-31156407"/>
+        <nd ref="-31156408"/>
+        <nd ref="-31156409"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:23:18.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156161" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156400"/>
+        <nd ref="-31156401"/>
+        <nd ref="-31156399"/>
+        <nd ref="-31156402"/>
+        <nd ref="-31156403"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156160" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156398"/>
+        <nd ref="-31156399"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156159" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156391"/>
+        <nd ref="-31156392"/>
+        <nd ref="-31156393"/>
+        <nd ref="-31156394"/>
+        <nd ref="-31156395"/>
+        <nd ref="-31156396"/>
+        <nd ref="-31156397"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156158" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156385"/>
+        <nd ref="-31156386"/>
+        <nd ref="-31156387"/>
+        <nd ref="-31156388"/>
+        <nd ref="-31156389"/>
+        <nd ref="-31156390"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:23:18.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156157" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156380"/>
+        <nd ref="-31156381"/>
+        <nd ref="-31156382"/>
+        <nd ref="-31156383"/>
+        <nd ref="-31156384"/>
+        <tag k="source" v="Bing"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-11-28T22:23:18.000Z"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156156" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156377"/>
+        <nd ref="-31156378"/>
+        <nd ref="-31156379"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156155" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156302"/>
+        <nd ref="-31156373"/>
+        <nd ref="-31156374"/>
+        <nd ref="-31156375"/>
+        <nd ref="-31156376"/>
+        <nd ref="-31156303"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-02-02T11:41:35.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156154" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156362"/>
+        <nd ref="-31156363"/>
+        <nd ref="-31156364"/>
+        <nd ref="-31156365"/>
+        <nd ref="-31156366"/>
+        <nd ref="-31156367"/>
+        <nd ref="-31156368"/>
+        <nd ref="-31156369"/>
+        <nd ref="-31156370"/>
+        <nd ref="-31156371"/>
+        <nd ref="-31156372"/>
+        <nd ref="-31156362"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-02-02T11:41:35.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156153" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156357"/>
+        <nd ref="-31156358"/>
+        <nd ref="-31156359"/>
+        <nd ref="-31156360"/>
+        <nd ref="-31156361"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156152" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156354"/>
+        <nd ref="-31156355"/>
+        <nd ref="-31156356"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156151" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156352"/>
+        <nd ref="-31156353"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156150" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156348"/>
+        <nd ref="-31156349"/>
+        <nd ref="-31156350"/>
+        <nd ref="-31156351"/>
+        <nd ref="-31156348"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="addr:city" v="Diffa, Niger"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2017-03-03 09:40:47"/>
+        <tag k="source:imagery:id" v="ea843113519ca7594af61c5de8f93d98"/>
+        <tag k="source:imagery:sensor" v="WV02"/>
+    </way>
+    <way visible="true" id="-31156149" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156346"/>
+        <nd ref="-31156347"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156148" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156269"/>
+        <nd ref="-31156340"/>
+        <nd ref="-31156341"/>
+        <nd ref="-31156342"/>
+        <nd ref="-31156343"/>
+        <nd ref="-31156344"/>
+        <nd ref="-31156345"/>
+        <tag k="source" v="Bing"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-05T16:22:33.000Z"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156147" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156331"/>
+        <nd ref="-31156332"/>
+        <nd ref="-31156333"/>
+        <nd ref="-31156334"/>
+        <nd ref="-31156335"/>
+        <nd ref="-31156336"/>
+        <nd ref="-31156337"/>
+        <nd ref="-31156338"/>
+        <nd ref="-31156328"/>
+        <nd ref="-31156339"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156146" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156328"/>
+        <nd ref="-31156329"/>
+        <nd ref="-31156330"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156145" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156326"/>
+        <nd ref="-31156327"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156144" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156320"/>
+        <nd ref="-31156321"/>
+        <nd ref="-31156322"/>
+        <nd ref="-31156323"/>
+        <nd ref="-31156324"/>
+        <nd ref="-31156325"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156143" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156315"/>
+        <nd ref="-31156316"/>
+        <nd ref="-31156317"/>
+        <nd ref="-31156318"/>
+        <nd ref="-31156319"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156142" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156308"/>
+        <nd ref="-31156309"/>
+        <nd ref="-31156310"/>
+        <nd ref="-31156311"/>
+        <nd ref="-31156312"/>
+        <nd ref="-31156313"/>
+        <nd ref="-31156314"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156141" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156299"/>
+        <nd ref="-31156300"/>
+        <nd ref="-31156301"/>
+        <nd ref="-31156302"/>
+        <nd ref="-31156303"/>
+        <nd ref="-31156304"/>
+        <nd ref="-31156305"/>
+        <nd ref="-31156306"/>
+        <nd ref="-31156307"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-02-02T11:41:35.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156140" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156294"/>
+        <nd ref="-31156295"/>
+        <nd ref="-31156296"/>
+        <nd ref="-31156297"/>
+        <nd ref="-31156279"/>
+        <nd ref="-31156298"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156139" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156287"/>
+        <nd ref="-31156288"/>
+        <nd ref="-31156289"/>
+        <nd ref="-31156290"/>
+        <nd ref="-31156291"/>
+        <nd ref="-31156292"/>
+        <nd ref="-31156293"/>
+        <nd ref="-31156287"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2015-02-02T11:37:18.000Z"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2017-08-12 09:34:49"/>
+        <tag k="source:imagery:id" v="e7e3d355c780ce791bd4182477f2fb78"/>
+        <tag k="source:imagery:sensor" v="GE01"/>
+    </way>
+    <way visible="true" id="-31156138" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156265"/>
+        <nd ref="-31156283"/>
+        <nd ref="-31156284"/>
+        <nd ref="-31156285"/>
+        <nd ref="-31156286"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156137" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156279"/>
+        <nd ref="-31156280"/>
+        <nd ref="-31156281"/>
+        <nd ref="-31156282"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156136" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156277"/>
+        <nd ref="-31156278"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156135" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156275"/>
+        <nd ref="-31156276"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156134" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156272"/>
+        <nd ref="-31156273"/>
+        <nd ref="-31156274"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156133" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156270"/>
+        <nd ref="-31156255"/>
+        <nd ref="-31156271"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156132" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156259"/>
+        <nd ref="-31156260"/>
+        <nd ref="-31156261"/>
+        <nd ref="-31156262"/>
+        <nd ref="-31156263"/>
+        <nd ref="-31156264"/>
+        <nd ref="-31156265"/>
+        <nd ref="-31156266"/>
+        <nd ref="-31156267"/>
+        <nd ref="-31156268"/>
+        <nd ref="-31156269"/>
+        <tag k="source" v="Bing"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="source:datetime" v="2015-10-05T16:22:33.000Z"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156131" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156256"/>
+        <nd ref="-31156257"/>
+        <nd ref="-31156258"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156130" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156253"/>
+        <nd ref="-31156254"/>
+        <nd ref="-31156255"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156129" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156248"/>
+        <nd ref="-31156249"/>
+        <nd ref="-31156250"/>
+        <nd ref="-31156251"/>
+        <nd ref="-31156252"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156128" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156244"/>
+        <nd ref="-31156245"/>
+        <nd ref="-31156246"/>
+        <nd ref="-31156242"/>
+        <nd ref="-31156247"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156127" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156242"/>
+        <nd ref="-31156243"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:layerName" v="2019-10-30 10:06:20 - WV03_VNIR"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2019-10-30 10:06:20"/>
+        <tag k="source:imagery:id" v="863f3b91e0082b8de9c7d8398daafd44"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+    </way>
+    <way visible="true" id="-31156126" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156238"/>
+        <nd ref="-31156239"/>
+        <nd ref="-31156240"/>
+        <nd ref="-31156241"/>
+        <nd ref="-31156238"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2015-01-08T01:52:47.000Z"/>
+        <tag k="barrier" v="wall"/>
+        <tag k="source:imagery:datetime" v="2017-08-12 09:34:49"/>
+        <tag k="source:imagery:id" v="e7e3d355c780ce791bd4182477f2fb78"/>
+        <tag k="source:imagery:sensor" v="GE01"/>
+    </way>
+    <way visible="true" id="-31156125" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156232"/>
+        <nd ref="-31156235"/>
+        <nd ref="-31156236"/>
+        <nd ref="-31156237"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:23:18.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156124" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156231"/>
+        <nd ref="-31156232"/>
+        <nd ref="-31156233"/>
+        <nd ref="-31156234"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:23:17.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156123" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156228"/>
+        <nd ref="-31156229"/>
+        <nd ref="-31156230"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:23:17.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156122" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156224"/>
+        <nd ref="-31156225"/>
+        <nd ref="-31156226"/>
+        <nd ref="-31156227"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:23:17.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-31156121" timestamp="2020-03-10T13:11:13Z" version="1">
+        <nd ref="-31156220"/>
+        <nd ref="-31156221"/>
+        <nd ref="-31156222"/>
+        <nd ref="-31156223"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-11-28T22:23:17.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <relation visible="true" id="-31156196" timestamp="2020-03-10T13:11:13Z" version="1">
+        <member type="way" ref="-31156211" role=""/>
+        <member type="way" ref="-31156515" role=""/>
+        <member type="way" ref="-31156516" role=""/>
+        <member type="way" ref="-31156517" role=""/>
+        <member type="way" ref="-31156212" role=""/>
+        <member type="way" ref="-31156518" role=""/>
+        <tag k="source:datetime" v="2015-11-28T22:39:26.000Z"/>
+        <tag k="name" v="complex building"/>
+    </relation>
+</osm>

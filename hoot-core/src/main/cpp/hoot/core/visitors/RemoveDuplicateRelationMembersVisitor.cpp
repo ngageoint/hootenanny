@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveDuplicateRelationMembersVisitor.h"
@@ -34,37 +34,39 @@
 
 // Qt
 #include <QVector>
-#include <QSet>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateRelationMembersVisitor)
 
-RemoveDuplicateRelationMembersVisitor::RemoveDuplicateRelationMembersVisitor()
-{
-}
-
 void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
 {
   if (e->getElementType() == ElementType::Relation)
   {
     RelationPtr relation = std::dynamic_pointer_cast<Relation>(e);
+    LOG_VART(relation->getElementId());
     const std::vector<RelationData::Entry>& members = relation->getMembers();
     if (members.size() > 1)
     {
-      QSet<RelationData::Entry> uniqueMembers;
+      // use an ordered collection here; entry doesn't have an < implementation, otherwise
+      // std::set could be used
+      QList<RelationData::Entry> uniqueMembers;
       for (std::vector<RelationData::Entry>::const_iterator it = members.begin();
            it != members.end(); ++it)
       {
-        uniqueMembers.insert(*it);
+        if (!uniqueMembers.contains(*it))
+        {
+          uniqueMembers.append(*it);
+        }
       }
 
-      // no point in updating them members if there were no dupes
+      // no point in updating the members if there were no dupes
       if (uniqueMembers.size() < (int)members.size())
       {
-        _numAffected += ((int)members.size() - uniqueMembers.size());
-        relation->setMembers(uniqueMembers.toList().toVector().toStdVector());
+        LOG_TRACE("Updating " << relation->getElementId() << "...");
+        _numAffected += (members.size() - uniqueMembers.size());
+        relation->setMembers(uniqueMembers.toVector().toStdVector());
       }
     }
   }

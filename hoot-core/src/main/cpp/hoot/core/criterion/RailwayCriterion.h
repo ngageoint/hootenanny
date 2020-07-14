@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RAILWAYCRITERION_H
@@ -35,7 +35,9 @@ namespace hoot
 {
 
 /**
- * A criterion that will keep railways.
+ * A criterion that will match linear railways.
+ *
+ * @todo rename to LinearRailwayCriterion?
  */
 class RailwayCriterion : public ConflatableElementCriterion
 {
@@ -43,7 +45,8 @@ public:
 
   static std::string className() { return "hoot::RailwayCriterion"; }
 
-  RailwayCriterion();
+  RailwayCriterion() = default;
+  virtual ~RailwayCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -53,10 +56,12 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RailwayCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies railways"; }
+  virtual QString getDescription() const { return "Identifies linear railways"; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
+
+  virtual bool supportsSpecificConflation() const { return true; }
 };
 
 }

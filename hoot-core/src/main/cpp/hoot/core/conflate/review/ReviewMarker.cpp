@@ -45,26 +45,28 @@ _addReviewTagsToFeatures(ConfigOptions().getAddReviewTagsToFeatures())
 {
 }
 
-set<ElementId> ReviewMarker::getReviewElements(const ConstOsmMapPtr &map, ReviewUid uid)
+set<ElementId> ReviewMarker::getReviewElements(const ConstOsmMapPtr& map, ReviewUid uid)
 {
   set<ElementId> result;
 
   ConstRelationPtr r = map->getRelation(uid.getId());
-
   if (r)
   {
     const vector<RelationData::Entry>& entries = r->getMembers();
-
     for (size_t i = 0; i < entries.size(); i++)
     {
-      result.insert(entries[i].getElementId());
+      const ElementId elementId = entries[i].getElementId();
+      if (map->containsElement(elementId))
+      {
+        result.insert(elementId);
+      }
     }
   }
 
   return result;
 }
 
-set<ElementId> ReviewMarker::_getReviewRelations(const ConstOsmMapPtr &map, ElementId eid)
+set<ElementId> ReviewMarker::_getReviewRelations(const ConstOsmMapPtr& map, ElementId eid)
 {
   set<ElementId> result = map->getParents(eid);
 
@@ -82,13 +84,10 @@ set<ElementId> ReviewMarker::_getReviewRelations(const ConstOsmMapPtr &map, Elem
   return result;
 }
 
-QString ReviewMarker::getReviewType(const ConstOsmMapPtr &map, ReviewUid uid)
+QString ReviewMarker::getReviewType(const ConstOsmMapPtr& map, ReviewUid uid)
 {
   assert(isReviewUid(map, uid));
-
-  ConstRelationPtr r = map->getRelation(uid.getId());
-
-  return r->getTags()[MetadataTags::HootReviewType()];
+  return map->getRelation(uid.getId())->getTags()[MetadataTags::HootReviewType()];
 }
 
 set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map)
@@ -108,13 +107,13 @@ set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &m
   return result;
 }
 
-set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map,
+set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr& map,
   ConstElementPtr e1)
 {
   return _getReviewRelations(map, e1->getElementId());
 }
 
-bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1)
+bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1)
 {
   // get all the review relations for e1
   set<ElementId> review1 = _getReviewRelations(map, e1->getElementId());
@@ -123,7 +122,7 @@ bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1)
   return review1.size() >= 1;
 }
 
-bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2)
+bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1, ConstElementPtr e2)
 {
   // get all the review relations for e1
   set<ElementId> review1 = _getReviewRelations(map, e1->getElementId());
@@ -142,7 +141,6 @@ bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, 
 bool ReviewMarker::isReview(ConstElementPtr e)
 {
   bool result = false;
-
   if (e->getElementType() == ElementType::Relation)
   {
     if (e->getTags().isTrue(MetadataTags::HootReviewNeeds()))
@@ -150,7 +148,6 @@ bool ReviewMarker::isReview(ConstElementPtr e)
       result = true;
     }
   }
-
   return result;
 }
 
@@ -159,7 +156,7 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
   return isReview(map->getElement(uid));
 }
 
-void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
+void ReviewMarker::mark(const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
   const QString& note, const QString& reviewType, double score, vector<QString> choices)
 {
   if (!e1 || !e2)
@@ -179,7 +176,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const std::set<ElementId>& ids, co
   mark(map, vids, note, reviewType, score, choices);
 }
 
-void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
+void ReviewMarker::mark(const OsmMapPtr& map, const ConstElementPtr& e, const QString& note,
   const QString& reviewType, double score, vector<QString> choices)
 {
   if (!e)
@@ -192,7 +189,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
 }
 
 void ReviewMarker::mark(
-  const OsmMapPtr &map, const std::vector<ElementId>& ids, const QString& note,
+  const OsmMapPtr& map, const std::vector<ElementId>& ids, const QString& note,
   const QString& reviewType, double score, vector<QString> choices)
 {
   if (note.isEmpty())

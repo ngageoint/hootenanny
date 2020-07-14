@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MARKFORREVIEWMERGERCREATOR_H
 #define MARKFORREVIEWMERGERCREATOR_H
@@ -39,13 +39,16 @@ public:
 
   static std::string className() { return "hoot::MarkForReviewMergerCreator"; }
 
-  MarkForReviewMergerCreator();
+  MarkForReviewMergerCreator() = default;
+  virtual ~MarkForReviewMergerCreator() = default;
 
   virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const override;
+  virtual bool isConflicting(
+    const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 };
 
 }

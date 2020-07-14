@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ADDRESS_COUNT_VISITOR_H
@@ -47,7 +47,8 @@ public:
 
   static std::string className() { return "hoot::AddressCountVisitor"; }
 
-  AddressCountVisitor();
+  AddressCountVisitor() : _totalCount(0) { }
+  virtual ~AddressCountVisitor() = default;
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -57,6 +58,8 @@ public:
 
   virtual QString getDescription() const
   { return "Counts the total number of valid element addresses"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -52,8 +52,6 @@ public:
 
   static std::string className() { return "hoot::Relation"; }
 
-  static int logWarnCount;
-
   explicit Relation(const Relation& from);
 
   Relation(Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
@@ -63,7 +61,7 @@ public:
            QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
            bool visible = ElementData::VISIBLE_EMPTY);
 
-  virtual ~Relation() {}
+  virtual ~Relation() = default;
 
   void addElement(const QString& role, const std::shared_ptr<const Element>& e);
   void addElement(const QString& role, ElementType t, long id);
@@ -83,22 +81,50 @@ public:
   bool contains(ElementId eid) const;
 
   /**
+   * Finds the index of a member
+   *
+   * @param eid ID of the relation member
+   * @return a numerical index
+   */
+  size_t indexOf(ElementId eid) const;
+
+  /**
+   * Inserts a relation member
+   *
+   * @param role role of the member
+   * @param elementId ID of the member
+   * @param pos position in the relation to insert the member
+   */
+  void insertElement(const QString& role, const ElementId& elementId, size_t pos);
+
+  /**
    * Returns the number of member elements with the given relation role
    *
    * @param role role by which to examine elements
    * @return the number of member elements with the specified role
    */
-  int numElementsByRole(const QString& role) const;
+  int numElementsByRole(const QString& role);
+
+  /**
+   * Retrieves all members with a particular role
+   *
+   * @param role role to search for
+   * @return a collection of members
+   */
+  const std::vector<RelationData::Entry> getElementsByRole(const QString& role);
 
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
 
+  size_t getMemberCount() const { return _relationData->getElements().size(); }
+
   /**
-   * Returns the IDs of all way members
+   * Returns the IDs of members
    *
+   * @param elementType optional element type of element Ids to return
    * @return a collection of element IDs
    */
-  std::set<ElementId> getWayMemberIds() const;
+  std::set<ElementId> getMemberIds(const ElementType& elementType = ElementType::Unknown) const;
 
   virtual geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
@@ -125,7 +151,7 @@ public:
   { return _relationData->getType() == MetadataTags::RelationRestriction(); }
 
   /**
-   * Remove all members that meet the speicified criteria. If no members meet the criteria then
+   * Remove all members that meet the specified criteria. If no members meet the criteria then
    * no changes are made.
    */
   void removeElement(const QString& role, const std::shared_ptr<const Element>& e);
@@ -171,6 +197,8 @@ public:
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
 
 private:
+
+  static int logWarnCount;
 
   std::shared_ptr<RelationData> _relationData;
 

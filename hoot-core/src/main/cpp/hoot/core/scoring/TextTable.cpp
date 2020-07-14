@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TextTable.h"
 
@@ -35,6 +35,10 @@
 
 // Standard
 #include <algorithm>
+
+// Boost
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 namespace hoot
 {
@@ -106,6 +110,37 @@ QString TextTable::toWikiString()
   }
 
   return result;
+}
+
+QString TextTable::toJsonString()
+{
+  const QStringList rows = _calculateRows();
+  const QStringList cols = _calculateColumns();
+
+  boost::property_tree::ptree result;
+
+  for (int i = 0; i < rows.size(); i++)
+  {
+    LOG_VART(rows[i]);
+
+    boost::property_tree::ptree children;
+    for (int j = 0; j < cols.size(); j++)
+    {
+      LOG_VART(cols[j]);
+      LOG_VART(_data[rows[i]][cols[j]].toString());
+
+      boost::property_tree::ptree child;
+      // Unfortunately, don't think the boost prop writer supports numerical values, so outputting
+      // everything as a string, even if it should be a JSON numerical value.
+      child.put(cols[j].toStdString(), _data[rows[i]][cols[j]].toString().toStdString());
+      children.push_back(std::make_pair("", child));
+    }
+    result.add_child(rows[i].toStdString(), children);
+  }
+
+  std::stringstream stringStrm;
+  boost::property_tree::json_parser::write_json(stringStrm, result);
+  return QString::fromStdString(stringStrm.str());
 }
 
 }

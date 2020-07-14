@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGPARTMERGEOP_H
 #define BUILDINGPARTMERGEOP_H
@@ -31,7 +31,6 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/StringUtils.h>
@@ -94,16 +93,15 @@ namespace hoot
  * buildings? Or should we change it only to be more strict and only merge building:part features
  * (if that's possible; or maybe its already doing that)?
  */
-class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo,
-  public Configurable
+class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::BuildingPartMergeOp"; }
 
-  static int logWarnCount;
 
   BuildingPartMergeOp(bool preserveTypes = false);
+  virtual ~BuildingPartMergeOp() = default;
 
   virtual void apply(OsmMapPtr& map) override;
 
@@ -111,8 +109,8 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual void readObject(QDataStream& /*is*/) {}
-  virtual void writeObject(QDataStream& /*os*/) const {}
+  virtual void readObject(QDataStream& /*is*/) { }
+  virtual void writeObject(QDataStream& /*os*/) const { }
 
   virtual QString getDescription() const override
   { return "Merges individual building parts into a single building"; }
@@ -135,6 +133,8 @@ public:
   void setPreserveTypes(bool preserve) { _preserveTypes = preserve; }
 
 private:
+
+  static int logWarnCount;
 
   // used to keep track of which elements make up a building
   Tgs::DisjointSetMap<ElementPtr> _buildingPartGroups;

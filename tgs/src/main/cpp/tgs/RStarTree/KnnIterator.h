@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGC_KNN_ITERATOR_H__
@@ -87,7 +87,7 @@ public:
   class NodeDistance
   {
   public:
-    NodeDistance() {}
+    NodeDistance() = default;
 
     NodeDistance(double dist, int nodeId)
     {

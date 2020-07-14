@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyOp.h"
 
@@ -37,6 +37,7 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/algorithms/perty/DirectSequentialSimulation.h>
 #include <hoot/core/algorithms/perty/PermuteGridCalculator.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 //Qt
 #include <QVector>
@@ -60,6 +61,7 @@ public:
     _gridSpacing(gridSpacing)
   {
   }
+  virtual ~ShiftMapVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -75,6 +77,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual std::string getClassName() const { return ""; }
 
   virtual void visit(const std::shared_ptr<Element>&) {}
 
@@ -201,8 +204,9 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
 
   // permute the data first
   permute(map);
+  OsmMapWriterFactory::writeDebugMap(map, "perty-after-perty-op");
 
-  // Apply any user specified operations.
+  // apply any custom perturbation ops
   NamedOp namedOps(_namedOps);
   namedOps.setConfiguration(_settings);
   namedOps.apply(map);

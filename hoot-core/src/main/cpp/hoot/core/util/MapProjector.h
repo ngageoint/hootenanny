@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __MAP_PROJECTOR_H__
 #define __MAP_PROJECTOR_H__
@@ -90,7 +90,8 @@ public:
   /**
    * Returns a vector of all candidate planar projections for a given envelope.
    */
-  std::vector<std::shared_ptr<OGRSpatialReference>> createAllPlanarProjections(const OGREnvelope& env);
+  std::vector<std::shared_ptr<OGRSpatialReference>> createAllPlanarProjections(
+    const OGREnvelope& env);
 
   /**
    * Using a predefined set of projections this method evaluates each one of them for both distance
@@ -171,9 +172,14 @@ private:
     Meters distanceError;
     Radians angleError;
     double score;
-  };
 
-  MapProjector() {}
+    QString toString() const
+    {
+      return
+        "Distance Error: " + QString::number(distanceError) + ", Angle Error: " +
+        QString::number(angleError) + ", Score: " + QString::number(score);
+    }
+  };
 
   static std::shared_ptr<MapProjector> _theInstance;
 
@@ -187,11 +193,16 @@ private:
   bool _evaluateProjection(const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs,
     Meters testDistance, Meters& maxDistanceError, Radians& maxAngleError);
 
-  size_t _findBestResult(std::vector<PlanarTestResult>& results);
-
   size_t _findBestScore(std::vector<PlanarTestResult>& results);
 
   static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
+
+  /** Default constructor/destructor */
+  MapProjector() = default;
+  ~MapProjector() = default;
+  /** Delete copy constructor and assignment operator */
+  MapProjector(const MapProjector&) = delete;
+  MapProjector& operator=(const MapProjector&) = delete;
 };
 
 class ReprojectCoordinateFilter : public geos::geom::CoordinateFilter

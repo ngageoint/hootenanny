@@ -30,4 +30,14 @@
         <nd ref="-17807"/>
         <tag k="key4" v="value4"/>
     </way>
+    <way visible="true" id="-4867">
+        <nd ref="-7454"/>
+        <nd ref="-7455"/>
+        <tag k="blah" v="bleh"/>
+    </way>
+    <way visible="true" id="-4866">
+        <nd ref="-7459"/>
+        <nd ref="-7455"/>
+        <tag k="mykey" v="myval"/>
+    </way>
 </osm>

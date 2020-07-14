@@ -7,7 +7,7 @@
 # The format is: <address component type>=<tag key 1>,<tag key 2>... Keep address component types and tag keys in alphabetical order.
 
 full_address=address,addr:full,ref:addr,source:addr,source:address
-house_number=addr:conscriptionnumber,addr:door,addr:housenumber,addr:provisionalnumber,addr:street:sym_ul,addr:streetnumber
+house_number=addr:conscriptionnumber,addr:door,addr:housenumber,addr:provisionalnumber,addr:street:sym_ul,addr:streetnumber,addr:housename
 street=addr:street,addr:street:name
 street_prefix=addr:street:prefix
 street_suffix=addr:street:suffix,addr:street:type

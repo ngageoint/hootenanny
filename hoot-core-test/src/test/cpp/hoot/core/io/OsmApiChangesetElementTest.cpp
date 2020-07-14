@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //  Hoot
@@ -40,6 +40,7 @@ class OsmApiChangesetElementTest : public HootTestFixture
   CPPUNIT_TEST(runNonAsciiChangesetNodeTest);
   CPPUNIT_TEST(runChangesetWayTest);
   CPPUNIT_TEST(runChangesetRelationTest);
+  CPPUNIT_TEST(runTagTruncateTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -195,6 +196,39 @@ public:
                     "\t\t\t<tag k=\"type\" v=\"multipolygon\"/>\n"
                     "\t\t</relation>\n",
                     relation.toString(1));
+  }
+
+  void runTagTruncateTest()
+  {
+    QXmlStreamAttributes attributes;
+    attributes.append("id", "-1");
+    attributes.append("version", "0");
+    attributes.append("lat", "38.8549321261880536");
+    attributes.append("lon", "-104.8979050333482093");
+    XmlObject n;
+    n.first = "node";
+    n.second = attributes;
+    ChangesetNode node(n, NULL);
+
+    //  There are max-9 Xs quoted, when HTML encoded the second '&quot;' runs over the max length mark
+    //  and is truncated mid-encoding. ChangesetElement::toTagString() fixes that and truncates before
+    //  the start of the encoding.
+    QString v = QString("\"%1\"").arg(QString(ConfigOptions().getMaxTagLength() - 9, 'X'));
+
+    QXmlStreamAttributes tagAttributes;
+    tagAttributes.append("k", "too:long");
+    tagAttributes.append("v", v);
+    XmlObject nameTag;
+    nameTag.first = "tag";
+    nameTag.second = tagAttributes;
+    node.addTag(nameTag);
+
+    HOOT_STR_EQUALS("\t\t<node id=\"-1\" version=\"0\" "
+                    "lat=\"38.8549321261880536\" lon=\"-104.8979050333482093\" changeset=\"1\">\n"
+                    "\t\t\t<tag k=\"too:long\" v=\"&quot;" +
+                    QString(ConfigOptions().getMaxTagLength() - 9, 'X') + "\"/>\n" /** No ending '&quot;' because it was truncated */
+                    "\t\t</node>\n",
+                    node.toString(1));
   }
 
 };

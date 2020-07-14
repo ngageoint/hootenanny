@@ -30,18 +30,18 @@
 */
 
 tds70.rules = {
-    // ##### Start of One2One Rules #####
+  // ##### Start of One2One Rules #####
 
-    // FCODE rules for Import
-    // This is where anything "unique" to TDS goes.
-    fcodeOne2oneIn : [
+  // FCODE rules for Import
+  // This is where anything "unique" to TDS goes.
+  fcodeOne2oneIn : [
     // ['F_CODE','AP030','highway','road'], // Road
-    ], // End fcodeOne2oneIn
+  ], // End fcodeOne2oneIn
 
-    // These are for finding an FCODE for export.
-    // Note: These get swapped around before being used
-    fcodeOne2oneOut : [
-//     ['F_CODE','AN060','railway','yes'], // Rail yards
+  // These are for finding an FCODE for export.
+  // Note: These get swapped around before being used
+  fcodeOne2oneOut : [
+    //     ['F_CODE','AN060','railway','yes'], // Rail yards
     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
     // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
     ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
@@ -90,9 +90,16 @@ tds70.rules = {
     ['F_CODE','AT042','power','tower'], // OSM
     ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
     ['F_CODE','BA030','place','islet'], // Island - From OSM
+    ['F_CODE','BA040','water','tidal'], // Tidal Water
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],
     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
+    ['F_CODE','DB090','embankment','mound'], // Embankment
+    ['F_CODE','DB090','embankment','berm'],
+    ['F_CODE','DB090','man_made','dyke'],
+    ['F_CODE','DB090','embankment','fill'],
+    ['F_CODE','DB090','embankment','levee'],
+    ['F_CODE','DB090','embankment','divider'],
     ['F_CODE','EB070','natural','heath'], // Brush
     ['F_CODE','ED010','natural','wetland'], // Marsh
     ['F_CODE','ED010','wetland','reedbed'], // Marsh
@@ -105,19 +112,20 @@ tds70.rules = {
     ['F_CODE','ZD040','natural','hill'], // From GeoNames
     ['F_CODE','ZD040','natural','peak'], // From OSM
     ['F_CODE','ZD040','natural','valley'], // From GeoNames
-    ], // End fcodeOne2oneOut
+  ], // End fcodeOne2oneOut
 
-    // One2one rules for Text Fields
-    txtBiased : {
+  // One2one rules for Text Fields
+  txtBiased : {
     'ADR':'addr:full', // Address
     'BA000_VDR':'source:datum:sounding:name', // Water Line : Sounding Datum Name
+    'BEN':'be_number', // Basic Encyclopedia (BE) Number
     'BRN':'bridge:reference', // Bridge Reference Number
     'CCN':'source:copyright', // Commercial Copyright Notice
     'CDR':'source:commercial_distribution_restriction', // Commercial Distribution Restriction
     'CID':'source:cell_identifier', // Cell Identifier
     'DQS':'source:data_quality', // Data Quality Statement
     'ETZ':'source:extraction_specification:version', // Extraction Specification Version
-//     'F_CODE':'raw:F_CODE', // Feature Code
+    //     'F_CODE':'raw:F_CODE', // Feature Code
     'GB052_RIDH':'aeroway:runway_designator_high', // Runway Direction (high end) : Runway Designator (high)
     'GB052_RIDL':'aeroway:runway_designator_low', // Runway Direction (low end) : Runway Designator (low)
     'IKO':'icao', // ICAO Location Indicator
@@ -149,13 +157,14 @@ tds70.rules = {
     'ZI020_GE42':'country_code:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
     'ZI020_GE43':'country_code:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
     'ZI020_GE44':'country_code:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
+    'ZSAX_RS0':'security:classification', // Restriction Information : Security Attributes Group <resource classification>
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
     'ZSAX_RX4':'security:resource_owner', // Restriction Information : Security Attributes Group <resource owner-producer>
-    }, // End txtBiased
+  }, // End txtBiased
 
-    // One2one ruled for Number fields
-    numBiased : {
+  // One2one ruled for Number fields
+  numBiased : {
     'AHA':'source:accuracy:horizontal', // Absolute Horizontal Accuracy (90%)
     'AOO':'angle', // Angle of Orientation
     'ARA':'feature_area', // Area - this has been moved from 'area' due to hoot conflicts
@@ -169,7 +178,7 @@ tds70.rules = {
     'DZC':'deck_count', // Deck Count
     'EPW':'generator:output:electricity', // Electrical Power Generation Capacity
     'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
-//    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
+    //    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
     'GSGCHL':'aeroway:runway_highend:slope:high_lowervalue', // Runway Direction (high end) : Surface Slope (high) (lower value)
     'GSGCHU':'aeroway:runway_highend:slope:high_uppervalue', // Runway Direction (high end) : Surface Slope (high) (upper value)
     'GSGCLL':'aeroway:runway_highend:slope:low_lowervalue', // Runway Direction (low end) : Surface Slope (low) (lower value)
@@ -220,11 +229,11 @@ tds70.rules = {
     'ZI026_CTUU':'cartographic_scale:upper', // Feature Metadata : Cartographic Usability Range <upper value>
     'ZVA':'ele', // Aerodrome Elevation
     'ZVH':'ele:max' // Highest Elevation
-    }, // End numBiased
+  }, // End numBiased
 
 
-    // Common one2one rules. Used for both import and export
-    one2one : [
+  // Common one2one rules. Used for both import and export
+  one2one : [
     // ACC - Horizontal Accuracy Category
     // ['ACC','-999999',undefined,undefined], // noInformation
     ['ACC','1','source:accuracy:horizontal:category','accurate'],
@@ -644,6 +653,7 @@ tds70.rules = {
     ['BSU','15','building:superstructure:type','steeple'], // Steeple
     ['BSU','16','building:superstructure:type','turret'], // Turret
     ['BSU','17','building:superstructure:type','dome'], // Dome
+    ['BSU','18','building:superstructure:type','solar_panels'], // Solar Panels
     ['BSU','999','building:superstructure:type','other'], // Other
 
     // CAA - Controlling Authority - This does not play nicely in OSM
@@ -1327,12 +1337,12 @@ tds70.rules = {
 
     // FIC - Embankment Type
     // ['FIC','-999999',undefined,undefined], // No Information
-    ['FIC','1','embankment:type','mound'], // Mound
-    ['FIC','2','embankment:type','fill'], // Fill
-    ['FIC','3','embankment:type','dyke'], // Dyke
-    ['FIC','5','embankment:type','levee'], // Levee
-    ['FIC','6','embankment:type','divider'], // Divider
-    ['FIC','999','embankment:type','other'], // Other
+    ['FIC','1','embankment','mound'], // Mound
+    ['FIC','2','embankment','fill'], // Fill
+    ['FIC','3','man-made','dyke'], // Dyke
+    ['FIC','5','embankment','levee'], // Levee
+    ['FIC','6','embankment','divider'], // Divider
+    ['FIC','999','embankment','other'], // Other
 
     // FLO - Floating
     // ['FLO','-999999',undefined,undefined], // No Information
@@ -1812,7 +1822,7 @@ tds70.rules = {
     ['IWT','1','water','lake'], // Lake
     ['IWT','2','water','pond'], // Pond
     ['IWT','3','water','undifferentiated_water_body'], // Undifferentiated Water Body
-    ['IWT','4','man_made','reservoir'], // Reservoir
+    ['IWT','4','water','reservoir'], // Reservoir
     ['IWT','5','landuse','basin'], // Basin
     ['IWT','6','water','water-hole'], // Water-hole
     ['IWT','7','water','landlocked_sea'], // Landlocked Sea
@@ -1865,11 +1875,6 @@ tds70.rules = {
     // ['LUN','-999999',undefined,undefined], // No Information
     ['LUN','1000','underground','no'],
     ['LUN','1001','underground','yes'],
-
-    // MAN - Maritime Navigation Marked
-    // ['MAN','-999999',undefined,undefined], // No Information
-    ['MAN','1000','navigation:maritime_landmark','no'],
-    ['MAN','1001','navigation:maritime_landmark','yes'],
 
     // MCC - Structural Material Type
     // ['MCC','-999999',undefined,undefined], // No Information
@@ -2604,7 +2609,7 @@ tds70.rules = {
     ['TRS','5','transport:type','canal'], // Canal
     ['TRS','6','transport:type','caravan_route'], // Caravan Route
     ['TRS','7','transport:type','maritime'],
-    ['TRS','8',undefined,undefined], // No Transportation System
+    ['TRS','8','transport:type','none'], // No Transportation System
     ['TRS','9','transport:type','pedestrian'], // Pedestrian
     ['TRS','10','transport:type','pipeline'], // Pipeline
     ['TRS','11','transport:type','portage'], // Portage
@@ -2985,97 +2990,97 @@ tds70.rules = {
 
     // ZI004_RCG - Feature Metadata : Process Step Information : Resource Content Originator
     // ['ZI004_RCG','-999999',undefined,undefined], // noInformation
-     ['ZI004_RCG','1','attribution','u.s._army'], // U.S. Army
-     ['ZI004_RCG','2','attribution','u.s._navy'], // U.S. Navy
-     ['ZI004_RCG','3','attribution','u.s._air_force'], // U.S. Air Force
-     ['ZI004_RCG','4','attribution','u.s._marine_corps'], // U.S. Marine Corps
-     ['ZI004_RCG','5','attribution','u.s._coast_guard'], // U.S. Coast Guard
-     ['ZI004_RCG','6','attribution','u.s._africa_command_(usafricom)'], // U.S. Africa Command (USAFRICOM)
-     ['ZI004_RCG','7','attribution','u.s._central_command_(uscentcom)'], // U.S. Central Command (USCENTCOM)
-     ['ZI004_RCG','8','attribution','u.s._european_command_(useucom)'], // U.S. European Command (USEUCOM)
-     ['ZI004_RCG','9','attribution','u.s._joint_forces_command_(usjfcom)'], // U.S. Joint Forces Command (USJFCOM)
-     ['ZI004_RCG','10','attribution','u.s._northern_command_(usnorthcom)'], // U.S. Northern Command (USNORTHCOM)
-     ['ZI004_RCG','11','attribution','u.s._pacific_command_(pacom)'], // U.S. Pacific Command (PACOM)
-     ['ZI004_RCG','12','attribution','u.s._special_operations_command_(ussocom)'], // U.S. Special Operations Command (USSOCOM)
-     ['ZI004_RCG','13','attribution','u.s._southern_command_(ussouthcom)'], // U.S. Southern Command (USSOUTHCOM)
-     ['ZI004_RCG','14','attribution','u.s._strategic_command_(usstratcom)'], // U.S. Strategic Command (USSTRATCOM)
-     ['ZI004_RCG','15','attribution','u.s._transportation_command_(ustranscom)'], // U.S. Transportation Command (USTRANSCOM)
-     ['ZI004_RCG','16','attribution','u.s._central_intelligence_agency_(cia)'], // U.S. Central Intelligence Agency (CIA)
-     ['ZI004_RCG','17','attribution','u.s._defense_intelligence_agency_(dia)'], // U.S. Defense Intelligence Agency (DIA)
-     ['ZI004_RCG','18','attribution','u.s._national_security_agency_(nsa)'], // U.S. National Security Agency (NSA)
-     ['ZI004_RCG','19','attribution','u.s._national_geospatial-intelligence_agency_(nga)'], // U.S. National Geospatial-Intelligence Agency (NGA)
-     ['ZI004_RCG','20','attribution','u.s._national_reconnaissance_office_(nro)'], // U.S. National Reconnaissance Office (NRO)
-     ['ZI004_RCG','21','attribution','u.s._department_of_state'], // U.S. Department of State
-     ['ZI004_RCG','22','attribution','u.s._department_of_homeland_security_(dhs)'], // U.S. Department of Homeland Security (DHS)
-     ['ZI004_RCG','23','attribution','u.s._department_of_energy_(doe)'], // U.S. Department of Energy (DOE)
-     ['ZI004_RCG','24','attribution','u.s._federal_bureau_of_investigation_(fbi)'], // U.S. Federal Bureau of Investigation (FBI)
-     ['ZI004_RCG','25','attribution','u.s._geological_survey_(usgs)'], // U.S. Geological Survey (USGS)
-     ['ZI004_RCG','26','attribution','u.s._national_civil_applications_program_(ncap)'], // U.S. National Civil Applications Program (NCAP)
-     ['ZI004_RCG','27','attribution','u.s._national_oceanic_and_atmospheric_administration'], // U.S. National Oceanic and Atmospheric Administration
-     ['ZI004_RCG','28','attribution','australian_geospatial-intelligence_organization_(australia)'], // Australian Geospatial-Intelligence Organization (Australia)
-     ['ZI004_RCG','29','attribution','geographic_service_(belgium)'], // Geographic Service (Belgium)
-     ['ZI004_RCG','30','attribution','military_topographic_service_(bulgaria)'], // Military Topographic Service (Bulgaria)
-     ['ZI004_RCG','31','attribution','mapping_and_charting_establishment_(canada)'], // Mapping and Charting Establishment (Canada)
-     ['ZI004_RCG','32','attribution','geographic_service_of_the_czech_armed_forces_(czech_republic)'], // Geographic Service of the Czech Armed Forces (Czech Republic)
-     ['ZI004_RCG','33','attribution','defence_acquisition_and_logistics_organization_(denmark)'], // Defence Acquisition and Logistics Organization (Denmark)
-     ['ZI004_RCG','34','attribution','military_geographic_group_(estonia)'], // Military Geographic Group (Estonia)
-     ['ZI004_RCG','35','attribution','topographic_service_(finland)'], // Topographic Service (Finland)
-     ['ZI004_RCG','36','attribution','bureau_geographie,_hydrographie,_oceanographie_et_meteorologie_(france)'], // Bureau Geographie, Hydrographie, Oceanographie et Meteorologie (France)
-     ['ZI004_RCG','37','attribution','bundeswehr_geoinformation_office_(germany)'], // Bundeswehr Geoinformation Office (Germany)
-     ['ZI004_RCG','38','attribution','hellenic_military_geographic_service_(greece)'], // Hellenic Military Geographic Service (Greece)
-     ['ZI004_RCG','39','attribution','geoinformation_service_of_the_hungarian_defence_forces_(hungary)'], // Geoinformation Service of the Hungarian Defence Forces (Hungary)
-     ['ZI004_RCG','40','attribution','defense_information_security_(italy)'], // Defense Information Security (Italy)
-     ['ZI004_RCG','41','attribution','geospatial_information_agency_(latvia)'], // Geospatial Information Agency (Latvia)
-     ['ZI004_RCG','42','attribution','military_mapping_centre_(lithuania)'], // Military Mapping Centre (Lithuania)
-     ['ZI004_RCG','43','attribution','national_army_topographic_service_(moldova)'], // National Army Topographic Service (Moldova)
-     ['ZI004_RCG','44','attribution','army_geographic_agency_(netherlands)'], // Army Geographic Agency (Netherlands)
-     ['ZI004_RCG','45','attribution','geoint_new_zealand_(new_zealand)'], // GEOINT New Zealand (New Zealand)
-     ['ZI004_RCG','46','attribution','military_geographic_service_(norway)'], // Military Geographic Service (Norway)
-     ['ZI004_RCG','47','attribution','military_geography_division_(poland)'], // Military Geography Division (Poland)
-     ['ZI004_RCG','48','attribution','army_geographic_institute_(portugal)'], // Army Geographic Institute (Portugal)
-     ['ZI004_RCG','49','attribution','military_topographic_directorate_(romania)'], // Military Topographic Directorate (Romania)
-     ['ZI004_RCG','50','attribution','topographic_institute_(slovakia)'], // Topographic Institute (Slovakia)
-     ['ZI004_RCG','51','attribution','army_geographic_centre_(spain)'], // Army Geographic Centre (Spain)
-     ['ZI004_RCG','52','attribution','swedish_armed_forces_(sweden)'], // Swedish Armed Forces (Sweden)
-     ['ZI004_RCG','53','attribution','general_command_of_mapping_(turkey)'], // General Command of Mapping (Turkey)
-     ['ZI004_RCG','54','attribution','defence_geographic_centre_intelligence_collection_group_(united_kingdom)'], // Defence Geographic Centre Intelligence Collection Group (United Kingdom)
-     ['ZI004_RCG','55','attribution','u.s._army_geospatial_center_(agc)'], // U.S. Army Geospatial Center (AGC)
-     ['ZI004_RCG','56','attribution','army_(australia)'], // Army (Australia)
-     ['ZI004_RCG','57','attribution','military_geographic_division_(croatia)'], // Military Geographic Division (Croatia)
-     ['ZI004_RCG','58','attribution','directorate_geospatial_information_(south_africa)'], // Directorate Geospatial Information (South Africa)
-     ['ZI004_RCG','59','attribution','korean_defense_intelligence_agency_(south_korea)'], // Korean Defense Intelligence Agency (South Korea)
-     ['ZI004_RCG','60','attribution','national_intelligence_service_(south_korea)'], // National Intelligence Service (South Korea)
-     ['ZI004_RCG','61','attribution','imagery_support_group_(singapore)'], // Imagery Support Group (Singapore)
-     ['ZI004_RCG','62','attribution','national_security_bureau_(taiwan)'], // National Security Bureau (Taiwan)
-     ['ZI004_RCG','63','attribution','materiel_production_center_(taiwan)'], // Materiel Production Center (Taiwan)
-     ['ZI004_RCG','64','attribution','ministry_of_defense_of_japan_(japan)'], // Ministry of Defense of Japan (Japan)
-     ['ZI004_RCG','65','attribution','ministry_of_construction_and_urban_development_(mongolia)'], // Ministry of Construction and Urban Development (Mongolia)
-     ['ZI004_RCG','66','attribution','national_mapping_and_resource_information_authority_(philippines)'], // National Mapping and Resource Information Authority (Philippines)
-     ['ZI004_RCG','67','attribution','royal_jordanian_geographic_centre_(jordan)'], // Royal Jordanian Geographic Centre (Jordan)
-     ['ZI004_RCG','68','attribution','national_survey_authority_(oman)'], // National Survey Authority (Oman)
-     ['ZI004_RCG','69','attribution','armed_forces_general_headquarters_(qatar)'], // Armed Forces General Headquarters (Qatar)
-     ['ZI004_RCG','70','attribution','ministry_of_defense_of_saudi_arabia_(saudi_arabia)'], // Ministry of Defense of Saudi Arabia (Saudi Arabia)
-     ['ZI004_RCG','71','attribution','directorate_of_survey_(kuwait)'], // Directorate of Survey (Kuwait)
-     ['ZI004_RCG','72','attribution','military_survey_department_(united_arab_emirates)'], // Military Survey Department (United Arab Emirates)
-     ['ZI004_RCG','73','attribution','information_network_security_agency_(ethiopia)'], // Information Network Security Agency (Ethiopia)
-     ['ZI004_RCG','74','attribution','ministry_of_state_for_defense_(kenya)'], // Ministry of State for Defense (Kenya)
-     ['ZI004_RCG','75','attribution','el_instituto_nacional_de_estadistica_y_geografia_(mexico)'], // El Instituto Nacional de Estadistica y Geografia (Mexico)
-     ['ZI004_RCG','76','attribution','instituto_geográfico_militar_(chile)'], // Instituto Geográfico Militar (Chile)
-     ['ZI004_RCG','77','attribution','servicio_geográfico_militar_(uruguay)'], // Servicio Geográfico Militar (Uruguay)
-     ['ZI004_RCG','78','attribution','dirección_del_servicio_geográfico_military_(paraguay)'], // Dirección del Servicio Geográfico Military (Paraguay)
-     ['ZI004_RCG','79','attribution','instituto_geográfico_nacional_(peru)'], // Instituto Geográfico Nacional (Peru)
-     ['ZI004_RCG','80','attribution','instituto_geográfico_agustín_codazzi_(colombia)'], // Instituto Geográfico Agustín Codazzi (Colombia)
-     ['ZI004_RCG','81','attribution','instituto_geográfico_y_del_catastro_nacional_(el_salvador)'], // Instituto Geográfico y del Catastro Nacional (El Salvador)
-     ['ZI004_RCG','82','attribution','instituto_geográfico_nacional_(guatemala)'], // Instituto Geográfico Nacional (Guatemala)
-     ['ZI004_RCG','83','attribution','servicio_geográfico_militar_(guatemala)'], // Servicio Geográfico Militar (Guatemala)
-     ['ZI004_RCG','84','attribution','instituto_cartográfico_militar_(dominican_republic)'], // Instituto Cartográfico Militar (Dominican Republic)
-     ['ZI004_RCG','85','attribution','instituto_nicaragüense_de_estudios_terretoriales_(nicaragua)'], // Instituto Nicaragüense de Estudios Terretoriales (Nicaragua)
-     ['ZI004_RCG','86','attribution','dirección_general_de_registros,_catastro,_y_geografía_(honduras)'], // Dirección General de Registros, Catastro, y Geografía (Honduras)
-     ['ZI004_RCG','87','attribution','instituto_geográfico_militar_(ecuador)'], // Instituto Geográfico Militar (Ecuador)
-     ['ZI004_RCG','88','attribution','instituto_geográfico_nacional_"tommy_guardia"_(panama)'], // Instituto Geográfico Nacional "Tommy Guardia" (Panama)
-     ['ZI004_RCG','89','attribution','instituto_geográfico_nacional_(argentina)'], // Instituto Geográfico Nacional (Argentina)
-     ['ZI004_RCG','90','attribution','diretoria_de_serviço_geográfico_(brazil)'], // Diretoria de Serviço Geográfico (Brazil)
-     ['ZI004_RCG','999','attribution','other'], // Other
+    ['ZI004_RCG','1','attribution','u.s._army'], // U.S. Army
+    ['ZI004_RCG','2','attribution','u.s._navy'], // U.S. Navy
+    ['ZI004_RCG','3','attribution','u.s._air_force'], // U.S. Air Force
+    ['ZI004_RCG','4','attribution','u.s._marine_corps'], // U.S. Marine Corps
+    ['ZI004_RCG','5','attribution','u.s._coast_guard'], // U.S. Coast Guard
+    ['ZI004_RCG','6','attribution','u.s._africa_command_(usafricom)'], // U.S. Africa Command (USAFRICOM)
+    ['ZI004_RCG','7','attribution','u.s._central_command_(uscentcom)'], // U.S. Central Command (USCENTCOM)
+    ['ZI004_RCG','8','attribution','u.s._european_command_(useucom)'], // U.S. European Command (USEUCOM)
+    ['ZI004_RCG','9','attribution','u.s._joint_forces_command_(usjfcom)'], // U.S. Joint Forces Command (USJFCOM)
+    ['ZI004_RCG','10','attribution','u.s._northern_command_(usnorthcom)'], // U.S. Northern Command (USNORTHCOM)
+    ['ZI004_RCG','11','attribution','u.s._pacific_command_(pacom)'], // U.S. Pacific Command (PACOM)
+    ['ZI004_RCG','12','attribution','u.s._special_operations_command_(ussocom)'], // U.S. Special Operations Command (USSOCOM)
+    ['ZI004_RCG','13','attribution','u.s._southern_command_(ussouthcom)'], // U.S. Southern Command (USSOUTHCOM)
+    ['ZI004_RCG','14','attribution','u.s._strategic_command_(usstratcom)'], // U.S. Strategic Command (USSTRATCOM)
+    ['ZI004_RCG','15','attribution','u.s._transportation_command_(ustranscom)'], // U.S. Transportation Command (USTRANSCOM)
+    ['ZI004_RCG','16','attribution','u.s._central_intelligence_agency_(cia)'], // U.S. Central Intelligence Agency (CIA)
+    ['ZI004_RCG','17','attribution','u.s._defense_intelligence_agency_(dia)'], // U.S. Defense Intelligence Agency (DIA)
+    ['ZI004_RCG','18','attribution','u.s._national_security_agency_(nsa)'], // U.S. National Security Agency (NSA)
+    ['ZI004_RCG','19','attribution','u.s._national_geospatial-intelligence_agency_(nga)'], // U.S. National Geospatial-Intelligence Agency (NGA)
+    ['ZI004_RCG','20','attribution','u.s._national_reconnaissance_office_(nro)'], // U.S. National Reconnaissance Office (NRO)
+    ['ZI004_RCG','21','attribution','u.s._department_of_state'], // U.S. Department of State
+    ['ZI004_RCG','22','attribution','u.s._department_of_homeland_security_(dhs)'], // U.S. Department of Homeland Security (DHS)
+    ['ZI004_RCG','23','attribution','u.s._department_of_energy_(doe)'], // U.S. Department of Energy (DOE)
+    ['ZI004_RCG','24','attribution','u.s._federal_bureau_of_investigation_(fbi)'], // U.S. Federal Bureau of Investigation (FBI)
+    ['ZI004_RCG','25','attribution','u.s._geological_survey_(usgs)'], // U.S. Geological Survey (USGS)
+    ['ZI004_RCG','26','attribution','u.s._national_civil_applications_program_(ncap)'], // U.S. National Civil Applications Program (NCAP)
+    ['ZI004_RCG','27','attribution','u.s._national_oceanic_and_atmospheric_administration'], // U.S. National Oceanic and Atmospheric Administration
+    ['ZI004_RCG','28','attribution','australian_geospatial-intelligence_organization_(australia)'], // Australian Geospatial-Intelligence Organization (Australia)
+    ['ZI004_RCG','29','attribution','geographic_service_(belgium)'], // Geographic Service (Belgium)
+    ['ZI004_RCG','30','attribution','military_topographic_service_(bulgaria)'], // Military Topographic Service (Bulgaria)
+    ['ZI004_RCG','31','attribution','mapping_and_charting_establishment_(canada)'], // Mapping and Charting Establishment (Canada)
+    ['ZI004_RCG','32','attribution','geographic_service_of_the_czech_armed_forces_(czech_republic)'], // Geographic Service of the Czech Armed Forces (Czech Republic)
+    ['ZI004_RCG','33','attribution','defence_acquisition_and_logistics_organization_(denmark)'], // Defence Acquisition and Logistics Organization (Denmark)
+    ['ZI004_RCG','34','attribution','military_geographic_group_(estonia)'], // Military Geographic Group (Estonia)
+    ['ZI004_RCG','35','attribution','topographic_service_(finland)'], // Topographic Service (Finland)
+    ['ZI004_RCG','36','attribution','bureau_geographie,_hydrographie,_oceanographie_et_meteorologie_(france)'], // Bureau Geographie, Hydrographie, Oceanographie et Meteorologie (France)
+    ['ZI004_RCG','37','attribution','bundeswehr_geoinformation_office_(germany)'], // Bundeswehr Geoinformation Office (Germany)
+    ['ZI004_RCG','38','attribution','hellenic_military_geographic_service_(greece)'], // Hellenic Military Geographic Service (Greece)
+    ['ZI004_RCG','39','attribution','geoinformation_service_of_the_hungarian_defence_forces_(hungary)'], // Geoinformation Service of the Hungarian Defence Forces (Hungary)
+    ['ZI004_RCG','40','attribution','defense_information_security_(italy)'], // Defense Information Security (Italy)
+    ['ZI004_RCG','41','attribution','geospatial_information_agency_(latvia)'], // Geospatial Information Agency (Latvia)
+    ['ZI004_RCG','42','attribution','military_mapping_centre_(lithuania)'], // Military Mapping Centre (Lithuania)
+    ['ZI004_RCG','43','attribution','national_army_topographic_service_(moldova)'], // National Army Topographic Service (Moldova)
+    ['ZI004_RCG','44','attribution','army_geographic_agency_(netherlands)'], // Army Geographic Agency (Netherlands)
+    ['ZI004_RCG','45','attribution','geoint_new_zealand_(new_zealand)'], // GEOINT New Zealand (New Zealand)
+    ['ZI004_RCG','46','attribution','military_geographic_service_(norway)'], // Military Geographic Service (Norway)
+    ['ZI004_RCG','47','attribution','military_geography_division_(poland)'], // Military Geography Division (Poland)
+    ['ZI004_RCG','48','attribution','army_geographic_institute_(portugal)'], // Army Geographic Institute (Portugal)
+    ['ZI004_RCG','49','attribution','military_topographic_directorate_(romania)'], // Military Topographic Directorate (Romania)
+    ['ZI004_RCG','50','attribution','topographic_institute_(slovakia)'], // Topographic Institute (Slovakia)
+    ['ZI004_RCG','51','attribution','army_geographic_centre_(spain)'], // Army Geographic Centre (Spain)
+    ['ZI004_RCG','52','attribution','swedish_armed_forces_(sweden)'], // Swedish Armed Forces (Sweden)
+    ['ZI004_RCG','53','attribution','general_command_of_mapping_(turkey)'], // General Command of Mapping (Turkey)
+    ['ZI004_RCG','54','attribution','defence_geographic_centre_intelligence_collection_group_(united_kingdom)'], // Defence Geographic Centre Intelligence Collection Group (United Kingdom)
+    ['ZI004_RCG','55','attribution','u.s._army_geospatial_center_(agc)'], // U.S. Army Geospatial Center (AGC)
+    ['ZI004_RCG','56','attribution','army_(australia)'], // Army (Australia)
+    ['ZI004_RCG','57','attribution','military_geographic_division_(croatia)'], // Military Geographic Division (Croatia)
+    ['ZI004_RCG','58','attribution','directorate_geospatial_information_(south_africa)'], // Directorate Geospatial Information (South Africa)
+    ['ZI004_RCG','59','attribution','korean_defense_intelligence_agency_(south_korea)'], // Korean Defense Intelligence Agency (South Korea)
+    ['ZI004_RCG','60','attribution','national_intelligence_service_(south_korea)'], // National Intelligence Service (South Korea)
+    ['ZI004_RCG','61','attribution','imagery_support_group_(singapore)'], // Imagery Support Group (Singapore)
+    ['ZI004_RCG','62','attribution','national_security_bureau_(taiwan)'], // National Security Bureau (Taiwan)
+    ['ZI004_RCG','63','attribution','materiel_production_center_(taiwan)'], // Materiel Production Center (Taiwan)
+    ['ZI004_RCG','64','attribution','ministry_of_defense_of_japan_(japan)'], // Ministry of Defense of Japan (Japan)
+    ['ZI004_RCG','65','attribution','ministry_of_construction_and_urban_development_(mongolia)'], // Ministry of Construction and Urban Development (Mongolia)
+    ['ZI004_RCG','66','attribution','national_mapping_and_resource_information_authority_(philippines)'], // National Mapping and Resource Information Authority (Philippines)
+    ['ZI004_RCG','67','attribution','royal_jordanian_geographic_centre_(jordan)'], // Royal Jordanian Geographic Centre (Jordan)
+    ['ZI004_RCG','68','attribution','national_survey_authority_(oman)'], // National Survey Authority (Oman)
+    ['ZI004_RCG','69','attribution','armed_forces_general_headquarters_(qatar)'], // Armed Forces General Headquarters (Qatar)
+    ['ZI004_RCG','70','attribution','ministry_of_defense_of_saudi_arabia_(saudi_arabia)'], // Ministry of Defense of Saudi Arabia (Saudi Arabia)
+    ['ZI004_RCG','71','attribution','directorate_of_survey_(kuwait)'], // Directorate of Survey (Kuwait)
+    ['ZI004_RCG','72','attribution','military_survey_department_(united_arab_emirates)'], // Military Survey Department (United Arab Emirates)
+    ['ZI004_RCG','73','attribution','information_network_security_agency_(ethiopia)'], // Information Network Security Agency (Ethiopia)
+    ['ZI004_RCG','74','attribution','ministry_of_state_for_defense_(kenya)'], // Ministry of State for Defense (Kenya)
+    ['ZI004_RCG','75','attribution','el_instituto_nacional_de_estadistica_y_geografia_(mexico)'], // El Instituto Nacional de Estadistica y Geografia (Mexico)
+    ['ZI004_RCG','76','attribution','instituto_geografico_militar_(chile)'], // Instituto Geografico Militar (Chile)
+    ['ZI004_RCG','77','attribution','servicio_geografico_militar_(uruguay)'], // Servicio Geografico Militar (Uruguay)
+    ['ZI004_RCG','78','attribution','direccion_del_servicio_geografico_military_(paraguay)'], // Direccion del Servicio Geografico Military (Paraguay)
+    ['ZI004_RCG','79','attribution','instituto_geografico_nacional_(peru)'], // Instituto Geografico Nacional (Peru)
+    ['ZI004_RCG','80','attribution','instituto_geografico_agustin_codazzi_(colombia)'], // Instituto Geografico Agustin Codazzi (Colombia)
+    ['ZI004_RCG','81','attribution','instituto_geografico_y_del_catastro_nacional_(el_salvador)'], // Instituto Geografico y del Catastro Nacional (El Salvador)
+    ['ZI004_RCG','82','attribution','instituto_geografico_nacional_(guatemala)'], // Instituto Geografico Nacional (Guatemala)
+    ['ZI004_RCG','83','attribution','servicio_geografico_militar_(guatemala)'], // Servicio Geografico Militar (Guatemala)
+    ['ZI004_RCG','84','attribution','instituto_cartografico_militar_(dominican_republic)'], // Instituto Cartografico Militar (Dominican Republic)
+    ['ZI004_RCG','85','attribution','instituto_nicaraguense_de_estudios_terretoriales_(nicaragua)'], // Instituto Nicaraguense de Estudios Terretoriales (Nicaragua)
+    ['ZI004_RCG','86','attribution','direccion_general_de_registros,_catastro,_y_geografia_(honduras)'], // Direccion General de Registros, Catastro, y Geografia (Honduras)
+    ['ZI004_RCG','87','attribution','instituto_geografico_militar_(ecuador)'], // Instituto Geografico Militar (Ecuador)
+    ['ZI004_RCG','88','attribution','instituto_geografico_nacional_tommy_guardia_(panama)'], // Instituto Geografico Nacional "Tommy Guardia" (Panama)
+    ['ZI004_RCG','89','attribution','instituto_geografico_nacional_(argentina)'], // Instituto Geografico Nacional (Argentina)
+    ['ZI004_RCG','90','attribution','diretoria_de_servico_geografico_(brazil)'], // Diretoria de Servico Geografico (Brazil)
+    ['ZI004_RCG','999','attribution','other'], // Other
 
     // ZI013_CSP - Crop Information : Crop Species
     // ['ZI013_CSP','-999999',undefined,undefined], // No Information
@@ -3201,18 +3206,28 @@ tds70.rules = {
     ['ZI014_PPO','3','product','ammunition'], // Ammunition
     ['ZI014_PPO','4','product','asphalt'], // Asphalt
     ['ZI014_PPO','5','product','motor_vehicle'], // Motor Vehicle
+    ['ZI014_PPO','8','product','basalt'], // Basalt -- From PPO
+    ['ZI014_PPO','9','product','bauxite'], // Bauxite -- From PPO
+    ['ZI014_PPO','11','product','bivalve_mollusc'], // Bivalve Mollusc -- From PPO
     ['ZI014_PPO','13','product','brick'], // Brick
     ['ZI014_PPO','15','product','cement'], // Cement
     ['ZI014_PPO','16','product','chemical'], // Chemical
+    ['ZI014_PPO','17','product','clay'], // Clay -- From PPO
     ['ZI014_PPO','18','product','coal'], // Coal
+    ['ZI014_PPO','19','product','cobbles'], // Cobbles -- From PPO
     ['ZI014_PPO','20','product','coffee'], // Coffee
     ['ZI014_PPO','21','product','coke'], // Coke
     ['ZI014_PPO','23','product','concrete'], // Concrete
     ['ZI014_PPO','25','product','consumer_goods'], // Consumer Goods
     ['ZI014_PPO','26','product','copper'], // Copper
     ['ZI014_PPO','28','product','cotton'], // Cotton
+    ['ZI014_PPO','29','product','crustacean'], // Crustacean -- From PPO
+    ['ZI014_PPO','30','product','cultivated_shellfish'], // Cultivated Shellfish -- From PPO
     ['ZI014_PPO','32','product','desalinated_water'], // Desalinated Water
+    ['ZI014_PPO','33','product','diamond'], // Diamond -- From PPO
+    ['ZI014_PPO','34','product','diatomaceous_earth'], // Diatomaceous Earth -- From PPO
     ['ZI014_PPO','37','product','electric_power'], // Electric Power
+    ['ZI014_PPO','35','product','dolomite'], // Dolomite -- From PPO
     ['ZI014_PPO','38','product','explosive'], // Explosive
     ['ZI014_PPO','39','product','fish'], // Fish
     ['ZI014_PPO','41','product','food'], // Food
@@ -3222,6 +3237,8 @@ tds70.rules = {
     ['ZI014_PPO','46','product','petrol'], // Petrol
     ['ZI014_PPO','47','product','glass'], // Glass
     ['ZI014_PPO','48','product','gold'], // Gold
+    ['ZI014_PPO','50','product','granite'], // Granite -- From PPO
+    ['ZI014_PPO','53','product','gravel'], // Gravel -- From PPO
     ['ZI014_PPO','57','product','ice'], // Ice
     ['ZI014_PPO','58','product','iron'], // Iron
     ['ZI014_PPO','59','product','lead'], // Lead
@@ -3230,46 +3247,75 @@ tds70.rules = {
     ['ZI014_PPO','62','product','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
     ['ZI014_PPO','63','product','lumber'], // Lumber
     ['ZI014_PPO','65','product','manganese'], // Manganese
+    ['ZI014_PPO','66','product','marble'], // Marble -- From PPO
     ['ZI014_PPO','69','product','metal'], // Metal
     ['ZI014_PPO','70','product','milk'], // Milk
+    ['ZI014_PPO','72','product','mussels'], // Mussels -- From PPO
     ['ZI014_PPO','73','product','no_product'], // No Product
     ['ZI014_PPO','74','product','non-solid_hydrocarbon_fuel'], // Non-solid Hydrocarbon Fuel
+    ['ZI014_PPO','77','product','oysters'], // Oysters -- From PPO
     ['ZI014_PPO','80','product','paper'], // Paper
     ['ZI014_PPO','83','product','petroleum'], // Petroleum
     ['ZI014_PPO','84','product','plastic'], // Plastic
+    ['ZI014_PPO','85','product','porphyry'], // Porphyry -- From PPO
     ['ZI014_PPO','87','product','prestressed_concrete'], // Prestressed Concrete
+    ['ZI014_PPO','88','product','pumice'], // Pumice -- From PPO
+    ['ZI014_PPO','89','product','quartz'], // Quartz -- From PPO
     ['ZI014_PPO','90','product','radioactive_material'], // Radioactive Material
     ['ZI014_PPO','92','product','rice'], // Rice
+    ['ZI014_PPO','93','product','rock'], // Rock -- From PPO
     ['ZI014_PPO','94','product','rubber'], // Rubber
     ['ZI014_PPO','95','product','salt'], // Salt
+    ['ZI014_PPO','96','product','sand'], // Sand -- From PPO
+    ['ZI014_PPO','97','product','sandstone'], // Sandstone -- From PPO
     ['ZI014_PPO','101','product','sewage'], // Sewage
     ['ZI014_PPO','105','product','silver'], // Silver
     ['ZI014_PPO','106','product','snow'], // Snow
     ['ZI014_PPO','109','product','steel'], // Steel
+    ['ZI014_PPO','110','product','stone'], // Stone -- From PPO
     ['ZI014_PPO','111','product','sugar'], // Sugar
     ['ZI014_PPO','114','product','textile'], // Textile
+    ['ZI014_PPO','116','product','timber'], // Timber -- From PPO
     ['ZI014_PPO','117','product','tobacco'], // Tobacco
+    ['ZI014_PPO','118','product','travertine'], // Travertine -- From PPO
     ['ZI014_PPO','120','product','uranium'], // Uranium
     ['ZI014_PPO','121','product','vegetation_product'], // Vegetation Product
     ['ZI014_PPO','122','product','water'], // Water
     ['ZI014_PPO','123','product','wine'], // Wine
     ['ZI014_PPO','126','product','zinc'], // Zinc
+    ['ZI014_PPO','130','product','chalk'], // Chalk -- From PPO
     ['ZI014_PPO','136','product','biochemical'], // Biochemical
     ['ZI014_PPO','137','product','petrochemical'], // Petrochemical
     ['ZI014_PPO','146','product','heating_steam_and/or_water'], // Heating Steam and/or Water
     ['ZI014_PPO','147','product','electronic_equipment'], // Electronic Equipment
     ['ZI014_PPO','148','product','electrical_equipment'], // Electrical Equipment
+    ['ZI014_PPO','149','product','brine'], // Brine -- From PPO
     ['ZI014_PPO','150','product','fertilizer'], // Fertilizer
+    ['ZI014_PPO','151','product','chromium'], // Chromium -- From PPO
+    ['ZI014_PPO','152','product','nickel'], // Nickel -- From PPO
+    ['ZI014_PPO','153','product','tin'], // Tin -- From PPO
     ['ZI014_PPO','154','product','munitions'], // Munitions
     ['ZI014_PPO','155','product','olive_oil'], // Olive Oil
     ['ZI014_PPO','156','product','whale_products'], // Whale Products
     ['ZI014_PPO','157','product','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
+    ['ZI014_PPO','158','product','pottery'], // Pottery -- From PPO
+    ['ZI014_PPO','159','product','charcoal'], // Charcoal -- From PPO
     ['ZI014_PPO','160','product','milled_grain'], // Milled Grain
+    ['ZI014_PPO','161','product','coalbed_methane'], // Coalbed Methane -- From PPO
+    ['ZI014_PPO','162','product','natural_gas_condensate'], // Natural Gas Condensate -- From PPO
+    ['ZI014_PPO','163','product','helium'], // Helium -- From PPO
+    ['ZI014_PPO','164','product','hydrothermal_fluid'], // Hydrothermal Fluid -- From PPO
     ['ZI014_PPO','165','product','clothing'], // Clothing
+    ['ZI014_PPO','170','product','beverage'], // Beverage -- From PPO
+    ['ZI014_PPO','173','product','fluorite'], // Fluorite -- From PPO
     ['ZI014_PPO','192','product','petroleum_lubricant'], // Petroleum Lubricant
+    ['ZI014_PPO','204','product','phosphate'], // Phosphate -- From PPO
     ['ZI014_PPO','214','product','biodiesel'], // Biodiesel
+    ['ZI014_PPO','224','product','vanadium'], // Vanadium -- From PPO
     ['ZI014_PPO','279','product','fluorine'], // Fluorine
+    ['ZI014_PPO','283','product','mica'], // Mica -- From PPO
     ['ZI014_PPO','325','product','phosphorus'], // Phosphorus
+    ['ZI014_PPO','339','product','selenium'], // Selenium -- From PPO
     ['ZI014_PPO','435','product','nuclear_fuel'], // Nuclear Fuel
     ['ZI014_PPO','999','product','other'], // Other
 
@@ -3592,19 +3638,18 @@ tds70.rules = {
     ['ZI071_UAO','5','direction','vertical_up'], // Vertical Up
 
     // ZSAX_RS0 - Restriction Information : Security Attributes Group <resource classification>
-    ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
-    ['ZSAX_RS0','R','security:classification','RESTRICTED'],
-    ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
-    ['ZSAX_RS0','S','security:classification','SECRET'],
-    ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
+    ['ZSAX_RS0','U','security:classification','U'],
+    ['ZSAX_RS0','R','security:classification','R'],
+    ['ZSAX_RS0','C','security:classification','C'],
+    ['ZSAX_RS0','S','security:classification','S'],
+    ['ZSAX_RS0','TS','security:classification','TS'],
 
     // ZVH_VDT - Highest Elevation <vertical datum> - See VDT
+  ], // End one2one
 
-    ], // End one2one
-
-    // Input Translation Rules:
-    // These are only used for IMPORT and get added to the standard one2one rules
-    one2oneIn : [
+  // Input Translation Rules:
+  // These are only used for IMPORT and get added to the standard one2one rules
+  one2oneIn : [
     // To account for an "error" in the TDSv61 sample GDB
     ['ZI001_VSC','Stereoscopic Imagery','source:vertical_source:type','stereoscopic_imagery'],
 
@@ -3642,16 +3687,16 @@ tds70.rules = {
     ['ZI001_SRT','171','source:non_spatial_source:type','tomtom_data'], // TomTom Data
     ['ZI001_SRT','999','source:non_spatial_source:type','other'], // Other
 
-    ], // End one2oneIn
+  ], // End one2oneIn
 
-    // One2one translation table for converting "Other" OSM attributes to TDS
-    // This is for Export only. The values are swapped before use
-    one2oneOut : [
-    ['ZSAX_RS0','U','security:classification','U'],
-    ['ZSAX_RS0','R','security:classification','R'],
-    ['ZSAX_RS0','C','security:classification','C'],
-    ['ZSAX_RS0','S','security:classification','S'],
-    ['ZSAX_RS0','TS','security:classification','TS'],
+  // One2one translation table for converting "Other" OSM attributes to TDS
+  // This is for Export only. The values are swapped before use
+  one2oneOut : [
+    ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
+    ['ZSAX_RS0','R','security:classification','RESTRICTED'],
+    ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],
+    ['ZSAX_RS0','S','security:classification','SECRET'],
+    ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
 
     // OTH Filler.  These are to build OTH values
     ['RTY','999','highway','other'],
@@ -3667,6 +3712,16 @@ tds70.rules = {
     ['FFN','999','shop','other'],
     ['FFN','999','social_facility','other'],
     ['FFN','999','tourism','other'],
+
+    ['FIC','1','embankment:type','mound'], // Mound
+    ['FIC','1','embankment:type','berm'],
+    ['FIC','1','embankment','berm'],
+    ['FIC','2','embankment:type','fill'], // Fill
+    ['FIC','3','embankment','dyke'], // Dyke
+    ['FIC','3','embankment:type','dyke'], // Dyke
+    ['FIC','5','embankment:type','levee'], // Levee
+    ['FIC','6','embankment:type','divider'], // Divider
+    ['FIC','999','embankment:type','other'], // Other
 
     // Funky Road Type attributes from TDSv40
     ['RTY','4','ref:road:type','boulevard'], // Boulevard
@@ -3736,13 +3791,13 @@ tds70.rules = {
     ['FFN','843','amenity','jail'], // Imprisonment
     ['FFN','980','building','cemetery_building'], // Death care services
     ['ZI014_PPO','-999999','product','unknown'], // Unknown
-//     [undefined,undefined,'amenity','school'], //  converted in pre processing
-//     [undefined,undefined,'amenity','hospital'], //  converted in pre processing
-//     [undefined,undefined,'amenity','university'], //  converted in pre processing
-//     [undefined,undefined,'amenity','college'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','school'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','hospital'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','university'], //  converted in pre processing
+    //     [undefined,undefined,'amenity','college'], //  converted in pre processing
     [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
-    ['IWT','4','water','reservoir'], // Reservoir
+    ['IWT','4','man_made','reservoir'], // Reservoir
 
     ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
 
@@ -3796,14 +3851,14 @@ tds70.rules = {
     // Added to give something for the OTH value to use
     ['ZI016_ROC','999','surface','other'], // Other
 
-   ], // End one2oneOut
+  ], // End one2oneOut
 
-    // ##### End of One2One Rules #####
+  // ##### End of One2One Rules #####
 
 
-    // ##### Start of fuzzyTable #####
-    // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
-    fuzzyTable : [
+  // ##### Start of fuzzyTable #####
+  // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
+  fuzzyTable : [
     ['ZI016_ROC','1',schemaTools.simple('surface=ground',1)], // Unimproved
     ['ZI016_ROC','2',schemaTools.simple('surface=compacted',1)], // Stabilized earth
     ['ZI016_ROC','3',schemaTools.isA('surface=unpaved', 0.8)], // Flexible Pavement
@@ -3814,7 +3869,7 @@ tds70.rules = {
     ['ZI016_ROC','8',schemaTools.simple('surface=concrete',1)], // Concrete
     ['ZI016_ROC','9',schemaTools.simple('surface=asphalt',1)], // Asphalt
     ['ZI016_ROC','10',schemaTools.simple('surface=asphalt_over_concrete',1)], // Asphalt over Concrete
-    ['ZI016_ROC','11',"surface=cobblestone",schemaTools.isA('surface=cobblestone',1),schemaTools.simple('surface=sett')], // Cobble-stone
+    ['ZI016_ROC','11','surface=cobblestone',schemaTools.isA('surface=cobblestone',1),schemaTools.simple('surface=sett')], // Cobble-stone
     ['ZI016_ROC','12',schemaTools.simple('surface=brick',1)], // Brick
     ['ZI016_ROC','13',schemaTools.simple('surface=metal',1)], // Metal
     ['ZI016_ROC','14',schemaTools.simple('surface=wood',1)], // Wood
@@ -3823,15 +3878,12 @@ tds70.rules = {
     ['ZI016_ROC','17',schemaTools.simple('surface=ice',1)], // Ice
     ['ZI016_ROC','18',schemaTools.simple('surface=snow',1)], // Snow
     ['ZI016_ROC','999',schemaTools.simple('surface=other',1)], // Other
-    ],
-    // ##### End of fuzzyTable #####
+  ],
+  // ##### End of fuzzyTable #####
 
-    // ##### Start of ignoreList #####
-    // This is taken from OSM pre processing and a few added
-    ignoreList : [
-
-
-
+  // ##### Start of ignoreList #####
+  // This is taken from OSM pre processing and a few added
+  ignoreList : [
     'APT2', 'APT3',
     'APU2', 'APU3',
     'AQO2', 'AQO3',
@@ -3849,7 +3901,6 @@ tds70.rules = {
     'FRT2', 'FRT3',
     'F_CODE',
     'HST2', 'HST3',
-    'HYP',
     'MCC2', 'MCC3',
     'MEM',
     'MST2', 'MST3',
@@ -3863,11 +3914,9 @@ tds70.rules = {
     'RIN_ROI2', 'RIN_ROI3',
     'RIN_RTN2', 'RIN_RTN3',
     'RRC2', 'RRC3',
-    'RTN', 'RTN2', 'RTN3',
     'SBT2', 'SBT3',
     'SSR2', 'SSR3',
     'STL2', 'STL3',
-    'SUR',
     'TRS2', 'TRS3',
     'TSM2', 'TSM3',
     'TTC2', 'TTC3',
@@ -3877,7 +3926,6 @@ tds70.rules = {
     'VCT2', 'VCT3',
     'VSP2', 'VSP3',
     'WBD',
-    'WD1',
     'WEQ2', 'WEQ3',
     'YWQ',
     'ZI005_FNA2', 'ZI005_FNA3',
@@ -3890,7 +3938,6 @@ tds70.rules = {
     'ZI014_PRW2', 'ZI014_PRW3',
     'ZI019_ASP2', 'ZI019_ASP3',
     'ZI019_ASU2', 'ZI019_ASU3',
-    'ZI025_MAN',
     'ZI025_WLE',
     'ZI032_GUG',
     'ZI032_PYC',
@@ -3898,13 +3945,12 @@ tds70.rules = {
     'ZI032_TOS',
     'ZI071_FFN', 'ZI071_FFN2', 'ZI071_FFN3',
     'ZSAX_RX3', 'ZSAX_RX4',
-    'ZVH_VDT',
     ],
     // ##### End of ignoreList #####
 
-    // ##### Start of fCodeMap #####
-    // This is a map of FCODE's and filenames
-    fCodeMap : [
+  // ##### Start of fCodeMap #####
+  // This is a map of FCODE's and filenames
+  fCodeMap : [
     ['AF010', ['af010','smokestack_p']], // Smokestack
     ['AH025', ['ah025','engineered_earthwork_s','engineered_earthwork_p']], // Engineered Earthwork
     ['AH060', ['ah060','underground_bunker_s','underground_bunker_p']], // Underground Bunker
@@ -3960,26 +4006,26 @@ tds70.rules = {
     ['GB050', ['gb050','aircraft_revetment_c']], // Aircraft Revetment
     ['ZD040', ['zd040','named_location_s','named_location_c','named_location_p']], // Named Location
     ['ZD045', ['zd045','annotated_location_s','annotated_location_c','annotated_location_p']], // Named Location
-    ],
-    // ##### End of fCodeMap #####
+  ],
+  // ##### End of fCodeMap #####
 
 
-    // ##### Start of closureList #####
-    closureList : {
+  // ##### Start of closureList #####
+  closureList : {
     'GSGCHC':['GSGCHL','GSGCHU'],
     'GSGCLC':['GSGCLL','GSGCLU'],
     'RMWC':['RMWL','RMWU'],
     'SGCC':['SGCL','SGCU'],
     'ZI026_CTUC':['ZI026_CTUL','ZI026_CTUU']
-    },
-    // ##### End of closureList #####
+  },
+  // ##### End of closureList #####
 
-    // ##### Start of swapListIn #####
-    // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
-    // but renamed in different features. We swap these so that there is only one
-    // set of rules needed in the One2One section.
-    // These get converted back on output - if we need to.
-    swapListIn : {
+  // ##### Start of swapListIn #####
+  // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
+  // but renamed in different features. We swap these so that there is only one
+  // set of rules needed in the One2One section.
+  // These get converted back on output - if we need to.
+  swapListIn : {
     'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
     'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
     'MEM':'ZI006_MEM',
@@ -3987,29 +4033,22 @@ tds70.rules = {
     'ZI002_UFI':'UFI',
     'ZI025_WLE':'WLE',
     'ZI032_GUG':'GUG',
-    'HYP':'ZI024_HYP',
-    // 'LEN_':'LZN',
     'PFD':'PWA',
     'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
     'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
     'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
-    'RTN':'RIN_RTN', 'RTN2':'RIN_RTN2', 'RTN3':'RIN_RTN3',
-    'SUR':'ZI026_SUR',
     'WBD':'PWA',
-    'WD1':'ZI016_WD1',
     'YWQ':'ZI024_YWQ',
-    'ZI025_MAN':'MAN',
     'ZI032_TOS':'TOS',
     'ZI032_PYC':'PYC',
     'ZI032_PYM':'PYM',
     'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
-    'ZVH_VDT':'VDT'
-    },
-    // ##### End of swapListIn #####
+  },
+  // ##### End of swapListIn #####
 
-    // ##### Start of swapListOut #####
-    // Format is: <FCODE>:{<from>:<to>}
-    swapListOut : {
+  // ##### Start of swapListOut #####
+  // Format is: <FCODE>:{<from>:<to>}
+  swapListOut : {
     'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB','CAB2':'AT005_CAB2','CAB3':'AT005_CAB3'},
     'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
     'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG', 'UFI':'ZI002_UFI'},
@@ -4032,38 +4071,33 @@ tds70.rules = {
     'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AM080':{'ZI014_YWQ':'YWQ'},
-    'AQ059':{'ZI016_WD1':'WD1'},
     'AQ113':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AQ116':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'BH070':{'PWA':'WBD'},
     'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
-    'ED010':{'ZI024_HYP':'HYP'},
-    'BD115':{'MAN':'ZI025_MAN'},
-    'AP055':{'RIN_RTN':'RTN', 'RIN_RTN2':'RTN2', 'RIN_RTN3':'RTN3'},
-    'ZI026':{'ZI026_SUR':'SUR'}
     },
 
-    // ##### End of swapListOut #####
+  // ##### End of swapListOut #####
 
-    // ##### Start of txtLength #####
-    // This list is for validateing the lengths of text attributes prior to export
-    txtLength : {
+  // ##### Start of txtLength #####
+  // This list is for validateing the lengths of text attributes prior to export
+  txtLength : {
     'BA000_VDR':80,'BEN':15,'BRN':24,'CID':20,'ETZ':24,'GB052_RIDH':14,'GB052_RIDL':14,'IKO':14,'MDE':20,'NA8':80,
     'RIN_RTN':24,'RIN_RTN2':24,'RIN_RTN3':24,'UFI':254,'URI':254,'VOI':14,'WPI':14,'ZI001_SDV':20,'ZI001_VSD':20,
     'ZI002_UFI':254,'ZI005_FNA':200,'ZI005_FNA2':200,'ZI005_NFN':18,'ZI005_NFN2':18,'ZSAX_RS0':14,'ZSAX_RX0':254,
     'ZSAX_RX3':254, 'ZSAX_RX4':254
-    },
-    // ##### End of txtLength #####
+  },
+  // ##### End of txtLength #####
 
-    // ##### Start of intList #####
-    // This list is for validateing the integer attributes prior to export
-    intList : ['BNF','DEV','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','ZI026_CTUL','ZI026_CTUU'],
-    // ##### End of intList #####
+  // ##### Start of intList #####
+  // This list is for validateing the integer attributes prior to export
+  intList : ['BNF','DEV','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','ZI026_CTUL','ZI026_CTUU'],
+  // ##### End of intList #####
 
-    // ##### Start of ge4List #####
-    // This list is for validateing the XXX_GE4XX values
-    ge4List : {
+  // ##### Start of ge4List #####
+  // This list is for validateing the XXX_GE4XX values
+  ge4List : {
     'ge:GENC:3:1-2:ABW':'AW', // Aruba
     'ge:GENC:3:1-2:AFG':'AF', // Islamic Republic of Afghanistan
     'ge:GENC:3:1-2:AGO':'AO', // Republic of Angola
@@ -4113,7 +4147,7 @@ tds70.rules = {
     'ge:GENC:3:1-2:CPV':'CV', // Republic of Cape Verde
     'ge:GENC:3:1-2:CRI':'CR', // Republic of Costa Rica
     'ge:GENC:3:1-2:CUB':'CU', // Republic of Cuba
-    'ge:GENC:3:1-2:CUW':'CW', // Curaçao
+    'ge:GENC:3:1-2:CUW':'CW', // Curacao
     'ge:GENC:3:1-2:CXR':'CX', // Territory of Christmas Island
     'ge:GENC:3:1-2:CYM':'KY', // Cayman Islands
     'ge:GENC:3:1-2:CYP':'CY', // Republic of Cyprus
@@ -4347,11 +4381,11 @@ tds70.rules = {
     'ge:ISO1:3:VI-15:TKM':'TM', // Turkmenistan
     'ge:ISO1:3:VI-15:TUV':'TV', // Tuvalu
     'other':'other', // Other
-    },
-    // ##### End of ge4List #####
+  },
+  // ##### End of ge4List #####
 
-    // ##### Start of Thematic Group Rules #####
-    thematicGroupList : {
+  // ##### Start of Thematic Group Rules #####
+  thematicGroupList : {
     'AAA010':'IndustrySrf', // EXTRACTION_MINE_S
     'AAA020':'IndustrySrf', // MINE_SHAFT_SUPERSTRUCTURE_S
     'AAA040':'IndustrySrf', // RIG_S
@@ -4788,70 +4822,70 @@ tds70.rules = {
     'PZD015':'PointofChangePnt', // POINT_OF_CHANGE_P
     'PZD040':'InformationPnt', // NAMED_LOCATION_P
     'PZD045':'InformationPnt', // ANNOTATED_LOCATION_P
-    }, // End of thematicGroupList
-    // ##### End of Thematic Group Rules #####
+  }, // End of thematicGroupList
+  // ##### End of Thematic Group Rules #####
 
-    // ##### Start of ESRI FCSubtype Rules #####
-    subtypeList : {
-'AA010':'100001','AA011':'100002','AA020':'100003','AA040':'100004','AA052':'100006',
-'AA054':'155023','AB000':'100007','AB010':'100008','AB040':'100010','AC010':'100012',
-'AC020':'100013','AC030':'100014','AC060':'100016','AD010':'100018','AD020':'100019',
-'AD025':'100020','AD030':'100021','AD060':'100687','AF010':'100025','AF020':'100026',
-'AF030':'100028','AF040':'100029','AF070':'100032','AF080':'100033','AG030':'100034',
-'AH025':'132596','AH055':'132626','AH060':'100038','AH070':'100039','AI020':'100040',
-'AI021':'133168','AJ030':'100043','AJ050':'100044','AJ051':'100045','AJ055':'100046',
-'AJ085':'100691','AJ110':'100052','AK020':'100053','AK030':'100054','AK040':'100055',
-'AK060':'100057','AK070':'100059','AK080':'100060','AK090':'100061','AK100':'100062',
-'AK101':'100063','AK110':'100064','AK120':'100065','AK130':'100069','AK150':'100072',
-'AK160':'154703','AK161':'121747','AK164':'100074','AK170':'100077','AK180':'100078',
-'AL010':'100080','AL011':'100081','AL012':'100082','AL013':'100083','AL014':'100084',
-'AL018':'100087','AL019':'100088','AL020':'100089','AL025':'100091','AL030':'100092',
-'AL036':'100094','AL060':'100096','AL065':'100097','AL070':'100098','AL080':'100101',
-'AL099':'100103','AL105':'100104','AL110':'100105','AL130':'100108','AL140':'100110',
-'AL142':'100111','AL155':'100112','AL165':'100113','AL170':'100114','AL175':'100688',
-'AL200':'100116','AL208':'100118','AL211':'130921','AL241':'100122','AL250':'100123',
-'AL260':'100124','AL270':'100129','AL351':'100126','AL375':'100128','AL376':'132642',
-'AL510':'100130','AM010':'100131','AM020':'100133','AM030':'100134','AM040':'100136',
-'AM060':'100137','AM065':'100138','AM070':'100139','AM071':'100140','AM075':'100141',
-'AM080':'100142','AN010':'100143','AN050':'100144','AN060':'100145','AN075':'100146',
-'AN076':'100147','AP010':'100150','AP020':'100151','AP030':'100152','AP033':'179969',
-'AP040':'100154','AP041':'100155','AP050':'100156','AQ035':'100159','AQ040':'100161',
-'AQ045':'100162','AQ055':'100164','AQ060':'100167','AQ063':'130381','AQ065':'100170',
-'AQ068':'100171','AQ070':'100172','AQ075':'100173','AQ080':'100174','AQ095':'100176',
-'AQ110':'100177','AQ113':'100179','AQ116':'100182','AQ118':'100183','AQ125':'100186',
-'AQ130':'100187','AQ135':'100188','AQ140':'100189','AQ141':'100190','AQ150':'100191',
-'AQ151':'100192','AQ170':'100197','AT005':'100199','AT010':'100200','AT012':'100202',
-'AT041':'100206','AT042':'100558','AT045':'100207','BA010':'100212','BA023':'100215',
-'BA030':'100217','BA040':'100218','BB005':'100222','BB009':'100223','BB010':'100224',
-'BB080':'100230','BB081':'100231','BB082':'100232','BB090':'100233','BB199':'100243',
-'BC040':'800668','BC050':'100253','BD061':'100692','BD100':'100271','BD115':'100272',
-'BD120':'100301','BD130':'100306','BD180':'100278','BD181':'100279','BE010':'100310',
-'BG010':'100323','BH010':'100295','BH012':'131749','BH015':'100296','BH020':'100297',
-'BH030':'100298','BH040':'100299','BH050':'114168','BH051':'191951','BH065':'131810',
-'BH070':'100302','BH075':'100303','BH077':'100304','BH082':'130384','BH090':'100307',
-'BH100':'100309','BH110':'100310','BH120':'100311','BH135':'100313','BH140':'100314',
-'BH145':'100315','BH150':'100316','BH155':'100317','BH160':'100318','BH165':'100319',
-'BH170':'100320','BH180':'100321','BH230':'100326','BI005':'100328','BI006':'132749',
-'BI010':'100329','BI020':'100330','BI030':'100331','BI040':'100334','BI044':'131207',
-'BI045':'131206','BI050':'100337','BJ020':'100340','BJ030':'100341','BJ031':'100342',
-'BJ040':'100343','BJ060':'100344','BJ065':'100345','BJ080':'100347','BJ099':'100348',
-'BJ100':'100349','BJ110':'100350','CA010':'100353','CA030':'100355','DA005':'100356',
-'DA010':'100358','DB010':'100362','DB029':'154961','DB061':'100365','DB070':'100366',
-'DB071':'192101','DB090':'100368','DB100':'100369','DB110':'100370','DB115':'100371',
-'DB150':'100372','DB160':'100373','DB170':'100374','DB180':'100375','EA010':'100380',
-'EA020':'100381','EA030':'100382','EA040':'100384','EA050':'100385','EA055':'100386',
-'EB010':'100387','EB020':'100388','EB070':'100390','EC005':'100392','EC010':'100393',
-'EC015':'130380','EC020':'100394','EC040':'100396','EC060':'100398','ED010':'100399',
-'ED020':'100400','EE010':'100401','FA000':'100405','FA002':'100406','FA003':'100407',
-'FA015':'100410','FA091':'100413','FA100':'100414','FA110':'800591','FA165':'100416',
-'FA210':'100417','GA005':'800078','GA033':'500002','GA036':'801161','GA037':'801074',
-'GA038':'800786','GA041':'800291','GB005':'100436','GB013':'114580','GB015':'100438',
-'GB030':'100441','GB035':'100442','GB040':'100443','GB045':'100444','GB050':'100446',
-'GB055':'100448','GB065':'100452','GB070':'100453','GB075':'100454','GB230':'100456',
-'GB250':'100457','SU001':'100462','ZB030':'100465','ZB050':'177997','ZC050':'800597',
-'ZD015':'100578','ZD020':'100473','ZD040':'100475','ZD045':'100476','ZI031':'121591',
-'ZI039':'132721'
-    }, // End of subtypeList
-    // ##### End of ESRI FCSubtype Rules #####
+  // ##### Start of ESRI FCSubtype Rules #####
+  subtypeList : {
+    'AA010':'100001','AA011':'100002','AA020':'100003','AA040':'100004','AA052':'100006',
+    'AA054':'155023','AB000':'100007','AB010':'100008','AB040':'100010','AC010':'100012',
+    'AC020':'100013','AC030':'100014','AC060':'100016','AD010':'100018','AD020':'100019',
+    'AD025':'100020','AD030':'100021','AD060':'100687','AF010':'100025','AF020':'100026',
+    'AF030':'100028','AF040':'100029','AF070':'100032','AF080':'100033','AG030':'100034',
+    'AH025':'132596','AH055':'132626','AH060':'100038','AH070':'100039','AI020':'100040',
+    'AI021':'133168','AJ030':'100043','AJ050':'100044','AJ051':'100045','AJ055':'100046',
+    'AJ085':'100691','AJ110':'100052','AK020':'100053','AK030':'100054','AK040':'100055',
+    'AK060':'100057','AK070':'100059','AK080':'100060','AK090':'100061','AK100':'100062',
+    'AK101':'100063','AK110':'100064','AK120':'100065','AK130':'100069','AK150':'100072',
+    'AK160':'154703','AK161':'121747','AK164':'100074','AK170':'100077','AK180':'100078',
+    'AL010':'100080','AL011':'100081','AL012':'100082','AL013':'100083','AL014':'100084',
+    'AL018':'100087','AL019':'100088','AL020':'100089','AL025':'100091','AL030':'100092',
+    'AL036':'100094','AL060':'100096','AL065':'100097','AL070':'100098','AL080':'100101',
+    'AL099':'100103','AL105':'100104','AL110':'100105','AL130':'100108','AL140':'100110',
+    'AL142':'100111','AL155':'100112','AL165':'100113','AL170':'100114','AL175':'100688',
+    'AL200':'100116','AL208':'100118','AL211':'130921','AL241':'100122','AL250':'100123',
+    'AL260':'100124','AL270':'100129','AL351':'100126','AL375':'100128','AL376':'132642',
+    'AL510':'100130','AM010':'100131','AM020':'100133','AM030':'100134','AM040':'100136',
+    'AM060':'100137','AM065':'100138','AM070':'100139','AM071':'100140','AM075':'100141',
+    'AM080':'100142','AN010':'100143','AN050':'100144','AN060':'100145','AN075':'100146',
+    'AN076':'100147','AP010':'100150','AP020':'100151','AP030':'100152','AP033':'179969',
+    'AP040':'100154','AP041':'100155','AP050':'100156','AQ035':'100159','AQ040':'100161',
+    'AQ045':'100162','AQ055':'100164','AQ060':'100167','AQ063':'130381','AQ065':'100170',
+    'AQ068':'100171','AQ070':'100172','AQ075':'100173','AQ080':'100174','AQ095':'100176',
+    'AQ110':'100177','AQ113':'100179','AQ116':'100182','AQ118':'100183','AQ125':'100186',
+    'AQ130':'100187','AQ135':'100188','AQ140':'100189','AQ141':'100190','AQ150':'100191',
+    'AQ151':'100192','AQ170':'100197','AT005':'100199','AT010':'100200','AT012':'100202',
+    'AT041':'100206','AT042':'100558','AT045':'100207','BA010':'100212','BA023':'100215',
+    'BA030':'100217','BA040':'100218','BB005':'100222','BB009':'100223','BB010':'100224',
+    'BB080':'100230','BB081':'100231','BB082':'100232','BB090':'100233','BB199':'100243',
+    'BC040':'800668','BC050':'100253','BD061':'100692','BD100':'100271','BD115':'100272',
+    'BD120':'100301','BD130':'100306','BD180':'100278','BD181':'100279','BE010':'100310',
+    'BG010':'100323','BH010':'100295','BH012':'131749','BH015':'100296','BH020':'100297',
+    'BH030':'100298','BH040':'100299','BH050':'114168','BH051':'191951','BH065':'131810',
+    'BH070':'100302','BH075':'100303','BH077':'100304','BH082':'130384','BH090':'100307',
+    'BH100':'100309','BH110':'100310','BH120':'100311','BH135':'100313','BH140':'100314',
+    'BH145':'100315','BH150':'100316','BH155':'100317','BH160':'100318','BH165':'100319',
+    'BH170':'100320','BH180':'100321','BH230':'100326','BI005':'100328','BI006':'132749',
+    'BI010':'100329','BI020':'100330','BI030':'100331','BI040':'100334','BI044':'131207',
+    'BI045':'131206','BI050':'100337','BJ020':'100340','BJ030':'100341','BJ031':'100342',
+    'BJ040':'100343','BJ060':'100344','BJ065':'100345','BJ080':'100347','BJ099':'100348',
+    'BJ100':'100349','BJ110':'100350','CA010':'100353','CA030':'100355','DA005':'100356',
+    'DA010':'100358','DB010':'100362','DB029':'154961','DB061':'100365','DB070':'100366',
+    'DB071':'192101','DB090':'100368','DB100':'100369','DB110':'100370','DB115':'100371',
+    'DB150':'100372','DB160':'100373','DB170':'100374','DB180':'100375','EA010':'100380',
+    'EA020':'100381','EA030':'100382','EA040':'100384','EA050':'100385','EA055':'100386',
+    'EB010':'100387','EB020':'100388','EB070':'100390','EC005':'100392','EC010':'100393',
+    'EC015':'130380','EC020':'100394','EC040':'100396','EC060':'100398','ED010':'100399',
+    'ED020':'100400','EE010':'100401','FA000':'100405','FA002':'100406','FA003':'100407',
+    'FA015':'100410','FA091':'100413','FA100':'100414','FA110':'800591','FA165':'100416',
+    'FA210':'100417','GA005':'800078','GA033':'500002','GA036':'801161','GA037':'801074',
+    'GA038':'800786','GA041':'800291','GB005':'100436','GB013':'114580','GB015':'100438',
+    'GB030':'100441','GB035':'100442','GB040':'100443','GB045':'100444','GB050':'100446',
+    'GB055':'100448','GB065':'100452','GB070':'100453','GB075':'100454','GB230':'100456',
+    'GB250':'100457','SU001':'100462','ZB030':'100465','ZB050':'177997','ZC050':'800597',
+    'ZD015':'100578','ZD020':'100473','ZD040':'100475','ZD045':'100476','ZI031':'121591',
+    'ZI039':'132721'
+  }, // End of subtypeList
+  // ##### End of ESRI FCSubtype Rules #####
 
-} // End of tds70.rules
+}; // End of tds70.rules

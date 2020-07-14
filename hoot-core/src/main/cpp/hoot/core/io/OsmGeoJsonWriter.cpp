@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmGeoJsonWriter.h"
 
@@ -33,7 +33,7 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
@@ -132,7 +132,7 @@ QString OsmGeoJsonWriter::_getBbox()
 void OsmGeoJsonWriter::_writeMeta(ConstElementPtr e)
 {
   _write("\"meta\": {");
-  _writeKvp("timestamp", OsmUtils::toTimeString(e->getTimestamp())); _write(",");
+  _writeKvp("timestamp", DateTimeUtils::toTimeString(e->getTimestamp())); _write(",");
   _writeKvp("version", e->getVersion()); _write(",");
   _writeKvp("visible", (e->getVisible() ? "true" : "false"));
   _write("}");

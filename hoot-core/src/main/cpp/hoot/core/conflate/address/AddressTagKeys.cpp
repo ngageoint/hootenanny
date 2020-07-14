@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddressTagKeys.h"
 
@@ -35,23 +35,18 @@
 namespace hoot
 {
 
-AddressTagKeysPtr AddressTagKeys::_theInstance;
+QMultiMap<QString, QString> AddressTagKeys::_addressTypeToTagKeys;
 
 AddressTagKeys::AddressTagKeys()
 {
   ConfigOptions config = ConfigOptions(conf());
-  _readAddressTagKeys(config.getAddressTagKeysFile());
+  // only read the config file in once
+  if (_addressTypeToTagKeys.isEmpty())
+  {
+    _readAddressTagKeys(config.getAddressTagKeysFile());
+  }
   _additionalTagKeys = config.getAddressAdditionalTagKeys().toSet();
   LOG_VART(_additionalTagKeys);
-}
-
-const AddressTagKeysPtr& AddressTagKeys::getInstance()
-{
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new AddressTagKeys());
-  }
-  return _theInstance;
 }
 
 void AddressTagKeys::_readAddressTagKeys(const QString& configFile)
@@ -114,19 +109,16 @@ QSet<QString> AddressTagKeys::getAddressTagKeys(const Element& element) const
 
 QString AddressTagKeys::getAddressTagKey(const Tags& tags, const QString& addressTagType) const
 {
-  const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
-  for (int i = 0; i < tagKeys.size(); i++)
-  {
-    const QString tagKey = tagKeys.at(i);
-    if (tags.contains(tagKey))
-    {
-      return tagKey;
-    }
-  }
-  return "";
+  return _getAddressTag(tags, addressTagType, true);
 }
 
 QString AddressTagKeys::getAddressTagValue(const Tags& tags, const QString& addressTagType) const
+{
+  return _getAddressTag(tags, addressTagType, false);
+}
+
+QString AddressTagKeys::_getAddressTag(const Tags& tags, const QString& addressTagType,
+                                       bool key) const
 {
   const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
   for (int i = 0; i < tagKeys.size(); i++)
@@ -134,7 +126,10 @@ QString AddressTagKeys::getAddressTagValue(const Tags& tags, const QString& addr
     const QString tagKey = tagKeys.at(i);
     if (tags.contains(tagKey))
     {
-      return tags.get(tagKey);
+      if (key)
+        return tagKey;
+      else
+        return tags.get(tagKey);
     }
   }
   return "";

@@ -195,8 +195,9 @@ void DataConverter::setTranslation(const QString& translation)
 
 void DataConverter::setConfiguration(const Settings& conf)
 {
-  // The ordering of these setters matter to DataConvertTest.
   ConfigOptions config = ConfigOptions(conf);
+
+  // The ordering of these setters matter to DataConvertTest.
   setConvertOps(config.getConvertOps());
   setOgrFeatureReadLimit(config.getOgrReaderLimit());
   setShapeFileColumns(config.getShapeFileWriterCols());
@@ -320,12 +321,11 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
     throw HootException("Read limit may only be specified when converting OGR inputs.");
   }
 
-  QFileInfo outputInfo(output);
-  LOG_VARD(outputInfo.dir().absolutePath());
-  const bool outputDirSuccess = QDir().mkpath(outputInfo.dir().absolutePath());
-  if (!outputDirSuccess)
+  if (!IoUtils::isUrl(output))
   {
-    throw IllegalArgumentException("Unable to create output path for: " + output);
+    // write the output dir now so we don't get a nasty surprise at the end of a long job that it
+    // can't be written
+    IoUtils::writeOutputDir(output);
   }
 }
 
@@ -428,6 +428,19 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
       "Ignoring specified schema.translation.direction=toosm and using toogr to write to " <<
       "OGR output...");
   }
+
+  // Set a config option so the translation script knows what the output format is
+  // For this, output format == file extension
+  // We are going to grab everything after the last "." in the output file name and use it as the file extension
+  QString outputFormat = "";
+  if (output.lastIndexOf(".") > -1)
+  {
+    outputFormat = output.right(output.size() - output.lastIndexOf(".") - 1).toLower();
+  }
+  conf().set(ConfigOptions::getOgrOutputFormatKey(), outputFormat);
+
+  LOG_DEBUG(conf().getString(ConfigOptions::getOgrOutputFormatKey()));
+
 
   // Translation for going to OGR is always required and happens in the writer itself. It is not to
   // be done with convert ops, so let's ignore any translation ops that were specified.
@@ -600,6 +613,8 @@ void DataConverter::_setFromOgrOptions()
     if (!_convertOps.contains(QString::fromStdString(DuplicateNodeRemover::className())))
     {
       _convertOps.append(QString::fromStdString(DuplicateNodeRemover::className()));
+      // also run dupe way node removal
+      _convertOps.append(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className()));
     }
   }
 
@@ -644,6 +659,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   {
     reader.setLimit(_ogrFeatureReadLimit);
   }
+  reader.setConfiguration(conf());
   reader.setSchemaTranslationScript(_translation);
 
   // see similar note in _convertToOgr

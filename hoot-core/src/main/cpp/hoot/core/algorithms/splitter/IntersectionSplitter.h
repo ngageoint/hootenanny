@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef INTERSECTIONSPLITTER_H
@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
@@ -50,15 +49,15 @@ class Way;
  * example, if two ways make a four way intesection the intersection splitter will convert that
  * into four ways that meet at a four way intersection. No nodes are modified in this process.
  */
-class IntersectionSplitter : public OsmMapOperation, public OperationStatusInfo
+class IntersectionSplitter : public OsmMapOperation
 {
 public:
 
   static std::string className() { return "hoot::IntersectionSplitter"; }
 
-  IntersectionSplitter();
-
-  IntersectionSplitter(const std::shared_ptr<OsmMap>& map);
+  IntersectionSplitter() = default;
+  IntersectionSplitter(const std::shared_ptr<OsmMap>& map) : _map(map) { }
+  virtual ~IntersectionSplitter() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -66,13 +65,20 @@ public:
 
   void splitIntersections();
 
-  virtual QString getInitStatusMessage() const { return "Splitting road intersections..."; }
+  virtual QString getInitStatusMessage() const { return "Splitting linear intersections..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Split " + QString::number(_numAffected) + " road intersections"; }
+  { return "Split " + QString::number(_numAffected) + " linear intersections"; }
 
   virtual QString getDescription() const override
-  { return "Makes all road intersections contain only way end nodes"; }
+  { return "Makes all linear intersections contain only way end nodes"; }
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const;
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

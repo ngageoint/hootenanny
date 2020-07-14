@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __INDEXED_EDGE_MATCH_SET_H__
 #define __INDEXED_EDGE_MATCH_SET_H__
@@ -44,11 +44,10 @@ public:
 
   static std::string className() { return "hoot::IndexedEdgeMatchSet"; }
 
-  static int logWarnCount;
-
   typedef QHash<ConstEdgeMatchPtr, double> MatchHash;
 
-  IndexedEdgeMatchSet();
+  IndexedEdgeMatchSet() = default;
+  virtual ~IndexedEdgeMatchSet()  = default;
 
   /**
    * The edge match should not be modified after it has been added to the index.
@@ -131,6 +130,8 @@ public:
   virtual QString toString() const override;
 
 private:
+
+  static int logWarnCount;
 
   typedef QHash<ConstNetworkEdgePtr, QSet<ConstEdgeMatchPtr>> EdgeToMatchMap;
   typedef QHash<ConstNetworkVertexPtr, QSet<ConstEdgeMatchPtr>> VertexToMatchMap;

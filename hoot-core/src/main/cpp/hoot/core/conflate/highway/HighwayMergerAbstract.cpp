@@ -22,33 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayMergerAbstract.h"
 
-// geos
-#include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/geom/GeometryFactory.h>
-#include <geos/geom/LineString.h>
-
 // hoot
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
-#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
-#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/RemoveReviewsByEidOp.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
-#include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/Validate.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/util/Log.h>
 
 using namespace geos::geom;

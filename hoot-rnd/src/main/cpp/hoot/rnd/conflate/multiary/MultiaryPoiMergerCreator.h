@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYPOIMERGERCREATOR_H
 #define MULTIARYPOIMERGERCREATOR_H
@@ -57,7 +57,8 @@ class MultiaryPoiMergerCreator : public MergerCreator
 public:
   static std::string className() { return "hoot::MultiaryPoiMergerCreator"; }
 
-  MultiaryPoiMergerCreator();
+  MultiaryPoiMergerCreator() = default;
+  virtual ~MultiaryPoiMergerCreator() = default;
 
   /**
    * This merger is very aggressive and will merge pretty much any set of matches that are passed
@@ -70,7 +71,9 @@ public:
    */
   virtual std::vector<CreatorDescription> getAllCreators() const override;
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const;
+  virtual bool isConflicting(
+    const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const;
 };
 
 }

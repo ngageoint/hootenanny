@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGKEYCOUNTVISITOR_H
 #define TAGKEYCOUNTVISITOR_H
@@ -47,6 +47,7 @@ public:
   TagKeyCountVisitor();
   TagKeyCountVisitor(const QString& key);
   explicit TagKeyCountVisitor(const QStringList& keys);
+  virtual ~TagKeyCountVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e);
 
@@ -56,6 +57,8 @@ public:
   { return "Counts the number of tags with the given keys"; }
 
   virtual void setConfiguration(const Settings& conf);
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

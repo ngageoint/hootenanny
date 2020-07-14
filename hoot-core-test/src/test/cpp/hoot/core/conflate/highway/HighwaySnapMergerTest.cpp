@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -50,6 +50,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -128,6 +129,9 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
+    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    map->visitRw(hashRemover);
+
     ElementConverter ec(map);
     HOOT_STR_EQUALS("[2]{(Way(-1), Way(-5)), (Way(-2), Way(-7))}", replaced);
     HOOT_STR_EQUALS("LINESTRING (50.0000000000000000 0.0000000000000000, 100.0000000000000000 0.0000000000000000)",
@@ -195,16 +199,19 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
+    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    map->visitRw(hashRemover);
+
     HOOT_STR_EQUALS(0, replaced.size());
     HOOT_STR_EQUALS(1, map->getWays().size());
-    HOOT_STR_EQUALS("way(-4)\n"
+    HOOT_STR_EQUALS("way(-1)\n"
                     "nodes: [2]{-1, -2}\n"
                     "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: conflated\n"
                     "version: 0\n"
                     "visible: 1\n"
                     "circular error: 15\n",
-                    map->getWay(-4)->toString());
+                    map->getWay(-1)->toString());
   }
 
   /**
@@ -353,6 +360,9 @@ public:
 
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
+
+    RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
+    map->visitRw(hashRemover);
 
     const QString testFileName = "runTagsSplitTest.json";
     OsmJsonWriter writer;

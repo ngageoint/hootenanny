@@ -145,7 +145,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-196" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-35"/>
         <nd ref="-34"/>
         <nd ref="-33"/>
@@ -153,7 +153,7 @@
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="2"/>
-        <tag k="hoot:id" v="-192"/>
+        <tag k="hoot:id" v="-196"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1">

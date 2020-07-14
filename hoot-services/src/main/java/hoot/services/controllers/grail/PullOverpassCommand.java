@@ -40,9 +40,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -103,6 +100,7 @@ class PullOverpassCommand implements InternalCommand {
             //write to intermediate file
             InputStream is = PullOverpassCommand.getOverpassInputStream(url);
             FileUtils.copyInputStreamToFile(is, outputFile);
+            is.close();
 
         }
         catch (Exception ex) {
@@ -143,12 +141,7 @@ class PullOverpassCommand implements InternalCommand {
         String overpassQuery;
 
         if (query == null || query.equals("")) {
-            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
-            try {
-                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
-            } catch(Exception exc) {
-                throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
-        }
+            overpassQuery = getDefaultOverpassQuery();
         } else {
             overpassQuery = query;
         }
@@ -171,19 +164,24 @@ class PullOverpassCommand implements InternalCommand {
 
     static InputStream getOverpassInputStream(String url) throws IOException {
         InputStream inputStream;
-        if ("https://overpass-api.de/api/interpreter".equalsIgnoreCase(PUBLIC_OVERPASS_URL)) {
-            URLConnection conn = new URL(url).openConnection();
-            inputStream = conn.getInputStream();
+        if ("https://overpass-api.de/api/interpreter".equalsIgnoreCase(replaceSensitiveData(PUBLIC_OVERPASS_URL))) {
+            inputStream = new URL(url).openStream();
         } else { // add no cert checker if using a public mirror
-            HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
-            conn.setHostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession sslSession) {
-                    return true;
-                }
-            });
-            inputStream = conn.getInputStream();
+            inputStream = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
         }
         return inputStream;
+    }
+
+    static String getDefaultOverpassQuery() {
+        String overpassQuery;
+
+        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+        try {
+            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+        } catch(Exception exc) {
+            throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
+        }
+
+        return overpassQuery;
     }
 }

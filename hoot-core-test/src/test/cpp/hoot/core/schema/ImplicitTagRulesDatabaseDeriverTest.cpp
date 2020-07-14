@@ -72,7 +72,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(86L, dbReader.getRuleCount());
+    CPPUNIT_ASSERT_EQUAL(88L, dbReader.getRuleCount());
     dbReader.close();
   }
 
@@ -153,7 +153,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(51L, dbReader.getRuleCount());
+    CPPUNIT_ASSERT_EQUAL(52L, dbReader.getRuleCount());
     dbReader.close();
   }
 
@@ -175,7 +175,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(57L, dbReader.getRuleCount());
+    CPPUNIT_ASSERT_EQUAL(59L, dbReader.getRuleCount());
     dbReader.close();
   }
 
@@ -198,7 +198,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(78L, dbReader.getRuleCount());
+    CPPUNIT_ASSERT_EQUAL(80L, dbReader.getRuleCount());
     dbReader.close();
   }
 
@@ -221,7 +221,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(89L, dbReader.getRuleCount());
+    CPPUNIT_ASSERT_EQUAL(91L, dbReader.getRuleCount());
     dbReader.close();
   }
 
@@ -249,5 +249,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesDatabaseDeriverTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesDatabaseDeriverTest, "serial");
 
 }

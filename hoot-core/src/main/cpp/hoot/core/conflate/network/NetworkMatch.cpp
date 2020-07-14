@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatch.h"
 
@@ -40,11 +40,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(Match, NetworkMatch)
-
-NetworkMatch::NetworkMatch() :
-Match()
-{
-}
 
 NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
   double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
@@ -100,8 +95,8 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   // Unfortunately, this can be a very coarse estimate. Something like Frechet distance may
   // improve this matching. - see #3158
 
-  // Its not why we would allow node/way match pairs here, but forcing way/way match pairs does
-  // lead to worse snapping at some road intersections as was found while working on #3386.
+  // Its not obvious why we would allow node/way match pairs here, but forcing way/way match pairs
+  // does lead to worse snapping at some road intersections as was found while working on #3386.
   // NetworkMatchCreator does have a candidate check for highways, so its also not completely
   // clear when nodes would be getting into the mix here.
 
@@ -148,7 +143,9 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   LOG_VART(_pairs);
 }
 
-bool NetworkMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/) const
+bool NetworkMatch::isConflicting(
+  const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,
+  const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   set<pair<ElementId, ElementId>> s = other->getMatchPairs();
 
@@ -158,7 +155,7 @@ bool NetworkMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPt
     const pair<ElementId, ElementId>& ip = *it;
 
     for (set<pair<ElementId, ElementId>>::const_iterator jt = _pairs.begin(); jt != _pairs.end();
-      ++jt)
+         ++jt)
     {
       const pair<ElementId, ElementId>& jp = *jt;
 

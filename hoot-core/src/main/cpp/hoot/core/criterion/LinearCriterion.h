@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LINEARCRITERION_H
 #define LINEARCRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -37,13 +37,14 @@ namespace hoot
 /**
  * Identifies linear features
  */
-class LinearCriterion : public GeometryTypeCriterion
+class LinearCriterion : public ConflatableElementCriterion
 {
 public:
 
   static std::string className() { return "hoot::LinearCriterion"; }
 
-  LinearCriterion();
+  LinearCriterion() = default;
+  virtual ~LinearCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -56,6 +57,9 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
+  virtual bool supportsSpecificConflation() const { return false; }
+
+  static bool isLinearRelation(const ConstRelationPtr& relation);
 };
 
 }

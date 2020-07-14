@@ -6,7 +6,9 @@ mkdir -p $HOOT_HOME/test-output/cmd/quick/NodeDensityPlotCmdTest
 inputfile=$HOOT_HOME/test-files/DcGisRoads.pbf
 outputfile=$HOOT_HOME/test-output/cmd/quick/NodeDensityPlotCmdTest/out.png
 
-hoot node-density-plot $inputfile $outputfile 1024 
+CONFIG="-C Testing.conf"
+
+hoot node-density-plot $CONFIG $inputfile $outputfile 1024 
 
 # Compare to known-good
 goodfile=$HOOT_HOME/test-files/cmd/quick/NodeDensityPlotCmdTest/out.png

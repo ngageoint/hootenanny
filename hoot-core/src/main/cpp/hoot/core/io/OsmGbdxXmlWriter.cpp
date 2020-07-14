@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmGbdxXmlWriter.h"
 
@@ -31,7 +31,6 @@
 #include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
@@ -41,6 +40,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
@@ -61,7 +61,7 @@ int OsmGbdxXmlWriter::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGbdxXmlWriter)
 
 OsmGbdxXmlWriter::OsmGbdxXmlWriter() :
-_formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
+_formatXml(ConfigOptions().getWriterXmlFormat()),
 _precision(ConfigOptions().getWriterPrecision()),
 _encodingErrorCount(0),
 _fileNumber(0)
@@ -130,7 +130,7 @@ void OsmGbdxXmlWriter::open(const QString& url)
 
   if (_outputDir.exists() == false)
   {
-    if (QDir().mkpath(_outputDir.path()) == false)
+    if (FileUtils::makeDir(_outputDir.path()) == false)
     {
       throw HootException("Error creating directory for writing.");
     }

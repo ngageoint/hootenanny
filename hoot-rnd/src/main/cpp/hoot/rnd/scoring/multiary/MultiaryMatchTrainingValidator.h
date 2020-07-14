@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYMATCHTRAININGVALIDATOR_H
 #define MULTIARYMATCHTRAININGVALIDATOR_H
@@ -36,7 +36,11 @@ namespace hoot
 class MultiaryMatchTrainingValidator : public OsmMapOperation
 {
 public:
-  MultiaryMatchTrainingValidator();
+
+  static std::string className() { return "hoot::AddressCountVisitor"; }
+
+  MultiaryMatchTrainingValidator() = default;
+  virtual ~MultiaryMatchTrainingValidator() = default;
 
   /**
    * @see OsmMapOperation::apply()
@@ -44,6 +48,8 @@ public:
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual QString getDescription() const override { return "TODO"; }
+
+  virtual std::string getClassName() const { return className(); }
 };
 
 }

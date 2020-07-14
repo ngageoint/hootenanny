@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __WAY_LOCATION_H__
 #define __WAY_LOCATION_H__
@@ -125,7 +125,7 @@ public:
   double getSegmentFraction() const { return _segmentFraction; }
 
   /**
-   * Returns true if this way location is at one extreme or the other (isFirst() || isLast())
+   * Returns true if this way location is at one extreme or the other, first or last
    */
   bool isExtreme(double epsilon = 0.0) const { return isFirst(epsilon) || isLast(epsilon); }
 
@@ -137,8 +137,7 @@ public:
   /**
    * If this is effectively on a node.
    */
-  bool isNode(double epsilon = 0.0) const
-  { return _segmentFraction <= epsilon || _segmentFraction >= 1.0 - epsilon; }
+  bool isNode(double epsilon = 0.0) const;
 
   bool isValid() const { return _segmentIndex != -1; }
 

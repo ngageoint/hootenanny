@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUFFEREDOVERLAPEXTRACTOR_H
 #define BUFFEREDOVERLAPEXTRACTOR_H
@@ -40,7 +40,7 @@ class Element;
 /**
  * Shamelessly taken from JCS.
  *
- * This is exactly the same as the SymDiffMatcher (in JCS speak) so I've skipped implementing the
+ * This is exactly the same as the SymDiffMatcher (in JCS speak), so I've skipped implementing the
  * SymDiffMatcher.
  *
  * @author RoadMatcher
@@ -54,6 +54,7 @@ class BufferedOverlapExtractor : public FeatureExtractorBase, public Configurabl
 public:
 
   BufferedOverlapExtractor();
+  virtual ~BufferedOverlapExtractor() = default;
   /**
    * Similar to OverlapExtractor, but the objects are buffered before the overlap is calculated.
    *

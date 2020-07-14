@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-476582' action='modify' visible='true' lat='39.1031916' lon='-94.5419776' />
+  <node id='-476583' action='modify' visible='true' lat='39.1031217' lon='-94.5419811'>
+    <tag k='highway' v='crossing' />
+  </node>
+  <node id='-476584' action='modify' visible='true' lat='39.1022654' lon='-94.542023'>
+    <tag k='highway' v='crossing' />
+  </node>
+  <node id='-476585' action='modify' visible='true' lat='39.1021875' lon='-94.5420268' />
+  <node id='-476586' action='modify' visible='true' lat='39.1060134' lon='-94.5418408' />
+  <node id='-476587' action='modify' visible='true' lat='39.1059107' lon='-94.5418456'>
+    <tag k='crossing' v='unmarked' />
+    <tag k='highway' v='crossing' />
+    <tag k='tactile_paving' v='no' />
+  </node>
+  <node id='-476588' action='modify' visible='true' lat='39.1051653' lon='-94.5418804'>
+    <tag k='crossing' v='unmarked' />
+    <tag k='highway' v='crossing' />
+    <tag k='tactile_paving' v='yes' />
+  </node>
+  <node id='-476589' action='modify' visible='true' lat='39.105106' lon='-94.5418832' />
+  <node id='-476590' action='modify' visible='true' lat='39.1050431' lon='-94.5418866'>
+    <tag k='crossing' v='unmarked' />
+    <tag k='highway' v='crossing' />
+    <tag k='tactile_paving' v='yes' />
+  </node>
+  <node id='-476591' action='modify' visible='true' lat='39.1042573' lon='-94.5419295'>
+    <tag k='highway' v='crossing' />
+  </node>
+  <node id='-476592' action='modify' visible='true' lat='39.1042016' lon='-94.5419325' />
+  <node id='-476593' action='modify' visible='true' lat='39.1041403' lon='-94.5419353'>
+    <tag k='highway' v='crossing' />
+  </node>
+  <node id='-476594' action='modify' visible='true' lat='39.1032599' lon='-94.5419745'>
+    <tag k='highway' v='crossing' />
+  </node>
+  <way id='-476580' action='modify' visible='true'>
+    <nd ref='-476582' />
+    <nd ref='-476583' />
+    <nd ref='-476584' />
+    <nd ref='-476585' />
+    <tag k='highway' v='residential' />
+    <tag k='name' v='Indiana Avenue' />
+    <tag k='surface' v='asphalt' />
+    <tag k='tiger:cfcc' v='A41' />
+    <tag k='tiger:county' v='Jackson, MO' />
+    <tag k='tiger:name_base' v='Indiana' />
+    <tag k='tiger:name_type' v='Ave' />
+    <tag k='tiger:reviewed' v='no' />
+    <tag k='tiger:zip_left' v='64124' />
+    <tag k='tiger:zip_right' v='64124' />
+  </way>
+  <way id='-476581' action='modify' visible='true'>
+    <nd ref='-476586' />
+    <nd ref='-476587' />
+    <nd ref='-476588' />
+    <nd ref='-476589' />
+    <nd ref='-476590' />
+    <nd ref='-476591' />
+    <nd ref='-476592' />
+    <nd ref='-476593' />
+    <nd ref='-476594' />
+    <nd ref='-476582' />
+    <tag k='highway' v='residential' />
+    <tag k='lit' v='yes' />
+    <tag k='maxspeed' v='25 mph' />
+    <tag k='name' v='Indiana Avenue' />
+    <tag k='surface' v='asphalt' />
+    <tag k='tiger:cfcc' v='A41' />
+    <tag k='tiger:county' v='Jackson, MO' />
+    <tag k='tiger:name_base' v='Indiana' />
+    <tag k='tiger:name_type' v='Ave' />
+    <tag k='tiger:reviewed' v='no' />
+    <tag k='tiger:zip_left' v='64124' />
+    <tag k='tiger:zip_right' v='64124' />
+  </way>
+</osm>

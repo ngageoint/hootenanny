@@ -22,17 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FEATUREEXTRACTOR_JS_H
 #define FEATUREEXTRACTOR_JS_H
 
 // hoot
 #include <hoot/core/algorithms/extractors/FeatureExtractor.h>
-
-// node.js
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
-#include <hoot/js/SystemNodeJs.h>
 
 // Qt
 #include <QString>
@@ -45,16 +43,19 @@ namespace hoot
 
 class OsmMapOperation;
 
-class FeatureExtractorJs : public node::ObjectWrap
+class FeatureExtractorJs : public HootBaseJs
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   FeatureExtractorPtr getFeatureExtractor() { return _fe; }
 
+  virtual ~FeatureExtractorJs() = default;
+
 private:
-  FeatureExtractorJs(FeatureExtractorPtr fe);
-  ~FeatureExtractorJs();
+
+  FeatureExtractorJs(FeatureExtractorPtr fe) : _fe(fe) { }
 
   static void extract(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayJs.h"
 
@@ -47,18 +47,6 @@ HOOT_JS_REGISTER(WayJs)
 
 Persistent<Function> WayJs::_constructor;
 
-WayJs::WayJs(ConstWayPtr w) : _constWay(w)
-{
-}
-
-WayJs::WayJs()
-{
-}
-
-WayJs::~WayJs()
-{
-}
-
 void WayJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
@@ -69,6 +57,8 @@ void WayJs::Init(Handle<Object> target)
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   ElementJs::_addBaseFunctions(tpl);
+  tpl->PrototypeTemplate()->Set(
+    String::NewFromUtf8(current, "getNodeCount"), FunctionTemplate::New(current, getNodeCount));
 
   _constructor.Reset(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, "Way"), ToLocal(&_constructor));
@@ -110,5 +100,13 @@ void WayJs::New(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(args.This());
 }
 
+void WayJs::getNodeCount(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstWayPtr way = ObjectWrap::Unwrap<WayJs>(args.This())->getConstWay();
+  args.GetReturnValue().Set(Number::New(current, way->getNodeCount()));
 }
 
+}

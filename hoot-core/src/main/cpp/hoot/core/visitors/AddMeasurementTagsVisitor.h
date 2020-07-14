@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDMEASUREMENTTAGSVISITOR_H
 #define ADDMEASUREMENTTAGSVISITOR_H
@@ -31,7 +31,6 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 // Geos
@@ -52,13 +51,14 @@ namespace hoot
  *    - the combined closed way members of a relationship where outer
  *      entries are added and inner entries are subtracted
  */
-class AddMeasurementTagsVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class AddMeasurementTagsVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  AddMeasurementTagsVisitor() {}
+  AddMeasurementTagsVisitor() = default;
   AddMeasurementTagsVisitor(bool area, bool length, bool width) :
-    _addArea(area), _addLength(length), _addWidth(width) {}
+    _addArea(area), _addLength(length), _addWidth(width) { }
+  virtual ~AddMeasurementTagsVisitor() = default;
 
   // ElementVisitor
   static std::string className() { return "hoot::AddMeasurementTagsVisitor"; }
@@ -68,7 +68,10 @@ public:
 
   // OperationStatusInfo
   virtual QString getInitStatusMessage() const { return "Adding measurement tags..."; }
-  virtual QString getCompletedStatusMessage() const { return "Added tags to " + QString::number(_numAffected) + " elements"; }
+  virtual QString getCompletedStatusMessage() const
+  { return "Added tags to " + QString::number(_numAffected) + " elements"; }
+
+  virtual std::string getClassName() const { return className(); }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AlphaShapeGenerator.h"
@@ -33,6 +33,10 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/StringUtils.h>
+
+// GEOS
+#include <geos/geom/GeometryFactory.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -42,8 +46,19 @@ namespace hoot
 
 AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer) :
 _alpha(alpha),
-_buffer(buffer)
+_buffer(buffer),
+_manuallyCoverSmallPointClusters(true),
+_retryOnTooSmallInitialAlpha(true),
+_maxTries(1)
 {
+  LOG_VART(_alpha);
+  LOG_VART(_buffer);
+  if (_retryOnTooSmallInitialAlpha)
+  {
+    // have not seen an instance yet where more than two tries are needed to complete successfully;
+    // in all other cases, no solution could be found no matter how many tries were attempted
+    _maxTries = 2;
+  }
 }
 
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
@@ -53,17 +68,18 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   std::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
   if (cutterShape->getArea() == 0.0)
   {
-    // would rather this be thrown than a warning logged, as the warning may go unoticed by web
+    // would rather this be thrown than a warning logged, as the warning may go unoticed by
     // clients who are expecting the alpha shape to be generated
     throw HootException("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
   }
+  OsmMapWriterFactory::writeDebugMap(cutterShape, inputMap->getProjection(), "cutter-shape-map");
 
   OsmMapPtr result;
-
   result.reset(new OsmMap(inputMap->getProjection()));
   result->appendSource(inputMap->getSource());
   // add the resulting alpha shape for debugging.
   GeometryConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
+  OsmMapWriterFactory::writeDebugMap(result, "alpha-shape-result-map");
 
   const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
@@ -72,7 +88,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
     r->setTag("area", "yes");
   }
 
-  LOG_VARD(MapProjector::toWkt(result->getProjection()));
+  LOG_VART(MapProjector::toWkt(result->getProjection()));
   OsmMapWriterFactory::writeDebugMap(result, "alpha-shape-result-map");
 
   return result;
@@ -81,9 +97,9 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
 {
   MapProjector::projectToPlanar(inputMap);
-  LOG_VARD(MapProjector::toWkt(inputMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(inputMap->getProjection()));
 
-  // put all the nodes into a vector of points.
+  // put all the nodes into a vector of points
   std::vector<std::pair<double, double>> points;
   points.reserve(inputMap->getNodes().size());
   const NodeMap& nodes = inputMap->getNodes();
@@ -94,17 +110,90 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
     p.second = (it->second)->getY();
     points.push_back(p);
   }
+  LOG_VART(points.size());
 
   // create a complex geometry representing the alpha shape
+
   std::shared_ptr<Geometry> cutterShape;
+
+  int numTries = 0;
+  while (numTries < _maxTries)
   {
+    LOG_DEBUG(
+      "Generating alpha shape geometry with alpha: " << _alpha << "; attempt " << (numTries + 1) <<
+      " / " << _maxTries << "...");
+
     AlphaShape alphaShape(_alpha);
     alphaShape.insert(points);
-    cutterShape = alphaShape.toGeometry();
-    cutterShape.reset(cutterShape->buffer(_buffer));
+    try
+    {
+      cutterShape = alphaShape.toGeometry();
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      if (_retryOnTooSmallInitialAlpha && e.getWhat().startsWith("Longest face edge of size"))
+      {
+        const double longestFaceEdge = alphaShape.getLongestFaceEdge();
+        LOG_INFO(
+          "Failed to generate alpha shape geometry with alpha value of: " <<
+          StringUtils::formatLargeNumber(_alpha) <<
+          ". Attempting to generate the shape again using the longest face edge size of: " <<
+          StringUtils::formatLargeNumber(longestFaceEdge) << " for alpha...");
+        _alpha = longestFaceEdge;
+      }
+      else
+      {
+        break;
+      }
+    }
+    numTries++;
+  }
+  if (!cutterShape)
+  {
+    cutterShape.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+  }
+  cutterShape.reset(cutterShape->buffer(_buffer));
+  //OsmMapWriterFactory::writeDebugMap(cutterShape, inputMap->getProjection(), "cutter-shape-map");
+
+  // See _coverStragglers description. This is an add-on behavior that is separate from the Alpha
+  // Shape algorithm itself.
+  if (_manuallyCoverSmallPointClusters)
+  {
+    _coverStragglers(cutterShape, inputMap);
+    //OsmMapWriterFactory::writeDebugMap(geometry, spatRef, "alpha-shape-after-covering-stragglers");
   }
 
   return cutterShape;
+}
+
+void AlphaShapeGenerator::_coverStragglers(std::shared_ptr<Geometry>& geometry,
+                                           const ConstOsmMapPtr& map)
+{
+  LOG_DEBUG("Covering stragglers...");
+
+  // Pretty simple...go through and find any point that wasn't covered by the Alpha Shape and draw
+  // a buffer around it.
+
+  int addedPointCtr = 0;
+  const NodeMap& nodes = map->getNodes();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  {
+    NodePtr node = it->second;
+    std::shared_ptr<geos::geom::Geometry> point(
+      GeometryFactory::getDefaultInstance()->createPoint(
+        geos::geom::Coordinate(node->getX(), node->getY())));
+    if (!geometry->contains(point.get()))
+    {
+      LOG_TRACE(
+        "Point " << point->toString() << " not covered by alpha shape. Buffering and adding it...");
+      point.reset(point->buffer(_buffer));
+      geometry.reset(geometry->Union(point.get()));
+      addedPointCtr++;
+      LOG_VART(geometry->getArea());
+    }
+  }
+
+  LOG_DEBUG("Added " << addedPointCtr << " point stragglers to alpha shape.");
 }
 
 }

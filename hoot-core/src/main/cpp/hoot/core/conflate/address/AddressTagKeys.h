@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDRESS_TAG_KEYS_H
 #define ADDRESS_TAG_KEYS_H
@@ -42,13 +42,13 @@ class AddressTagKeys;
 typedef std::shared_ptr<AddressTagKeys> AddressTagKeysPtr;
 
 /**
- * Allows for mapping an address part type to a range of valid OSM tag keys (Singleton)
+ * Allows for mapping an address part type to a range of valid OSM tag keys
  */
 class AddressTagKeys
 {
 public:
 
-  static const AddressTagKeysPtr& getInstance();
+  AddressTagKeys();
 
   /**
    * Returns the tag keys of all address tags on an element
@@ -83,21 +83,17 @@ public:
 
 private:
 
-  AddressTagKeys();
-
-  friend class AddressScoreExtractorTest;
-
-  static AddressTagKeysPtr _theInstance;
-
-  //extra tags to search for addresses in
-  QSet<QString> _additionalTagKeys;
-  //maps address tag types to valid address tag keys
-  QMultiMap<QString, QString> _addressTypeToTagKeys;
-
   /*
    * Reads tag keys used to identify tags as addresses
    */
   void _readAddressTagKeys(const QString& configFile);
+
+  QString _getAddressTag(const Tags& tags, const QString& addressTagType, bool key) const;
+
+  // extra tags to search for addresses in
+  QSet<QString> _additionalTagKeys;
+  // maps address tag types to valid address tag keys
+  static QMultiMap<QString, QString> _addressTypeToTagKeys;
 };
 
 }

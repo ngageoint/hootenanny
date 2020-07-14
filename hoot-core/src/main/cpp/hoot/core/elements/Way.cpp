@@ -63,10 +63,6 @@ Way::Way(const Way& from)
 {
 }
 
-Way::~Way()
-{
-}
-
 void Way::addNode(long id)
 {
   _preGeometryChange();
@@ -294,6 +290,11 @@ bool Way::isOneWay() const
 
 bool Way::isSimpleLoop() const
 {
+  if (getNodeCount() < 2)
+  {
+    return false;
+  }
+
   return (getFirstNodeId() == getLastNodeId());
 }
 
@@ -452,16 +453,6 @@ QString Way::toString() const
   return QString::fromStdString(ss.str());
 }
 
-bool Way::isFirstLastNodeIdentical() const
-{
-  if (getNodeCount() < 2)
-  {
-    return false;
-  }
-
-  return (getFirstNodeId() == getLastNodeId());
-}
-
 bool Way::isClosedArea() const
 {
   return getNodeCount() > 3 && getFirstNodeId() == getLastNodeId();
@@ -480,9 +471,21 @@ long Way::getPid(long p, long c)
   else                                  return WayData::PID_EMPTY;
 }
 
-bool Way::hasSameNodeIds(const Way& other) const
+bool Way::hasSameNodes(const Way& other) const
 {
   return getNodeIds() == other.getNodeIds();
+}
+
+QSet<long> Way::sharedNodeIds(const Way& other) const
+{
+  QSet<long> nodes = QVector<long>::fromStdVector(getNodeIds()).toList().toSet();
+  QSet<long> otherNodes = QVector<long>::fromStdVector(other.getNodeIds()).toList().toSet();
+  return nodes.intersect(otherNodes);
+}
+
+bool Way::hasSharedNode(const Way& other) const
+{
+  return sharedNodeIds(other).size() > 0;
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATIONJS_H
 #define RELATIONJS_H
@@ -56,12 +56,13 @@ public:
 
 private:
 
-  RelationJs(ConstRelationPtr w);
-  RelationJs();
-  ~RelationJs();
+  RelationJs(ConstRelationPtr r) : _constRelation(r) { }
+  RelationJs() = default;
+  virtual ~RelationJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void replaceElement(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getType(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   ConstRelationPtr _constRelation;
   RelationPtr _relation;

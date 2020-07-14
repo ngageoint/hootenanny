@@ -22,15 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Boost
 #include <boost/random/uniform_int.hpp>
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
@@ -38,13 +36,18 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/io/ShapefileWriter.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDir>
 #include <QFile>
+#include <QElapsedTimer>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
@@ -61,7 +64,7 @@ public:
 
   static string className() { return "hoot::EvalPointMovesCmd"; }
 
-  EvalPointMovesCmd() { }
+  EvalPointMovesCmd() = default;
 
   virtual QString getName() const override { return "evaluate-point-moves"; }
 
@@ -191,6 +194,9 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    QElapsedTimer timer;
+    timer.start();
+
     if (args.size() != 3)
     {
       cout << getHelp() << endl << endl;
@@ -205,7 +211,7 @@ public:
     }
     Envelope bounds = parseEnvelope(args[1]);
     QString workingDir = args[2];
-    QDir(".").mkpath(workingDir);
+    FileUtils::makeDir(workingDir);
 
     OsmMapPtr map(new OsmMap());
 
@@ -271,6 +277,9 @@ public:
     cout << "Save to .shp\t";
     compareMaps(map, shpTransform(map, workingDir), pointCount).print();
     cout << endl;
+
+    LOG_STATUS(
+      "Point moves evaluated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JSREGISTRAR_H
 #define JSREGISTRAR_H
@@ -40,9 +40,9 @@ class ClassInitializer
 {
 public:
 
-  ClassInitializer() {}
+  ClassInitializer() = default;
 
-  virtual ~ClassInitializer() { }
+  virtual ~ClassInitializer() = default;
 
   virtual void Init(v8::Handle<v8::Object> exports) = 0;
 
@@ -56,11 +56,9 @@ class ClassInitializerTemplate : public ClassInitializer
 {
 public:
 
-  ClassInitializerTemplate()
-  {
-  }
+  ClassInitializerTemplate() = default;
 
-  virtual ~ClassInitializerTemplate() { }
+  virtual ~ClassInitializerTemplate() = default;
 
   virtual void Init(v8::Handle<v8::Object> exports) override
   {
@@ -86,9 +84,13 @@ public:
 private:
 
   std::vector<std::shared_ptr<ClassInitializer>> _initializers;
-  static std::shared_ptr<JsRegistrar> _theInstance;
 
-  JsRegistrar();
+  /** Default constructor/destructor */
+  JsRegistrar() = default;
+  ~JsRegistrar() = default;
+  /** Delete copy constructor and assignment operator */
+  JsRegistrar(const JsRegistrar&) = delete;
+  JsRegistrar& operator=(const JsRegistrar&) = delete;
 };
 
 template<class T>
