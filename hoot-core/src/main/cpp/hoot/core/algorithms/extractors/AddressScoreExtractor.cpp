@@ -91,20 +91,20 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
   const OsmMap& map, const ConstElementPtr& element,
   const ConstElementPtr& elementBeingComparedWith) const
 {
-  LOG_TRACE("Collecting addresses from: " << element->getElementId() << "...");
+  // TODO: change back?
+  LOG_TRACE("Collecting addresses from: " << element/*->getElementId()*/ << "...");
 
   if (_cacheEnabled)
   { 
     const QList<Address>* cachedVal = _addressesCache[element->getElementId()];
     if (cachedVal != 0)
     {
-      LOG_TRACE("Found cached address.");
+      LOG_TRACE("Found cached address(es): " << *cachedVal);
       _addressCacheHits++;
       return *cachedVal;
     }
   }
 
-  //LOG_VART(element);
   QList<Address> elementAddresses = _addressParser.parseAddresses(*element);
   if (elementAddresses.size() == 0)
   {
@@ -118,7 +118,7 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
       if (elementAddresses.size() != 0)
       {
         LOG_TRACE(
-          "Found " << elementAddresses.size() << " addresses on the way nodes of " <<
+          "Found " << elementAddresses.size() << " address(es) on the way nodes of " <<
           element->getElementId());
       }
     }
@@ -132,14 +132,16 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
       if (elementAddresses.size() != 0)
       {
         LOG_TRACE(
-          "Found " << elementAddresses.size() << " addresses on the relation members of " <<
+          "Found " << elementAddresses.size() << " address(es) on the relation members of " <<
           element->getElementId());
       }
     }
   }
   else
   {
-    LOG_TRACE("Found " << elementAddresses.size() << " addresses on " << element->getElementId());
+    LOG_TRACE(
+      "Found " << elementAddresses.size() << " address(es) on " << element->getElementId() <<
+      ": " << elementAddresses);
   }
 
   if (_cacheEnabled)

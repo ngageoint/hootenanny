@@ -109,9 +109,7 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
   else if (element->getElementType() == ElementType::Way)
   {
     addresses = parseAddressesFromWayNodes(*std::dynamic_pointer_cast<const Way>(element), map);
-    // TODO: Uncommenting this blows up a few of the poi/poly regression tests by forcing some
-    // address comparisons. See #3627.
-    //addresses.append(parseAddresses(*element));
+    addresses.append(parseAddresses(*element));
   }
   else if (element->getElementType() == ElementType::Relation)
   {
@@ -142,7 +140,6 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
   QString street;
   const QSet<QString> parsedAddresses = _parseAddresses(element, houseNum, street);
   LOG_TRACE("Parsed " << parsedAddresses.size() << " addresses for " << element.getElementId());
-  //LOG_TRACE("Parsed " << parsedAddresses.size() << " addresses for " << element);
   LOG_VART(parsedAddresses);
 
   // add the parsed addresses to a collection in which they will later be compared to each other
@@ -152,11 +149,11 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
     QString parsedAddress = *parsedAddressItr;
     LOG_VART(parsedAddress);
 
-    //optional additional lang pre-normalization translation
+    // optional additional lang pre-normalization translation
     if (_preTranslateTagValuesToEnglish)
     {
-      //only translating the street portion of the address string...the number isn't translatable
-       assert(!street.isEmpty());
+      // only translating the street portion of the address string...the number isn't translatable
+      assert(!street.isEmpty());
       const QString preTranslatedStreet = _addressTranslator.translateToEnglish(street);
       if (!preTranslatedStreet.isEmpty())
       {
@@ -294,13 +291,19 @@ bool AddressParser::_isParseableAddressFromComponents(const Tags& tags, QString&
 {
   // we only require a valid street address...no other higher order parts, like city, state, etc.
   houseNum = _addressNormalizer.getAddressTagKeys()->getAddressTagValue(tags, "house_number");
+  LOG_VART(houseNum);
   street = _addressNormalizer.getAddressTagKeys()->getAddressTagValue(tags, "street").toLower();
+  LOG_VART(street);
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
     LOG_TRACE("Found address from components: " << houseNum << ", " << street << ".");
     return true;
   }
-  return false;
+  else
+  {
+    LOG_TRACE("No parseable address present.");
+    return false;
+  }
 }
 
 bool AddressParser::_isRangeAddress(const QString& houseNum) const

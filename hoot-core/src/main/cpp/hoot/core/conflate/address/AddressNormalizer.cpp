@@ -234,7 +234,7 @@ void AddressNormalizer::_prepareAddressForLibPostalNormalization(QString& addres
 {
   LOG_TRACE("Before normalization fix: " << address);
   LOG_VART(Address::isStreetIntersectionAddress(address));
-  // This is a nast thing libpostal does where it changes "St" to "Saint" when it should be
+  // This is a nasty thing libpostal does where it changes "St" to "Saint" when it should be
   // "Street".
   if (address.endsWith("st", Qt::CaseInsensitive) && !Address::isStreetIntersectionAddress(address))
   {

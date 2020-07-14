@@ -137,6 +137,14 @@ addresses with the same house number.  e.g. when enabled, 23a Elm Street matches
 Allows address comparison to score addresses parsed from elements. This is generally only to be
 turned off when running certain unit tests which are incompatible with it being enabled.
 
+=== address.string.comparer
+
+* Data Type: string
+* Default Value: `hoot::ExactStringDistance`
+
+String comparison algorithm to use for address comparison during conflation. Must be an
+implementation of `StringDistance`.
+
 === address.tag.keys.file
 
 * Data Type: string
@@ -151,9 +159,9 @@ Flat file containing tag keys that make up feature address components.
 
 If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
 address before normalizing it during conflation address matching (note that address normalization
-may involve some form of language translation even when this setting is).  This can have significant
-impact on the runtime performance of conflation when enabled and should only be enabled if the
-source data is known to have non-English addresses.  The configuration option,
+may involve some form of language translation even when this setting is disabled).  This can have
+significant impact on the runtime performance of conflation when enabled and should only be enabled
+if the source data is known to have non-English addresses.  The configuration option,
 'language.translation.translator', controls which translator is used.
 
 === address.use.default.language.translation.only
@@ -3598,7 +3606,7 @@ controlled by the Hootenanny schema.
 
 The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
 
-=== poi.polygon.string.comparer
+=== poi.polygon.name.string.comparer
 
 * Data Type: string
 * Default Value: `hoot::KskipBigramDistance`

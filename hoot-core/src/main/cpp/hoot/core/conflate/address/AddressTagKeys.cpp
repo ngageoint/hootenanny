@@ -37,6 +37,13 @@ namespace hoot
 
 QMultiMap<QString, QString> AddressTagKeys::_addressTypeToTagKeys;
 
+const QString AddressTagKeys::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
+const QString AddressTagKeys::STREET_TAG_NAME = "addr:street";
+const QString AddressTagKeys::CITY_TAG_NAME = "addr:city";
+const QString AddressTagKeys::FULL_ADDRESS_TAG_NAME = "address";
+const QString AddressTagKeys::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
+const QString AddressTagKeys::HOUSE_NAME = "addr:housename";
+
 AddressTagKeys::AddressTagKeys()
 {
   ConfigOptions config = ConfigOptions(conf());
@@ -114,22 +121,45 @@ QString AddressTagKeys::getAddressTagKey(const Tags& tags, const QString& addres
 
 QString AddressTagKeys::getAddressTagValue(const Tags& tags, const QString& addressTagType) const
 {
+  LOG_TRACE("Retrieving address tag value of type: " << addressTagType);
   return _getAddressTag(tags, addressTagType, false);
 }
 
-QString AddressTagKeys::_getAddressTag(const Tags& tags, const QString& addressTagType,
-                                       bool key) const
+QString AddressTagKeys::_getAddressTag(
+  const Tags& tags, const QString& addressTagType, bool key) const
 {
   const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
   for (int i = 0; i < tagKeys.size(); i++)
   {
     const QString tagKey = tagKeys.at(i);
+    LOG_VART(tagKey);
     if (tags.contains(tagKey))
     {
+      // This may eventually go away. I believe addr:housename shouldn't be used in place of
+      // addr:housenum, but have seen instances of it. The config is set up to allow addr:housename
+      // as a house number, so we'll do a check here to make sure the value is actually numeric
+      // before using it in this way. If its not actually a number, then skip it.
+      if (tagKey.toLower() == HOUSE_NAME)
+      {
+        bool ok = false;
+        tags.get(tagKey).toInt(&ok);
+        if (!ok)
+        {
+          continue;
+        }
+      }
+
       if (key)
+      {
+        LOG_TRACE("Returning: " << tagKey << "...");
         return tagKey;
+      }
+
       else
+      {
+        LOG_TRACE("Returning: " << tags.get(tagKey) << " for key: " << tagKey << "...");
         return tags.get(tagKey);
+      }
     }
   }
   return "";

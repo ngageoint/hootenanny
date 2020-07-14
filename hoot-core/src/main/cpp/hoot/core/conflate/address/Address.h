@@ -27,8 +27,8 @@
 #ifndef ADDRESSS_H
 #define ADDRESSS_H
 
-// hoot
-#include <hoot/core/algorithms/string/ExactStringDistance.h>
+// Hoot
+#include <hoot/core/algorithms/string/StringDistance.h>
 
 // Qt
 #include <QSet>
@@ -121,7 +121,10 @@ private:
 
   QString _address;
 
-  ExactStringDistance _addrComp;
+  // This has been made configurable, but due to the fact that address strings are usually
+  // normalized before being set on this class, its seems unlikely at this point that anything other
+  // than ExactStringDistance will be used.
+  static StringDistancePtr _stringComp;
 
   //see AddressParser::addressesMatchDespiteSubletterDiffs
   bool _allowLenientHouseNumberMatching;
@@ -135,6 +138,8 @@ private:
   static QMap<QString, QString> _streetFullTypesToTypeAbbreviations;
   // see getStreetTypeAbbreviationsToFullTypes
   static QMap<QString, QString> _streetTypeAbbreviationsToFullTypes;
+
+  void _initializeStringComparator();
 };
 
 }

@@ -59,12 +59,6 @@ namespace hoot
 
 std::shared_ptr<TestUtils> TestUtils::_theInstance;
 
-const QString TestUtils::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
-const QString TestUtils::STREET_TAG_NAME = "addr:street";
-const QString TestUtils::CITY_TAG_NAME = "addr:city";
-const QString TestUtils::FULL_ADDRESS_TAG_NAME = "address";
-const QString TestUtils::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
-
 const QString HootTestFixture::UNUSED_PATH = "";
 
 TestUtils::TestUtils()
