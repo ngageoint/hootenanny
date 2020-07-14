@@ -90,10 +90,8 @@ The search radius is determined in order of priority
 1) by the 'search.radius.poi' configuration option (turned off by default)
 2) by the elements circular error tag if the circular error is larger than the configured search
 radius for the feature
-3) by the aforementioned customizable search radii passed in as JSON in the configuration option:
-`poi.search.radii`
-4) by the aforementioned customizable search radii defined in a file whose location is defined by
-the `poi.search.radii.config` configuration option
+3) by the aforementioned customizable search radii passed in as either a JSON string or file in 
+the configuration option: `poi.search.radii`
 
 Some example search radii are below:
 

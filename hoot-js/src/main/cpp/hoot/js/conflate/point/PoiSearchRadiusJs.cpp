@@ -53,30 +53,28 @@ void PoiSearchRadiusJs::Init(Handle<Object> exports)
                FunctionTemplate::New(current, getSearchRadii)->GetFunction());
 }
 
+bool PoiSearchRadiusJs::_searchRadiiOptionIsConfigFile(const QString data)
+{
+  return
+    data.toLower().endsWith(".json") && !data.trimmed().startsWith("{") &&
+    !data.trimmed().endsWith("}");
+}
+
+bool PoiSearchRadiusJs::_searchRadiiOptionIsJsonString(const QString data)
+{
+  return
+    !data.toLower().endsWith(".json") && data.trimmed().startsWith("{") &&
+    data.trimmed().endsWith("}");
+}
+
 void PoiSearchRadiusJs::getSearchRadii(const FunctionCallbackInfo<Value>& args)
 {
-  ConfigOptions opts;
-  // This should be a JSON string, not a file.
-  QString searchRadiiData = opts.getPoiSearchRadii().trimmed();
-  if (searchRadiiData.toLower().endsWith(".json") && !searchRadiiData.trimmed().startsWith("{") &&
-      !searchRadiiData.trimmed().endsWith("}"))
-  {
-    throw IllegalArgumentException("poi.search.radii should contain a JSON string.");
-  }
-  if (searchRadiiData.isEmpty())
-  {
-    // This should be a JSON file.
-    searchRadiiData = opts.getPoiSearchRadiiConfig().trimmed();
-    if (!searchRadiiData.toLower().endsWith(".json"))
-    {
-      throw IllegalArgumentException("poi.search.radii.config should point to a JSON file.");
-    }
-  }
-  if (searchRadiiData.isEmpty())
+  const QString searchRadiiData = ConfigOptions().getPoiSearchRadii().trimmed();
+  if (!_searchRadiiOptionIsConfigFile(searchRadiiData) &&
+      !_searchRadiiOptionIsJsonString(searchRadiiData))
   {
     throw IllegalArgumentException(
-      "Either a POI search radii file must be specified by " +
-      ConfigOptions::getPoiSearchRadiiConfigKey() + " or custom JSON specified by " +
+      "Either a POI search radii config file or custom JSON must be specified by " +
       ConfigOptions::getPoiSearchRadiiKey() + ".");
   }
 

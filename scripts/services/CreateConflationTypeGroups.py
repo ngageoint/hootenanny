@@ -81,7 +81,60 @@ def createUiJSON(groups, options):
                         memberConfig.update(configOptions[match])
                         del memberConfig['key']
                         templateDefault = re.findall(r'(?<=\${).*(?=})', memberConfig['default'])
-                        if len(templateDefault) == 1:
+                        # If default points to file of values
+                        if 'HOOT_HOME' in memberConfig['default'] and memberConfig['default'].endswith('.json'):
+                            filePath = os.path.expandvars(memberConfig['default'])
+                            if os.path.isfile(filePath):
+                                with open(filePath, 'r') as jsonFile:
+                                    data = json.load(jsonFile)
+                                    for (key, value) in data.items():
+                                        #Use key as label for what the objects inside represent
+                                        category = key.replace('_', ' ').capitalize()
+
+                                        # ignore comments in the json
+                                        if key != '#' and isinstance(value, list):
+                                            for categoryObj in value:
+                                                memberObject = {
+                                                    'id': match,
+                                                    'input': 'text',
+                                                    'type': 'json',
+                                                    'parentKey': key
+                                                }
+                                                objKeys = []
+
+                                                if 'key' in categoryObj:
+                                                    categoryKey = categoryObj['key']
+                                                    objKeys.append('key')
+                                                    memberObject['key'] = categoryKey
+                                                else:
+                                                    categoryKey = ''
+
+                                                if 'value' in categoryObj:
+                                                    categoryVal = categoryObj['value']
+                                                    objKeys.append('value')
+                                                    memberObject['value'] = categoryVal
+                                                else:
+                                                    categoryVal = '*'
+                                               
+                                                if 'distance' in categoryObj:
+                                                    categoryDefault = categoryObj['distance']
+                                                    objKeys.append('distance')
+                                                    memberObject['distance'] = categoryDefault
+                                                else:
+                                                    categoryDefault = ''
+
+                                                label = category + ' [' + categoryKey + '=' + categoryVal + ']'
+                                                description = category + ' for ' + categoryKey
+
+                                                memberObject['default'] = categoryDefault
+                                                memberObject['description'] = description
+                                                memberObject['label'] = label
+                                                memberObject['keysList'] = objKeys
+
+                                                members.append(memberObject)
+
+                                    continue # Need this so that the member config that describes all the json components doesn't get added
+                        elif len(templateDefault) == 1:
                             defaultKey = templateDefault[0]
                             memberConfig['default'] = next(
                             (m['member']['default'] for m in configMembers if m['member']['key'] == defaultKey),
@@ -92,8 +145,6 @@ def createUiJSON(groups, options):
 
                         memberConfig['input'] = toInput(memberConfig['type'])
                         members.append(memberConfig)
-
-
 
             if (conflateType == 'Roads'):
                 members = groupDefaults[conflateType] + members
