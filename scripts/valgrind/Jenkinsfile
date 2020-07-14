@@ -90,8 +90,10 @@ pipeline {
         }
         cleanup {
             script {
+                //  archiveArtifacts will only archive files available to the host and not the VM, scp the artifact files
+                sh "vagrant scp ${params.Box}:~/hoot/test-output/valgrind_error_* ./"
                 //  Always store the artifacts, they will be cleaned up later
-                archiveArtifacts '**/valgrind_error_*'
+                archiveArtifacts '**/valgrind_error_*', excludes '**/test-files/*'
                 //  Destroy the VM
                 sh "vagrant destroy -f ${params.Box}"
                 cleanWs()
