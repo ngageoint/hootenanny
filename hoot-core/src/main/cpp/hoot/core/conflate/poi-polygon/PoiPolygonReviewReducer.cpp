@@ -443,7 +443,11 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   {
     // If both have addresses and they explicitly contradict each other, throw out the review. Don't
     // do it if the poly has more than one address, like in many multi-use buildings.
-    if (!_addressMatch && !(_distance == 0 && (_nameMatch || _typeMatch)))
+    if (!_addressMatch &&
+        // We don't want to shoot ourselves and throw out a good review just b/c of an address
+        // mismatch when we have some other good evidence. TODO: should this be moved down to the if
+        // block that checks the address score?
+        !(_distance == 0 && (_nameMatch || _typeMatch)))
     {
       const int numPoiAddresses = _infoCache->numAddresses(poi);
       const int numPolyAddresses = _infoCache->numAddresses(poly);
