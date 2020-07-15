@@ -51,17 +51,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
 import hoot.services.controllers.osm.user.UserResource;
@@ -80,7 +79,7 @@ import hoot.services.utils.PostgresUtils;
 @Path("/review/bookmarks")
 @Transactional
 public class ReviewBookmarkResource {
-    private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarkResource.class);
+    static final JSONParser parser = new JSONParser();
 
     public ReviewBookmarkResource() {}
 
@@ -182,15 +181,18 @@ public class ReviewBookmarkResource {
                 // TODO: find out exactly why we need to do this
                 String bmkNotes = hstoreMap.get("bookmarknotes");
                 if ((bmkNotes != null) && (!bmkNotes.isEmpty())) {
-                    bmkNotes = bmkNotes.replace("\\\"", "\"");
-                    bmkNotes = bmkNotes.replace("\\\\", "\\");
-                    JSONParser parser = new JSONParser();
-                    JSONArray jsonArray = (JSONArray) parser.parse(bmkNotes);
+                    JSONArray jsonArray = (JSONArray) parser.parse(PostgresUtils.unescapeJson(bmkNotes));
                     json.put("bookmarknotes", jsonArray);
                 }
 
                 // TODO: find out exactly why we need to do this
                 appendHstoreElement(hstoreMap.get("bookmarkreviewitem"), json, "bookmarkreviewitem");
+
+                String usersArray = hstoreMap.get("taggedUsers");
+                if(usersArray != null) {
+                    JSONArray jsonArray = (JSONArray) parser.parse(hstoreMap.get("taggedUsers"));
+                    json.put("taggedUsers", jsonArray);
+                }
 
                 reviewBookmark.setDetail(json);
             }
@@ -217,10 +219,7 @@ public class ReviewBookmarkResource {
             throws ParseException {
         String bmkElem = rawElem;
         if ((bmkElem != null) && (!bmkElem.isEmpty())) {
-            bmkElem = bmkElem.replace("\\\"", "\"");
-            bmkElem = bmkElem.replace("\\\\", "\\");
-            JSONParser parser = new JSONParser();
-            JSONObject oParsed = (JSONObject) parser.parse(bmkElem);
+            JSONObject oParsed = (JSONObject) parser.parse(PostgresUtils.unescapeJson(bmkElem));
             oBmkDetail.put(elemName, oParsed);
         }
     }
@@ -256,7 +255,8 @@ public class ReviewBookmarkResource {
             @QueryParam("orderBy") @DefaultValue("") String orderByCol,
             @QueryParam("creatorFilter") String creatorFilter,
             @QueryParam("layerNameFilter") String layerNameFilter,
-            @QueryParam("offset") @DefaultValue("0") String offset) {
+            @QueryParam("offset") @DefaultValue("0") String offset,
+            @QueryParam("showTagged") boolean showTagged) {
 
         Users user = Users.fromRequest(request);
         long userId = user.getId();
@@ -283,7 +283,7 @@ public class ReviewBookmarkResource {
                 layerId = Long.parseLong(layerNameFilter);
             }
 
-            SQLQuery<ReviewBookmarks> getQuery = retrieveAll(userId, orderByCol, limit, offsetCnt, creatorId, layerId);
+            SQLQuery<ReviewBookmarks> getQuery = retrieveAll(userId, orderByCol, limit, offsetCnt, creatorId, layerId, showTagged);
             List<ReviewBookmarks> reviewBookmarks = getQuery.fetch();
 
             for (ReviewBookmarks reviewBookmark : reviewBookmarks) {
@@ -299,7 +299,7 @@ public class ReviewBookmarkResource {
             }
             response.put("reviewBookmarks", reviewBookmarks);
 
-            SQLQuery filteredBookmarkQuery = retrieveAll(userId, orderByCol, -1, -1, creatorId, layerId);
+            SQLQuery filteredBookmarkQuery = retrieveAll(userId, orderByCol, -1, -1, creatorId, layerId, showTagged);
             response.put("totalCount", filteredBookmarkQuery.fetchCount());
 
             List<String> creators = getUsers();
@@ -407,7 +407,7 @@ public class ReviewBookmarkResource {
      *            - offset row for paging
      * @return - list of Review tags
      */
-    private static SQLQuery<ReviewBookmarks> retrieveAll(long userId, String orderByCol, long limit, long offset, long creator, long layer) {
+    private static SQLQuery<ReviewBookmarks> retrieveAll(long userId, String orderByCol, long limit, long offset, long creator, long layer, boolean showTagged) {
         SQLQuery<ReviewBookmarks> query = createQuery()
                 .select(reviewBookmarks)
                 .from(reviewBookmarks)
@@ -437,6 +437,10 @@ public class ReviewBookmarkResource {
                 .or(folders.publicCol.isTrue())); // or in a public folder
 
             query.where(isVisible);
+        }
+
+        if (showTagged) {
+            query.where(Expressions.booleanTemplate("{0} = ANY(TRANSLATE((detail->'taggedUsers')::jsonb::text, '[]','{}')::INT[])", userId));
         }
 
         query.orderBy(getSpecifier(orderByCol, true));
