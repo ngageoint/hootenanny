@@ -254,6 +254,15 @@ void Address::removeStreetTypes()
   LOG_VART(_address);
 }
 
+QString Address::getHouseNumber() const
+{
+  if (!isStreetIntersectionAddress(_address, false))
+  {
+    return StringUtils::splitAndGetAtIndex(_address, QRegExp("\\s+"), 0);
+  }
+  return "";
+}
+
 void Address::removeHouseNumber()
 {
   LOG_VART(_address);

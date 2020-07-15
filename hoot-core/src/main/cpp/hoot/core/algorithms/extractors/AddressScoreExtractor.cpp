@@ -293,7 +293,7 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
           !element1Address.getIsSubLetter() && !element2Address.getIsSubLetter() &&
           !element1Address.getIsRange() && !element2Address.getIsRange())
       {
-        LOG_TRACE("Attempting street partial match with looser street name similarity...");
+        LOG_TRACE("Attempting street partial match with looser street name comparison...");
 
         Address elementAddress1Temp = element1Address;
         Address elementAddress2Temp = element2Address;

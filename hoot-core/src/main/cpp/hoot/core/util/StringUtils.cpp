@@ -382,4 +382,26 @@ QString StringUtils::_splitAndRemoveAtIndex(QStringList& input, const int index,
   return input.join(separator);
 }
 
+QString StringUtils::splitAndGetAtIndex(
+  const QString& input, const QString& splitToken, const int index)
+{
+  QStringList tokens = input.split(splitToken);
+  if (index < tokens.size())
+  {
+    return tokens.at(index);
+  }
+  return "";
+}
+
+QString StringUtils::splitAndGetAtIndex(
+  const QString& input, const QRegExp& splitExp, const int index)
+{
+  QStringList tokens = input.split(splitExp);
+  if (index < tokens.size())
+  {
+    return tokens.at(index);
+  }
+  return "";
+}
+
 }

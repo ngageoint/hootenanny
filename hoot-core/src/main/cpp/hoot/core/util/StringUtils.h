@@ -322,6 +322,28 @@ public:
    */
   static void splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index);
 
+  /**
+   *
+   *
+   * @param input
+   * @param splitToken
+   * @param index
+   * @return
+   */
+  static QString splitAndGetAtIndex(
+    const QString& input, const QString& splitToken, const int index);
+
+  /**
+   *
+   *
+   * @param input
+   * @param splitExp
+   * @param index
+   * @return
+   */
+  static QString splitAndGetAtIndex(
+    const QString& input, const QRegExp& splitExp, const int index);
+
 private:
 
   static QString _splitAndRemoveAtIndex(

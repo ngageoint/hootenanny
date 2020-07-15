@@ -137,6 +137,8 @@ public:
   bool getIsSubLetter() const { return _isSubLetter; }
   void setIsSubLetter(bool isSubLetter) { _isSubLetter = isSubLetter; }
 
+  QString getHouseNumber() const;
+
 private:
 
   QString _address;

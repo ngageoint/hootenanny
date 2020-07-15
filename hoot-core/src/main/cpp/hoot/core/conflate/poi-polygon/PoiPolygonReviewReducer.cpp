@@ -443,7 +443,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   {
     // If both have addresses and they explicitly contradict each other, throw out the review. Don't
     // do it if the poly has more than one address, like in many multi-use buildings.
-    if (!_addressMatch)
+    if (!_addressMatch && !(_distance == 0 && (_nameMatch || _typeMatch)))
     {
       const int numPoiAddresses = _infoCache->numAddresses(poi);
       const int numPolyAddresses = _infoCache->numAddresses(poly);
