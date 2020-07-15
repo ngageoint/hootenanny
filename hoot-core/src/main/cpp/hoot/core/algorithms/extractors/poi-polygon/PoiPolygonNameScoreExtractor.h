@@ -85,7 +85,7 @@ private:
 
   double _nameScoreThreshold;
   double _levDist;
-  // TODO
+  // string comparer to use when comparing names
   StringDistancePtr _stringComp;
 
   // when enabled, will attempt to translate address tags to English

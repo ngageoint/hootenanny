@@ -154,9 +154,9 @@ private:
   // is the current address being parsed from an OSM address tag or some other auxiliary tag (name,
   // etc.)?
   mutable bool _parsedFromAddressTag;
-  // TODO
+  // determines if the last address parsed is a street address with a house number range
   mutable bool _isHouseNumRange;
-  // TODO
+  // determines if the last address parsed is a street address with a subletter in its house number
   mutable bool _isSubLetter;
 
   ToEnglishAddressTranslator _addressTranslator;

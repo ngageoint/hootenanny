@@ -303,43 +303,43 @@ public:
                                  Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
-   * TODO
+   * Splits a string on a token and removes the token found at the specified index
    *
-   * @param input
-   * @param splitToken
-   * @param index
-   * @return
+   * @param input the string to remove from; the string remains unmodified if the string split parts
+   * have no entry at the specified index
+   * @param splitToken the string token to split the input string on
+   * @param index the index at which to remove from the split string parts
    */
   static void splitAndRemoveAtIndex(QString& input, const QString& splitToken, const int index);
 
   /**
-   * TODO
+   * Splits a string on a regular expression and removes the token found at the specified index
    *
-   * @param input
-   * @param splitExp
-   * @param index
-   * @return
+   * @param input the string to remove from; the string remains unmodified if the string split parts
+   * have no entry at the specified index
+   * @param splitExp the regular expression to split the input string on
+   * @param index the index at which to remove from the split string parts
    */
   static void splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index);
 
   /**
+   * Splits a string on a token and returns the token found at the specified index
    *
-   *
-   * @param input
-   * @param splitToken
-   * @param index
-   * @return
+   * @param input the string to retrieve from
+   * @param splitToken the string token to split the input string on
+   * @param index the index at which to return a split string parts
+   * @return the string at the requested index
    */
   static QString splitAndGetAtIndex(
     const QString& input, const QString& splitToken, const int index);
 
   /**
+   * Splits a string on a regular expression and returns the token found at the specified index
    *
-   *
-   * @param input
-   * @param splitExp
-   * @param index
-   * @return
+   * @param input the string to retrieve from
+   * @param splitExp the regular expression to split the input string on
+   * @param index the index at which to return a split string parts
+   * @return the string at the requested index
    */
   static QString splitAndGetAtIndex(
     const QString& input, const QRegExp& splitExp, const int index);

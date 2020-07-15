@@ -195,8 +195,6 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   // However, it does help with address matching and will remain in place unless its found to be
   // causing harm in some way.
 
-  // TODO: this needs cleanup
-
   QStringList modifiedAddressParts =
     StringUtils::splitOnAny(modifiedAddress, Address::getIntersectionSplitTokens(), 2);
   assert(modifiedAddressParts.size() == 2);

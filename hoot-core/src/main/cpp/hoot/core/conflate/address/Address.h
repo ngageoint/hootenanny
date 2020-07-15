@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * Encapsulates a street address for conflation purposes
+ * Encapsulates a street address for conflation purposes. This class has become less object-oriented
+ * over time and likely needs some re-design.
  *
  * Note that a QMap can be used to represent the street type full names and their abbreviations
  * b/c we currently only support a one to one mapping. If we expand it to support multiple
@@ -110,9 +111,10 @@ public:
   static QList<QRegExp> getIntersectionSplitTokens();
 
   /**
-   * TODO
+   * Returns the intersection parts of the address
    *
-   * @return
+   * @return a string list with two entries for the intersection parts if the address is an
+   * intersection address; an empty list otherwise
    */
   QStringList getIntersectionParts() const;
 
@@ -122,7 +124,7 @@ public:
   void removeStreetTypes();
 
   /**
-   * TODO
+   * Removes the house number from the address if its not an intersection address
    */
   void removeHouseNumber();
 
@@ -154,10 +156,10 @@ private:
   // was the address parsed from an OSM address tag or some other auxiliary tag (name, etc.)?
   bool _parsedFromAddressTag;
 
-  // TODO
+  // determines if the address has a house number range; like: 120-130 Sutter St
   bool _isRange;
 
-  // TODO
+  // determines if the address has a subletter in the house number; like 120a Sutter St
   bool _isSubLetter;
 
   // see getStreetTypes
