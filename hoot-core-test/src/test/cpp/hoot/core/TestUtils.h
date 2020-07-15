@@ -98,16 +98,10 @@ public:
 
   class RegisteredReset
   {
-  public:
+    public:
 
-    virtual void reset() = 0;
+      virtual void reset() = 0;
   };
-
-  static const QString HOUSE_NUMBER_TAG_NAME;
-  static const QString STREET_TAG_NAME;
-  static const QString CITY_TAG_NAME;
-  static const QString FULL_ADDRESS_TAG_NAME;
-  static const QString FULL_ADDRESS_TAG_NAME_2;
 
   TestUtils();
 

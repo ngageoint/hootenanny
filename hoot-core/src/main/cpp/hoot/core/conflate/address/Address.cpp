@@ -31,6 +31,9 @@
 #include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
 
 namespace hoot
 {
@@ -38,19 +41,61 @@ namespace hoot
 QSet<QString> Address::_streetTypes;
 QMap<QString, QString> Address::_streetFullTypesToTypeAbbreviations;
 QMap<QString, QString> Address::_streetTypeAbbreviationsToFullTypes;
+StringDistancePtr Address::_stringComp;
 
 Address::Address() :
 _address(""),
 _allowLenientHouseNumberMatching(true),
-_parsedFromAddressTag(true)
+_parsedFromAddressTag(true),
+_isRange(false),
+_isSubLetter(false)
 {
+  if (!_stringComp)
+  {
+    _initializeStringComparator();
+  }
 }
 
 Address::Address(const QString& address, const bool allowLenientHouseNumberMatching) :
 _address(address),
 _allowLenientHouseNumberMatching(allowLenientHouseNumberMatching),
-_parsedFromAddressTag(true)
+_parsedFromAddressTag(true),
+_isRange(false),
+_isSubLetter(false)
 {
+  if (!_stringComp)
+  {
+    _initializeStringComparator();
+  }
+}
+
+void Address::_initializeStringComparator()
+{
+  const QString stringCompClassName = ConfigOptions().getAddressStringComparer().trimmed();
+  if (stringCompClassName.isEmpty())
+  {
+    throw IllegalArgumentException(
+      "No address string comparer specified (must implement StringDistance).");
+  }
+  else
+  {
+    _stringComp =
+      StringDistancePtr(
+        Factory::getInstance().constructObject<StringDistance>(stringCompClassName));
+    if (!_stringComp)
+    {
+      throw IllegalArgumentException(
+        "Invalid address string comparer (must implement StringDistance): " +
+        stringCompClassName);
+    }
+    std::shared_ptr<StringDistanceConsumer> strDistConsumer =
+      std::dynamic_pointer_cast<StringDistanceConsumer>(_stringComp);
+    if (strDistConsumer)
+    {
+      strDistConsumer->setStringDistance(
+        StringDistancePtr(new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())));
+    }
+  }
 }
 
 bool Address::operator==(const Address& address) const
@@ -60,7 +105,7 @@ bool Address::operator==(const Address& address) const
 
   return
     !_address.isEmpty() &&
-      (_addrComp.compare(_address, address._address) == 1.0 ||
+      (_stringComp->compare(_address, address._address) == 1.0 ||
        (_allowLenientHouseNumberMatching &&
         // don't do subletter matching on an intersection, as it won't have house numbers
         !isStreetIntersectionAddress(_address, !_parsedFromAddressTag) &&
@@ -145,6 +190,11 @@ QMap<QString, QString> Address::getStreetTypeAbbreviationsToFullTypes()
   return _streetTypeAbbreviationsToFullTypes;
 }
 
+QStringList Address::getIntersectionParts() const
+{
+  return _address.split("and");
+}
+
 bool Address::isStreetIntersectionAddress(const QString& addressStr,
                                           const bool requireStreetTypeInIntersection)
 {
@@ -201,7 +251,27 @@ void Address::removeStreetTypes()
     _address = firstIntersectionPart.trimmed() + " and " + secondIntersectionPart.trimmed();
   }
 
-  LOG_TRACE(_address);
+  LOG_VART(_address);
+}
+
+QString Address::getHouseNumber() const
+{
+  if (!isStreetIntersectionAddress(_address, false))
+  {
+    return StringUtils::splitAndGetAtIndex(_address, QRegExp("\\s+"), 0);
+  }
+  return "";
+}
+
+void Address::removeHouseNumber()
+{
+  LOG_VART(_address);
+  if (!isStreetIntersectionAddress(_address, false))
+  {
+    // house num should be the first token on a non-intersection address, so remove it
+    StringUtils::splitAndRemoveAtIndex(_address, QRegExp("\\s+"), 0);
+  }
+  LOG_VART(_address);
 }
 
 }

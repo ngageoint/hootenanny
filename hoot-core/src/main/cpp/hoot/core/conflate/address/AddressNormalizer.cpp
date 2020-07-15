@@ -192,35 +192,90 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   // If one of the intersection parts has a street type and the other doesn't we'll copy one street
   // type over to the other. This isn't foolproof as we could end up giving one of the intersections
   // an incorrect street type (the actual element's address tags never get modified, though).
-  // However, it does help with address matching and will remain in place unless its causing harm
-  // in some way.
+  // However, it does help with address matching and will remain in place unless its found to be
+  // causing harm in some way.
 
   QStringList modifiedAddressParts =
     StringUtils::splitOnAny(modifiedAddress, Address::getIntersectionSplitTokens(), 2);
   assert(modifiedAddressParts.size() == 2);
-  const QString firstIntersectionPart = modifiedAddressParts[0].trimmed();
+  LOG_VART(modifiedAddressParts);
+  QString firstIntersectionPart = modifiedAddressParts[0].trimmed();
   LOG_VART(firstIntersectionPart);
-  const QString secondIntersectionPart = modifiedAddressParts[1].trimmed();
+  QString secondIntersectionPart = modifiedAddressParts[1].trimmed();
   LOG_VART(secondIntersectionPart);
-  const QStringList streetFullTypes =
+
+  QStringList streetFullTypes;
+  QStringList streetPluralTypes;
+  const QStringList streetFullTypesTemp =
     Address::getStreetFullTypesToTypeAbbreviations().keys();
-  const QString firstIntersectionEndingStreetType =
+  streetFullTypes = streetFullTypesTemp;
+
+  // Sometimes intersections have plural street types (suffixes). We want to be able to handle those
+  // as well, but we don't want them plural in the final normalized address.
+  for (int i = 0; i < streetFullTypesTemp.size(); i++)
+  {
+    const QString pluralType = streetFullTypesTemp.at(i) + "s";
+    if (!streetFullTypes.contains(pluralType))
+    {
+      streetFullTypes.append(pluralType);
+    }
+    streetPluralTypes.append(pluralType);
+  }
+  LOG_VART(streetPluralTypes);
+
+  // remove any plural suffixes found; TODO: may not need all of this here
+  if (StringUtils::endsWithAny(firstIntersectionPart.trimmed(), streetPluralTypes))
+  {
+    firstIntersectionPart.chop(1);
+    LOG_VART(firstIntersectionPart);
+  }
+  if (StringUtils::endsWithAny(secondIntersectionPart.trimmed(), streetPluralTypes))
+  {
+    secondIntersectionPart.chop(1);
+    LOG_VART(secondIntersectionPart);
+  }
+  QStringList modifiedAddressPartsTemp;
+  for (int i = 0; i < modifiedAddressParts.size(); i++)
+  {
+    QString modifiedAddressPart = modifiedAddressParts.at(i);
+    if (StringUtils::endsWithAny(modifiedAddressPart.trimmed(), streetPluralTypes))
+    {
+      modifiedAddressPart.chop(1);
+      LOG_VART(modifiedAddressPart);
+    }
+    modifiedAddressPartsTemp.append(modifiedAddressPart);
+  }
+  modifiedAddressParts = modifiedAddressPartsTemp;
+  QString firstIntersectionEndingStreetType =
     StringUtils::endsWithAnyAsStr(firstIntersectionPart.trimmed(), streetFullTypes).trimmed();
+  if (firstIntersectionEndingStreetType.endsWith('s'))
+  {
+    firstIntersectionEndingStreetType.chop(1);
+  }
   LOG_VART(firstIntersectionEndingStreetType);
-  const QString secondIntersectionEndingStreetType =
+  QString secondIntersectionEndingStreetType =
     StringUtils::endsWithAnyAsStr(secondIntersectionPart.trimmed(), streetFullTypes).trimmed();
+  if (secondIntersectionEndingStreetType.endsWith('s'))
+  {
+    secondIntersectionEndingStreetType.chop(1);
+  }
   LOG_VART(secondIntersectionEndingStreetType);
+
   if (!firstIntersectionEndingStreetType.isEmpty() &&
       secondIntersectionEndingStreetType.isEmpty())
   {
+    LOG_VART(modifiedAddressParts[1]);
     modifiedAddressParts[1] =
       modifiedAddressParts[1].trimmed() + " " + firstIntersectionEndingStreetType.trimmed();
+    LOG_VART(modifiedAddressParts[1]);
   }
   else if (firstIntersectionEndingStreetType.isEmpty() &&
            !secondIntersectionEndingStreetType.isEmpty())
   {
+    LOG_VART(modifiedAddressParts[0]);
     modifiedAddressParts[0] =
       modifiedAddressParts[0].trimmed() + " " + secondIntersectionEndingStreetType.trimmed();
+    LOG_VART(modifiedAddressParts[0]);
   }
   modifiedAddress = modifiedAddressParts[0].trimmed() + " and " + modifiedAddressParts[1].trimmed();
   LOG_VART(modifiedAddress);
@@ -234,7 +289,7 @@ void AddressNormalizer::_prepareAddressForLibPostalNormalization(QString& addres
 {
   LOG_TRACE("Before normalization fix: " << address);
   LOG_VART(Address::isStreetIntersectionAddress(address));
-  // This is a nast thing libpostal does where it changes "St" to "Saint" when it should be
+  // This is a nasty thing libpostal does where it changes "St" to "Saint" when it should be
   // "Street".
   if (address.endsWith("st", Qt::CaseInsensitive) && !Address::isStreetIntersectionAddress(address))
   {
@@ -252,7 +307,8 @@ bool AddressNormalizer::_isValidNormalizedAddress(const QString& inputAddress,
     return false;
   }
   // This is a bit of hack, but I don't like the way libpostal is turning "St" or "Street" into
-  // "Saint".  Should probably look into configuration of libpostal for a possible fix instead.
+  // "Saint". Should probably look into configuration of libpostal or update it for a possible fix
+  // instead.
   else if (normalizedAddress.endsWith("saint", Qt::CaseInsensitive) &&
            (inputAddress.endsWith("street", Qt::CaseInsensitive) ||
             inputAddress.endsWith("st", Qt::CaseInsensitive)))

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -45,11 +45,11 @@ public:
     HasAddressCriterion uut;
 
     NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     CPPUNIT_ASSERT(uut.isSatisfied(node1));
 
     WayPtr way1(new Way(Status::Unknown1, -1, 15.0));
-    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "blah");
+    way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "blah");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
 
     WayPtr way2(new Way(Status::Unknown1, -1, 15.0));

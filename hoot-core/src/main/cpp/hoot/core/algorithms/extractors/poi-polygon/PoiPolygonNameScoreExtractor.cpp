@@ -60,7 +60,7 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
   setLevDist(config.getLevenshteinDistanceAlpha());
 
-  const QString stringCompClassName = config.getPoiPolygonStringComparer().trimmed();
+  const QString stringCompClassName = config.getPoiPolygonNameStringComparer().trimmed();
   if (stringCompClassName.isEmpty())
   {
     throw IllegalArgumentException(

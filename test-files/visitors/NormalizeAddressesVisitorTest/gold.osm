@@ -408,7 +408,7 @@
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7650000000000006" lon="-122.4092999999999876">
         <tag k="wheelchair" v="yes"/>
         <tag k="addr:state" v="CA"/>
-        <tag k="address" v="16th and bryant streets"/>
+        <tag k="address" v="16th street and bryant street"/>
         <tag k="name" v="Franklin Square"/>
         <tag k="addr:postcode" v="94110"/>
         <tag k="addr:city" v="San Francisco"/>

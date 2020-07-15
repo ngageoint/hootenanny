@@ -237,7 +237,7 @@ void StringUtils::removeLastIndexOf(QString& input, const QStringList& toRemove,
     const int index = input.lastIndexOf(toRemove.at(i), -1, caseSensitivity);
     if (index != -1)
     {
-      input = input.remove(index, toRemove.at(i).length());
+      input = input.remove(index, toRemove.at(i).length()).trimmed();
     }
   }
 }
@@ -355,6 +355,53 @@ void StringUtils::replaceLastIndexOf(QString& input, const QString& strToReplace
   {
     input = input.replace(index, strToReplace.size(), replacementStr);
   }
+}
+
+void StringUtils::splitAndRemoveAtIndex(QString& input, const QString& splitToken, const int index)
+{
+  QStringList tokens = input.split(splitToken);
+  LOG_VART(tokens);
+  input = StringUtils::_splitAndRemoveAtIndex(tokens, index, splitToken);
+}
+
+void StringUtils::splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index)
+{
+  QStringList tokens = input.split(splitExp);
+  LOG_VART(tokens);
+  input = StringUtils::_splitAndRemoveAtIndex(tokens, index, " ");
+}
+
+QString StringUtils::_splitAndRemoveAtIndex(QStringList& input, const int index,
+                                            const QString& separator)
+{
+  if (input.size() > 0 && index < input.size())
+  {
+    input.removeAt(index);
+  }
+  LOG_VART(input);
+  return input.join(separator);
+}
+
+QString StringUtils::splitAndGetAtIndex(
+  const QString& input, const QString& splitToken, const int index)
+{
+  QStringList tokens = input.split(splitToken);
+  if (index < tokens.size())
+  {
+    return tokens.at(index);
+  }
+  return "";
+}
+
+QString StringUtils::splitAndGetAtIndex(
+  const QString& input, const QRegExp& splitExp, const int index)
+{
+  QStringList tokens = input.split(splitExp);
+  if (index < tokens.size())
+  {
+    return tokens.at(index);
+  }
+  return "";
 }
 
 }

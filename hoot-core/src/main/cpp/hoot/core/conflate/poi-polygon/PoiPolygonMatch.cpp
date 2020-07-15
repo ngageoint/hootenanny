@@ -448,7 +448,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
-      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0,
+      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore,
       _addressMatchEnabled, _infoCache);
     reviewReducer.setConfiguration(conf());
     if (reviewReducer.triggersRule(_poi, _poly))
@@ -561,18 +561,18 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
       _infoCache->getReviewDistance(_poi, poly->getTags(), _reviewDistanceThreshold),
       _infoCache->getReviewDistance(_poly, poly->getTags(), _reviewDistanceThreshold));
 
-  //Tried type and density based match distance changes here too, but they didn't have any positive
-  //effect.
+  // Tried type and density based match distance changes here too, but they didn't have any positive
+  // effect.
 
   // calculate the 2 sigma for the distance between the two objects
   const double poiSigma = poi->getCircularError() / 2.0;
   const double polySigma = poly->getCircularError() / 2.0;
-  const double sigma = sqrt(poiSigma * poiSigma + polySigma * polySigma);
+  const double sigma = sqrt((poiSigma * poiSigma) + (polySigma * polySigma));
   const double combinedCircularError2Sigma = sigma * 2;
   _reviewDistancePlusCe = _reviewDistanceThreshold + combinedCircularError2Sigma;
   _closeDistanceMatch = _distance <= _reviewDistancePlusCe;
-  //close distance match is a requirement for any matching, regardless of the final total evidence
-  //count
+  // close distance match is a requirement for any matching, regardless of the final total evidence
+  // count
   if (!_closeDistanceMatch)
   {
     _explainText =
@@ -589,7 +589,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(_distance);
   LOG_VART(_closeDistanceMatch);
 
-  //Tried weighting distance less when both POI's had specific types, but it hasn't helped so far.
+  // Tried weighting distance less when both POI's had specific types, but it hasn't helped so far.
   return _distance <= _matchDistanceThreshold ? 2u : 0u;
 }
 

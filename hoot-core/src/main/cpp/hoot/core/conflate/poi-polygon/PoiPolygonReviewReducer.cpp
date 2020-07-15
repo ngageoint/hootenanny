@@ -57,7 +57,7 @@ PoiPolygonReviewReducer::PoiPolygonReviewReducer(
   const ConstOsmMapPtr& map,
   const std::set<ElementId>& polyNeighborIds, double distance, double nameScoreThreshold,
   double nameScore, bool nameMatch, bool exactNameMatch, double typeScoreThreshold,
-  double typeScore, bool typeMatch, double matchDistanceThreshold, bool addressMatch,
+  double typeScore, bool typeMatch, double matchDistanceThreshold, double addressScore,
   bool addressParsingEnabled, PoiPolygonInfoCachePtr infoCache) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
@@ -70,7 +70,8 @@ _typeScoreThreshold(typeScoreThreshold),
 _typeScore(typeScore),
 _typeMatch(typeMatch),
 _matchDistanceThreshold(matchDistanceThreshold),
-_addressMatch(addressMatch),
+_addressScore(addressScore),
+_addressMatch(addressScore == 1.0),
 _addressParsingEnabled(addressParsingEnabled),
 _infoCache(infoCache)
 {
@@ -83,6 +84,7 @@ _infoCache(infoCache)
   LOG_VART(_typeScoreThreshold);
   LOG_VART(_typeMatch);
   LOG_VART(_matchDistanceThreshold);
+  LOG_VART(_addressScore);
   LOG_VART(_addressMatch);
   LOG_VART(_addressParsingEnabled);
   LOG_VART(_infoCache.get());
@@ -202,7 +204,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     return true;
   }
 
-  //these seem to be clustered together tightly a lot in cities, so up the requirement a bit
+  // these seem to be clustered together tightly a lot in cities, so up the requirement a bit
   // using custom match/review distances or custom score requirements may be a better way to
   // handle these types
   ruleDescription = "#7: hotel";
@@ -391,8 +393,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     }
   }
 
-  //Don't match a park poi to a sport poly.  Simpler version of some rules above.
-  //may make some previous rules obsolete
+  // Don't match a park poi to a sport poly; simpler version of some rules above which may make some
+  // previous rules obsolete
   ruleDescription = "#21: park/sport";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
   if (poiIsPark && polyIsSport)
@@ -408,7 +410,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   const bool poiIsParkish = _infoCache->isType(poi, PoiPolygonSchemaType::Parkish);
   LOG_VART(poiIsParkish);
 
-  //Don't review park poi's against large non-park polys.
+  // Don't review park poi's against large non-park polys.
   ruleDescription = "#22: park poi/poly 1";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
   if (poiHasType && polyHasType && !_nameMatch && !polyIsPark &&
@@ -424,8 +426,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     return true;
   }
 
-  //This is a simple rule to prevent matching poi's not at all like a park with park polys.
-  //this may render some of the previous rules obsolete.
+  // This is a simple rule to prevent matching poi's not at all like a park with park polys.
+  // this may render some of the previous rules obsolete.
   ruleDescription = "#23: park poi/poly 2";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
   if (!poiIsPark && !poiIsParkish && poiHasType && polyIsPark && !polyHasMoreThanOneType)
@@ -439,22 +441,25 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
   if (_addressParsingEnabled)
   {
-    //if both have addresses and they explicitly contradict each other, throw out the review; don't
-    //do it if the poly has more than one address, like in many multi-use buildings.
-
-    if (!_addressMatch)
+    // If both have addresses and they explicitly contradict each other, throw out the review. Don't
+    // do it if the poly has more than one address, like in many multi-use buildings.
+    if (!_addressMatch &&
+        // We don't want to shoot ourselves and throw out a good review just b/c of an address
+        // mismatch when we have some other good evidence. TODO: should this be moved down to the if
+        // block that checks the address score?
+        !(_distance == 0 && (_nameMatch || _typeMatch)))
     {
       const int numPoiAddresses = _infoCache->numAddresses(poi);
       const int numPolyAddresses = _infoCache->numAddresses(poly);
 
       if (numPoiAddresses > 0 && numPolyAddresses > 0)
       {
-        //check to make sure the only address the poly has isn't the poi itself as a way node /
-        //relation member
+        // Check to make sure the only address the poly has isn't the poi itself as a way node /
+        // relation member.
         if (numPolyAddresses < 2 && _infoCache->containsMember(poly, poi->getElementId()))
         {
         }
-        else
+        else if (_addressScore < 0.8)
         {
           LOG_TRACE("Returning miss per review reduction rule: " << ruleDescription << "...");
           _triggeredRuleDescription = ruleDescription;
@@ -464,9 +469,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     }
   }
 
-  //This portion is saved until last b/c it involves looping over all the neighboring data for
-  //each of the features being compared.  This neighbor checking section could be abstracted to
-  //types other than parks, if proven valuable to do so after testing against real world data.
+  // This portion is saved until last b/c it involves looping over all the neighboring data for
+  // each of the features being compared.  This neighbor checking section could be abstracted to
+  // types other than parks, if proven valuable to do so after testing against real world data.
 
   bool polyVeryCloseToAnotherParkPoly = false;
   double parkPolyAngleHistVal = -1.0;

@@ -85,9 +85,10 @@ private:
 
   double _nameScoreThreshold;
   double _levDist;
+  // string comparer to use when comparing names
   StringDistancePtr _stringComp;
 
-  //when enabled, will attempt to translate address tags to English
+  // when enabled, will attempt to translate address tags to English
   bool _translateTagValuesToEnglish;
   // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
   static std::shared_ptr<ToEnglishTranslator> _translator;

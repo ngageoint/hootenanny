@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.76477199999999" minlon="-122.4045170996296" maxlat="37.7661" maxlon="-122.4027078"/>
+    <node visible="true" id="-211265" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661000000000016" lon="-122.4045170996296150"/>
+    <node visible="true" id="-211264" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660999999999945" lon="-122.4042581310809936"/>
+    <node visible="true" id="-22577" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651840999999848" lon="-122.4037292000000008"/>
+    <node visible="true" id="-22576" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651635999999939" lon="-122.4040781000000067"/>
+    <node visible="true" id="-22575" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654489000000027" lon="-122.4037541000000004"/>
+    <node visible="true" id="-22574" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654283999999905" lon="-122.4041031000000004"/>
+    <node visible="true" id="-20324" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7647719999999865" lon="-122.4043779999999941"/>
+    <node visible="true" id="-20323" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7647824000000014" lon="-122.4042093999999850"/>
+    <node visible="true" id="-20322" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7647886999999898" lon="-122.4040389000000033"/>
+    <node visible="true" id="-20321" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7648103999999947" lon="-122.4036873000000014"/>
+    <node visible="true" id="-20320" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649704999999898" lon="-122.4040590000000037"/>
+    <node visible="true" id="-20319" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649706999999921" lon="-122.4040569000000005"/>
+    <node visible="true" id="-20318" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649706999999921" lon="-122.4042279999999892"/>
+    <node visible="true" id="-20317" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649772999999911" lon="-122.4041202999999882"/>
+    <node visible="true" id="-20316" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649923999999899" lon="-122.4037052999999986"/>
+    <node visible="true" id="-20315" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7650453999999982" lon="-122.4044049999999970"/>
+    <node visible="true" id="-20314" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7650542000000016" lon="-122.4042362999999938"/>
+    <node visible="true" id="-20313" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7650550999999908" lon="-122.4044139999999885"/>
+    <node visible="true" id="-20312" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7650557999999990" lon="-122.4042363999999878"/>
+    <node visible="true" id="-20311" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7650608000000005" lon="-122.4041284999999846"/>
+    <node visible="true" id="-20310" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7650759000000065" lon="-122.4040779999999842"/>
+    <node visible="true" id="-20309" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651854000000000" lon="-122.4037243000000075"/>
+    <node visible="true" id="-20308" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652698999999927" lon="-122.4044351999999947"/>
+    <node visible="true" id="-20307" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652796000000066" lon="-122.4042786999999919"/>
+    <node visible="true" id="-20306" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652903999999978" lon="-122.4041033000000027"/>
+    <node visible="true" id="-20305" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652905999999930" lon="-122.4040992000000045"/>
+    <node visible="true" id="-20304" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653529999999975" lon="-122.4044433999999910"/>
+    <node visible="true" id="-20303" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653626999999901" lon="-122.4042869000000024"/>
+    <node visible="true" id="-20302" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653701999999996" lon="-122.4034653999999875"/>
+    <node visible="true" id="-20301" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653872999999862" lon="-122.4042893000000021"/>
+    <node visible="true" id="-20300" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653898000000012" lon="-122.4031487000000027"/>
+    <node visible="true" id="-20299" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653980999999987" lon="-122.4041138999999987"/>
+    <node visible="true" id="-20298" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654155000000031" lon="-122.4044513999999992"/>
+    <node visible="true" id="-20297" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654588999999916" lon="-122.4037481000000014"/>
+    <node visible="true" id="-20296" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655182999999965" lon="-122.4030831999999833"/>
+    <node visible="true" id="-20295" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655376000000018" lon="-122.4027716999999882"/>
+    <node visible="true" id="-20294" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655442999999948" lon="-122.4031640000000039"/>
+    <node visible="true" id="-20293" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655491000000012" lon="-122.4030862999999982"/>
+    <node visible="true" id="-20292" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658689999999950" lon="-122.4044961999999970"/>
+    <node visible="true" id="-20291" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659123999999977" lon="-122.4037928999999991"/>
+    <node visible="true" id="-20290" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659274000000025" lon="-122.4035204000000050"/>
+    <node visible="true" id="-20289" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659469000000101" lon="-122.4032036999999917"/>
+    <node visible="true" id="-20288" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659517000000022" lon="-122.4031260000000145"/>
+    <node visible="true" id="-20287" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659565999999955" lon="-122.4031264999999991"/>
+    <node visible="true" id="-20286" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659757999999997" lon="-122.4028150000000039"/>
+    <node visible="true" id="-20285" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660855000000026" lon="-122.4045157999999844"/>
+    <node visible="true" id="-4662" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652629000000033" lon="-122.4034520999999955"/>
+    <node visible="true" id="-4661" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7648335000000017" lon="-122.4034051999999946"/>
+    <node visible="true" id="-4660" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7648589999999871" lon="-122.4029893999999956"/>
+    <node visible="true" id="-4659" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7648696000000044" lon="-122.4029907999999836"/>
+    <node visible="true" id="-4658" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7648843999999855" lon="-122.4027077999999875"/>
+    <node visible="true" id="-4657" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654261999999932" lon="-122.4027533999999946"/>
+    <node visible="true" id="-4656" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654070999999973" lon="-122.4030565000000053"/>
+    <node visible="true" id="-4655" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652555000000092" lon="-122.4030416999999886"/>
+    <node visible="true" id="-4654" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652511999999945" lon="-122.4031343000000049"/>
+    <node visible="true" id="-4653" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652829999999895" lon="-122.4031382999999948"/>
+    <way visible="true" id="-16485" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-211264"/>
+        <nd ref="-20285"/>
+        <nd ref="-211265"/>
+        <nd ref="-211264"/>
+        <tag k="amenity" v="fire_station"/>
+        <tag k="addr:street" v="Vermont Street"/>
+        <tag k="name" v="Station 29: Engine Co 29; Div 3: Battalion 2"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="REF1" v="009c63"/>
+        <tag k="addr:housenumber" v="299"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-4039" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-22576"/>
+        <nd ref="-22574"/>
+        <nd ref="-22575"/>
+        <nd ref="-22577"/>
+        <nd ref="-22576"/>
+        <tag k="addr:street" v="Kansas Street"/>
+        <tag k="name" v="CCA Wattis Institute for Contemporary Arts"/>
+        <tag k="tourism" v="museum"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="university"/>
+        <tag k="operator" v="California College of the Arts"/>
+        <tag k="REF1" v="009070"/>
+        <tag k="addr:housenumber" v="360"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3589" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20289"/>
+        <nd ref="-20288"/>
+        <nd ref="-20287"/>
+        <nd ref="-20286"/>
+        <nd ref="-20295"/>
+        <nd ref="-20296"/>
+        <nd ref="-20293"/>
+        <nd ref="-20294"/>
+        <nd ref="-20300"/>
+        <nd ref="-20302"/>
+        <nd ref="-20290"/>
+        <nd ref="-20289"/>
+        <tag k="building:levels" v="4"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="addr:street" v="Rhode Island Street"/>
+        <tag k="name" v="350 Rhode Island North Building"/>
+        <tag k="address" v="350 Rhode Island St"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="alt_name" v="California Culinary Academy"/>
+        <tag k="building" v="commercial"/>
+        <tag k="REVIEW" v="009c5c"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:housename" v="350 Rhode Island North Bldg"/>
+        <tag k="REF1" v="009c5c"/>
+        <tag k="addr:housenumber" v="350"/>
+        <tag k="REF2" v="none"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3587" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20308"/>
+        <nd ref="-20305"/>
+        <nd ref="-20310"/>
+        <nd ref="-20313"/>
+        <nd ref="-20308"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="009c60"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3584" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20307"/>
+        <nd ref="-20301"/>
+        <nd ref="-20299"/>
+        <nd ref="-20306"/>
+        <nd ref="-20307"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="009c65"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3579" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20292"/>
+        <nd ref="-20291"/>
+        <nd ref="-20297"/>
+        <nd ref="-20298"/>
+        <nd ref="-20292"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="009c6a"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3577" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20304"/>
+        <nd ref="-20303"/>
+        <nd ref="-20307"/>
+        <nd ref="-20308"/>
+        <nd ref="-20304"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="009c6c"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3573" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20319"/>
+        <nd ref="-20320"/>
+        <nd ref="-22576"/>
+        <nd ref="-20309"/>
+        <nd ref="-20316"/>
+        <nd ref="-20321"/>
+        <nd ref="-20322"/>
+        <nd ref="-20319"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="009c71"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3572" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20314"/>
+        <nd ref="-20311"/>
+        <nd ref="-20317"/>
+        <nd ref="-20318"/>
+        <nd ref="-20323"/>
+        <nd ref="-20324"/>
+        <nd ref="-20315"/>
+        <nd ref="-20312"/>
+        <nd ref="-20314"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="009c72"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-616" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4662"/>
+        <nd ref="-4661"/>
+        <nd ref="-4660"/>
+        <nd ref="-4659"/>
+        <nd ref="-4658"/>
+        <nd ref="-4657"/>
+        <nd ref="-4656"/>
+        <nd ref="-4655"/>
+        <nd ref="-4654"/>
+        <nd ref="-4653"/>
+        <nd ref="-4662"/>
+        <tag k="building:levels" v="4"/>
+        <tag k="addr:street" v="Rhode Island Street"/>
+        <tag k="name" v="350 Rhode Island South Building"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="commercial"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="REF1" v="004b33"/>
+        <tag k="addr:housenumber" v="350"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

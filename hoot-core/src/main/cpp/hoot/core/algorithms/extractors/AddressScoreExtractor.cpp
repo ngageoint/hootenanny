@@ -33,6 +33,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/address/Address.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
 
 using namespace std;
 
@@ -87,73 +89,10 @@ void AddressScoreExtractor::setConfiguration(const Settings& conf)
   }
 }
 
-QList<Address> AddressScoreExtractor::_getElementAddresses(
-  const OsmMap& map, const ConstElementPtr& element,
-  const ConstElementPtr& elementBeingComparedWith) const
-{
-  LOG_TRACE("Collecting addresses from: " << element->getElementId() << "...");
-
-  if (_cacheEnabled)
-  { 
-    const QList<Address>* cachedVal = _addressesCache[element->getElementId()];
-    if (cachedVal != 0)
-    {
-      LOG_TRACE("Found cached address.");
-      _addressCacheHits++;
-      return *cachedVal;
-    }
-  }
-
-  //LOG_VART(element);
-  QList<Address> elementAddresses = _addressParser.parseAddresses(*element);
-  if (elementAddresses.size() == 0)
-  {
-    //if not, try to find the address from a poly way node instead
-    if (element->getElementType() == ElementType::Way)
-    {
-      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
-      elementAddresses =
-        _addressParser.parseAddressesFromWayNodes(
-          *way, map, elementBeingComparedWith->getElementId());
-      if (elementAddresses.size() != 0)
-      {
-        LOG_TRACE(
-          "Found " << elementAddresses.size() << " addresses on the way nodes of " <<
-          element->getElementId());
-      }
-    }
-    //if still no luck, try to find the address from a poly way node that is a relation member
-    else if (element->getElementType() == ElementType::Relation)
-    {
-      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
-      elementAddresses =
-        _addressParser.parseAddressesFromRelationMembers(
-          *relation, map, elementBeingComparedWith->getElementId());
-      if (elementAddresses.size() != 0)
-      {
-        LOG_TRACE(
-          "Found " << elementAddresses.size() << " addresses on the relation members of " <<
-          element->getElementId());
-      }
-    }
-  }
-  else
-  {
-    LOG_TRACE("Found " << elementAddresses.size() << " addresses on " << element->getElementId());
-  }
-
-  if (_cacheEnabled)
-  {
-    _addressesCache.insert(element->getElementId(), new QList<Address>(elementAddresses));
-  }
-
-  return elementAddresses;
-}
-
 double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& element1,
                                       const ConstElementPtr& element2) const
 {
-  // Experimented with partial addresses matches in the past and it had no positive affect.  Search
+  // Experimented with partial addresses matches in the past and it had no positive affect. Search
   // the history for this class to see examples, to see if its worth experimenting with again at
   // some point.
 
@@ -190,28 +129,230 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
       Address element1Address = *element1AddrItr;
       if (element2Address == element1Address)
       {
-        LOG_TRACE("Found address match.");
+        LOG_TRACE("Found address match: 1: " << element1Address << ", 2: " << element2Address);
         return 1.0;
       }
-      // This is kind of a last ditch effort to get an street intersection match (may be a better
-      // way to do it or a better place to put this code). If both addresses being compared are
-      // intersections and possibly one has street types in one or both of its intersection parts
-      // and the other doesn't, let's try dropping all street type tokens and comparing the address
-      // strings again.
-      else if (element1Address.getParsedFromAddressTag() &&
-               element2Address.getParsedFromAddressTag() &&
-               Address::isStreetIntersectionAddress(element1Address) &&
-               Address::isStreetIntersectionAddress(element2Address))
+
+      const double partialMatchScore = _getPartialMatchScore(element1Address, element2Address);
+      if (partialMatchScore > 0.0)
       {
-        element1Address.removeStreetTypes();
-        element2Address.removeStreetTypes();
-        if (element2Address == element1Address)
-        {
-          LOG_TRACE("Found address match.");
-          return 1.0;
-        }
+        return partialMatchScore;
       }
     }
+  }
+
+  return 0.0;
+}
+
+QList<Address> AddressScoreExtractor::_getElementAddresses(
+  const OsmMap& map, const ConstElementPtr& element,
+  const ConstElementPtr& elementBeingComparedWith) const
+{
+  LOG_TRACE("Collecting addresses from: " << element->getElementId() << "...");
+
+  if (_cacheEnabled)
+  {
+    const QList<Address>* cachedVal = _addressesCache[element->getElementId()];
+    if (cachedVal != 0)
+    {
+      LOG_TRACE("Found cached address(es): " << *cachedVal);
+      _addressCacheHits++;
+      return *cachedVal;
+    }
+  }
+
+  QList<Address> elementAddresses = _addressParser.parseAddresses(*element);
+  if (elementAddresses.size() == 0)
+  {
+    //if not, try to find the address from a poly way node instead
+    if (element->getElementType() == ElementType::Way)
+    {
+      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
+      elementAddresses =
+        _addressParser.parseAddressesFromWayNodes(
+          *way, map, elementBeingComparedWith->getElementId());
+      if (elementAddresses.size() != 0)
+      {
+        LOG_TRACE(
+          "Found " << elementAddresses.size() << " address(es) on the way nodes of " <<
+          element->getElementId());
+      }
+    }
+    //if still no luck, try to find the address from a poly way node that is a relation member
+    else if (element->getElementType() == ElementType::Relation)
+    {
+      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
+      elementAddresses =
+        _addressParser.parseAddressesFromRelationMembers(
+          *relation, map, elementBeingComparedWith->getElementId());
+      if (elementAddresses.size() != 0)
+      {
+        LOG_TRACE(
+          "Found " << elementAddresses.size() << " address(es) on the relation members of " <<
+          element->getElementId());
+      }
+    }
+  }
+  else
+  {
+    LOG_TRACE(
+      "Found " << elementAddresses.size() << " address(es) on " << element->getElementId() <<
+      ": " << elementAddresses);
+  }
+
+  if (_cacheEnabled)
+  {
+    _addressesCache.insert(element->getElementId(), new QList<Address>(elementAddresses));
+  }
+
+  return elementAddresses;
+}
+
+bool AddressScoreExtractor::_addressesMatchWithSuffixesRemoved(
+  const Address& address1, const Address& address2) const
+{
+  LOG_TRACE("Attempting intersection match or partial street match without suffix...");
+
+  Address elementAddress1Temp = address1;
+  Address elementAddress2Temp = address2;
+  elementAddress1Temp.removeStreetTypes();
+  elementAddress2Temp.removeStreetTypes();
+  LOG_VART(elementAddress1Temp.getAddressStr());
+  LOG_VART(elementAddress2Temp.getAddressStr());
+
+  return elementAddress2Temp == elementAddress1Temp;
+}
+
+bool AddressScoreExtractor::_intersectionAndStreetAddressesMatchWithHouseNumbersRemoved(
+  const Address& address1, const Address& address2) const
+{
+  LOG_TRACE("Attempting street/intersection partial match without house number...");
+
+  const bool element1IsIntersection = Address::isStreetIntersectionAddress(address1);
+  const bool element2IsIntersection = Address::isStreetIntersectionAddress(address2);
+  Address elementAddress1Temp = address1;
+  Address elementAddress2Temp = address2;
+
+  QStringList intersectionParts;
+  if (element1IsIntersection)
+  {
+    intersectionParts = elementAddress1Temp.getIntersectionParts();
+  }
+  else if (element2IsIntersection)
+  {
+    intersectionParts = elementAddress2Temp.getIntersectionParts();
+  }
+  LOG_VART(intersectionParts);
+  QString nonIntersection;
+  if (element1IsIntersection)
+  {
+    elementAddress2Temp.removeHouseNumber();
+    nonIntersection = elementAddress2Temp.getAddressStr();
+  }
+  else
+  {
+    elementAddress1Temp.removeHouseNumber();
+    nonIntersection = elementAddress1Temp.getAddressStr();
+  }
+  LOG_VART(nonIntersection);
+  for (int i = 0; i < intersectionParts.size(); i++)
+  {
+    LOG_VART(intersectionParts.at(i).trimmed());
+    if (nonIntersection == intersectionParts.at(i).trimmed())
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool AddressScoreExtractor::_addressesMatchWithNameComparisonRelaxed(
+  const Address& address1, const Address& address2) const
+{
+   LOG_TRACE("Attempting street partial match with looser street name comparison...");
+
+   Address elementAddress1Temp = address1;
+   Address elementAddress2Temp = address2;
+   elementAddress1Temp.removeStreetTypes();
+   elementAddress2Temp.removeStreetTypes();
+
+   elementAddress1Temp.removeHouseNumber();
+   elementAddress2Temp.removeHouseNumber();
+   LOG_VART(elementAddress1Temp.getAddressStr());
+   LOG_VART(elementAddress2Temp.getAddressStr());
+
+   MeanWordSetDistance stringComp(
+     StringDistancePtr(
+       new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())));
+   const double stringSim =
+     stringComp.compare(elementAddress1Temp.getAddressStr(), elementAddress2Temp.getAddressStr());
+   LOG_VART(stringSim);
+   return stringSim >= 0.8; // TODO: tie this to a config var?
+}
+
+double AddressScoreExtractor::_getPartialMatchScore(const Address& address1,
+                                                    const Address& address2) const
+{
+  const bool element1IsIntersection = Address::isStreetIntersectionAddress(address1);
+  const bool element2IsIntersection = Address::isStreetIntersectionAddress(address2);
+  const bool onlyOneIsIntersection =
+    (element1IsIntersection && !element2IsIntersection) ||
+    (!element1IsIntersection && element2IsIntersection);
+  LOG_VART(onlyOneIsIntersection);
+
+  // These partial matches (except for the first one) are getting a fairly arbitrary scores, which
+  // could be tweaked going forward. Currently, address partial match scoring is primarily being
+  // used by POI/Polygon conflation to prevent removing reviews for features that have addresses
+  // with some similarity.
+
+  // remove the street types (suffixes) from each and see if we have an address string match
+  if (_addressesMatchWithSuffixesRemoved(address1, address2))
+  {
+    // If both addresses being compared are intersections and possibly one has street types
+    // in one or both of its intersection parts and the other doesn't, let's try dropping
+    // all street type tokens and comparing the address strings again.
+    if (address1.getParsedFromAddressTag() &&
+        address2.getParsedFromAddressTag() &&
+        element1IsIntersection && element2IsIntersection)
+    {
+      LOG_TRACE(
+        "Found address intersection match after removing suffixes. 1: " <<
+        address1 << ", 2: " << address2);
+      // arguably this could be made into a partial match score like it is for non-intersections
+      return 1.0;
+    }
+    else
+    {
+      LOG_TRACE(
+        "Found partial address match after removing suffixes. 1: " << address1 <<
+         ", 2: " << address2);
+      return 0.8;
+    }
+  }
+
+  // remove the house numbers from each and see if we have an address string match; only do it if
+  // one of them is an intersection
+  if (onlyOneIsIntersection &&
+      _intersectionAndStreetAddressesMatchWithHouseNumbersRemoved(
+        address1, address2))
+  {
+    LOG_TRACE(
+      "Found partial address intersection/street address match: " << address1 <<
+      ", 2: " << address2);
+    return 0.8;
+  }
+
+  // slight street name misspelling but everything else matches; only do it with basic street
+  // addresses, no intersections, house number ranges or subletters
+  if (!element1IsIntersection && !element2IsIntersection &&
+      !address1.getIsSubLetter() && !address2.getIsSubLetter() &&
+      !address1.getIsRange() && !address2.getIsRange() &&
+      _addressesMatchWithNameComparisonRelaxed(address1, address2))
+  {
+    LOG_TRACE(
+      "Found partial address match based on string similarity. 1: " <<
+      address1 << ", 2: " << address2);
+    return 0.8;
   }
 
   return 0.0;

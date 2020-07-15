@@ -27,8 +27,8 @@
 #ifndef ADDRESSS_H
 #define ADDRESSS_H
 
-// hoot
-#include <hoot/core/algorithms/string/ExactStringDistance.h>
+// Hoot
+#include <hoot/core/algorithms/string/StringDistance.h>
 
 // Qt
 #include <QSet>
@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * Encapsulates a street address for conflation purposes
+ * Encapsulates a street address for conflation purposes. This class has become less object-oriented
+ * over time and likely needs some re-design.
  *
  * Note that a QMap can be used to represent the street type full names and their abbreviations
  * b/c we currently only support a one to one mapping. If we expand it to support multiple
@@ -110,18 +111,44 @@ public:
   static QList<QRegExp> getIntersectionSplitTokens();
 
   /**
+   * Returns the intersection parts of the address
+   *
+   * @return a string list with two entries for the intersection parts if the address is an
+   * intersection address; an empty list otherwise
+   */
+  QStringList getIntersectionParts() const;
+
+  /**
    * Removes street type (suffix) text from the address
    */
   void removeStreetTypes();
 
+  /**
+   * Removes the house number from the address if its not an intersection address
+   */
+  void removeHouseNumber();
+
   bool getParsedFromAddressTag() const { return _parsedFromAddressTag; }
   void setParsedFromAddressTag(bool from) { _parsedFromAddressTag = from; }
+
+  QString getAddressStr() const { return _address; }
+
+  bool getIsRange() const { return _isRange; }
+  void setIsRange(bool isRange) { _isRange = isRange; }
+
+  bool getIsSubLetter() const { return _isSubLetter; }
+  void setIsSubLetter(bool isSubLetter) { _isSubLetter = isSubLetter; }
+
+  QString getHouseNumber() const;
 
 private:
 
   QString _address;
 
-  ExactStringDistance _addrComp;
+  // This has been made configurable, but due to the fact that address strings are usually
+  // normalized before being set on this class, its seems unlikely at this point that anything other
+  // than ExactStringDistance will be used.
+  static StringDistancePtr _stringComp;
 
   //see AddressParser::addressesMatchDespiteSubletterDiffs
   bool _allowLenientHouseNumberMatching;
@@ -129,12 +156,20 @@ private:
   // was the address parsed from an OSM address tag or some other auxiliary tag (name, etc.)?
   bool _parsedFromAddressTag;
 
+  // determines if the address has a house number range; like: 120-130 Sutter St
+  bool _isRange;
+
+  // determines if the address has a subletter in the house number; like 120a Sutter St
+  bool _isSubLetter;
+
   // see getStreetTypes
   static QSet<QString> _streetTypes;
   // see getStreetFullTypesToTypeAbbreviations
   static QMap<QString, QString> _streetFullTypesToTypeAbbreviations;
   // see getStreetTypeAbbreviationsToFullTypes
   static QMap<QString, QString> _streetTypeAbbreviationsToFullTypes;
+
+  void _initializeStringComparator();
 };
 
 }

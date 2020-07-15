@@ -154,6 +154,10 @@ private:
   // is the current address being parsed from an OSM address tag or some other auxiliary tag (name,
   // etc.)?
   mutable bool _parsedFromAddressTag;
+  // determines if the last address parsed is a street address with a house number range
+  mutable bool _isHouseNumRange;
+  // determines if the last address parsed is a street address with a subletter in its house number
+  mutable bool _isSubLetter;
 
   ToEnglishAddressTranslator _addressTranslator;
   AddressNormalizer _addressNormalizer;
@@ -162,6 +166,7 @@ private:
 
   QSet<QString> _parseAddressAsRange(const QString& houseNum, const QString& street) const;
   bool _isRangeAddress(const QString& houseNum) const;
+  bool _isSubLetterAddress(const QString& houseNum) const;
   bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,
                                          QString& street) const;
   bool _isValidAddressStr(QString& address, QString& houseNum,  QString& street,
