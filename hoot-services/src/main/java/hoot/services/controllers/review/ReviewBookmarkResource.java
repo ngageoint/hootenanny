@@ -79,6 +79,7 @@ import hoot.services.utils.PostgresUtils;
 @Path("/review/bookmarks")
 @Transactional
 public class ReviewBookmarkResource {
+    static final JSONParser parser = new JSONParser();
 
     public ReviewBookmarkResource() {}
 
@@ -180,7 +181,6 @@ public class ReviewBookmarkResource {
                 // TODO: find out exactly why we need to do this
                 String bmkNotes = hstoreMap.get("bookmarknotes");
                 if ((bmkNotes != null) && (!bmkNotes.isEmpty())) {
-                    JSONParser parser = new JSONParser();
                     JSONArray jsonArray = (JSONArray) parser.parse(PostgresUtils.unescapeJson(bmkNotes));
                     json.put("bookmarknotes", jsonArray);
                 }
@@ -188,7 +188,6 @@ public class ReviewBookmarkResource {
                 // TODO: find out exactly why we need to do this
                 appendHstoreElement(hstoreMap.get("bookmarkreviewitem"), json, "bookmarkreviewitem");
 
-                JSONParser parser = new JSONParser();
                 String usersArray = hstoreMap.get("taggedUsers");
                 if(usersArray != null) {
                     JSONArray jsonArray = (JSONArray) parser.parse(hstoreMap.get("taggedUsers"));
@@ -220,7 +219,6 @@ public class ReviewBookmarkResource {
             throws ParseException {
         String bmkElem = rawElem;
         if ((bmkElem != null) && (!bmkElem.isEmpty())) {
-            JSONParser parser = new JSONParser();
             JSONObject oParsed = (JSONObject) parser.parse(PostgresUtils.unescapeJson(bmkElem));
             oBmkDetail.put(elemName, oParsed);
         }
