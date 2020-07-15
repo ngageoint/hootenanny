@@ -168,7 +168,14 @@ do
   printf "%3d\t\t%s\n" $LINES $FILE >> ${HOOT_HOME}/test-output/valgrind_error_count.log
 done
 
-diff ${HOOT_HOME}/test-files/valgrind_error_count_expected.log ${HOOT_HOME}/test-output/valgrind_error_count.log
+diff ${HOOT_HOME}/test-files/valgrind_error_count_expected.log \
+     ${HOOT_HOME}/test-output/valgrind_error_count.log \
+|| \
+diff -Naur \
+     ${HOOT_HOME}/test-files/valgrind_error_count_expected.log \
+     ${HOOT_HOME}/test-output/valgrind_error_count.log \
+     >${HOOT_HOME}/test-output/valgrind_error_count.log.patch
+
 
 pushd ${OUTPUT_DIR} > /dev/null
 tar -czf ../valgrind_error_findings.tar.gz *.xml

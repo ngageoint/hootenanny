@@ -206,8 +206,8 @@ class ConflateCommand extends ExternalCommand {
                     JSONParser parser = new JSONParser();
                     try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, NETWORK_CONFLATION_PATH))) {
                         JSONObject networkConfigJson = (JSONObject) parser.parse(fileReader);
-			matchCreators = getCreatorsFromJson("match.creators", "MatchCreators", networkConfigJson);
-			mergerCreators = getCreatorsFromJson("merger.creators", "MergerCreators", networkConfigJson);
+                        matchCreators = getCreatorsFromJson("match.creators", "MatchCreators", networkConfigJson);
+                        mergerCreators = getCreatorsFromJson("merger.creators", "MergerCreators", networkConfigJson);
                     }
                     catch (IOException | ParseException ioe) {
                         throw new RuntimeException("Error reading NetworkAlgorithm.conf file", ioe);
@@ -252,7 +252,12 @@ class ConflateCommand extends ExternalCommand {
                             optionValue = optionValue.replaceAll("\\[|\\]", "").replaceAll(",", ";");
                         }
 
-                        options.add("\"" + optionConfig.get("key") + "=" + optionValue + "\"");
+                        // if value is json string
+                        if (optionValue.matches("\\{(.*)\\}")) {
+                            options.add(optionConfig.get("key") + "=" + optionValue);
+                        } else {
+                            options.add("\"" + optionConfig.get("key") + "=" + optionValue + "\"");
+                        }
                     }
                 }
             }
@@ -335,7 +340,7 @@ class ConflateCommand extends ExternalCommand {
         // "hoot::HighwayMatchCreator", in the "match.creators" config option the json snippet would look like:
         //
         // "match.creators": "hoot::HighwayMatchCreator->hoot::NetworkMatchCreator",
-        // 
+        //
         // where '->' means replace the first item with the second item.
 
         String creatorsStr = config.get(optionName).toString();

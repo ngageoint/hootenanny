@@ -2,9 +2,9 @@
   "#": "This file contains the search radius to be used for each feature type that POI to POI",
   "#": "conflation supports. Keep this list alphabetized. Distances are in meters. 'value' is an",
   "#": "optional attribute and the rest are required. See the 'Find Match Candidates' section in ",
-  "#": "the POI to POI Conflation Algorithms documentation for the ways in which the contents of ",
-  "#": "this file may be overridden. Make sure there are schema entries with the 'poi' category ",
-  "#": "added to them for every feature type added here.",
+  "#": "the POI to POI Conflation Algorithms documentation for more details on how the configuration ",
+  "#": "uses this file. Make sure there are schema entries with the 'poi' category added to them for ",
+  "#": "every feature type added here.",
   "search_radii":
   [
     {

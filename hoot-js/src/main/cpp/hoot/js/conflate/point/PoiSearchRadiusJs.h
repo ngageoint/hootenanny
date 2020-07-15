@@ -44,6 +44,9 @@ private:
 
   PoiSearchRadiusJs() = default;
   virtual ~PoiSearchRadiusJs() = default;
+
+  static bool _searchRadiiOptionIsConfigFile(const QString data);
+  static bool _searchRadiiOptionIsJsonString(const QString data);
 };
 
 }

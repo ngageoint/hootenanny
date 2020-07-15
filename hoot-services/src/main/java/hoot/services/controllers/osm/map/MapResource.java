@@ -774,6 +774,16 @@ public class MapResource {
 
         ret.putAll(tags);
 
+        if (tags.containsKey("params")) {
+            JSONParser jp = new JSONParser();
+            String unescaped = tags.get("params").replace("\\\"", "\"").replace("\\\\", "").replace("\"{", "{").replace("}\"", "}");
+            try {
+                ret.put("params", jp.parse(unescaped));
+            } catch (ParseException ex) {
+                logger.error(unescaped, ex);
+            }
+        }
+
         Object oInput1 = ret.get("input1");
         if (oInput1 != null) {
             String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput1.toString()));
