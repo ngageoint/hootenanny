@@ -199,127 +199,125 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
 
       // TODO: move everything after here into separate methods
 
-      if (!element1Address.getIsRange() && !element2Address.getIsRange() &&
-          !element1Address.getIsSubLetter() && !element2Address.getIsSubLetter())
+      const bool element1IsIntersection = Address::isStreetIntersectionAddress(element1Address);
+      const bool element2IsIntersection = Address::isStreetIntersectionAddress(element2Address);
+      const bool element1ParsedFromAddressTag = element1Address.getParsedFromAddressTag();
+      const bool element2ParsedFromAddressTag = element2Address.getParsedFromAddressTag();
+      LOG_VART(element1IsIntersection);
+      LOG_VART(element2IsIntersection);
+      LOG_VART(element1ParsedFromAddressTag);
+      LOG_VART(element2ParsedFromAddressTag);
+
       {
-        const bool element1IsIntersection = Address::isStreetIntersectionAddress(element1Address);
-        const bool element2IsIntersection = Address::isStreetIntersectionAddress(element2Address);
-        const bool element1ParsedFromAddressTag = element1Address.getParsedFromAddressTag();
-        const bool element2ParsedFromAddressTag = element2Address.getParsedFromAddressTag();
-        LOG_VART(element1IsIntersection);
-        LOG_VART(element2IsIntersection);
-        LOG_VART(element1ParsedFromAddressTag);
-        LOG_VART(element2ParsedFromAddressTag);
+        LOG_TRACE("Attempting intersection match or partial street match without suffix...");
 
+        Address elementAddress1Temp = element1Address;
+        Address elementAddress2Temp = element2Address;
+        elementAddress1Temp.removeStreetTypes();
+        elementAddress2Temp.removeStreetTypes();
+        LOG_VART(elementAddress1Temp.getAddressStr());
+        LOG_VART(elementAddress2Temp.getAddressStr());
+
+        if (elementAddress2Temp == elementAddress1Temp)
         {
-          LOG_TRACE("Attempting intersection match or partial street match without suffix...");
-
-          Address elementAddress1Temp = element1Address;
-          Address elementAddress2Temp = element2Address;
-          elementAddress1Temp.removeStreetTypes();
-          elementAddress2Temp.removeStreetTypes();
-          LOG_VART(elementAddress1Temp.getAddressStr());
-          LOG_VART(elementAddress2Temp.getAddressStr());
-
-          if (elementAddress2Temp == elementAddress1Temp)
+          // If both addresses being compared are intersections and possibly one has street types
+          // in one or both of its intersection parts and the other doesn't, let's try dropping
+          // all street type tokens and comparing the address strings again (may be a better way
+          // to do it or a better place to put this in the code).
+          if (element1ParsedFromAddressTag && element2ParsedFromAddressTag &&
+              element1IsIntersection && element2IsIntersection)
           {
-            // If both addresses being compared are intersections and possibly one has street types
-            // in one or both of its intersection parts and the other doesn't, let's try dropping all
-            // street type tokens and comparing the address strings again (may be a better way to do
-            // it or a better place to put this in the code).
-            if (element1ParsedFromAddressTag && element2ParsedFromAddressTag &&
-                element1IsIntersection && element2IsIntersection)
-            {
-              LOG_TRACE(
-                "Found address intersection match after removing suffixes. 1: " <<
-                element1Address << ", 2: " << element2Address);
-              return 1.0;
-            }
-            else
-            {
-              LOG_TRACE(
-                "Found partial address match after removing suffixes. 1: " << element1Address <<
-                 ", 2: " << element2Address);
-              return 0.8;
-            }
-          }
-        }
-
-        const bool onlyOneIsIntersection =
-          (element1IsIntersection && !element2IsIntersection) ||
-          (!element1IsIntersection && element2IsIntersection);
-        LOG_VART(onlyOneIsIntersection);
-        if (onlyOneIsIntersection)
-        {
-          LOG_TRACE("Attempting street/intersection partial match without house number...");
-
-          Address elementAddress1Temp = element1Address;
-          Address elementAddress2Temp = element2Address;
-
-          QStringList intersectionParts;
-          if (element1IsIntersection)
-          {
-            intersectionParts = elementAddress1Temp.getIntersectionParts();
-          }
-          else if (element2IsIntersection)
-          {
-            intersectionParts = elementAddress2Temp.getIntersectionParts();
-          }
-          LOG_VART(intersectionParts);
-          QString nonIntersection;
-          if (element1IsIntersection)
-          {
-            elementAddress2Temp.removeHouseNumber();
-            nonIntersection = elementAddress2Temp.getAddressStr();
+            LOG_TRACE(
+              "Found address intersection match after removing suffixes. 1: " <<
+              element1Address << ", 2: " << element2Address);
+            return 1.0;
           }
           else
           {
-            elementAddress1Temp.removeHouseNumber();
-            nonIntersection = elementAddress1Temp.getAddressStr();
-          }
-          LOG_VART(nonIntersection);
-          for (int i = 0; i < intersectionParts.size(); i++)
-          {
-            LOG_VART(intersectionParts.at(i).trimmed());
-            if (nonIntersection == intersectionParts.at(i).trimmed())
-            {
-              LOG_TRACE(
-                "Found partial address intersection/street address match: " << element1Address <<
-                ", 2: " << element2Address);
-              return 0.8;
-            }
-          }
-        }
-
-        // slight street name misspelling but everything else matches
-        if (!element1IsIntersection && !element2IsIntersection)
-        {
-          LOG_TRACE("Attempting street partial match with looser street name similarity...");
-
-          Address elementAddress1Temp = element1Address;
-          Address elementAddress2Temp = element2Address;
-          elementAddress1Temp.removeStreetTypes();
-          elementAddress2Temp.removeStreetTypes();
-
-          elementAddress1Temp.removeHouseNumber();
-          elementAddress2Temp.removeHouseNumber();
-          LOG_VART(elementAddress1Temp.getAddressStr());
-          LOG_VART(elementAddress2Temp.getAddressStr());
-
-          MeanWordSetDistance stringComp(
-            StringDistancePtr(
-              new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())));
-          const double stringSim =
-            stringComp.compare(
-              elementAddress1Temp.getAddressStr(), elementAddress2Temp.getAddressStr());
-          LOG_VART(stringSim);
-          if (stringSim >= 0.8)
-          {
             LOG_TRACE(
-              "Found partial address match based on string similarity. 1: " <<
-              element1Address << ", 2: " << element2Address);
+              "Found partial address match after removing suffixes. 1: " << element1Address <<
+               ", 2: " << element2Address);
             return 0.8;
           }
+        }
+      }
+
+      const bool onlyOneIsIntersection =
+        (element1IsIntersection && !element2IsIntersection) ||
+        (!element1IsIntersection && element2IsIntersection);
+      LOG_VART(onlyOneIsIntersection);
+      if (onlyOneIsIntersection)
+      {
+        LOG_TRACE("Attempting street/intersection partial match without house number...");
+
+        Address elementAddress1Temp = element1Address;
+        Address elementAddress2Temp = element2Address;
+
+        QStringList intersectionParts;
+        if (element1IsIntersection)
+        {
+          intersectionParts = elementAddress1Temp.getIntersectionParts();
+        }
+        else if (element2IsIntersection)
+        {
+          intersectionParts = elementAddress2Temp.getIntersectionParts();
+        }
+        LOG_VART(intersectionParts);
+        QString nonIntersection;
+        if (element1IsIntersection)
+        {
+          elementAddress2Temp.removeHouseNumber();
+          nonIntersection = elementAddress2Temp.getAddressStr();
+        }
+        else
+        {
+          elementAddress1Temp.removeHouseNumber();
+          nonIntersection = elementAddress1Temp.getAddressStr();
+        }
+        LOG_VART(nonIntersection);
+        for (int i = 0; i < intersectionParts.size(); i++)
+        {
+          LOG_VART(intersectionParts.at(i).trimmed());
+          if (nonIntersection == intersectionParts.at(i).trimmed())
+          {
+            LOG_TRACE(
+              "Found partial address intersection/street address match: " << element1Address <<
+              ", 2: " << element2Address);
+            return 0.8;
+          }
+        }
+      }
+
+      // slight street name misspelling but everything else matches
+      if (!element1IsIntersection && !element2IsIntersection &&
+          !element1Address.getIsSubLetter() && !element2Address.getIsSubLetter() &&
+          !element1Address.getIsRange() && !element2Address.getIsRange())
+      {
+        LOG_TRACE("Attempting street partial match with looser street name similarity...");
+
+        Address elementAddress1Temp = element1Address;
+        Address elementAddress2Temp = element2Address;
+        elementAddress1Temp.removeStreetTypes();
+        elementAddress2Temp.removeStreetTypes();
+
+        elementAddress1Temp.removeHouseNumber();
+        elementAddress2Temp.removeHouseNumber();
+        LOG_VART(elementAddress1Temp.getAddressStr());
+        LOG_VART(elementAddress2Temp.getAddressStr());
+
+        MeanWordSetDistance stringComp(
+          StringDistancePtr(
+            new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())));
+        const double stringSim =
+          stringComp.compare(
+            elementAddress1Temp.getAddressStr(), elementAddress2Temp.getAddressStr());
+        LOG_VART(stringSim);
+        if (stringSim >= 0.8)
+        {
+          LOG_TRACE(
+            "Found partial address match based on string similarity. 1: " <<
+            element1Address << ", 2: " << element2Address);
+          return 0.8;
         }
       }
     }

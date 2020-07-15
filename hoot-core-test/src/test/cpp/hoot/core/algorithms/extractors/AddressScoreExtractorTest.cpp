@@ -180,15 +180,6 @@ public:
     way3->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addWay(way3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way3), 0.01);
-
-    NodePtr node4(new Node(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0));
-    node4->getTags().set("address", "150 Sutter Street");
-    map->addNode(node4);
-    WayPtr way4(new Way(Status::Unknown2, -3, 15.0));
-    way4->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "130-150");
-    way4->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Sutter");
-    map->addWay(way4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node4, way4), 0.01);
   }
 
   void runAltFormatTest()
@@ -751,7 +742,7 @@ public:
     uut.setCacheEnabled(false);
 
     {
-      // matching street names and house numbers; suffix doesn't match
+      // matching street names and house numbers, one doesn't have a suffix
 
       OsmMapPtr map(new OsmMap());
 
@@ -779,6 +770,24 @@ public:
       WayPtr way(new Way(Status::Unknown2, -1, 15.0));
       way->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "100");
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "Whitney Yound Circle");
+      map->addWay(way);
+
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node, way), 0.0);
+    }
+
+    {
+      // range address where one has no suffix
+
+      OsmMapPtr map(new OsmMap());
+
+      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      node->getTags().set("address", "150 Sutter Street");
+      map->addNode(node);
+
+      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "Hallidie Building");
+      way->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "130-150");
+      way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Sutter");
       map->addWay(way);
 
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node, way), 0.0);
