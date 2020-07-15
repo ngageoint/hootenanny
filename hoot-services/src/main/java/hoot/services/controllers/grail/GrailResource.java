@@ -882,26 +882,20 @@ public class GrailResource {
             // Do an invert crop of this data to get nodes outside bounds
             workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", InvertCropCommand.class, this.getClass()));
 
-            //read node ids, pull connected ways, pull entire ways, remove cropfile
+            // read node ids, pull connected ways, pull entire ways, remove cropfile
             workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
 
             // merge OOB connected ways osm files and add 'hoot:change:exclude:delete' tag to each
             GrailParams mergeOobWaysParams = new GrailParams(params);
             File mergeOobWaysFile = new File(params.getWorkDir(), "oobways.osm");
             mergeOobWaysParams.setOutput(mergeOobWaysFile.getAbsolutePath());
-            // Map<String, String> opts = new HashMap<>();
-            // opts.put("convert.ops", "hoot::SetTagValueVisitor");
-            // opts.put("set.tag.value.visitor.element.criteria", "hoot::WayCriterion");
-            // opts.put("set.tag.value.visitor.keys", "hoot:change:exclude:delete");
-            // opts.put("set.tag.value.visitor.values", "yes");
-            // mergeOobWaysParams.setAdvancedOptions(opts);
             mergeOobWaysParams.setInput1("\\d+\\.osm"); //this is the file filter
             workflow.add(grailCommandFactory.build(jobId, mergeOobWaysParams, "info", MergeOsmFilesCommand.class, this.getClass()));
 
             // merge OOB connected ways merge file and the reference osm file
             GrailParams mergeRefParams = new GrailParams(params);
+            mergeRefParams.setInput1("(" + mergeOobWaysFile.getName() + "|" + ingestFile.getName() + ")"); //this is the file filter. ingestFile here points to reference.osm
             ingestFile = new File(params.getWorkDir(), "merge.osm");
-            mergeRefParams.setInput1("(" + mergeOobWaysFile.getName() + "|" + ingestFile.getName() + ")"); //this is the file filter
             mergeRefParams.setOutput(ingestFile.getAbsolutePath());
             workflow.add(grailCommandFactory.build(jobId, mergeRefParams, "info", MergeOsmFilesCommand.class, this.getClass()));
         }
