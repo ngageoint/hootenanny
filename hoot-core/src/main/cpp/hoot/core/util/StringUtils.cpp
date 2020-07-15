@@ -237,7 +237,7 @@ void StringUtils::removeLastIndexOf(QString& input, const QStringList& toRemove,
     const int index = input.lastIndexOf(toRemove.at(i), -1, caseSensitivity);
     if (index != -1)
     {
-      input = input.remove(index, toRemove.at(i).length());
+      input = input.remove(index, toRemove.at(i).length()).trimmed();
     }
   }
 }

@@ -192,8 +192,8 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   // If one of the intersection parts has a street type and the other doesn't we'll copy one street
   // type over to the other. This isn't foolproof as we could end up giving one of the intersections
   // an incorrect street type (the actual element's address tags never get modified, though).
-  // However, it does help with address matching and will remain in place unless its causing harm
-  // in some way.
+  // However, it does help with address matching and will remain in place unless its found to be
+  // causing harm in some way.
 
   QStringList modifiedAddressParts =
     StringUtils::splitOnAny(modifiedAddress, Address::getIntersectionSplitTokens(), 2);
@@ -202,13 +202,35 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   LOG_VART(firstIntersectionPart);
   const QString secondIntersectionPart = modifiedAddressParts[1].trimmed();
   LOG_VART(secondIntersectionPart);
-  const QStringList streetFullTypes =
+
+  QStringList streetFullTypes;
+  const QStringList streetFullTypesTemp =
     Address::getStreetFullTypesToTypeAbbreviations().keys();
-  const QString firstIntersectionEndingStreetType =
+  streetFullTypes = streetFullTypesTemp;
+  // TODO
+  for (int i = 0; i < streetFullTypesTemp.size(); i++)
+  {
+    const QString pluralType = streetFullTypesTemp.at(i) + "s";
+    if (!streetFullTypes.contains(pluralType))
+    {
+      streetFullTypes.append(pluralType);
+    }
+  }
+
+  QString firstIntersectionEndingStreetType =
     StringUtils::endsWithAnyAsStr(firstIntersectionPart.trimmed(), streetFullTypes).trimmed();
+  // TODO
+  if (firstIntersectionEndingStreetType.endsWith('s'))
+  {
+    firstIntersectionEndingStreetType.chop(1);
+  }
   LOG_VART(firstIntersectionEndingStreetType);
-  const QString secondIntersectionEndingStreetType =
+  QString secondIntersectionEndingStreetType =
     StringUtils::endsWithAnyAsStr(secondIntersectionPart.trimmed(), streetFullTypes).trimmed();
+  if (secondIntersectionEndingStreetType.endsWith('s'))
+  {
+    secondIntersectionEndingStreetType.chop(1);
+  }
   LOG_VART(secondIntersectionEndingStreetType);
   if (!firstIntersectionEndingStreetType.isEmpty() &&
       secondIntersectionEndingStreetType.isEmpty())

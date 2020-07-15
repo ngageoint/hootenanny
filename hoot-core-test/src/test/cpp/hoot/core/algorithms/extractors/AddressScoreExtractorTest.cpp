@@ -262,7 +262,6 @@ public:
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     map->addWay(way1);
 
-    // TODO: re-enable
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
@@ -316,30 +315,28 @@ public:
     way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
 
-    // TODO: re-enable
-//    node1->getTags().clear();
-//    node1->getTags().set("address", "CASTRO AND DUBOCE STREETS");
-//    way1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "45");
-//    way1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Castro Street");
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node1, way1), 0.0);
-
+    // sometimes the road type is expressed as plural with intersections
     node1->getTags().clear();
-    node1->getTags().set("address", "19th Ave & Wawona St");
+    node1->getTags().set("address", "CASTRO AND DUBOCE STREETS");
     way1->getTags().clear();
+    way1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "45");
+    way1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Castro Street");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node1, way1), 0.0);
+
+    // node1->getTags().clear();
+    //    node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "16th &amp; Bryant Street");
+    // way1->getTags().clear();
+    //    way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "16th and Bryant Streets");
+    //    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    node1->getTags().set("address", "19th Ave & Wawona St");
     way1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "2695");
     way1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "19th Avenue");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node1, way1), 0.0);
 
-    // Haven't wrapped my head around how to deal with these yet but not worrying too much yet, b/c
-    // haven't found any instances where the inability to match address intersection has kept
-    // something from conflating. If we need it, we should be able to come up with some custom logic
-    // to handle cases like below if there's no way to make libpostal do it. AddressParser may need
-    // some refactoring, though.
-
-//    // sometimes the road type is expressed as plural in this type of intersection naming
-//    node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "16th &amp; Bryant Street");
-//    way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "16th and Bryant Streets");
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+    // Below are some that have been seen but haven't figured out how to deal with them yet. Not
+    // worrying about them at this time, b/c haven't found any instances where the inability to
+    // match address intersection has kept something from conflating.
 
 //    node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "6TH &amp; HOFF ST. PARKING GARAGE");
 //    way1->getTags().set(
@@ -347,7 +344,7 @@ public:
 //    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     // Have also seen this: 'name = Valencia @ 14th Streets'. Not really sure @ should be added to
-    // the intersection tokens, but maybe.
+    // the intersection split tokens, but maybe.
   }
 
   void runWayTest()
@@ -769,7 +766,7 @@ public:
     }
 
     {
-      // street names are spelled slightly differently
+      // street names are spelled very slightly differently
 
       OsmMapPtr map(new OsmMap());
 
