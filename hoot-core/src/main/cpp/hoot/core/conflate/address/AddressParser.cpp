@@ -44,7 +44,9 @@ namespace hoot
 AddressParser::AddressParser() :
 _allowLenientHouseNumberMatching(true),
 _preTranslateTagValuesToEnglish(false),
-_parsedFromAddressTag(true)
+_parsedFromAddressTag(true),
+_isHouseNumRange(false),
+_isSubLetter(false)
 {
 }
 
@@ -128,6 +130,8 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
                                              const bool normalizeAddresses) const
 {
   _parsedFromAddressTag = true;
+  _isHouseNumRange = false;
+  _isSubLetter = false;
 
   // Make this call here, so that we don't cause it to be done unnecessarily as part of this
   // class's init when its a mem var on another class, since this init is expensive.
@@ -179,6 +183,8 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
         LOG_VART(normalizedAddress);
         Address address(normalizedAddress, _allowLenientHouseNumberMatching);
         address.setParsedFromAddressTag(_parsedFromAddressTag);
+        address.setIsRange(_isHouseNumRange);
+        address.setIsSubLetter(_isSubLetter);
         if (!addresses.contains(address))
         {
           LOG_TRACE("Adding address: " << address << " for element: " << element.getElementId());
@@ -189,6 +195,9 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
     else
     {
       Address address(parsedAddress, _allowLenientHouseNumberMatching);
+      address.setParsedFromAddressTag(_parsedFromAddressTag);
+      address.setIsRange(_isHouseNumRange);
+      address.setIsSubLetter(_isSubLetter);
       if (!addresses.contains(address))
       {
         LOG_TRACE("Adding address: " << address << " for element: " << element.getElementId());
@@ -230,7 +239,7 @@ QList<Address> AddressParser::parseAddressesFromRelationMembers(const Relation& 
     ConstElementPtr member = map.getElement(relationMembers[i].getElementId());
     // If the poly contains the poi being compared to as a way node or relation member, then the
     // POI's address will be added to both the poly and poi group of addresses and yield a fake
-    // address match
+    // address match.
     if (skipElementId.isNull() || member->getElementId() != skipElementId)
     {
       if (member->getElementType() == ElementType::Node)
@@ -309,6 +318,11 @@ bool AddressParser::_isParseableAddressFromComponents(const Tags& tags, QString&
 bool AddressParser::_isRangeAddress(const QString& houseNum) const
 {
   return houseNum.contains("-");
+}
+
+bool AddressParser::_isSubLetterAddress(const QString& houseNum) const
+{
+  return StringUtils::hasAlphabeticCharacter(houseNum);
 }
 
 bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QString& street,
@@ -424,9 +438,17 @@ QSet<QString> AddressParser::_parseAddressFromComponents(const Tags& tags, QStri
     {
       // use custom logic for a address containing a range of addresses
       parsedAddresses = _parseAddressAsRange(houseNum, street);
+      _isHouseNumRange = true;
+      LOG_TRACE("Address is range address.");
     }
     else
     {
+      if (_isSubLetterAddress(houseNum))
+      {
+        _isSubLetter = true;
+        LOG_TRACE("Address is subletter address.");
+      }
+
       QString parsedAddress = houseNum + " ";
       const QString streetPrefix =
         _addressNormalizer.getAddressTagKeys()->getAddressTagValue(tags, "street_prefix");
@@ -456,8 +478,8 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
   LOG_TRACE("Parsing address from alt tags...");
   QString parsedAddress;
 
-  //let's always look in the name field; arguably, we could look in all of them instead of just
-  //one...
+  // let's always look in the name field; arguably, we could look in all of them instead of just
+  // one...
   QSet<QString> additionalTagKeys = _addressNormalizer.getAddressTagKeys()->getAdditionalTagKeys();
   LOG_VART(additionalTagKeys);
 
@@ -504,7 +526,7 @@ QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& ho
   LOG_VART(fullAddress);
   if (fullAddress.isEmpty())
   {
-    // if we don't have the full address, let's try to get an address from parts
+    // If we don't have the full address, let's try to get an address from parts.
     parsedAddresses = _parseAddressFromComponents(element.getTags(), houseNum, street);
   }
   else
@@ -519,8 +541,8 @@ QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& ho
 
   if (parsedAddresses.isEmpty())
   {
-    // we didn't find anything in the standard address tags, so let's try feature names and any user
-    // defined tags
+    // We didn't find anything in the standard address tags, so let's try feature names and any user
+    // defined tags.
     const QString parsedAddress = _parseAddressFromAltTags(element.getTags(), houseNum, street);
     if (!parsedAddress.isEmpty())
     {

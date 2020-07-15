@@ -44,7 +44,8 @@ class Address;
 
 /**
  * Calculates the address similarity score of two features involved in certain types of conflation.
- * Only exact string matches yield a positive score (no partial matching...for now).
+ * Only exact string matches yield a 1.0 score that is considered a match. There is limited support
+ * for partial matching.
  *
  * Some effort was spent in validating addresses with libaddressinput
  * (https://github.com/googlei18n/libaddressinput).  It was found that yields no utility since the

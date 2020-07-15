@@ -301,6 +301,31 @@ public:
   static void replaceLastIndexOf(QString& input, const QString& strToReplace,
                                  const QString& replacementStr,
                                  Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @param splitToken
+   * @param index
+   * @return
+   */
+  static void splitAndRemoveAtIndex(QString& input, const QString& splitToken, const int index);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @param splitExp
+   * @param index
+   * @return
+   */
+  static void splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index);
+
+private:
+
+  static QString _splitAndRemoveAtIndex(
+    QStringList& input, const int index, const QString& separator);
 };
 
 }

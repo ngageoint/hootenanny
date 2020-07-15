@@ -110,12 +110,32 @@ public:
   static QList<QRegExp> getIntersectionSplitTokens();
 
   /**
+   * TODO
+   *
+   * @return
+   */
+  QStringList getIntersectionParts() const;
+
+  /**
    * Removes street type (suffix) text from the address
    */
   void removeStreetTypes();
 
+  /**
+   * TODO
+   */
+  void removeHouseNumber();
+
   bool getParsedFromAddressTag() const { return _parsedFromAddressTag; }
   void setParsedFromAddressTag(bool from) { _parsedFromAddressTag = from; }
+
+  QString getAddressStr() const { return _address; }
+
+  bool getIsRange() const { return _isRange; }
+  void setIsRange(bool isRange) { _isRange = isRange; }
+
+  bool getIsSubLetter() const { return _isSubLetter; }
+  void setIsSubLetter(bool isSubLetter) { _isSubLetter = isSubLetter; }
 
 private:
 
@@ -131,6 +151,12 @@ private:
 
   // was the address parsed from an OSM address tag or some other auxiliary tag (name, etc.)?
   bool _parsedFromAddressTag;
+
+  // TODO
+  bool _isRange;
+
+  // TODO
+  bool _isSubLetter;
 
   // see getStreetTypes
   static QSet<QString> _streetTypes;

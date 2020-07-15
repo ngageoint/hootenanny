@@ -357,4 +357,29 @@ void StringUtils::replaceLastIndexOf(QString& input, const QString& strToReplace
   }
 }
 
+void StringUtils::splitAndRemoveAtIndex(QString& input, const QString& splitToken, const int index)
+{
+  QStringList tokens = input.split(splitToken);
+  LOG_VART(tokens);
+  input = StringUtils::_splitAndRemoveAtIndex(tokens, index, splitToken);
+}
+
+void StringUtils::splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index)
+{
+  QStringList tokens = input.split(splitExp);
+  LOG_VART(tokens);
+  input = StringUtils::_splitAndRemoveAtIndex(tokens, index, " ");
+}
+
+QString StringUtils::_splitAndRemoveAtIndex(QStringList& input, const int index,
+                                            const QString& separator)
+{
+  if (input.size() > 0 && index < input.size())
+  {
+    input.removeAt(index);
+  }
+  LOG_VART(input);
+  return input.join(separator);
+}
+
 }

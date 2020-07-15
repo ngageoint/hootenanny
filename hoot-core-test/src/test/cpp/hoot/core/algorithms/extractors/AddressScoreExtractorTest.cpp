@@ -44,11 +44,8 @@ namespace hoot
 {
 
 /*
- * Its possible we might want to eventually break the parsing and normalization tests out
- * separately.
- *
- * This test took a hit in readability when moved from PoiPolygonAddressScoreExtractor to the more
- * generic AddressScoreExtractor, so could use some simplification.
+ * Its possible we might want to eventually create separate AddressParserTest and
+ * AddressNormalizerTest tests.
  */
 class AddressScoreExtractorTest : public HootTestFixture
 {
@@ -66,6 +63,7 @@ class AddressScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(invalidComponentAddressTest);
   CPPUNIT_TEST(additionalTagsTest);
   CPPUNIT_TEST(noStreetNumberTest);
+  CPPUNIT_TEST(partialMatchTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -182,6 +180,15 @@ public:
     way3->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addWay(way3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way3), 0.01);
+
+    NodePtr node4(new Node(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0));
+    node4->getTags().set("address", "150 Sutter Street");
+    map->addNode(node4);
+    WayPtr way4(new Way(Status::Unknown2, -3, 15.0));
+    way4->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "130-150");
+    way4->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Sutter");
+    map->addWay(way4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node4, way4), 0.01);
   }
 
   void runAltFormatTest()
@@ -255,6 +262,7 @@ public:
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     map->addWay(way1);
 
+    // TODO: re-enable
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
@@ -296,20 +304,31 @@ public:
     way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    node1->getTags().clear();
     node1->getTags().set("name", "Jones and Bryant Street");
     way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    node1->getTags().clear();
     node1->getTags().set("name", "Jones and Bryant");
     way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
 
-    node1->getTags().clear();
     node1->getTags().set("name", "Jones Street and Bryant");
     way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
+
+    // TODO: re-enable
+//    node1->getTags().clear();
+//    node1->getTags().set("address", "CASTRO AND DUBOCE STREETS");
+//    way1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "45");
+//    way1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Castro Street");
+//    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node1, way1), 0.0);
+
+    node1->getTags().clear();
+    node1->getTags().set("address", "19th Ave & Wawona St");
+    way1->getTags().clear();
+    way1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "2695");
+    way1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "19th Avenue");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node1, way1), 0.0);
 
     // Haven't wrapped my head around how to deal with these yet but not worrying too much yet, b/c
     // haven't found any instances where the inability to match address intersection has kept
@@ -681,12 +700,12 @@ public:
       WayPtr way(new Way(Status::Unknown1, -1, 15.0));
       // See note in AddressTagKeys::_getAddressTag. Not completely sure that this is a valid
       // address but going with it for now.
-      way->getTags().set(AddressTagKeys::HOUSE_NAME, "462");
+      way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addWay(way);
 
       NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-      node->getTags().set(AddressTagKeys::HOUSE_NAME, "462");
+      node->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462");
       node->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addNode(node);
 
@@ -699,7 +718,7 @@ public:
       WayPtr way(new Way(Status::Unknown1, -1, 15.0));
       // See note in AddressTagKeys::_getAddressTag. Don't allow anything other than a number for
       // addr:housename posing as a street num.
-      way->getTags().set(AddressTagKeys::HOUSE_NAME, "462 blah");
+      way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462 blah");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addWay(way);
 
@@ -714,7 +733,7 @@ public:
       OsmMapPtr map(new OsmMap());
 
       WayPtr way(new Way(Status::Unknown1, -1, 15.0));
-      way->getTags().set(AddressTagKeys::HOUSE_NAME, "462");
+      way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addWay(way);
 
@@ -723,6 +742,47 @@ public:
       map->addNode(node);
 
       CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node, way), 0.0);
+    }
+  }
+
+  void partialMatchTest()
+  {
+    AddressScoreExtractor uut;
+    uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
+
+    {
+      // matching street names and house numbers; suffix doesn't match
+
+      OsmMapPtr map(new OsmMap());
+
+      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      node->getTags().set("address", "670 Brunswick");
+      map->addNode(node);
+
+      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      way->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "670");
+      way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Brunswick Street");
+      map->addWay(way);
+
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node, way), 0.0);
+    }
+
+    {
+      // street names are spelled slightly differently
+
+      OsmMapPtr map(new OsmMap());
+
+      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      node->getTags().set("name", "100 Whitney Young Circle");
+      map->addNode(node);
+
+      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      way->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "100");
+      way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "Whitney Yound Circle");
+      map->addWay(way);
+
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node, way), 0.0);
     }
   }
 };

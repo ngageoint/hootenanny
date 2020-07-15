@@ -42,7 +42,7 @@ const QString AddressTagKeys::STREET_TAG_NAME = "addr:street";
 const QString AddressTagKeys::CITY_TAG_NAME = "addr:city";
 const QString AddressTagKeys::FULL_ADDRESS_TAG_NAME = "address";
 const QString AddressTagKeys::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
-const QString AddressTagKeys::HOUSE_NAME = "addr:housename";
+const QString AddressTagKeys::HOUSE_NAME_TAG_NAME = "addr:housename";
 
 AddressTagKeys::AddressTagKeys()
 {
@@ -139,7 +139,7 @@ QString AddressTagKeys::_getAddressTag(
       // addr:housenum, but have seen instances of it. The config is set up to allow addr:housename
       // as a house number, so we'll do a check here to make sure the value is actually numeric
       // before using it in this way. If its not actually a number, then skip it.
-      if (tagKey.toLower() == HOUSE_NAME)
+      if (tagKey.toLower() == HOUSE_NAME_TAG_NAME)
       {
         bool ok = false;
         tags.get(tagKey).toInt(&ok);

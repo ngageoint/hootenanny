@@ -252,7 +252,8 @@ bool AddressNormalizer::_isValidNormalizedAddress(const QString& inputAddress,
     return false;
   }
   // This is a bit of hack, but I don't like the way libpostal is turning "St" or "Street" into
-  // "Saint".  Should probably look into configuration of libpostal for a possible fix instead.
+  // "Saint". Should probably look into configuration of libpostal or update it for a possible fix
+  // instead.
   else if (normalizedAddress.endsWith("saint", Qt::CaseInsensitive) &&
            (inputAddress.endsWith("street", Qt::CaseInsensitive) ||
             inputAddress.endsWith("st", Qt::CaseInsensitive)))

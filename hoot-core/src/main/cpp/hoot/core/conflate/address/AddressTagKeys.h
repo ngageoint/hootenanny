@@ -53,7 +53,7 @@ public:
   static const QString CITY_TAG_NAME;
   static const QString FULL_ADDRESS_TAG_NAME;
   static const QString FULL_ADDRESS_TAG_NAME_2;
-  static const QString HOUSE_NAME;
+  static const QString HOUSE_NAME_TAG_NAME;
 
   AddressTagKeys();
 

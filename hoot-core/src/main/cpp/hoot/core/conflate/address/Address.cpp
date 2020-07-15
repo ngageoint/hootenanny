@@ -46,7 +46,9 @@ StringDistancePtr Address::_stringComp;
 Address::Address() :
 _address(""),
 _allowLenientHouseNumberMatching(true),
-_parsedFromAddressTag(true)
+_parsedFromAddressTag(true),
+_isRange(false),
+_isSubLetter(false)
 {
   if (!_stringComp)
   {
@@ -57,7 +59,9 @@ _parsedFromAddressTag(true)
 Address::Address(const QString& address, const bool allowLenientHouseNumberMatching) :
 _address(address),
 _allowLenientHouseNumberMatching(allowLenientHouseNumberMatching),
-_parsedFromAddressTag(true)
+_parsedFromAddressTag(true),
+_isRange(false),
+_isSubLetter(false)
 {
   if (!_stringComp)
   {
@@ -186,6 +190,11 @@ QMap<QString, QString> Address::getStreetTypeAbbreviationsToFullTypes()
   return _streetTypeAbbreviationsToFullTypes;
 }
 
+QStringList Address::getIntersectionParts() const
+{
+  return _address.split("and");
+}
+
 bool Address::isStreetIntersectionAddress(const QString& addressStr,
                                           const bool requireStreetTypeInIntersection)
 {
@@ -242,7 +251,18 @@ void Address::removeStreetTypes()
     _address = firstIntersectionPart.trimmed() + " and " + secondIntersectionPart.trimmed();
   }
 
-  LOG_TRACE(_address);
+  LOG_VART(_address);
+}
+
+void Address::removeHouseNumber()
+{
+  LOG_VART(_address);
+  if (!isStreetIntersectionAddress(_address, false))
+  {
+    // house num should be the first token on a non-intersection address, so remove it
+    StringUtils::splitAndRemoveAtIndex(_address, QRegExp("\\s+"), 0);
+  }
+  LOG_VART(_address);
 }
 
 }
