@@ -209,7 +209,9 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   const QStringList streetFullTypesTemp =
     Address::getStreetFullTypesToTypeAbbreviations().keys();
   streetFullTypes = streetFullTypesTemp;
-  // TODO
+
+  // Sometimes intersections have plural street types (suffixes). We want to be able to handle those
+  // as well, but we don't want them plural in the final normalized address.
   for (int i = 0; i < streetFullTypesTemp.size(); i++)
   {
     const QString pluralType = streetFullTypesTemp.at(i) + "s";
@@ -221,6 +223,7 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   }
   LOG_VART(streetPluralTypes);
 
+  // remove any plural suffixes found; TODO: may not need all of this here
   if (StringUtils::endsWithAny(firstIntersectionPart.trimmed(), streetPluralTypes))
   {
     firstIntersectionPart.chop(1);
@@ -231,7 +234,6 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
     secondIntersectionPart.chop(1);
     LOG_VART(secondIntersectionPart);
   }
-
   QStringList modifiedAddressPartsTemp;
   for (int i = 0; i < modifiedAddressParts.size(); i++)
   {
@@ -244,10 +246,8 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
     modifiedAddressPartsTemp.append(modifiedAddressPart);
   }
   modifiedAddressParts = modifiedAddressPartsTemp;
-
   QString firstIntersectionEndingStreetType =
     StringUtils::endsWithAnyAsStr(firstIntersectionPart.trimmed(), streetFullTypes).trimmed();
-  // TODO
   if (firstIntersectionEndingStreetType.endsWith('s'))
   {
     firstIntersectionEndingStreetType.chop(1);
@@ -260,6 +260,7 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
     secondIntersectionEndingStreetType.chop(1);
   }
   LOG_VART(secondIntersectionEndingStreetType);
+
   if (!firstIntersectionEndingStreetType.isEmpty() &&
       secondIntersectionEndingStreetType.isEmpty())
   {

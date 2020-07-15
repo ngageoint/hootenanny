@@ -114,6 +114,28 @@ private:
    */
   QList<Address> _getElementAddresses(const OsmMap& map, const ConstElementPtr& element,
                                       const ConstElementPtr& elementBeingComparedWith) const;
+
+  /*
+   * Checks to see if two address warrant a partial match score. This is still fairly experimental.
+   */
+  double _getPartialMatchScore(const Address& address1, const Address& address2) const;
+
+  /*
+   * Drop the street types (suffixes) and see if we have a address string match
+   */
+  bool _addressesMatchWithSuffixesRemoved(const Address& address1, const Address& address2) const;
+
+  /*
+   * Drop the house numbers and see if we have a address string match
+   */
+  bool _intersectionAndStreetAddressesMatchWithHouseNumbersRemoved(
+    const Address& address1, const Address& address2) const;
+
+  /*
+   * Go a little easier on the street name comparison; good for resolving typos in the name
+   */
+  bool _addressesMatchWithNameComparisonRelaxed(
+    const Address& address1, const Address& address2) const;
 };
 
 }
