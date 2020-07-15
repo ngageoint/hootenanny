@@ -323,13 +323,15 @@ public:
     way1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Castro Street");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node1, way1), 0.0);
 
-    // node1->getTags().clear();
-    //    node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "16th &amp; Bryant Street");
-    // way1->getTags().clear();
-    //    way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "16th and Bryant Streets");
-    //    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+    node1->getTags().clear();
+    node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "16th &amp; Bryant Street");
+    way1->getTags().clear();
+    way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "16th and Bryant Streets");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
+    node1->getTags().clear();
     node1->getTags().set("address", "19th Ave & Wawona St");
+    way1->getTags().clear();
     way1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "2695");
     way1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "19th Avenue");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node1, way1), 0.0);

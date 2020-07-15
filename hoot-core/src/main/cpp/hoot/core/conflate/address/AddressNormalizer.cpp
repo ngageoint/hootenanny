@@ -195,15 +195,19 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   // However, it does help with address matching and will remain in place unless its found to be
   // causing harm in some way.
 
+  // TODO: this needs cleanup
+
   QStringList modifiedAddressParts =
     StringUtils::splitOnAny(modifiedAddress, Address::getIntersectionSplitTokens(), 2);
   assert(modifiedAddressParts.size() == 2);
-  const QString firstIntersectionPart = modifiedAddressParts[0].trimmed();
+  LOG_VART(modifiedAddressParts);
+  QString firstIntersectionPart = modifiedAddressParts[0].trimmed();
   LOG_VART(firstIntersectionPart);
-  const QString secondIntersectionPart = modifiedAddressParts[1].trimmed();
+  QString secondIntersectionPart = modifiedAddressParts[1].trimmed();
   LOG_VART(secondIntersectionPart);
 
   QStringList streetFullTypes;
+  QStringList streetPluralTypes;
   const QStringList streetFullTypesTemp =
     Address::getStreetFullTypesToTypeAbbreviations().keys();
   streetFullTypes = streetFullTypesTemp;
@@ -215,7 +219,33 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
     {
       streetFullTypes.append(pluralType);
     }
+    streetPluralTypes.append(pluralType);
   }
+  LOG_VART(streetPluralTypes);
+
+  if (StringUtils::endsWithAny(firstIntersectionPart.trimmed(), streetPluralTypes))
+  {
+    firstIntersectionPart.chop(1);
+    LOG_VART(firstIntersectionPart);
+  }
+  if (StringUtils::endsWithAny(secondIntersectionPart.trimmed(), streetPluralTypes))
+  {
+    secondIntersectionPart.chop(1);
+    LOG_VART(secondIntersectionPart);
+  }
+
+  QStringList modifiedAddressPartsTemp;
+  for (int i = 0; i < modifiedAddressParts.size(); i++)
+  {
+    QString modifiedAddressPart = modifiedAddressParts.at(i);
+    if (StringUtils::endsWithAny(modifiedAddressPart.trimmed(), streetPluralTypes))
+    {
+      modifiedAddressPart.chop(1);
+      LOG_VART(modifiedAddressPart);
+    }
+    modifiedAddressPartsTemp.append(modifiedAddressPart);
+  }
+  modifiedAddressParts = modifiedAddressPartsTemp;
 
   QString firstIntersectionEndingStreetType =
     StringUtils::endsWithAnyAsStr(firstIntersectionPart.trimmed(), streetFullTypes).trimmed();
@@ -235,14 +265,18 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   if (!firstIntersectionEndingStreetType.isEmpty() &&
       secondIntersectionEndingStreetType.isEmpty())
   {
+    LOG_VART(modifiedAddressParts[1]);
     modifiedAddressParts[1] =
       modifiedAddressParts[1].trimmed() + " " + firstIntersectionEndingStreetType.trimmed();
+    LOG_VART(modifiedAddressParts[1]);
   }
   else if (firstIntersectionEndingStreetType.isEmpty() &&
            !secondIntersectionEndingStreetType.isEmpty())
   {
+    LOG_VART(modifiedAddressParts[0]);
     modifiedAddressParts[0] =
       modifiedAddressParts[0].trimmed() + " " + secondIntersectionEndingStreetType.trimmed();
+    LOG_VART(modifiedAddressParts[0]);
   }
   modifiedAddress = modifiedAddressParts[0].trimmed() + " and " + modifiedAddressParts[1].trimmed();
   LOG_VART(modifiedAddress);
