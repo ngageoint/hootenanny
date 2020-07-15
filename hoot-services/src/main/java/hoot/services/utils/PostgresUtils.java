@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -43,7 +43,7 @@ public final class PostgresUtils {
 
     /**
      * Converts an hstore Postgres object to Map<String, String>
-     * 
+     *
      * @param postgresObj
      *            a Postgres object containing an hstore
 
@@ -95,14 +95,40 @@ public final class PostgresUtils {
                     jsonStr = oVal.toString();
                 }
 
-                jsonStr = jsonStr.replace("\\", "\\\\");
-                jsonStr = jsonStr.replace("'", "''");
-                jsonStr = jsonStr.replace("\"", "\\\"");
-
-                hStoreObject.put(pairs.getKey().toString(), jsonStr);
+                hStoreObject.put(pairs.getKey().toString(), escapeJson(jsonStr));
             }
         }
 
         return hStoreObject;
+    }
+
+    /**
+     * Escapes double quote, single quote, and backslash in JSON object
+     * when converting to Postgesql hStore objects
+     *
+     * @param jsonStr
+     *            - json string to be escaped
+     * @return - Escaped string
+     */
+    public static String escapeJson(String jsonStr) {
+        jsonStr = jsonStr.replace("\"", "\\\""); //double quote
+        jsonStr = jsonStr.replace("\\", "\\\\"); //backslash
+        jsonStr = jsonStr.replace("'", "''"); //single quote
+        return jsonStr;
+    }
+
+    /**
+     * Unescapes double quote, single quote, and backslash in JSON object
+     * when converting from Postgesql hStore objects
+     *
+     * @param jsonStr
+     *            - json string to be unescaped
+     * @return - Unescaped string
+     */
+    public static String unescapeJson(String jsonStr) {
+        jsonStr = jsonStr.replace("\\\\", "\\"); //backslash
+        jsonStr = jsonStr.replace("\\\"", "\""); //double quote
+        jsonStr = jsonStr.replace("''", "'"); //single quote
+        return jsonStr;
     }
 }

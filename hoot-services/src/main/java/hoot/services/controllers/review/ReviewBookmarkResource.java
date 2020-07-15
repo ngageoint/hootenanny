@@ -51,18 +51,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
 import hoot.services.controllers.osm.user.UserResource;
@@ -81,7 +79,6 @@ import hoot.services.utils.PostgresUtils;
 @Path("/review/bookmarks")
 @Transactional
 public class ReviewBookmarkResource {
-    private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarkResource.class);
 
     public ReviewBookmarkResource() {}
 
@@ -183,10 +180,8 @@ public class ReviewBookmarkResource {
                 // TODO: find out exactly why we need to do this
                 String bmkNotes = hstoreMap.get("bookmarknotes");
                 if ((bmkNotes != null) && (!bmkNotes.isEmpty())) {
-                    bmkNotes = bmkNotes.replace("\\\"", "\"");
-                    bmkNotes = bmkNotes.replace("\\\\", "\\");
                     JSONParser parser = new JSONParser();
-                    JSONArray jsonArray = (JSONArray) parser.parse(bmkNotes);
+                    JSONArray jsonArray = (JSONArray) parser.parse(PostgresUtils.unescapeJson(bmkNotes));
                     json.put("bookmarknotes", jsonArray);
                 }
 
@@ -225,10 +220,8 @@ public class ReviewBookmarkResource {
             throws ParseException {
         String bmkElem = rawElem;
         if ((bmkElem != null) && (!bmkElem.isEmpty())) {
-            bmkElem = bmkElem.replace("\\\"", "\"");
-            bmkElem = bmkElem.replace("\\\\", "\\");
             JSONParser parser = new JSONParser();
-            JSONObject oParsed = (JSONObject) parser.parse(bmkElem);
+            JSONObject oParsed = (JSONObject) parser.parse(PostgresUtils.unescapeJson(bmkElem));
             oBmkDetail.put(elemName, oParsed);
         }
     }
