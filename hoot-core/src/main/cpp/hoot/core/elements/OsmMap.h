@@ -241,6 +241,7 @@ public:
 
   virtual const ConstRelationPtr getRelation(long id) const;
   virtual const RelationPtr getRelation(long id);
+  const ConstRelationPtr getRelation(ElementId eid) const;
   const RelationMap& getRelations() const { return _relations; }
   QSet<long> getRelationIds() const;
   QSet<ElementId> getRelationElementIds() const;
@@ -454,6 +455,11 @@ inline const ConstRelationPtr OsmMap::getRelation(long id) const
   {
     return _nullRelation;
   }
+}
+
+inline const ConstRelationPtr OsmMap::getRelation(ElementId eid) const
+{
+  return getRelation(eid.getId());
 }
 
 inline const RelationPtr OsmMap::getRelation(long id)
