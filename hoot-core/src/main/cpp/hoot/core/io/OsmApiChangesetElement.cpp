@@ -129,7 +129,6 @@ QString ChangesetElement::toString(const ElementAttributes& attributes, long cha
     else if (name == "version") //  Versions are updated by the API
     {
       //  Don't allow negative or zero versions for modify and delete, force them to 1
-      //  zero
       if (_version < 1)
         ts << ((type == ChangesetType::TypeCreate) ? 0 : 1);
       else
