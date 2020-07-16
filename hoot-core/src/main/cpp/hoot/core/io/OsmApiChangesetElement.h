@@ -55,6 +55,15 @@ typedef std::vector<std::pair<QString, QString>> ElementAttributes;
 typedef std::pair<QString, QString> ElementTag;
 typedef std::vector<ElementTag> ElementTags;
 
+/** Elements in a changeset can be in three sections, create, modify, and delete.  Max is used for iterating */
+enum ChangesetType : int
+{
+  TypeCreate = 0,
+  TypeModify,
+  TypeDelete,
+  TypeMax
+};
+
 /** Changeset element abstraction for simplified nodes, ways, and relations */
 class ChangesetElement
 {
@@ -107,9 +116,10 @@ public:
   /**
    * @brief toString Get the XML string equivalent for the element
    * @param changesetId ID of the changeset to insert into the element
+   * @param type Changeset section type (create, modify, delete)
    * @return XML string
    */
-  virtual QString toString(long changesetId) const = 0;
+  virtual QString toString(long changesetId, ChangesetType type) const = 0;
   /**
    *  Getter/setter for the element version
    */
@@ -135,9 +145,10 @@ protected:
    * @brief toString Get the XML string of the attributes only
    * @param attributes XML attributes
    * @param changesetId ID of the changeset to insert into the attributes
+   * @param type Changeset section type (create, modify, delete)
    * @return XML string
    */
-  QString toString(const ElementAttributes& attributes, long changesetId) const;
+  QString toString(const ElementAttributes& attributes, long changesetId, ChangesetType type) const;
   /**
    * @brief toTagString Get the XML string of a single tag with key/value pair
    * @param tag Key/value pair from tag
@@ -214,9 +225,10 @@ public:
   /**
    * @brief toString Get the XML string equivalent for the node
    * @param changesetId ID of the changeset to insert into the node
+   * @param type Changeset section type (create, modify, delete)
    * @return XML string
    */
-  virtual QString toString(long changesetId) const;
+  virtual QString toString(long changesetId, ChangesetType type) const;
   /**
    * @brief diff Compare two nodes and build a 'diff' style string
    * @param node Node to compare this node against
@@ -270,9 +282,10 @@ public:
   /**
    * @brief toString Get the XML string equivalent for the way
    * @param changesetId ID of the changeset to insert into the way
+   * @param type Changeset section type (create, modify, delete)
    * @return XML string
    */
-  virtual QString toString(long changesetId) const;
+  virtual QString toString(long changesetId, ChangesetType type) const;
   /**
    * @brief diff Compare two ways and build a 'diff' style string
    * @param way Way to compare this way against
@@ -388,9 +401,10 @@ public:
   /**
    * @brief toString Get the XML string equivalent for the relation
    * @param changesetId ID of the changeset to insert into the relation
+   * @param type Changeset section type (create, modify, delete)
    * @return XML string
    */
-  virtual QString toString(long changesetId) const;
+  virtual QString toString(long changesetId, ChangesetType type) const;
   /**
    * @brief diff Compare two relations and build a 'diff' style string
    * @param relation Relation to compare this relation against

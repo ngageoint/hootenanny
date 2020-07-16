@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osmChange version="0.6" generator="hootenanny">
 	<modify>
-		<node id="-10" version="0" lat="38.8542471187715179" lon="-104.9010788637033329" timestamp="" changeset="0"/>
-		<way id="-10" version="0" timestamp="" changeset="0">
+		<node id="-10" version="1" lat="38.8542471187715179" lon="-104.9010788637033329" timestamp="" changeset="0"/>
+		<way id="-10" version="1" timestamp="" changeset="0">
 			<nd ref="10"/>
 			<nd ref="20"/>
 			<tag k="key1" v="value1"/>
 			<tag k="error:circular" v="15"/>
 		</way>
-		<way id="-15" version="0" timestamp="" changeset="0">
+		<way id="-15" version="1" timestamp="" changeset="0">
 			<nd ref="12"/>
 			<nd ref="13"/>
 			<tag k="key1" v="value1"/>
@@ -16,24 +16,24 @@
 		</way>
 	</modify>
 	<delete>
-		<relation id="-10" version="0" timestamp="" changeset="0">
+		<relation id="-10" version="1" timestamp="" changeset="0">
 			<member type="node" ref="17" role="role1"/>
 			<member type="way" ref="13" role="role2"/>
 			<tag k="key2" v="value2"/>
 			<tag k="error:circular" v="15"/>
 		</relation>
-		<way id="-12" version="0" timestamp="" changeset="0">
+		<way id="-12" version="1" timestamp="" changeset="0">
 			<nd ref="14"/>
 			<nd ref="15"/>
 			<tag k="key1" v="value1"/>
 			<tag k="error:circular" v="15"/>
 		</way>
-		<way id="-14" version="0" timestamp="" changeset="0">
+		<way id="-14" version="1" timestamp="" changeset="0">
 			<nd ref="19"/>
 			<nd ref="20"/>
 			<tag k="key1" v="value1"/>
 			<tag k="error:circular" v="15"/>
 		</way>
-		<node id="-16" version="0" lat="38.8542471187715179" lon="-104.9010788637033329" timestamp="" changeset="0"/>
+		<node id="-16" version="1" lat="38.8542471187715179" lon="-104.9010788637033329" timestamp="" changeset="0"/>
 	</delete>
 </osmChange>

@@ -888,10 +888,11 @@ bool OsmApiWriter::_fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr 
     //  Increment the retry version count
     changeset->retryVersion();
     //  Iterate the changeset types looking for the element, no need to check XmlChangeset::TypeCreate
-    for (int changesetType = XmlChangeset::TypeModify; changesetType < XmlChangeset::TypeMax; ++changesetType)
+    for (int changesetType = ChangesetType::TypeModify; changesetType < ChangesetType::TypeMax; ++changesetType)
     {
-      ChangesetInfo::iterator element = changeset->begin((ElementType::Type)element_type, (XmlChangeset::ChangesetType)changesetType);
-      if (element != changeset->end((ElementType::Type)element_type, (XmlChangeset::ChangesetType)changesetType))
+      ChangesetType type = static_cast<ChangesetType>(changesetType);
+      ChangesetInfo::iterator element = changeset->begin(element_type, type);
+      if (element != changeset->end(element_type, type))
       {
         QString update = "";
         //  Get the element from the OSM API
@@ -922,11 +923,13 @@ bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPt
     return false;
   for (int elementType = ElementType::Node; elementType < ElementType::Unknown; ++elementType)
   {
+    ElementType::Type e_type = static_cast<ElementType::Type>(elementType);
     //  Creates cannot be fixed with this method, skip them here
-    for (int changesetType = XmlChangeset::TypeModify; changesetType < XmlChangeset::TypeMax; ++changesetType)
+    for (int changesetType = ChangesetType::TypeModify; changesetType < ChangesetType::TypeMax; ++changesetType)
     {
-      ChangesetInfo::iterator element = changeset->begin((ElementType::Type)elementType, (XmlChangeset::ChangesetType)changesetType);
-      if (element != changeset->end((ElementType::Type)elementType, (XmlChangeset::ChangesetType)changesetType))
+      ChangesetType c_type = static_cast<ChangesetType>(changesetType);
+      ChangesetInfo::iterator element = changeset->begin(e_type, c_type);
+      if (element != changeset->end(e_type, c_type))
       {
         long id = *element;
         QString update = "";

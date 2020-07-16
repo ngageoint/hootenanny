@@ -59,7 +59,7 @@ public:
 
     HOOT_STR_EQUALS("\t\t<node id=\"-1\" version=\"0\" "
                     "lat=\"38.8549321261880536\" lon=\"-104.8979050333482093\" changeset=\"1\"/>\n",
-                    node.toString(1));
+                    node.toString(1, ChangesetType::TypeCreate));
 
     QXmlStreamAttributes tagAttributes;
     tagAttributes.append("k", "name");
@@ -73,7 +73,7 @@ public:
                     "lat=\"38.8549321261880536\" lon=\"-104.8979050333482093\" changeset=\"1\">\n"
                     "\t\t\t<tag k=\"name\" v=\"node name\"/>\n"
                     "\t\t</node>\n",
-                    node.toString(1));
+                    node.toString(1, ChangesetType::TypeCreate));
   }
 
   void runNonAsciiChangesetNodeTest()
@@ -116,7 +116,7 @@ public:
                     "\t\t\t<tag k=\"name:zh\" v=\"埃及大使馆\"/>\n"
                     "\t\t\t<tag k=\"name:fr\" v=\"Ambassade de l'Égypte\"/>\n"
                     "\t\t</node>\n",
-                    node.toString(1));
+                    node.toString(1, ChangesetType::TypeCreate));
   }
 
   void runChangesetWayTest()
@@ -131,7 +131,7 @@ public:
     ChangesetWay way(w, NULL);
 
     HOOT_STR_EQUALS("\t\t<way id=\"-1\" version=\"0\" timestamp=\"\" changeset=\"1\">\n\t\t</way>\n",
-                    way.toString(1));
+                    way.toString(1, ChangesetType::TypeCreate));
 
     way.addNode(-1);
     way.addNode(-2);
@@ -140,7 +140,7 @@ public:
                     "\t\t\t<nd ref=\"-1\"/>\n"
                     "\t\t\t<nd ref=\"-2\"/>\n"
                     "\t\t</way>\n",
-                    way.toString(1));
+                    way.toString(1, ChangesetType::TypeCreate));
 
     QXmlStreamAttributes tagAttributes;
     tagAttributes.append("k", "name");
@@ -155,7 +155,7 @@ public:
                     "\t\t\t<nd ref=\"-2\"/>\n"
                     "\t\t\t<tag k=\"name\" v=\"way name\"/>\n"
                     "\t\t</way>\n",
-                    way.toString(1));
+                    way.toString(1, ChangesetType::TypeCreate));
   }
 
   void runChangesetRelationTest()
@@ -170,7 +170,7 @@ public:
     ChangesetRelation relation(w, NULL);
 
     HOOT_STR_EQUALS("\t\t<relation id=\"-1\" version=\"0\" timestamp=\"\" changeset=\"1\">\n\t\t</relation>\n",
-                    relation.toString(1));
+                    relation.toString(1, ChangesetType::TypeCreate));
 
     QXmlStreamAttributes member1;
     member1.append("type", "way");
@@ -195,7 +195,7 @@ public:
                     "\t\t\t<member type=\"way\" ref=\"-2\" role=\"inner\"/>\n"
                     "\t\t\t<tag k=\"type\" v=\"multipolygon\"/>\n"
                     "\t\t</relation>\n",
-                    relation.toString(1));
+                    relation.toString(1, ChangesetType::TypeCreate));
   }
 
   void runTagTruncateTest()
@@ -228,7 +228,7 @@ public:
                     "\t\t\t<tag k=\"too:long\" v=\"&quot;" +
                     QString(ConfigOptions().getMaxTagLength() - 9, 'X') + "\"/>\n" /** No ending '&quot;' because it was truncated */
                     "\t\t</node>\n",
-                    node.toString(1));
+                    node.toString(1, ChangesetType::TypeCreate));
   }
 
 };

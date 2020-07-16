@@ -1724,7 +1724,7 @@ bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version, QMap
       //  Found the element, now update it
       ChangesetElementPtr element = map[type][id];
       //  Only update the version if it is out of sync
-      if (element->getVersion() != version)
+      if (element->getVersion() != version && version >= 1)
       {
         element->setVersion(version);
         //  Change was made
@@ -1930,7 +1930,7 @@ void XmlChangeset::writeElements(const ChangesetInfoPtr& changeset, QTextStream&
   std::sort(outputElements.begin(), outputElements.end(), id_sort_order);
   //  Iterate the elements again, writing them to the output stream
   for (vector<long>::iterator it = outputElements.begin(); it != outputElements.end(); ++it)
-    ts << elements.at(_idMap.getId(elementType, *it))->toString(changeset_id);
+    ts << elements.at(_idMap.getId(elementType, *it))->toString(changeset_id, type);
 }
 
 void XmlChangeset::writeNodes(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id)
@@ -2043,13 +2043,14 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
   //  Now check each type, create, modify, delete
   for (int changeset_type = ChangesetType::TypeCreate; changeset_type != ChangesetType::TypeMax; ++changeset_type)
   {
+    ChangesetType type = static_cast<ChangesetType>(changeset_type);
     //  Iterate all of the nodes of "type" in the changeset
     QSet<long> missingNodes;
-    for (ChangesetElementMap::iterator it = _nodes[changeset_type].begin(); it != _nodes[changeset_type].end(); ++it)
+    for (ChangesetElementMap::iterator it = _nodes[type].begin(); it != _nodes[type].end(); ++it)
     {
       ChangesetNode* node = dynamic_cast<ChangesetNode*>(it->second.get());
-      ChangesetElementMap::const_iterator found = changeset._nodes[changeset_type].find(node->id());
-      if (found != changeset._nodes[changeset_type].end())
+      ChangesetElementMap::const_iterator found = changeset._nodes[type].find(node->id());
+      if (found != changeset._nodes[type].end())
       {
         //  Compare the two nodes
         ChangesetNode* node2 = dynamic_cast<ChangesetNode*>(found->second.get());
@@ -2071,20 +2072,19 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
       QTextStream ts(&buffer);
       ts.setCodec("UTF-8");
       for (QSet<long>::iterator it = missingNodes.begin(); it != missingNodes.end(); ++it)
-        ts << _nodes[changeset_type][*it]->toString(0);
+        ts << _nodes[type][*it]->toString(0, type);
       buffer.chop(1);
       buffer.replace("\n", "\n>");
-      LOG_WARN("Missing nodes: " << getString(static_cast<ChangesetType>(changeset_type)) <<
-               " - " << missingNodes << "\n>" << buffer);
+      LOG_WARN("Missing nodes: " << getString(type) << " - " << missingNodes << "\n>" << buffer);
       isEqual = false;
     }
     //  Iterate all of the ways of "type" in the changeset
     QSet<long> missingWays;
-    for (ChangesetElementMap::iterator it = _ways[changeset_type].begin(); it != _ways[changeset_type].end(); ++it)
+    for (ChangesetElementMap::iterator it = _ways[type].begin(); it != _ways[type].end(); ++it)
     {
       ChangesetWay* way = dynamic_cast<ChangesetWay*>(it->second.get());
-      ChangesetElementMap::const_iterator found = changeset._ways[changeset_type].find(way->id());
-      if (found != changeset._ways[changeset_type].end())
+      ChangesetElementMap::const_iterator found = changeset._ways[type].find(way->id());
+      if (found != changeset._ways[type].end())
       {
         //  Compare the two ways
         ChangesetWay* way2 = dynamic_cast<ChangesetWay*>(found->second.get());
@@ -2106,11 +2106,10 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
       QTextStream ts(&buffer);
       ts.setCodec("UTF-8");
       for (QSet<long>::iterator it = missingWays.begin(); it != missingWays.end(); ++it)
-        ts << _ways[changeset_type][*it]->toString(0);
+        ts << _ways[type][*it]->toString(0, type);
       buffer.chop(1);
       buffer.replace("\n", "\n>");
-      LOG_WARN("Missing ways: " << getString(static_cast<ChangesetType>(changeset_type)) <<
-               " - " << missingWays << "\n>" << buffer);
+      LOG_WARN("Missing ways: " << getString(type) << " - " << missingWays << "\n>" << buffer);
       isEqual = false;
     }
     //  Iterate all of the relations of "type" in the changeset
@@ -2141,11 +2140,10 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
       QTextStream ts(&buffer);
       ts.setCodec("UTF-8");
       for (QSet<long>::iterator it = missingRelations.begin(); it != missingRelations.end(); ++it)
-        ts << _relations[changeset_type][*it]->toString(0);
+        ts << _relations[type][*it]->toString(0, type);
       buffer.chop(1);
       buffer.replace("\n", "\n>");
-      LOG_WARN("Missing relations: " << getString(static_cast<ChangesetType>(changeset_type)) <<
-               " - " << missingRelations << "\n>" << buffer);
+      LOG_WARN("Missing relations: " << getString(type) << " - " << missingRelations << "\n>" << buffer);
       isEqual = false;
     }
   }
@@ -2199,14 +2197,14 @@ ChangesetInfo::ChangesetInfo()
 {
 }
 
-void ChangesetInfo::add(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
+void ChangesetInfo::add(ElementType::Type element_type, ChangesetType changeset_type, long id)
 {
   _changeset[element_type][changeset_type].insert(id);
   //  Changes in the changeset cause the retries to start over
   _numFailureRetries = 0;
 }
 
-void ChangesetInfo::remove(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
+void ChangesetInfo::remove(ElementType::Type element_type, ChangesetType changeset_type, long id)
 {
   container& selectedSet = _changeset[element_type][changeset_type];
   if (selectedSet.find(id) != selectedSet.end())
@@ -2215,39 +2213,39 @@ void ChangesetInfo::remove(ElementType::Type element_type, XmlChangeset::Changes
   _numFailureRetries = 0;
 }
 
-long ChangesetInfo::getFirst(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
+long ChangesetInfo::getFirst(ElementType::Type element_type, ChangesetType changeset_type)
 {
   return *(_changeset[element_type][changeset_type].begin());
 }
 
 void ChangesetInfo::clear()
 {
-  for (int i = 0; i < (int)ElementType::Unknown; ++i)
+  for (int i = 0; i < ElementType::Unknown; ++i)
   {
-    for (int j = 0; j < (int)XmlChangeset::TypeMax; ++j)
+    for (int j = 0; j < ChangesetType::TypeMax; ++j)
       _changeset[i][j].clear();
   }
   _numFailureRetries = 0;
 }
 
-bool ChangesetInfo::contains(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
+bool ChangesetInfo::contains(ElementType::Type element_type, ChangesetType changeset_type, long id)
 {
   return _changeset[element_type][changeset_type].find(id) != end(element_type, changeset_type);
 }
 
-ChangesetInfo::iterator ChangesetInfo::begin(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
+ChangesetInfo::iterator ChangesetInfo::begin(ElementType::Type element_type, ChangesetType changeset_type)
 {
   return _changeset[element_type][changeset_type].begin();
 }
 
-ChangesetInfo::iterator ChangesetInfo::end(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
+ChangesetInfo::iterator ChangesetInfo::end(ElementType::Type element_type, ChangesetType changeset_type)
 {
   return _changeset[element_type][changeset_type].end();
 }
 
-size_t ChangesetInfo::size(ElementType::Type elementType, XmlChangeset::ChangesetType changesetType)
+size_t ChangesetInfo::size(ElementType::Type elementType, ChangesetType changesetType)
 {
-  return _changeset[(int)elementType][(int)changesetType].size();
+  return _changeset[elementType][changesetType].size();
 }
 
 size_t ChangesetInfo::size()
@@ -2257,7 +2255,7 @@ size_t ChangesetInfo::size()
   for (int i = 0; i < (int)ElementType::Unknown; ++i)
   {
     //  Sum up all counts for each changeset type
-    for (int j = 0; j < (int)XmlChangeset::TypeMax; ++j)
+    for (int j = 0; j < ChangesetType::TypeMax; ++j)
       s += _changeset[i][j].size();
   }
   return s;
