@@ -110,14 +110,6 @@ public:
    * @return true if there aren't any elements left to receive updates from
    */
   bool isDone() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) <= _processedCount + _failedCount; }
-  /** Elements in a changeset can be in three sections, create, modify, and delete.  Max is used for iterating */
-  enum ChangesetType : int
-  {
-    TypeCreate = 0,
-    TypeModify,
-    TypeDelete,
-    TypeMax
-  };
   /** Convert ChangesetType to string */
   static QString getString(ChangesetType type);
   /**
@@ -506,21 +498,21 @@ public:
    * @param changeset_type Describes the changeset method as create, modify, or delete
    * @param id Element ID of the element to add
    */
-  void add(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id);
+  void add(ElementType::Type element_type, ChangesetType changeset_type, long id);
   /**
    * @brief remove Remove an element ID of a certain type from the changeset type
    * @param element_type Describes the 'id' argument as a node, way, or relation
    * @param changeset_type Describes the changeset method as create, modify, or delete
    * @param id Element ID of the element to remove
    */
-  void remove(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id);
+  void remove(ElementType::Type element_type, ChangesetType changeset_type, long id);
   /**
    * @brief getFirst Get the first element of the types
    * @param element_type Describes the element type: node, way, or relation
    * @param changeset_type Describes the type: create, modify, delete
    * @return
    */
-  long getFirst(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type);
+  long getFirst(ElementType::Type element_type, ChangesetType changeset_type);
   /**
    * @brief clear Clear out this entire changeset subset
    */
@@ -532,21 +524,21 @@ public:
    * @param id Element ID that is being searched for
    * @return true if it is found
    */
-  bool contains(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id);
+  bool contains(ElementType::Type element_type, ChangesetType changeset_type, long id);
   /**
    * @brief begin Begin iterator
    * @param element_type Describes the type (node/way/relation) to iterate
    * @param changeset_type Describes the type (create/modify/delete) to iterate
    * @return iterator pointing to the beginning of the set
    */
-  iterator begin(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type);
+  iterator begin(ElementType::Type element_type, ChangesetType changeset_type);
   /**
    * @brief end End iterator
    * @param element_type Describes the type (node/way/relation) to iterate
    * @param changeset_type Describes the type (create/modify/delete) to iterate
    * @return iterator pointing off of the end of the set
    */
-  iterator end(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type);
+  iterator end(ElementType::Type element_type, ChangesetType changeset_type);
   /**
    * @brief size Total number of ElementType::Type elements (node/way/relation) of a specific changeset
    *  type (create/modify/delete) within this subset
@@ -554,7 +546,7 @@ public:
    * @param changesetType Describes the type (create/modify/delete) to count
    * @return count based on types
    */
-  size_t size(ElementType::Type elementType, XmlChangeset::ChangesetType changesetType);
+  size_t size(ElementType::Type elementType, ChangesetType changesetType);
   /**
    * @brief size Total number of elements in the subset
    * @return total count
@@ -578,7 +570,7 @@ public:
 
 private:
   /** 3x3 array of containers for elements in this subset */
-  std::array<std::array<container, XmlChangeset::TypeMax>, ElementType::Unknown> _changeset;
+  std::array<std::array<container, ChangesetType::TypeMax>, ElementType::Unknown> _changeset;
   /** Flag set after attempt to resolve changeset issues has completed. */
   bool _attemptedResolveChangesetIssues;
   /** Number of times this exact changeset has been retried from failures unsuccessfully */

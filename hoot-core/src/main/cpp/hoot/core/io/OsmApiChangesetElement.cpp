@@ -105,7 +105,7 @@ QString ChangesetElement::getTagValue(int index) const
   return _tags[index].second;
 }
 
-QString ChangesetElement::toString(const ElementAttributes& attributes, long changesetId) const
+QString ChangesetElement::toString(const ElementAttributes& attributes, long changesetId, ChangesetType type) const
 {
   QString buffer;
   QTextStream ts(&buffer);
@@ -127,7 +127,14 @@ QString ChangesetElement::toString(const ElementAttributes& attributes, long cha
     else if (name == "id")      //  Element ID could be different than provided in the file, could be from the API
       ts << (_idMap ? _idMap->getId(_type, _id) : _id);
     else if (name == "version") //  Versions are updated by the API
-      ts << _version;
+    {
+      //  Don't allow negative or zero versions for modify and delete, force them to 1
+      //  zero
+      if (_version < 1)
+        ts << ((type == ChangesetType::TypeCreate) ? 0 : 1);
+      else
+        ts << _version;
+    }
     else
       ts << it->second;
     ts << "\" ";
@@ -278,12 +285,12 @@ ChangesetNode::ChangesetNode(const ChangesetNode &node)
 {
 }
 
-QString ChangesetNode::toString(long changesetId) const
+QString ChangesetNode::toString(long changesetId, ChangesetType type) const
 {
   QString buffer;
   QTextStream ts(&buffer);
   ts.setCodec("UTF-8");
-  ts << "\t\t<node " << ChangesetElement::toString(_object, changesetId);
+  ts << "\t\t<node " << ChangesetElement::toString(_object, changesetId, type);
   if (_tags.size() > 0)
   {
     ts << ">\n";
@@ -340,12 +347,12 @@ void ChangesetWay::removeNodes(int position, int count)
   _nodes.remove(position, count);
 }
 
-QString ChangesetWay::toString(long changesetId) const
+QString ChangesetWay::toString(long changesetId, ChangesetType type) const
 {
   QString buffer;
   QTextStream ts(&buffer);
   ts.setCodec("UTF-8");
-  ts << "\t\t<way " << ChangesetElement::toString(_object, changesetId) << ">\n";
+  ts << "\t\t<way " << ChangesetElement::toString(_object, changesetId, type) << ">\n";
   for (QVector<long>::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
     ts << "\t\t\t<nd ref=\"" << (_idMap ? _idMap->getId(ElementType::Node, *it) : *it) << "\"/>\n";
   if (_tags.size() > 0)
@@ -453,12 +460,12 @@ bool ChangesetRelation::hasMember(ElementType::Type type, long id) const
   return false;
 }
 
-QString ChangesetRelation::toString(long changesetId) const
+QString ChangesetRelation::toString(long changesetId, ChangesetType type) const
 {
   QString buffer;
   QTextStream ts(&buffer);
   ts.setCodec("UTF-8");
-  ts << "\t\t<relation " << ChangesetElement::toString(_object, changesetId) << ">\n";
+  ts << "\t\t<relation " << ChangesetElement::toString(_object, changesetId, type) << ">\n";
   for (QList<ChangesetRelationMember>::const_iterator it = _members.begin(); it != _members.end(); ++it)
     ts << it->toString();
   if (_tags.size() > 0)
