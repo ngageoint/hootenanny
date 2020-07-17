@@ -485,9 +485,9 @@ function isBuilding(map, e)
  * See the OSM wiki for more information:
  * http://wiki.openstreetmap.org/wiki/Key:area
  */
-function isLinear(e)
+function isLinear(map, e)
 {
-  return hoot.OsmSchema.isLinear(e);
+  return hoot.OsmSchema.isLinear(map, e);
 }
 
 /**
@@ -496,9 +496,9 @@ function isLinear(e)
  * See the OSM wiki for more information:
  * http://wiki.openstreetmap.org/wiki/River
  */
-function isLinearWaterway(e)
+function isLinearWaterway(map, e)
 {
-  return hoot.OsmSchema.isLinearWaterway(e);
+  return hoot.OsmSchema.isLinearWaterway(map, e);
 }
 
 /**
@@ -516,9 +516,9 @@ function isPoi(e)
  * See the OSM wiki for more information:
  * http://wiki.openstreetmap.org/wiki/Railway
  */
-function isRailway(e)
+function isRailway(map, e)
 {
-  return hoot.OsmSchema.isRailway(e);
+  return hoot.OsmSchema.isRailway(map, e);
 }
 
 /**

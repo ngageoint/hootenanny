@@ -80,7 +80,7 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isLinearWaterway(e);
+  return isLinearWaterway(map, e);
 };
 
 /**

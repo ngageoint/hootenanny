@@ -39,13 +39,16 @@ var sublineMatcher = new hoot.MaximalSublineStringMatcher({
  */
 exports.isMatchCandidate = function(map, e)
 {
+  hoot.trace("e: " + e.getElementId());
   // Even though a route relation passes the linear crit, we want only highway or rail
   // conflation to conflate it.
   if (e.getElementId().getType() == "Relation" && e.getTags().contains("route"))
   {
     return false;
   }
-  return isLinear(e) && !isSpecificallyConflatable(map, e, exports.geometryType);
+  hoot.trace("isLinear: " + isLinear(map, e));
+  hoot.trace("isSpecificallyConflatable: " + isSpecificallyConflatable(map, e, exports.geometryType));
+  return isLinear(map, e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**
@@ -79,18 +82,18 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+  //hoot.trace("e1: " + e1.getElementId() + ", " + e1.getTags().get("name"));
+  hoot.trace("e1: " + e1);
   if (e1.getTags().get("note"))
   {
     hoot.trace("e1 note: " + e1.getTags().get("note"));
   }
-  hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+  //hoot.trace("e2: " + e2.getElementId() + ", " + e2.getTags().get("name"));
+  hoot.trace("e2: " + e2);
   if (e2.getTags().get("note"))
   {
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
-
-  // TODO: Should we do anything with names?
 
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
@@ -154,10 +157,9 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced) 
 {
-  // snap the ways in the second input to the first input. Use the default tag 
+  // Snap the ways in the second input to the first input. Use the default tag 
   // merge method.
-  var result = snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
-  return result;
+  return snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

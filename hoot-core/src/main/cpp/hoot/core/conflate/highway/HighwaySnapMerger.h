@@ -92,6 +92,8 @@ private:
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;
 
+  bool _writeDebugMaps;
+
   /*
    * Returns true if the way directly connects the left and right ways. There is some tolerance
    * for "directly". See ticket #951 for details.

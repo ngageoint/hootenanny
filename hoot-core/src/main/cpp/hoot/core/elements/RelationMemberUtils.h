@@ -146,6 +146,27 @@ public:
     const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
 
   /**
+   *
+   *
+   * @param map
+   * @param childId
+   * @param criterion
+   * @return
+   */
+  static bool isMemberOfRelationWithCriterion(
+    const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion);
+
+  /**
+   *
+   *
+   * @param map
+   * @param childId
+   * @return
+   */
+  static std::vector<ConstRelationPtr> getContainingRelations(
+    const ConstOsmMapPtr& map, const ElementId& childId);
+
+  /**
    * Detemines if a relation has members all with the same geometry type
    *
    * @param relation the relation to examine

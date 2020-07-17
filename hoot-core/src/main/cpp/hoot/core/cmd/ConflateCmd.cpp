@@ -57,9 +57,6 @@
 #include <hoot/core/elements/VersionUtils.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
-#include <hoot/core/criterion/PointCriterion.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
