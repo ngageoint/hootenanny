@@ -190,6 +190,14 @@ function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
   return map.isMemberOfRelationWithTagKey(childElementId, tagKey);
 }
 
+/*
+ * TODO
+ */
+function isMemberOfRelationSatisfyingCriterion(map, childElementId, criterionClassName)
+{
+  return map.isMemberOfRelationSatisfyingCriterion(childElementId, criterionClassName);
+}
+
 /**
  * Determines if two features mismatch on non-generic types
  */
@@ -485,9 +493,9 @@ function isBuilding(map, e)
  * See the OSM wiki for more information:
  * http://wiki.openstreetmap.org/wiki/Key:area
  */
-function isLinear(map, e)
+function isLinear(d)
 {
-  return hoot.OsmSchema.isLinear(map, e);
+  return hoot.OsmSchema.isLinear(d);
 }
 
 /**
@@ -496,9 +504,9 @@ function isLinear(map, e)
  * See the OSM wiki for more information:
  * http://wiki.openstreetmap.org/wiki/River
  */
-function isLinearWaterway(map, e)
+function isLinearWaterway(e)
 {
-  return hoot.OsmSchema.isLinearWaterway(map, e);
+  return hoot.OsmSchema.isLinearWaterway(e);
 }
 
 /**
@@ -516,9 +524,9 @@ function isPoi(e)
  * See the OSM wiki for more information:
  * http://wiki.openstreetmap.org/wiki/Railway
  */
-function isRailway(map, e)
+function isRailway(e)
 {
-  return hoot.OsmSchema.isRailway(map, e);
+  return hoot.OsmSchema.isRailway(e);
 }
 
 /**

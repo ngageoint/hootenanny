@@ -41,16 +41,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, LinearCriterion)
 
-LinearCriterion::LinearCriterion(ConstOsmMapPtr map) :
-_map(map)
-{
-}
-
 bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-  //LOG_VART(e);
-  //bool result = false;
 
   if (e->getElementType() == ElementType::Node)
   {
@@ -59,7 +52,6 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   else if (e->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
-    //result = isLinearRelation(relation);
     if (isLinearRelation(relation))
     {
       LOG_TRACE(e->getElementId() << " is linear relation and passes LinearCriterion.");
@@ -76,61 +68,12 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
       return false;
     }
 
-    // TODO: explain - #4149
-    if (!OsmSchema::getInstance().hasType(way->getTags()))
-    {
-      LOG_VART(_map.get());
-      std::vector<ConstRelationPtr> owningRelations =
-        RelationMemberUtils::getContainingRelations(_map, way->getElementId());
-      LOG_VART(owningRelations.size());
-      for (std::vector<ConstRelationPtr>::const_iterator it = owningRelations.begin();
-           it != owningRelations.end(); ++it)
-      {
-        ConstRelationPtr relation = *it;
-        LOG_VART(relation.get());
-        if (relation)
-        {
-          LOG_VART(CollectionRelationCriterion().isSatisfied(relation));
-        }
-        if (relation &&
-            (/*isLinearRelation(relation) || */CollectionRelationCriterion().isSatisfied(relation)))
-        {
-          LOG_TRACE("Untyped way is member of a linear relation, so fails LinearCriterion.");
-          return false;
-        }
-      }
-    }
-//      if (!OsmSchema::getInstance().hasType(way->getTags()) &&
-//          RelationMemberUtils::elementContainedByAnyRelation(way->getElementId(), _map))
-//      {
-//        LOG_TRACE("Untyped way is member of a relation, so fails LinearCriterion.");
-//        return false;
-//      }
     LOG_TRACE(e->getElementId() << " passes LinearCriterion.");
     return true;
   }
 
-//  const Tags& t = e->getTags();
-//  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
-//  {
-//    const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
-//    uint16_t g = tv.geometries;
+  // TODO: explain
 
-//    LOG_VART(g & OsmGeometries::LineString);
-//    LOG_VART(g & OsmGeometries::Area);
-
-//    // We don't want to fail here if the associated schema type supports both a line and a poly. We
-//    // only care by this point that it does support a line. The previous closed area check will take
-//    // care of weeding out any polys.
-//    if (g & OsmGeometries::LineString)
-//    {
-//      result = true;
-//      break;
-//    }
-//  }
-
-  //LOG_VART(result);
-  //return result;
   LOG_TRACE(e->getElementId() << " fails LinearCriterion.");
   return false;
 }

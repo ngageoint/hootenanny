@@ -830,7 +830,7 @@ void ScriptMatchCreator::createMatches(
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
   LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.geometryType));
-  if (scriptFileInfo.fileName().toLower().contains("relation")) // hack
+  if (scriptFileInfo.fileName().toLower().contains("relation")) // TODO: hack
   {
     map->visitRelationsRo(v);
   }

@@ -45,7 +45,7 @@ var lengthScoreExtractor = new hoot.LengthScoreExtractor();
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isRailway(map, e);
+  return isRailway(e);
 };
 
 /**

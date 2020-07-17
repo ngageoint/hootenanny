@@ -72,6 +72,7 @@ private:
   static void mergeCollectionRelations(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getNumRelationMemberNodes(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void relationsHaveConnectedWayMembers(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationSatisfyingCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   OsmMapPtr _map;
   ConstOsmMapPtr _constMap;

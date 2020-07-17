@@ -153,7 +153,7 @@ public:
    * @param criterion
    * @return
    */
-  static bool isMemberOfRelationWithCriterion(
+  static bool isMemberOfRelationSatisfyingCriterion(
     const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion);
 
   /**
