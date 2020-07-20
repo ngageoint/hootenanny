@@ -79,6 +79,9 @@ private:
    * can let that be use case driven.
    */
   bool _isContiguous(const ConstRelationPtr& r);
+  bool _isContiguous(const ConstRelationPtr& r, long& lastNode);
+
+  void _getFirstLastNodes(const ConstRelationPtr& r, ElementId& first, ElementId& last);
 
   bool _isValidElement(const ConstElementPtr& e);
 

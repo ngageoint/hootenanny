@@ -97,27 +97,84 @@ OsmNetworkPtr OsmNetworkExtractor::extractNetwork(ConstOsmMapPtr map)
 
 bool OsmNetworkExtractor::_isContiguous(const ConstRelationPtr& r)
 {
+  long lastNode = 0;
+  return _isContiguous(r, lastNode);
+}
+
+bool OsmNetworkExtractor::_isContiguous(const ConstRelationPtr& r, long& lastNode)
+{
   assert(LinearCriterion().isSatisfied(r));
 
   const vector<RelationData::Entry>& members = r->getMembers();
-  bool result = members.size() > 0;
-  long lastNode = 0;
+
+  if (members.size() < 1)
+    return false;
   for (size_t i = 0; i < members.size(); ++i)
   {
     ElementId eid = members[i].getElementId();
-    assert(eid.getType() == ElementType::Way);
-    ConstWayPtr w = _map->getWay(eid);
-    if (i > 0)
-    {
-      if (w->getFirstNodeId() != lastNode)
-      {
-        result = false;
-      }
-    }
-    lastNode = w->getLastNodeId();
-  }
 
-  return result;
+    if (eid.getType() == ElementType::Way)
+    {
+      ConstWayPtr w = _map->getWay(eid);
+      if (i > 0)
+      {
+        if (w->getFirstNodeId() != lastNode)
+          return false;
+      }
+      lastNode = w->getLastNodeId();
+    }
+    else if (eid.getType() == ElementType::Relation)
+    {
+      ConstRelationPtr sub = _map->getRelation(eid);
+      if (!_isContiguous(sub, lastNode))
+        return false;
+    }
+  }
+  return true;
+}
+
+void OsmNetworkExtractor::_getFirstLastNodes(const ConstRelationPtr& r, ElementId& first, ElementId& last)
+{
+  ElementId temp;
+  ConstRelationPtr sub;
+  const vector<RelationData::Entry>& members = r->getMembers();
+  //  Get the first and last members
+  ElementId from = members[0].getElementId();
+  ElementId to = members[members.size() - 1].getElementId();
+  //  Find the first node of the first member
+  switch(from.getType().getEnum())
+  {
+  case ElementType::Node:
+    first = from;
+    break;
+  case ElementType::Way:
+    first = ElementId::node(_map->getWay(from)->getFirstNodeId());
+    break;
+  case ElementType::Relation:
+    sub = _map->getRelation(from);
+    _getFirstLastNodes(sub, first, temp);
+    break;
+  default:
+    LOG_ERROR("Unknown relation member type");
+    break;
+  }
+  //  Find the last node of the last member
+  switch(to.getType().getEnum())
+  {
+  case ElementType::Node:
+    last = to;
+    break;
+  case ElementType::Way:
+    last = ElementId::node(_map->getWay(to)->getLastNodeId());
+    break;
+  case ElementType::Relation:
+    sub = _map->getRelation(to);
+    _getFirstLastNodes(sub, temp, last);
+    break;
+  default:
+    LOG_ERROR("Unknown relation member type");
+    break;
+  }
 }
 
 bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
@@ -189,14 +246,12 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
 
       if (_isContiguous(r))
       {
-        const vector<RelationData::Entry>& members = r->getMembers();
-        from = ElementId::node(_map->getWay(members[0].getElementId())->getFirstNodeId());
-        to =
-          ElementId::node(_map->getWay(members[members.size() - 1].getElementId())->getLastNodeId());
+        //  Getting the first and last nodes of a relation is non-trivial
+        _getFirstLastNodes(r, from, to);
       }
-      // if this is a bad multi-linestring then don't include it in the network.
       else
       {
+        // if this is a bad multi-linestring then don't include it in the network.
         if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN(
