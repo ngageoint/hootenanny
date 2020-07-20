@@ -137,10 +137,11 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
   return true;
 }
 
-// TODO: Roll this into OsmMapReaderFactory somehow?
 void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
                       Status defaultStatus)
 {
+  // TODO: Roll this whole thing into OsmMapReaderFactory somehow and get rid of OgrReader portion?
+
   QStringList pathLayer = path.split(";");
   QString justPath = pathLayer[0];
   if (OgrReader::isReasonablePath(justPath))

@@ -71,8 +71,9 @@ public:
     CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::BuildingCriterion"));
     CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::PoiPolygonPolyCriterion"));
 
+    // Untyped features are now conflatable by default.
     CPPUNIT_ASSERT_EQUAL(
-      0,
+      1,
       ConflatableElementCriterion::getConflatableCriteriaForElement(
         TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("blah", "blah")), map)
       .size());

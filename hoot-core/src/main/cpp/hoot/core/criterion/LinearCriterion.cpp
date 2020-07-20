@@ -33,8 +33,6 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/Way.h>
-//#include <hoot/core/elements/RelationMemberUtils.h>
-//#include <hoot/core/criterion/CollectionRelationCriterion.h>
 
 namespace hoot
 {
@@ -68,38 +66,31 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
       return false;
     }
 
-    // This prevents some of the problems seen in #4149. Decided to leave it disabled due to issues
-    // with _map becoming null at odd times. Leaving it commented out here in case its helpfule with
-    // #4149.
-//    if (!OsmSchema::getInstance().hasType(way->getTags()))
-//    {
-//      LOG_VART(_map.get());
-//      std::vector<ConstRelationPtr> owningRelations =
-//        RelationMemberUtils::getContainingRelations(_map, way->getElementId());
-//      LOG_VART(owningRelations.size());
-//      for (std::vector<ConstRelationPtr>::const_iterator it = owningRelations.begin();
-//           it != owningRelations.end(); ++it)
-//      {
-//        ConstRelationPtr relation = *it;
-//        LOG_VART(relation.get());
-//        if (relation)
-//        {
-//          LOG_VART(CollectionRelationCriterion().isSatisfied(relation));
-//        }
-//        if (relation &&
-//            (/*isLinearRelation(relation) || */CollectionRelationCriterion().isSatisfied(relation)))
-//        {
-//          LOG_TRACE("Untyped way is member of a linear relation, so fails LinearCriterion.");
-//          return false;
-//        }
-//      }
-//    }
-
     LOG_TRACE(e->getElementId() << " passes LinearCriterion.");
     return true;
   }
 
-  // TODO: explain
+  // TODO: explain - #4149
+  if (e->getElementType() == ElementType::Relation)
+  {
+    const Tags& t = e->getTags();
+    for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+    {
+      const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
+      uint16_t g = tv.geometries;
+
+      LOG_VART(g & OsmGeometries::LineString);
+      LOG_VART(g & OsmGeometries::Area);
+
+      // We don't want to fail here if the associated schema type supports both a line and a poly.
+      // We only care by this point that it does support a line. The previous closed area check will
+      // take care of weeding out any polys.
+      if (g & OsmGeometries::LineString)
+      {
+        return true;
+      }
+    }
+  }
 
   LOG_TRACE(e->getElementId() << " fails LinearCriterion.");
   return false;
@@ -112,8 +103,7 @@ bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
          relation->getType() == MetadataTags::RelationBoundary() ||
          relation->getType() == MetadataTags::RelationRouteMaster() ||
          relation->getType() == MetadataTags::RelationSuperRoute() ||
-         relation->getType() == MetadataTags::RelationRestriction() /*||
-         relation->getType() == "level"*/;
+         relation->getType() == MetadataTags::RelationRestriction();
 }
 
 }

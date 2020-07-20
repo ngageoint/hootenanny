@@ -14,25 +14,25 @@
     "Delete":
     [
         {
-            "Node": "5016"
+            "Node": "5321"
         },
         {
-            "Relation": "64"
+            "Relation": "70"
         },
         {
-            "Way": "100"
+            "Way": "101"
         }
     ],
     "Modify":
     [
         {
-            "Node": "16"
+            "Node": "41"
         },
         {
             "Relation": "0"
         },
         {
-            "Way": "55"
+            "Way": "60"
         }
     ]
 }

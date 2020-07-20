@@ -64,7 +64,6 @@
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
-#include <hoot/core/schema/SchemaUtils.h>
 
 // Standard
 #include <fstream>
@@ -392,15 +391,6 @@ int ConflateCmd::runSimple(QStringList& args)
   stats.append(SingleStat("Read Inputs Time (sec)", elapsed));
   stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));
   stats.append(SingleStat("(Dubious) Read Inputs Bytes per Second", inputBytes / elapsed));
-
-  // Check to see if all the data is untyped. If so, log a warning so the user knows they may not
-  // be getting the best conflate results in case types could be added to the input.
-  if (!SchemaUtils::anyElementsHaveType(map))
-  {
-    LOG_WARN(
-      "No elements in the input map have a recognizable schema type. Generic conflation " <<
-      "routines will be used.")
-  }
 
   CalculateStatsOp input1Cso(
     ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1");
