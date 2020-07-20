@@ -33,7 +33,8 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/Way.h>
-//#include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
+#include <hoot/core/criterion/CollectionRelationCriterion.h>
 
 namespace hoot
 {
@@ -56,9 +57,6 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
       LOG_TRACE(e->getElementId() << " is linear relation and passes LinearCriterion.");
       return true;
     }
-//    RelationWithLinearMembersCriterion crit(_map);
-//    crit.setAllowMixedChildren(true);
-//    return crit.isSatisfied(e);
   }
   else if (e->getElementType() == ElementType::Way)
   {
@@ -82,21 +80,12 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
 
 bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
 {
-  // This list could get HUGE - see #4151.
   return relation->getType() == MetadataTags::RelationMultilineString() ||
          relation->getType() == MetadataTags::RelationRoute() ||
          relation->getType() == MetadataTags::RelationBoundary() ||
          relation->getType() == MetadataTags::RelationRouteMaster() ||
          relation->getType() == MetadataTags::RelationSuperRoute() ||
-         relation->getType() == MetadataTags::RelationRestriction() ||
-         relation->getType() == MetadataTags::RelationPublicTransport() ||
-         relation->getType() == MetadataTags::RelationWaterway() ||
-         relation->getType() == MetadataTags::RelationNetwork() ||
-         relation->getType() == MetadataTags::RelationEnforcement() ||
-         relation->getType() == MetadataTags::RelationConnectivity() ||
-         relation->getType() == MetadataTags::RelationSite() ||
-         relation->getType() == MetadataTags::RelationAssociatedStreet() ||
-         relation->getType() == "level";
+         relation->getType() == MetadataTags::RelationRestriction();
 }
 
 }
