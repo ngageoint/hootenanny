@@ -44,18 +44,18 @@ class SchemaUtils
 public:
 
   /**
-   * TODO
+   * Determines if any elements in a map have a type recognized by the schema
    *
-   * @param map
-   * @return
+   * @param map the map to examine
+   * @return true if at least one feature has a type recognized by the schema; false otherwise
    */
   static bool anyElementsHaveType(const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Determines if all elements in a map have a type recognized by the schema
    *
-   * @param map
-   * @return
+   * @param map the map to examine
+   * @return true if all features have a type recognized by the schema; false otherwise
    */
   static bool allElementsHaveType(const ConstOsmMapPtr& map);
 };

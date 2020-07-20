@@ -70,7 +70,10 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
     return true;
   }
 
-  // TODO: explain - #4149
+  // As part of #4137, we're allowing all types to be conflatable, so no schema checks are required.
+  // This relation only check has been left in to appease
+  // ServiceChangesetReplacementOutOfSpecRelationTest. #4149 should fix the problem, and this code
+  // block can then be removed.
   if (e->getElementType() == ElementType::Relation)
   {
     const Tags& t = e->getTags();

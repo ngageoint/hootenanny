@@ -183,7 +183,7 @@ function isMemberOfRelationInCategory(map, childElementId, schemaCategory)
 }
 
 /**
- * Determines if an element is a member of relation containing a specified tag key
+ * Determines if an element is a member of a relation containing a specified tag key
  */
 function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
 {
@@ -191,7 +191,7 @@ function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
 }
 
 /*
- * TODO
+ * Determines if an element is a member of a relation that satisifies specified criteria
  */
 function isMemberOfRelationSatisfyingCriterion(map, childElementId, criterionClassName)
 {

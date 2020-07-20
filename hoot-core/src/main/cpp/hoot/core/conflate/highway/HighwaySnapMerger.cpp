@@ -82,8 +82,7 @@ HighwayMergerAbstract(),
 _matchedBy(HighwayMatch::MATCH_NAME),
 // ENABLE THE OsmMapWriterFactory::writeDebugMap CALLS FOR SMALL DATASETS DURING DEBUGGING ONLY.
 // writes a map file for each road merge
-// TODO: change back
-_writeDebugMaps(true)
+_writeDebugMaps(false)
 {
 }
 
@@ -95,7 +94,7 @@ _markAddedMultilineStringRelations(false),
 _sublineMatcher(sublineMatcher),
 _matchedBy(HighwayMatch::MATCH_NAME),
 // see note above
-_writeDebugMaps(true)
+_writeDebugMaps(false)
 {
   _pairs = pairs;
   LOG_VART(_pairs);
