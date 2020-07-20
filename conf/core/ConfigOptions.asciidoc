@@ -2309,6 +2309,20 @@ The maximum number of warn log messages that will be emitted per class before th
 A value of -1 passed to class will ensure that no warnings are logged by it, if it honors the
 option. A setting of -1 is useful for tests where you do not have granular enough logging control.
 
+=== log.warnings.for.completely.untyped.input.maps
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
+=== log.warnings.for.empty.input.maps
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === log.warnings.for.missing.elements
 
 * Data Type: bool

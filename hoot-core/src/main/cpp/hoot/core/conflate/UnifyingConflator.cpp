@@ -152,9 +152,17 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // be getting the best conflate results in case types could be added to the input.
   if (map->size() > 0 && !SchemaUtils::anyElementsHaveType(map))
   {
-    LOG_WARN(
-      "No elements in the input map have a recognizable schema type. Generic conflation " <<
-      "routines will be used.")
+    const QString msg =
+      "No elements in the input map have a recognizable schema type. Generic conflation "
+      "routines will be used.";
+    if (ConfigOptions().getLogWarningsForCompletelyUntypedInputMaps())
+    {
+      LOG_WARN(msg);
+    }
+    else
+    {
+      LOG_INFO(msg);
+    }
   }
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
