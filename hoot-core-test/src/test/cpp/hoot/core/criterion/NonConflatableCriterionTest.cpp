@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -43,6 +43,7 @@ public:
   void runBasicTest()
   {
     NonConflatableCriterion uut;
+    uut.setIgnoreGenericConflators(false);
     OsmMapPtr map(new OsmMap());
     geos::geom::Coordinate wayCoords[] = {
       geos::geom::Coordinate(0.0, 0.0),
@@ -62,6 +63,15 @@ public:
       !uut.isSatisfied(
         TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("building", "yes"))));
 
+    // Untyped feature are now conflatable by default, if NonConflatableCriterion is set to consider
+    // the generic geometry conflate scripts.
+    CPPUNIT_ASSERT(
+      !uut.isSatisfied(
+        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("blah", "blah"))));
+
+    // If its set to ignore the generic geometry scripts, then an untyped feature won't be
+    // confltable.
+    uut.setIgnoreGenericConflators(true);
     CPPUNIT_ASSERT(
       uut.isSatisfied(
         TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("blah", "blah"))));

@@ -86,10 +86,11 @@ public:
     way1->getTags().appendValue("highway", "road");
     CPPUNIT_ASSERT(uut.isMatchCandidate(way1, map));
 
+    // Untyped features are now conflatable with the generic geometry scripts.
     way1 = TestUtils::createWay(map, wayNodes, Status::Unknown1);
     way1->setStatus(Status::Unknown1);
     way1->getTags().clear();
-    HOOT_STR_EQUALS(false, uut.isMatchCandidate(way1, map));
+    HOOT_STR_EQUALS(true, uut.isMatchCandidate(way1, map));
   }
 
 };

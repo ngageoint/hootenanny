@@ -96,6 +96,8 @@ exports.matchScore = function(map, e1, e2)
 
   var result = { miss: 1.0, explain:"miss" };
 
+  hoot.trace("e1: " + e1.getElementId() + ", " + e1.getTags().get("name"));
+  hoot.trace("e2: " + e2.getElementId() + ", " + e2.getTags().get("name"));
   hoot.trace("e1: " + e1.getTags());
   hoot.trace("e2: " + e2.getTags());
   hoot.trace("e1: " + e1.getStatusString());

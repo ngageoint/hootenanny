@@ -90,18 +90,16 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }*/
 
-  hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+  hoot.trace("e1: " + e1.getElementId() + ", " + e1.getTags().get("name"));
   if (e1.getTags().get("note"))
   {
     hoot.trace("e1 note: " + e1.getTags().get("note"));
   }
-  hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+  hoot.trace("e2: " + e2.getElementId() + ", " + e2.getTags().get("name"));
   if (e2.getTags().get("note"))
   {
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
-
-  // TODO: Should we do anything with names?
 
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.

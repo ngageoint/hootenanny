@@ -222,12 +222,12 @@ exports.matchScore = function(map, e1, e2)
   var tags2 = e2.getTags();
 
   hoot.trace("**********************************");
-  hoot.trace("e1: " + e1.getId() + ", " + tags1.get("name"));
+  hoot.trace("e1: " + e1.getElementId() + ", " + tags1.get("name"));
   if (tags1.get("note"))
   {
     hoot.trace("e1 note: " + tags1.get("note"));
   }
-  hoot.trace("e2: " + e2.getId() + ", " + tags2.get("name"));
+  hoot.trace("e2: " + e2.getElementId() + ", " + tags2.get("name"));
   if (tags2.get("note"))
   {
     hoot.trace("e2 note: " + tags2.get("note"));

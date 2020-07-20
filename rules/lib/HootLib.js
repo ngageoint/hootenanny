@@ -183,11 +183,19 @@ function isMemberOfRelationInCategory(map, childElementId, schemaCategory)
 }
 
 /**
- * Determines if an element is a member of relation containing a specified tag key
+ * Determines if an element is a member of a relation containing a specified tag key
  */
 function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
 {
   return map.isMemberOfRelationWithTagKey(childElementId, tagKey);
+}
+
+/*
+ * Determines if an element is a member of a relation that satisifies specified criteria
+ */
+function isMemberOfRelationSatisfyingCriterion(map, childElementId, criterionClassName)
+{
+  return map.isMemberOfRelationSatisfyingCriterion(childElementId, criterionClassName);
 }
 
 /**
@@ -485,9 +493,9 @@ function isBuilding(map, e)
  * See the OSM wiki for more information:
  * http://wiki.openstreetmap.org/wiki/Key:area
  */
-function isLinear(e)
+function isLinear(d)
 {
-  return hoot.OsmSchema.isLinear(e);
+  return hoot.OsmSchema.isLinear(d);
 }
 
 /**

@@ -197,6 +197,10 @@ void OsmMapReaderFactory::_read(const OsmMapPtr& map,
 
   reader->open(url);
   reader->read(map);
+  if (map->size() == 0)
+  {
+    LOG_WARN("No data in map: " << url << ".");
+  }
   VALIDATE(map->validate(true));
   LOG_STATUS(
     "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<

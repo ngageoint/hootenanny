@@ -1881,15 +1881,19 @@ bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
   bool featuresHaveExplicitTypeMismatch = false;
 
   const bool feature1HasType = hasType(tags1);
+  LOG_VART(feature1HasType);
   if (feature1HasType)
   {
     const bool feature2HasType = hasType(tags2);
+    LOG_VART(feature2HasType);
     if (feature2HasType)
     {
       const bool feature1Generic = isGeneric(tags1);
+      LOG_VART(feature1Generic);
       if (!feature1Generic)
       {
         const bool feature2Generic = isGeneric(tags2);
+        LOG_VART(feature2Generic);
         if (!feature2Generic)
         {
           const double typeScore = scoreTypes(tags1, tags2, true);
@@ -1921,11 +1925,13 @@ bool OsmSchema::hasType(const Tags& tags)
   {
     LOG_VART(tagsItr.key());
     LOG_VART(isTypeKey(tagsItr.key()));
-    if (isTypeKey(tagsItr.key()))
+    if (isTypeKey(tagsItr.key()) && !tags[tagsItr.key()].trimmed().isEmpty())
     {
+      LOG_TRACE("has type");
       return true;
     }
   }
+  LOG_TRACE("does not have type");
   return false;
 }
 

@@ -41,7 +41,6 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PolygonCriterion)
 bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-  //LOG_VARD(e);
 
   bool result = false;
 

@@ -42,8 +42,6 @@ HOOT_FACTORY_REGISTER(ElementCriterion, LinearCriterion)
 bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-  //LOG_VART(e);
-  bool result = false;
 
   if (e->getElementType() == ElementType::Node)
   {
@@ -52,39 +50,53 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   else if (e->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
-    result = isLinearRelation(relation);
+    if (isLinearRelation(relation))
+    {
+      LOG_TRACE(e->getElementId() << " is linear relation and passes LinearCriterion.");
+      return true;
+    }
   }
   else if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
+
     if (way->isClosedArea())
     {
       LOG_TRACE("Way is a closed area, so fails LinearCriterion.");
       return false;
     }
+
+    LOG_TRACE(e->getElementId() << " passes LinearCriterion.");
+    return true;
   }
 
-  const Tags& t = e->getTags();
-  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
+  // As part of #4137, we're allowing all types to be conflatable, so no schema checks are required.
+  // This relation only check has been left in to appease
+  // ServiceChangesetReplacementOutOfSpecRelationTest. #4149 should fix the problem, and this code
+  // block can then be removed.
+  if (e->getElementType() == ElementType::Relation)
   {
-    const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
-    uint16_t g = tv.geometries;
-
-    LOG_VART(g & OsmGeometries::LineString);
-    LOG_VART(g & OsmGeometries::Area);
-
-    // We don't want to fail here if the associated schema type supports both a line and a poly. We
-    // only care by this point that it does support a line. The previous closed area check will take
-    // care of weeding out any polys.
-    if (g & OsmGeometries::LineString)
+    const Tags& t = e->getTags();
+    for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
     {
-      result = true;
-      break;
+      const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
+      uint16_t g = tv.geometries;
+
+      LOG_VART(g & OsmGeometries::LineString);
+      LOG_VART(g & OsmGeometries::Area);
+
+      // We don't want to fail here if the associated schema type supports both a line and a poly.
+      // We only care by this point that it does support a line. The previous closed area check will
+      // take care of weeding out any polys.
+      if (g & OsmGeometries::LineString)
+      {
+        return true;
+      }
     }
   }
-  LOG_VART(result);
 
-  return result;
+  LOG_TRACE(e->getElementId() << " fails LinearCriterion.");
+  return false;
 }
 
 bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)

@@ -48,6 +48,7 @@
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/conflate/network/NetworkMatchCreator.h>
+#include <hoot/core/schema/SchemaUtils.h>
 
 // standard
 #include <algorithm>
@@ -146,6 +147,15 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   Timer timer;
   _reset();
   int currentStep = 1;  // tracks the current job task step for progress reporting
+
+  // Check to see if all the data is untyped. If so, log a warning so the user knows they may not
+  // be getting the best conflate results in case types could be added to the input.
+  if (map->size() > 0 && !SchemaUtils::anyElementsHaveType(map))
+  {
+    LOG_WARN(
+      "No elements in the input map have a recognizable schema type. Generic conflation " <<
+      "routines will be used.")
+  }
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.76654500000001" minlon="-9.3136992" maxlat="40.1485882" maxlon="-8.743117"/>
-    <node visible="true" id="-98866836" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124955489339186" lon="-9.2850101068795219"/>
-    <node visible="true" id="-98866835" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9282584371522304" lon="-9.2606621844981181"/>
-    <node visible="true" id="-98866834" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9274655559008522" lon="-9.2630972478139277"/>
-    <node visible="true" id="-98866833" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9292942101787460" lon="-9.2549948557006765"/>
-    <node visible="true" id="-98866832" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9288689115158917" lon="-9.2565990420000812"/>
-    <node visible="true" id="-98866830" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9283972276426411" lon="-9.2596889996154594"/>
-    <node visible="true" id="-98866829" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9283083683013658" lon="-9.2603120793658267"/>
-    <node visible="true" id="-98866828" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9498122318207649" lon="-9.2330202202095801">
+    <node visible="true" id="-98866838" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124955489339186" lon="-9.2850101068795219"/>
+    <node visible="true" id="-98866837" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9282584371522304" lon="-9.2606621844981181"/>
+    <node visible="true" id="-98866836" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9274655559008522" lon="-9.2630972478139277"/>
+    <node visible="true" id="-98866835" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9292942101787460" lon="-9.2549948557006765"/>
+    <node visible="true" id="-98866834" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9288689115158917" lon="-9.2565990420000812"/>
+    <node visible="true" id="-98866832" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9283972276426411" lon="-9.2596889996154594"/>
+    <node visible="true" id="-98866831" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9283083683013658" lon="-9.2603120793658267"/>
+    <node visible="true" id="-98866830" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9498122318207649" lon="-9.2330202202095801">
         <tag k="wikipedia" v="pt:Apeadeiro de Jerumelo"/>
         <tag k="wikidata" v="Q18482941"/>
         <tag k="public_transport" v="stop_position"/>
@@ -2875,8 +2875,8 @@
     <node visible="true" id="-98855647" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9054926000000023" lon="-9.2876042999999999"/>
     <node visible="true" id="-98855646" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057760000000101" lon="-9.2876870000000000"/>
     <node visible="true" id="-98855644" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9052329000000015" lon="-9.2875452999999979"/>
-    <way visible="true" id="-98863152" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-98866833"/>
+    <way visible="true" id="-98863156" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98866835"/>
         <nd ref="-98863230"/>
         <nd ref="-98863240"/>
         <nd ref="-98863201"/>
@@ -2921,7 +2921,7 @@
         <tag k="usage" v="main"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-98863135" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-98863139" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-98855676"/>
         <nd ref="-98862157"/>
         <nd ref="-98855671"/>
@@ -2960,7 +2960,7 @@
         <nd ref="-98855743"/>
         <nd ref="-98855746"/>
         <nd ref="-98855727"/>
-        <nd ref="-98866836"/>
+        <nd ref="-98866838"/>
         <nd ref="-98866594"/>
         <nd ref="-98855724"/>
         <nd ref="-98855730"/>
@@ -3009,15 +3009,15 @@
         <nd ref="-98855931"/>
         <nd ref="-98855930"/>
         <nd ref="-98855925"/>
-        <nd ref="-98866834"/>
+        <nd ref="-98866836"/>
         <nd ref="-98855926"/>
         <nd ref="-98855927"/>
         <nd ref="-98855921"/>
         <nd ref="-98855922"/>
         <nd ref="-98855924"/>
         <nd ref="-98855914"/>
-        <nd ref="-98866835"/>
-        <nd ref="-98866829"/>
+        <nd ref="-98866837"/>
+        <nd ref="-98866831"/>
         <tag k="maxspeed" v="90"/>
         <tag k="railway:pzb" v="no"/>
         <tag k="railway:atc" v="no"/>
@@ -3031,7 +3031,7 @@
         <tag k="usage" v="main"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-98863129" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-98863133" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-98864026"/>
         <nd ref="-98862045"/>
         <nd ref="-98864034"/>
@@ -3376,7 +3376,7 @@
         <nd ref="-98864909"/>
         <nd ref="-98864910"/>
         <nd ref="-98864911"/>
-        <nd ref="-98866833"/>
+        <nd ref="-98866835"/>
         <tag k="maxspeed" v="90"/>
         <tag k="railway:pzb" v="no"/>
         <tag k="railway:atc" v="no"/>
@@ -3391,8 +3391,8 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-98862628" timestamp="2020-01-17T17:39:21Z" version="4">
-        <nd ref="-98866835"/>
-        <nd ref="-98866829"/>
+        <nd ref="-98866837"/>
+        <nd ref="-98866831"/>
         <nd ref="-98864914"/>
         <tag k="maxspeed" v="90"/>
         <tag k="railway:pzb" v="no"/>
@@ -3408,7 +3408,7 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-98862626" timestamp="2020-01-17T17:39:21Z" version="3" user="JJJWegdam" uid="1758654">
-        <nd ref="-98866835"/>
+        <nd ref="-98866837"/>
         <nd ref="-98866610"/>
         <nd ref="-98866609"/>
         <nd ref="-98866608"/>
@@ -3425,14 +3425,14 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-98862625" timestamp="2020-01-17T17:39:21Z" version="3" user="JJJWegdam" uid="1758654">
-        <nd ref="-98866830"/>
+        <nd ref="-98866832"/>
         <nd ref="-98866606"/>
         <nd ref="-98866605"/>
         <nd ref="-98866597"/>
         <nd ref="-98866604"/>
         <nd ref="-98866603"/>
         <nd ref="-98866602"/>
-        <nd ref="-98866832"/>
+        <nd ref="-98866834"/>
         <tag k="railway:pzb" v="no"/>
         <tag k="railway:atc" v="no"/>
         <tag k="name" v="Linha do Oeste"/>
@@ -3445,7 +3445,7 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-98862623" timestamp="2020-01-17T17:39:21Z" version="4" user="JJJWegdam" uid="1758654">
-        <nd ref="-98866836"/>
+        <nd ref="-98866838"/>
         <tag k="maxspeed" v="90"/>
         <tag k="railway:pzb" v="no"/>
         <tag k="railway:atc" v="no"/>
@@ -3462,7 +3462,7 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-98862621" timestamp="2020-01-17T17:39:21Z" version="3" user="JJJWegdam" uid="1758654">
-        <nd ref="-98866834"/>
+        <nd ref="-98866836"/>
         <tag k="maxspeed" v="90"/>
         <tag k="railway:pzb" v="no"/>
         <tag k="railway:atc" v="no"/>
@@ -8349,7 +8349,7 @@
         <nd ref="-98864354"/>
         <nd ref="-98864382"/>
         <nd ref="-98864961"/>
-        <nd ref="-98866828"/>
+        <nd ref="-98866830"/>
         <nd ref="-98865996"/>
         <nd ref="-98864294"/>
         <nd ref="-98864314"/>
@@ -8401,11 +8401,11 @@
     </way>
     <way visible="true" id="-98855310" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-98863243"/>
-        <nd ref="-98866832"/>
+        <nd ref="-98866834"/>
         <nd ref="-98863279"/>
         <nd ref="-98863263"/>
         <nd ref="-98863270"/>
-        <nd ref="-98866833"/>
+        <nd ref="-98866835"/>
         <tag k="railway:pzb" v="no"/>
         <tag k="created_by" v="Potlatch 0.8a"/>
         <tag k="railway:atc" v="no"/>
@@ -8419,8 +8419,8 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-98855308" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-98866829"/>
-        <nd ref="-98866830"/>
+        <nd ref="-98866831"/>
+        <nd ref="-98866832"/>
         <nd ref="-98863243"/>
         <tag k="railway:pzb" v="no"/>
         <tag k="railway:atc" v="no"/>
@@ -8441,7 +8441,7 @@
         <member type="node" ref="-98866179" role="stop"/>
         <member type="node" ref="-98864836" role="stop"/>
         <member type="node" ref="-98864914" role="stop"/>
-        <member type="node" ref="-98866828" role="stop"/>
+        <member type="node" ref="-98866830" role="stop"/>
         <member type="node" ref="-98865004" role="stop"/>
         <member type="node" ref="-98865043" role="stop"/>
         <member type="node" ref="-98865103" role="stop"/>

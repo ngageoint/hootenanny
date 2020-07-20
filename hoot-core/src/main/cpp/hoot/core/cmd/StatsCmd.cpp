@@ -26,7 +26,6 @@
  */
 
 // Hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/ops/CalculateStatsOp.h>

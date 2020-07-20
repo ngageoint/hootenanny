@@ -31,6 +31,7 @@
 // hoot
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
@@ -103,6 +104,9 @@ void OsmMapJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(
     String::NewFromUtf8(current, "relationsHaveConnectedWayMembers"),
     FunctionTemplate::New(current, relationsHaveConnectedWayMembers));
+  tpl->PrototypeTemplate()->Set(
+    String::NewFromUtf8(current, "isMemberOfRelationSatisfyingCriterion"),
+    FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion));
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                 String::NewFromUtf8(current, OsmMap::className().data()));
 
@@ -400,6 +404,39 @@ void OsmMapJs::relationsHaveConnectedWayMembers(const FunctionCallbackInfo<Value
       current,
         finder.haveConnectedWayMembers(
           map->getRelation(relationId1.getId()), map->getRelation(relationId2.getId()))));
+}
+
+void OsmMapJs::isMemberOfRelationSatisfyingCriterion(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+  ElementId childId = toCpp<ElementId>(args[0]);
+  LOG_VART(childId);
+  QString critClassName = toCpp<QString>(args[1]);
+  LOG_VART(critClassName);
+
+  ElementCriterionPtr crit =
+    std::shared_ptr<ElementCriterion>(
+      Factory::getInstance().constructObject<ElementCriterion>(critClassName.trimmed()));
+  if (!crit)
+  {
+    throw IllegalArgumentException(
+      "isMemberOfRelationSatisfyingCriterion: invalid criterion: " + critClassName.trimmed());
+  }
+  std::shared_ptr<OsmMapConsumer> mapConsumer =
+    std::dynamic_pointer_cast<OsmMapConsumer>(crit);
+  LOG_VART(mapConsumer.get());
+  if (mapConsumer)
+  {
+    mapConsumer->setOsmMap(mapJs->getMap().get());
+  }
+
+  const bool isMember =
+    RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(mapJs->getConstMap(), childId, *crit);
+
+  args.GetReturnValue().Set(Boolean::New(current, isMember));
 }
 
 }

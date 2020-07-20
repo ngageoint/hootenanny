@@ -253,6 +253,49 @@ bool RelationMemberUtils::containsOnlyMembersWithCriterion(
   return true;
 }
 
+std::vector<ConstRelationPtr> RelationMemberUtils::getContainingRelations(
+  const ConstOsmMapPtr& map, const ElementId& childId)
+{
+  LOG_VART(map.get());
+  LOG_VART(childId);
+
+  std::vector<ConstRelationPtr> relations;
+  const std::shared_ptr<ElementToRelationMap>& e2r = map->getIndex().getElementToRelationMap();
+  LOG_VART(e2r.get());
+  const std::set<long> relationIds = e2r->getRelationByElement(childId);
+  LOG_VART(relationIds.size());
+  for (std::set<long>::const_iterator it = relationIds.begin(); it != relationIds.end(); ++it)
+  {
+    ConstRelationPtr relation = map->getRelation(*it);
+    LOG_VART(relation.get());
+    if (relation)
+    {
+      relations.push_back(relation);
+    }
+  }
+  return relations;
+}
+
+bool RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
+  const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion)
+{
+  LOG_VART(map.get());
+  LOG_VART(childId);
+  LOG_VART(criterion.toString());
+
+  std::vector<ConstRelationPtr> containingRelations = getContainingRelations(map, childId);
+  LOG_VART(containingRelations.size());
+  for (std::vector<ConstRelationPtr>::const_iterator it = containingRelations.begin();
+       it != containingRelations.end(); ++it)
+  {
+    if (criterion.isSatisfied(*it))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 bool RelationMemberUtils::membersHaveHomogenousGeometryType(
   const ConstRelationPtr& relation, const ConstOsmMapPtr& map,
   const GeometryTypeCriterion::GeometryType& geometryType)
