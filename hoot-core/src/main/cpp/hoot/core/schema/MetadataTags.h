@@ -127,6 +127,7 @@ public:
 
   inline static const QString HootSource()              { return "hoot:source"; }
 
+  // TODO: rename this; vague
   inline static const QString HootSpecial()             { return "hoot:special"; }
   inline static const QString RoundaboutCenter()        { return "roundabout_center"; }
   inline static const QString RoundaboutConnector()     { return "roundabout_connector"; }
@@ -147,15 +148,15 @@ public:
   inline static const QString BuildingHeight()          { return "height"; }
   inline static const QString BuildingLevels()          { return "building:levels"; }
 
+  // https://wiki.openstreetmap.org/wiki/Types_of_relation; add only those approved or in use
+  inline static const QString RelationAssociatedStreet(){ return "associatedStreet"; }
   inline static const QString RelationBoundary()        { return "boundary"; }
   inline static const QString RelationBuilding()        { return "building"; }
-  inline static const QString RelationCollection()      { return "collection"; }
-  inline static const QString RelationInner()           { return "inner"; }
-  inline static const QString RelationMultilineString() { return "multilinestring"; }
-  inline static const QString RelationMultiPolygon()    { return "multipolygon"; }
-  inline static const QString RelationMultiPoint()      { return "multipoint"; }
+  inline static const QString RelationConnectivity()    { return "connectivity"; }
+  inline static const QString RelationDestinationSign() { return "designation_sign"; }
+  inline static const QString RelationEnforcement()     { return "enforcement"; }
   inline static const QString RelationNetwork()         { return "network"; }
-  inline static const QString RelationOuter()           { return "outer"; }
+  inline static const QString RelationPublicTransport() { return "public_transport"; }
   inline static const QString RelationRestriction()     { return "restriction"; }
   inline static const QString RelationReview()          { return "review"; }
   inline static const QString RelationRoute()           { return "route"; }
@@ -163,6 +164,14 @@ public:
   inline static const QString RelationSite()            { return "site"; }
   inline static const QString RelationSuperRoute()      { return "superroute"; }
   inline static const QString RelationWaterway()        { return "waterway"; }
+
+  inline static const QString RelationCollection()      { return "collection"; }
+  inline static const QString RelationMultilineString() { return "multilinestring"; }
+  inline static const QString RelationMultiPoint()      { return "multipoint"; }
+  inline static const QString RelationMultiPolygon()    { return "multipolygon"; }
+
+  inline static const QString RelationInner()           { return "inner"; }
+  inline static const QString RelationOuter()           { return "outer"; }
   inline static const QString RelationType()            { return "type"; }
 
   inline static const QString RoleInner()               { return RelationInner(); }

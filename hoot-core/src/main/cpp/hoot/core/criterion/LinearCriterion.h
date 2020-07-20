@@ -30,6 +30,8 @@
 
 // Hoot
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ElementProvider.h>
 
 namespace hoot
 {
@@ -37,18 +39,20 @@ namespace hoot
 /**
  * Identifies linear features
  */
-class LinearCriterion : public ConflatableElementCriterion
+class LinearCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
   static std::string className() { return "hoot::LinearCriterion"; }
 
   LinearCriterion() = default;
+  //LinearCriterion(ConstOsmMapPtr map);
+  //LinearCriterion(ConstElementProviderPtr elementProvider);
   virtual ~LinearCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new LinearCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new LinearCriterion(/*_map*/)); }
 
   virtual QString getDescription() const { return "Identifies linear features"; }
 
@@ -60,6 +64,12 @@ public:
   virtual bool supportsSpecificConflation() const { return false; }
 
   static bool isLinearRelation(const ConstRelationPtr& relation);
+
+  //virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+//private:
+
+  //ConstOsmMapPtr _map;
 };
 
 }

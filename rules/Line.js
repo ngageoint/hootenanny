@@ -47,14 +47,14 @@ exports.isMatchCandidate = function(map, e)
   }
   // TODO: explain - #4149
   else if (e.getElementId().getType() == "Way" && !hasType(e) &&
-           isMemberOfRelationSatisfyingCriterion(map, e.getElementId(), "hoot::CollectionRelationCriterion"))
+           isMemberOfRelationSatisfyingCriterion(map, e.getElementId(), "hoot::CollectionRelationCriterion")/*isMemberOfRelation(map e.getElementId()*/)
   {
     return false;
   };
 
-  hoot.trace("isLinear: " + isLinear(e));
+  hoot.trace("isLinear: " + isLinear(map, e));
   hoot.trace("isSpecificallyConflatable: " + isSpecificallyConflatable(map, e, exports.geometryType));
-  return isLinear(e) && !isSpecificallyConflatable(map, e, exports.geometryType);
+  return isLinear(map, e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**
