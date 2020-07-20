@@ -33,8 +33,8 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/RelationMemberUtils.h>
-#include <hoot/core/criterion/CollectionRelationCriterion.h>
+//#include <hoot/core/elements/RelationMemberUtils.h>
+//#include <hoot/core/criterion/CollectionRelationCriterion.h>
 
 namespace hoot
 {
@@ -112,7 +112,8 @@ bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
          relation->getType() == MetadataTags::RelationBoundary() ||
          relation->getType() == MetadataTags::RelationRouteMaster() ||
          relation->getType() == MetadataTags::RelationSuperRoute() ||
-         relation->getType() == MetadataTags::RelationRestriction();
+         relation->getType() == MetadataTags::RelationRestriction() /*||
+         relation->getType() == "level"*/;
 }
 
 }
