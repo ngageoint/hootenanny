@@ -46,6 +46,7 @@ class OverwriteTagMergerTest : public HootTestFixture
   CPPUNIT_TEST(overwriteTest);
   CPPUNIT_TEST(overwriteSwapTest);
   CPPUNIT_TEST(overwriteExcludeTest);
+  CPPUNIT_TEST(accumulateValuesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -212,6 +213,67 @@ public:
     expected["uuid"] = "bar";
 
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
+  }
+
+  void accumulateValuesTest()
+  {
+    // overwrite t1; force some tag to accumulate their values on successive merges
+
+    OverwriteTag1Merger uut;
+    QStringList accumulateKeys;
+    accumulateKeys.append("b_id");
+    accumulateKeys.append("b_id_2");
+    uut.setAccumulateValuesTagKeys(accumulateKeys);
+
+    Tags t1;;
+    t1["name"] = "Test1";
+    t1["a_id"] = "1";
+
+    Tags t2;
+    t2["name"] = "Test2";
+    t2["b_id"] = "1";
+
+    Tags expected;
+    expected["name"] = "Test2";
+    expected["alt_name"] = "Test1";
+    expected["a_id"] = "1";
+    expected["b_id"] = "1";
+
+    Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
+
+    t1 = expected;
+    expected.clear();
+    t2.clear();
+
+    t2["name"] = "Test3";
+    t2["b_id"] = "2";
+    t2["b_id_2"] = "1";
+
+    expected["name"] = "Test3";
+    expected["alt_name"] = "Test1;Test2";
+    expected["a_id"] = "1";
+    expected["b_id"] = "1;2";
+    expected["b_id_2"] = "1";
+
+    merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
+
+    t1 = expected;
+    expected.clear();
+    t2.clear();
+
+    t2["name"] = "Test4";
+    t2["b_id_2"] = "2";
+
+    expected["name"] = "Test4";
+    expected["alt_name"] = "Test1;Test2;Test3";
+    expected["a_id"] = "1";
+    expected["b_id"] = "1;2";
+    expected["b_id_2"] = "1;2";
+
+    merged = uut.mergeTags(t1, t2, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected, merged);
   }
 };

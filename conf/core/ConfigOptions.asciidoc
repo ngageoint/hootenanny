@@ -2354,6 +2354,22 @@ If true, when comparing maps with the Compare command it will print out the deta
 identified as different between the two maps when there is a size difference (up to a default
 limit). This is useful in debugging remote test errors.
 
+=== map.factory.reader
+
+* Data Type: string
+* Default Value: ``
+
+Specifies the reader that the OsmMapReaderFactory will use. This overrides any information derived
+from the URL.
+
+=== map.factory.writer
+
+* Data Type: string
+* Default Value: ``
+
+Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived
+from the URL.
+
 === map.merge.ignore.duplicate.ids
 
 * Data Type: bool
@@ -2363,6 +2379,33 @@ Option to allow for multiple datasets to be merged into one dataset, while ignor
 duplicate element IDs.  This allows for two neighboring cells to contain the same way
 that spans both cells and is included in both datasets to not be duplicated when read
 into Hootenanny.
+
+=== map.reader.add.child.refs.when.missing
+
+* Data Type: bool
+* Default Value: `false`
+
+By default, file based readers will not add child references (node ref, elements members) to parent
+elements if those elements are not present in the data.  For external sorting and translations
+where partial chunks of elements only may be present, or workflows where you are working with
+remote sourced data with missing element children, the default value may need to be changed. This
+option is not supported by all file based readers.
+
+=== map.writer.schema
+
+* Data Type: string
+* Default Value: ``
+
+Sets the value for a "schema" attribute when writing a map to OSM XML.  NOTE: this will only be
+written if the value is not empty.
+
+=== map.writer.skip.empty
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM map writer will NOT write a file if the map is empty. The default is to write a
+file even if the map is empty.
 
 [[match.creators]]
 === match.creators
@@ -2393,36 +2436,6 @@ List of match creators to use during conflation. This can modify what features w
 * Default Value: `1`
 
 Used in the calculation of the match parallel score, cos (delta) ^ match.parallel.exponent
-
-=== metadata.dataset.indicator.tag
-
-* Data Type: list
-* Default Value:
-** `source:metadata`
-** `dataset`
-
-Single tag/value pair indicating that an element is a dataset used as import source or export
-destination for metadata values.
-
-=== metadata.tags
-
-* Data Type: list
-* Default Value:
-** `attribution`
-** `test-attribution`
-** `source`
-** `test-source`
-
-List of tag/value pairs of metatdata tags with default values to be distributed (import) or
-collected (export).
-
-=== metadata.grid.cell.size
-
-* Data Type: double
-* Default Value: `0.25`
-
-Cell size of the dataset grid created when exporting metadata tags to dataset elements. If this
-value is set to 0 a single polygon using the bounds of the source data is being created instead.
 
 === max.elements.per.partial.map
 
@@ -2455,6 +2468,14 @@ The Linux utility RLIMIT_AS is used for limiting virtual memory. This is analago
 less RAM will be utilized than the value specified. Typically this is most useful when limiting
 RAM usage of applications in a shared server environment.
 
+=== maximal.subline.spacing
+
+* Data Type: double
+* Default Value: `2.0`
+
+Spacing in meters used by the MaximalSublineMatcher during point discretization performed between
+matching ways.  Larger values may increase runtime performance but decrease conflation quality.
+
 === max.tag.length
 
 * Data Type: int
@@ -2463,14 +2484,6 @@ RAM usage of applications in a shared server environment.
 The OSM API imposes a 255 character limit to tag values even though the database doesn't.  It is
 possible to update the OSM API to a different limit and allow Hootenanny to use a larger upper
 limit to tag key/value pairs.
-
-=== maximal.subline.spacing
-
-* Data Type: double
-* Default Value: `2.0`
-
-Spacing in meters used by the MaximalSublineMatcher during point discretization performed between
-matching ways.  Larger values may increase runtime performance but decrease conflation quality.
 
 === memory.usage.checker.enabled
 
@@ -2517,6 +2530,36 @@ notification. The same threshold value is used separately for both used physical
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
 'hoot info --mergers' displays information about the available mergers.
+
+=== metadata.dataset.indicator.tag
+
+* Data Type: list
+* Default Value:
+** `source:metadata`
+** `dataset`
+
+Single tag/value pair indicating that an element is a dataset used as import source or export
+destination for metadata values.
+
+=== metadata.grid.cell.size
+
+* Data Type: double
+* Default Value: `0.25`
+
+Cell size of the dataset grid created when exporting metadata tags to dataset elements. If this
+value is set to 0 a single polygon using the bounds of the source data is being created instead.
+
+=== metadata.tags
+
+* Data Type: list
+* Default Value:
+** `attribution`
+** `test-attribution`
+** `source`
+** `test-source`
+
+List of tag/value pairs of metatdata tags with default values to be distributed (import) or
+collected (export).
 
 === name.contains.criterion.case.sensitive
 
@@ -3129,49 +3172,6 @@ as master for determining the sequencing of element ID's.
 
 Add a tag with the bounding box for each element
 
-=== map.factory.reader
-
-* Data Type: string
-* Default Value: ``
-
-Specifies the reader that the OsmMapReaderFactory will use. This overrides any information derived
-from the URL.
-
-=== map.factory.writer
-
-* Data Type: string
-* Default Value: ``
-
-Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived
-from the URL.
-
-=== map.reader.add.child.refs.when.missing
-
-* Data Type: bool
-* Default Value: `false`
-
-By default, file based readers will not add child references (node ref, elements members) to parent
-elements if those elements are not present in the data.  For external sorting and translations
-where partial chunks of elements only may be present, or workflows where you are working with
-remote sourced data with missing element children, the default value may need to be changed. This
-option is not supported by all file based readers.
-
-=== map.writer.schema
-
-* Data Type: string
-* Default Value: ``
-
-Sets the value for a "schema" attribute when writing a map to OSM XML.  NOTE: this will only be
-written if the value is not empty.
-
-=== map.writer.skip.empty
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the OSM map writer will NOT write a file if the map is empty. The default is to write a
-file even if the map is empty.
-
 === overpass.api.host
 
 * Data Type: string
@@ -3179,6 +3179,14 @@ file even if the map is empty.
 
 Overpass API URL host name. Used by the JSON readers to distinguish Overpass JSON web sources from
 GeoJSON web sources.
+
+=== overwrite.tag.merger.accumulate.values.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
 
 === perty.csm.D
 

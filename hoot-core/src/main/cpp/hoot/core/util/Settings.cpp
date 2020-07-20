@@ -139,7 +139,7 @@ private:
     for (pt::ptree::value_type& element : tree.get_child(""))
     {
       const QString optionName = QString::fromUtf8(element.first.c_str());
-      LOG_VART(optionName);
+      LOG_VARD(optionName);
 
       //  Skip comments
       if (optionName.startsWith("#"))
@@ -155,7 +155,7 @@ private:
 
       //  Set key/value pair as name and data, data() turns everything to a string
       const QString optionVal = QString::fromUtf8(element.second.data().c_str());
-      LOG_VART(optionVal);
+      LOG_VARD(optionVal);
       if (optionVal.contains("->"))
       {
         // '->' replaces one option val with another and there can be multiple list replacement

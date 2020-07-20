@@ -70,7 +70,6 @@ public:
 protected:
 
   bool _caseSensitive;
-
 };
 
 typedef std::shared_ptr<TagMerger> TagMergerPtr;

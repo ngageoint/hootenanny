@@ -58,14 +58,20 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setOverwriteExcludeTagKeys(const QStringList& overwriteExcludeTagKeys)
-  { _overwriteExcludeTagKeys = overwriteExcludeTagKeys; }
+  void setOverwriteExcludeTagKeys(const QStringList& tagKeys)
+  { _overwriteExcludeTagKeys = tagKeys; }
+  void setAccumulateValuesTagKeys(const QStringList& tagKeys)
+  { _accumulateValuesTagKeys = tagKeys; }
 
 protected:
 
   bool _swap;
+
   // keys of tags not to be overwritten
   QStringList _overwriteExcludeTagKeys;
+
+  // TODO
+  QStringList _accumulateValuesTagKeys;
 };
 
 /**

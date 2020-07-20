@@ -47,21 +47,22 @@ namespace hoot
 HOOT_FACTORY_REGISTER(Merger, HighwayTagOnlyMerger)
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-                                           std::shared_ptr<PartialNetworkMerger> networkMerger)
-  : HighwaySnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
-      _performBridgeGeometryMerging(
-      ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
-      _networkMerger(networkMerger)
+                                           std::shared_ptr<PartialNetworkMerger> networkMerger) :
+HighwaySnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
+_performBridgeGeometryMerging(
+ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
+_networkMerger(networkMerger)
 {
   _removeTagsFromWayMembers = false;
   _markAddedMultilineStringRelations = true;
 }
 
-HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-                                           const std::shared_ptr<SublineStringMatcher>& sublineMatcher)
-  : HighwaySnapMerger(pairs, sublineMatcher),
-      _performBridgeGeometryMerging(
-      ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
+HighwayTagOnlyMerger::HighwayTagOnlyMerger(
+  const std::set<std::pair<ElementId, ElementId>>& pairs,
+  const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
+HighwaySnapMerger(pairs, sublineMatcher),
+_performBridgeGeometryMerging(
+ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
 {
   _removeTagsFromWayMembers = false;
   _markAddedMultilineStringRelations = true;

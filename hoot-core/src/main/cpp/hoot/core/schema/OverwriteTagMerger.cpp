@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -44,13 +45,21 @@ OverwriteTagMerger::OverwriteTagMerger(bool swap)
 
 Tags OverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
+  LOG_VARD(_overwriteExcludeTagKeys);
+  LOG_VARD(_accumulateValuesTagKeys);
+  LOG_VARD(_caseSensitive);
+
   if (_swap)
   {
-    return TagComparator::getInstance().overwriteMerge(t2, t1, _overwriteExcludeTagKeys, _caseSensitive);
+    return
+      TagComparator::getInstance().overwriteMerge(
+        t2, t1, _overwriteExcludeTagKeys, _accumulateValuesTagKeys, _caseSensitive);
   }
   else
   {
-    return TagComparator::getInstance().overwriteMerge(t1, t2, _overwriteExcludeTagKeys, _caseSensitive);
+    return
+      TagComparator::getInstance().overwriteMerge(
+        t1, t2, _overwriteExcludeTagKeys, _accumulateValuesTagKeys, _caseSensitive);
   }
 }
 
@@ -59,6 +68,7 @@ void OverwriteTagMerger::setConfiguration(const Settings& conf)
   TagMerger::setConfiguration(conf);
   ConfigOptions config = ConfigOptions(conf);
   setOverwriteExcludeTagKeys(config.getTagMergerOverwriteExclude());
+  setAccumulateValuesTagKeys(config.getOverwriteTagMergerAccumulateValuesKeys());
 }
 
 }

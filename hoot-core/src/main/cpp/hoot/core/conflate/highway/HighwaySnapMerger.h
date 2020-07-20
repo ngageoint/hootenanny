@@ -42,7 +42,7 @@ class WaySublineCollection;
  * Note that this was originally written specifically for roads, but now is used by several linear
  * script routines, including railway and river.
  *
- * @todo rename to SnapMergerJs
+ * @todo rename to LinearSnapMerger
  */
 class HighwaySnapMerger : public HighwayMergerAbstract
 {
