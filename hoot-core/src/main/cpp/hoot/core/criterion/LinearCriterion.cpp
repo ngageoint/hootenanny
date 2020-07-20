@@ -68,6 +68,33 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
       return false;
     }
 
+    // This prevents some of the problems seen in #4149. Decided to leave it disabled due to issues
+    // with _map becoming null at odd times. Leaving it commented out here in case its helpfule with
+    // #4149.
+//    if (!OsmSchema::getInstance().hasType(way->getTags()))
+//    {
+//      LOG_VART(_map.get());
+//      std::vector<ConstRelationPtr> owningRelations =
+//        RelationMemberUtils::getContainingRelations(_map, way->getElementId());
+//      LOG_VART(owningRelations.size());
+//      for (std::vector<ConstRelationPtr>::const_iterator it = owningRelations.begin();
+//           it != owningRelations.end(); ++it)
+//      {
+//        ConstRelationPtr relation = *it;
+//        LOG_VART(relation.get());
+//        if (relation)
+//        {
+//          LOG_VART(CollectionRelationCriterion().isSatisfied(relation));
+//        }
+//        if (relation &&
+//            (/*isLinearRelation(relation) || */CollectionRelationCriterion().isSatisfied(relation)))
+//        {
+//          LOG_TRACE("Untyped way is member of a linear relation, so fails LinearCriterion.");
+//          return false;
+//        }
+//      }
+//    }
+
     LOG_TRACE(e->getElementId() << " passes LinearCriterion.");
     return true;
   }
