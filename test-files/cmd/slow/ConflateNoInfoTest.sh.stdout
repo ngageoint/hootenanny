@@ -48,7 +48,6 @@
 16:42:37.003 STATUS ...pp/hoot/core/util/Progress.cpp( 114) Conflate (42%): Rubbersheeting data...
 16:42:37.022 STATUS .../cpp/hoot/core/ops/NamedOp.cpp( 167) 	Rubbersheeted 0 / 490 linear features. in 00:00
 16:42:37.022 STATUS .../hoot/core/cmd/ConflateCmd.cpp( 446) Conflate pre-operations ran in 00:00 total.
-16:42:37.028 WARN   ...conflate/UnifyingConflator.cpp( 157) No elements in the input map have a recognizable schema type. Generic conflation routines will be used.
 16:42:37.029 STATUS ...pp/hoot/core/util/Progress.cpp( 114) Conflate (42%): Matching features...
 16:42:37.029 STATUS ...late/matching/MatchFactory.cpp(  80) Launching matcher: 1 / 4: hoot::HighwayMatchCreator...
 16:42:37.029 STATUS ...ighway/HighwayMatchCreator.cpp( 378) Looking for matches with: hoot::HighwayMatchCreator within a feature dependent search radius...
@@ -74,7 +73,12 @@
 16:42:37.524 STATUS ...pp/hoot/core/util/Progress.cpp( 114) Conflate (57%): Removing invalid POIs from reviews...
 16:42:37.524 STATUS .../cpp/hoot/core/ops/NamedOp.cpp( 167) 	Removed 0 invalid reviewable POIs and 0 reviews in 00:00
 16:42:37.524 STATUS ...pp/hoot/core/util/Progress.cpp( 114) Conflate (58%): Removing superfluous nodes...
-16:42:37.525 INFO   ...ops/SuperfluousNodeRemover.cpp( 107) Exempted 1,964 nodes from removal after processing 3,000 total elements.        16:42:37.525 INFO   ...ops/SuperfluousNodeRemover.cpp( 145) Exempted 2,154 nodes from removal after processing 4,000 total elements.        16:42:37.526 INFO   ...ops/SuperfluousNodeRemover.cpp( 145) Exempted 2,154 nodes from removal after processing 5,000 total elements.        16:42:37.533 INFO   ...ops/SuperfluousNodeRemover.cpp( 203) Processed 1,000 nodes / 2,154 total nodes.        16:42:37.534 INFO   ...ops/SuperfluousNodeRemover.cpp( 203) Processed 2,000 nodes / 2,154 total nodes.        16:42:37.534 STATUS .../cpp/hoot/core/ops/NamedOp.cpp( 167) 	Removed 0 superfluous nodes in 00:00
+16:42:37.525 INFO   ...ops/SuperfluousNodeRemover.cpp( 107) Exempted 1,964 nodes from removal after processing 3,000 total elements.        
+16:42:37.525 INFO   ...ops/SuperfluousNodeRemover.cpp( 145) Exempted 2,154 nodes from removal after processing 4,000 total elements.        
+16:42:37.526 INFO   ...ops/SuperfluousNodeRemover.cpp( 145) Exempted 2,154 nodes from removal after processing 5,000 total elements.        
+16:42:37.533 INFO   ...ops/SuperfluousNodeRemover.cpp( 203) Processed 1,000 nodes / 2,154 total nodes.        
+16:42:37.534 INFO   ...ops/SuperfluousNodeRemover.cpp( 203) Processed 2,000 nodes / 2,154 total nodes.        
+16:42:37.534 STATUS .../cpp/hoot/core/ops/NamedOp.cpp( 167) 	Removed 0 superfluous nodes in 00:00
 16:42:37.534 STATUS ...pp/hoot/core/util/Progress.cpp( 114) Conflate (59%): Merging very small roads...
 16:42:37.536 STATUS .../cpp/hoot/core/ops/NamedOp.cpp( 167) 	Merged 0 very small roads in 00:00
 16:42:37.536 STATUS ...pp/hoot/core/util/Progress.cpp( 114) Conflate (60%): Replacing road roundabouts with simple intersections...
