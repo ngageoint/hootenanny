@@ -68,7 +68,7 @@ void OverwriteTagMerger::setConfiguration(const Settings& conf)
   TagMerger::setConfiguration(conf);
   ConfigOptions config = ConfigOptions(conf);
   setOverwriteExcludeTagKeys(config.getTagMergerOverwriteExclude());
-  setAccumulateValuesTagKeys(config.getOverwriteTagMergerAccumulateValuesKeys());
+  setAccumulateValuesTagKeys(config.getTagMergerOverwriteAccumulateValuesKeys());
 }
 
 }

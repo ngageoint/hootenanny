@@ -3197,18 +3197,6 @@ Add a tag with the bounding box for each element
 Overpass API URL host name. Used by the JSON readers to distinguish Overpass JSON web sources from
 GeoJSON web sources.
 
-=== overwrite.tag.merger.accumulate.values.keys
-
-* Data Type: list
-* Default Value:
-** ``
-
-This allows the OverwriteTagMerger to preserve the values of select tags during tag merging. This
-does not apply to name tags or tags marked as type "text" or "metadata" in the schema. Any tag key
-in the option list found in the set of tags used to overwrite will result in corresponding tag
-values in the target feature being appended to each other. e.g. A: { a_id=1, b_id=1} merged with
-B: { b_id=2} results in C: { a_id=1, b_id=1;2 }
-
 === perty.csm.D
 
 * Data Type: double
@@ -4760,6 +4748,18 @@ key/value pairs with ';' and surround the entire list in double quotes.
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
 depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the 
 available mergers.
+
+=== tag.merger.overwrite.accumulate.values.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+This allows the OverwriteTagMerger to preserve the values of select tags during tag merging. This
+does not apply to name tags or tags marked as type "text" or "metadata" in the schema. Any tag key
+in the option list found in the set of tags used to overwrite will result in corresponding tag
+values in the target feature being appended to each other. e.g. A: { a_id=1, b_id=1} merged with
+B: { b_id=2} results in C: { a_id=1, b_id=1;2 }
 
 === tag.merger.overwrite.exclude
 
