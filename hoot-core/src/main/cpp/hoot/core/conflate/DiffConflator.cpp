@@ -608,7 +608,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
     TagComparator::getInstance().overwriteMerge(
       pNewElement->getTags(), pOldElement->getTags(),
       ConfigOptions().getTagMergerOverwriteExclude(),
-      ConfigOptions().getOverwriteTagMergerAccumulateValuesKeys(),
+      ConfigOptions().getTagMergerOverwriteAccumulateValuesKeys(),
       ConfigOptions().getDuplicateNameCaseSensitive());
   pChangeElement->setTags(newTags);
 
