@@ -2314,14 +2314,17 @@ option. A setting of -1 is useful for tests where you do not have granular enoug
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+If true, warnings are logged any time an input map is loaded for conflation that does not contain
+any feature with a  type recognizable by the Hootenanny schema. This is generally only turned off
+when running tests.
 
 === log.warnings.for.empty.input.maps
 
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+If true, warnings are logged any time an empty map is loaded. This is generally only turned off
+when running tests.
 
 === log.warnings.for.missing.elements
 
@@ -3200,7 +3203,11 @@ GeoJSON web sources.
 * Default Value:
 ** ``
 
-TODO
+This allows the OverwriteTagMerger to preserve the values of select tags during tag merging. This
+does not apply to name tags or tags marked as type "text" or "metadata" in the schema. Any tag key
+in the option list found in the set of tags used to overwrite will result in corresponding tag
+values in the target feature being appended to each other. e.g. A: { a_id=1, b_id=1} merged with
+B: { b_id=2} results in C: { a_id=1, b_id=1;2 }
 
 === perty.csm.D
 

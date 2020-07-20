@@ -70,7 +70,8 @@ protected:
   // keys of tags not to be overwritten
   QStringList _overwriteExcludeTagKeys;
 
-  // TODO
+  // Any tags being merged with matching keys will have values appended rather than overwritten in
+  // the target.
   QStringList _accumulateValuesTagKeys;
 };
 

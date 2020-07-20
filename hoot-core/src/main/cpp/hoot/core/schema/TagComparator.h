@@ -108,7 +108,7 @@ public:
    * @param t1 tags to keep
    * @param t2 tags to be overwritten
    * @param overwriteExcludeTagKeys optional keys of tags to exclude being overwritten in t2
-   * @param accumulateValuesTagKeys TODO
+   * @param accumulateValuesTagKeys optional keys of tags to preserve values for via concatenation
    * @param caseSensitive True for case sensitive merge names
    * @return merged tags
    */

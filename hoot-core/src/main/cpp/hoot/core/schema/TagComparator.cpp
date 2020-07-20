@@ -801,7 +801,7 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
   }
   //LOG_VART(result);
 
-  // Add t1 tags overwriting any t2 tags in the process (except those in the optional exclude list).
+  // Add t1 tags overwriting any t2 tags in the process.
   const Qt::CaseSensitivity caseSensitivity =
     caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
   for (Tags::ConstIterator it1 = t1.constBegin(); it1 != t1.constEnd(); ++it1)
@@ -814,7 +814,9 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
 
     const bool tagsHaveKey = result.contains(it1.key());
     if (it1.value().isEmpty() == false &&
-        (!tagsHaveKey || !overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity)))
+        (!tagsHaveKey ||
+         // Do not overwrite any tags whose keys are exclude list.
+         !overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity)))
     {
       if (!tagsHaveKey || !accumulateValuesTagKeys.contains(it1.key(), caseSensitivity))
       {
@@ -822,7 +824,8 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
       }
       else
       {
-        // TODO
+        // If the tag was marked for preservation by accumulation, append values to each other
+        // rather than overwriting them.
         result[it1.key()] = result[it1.key()] + ";" + it1.value();
       }
     }
