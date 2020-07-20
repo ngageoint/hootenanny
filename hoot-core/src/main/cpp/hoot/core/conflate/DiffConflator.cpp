@@ -605,8 +605,11 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
 
   // Need to merge tags into the new element. Keeps all names, chooses tags1 in event of a conflict.
   Tags newTags =
-    TagComparator::getInstance().overwriteMerge(pNewElement->getTags(), pOldElement->getTags(), QStringList(),
-                                                ConfigOptions().getDuplicateNameCaseSensitive());
+    TagComparator::getInstance().overwriteMerge(
+      pNewElement->getTags(), pOldElement->getTags(),
+      ConfigOptions().getTagMergerOverwriteExclude(),
+      ConfigOptions().getOverwriteTagMergerAccumulateValuesKeys(),
+      ConfigOptions().getDuplicateNameCaseSensitive());
   pChangeElement->setTags(newTags);
 
   // Create the change
