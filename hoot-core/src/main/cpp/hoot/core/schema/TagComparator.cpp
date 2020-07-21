@@ -732,7 +732,8 @@ void TagComparator::_mergeUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
   }
 }
 
-Tags TagComparator::overwriteMerge(Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys, bool caseSensitive)
+Tags TagComparator::overwriteMerge(Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys,
+                                   const QStringList& accumulateValuesTagKeys, bool caseSensitive)
 { 
   Tags result;
 
@@ -743,7 +744,8 @@ Tags TagComparator::overwriteMerge(Tags t1, Tags t2, const QStringList& overwrit
   mergeText(t1, t2, result, overwriteExcludeTagKeys, caseSensitive);
 
   // use the tags in t1 first, then fall back to tags in t2
-  _overwriteRemainingTags(t1, t2, result, overwriteExcludeTagKeys, caseSensitive);
+  _overwriteRemainingTags(
+    t1, t2, result, overwriteExcludeTagKeys, accumulateValuesTagKeys, caseSensitive);
 
   return result;
 }
@@ -778,11 +780,16 @@ Tags TagComparator::replaceMerge(const Tags& t1, const Tags& t2,
 
 void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
                                             const QStringList& overwriteExcludeTagKeys,
+                                            const QStringList& accumulateValuesTagKeys,
                                             bool caseSensitive)
 {
   LOG_TRACE("Overwriting remaining tags...");
+
   LOG_VART(t1);
   LOG_VART(t2);
+  LOG_VART(overwriteExcludeTagKeys);
+  LOG_VART(accumulateValuesTagKeys);
+  LOG_VART(caseSensitive);
 
   // Add t2 tags
   for (Tags::ConstIterator it2 = t2.constBegin(); it2 != t2.constEnd(); ++it2)
@@ -794,20 +801,33 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
   }
   //LOG_VART(result);
 
-  // Add t1 tags overwriting any t2 tags in the process (except those in the optional exclude list).
+  // Add t1 tags overwriting any t2 tags in the process.
   const Qt::CaseSensitivity caseSensitivity =
     caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
   for (Tags::ConstIterator it1 = t1.constBegin(); it1 != t1.constEnd(); ++it1)
   {
-    //LOG_VART(it1.key());
-    //LOG_VART(it1.value());
-    //LOG_VART(overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity));
-    //LOG_VART(result.contains(it1.key()));
+    LOG_VART(it1.key());
+    LOG_VART(it1.value());
+    LOG_VART(overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity));
+    LOG_VART(accumulateValuesTagKeys.contains(it1.key(), caseSensitivity));
+    LOG_VART(result.contains(it1.key()));
+
+    const bool tagsHaveKey = result.contains(it1.key());
     if (it1.value().isEmpty() == false &&
-        (!result.contains(it1.key()) ||
+        (!tagsHaveKey ||
+         // Do not overwrite any tags whose keys are exclude list.
          !overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity)))
     {
-      result[it1.key()] = it1.value();
+      if (!tagsHaveKey || !accumulateValuesTagKeys.contains(it1.key(), caseSensitivity))
+      {
+        result[it1.key()] = it1.value();
+      }
+      else
+      {
+        // If the tag was marked for preservation by accumulation, append values to each other
+        // rather than overwriting them.
+        result[it1.key()] = result[it1.key()] + ";" + it1.value();
+      }
     }
   }
   LOG_VART(result);

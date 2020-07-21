@@ -199,7 +199,15 @@ void OsmMapReaderFactory::_read(const OsmMapPtr& map,
   reader->read(map);
   if (map->size() == 0)
   {
-    LOG_WARN("No data in map: " << url << ".");
+    const QString msg = "No data in map: " + url + ".";
+    if (ConfigOptions().getLogWarningsForEmptyInputMaps())
+    {
+      LOG_WARN(msg);
+    }
+    else
+    {
+      LOG_INFO(msg);
+    }
   }
   VALIDATE(map->validate(true));
   LOG_STATUS(
