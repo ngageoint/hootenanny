@@ -124,7 +124,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   /// https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx
   /// for more details.
 
-  // merge all POI tags first, but keep Unknown1 and Unknown2 separate. It is implicitly assumed
+  // Merge all POI tags first, but keep Unknown1 and Unknown2 separate. It is implicitly assumed
   // that since they're in a single group they all represent the same entity.
   Tags poiTags1 = _mergePoiTags(map, Status::Unknown1);
   // This debug map writing is very expensive, so just turn it on when debugging small datasets.
@@ -145,8 +145,8 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   ElementPtr finalBuilding = map->getElement(finalBuildingEid);
   if (!finalBuilding.get())
   {
-    //building merger must not have been able to merge...maybe need an earlier check for this
-    //and also handle it differently...
+    // Building merger must not have been able to merge...maybe need an earlier check for this
+    // and also handle it differently...
 
     if (logWarnCount < Log::getWarnMessageLimit())
     {
@@ -190,7 +190,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     //OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-2");
   }
 
-  // do some book keeping to remove the POIs and mark them as replaced.
+  // Do some book keeping to remove the POIs and mark them as replaced.
   long poisMerged = 0;
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
@@ -438,7 +438,7 @@ ElementId PoiPolygonMerger::mergeOnePoiAndOnePolygon(OsmMapPtr map)
 
   // do the merging
   std::set<std::pair<ElementId, ElementId>> pairs;
-  //Ordering doesn't matter here, since the poi is always merged into the poly.
+  // Ordering doesn't matter here, since the poi is always merged into the poly.
   pairs.insert(std::pair<ElementId, ElementId>(polyId, poiId));
   PoiPolygonMerger merger(pairs);
   std::vector<std::pair<ElementId, ElementId>> replacedElements;
