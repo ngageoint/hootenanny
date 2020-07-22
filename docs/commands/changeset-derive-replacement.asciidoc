@@ -143,7 +143,7 @@ point features.
 
 ==== Out of Bounds Connected Ways
 
-When performing replacement a method is required to protect the reference linear features that fall outside of the replacement bounds from
+When performing replacement, a method is required to protect the reference linear features that fall outside of the replacement bounds from
 deletion in the output changeset. This is only necessary when the +--strict-bounds+ option is omitted. The method to protect the ways is to 
 tag them with the tag, hoot:change:exclude:delete=yes. This can either be done automatically by Hootenanny as part of this command's execution
 or can be done before the call to this command. 

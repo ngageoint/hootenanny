@@ -403,7 +403,7 @@ void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const
   {
     // don't think this should ever occur
     throw IllegalArgumentException(
-      "POI being merged with polygon cannot must have an Unknown1 or Unknown2 status.");
+      "POI being merged with polygon must have an Unknown1 or Unknown2 status.");
   }
   else if (poly->getStatus() == Status::Conflated)
   {
