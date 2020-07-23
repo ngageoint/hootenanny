@@ -101,7 +101,7 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
   }
   // This error handling has been proven to not work as it never returns the error message to the
   // nodejs calling service....makes debugging very difficult. Need to fix: #2231. As a workaround,
-  // use scripts/core/MergeElements.js to see log output duriing merging.
+  // use scripts/core/MergeElements.js to see log output during merging.
   catch (const HootException& e)
   {
     LOG_ERROR(e.getWhat());
@@ -137,8 +137,8 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
   LOG_VART(_mergeTypeToString(mergeType));
 
   ElementId mergeTargetId;
-  // merge target id won't be passed in for poi/poly, as the poi/poly merging picks the target
-  // element itself
+  // The merge target id won't be passed in for poi/poly, as the poi/poly merging picks the target
+  // element itself.
   if (mergeType != MergeType::PoiToPolygon)
   {
     mergeTargetId = _getMergeTargetFeatureId(map);

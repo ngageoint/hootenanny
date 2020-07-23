@@ -94,17 +94,18 @@ struct BoundsOptions
  * generated for, whether all the reference features or just those that overlap secondary features
  * are to be replaced, and how strict the AOI is to be interpreted. ChangesetCreator is used for the
  * actual changeset generation and file output. This class handles the cookie cutting, conflation,
- * and a host of other things that need to happen before the changeset generation. The secondary
- * data added to the output changeset, as well as the reference data removed from the changeset can
- * be further restricted with a non-geometry type filter.
+ * and a host of other things that need to happen before the replacement changeset is generated.
+ * The secondary data added to the output changeset, as well as the reference data removed from the
+ * changeset can be further restricted with a non-geometry type filter.
  *
  * Occasionally, relations will be passed in with some members missing. This class will optionally
  * tag those with a custom metadata tag to be passed to the changeset output. This allows for
- * potential manual repairing of those relations after the changeset is written (tag can then be
- * removed).
+ * potential manual repairing of those relations after the changeset is written, and after that the
+ * tag can then be removed. This is also a configurable feature, which can be turned off.
  *
  * TODO: implement progress
  * TODO: can probably break some of this up into separate classes now; e.g. filtering, etc.
+ * TODO: need to test missing way node refs
  */
 class ChangesetReplacementCreator
 {
@@ -171,6 +172,7 @@ private:
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
 
+
   // One or more non-geometry criteria to be combined with the geometry type filters for the
   // secondary input. Allows for further restriction of the secondary data that makes it to output.
   std::shared_ptr<ChainCriterion> _replacementFilter;
@@ -209,6 +211,9 @@ private:
 
   // controls cropping
   BoundsOptions _boundsOpts;
+
+  // determines if the current changeset map generation pass contains only linear features
+  bool _currentChangeDerivationPassIsLinear;
 
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
@@ -271,8 +276,13 @@ private:
    */
   void _addChangesetDeleteExclusionTags(OsmMapPtr& map);
 
+  /*
+   * Cut out of the reference map what you don't want, and if there is anything in the secondary
+   * map, add that data in (not applicable in the cut only scenario).
+   */
   OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
-                             const GeometryTypeCriterion::GeometryType& geometryType);
+                             const GeometryTypeCriterion::GeometryType& geometryType,
+                             const geos::geom::Envelope& replacementBounds);
 
   /*
    * Copies all ways that are tagged with MetadataTags::HootConnectedWayOutsideBounds() out of a map
