@@ -109,7 +109,8 @@ _chainRetainmentFilters(false),
 _waySnappingEnabled(true),
 _conflationEnabled(true),
 _cleaningEnabled(true),
-_tagOobConnectedWays(false)
+_tagOobConnectedWays(false),
+_currentChangeDerivationPassIsLinear(false)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, statsOutputFile, osmApiDbUrl));
 
@@ -298,6 +299,7 @@ QString ChangesetReplacementCreator::_getJobDescription(
     lenientStr += "not ";
   }
   lenientStr += "lenient.";
+  LOG_VARD(_fullReplacement);
   const QString replacementTypeStr = _fullReplacement ? "full" : "overlapping only";
   QString geometryFiltersStr = "are ";
   if (!_geometryFiltersSpecified)
@@ -535,9 +537,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // versions later.
   const QMap<ElementId, long> refIdToVersionMappings = _getIdToVersionMappings(refMap);
 
-  const bool isLinearCrit = !linearFilterClassNames.isEmpty();
-  LOG_VART(isLinearCrit);
-  if (_tagOobConnectedWays && _lenientBounds && isLinearCrit)
+  _currentChangeDerivationPassIsLinear = !linearFilterClassNames.isEmpty();
+  LOG_VART(_currentChangeDerivationPassIsLinear);
+  if (_tagOobConnectedWays && _currentChangeDerivationPassIsLinear)
   {
     // If we have a lenient bounds requirement and linear features, we need to exclude all ways
     // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
@@ -620,7 +622,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // SNAP
 
-  if (isLinearCrit && _waySnappingEnabled)
+  if (_currentChangeDerivationPassIsLinear && _waySnappingEnabled)
   {
     // Snap secondary features back to reference features if dealing with linear features where
     // ref features may have been cut along the bounds. We're being lenient here by snapping
@@ -648,7 +650,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // PRE-CHANGESET DERIVATION DATA PREP
 
   OsmMapPtr immediatelyConnectedOutOfBoundsWays;
-  if (_lenientBounds && isLinearCrit)
+  if (_lenientBounds && /*isLinearCrit*/_currentChangeDerivationPassIsLinear)
   {
     // If we're conflating linear features with the lenient bounds requirement, copy the
     // immediately connected out of bounds ways to a new temp map. We'll lose those ways once we
@@ -667,9 +669,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     conflatedMap, bounds, _boundsOpts.changesetSecKeepEntireCrossingBounds,
     _boundsOpts.changesetSecKeepOnlyInsideBounds, "sec-cropped-for-changeset");
   LOG_VART(_lenientBounds);
-  LOG_VART(isLinearCrit);
 
-  if (_lenientBounds && isLinearCrit)
+  if (_lenientBounds && _currentChangeDerivationPassIsLinear)
   {
     if (_waySnappingEnabled)
     {
@@ -764,6 +765,7 @@ void ChangesetReplacementCreator::_validateInputs(const QString& input1, const Q
       "GeoJSON inputs are not supported by replacement changeset derivation.");
   }
 
+  LOG_VARD(_fullReplacement);
   if (_fullReplacement && _retainmentFilter)
   {
     throw IllegalArgumentException(
@@ -875,6 +877,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(
       }
     }
 
+    // TODO: explain these and the rest
     _boundsOpts.loadRefKeepEntireCrossingBounds = false;
     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
     _boundsOpts.loadSecKeepEntireCrossingBounds = false;
@@ -1263,23 +1266,42 @@ void ChangesetReplacementCreator::_filterFeatures(
 OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType)
 {
-  // This could use some refactoring after the addition of _fullReplacement.
+  LOG_VARD(_fullReplacement);
+  LOG_VARD(doughMap->getElementCount());
+  LOG_VARD(cutterMap->size());
 
-  // If the passed in dough map is empty, there's nothing to be cut out.
+  /*
+   * lenient/overlapping - cutter shape is all overlapping sec data inside the bounds and
+   *                       immediately connected outside the bounds OR all ref data inside the
+   *                       bounds and immediately connected outside the bounds (if linear) if sec
+   *                       map is empty
+     lenient/full        - cutter shape is all ref data inside the bounds and immediately connected
+                           outside the bounds (if linear)
+     strict/overlapping  - cutter shape is all overlapping sec data inside the bounds
+     strict/full         - cutter shape is all ref data inside the bounds
+   */
+
+  // If the passed in dough map is empty, there's nothing to be cut out. So, just return the empty
+  // ref map.
   if (doughMap->getElementCount() == 0)
   {
-    LOG_DEBUG("Nothing to cut from dough map, so returning the dough map as the cut map...");
+    LOG_DEBUG(
+      "Nothing to cut from dough map, so returning the empty dough map as the map after " <<
+      "cutting: " << doughMap->getName() << "...");
     return doughMap;
   }
   else if (cutterMap->size() == 0)
   {
+    // TODO: make this work for the delete only test
+
     if (_fullReplacement)
     {
       // If the sec map is empty and we're doing full replacement, we want everything deleted out
-      // of the ref for the current feature type in the changeset. So, return an empty map.
+      // of the ref inside the bounds and immediate connected (if linear) for the current feature
+      // type in the changeset. So, return an empty map.
       LOG_DEBUG(
-        "Nothing in cutter map. Full replacement not enabled, so returning an empty map " <<
-        "as the cut map...");
+        "Nothing in cutter map. Full replacement enabled, so returning an empty map " <<
+        "as the map after cutting...");
       return OsmMapPtr(new OsmMap());
     }
     else
@@ -1287,8 +1309,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
       // If the sec map is empty and we're not doing full replacement, there's nothing in the sec
       // to overlap with the ref, so leave the ref untouched.
       LOG_DEBUG(
-        "Nothing in cutter map. Full replacement enabled, so returning the entire dough map " <<
-        "as the cut map...");
+        "Nothing in cutter map. Full replacement not enabled, so returning the entire dough map " <<
+        "as the map after cutting: " << doughMap->getName() << "...");
       return doughMap;
     }
   }
@@ -1310,35 +1332,70 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_VART(MapUtils::mapIsPointsOnly(cutterMap));
   const double cookieCutterAlpha = opts.getCookieCutterAlpha();
   double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
-  LOG_VART(_fullReplacement);
-  if (_fullReplacement)
+  LOG_VARD(_fullReplacement);
+  LOG_VARD(_lenientBounds);
+  LOG_VARD(_currentChangeDerivationPassIsLinear);
+  // TODO: cleanup
+  if (_currentChangeDerivationPassIsLinear)
   {
-    // Generate a cutter shape based on the ref map, which will cause all the ref data to be
-    // replaced.
-    LOG_DEBUG("Using dough map as cutter shape map...");
-    cutterMapToUse = doughMap;
-    // TODO: riverbank test fails with missing POIs without this and the single point test has
-    // extra POIs in output without this; explain
-    cookieCutterAlphaShapeBuffer = 10.0;
+    if (_lenientBounds)
+    {
+      if (_fullReplacement)
+      {
+        // Generate a cutter shape based on the ref map, which will cause all the ref data to be
+        // replaced.
+        LOG_DEBUG("Using dough map: " << doughMap->getName() << " as cutter shape map...");
+        cutterMapToUse = doughMap;
+        // TODO: riverbank test fails with missing POIs without this and the single point test has
+        // extra POIs in output without this; explain
+        cookieCutterAlphaShapeBuffer = 10.0;
+      }
+      else
+      {
+        // Generate a cutter shape based on the cropped secondary map, which will cause only
+        // overlapping data between the two datasets to be replaced.
+        LOG_DEBUG("Using cutter map: " << cutterMap->getName() << " as cutter shape map...");
+        cutterMapToUse = cutterMap;
+      }
+    }
+    else
+    {
+      LOG_DEBUG("Using cutter map: " << cutterMap->getName() << " as cutter shape map...");
+      cutterMapToUse = cutterMap;
+    }
   }
   else
   {
-    // Generate a cutter shape based on the cropped secondary map, which will cause only
-    // overlapping data between the two datasets to be replaced.
-    LOG_DEBUG("Using cutter map as cutter shape map...");
-    cutterMapToUse = cutterMap;
+    if (_fullReplacement)
+    {
+      // Generate a cutter shape based on the ref map, which will cause all the ref data to be
+      // replaced.
+      LOG_DEBUG("Using dough map: " << doughMap->getName() << " as cutter shape map...");
+      cutterMapToUse = doughMap;
+      // TODO: riverbank test fails with missing POIs without this and the single point test has
+      // extra POIs in output without this; explain
+      cookieCutterAlphaShapeBuffer = 10.0;
+    }
+    else
+    {
+      // Generate a cutter shape based on the cropped secondary map, which will cause only
+      // overlapping data between the two datasets to be replaced.
+      LOG_DEBUG("Using cutter map: " << cutterMap->getName() << " as cutter shape map...");
+      cutterMapToUse = cutterMap;
+    }
   }
 
   // Found that if a map only has a couple points or less, generating an alpha shape from them may
-  // not be possible (or at least don't know how to yet). So instead, go through the points in
-  // the map and replace them with small square polys...from that we can generate the alpha shape.
+  // not be possible (or at least don't know how to yet). So instead, go through the points in the
+  // map and replace them with small square shaped polys...from that we can generate the alpha
+  // shape.
   if ((int)cutterMapToUse->getElementCount() < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
   {
     LOG_DEBUG("Creating a cutter shape map transformation for point map...");
     // Make a copy here since we're making destructive changes to the geometry here for alpha shape
     // generation purposes only.
     cutterMapToUse.reset(new OsmMap(cutterMap));
-    PointsToPolysConverter pointConverter/*(1.0)*/;
+    PointsToPolysConverter pointConverter;
     LOG_STATUS("\t" << pointConverter.getInitStatusMessage());
     pointConverter.apply(cutterMapToUse);
     LOG_STATUS("\t" << pointConverter.getCompletedStatusMessage());
