@@ -212,7 +212,7 @@ private:
   // controls cropping
   BoundsOptions _boundsOpts;
 
-  // TODO
+  // determines if the current changeset map generation pass contains only linear features
   bool _currentChangeDerivationPassIsLinear;
 
   // handles changeset generation and output
@@ -277,7 +277,8 @@ private:
   void _addChangesetDeleteExclusionTags(OsmMapPtr& map);
 
   /*
-   * TODO
+   * Cut out of the reference map what you don't want, and if there is anything in the secondary
+   * map, add that data in (not applicable in the cut only scenario).
    */
   OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
                              const GeometryTypeCriterion::GeometryType& geometryType,
