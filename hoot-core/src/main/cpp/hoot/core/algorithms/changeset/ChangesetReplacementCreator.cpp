@@ -1268,6 +1268,11 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType,
   const geos::geom::Envelope& replacementBounds)
 {
+  // TODO: This logic has become extremely complicated over time to handle all the different cut
+  // and replace use cases. There may be way to simplify some of this logic related to
+  // strict/lenient bounds in here by changing some of the initial crop related opts set in
+  // _parseConfigOpts...not sure.
+
   LOG_VARD(_fullReplacement);
   LOG_VARD(_lenientBounds);
   LOG_VARD(_currentChangeDerivationPassIsLinear);
@@ -1297,14 +1302,16 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   }
   else if (cutterMap->size() == 0)
   {
-    // TODO: cleanup
+    // Linear features need to be handled slightly differently, due to the need to snap cut features
+    // back to reference features when the strict bounds interpretation is enabled.
     if (!_currentChangeDerivationPassIsLinear)
     {
+      // The bounds interpretation doesn't seem to matter here for non-linear features.
       if (_fullReplacement)
       {
-        // If the sec map is empty and we're doing full replacement, we want everything deleted out
-        // of the ref inside the bounds and immediate connected (if linear) for the current feature
-        // type in the changeset. So, return an empty map.
+        // If the sec map is empty and we're doing full replacement on non-linear features, we want
+        // everything deleted out of the ref inside the the replacement bounds. So, return an empty
+        // map.
         LOG_DEBUG(
           "Nothing in cutter map. Full replacement enabled, so returning an empty map " <<
           "as the map after cutting...");
@@ -1315,8 +1322,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
         // If the sec map is empty and we're not doing full replacement, there's nothing in the sec
         // to overlap with the ref, so leave the ref untouched.
         LOG_DEBUG(
-          "Nothing in cutter map. Full replacement not enabled, so returning the entire dough map " <<
-          "as the map after cutting: " << doughMap->getName() << "...");
+          "Nothing in cutter map. Full replacement not enabled, so returning the entire dough " <<
+          "map as the map after cutting: " << doughMap->getName() << "...");
         OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cut");
         return doughMap;
       }
@@ -1325,12 +1332,13 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     {
       if (_fullReplacement && _lenientBounds)
       {
-        // If the sec map is empty and we're doing full replacement, we want everything deleted out
-        // of the ref inside the bounds and immediate connected (if linear) for the current feature
-        // type in the changeset. So, return an empty map.
+        // If our map contains linear features only, the sec map is empty, we're doing full
+        // replacement, AND there isn't a strict interpretation of the bounds, we want everything
+        // deleted out of the ref inside the replacement bounds and featres immediately connected
+        // outside of the bounds. So, return an empty map.
         LOG_DEBUG(
-          "Nothing in cutter map. Full replacement enabled, so returning an empty map " <<
-          "as the map after cutting...");
+          "Nothing in cutter map for linear features. Full replacement and lenient bounds "
+          "interpretation, so returning an empty map as the map after cutting...");
         return OsmMapPtr(new OsmMap());
       }
       else if (_fullReplacement && !_lenientBounds)
@@ -1363,8 +1371,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
         // If the sec map is empty and we're not doing full replacement, there's nothing in the sec
         // to overlap with the ref, so leave the ref untouched.
         LOG_DEBUG(
-          "Nothing in cutter map. Full replacement not enabled, so returning the entire dough map " <<
-          "as the map after cutting: " << doughMap->getName() << "...");
+          "Nothing in cutter map for linear features. Full replacement not enabled, so returning the "
+          "entire dough map as the map after cutting: " << doughMap->getName() << "...");
         OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cut");
         return doughMap;
       }
@@ -1388,28 +1396,17 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_VART(MapUtils::mapIsPointsOnly(cutterMap));
   const double cookieCutterAlpha = opts.getCookieCutterAlpha();
   double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
-  // TODO: cleanup
-  if (_currentChangeDerivationPassIsLinear)
+  if (_currentChangeDerivationPassIsLinear) // See related note above when the cutter map is empty.
   {
-    if (_lenientBounds)
+    if (_lenientBounds && _fullReplacement)
     {
-      if (_fullReplacement)
-      {
-        // Generate a cutter shape based on the ref map, which will cause all the ref data to be
-        // replaced.
-        LOG_DEBUG("Using dough map: " << doughMap->getName() << " as cutter shape map...");
-        cutterMapToUse = doughMap;
-        // TODO: riverbank test fails with missing POIs without this and the single point test has
-        // extra POIs in output without this; explain
-        cookieCutterAlphaShapeBuffer = 10.0;
-      }
-      else
-      {
-        // Generate a cutter shape based on the cropped secondary map, which will cause only
-        // overlapping data between the two datasets to be replaced.
-        LOG_DEBUG("Using cutter map: " << cutterMap->getName() << " as cutter shape map...");
-        cutterMapToUse = cutterMap;
-      }
+      // Generate a cutter shape based on the ref map, which will cause all the ref data to be
+      // replaced.
+      LOG_DEBUG("Using dough map: " << doughMap->getName() << " as cutter shape map...");
+      cutterMapToUse = doughMap;
+      // TODO: riverbank test fails with missing POIs without this and the single point test has
+      // extra POIs in output without this; explain
+      cookieCutterAlphaShapeBuffer = 10.0;
     }
     else
     {
