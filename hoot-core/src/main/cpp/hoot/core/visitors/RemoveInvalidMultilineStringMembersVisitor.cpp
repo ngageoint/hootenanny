@@ -62,9 +62,13 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
       for (vector<RelationData::Entry>::iterator it = multi_members.begin();
            it != multi_members.end(); ++it)
       {
-        LOG_VART(_map->getElement(it->getElementId())->getTags().getInformationCount());
-        if (_map->getElement(it->getElementId())->getTags().getInformationCount() > 0)
-          return;
+        ElementPtr element = _map->getElement(it->getElementId());
+        if (element)
+        {
+          LOG_VART(element->getTags().getInformationCount());
+          if (element->getTags().getInformationCount() > 0)
+            return;
+        }
       }
 
       const double expansion = r->getCircularError() / 2.0;
@@ -74,11 +78,13 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
       set<ElementId> parents = map->getParents(r->getElementId());
       for (set<ElementId>::iterator it = parents.begin(); it != parents.end(); ++it)
       {
-        ElementPtr p = map->getElement(*it);
-        LOG_VART(p->getElementId());
-        if (p->getElementType() == ElementType::Relation)
+        ElementPtr parent = map->getElement(*it);
+        if (!parent)
+          continue;
+        LOG_VART(parent->getElementId());
+        if (parent->getElementType() == ElementType::Relation)
         {
-          Relation* rev = dynamic_cast<Relation*>(p.get());
+          Relation* rev = dynamic_cast<Relation*>(parent.get());
           LOG_VART(rev->getType());
 
           if (rev->getType() == MetadataTags::RelationReview())
@@ -145,8 +151,11 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
       {
         ElementId id = i->getElementId();
         ElementPtr element = _map->getElement(id);
-        Tags merged = merger.mergeTags(element->getTags(), tags, id.getType());
-        element->setTags(merged);
+        if (element)
+        {
+          Tags merged = merger.mergeTags(element->getTags(), tags, id.getType());
+          element->setTags(merged);
+        }
         LOG_TRACE("Removing: " << id << "...");
         r->removeElement(id);
       }
