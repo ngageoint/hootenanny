@@ -276,8 +276,12 @@ private:
    */
   void _addChangesetDeleteExclusionTags(OsmMapPtr& map);
 
+  /*
+   * TODO
+   */
   OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
-                             const GeometryTypeCriterion::GeometryType& geometryType);
+                             const GeometryTypeCriterion::GeometryType& geometryType,
+                             const geos::geom::Envelope& replacementBounds);
 
   /*
    * Copies all ways that are tagged with MetadataTags::HootConnectedWayOutsideBounds() out of a map
