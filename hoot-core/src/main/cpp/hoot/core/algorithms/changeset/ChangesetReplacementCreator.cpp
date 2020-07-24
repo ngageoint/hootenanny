@@ -349,7 +349,7 @@ QString ChangesetReplacementCreator::_getJobDescription(
   str += "\nBeing replaced: ..." + input1.right(maxFilePrintLength);
   str += "\nReplacing with ..." + input2.right(maxFilePrintLength);
   str += "\nOutput Changeset: ..." + output.right(maxFilePrintLength);
-  str += "\nBounds: " + bounds + lenientStr;
+  str += "\nBounds: " + bounds + "; " + lenientStr;
   str += "\nReplacement is: " + replacementTypeStr;
   str += "\nGeometry filters: " + geometryFiltersStr;
   str += "\nReplacement filter: " + replacementFiltersStr;
@@ -382,7 +382,7 @@ void ChangesetReplacementCreator::create(
   // If a retainment filter was specified, we'll AND it together with each geometry type filter to
   // further restrict what reference data gets replaced in the final changeset.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
-   _getCombinedFilters(_retainmentFilter);
+    _getCombinedFilters(_retainmentFilter);
   // If a replacement filter was specified, we'll AND it together with each geometry type filter to
   // further restrict what secondary replacement data goes into the final changeset.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
@@ -416,9 +416,7 @@ void ChangesetReplacementCreator::create(
     }
 
     ElementCriterionPtr refFilter = itr.value();
-    LOG_VARD(refFilter->toString());
     ElementCriterionPtr secFilter = secFilters[itr.key()];
-    LOG_VARD(secFilter->toString());
 
     _getMapsForGeometryType(
       refMap, conflatedMap, input1, input2, boundsStr, refFilter, secFilter, itr.key(),
@@ -506,8 +504,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   const GeometryTypeCriterion::GeometryType& geometryType,
   const QStringList& linearFilterClassNames)
 {
-  LOG_VART(linearFilterClassNames);
-  LOG_VART(secFeatureFilter);
+  LOG_VARD(linearFilterClassNames);
+  LOG_VARD(refFeatureFilter->toString());
+  LOG_VARD(secFeatureFilter->toString());
 
   // INPUT VALIDATION AND SETUP
 
@@ -774,7 +773,7 @@ void ChangesetReplacementCreator::_validateInputs(const QString& input1, const Q
       "be specified for replacement changeset derivation.");
   }
 
-  if (ConfigOptions().getConvertOps().size())
+  if (ConfigOptions().getConvertOps().size() > 0)
   {
     throw IllegalArgumentException(
       "Replacement changeset derivation does not support convert operations.");
@@ -1104,7 +1103,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   }
   else
   {
-    LOG_VART(_geometryTypeFilters.size());
+    LOG_VARD(_geometryTypeFilters.size());
     if (_geometryTypeFilters.isEmpty())
     {
       _geometryTypeFilters = _getDefaultGeometryFilters();
@@ -1155,7 +1154,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
       LOG_TRACE("New combined filter: " << combinedFilters[geomType]->toString());
     }
   }
-  LOG_VART(combinedFilters.size());
+  LOG_VARD(combinedFilters.size());
   return combinedFilters;
 }
 
@@ -1253,8 +1252,8 @@ void ChangesetReplacementCreator::_filterFeatures(
   elementPruner.addCriterion(featureFilter);
   elementPruner.setConfiguration(config);
   elementPruner.setOsmMap(map.get());
-  // If recursion isn't used here, nasty crashes that are hard to track down occur at times. I'm
-  // not completely convinced recursion should be used here, though.
+  // If recursion isn't used here, nasty crashes that are hard to track down occur at times. Not
+  // completely convinced recursion should be used here, though.
   elementPruner.setRecursive(true);
   LOG_STATUS("\t" << elementPruner.getInitStatusMessage());
   map->visitRw(elementPruner);
