@@ -86,7 +86,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
     // clients who are expecting the cookie cutting to occur
     throw HootException("Cutter area is zero. Try increasing the buffer size or check the input.");
   }
-  LOG_VARD(cutterShape->toString());
+  LOG_VART(cutterShape->toString());
 
   // free up a little RAM
   cutterShapeOutlineMap.reset();

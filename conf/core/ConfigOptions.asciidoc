@@ -624,6 +624,13 @@ delete statements for reference features falling outside of `convert.bounding.bo
 If enabled, changeset replacement derivation will perform an extra element de-duplication step
 before calculating the changeset.
 
+=== changeset.replacement.implementation
+
+* Data Type: string
+* Default Value: `hoot::ChangesetReplacementCreator`
+
+TODO
+
 === changeset.replacement.mark.elements.with.missing.children
 
 * Data Type: bool

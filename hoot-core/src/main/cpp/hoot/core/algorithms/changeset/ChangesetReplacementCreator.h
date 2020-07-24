@@ -40,52 +40,6 @@ namespace hoot
 {
 
 /**
- * Options used to control cropping at various stages of the replacement changeset workflow
- */
-struct BoundsOptions
-{
-  // Determines whether features crossing the bounds should be kept when loading reference data.
-  bool loadRefKeepEntireCrossingBounds;
-  // Determines whether only features completely inside the bounds should be kept when loading
-  // reference data.
-  bool loadRefKeepOnlyInsideBounds;
-  // Determines whether ways immediately connected to other ways being kept but completely outside
-  // of the bounds should also be kept
-  bool loadRefKeepImmediateConnectedWaysOutsideBounds;
-  // Determines whether features crossing the bounds should be kept when loading secondary data.
-  bool loadSecKeepEntireCrossingBounds;
-  // Determines whether only features completely inside the bounds should be kept when loading
-  // secondary data.
-  bool loadSecKeepOnlyInsideBounds;
-
-  // Determines whether features crossing the bounds should be kept when cookie cutting reference
-  // data.
-  bool cookieCutKeepEntireCrossingBounds;
-  // Determines whether only features completely inside the bounds should be kept when cookie
-  // cutting reference data.
-  bool cookieCutKeepOnlyInsideBounds;
-
-  // Determines whether reference features crossing the bounds should be kept when deriving a
-  // changeset.
-  bool changesetRefKeepEntireCrossingBounds;
-  // Determines whether secondary features crossing the bounds should be kept when deriving a
-  // changeset.
-  bool changesetSecKeepEntireCrossingBounds;
-  // Determines whether only reference features completely inside the bounds should be kept when
-  // deriving a changeset.
-  bool changesetRefKeepOnlyInsideBounds;
-  // Determines whether only secondary features completely inside the bounds should be kept when
-  // deriving a changeset.
-  bool changesetSecKeepOnlyInsideBounds;
-  // Determines whether deleting reference features existing either partially of completely outside
-  // of the bounds is allowed during changeset generation
-  bool changesetAllowDeletingRefOutsideBounds;
-  // the strictness of the bounds calculation used in conjunction with
-  // _changesetAllowDeletingRefOutsideBounds
-  bool inBoundsStrict;
-};
-
-/**
  * High level class for prepping data for replacement changeset generation (changesets which
  * replace features inside of a specified bounds) and then calls on the appropriate changeset file
  * writer to output a changeset file.
@@ -109,6 +63,52 @@ struct BoundsOptions
  */
 class ChangesetReplacementCreator
 {
+
+  /**
+   * Options used to control cropping at various stages of the replacement changeset workflow
+   */
+  struct BoundsOptions
+  {
+    // Determines whether features crossing the bounds should be kept when loading reference data.
+    bool loadRefKeepEntireCrossingBounds;
+    // Determines whether only features completely inside the bounds should be kept when loading
+    // reference data.
+    bool loadRefKeepOnlyInsideBounds;
+    // Determines whether ways immediately connected to other ways being kept but completely outside
+    // of the bounds should also be kept
+    bool loadRefKeepImmediateConnectedWaysOutsideBounds;
+    // Determines whether features crossing the bounds should be kept when loading secondary data.
+    bool loadSecKeepEntireCrossingBounds;
+    // Determines whether only features completely inside the bounds should be kept when loading
+    // secondary data.
+    bool loadSecKeepOnlyInsideBounds;
+
+    // Determines whether features crossing the bounds should be kept when cookie cutting reference
+    // data.
+    bool cookieCutKeepEntireCrossingBounds;
+    // Determines whether only features completely inside the bounds should be kept when cookie
+    // cutting reference data.
+    bool cookieCutKeepOnlyInsideBounds;
+
+    // Determines whether reference features crossing the bounds should be kept when deriving a
+    // changeset.
+    bool changesetRefKeepEntireCrossingBounds;
+    // Determines whether secondary features crossing the bounds should be kept when deriving a
+    // changeset.
+    bool changesetSecKeepEntireCrossingBounds;
+    // Determines whether only reference features completely inside the bounds should be kept when
+    // deriving a changeset.
+    bool changesetRefKeepOnlyInsideBounds;
+    // Determines whether only secondary features completely inside the bounds should be kept when
+    // deriving a changeset.
+    bool changesetSecKeepOnlyInsideBounds;
+    // Determines whether deleting reference features existing either partially of completely outside
+    // of the bounds is allowed during changeset generation
+    bool changesetAllowDeletingRefOutsideBounds;
+    // the strictness of the bounds calculation used in conjunction with
+    // _changesetAllowDeletingRefOutsideBounds
+    bool inBoundsStrict;
+  };
 
 public:
 
@@ -172,7 +172,6 @@ private:
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
 
-
   // One or more non-geometry criteria to be combined with the geometry type filters for the
   // secondary input. Allows for further restriction of the secondary data that makes it to output.
   std::shared_ptr<ChainCriterion> _replacementFilter;
@@ -217,8 +216,6 @@ private:
 
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
-
-  bool _isNetworkConflate() const;
 
   void _validateInputs(const QString& input1, const QString& input2);
 
