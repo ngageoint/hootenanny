@@ -1829,6 +1829,13 @@ ggdm30 = {
     // Names. Sometimes we don't have a name but we do have language ones
     if (!tags.name) translate.swapName(tags);
 
+    // Tag retired
+    if (tags.controlling_authority) 
+    {
+      tags.operator = tags.controlling_authority;
+      delete tags.controlling_authority;
+    }
+
   }, // End applyToOgrPreProcessing
 
   // #####################################################################################################

@@ -809,21 +809,21 @@ tds61.rules = {
 
     // CAA - Controlling Authority - This does not play nicely in OSM
     // ['CAA','-999999',undefined,undefined], // No Information
-    // ['CAA','0','controlling_authority','unknown'],
-    // ['CAA','1','controlling_authority','national'],
-    // ['CAA','2','controlling_authority','state'],
-    ['CAA','3','controlling_authority','private'], // Private
-    ['CAA','4','controlling_authority','tribal'], // Tribal
-    ['CAA','5','controlling_authority','military'], // Military
-    ['CAA','6','controlling_authority','municipal'], // Municipal
-    ['CAA','7','controlling_authority','joint_military_civilian'], // Joint Military and Civilian
-    // ['CAA','8','controlling_authority','international'],
-    // ['CAA','11','controlling_authority','province'], // From NFDD
-    // ['CAA','13','controlling_authority','regional'], // From NFDD
-    ['CAA','16','controlling_authority','civilian'], // Civilian
-    ['CAA','17','controlling_authority','public'], // Public
+    // ['CAA','0','operator','unknown'],
+    // ['CAA','1','operator','national'],
+    // ['CAA','2','operator','state'],
+    ['CAA','3','operator','private'], // Private
+    ['CAA','4','operator','tribal'], // Tribal
+    ['CAA','5','operator','military'], // Military
+    ['CAA','6','operator','municipal'], // Municipal
+    ['CAA','7','operator','joint_military_civilian'], // Joint Military and Civilian
+    // ['CAA','8','operator','international'],
+    // ['CAA','11','operator','province'], // From NFDD
+    // ['CAA','13','operator','regional'], // From NFDD
+    ['CAA','16','operator','civilian'], // Civilian
+    ['CAA','17','operator','public'], // Public
     // ['CAA','998',undefined,undefined],
-    ['CAA','999','controlling_authority','other'], // Other
+    ['CAA','999','operator','other'], // Other
 
     // CAB - Cable Type
     // ['CAB','-999999',undefined,undefined], // No Information
@@ -4026,7 +4026,7 @@ tds61.rules = {
     ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
 
     // From UFD
-    ['CAA','-999999','controlling_authority','unknown'],
+    ['CAA','-999999','operator','unknown'],
     ['FFN','190','use','oil_gas_facility'], //
 
     // From UTP

@@ -81,7 +81,7 @@
     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3552385457835108" lon="153.0972030403666793">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.890Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="yes"/>
         <tag k="uuid" v="{0f148704-b6ef-4b6c-999a-4d4a951aa6f9}"/>
@@ -96,7 +96,7 @@
     <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3552604194350408" lon="153.0898108723803261">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.890Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="yes"/>
         <tag k="uuid" v="{0f084b8f-6f96-4054-bc66-c63036bbc709}"/>
@@ -110,7 +110,7 @@
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3549035604006008" lon="153.0818797702337406">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.889Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="product" v="bamboo"/>
         <tag k="building" v="yes"/>
@@ -125,7 +125,7 @@
     <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551730274807277" lon="153.0721789553492727">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.889Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="product" v="explosive"/>
         <tag k="building" v="yes"/>
@@ -141,7 +141,7 @@
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498055595297807" lon="153.1331954828873734">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.889Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="product" v="oil"/>
         <tag k="building" v="yes"/>
@@ -155,7 +155,7 @@
     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3497181675754639" lon="153.1273836612958803">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.889Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="wind_tunnel"/>
         <tag k="uuid" v="{0d4d26bb-2b1a-4238-94dd-fc59fb6cdd4b}"/>
@@ -168,7 +168,7 @@
     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498783690497547" lon="153.1208289567668146">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.888Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="product" v="desalinated_water"/>
         <tag k="building" v="yes"/>
@@ -279,7 +279,7 @@
     <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3610353743334933" lon="153.0727033070751872">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.887Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="national"/>
+        <tag k="operator" v="national"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="yes"/>
         <tag k="uuid" v="{0aae9176-488f-4b64-9e57-ccf37ccf053a}"/>
@@ -293,7 +293,7 @@
     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3613048414136131" lon="153.0821346548795248">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.886Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="national"/>
+        <tag k="operator" v="national"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="palace"/>
         <tag k="uuid" v="{09f74b4b-6af8-438d-9475-ed7dec4fbe95}"/>
@@ -306,7 +306,7 @@
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3614869165394232" lon="153.0902186672832386">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.886Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="national"/>
+        <tag k="operator" v="national"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="college"/>
         <tag k="uuid" v="{09e52823-d8af-4217-b6d9-93cf311b6195}"/>
@@ -319,7 +319,7 @@
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3615014989737659" lon="153.0977128096582760">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.886Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="national"/>
+        <tag k="operator" v="national"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="university"/>
         <tag k="uuid" v="{09ac9b8a-e8fb-4796-8e1d-ef544550aedd}"/>
@@ -332,7 +332,7 @@
     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3615815997109166" lon="153.1038450341982866">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.886Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="state"/>
+        <tag k="operator" v="state"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="school"/>
         <tag k="uuid" v="{09561dbe-032a-42dd-9b17-beed2fa15be0}"/>
@@ -371,7 +371,7 @@
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3619384587453602" lon="153.1213533084927292">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.885Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="caravan"/>
         <tag k="uuid" v="{088f49df-66ba-4e69-a955-dc7e0a7a574e}"/>
@@ -461,7 +461,7 @@
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674952930392728" lon="153.1038231605467388">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.884Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="yes"/>
         <tag k="uuid" v="{02a15efc-6f77-4485-b274-89215bb4b2f3}"/>
@@ -475,7 +475,7 @@
     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674079010849596" lon="153.1093946799268508">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.884Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="lyceum"/>
         <tag k="uuid" v="{0271a5a2-256b-43f4-8b1c-150fce18eb8a}"/>
@@ -488,7 +488,7 @@
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674807106049265" lon="153.1213093558860976">
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.883Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="yes"/>
         <tag k="uuid" v="{01c74358-4715-4b41-a7de-52214c32b078}"/>
@@ -503,7 +503,7 @@
         <tag k="source:ingest:datetime" v="2016-08-31T14:53:46.883Z"/>
         <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
         <tag k="historic" v="castle"/>
-        <tag k="controlling_authority" v="national"/>
+        <tag k="operator" v="national"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="building" v="yes"/>
         <tag k="uuid" v="{011307d1-d235-4180-8f74-0c77f432e9fa}"/>

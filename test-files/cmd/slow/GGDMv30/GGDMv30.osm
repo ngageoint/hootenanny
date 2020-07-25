@@ -159,7 +159,7 @@
         <tag k="uuid" v="{cd706b59-6f0f-467b-8ff7-2bc5b22a8cea}"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-326" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4208334206300002" lon="153.0824096575099986"/>
@@ -369,7 +369,7 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="height" v="2"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="condition" v="functional"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -385,7 +385,7 @@
         <tag k="man_made" v="structure"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="condition" v="destroyed"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -618,7 +618,7 @@
     </node>
     <node visible="true" id="-167" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3497234289399991" lon="153.1276267620600038">
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -640,7 +640,7 @@
     </node>
     <node visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3675801195800013" lon="153.1278579166300062">
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="condition" v="functional"/>
@@ -663,7 +663,7 @@
     </node>
     <node visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674189250600008" lon="153.1087615499899925">
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="abandoned:building" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -683,7 +683,7 @@
     </node>
     <node visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3668293056699987" lon="153.0800777400000072">
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="condition" v="functional"/>
         <tag k="communication:mobile_phone" v="yes"/>
@@ -708,7 +708,7 @@
     <node visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674807105999989" lon="153.1213093558899914">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="1"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="error:circular" v="15"/>
@@ -793,7 +793,7 @@
     <node visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674952930400011" lon="153.1026673876899906">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="1"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="building:multi_unit" v="no"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="by_product" v="scrap-metal"/>
@@ -829,14 +829,14 @@
         <tag k="building" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="condition" v="functional"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3610064800100012" lon="153.0721254206499964">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="2"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="communication:television" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -929,14 +929,14 @@
         <tag k="building" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="condition" v="functional"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3491402811499995" lon="153.0799969741599966">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="6"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="use:2" v="Elf Store"/>
         <tag k="communication:cellular_phone" v="yes"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -972,12 +972,12 @@
         <tag k="material" v="adobe_brick"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551316777000011" lon="153.1146594080200032">
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="office" v="government"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1010,7 +1010,7 @@
         <tag k="building" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="condition" v="destroyed"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -1018,7 +1018,7 @@
         <tag k="crop" v="dairy"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="1"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="building:multi_unit" v="yes"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1041,7 +1041,7 @@
     <node visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3550302953500015" lon="153.0723200037799927">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="1"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="condition" v="functional"/>
         <tag k="communication:mobile_phone" v="yes"/>
@@ -1074,7 +1074,7 @@
         <tag k="material" v="metal"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3494846154899989" lon="153.0878450789900000">
@@ -1093,12 +1093,12 @@
         <tag k="attached" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3550383186099992" lon="153.1276526628400063">
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="use:3" v="healthcare"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1131,12 +1131,12 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3494637213700003" lon="153.1025694301200133">
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="product:2" v="desalinated_water"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="condition" v="functional"/>
@@ -1173,14 +1173,14 @@
         <tag k="use" v="agriculture"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="condition" v="destroyed"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616393883499995" lon="153.1089323707799963">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="5"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="amenity" v="fire_station"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="communication:mobile_phone" v="yes"/>
@@ -1201,7 +1201,7 @@
     <node visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3493432503899996" lon="153.0951127672499865">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="4"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1222,7 +1222,7 @@
     <node visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3618249392000017" lon="153.1146985551199862">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="1"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="building:multi_unit" v="no"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1244,7 +1244,7 @@
     <node visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553177696399992" lon="153.1206011880099993">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="1"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="communication:cellular_phone" v="yes"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="condition" v="functional"/>
@@ -1264,7 +1264,7 @@
     <node visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3671464342099995" lon="153.0722121036100134">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="1"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="amenity" v="bank"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1287,7 +1287,7 @@
     <node visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3554041820499982" lon="153.1088747435599942">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="2"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="craft" v="sawmilling"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1307,7 +1307,7 @@
     <node visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3613204972700004" lon="153.0951367304600126">
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="1"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="communication:cellular_phone" v="yes"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1327,7 +1327,7 @@
     </node>
     <node visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3489174959999986" lon="153.0723523212799932">
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="building:multi_unit" v="yes"/>
         <tag k="amenity" v="embassy"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1472,7 +1472,7 @@
         <tag k="use" v="manufacturing"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="condition" v="functional"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -1490,7 +1490,7 @@
         <tag k="note" v="Lots of houses"/>
         <tag k="attribution" v="u.s._army"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="condition" v="functional"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -1507,7 +1507,7 @@
         <tag k="use" v="religious_activities"/>
         <tag k="attribution" v="defence_imagery_and_geospatial_organisation_(australia)"/>
         <tag k="security:resource_owner" v="AUS"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="condition" v="construction"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -1565,7 +1565,7 @@
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240500008" lon="153.1050368117599874"/>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3496945658699993" lon="153.1480090525799937">
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="condition" v="construction"/>
         <tag k="by_product" v="ash"/>
@@ -1631,7 +1631,7 @@
     </node>
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495512104400014" lon="153.1531984712100041">
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="communication:cellular_phone" v="yes"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="condition" v="construction"/>
@@ -2401,7 +2401,7 @@
         <nd ref="-240"/>
         <nd ref="-241"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="surface" v="Jello"/>
         <tag k="layer" v="0"/>
         <tag k="seasonal" v="winter"/>
@@ -2464,7 +2464,7 @@
         <nd ref="-236"/>
         <nd ref="-237"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="surface" v="wood"/>
         <tag k="layer" v="0"/>
         <tag k="seasonal" v="no"/>
@@ -2490,7 +2490,7 @@
         <nd ref="-234"/>
         <nd ref="-235"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="surface" v="stabilized_earth"/>
         <tag k="layer" v="0"/>
         <tag k="seasonal" v="fair"/>
@@ -2516,7 +2516,7 @@
         <nd ref="-232"/>
         <nd ref="-233"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="surface" v="asphalt"/>
         <tag k="layer" v="0"/>
         <tag k="in_tunnel" v="no"/>
@@ -2644,7 +2644,7 @@
         <tag k="abandoned:building" v="yes"/>
         <tag k="width" v="25"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2666,7 +2666,7 @@
         <tag k="width" v="25"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2741,7 +2741,7 @@
         <tag k="width" v="25"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2751,7 +2751,7 @@
         <nd ref="-197"/>
         <nd ref="-193"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="building:multi_unit" v="yes"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="condition" v="damaged"/>
@@ -2784,7 +2784,7 @@
         <nd ref="-192"/>
         <nd ref="-188"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="communication:cellular_phone" v="yes"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -2987,7 +2987,7 @@
         <tag k="use" v="utilities"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="condition" v="functional"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -3033,7 +3033,7 @@
         <tag k="uuid" v="{0d490002-2c16-4659-8311-7b7c8b59b48e}"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="condition" v="damaged"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -3079,7 +3079,7 @@
         <tag k="use" v="military"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="condition" v="functional"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -3100,7 +3100,7 @@
         <tag k="uuid" v="{e76b27ae-22e0-43b0-b269-ca024bc2ca03}"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -3465,7 +3465,7 @@
         <tag k="width" v="25"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="condition" v="functional"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -3489,7 +3489,7 @@
         <tag k="facility" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -3500,7 +3500,7 @@
         <nd ref="-15"/>
         <nd ref="-11"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="product:2" v="explosive"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="condition" v="construction"/>

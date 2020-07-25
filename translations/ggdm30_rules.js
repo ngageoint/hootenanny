@@ -1312,19 +1312,19 @@ ggdm30.rules = {
 
     // CAA - Controlling Authority
     // ['CAA','-999999',undefined,undefined], // No Information
-    ['CAA','1','controlling_authority','national'], // National
-    ['CAA','2','controlling_authority','state'], // State
-    ['CAA','3','controlling_authority','private'], // Private
-    ['CAA','4','controlling_authority','tribal'], // Tribal
-    ['CAA','5','controlling_authority','military'], // Military
-    ['CAA','6','controlling_authority','municipal'], // Municipal
-    ['CAA','7','controlling_authority','joint_military_civilian'], // Joint Military and Civilian
-    ['CAA','8','controlling_authority','international'], // International
-    ['CAA','11','controlling_authority','province'], // Province
-    ['CAA','13','controlling_authority','regional'], // Regional
-    ['CAA','16','controlling_authority','civilian'], // Civilian
-    ['CAA','17','controlling_authority','public'], // Public
-    ['CAA','999','controlling_authority','other'], // Other
+    ['CAA','1','operator','national'], // National
+    ['CAA','2','operator','state'], // State
+    ['CAA','3','operator','private'], // Private
+    ['CAA','4','operator','tribal'], // Tribal
+    ['CAA','5','operator','military'], // Military
+    ['CAA','6','operator','municipal'], // Municipal
+    ['CAA','7','operator','joint_military_civilian'], // Joint Military and Civilian
+    ['CAA','8','operator','international'], // International
+    ['CAA','11','operator','province'], // Province
+    ['CAA','13','operator','regional'], // Regional
+    ['CAA','16','operator','civilian'], // Civilian
+    ['CAA','17','operator','public'], // Public
+    ['CAA','999','operator','other'], // Other
 
     // CAB - Cable Type
     // ['CAB','-999999',undefined,undefined], // No Information
@@ -6272,7 +6272,7 @@ ggdm30.rules = {
     ['IWT','4','man_made','reservoir'], // Reservoir
 
     // From UFD
-    ['CAA','-999999','controlling_authority','unknown'],
+    ['CAA','-999999','operator','unknown'],
     ['FFN','190','use','oil_gas_facility'], //
 
     // From UTP

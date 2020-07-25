@@ -720,6 +720,13 @@ tds40 = {
       }
     } // End closureList
 
+    // Tag retired
+    if (tags.controlling_authority) 
+    {
+      tags.operator = tags.controlling_authority;
+      delete tags.controlling_authority;
+    }
+
     // Now find an F_CODE
     if (attrs.F_CODE)
     {
@@ -1181,9 +1188,9 @@ tds40 = {
     */
 
     // Bunkers. Are they actually Military?
-    if (tags.man_made == 'bunker' && tags.controlling_authority)
+    if (tags.man_made == 'bunker' && tags.operator)
     {
-      if (tags.controlling_authority == 'military' || tags.controlling_authority == '')
+      if (tags.operator == 'military' || tags.operator == '')
       {
         // Debug
         print('Bunker: drop man_made. military = ' + tags.military);
@@ -1255,7 +1262,7 @@ tds40 = {
     if (tags.military == 'bunker')
     {
       // Making a guess that these are military...
-      if (! tags.controlling_authority) tags.controlling_authority = 'military';
+      if (! tags.operator) tags.operator = 'military';
 
       if (tags['bunker_type'] == 'munitions')
       {

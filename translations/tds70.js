@@ -742,6 +742,13 @@ tds70 = {
       }
     } // End closureList
 
+    // Tag retired
+    if (tags.controlling_authority) 
+    {
+      tags.operator = tags.controlling_authority;
+      delete tags.controlling_authority;
+    }
+
     // Now find an F_CODE
     if (attrs.F_CODE)
     {

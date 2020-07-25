@@ -503,7 +503,7 @@
     <tag k='by_product' v='ash' />
     <tag k='by_product2' v='cinders' />
     <tag k='condition' v='construction' />
-    <tag k='controlling_authority' v='military' />
+    <tag k='operator' v='military' />
     <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='height' v='2' />
@@ -574,7 +574,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='communication:cellular_phone' v='yes' />
     <tag k='condition' v='construction' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='height' v='3' />
@@ -596,7 +596,7 @@
     <tag k='amenity' v='school' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='private' />
+    <tag k='operator' v='private' />
     <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='height' v='2' />
@@ -802,7 +802,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:density' v='moderate' />
     <tag k='condition' v='destroyed' />
-    <tag k='controlling_authority' v='military' />
+    <tag k='operator' v='military' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='landuse' v='commercial' />
@@ -821,7 +821,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:density' v='dense' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='public' />
+    <tag k='operator' v='public' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='landuse' v='built_up_area' />
@@ -841,7 +841,7 @@
     <tag k='attribution' v='u.s._army' />
     <tag k='building:density' v='sparse' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='landuse' v='residential' />
@@ -860,7 +860,7 @@
   <node id='-88238' version='1' lat='-25.34982698257' lon='153.14184473589'>
     <tag k='attribution' v='defence_imagery_and_geospatial_organisation_(australia)' />
     <tag k='condition' v='construction' />
-    <tag k='controlling_authority' v='private' />
+    <tag k='operator' v='private' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='landuse' v='built_up_area' />
@@ -974,7 +974,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='mission' />
     <tag k='building:manufactured' v='yes' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='denomination' v='protestant' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
@@ -999,7 +999,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='mosque' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='name' v='A Mosque' />
@@ -1024,7 +1024,7 @@
     <tag k='building' v='yes' />
     <tag k='building:manufactured' v='yes' />
     <tag k='condition' v='abandoned' />
-    <tag k='controlling_authority' v='public' />
+    <tag k='operator' v='public' />
     <tag k='error:circular' v='15' />
     <tag k='height' v='35' />
     <tag k='is_in:country_code' v='AU' />
@@ -1047,7 +1047,7 @@
     <tag k='building' v='yes' />
     <tag k='communication:mobile_phone' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='BN' />
     <tag k='material' v='brick' />
@@ -1075,7 +1075,7 @@
     <tag k='building:levels' v='1' />
     <tag k='building:manufactured' v='yes' />
     <tag k='condition' v='construction' />
-    <tag k='controlling_authority' v='private' />
+    <tag k='operator' v='private' />
     <tag k='error:circular' v='15' />
     <tag k='height' v='60' />
     <tag k='is_in:country_code' v='AU' />
@@ -1166,7 +1166,7 @@
     <tag k='building:multi_unit' v='no' />
     <tag k='by_product' v='scrap-metal' />
     <tag k='by_product2' v='slag' />
-    <tag k='controlling_authority' v='military' />
+    <tag k='operator' v='military' />
     <tag k='error:circular' v='15' />
     <tag k='height' v='50' />
     <tag k='is_in:country_code' v='AU' />
@@ -1192,7 +1192,7 @@
     <tag k='building' v='yes' />
     <tag k='building:manufactured' v='no' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='military' />
+    <tag k='operator' v='military' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='name' v='Prison' />
@@ -1212,7 +1212,7 @@
     <tag k='building' v='yes' />
     <tag k='building:levels' v='2' />
     <tag k='communication:television' v='yes' />
-    <tag k='controlling_authority' v='military' />
+    <tag k='operator' v='military' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='BN' />
     <tag k='light:obstacle' v='no' />
@@ -1302,7 +1302,7 @@
     <tag k='building:levels' v='6' />
     <tag k='communication:television' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='public' />
+    <tag k='operator' v='public' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='name' v='Restaurant' />
@@ -1321,7 +1321,7 @@
     <tag k='building' v='yes' />
     <tag k='building:levels' v='6' />
     <tag k='communication:cellular_phone' v='yes' />
-    <tag k='controlling_authority' v='public' />
+    <tag k='operator' v='public' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='BN' />
     <tag k='light:obstacle' v='yes' />
@@ -1345,7 +1345,7 @@
   <node id='-88344' version='1' lat='-25.34956258925' lon='153.1345447'>
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
-    <tag k='controlling_authority' v='public' />
+    <tag k='operator' v='public' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='light:obstacle' v='yes' />
@@ -1367,7 +1367,7 @@
     <tag k='building' v='yes' />
     <tag k='building:manufactured' v='no' />
     <tag k='condition' v='construction' />
-    <tag k='controlling_authority' v='public' />
+    <tag k='operator' v='public' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='light:obstacle' v='yes' />
@@ -1389,7 +1389,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='condition' v='destroyed' />
-    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='operator' v='joint_military_civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='light:obstacle' v='no' />
@@ -1411,7 +1411,7 @@
     <tag k='building' v='yes' />
     <tag k='building:levels' v='1' />
     <tag k='building:multi_unit' v='yes' />
-    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='operator' v='joint_military_civilian' />
     <tag k='crop' v='dairy' />
     <tag k='error:circular' v='15' />
     <tag k='height' v='75' />
@@ -1439,7 +1439,7 @@
     <tag k='building:manufactured' v='yes' />
     <tag k='communication:mobile_phone' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='operator' v='joint_military_civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='BN' />
     <tag k='name' v='Residential House' />
@@ -1460,7 +1460,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='1' />
-    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='operator' v='joint_military_civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='material' v='metal' />
@@ -1480,7 +1480,7 @@
     <tag k='building' v='university' />
     <tag k='communication:mobile_phone' v='yes' />
     <tag k='condition' v='dismantled' />
-    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='operator' v='joint_military_civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='BN' />
     <tag k='name' v='Higher Education' />
@@ -1501,7 +1501,7 @@
     <tag k='attached' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='cathedral' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='denomination' v='roman_catholic' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
@@ -1523,7 +1523,7 @@
   <node id='-88360' version='1' lat='-25.36165678369' lon='153.12083659652'>
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -1545,7 +1545,7 @@
     <tag k='building' v='yes' />
     <tag k='building:multi_unit' v='yes' />
     <tag k='communication:cellular_phone' v='yes' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='material' v='metal' />
@@ -1567,7 +1567,7 @@
     <tag k='building:manufactured' v='yes' />
     <tag k='by_product' v='cinders' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='material' v='wood' />
@@ -1591,7 +1591,7 @@
     <tag k='building' v='yes' />
     <tag k='building:levels' v='6' />
     <tag k='condition' v='destroyed' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='BN' />
     <tag k='name' v='Agriculture' />
@@ -1613,7 +1613,7 @@
     <tag k='building' v='yes' />
     <tag k='building:levels' v='5' />
     <tag k='communication:mobile_phone' v='yes' />
-    <tag k='controlling_authority' v='private' />
+    <tag k='operator' v='private' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='material' v='adobe_brick' />
@@ -1635,7 +1635,7 @@
     <tag k='building' v='industrial' />
     <tag k='building:levels' v='4' />
     <tag k='condition' v='destroyed' />
-    <tag k='controlling_authority' v='private' />
+    <tag k='operator' v='private' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='material' v='wood' />
@@ -1660,7 +1660,7 @@
     <tag k='building:levels' v='1' />
     <tag k='building:manufactured' v='yes' />
     <tag k='building:multi_unit' v='no' />
-    <tag k='controlling_authority' v='private' />
+    <tag k='operator' v='private' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='light:obstacle' v='no' />
@@ -1684,7 +1684,7 @@
     <tag k='building:levels' v='1' />
     <tag k='communication:cellular_phone' v='yes' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='public' />
+    <tag k='operator' v='public' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='name' v='Paper Mill' />
@@ -1706,7 +1706,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='1' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='height' v='21' />
     <tag k='is_in:country_code' v='BN' />
@@ -1730,7 +1730,7 @@
     <tag k='building' v='yes' />
     <tag k='building:levels' v='2' />
     <tag k='condition' v='dismantled' />
-    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='operator' v='joint_military_civilian' />
     <tag k='craft' v='sawmilling' />
     <tag k='error:circular' v='15' />
     <tag k='height' v='25' />
@@ -1753,7 +1753,7 @@
     <tag k='building' v='yes' />
     <tag k='building:levels' v='1' />
     <tag k='communication:cellular_phone' v='yes' />
-    <tag k='controlling_authority' v='military' />
+    <tag k='operator' v='military' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='AU' />
     <tag k='material' v='metal' />
@@ -1776,7 +1776,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:multi_unit' v='yes' />
-    <tag k='controlling_authority' v='private' />
+    <tag k='operator' v='private' />
     <tag k='diplomatic' v='embassy' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='BN' />
@@ -2294,7 +2294,7 @@
     <nd ref='-87962' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='damaged' />
-    <tag k='controlling_authority' v='private' />
+    <tag k='operator' v='private' />
     <tag k='error:circular' v='15' />
     <tag k='feature_configuration' v='different' />
     <tag k='highway' v='primary' />
@@ -2360,7 +2360,7 @@
     <nd ref='-87972' />
     <nd ref='-87970' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='controlling_authority' v='military' />
+    <tag k='operator' v='military' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='tertiary' />
     <tag k='is_in:country_code' v='AU' />
@@ -2388,7 +2388,7 @@
     <nd ref='-87976' />
     <nd ref='-87974' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='operator' v='joint_military_civilian' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='secondary' />
     <tag k='is_in:country_code' v='AU' />
@@ -2417,7 +2417,7 @@
     <nd ref='-87978' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='construction' v='tertiary' />
-    <tag k='controlling_authority' v='public' />
+    <tag k='operator' v='public' />
     <tag k='error:circular' v='15' />
     <tag k='feature_configuration' v='same' />
     <tag k='highway' v='construction' />
@@ -2963,7 +2963,7 @@
     <tag k='area' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='private' />
+    <tag k='operator' v='private' />
     <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='is_in:country_code' v='XE' />
@@ -2987,7 +2987,7 @@
     <nd ref='-88110' />
     <tag k='area' v='yes' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='controlling_authority' v='military' />
+    <tag k='operator' v='military' />
     <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='is_in:country_code' v='XE' />
@@ -3017,7 +3017,7 @@
     <tag k='by_product2' v='radioactive_material' />
     <tag k='communication:microwave_radio_relay' v='yes' />
     <tag k='condition' v='construction' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='facility' v='yes' />
     <tag k='is_in:country_code' v='XE' />
@@ -3157,7 +3157,7 @@
     <nd ref='-88180' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='XE' />
     <tag k='landuse' v='built_up_area' />
@@ -3208,7 +3208,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:density' v='sparse' />
     <tag k='condition' v='damaged' />
-    <tag k='controlling_authority' v='public' />
+    <tag k='operator' v='public' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='XE' />
     <tag k='landuse' v='residential' />
@@ -3257,7 +3257,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building:density' v='moderate' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='operator' v='joint_military_civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='XE' />
     <tag k='landuse' v='built_up_area' />
@@ -3281,7 +3281,7 @@
     <nd ref='-88222' />
     <nd ref='-88230' />
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
-    <tag k='controlling_authority' v='military' />
+    <tag k='operator' v='military' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='XE' />
     <tag k='landuse' v='built_up_area' />
@@ -3335,7 +3335,7 @@
     <tag k='building' v='yes' />
     <tag k='communication:mobile_phone' v='yes' />
     <tag k='condition' v='abandoned' />
-    <tag k='controlling_authority' v='military' />
+    <tag k='operator' v='military' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='US' />
     <tag k='light:obstacle' v='yes' />
@@ -3361,7 +3361,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='building:multi_unit' v='yes' />
-    <tag k='controlling_authority' v='military' />
+    <tag k='operator' v='military' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='US' />
     <tag k='navigation:landmark' v='no' />
@@ -3445,7 +3445,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='condition' v='construction' />
-    <tag k='controlling_authority' v='civilian' />
+    <tag k='operator' v='civilian' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='US' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -3471,7 +3471,7 @@
     <tag k='building:multi_unit' v='yes' />
     <tag k='by_product' v='ash' />
     <tag k='condition' v='damaged' />
-    <tag k='controlling_authority' v='public' />
+    <tag k='operator' v='public' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='US' />
     <tag k='light:obstacle' v='no' />
@@ -3506,7 +3506,7 @@
     <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
     <tag k='building' v='yes' />
     <tag k='communication:cellular_phone' v='yes' />
-    <tag k='controlling_authority' v='private' />
+    <tag k='operator' v='private' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='US' />
     <tag k='name' v='Place of Worship' />
