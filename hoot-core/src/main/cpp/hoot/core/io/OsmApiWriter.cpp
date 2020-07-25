@@ -33,6 +33,7 @@
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/Log.h>
@@ -43,6 +44,7 @@
 #include <tgs/System/Timer.h>
 
 //  Qt
+#include <QUrlQuery>
 #include <QXmlStreamReader>
 
 using namespace std;
@@ -61,6 +63,7 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
     _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
     _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
+    _throttlePlusMinus(ConfigOptions().getChangesetApidbWritersThrottleTimespan()),
     _showProgress(false),
     _consumerKey(ConfigOptions().getHootOsmAuthConsumerKey()),
     _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
@@ -70,7 +73,8 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
     _apiId(0),
-    _threadsCanExit(false)
+    _threadsCanExit(false),
+    _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap())
 {
   _changesets.push_back(changeset);
   if (isSupported(url))
@@ -88,6 +92,7 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
     _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
     _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
+    _throttlePlusMinus(ConfigOptions().getChangesetApidbWritersThrottleTimespan()),
     _showProgress(false),
     _consumerKey(ConfigOptions().getHootOsmAuthConsumerKey()),
     _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
@@ -97,7 +102,8 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
     _apiId(0),
-    _threadsCanExit(false)
+    _threadsCanExit(false),
+    _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap())
 {
   if (isSupported(url))
     _url = url;
@@ -130,6 +136,9 @@ bool OsmApiWriter::apply()
     return false;
   }
   _stats.append(SingleStat("API Permissions Query Time (sec)", timer.getElapsedAndRestart()));
+  //  Throttle uploads when using CGImap if requested
+  if (_throttleCgiMap && usingCgiMap(request))
+    _throttleWriters = true;
   bool success = true;
   //  Load all of the changesets into memory
   _changeset.setMaxPushSize(_maxPushSize);
@@ -387,7 +396,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         }
         //  Throttle the input rate if desired
         if (_throttleWriters && !_changeset.isDone())
-          _yield(_throttleTime * 1000);
+          _yield(std::max(_throttleTime - _throttlePlusMinus, 0) * 1000, (_throttleTime + _throttlePlusMinus) * 1000);
       }
       else
       {
@@ -573,7 +582,7 @@ void OsmApiWriter::_yield(int milliseconds)
 void OsmApiWriter::_yield(int minimum_ms, int maximum_ms)
 {
   //  Yield for a random amount of time between minimum_ms and maximum_ms
-  _yield((minimum_ms + Tgs::Random::instance()->generateInt(maximum_ms - minimum_ms)));
+  _yield(minimum_ms + Tgs::Random::instance()->generateInt(maximum_ms - minimum_ms));
 }
 
 void OsmApiWriter::setConfiguration(const Settings& conf)
@@ -587,12 +596,14 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
   _maxWriters = options.getChangesetApidbWritersMax();
   _throttleWriters = options.getChangesetApidbWritersThrottle();
   _throttleTime = options.getChangesetApidbWritersThrottleTime();
+  _throttlePlusMinus = options.getChangesetApidbWritersThrottleTimespan();
   _consumerKey = options.getHootOsmAuthConsumerKey();
   _consumerSecret = options.getHootOsmAuthConsumerSecret();
   _accessToken = options.getHootOsmAuthAccessToken();
   _secretToken = options.getHootOsmAuthAccessTokenSecret();
   _debugOutput = options.getChangesetApidbWriterDebugOutput();
   _debugOutputPath = options.getChangesetApidbWriterDebugOutputPath();
+  _throttleCgiMap = options.getChangesetApidbWritersThrottleCgimap();
 }
 
 bool OsmApiWriter::isSupported(const QUrl &url)
@@ -651,6 +662,31 @@ bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request)
     LOG_WARN(ex.what());
   }
   return success;
+}
+
+bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request)
+{
+  bool cgimap = false;
+  try
+  {
+    QUrl map = _url;
+    map.setPath(OsmApiEndpoints::API_PATH_MAP);
+    QUrlQuery query(map);
+    //  Use the correct type of bbox for this query
+    geos::geom::Envelope envelope(-77.42249541, -77.42249539, 38.96003149, 38.96003151);
+    QString bboxQuery = GeometryUtils::toConfigString(envelope);
+    query.addQueryItem("bbox", bboxQuery);
+    map.setQuery(query);
+    request->networkRequest(map);
+    QString responseXml = QString::fromUtf8(request->getResponseContent().data());
+    QRegExp regex("generator=(\"|')CGImap", Qt::CaseInsensitive);
+    cgimap = responseXml.contains(regex);
+  }
+  catch (HootException& ex)
+  {
+    LOG_WARN(ex.what());
+  }
+  return cgimap;
 }
 
 OsmApiCapabilites OsmApiWriter::_parseCapabilities(const QString& capabilites)

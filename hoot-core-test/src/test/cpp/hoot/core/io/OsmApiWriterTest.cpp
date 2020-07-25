@@ -55,6 +55,7 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runRetryConflictsTest);
   CPPUNIT_TEST(runVersionConflictResolutionTest);
   CPPUNIT_TEST(runChangesetOutputTest);
+  CPPUNIT_TEST(runChangesetOutputThrottleTest);
   CPPUNIT_TEST(runChangesetCreateFailureTest);
   CPPUNIT_TEST(runChangesetFailNodesWithWaysTest);
   CPPUNIT_TEST(runChangesetVersionFailureTest);
@@ -79,14 +80,15 @@ public:
   const QString TEST_USER_INFO = "test01:hoottest";
 
   /** Separate port numbers so that tests can run in parallel */
-  const int PORT_CAPABILITIES = 9800;
-  const int PORT_PERMISSIONS =  9801;
-  const int PORT_CONFLICTS =    9802;
-  const int PORT_VERSION =      9803;
-  const int PORT_DEBUG_OUTPUT = 9804;
-  const int PORT_CREATE_FAIL =  9805;
-  const int PORT_FAIL_WAYS =    9806;
-  const int PORT_FAIL_VERSION = 9807;
+  const int PORT_CAPABILITIES =     9800;
+  const int PORT_PERMISSIONS =      9801;
+  const int PORT_CONFLICTS =        9802;
+  const int PORT_VERSION =          9803;
+  const int PORT_DEBUG_OUTPUT =     9804;
+  const int PORT_THROTTLE_OUTPUT =  9805;
+  const int PORT_CREATE_FAIL =      9806;
+  const int PORT_FAIL_WAYS =        9807;
+  const int PORT_FAIL_VERSION =     9808;
 
   OsmApiWriterTest()
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
@@ -431,6 +433,52 @@ public:
                      _outputPath + "OsmApiWriter-000002-00001-Request--000.osc");
     HOOT_FILE_EQUALS( _inputPath + "ChangesetOutput-Response-2.osc",
                      _outputPath + "OsmApiWriter-000002-00001-Response-200.osc");
+#endif
+  }
+
+  void runChangesetOutputThrottleTest()
+  {
+#ifdef RUN_LOCAL_TEST_SERVER
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_THROTTLE_OUTPUT));
+    osm.setUserInfo(TEST_USER_INFO);
+
+    //  Kick off the file output test server
+    ChangesetOutputThrottleTestServer server(PORT_THROTTLE_OUTPUT);
+    server.start();
+
+    OsmApiWriter writer(osm, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_REQUEST);
+
+    QString output_path = _outputPath + "throttle/";
+
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 2);
+    s.set(ConfigOptions::getChangesetApidbWriterDebugOutputKey(), true);
+    s.set(ConfigOptions::getChangesetApidbWriterDebugOutputPathKey(), output_path);
+    s.set(ConfigOptions::getChangesetApidbWritersThrottleCgimapKey(), true);
+    s.set(ConfigOptions::getChangesetApidbWritersThrottleTimeKey(), 1);
+    s.set(ConfigOptions::getChangesetApidbWritersThrottleTimespanKey(), 0);
+    writer.setConfiguration(s);
+    writer.apply();
+
+    //  Wait for the test server to finish
+    server.shutdown();
+
+    //  Make sure that none of the changes failed
+    CPPUNIT_ASSERT(!writer.containsFailed());
+    //  Check the stats
+    checkStats(writer.getStats(), 0, 4, 0, 0, 4, 0, 0);
+    //  Compare the files
+    HOOT_FILE_EQUALS( _inputPath + "ChangesetOutput-Request--1.osc",
+                     output_path + "OsmApiWriter-000001-00001-Request--000.osc");
+    HOOT_FILE_EQUALS( _inputPath + "ChangesetOutput-Response-1.osc",
+                     output_path + "OsmApiWriter-000001-00001-Response-200.osc");
+    HOOT_FILE_EQUALS( _inputPath + "ChangesetOutput-Request--2.osc",
+                     output_path + "OsmApiWriter-000002-00001-Request--000.osc");
+    HOOT_FILE_EQUALS( _inputPath + "ChangesetOutput-Response-2.osc",
+                     output_path + "OsmApiWriter-000002-00001-Response-200.osc");
 #endif
   }
 
