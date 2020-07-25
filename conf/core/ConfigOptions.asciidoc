@@ -573,7 +573,7 @@ another changeset to the OSM API.
 === changeset.apidb.writers.throttle.cgimap
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 Flag to turn on throttling if the OSM API uses CGImap in the back end instead of the rails port.
 Checks the usage of CGImap and then enables `changeset.apidb.writers.throttle`.

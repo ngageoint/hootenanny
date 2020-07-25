@@ -582,7 +582,7 @@ void OsmApiWriter::_yield(int milliseconds)
 void OsmApiWriter::_yield(int minimum_ms, int maximum_ms)
 {
   //  Yield for a random amount of time between minimum_ms and maximum_ms
-  _yield((minimum_ms + Tgs::Random::instance()->generateInt(maximum_ms - minimum_ms)));
+  _yield(minimum_ms + Tgs::Random::instance()->generateInt(maximum_ms - minimum_ms));
 }
 
 void OsmApiWriter::setConfiguration(const Settings& conf)
@@ -679,7 +679,8 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request)
     map.setQuery(query);
     request->networkRequest(map);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
-    cgimap = responseXml.contains("generator=\"CGImap", Qt::CaseInsensitive);
+    QRegExp regex("generator=(\"|')CGImap", Qt::CaseInsensitive);
+    cgimap = responseXml.contains(regex);
   }
   catch (HootException& ex)
   {

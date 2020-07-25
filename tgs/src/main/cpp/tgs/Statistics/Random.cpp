@@ -75,7 +75,10 @@ namespace Tgs
 
   int Random::generateInt(int max)
   {
-    return generateInt() % max;
+    if (max <= 0)
+      return 0;
+    else
+      return generateInt() % max;
   }
 
   int Random::generateInt()
