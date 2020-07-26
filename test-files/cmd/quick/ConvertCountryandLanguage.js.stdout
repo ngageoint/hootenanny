@@ -1,0 +1,56 @@
+c3 AFG to name
+AFGHANISTAN
+#####
+c3 AUS to c2
+AU
+#####
+c3 CAN to urn
+ge:GENC:3:1-2:CAN
+#####
+urn ge:GENC:3:1-2:LAO to c3
+LAO
+#####
+missing 01
+
+#####
+missing 02
+
+#####
+genc ge:GENC:3:1-2:LAO to local name
+{ 'Sathalanalat Paxathipatai Paxaxôn Lao': 'lao' }
+#####
+name BOSNIA AND HERZEGOVINA to local name
+{ 'Bosna i Hercegovina': 'srp' }
+#####
+local name for BHUTAN
+{}
+#####
+local name for ZAF
+{ 'Suid-Afrika': 'afr',
+  'South Africa': 'eng',
+  'Sewula Afrika': 'nbl',
+  'Afrika-Borwa': 'sot',
+  'iNingizimu Afrika': 'zul',
+  'Aforika Borwa': 'tsn',
+  'Afrika Dzonga': 'tso',
+  'Afurika Tshipembe': 'ven',
+  'umZantsi Afrika': 'xho' }
+#####
+country name for local name Kòrsou
+CURAÇAO
+#####
+c2 for local name Sewula Afrika
+ZA
+#####
+Languages for Kòrsou local country name
+Country name: CURAÇAO
+Name: Curaçao  Lang: nld  Lang2: nl  LangName: Dutch; Flemish
+Name: Kòrsou  Lang: pap  Lang2:   LangName: Papiamento
+#####
+language 2code for Chuang
+za
+#####
+language 2code and name for fao
+fo
+Faroese
+#####

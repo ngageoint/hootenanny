@@ -3,7 +3,7 @@
     <bounds minlat="42.50692" minlon="1.44986" maxlat="42.64991" maxlon="1.74028"/>
     <node visible="true" id="2986043" timestamp="2020-05-21T20:30:15Z" version="1" changeset="770" lat="42.6499099999999984" lon="1.5333500000000000">
         <tag k="source" v="geonames"/>
-        <tag k="is_in:country_code" v="AD"/>
+        <tag k="addr:country" v="AD"/>
         <tag k="ele" v="2860"/>
         <tag k="name" v="Pic de Font Blanca"/>
         <tag k="uuid" v="GeoNames.org:2986043"/>
@@ -12,7 +12,7 @@
     </node>
     <node visible="true" id="2994701" timestamp="2020-05-21T20:30:15Z" version="1" changeset="770" lat="42.5876499999999965" lon="1.7402800000000000">
         <tag k="source" v="geonames"/>
-        <tag k="is_in:country_code" v="AD"/>
+        <tag k="addr:country" v="AD"/>
         <tag k="ele" v="2803"/>
         <tag k="name" v="Roc Mélé"/>
         <tag k="uuid" v="GeoNames.org:2994701"/>
@@ -21,7 +21,7 @@
     </node>
     <node visible="true" id="3007683" timestamp="2020-05-21T20:30:15Z" version="1" changeset="770" lat="42.6120299999999972" lon="1.4736400000000001">
         <tag k="source" v="geonames"/>
-        <tag k="is_in:country_code" v="AD"/>
+        <tag k="addr:country" v="AD"/>
         <tag k="ele" v="2685"/>
         <tag k="name" v="Pic des Langounelles"/>
         <tag k="uuid" v="GeoNames.org:3007683"/>
@@ -30,7 +30,7 @@
     </node>
     <node visible="true" id="3017832" timestamp="2020-05-21T20:30:15Z" version="1" changeset="770" lat="42.5253500000000031" lon="1.7334300000000000">
         <tag k="source" v="geonames"/>
-        <tag k="is_in:country_code" v="AD"/>
+        <tag k="addr:country" v="AD"/>
         <tag k="ele" v="2411"/>
         <tag k="name" v="Pic de les Abelletes"/>
         <tag k="uuid" v="GeoNames.org:3017832"/>
@@ -39,7 +39,7 @@
     </node>
     <node visible="true" id="3017833" timestamp="2020-05-21T20:30:15Z" version="1" changeset="770" lat="42.5291500000000013" lon="1.7336199999999999">
         <tag k="source" v="geonames"/>
-        <tag k="is_in:country_code" v="AD"/>
+        <tag k="addr:country" v="AD"/>
         <tag k="water" v="lake"/>
         <tag k="ele" v="2260"/>
         <tag k="name" v="Estany de les Abelletes"/>
@@ -49,7 +49,7 @@
     </node>
     <node visible="true" id="3023203" timestamp="2020-05-21T20:30:15Z" version="1" changeset="770" lat="42.6256800000000027" lon="1.6182300000000001">
         <tag k="source" v="geonames"/>
-        <tag k="is_in:country_code" v="AD"/>
+        <tag k="addr:country" v="AD"/>
         <tag k="ele" v="2687"/>
         <tag k="name" v="Port Vieux de la Coume d’Ose"/>
         <tag k="uuid" v="GeoNames.org:3023203"/>
@@ -58,7 +58,7 @@
     </node>
     <node visible="true" id="3029315" timestamp="2020-05-21T20:30:15Z" version="1" changeset="770" lat="42.6000000000000014" lon="1.7333300000000000">
         <tag k="source" v="geonames"/>
-        <tag k="is_in:country_code" v="AD"/>
+        <tag k="addr:country" v="AD"/>
         <tag k="ele" v="2379"/>
         <tag k="name" v="Port de la Cabanette"/>
         <tag k="uuid" v="GeoNames.org:3029315"/>
@@ -67,7 +67,7 @@
     </node>
     <node visible="true" id="3034945" timestamp="2020-05-21T20:30:15Z" version="1" changeset="770" lat="42.6017200000000003" lon="1.4556199999999999">
         <tag k="source" v="geonames"/>
-        <tag k="is_in:country_code" v="AD"/>
+        <tag k="addr:country" v="AD"/>
         <tag k="ele" v="2660"/>
         <tag k="name" v="Port Dret"/>
         <tag k="uuid" v="GeoNames.org:3034945"/>
@@ -76,7 +76,7 @@
     </node>
     <node visible="true" id="3038814" timestamp="2020-05-21T20:30:15Z" version="1" changeset="770" lat="42.5069200000000009" lon="1.4756899999999999">
         <tag k="source" v="geonames"/>
-        <tag k="is_in:country_code" v="AD"/>
+        <tag k="addr:country" v="AD"/>
         <tag k="ele" v="1839"/>
         <tag k="name" v="Costa de Xurius"/>
         <tag k="slope" v="yes"/>
@@ -84,7 +84,7 @@
     </node>
     <node visible="true" id="3038815" timestamp="2020-05-21T20:30:15Z" version="1" changeset="770" lat="42.5500299999999996" lon="1.4498599999999999">
         <tag k="source" v="geonames"/>
-        <tag k="is_in:country_code" v="AD"/>
+        <tag k="addr:country" v="AD"/>
         <tag k="ele" v="1839"/>
         <tag k="name" v="Costa de Xurius"/>
         <tag k="slope" v="yes"/>
