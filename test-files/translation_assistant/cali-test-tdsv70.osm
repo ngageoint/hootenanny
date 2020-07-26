@@ -1422,7 +1422,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.152Z"/>
         <tag k="name" v="AK 109"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{15b32005-c8af-4a4e-8815-9996cadcbebc}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1438,7 +1438,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.151Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2c2395e6-bba5-4684-920f-6ddfc40999a4}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1449,7 +1449,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.151Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a61739f2-f43a-458e-bccb-fe4abe5685c2}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1460,7 +1460,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.150Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c205949c-8cd6-4595-b08b-be95a9554895}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1477,7 +1477,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.145Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e02bdec7-73d2-41ef-a10e-69c824118143}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1490,7 +1490,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.145Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a15682a8-d254-4022-af65-59d6ed29e646}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1502,7 +1502,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.144Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f9c6d7b8-7890-4e72-93b0-f0cd07f5b15e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1514,7 +1514,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.144Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{15c9b5fb-4e38-40b3-bb52-dcb103d9bd87}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1525,7 +1525,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.143Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{9f824561-d4b2-4c96-949a-30dc5c4ef466}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1550,7 +1550,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.143Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{05931ecf-886c-41a9-87f5-f74ae4f64efa}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1574,7 +1574,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.143Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5541697c-4547-4593-971c-2eaa71eb4077}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1585,7 +1585,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.142Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{9bdcb6c0-0b55-4364-8c73-4e5870362809}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1596,7 +1596,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.142Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{1019f7af-49bf-45b0-b784-e4e0725e30e1}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1607,7 +1607,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.142Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2b119a91-c073-4ee2-ab8b-976df4791995}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1618,7 +1618,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.141Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2a719e85-90a1-4f32-9450-b1fb6f38b1ab}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1629,7 +1629,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.141Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{ef09294d-2040-4e65-b19c-da04a4d08a8f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1642,7 +1642,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.141Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{740d193c-4dd2-4645-a079-fd32e726a9e9}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1653,7 +1653,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.140Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4a99d9c9-4605-40e3-9016-fec90841945f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1664,7 +1664,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.140Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4fcf97f7-f58e-4da8-b8ee-98b24a1547c7}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1675,7 +1675,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.139Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5a26d7c6-46bf-4a4b-8fe4-42e3ed719a54}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1693,7 +1693,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.139Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{29238b8e-834a-4df9-ad29-c5c9b3d35f5e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1704,7 +1704,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.139Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{18bed07c-2931-4a8a-8d79-e6586d024f30}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1716,7 +1716,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.138Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{756aa056-ce4f-440f-9401-4ae3d6efe698}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1728,7 +1728,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.138Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{32bdbb06-3140-4874-bc58-d44a377fb19d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1739,7 +1739,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.137Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{ed035c8b-25fe-4b2e-87ec-7e2748efa815}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1750,7 +1750,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.137Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{aa38d5e9-5eff-4f5e-bcbe-410c7f6ef33a}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1761,7 +1761,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.137Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a9015f18-9cc3-4f78-a735-8f8a3e81ba93}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1772,7 +1772,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.136Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{42aa65a7-fb34-4e1d-8bd7-151ce19def20}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1788,7 +1788,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.136Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b90f2859-e9d9-49ae-9f97-4f8523540ca7}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1799,7 +1799,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.136Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f15c4e4b-2e8d-410e-a5c4-9f456e3fe47b}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1869,7 +1869,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.135Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{822b5c27-5bd8-4626-b7b7-bf381849bf6b}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1880,7 +1880,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.135Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{d070c94a-41cd-487a-8451-649b53b1dbe9}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1893,7 +1893,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.134Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{651a4c19-9cb1-4366-88be-07b4947b6ce4}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1904,7 +1904,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.134Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b434b63c-4069-4482-966b-1f72eff6d611}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1915,7 +1915,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.133Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{44236978-dd8a-46fa-a11f-15e0d6043469}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1926,7 +1926,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.133Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c2acba24-82e9-427b-b6ba-05eb8536563b}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1937,7 +1937,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.133Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{be3667de-e679-46f5-9d96-5699c5ee5eaf}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1950,7 +1950,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.132Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c70b1473-1cdb-4848-971f-b42c78532c4b}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1962,7 +1962,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.132Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{378bbc3e-f7df-48d5-9576-1a66d1790757}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1974,7 +1974,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.132Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e20b7df1-1035-4d2b-86cf-610977ed205e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1985,7 +1985,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.131Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b7478800-e4de-4873-94d0-411a7525cf55}"/>
         <tag k="ref:road:class" v="local"/>
@@ -1996,7 +1996,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.131Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b4c3219b-8355-4f18-b7dc-29502eaf175c}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2008,7 +2008,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.130Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f1871cbe-1fa3-4e90-9801-6515fc370c84}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2021,7 +2021,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.130Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e5eed581-3a86-4e2f-9613-b001d9d2b1e1}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2035,7 +2035,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.130Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b27e40e8-8e34-427b-bf92-ce6c3b208035}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2057,7 +2057,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.129Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{8da2d61b-fe5a-4531-a867-50ba65c84d3a}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2068,7 +2068,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.129Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{94cf3af1-d448-4422-bb29-af03a32a5f4c}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2079,7 +2079,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.129Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c2683b23-de6b-4ef0-8ded-297e9b3270a7}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2092,7 +2092,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.128Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{895b9611-b87d-49f1-a6f5-0965b1985908}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2106,7 +2106,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.128Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3a6d1e46-18ea-48ea-bc95-1b291793bbf3}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2118,7 +2118,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.127Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f64a3a97-10bf-4c04-b0ea-299f77be7cc8}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2134,7 +2134,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.127Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4d74122c-8bb4-4682-9043-895b1f7101bf}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2145,7 +2145,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.127Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{59aab6d7-44e8-41e3-ae55-8ec65d1e7356}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2161,7 +2161,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.126Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{616d6dee-0d16-4375-9339-184d2c2321e4}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2172,7 +2172,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.126Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e56091cd-b749-45ba-9356-37844439630c}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2197,7 +2197,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.125Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{8eed1a41-4d47-4a1e-b5b9-5067d0d377d8}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2211,7 +2211,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.125Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a5ed8ff8-c4da-4cb8-a2d4-12567fd1f882}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2222,7 +2222,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.125Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{bc891c61-511b-4796-a6d4-b60374ddc4fb}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2233,7 +2233,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.124Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{9c3c0054-facc-48f7-9695-c151c0bceb9e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2244,7 +2244,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.124Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5712084e-4a5c-456c-a9d7-1be12ec46902}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2256,7 +2256,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.124Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{90582711-1e2d-4997-8bd9-1338628d7eda}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2267,7 +2267,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.123Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{55613065-c84e-4ba7-b965-b4fc921cb097}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2286,7 +2286,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.123Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e0f341d2-a67c-40e3-be1b-10b52ae85f35}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2299,7 +2299,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.123Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3cb03855-f335-4f3d-9c34-bf1e5790f925}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2310,7 +2310,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.122Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{bf0cae7d-38f4-419b-b782-affe564fae3d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2323,7 +2323,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.122Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3b0bb6cb-1db7-4a9d-8420-d7035c0c53c4}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2335,7 +2335,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.122Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3ae4cb82-33b7-4eb4-9ddc-809e548707bf}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2351,7 +2351,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.121Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{6628ef40-6dae-458a-8bad-e4838d789dc3}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2364,7 +2364,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.121Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{d425d54b-b084-4fcf-9c81-67c1fee0999a}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2420,7 +2420,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.120Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{09db9b72-5633-43ae-acd7-b9d961863f81}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2431,7 +2431,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.120Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a1a0ba07-ee9a-457b-9f95-5da3c1d4831f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2442,7 +2442,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.120Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e09f0ee3-5437-4ead-ad93-fbe1e8a663b2}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2459,7 +2459,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.119Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{ea5b8d28-1ec9-4bf7-8265-0e5a7fdb61bd}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2470,7 +2470,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.119Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{6ff37b48-9a3e-4191-b24c-04a3604f8097}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2483,7 +2483,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.119Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{7255ca92-80c4-4523-b2a6-61ea8dd82a31}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2494,7 +2494,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.118Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{0ec17393-ad8e-4d1c-b5ab-d1ae4ec4eb72}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2510,7 +2510,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.118Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4414a58b-8f3c-4a2b-b9dd-1b7328f730f7}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2521,7 +2521,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.117Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{36f35db6-3e5f-435d-861f-7bf1de2f1b4f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2535,7 +2535,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.117Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e2d1813d-f81e-45ae-bb2c-dacd4fb4e459}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2546,7 +2546,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.117Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{33ef0651-3d72-4adc-8bd3-65030c0380ce}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2558,7 +2558,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.116Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{79629910-435b-4a78-82af-2f9536ff8ab6}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2571,7 +2571,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.116Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f4f21c1b-2474-45b6-8e2d-6cddbc77b462}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2583,7 +2583,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.116Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{727bd14b-b7ba-4ac1-a948-2d4ec12a2b54}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2594,7 +2594,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.115Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{8c457513-a001-4ba3-a709-c0d8aa6dabed}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2609,7 +2609,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.115Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{59c13696-be1c-44f3-b929-6e7bf89609cc}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2621,7 +2621,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.115Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{7f8f6437-a67c-407c-ba5e-a705cd65d0bd}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2636,7 +2636,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.114Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3cdbb609-6f4a-486c-b0af-7c988f8fc8c0}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2647,7 +2647,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.114Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4f171e33-4e6c-4510-a730-04e203a06c1d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2658,7 +2658,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.114Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5b2dffcb-289e-4bfd-889b-60f1c60f96cf}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2673,7 +2673,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.113Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e3a122f2-faba-4186-8006-dd7a0200722f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2684,7 +2684,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.113Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{759c9969-e63a-48a8-86df-da768e1aeaf7}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2696,7 +2696,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.113Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5df3c041-da2c-400f-8aa8-67901ce0274f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2720,7 +2720,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.112Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c858e612-1589-4bb3-a950-21ef8195ee8d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2733,7 +2733,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.112Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c0a4b6c3-dab0-475f-97c6-9f0ce311a596}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2747,7 +2747,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.112Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2d5480ce-a818-438d-b611-b2e716b24194}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2771,7 +2771,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.111Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a2fd8b67-5655-42c1-8398-bc767693336e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2786,7 +2786,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.111Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{200e5a28-d993-4c57-a1ea-1fc5b16acf68}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2797,7 +2797,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.110Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{1c26a7fb-7f85-4ebe-9dfa-d87429731014}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2808,7 +2808,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.110Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3b167e57-d07d-4ba4-9505-8674fd8bccf4}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2821,7 +2821,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.110Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{7edf0a96-d027-441c-abd7-a35621076fd3}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2834,7 +2834,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.109Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b809cba9-b592-46c8-803c-443b0da4cdff}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2855,7 +2855,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.109Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{aedca0c2-e509-4d8c-9d9a-3b21a27e08fa}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2866,7 +2866,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.109Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{7688a5ac-a61b-46ae-9a0a-24542f715380}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2877,7 +2877,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.108Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{028ccaf3-04dd-4318-8ecd-3e694fdea60f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2888,7 +2888,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.108Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{8ef2d53a-91c2-441a-aa72-b3b3c6b0b146}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2901,7 +2901,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.108Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{725c810e-b64b-4c8c-816c-ad2fd9933de0}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2912,7 +2912,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.107Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{32526355-d5cc-474f-96de-a7949531aab6}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2932,7 +2932,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.107Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{674d5714-2fd9-4a73-8b6d-dcafc9320949}"/>
         <tag k="ref:road:class" v="local"/>
@@ -2984,7 +2984,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.106Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{87e65ce5-c9a9-4c72-ac15-2073f53be599}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3002,7 +3002,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.106Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{8220a6b0-8680-45e7-804f-6395b7ed626b}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3015,7 +3015,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.106Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{50873588-973c-443b-b748-00f619ce29e0}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3026,7 +3026,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.105Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2722d891-b3c4-4ca5-be15-73aabc0cd9b2}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3037,7 +3037,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.105Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a4b25c39-b1c2-45e2-aa46-99bc3c7b4674}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3050,7 +3050,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.105Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{dd69d0d0-31a2-49e6-9a30-89fec4118e20}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3061,7 +3061,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.104Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5684fbb8-6aec-4f81-bd46-03c48c1df716}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3073,7 +3073,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.104Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5198bf59-ebbd-46b6-84a8-63265048050a}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3085,7 +3085,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.104Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{703d0dd8-bea8-4ae0-b4e2-0c93facc19ca}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3101,7 +3101,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.103Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c2fce3d2-ffd7-4e57-ac8c-7a57ee338138}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3113,7 +3113,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.103Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{d3607dd9-52eb-47bc-9efe-b19293dd3ce2}"/>
@@ -3128,7 +3128,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.102Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{24a22a23-6fa2-4584-a316-f7866f5f7f26}"/>
@@ -3146,7 +3146,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.102Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{2d17085c-b34f-497c-877e-dc9316459335}"/>
@@ -3161,7 +3161,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.102Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{f1970da2-c2b7-4bcd-ae31-0b58fb645ab8}"/>
@@ -3178,7 +3178,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.101Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{7db92e17-3905-4912-bd6f-fa7219087c2f}"/>
@@ -3196,7 +3196,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.101Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{fc6a0dc6-3d42-48a9-a8e3-83bf93171de9}"/>
@@ -3210,7 +3210,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.100Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{ec9cae61-bc25-4ce3-910a-507fc379003c}"/>
@@ -3224,7 +3224,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.100Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{d09e32c9-8449-4419-b312-e340785474ae}"/>
@@ -3237,7 +3237,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.100Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{a1efe77a-4d70-4ad6-bdc9-9a7c1f59f698}"/>
@@ -3250,7 +3250,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.099Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{496d19c7-7409-4516-a499-3186e3da0d33}"/>
@@ -3265,7 +3265,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.099Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{d1c9c38b-19ea-44c0-9c73-710e969e7a9d}"/>
@@ -3279,7 +3279,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.099Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{12364ed4-d65b-4da9-a750-12a523bcb6f7}"/>
@@ -3293,7 +3293,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.098Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{da384f02-2419-4e7e-ba5a-89dc6a233812}"/>
@@ -3306,7 +3306,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.098Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{a1b7bde1-9d7d-4660-ad74-6caa492776ba}"/>
@@ -3321,7 +3321,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.097Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{44fd3cf9-a5e8-469b-a087-bf5581a6f396}"/>
@@ -3335,7 +3335,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.097Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{e7a8d041-e6cf-487e-9ef7-cdc6feea52fd}"/>
@@ -3348,7 +3348,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.097Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{1f923bf4-380c-40dd-9876-620e70763d2b}"/>
@@ -3362,7 +3362,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.096Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{a957e811-791f-48dc-a39e-3667936746cf}"/>
@@ -3376,7 +3376,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.096Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{c2adc2c4-f8a8-4681-9b01-ec808a46408e}"/>
@@ -3390,7 +3390,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.096Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{24ac368d-f106-4fd7-a593-4240bbbed155}"/>
@@ -3403,7 +3403,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.095Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{58c35e62-2c18-46e8-8218-942855f0b01e}"/>
@@ -3417,7 +3417,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.095Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{479f435a-039d-46ee-aced-f61fdeed3613}"/>
@@ -3430,7 +3430,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.094Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{abebc3fb-a34a-461d-9cd3-78d3cba245af}"/>
@@ -3444,7 +3444,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.094Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{22aac944-e33c-4a7b-b7d0-429129d40de5}"/>
@@ -3458,7 +3458,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.094Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{e90b6cdc-25c8-4ce3-b4ed-5990ef772f96}"/>
@@ -3471,7 +3471,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.093Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{21735361-c182-4266-8e06-30db590a406b}"/>
@@ -3484,7 +3484,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.093Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{c73e6f8b-f92e-4772-98ad-1c76f157ebdd}"/>
@@ -3498,7 +3498,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.092Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{47c09e00-220c-4214-97cc-d41531d94ae4}"/>
@@ -3512,7 +3512,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.092Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{8bbf8977-6e3a-4d65-94b9-f8918215b888}"/>
@@ -3527,7 +3527,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.092Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{20226e3c-86e1-4b90-89ad-2cf3bb78ffd5}"/>
@@ -3540,7 +3540,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.091Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{fa4338db-d376-437c-b48e-5a86d36b0f58}"/>
@@ -3554,7 +3554,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.091Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{eb299cac-7685-4ba2-8a85-2aad18e7495d}"/>
@@ -3567,7 +3567,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.090Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{ef117b21-15d7-4810-b5f0-864f1cffb440}"/>
@@ -3581,7 +3581,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.090Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{dff27c4f-7a28-4ab3-aefc-34fb078dfaf5}"/>
@@ -3595,7 +3595,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.090Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{3309a462-bc98-44b7-a335-1f04b0855f09}"/>
@@ -3609,7 +3609,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.089Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{8a82bfac-1adf-4819-8c1a-d7f9777af496}"/>
@@ -3622,7 +3622,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.089Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{28f59216-59c8-4f37-9c80-44c8a28c69f7}"/>
@@ -3640,7 +3640,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.088Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{9b8c5dba-3e56-4658-bb7c-f6a0406e5e28}"/>
@@ -3656,7 +3656,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.088Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{4be17e29-8d7d-4874-aadc-977ded421576}"/>
@@ -3669,7 +3669,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.088Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{94b98553-111c-468c-afc2-204e024d696a}"/>
@@ -3682,7 +3682,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.087Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{c1b66ec4-95eb-4601-ac93-c9470081903a}"/>
@@ -3697,7 +3697,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.087Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{b3642ef0-1ea8-4b44-81c7-b717cb4fd62d}"/>
@@ -3710,7 +3710,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.086Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{e1c95188-1dbe-4b04-8c4e-515ee81aa5d0}"/>
@@ -3723,7 +3723,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.086Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{105896df-a3df-4e84-857a-2f793a3f6789}"/>
@@ -3736,7 +3736,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.086Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{db002d32-64c1-4e5b-98f9-bd87f9d181a2}"/>
@@ -3749,7 +3749,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.085Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{80016f39-1d07-4ca4-97a9-c08219006ae3}"/>
@@ -3770,7 +3770,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.085Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{4afcd4c5-f528-40f1-913c-059e76bbe0e5}"/>
@@ -3784,7 +3784,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.085Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{9a689028-ff1b-491a-b2b1-42870d65294c}"/>
@@ -3798,7 +3798,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.084Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{251e49e9-1f1e-40af-853d-fce1e0ef734c}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3813,7 +3813,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.084Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{26a7dbaf-3c8d-4f4a-b331-8ea236193f30}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3824,7 +3824,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.083Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5e1eb439-2781-4eac-b1aa-fae40f7bd712}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3846,7 +3846,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.083Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{cf93423b-1d4e-4f1f-89e2-f807aaf4d56b}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3857,7 +3857,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.083Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{fa6c3a35-36f5-435d-9554-af3b8fe19540}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3878,7 +3878,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.082Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{fd331799-88b5-4c93-a464-7f224a75b26d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3891,7 +3891,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.082Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3a09ac08-654d-4589-a368-54013f5aa84d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3902,7 +3902,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.082Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{22bc6391-a2e7-489b-bb10-90b9491d2fca}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3916,7 +3916,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.081Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{1756f443-862f-47b8-a15f-ac27ec3d97a9}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3927,7 +3927,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.081Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f454ba9c-3b17-41ce-91e2-d2ac030bd00b}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3938,7 +3938,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.080Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{57819b29-77ca-4618-86e2-82dda80edc7c}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3957,7 +3957,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.080Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{0d69ce72-fc4c-447d-bc31-7666fdb0df2d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -3980,7 +3980,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.080Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{be4339d8-8861-422f-b752-5a2de7522547}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4007,7 +4007,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.079Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{bb0019b7-168c-48d9-99e8-c114972eb5ed}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4023,7 +4023,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.079Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4f4273bd-c624-4f78-94dc-3ff77ec5d3e3}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4034,7 +4034,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.079Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{13976027-3372-4334-9940-b50e8f160a7b}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4058,7 +4058,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.078Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{96473160-8b4d-48f0-a5fb-23b59cdbbf57}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4069,7 +4069,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.078Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{15104892-8da6-4c75-85bf-4ea236ac6dd7}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4080,7 +4080,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.077Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{43c68777-8e89-4642-b3e0-995ce6c74eac}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4096,7 +4096,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.077Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{317d697b-cf52-4302-905c-39545ccfcfce}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4107,7 +4107,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.077Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5321c061-5df3-4655-a74a-de94271c7c7f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4119,7 +4119,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.076Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{671e50e3-16a8-4e5e-92d2-da4585fb400a}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4137,7 +4137,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.076Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3109537e-a60e-4b56-b9ba-5f304da6c72c}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4148,7 +4148,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.076Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4167d2bc-6c96-407d-aa91-038b291e20f3}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4159,7 +4159,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.075Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{1cf1551b-f8d6-4580-a6ae-ff7cfec6de67}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4173,7 +4173,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.075Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{fe14ff66-bafe-40e8-965d-becc901ca104}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4188,7 +4188,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.074Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{74ceaebf-dcd2-49d3-a72c-67eae929fc04}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4203,7 +4203,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.074Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4a34b7dd-ae1f-4b55-a913-7b46418be5c4}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4216,7 +4216,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.074Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2e81093c-62b4-47e9-8b69-b40b7c0cea7c}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4227,7 +4227,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.073Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2add2fd8-8a3b-4371-bbcd-048e998d28ba}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4238,7 +4238,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.073Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e4bb6da8-0b8e-4476-81a4-f407977db2ad}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4250,7 +4250,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.072Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{8a67cc71-3bd6-4e1b-9cc8-1ea18a89b3e6}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4264,7 +4264,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.072Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{27d2244f-8f2f-4655-8f28-8783a9fd363f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4275,7 +4275,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.072Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{aa7cf821-0aa0-4640-8e5a-78ed9b7d3dcf}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4287,7 +4287,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.071Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e214c4e3-d7c8-4baa-899c-8536a33f2e09}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4299,7 +4299,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.071Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{9221f5e9-b9b2-493c-b195-495c4da4269e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4310,7 +4310,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.070Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{51a603ea-9dfa-41af-8381-83515f1a4ee4}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4321,7 +4321,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.070Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{ecec49c6-24aa-4521-bb24-c78f11e9f531}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4333,7 +4333,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.070Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4b0452eb-6b2d-49ae-b239-02d840c69d80}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4346,7 +4346,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.069Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{6e171a06-c38d-4538-a9a9-1b435af8227c}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4357,7 +4357,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.069Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{544bace8-b837-4608-a175-5b14ab117be2}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4368,7 +4368,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.069Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f3523346-564b-41fd-aff9-964c2b4b8226}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4380,7 +4380,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.068Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{ea1a4100-ba28-438a-97fd-9055ccc0f5cb}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4391,7 +4391,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.068Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{6f9e7f40-c8ee-4934-956e-a76693ef8ae1}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4403,7 +4403,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.068Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a88a1713-812c-4fb9-9287-e50b95fb4478}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4414,7 +4414,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.067Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{cff255d6-1bcc-497d-b584-8241c8f22aa3}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4429,7 +4429,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.067Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{26664c54-1d12-4da8-912b-74babde5e3b5}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4443,7 +4443,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.066Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e3f9a5a7-dd27-4118-acf0-9bac6f755d24}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4463,7 +4463,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.066Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3c4f5bb0-0aee-4c87-bb14-f07c5ffcb8e5}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4474,7 +4474,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.066Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{be020970-9613-4fd2-8476-0d4b5de637da}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4485,7 +4485,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.065Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f95102c8-fb13-482c-86d3-4ddf264decfd}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4517,7 +4517,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.065Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{d2dc3313-f53d-46b6-99de-f31a6a8271ec}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4531,7 +4531,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.064Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c24dab63-735e-45a9-ad36-5d17fe26a9a6}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4542,7 +4542,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.064Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2c43cbc1-5f73-4dfe-b5a4-aa2418c33b4e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4553,7 +4553,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.064Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5b44d03e-1b72-4067-a66a-5903470b1408}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4565,7 +4565,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.063Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2b8932f8-b330-4695-87b5-7e9dc15b050d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4590,7 +4590,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.063Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f0d7948a-f631-4ae9-a090-75159277f7d5}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4601,7 +4601,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.063Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{9e782881-fee0-4784-8dd0-6aca395cf14f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4612,7 +4612,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.062Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{432ade1a-cefb-472e-b6ca-e1e2ab34454a}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4624,7 +4624,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.062Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e721098b-44ef-4f95-ad34-8e57a0c25094}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4636,7 +4636,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.062Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{9b85a0f4-a995-4b24-a388-5d535000fb74}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4648,7 +4648,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.061Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{7a3dae84-57e1-45d8-88ac-aa18cef570d0}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4659,7 +4659,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.061Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{1c1247db-f42d-4a71-8767-8b17a3449cbb}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4758,7 +4758,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.060Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{648ab120-a9c4-4343-8b8c-7d1c7506f8d4}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4769,7 +4769,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.060Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{843ac775-d2ee-4c4e-9be5-1b57c46d5f7d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4780,7 +4780,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.060Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e19788c5-8846-4f32-91bf-d02757a8c897}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4794,7 +4794,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.059Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f6359f97-fbd1-4394-8a74-0cfff3307f15}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4806,7 +4806,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.059Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{6158acda-477c-4a9c-9077-9a3c387d7110}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4817,7 +4817,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.059Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2cef82ff-1be4-4147-b2ce-2f23920e059a}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4828,7 +4828,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.058Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e960e860-262f-470f-ba13-a93273dcdc37}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4839,7 +4839,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.058Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{0826eee9-d3b8-4765-9fcf-c809579fb07b}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4850,7 +4850,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.058Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b261dc59-a08b-455b-955e-91932a7af0a1}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4861,7 +4861,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.057Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b8b0d9dd-63ed-4083-b174-3f7c403a4fc2}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4872,7 +4872,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.057Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{58fbe2ed-f714-42a8-84c1-e64a6fe3f557}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4883,7 +4883,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.057Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{41134e3d-0809-464b-944f-3d17cd053877}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4894,7 +4894,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.056Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{105d8c2e-1d14-4efd-8b2d-de6e38f633f0}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4905,7 +4905,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.056Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{9b37f471-aa33-48c1-a8c1-58f111dd70af}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4916,7 +4916,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.056Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{612460a3-c8c4-4169-8983-9ff3baddd8be}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4928,7 +4928,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.055Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{841126d9-f34f-4cb7-9ce5-2f2b916284b0}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4939,7 +4939,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.055Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c11938b5-78da-41a3-99a4-40bd18c3b87f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4951,7 +4951,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.054Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c58a264e-a082-4df6-bf9e-6a4e939fc6b3}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4963,7 +4963,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.054Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{ab714458-9c50-4cb7-8ca8-435c648d2f83}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4975,7 +4975,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.054Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4e1eca03-8c2a-4a92-aed8-537e10900429}"/>
         <tag k="ref:road:class" v="local"/>
@@ -4986,7 +4986,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.053Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a3bed1eb-3292-4c36-919c-cc439af1bdf1}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5003,7 +5003,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.053Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{07977989-2644-4c4d-941a-bac91efd1ffd}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5014,7 +5014,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.053Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b057e19d-f7e1-4495-bada-38758e3b9890}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5025,7 +5025,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.052Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{32130724-d91b-46e7-8c9d-0b5e2982cfb8}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5037,7 +5037,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.052Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{8e39fd46-f172-42f3-98b3-d852d4b0bd0d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5048,7 +5048,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.052Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a54272a0-3150-41fb-b82f-756adae31474}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5060,7 +5060,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.051Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{0c58eaea-61fc-4a1a-ae7c-a7b9b063aa04}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5071,7 +5071,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.051Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{0384784d-5cda-4fd7-be77-aad43ac75977}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5082,7 +5082,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.050Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a556a24f-0998-4042-8091-6b3686737102}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5095,7 +5095,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.050Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a95bcef1-b8cb-40da-8cd8-1ac12980522a}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5107,7 +5107,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.050Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{40d18b93-ace3-43a2-b41d-c8ad1d529fb5}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5118,7 +5118,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.049Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{9f6b222e-f7e1-45ee-a424-c1766a368964}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5131,7 +5131,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.049Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{ef824ebb-1a7a-490d-88a2-82b8cc6c89a8}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5143,7 +5143,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.049Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{a0318eb4-b90b-4442-b58c-fab57a44323e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5155,7 +5155,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.048Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4ec54cc4-09b3-4597-81bc-973dcdbe300e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5166,7 +5166,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.048Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{017189b5-e0e6-4882-a30e-d01a2b79ba1e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5178,7 +5178,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.048Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{69a7d6d5-a160-4f1f-8467-ee8695d2d9c0}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5189,7 +5189,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.047Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{dcb08726-6ad1-4328-8ab0-c1393045e919}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5200,7 +5200,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.047Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{1ef029d1-5837-4631-8d41-e8edb689c2c5}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5212,7 +5212,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.047Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c21a4f72-f77c-42b6-8de0-3a8f1e650364}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5226,7 +5226,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.046Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{31f20642-15ac-46e6-b06a-7c9c983e4fe2}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5243,7 +5243,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.046Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{872a722a-ba14-48d8-9f8a-1a5ba967752a}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5254,7 +5254,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.046Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{fdb14fbb-7c02-4d96-a379-d23148eb4efd}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5266,7 +5266,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.045Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4392ad5c-13ef-46a1-9898-ecaa90ba4953}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5278,7 +5278,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.045Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2a6a55d4-744b-4aa6-b4c1-fb4380a482fd}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5290,7 +5290,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.044Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{dedf5f2a-757c-4a7f-9eed-d829e946ce64}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5301,7 +5301,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.044Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c12b9612-4317-4d0f-a083-08ce88ac987c}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5312,7 +5312,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.044Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5d0915e5-42b0-40bd-a1d5-a5933d49d23e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5324,7 +5324,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.043Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{fef2eb14-65e6-4eb9-9513-144746fad0c8}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5336,7 +5336,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.043Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{dff58187-4ff8-4be3-b4a4-29cd44b8ec6b}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5348,7 +5348,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.043Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{86df2558-971c-49ea-8e5d-ff2a27c9833a}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5359,7 +5359,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.042Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c62a1d29-fbed-4907-94ba-d0ac0bd97412}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5371,7 +5371,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.042Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c17d9898-82a3-4140-bdc7-92d2efea4d5d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5383,7 +5383,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.042Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{1762d587-bf99-4e2a-8745-539a390dd126}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5407,7 +5407,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.041Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{0990daa8-3725-43e5-aca9-9a382230cc44}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5420,7 +5420,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.041Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{737c317f-cefd-40b9-89d2-b184f3fa65e5}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5431,7 +5431,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.040Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{96ba5b63-0d18-4fa4-90a9-bfe63a48aefb}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5443,7 +5443,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.040Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{9ddecfef-0ce9-487a-8aea-08852c7f21de}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5456,7 +5456,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.040Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{012744a6-75a4-453e-8269-96686ad9dc82}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5482,7 +5482,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.039Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{ff0f4d2c-33e4-4e1d-a830-81c7462e6c23}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5493,7 +5493,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.039Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4c00e930-a3f7-4d13-8fe1-47450afd3147}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5504,7 +5504,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.039Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{66f5c0fc-0b51-457c-8446-cad8e2856236}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5515,7 +5515,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.038Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c1dbaa87-14a7-4ade-953b-588fac903777}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5526,7 +5526,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.038Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{315fb2dd-e90e-41cd-a909-e2072e1a9f98}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5537,7 +5537,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.038Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f3240fc4-7ee9-4fcd-92ce-33615495ea00}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5549,7 +5549,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.037Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{d0492158-a372-4f5b-9ab2-4200f7fefd36}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5560,7 +5560,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.037Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{65e604d9-7676-4f33-9c07-190a758660fa}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5571,7 +5571,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.037Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{1e3a165c-2997-4484-ad7f-bffca3226a77}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5585,7 +5585,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.036Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{7ab980b1-42c7-41fc-bd8a-5b491a15bfcc}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5599,7 +5599,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.036Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{890e907f-d848-440a-8c69-a0e73f1c23f7}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5613,7 +5613,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.036Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{509fd081-9b5d-466e-be65-c48a818d1c93}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5624,7 +5624,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.035Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{ea1f0050-859b-414a-8756-e5c572dac143}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5635,7 +5635,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.035Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{464f6781-aa9f-4740-a54a-7d874ce8ca9d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5649,7 +5649,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.035Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{08a412db-3394-4fde-8adb-8418e061c4ff}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5683,7 +5683,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.034Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2d5c0263-876e-4d32-9765-d152bfbb6abb}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5694,7 +5694,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.034Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3bc890f8-0c27-4f81-8029-356241f42820}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5705,7 +5705,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.034Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2b3bf00b-76cc-4fdc-bf0f-69aa84af08b2}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5716,7 +5716,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.033Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{0fe2dcf3-9b0d-4f0c-a22e-46b1af302153}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5728,7 +5728,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.033Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{80ae2f46-e425-4976-830e-11ff85af0239}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5743,7 +5743,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.033Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{bc537734-ef3d-48d2-8be9-d1915c6f64b0}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5754,7 +5754,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.032Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b63cb04b-a867-457b-aea6-01d525c98712}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5770,7 +5770,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.032Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{1a679bac-03af-4814-bdef-50ae86ea2424}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5786,7 +5786,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.032Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e179c3f0-8b6f-4754-90c3-39d670f60258}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5797,7 +5797,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.031Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b4be085d-7250-4d19-86a0-7c77ee186462}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5808,7 +5808,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.031Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5c510333-b1a5-4a54-bc2e-7448cb970afb}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5819,7 +5819,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.030Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{9c2cfb72-cc10-4d4e-a407-1272acad1958}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5831,7 +5831,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.030Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{24f8f0e2-4a07-467c-8c17-fd5706d06e85}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5843,7 +5843,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.030Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c2c6cef9-93d0-4dcd-bbe5-856f639ba8b3}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5856,7 +5856,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.029Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5725fb06-ecda-4b25-b5df-778e4f31dcf9}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5868,7 +5868,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.029Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{061cc3f5-62b6-4d00-847a-93f851d8102c}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5879,7 +5879,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.029Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e7f8df6f-7052-484f-a63a-84aa3a9f8c48}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5890,7 +5890,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.028Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{c551ea94-2f40-4aa0-b8a4-363057a6d2ee}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5901,7 +5901,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.028Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{4b0feb44-f187-4155-844b-5c0c42bdd2a1}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5913,7 +5913,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.028Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b3252771-ceac-4860-888c-caed417b27eb}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5925,7 +5925,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.027Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{bc45d34f-1f4f-49e4-80d1-d2278f7ba718}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5936,7 +5936,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.027Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{739087cc-7908-4423-a324-932aae13ecd7}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5947,7 +5947,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.027Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3efe894c-d2c0-4814-b875-de16eecca319}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5959,7 +5959,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.026Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{f7a568d8-c2fb-4c54-b6ac-f8576a0ffa38}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5970,7 +5970,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.026Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{569e6587-9513-4b17-8eea-dedabfd85281}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5981,7 +5981,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.026Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e3af89be-3baa-40f7-a655-16171cf13e82}"/>
         <tag k="ref:road:class" v="local"/>
@@ -5993,7 +5993,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.025Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{fedbbb0a-c300-412b-870d-80985dec5f7b}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6004,7 +6004,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.025Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{734a6414-40c2-45b5-8d83-bed7aa0a08d7}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6015,7 +6015,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.025Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{9f803f8e-7fe9-4d3e-b63e-144963d43e37}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6026,7 +6026,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.024Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{71961705-d2f2-4814-a7d1-1b2b98a90d10}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6037,7 +6037,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.024Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{fa465ec6-6f3b-4aaf-b301-01cbea4e35e4}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6048,7 +6048,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.024Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{47d31e0b-2c42-4232-9b30-ae51cfdf9237}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6062,7 +6062,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.023Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3d8ab05b-5be6-4dbf-a2d2-376f2d29740d}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6073,7 +6073,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.023Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{e0a5e619-f2f8-4cb1-ab69-c6369a2eb062}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6084,7 +6084,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.022Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{21b4bef0-b0a7-443d-bb1d-ff0441d25e7e}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6099,7 +6099,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.022Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{7d34f53f-a675-439a-aa39-0ca19372cbd5}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6111,7 +6111,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.022Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{eea96264-d2f0-4f82-b8f6-15d7415bbec7}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6123,7 +6123,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.021Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{59650ad4-ce62-4e60-abc3-f6f1b275f88f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6134,7 +6134,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.021Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5d5e092a-7027-43fa-8f35-61d2909151f7}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6145,7 +6145,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.021Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{2dc3fe3b-a457-46fd-b28a-87ea99825f16}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6157,7 +6157,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.020Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{5ec1c498-7228-4ac4-b0e0-f821686b2e17}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6200,7 +6200,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.020Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{b749e940-a694-4e31-856c-eda9d3c2b107}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6244,7 +6244,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.020Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{d75bfef6-757d-4348-80f6-ab6de543d5a0}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6282,7 +6282,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.019Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{792c482b-582d-47cf-b3f9-e32a62e37953}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6319,7 +6319,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.019Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{097f5dde-8122-435f-a953-c63b1306c012}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6342,7 +6342,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.019Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{cbeebaa9-66b4-4bfb-a03e-99c5df0c9b7f}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6359,7 +6359,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.018Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{eb9596a5-1ffa-4fec-90b5-7f6f9ac47bac}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6382,7 +6382,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.018Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{404f0390-f6c2-482a-b267-6a9935b8b075}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6401,7 +6401,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.017Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{de835569-67d8-4fdc-bb2b-e8596a3285df}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6418,7 +6418,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.017Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{d7bc8d5a-2182-4ae7-aa7a-a28c872bce73}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6458,7 +6458,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.017Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{699b9bb6-7b4b-44bf-a24a-9cb9b902b309}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6487,7 +6487,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.016Z"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{3767014d-8b5d-42c9-8591-3ddc350fdd84}"/>
         <tag k="ref:road:class" v="local"/>
@@ -6543,7 +6543,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.015Z"/>
         <tag k="name" v="AC 13 (PASO ANCHO)"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{1e2db18e-08f5-4bc7-a5e0-e11980a66e38}"/>
@@ -6565,7 +6565,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="source:ingest:datetime" v="2019-10-24T14:25:23.014Z"/>
         <tag k="name" v="KR 100"/>
-        <tag k="is_in:country_code" v="CO"/>
+        <tag k="addr:country" v="CO"/>
         <tag k="highway" v="primary"/>
         <tag k="oneway" v="yes"/>
         <tag k="uuid" v="{4fc4cca9-f279-44bb-84ea-f1c72fbffc6e}"/>
