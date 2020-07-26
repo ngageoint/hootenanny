@@ -18,7 +18,7 @@
         <tag k="transport:type:2" v="bus"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{9e5f2b36-e9e5-4e61-8ccb-bffb08256dd9}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -44,7 +44,7 @@
         <tag k="transport:type:2" v="bus"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{6928c36d-69a3-43f4-ab53-4e1ac7e2ffba}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -82,7 +82,7 @@
         <tag k="material" v="metal"/>
         <tag k="uuid" v="{18021657-b6e6-4b01-b5a4-41329def51d5}"/>
         <tag k="height:object" v="10"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="condition" v="construction"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -105,7 +105,7 @@
         <tag k="tower:type" v="communication"/>
         <tag k="material" v="wood"/>
         <tag k="uuid" v="{59302be3-1415-48eb-96cc-c3d482af34e1}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -130,7 +130,7 @@
         <tag k="material" v="masonry"/>
         <tag k="uuid" v="{3df8f982-d64a-4196-83d0-2c6c01dc6ec9}"/>
         <tag k="height:object" v="500"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="height" v="50"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -159,7 +159,7 @@
         <tag k="tower:type" v="industrial"/>
         <tag k="material" v="metal"/>
         <tag k="uuid" v="{8dde26f8-3143-4d7a-b021-65dade3722da}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="height" v="59"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -185,7 +185,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="material" v="aluminium"/>
         <tag k="uuid" v="{d8fae562-b5ce-4529-92e4-dd209f69ee31}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="height" v="57"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -281,7 +281,7 @@
         <tag k="raw_material" v="plant_material"/>
         <tag k="material" v="aluminium"/>
         <tag k="uuid" v="{b202f179-5156-4769-a5a0-031bb3468d10}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="product:2" v="aircraft"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="product" v="coffee"/>
@@ -308,7 +308,7 @@
         <tag k="raw_material" v="no_raw_material"/>
         <tag k="material" v="concrete"/>
         <tag k="uuid" v="{7cc3f7a2-845b-441e-a89f-d6939fb0f5f0}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="product" v="consumer_goods"/>
@@ -417,7 +417,7 @@
         <tag k="power" v="tower"/>
         <tag k="material" v="steel"/>
         <tag k="uuid" v="{64c05490-22b9-44d1-8fb9-7a3130c08f9b}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="pylon" v="yes"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -441,7 +441,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="material" v="fibreglass"/>
         <tag k="uuid" v="{be171f7c-b9f1-47b6-8fcc-455508f11621}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="pylon" v="yes"/>
         <tag k="condition" v="construction"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -459,7 +459,7 @@
     </node>
     <node visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498783690499998" lon="153.1208289567699978">
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="amenity" v="fuel"/>
         <tag k="source:spatial_source" v="no"/>
@@ -476,7 +476,7 @@
     </node>
     <node visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498229434500040" lon="153.1669064749700055">
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.087Z"/>
@@ -495,7 +495,7 @@
     </node>
     <node visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3559810355000010" lon="153.1666839561000018">
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.087Z"/>
@@ -518,7 +518,7 @@
         <tag k="name" v="Clinic of some sort"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{aad37b05-3771-44b8-ace3-3f7933d18890}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="note" v="Yes, a memo"/>
@@ -541,7 +541,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="amenity" v="social_facility"/>
         <tag k="uuid" v="{9beacdca-869f-4188-b894-5ab18e6a4fe3}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.085Z"/>
@@ -574,7 +574,7 @@
         <tag k="material" v="mud-based_construction"/>
         <tag k="uuid" v="{964ac67b-8ae1-4320-8a68-f804510d076b}"/>
         <tag k="amenity" v="school"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="height" v="2"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -596,7 +596,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="material" v="steel"/>
         <tag k="uuid" v="{2e21028a-196a-4abc-9235-e92296942756}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="height" v="3"/>
         <tag k="condition" v="construction"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -618,7 +618,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="material" v="stone"/>
         <tag k="uuid" v="{cf031628-1b2d-47e5-a715-d567ee5c4963}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="height" v="1"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -643,7 +643,7 @@
         <tag k="amenity" v="place_of_worship"/>
         <tag k="religion" v="muslim"/>
         <tag k="uuid" v="{f9f1e2e7-7699-4dd7-8271-586970f42122}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -664,7 +664,7 @@
         <tag k="raw_material:2" v="plant_material"/>
         <tag k="raw_material" v="clay"/>
         <tag k="uuid" v="{c484012c-333d-4ae9-b995-8f2190be07fd}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="height" v="2"/>
         <tag k="by_product:2" v="cinders"/>
         <tag k="condition" v="construction"/>
@@ -686,7 +686,7 @@
     <node visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3796437927999996" lon="153.1526186716100142">
         <tag k="crossing_point" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="transport:type" v="railway"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -703,7 +703,7 @@
     <node visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3768517048599982" lon="153.1525925435900035">
         <tag k="crossing_point" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="transport:type" v="road"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -738,7 +738,7 @@
         <tag k="transport:type:2" v="road"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{e4600f2b-ae94-4934-8d6e-e4a55fe12f28}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="transport:type" v="railway"/>
@@ -759,7 +759,7 @@
         <tag k="tower:type" v="observation"/>
         <tag k="material" v="brick"/>
         <tag k="uuid" v="{65322290-34e9-4b36-90d0-0cf930ec8142}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="control_tower" v="yes"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -786,7 +786,7 @@
         <tag k="material:vertical:2" v="prestressed_concrete"/>
         <tag k="material" v="iron"/>
         <tag k="uuid" v="{12d8e91e-46d3-4ef4-b66d-fea61c12aa20}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="control_tower" v="yes"/>
         <tag k="condition" v="construction"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -809,7 +809,7 @@
         <tag k="transport:type:2" v="road"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{a941263e-ca69-413d-9148-b2550cd5256d}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="control_tower" v="yes"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -871,7 +871,7 @@
     <node visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4655160816100050" lon="153.1368317061399864"/>
     <node visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498269825700007" lon="153.1418447358900039">
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="AUS"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.037Z"/>
@@ -893,7 +893,7 @@
         <tag k="name" v="Residential Area"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{af7324fd-6e0b-4347-8072-5978df62dddb}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="building:density" v="sparse"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -913,7 +913,7 @@
         <tag k="name" v="Industrial Estate"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{7b0243f4-29f8-40af-85f6-85e3d923f37e}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="building:density" v="dense"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -930,7 +930,7 @@
     </node>
     <node visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3673729849599958" lon="153.1418234399299934">
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.035Z"/>
@@ -953,7 +953,7 @@
         <tag k="width" v="3"/>
         <tag k="length" v="3"/>
         <tag k="uuid" v="{91b5cd10-c9a9-4573-983f-cd7eb41afbf5}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="height" v="13"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -973,7 +973,7 @@
         <tag k="width" v="2"/>
         <tag k="length" v="2"/>
         <tag k="uuid" v="{4c2a2cf3-9dda-4a11-8f85-fde7797b92e6}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="height" v="8"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -993,7 +993,7 @@
         <tag k="width" v="2"/>
         <tag k="length" v="2"/>
         <tag k="uuid" v="{04876e5f-f7c8-4836-8910-a7c35212a064}"/>
-        <tag k="is_in:country_code" v="EH"/>
+        <tag k="addr:country" v="EH"/>
         <tag k="height" v="9"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -1047,7 +1047,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="material" v="adobe_brick"/>
         <tag k="uuid" v="{20599e44-9357-4b09-bc43-f3b5f7c47ac9}"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="shelter:type" v="bomb"/>
@@ -1071,7 +1071,7 @@
         <tag k="attached" v="no"/>
         <tag k="uuid" v="{fb58f307-c7ed-4023-90d2-535b440bb474}"/>
         <tag k="amenity" v="embassy"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="roof:shape" v="with_cupola"/>
@@ -1093,7 +1093,7 @@
         <tag k="attached" v="yes"/>
         <tag k="material" v="metal"/>
         <tag k="uuid" v="{01e8c028-8afb-4c30-88e4-fed176b8fd9a}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="roof:shape" v="pitched"/>
@@ -1113,7 +1113,7 @@
         <tag k="building:levels" v="2"/>
         <tag k="attached" v="no"/>
         <tag k="uuid" v="{5dc03ed7-7f8b-4006-a53f-40f4267664c8}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="height" v="25"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="product" v="explosive"/>
@@ -1139,7 +1139,7 @@
         <tag k="material" v="wood"/>
         <tag k="amenity" v="bank"/>
         <tag k="uuid" v="{af4e3199-44c2-477d-bb18-758584294df8}"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="height" v="21"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1162,7 +1162,7 @@
         <tag k="building:levels" v="1"/>
         <tag k="attached" v="yes"/>
         <tag k="uuid" v="{5f4211f0-ea5a-44df-8cd9-675bfdf37d00}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1184,7 +1184,7 @@
         <tag k="building:levels" v="1"/>
         <tag k="attached" v="yes"/>
         <tag k="uuid" v="{ac05fed0-e5d2-40ea-9916-b979e1e2ff49}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="roof:shape" v="pitched"/>
@@ -1207,7 +1207,7 @@
         <tag k="building:levels" v="4"/>
         <tag k="material" v="wood"/>
         <tag k="uuid" v="{8b735764-25eb-4d52-b732-6c69ed0cd206}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="product" v="petroleum"/>
@@ -1232,7 +1232,7 @@
         <tag k="material" v="adobe_brick"/>
         <tag k="amenity" v="fire_station"/>
         <tag k="uuid" v="{19ab50f6-8ce7-4edd-892b-a59887739903}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="roof:shape" v="with_steeple"/>
@@ -1252,7 +1252,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="building:levels" v="6"/>
         <tag k="uuid" v="{c9c1f4eb-32d4-438d-8c4b-1efabe1f0548}"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="product" v="fruit"/>
@@ -1274,7 +1274,7 @@
         <tag k="attached" v="no"/>
         <tag k="material" v="wood"/>
         <tag k="uuid" v="{09528206-90f4-4cbe-a616-1e5fb200d5ee}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="product:2" v="desalinated_water"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1294,7 +1294,7 @@
     </node>
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616567836900018" lon="153.1208365965200073">
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:53.996Z"/>
@@ -1320,7 +1320,7 @@
         <tag k="amenity" v="place_of_worship"/>
         <tag k="uuid" v="{c9e03c34-8ab5-4f9c-b31f-5f4d316bc61d}"/>
         <tag k="religion" v="christian"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:53.995Z"/>
@@ -1341,7 +1341,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="attached" v="no"/>
         <tag k="uuid" v="{440884fb-8904-4333-9319-57451ac9fa38}"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="roof:shape" v="flat"/>
@@ -1357,7 +1357,7 @@
     </node>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551807571400047" lon="153.0951226492200021">
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="amenity" v="pharmacy"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1383,7 +1383,7 @@
         <tag k="building:levels" v="1"/>
         <tag k="attached" v="no"/>
         <tag k="uuid" v="{31a7d704-3216-44d3-a71c-0fb3ccf1e44f}"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1408,7 +1408,7 @@
         <tag k="attached" v="yes"/>
         <tag k="material" v="plant_material"/>
         <tag k="uuid" v="{815aac0f-05fd-41b2-9881-65311103dbee}"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="height" v="75"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="product" v="milk"/>
@@ -1431,7 +1431,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="attached" v="yes"/>
         <tag k="uuid" v="{cdde649e-ab52-416b-aa26-6188d3641214}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1452,7 +1452,7 @@
         <tag k="office" v="government"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{9a518e65-127b-4f23-8d5f-38990fd6d667}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="roof:shape" v="pitched"/>
@@ -1474,7 +1474,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="material" v="adobe_brick"/>
         <tag k="uuid" v="{4c26fa83-efc1-41a7-9568-768a390e6e54}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:53.988Z"/>
@@ -1496,7 +1496,7 @@
         <tag k="building:levels" v="6"/>
         <tag k="material" v="Smoke"/>
         <tag k="uuid" v="{34788650-9dc2-45b0-95ee-42f28c23f8f4}"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="product" v="bamboo"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1521,7 +1521,7 @@
         <tag k="building:levels" v="6"/>
         <tag k="amenity" v="restaurant"/>
         <tag k="uuid" v="{3baf263f-4c66-4640-8a48-e98aeba77678}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1543,7 +1543,7 @@
         <tag k="building:levels" v="2"/>
         <tag k="material" v="metal"/>
         <tag k="uuid" v="{08b347f2-0039-4bde-a17d-a456214f56e1}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1566,7 +1566,7 @@
         <tag k="building:levels" v="3"/>
         <tag k="material" v="glass"/>
         <tag k="uuid" v="{38816f81-a5bc-4fff-954f-29423f09b76b}"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="roof:shape" v="pitched"/>
@@ -1587,7 +1587,7 @@
         <tag k="religion" v="muslim"/>
         <tag k="uuid" v="{375f559b-1f8b-47c0-ad34-7f0df3e6a60e}"/>
         <tag k="amenity" v="place_of_worship"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="roof:shape" v="with_minaret"/>
@@ -1608,7 +1608,7 @@
         <tag k="attached" v="yes"/>
         <tag k="material" v="plant_material"/>
         <tag k="uuid" v="{e68c306d-bd66-4a9c-896c-3a313a9c0a64}"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="communication:television" v="yes"/>
@@ -1630,7 +1630,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="amenity" v="prison"/>
         <tag k="uuid" v="{25fa4462-4fc9-4f15-8193-faafd0891f5f}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1652,7 +1652,7 @@
         <tag k="building:levels" v="1"/>
         <tag k="material" v="adobe_brick"/>
         <tag k="uuid" v="{ada332ac-aeec-428c-8011-5241c94f4b8e}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="height" v="50"/>
         <tag k="by_product:2" v="slag"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1678,7 +1678,7 @@
         <tag k="amenity" v="place_of_worship"/>
         <tag k="religion" v="buddhist"/>
         <tag k="uuid" v="{3cdd04f4-a468-4dfe-a564-7e0369a9832b}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -1701,7 +1701,7 @@
         <tag k="material" v="glass"/>
         <tag k="amenity" v="police"/>
         <tag k="uuid" v="{ada3fb8e-d49a-412a-a427-1df9fdbdde9b}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="height" v="71"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1718,7 +1718,7 @@
     </node>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553182080799999" lon="153.0879616358099895">
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="amenity" v="community_centre"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1744,7 +1744,7 @@
         <tag k="building:levels" v="1"/>
         <tag k="attached" v="no"/>
         <tag k="uuid" v="{b14e13c0-5ea4-4b04-8ce9-422e15b3037e}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="height" v="60"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1771,7 +1771,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="material" v="brick"/>
         <tag k="uuid" v="{26cb3035-d35e-4b09-aeba-ec27be6a0bb1}"/>
-        <tag k="is_in:country_code" v="BN"/>
+        <tag k="addr:country" v="BN"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="product" v="milk"/>
@@ -1794,7 +1794,7 @@
         <tag k="name" v="Abandoned Hospital"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{5995970c-4266-429f-ae1e-5146a77eafee}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="height" v="35"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1819,7 +1819,7 @@
         <tag k="uuid" v="{fd5605a3-70b6-492b-896a-6bdb2e5e439c}"/>
         <tag k="religion" v="muslim"/>
         <tag k="amenity" v="place_of_worship"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -1843,7 +1843,7 @@
         <tag k="uuid" v="{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}"/>
         <tag k="religion" v="christian"/>
         <tag k="amenity" v="place_of_worship"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="shelter:type" v="fallout"/>
@@ -1870,7 +1870,7 @@
         <tag k="attached" v="no"/>
         <tag k="material" v="metal"/>
         <tag k="uuid" v="{c253da4d-f6d4-41e1-a7ad-8bb6ea55d8f8}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="roof:shape" v="pyramidal"/>
@@ -1892,7 +1892,7 @@
         <nd ref="-328"/>
         <nd ref="-329"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="transport:type" v="road"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1910,7 +1910,7 @@
         <nd ref="-326"/>
         <nd ref="-327"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="transport:type" v="road"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -1928,7 +1928,7 @@
         <nd ref="-324"/>
         <nd ref="-325"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="transport:type" v="pedestrian"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1947,7 +1947,7 @@
         <nd ref="-322"/>
         <nd ref="-323"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="transport:type" v="pedestrian"/>
         <tag k="source:spatial_source" v="no"/>
@@ -1966,7 +1966,7 @@
         <nd ref="-324"/>
         <nd ref="-325"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.200Z"/>
@@ -1990,7 +1990,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="location" v="underground"/>
         <tag k="uuid" v="{1dee6011-6730-4b71-adb3-1a7ff398579f}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="path"/>
         <tag k="in_tunnel" v="yes"/>
         <tag k="condition" v="destroyed"/>
@@ -2014,7 +2014,7 @@
         <tag k="name" v="Short"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{da1025eb-d540-4a47-900d-3687d3cd0e37}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="path"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -2037,7 +2037,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{389f4414-8e8c-45a7-9935-3401c2eaf29d}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="path"/>
         <tag k="in_tunnel" v="no"/>
         <tag k="condition" v="damaged"/>
@@ -2062,7 +2062,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{2728cc25-56fa-487f-801b-0d56bdacf98a}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="path"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -2084,7 +2084,7 @@
         <tag k="name" v="Long"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{39d182e1-6088-4185-a1c4-7fc58b9c002c}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="path"/>
         <tag k="in_tunnel" v="no"/>
         <tag k="condition" v="functional"/>
@@ -2242,7 +2242,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="leisure" v="stadium"/>
         <tag k="uuid" v="{627c4c65-2a14-4c7f-b8b9-9b799fe12f4f}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -2277,7 +2277,7 @@
         <tag k="raw_material" v="gold"/>
         <tag k="material" v="adobe_brick"/>
         <tag k="uuid" v="{627c4c65-2a14-4c7f-b8b9-9b799fe12f4f}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="by_product:2" v="no_byproduct"/>
         <tag k="product:2" v="wine"/>
         <tag k="condition" v="functional"/>
@@ -2309,7 +2309,7 @@
         <tag k="width" v="4"/>
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{1ea0e03c-4bfa-4fcf-aa6c-d05676895f8e}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="construction"/>
         <tag k="in_tunnel" v="no"/>
         <tag k="width:minimum_traveled_way" v="4"/>
@@ -2342,7 +2342,7 @@
         <tag k="width" v="4"/>
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{632db716-7256-4b2c-b27d-593bf9a2093e}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="construction"/>
         <tag k="in_tunnel" v="no"/>
         <tag k="width:minimum_traveled_way" v="4"/>
@@ -2376,7 +2376,7 @@
         <tag k="width" v="4"/>
         <tag k="location" v="underground"/>
         <tag k="uuid" v="{68d0dd28-6b60-468a-b33c-eaa663675dc8}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="secondary"/>
         <tag k="width:minimum_traveled_way" v="4"/>
         <tag k="surface" v="compacted"/>
@@ -2404,7 +2404,7 @@
         <tag k="width" v="4"/>
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{f0ecd77e-fdac-4deb-bd9c-d4f84dad328c}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="tertiary"/>
         <tag k="width:minimum_traveled_way" v="4"/>
         <tag k="surface" v="wood"/>
@@ -2433,7 +2433,7 @@
         <tag k="width" v="4"/>
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{1432b382-1299-4aa7-af5f-c89e3c15234d}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="road"/>
         <tag k="in_tunnel" v="no"/>
         <tag k="width:minimum_traveled_way" v="4"/>
@@ -2466,7 +2466,7 @@
         <tag k="width" v="4"/>
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{d9d0703d-83d7-4874-ac98-1b323e5de301}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="primary"/>
         <tag k="width:minimum_traveled_way" v="4"/>
         <tag k="condition" v="damaged"/>
@@ -2493,7 +2493,7 @@
         <nd ref="-245"/>
         <nd ref="-246"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.144Z"/>
@@ -2514,7 +2514,7 @@
         <nd ref="-328"/>
         <nd ref="-329"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.143Z"/>
@@ -2538,7 +2538,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="ref:road:class" v="national_motorway"/>
         <tag k="uuid" v="{b865241d-fb0a-4662-8042-21378b5d8149}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="motorway_link"/>
         <tag k="in_tunnel" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -2557,7 +2557,7 @@
         <nd ref="-239"/>
         <nd ref="-240"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.140Z"/>
@@ -2578,7 +2578,7 @@
         <nd ref="-237"/>
         <nd ref="-238"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.139Z"/>
@@ -2722,7 +2722,7 @@
         <tag k="width" v="3"/>
         <tag k="uuid" v="{93522adb-ba0c-4e44-9faa-ac6d2370741b}"/>
         <tag k="tidal" v="yes"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="water:morphology" v="distributary"/>
         <tag k="source:spatial_source" v="no"/>
@@ -2740,7 +2740,7 @@
         <nd ref="-213"/>
         <nd ref="-214"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.124Z"/>
@@ -2766,7 +2766,7 @@
         <tag k="width" v="3"/>
         <tag k="uuid" v="{5a1b64e8-d713-41fd-bd7e-252120ef275a}"/>
         <tag k="tidal" v="yes"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="covered" v="no"/>
@@ -2789,7 +2789,7 @@
         <tag k="width" v="3"/>
         <tag k="uuid" v="{b710f27a-0366-4a3b-805d-e111a52c971c}"/>
         <tag k="tidal" v="no"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="covered" v="no"/>
@@ -2807,7 +2807,7 @@
         <nd ref="-207"/>
         <nd ref="-208"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.121Z"/>
@@ -2832,7 +2832,7 @@
         <tag k="width" v="3"/>
         <tag k="uuid" v="{e0e597a8-f2fd-4982-b3f0-2dc6ffdea549}"/>
         <tag k="tidal" v="no"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="covered" v="yes"/>
@@ -2855,7 +2855,7 @@
         <tag k="width" v="3"/>
         <tag k="uuid" v="{6f588533-90a0-4928-b7b3-3e452d1144ab}"/>
         <tag k="tidal" v="yes"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="covered" v="no"/>
@@ -2876,7 +2876,7 @@
         <tag k="width" v="3"/>
         <tag k="uuid" v="{ec56c1bd-cd9c-482b-9a0d-95a24282e305}"/>
         <tag k="tidal" v="no"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="water:morphology" v="headwaters"/>
         <tag k="source:spatial_source" v="no"/>
@@ -2895,7 +2895,7 @@
         <nd ref="-199"/>
         <nd ref="-200"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.115Z"/>
@@ -2916,7 +2916,7 @@
         <nd ref="-197"/>
         <nd ref="-198"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.114Z"/>
@@ -2942,7 +2942,7 @@
         <tag k="width" v="3"/>
         <tag k="uuid" v="{aea98498-70b6-4beb-9395-63f768f4f29e}"/>
         <tag k="tidal" v="no"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="covered" v="no"/>
@@ -2964,7 +2964,7 @@
         <tag k="width" v="3"/>
         <tag k="uuid" v="{5653d95b-3b19-4b75-8571-4c67c4597227}"/>
         <tag k="tidal" v="yes"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="covered" v="no"/>
@@ -2986,7 +2986,7 @@
         <tag k="width" v="3"/>
         <tag k="uuid" v="{7eddcdf0-3e83-4658-88b5-c4da67b9bf82}"/>
         <tag k="tidal" v="yes"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="covered" v="no"/>
@@ -3004,7 +3004,7 @@
         <nd ref="-189"/>
         <nd ref="-190"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.110Z"/>
@@ -3028,7 +3028,7 @@
         <tag k="width" v="3"/>
         <tag k="uuid" v="{e3fe79cc-cd87-4e44-9d76-62086136bb95}"/>
         <tag k="tidal" v="no"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="covered" v="no"/>
@@ -3047,7 +3047,7 @@
         <nd ref="-185"/>
         <nd ref="-186"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.105Z"/>
@@ -3076,7 +3076,7 @@
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{18ab8349-3fb0-48eb-917b-49995b451fc5}"/>
         <tag k="gauge:type" v="broad"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="abandoned:railway" v="funicular"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -3102,7 +3102,7 @@
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{c0041728-2262-4969-bd62-4ca3607af853}"/>
         <tag k="gauge:type" v="standard"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.103Z"/>
@@ -3125,7 +3125,7 @@
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{711b42ac-132c-44e5-8ecb-3f39451c41da}"/>
         <tag k="gauge:type" v="narrow"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -3150,7 +3150,7 @@
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{cbcf9671-3825-46a9-8ef0-f1676648b43e}"/>
         <tag k="gauge:type" v="narrow"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.102Z"/>
@@ -3174,7 +3174,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="location" v="surface"/>
         <tag k="uuid" v="{c650708f-0984-4c35-a971-8154879af68f}"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -3203,7 +3203,7 @@
         <tag k="raw_material:3" v="plastic"/>
         <tag k="material" v="adobe_brick"/>
         <tag k="uuid" v="{ae014362-8c96-46b2-8149-d377ed03f334}"/>
-        <tag k="is_in:country_code" v="XE"/>
+        <tag k="addr:country" v="XE"/>
         <tag k="by_product:2" v="radioactive_material"/>
         <tag k="product:2" v="explosive"/>
         <tag k="condition" v="construction"/>
@@ -3237,7 +3237,7 @@
         <tag k="name" v="HealthCare"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{8f97a17a-a3df-40b4-9dc0-71228b65bf0a}"/>
-        <tag k="is_in:country_code" v="XE"/>
+        <tag k="addr:country" v="XE"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.080Z"/>
@@ -3259,7 +3259,7 @@
         <nd ref="-151"/>
         <nd ref="-147"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="XE"/>
+        <tag k="addr:country" v="XE"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.079Z"/>
@@ -3280,7 +3280,7 @@
         <nd ref="-132"/>
         <nd ref="-134"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.056Z"/>
@@ -3306,7 +3306,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="width" v="2.5"/>
         <tag k="uuid" v="{275a5223-4adb-497d-9ba6-edac1dca6b6f}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="in_tunnel" v="no"/>
         <tag k="width:minimum_traveled_way" v="2.5"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -3329,7 +3329,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="width" v="4"/>
         <tag k="uuid" v="{af12e7c5-c4b9-4db9-a11b-fe53910c9e0d}"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="highway" v="track"/>
         <tag k="width:minimum_traveled_way" v="4"/>
         <tag k="condition" v="functional"/>
@@ -3362,7 +3362,7 @@
         <nd ref="-123"/>
         <nd ref="-119"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="XE"/>
+        <tag k="addr:country" v="XE"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.050Z"/>
@@ -3387,7 +3387,7 @@
         <tag k="name" v="Defence"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="uuid" v="{c5d722af-c570-42de-8ac6-4abea5a4983f}"/>
-        <tag k="is_in:country_code" v="XE"/>
+        <tag k="addr:country" v="XE"/>
         <tag k="building:density" v="moderate"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -3410,7 +3410,7 @@
         <nd ref="-113"/>
         <nd ref="-109"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="XE"/>
+        <tag k="addr:country" v="XE"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.045Z"/>
@@ -3434,7 +3434,7 @@
         <nd ref="-108"/>
         <nd ref="-104"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="XE"/>
+        <tag k="addr:country" v="XE"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.044Z"/>
@@ -3459,7 +3459,7 @@
         <nd ref="-103"/>
         <nd ref="-99"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="XE"/>
+        <tag k="addr:country" v="XE"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.043Z"/>
@@ -3484,7 +3484,7 @@
         <nd ref="-98"/>
         <nd ref="-94"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="XE"/>
+        <tag k="addr:country" v="XE"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.042Z"/>
@@ -3509,7 +3509,7 @@
         <nd ref="-93"/>
         <nd ref="-89"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="XE"/>
+        <tag k="addr:country" v="XE"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.041Z"/>
@@ -3541,7 +3541,7 @@
         <tag k="attached" v="yes"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="uuid" v="{e8cbc330-a431-4cf6-adcf-73a9c8f10fe9}"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.026Z"/>
@@ -3568,7 +3568,7 @@
         <tag k="raw_material" v="oil"/>
         <tag k="material" v="prestressed_concrete"/>
         <tag k="uuid" v="{a7694937-07d8-437b-8a03-384b8a3b7369}"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="condition" v="damaged"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="product" v="petroleum"/>
@@ -3593,7 +3593,7 @@
         <nd ref="-71"/>
         <nd ref="-67"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="amenity" v="prison"/>
         <tag k="source:spatial_source" v="no"/>
@@ -3627,7 +3627,7 @@
         <tag k="amenity" v="place_of_worship"/>
         <tag k="uuid" v="{c57bcb46-fabf-46f1-a3e6-2e77f4f5c32d}"/>
         <tag k="religion" v="muslim"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -3654,7 +3654,7 @@
         <tag k="amenity" v="place_of_worship"/>
         <tag k="religion" v="buddhist"/>
         <tag k="uuid" v="{eea2047e-4a2d-449e-9def-8d1bc1765166}"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="condition" v="functional"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -3674,7 +3674,7 @@
         <nd ref="-56"/>
         <nd ref="-52"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.020Z"/>
@@ -3703,7 +3703,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="width" v="25"/>
         <tag k="uuid" v="{f9f1e2e7-7699-4dd7-8271-586970f42122}"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:ingest:datetime" v="2019-10-23T18:40:54.018Z"/>
@@ -3733,7 +3733,7 @@
         <tag k="material" v="wood"/>
         <tag k="amenity" v="bank"/>
         <tag k="uuid" v="{69d80b50-1eb2-4fe6-8db6-ea346395b285}"/>
-        <tag k="is_in:country_code" v="US"/>
+        <tag k="addr:country" v="US"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
@@ -3749,7 +3749,7 @@
         <nd ref="-4"/>
         <nd ref="-5"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="transport:type" v="road"/>
         <tag k="source:spatial_source" v="no"/>
@@ -3770,7 +3770,7 @@
         <nd ref="-2"/>
         <nd ref="-3"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="is_in:country_code" v="AU"/>
+        <tag k="addr:country" v="AU"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="transport:type" v="pedestrian"/>
         <tag k="source:spatial_source" v="no"/>

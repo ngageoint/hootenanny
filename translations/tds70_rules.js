@@ -153,10 +153,10 @@ tds70.rules = {
     'ZI005_NFN2':'gndb_id:2', // Geographic Name Information : (second) Name Identifier
     'ZI006_MEM':'note', // Note : Memorandum
     // We fix ZI020_GE4X in post processing
-    'ZI020_GE4':'is_in:country_code', // (Location Country) Designation : GENC Short URN-based Identifier
-    'ZI020_GE42':'country_code:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
-    'ZI020_GE43':'country_code:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
-    'ZI020_GE44':'country_code:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
+    'ZI020_GE4':'addr:country', // (Location Country) Designation : GENC Short URN-based Identifier
+    'ZI020_GE42':'addr:country:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
+    'ZI020_GE43':'addr:country:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
+    'ZI020_GE44':'addr:country:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
     'ZSAX_RS0':'security:classification', // Restriction Information : Security Attributes Group <resource classification>
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>

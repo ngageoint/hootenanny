@@ -1740,10 +1740,18 @@ translate = {
   ],
 
   // General country name conversion
-  // This is grungy but avoids having multiple lookup tables.
-  // possible From/To values: name,shortName,fullName,char3code,char2code,fips,code,urn
+  // This is grungy but avoids having multiple lookup tables
+  // possible From/To values: 
+  //  n = name
+  //  sN = shortName
+  //  fN = fullName
+  //  c3 = Alpha 3 code
+  //  c2 = Alpha 2 code
+  //  fips = fips code
+  //  code = Numeric country number
+  //  urn = NGA GENC URN
   convertCountryCode: function(from,to,value) {
-    if (value == '') return '';
+    if (!value || value == '') return '';
 
     var output = '';
     for (var i = 0, iLen = translate.countryTable.length; i < iLen; i++){
@@ -1760,7 +1768,7 @@ translate = {
 
   // This looks through the Local Names to try to find a country code
   convertLocalNameCountryCode: function(to,value) {
-    if (value == '') return '';
+    if (!value || value == '') return '';
 
     var output = '';
     for (var i = 0, iLen = translate.countryTable.length; i < iLen; i++){
@@ -1778,9 +1786,10 @@ translate = {
   },
 
 
-  // Try to find the 2char country name by searching all fields
-  findCountryCode: function(value) {
-    if (value == '' || value.length == 2) return '';
+  // Try to convert the country name by searching all fields
+  // Useful if you don't know what you have
+  findCountryCode: function(to,value) {
+    if (!value || value == '' || value.length == 2) return '';
 
     var output = '';
     for (var i = 0, iLen = translate.countryTable.length; i < iLen; i++){
@@ -1788,17 +1797,18 @@ translate = {
           translate.countryTable[i]['n'] == value ||
           translate.countryTable[i]['fN'] == value ||
           translate.countryTable[i]['code'] == value ||
+          translate.countryTable[i]['fips'] == value ||
           translate.countryTable[i]['c3'] == value ||
           translate.countryTable[i]['urn'] == value
           )
       {
-        output = translate.countryTable[i]['c2'];
+        output = translate.countryTable[i][to];
         break;
       }
     }
 
     // Try looking in the Local Names
-    if (output == '') output = translate.convertLocalNameCountryCode('c2',value);
+    if (output == '') output = translate.convertLocalNameCountryCode(to,value);
 
     return output
   },
@@ -1810,7 +1820,7 @@ translate = {
     ],
 
   convertLanguageCode: function(from,to,value) {
-    if (value == '') return '';
+    if (!value || value == '') return '';
 
     var output = '';
     for (var i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
@@ -1828,7 +1838,7 @@ translate = {
   // Search the Alpha3 "B" (bibliographic) and "T" (terminology) and the Alpha 2 values 
   // If these fail, try looking at the landuage Name IF the length of the value is > 3 char
   findLanguage2Code: function(value) {
-    if (value == '') return '';
+    if (!value || value == '') return '';
 
     var output = '';
     for (var i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
@@ -1856,7 +1866,7 @@ translate = {
   // Search the Alpha3 "B" (bibliographic) or "T" (terminology) as well as 
   // the Alpha 2 values.
   findLanguageName: function(value) {
-    if (value == '') return '';
+    if (!value || value == '') return '';
 
     var output = '';
     for (var i = 0, iLen = translate.languageCodes.length; i < iLen; i++){

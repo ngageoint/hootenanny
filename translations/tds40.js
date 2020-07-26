@@ -1202,6 +1202,14 @@ tds40 = {
     // Catch all. Particularly for Hardened Aircraft Shelters
     if (tags.bunker_type && !(tags.man_made == 'bunker' || tags.military == 'bunker')) tags.military = 'bunker';
 
+
+    // Fix IC2 country code
+    if (tags['addr:country'])
+    {
+      var country = translate.findCountryCode('c2',tags['addr:country']);
+      if (country !== '') tags['addr:country'] = country;
+    }
+
   }, // End of applyToOsmPostProcessing
 
   // ##### End of the xxToOsmxx Block #####
@@ -2005,6 +2013,36 @@ tds40 = {
 
     // Names. Sometimes we don't have a name but we do have language ones
     if (!tags.name) translate.swapName(tags);
+
+    // Fix country tags
+    if (tags['is_in:country_code'] && !tags['addr:country'])
+    {
+      tags['addr:country'] = tags['is_in:country_code'];
+      delete tags['is_in:country_code'];
+    }
+
+    if (tags['is_in:country'] && !tags['addr:country'])
+    {
+      tags['addr:country'] = tags['is_in:country'];
+      delete tags['is_in:country'];
+    }
+
+    if (tags['addr:country'])
+    {
+      var country = translate.convertCountryCode('c2','c3',tags['addr:country']);
+
+      if (country == '') country = translate.findCountryCode('c3',tags['addr:country'])
+
+      if (country !== '')
+      {
+        tags['addr:country'] = country;
+      }
+      else
+      {
+        hoot.logWarn('Dropping invalid country code value: ' + tags['addr:country']);
+        delete tags['addr:country'];
+      }
+    }
 
   }, // End applyToTdsPreProcessing
 

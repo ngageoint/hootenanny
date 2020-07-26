@@ -1169,19 +1169,17 @@ tds61 = {
     }
 
     // Fix the ZI020_GE4X Values
-    var ge4meta = ['is_in:country_code','country_code:second','country_code:third','country_code:fourth'];
+    var ge4meta = ['addr:country','addr:country:second','addr:country:third','addr:country:fourth',
+      'addr:country:first_side','addr:country:second_side'];
 
     for (var i=0, iLen=ge4meta.length; i < iLen; i++)
     {
       if (tags[ge4meta[i]])
       {
-        if (tds61.rules.ge4List[tags[ge4meta[i]]])
+        var country = translate.findCountryCode('c2',tags[ge4meta[i]]);
+        if (country !== '')
         {
-          tags[ge4meta[i]] = tds61.rules.ge4List[tags[ge4meta[i]]];
-        }
-        else if (tds61.rules.ge4List['ge:GENC:3:1-2:' + tags[ge4meta[i]]])
-        {
-          tags[ge4meta[i]] = tds61.rules.ge4List['ge:GENC:3:1-2:' + tags[ge4meta[i]]];
+          tags[ge4meta[i]] = country;
         }
         else
         {
@@ -2066,6 +2064,31 @@ tds61 = {
     // Names. Sometimes we don't have a name but we do have language ones
     if (!tags.name) translate.swapName(tags);
 
+    // Handle retired country tags
+    var ge4meta = {
+      'is_in:country_code':'addr:country',
+      'country_code:second':'addr:country:second',
+      'country_code:third':'addr:country:third',
+      'country_code:fourth':'addr:country:fourth',
+      'country_code:first_side':'addr:country:first_side',
+      'country_code:second_side':'addr:country:second_side'};
+
+    for (var i in ge4meta)
+    {
+      if (tags[i])
+      {
+        tags[ge4meta[i]] = tags[i];
+        delete tags[i];
+      }
+    }
+
+    if (tags['is_in:country'] && !tags['addr:country'])
+    {
+        tags['addr:country'] = tags['is_in:country'];
+        delete tags['is_in:country'];
+    }
+
+
   }, // End applyToTdsPreProcessing
 
   // #####################################################################################################
@@ -2315,9 +2338,15 @@ tds61 = {
     {
       if (attrs[ge4attr[i]])
       {
-        if (tds61.ge4Lookup[attrs[ge4attr[i]]])
+        // First, try the 2char country code
+        var urn = translate.convertCountryCode('c2','urn',attrs[ge4attr[i]])
+
+        // If nothing, try searching all of the fields to get a match
+        if (urn == '') urn = translate.findCountryCode('urn',attrs[ge4attr[i]])
+
+        if (urn !== '')
         {
-          attrs[ge4attr[i]] = tds61.ge4Lookup[attrs[ge4attr[i]]];
+          attrs[ge4attr[i]] = urn;
         }
         else
         {
@@ -2575,16 +2604,6 @@ tds61 = {
     // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line
     // There is no way we can translate these to a single TDS feature
     if (geometryType == 'Collection') return null;
-
-    // Flip the ge4List table so we can use it for export
-    if (tds61.ge4Lookup == undefined)
-    {
-      tds61.ge4Lookup = {};
-      for (var i in tds61.rules.ge4List)
-      {
-        tds61.ge4Lookup[tds61.rules.ge4List[i]] = i;
-      }
-    }
 
     // Set up the fcode translation rules. We need this due to clashes between the one2one and
     // the fcode one2one rules
