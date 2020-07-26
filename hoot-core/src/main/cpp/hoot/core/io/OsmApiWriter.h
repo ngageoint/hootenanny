@@ -110,6 +110,12 @@ public:
    */
   bool validatePermissions(HootNetworkRequestPtr request);
   /**
+   * @brief usingCgiMap Run a small query on the OSM API and check the generator for CGImap
+   * @param request - Network request object initialized with OSM API URL
+   * @return true if the response comes from CGImap
+   */
+  bool usingCgiMap(HootNetworkRequestPtr request);
+  /**
    * @brief getStats Get the stats object
    * @return
    */
@@ -373,6 +379,8 @@ private:
   bool _throttleWriters;
   /** Number of seconds for a writer thread to wait after a successful API writer before continuing, if enabled */
   int _throttleTime;
+  /** Number of seconds plus or minus for random throttle intervals, if enabled */
+  int _throttlePlusMinus;
   /** Queried capabilities from the target OSM API */
   OsmApiCapabilites _capabilities;
   /** Actual statistics */
@@ -404,6 +412,8 @@ private:
   bool _threadsCanExit;
   /** Error message for why the process failed */
   QString _errorMessage;
+  /** Enable throttling for API uploads through CGImap (instead of the rails port) */
+  bool _throttleCgiMap;
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */

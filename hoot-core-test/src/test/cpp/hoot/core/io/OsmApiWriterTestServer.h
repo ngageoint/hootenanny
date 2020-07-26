@@ -119,6 +119,27 @@ protected:
   bool respond(HttpConnection::HttpConnectionPtr& connection) override;
 };
 
+class ChangesetOutputThrottleTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  ChangesetOutputThrottleTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate a changeset upload.
+   *  Requests, in order:
+   *   - Capabilities
+   *   - Permissions
+   *   - Map Request - responds with HTTP 200
+   *   - Changeset Create
+   *   - Changeset Upload - responds with HTTP 200
+   *   - Changeset Upload - responds with HTTP 200
+   *   - Changeset Close
+   */
+  bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+};
+
 class ChangesetCreateFailureTestServer : public HttpTestServer
 {
 public:
@@ -193,6 +214,8 @@ public:
   static const char* SAMPLE_CHANGESET_REQUEST;
   /** Sample Changeset upload response body from '/api/0.6/changeset/1/upload' */
   static const char* SAMPLE_CHANGESET_1_RESPONSE;
+  /** Sample map GET response from '/api/0.6/map' with the CGImap generator attribute */
+  static const char* SAMPLE_CGIMAP_RESPONSE;
   /** Sample element GET response from '/api/0.6/way/1' */
   static const char* SAMPLE_ELEMENT_1_GET_RESPONSE;
   /** Sample Changeset upload response bodies from '/api/0.6/changeset/1/upload' divided into two responses */
