@@ -38,20 +38,12 @@ set -e
 
 # PROCESS INPUTS
 
-#IFS=';'
-
 TEST_NAME=$1
 echo "test name: " $TEST_NAME
 
 # There may be multiple source files delimited with ';'. For multiple file inputs we'll run multiple consecutive replacements in a loop.
 SOURCE_FILE_1=$2
-#echo "source file 1: " $SOURCE_FILE_1
-#read -a toBeReplacedInputs <<< "$2"
-#echo "toBeReplacedInputs: "
-#for input in "${toBeReplacedInputs[@]}";
-#do
-#  printf "$input;"
-#done
+echo "source file 1: " $SOURCE_FILE_1
 
 SOURCE_FILE_2=$3
 # If the second source file input parameter was not passed in, we'll perturb the first input source file and use the original data for the 
@@ -213,8 +205,8 @@ REF_DB_INPUT=$OSM_API_DB_URL
 # debug.maps.remove.missing.elements=false is useful for debugging but it can make output unviewable in JOSM.
 # convert.bounding.box.remove.missing.elements=false ensures that we don't drop any missing elements except when writing out our debug maps.
 
-LOG_LEVEL="--debug"
-GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounding.box.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=true -D element.hash.visitor.non.metadata.ignore.keys=note -D log.class.filter= "
+LOG_LEVEL="--info"
+GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounding.box.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=true -D debug.maps.remove.missing.elements=true -D element.hash.visitor.non.metadata.ignore.keys=note -D log.class.filter= "
 # Holding onto missing child element refs does not work yet with cropping, so disable it when cropping is specified...bug issue creation 
 # pending.
 if [ "$CROP_OPTS" == "" ]; then
@@ -222,14 +214,9 @@ if [ "$CROP_OPTS" == "" ]; then
 fi
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999"
 PERTY_OPTS="-D random.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
-CHANGESET_DERIVE_OPTS="-D changeset.replacement.implementation=hoot::ChangesetReplacementCreator2 -D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE "
+CHANGESET_DERIVE_OPTS="-D changeset.replacement.implementation=hoot::ChangesetReplacementCreator -D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE "
 CUSTOM_TAG_KEY="note"
 CUSTOM_TAG_VAL="Source"
-
-#for input in "${toBeReplacedInputs[@]}";
-#do
-#  printf "$input\n"
-#done
 
 # DB SOURCE WORKFLOW
 

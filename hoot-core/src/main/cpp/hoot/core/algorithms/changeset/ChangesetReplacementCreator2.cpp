@@ -128,7 +128,6 @@ void ChangesetReplacementCreator2::create(
   _validateInputs(input1, input2);
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _setGlobalOpts(boundsStr);
-  _parseConfigOpts();
 
   LOG_DEBUG(_getJobDescription(input1, input2, boundsStr, output));
 
@@ -151,6 +150,10 @@ void ChangesetReplacementCreator2::create(
     _markElementsWithMissingChildren(mapToReplace);
   }
 
+  // If we have a lenient bounds requirement and linear features, we need to exclude all ways
+  // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
+  _addChangesetDeleteExclusionTags(mapToReplace);
+
   // load the sec dataset and crop to the specified aoi
   OsmMapPtr replacementMap = _loadSecMap(input2);
   MemoryUsageChecker::getInstance().check();
@@ -172,9 +175,17 @@ void ChangesetReplacementCreator2::create(
   _combineMaps(combinedMap, replacementMap, false, "combined");
   replacementMap.reset();
 
-  // clean up introduced mistakes
-  _cleanup(mapToReplace);
-  _cleanup(combinedMap);
+  OsmMapPtr immediatelyConnectedOutOfBoundsWays =
+    _getImmediatelyConnectedOutOfBoundsWays(mapToReplace);
+  // combine the conflated map with the immediately connected out of bounds ways
+  _combineMaps(
+    replacementMap, immediatelyConnectedOutOfBoundsWays, true, "replaced-connected-combined");
+  immediatelyConnectedOutOfBoundsWays.reset();
+
+  // If we're not allowing the changeset deriver to generate delete statements for reference
+  // features outside of the bounds, we need to mark all corresponding ref ways with a custom
+  // tag that will cause the deriver to skip deleting them.
+  _excludeFeaturesFromChangesetDeletion(replacementMap, boundsStr);
 
   // CHANGESET GENERATION
 
@@ -254,45 +265,11 @@ void ChangesetReplacementCreator2::_setGlobalOpts(const QString& boundsStr)
     conf().set(ConfigOptions::getChangesetMetadataAllowedTagKeysKey(), metadataAllowTagKeys);
   }
 
-  // These don't change between scenarios (or at least we haven't needed to change them yet).
-  _boundsOpts.loadRefKeepOnlyInsideBounds = false;
-  _boundsOpts.cookieCutKeepOnlyInsideBounds = false;
-  //_boundsOpts.changesetRefKeepOnlyInsideBounds = false;
+  conf().set(
+    ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(), false);
 
   // turn on for testing only
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
-}
-
-void ChangesetReplacementCreator2::_parseConfigOpts()
-{
-  _boundsOpts.loadRefKeepEntireCrossingBounds = true;
-  _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = true; //*
-  _boundsOpts.loadSecKeepEntireCrossingBounds = true;
-  _boundsOpts.loadSecKeepOnlyInsideBounds = false;
-  _boundsOpts.cookieCutKeepEntireCrossingBounds = false; //*
-  //_boundsOpts.changesetRefKeepEntireCrossingBounds = true;
-  //_boundsOpts.changesetSecKeepEntireCrossingBounds = true;
-  //_boundsOpts.changesetSecKeepOnlyInsideBounds = false;
-  _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
-  _boundsOpts.inBoundsStrict = false;
-
-  conf().set(
-    ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
-    _boundsOpts.changesetAllowDeletingRefOutsideBounds);
-
-  LOG_VART(_boundsOpts.loadRefKeepEntireCrossingBounds);
-  LOG_VART(_boundsOpts.loadRefKeepOnlyInsideBounds);
-  LOG_VART(_boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
-  LOG_VART(_boundsOpts.loadSecKeepEntireCrossingBounds);
-  LOG_VART(_boundsOpts.loadSecKeepOnlyInsideBounds);
-  LOG_VART(_boundsOpts.cookieCutKeepEntireCrossingBounds);
-  LOG_VART(_boundsOpts.cookieCutKeepOnlyInsideBounds);
-  //LOG_VART(_boundsOpts.changesetRefKeepEntireCrossingBounds);
-  //LOG_VART(_boundsOpts.changesetRefKeepOnlyInsideBounds);
-  //LOG_VART(_boundsOpts.changesetSecKeepEntireCrossingBounds);
-  //LOG_VART(_boundsOpts.changesetSecKeepOnlyInsideBounds);
-  LOG_VART(_boundsOpts.changesetAllowDeletingRefOutsideBounds);
-  LOG_VART(_boundsOpts.inBoundsStrict);
 }
 
 OsmMapPtr ChangesetReplacementCreator2::_loadRefMap(const QString& input)
@@ -306,14 +283,11 @@ OsmMapPtr ChangesetReplacementCreator2::_loadRefMap(const QString& input)
   conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), true);
 
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-    _boundsOpts.loadRefKeepEntireCrossingBounds);
+    ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), true);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-    _boundsOpts.loadRefKeepOnlyInsideBounds);
+    ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), false);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(),
-    _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
+    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), true);
 
   // Here and with sec map loading, attempted to cache the initial map to avoid unnecessary
   // reloading, but it wreaked havoc on the element IDs. May try debugging it again later.
@@ -335,11 +309,9 @@ OsmMapPtr ChangesetReplacementCreator2::_loadSecMap(const QString& input)
   LOG_STATUS("Loading secondary map: " << input << "...");
 
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-    _boundsOpts.loadSecKeepEntireCrossingBounds);
+    ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-    _boundsOpts.loadSecKeepOnlyInsideBounds);
+    ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
 
@@ -418,13 +390,13 @@ OsmMapPtr ChangesetReplacementCreator2::_getCookieCutMap(OsmMapPtr doughMap, Osm
   const double cookieCutterAlpha = opts.getCookieCutterAlpha();
   double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
 
-    // Generate a cutter shape based on the ref map, which will cause all the ref data to be
-    // replaced.
-    LOG_DEBUG("Using dough map: " << doughMap->getName() << " as cutter shape map...");
-    cutterMapToUse = doughMap;
-    // TODO: riverbank test fails with missing POIs without this and the single point test has
-    // extra POIs in output without this; explain
-    cookieCutterAlphaShapeBuffer = 10.0;
+  // Generate a cutter shape based on the ref map, which will cause all the ref data to be
+  // replaced.
+  LOG_DEBUG("Using dough map: " << doughMap->getName() << " as cutter shape map...");
+  cutterMapToUse = /*doughMap*/cutterMap;
+  // TODO: riverbank test fails with missing POIs without this and the single point test has
+  // extra POIs in output without this; explain
+  cookieCutterAlphaShapeBuffer = 10.0;
 
   // Found that if a map only has a couple points or less, generating an alpha shape from them may
   // not be possible (or at least don't know how to yet). So instead, go through the points in the
@@ -480,8 +452,11 @@ OsmMapPtr ChangesetReplacementCreator2::_getCookieCutMap(OsmMapPtr doughMap, Osm
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
   CookieCutter(
-    false, 0.0, _boundsOpts.cookieCutKeepEntireCrossingBounds,
-    _boundsOpts.cookieCutKeepOnlyInsideBounds, false)
+    false,  // crop
+    0.0,    // buffer
+    true,  // keepEntireFeaturesCrossingBounds
+    false,   // keepOnlyFeaturesInsideBounds
+    false)  // removeMissingElements
     .cut(cutterShapeOutlineMap, cookieCutMap);
   MapProjector::projectToWgs84(cookieCutMap); // not exactly sure yet why this needs to be done
   LOG_VARD(cookieCutMap->getElementCount());
@@ -492,6 +467,41 @@ OsmMapPtr ChangesetReplacementCreator2::_getCookieCutMap(OsmMapPtr doughMap, Osm
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
 
   return cookieCutMap;
+}
+
+void ChangesetReplacementCreator2::_addChangesetDeleteExclusionTags(OsmMapPtr& map)
+{
+  LOG_STATUS(
+    "Setting connected way features outside of bounds to be excluded from deletion for: " <<
+    map->getName() << "...");
+
+  // Add the changeset deletion exclusion tag to all connected ways previously tagged upon load.
+
+  SetTagValueVisitor addTagVis(MetadataTags::HootChangeExcludeDelete(), "yes");
+  LOG_STATUS("\t" << addTagVis.getInitStatusMessage());
+  ChainCriterion addTagCrit(
+    std::shared_ptr<WayCriterion>(new WayCriterion()),
+    std::shared_ptr<TagKeyCriterion>(
+      new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds())));
+  FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
+  map->visitRw(deleteExcludeTagVis);
+  LOG_STATUS("\t" << addTagVis.getCompletedStatusMessage());
+
+  // Add the changeset deletion exclusion tag to all children of those connected ways.
+
+  std::shared_ptr<ChainCriterion> childAddTagCrit(
+    new ChainCriterion(
+      std::shared_ptr<WayCriterion>(new WayCriterion()),
+      std::shared_ptr<TagKeyCriterion>(
+        new TagKeyCriterion(MetadataTags::HootChangeExcludeDelete()))));
+  RecursiveSetTagValueOp childDeletionExcludeTagOp(
+    MetadataTags::HootChangeExcludeDelete(), "yes", childAddTagCrit);
+  LOG_STATUS("\t" << childDeletionExcludeTagOp.getInitStatusMessage());
+  childDeletionExcludeTagOp.apply(map);
+  LOG_STATUS("\t" << childDeletionExcludeTagOp.getCompletedStatusMessage());
+
+  MemoryUsageChecker::getInstance().check();
+  OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclusion-tagging");
 }
 
 void ChangesetReplacementCreator2::_combineMaps(
@@ -519,32 +529,53 @@ void ChangesetReplacementCreator2::_combineMaps(
   OsmMapWriterFactory::writeDebugMap(map1, debugFileName);
 }
 
-void ChangesetReplacementCreator2::_cleanup(OsmMapPtr& map)
+void ChangesetReplacementCreator2::_excludeFeaturesFromChangesetDeletion(
+  OsmMapPtr& map, const QString& boundsStr)
 {
-  LOG_STATUS("Cleaning up duplicated elements for " << map->getName() << "...");
+  if (map->size() == 0)
+  {
+    return;
+  }
 
-  // Due to mixed geometry type relations explained in _getDefaultGeometryFilters, we may have
-  // introduced some duplicate relation members by this point.
-//  RemoveDuplicateRelationMembersVisitor dupeMembersRemover;
-//  LOG_STATUS("\t" << dupeMembersRemover.getInitStatusMessage());
-//  map->visitRw(dupeMembersRemover);
-//  LOG_STATUS("\t" << dupeMembersRemover.getCompletedStatusMessage());
+  LOG_STATUS(
+    "Marking reference features in: " << map->getName() << " for exclusion from deletion...");
 
-  // get rid of straggling nodes
-  SuperfluousNodeRemover orphanedNodeRemover;
-  LOG_STATUS("\t" << orphanedNodeRemover.getInitStatusMessage());
-  orphanedNodeRemover.apply(map);
-  LOG_STATUS("\t" << orphanedNodeRemover.getCompletedStatusMessage());
+  std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(false));
+  boundsCrit->setBounds(GeometryUtils::envelopeFromConfigString(boundsStr));
+  boundsCrit->setOsmMap(map.get());
+  std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
+  std::shared_ptr<ChainCriterion> elementCrit(
+    new ChainCriterion(std::shared_ptr<WayCriterion>(new WayCriterion()), notInBoundsCrit));
 
-  // This will remove any relations that were already empty or became empty after we removed
-  // duplicated members.
-//  RemoveEmptyRelationsOp emptyRelationRemover;
-//  LOG_STATUS("\t" << emptyRelationRemover.getInitStatusMessage());
-//  emptyRelationRemover.apply(map);
-//  LOG_STATUS("\t" << emptyRelationRemover.getCompletedStatusMessage());
+  RecursiveSetTagValueOp tagSetter(MetadataTags::HootChangeExcludeDelete(), "yes", elementCrit);
+  LOG_STATUS("\t" << tagSetter.getInitStatusMessage());
+  tagSetter.apply(map);
+  LOG_STATUS("\t" << tagSetter.getCompletedStatusMessage());
 
-  // get out of orthographic
-  MapProjector::projectToWgs84(map);
+  MemoryUsageChecker::getInstance().check();
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclude-tags");
+}
+
+OsmMapPtr ChangesetReplacementCreator2::_getImmediatelyConnectedOutOfBoundsWays(
+  const ConstOsmMapPtr& map) const
+{
+  const QString outputMapName = "connected-ways";
+  LOG_STATUS(
+    "Copying immediately connected out of bounds ways from: " << map->getName() <<
+    " to new map: " << outputMapName << "...");
+
+  std::shared_ptr<ChainCriterion> copyCrit(
+    new ChainCriterion(
+      std::shared_ptr<WayCriterion>(new WayCriterion()),
+      std::shared_ptr<TagKeyCriterion>(
+        new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
+  OsmMapPtr connectedWays = MapUtils::getMapSubset(map, copyCrit);
+  connectedWays->setName(outputMapName);
+  LOG_VART(MapProjector::toWkt(connectedWays->getProjection()));
+  MemoryUsageChecker::getInstance().check();
+  OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways");
+  return connectedWays;
 }
 
 }
