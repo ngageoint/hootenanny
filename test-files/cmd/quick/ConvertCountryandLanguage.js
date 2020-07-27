@@ -57,7 +57,7 @@ console.log(translate.convertLocalNameCountryCode('n','Kòrsou'));
 console.log('#####');
 
 console.log('c2 for local name Sewula Afrika');
-console.log(translate.findCountryCode('Sewula Afrika'));
+console.log(translate.findCountryCode('c2','Sewula Afrika'));
 console.log('#####');
 
 console.log('Languages for Kòrsou local country name');

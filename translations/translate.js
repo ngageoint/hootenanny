@@ -1789,7 +1789,7 @@ translate = {
   // Try to convert the country name by searching all fields
   // Useful if you don't know what you have
   findCountryCode: function(to,value) {
-    if (!value || value == '' || value.length == 2) return '';
+    if (!value || value == '') return '';
 
     var output = '';
     for (var i = 0, iLen = translate.countryTable.length; i < iLen; i++){
@@ -1799,6 +1799,7 @@ translate = {
           translate.countryTable[i]['code'] == value ||
           translate.countryTable[i]['fips'] == value ||
           translate.countryTable[i]['c3'] == value ||
+          translate.countryTable[i]['c2'] == value ||
           translate.countryTable[i]['urn'] == value
           )
       {
