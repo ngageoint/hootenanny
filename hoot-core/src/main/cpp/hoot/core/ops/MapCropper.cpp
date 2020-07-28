@@ -528,6 +528,12 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
     gc.convertGeometryToElement(g.get(), way->getStatus(), way->getCircularError());
   LOG_VART(e.get());
 
+  // If the cropped version of the way ends up being cropped down to a single node, throw it out.
+  if (e->getElementType() == ElementType::Node)
+  {
+    return;
+  }
+
   if (e == 0)
   {
     LOG_TRACE("Removing way during crop check: " << way->getElementId() << "...");
