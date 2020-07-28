@@ -197,6 +197,26 @@ protected:
   bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 };
 
+class ElementGoneTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  ElementGoneTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate an element gone test.
+   *  Requests, in order:
+   *   - Capabilities
+   *   - Permissions
+   *   - Changeset Create
+   *   - Changeset Upload Gone Failure - responds with HTTP 410
+   *   - Changeset Upload - responds with HTTP 200
+   *   - Changeset Close
+   */
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+};
+
 class OsmApiSampleRequestResponse
 {
 public:
@@ -230,6 +250,9 @@ public:
   static const char* SAMPLE_CHANGESET_VERSION_FAILURE_RESPONSE;
   /** Sample Element GET response body for version conflict resolution */
   static const char* SAMPLE_CHANGESET_VERSION_FAILURE_GET_RESPONSE;
+  /** Sample Element response bodies for a GONE response sequence to '/api/0.6/changeset/1/upload' */
+  static const char* SAMPLE_ELEMENT_GONE_RESPONSE_1;
+  static const char* SAMPLE_ELEMENT_GONE_RESPONSE_2;
 };
 
 }

@@ -392,6 +392,11 @@ public:
    */
   int getMemberCount() const { return _members.size(); }
   /**
+   * @brief removeMember Remove the relation member at index
+   * @param index Index in the member vector
+   */
+  void removeMember(int index) { _members.removeAt(index); }
+  /**
    * @brief hasMember Search the relation for a specific element type with the given ID
    * @param type Element type to search for (node/way/relation)
    * @param id ID of the element to search for

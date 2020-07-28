@@ -39,6 +39,7 @@ namespace HttpResponseCode
   const int HTTP_NOT_FOUND              = 404;
   const int HTTP_METHOD_NOT_ALLOWED     = 405;
   const int HTTP_CONFLICT               = 409;
+  const int HTTP_GONE                   = 410;
   const int HTTP_PRECONDITION_FAILED    = 412;
   const int HTTP_INTERNAL_SERVER_ERROR  = 500;
   const int HTTP_BAD_GATEWAY            = 502;

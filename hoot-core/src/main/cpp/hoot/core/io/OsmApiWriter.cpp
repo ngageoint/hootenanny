@@ -485,10 +485,13 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         case HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR:  //  Internal Server Error, could be caused by the database being saturated
         case HttpResponseCode::HTTP_BAD_GATEWAY:            //  Bad Gateway, there are issues with the gateway, split and retry
         case HttpResponseCode::HTTP_GATEWAY_TIMEOUT:        //  Gateway Timeout, server is taking too long, split and retry
+        case HttpResponseCode::HTTP_GONE:                   //  Element has already been deleted, split and retry (error body is blank sometimes)
           if (!_splitChangeset(workInfo, info->response))
           {
             //  Splitting failed which means that the changeset only has one element in it,
             //  push it back on the queue and give the API a break
+            //  For HTTP_GONE, it could come back false if the element that is gone is removed
+            //  successfully and the rest of the changeset needs to be processed
             _pushChangesets(workInfo);
             //  Sleep the thread
             _yield();
