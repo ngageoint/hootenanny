@@ -29,7 +29,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
-#include <hoot/core/algorithms/changeset/ChangesetReplacementCreator2.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -70,15 +69,9 @@ public:
     timer.start();
     LOG_VARD(args);
 
-    if (ConfigOptions().getChangesetReplacementImplementation() ==
-          "hoot::ChangesetReplacementCreator")
-    {
-      runVersion1(args);
-    }
-    else
-    {
-      runVersion2(args);
-    }
+    // If needed for testing, can manually load separate implementations with
+    // ConfigOptions().getChangesetReplacementImplementation().
+    run(args);
 
     LOG_STATUS(
       "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
@@ -86,7 +79,7 @@ public:
     return 0;
   }
 
-  void runVersion1(QStringList& args)
+  void run(QStringList& args)
   {
     // process optional params
 
@@ -303,59 +296,6 @@ public:
     }
     LOG_VARD(printStats);
     LOG_VARD(outputStatsFile);
-  }
-
-  void runVersion2(QStringList& args)
-  {
-    bool printStats = false;
-    QString outputStatsFile;
-    processStatsParams(args, printStats, outputStatsFile);
-
-    QStringList tempArgs;
-    for (int i = 0; i < args.size(); i++)
-    {
-      if (!args[i].startsWith("--"))
-      {
-        tempArgs.append(args[i]);
-      }
-    }
-    args = tempArgs;
-
-    QString boundsStr = "";
-    if (args.size() >= 3)
-    {
-      boundsStr = args[2].trimmed();
-      conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
-      BoundedCommand::runSimple(args);
-    }
-
-    // param error checking
-    checkParameterCount(args.size());
-
-    // process non-optional params
-    const QString input1 = args[0].trimmed();
-    LOG_VARD(input1);
-    const QString input2 = args[1].trimmed();
-    LOG_VARD(input2);
-    const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
-    LOG_VARD(bounds);
-    const QString output = args[3].trimmed();
-    LOG_VARD(output);
-
-    QString osmApiDbUrl;
-    if (output.endsWith(".osc.sql"))
-    {
-      if (args.size() != 5)
-      {
-        std::cout << getHelp() << std::endl << std::endl;
-        throw IllegalArgumentException(
-          QString("%1 with SQL output takes five parameters.").arg(getName()));
-      }
-      osmApiDbUrl = args[4].trimmed();
-    }
-
-    ChangesetReplacementCreator2 changesetCreator(printStats, outputStatsFile, osmApiDbUrl);
-    changesetCreator.create(input1, input2, bounds, output);
   }
 
   void checkParameterCount(int count)

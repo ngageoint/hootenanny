@@ -35,10 +35,13 @@ IDs in the secondary data are not retained and those elements treated as complet
                                    replaced. With this option omitted, only reference features that overlap with secondary features are 
                                    replaced. This option is incompatible with the +--retainment-filters+ option. See the 
                                    "Full vs Overlapping Only Replacement" section for more detail.
-* +--strict-bounds+              - Determines how strict the interpretation of the specified bounds is during feature replacement. With this
-                                   option specified, no features overlapping the specified bounds will be replaced. With this option omitted,
-                                   features overlapping the bounds may be replaced or modified. This option is ignored for point features. See 
-                                   the "Bounds Handling" section for more detail.
+* +--strict-bounds+              - Determines how strict the interpretation of the specified bounds is during feature replacement. Precludes 
+                                   use of +--hybrid-bounds+. With this option specified, no features overlapping the specified bounds will be 
+                                   completely replaced, but they may be modified. With this option omitted, features overlapping the bounds may 
+                                   be completely replaced. See the  "Bounds Handling" section for more detail.
+* +--hybrid-bounds+              - Determines how strict the interpretation of the specified bounds is during feature replacement. Precludes 
+                                   use of +--strict-bounds+. This option uses the strict bounds interpretation for linear and point features 
+                                   and the lenient bounds interpretation for polygon features. See the "Bounds Handling" section for more detail.
 * +--geometry-filters+           - Optional criteria used to control the geometry type of the features that are replaced. When this option is
                                    omitted, features of all geometry types are replaced by features of a like geometry type. See the 
                                    "Geometry Filtering" section for more detail.

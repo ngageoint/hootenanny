@@ -629,7 +629,7 @@ before calculating the changeset.
 * Data Type: string
 * Default Value: `hoot::ChangesetReplacementCreator`
 
-TODO
+Used for testing only.
 
 === changeset.replacement.mark.elements.with.missing.children
 
