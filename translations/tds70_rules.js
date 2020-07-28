@@ -153,10 +153,10 @@ tds70.rules = {
     'ZI005_NFN2':'gndb_id:2', // Geographic Name Information : (second) Name Identifier
     'ZI006_MEM':'note', // Note : Memorandum
     // We fix ZI020_GE4X in post processing
-    'ZI020_GE4':'is_in:country_code', // (Location Country) Designation : GENC Short URN-based Identifier
-    'ZI020_GE42':'country_code:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
-    'ZI020_GE43':'country_code:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
-    'ZI020_GE44':'country_code:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
+    'ZI020_GE4':'addr:country', // (Location Country) Designation : GENC Short URN-based Identifier
+    'ZI020_GE42':'addr:country:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
+    'ZI020_GE43':'addr:country:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
+    'ZI020_GE44':'addr:country:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
     'ZSAX_RS0':'security:classification', // Restriction Information : Security Attributes Group <resource classification>
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
@@ -658,20 +658,20 @@ tds70.rules = {
 
     // CAA - Controlling Authority - This does not play nicely in OSM
     // ['CAA','-999999',undefined,undefined], // No Information
-    ['CAA','0','controlling_authority','unknown'],
-    ['CAA','1','controlling_authority','national'],
-    ['CAA','2','controlling_authority','state'],
-    ['CAA','3','controlling_authority','private'], // Private
-    ['CAA','4','controlling_authority','tribal'], // Tribal
-    ['CAA','5','controlling_authority','military'], // Military
-    ['CAA','6','controlling_authority','municipal'], // Municipal
-    ['CAA','7','controlling_authority','joint_military_civilian'], // Joint Military and Civilian
-    ['CAA','8','controlling_authority','international'],
-    ['CAA','11','controlling_authority','province'], // From NFDD
-    // ['CAA','13','controlling_authority','regional'], // From NFDD
-    ['CAA','16','controlling_authority','civilian'], // Civilian
-    ['CAA','17','controlling_authority','public'], // Public
-    ['CAA','999','controlling_authority','other'], // Other
+    ['CAA','0','operator','unknown'],
+    ['CAA','1','operator','national'],
+    ['CAA','2','operator','state'],
+    ['CAA','3','operator','private'], // Private
+    ['CAA','4','operator','tribal'], // Tribal
+    ['CAA','5','operator','military'], // Military
+    ['CAA','6','operator','municipal'], // Municipal
+    ['CAA','7','operator','joint_military_civilian'], // Joint Military and Civilian
+    ['CAA','8','operator','international'],
+    ['CAA','11','operator','province'], // From NFDD
+    // ['CAA','13','operator','regional'], // From NFDD
+    ['CAA','16','operator','civilian'], // Civilian
+    ['CAA','17','operator','public'], // Public
+    ['CAA','999','operator','other'], // Other
 
     // CAB - Cable Type
     // ['CAB','-999999',undefined,undefined], // No Information
@@ -3802,7 +3802,7 @@ tds70.rules = {
     ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
 
     // From UFD
-    ['CAA','-999999','controlling_authority','unknown'],
+    ['CAA','-999999','operator','unknown'],
     ['FFN','190','use','oil_gas_facility'], //
 
     // From UTP

@@ -1040,16 +1040,17 @@ ggdm30 = {
     }
 
     // Fix the ZI020_GE4X Values
-    var ge4meta = ['is_in:country_code','country_code:second','country_code:third','country_code:fourth',
-      'country_code:first_side','country_code:second_side'];
+    var ge4meta = ['addr:country','addr:country:second','addr:country:third','addr:country:fourth',
+      'addr:country:first_side','addr:country:second_side'];
 
     for (var i=0, iLen=ge4meta.length; i < iLen; i++)
     {
       if (tags[ge4meta[i]])
       {
-        if (ggdm30.rules.ge4List[tags[ge4meta[i]]])
+        var country = translate.findCountryCode('c2',tags[ge4meta[i]]);
+        if (country !== '')
         {
-          tags[ge4meta[i]] = ggdm30.rules.ge4List[tags[ge4meta[i]]];
+          tags[ge4meta[i]] = country;
         }
         else
         {
@@ -1829,6 +1830,38 @@ ggdm30 = {
     // Names. Sometimes we don't have a name but we do have language ones
     if (!tags.name) translate.swapName(tags);
 
+    // Tag retired
+    if (tags.controlling_authority) 
+    {
+      tags.operator = tags.controlling_authority;
+      delete tags.controlling_authority;
+    }
+
+    // Handle retired country tags
+    var ge4meta = {
+      'is_in:country_code':'addr:country',
+      'country_code:second':'addr:country:second',
+      'country_code:third':'addr:country:third',
+      'country_code:fourth':'addr:country:fourth',
+      'country_code:first_side':'addr:country:first_side',
+      'country_code:second_side':'addr:country:second_side'};
+
+    for (var i in ge4meta)
+    {
+      if (tags[i])
+      {
+        tags[ge4meta[i]] = tags[i];
+        delete tags[i];
+      }
+    }
+
+    if (tags['is_in:country'] && !tags['addr:country'])
+    {
+        tags['addr:country'] = tags['is_in:country'];
+        delete tags['is_in:country'];
+    }
+
+
   }, // End applyToOgrPreProcessing
 
   // #####################################################################################################
@@ -2063,9 +2096,15 @@ ggdm30 = {
     {
       if (attrs[ge4attr[i]])
       {
-        if (ggdm30.ge4Lookup[attrs[ge4attr[i]]])
+        // First, try the 2char country code
+        var urn = translate.convertCountryCode('c2','urn',attrs[ge4attr[i]])
+
+        // If nothing, try searching all of the fields to get a match
+        if (urn == '') urn = translate.findCountryCode('urn',attrs[ge4attr[i]])
+
+        if (urn !== '')
         {
-          attrs[ge4attr[i]] = ggdm30.ge4Lookup[attrs[ge4attr[i]]];
+          attrs[ge4attr[i]] = urn;
         }
         else
         {
@@ -2285,16 +2324,6 @@ ggdm30 = {
     // Start processing here
     // Debug:
     if (ggdm30.config.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
-
-    // Flip the ge4List table so we can use it for export
-    if (ggdm30.ge4Lookup == undefined)
-    {
-      ggdm30.ge4Lookup = {};
-      for (var i in ggdm30.rules.ge4List)
-      {
-        ggdm30.ge4Lookup[ggdm30.rules.ge4List[i]] = i;
-      }
-    }
 
     // Set up the fcode translation rules. We need this due to clashes between the one2one and
     // the fcode one2one rules

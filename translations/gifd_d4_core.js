@@ -441,6 +441,15 @@ gifd = {
       tags.facility = 'yes';
     }
 
+    // Fix up country codes.
+    // GIFD uses FIPS for the country code so we need to convert it.
+    if (tags['addr:country'])
+    {
+      var country = translate.convertCountryCode('fips','c2',tags['addr:country']);
+      if (country !== '') tags['addr:country'] = country;
+    }
+
+
   }, // End of applyToOsmPostProcessing
 
   // ##### End of the xxToOsmxx Block #####

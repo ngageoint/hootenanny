@@ -3,7 +3,7 @@
     <bounds minlat="30.16352458824" minlon="31.46648899977" maxlat="30.16354000036999" maxlon="31.4665112"/>
     <node visible="true" id="-2231903" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1635400003699949" lon="31.4664889997700001">
         <tag k="source:review_source_type" v="NA"/>
-        <tag k="controlling_authority" v="unknown"/>
+        <tag k="operator" v="unknown"/>
         <tag k="source:abs_vert_accuracy" v="-32765"/>
         <tag k="source:description" v="IKONOS - 1m resolution"/>
         <tag k="condition" v="functional"/>

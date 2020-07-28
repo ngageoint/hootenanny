@@ -2614,18 +2614,18 @@ ufd = {
 
     // USE_ / USG - Usage: This is just Ugly.
     // It is a combination of primary user, function, or controlling authority
-    // ['USG','0','controlling_authority','unknown'],
+    // ['USG','0','operator','unknown'],
     ['USG','0',undefined,undefined],
-    // ['USG','Unknown','controlling_authority','unknown'],
+    // ['USG','Unknown','operator','unknown'],
     ['USG','Unknown',undefined,undefined],
-    ['USG','4','controlling_authority','national'],
-    ['USG','National','controlling_authority','national'],
-    ['USG','5','controlling_authority','state'],
-    ['USG','State','controlling_authority','state'],
-    ['USG','6','controlling_authority','private'],
-    ['USG','Private','controlling_authority','private'],
-    ['USG','7','controlling_authority','tribal'],
-    ['USG','Tribal','controlling_authority','tribal'],
+    ['USG','4','operator','national'],
+    ['USG','National','operator','national'],
+    ['USG','5','operator','state'],
+    ['USG','State','operator','state'],
+    ['USG','6','operator','private'],
+    ['USG','Private','operator','private'],
+    ['USG','7','operator','tribal'],
+    ['USG','Tribal','operator','tribal'],
     ['USG','8','use','military'],
     ['USG','Military','use','military'],
     ['USG','11','use','motel/hotel'],
@@ -2634,20 +2634,20 @@ ufd = {
     ['USG','Apartment','use','apartment'], // Apartment
     ['USG','13','use','open'], // Open
     ['USG','Open','use','open'], // Open
-    ['USG','16','controlling_authority','city'],
-    ['USG','City','controlling_authority','city'],
-    ['USG','17','controlling_authority','public'],
-    ['USG','Public','controlling_authority','public'],
+    ['USG','16','operator','city'],
+    ['USG','City','operator','city'],
+    ['USG','17','operator','public'],
+    ['USG','Public','operator','public'],
     ['USG','20','use','closed'], // Closed
     ['USG','Closed','use','closed'], // Closed
     ['USG','21','use','restricted'], // Restricted
     ['USG','Restricted','use','restricted'], // Restricted
-    ['USG','22','controlling_authority','joint_military/civilian'], // Joint Military/Civilian
-    ['USG','Joint Military/Civilian','controlling_authority','joint_military/civilian'], // Joint Military/Civilian
-    ['USG','23','controlling_authority','international'],
-    ['USG','International','controlling_authority','international'],
-    ['USG','25','controlling_authority','federal'], // Federal
-    ['USG','Federal','controlling_authority','federal'], // Federal
+    ['USG','22','operator','joint_military/civilian'], // Joint Military/Civilian
+    ['USG','Joint Military/Civilian','operator','joint_military/civilian'], // Joint Military/Civilian
+    ['USG','23','operator','international'],
+    ['USG','International','operator','international'],
+    ['USG','25','operator','federal'], // Federal
+    ['USG','Federal','operator','federal'], // Federal
     ['USG','26','use','primary/1st_order'], // Primary/1st Order
     ['USG','Primary/1st Order','use','primary/1st_order'], // Primary/1st Order
     ['USG','30','use','secondary/2nd_order'], // Secondary/2nd Order
@@ -2672,8 +2672,8 @@ ufd = {
     ['USG','Agricultural','use','agriculture'],
     ['USG','48','use','decoy'], // Decoy
     ['USG','Decoy','use','decoy'], // Decoy
-    ['USG','49','controlling_authority','civilian/public'], // Civilian/Public
-    ['USG','Civilian/Public','controlling_authority','civilian/public'],
+    ['USG','49','operator','civilian/public'], // Civilian/Public
+    ['USG','Civilian/Public','operator','civilian/public'],
     ['USG','100','use','transient_apron'], // Transient Apron
     ['USG','Transient Apron','use','transient_apron'], // Transient Apron
     ['USG','101','use','depot_apron'], // Depot Apron
@@ -2696,8 +2696,8 @@ ufd = {
     ['USG','Compass Rose Hardstand','use','compass_rose_hardstand'], // Compass Rose Hardstand
     ['USG','110','use','maintenance_hardstand'], // Maintenance Hardstand
     ['USG','Maintenance Hardstand','use','maintenance_hardstand'], // Maintenance Hardstand
-    ['USG','113','controlling_authority','regional'], // Regional
-    ['USG','Regional','controlling_authority','regional'], // Regional
+    ['USG','113','operator','regional'], // Regional
+    ['USG','Regional','operator','regional'], // Regional
     ['USG','115','man_made','snow_fence'], // Snow Shed
     ['USG','Snow Shed','man_made','snow_fence'], // Snow Shed
     ['USG','116','man_made','rock_shed'], // Rock Shed

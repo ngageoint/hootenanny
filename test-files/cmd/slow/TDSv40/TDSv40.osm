@@ -565,7 +565,7 @@
         <tag k="product" v="brick"/>
         <tag k="raw_material:2" v="plant_material"/>
         <tag k="by_product" v="ash"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="source" v="tdsv40:facility_p"/>
         <tag k="condition" v="construction"/>
     </node>
@@ -621,7 +621,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="construction"/>
         <tag k="use" v="healthcare"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616748649023123" lon="153.1478155630082654">
@@ -639,7 +639,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="functional"/>
         <tag k="use" v="education"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498177361501256" lon="153.1602973097869267">
@@ -787,7 +787,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="destroyed"/>
         <tag k="building:density" v="moderate"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3619701421581674" lon="153.1419407639083943">
@@ -803,7 +803,7 @@
         <tag k="condition" v="functional"/>
         <tag k="use" v="manufacturing"/>
         <tag k="building:density" v="dense"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3555007213724899" lon="153.1417852005552049">
@@ -819,7 +819,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="functional"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498269825651583" lon="153.1418447358927040">
@@ -834,7 +834,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="construction"/>
         <tag k="use" v="religious_activities"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3832105357953814" lon="153.1752433790204577">
@@ -962,7 +962,7 @@
         <tag k="shelter:type" v="fallout"/>
         <tag k="building:manufactured" v="yes"/>
         <tag k="source" v="tdsv40:building_p"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
     </node>
     <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3675801195806976" lon="153.1278579166307736">
@@ -981,7 +981,7 @@
         <tag k="religion" v="muslim"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="source" v="tdsv40:building_p"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="condition" v="functional"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="roof:shape" v="with_minaret"/>
@@ -1001,7 +1001,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="addr:full" v="Left of Main Street"/>
         <tag k="use" v="healthcare"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3668293056664318" lon="153.0800777400005188">
@@ -1020,7 +1020,7 @@
         <tag k="communication:mobile_phone" v="yes"/>
         <tag k="material" v="brick"/>
         <tag k="source" v="tdsv40:building_p"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="condition" v="functional"/>
         <tag k="navigation:landmark" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
@@ -1042,7 +1042,7 @@
         <tag k="attached" v="no"/>
         <tag k="shelter:type" v="bomb"/>
         <tag k="building:manufactured" v="yes"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="navigation:landmark" v="yes"/>
         <tag k="light:obstacle" v="no"/>
@@ -1118,7 +1118,7 @@
         <tag k="by_product" v="scrap-metal"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="material" v="adobe_brick"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="navigation:landmark" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
@@ -1138,7 +1138,7 @@
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="functional"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3610064800120689" lon="153.0721254206466995">
@@ -1156,7 +1156,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="communication:television" v="yes"/>
         <tag k="light:obstacle" v="no"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="shelter:type" v="fallout"/>
     </node>
@@ -1228,7 +1228,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="functional"/>
         <tag k="communication:television" v="yes"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3491402811469726" lon="153.0799969741597408">
@@ -1245,7 +1245,7 @@
         <tag k="product" v="bamboo"/>
         <tag k="shelter:type" v="fallout"/>
         <tag k="source" v="tdsv40:building_p"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="communication:cellular_phone" v="yes"/>
         <tag k="light:obstacle" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
@@ -1264,7 +1264,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="use" v="wind_tunnel"/>
         <tag k="light:obstacle" v="yes"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551316776950806" lon="153.1146594080182126">
@@ -1280,7 +1280,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="roof:shape" v="pitched"/>
         <tag k="light:obstacle" v="yes"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="office" v="government"/>
         <tag k="construction" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1299,7 +1299,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="destroyed"/>
         <tag k="light:obstacle" v="no"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3672681783417282" lon="153.0874559630275087">
@@ -1317,7 +1317,7 @@
         <tag k="shelter:type" v="fallout"/>
         <tag k="material" v="plant_material"/>
         <tag k="source" v="tdsv40:building_p"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="crop" v="dairy"/>
         <tag k="navigation:landmark" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
@@ -1342,7 +1342,7 @@
         <tag k="roof:shape:2" v="pyramidal"/>
         <tag k="material" v="aerogel"/>
         <tag k="building:manufactured" v="yes"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="roof:shape:3" v="gargoyles"/>
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="condition" v="functional"/>
@@ -1362,7 +1362,7 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="error:circular" v="15"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3494846154866629" lon="153.0878450789861631">
@@ -1377,7 +1377,7 @@
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="error:circular" v="15"/>
         <tag k="roof:shape" v="flat"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="navigation:landmark" v="no"/>
         <tag k="communication:mobile_phone" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1397,7 +1397,7 @@
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="error:circular" v="15"/>
         <tag k="denomination" v="roman_catholic"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616567836886837" lon="153.1208365965246685">
@@ -1410,7 +1410,7 @@
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="error:circular" v="15"/>
         <tag k="use" v="water_transport"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="shelter:type" v="storm"/>
     </node>
@@ -1429,7 +1429,7 @@
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="error:circular" v="15"/>
         <tag k="building:multi_unit" v="yes"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3494637213724694" lon="153.1025694301153521">
@@ -1448,7 +1448,7 @@
         <tag k="material" v="wood"/>
         <tag k="building:manufactured" v="yes"/>
         <tag k="source" v="tdsv40:building_p"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="product:2" v="desalinated_water"/>
         <tag k="condition" v="functional"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
@@ -1468,7 +1468,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="destroyed"/>
         <tag k="use" v="agriculture"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616393883537619" lon="153.1089323707840606">
@@ -1485,7 +1485,7 @@
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="error:circular" v="15"/>
         <tag k="roof:shape" v="with_steeple"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="communication:mobile_phone" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="shelter:type" v="storm"/>
@@ -1505,7 +1505,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="destroyed"/>
         <tag k="use" v="petroleum_and_coal_product_manufacturing"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="navigation:landmark" v="no"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
@@ -1522,7 +1522,7 @@
         <tag k="attached" v="yes"/>
         <tag k="building:manufactured" v="yes"/>
         <tag k="source" v="tdsv40:building_p"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="light:obstacle" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="roof:shape" v="pitched"/>
@@ -1544,7 +1544,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="functional"/>
         <tag k="use" v="paper_mill"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3671464342120636" lon="153.0722121036109797">
@@ -1563,7 +1563,7 @@
         <tag k="shelter:type" v="storm"/>
         <tag k="material" v="wood"/>
         <tag k="source" v="tdsv40:building_p"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="roof:shape" v="pitched"/>
         <tag k="building:levels" v="1"/>
@@ -1583,7 +1583,7 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="error:circular" v="15"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3613204972742423" lon="153.0951367304635085">
@@ -1602,7 +1602,7 @@
         <tag k="source" v="tdsv40:building_p"/>
         <tag k="error:circular" v="15"/>
         <tag k="roof:shape" v="pitched"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3489174959950319" lon="153.0723523212778048">
@@ -1620,7 +1620,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="roof:shape" v="with_cupola"/>
         <tag k="building:multi_unit" v="yes"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </node>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551910609763276" lon="153.0798897137994459">
@@ -2059,7 +2059,7 @@
         <tag k="lanes" v="1"/>
         <tag k="ref" v="470"/>
         <tag k="location" v="surface"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="source" v="tdsv40:road_c"/>
         <tag k="in_tunnel" v="no"/>
         <tag k="feature_configuration" v="same"/>
@@ -2086,7 +2086,7 @@
         <tag k="lanes" v="2"/>
         <tag k="location" v="underground"/>
         <tag k="source" v="tdsv40:road_c"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width:minimum_traveled_way" v="4"/>
     </way>
@@ -2109,7 +2109,7 @@
         <tag k="lanes" v="1"/>
         <tag k="location" v="surface"/>
         <tag k="source" v="tdsv40:road_c"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width:minimum_traveled_way" v="4"/>
     </way>
@@ -2162,7 +2162,7 @@
         <tag k="lanes" v="1"/>
         <tag k="ref" v="1"/>
         <tag k="location" v="surface"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="source" v="tdsv40:road_c"/>
         <tag k="condition" v="damaged"/>
         <tag k="feature_configuration" v="different"/>
@@ -2639,7 +2639,7 @@
         <tag k="raw_material:3" v="plastic"/>
         <tag k="by_product" v="scrap-metal"/>
         <tag k="material" v="adobe_brick"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="source" v="tdsv40:facility_s"/>
         <tag k="product:2" v="explosive"/>
         <tag k="communication:microwave_radio_relay" v="yes"/>
@@ -2667,7 +2667,7 @@
         <tag k="source" v="tdsv40:facility_s"/>
         <tag k="error:circular" v="15"/>
         <tag k="use" v="healthcare"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </way>
     <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2687,7 +2687,7 @@
         <tag k="source" v="tdsv40:facility_s"/>
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="functional"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </way>
     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2787,7 +2787,7 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="source" v="tdsv40:built-up_area_s"/>
         <tag k="error:circular" v="15"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </way>
     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2809,7 +2809,7 @@
         <tag k="condition" v="functional"/>
         <tag k="use" v="military"/>
         <tag k="building:density" v="moderate"/>
-        <tag k="controlling_authority" v="joint_military_civilian"/>
+        <tag k="operator" v="joint_military_civilian"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </way>
     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2850,7 +2850,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="damaged"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2892,7 +2892,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="condition" v="functional"/>
         <tag k="use" v="utilities"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2952,7 +2952,7 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="source" v="tdsv40:building_s"/>
         <tag k="error:circular" v="15"/>
-        <tag k="controlling_authority" v="private"/>
+        <tag k="operator" v="private"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2976,7 +2976,7 @@
         <tag k="by_product" v="ash"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="material" v="prestressed_concrete"/>
-        <tag k="controlling_authority" v="public"/>
+        <tag k="operator" v="public"/>
         <tag k="source" v="tdsv40:building_s"/>
         <tag k="width" v="25"/>
         <tag k="condition" v="damaged"/>
@@ -3001,7 +3001,7 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="source" v="tdsv40:building_s"/>
         <tag k="error:circular" v="15"/>
-        <tag k="controlling_authority" v="civilian"/>
+        <tag k="operator" v="civilian"/>
         <tag k="construction" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </way>
@@ -3070,7 +3070,7 @@
         <tag k="source" v="tdsv40:building_s"/>
         <tag k="error:circular" v="15"/>
         <tag k="building:multi_unit" v="yes"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="navigation:landmark" v="no"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </way>
@@ -3091,7 +3091,7 @@
         <tag k="abandoned:building" v="yes"/>
         <tag k="error:circular" v="15"/>
         <tag k="light:obstacle" v="yes"/>
-        <tag k="controlling_authority" v="military"/>
+        <tag k="operator" v="military"/>
         <tag k="communication:mobile_phone" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
     </way>

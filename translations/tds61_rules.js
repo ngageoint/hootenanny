@@ -184,10 +184,10 @@ tds61.rules = {
     'ZI005_NFN3':'gndb_id:3', // Geographic Name Information : Name Identifier (third)
     'ZI006_MEM':'note', // Note : Memorandum
     // We fix ZI020_GE4X in post processing
-    'ZI020_GE4':'is_in:country_code', // (Location Country) Designation : GENC Short URN-based Identifier
-    'ZI020_GE42':'country_code:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
-    'ZI020_GE43':'country_code:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
-    'ZI020_GE44':'country_code:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
+    'ZI020_GE4':'addr:country', // (Location Country) Designation : GENC Short URN-based Identifier
+    'ZI020_GE42':'addr:country:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
+    'ZI020_GE43':'addr:country:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
+    'ZI020_GE44':'addr:country:fourth', // (Location Country) Designation : GENC Short URN-based Identifier (fourth)
     'ZI026T_UFI':'source:table:uuid', // Feature Metadata (Table) : Unique Entity Identifier
     'ZI027T_UFI':'source:attribute:uuid', // Feature Attribute Metadata (Table) : Unique Entity Identifier
     'ZI028_UFI':'source:feature:uuid', // Feature Entity : Unique Entity Identifier
@@ -809,21 +809,21 @@ tds61.rules = {
 
     // CAA - Controlling Authority - This does not play nicely in OSM
     // ['CAA','-999999',undefined,undefined], // No Information
-    // ['CAA','0','controlling_authority','unknown'],
-    // ['CAA','1','controlling_authority','national'],
-    // ['CAA','2','controlling_authority','state'],
-    ['CAA','3','controlling_authority','private'], // Private
-    ['CAA','4','controlling_authority','tribal'], // Tribal
-    ['CAA','5','controlling_authority','military'], // Military
-    ['CAA','6','controlling_authority','municipal'], // Municipal
-    ['CAA','7','controlling_authority','joint_military_civilian'], // Joint Military and Civilian
-    // ['CAA','8','controlling_authority','international'],
-    // ['CAA','11','controlling_authority','province'], // From NFDD
-    // ['CAA','13','controlling_authority','regional'], // From NFDD
-    ['CAA','16','controlling_authority','civilian'], // Civilian
-    ['CAA','17','controlling_authority','public'], // Public
+    // ['CAA','0','operator','unknown'],
+    // ['CAA','1','operator','national'],
+    // ['CAA','2','operator','state'],
+    ['CAA','3','operator','private'], // Private
+    ['CAA','4','operator','tribal'], // Tribal
+    ['CAA','5','operator','military'], // Military
+    ['CAA','6','operator','municipal'], // Municipal
+    ['CAA','7','operator','joint_military_civilian'], // Joint Military and Civilian
+    // ['CAA','8','operator','international'],
+    // ['CAA','11','operator','province'], // From NFDD
+    // ['CAA','13','operator','regional'], // From NFDD
+    ['CAA','16','operator','civilian'], // Civilian
+    ['CAA','17','operator','public'], // Public
     // ['CAA','998',undefined,undefined],
-    ['CAA','999','controlling_authority','other'], // Other
+    ['CAA','999','operator','other'], // Other
 
     // CAB - Cable Type
     // ['CAB','-999999',undefined,undefined], // No Information
@@ -4026,7 +4026,7 @@ tds61.rules = {
     ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
 
     // From UFD
-    ['CAA','-999999','controlling_authority','unknown'],
+    ['CAA','-999999','operator','unknown'],
     ['FFN','190','use','oil_gas_facility'], //
 
     // From UTP
@@ -4356,295 +4356,6 @@ tds61.rules = {
     'ZI026_CTUU'
   ],
   // ##### End of intList #####
-
-  // ##### Start of ge4List #####
-  // This list is for validateing the XXX_GE4XX values
-  ge4List : {
-    'ge:GENC:3:1-2:ABW':'AW', // Aruba
-    'ge:GENC:3:1-2:AFG':'AF', // Islamic Republic of Afghanistan
-    'ge:GENC:3:1-2:AGO':'AO', // Republic of Angola
-    'ge:GENC:3:1-2:ALB':'AL', // Republic of Albania
-    'ge:GENC:3:1-2:AND':'AD', // Principality of Andorra
-    'ge:GENC:3:1-2:ARE':'AE', // United Arab Emirates
-    'ge:GENC:3:1-2:ARG':'AR', // Argentine Republic
-    'ge:GENC:3:1-2:ARM':'AM', // Republic of Armenia
-    'ge:GENC:3:1-2:ASM':'AS', // Territory of American Samoa
-    'ge:GENC:3:1-2:ATF':'TF', // French Southern and Antarctic Lands
-    'ge:GENC:3:1-2:ATG':'AG', // Antigua and Barbuda
-    'ge:GENC:3:1-2:AUS':'AU', // Commonwealth of Australia
-    'ge:GENC:3:1-2:AUT':'AT', // Republic of Austria
-    'ge:GENC:3:1-2:AX1':'A1', // Unknown
-    'ge:GENC:3:1-2:AX2':'A2', // Guantanamo Bay Naval Base
-    'ge:GENC:3:1-2:AZE':'AZ', // Republic of Azerbaijan
-    'ge:GENC:3:1-2:BDI':'BI', // Republic of Burundi
-    'ge:GENC:3:1-2:BEL':'BE', // Kingdom of Belgium
-    'ge:GENC:3:1-2:BEN':'BJ', // Republic of Benin
-    'ge:GENC:3:1-2:BES':'BQ', // Bonaire, Sint Eustatius, and Saba
-    'ge:GENC:3:1-2:BFA':'BF', // Burkina Faso
-    'ge:GENC:3:1-2:BGD':'BD', // Peoples Republic of Bangladesh
-    'ge:GENC:3:1-2:BGR':'BG', // Republic of Bulgaria
-    'ge:GENC:3:1-2:BHR':'BH', // Kingdom of Bahrain
-    'ge:GENC:3:1-2:BHS':'BS', // Commonwealth of The Bahamas
-    'ge:GENC:3:1-2:BLM':'BL', // Saint Barthelemy
-    'ge:GENC:3:1-2:BLR':'BY', // Republic of Belarus
-    'ge:GENC:3:1-2:BOL':'BO', // Plurinational State of Bolivia
-    'ge:GENC:3:1-2:BRA':'BR', // Federative Republic of Brazil
-    'ge:GENC:3:1-2:BRN':'BN', // Brunei Darussalam
-    'ge:GENC:3:1-2:BTN':'BT', // Kingdom of Bhutan
-    'ge:GENC:3:1-2:BWA':'BW', // Republic of Botswana
-    'ge:GENC:3:1-2:CAF':'CF', // Central African Republic
-    'ge:GENC:3:1-2:CAN':'CA', // Canada
-    'ge:GENC:3:1-2:CCK':'CC', // Territory of Cocos (Keeling) Islands
-    'ge:GENC:3:1-2:CHE':'CH', // Swiss Confederation
-    'ge:GENC:3:1-2:CHL':'CL', // Republic of Chile
-    'ge:GENC:3:1-2:CHN':'CN', // Peoples Republic of China
-    'ge:GENC:3:1-2:CIV':'CI', // Republic of Côte dIvoire
-    'ge:GENC:3:1-2:CMR':'CM', // Republic of Cameroon
-    'ge:GENC:3:1-2:COD':'CD', // Democratic Republic of the Congo
-    'ge:GENC:3:1-2:COG':'CG', // Republic of the Congo
-    'ge:GENC:3:1-2:COK':'CK', // Cook Islands
-    'ge:GENC:3:1-2:COL':'CO', // Republic of Colombia
-    'ge:GENC:3:1-2:COM':'KM', // Union of the Comoros
-    'ge:GENC:3:1-2:CPT':'CP', // Clipperton Island
-    'ge:GENC:3:1-2:CPV':'CV', // Republic of Cape Verde
-    'ge:GENC:3:1-2:CRI':'CR', // Republic of Costa Rica
-    'ge:GENC:3:1-2:CUB':'CU', // Republic of Cuba
-    'ge:GENC:3:1-2:CUW':'CW', // Curaçao
-    'ge:GENC:3:1-2:CXR':'CX', // Territory of Christmas Island
-    'ge:GENC:3:1-2:CYM':'KY', // Cayman Islands
-    'ge:GENC:3:1-2:CYP':'CY', // Republic of Cyprus
-    'ge:GENC:3:1-2:CZE':'CZ', // Czech Republic
-    'ge:GENC:3:1-2:DEU':'DE', // Federal Republic of Germany
-    'ge:GENC:3:1-2:DGA':'DG', // Diego Garcia
-    'ge:GENC:3:1-2:DJI':'DJ', // Republic of Djibouti
-    'ge:GENC:3:1-2:DMA':'DM', // Commonwealth of Dominica
-    'ge:GENC:3:1-2:DNK':'DK', // Kingdom of Denmark
-    'ge:GENC:3:1-2:DOM':'DO', // Dominican Republic
-    'ge:GENC:3:1-2:DZA':'DZ', // Peoples Democratic Republic of Algeria
-    'ge:GENC:3:1-2:ECU':'EC', // Republic of Ecuador
-    'ge:GENC:3:1-2:EGY':'EG', // Arab Republic of Egypt
-    'ge:GENC:3:1-2:ERI':'ER', // State of Eritrea
-    'ge:GENC:3:1-2:ESH':'EH', // Western Sahara
-    'ge:GENC:3:1-2:ESP':'ES', // Kingdom of Spain
-    'ge:GENC:3:1-2:EST':'EE', // Republic of Estonia
-    'ge:GENC:3:1-2:ETH':'ET', // Federal Democratic Republic of Ethiopia
-    'ge:GENC:3:1-2:FIN':'FI', // Republic of Finland
-    'ge:GENC:3:1-2:FJI':'FJ', // Republic of Fiji
-    'ge:GENC:3:1-2:FLK':'FK', // Falkland Islands (Islas Malvinas)
-    'ge:GENC:3:1-2:FRA':'FR', // French Republic
-    'ge:GENC:3:1-2:FRO':'FO', // Faroe Islands
-    'ge:GENC:3:1-2:FSM':'FM', // Federated States of Micronesia
-    'ge:GENC:3:1-2:GAB':'GA', // Gabonese Republic
-    'ge:GENC:3:1-2:GBR':'GB', // United Kingdom of Great Britain and Northern Ireland
-    'ge:GENC:3:1-2:GEO':'GE', // Georgia
-    'ge:GENC:3:1-2:GGY':'GG', // Bailiwick of Guernsey
-    'ge:GENC:3:1-2:GHA':'GH', // Republic of Ghana
-    'ge:GENC:3:1-2:GIN':'GN', // Republic of Guinea
-    'ge:GENC:3:1-2:GLP':'GP', // Department of Guadeloupe
-    'ge:GENC:3:1-2:GMB':'GM', // Republic of The Gambia
-    'ge:GENC:3:1-2:GNB':'GW', // Republic of Guinea-Bissau
-    'ge:GENC:3:1-2:GNQ':'GQ', // Republic of Equatorial Guinea
-    'ge:GENC:3:1-2:GRC':'GR', // Hellenic Republic
-    'ge:GENC:3:1-2:GTM':'GT', // Republic of Guatemala
-    'ge:GENC:3:1-2:GUF':'GF', // Department of Guiana
-    'ge:GENC:3:1-2:GUM':'GU', // Territory of Guam
-    'ge:GENC:3:1-2:GUY':'GY', // Co-operative Republic of Guyana
-    'ge:GENC:3:1-2:HKG':'HK', // Hong Kong Special Administrative Region
-    'ge:GENC:3:1-2:HMD':'HM', // Territory of Heard Island and McDonald Islands
-    'ge:GENC:3:1-2:HND':'HN', // Republic of Honduras
-    'ge:GENC:3:1-2:HRV':'HR', // Republic of Croatia
-    'ge:GENC:3:1-2:HTI':'HT', // Republic of Haiti
-    'ge:GENC:3:1-2:IDN':'ID', // Republic of Indonesia
-    'ge:GENC:3:1-2:IND':'IN', // Republic of India
-    'ge:GENC:3:1-2:IOT':'IO', // British Indian Ocean Territory
-    'ge:GENC:3:1-2:IRN':'IR', // Islamic Republic of Iran
-    'ge:GENC:3:1-2:IRQ':'IQ', // Republic of Iraq
-    'ge:GENC:3:1-2:ISL':'IS', // Republic of Iceland
-    'ge:GENC:3:1-2:ISR':'IL', // State of Israel
-    'ge:GENC:3:1-2:ITA':'IT', // Italian Republic
-    'ge:GENC:3:1-2:JEY':'JE', // Bailiwick of Jersey
-    'ge:GENC:3:1-2:JOR':'JO', // Hashemite Kingdom of Jordan
-    'ge:GENC:3:1-2:KAZ':'KZ', // Republic of Kazakhstan
-    'ge:GENC:3:1-2:KEN':'KE', // Republic of Kenya
-    'ge:GENC:3:1-2:KGZ':'KG', // Kyrgyz Republic
-    'ge:GENC:3:1-2:KHM':'KH', // Kingdom of Cambodia
-    'ge:GENC:3:1-2:KIR':'KI', // Republic of Kiribati
-    'ge:GENC:3:1-2:KNA':'KN', // Federation of Saint Kitts and Nevis
-    'ge:GENC:3:1-2:KOR':'KR', // Republic of Korea
-    'ge:GENC:3:1-2:KWT':'KW', // State of Kuwait
-    'ge:GENC:3:1-2:LAO':'LA', // Lao Peoples Democratic Republic
-    'ge:GENC:3:1-2:LBN':'LB', // Lebanese Republic
-    'ge:GENC:3:1-2:LBR':'LR', // Republic of Liberia
-    'ge:GENC:3:1-2:LIE':'LI', // Principality of Liechtenstein
-    'ge:GENC:3:1-2:LKA':'LK', // Democratic Socialist Republic of Sri Lanka
-    'ge:GENC:3:1-2:LSO':'LS', // Kingdom of Lesotho
-    'ge:GENC:3:1-2:LTU':'LT', // Republic of Lithuania
-    'ge:GENC:3:1-2:LUX':'LU', // Grand Duchy of Luxembourg
-    'ge:GENC:3:1-2:LVA':'LV', // Republic of Latvia
-    'ge:GENC:3:1-2:MAC':'MO', // Macau Special Administrative Region
-    'ge:GENC:3:1-2:MAF':'MF', // Saint Martin
-    'ge:GENC:3:1-2:MAR':'MA', // Kingdom of Morocco
-    'ge:GENC:3:1-2:MCO':'MC', // Principality of Monaco
-    'ge:GENC:3:1-2:MDA':'MD', // Republic of Moldova
-    'ge:GENC:3:1-2:MDG':'MG', // Republic of Madagascar
-    'ge:GENC:3:1-2:MDV':'MV', // Republic of Maldives
-    'ge:GENC:3:1-2:MEX':'MX', // United Mexican States
-    'ge:GENC:3:1-2:MHL':'MH', // Republic of the Marshall Islands
-    'ge:GENC:3:1-2:MKD':'MK', // Republic of Macedonia
-    'ge:GENC:3:1-2:MLI':'ML', // Republic of Mali
-    'ge:GENC:3:1-2:MLT':'MT', // Republic of Malta
-    'ge:GENC:3:1-2:MMR':'MM', // Union of Burma
-    'ge:GENC:3:1-2:MNG':'MN', // Mongolia
-    'ge:GENC:3:1-2:MNP':'MP', // Commonwealth of the Northern Mariana Islands
-    'ge:GENC:3:1-2:MOZ':'MZ', // Republic of Mozambique
-    'ge:GENC:3:1-2:MRT':'MR', // Islamic Republic of Mauritania
-    'ge:GENC:3:1-2:MTQ':'MQ', // Department of Martinique
-    'ge:GENC:3:1-2:MUS':'MU', // Republic of Mauritius
-    'ge:GENC:3:1-2:MWI':'MW', // Republic of Malawi
-    'ge:GENC:3:1-2:MYS':'MY', // Malaysia
-    'ge:GENC:3:1-2:MYT':'YT', // Department of Mayotte
-    'ge:GENC:3:1-2:NAM':'NA', // Republic of Namibia
-    'ge:GENC:3:1-2:NCL':'NC', // New Caledonia
-    'ge:GENC:3:1-2:NER':'NE', // Republic of the Niger
-    'ge:GENC:3:1-2:NFK':'NF', // Territory of Norfolk Island
-    'ge:GENC:3:1-2:NGA':'NG', // Federal Republic of Nigeria
-    'ge:GENC:3:1-2:NIC':'NI', // Republic of Nicaragua
-    'ge:GENC:3:1-2:NLD':'NL', // Kingdom of the Netherlands
-    'ge:GENC:3:1-2:NOR':'NO', // Kingdom of Norway
-    'ge:GENC:3:1-2:NPL':'NP', // Federal Democratic Republic of Nepal
-    'ge:GENC:3:1-2:NRU':'NR', // Republic of Nauru
-    'ge:GENC:3:1-2:NZL':'NZ', // New Zealand
-    'ge:GENC:3:1-2:OMN':'OM', // Sultanate of Oman
-    'ge:GENC:3:1-2:PAK':'PK', // Islamic Republic of Pakistan
-    'ge:GENC:3:1-2:PAN':'PA', // Republic of Panama
-    'ge:GENC:3:1-2:PCN':'PN', // Pitcairn, Henderson, Ducie, and Oeno Islands
-    'ge:GENC:3:1-2:PER':'PE', // Republic of Peru
-    'ge:GENC:3:1-2:PHL':'PH', // Republic of the Philippines
-    'ge:GENC:3:1-2:PLW':'PW', // Republic of Palau
-    'ge:GENC:3:1-2:POL':'PL', // Republic of Poland
-    'ge:GENC:3:1-2:PRI':'PR', // Commonwealth of Puerto Rico
-    'ge:GENC:3:1-2:PRK':'KP', // Democratic Peoples Republic of Korea
-    'ge:GENC:3:1-2:PRT':'PT', // Portuguese Republic
-    'ge:GENC:3:1-2:PRY':'PY', // Republic of Paraguay
-    'ge:GENC:3:1-2:PSE':'PS', // Palestinian Territory
-    'ge:GENC:3:1-2:PYF':'PF', // French Polynesia
-    'ge:GENC:3:1-2:QAT':'QA', // State of Qatar
-    'ge:GENC:3:1-2:REU':'RE', // Department of Reunion
-    'ge:GENC:3:1-2:RUS':'RU', // Russian Federation
-    'ge:GENC:3:1-2:RWA':'RW', // Republic of Rwanda
-    'ge:GENC:3:1-2:SAU':'SA', // Kingdom of Saudi Arabia
-    'ge:GENC:3:1-2:SDN':'SD', // Republic of the Sudan
-    'ge:GENC:3:1-2:SEN':'SN', // Republic of Senegal
-    'ge:GENC:3:1-2:SGP':'SG', // Republic of Singapore
-    'ge:GENC:3:1-2:SGS':'GS', // South Georgia and South Sandwich Islands
-    'ge:GENC:3:1-2:SHN':'SH', // Saint Helena, Ascension, and Tristan da Cunha
-    'ge:GENC:3:1-2:SLB':'SB', // Solomon Islands
-    'ge:GENC:3:1-2:SLE':'SL', // Republic of Sierra Leone
-    'ge:GENC:3:1-2:SLV':'SV', // Republic of El Salvador
-    'ge:GENC:3:1-2:SMR':'SM', // Republic of San Marino
-    'ge:GENC:3:1-2:SOM':'SO', // Somalia, Federal Republic of
-    'ge:GENC:3:1-2:SPM':'PM', // Territorial Collectivity of Saint Pierre and Miquelon
-    'ge:GENC:3:1-2:SRB':'RS', // Republic of Serbia
-    'ge:GENC:3:1-2:SSD':'SS', // Republic of South Sudan
-    'ge:GENC:3:1-2:STP':'ST', // Democratic Republic of Sao Tome and Principe
-    'ge:GENC:3:1-2:SUR':'SR', // Republic of Suriname
-    'ge:GENC:3:1-2:SVK':'SK', // Slovak Republic
-    'ge:GENC:3:1-2:SVN':'SI', // Republic of Slovenia
-    'ge:GENC:3:1-2:SWE':'SE', // Kingdom of Sweden
-    'ge:GENC:3:1-2:SWZ':'SZ', // Kingdom of Swaziland
-    'ge:GENC:3:1-2:SXM':'SX', // Sint Maarten
-    'ge:GENC:3:1-2:SYC':'SC', // Republic of Seychelles
-    'ge:GENC:3:1-2:SYR':'SY', // Syrian Arab Republic
-    'ge:GENC:3:1-2:TCA':'TC', // Turks and Caicos Islands
-    'ge:GENC:3:1-2:TCD':'TD', // Republic of Chad
-    'ge:GENC:3:1-2:TGO':'TG', // Togolese Republic
-    'ge:GENC:3:1-2:THA':'TH', // Kingdom of Thailand
-    'ge:GENC:3:1-2:TJK':'TJ', // Republic of Tajikistan
-    'ge:GENC:3:1-2:TLS':'TL', // Democratic Republic of Timor-Leste
-    'ge:GENC:3:1-2:TON':'TO', // Kingdom of Tonga
-    'ge:GENC:3:1-2:TTO':'TT', // Republic of Trinidad and Tobago
-    'ge:GENC:3:1-2:TUN':'TN', // Tunisian Republic
-    'ge:GENC:3:1-2:TUR':'TR', // Republic of Turkey
-    'ge:GENC:3:1-2:TWN':'TW', // Taiwan
-    'ge:GENC:3:1-2:TZA':'TZ', // United Republic of Tanzania
-    'ge:GENC:3:1-2:UGA':'UG', // Republic of Uganda
-    'ge:GENC:3:1-2:UKR':'UA', // Ukraine
-    'ge:GENC:3:1-2:URY':'UY', // Oriental Republic of Uruguay
-    'ge:GENC:3:1-2:USA':'US', // United States of America
-    'ge:GENC:3:1-2:UZB':'UZ', // Republic of Uzbekistan
-    'ge:GENC:3:1-2:VAT':'VA', // State of the Vatican City
-    'ge:GENC:3:1-2:VCT':'VC', // Saint Vincent and the Grenadines
-    'ge:GENC:3:1-2:VEN':'VE', // Bolivarian Republic of Venezuela
-    'ge:GENC:3:1-2:VGB':'VG', // Virgin Islands, British
-    'ge:GENC:3:1-2:VIR':'VI', // United States Virgin Islands
-    'ge:GENC:3:1-2:VNM':'VN', // Socialist Republic of Vietnam
-    'ge:GENC:3:1-2:VUT':'VU', // Republic of Vanuatu
-    'ge:GENC:3:1-2:WLF':'WF', // Wallis and Futuna
-    'ge:GENC:3:1-2:WSM':'WS', // Independent State of Samoa
-    'ge:GENC:3:1-2:XAC':'XA', // Territory of Ashmore and Cartier Islands
-    'ge:GENC:3:1-2:XAZ':'XAZ', // Entity 1
-    'ge:GENC:3:1-2:XBI':'QS', // Bassas da India
-    'ge:GENC:3:1-2:XBK':'XB', // Baker Island
-    'ge:GENC:3:1-2:XCR':'XCR', // Entity 2
-    'ge:GENC:3:1-2:XCS':'XC', // Coral Sea Islands Territory
-    'ge:GENC:3:1-2:XCY':'XCY', // Entity 3
-    'ge:GENC:3:1-2:XEU':'XE', // Europa Island
-    'ge:GENC:3:1-2:XGL':'QX', // Glorioso Islands
-    'ge:GENC:3:1-2:XGZ':'XG', // Gaza Strip
-    'ge:GENC:3:1-2:XHO':'XH', // Howland Island
-    'ge:GENC:3:1-2:XJA':'XU', // Johnston Atoll
-    'ge:GENC:3:1-2:XJM':'XJ', // Jan Mayen
-    'ge:GENC:3:1-2:XJN':'QU', // Juan de Nova Island
-    'ge:GENC:3:1-2:XJV':'XQ', // Jarvis Island
-    'ge:GENC:3:1-2:XKM':'XKM', // Entity 4
-    'ge:GENC:3:1-2:XKN':'XKN', // Entity 5
-    'ge:GENC:3:1-2:XKR':'XM', // Kingman Reef
-    'ge:GENC:3:1-2:XKS':'XK', // Republic of Kosovo
-    'ge:GENC:3:1-2:XMW':'QM', // Midway Islands
-    'ge:GENC:3:1-2:XNV':'XV', // Navassa Island
-    'ge:GENC:3:1-2:XPL':'XL', // Palmyra Atoll
-    'ge:GENC:3:1-2:XPR':'XP', // Paracel Islands
-    'ge:GENC:3:1-2:XQP':'QP', // Etorofu, Habomai, Kunashiri, and Shikotan Islands
-    'ge:GENC:3:1-2:XQZ':'QZ', // Akrotiri
-    'ge:GENC:3:1-2:XSP':'XS', // Spratly Islands
-    'ge:GENC:3:1-2:XSV':'XR', // Svalbard
-    'ge:GENC:3:1-2:XTR':'XT', // Tromelin Island
-    'ge:GENC:3:1-2:XWB':'XW', // West Bank
-    'ge:GENC:3:1-2:XWK':'QW', // Wake Island
-    'ge:GENC:3:1-2:XXD':'XD', // Dhekelia
-    'ge:GENC:3:1-2:XXX':'XXX', // No Mans Land
-    'ge:GENC:3:1-2:YEM':'YE', // Republic of Yemen
-    'ge:GENC:3:1-2:ZAF':'ZA', // Republic of South Africa
-    'ge:GENC:3:1-2:ZMB':'ZM', // Republic of Zambia
-    'ge:GENC:3:1-2:ZWE':'ZW', // Republic of Zimbabwe
-    'ge:ISO1:3:VI-15:AIA':'AI', // Anguilla
-    'ge:ISO1:3:VI-15:ATA':'AQ', // Antarctica
-    'ge:ISO1:3:VI-15:BIH':'BA', // Bosnia and Herzegovina
-    'ge:ISO1:3:VI-15:BLZ':'BZ', // Belize
-    'ge:ISO1:3:VI-15:BMU':'BM', // Bermuda
-    'ge:ISO1:3:VI-15:BRB':'BB', // Barbados
-    'ge:ISO1:3:VI-15:BVT':'BV', // Bouvet Island
-    'ge:ISO1:3:VI-15:GIB':'GI', // Gibraltar
-    'ge:ISO1:3:VI-15:GRD':'GD', // Grenada
-    'ge:ISO1:3:VI-15:GRL':'GL', // Greenland
-    'ge:ISO1:3:VI-15:HUN':'HU', // Hungary
-    'ge:ISO1:3:VI-15:IMN':'IM', // Isle of Man
-    'ge:ISO1:3:VI-15:IRL':'IE', // Ireland
-    'ge:ISO1:3:VI-15:JAM':'JM', // Jamaica
-    'ge:ISO1:3:VI-15:JPN':'JP', // Japan
-    'ge:ISO1:3:VI-15:LBY':'LY', // Libya
-    'ge:ISO1:3:VI-15:LCA':'LC', // Saint Lucia
-    'ge:ISO1:3:VI-15:MNE':'ME', // Montenegro
-    'ge:ISO1:3:VI-15:MSR':'MS', // Montserrat
-    'ge:ISO1:3:VI-15:NIU':'NU', // Niue
-    'ge:ISO1:3:VI-15:PNG':'PG', // Independent State of Papua New Guinea
-    'ge:ISO1:3:VI-15:ROU':'RO', // Romania
-    'ge:ISO1:3:VI-15:TKL':'TK', // Tokelau
-    'ge:ISO1:3:VI-15:TKM':'TM', // Turkmenistan
-    'ge:ISO1:3:VI-15:TUV':'TV', // Tuvalu
-    'other':'other', // Other
-  },
-  // ##### End of ge4List #####
 
   // ##### Start of Thematic Group Rules #####
   thematicGroupList : {

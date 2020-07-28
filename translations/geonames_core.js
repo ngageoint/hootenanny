@@ -80,7 +80,7 @@ geonames = {
     }
 
     // Where are we?
-    if (attrs.country_code) tags['is_in:country_code'] = attrs.country_code;
+    if (attrs.country_code) tags['addr:country'] = attrs.country_code;
 
     // Feature Code
     if (geonames.rules.one2one[attrs.feature_code])

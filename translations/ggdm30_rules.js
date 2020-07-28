@@ -208,13 +208,13 @@ ggdm30.rules = {
     'ZI020_FI2B':'country_name:second_side', // Designation : FIPS 10-4 Country Name (second side)
 
     // NOTE: These are validated in post-processing
-    'ZI020_GE4':'is_in:country_code', // Designation : GENC Short URN-based Identifier
-    'ZI020_GE42':'country_code:second', // Designation : GENC Short URN-based Identifier [2]
-    'ZI020_GE43':'country_code:third', // Designation : GENC Short URN-based Identifier [3]
-    'ZI020_GE44':'country_code:fourth', // Designation : GENC Short URN-based Identifier [4]
-    'ZI020_GE4A':'country_code:first_side', // Designation : GENC Short URN-based Identifier
-    'ZI020_GE4B':'country_code:second_side', // Designation : GENC Short URN-based Identifier
-    'ZI020_IC4':'is_in:country:en', // Designation : ISO 3166-1 English Country Name
+    'ZI020_GE4':'addr:country', // Designation : GENC Short URN-based Identifier
+    'ZI020_GE42':'addr:country:second', // Designation : GENC Short URN-based Identifier [2]
+    'ZI020_GE43':'addr:country:third', // Designation : GENC Short URN-based Identifier [3]
+    'ZI020_GE44':'addr:country:fourth', // Designation : GENC Short URN-based Identifier [4]
+    'ZI020_GE4A':'addr:country:first_side', // Designation : GENC Short URN-based Identifier
+    'ZI020_GE4B':'addr:country:second_side', // Designation : GENC Short URN-based Identifier
+    'ZI020_IC4':'addr:country:en', // Designation : ISO 3166-1 English Country Name
     'ZI031S_URI':'source:dataset:surface:uuid', // Dataset (Surface) : Unique Resource Identifier
     'ZI039S_UFI':'source:entity:surface:uuid', // Entity Collection Metadata (Surface) : Unique Entity Identifier
     'ZI103_MVD':'magnetic_variation:date', // Magnetic Variation Information : Magnetic Variation Date
@@ -1312,19 +1312,19 @@ ggdm30.rules = {
 
     // CAA - Controlling Authority
     // ['CAA','-999999',undefined,undefined], // No Information
-    ['CAA','1','controlling_authority','national'], // National
-    ['CAA','2','controlling_authority','state'], // State
-    ['CAA','3','controlling_authority','private'], // Private
-    ['CAA','4','controlling_authority','tribal'], // Tribal
-    ['CAA','5','controlling_authority','military'], // Military
-    ['CAA','6','controlling_authority','municipal'], // Municipal
-    ['CAA','7','controlling_authority','joint_military_civilian'], // Joint Military and Civilian
-    ['CAA','8','controlling_authority','international'], // International
-    ['CAA','11','controlling_authority','province'], // Province
-    ['CAA','13','controlling_authority','regional'], // Regional
-    ['CAA','16','controlling_authority','civilian'], // Civilian
-    ['CAA','17','controlling_authority','public'], // Public
-    ['CAA','999','controlling_authority','other'], // Other
+    ['CAA','1','operator','national'], // National
+    ['CAA','2','operator','state'], // State
+    ['CAA','3','operator','private'], // Private
+    ['CAA','4','operator','tribal'], // Tribal
+    ['CAA','5','operator','military'], // Military
+    ['CAA','6','operator','municipal'], // Municipal
+    ['CAA','7','operator','joint_military_civilian'], // Joint Military and Civilian
+    ['CAA','8','operator','international'], // International
+    ['CAA','11','operator','province'], // Province
+    ['CAA','13','operator','regional'], // Regional
+    ['CAA','16','operator','civilian'], // Civilian
+    ['CAA','17','operator','public'], // Public
+    ['CAA','999','operator','other'], // Other
 
     // CAB - Cable Type
     // ['CAB','-999999',undefined,undefined], // No Information
@@ -6272,7 +6272,7 @@ ggdm30.rules = {
     ['IWT','4','man_made','reservoir'], // Reservoir
 
     // From UFD
-    ['CAA','-999999','controlling_authority','unknown'],
+    ['CAA','-999999','operator','unknown'],
     ['FFN','190','use','oil_gas_facility'], //
 
     // From UTP
@@ -6614,296 +6614,6 @@ ggdm30.rules = {
     ['ZD045', ['zd045','annotated_location_s','annotated_location_c','annotated_location_p']], // Named Location
   ],
   // ##### End of fCodeMap #####
-
-  // ##### Start of ge4List #####
-  // This list is for validateing the XXX_GE4XX values
-  ge4List : {
-    'ge:GENC:3:1-2:ABW':'AW', // ARUBA AS OF 2013-06-30
-    'ge:GENC:3:1-2:AFG':'AF', // AFGHANISTAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:AGO':'AO', // ANGOLA AS OF 2013-06-30
-    'ge:GENC:3:1-2:ALB':'AL', // ALBANIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:AND':'AD', // ANDORRA AS OF 2013-06-30
-    'ge:GENC:3:1-2:ARE':'AE', // UNITED ARAB EMIRATES AS OF 2013-06-30
-    'ge:GENC:3:1-2:ARG':'AR', // ARGENTINA AS OF 2013-06-30
-    'ge:GENC:3:1-2:ARM':'AM', // ARMENIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:ASM':'AS', // AMERICAN SAMOA AS OF 2013-06-30
-    'ge:GENC:3:1-2:ATF':'TF', // FRENCH SOUTHERN AND ANTARCTIC LANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:ATG':'AG', // ANTIGUA AND BARBUDA AS OF 2013-06-30
-    'ge:GENC:3:1-2:AUS':'AU', // AUSTRALIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:AUT':'AT', // AUSTRIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:AX1':'A1', // UNKNOWN AS OF 2013-06-30
-    'ge:GENC:3:1-2:AX2':'A2', // GUANTANAMO BAY NAVAL BASE AS OF 2013-06-30
-    'ge:GENC:3:1-2:AZE':'AZ', // AZERBAIJAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:BDI':'BI', // BURUNDI AS OF 2013-06-30
-    'ge:GENC:3:1-2:BEL':'BE', // BELGIUM AS OF 2013-06-30
-    'ge:GENC:3:1-2:BEN':'BJ', // BENIN AS OF 2013-06-30
-    'ge:GENC:3:1-2:BES':'BQ', // BONAIRE, SINT EUSTATIUS, AND SABA AS OF 2013-06-30
-    'ge:GENC:3:1-2:BFA':'BF', // BURKINA FASO AS OF 2013-06-30
-    'ge:GENC:3:1-2:BGD':'BD', // BANGLADESH AS OF 2013-06-30
-    'ge:GENC:3:1-2:BGR':'BG', // BULGARIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:BHR':'BH', // BAHRAIN AS OF 2013-06-30
-    'ge:GENC:3:1-2:BHS':'BS', // BAHAMAS, THE AS OF 2013-06-30
-    'ge:GENC:3:1-2:BLM':'BL', // SAINT BARTHELEMY AS OF 2013-06-30
-    'ge:GENC:3:1-2:BLR':'BY', // BELARUS AS OF 2013-06-30
-    'ge:GENC:3:1-2:BOL':'BO', // BOLIVIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:BRA':'BR', // BRAZIL AS OF 2013-06-30
-    'ge:GENC:3:1-2:BRN':'BN', // BRUNEI AS OF 2013-06-30
-    'ge:GENC:3:1-2:BTN':'BT', // BHUTAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:BWA':'BW', // BOTSWANA AS OF 2013-06-30
-    'ge:GENC:3:1-2:CAF':'CF', // CENTRAL AFRICAN REPUBLIC AS OF 2013-06-30
-    'ge:GENC:3:1-2:CAN':'CA', // CANADA AS OF 2013-06-30
-    'ge:GENC:3:1-2:CCK':'CC', // COCOS (KEELING) ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:CHE':'CH', // SWITZERLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:CHL':'CL', // CHILE AS OF 2013-06-30
-    'ge:GENC:3:1-2:CHN':'CN', // CHINA AS OF 2013-06-30
-    'ge:GENC:3:1-2:CIV':'CI', // COTE D"IVOIRE AS OF 2013-06-30
-    'ge:GENC:3:1-2:CMR':'CM', // CAMEROON AS OF 2013-06-30
-    'ge:GENC:3:1-2:COD':'CD', // CONGO (KINSHASA) AS OF 2013-06-30
-    'ge:GENC:3:1-2:COG':'CG', // CONGO (BRAZZAVILLE) AS OF 2013-06-30
-    'ge:GENC:3:1-2:COK':'CK', // COOK ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:COL':'CO', // COLOMBIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:COM':'KM', // COMOROS AS OF 2013-06-30
-    'ge:GENC:3:1-2:CPT':'CP', // CLIPPERTON ISLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:CPV':'CV', // CAPE VERDE AS OF 2013-06-30
-    'ge:GENC:3:1-2:CRI':'CR', // COSTA RICA AS OF 2013-06-30
-    'ge:GENC:3:1-2:CUB':'CU', // CUBA AS OF 2013-06-30
-    'ge:GENC:3:1-2:CUW':'CW', // CURACAO AS OF 2013-06-30
-    'ge:GENC:3:1-2:CXR':'CX', // CHRISTMAS ISLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:CYM':'KY', // CAYMAN ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:CYP':'CY', // CYPRUS AS OF 2013-06-30
-    'ge:GENC:3:1-2:CZE':'CZ', // CZECH REPUBLIC AS OF 2013-06-30
-    'ge:GENC:3:1-2:DEU':'DE', // GERMANY AS OF 2013-06-30
-    'ge:GENC:3:1-2:DGA':'DG', // DIEGO GARCIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:DJI':'DJ', // DJIBOUTI AS OF 2013-06-30
-    'ge:GENC:3:1-2:DMA':'DM', // DOMINICA AS OF 2013-06-30
-    'ge:GENC:3:1-2:DNK':'DK', // DENMARK AS OF 2013-06-30
-    'ge:GENC:3:1-2:DOM':'DO', // DOMINICAN REPUBLIC AS OF 2013-06-30
-    'ge:GENC:3:1-2:DZA':'DZ', // ALGERIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:ECU':'EC', // ECUADOR AS OF 2013-06-30
-    'ge:GENC:3:1-2:EGY':'EG', // EGYPT AS OF 2013-06-30
-    'ge:GENC:3:1-2:ERI':'ER', // ERITREA AS OF 2013-06-30
-    'ge:GENC:3:1-2:ESH':'EH', // WESTERN SAHARA AS OF 2013-06-30
-    'ge:GENC:3:1-2:ESP':'ES', // SPAIN AS OF 2013-06-30
-    'ge:GENC:3:1-2:EST':'EE', // ESTONIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:ETH':'ET', // ETHIOPIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:FIN':'FI', // FINLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:FJI':'FJ', // FIJI AS OF 2013-06-30
-    'ge:GENC:3:1-2:FLK':'FK', // FALKLAND ISLANDS (ISLAS MALVINAS) AS OF 2013-06-30
-    'ge:GENC:3:1-2:FRA':'FR', // FRANCE AS OF 2013-06-30
-    'ge:GENC:3:1-2:FRO':'FO', // FAROE ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:FSM':'FM', // MICRONESIA, FEDERATED STATES OF AS OF 2013-06-30
-    'ge:GENC:3:1-2:GAB':'GA', // GABON AS OF 2013-06-30
-    'ge:GENC:3:1-2:GBR':'GB', // UNITED KINGDOM AS OF 2013-06-30
-    'ge:GENC:3:1-2:GEO':'GE', // GEORGIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:GGY':'GG', // GUERNSEY AS OF 2013-06-30
-    'ge:GENC:3:1-2:GHA':'GH', // GHANA AS OF 2013-06-30
-    'ge:GENC:3:1-2:GIN':'GN', // GUINEA AS OF 2013-06-30
-    'ge:GENC:3:1-2:GLP':'GP', // GUADELOUPE AS OF 2013-06-30
-    'ge:GENC:3:1-2:GMB':'GM', // GAMBIA, THE AS OF 2013-06-30
-    'ge:GENC:3:1-2:GNB':'GW', // GUINEA-BISSAU AS OF 2013-06-30
-    'ge:GENC:3:1-2:GNQ':'GQ', // EQUATORIAL GUINEA AS OF 2013-06-30
-    'ge:GENC:3:1-2:GRC':'GR', // GREECE AS OF 2013-06-30
-    'ge:GENC:3:1-2:GTM':'GT', // GUATEMALA AS OF 2013-06-30
-    'ge:GENC:3:1-2:GUF':'GF', // FRENCH GUIANA AS OF 2013-06-30
-    'ge:GENC:3:1-2:GUM':'GU', // GUAM AS OF 2013-06-30
-    'ge:GENC:3:1-2:GUY':'GY', // GUYANA AS OF 2013-06-30
-    'ge:GENC:3:1-2:HKG':'HK', // HONG KONG AS OF 2013-06-30
-    'ge:GENC:3:1-2:HMD':'HM', // HEARD ISLAND AND MCDONALD ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:HND':'HN', // HONDURAS AS OF 2013-06-30
-    'ge:GENC:3:1-2:HRV':'HR', // CROATIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:HTI':'HT', // HAITI AS OF 2013-06-30
-    'ge:GENC:3:1-2:IDN':'ID', // INDONESIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:IND':'IN', // INDIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:IOT':'IO', // BRITISH INDIAN OCEAN TERRITORY AS OF 2013-06-30
-    'ge:GENC:3:1-2:IRN':'IR', // IRAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:IRQ':'IQ', // IRAQ AS OF 2013-06-30
-    'ge:GENC:3:1-2:ISL':'IS', // ICELAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:ISR':'IL', // ISRAEL AS OF 2013-06-30
-    'ge:GENC:3:1-2:ITA':'IT', // ITALY AS OF 2013-06-30
-    'ge:GENC:3:1-2:JEY':'JE', // JERSEY AS OF 2013-06-30
-    'ge:GENC:3:1-2:JOR':'JO', // JORDAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:KAZ':'KZ', // KAZAKHSTAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:KEN':'KE', // KENYA AS OF 2013-06-30
-    'ge:GENC:3:1-2:KGZ':'KG', // KYRGYZSTAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:KHM':'KH', // CAMBODIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:KIR':'KI', // KIRIBATI AS OF 2013-06-30
-    'ge:GENC:3:1-2:KNA':'KN', // SAINT KITTS AND NEVIS AS OF 2013-06-30
-    'ge:GENC:3:1-2:KOR':'KR', // KOREA, SOUTH AS OF 2013-06-30
-    'ge:GENC:3:1-2:KWT':'KW', // KUWAIT AS OF 2013-06-30
-    'ge:GENC:3:1-2:LAO':'LA', // LAOS AS OF 2013-06-30
-    'ge:GENC:3:1-2:LBN':'LB', // LEBANON AS OF 2013-06-30
-    'ge:GENC:3:1-2:LBR':'LR', // LIBERIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:LIE':'LI', // LIECHTENSTEIN AS OF 2013-06-30
-    'ge:GENC:3:1-2:LKA':'LK', // SRI LANKA AS OF 2013-06-30
-    'ge:GENC:3:1-2:LSO':'LS', // LESOTHO AS OF 2013-06-30
-    'ge:GENC:3:1-2:LTU':'LT', // LITHUANIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:LUX':'LU', // LUXEMBOURG AS OF 2013-06-30
-    'ge:GENC:3:1-2:LVA':'LV', // LATVIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:MAC':'MO', // MACAU AS OF 2013-06-30
-    'ge:GENC:3:1-2:MAF':'MF', // SAINT MARTIN AS OF 2013-06-30
-    'ge:GENC:3:1-2:MAR':'MA', // MOROCCO AS OF 2013-06-30
-    'ge:GENC:3:1-2:MCO':'MC', // MONACO AS OF 2013-06-30
-    'ge:GENC:3:1-2:MDA':'MD', // MOLDOVA AS OF 2013-06-30
-    'ge:GENC:3:1-2:MDG':'MG', // MADAGASCAR AS OF 2013-06-30
-    'ge:GENC:3:1-2:MDV':'MV', // MALDIVES AS OF 2013-06-30
-    'ge:GENC:3:1-2:MEX':'MX', // MEXICO AS OF 2013-06-30
-    'ge:GENC:3:1-2:MHL':'MH', // MARSHALL ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:MKD':'MK', // MACEDONIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:MLI':'ML', // MALI AS OF 2013-06-30
-    'ge:GENC:3:1-2:MLT':'MT', // MALTA AS OF 2013-06-30
-    'ge:GENC:3:1-2:MMR':'MM', // BURMA AS OF 2013-06-30
-    'ge:GENC:3:1-2:MNG':'MN', // MONGOLIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:MNP':'MP', // NORTHERN MARIANA ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:MOZ':'MZ', // MOZAMBIQUE AS OF 2013-06-30
-    'ge:GENC:3:1-2:MRT':'MR', // MAURITANIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:MTQ':'MQ', // MARTINIQUE AS OF 2013-06-30
-    'ge:GENC:3:1-2:MUS':'MU', // MAURITIUS AS OF 2013-06-30
-    'ge:GENC:3:1-2:MWI':'MW', // MALAWI AS OF 2013-06-30
-    'ge:GENC:3:1-2:MYS':'MY', // MALAYSIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:MYT':'YT', // MAYOTTE AS OF 2013-06-30
-    'ge:GENC:3:1-2:NAM':'NA', // NAMIBIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:NCL':'NC', // NEW CALEDONIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:NER':'NE', // NIGER AS OF 2013-06-30
-    'ge:GENC:3:1-2:NFK':'NF', // NORFOLK ISLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:NGA':'NG', // NIGERIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:NIC':'NI', // NICARAGUA AS OF 2013-06-30
-    'ge:GENC:3:1-2:NLD':'NL', // NETHERLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:NOR':'NO', // NORWAY AS OF 2013-06-30
-    'ge:GENC:3:1-2:NPL':'NP', // NEPAL AS OF 2013-06-30
-    'ge:GENC:3:1-2:NRU':'NR', // NAURU AS OF 2013-06-30
-    'ge:GENC:3:1-2:NZL':'NZ', // NEW ZEALAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:OMN':'OM', // OMAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:PAK':'PK', // PAKISTAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:PAN':'PA', // PANAMA AS OF 2013-06-30
-    'ge:GENC:3:1-2:PCN':'PN', // PITCAIRN ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:PER':'PE', // PERU AS OF 2013-06-30
-    'ge:GENC:3:1-2:PHL':'PH', // PHILIPPINES AS OF 2013-06-30
-    'ge:GENC:3:1-2:PLW':'PW', // PALAU AS OF 2013-06-30
-    'ge:GENC:3:1-2:POL':'PL', // POLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:PRI':'PR', // PUERTO RICO AS OF 2013-06-30
-    'ge:GENC:3:1-2:PRK':'KP', // KOREA, NORTH AS OF 2013-06-30
-    'ge:GENC:3:1-2:PRT':'PT', // PORTUGAL AS OF 2013-06-30
-    'ge:GENC:3:1-2:PRY':'PY', // PARAGUAY AS OF 2013-06-30
-    'ge:GENC:3:1-2:PSE':'PS', // PALESTINIAN TERRITORY AS OF 2013-06-30
-    'ge:GENC:3:1-2:PYF':'PF', // FRENCH POLYNESIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:QAT':'QA', // QATAR AS OF 2013-06-30
-    'ge:GENC:3:1-2:REU':'RE', // REUNION AS OF 2013-06-30
-    'ge:GENC:3:1-2:RUS':'RU', // RUSSIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:RWA':'RW', // RWANDA AS OF 2013-06-30
-    'ge:GENC:3:1-2:SAU':'SA', // SAUDI ARABIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:SDN':'SD', // SUDAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:SEN':'SN', // SENEGAL AS OF 2013-06-30
-    'ge:GENC:3:1-2:SGP':'SG', // SINGAPORE AS OF 2013-06-30
-    'ge:GENC:3:1-2:SGS':'GS', // SOUTH GEORGIA AND SOUTH SANDWICH ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:SHN':'SH', // SAINT HELENA, ASCENSION, AND TRISTAN DA CUNHA AS OF 2013-06-30
-    'ge:GENC:3:1-2:SLB':'SB', // SOLOMON ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:SLE':'SL', // SIERRA LEONE AS OF 2013-06-30
-    'ge:GENC:3:1-2:SLV':'SV', // EL SALVADOR AS OF 2013-06-30
-    'ge:GENC:3:1-2:SMR':'SM', // SAN MARINO AS OF 2013-06-30
-    'ge:GENC:3:1-2:SOM':'SO', // SOMALIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:SPM':'PM', // SAINT PIERRE AND MIQUELON AS OF 2013-06-30
-    'ge:GENC:3:1-2:SRB':'RS', // SERBIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:SSD':'SS', // SOUTH SUDAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:STP':'ST', // SAO TOME AND PRINCIPE AS OF 2013-06-30
-    'ge:GENC:3:1-2:SUR':'SR', // SURINAME AS OF 2013-06-30
-    'ge:GENC:3:1-2:SVK':'SK', // SLOVAKIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:SVN':'SI', // SLOVENIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:SWE':'SE', // SWEDEN AS OF 2013-06-30
-    'ge:GENC:3:1-2:SWZ':'SZ', // SWAZILAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:SXM':'SX', // SINT MAARTEN AS OF 2013-06-30
-    'ge:GENC:3:1-2:SYC':'SC', // SEYCHELLES AS OF 2013-06-30
-    'ge:GENC:3:1-2:SYR':'SY', // SYRIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:TCA':'TC', // TURKS AND CAICOS ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:TCD':'TD', // CHAD AS OF 2013-06-30
-    'ge:GENC:3:1-2:TGO':'TG', // TOGO AS OF 2013-06-30
-    'ge:GENC:3:1-2:THA':'TH', // THAILAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:TJK':'TJ', // TAJIKISTAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:TLS':'TL', // TIMOR-LESTE AS OF 2013-06-30
-    'ge:GENC:3:1-2:TON':'TO', // TONGA AS OF 2013-06-30
-    'ge:GENC:3:1-2:TTO':'TT', // TRINIDAD AND TOBAGO AS OF 2013-06-30
-    'ge:GENC:3:1-2:TUN':'TN', // TUNISIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:TUR':'TR', // TURKEY AS OF 2013-06-30
-    'ge:GENC:3:1-2:TWN':'TW', // TAIWAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:TZA':'TZ', // TANZANIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:UGA':'UG', // UGANDA AS OF 2013-06-30
-    'ge:GENC:3:1-2:UKR':'UA', // UKRAINE AS OF 2013-06-30
-    'ge:GENC:3:1-2:URY':'UY', // URUGUAY AS OF 2013-06-30
-    'ge:GENC:3:1-2:USA':'US', // UNITED STATES AS OF 2013-06-30
-    'ge:GENC:3:1-2:UZB':'UZ', // UZBEKISTAN AS OF 2013-06-30
-    'ge:GENC:3:1-2:VAT':'VA', // VATICAN CITY AS OF 2013-06-30
-    'ge:GENC:3:1-2:VCT':'VC', // SAINT VINCENT AND THE GRENADINES AS OF 2013-06-30
-    'ge:GENC:3:1-2:VEN':'VE', // VENEZUELA AS OF 2013-06-30
-    'ge:GENC:3:1-2:VGB':'VG', // VIRGIN ISLANDS, BRITISH AS OF 2013-06-30
-    'ge:GENC:3:1-2:VIR':'VI', // VIRGIN ISLANDS, U.S. AS OF 2013-06-30
-    'ge:GENC:3:1-2:VNM':'VN', // VIETNAM AS OF 2013-06-30
-    'ge:GENC:3:1-2:VUT':'VU', // VANUATU AS OF 2013-06-30
-    'ge:GENC:3:1-2:WLF':'WF', // WALLIS AND FUTUNA AS OF 2013-06-30
-    'ge:GENC:3:1-2:WSM':'WS', // SAMOA AS OF 2013-06-30
-    'ge:GENC:3:1-2:XAC':'XA', // ASHMORE AND CARTIER ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:XAZ':'XAZ', // ENTITY 1 AS OF 2013-06-30
-    'ge:GENC:3:1-2:XBI':'QS', // BASSAS DA INDIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:XBK':'XB', // BAKER ISLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:XCR':'XCR', // ENTITY 2 AS OF 2013-06-30
-    'ge:GENC:3:1-2:XCS':'XC', // CORAL SEA ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:XCY':'XCY', // ENTITY 3 AS OF 2013-06-30
-    'ge:GENC:3:1-2:XEU':'XE', // EUROPA ISLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:XGL':'QX', // GLORIOSO ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:XGZ':'XG', // GAZA STRIP AS OF 2013-06-30
-    'ge:GENC:3:1-2:XHO':'XH', // HOWLAND ISLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:XJA':'XU', // JOHNSTON ATOLL AS OF 2013-06-30
-    'ge:GENC:3:1-2:XJM':'XJ', // JAN MAYEN AS OF 2013-06-30
-    'ge:GENC:3:1-2:XJN':'QU', // JUAN DE NOVA ISLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:XJV':'XQ', // JARVIS ISLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:XKM':'XKM', // ENTITY 4 AS OF 2013-06-30
-    'ge:GENC:3:1-2:XKN':'XKN', // ENTITY 5 AS OF 2013-06-30
-    'ge:GENC:3:1-2:XKR':'XM', // KINGMAN REEF AS OF 2013-06-30
-    'ge:GENC:3:1-2:XKS':'XK', // KOSOVO AS OF 2013-06-30
-    'ge:GENC:3:1-2:XMW':'QM', // MIDWAY ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:XNV':'XV', // NAVASSA ISLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:XPL':'XL', // PALMYRA ATOLL AS OF 2013-06-30
-    'ge:GENC:3:1-2:XPR':'XP', // PARACEL ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:XQP':'QP', // ETOROFU, HABOMAI, KUNASHIRI, AND SHIKOTAN ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:XQZ':'QZ', // AKROTIRI AS OF 2013-06-30
-    'ge:GENC:3:1-2:XSP':'XS', // SPRATLY ISLANDS AS OF 2013-06-30
-    'ge:GENC:3:1-2:XSV':'XR', // SVALBARD AS OF 2013-06-30
-    'ge:GENC:3:1-2:XTR':'XT', // TROMELIN ISLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:XWB':'XW', // WEST BANK AS OF 2013-06-30
-    'ge:GENC:3:1-2:XWK':'QW', // WAKE ISLAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:XXD':'XD', // DHEKELIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:XXX':'XXX', // NO MAN"S LAND AS OF 2013-06-30
-    'ge:GENC:3:1-2:YEM':'YE', // YEMEN AS OF 2013-06-30
-    'ge:GENC:3:1-2:ZAF':'ZA', // SOUTH AFRICA AS OF 2013-06-30
-    'ge:GENC:3:1-2:ZMB':'ZM', // ZAMBIA AS OF 2013-06-30
-    'ge:GENC:3:1-2:ZWE':'ZW', // ZIMBABWE AS OF 2013-06-30
-    'ge:GENC:3:ed3:AX3':'AX3', // ENTITY 6 AS OF 2015-06-30
-    'ge:ISO1:3:VI-15:AIA':'AI', // ANGUILLA AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:ATA':'AQ', // ANTARCTICA AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:BIH':'BA', // BOSNIA AND HERZEGOVINA AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:BLZ':'BZ', // BELIZE AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:BMU':'BM', // BERMUDA AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:BRB':'BB', // BARBADOS AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:BVT':'BV', // BOUVET ISLAND AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:GIB':'GI', // GIBRALTAR AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:GRD':'GD', // GRENADA AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:GRL':'GL', // GREENLAND AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:HUN':'HU', // HUNGARY AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:IMN':'IM', // ISLE OF MAN AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:IRL':'IE', // IRELAND AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:JAM':'JM', // JAMAICA AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:JPN':'JP', // JAPAN AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:LBY':'LY', // LIBYA AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:LCA':'LC', // SAINT LUCIA AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:MNE':'ME', // MONTENEGRO AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:MSR':'MS', // MONTSERRAT AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:NIU':'NU', // NIUE AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:PNG':'PG', // PAPUA NEW GUINEA AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:ROU':'RO', // ROMANIA AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:TKL':'TK', // TOKELAU AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:TKM':'TM', // TURKMENISTAN AS OF 2013-05-10
-    'ge:ISO1:3:VI-15:TUV':'TV', // TUVALU AS OF 2013-05-10
-    'other':'other', // Other
-  },
-  // ##### End of ge4List #####
 
   // ##### Start of Thematic Group Rules #####
   thematicGroupList : {
