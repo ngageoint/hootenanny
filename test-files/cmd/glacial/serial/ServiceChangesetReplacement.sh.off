@@ -45,6 +45,14 @@ echo "test name: " $TEST_NAME
 SOURCE_FILE_1=$2
 echo "source file 1: " $SOURCE_FILE_1
 
+# This has to come before parsing SOURCE_FILE_2.
+CROP_AOI=$5
+echo "crop aoi: " $CROP_AOI
+CROP_OPTS="-D crop.bounds=$CROP_AOI"
+if [[ "$CROP_AOI" == "-180,-90,180,90" ]]; then # If a global crop bounds was passed in, then skip cropping.
+  CROP_OPTS=""
+fi
+
 SOURCE_FILE_2=$3
 # If the second source file input parameter was not passed in, we'll perturb the first input source file and use the original data for the 
 # secondary and the perturbed for the ref.
@@ -74,13 +82,6 @@ echo "SEC_CONVERT_OPS: " $SEC_CONVERT_OPS
 
 REPLACEMENT_AOI=$4
 echo "replacement aoi: " $REPLACEMENT_AOI
-
-CROP_AOI=$5
-echo "crop aoi: " $CROP_AOI
-CROP_OPTS="-D crop.bounds=$CROP_AOI"
-if [[ "$CROP_AOI" == "-180,-90,180,90" ]]; then # If a global crop bounds was passed in, then skip cropping.
-  CROP_OPTS=""
-fi
 
 FULL_REPLACEMENT=$6
 if [ "$FULL_REPLACEMENT" == "true" ]; then
@@ -183,7 +184,7 @@ CLEAN_REF_DATABASE_BEFOREHAND=${19}
 if [ "$CLEAN_REF_DATABASE_BEFOREHAND" == "" ]; then
   CLEAN_REF_DATABASE_BEFOREHAND="true"
 fi
-echo "clean ref database beforehand: " $CLEAN_REF_DATABASE_BEFOREHAND
+#echo "clean ref database beforehand: " $CLEAN_REF_DATABASE_BEFOREHAND
 
 # SET UP TEST FILES
 
