@@ -112,6 +112,14 @@ class ChangesetReplacementCreator
 
 public:
 
+  // see command doc
+  enum BoundsInterpretation
+  {
+    Strict = 0, // only features completely inside or lines crossing that get cut at the boundary
+    Lenient,    // features inside and overlapping
+    Hybrid      // points inside, polys inside and overlapping, lines cut at the boundary
+  };
+
   /**
    * Constructor
    *
@@ -140,7 +148,8 @@ public:
     const QString& output);
 
   void setFullReplacement(const bool full) { _fullReplacement = full; }
-  void setLenientBounds(const bool lenient) { _lenientBounds = lenient; }
+  void setBoundsInterpretation(const BoundsInterpretation& interpretation)
+  { _boundsInterpretation = interpretation; }
   void setGeometryFilters(const QStringList& filterClassNames);
   void setReplacementFilters(const QStringList& filterClassNames);
   void setChainReplacementFilters(const bool chain) { _chainReplacementFilters = chain; }
@@ -162,7 +171,7 @@ private:
   bool _fullReplacement;
 
   // determines how strict the handling of the bounds is during replacement
-  bool _lenientBounds;
+  BoundsInterpretation _boundsInterpretation;
 
   // A set of geometry type filters, organized by core geometry type (point, line, poly) to
   // separately filter the input datasets on.
@@ -217,6 +226,8 @@ private:
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
 
+  QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
+
   void _validateInputs(const QString& input1, const QString& input2);
 
   QString _getJobDescription(
@@ -249,8 +260,7 @@ private:
     const QString& debugFileName);
 
   void _setGlobalOpts(const QString& boundsStr);
-  void _parseConfigOpts(
-    const bool lenientBounds, const GeometryTypeCriterion::GeometryType& geometryType);
+  void _parseConfigOpts(const GeometryTypeCriterion::GeometryType& geometryType);
 
   OsmMapPtr _loadRefMap(const QString& input);
   OsmMapPtr _loadSecMap(const QString& input);
@@ -309,7 +319,7 @@ private:
    */
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 
-  void _conflate(OsmMapPtr& map, const bool lenientBounds);
+  void _conflate(OsmMapPtr& map);
   void _removeConflateReviews(OsmMapPtr& map);
   void _clean(OsmMapPtr& map);
 

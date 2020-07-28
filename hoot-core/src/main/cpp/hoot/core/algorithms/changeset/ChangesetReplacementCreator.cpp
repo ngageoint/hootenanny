@@ -102,7 +102,7 @@ namespace hoot
 ChangesetReplacementCreator::ChangesetReplacementCreator(
   const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl) :
 _fullReplacement(false),
-_lenientBounds(true),
+_boundsInterpretation(BoundsInterpretation::Lenient),
 _geometryFiltersSpecified(false),
 _chainReplacementFilters(false),
 _chainRetainmentFilters(false),
@@ -288,18 +288,32 @@ void ChangesetReplacementCreator::setReplacementFilterOptions(const QStringList&
   _setInputFilterOptions(_replacementFilterOptions, optionKvps);
 }
 
+QString ChangesetReplacementCreator::_boundsInterpretationToString(
+  const BoundsInterpretation& boundsInterpretation) const
+{
+  switch (boundsInterpretation)
+  {
+    case BoundsInterpretation::Lenient:
+      return "lenient";
+
+    case BoundsInterpretation::Strict:
+      return "strict";
+
+    case BoundsInterpretation::Hybrid:
+      return "hybrid";
+
+    default:
+      return "";
+  }
+}
+
 QString ChangesetReplacementCreator::_getJobDescription(
   const QString& input1, const QString& input2, const QString& bounds,
   const QString& output) const
 {
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
-  QString lenientStr = "Bounds calculation is ";
-  if (!_lenientBounds)
-  {
-    lenientStr += "not ";
-  }
-  lenientStr += "lenient.";
-  LOG_VARD(_fullReplacement);
+  QString boundsStr = "Bounds calculation is " +
+    _boundsInterpretationToString(_boundsInterpretation);
   const QString replacementTypeStr = _fullReplacement ? "full" : "overlapping only";
   QString geometryFiltersStr = "are ";
   if (!_geometryFiltersSpecified)
@@ -349,7 +363,7 @@ QString ChangesetReplacementCreator::_getJobDescription(
   str += "\nBeing replaced: ..." + input1.right(maxFilePrintLength);
   str += "\nReplacing with ..." + input2.right(maxFilePrintLength);
   str += "\nOutput Changeset: ..." + output.right(maxFilePrintLength);
-  str += "\nBounds: " + bounds + "; " + lenientStr;
+  str += "\nBounds: " + bounds + "; " + boundsStr;
   str += "\nReplacement is: " + replacementTypeStr;
   str += "\nGeometry filters: " + geometryFiltersStr;
   str += "\nReplacement filter: " + replacementFiltersStr;
@@ -510,7 +524,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // INPUT VALIDATION AND SETUP
 
-  _parseConfigOpts(_lenientBounds, geometryType);
+  _parseConfigOpts(geometryType);
 
   // DATA LOAD AND INITIAL PREP
 
@@ -603,7 +617,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     if (_conflationEnabled)
     {
       // conflation cleans beforehand
-      _conflate(conflatedMap, _lenientBounds);
+      _conflate(conflatedMap);
       conflatedMap->setName("conflated");
 
       if (!ConfigOptions().getChangesetReplacementPassConflateReviews())
@@ -651,7 +665,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // PRE-CHANGESET DERIVATION DATA PREP
 
   OsmMapPtr immediatelyConnectedOutOfBoundsWays;
-  if (_lenientBounds && _currentChangeDerivationPassIsLinear)
+  if (_boundsInterpretation == BoundsInterpretation::Lenient &&
+      _currentChangeDerivationPassIsLinear)
   {
     // If we're conflating linear features with the lenient bounds requirement, copy the
     // immediately connected out of bounds ways to a new temp map. We'll lose those ways once we
@@ -668,9 +683,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   _cropMapForChangesetDerivation(
     conflatedMap, replacementBounds, _boundsOpts.changesetSecKeepEntireCrossingBounds,
     _boundsOpts.changesetSecKeepOnlyInsideBounds, "sec-cropped-for-changeset");
-  LOG_VART(_lenientBounds);
 
-  if (_lenientBounds && _currentChangeDerivationPassIsLinear)
+  if (_boundsInterpretation == BoundsInterpretation::Lenient &&
+      _currentChangeDerivationPassIsLinear)
   {
     if (_waySnappingEnabled)
     {
@@ -849,7 +864,7 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
 }
 
 void ChangesetReplacementCreator::_parseConfigOpts(
-  const bool lenientBounds, const GeometryTypeCriterion::GeometryType& geometryType)
+  const GeometryTypeCriterion::GeometryType& geometryType)
 {
   if (!_cleaningEnabled && _conflationEnabled)
   {
@@ -864,19 +879,6 @@ void ChangesetReplacementCreator::_parseConfigOpts(
 
   if (geometryType == GeometryTypeCriterion::GeometryType::Point)
   {
-    if (lenientBounds)
-    {
-      const QString msg = "--lenient-bounds option ignored with point datasets.";
-      if (_geometryFiltersSpecified)
-      {
-        LOG_WARN(msg);
-      }
-      else
-      {
-        LOG_DEBUG(msg);
-      }
-    }
-
     // TODO: explain these and the rest
     _boundsOpts.loadRefKeepEntireCrossingBounds = false;
     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
@@ -891,7 +893,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(
   }
   else if (geometryType == GeometryTypeCriterion::GeometryType::Line)
   {
-    if (lenientBounds)
+    if (_boundsInterpretation == BoundsInterpretation::Lenient)
     {
       _boundsOpts.loadRefKeepEntireCrossingBounds = true;
       _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = true;
@@ -918,7 +920,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(
       _boundsOpts.inBoundsStrict = false;
 
       // Conflate way joining needs to happen later in the post ops for strict linear replacements.
-      // Changing the default ordering of the post ops to accomodate this had detrimental effects
+      // Changing the default ordering of the post ops to accommodate this had detrimental effects
       // on other conflation. The best location seems to be at the end just before tag truncation.
       // would like to get rid of this...isn't a foolproof fix by any means if the conflate post
       // ops end up getting reordered for some reason.
@@ -936,7 +938,8 @@ void ChangesetReplacementCreator::_parseConfigOpts(
   }
   else if (geometryType == GeometryTypeCriterion::GeometryType::Polygon)
   {
-    if (lenientBounds)
+    if (_boundsInterpretation == BoundsInterpretation::Lenient ||
+        _boundsInterpretation == BoundsInterpretation::Hybrid)
     {
       _boundsOpts.loadRefKeepEntireCrossingBounds = true;
       _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
@@ -1273,7 +1276,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   // _parseConfigOpts...not sure.
 
   LOG_VARD(_fullReplacement);
-  LOG_VARD(_lenientBounds);
+  LOG_VARD(_boundsInterpretationToString(_boundsInterpretation));
   LOG_VARD(_currentChangeDerivationPassIsLinear);
   LOG_VARD(doughMap->getElementCount());
   LOG_VARD(cutterMap->size());
@@ -1287,6 +1290,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
                            outside the bounds (if linear)
      strict/overlapping  - cutter shape is all overlapping sec data inside the bounds
      strict/full         - cutter shape is all ref data inside the bounds
+
+     TODO: add for hybrid?
    */
 
   // If the passed in dough map is empty, there's nothing to be cut out. So, just return the empty
@@ -1329,7 +1334,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     }
     else
     {
-      if (_fullReplacement && _lenientBounds)
+      if (_fullReplacement && _boundsInterpretation == BoundsInterpretation::Lenient)
       {
         // If our map contains linear features only, the sec map is empty, we're doing full
         // replacement, AND there isn't a strict interpretation of the bounds, we want everything
@@ -1340,7 +1345,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
           "interpretation, so returning an empty map as the map after cutting...");
         return OsmMapPtr(new OsmMap());
       }
-      else if (_fullReplacement && !_lenientBounds)
+      else if (_fullReplacement && _boundsInterpretation != BoundsInterpretation::Lenient )
       {
         // With the strict bounds interpretation, full replacement, and an empty secondary map,
         // we want simply the rectangular replacement bounds cut out. No need to use the cookie
@@ -1397,7 +1402,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
   if (_currentChangeDerivationPassIsLinear) // See related note above when the cutter map is empty.
   {
-    if (_lenientBounds && _fullReplacement)
+    if (_boundsInterpretation == BoundsInterpretation::Lenient && _fullReplacement)
     {
       // Generate a cutter shape based on the ref map, which will cause all the ref data to be
       // replaced.
@@ -1578,7 +1583,7 @@ void ChangesetReplacementCreator::_combineMaps(
   OsmMapWriterFactory::writeDebugMap(map1, debugFileName);
 }
 
-void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBounds)
+void ChangesetReplacementCreator::_conflate(OsmMapPtr& map)
 {
   map->setName("conflated");
   LOG_STATUS(
@@ -1586,8 +1591,9 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
     "...");
 
   conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), true);
-  if (!lenientBounds) // not exactly sure yet why this needs to be done
+  if (_boundsInterpretation != BoundsInterpretation::Lenient)
   {
+    // not exactly sure yet why this needs to be done
     conf().set(ConfigOptions::getWayJoinerKey(), WayJoinerAdvanced::className());
   }
   else

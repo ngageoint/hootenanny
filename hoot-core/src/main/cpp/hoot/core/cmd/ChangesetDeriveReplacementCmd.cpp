@@ -164,13 +164,23 @@ public:
     }
     LOG_VARD(retainmentFilterOptions);
 
-    bool lenientBounds = true;
+    if (args.contains("--strict-bounds") && args.contains("--hybrid-bounds"))
+    {
+      throw IllegalArgumentException(
+        "Only one of '--strict-bounds' and '--hybrid-bounds' may be specified.");
+    }
+    ChangesetReplacementCreator::BoundsInterpretation boundsHandling =
+      ChangesetReplacementCreator::BoundsInterpretation::Lenient;
     if (args.contains("--strict-bounds"))
     {
-      lenientBounds = false;
+      boundsHandling = ChangesetReplacementCreator::BoundsInterpretation::Strict;
       args.removeAll("--strict-bounds");
     }
-    LOG_VARD(lenientBounds);
+    else if (args.contains("--hybrid-bounds"))
+    {
+      boundsHandling = ChangesetReplacementCreator::BoundsInterpretation::Hybrid;
+      args.removeAll("--hybrid-bounds");
+    }
 
     bool printStats = false;
     QString outputStatsFile;
@@ -252,7 +262,7 @@ public:
 
     ChangesetReplacementCreator changesetCreator(printStats, outputStatsFile, osmApiDbUrl);
     changesetCreator.setFullReplacement(fullReplacement);
-    changesetCreator.setLenientBounds(lenientBounds);
+    changesetCreator.setBoundsInterpretation(boundsHandling);
     changesetCreator.setGeometryFilters(geometryFilters);
     // chain param must be set before the filters themselves
     changesetCreator.setChainReplacementFilters(chainReplacementFilters);

@@ -137,32 +137,32 @@ void ChangesetReplacementCreator2::create(
   MemoryUsageChecker::getInstance().check();
 
   // always remove any existing missing child tags
-  RemoveTagsVisitor missingChildTagRemover(QStringList(MetadataTags::HootMissingChild()));
-  mapToReplace->visitRw(missingChildTagRemover);
-  const bool markMissing =
-    ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren();
-  if (markMissing)
-  {
-    // Find any elements with missing children and tag them with a custom tag, as its possible we'll
-    // break them during this process. There's really nothing that can be done about that, since we
-    // don't have access to the missing children elements. Any elements with missing children may
-    // require manual cleanup after the resulting changeset is applied.
-    _markElementsWithMissingChildren(mapToReplace);
-  }
+//  RemoveTagsVisitor missingChildTagRemover(QStringList(MetadataTags::HootMissingChild()));
+//  mapToReplace->visitRw(missingChildTagRemover);
+//  const bool markMissing =
+//    ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren();
+//  if (markMissing)
+//  {
+//    // Find any elements with missing children and tag them with a custom tag, as its possible we'll
+//    // break them during this process. There's really nothing that can be done about that, since we
+//    // don't have access to the missing children elements. Any elements with missing children may
+//    // require manual cleanup after the resulting changeset is applied.
+//    _markElementsWithMissingChildren(mapToReplace);
+//  }
 
   // If we have a lenient bounds requirement and linear features, we need to exclude all ways
   // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
-  _addChangesetDeleteExclusionTags(mapToReplace);
+  //_addChangesetDeleteExclusionTags(mapToReplace);
 
   // load the sec dataset and crop to the specified aoi
   OsmMapPtr replacementMap = _loadSecMap(input2);
   MemoryUsageChecker::getInstance().check();
 
-  replacementMap->visitRw(missingChildTagRemover);
-  if (markMissing)
-  {
-    _markElementsWithMissingChildren(replacementMap);
-  }
+//  replacementMap->visitRw(missingChildTagRemover);
+//  if (markMissing)
+//  {
+//    _markElementsWithMissingChildren(replacementMap);
+//  }
 
   // CUT
 
@@ -175,17 +175,17 @@ void ChangesetReplacementCreator2::create(
   _combineMaps(combinedMap, replacementMap, false, "combined");
   replacementMap.reset();
 
-  OsmMapPtr immediatelyConnectedOutOfBoundsWays =
-    _getImmediatelyConnectedOutOfBoundsWays(mapToReplace);
-  // combine the conflated map with the immediately connected out of bounds ways
-  _combineMaps(
-    replacementMap, immediatelyConnectedOutOfBoundsWays, true, "replaced-connected-combined");
-  immediatelyConnectedOutOfBoundsWays.reset();
+//  OsmMapPtr immediatelyConnectedOutOfBoundsWays =
+//    _getImmediatelyConnectedOutOfBoundsWays(mapToReplace);
+//  // combine the conflated map with the immediately connected out of bounds ways
+//  _combineMaps(
+//    replacementMap, immediatelyConnectedOutOfBoundsWays, true, "replaced-connected-combined");
+//  immediatelyConnectedOutOfBoundsWays.reset();
 
   // If we're not allowing the changeset deriver to generate delete statements for reference
   // features outside of the bounds, we need to mark all corresponding ref ways with a custom
   // tag that will cause the deriver to skip deleting them.
-  _excludeFeaturesFromChangesetDeletion(replacementMap, boundsStr);
+  //_excludeFeaturesFromChangesetDeletion(replacementMap, boundsStr);
 
   // CHANGESET GENERATION
 
@@ -309,11 +309,11 @@ OsmMapPtr ChangesetReplacementCreator2::_loadSecMap(const QString& input)
   LOG_STATUS("Loading secondary map: " << input << "...");
 
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
+    ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), true);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+    ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), false);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
+    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), true);
 
   OsmMapPtr secMap;
   secMap.reset(new OsmMap());
@@ -454,7 +454,7 @@ OsmMapPtr ChangesetReplacementCreator2::_getCookieCutMap(OsmMapPtr doughMap, Osm
   CookieCutter(
     false,  // crop
     0.0,    // buffer
-    true,  // keepEntireFeaturesCrossingBounds
+    true,  // keepEntireFeaturesCrossingBounds*
     false,   // keepOnlyFeaturesInsideBounds
     false)  // removeMissingElements
     .cut(cutterShapeOutlineMap, cookieCutMap);

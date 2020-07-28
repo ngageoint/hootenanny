@@ -90,11 +90,13 @@ else
 fi
 echo "full replacement: " $FULL_REPLACEMENT
 
+# TODO: change this to take in an enum
 STRICT_BOUNDS=$7
 if [ "$STRICT_BOUNDS" == "true" ]; then
   STRICT_BOUNDS="--strict-bounds"
 else
-  STRICT_BOUNDS=""
+  #STRICT_BOUNDS=""
+  STRICT_BOUNDS="--hybrid-bounds"
 fi
 echo "strict bounds: " $STRICT_BOUNDS
 
@@ -206,7 +208,7 @@ REF_DB_INPUT=$OSM_API_DB_URL
 # convert.bounding.box.remove.missing.elements=false ensures that we don't drop any missing elements except when writing out our debug maps.
 
 LOG_LEVEL="--info"
-GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounding.box.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=true -D debug.maps.remove.missing.elements=true -D element.hash.visitor.non.metadata.ignore.keys=note -D log.class.filter= "
+GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounding.box.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=true -D element.hash.visitor.non.metadata.ignore.keys=note -D log.class.filter= "
 # Holding onto missing child element refs does not work yet with cropping, so disable it when cropping is specified...bug issue creation 
 # pending.
 if [ "$CROP_OPTS" == "" ]; then
