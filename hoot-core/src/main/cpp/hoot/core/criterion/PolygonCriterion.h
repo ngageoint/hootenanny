@@ -30,6 +30,8 @@
 
 // Hoot
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
 
 namespace hoot
 {
@@ -37,28 +39,39 @@ namespace hoot
 /**
  * Identifies polygon features
  */
-class PolygonCriterion : public ConflatableElementCriterion
+class PolygonCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
   static std::string className() { return "hoot::PolygonCriterion"; }
 
   PolygonCriterion() = default;
+  PolygonCriterion(ConstOsmMapPtr map);
   virtual ~PolygonCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PolygonCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PolygonCriterion(_map)); }
 
   virtual QString getDescription() const { return "Identifies polygon features"; }
 
   virtual GeometryType getGeometryType() const
   { return GeometryType::Polygon; }
 
+  virtual void setOsmMap(const OsmMap* map);
+
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
   virtual bool supportsSpecificConflation() const { return false; }
+
+  void setAllowMixedChildren(bool allow) { _relationCrit.setAllowMixedChildren(allow); }
+
+private:
+
+  ConstOsmMapPtr _map;
+
+  RelationWithPolygonMembersCriterion _relationCrit;
 };
 
 }

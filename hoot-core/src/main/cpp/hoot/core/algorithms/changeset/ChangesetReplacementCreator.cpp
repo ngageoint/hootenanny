@@ -1008,8 +1008,9 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   // duplicated in the output. This is why we run a de-duplication routine just before changeset
   // derivation...kind of a band-aid unfortunately :-(
 
-  // The map will get set on this point crit by the RemoveElementsVisitor later on, right before its
-  // needed.
+  // The maps will get set on the crits here that need them by the RemoveElementsVisitor later on,
+  // right before its needed.
+
   ElementCriterionPtr pointCrit(new PointCriterion());
   std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
     new RelationWithPointMembersCriterion());
@@ -1024,12 +1025,11 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   OrCriterionPtr lineOr(new OrCriterion(lineCrit, relationLinearCrit));
   featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineOr;
 
-  ElementCriterionPtr polyCrit(new PolygonCriterion());
-  std::shared_ptr<RelationWithPolygonMembersCriterion> relationPolyCrit(
-    new RelationWithPolygonMembersCriterion());
-  relationPolyCrit->setAllowMixedChildren(false);
-  OrCriterionPtr polyOr(new OrCriterion(polyCrit, relationPolyCrit));
-  featureFilters[GeometryTypeCriterion::GeometryType::Polygon] = polyOr;
+  // Poly crit has been converted over to encapsulate RelationWithGeometryMembersCriterion, while
+  // the other types have not yet (#4151).
+  std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
+  polyCrit->setAllowMixedChildren(false);
+  featureFilters[GeometryTypeCriterion::GeometryType::Polygon] = polyCrit;
 
   return featureFilters;
 }

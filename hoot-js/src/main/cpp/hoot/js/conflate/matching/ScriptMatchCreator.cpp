@@ -112,7 +112,7 @@ public:
     std::shared_ptr<NonConflatableCriterion> nonConflatableCrit(new NonConflatableCriterion(map));
     nonConflatableCrit->setIgnoreGenericConflators(true);
     _pointPolyCrit.reset(
-      new ChainCriterion(ElementCriterionPtr(new PolygonCriterion()), nonConflatableCrit));
+      new ChainCriterion(ElementCriterionPtr(new PolygonCriterion(map)), nonConflatableCrit));
 
     _timer.start();
   }
@@ -751,7 +751,7 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
       {
         _pointPolyPolyCrit.reset(
           new ChainCriterion(
-            ElementCriterionPtr(new PolygonCriterion()),
+            ElementCriterionPtr(new PolygonCriterion(map)),
             ElementCriterionPtr(new NonConflatableCriterion(map))));
       }
       if (!_pointPolyPointCrit)

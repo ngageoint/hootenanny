@@ -2,19 +2,19 @@
     "Create":
     [
         {
-            "Node": "1329"
+            "Node": "1608"
         },
         {
-            "Relation": "87"
+            "Relation": "142"
         },
         {
-            "Way": "233"
+            "Way": "294"
         }
     ],
     "Delete":
     [
         {
-            "Node": "5016"
+            "Node": "5004"
         },
         {
             "Relation": "64"
@@ -26,13 +26,13 @@
     "Modify":
     [
         {
-            "Node": "6"
+            "Node": "41"
         },
         {
             "Relation": "0"
         },
         {
-            "Way": "44"
+            "Way": "60"
         }
     ]
 }
