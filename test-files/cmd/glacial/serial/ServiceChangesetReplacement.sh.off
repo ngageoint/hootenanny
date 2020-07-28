@@ -180,6 +180,9 @@ fi
 echo "disable conflation: " $DISABLE_CONFLATION
 
 CLEAN_REF_DATABASE_BEFOREHAND=${19}
+if [ "$CLEAN_REF_DATABASE_BEFOREHAND" == "" ]; then
+  CLEAN_REF_DATABASE_BEFOREHAND="true"
+fi
 echo "clean ref database beforehand: " $CLEAN_REF_DATABASE_BEFOREHAND
 
 # SET UP TEST FILES
