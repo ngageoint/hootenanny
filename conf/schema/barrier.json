@@ -49,5 +49,13 @@
         "isA": "barrier",
         "name": "barrier=border_control",
         "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "barrier",
+        "name": "barrier=fence",
+        "objectType": "tag"
     }
 ]
