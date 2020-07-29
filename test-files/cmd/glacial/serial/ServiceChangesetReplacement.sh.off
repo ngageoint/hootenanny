@@ -230,7 +230,7 @@ REF_DB_INPUT=$OSM_API_DB_URL
 # debug.maps.remove.missing.elements=false is useful for debugging but it can make output unviewable in JOSM.
 # convert.bounding.box.remove.missing.elements=false ensures that we don't drop any missing elements except when writing out our debug maps.
 
-LOG_LEVEL="--status"
+LOG_LEVEL="--warn"
 GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounding.box.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=true -D element.hash.visitor.non.metadata.ignore.keys=note $EXTRA_PARAMS -D log.class.filter= "
 # Holding onto missing child element refs does not work yet with cropping, so disable it when cropping is specified...bug issue creation 
 # pending.
@@ -383,8 +383,7 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D convert.ops="hoot::RemoveMissingElementsVisitor" -D debug.maps.filename=$OUT_DIR/final-write-xml.osm $OSM_API_DB_URL $OUT_DIR/$OUT_XML
   #hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/final-write-xml.osm $OSM_API_DB_URL $OUT_DIR/$OUT_XML
   # Not completely sure what the differences between the xml output and db output are yet, but the output maps look identical.
-  # TODO: re-enable
-  #hoot diff $LOG_LEVEL $GENERAL_OPTS $IN_DIR/$OUT_XML $OUT_DIR/$OUT_XML
+  hoot diff $LOG_LEVEL $GENERAL_OPTS $IN_DIR/$OUT_XML $OUT_DIR/$OUT_XML
 
 fi
 

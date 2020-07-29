@@ -5,12 +5,13 @@
         "objectType": "tag"
     },
     {
-        "geometries": ["way"],
+        "geometries": ["linestring", "node"],
         "isA": "military",
         "name": "military=trench",
         "objectType": "tag"
     },
     {
+        "description": "TODO: can't find this in the OSM schema",
         "geometries": ["way"],
         "isA": "military",
         "name": "military=revetment",

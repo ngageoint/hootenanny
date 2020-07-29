@@ -54,8 +54,6 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
 
-  bool result = false;
-
   if (e->getElementType() == ElementType::Node)
   {
     return false;
@@ -64,7 +62,12 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     // We use to define poly relations using a static list of relation types. Now, we look at the
     // member contents instead. If any member is a poly, then we call it a poly relation.
-    return _relationCrit.isSatisfied(e);
+    const bool result = _relationCrit.isSatisfied(e);
+    if (result)
+    {
+      LOG_TRACE("Relation has polygon members; crit satisified.");
+    }
+    return result;
   }
   else if (e->getElementType() == ElementType::Way)
   {
@@ -78,8 +81,7 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
     }
   }
 
-  LOG_VART(result);
-  return result;
+  return false;
 }
 
 }

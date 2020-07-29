@@ -112,7 +112,8 @@ class ChangesetReplacementCreator
 
 public:
 
-  // see command doc
+  // see command doc for more detail
+  // TODO: This Hybrid may go away.
   enum BoundsInterpretation
   {
     Strict = 0, // only features completely inside or lines crossing that get cut at the boundary
