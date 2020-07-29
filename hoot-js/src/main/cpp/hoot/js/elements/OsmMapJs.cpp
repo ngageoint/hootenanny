@@ -313,11 +313,8 @@ void OsmMapJs::isMemberOfRelationInCategory(const FunctionCallbackInfo<Value>& a
   HandleScope scope(current);
 
   OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  LOG_VART(mapJs == 0);
   ElementId childId = toCpp<ElementId>(args[0]);
-  LOG_VART(childId);
   QString schemaCategory = toCpp<QString>(args[1]);
-  LOG_VART(schemaCategory);
 
   const bool inRelationOfSpecifiedCategory =
     RelationMemberUtils::isMemberOfRelationInCategory(

@@ -162,7 +162,6 @@ bool RelationMemberUtils::isMemberOfRelationInCategory(
       }
     }
   }
-  LOG_TRACE("test1");
   return false;
 }
 

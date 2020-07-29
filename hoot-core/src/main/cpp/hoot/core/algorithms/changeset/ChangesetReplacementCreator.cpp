@@ -363,7 +363,7 @@ QString ChangesetReplacementCreator::_getJobDescription(
   str += "\nBeing replaced: ..." + input1.right(maxFilePrintLength);
   str += "\nReplacing with ..." + input2.right(maxFilePrintLength);
   str += "\nOutput Changeset: ..." + output.right(maxFilePrintLength);
-  str += "\nBounds: " + bounds + "; " + boundsStr;
+  str += "\nBounds interpretation: " + bounds + "; " + boundsStr;
   str += "\nReplacement is: " + replacementTypeStr;
   str += "\nGeometry filters: " + geometryFiltersStr;
   str += "\nReplacement filter: " + replacementFiltersStr;
