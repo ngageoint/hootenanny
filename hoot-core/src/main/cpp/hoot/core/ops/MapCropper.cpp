@@ -244,7 +244,7 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(_envelope);
   if (_envelopeG)
   {
-    LOG_VARD(_envelopeG->toString());
+    LOG_VART(_envelopeG->toString());
   }
   LOG_VARD(_inclusionCrit.get());
 

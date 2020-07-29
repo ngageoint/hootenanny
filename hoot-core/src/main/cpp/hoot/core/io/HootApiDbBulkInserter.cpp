@@ -125,6 +125,7 @@ void HootApiDbBulkInserter::_getOrCreateMap()
     _database.setUserId(_database.getUserId(_userEmail, true));
   }
   _changesetData.changesetUserId = _database.getUserId(_userEmail, true);
+  LOG_DEBUG("Creating changeset: " << _changesetData.currentChangesetId);
 
   // URL must have name in it
   const QStringList pList = QUrl(_outputUrl).path().split("/");
@@ -686,7 +687,7 @@ void HootApiDbBulkInserter::_writeChangeset()
   //transaction used with the copy statements.
   _changesetData.currentChangesetId =
     _database.insertChangeset(_changesetData.changesetBounds, _changesetTags, _maxChangesetSize);
-  LOG_TRACE(
+  LOG_DEBUG(
     "Inserted changeset with ID: " << _changesetData.currentChangesetId << " and " <<
     _changesetData.changesInChangeset << " changes.");
 }
