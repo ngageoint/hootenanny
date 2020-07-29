@@ -59,6 +59,7 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runChangesetCreateFailureTest);
   CPPUNIT_TEST(runChangesetFailNodesWithWaysTest);
   CPPUNIT_TEST(runChangesetVersionFailureTest);
+  CPPUNIT_TEST(runElementGoneTest);
 #endif
   /* These tests are for local testing and require additional resources to complete */
 #ifdef RUN_LOCAL_OSM_API_SERVER
@@ -89,6 +90,7 @@ public:
   const int PORT_CREATE_FAIL =      9806;
   const int PORT_FAIL_WAYS =        9807;
   const int PORT_FAIL_VERSION =     9808;
+  const int PORT_ELEMENT_GONE =     9809;
 
   OsmApiWriterTest()
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
@@ -610,6 +612,53 @@ public:
                      _outputPath + "VersionFailure-error.osc");
 #endif
   }
+
+  void runElementGoneTest()
+  {
+#ifdef RUN_LOCAL_TEST_SERVER
+    //  Suppress the OsmApiWriter errors by temporarily changing the log level
+    //  when the log level is Info or above because we expect the all of the errors.
+    //  Below Info is Debug and Trace, those are set because we want to see everything
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Fatal);
+
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_ELEMENT_GONE));
+    osm.setUserInfo(TEST_USER_INFO);
+
+    //  Kick off the element gone test server
+    ElementGoneTestServer server(PORT_ELEMENT_GONE);
+    server.start();
+
+    QString changeset(OsmApiSampleRequestResponse::SAMPLE_CHANGESET_REQUEST);
+    OsmApiWriter writer(osm,
+      changeset.replace(
+        "</osmChange>",
+        "  <delete>\n"
+        "    <node id='40' visible='true' version='1' changeset='1' lat='38.9600315' lon='-77.4224954'/>\n"
+        "  </delete>\n"
+        "</osmChange>"));
+    writer.setErrorPathname(_outputPath + "ElementGoneTest-error.osc");
+
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+    writer.setConfiguration(s);
+    writer.apply();
+
+    //  Wait for the test server to finish
+    server.shutdown();
+
+    Log::getInstance().setLevel(logLevel);
+
+    //  Make sure that the changes failed
+    CPPUNIT_ASSERT(!writer.containsFailed());
+
+    //  Check the stats, 1, node, 4 ways, 4 modifies, 1 delete
+    checkStats(writer.getStats(), 1, 4, 0, 0, 4, 1, 0);
+#endif
+}
 
   void checkStats(QList<SingleStat> stats,
                   int nodes, int ways, int relations,

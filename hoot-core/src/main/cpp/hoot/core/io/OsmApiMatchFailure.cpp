@@ -56,6 +56,10 @@ OsmApiMatchFailure::OsmApiMatchFailure()
     //  Changeset conflict: The changeset 49514098 was closed at 2020-01-08 16:28:56 UTC
     _changesetClosedFailure(
       ".*The changeset ([0-9]+) was closed.*",
+      QRegularExpression::CaseInsensitiveOption),
+    //  Gone: The node with the id 12345 has already been deleted
+    _elementGoneDeletedFailure(
+      ".*The (node|way|relation) with the id ([0-9]+) has already been deleted",
       QRegularExpression::CaseInsensitiveOption)
 {
   _placeholderFailure.optimize();
@@ -64,11 +68,13 @@ OsmApiMatchFailure::OsmApiMatchFailure()
   _deletePreconditionFailure.optimize();
   _conflictVersionFailure.optimize();
   _changesetClosedFailure.optimize();
+  _elementGoneDeletedFailure.optimize();
 }
 
-bool OsmApiMatchFailure::matchesPlaceholderFailure(const QString& hint,
-                                                   long& member_id, ElementType::Type& member_type,
-                                                   long& element_id, ElementType::Type& element_type) const
+bool OsmApiMatchFailure::matchesPlaceholderFailure(
+    const QString& hint,
+    long& member_id, ElementType::Type& member_type,
+    long& element_id, ElementType::Type& element_type) const
 {
   //  Placeholder node not found for reference -145213 in way -5687
   //  Placeholder Way not found for reference -12257 in Relation -51
@@ -89,9 +95,10 @@ bool OsmApiMatchFailure::matchesPlaceholderFailure(const QString& hint,
   return false;
 }
 
-bool OsmApiMatchFailure::matchesRelationFailure(const QString& hint,
-                                                long& element_id,
-                                                long& member_id, ElementType::Type& member_type) const
+bool OsmApiMatchFailure::matchesRelationFailure(
+    const QString& hint,
+    long& element_id,
+    long& member_id, ElementType::Type& member_type) const
 {
   //  Relation with id  cannot be saved due to Relation with id 1707699
   QRegularExpressionMatch match = _relationFailure.match(hint);
@@ -109,11 +116,10 @@ bool OsmApiMatchFailure::matchesRelationFailure(const QString& hint,
   return false;
 }
 
-bool OsmApiMatchFailure::matchesMultiElementFailure(const QString& hint,
-                                                    long& element_id,
-                                                    ElementType::Type& element_type,
-                                                    std::vector<long>& member_ids,
-                                                    ElementType::Type& member_type) const
+bool OsmApiMatchFailure::matchesMultiElementFailure(
+    const QString& hint,
+    long& element_id, ElementType::Type& element_type,
+    std::vector<long>& member_ids, ElementType::Type& member_type) const
 {
   //  Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible.
   QRegularExpressionMatch match = _multiElementFailure.match(hint);
@@ -138,9 +144,10 @@ bool OsmApiMatchFailure::matchesMultiElementFailure(const QString& hint,
   return false;
 }
 
-bool OsmApiMatchFailure::matchesChangesetDeletePreconditionFailure(const QString& hint,
-                                                             long& element_id, ElementType::Type& element_type,
-                                                             std::vector<long>& member_ids, ElementType::Type& member_type) const
+bool OsmApiMatchFailure::matchesChangesetDeletePreconditionFailure(
+    const QString& hint,
+    long& element_id, ElementType::Type& element_type,
+    std::vector<long>& member_ids, ElementType::Type& member_type) const
 {
   //  Precondition failed: Node 55 is still used by ways 123
   QRegularExpressionMatch match = _deletePreconditionFailure.match(hint);
@@ -164,9 +171,10 @@ bool OsmApiMatchFailure::matchesChangesetDeletePreconditionFailure(const QString
   return false;
 }
 
-bool OsmApiMatchFailure::matchesChangesetConflictVersionMismatchFailure(const QString& hint,
-                                                                  long& element_id, ElementType::Type& element_type,
-                                                                  long& version_old, long& version_new) const
+bool OsmApiMatchFailure::matchesChangesetConflictVersionMismatchFailure(
+    const QString& hint,
+    long& element_id, ElementType::Type& element_type,
+    long& version_old, long& version_new) const
 {
   //  Changeset conflict: Version mismatch: Provided 2, server had: 1 of Node 4869875616
   QRegularExpressionMatch match = _conflictVersionFailure.match(hint);
@@ -191,6 +199,22 @@ bool OsmApiMatchFailure::matchesChangesetClosedFailure(const QString& hint) cons
   //  Changeset conflict: The changeset 49514098 was closed at 2020-01-08 16:28:56 UTC
   QRegularExpressionMatch match = _changesetClosedFailure.match(hint);
   return match.hasMatch();
+}
+
+bool OsmApiMatchFailure::matchesElementGoneDeletedFailure(
+    const QString& hint,
+    long& element_id, ElementType::Type& element_type) const
+{
+  //  The node with the id 12345 has already been deleted
+  QRegularExpressionMatch match = _elementGoneDeletedFailure.match(hint);
+  if (match.hasMatch())
+  {
+    bool success = false;
+    element_type = ElementType::fromString(match.captured(1).toLower());
+    element_id = match.captured(2).toLong(&success);
+    return success;
+  }
+  return false;
 }
 
 }

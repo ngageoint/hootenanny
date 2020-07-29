@@ -26,6 +26,13 @@
 			<tag k="type" v="route"/>
 			<tag k="route" v="road"/>
 		</relation>
+    <relation id="-2" version="0" timestamp="">
+      <member type="node" ref="-1" role="forward"/>
+      <member type="node" ref="-100" role="forward"/>
+      <tag k="name" v="Test Drop"/>
+      <tag k="type" v="route"/>
+      <tag k="route" v="road"/>
+    </relation>
 	</create>
 	<modify>
 		<node id="-10" version="0" lat="38.8542471187715179" lon="-104.9010788637033329" timestamp=""/>

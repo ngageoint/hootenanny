@@ -115,6 +115,16 @@ public:
    */
   bool matchesChangesetClosedFailure(const QString& hint) const;
 
+  /**
+   * @brief matchesElementGoneDeletedFailure
+   *        "The node with the id 12345 has already been deleted"
+   * @param hint Error message from OSM API
+   * @param member_id ID of the element that was already deleted
+   * @param member_type Type of the element that was already deleted
+   * @return True if the message matches
+   */
+  bool matchesElementGoneDeletedFailure(const QString& hint, long& element_id, ElementType::Type& element_type) const;
+
 private:
   /** Precompiled regular expressions */
   QRegularExpression _placeholderFailure;
@@ -123,6 +133,7 @@ private:
   QRegularExpression _deletePreconditionFailure;
   QRegularExpression _conflictVersionFailure;
   QRegularExpression _changesetClosedFailure;
+  QRegularExpression _elementGoneDeletedFailure;
 };
 
 }

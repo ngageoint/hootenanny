@@ -179,6 +179,15 @@ public:
     hint = "Changeset conflict: The changeset 49514404 was closed at 2020-01-23 20:11:10 UTC";
     found = failureCheck.matchesChangesetClosedFailure(hint);
     CPPUNIT_ASSERT_EQUAL(true, found);
+
+    //  Test element gone deleted
+    id = 0;
+    type = ElementType::Unknown;
+    hint = "Gone: The node with the id 12345 has already been deleted";
+    found = failureCheck.matchesElementGoneDeletedFailure(hint, id, type);
+    CPPUNIT_ASSERT_EQUAL(true, found);
+    CPPUNIT_ASSERT_EQUAL(12345L, id);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Node, type);
   }
 
 };
