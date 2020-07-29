@@ -566,6 +566,13 @@ mgcp = {
       attrs.F_CODE = 'AQ080'; // TDS/GGDM fcode for Ferry Terminal
     }
 
+    // Tag retired
+    if (tags.controlling_authority) 
+    {
+      tags.operator = tags.controlling_authority;
+      delete tags.controlling_authority;
+    }
+
   }, // End of applyToOsmPreProcessing
 
   // Post Processing: Lots of cleanup

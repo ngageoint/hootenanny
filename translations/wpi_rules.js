@@ -46,7 +46,8 @@ wpi = {
   // Text attribute translations
   txtRules : {
     'CHART':'world_port_index:chart', // The chart it came from
-    'COUNTRY':'is_in:country_code',
+    // 'COUNTRY':'is_in:country_code',
+    'COUNTRY':'addr:country',
     // 'LAT_HEMI':'',
     // 'LONG_HEMI':'',
     'PORT_NAME':'name',

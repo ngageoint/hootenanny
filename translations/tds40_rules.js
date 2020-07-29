@@ -126,6 +126,7 @@ tds40.rules = {
     'DQS':'source:data_quality', // Data Quality Statement
     'GB052_RIDH':'aeroway:runway_designator_high', // Runway Direction (high end) : Runway Designator (high)
     'GB052_RIDL':'aeroway:runway_designator_low', // Runway Direction (low end) : Runway Designator (low)
+    'IC2':'addr:country', // IC2 - ISO 3166-1 Country Code (alpha3) - Fixed in post processing
     'IKO':'icao', // ICAO Location Indicator
     'LINK_ID':'etds:link_id', // eLTDS40 Field
     'MDE':'source:update:datetime', // Maintenance Date and Time
@@ -711,21 +712,21 @@ tds40.rules = {
 
     // CAA - Controlling Authority - This does not play nicely in OSM
     // ['CAA','-999999',undefined,undefined], // No Information
-    // ['CAA','0','controlling_authority','unknown'],
-    // ['CAA','1','controlling_authority','national'],
-    // ['CAA','2','controlling_authority','state'],
-    ['CAA','3','controlling_authority','private'], // Private
-    ['CAA','4','controlling_authority','tribal'], // Tribal
-    ['CAA','5','controlling_authority','military'], // Military
-    ['CAA','6','controlling_authority','municipal'], // Municipal
-    ['CAA','7','controlling_authority','joint_military_civilian'], // Joint Military and Civilian
-    // ['CAA','8','controlling_authority','international'],
-    // ['CAA','11','controlling_authority','province'], // From NFDD
-    // ['CAA','13','controlling_authority','regional'], // From NFDD
-    ['CAA','16','controlling_authority','civilian'], // Civilian
-    ['CAA','17','controlling_authority','public'], // Public
+    // ['CAA','0','operator','unknown'],
+    // ['CAA','1','operator','national'],
+    // ['CAA','2','operator','state'],
+    ['CAA','3','operator','private'], // Private
+    ['CAA','4','operator','tribal'], // Tribal
+    ['CAA','5','operator','military'], // Military
+    ['CAA','6','operator','municipal'], // Municipal
+    ['CAA','7','operator','joint_military_civilian'], // Joint Military and Civilian
+    // ['CAA','8','operator','international'],
+    // ['CAA','11','operator','province'], // From NFDD
+    // ['CAA','13','operator','regional'], // From NFDD
+    ['CAA','16','operator','civilian'], // Civilian
+    ['CAA','17','operator','public'], // Public
     // ['CAA','998',undefined,undefined],
-    ['CAA','999','controlling_authority','other'], // Other
+    ['CAA','999','operator','other'], // Other
 
     // CAB - Cable Type
     // ['CAB','-999999',undefined,undefined], // No Information
@@ -1937,256 +1938,7 @@ tds40.rules = {
     ['HZD','other','source:datum:geodetic','other'], // Other
 
     // IC2 - ISO 3166-1 Country Code (alpha3)
-    // ['IC2','-999999',undefined,undefined], // No Information
-    ['IC2','AFG','is_in:country_code3','afg'], // AFGHANISTAN
-    ['IC2','ALA','is_in:country_code3','ala'], // ALAND ISLANDS
-    ['IC2','ALB','is_in:country_code3','alb'], // ALBANIA
-    ['IC2','DZA','is_in:country_code3','dza'], // ALGERIA
-    ['IC2','ASM','is_in:country_code3','asm'], // AMERICAN SAMOA
-    ['IC2','AND','is_in:country_code3','and'], // ANDORRA
-    ['IC2','AGO','is_in:country_code3','ago'], // ANGOLA
-    ['IC2','AIA','is_in:country_code3','aia'], // ANGUILLA
-    ['IC2','ATA','is_in:country_code3','ata'], // ANTARCTICA
-    ['IC2','ATG','is_in:country_code3','atg'], // ANTIGUA AND BARBUDA
-    ['IC2','ARG','is_in:country_code3','arg'], // ARGENTINA
-    ['IC2','ARM','is_in:country_code3','arm'], // ARMENIA
-    ['IC2','ABW','is_in:country_code3','abw'], // ARUBA
-    ['IC2','AUS','is_in:country_code3','aus'], // AUSTRALIA
-    ['IC2','AUT','is_in:country_code3','aut'], // AUSTRIA
-    ['IC2','AZE','is_in:country_code3','aze'], // AZERBAIJAN
-    ['IC2','BHS','is_in:country_code3','bhs'], // BAHAMAS
-    ['IC2','BHR','is_in:country_code3','bhr'], // BAHRAIN
-    ['IC2','BGD','is_in:country_code3','bgd'], // BANGLADESH
-    ['IC2','BRB','is_in:country_code3','brb'], // BARBADOS
-    ['IC2','BLR','is_in:country_code3','blr'], // BELARUS
-    ['IC2','BEL','is_in:country_code3','bel'], // BELGIUM
-    ['IC2','BLZ','is_in:country_code3','blz'], // BELIZE
-    ['IC2','BEN','is_in:country_code3','ben'], // BENIN
-    ['IC2','BMU','is_in:country_code3','bmu'], // BERMUDA
-    ['IC2','BTN','is_in:country_code3','btn'], // BHUTAN
-    ['IC2','BOL','is_in:country_code3','bol'], // BOLIVIA PLURINATIONAL STATE OF
-    ['IC2','BES','is_in:country_code3','bes'], // BONAIRE SINT EUSTATIUS AND SABA
-    ['IC2','BIH','is_in:country_code3','bih'], // BOSNIA AND HERZEGOVINA
-    ['IC2','BWA','is_in:country_code3','bwa'], // BOTSWANA
-    ['IC2','BVT','is_in:country_code3','bvt'], // BOUVET ISLAND
-    ['IC2','BRA','is_in:country_code3','bra'], // BRAZIL
-    ['IC2','IOT','is_in:country_code3','iot'], // BRITISH INDIAN OCEAN TERRITORY
-    ['IC2','BRN','is_in:country_code3','brn'], // BRUNEI DARUSSALAM
-    ['IC2','BGR','is_in:country_code3','bgr'], // BULGARIA
-    ['IC2','BFA','is_in:country_code3','bfa'], // BURKINA FASO
-    ['IC2','BDI','is_in:country_code3','bdi'], // BURUNDI
-    ['IC2','KHM','is_in:country_code3','khm'], // CAMBODIA
-    ['IC2','CMR','is_in:country_code3','cmr'], // CAMEROON
-    ['IC2','CAN','is_in:country_code3','can'], // CANADA
-    ['IC2','CPV','is_in:country_code3','cpv'], // CAPE VERDE
-    ['IC2','CYM','is_in:country_code3','cym'], // CAYMAN ISLANDS
-    ['IC2','CAF','is_in:country_code3','caf'], // CENTRAL AFRICAN REPUBLIC
-    ['IC2','TCD','is_in:country_code3','tcd'], // CHAD
-    ['IC2','CHL','is_in:country_code3','chl'], // CHILE
-    ['IC2','CHN','is_in:country_code3','chn'], // CHINA
-    ['IC2','CXR','is_in:country_code3','cxr'], // CHRISTMAS ISLAND
-    ['IC2','CCK','is_in:country_code3','cck'], // COCOS (KEELING) ISLANDS
-    ['IC2','COL','is_in:country_code3','col'], // COLOMBIA
-    ['IC2','COM','is_in:country_code3','com'], // COMOROS
-    ['IC2','COG','is_in:country_code3','cog'], // CONGO
-    ['IC2','COD','is_in:country_code3','cod'], // CONGO DEMOCRATIC REPUBLIC OF THE
-    ['IC2','COK','is_in:country_code3','cok'], // COOK ISLANDS
-    ['IC2','CRI','is_in:country_code3','cri'], // COSTA RICA
-    ['IC2','CIV','is_in:country_code3','civ'], // COTE DIVOIRE
-    ['IC2','HRV','is_in:country_code3','hrv'], // CROATIA
-    ['IC2','CUB','is_in:country_code3','cub'], // CUBA
-    ['IC2','CUW','is_in:country_code3','cuw'], // CURACAO
-    ['IC2','CYP','is_in:country_code3','cyp'], // CYPRUS
-    ['IC2','CZE','is_in:country_code3','cze'], // CZECH REPUBLIC
-    ['IC2','DNK','is_in:country_code3','dnk'], // DENMARK
-    ['IC2','DJI','is_in:country_code3','dji'], // DJIBOUTI
-    ['IC2','DMA','is_in:country_code3','dma'], // DOMINICA
-    ['IC2','DOM','is_in:country_code3','dom'], // DOMINICAN REPUBLIC
-    ['IC2','ECU','is_in:country_code3','ecu'], // ECUADOR
-    ['IC2','EGY','is_in:country_code3','egy'], // EGYPT
-    ['IC2','SLV','is_in:country_code3','slv'], // EL SALVADOR
-    ['IC2','GNQ','is_in:country_code3','gnq'], // EQUATORIAL GUINEA
-    ['IC2','ERI','is_in:country_code3','eri'], // ERITREA
-    ['IC2','EST','is_in:country_code3','est'], // ESTONIA
-    ['IC2','ETH','is_in:country_code3','eth'], // ETHIOPIA
-    ['IC2','FLK','is_in:country_code3','flk'], // FALKLAND ISLANDS (MALVINAS)
-    ['IC2','FRO','is_in:country_code3','fro'], // FAROE ISLANDS
-    ['IC2','FJI','is_in:country_code3','fji'], // FIJI
-    ['IC2','FIN','is_in:country_code3','fin'], // FINLAND
-    ['IC2','FRA','is_in:country_code3','fra'], // FRANCE
-    ['IC2','GUF','is_in:country_code3','guf'], // FRENCH GUIANA
-    ['IC2','PYF','is_in:country_code3','pyf'], // FRENCH POLYNESIA
-    ['IC2','ATF','is_in:country_code3','atf'], // FRENCH SOUTHERN TERRITORIES
-    ['IC2','GAB','is_in:country_code3','gab'], // GABON
-    ['IC2','GMB','is_in:country_code3','gmb'], // GAMBIA
-    ['IC2','GEO','is_in:country_code3','geo'], // GEORGIA
-    ['IC2','DEU','is_in:country_code3','deu'], // GERMANY
-    ['IC2','GHA','is_in:country_code3','gha'], // GHANA
-    ['IC2','GIB','is_in:country_code3','gib'], // GIBRALTAR
-    ['IC2','GRC','is_in:country_code3','grc'], // GREECE
-    ['IC2','GRL','is_in:country_code3','grl'], // GREENLAND
-    ['IC2','GRD','is_in:country_code3','grd'], // GRENADA
-    ['IC2','GLP','is_in:country_code3','glp'], // GUADELOUPE
-    ['IC2','GUM','is_in:country_code3','gum'], // GUAM
-    ['IC2','GTM','is_in:country_code3','gtm'], // GUATEMALA
-    ['IC2','GGY','is_in:country_code3','ggy'], // GUERNSEY
-    ['IC2','GIN','is_in:country_code3','gin'], // GUINEA
-    ['IC2','GNB','is_in:country_code3','gnb'], // GUINEA-BISSAU
-    ['IC2','GUY','is_in:country_code3','guy'], // GUYANA
-    ['IC2','HTI','is_in:country_code3','hti'], // HAITI
-    ['IC2','HMD','is_in:country_code3','hmd'], // HEARD ISLAND AND MCDONALD ISLANDS
-    ['IC2','VAT','is_in:country_code3','vat'], // HOLY SEE (VATICAN CITY STATE)
-    ['IC2','HND','is_in:country_code3','hnd'], // HONDURAS
-    ['IC2','HKG','is_in:country_code3','hkg'], // HONG KONG
-    ['IC2','HUN','is_in:country_code3','hun'], // HUNGARY
-    ['IC2','ISL','is_in:country_code3','isl'], // ICELAND
-    ['IC2','IND','is_in:country_code3','ind'], // INDIA
-    ['IC2','IDN','is_in:country_code3','idn'], // INDONESIA
-    ['IC2','IRN','is_in:country_code3','irn'], // IRAN ISLAMIC REPUBLIC OF
-    ['IC2','IRQ','is_in:country_code3','irq'], // IRAQ
-    ['IC2','IRL','is_in:country_code3','irl'], // IRELAND
-    ['IC2','IMN','is_in:country_code3','imn'], // ISLE OF MAN
-    ['IC2','ISR','is_in:country_code3','isr'], // ISRAEL
-    ['IC2','ITA','is_in:country_code3','ita'], // ITALY
-    ['IC2','JAM','is_in:country_code3','jam'], // JAMAICA
-    ['IC2','JPN','is_in:country_code3','jpn'], // JAPAN
-    ['IC2','JEY','is_in:country_code3','jey'], // JERSEY
-    ['IC2','JOR','is_in:country_code3','jor'], // JORDAN
-    ['IC2','KAZ','is_in:country_code3','kaz'], // KAZAKHSTAN
-    ['IC2','KEN','is_in:country_code3','ken'], // KENYA
-    ['IC2','KIR','is_in:country_code3','kir'], // KIRIBATI
-    ['IC2','PRK','is_in:country_code3','prk'], // KOREA DEMOCRATIC PEOPLE'S REPUBLIC OF
-    ['IC2','KOR','is_in:country_code3','kor'], // KOREA REPUBLIC OF
-    ['IC2','KWT','is_in:country_code3','kwt'], // KUWAIT
-    ['IC2','KGZ','is_in:country_code3','kgz'], // KYRGYZSTAN
-    ['IC2','LAO','is_in:country_code3','lao'], // LAO PEOPLES DEMOCRATIC REPUBLIC
-    ['IC2','LVA','is_in:country_code3','lva'], // LATVIA
-    ['IC2','LBN','is_in:country_code3','lbn'], // LEBANON
-    ['IC2','LSO','is_in:country_code3','lso'], // LESOTHO
-    ['IC2','LBR','is_in:country_code3','lbr'], // LIBERIA
-    ['IC2','LBY','is_in:country_code3','lby'], // LIBYA
-    ['IC2','LIE','is_in:country_code3','lie'], // LIECHTENSTEIN
-    ['IC2','LTU','is_in:country_code3','ltu'], // LITHUANIA
-    ['IC2','LUX','is_in:country_code3','lux'], // LUXEMBOURG
-    ['IC2','MAC','is_in:country_code3','mac'], // MACAO
-    ['IC2','MKD','is_in:country_code3','mkd'], // MACEDONIA THE FORMER YUGOSLAV REPUBLIC OF
-    ['IC2','MDG','is_in:country_code3','mdg'], // MADAGASCAR
-    ['IC2','MWI','is_in:country_code3','mwi'], // MALAWI
-    ['IC2','MYS','is_in:country_code3','mys'], // MALAYSIA
-    ['IC2','MDV','is_in:country_code3','mdv'], // MALDIVES
-    ['IC2','MLI','is_in:country_code3','mli'], // MALI
-    ['IC2','MLT','is_in:country_code3','mlt'], // MALTA
-    ['IC2','MHL','is_in:country_code3','mhl'], // MARSHALL ISLANDS
-    ['IC2','MTQ','is_in:country_code3','mtq'], // MARTINIQUE
-    ['IC2','MRT','is_in:country_code3','mrt'], // MAURITANIA
-    ['IC2','MUS','is_in:country_code3','mus'], // MAURITIUS
-    ['IC2','MYT','is_in:country_code3','myt'], // MAYOTTE
-    ['IC2','MEX','is_in:country_code3','mex'], // MEXICO
-    ['IC2','FSM','is_in:country_code3','fsm'], // MICRONESIA FEDERATED STATES OF
-    ['IC2','MDA','is_in:country_code3','mda'], // MOLDOVA REPUBLIC OF
-    ['IC2','MCO','is_in:country_code3','mco'], // MONACO
-    ['IC2','MNG','is_in:country_code3','mng'], // MONGOLIA
-    ['IC2','MNE','is_in:country_code3','mne'], // MONTENEGRO
-    ['IC2','MSR','is_in:country_code3','msr'], // MONTSERRAT
-    ['IC2','MAR','is_in:country_code3','mar'], // MOROCCO
-    ['IC2','MOZ','is_in:country_code3','moz'], // MOZAMBIQUE
-    ['IC2','MMR','is_in:country_code3','mmr'], // MYANMAR
-    ['IC2','NAM','is_in:country_code3','nam'], // NAMIBIA
-    ['IC2','NRU','is_in:country_code3','nru'], // NAURU
-    ['IC2','NPL','is_in:country_code3','npl'], // NEPAL
-    ['IC2','NLD','is_in:country_code3','nld'], // NETHERLANDS
-    ['IC2','NCL','is_in:country_code3','ncl'], // NEW CALEDONIA
-    ['IC2','NZL','is_in:country_code3','nzl'], // NEW ZEALAND
-    ['IC2','NIC','is_in:country_code3','nic'], // NICARAGUA
-    ['IC2','NER','is_in:country_code3','ner'], // NIGER
-    ['IC2','NGA','is_in:country_code3','nga'], // NIGERIA
-    ['IC2','NIU','is_in:country_code3','niu'], // NIUE
-    ['IC2','NFK','is_in:country_code3','nfk'], // NORFOLK ISLAND
-    ['IC2','MNP','is_in:country_code3','mnp'], // NORTHERN MARIANA ISLANDS
-    ['IC2','NOR','is_in:country_code3','nor'], // NORWAY
-    ['IC2','OMN','is_in:country_code3','omn'], // OMAN
-    ['IC2','PAK','is_in:country_code3','pak'], // PAKISTAN
-    ['IC2','PLW','is_in:country_code3','plw'], // PALAU
-    ['IC2','PSE','is_in:country_code3','pse'], // PALESTINIAN TERRITORY OCCUPIED
-    ['IC2','PAN','is_in:country_code3','pan'], // PANAMA
-    ['IC2','PNG','is_in:country_code3','png'], // PAPUA NEW GUINEA
-    ['IC2','PRY','is_in:country_code3','pry'], // PARAGUAY
-    ['IC2','PER','is_in:country_code3','per'], // PERU
-    ['IC2','PHL','is_in:country_code3','phl'], // PHILIPPINES
-    ['IC2','PCN','is_in:country_code3','pcn'], // PITCAIRN
-    ['IC2','POL','is_in:country_code3','pol'], // POLAND
-    ['IC2','PRT','is_in:country_code3','prt'], // PORTUGAL
-    ['IC2','PRI','is_in:country_code3','pri'], // PUERTO RICO
-    ['IC2','QAT','is_in:country_code3','qat'], // QATAR
-    ['IC2','REU','is_in:country_code3','reu'], // RÉUNION
-    ['IC2','ROU','is_in:country_code3','rou'], // ROMANIA
-    ['IC2','RUS','is_in:country_code3','rus'], // RUSSIAN FEDERATION
-    ['IC2','RWA','is_in:country_code3','rwa'], // RWANDA
-    ['IC2','BLM','is_in:country_code3','blm'], // SAINT BARTHELEMY
-    ['IC2','SHN','is_in:country_code3','shn'], // SAINT HELENA ASCENSION AND TRISTAN DA CUNHA
-    ['IC2','KNA','is_in:country_code3','kna'], // SAINT KITTS AND NEVIS
-    ['IC2','LCA','is_in:country_code3','lca'], // SAINT LUCIA
-    ['IC2','MAF','is_in:country_code3','maf'], // SAINT MARTIN (FRENCH PART)
-    ['IC2','SPM','is_in:country_code3','spm'], // SAINT PIERRE AND MIQUELON
-    ['IC2','VCT','is_in:country_code3','vct'], // SAINT VINCENT AND THE GRENADINES
-    ['IC2','WSM','is_in:country_code3','wsm'], // SAMOA
-    ['IC2','SMR','is_in:country_code3','smr'], // SAN MARINO
-    ['IC2','STP','is_in:country_code3','stp'], // SAO TOME AND PRINCIPE
-    ['IC2','SAU','is_in:country_code3','sau'], // SAUDI ARABIA
-    ['IC2','SEN','is_in:country_code3','sen'], // SENEGAL
-    ['IC2','SRB','is_in:country_code3','srb'], // SERBIA
-    ['IC2','SYC','is_in:country_code3','syc'], // SEYCHELLES
-    ['IC2','SLE','is_in:country_code3','sle'], // SIERRA LEONE
-    ['IC2','SGP','is_in:country_code3','sgp'], // SINGAPORE
-    ['IC2','SXM','is_in:country_code3','sxm'], // SINT MAARTEN (DUTCH PART)
-    ['IC2','SVK','is_in:country_code3','svk'], // SLOVAKIA
-    ['IC2','SVN','is_in:country_code3','svn'], // SLOVENIA
-    ['IC2','SLB','is_in:country_code3','slb'], // SOLOMON ISLANDS
-    ['IC2','SOM','is_in:country_code3','som'], // SOMALIA
-    ['IC2','ZAF','is_in:country_code3','zaf'], // SOUTH AFRICA
-    ['IC2','SGS','is_in:country_code3','sgs'], // SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS
-    ['IC2','SSD','is_in:country_code3','ssd'], // SOUTH SUDAN
-    ['IC2','ESP','is_in:country_code3','esp'], // SPAIN
-    ['IC2','LKA','is_in:country_code3','lka'], // SRI LANKA
-    ['IC2','SDN','is_in:country_code3','sdn'], // SUDAN
-    ['IC2','SUR','is_in:country_code3','sur'], // SURINAME
-    ['IC2','SJM','is_in:country_code3','sjm'], // SVALBARD AND JAN MAYEN
-    ['IC2','SWZ','is_in:country_code3','swz'], // SWAZILAND
-    ['IC2','SWE','is_in:country_code3','swe'], // SWEDEN
-    ['IC2','CHE','is_in:country_code3','che'], // SWITZERLAND
-    ['IC2','SYR','is_in:country_code3','syr'], // SYRIAN ARAB REPUBLIC
-    ['IC2','TWN','is_in:country_code3','twn'], // TAIWAN PROVINCE OF CHINA
-    ['IC2','TJK','is_in:country_code3','tjk'], // TAJIKISTAN
-    ['IC2','TZA','is_in:country_code3','tza'], // TANZANIA UNITED REPUBLIC OF
-    ['IC2','THA','is_in:country_code3','tha'], // THAILAND
-    ['IC2','TLS','is_in:country_code3','tls'], // TIMOR-LESTE
-    ['IC2','TGO','is_in:country_code3','tgo'], // TOGO
-    ['IC2','TKL','is_in:country_code3','tkl'], // TOKELAU
-    ['IC2','TON','is_in:country_code3','ton'], // TONGA
-    ['IC2','TTO','is_in:country_code3','tto'], // TRINIDAD AND TOBAGO
-    ['IC2','TUN','is_in:country_code3','tun'], // TUNISIA
-    ['IC2','TUR','is_in:country_code3','tur'], // TURKEY
-    ['IC2','TKM','is_in:country_code3','tkm'], // TURKMENISTAN
-    ['IC2','TCA','is_in:country_code3','tca'], // TURKS AND CAICOS ISLANDS
-    ['IC2','TUV','is_in:country_code3','tuv'], // TUVALU
-    ['IC2','UGA','is_in:country_code3','uga'], // UGANDA
-    ['IC2','UKR','is_in:country_code3','ukr'], // UKRAINE
-    ['IC2','ARE','is_in:country_code3','are'], // UNITED ARAB EMIRATES
-    ['IC2','GBR','is_in:country_code3','gbr'], // UNITED KINGDOM
-    ['IC2','USA','is_in:country_code3','usa'], // UNITED STATES
-    ['IC2','UMI','is_in:country_code3','umi'], // UNITED STATES MINOR OUTLYING ISLANDS
-    ['IC2','URY','is_in:country_code3','ury'], // URUGUAY
-    ['IC2','UZB','is_in:country_code3','uzb'], // UZBEKISTAN
-    ['IC2','VUT','is_in:country_code3','vut'], // VANUATU
-    ['IC2','VEN','is_in:country_code3','ven'], // VENEZUELA BOLIVARIAN REPUBLIC OF
-    ['IC2','VNM','is_in:country_code3','vnm'], // VIET NAM
-    ['IC2','VGB','is_in:country_code3','vgb'], // VIRGIN ISLANDS BRITISH
-    ['IC2','VIR','is_in:country_code3','vir'], // VIRGIN ISLANDS U.S.
-    ['IC2','WLF','is_in:country_code3','wlf'], // WALLIS AND FUTUNA
-    ['IC2','ESH','is_in:country_code3','esh'], // WESTERN SAHARA
-    ['IC2','YEM','is_in:country_code3','yem'], // YEMEN
-    ['IC2','ZMB','is_in:country_code3','zmb'], // ZAMBIA
-    ['IC2','ZWE','is_in:country_code3','zwe'], // ZIMBABWE
+    // Fixed in post processing
 
     // IWT - Inland Water Type
     // ['IWT','-999999',undefined,undefined], // No Information
@@ -4339,7 +4091,7 @@ tds40.rules = {
     ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
 
     // From UFD
-    ['CAA','-999999','controlling_authority','unknown'],
+    ['CAA','-999999','operator','unknown'],
     ['FFN','190','use','oil_gas_facility'],
 
     // From UTP

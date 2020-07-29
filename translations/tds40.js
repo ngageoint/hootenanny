@@ -720,6 +720,13 @@ tds40 = {
       }
     } // End closureList
 
+    // Tag retired
+    if (tags.controlling_authority) 
+    {
+      tags.operator = tags.controlling_authority;
+      delete tags.controlling_authority;
+    }
+
     // Now find an F_CODE
     if (attrs.F_CODE)
     {
@@ -1181,9 +1188,9 @@ tds40 = {
     */
 
     // Bunkers. Are they actually Military?
-    if (tags.man_made == 'bunker' && tags.controlling_authority)
+    if (tags.man_made == 'bunker' && tags.operator)
     {
-      if (tags.controlling_authority == 'military' || tags.controlling_authority == '')
+      if (tags.operator == 'military' || tags.operator == '')
       {
         // Debug
         print('Bunker: drop man_made. military = ' + tags.military);
@@ -1194,6 +1201,14 @@ tds40 = {
 
     // Catch all. Particularly for Hardened Aircraft Shelters
     if (tags.bunker_type && !(tags.man_made == 'bunker' || tags.military == 'bunker')) tags.military = 'bunker';
+
+
+    // Fix IC2 country code
+    if (tags['addr:country'])
+    {
+      var country = translate.findCountryCode('c2',tags['addr:country']);
+      if (country !== '') tags['addr:country'] = country;
+    }
 
   }, // End of applyToOsmPostProcessing
 
@@ -1255,7 +1270,7 @@ tds40 = {
     if (tags.military == 'bunker')
     {
       // Making a guess that these are military...
-      if (! tags.controlling_authority) tags.controlling_authority = 'military';
+      if (! tags.operator) tags.operator = 'military';
 
       if (tags['bunker_type'] == 'munitions')
       {
@@ -1998,6 +2013,36 @@ tds40 = {
 
     // Names. Sometimes we don't have a name but we do have language ones
     if (!tags.name) translate.swapName(tags);
+
+    // Fix country tags
+    if (tags['is_in:country_code'] && !tags['addr:country'])
+    {
+      tags['addr:country'] = tags['is_in:country_code'];
+      delete tags['is_in:country_code'];
+    }
+
+    if (tags['is_in:country'] && !tags['addr:country'])
+    {
+      tags['addr:country'] = tags['is_in:country'];
+      delete tags['is_in:country'];
+    }
+
+    if (tags['addr:country'])
+    {
+      var country = translate.convertCountryCode('c2','c3',tags['addr:country']);
+
+      if (country == '') country = translate.findCountryCode('c3',tags['addr:country'])
+
+      if (country !== '')
+      {
+        tags['addr:country'] = country;
+      }
+      else
+      {
+        hoot.logWarn('Dropping invalid country code value: ' + tags['addr:country']);
+        delete tags['addr:country'];
+      }
+    }
 
   }, // End applyToTdsPreProcessing
 

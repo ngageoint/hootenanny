@@ -36,6 +36,7 @@
 
 //  Standard
 #include <algorithm>
+#include <stack>
 #include <vector>
 
 //  Qt
@@ -345,6 +346,50 @@ void XmlChangeset::fixMalformedInput()
       long new_id = getNextNodeId();
       //  Replace old_id everywhere with new_id, in the node, and in any ways and relations
       replaceNodeId(old_id, new_id);
+    }
+  }
+  //  Way and relation adds cannot have members that are negative that don't exist in this changeset
+  for (ChangesetElementMap::iterator it = _relations[TypeCreate].begin(); it != _relations[TypeCreate].end(); ++it)
+  {
+    ChangesetRelationPtr relation(std::dynamic_pointer_cast<ChangesetRelation>(it->second));
+    std::stack<int> remove_members;
+    for (int i = 0; i < relation->getMemberCount(); ++i)
+    {
+      ChangesetRelationMember& m = relation->getMember(i);
+      if (m.getRef() < 0)
+      {
+        //  Mark for removal all nodes/ways/relations with negative IDs that don't exist
+        if (m.isNode() && _allNodes.find(m.getRef()) == _allNodes.end())
+          remove_members.push(i);
+        else if (m.isWay() && _allWays.find(m.getRef()) == _allWays.end())
+          remove_members.push(i);
+        else if (m.isRelation() && _allRelations.find(m.getRef()) == _allRelations.end())
+          remove_members.push(i);
+      }
+    }
+    //  Remove any member with a negative ID (add) that doesn't exist in this changeset
+    while (!remove_members.empty())
+    {
+      relation->removeMember(remove_members.top());
+      remove_members.pop();
+    }
+  }
+  for (ChangesetElementMap::iterator it = _ways[TypeCreate].begin(); it != _ways[TypeCreate].end(); ++it)
+  {
+    ChangesetWayPtr way(std::dynamic_pointer_cast<ChangesetWay>(it->second));
+    std::stack<int> remove_nodes;
+    for (int i = 0; i < way->getNodeCount(); ++i)
+    {
+      //  Mark for removal all nodes with negative IDs that don't exist
+      long nodeId = way->getNode(i);
+      if (nodeId < 0 && _allNodes.find(nodeId) == _allNodes.end())
+        remove_nodes.push(nodeId);
+    }
+    //  Remove any node with a negative ID (add) that doesn't exist in this changeset
+    while (!remove_nodes.empty())
+    {
+      way->removeNodes(remove_nodes.top(), 1);
+      remove_nodes.pop();
     }
   }
   //  Element modifies/deletes cannot have a negative ID, must be positive
@@ -1493,6 +1538,33 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset,
               split->setError();
           }
           //  Split out the offending element and the associated blocking element if possible
+          return split;
+        }
+      }
+    }
+    //  See if the hint is something like:
+    //   The node with the id 12345 has already been deleted
+    else if (_failureCheck.matchesElementGoneDeletedFailure(splitHint, element_id, element_type))
+    {
+      //  This should only occur for deletes
+      if (changeset->contains(element_type, ChangesetType::TypeDelete, element_id))
+      {
+        //  Get the element from the correct element map
+        ChangesetElement* element = NULL;
+        if (element_type == ElementType::Node)
+          element = _allNodes[element_id].get();
+        else if (element_type == ElementType::Way)
+          element = _allWays[element_id].get();
+        else if (element_type == ElementType::Relation)
+          element = _allRelations[element_id].get();
+        //  If it was found, update the status to finalized because it doesn't need to be deleted twice
+        if (element)
+        {
+          changeset->remove(element_type, ChangesetType::TypeDelete, element->id());
+          element->setStatus(ChangesetElement::Finalized);
+          _processedCount++;
+          //  Return an empty split so that the rest of the changeset is just pushed back
+          //  on the work queue to continue on
           return split;
         }
       }

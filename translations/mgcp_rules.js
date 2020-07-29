@@ -306,13 +306,13 @@ mgcp.rules = {
     ['BSC','999','bridge:structure','other'],
 
     // CAA - Controlling Authority
-    //['CAA','0','controlling_authority','unknown'],
+    //['CAA','0','operator','unknown'],
     ['CAA','0',undefined,undefined],
-    ['CAA','3','controlling_authority','private'],
-    ['CAA','5','controlling_authority','military'],
-    ['CAA','7','controlling_authority','joint_military_civilian'],
-    ['CAA','16','controlling_authority','civilian'],
-    ['CAA','999','controlling_authority','other'], // Other
+    ['CAA','3','operator','private'],
+    ['CAA','5','operator','military'],
+    ['CAA','7','operator','joint_military_civilian'],
+    ['CAA','16','operator','civilian'],
+    ['CAA','999','operator','other'], // Other
 
     // CAB - Cable Type
     // ['CAB','0','cable:type','unknown'], // Unknown
@@ -1326,14 +1326,14 @@ mgcp.rules = {
 
     // CAA - Controlling Authority - This does not play nicely in OSM
     // There is no nice way to include this in other tags:
-    ['CAA','1','controlling_authority','national'],
-    ['CAA','2','controlling_authority','state'],
-    ['CAA','4','controlling_authority','tribal'], // From NFDD
-    ['CAA','6','controlling_authority','municipal'], // From NFDD
-    ['CAA','8','controlling_authority','international'],
-    ['CAA','11','controlling_authority','province'], // From NFDD
-    ['CAA','13','controlling_authority','regional'], // From NFDD
-    ['CAA','17','controlling_authority','public'], // From NFDD
+    ['CAA','1','operator','national'],
+    ['CAA','2','operator','state'],
+    ['CAA','4','operator','tribal'], // From NFDD
+    ['CAA','6','operator','municipal'], // From NFDD
+    ['CAA','8','operator','international'],
+    ['CAA','11','operator','province'], // From NFDD
+    ['CAA','13','operator','regional'], // From NFDD
+    ['CAA','17','operator','public'], // From NFDD
 
     // CAB - Cable Type
     ['CAB','3','cable:type','telephone'], // Telephone
@@ -2174,14 +2174,14 @@ mgcp.rules = {
     ['FFN','192','product','petroleum'],
 
     // CAA - Controlling Authority - TRD3/NFDD values. Convert to 'civilian'
-    ['CAA','16','controlling_authority','national'],
-    ['CAA','16','controlling_authority','state'],
-    ['CAA','16','controlling_authority','tribal'], // From NFDD
-    ['CAA','16','controlling_authority','municipal'], // From NFDD
-    ['CAA','16','controlling_authority','international'],
-    ['CAA','16','controlling_authority','province'], // From NFDD
-    ['CAA','16','controlling_authority','regional'], // From NFDD
-    ['CAA','16','controlling_authority','public'], // From NFDD
+    ['CAA','16','operator','national'],
+    ['CAA','16','operator','state'],
+    ['CAA','16','operator','tribal'], // From NFDD
+    ['CAA','16','operator','municipal'], // From NFDD
+    ['CAA','16','operator','international'],
+    ['CAA','16','operator','province'], // From NFDD
+    ['CAA','16','operator','regional'], // From NFDD
+    ['CAA','16','operator','public'], // From NFDD
 
     // AP020 - Interchange
     ['CON','35','junction','cloverleaf'],

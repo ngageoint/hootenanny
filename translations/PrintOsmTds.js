@@ -342,23 +342,23 @@ function dumpCsvTags(schema)
           // NOTE: Not using tColumnName here since it probably got chopped.
           if (columnName == 'ZI020_GE4')
           {
-            osmTag = 'is_in:country_code';
-            osmValue = tds70.rules.ge4List[enumValue];
+            osmTag = 'addr:country';
+            osmValue = translate.convertCountryCode('urn','c2',enumValue);
           }
           else if (columnName == 'ZI020_GE42')
           {
-            osmTag = 'is_in:country_code:second';
-            osmValue = tds70.rules.ge4List[enumValue];
+            osmTag = 'addr:country:second';
+            osmValue = translate.convertCountryCode('urn','c2',enumValue);
           }
           else if (columnName == 'ZI020_GE43')
           {
-            osmTag = 'is_in:country_code:third';
-            osmValue = tds70.rules.ge4List[enumValue];
+            osmTag = 'addr:country:third';
+            osmValue = translate.convertCountryCode('urn','c2',enumValue);
           }
           else if (columnName == 'ZI020_GE44')
           {
-            osmTag = 'is_in:country_code:fourth';
-            osmValue = tds70.rules.ge4List[enumValue];
+            osmTag = 'addr:country:fourth';
+            osmValue = translate.convertCountryCode('urn','c2',enumValue);
           }
           else if (['2','3','4','5'].indexOf(tColumnName.charAt(tColumnName.length -1)) > -1)
           {

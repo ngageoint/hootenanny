@@ -24,7 +24,7 @@
 // contain any special characters.
 // === key.name
 //
-// * Data Type: <string, double, list, bool>
+// * Data Type: <string, double, list, bool, int, long>
 // * Default Value: <value>
 //
 // If the default value is for a list then the default value should be followed
@@ -570,12 +570,27 @@ Flag to turn on throttling for OSM API changeset writes.  When turned on, each p
 will wait `changeset.api.writers.throttle.time` seconds after a successful write before submitting
 another changeset to the OSM API.
 
+=== changeset.apidb.writers.throttle.cgimap
+
+* Data Type: bool
+* Default Value: `false`
+
+Flag to turn on throttling if the OSM API uses CGImap in the back end instead of the rails port.
+Checks the usage of CGImap and then enables `changeset.apidb.writers.throttle`.
+
 === changeset.apidb.writers.throttle.time
 
 * Data Type: long
-* Default Value: `30`
+* Default Value: `10`
 
 The number of seconds after a successful write before submitting another changeset to the OSM API.
+
+=== changeset.apidb.writers.throttle.timespan
+
+* Data Type: long
+* Default Value: `0`
+
+The number of seconds plus or minus for random throttling of the OSM API writer.
 
 === changeset.description
 

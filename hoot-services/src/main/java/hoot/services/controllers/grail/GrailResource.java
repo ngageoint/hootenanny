@@ -281,6 +281,8 @@ public class GrailResource {
                 try {
                     // cut and replace needs to get connected ways
                     if (deriveType.equals("Cut & Replace")) {
+                        // can't have the cut and replace options for hoot convert. used for DeriveChangesetReplacementCommand
+                        getRailsParams.setAdvancedOptions(null);
                         workflow.addAll(setupRailsPull(jobId, getRailsParams, null));
                         grailCommandClass = DeriveChangesetReplacementCommand.class;
                     } else {

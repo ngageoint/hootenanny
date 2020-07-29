@@ -5,7 +5,7 @@
     <tag k='angle' v='164' />
     <tag k='building' v='guardhouse' />
     <tag k='condition' v='functional' />
-    <tag k='controlling_authority' v='unknown' />
+    <tag k='operator' v='unknown' />
     <tag k='error:circular' v='28.65' />
     <tag k='length' v='25' />
     <tag k='material' v='unknown' />

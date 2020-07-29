@@ -320,7 +320,7 @@ gifd.rules = {
     'M_VDR_2H020':'raw:M_VDR_2H020', // Hierarchy 2H020 VDR
     'M_VDR_6C165':'raw:M_VDR_6C165', // Hierarchy 6C165 VDR
     'NA2':'alt_name', // Second Name
-    'NA4':'is_in:country_code', // Country Code (FIPS Pub 10-4)
+    'NA4':'addr:country', // Country Code (FIPS Pub 10-4)
     'NA8':'official_name', // Primary Official Name Category ## Check
     'NAM':'name', // Name
     'NFI':'gndb_id:2', // Named Feature Identifier
