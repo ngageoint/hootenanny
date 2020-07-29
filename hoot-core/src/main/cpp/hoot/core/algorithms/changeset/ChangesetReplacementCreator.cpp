@@ -879,7 +879,6 @@ void ChangesetReplacementCreator::_parseConfigOpts(
 
   if (geometryType == GeometryTypeCriterion::GeometryType::Point)
   {
-    // TODO: explain these and the rest
     _boundsOpts.loadRefKeepEntireCrossingBounds = false;
     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
     _boundsOpts.loadSecKeepEntireCrossingBounds = false;
@@ -1270,7 +1269,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType,
   const geos::geom::Envelope& replacementBounds)
 {
-  // TODO: This logic has become extremely complicated over time to handle all the different cut
+  // This logic has become extremely complicated over time to handle all the different cut
   // and replace use cases. There may be way to simplify some of this logic related to
   // strict/lenient bounds in here by changing some of the initial crop related opts set in
   // _parseConfigOpts...not sure.
@@ -1291,7 +1290,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
      strict/overlapping  - cutter shape is all overlapping sec data inside the bounds
      strict/full         - cutter shape is all ref data inside the bounds
 
-     TODO: add for hybrid?
+     hybrid bounds acts like strict for linear features and lenient for polygon features.
    */
 
   // If the passed in dough map is empty, there's nothing to be cut out. So, just return the empty
