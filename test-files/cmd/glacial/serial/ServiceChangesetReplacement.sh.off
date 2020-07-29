@@ -200,9 +200,6 @@ fi
 echo "clean ref database beforehand: " $CLEAN_REF_DATABASE_BEFOREHAND
 
 EXTRA_PARAMS=${21}
-if [ "$EXTRA_PARAMS" == "" ]; then
-  EXTRA_PARAMS="true"
-fi
 echo "extra params: " $EXTRA_PARAMS
 
 # SET UP TEST FILES

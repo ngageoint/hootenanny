@@ -6,7 +6,7 @@ REF_CONVERT_OPS:  hoot::SetTagValueVisitor
 SEC_CONVERT_OPS:  hoot::SetTagValueVisitor
 replacement aoi:  -89.625447,20.99394,-89.612892,21.002564
 full replacement:  --full-replacement
-strict bounds:  --strict-bounds
+bounds interpretation:  --strict-bounds
 geometry filters: 
 tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion
 replacement filters: 
@@ -19,6 +19,9 @@ source formats:  xml
 way snap tolerance:  5.0
 existing way node tolerance:  0.5
 disable conflation: 
+disable cleaning: 
+clean ref database beforehand:  true
+extra params: 
 
 Writing the reference dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/Input1.osm to an osm api db (contains features to be replaced)...
 
@@ -36,10 +39,10 @@ Writing the secondary dataset from: test-files/cmd/glacial/serial/ServiceChanges
 
 Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ref-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/sec-original.osm over: -89.625447,20.99394,-89.612892,21.002564, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ServiceChangesetReplacementRoundaboutsConflateTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
 
-16:03:44.110 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
-16:03:44.114 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
-16:03:44.116 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
-16:03:44.117 WARN   ...thms/FindNodesInWayFactory.cpp(  75) hoot::FindNodesInWayFactory: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+21:46:26.912 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+21:46:26.915 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+21:46:26.917 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+21:46:26.919 WARN   ...thms/FindNodesInWayFactory.cpp(  75) hoot::FindNodesInWayFactory: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ServiceChangesetReplacementRoundaboutsConflateTest-changeset-xml.osc.sql to the reference data in the osm api db...
 

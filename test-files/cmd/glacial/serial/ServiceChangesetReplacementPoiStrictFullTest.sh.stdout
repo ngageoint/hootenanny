@@ -6,7 +6,7 @@ REF_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor
 SEC_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor
 replacement aoi:  -122.43204,37.7628,-122.4303457,37.76437
 full replacement:  --full-replacement
-strict bounds:  --strict-bounds
+bounds interpretation:  --strict-bounds
 geometry filters:  --geometry-filters hoot::PoiCriterion
 tag element criteria:  hoot::PoiCriterion
 replacement filters: 
@@ -16,9 +16,12 @@ retainment filters:
 chain retainment filters: 
 retainment filter options: 
 source formats:  xml
-way snap tolerance:  0.0
-existing way node tolerance:  0.0
+way snap tolerance:  5.0
+existing way node tolerance:  0.5
 disable conflation: 
+disable cleaning: 
+clean ref database beforehand:  true
+extra params: 
 
 Cropping the reference dataset from: test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm to: -122.43384,37.76069,-122.42742,37.76869, then writing it to an osm api db (contains features to be replaced)...
 
