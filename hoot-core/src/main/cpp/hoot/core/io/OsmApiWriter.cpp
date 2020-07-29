@@ -70,6 +70,7 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
     _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
     _changesetCount(0),
+    _lastChangesetId(0),
     _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
     _apiId(0),
@@ -99,6 +100,7 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
     _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
     _changesetCount(0),
+    _lastChangesetId(0),
     _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
     _apiId(0),
@@ -829,6 +831,8 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
       //  Changeset closed successfully
       _changesetCountMutex.lock();
       _changesetCount++;
+      //  Keep track of the last changeset ID closed inside the mutex
+      _lastChangesetId = id;
       _changesetCountMutex.unlock();
       break;
     default:
