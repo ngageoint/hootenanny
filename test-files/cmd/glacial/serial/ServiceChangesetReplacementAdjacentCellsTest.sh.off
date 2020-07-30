@@ -5,16 +5,16 @@ set -e
 # won't work unless you use the two osmapidb bulk inserter options specified (#4171).
 
 # southern task 52
-test-files/cmd/glacial/serial/ServiceChangesetReplacement.sh.off "ServiceChangesetReplacementAdjacentGridsTest-south" "/home/vagrant/hoot/tmp/4158/SouthernTask52/task_52_inputdata/NOME_d5a6dc.osm" "/home/vagrant/hoot/tmp/4158/SouthernTask52/task_52_inputdata/OSM_d5a6dc.osm" "-115.048828,36.244273,-115.004883,36.279709" "-180,-90,180,90" "true" "lenient" "" "" "false" "" "" "" "" "xml" "5.0" "0.5" "true" "true" "true" "-D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D apidb.bulk.inserter.validate.data=true"
+test-files/cmd/glacial/serial/ServiceChangesetReplacement.sh.off "ServiceChangesetReplacementAdjacentCellsTest-south" "/home/vagrant/hoot/tmp/4158/SouthernTask52/task_52_inputdata/NOME_d5a6dc.osm" "/home/vagrant/hoot/tmp/4158/SouthernTask52/task_52_inputdata/OSM_d5a6dc.osm" "-115.048828,36.244273,-115.004883,36.279709" "-180,-90,180,90" "true" "lenient" "" "" "false" "" "" "" "" "xml" "5.0" "0.5" "true" "true" "true" "-D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D apidb.bulk.inserter.validate.data=true"
 
 # northern task 53
-test-files/cmd/glacial/serial/ServiceChangesetReplacement.sh.off "ServiceChangesetReplacementAdjacentGridsTest-north" "/home/vagrant/hoot/tmp/4158/NorthernTask53/NOME_849248_OSM_849248/NOME_849248.osm" "/home/vagrant/hoot/tmp/4158/NorthernTask53/NOME_849248_OSM_849248/OSM_849248.osm" "-115.048828,36.279707,-115.004883,36.315127" "-180,-90,180,90" "true" "lenient" "" "" "false" "" "" "" "" "xml" "5.0" "0.5" "true" "true" "false" "-D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D apidb.bulk.inserter.validate.data=true"
+test-files/cmd/glacial/serial/ServiceChangesetReplacement.sh.off "ServiceChangesetReplacementAdjacentCellsTest-north" "/home/vagrant/hoot/tmp/4158/NorthernTask53/NOME_849248_OSM_849248/NOME_849248.osm" "/home/vagrant/hoot/tmp/4158/NorthernTask53/NOME_849248_OSM_849248/OSM_849248.osm" "-115.048828,36.279707,-115.004883,36.315127" "-180,-90,180,90" "true" "lenient" "" "" "false" "" "" "" "" "xml" "5.0" "0.5" "true" "true" "false" "-D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D apidb.bulk.inserter.validate.data=true"
 
 # read out both cells
 source conf/database/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
-COMBINED_OUT_DIR=test-output/cmd/glacial/serial/ServiceChangesetReplacementAdjacentGridsTest-combined
+COMBINED_OUT_DIR=test-output/cmd/glacial/serial/ServiceChangesetReplacementAdjacentCellsTest-combined
 mkdir -p $COMBINED_OUT_DIR
 hoot convert --status -C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounding.box.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=true -D element.hash.visitor.non.metadata.ignore.keys=note -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D apidb.bulk.inserter.validate.data=true -D log.class.filter="" -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999 -D convert.ops="hoot::RemoveMissingElementsVisitor" -D debug.maps.filename=$COMBINED_OUT_DIR/final-write-xml.osm $OSM_API_DB_URL $COMBINED_OUT_DIR/ServiceChangesetReplacementAdjacentGridsTest-replaced-combined.osm

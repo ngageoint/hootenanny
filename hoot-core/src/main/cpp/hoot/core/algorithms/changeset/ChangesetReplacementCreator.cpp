@@ -390,6 +390,14 @@ void ChangesetReplacementCreator::create(
   _validateInputs(input1, input2);
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _setGlobalOpts(boundsStr);
+  QFile outputFile(output);
+  if (outputFile.exists())
+  {
+    if (!outputFile.remove())
+    {
+      LOG_ERROR("Unable to remove changeset output file: " << output);
+    }
+  }
 
   LOG_DEBUG(_getJobDescription(input1, input2, boundsStr, output));
 
@@ -745,7 +753,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     _excludeFeaturesFromChangesetDeletion(refMap, boundsStr);
   }
 
-  // clean up introduced mistakes
+  // clean up any mistakes introduced
   _cleanup(refMap);
   _cleanup(conflatedMap);
 

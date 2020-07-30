@@ -170,6 +170,8 @@ public:
 
   std::vector<std::vector<geos::geom::Envelope>> getTiles() const { return _tiles; }
 
+  int getTileCount() const { return _tileCount; }
+
   /**
    * Returns the node counts for each computed tile bounding box
    *
@@ -233,6 +235,7 @@ private:
 
   std::vector<std::vector<long>> _nodeCounts;
   std::vector<std::vector<geos::geom::Envelope>> _tiles;
+  int _tileCount;
 
   /*
    * Calculates a set of rectangular bounding boxes that at most contain a configured set of nodes;

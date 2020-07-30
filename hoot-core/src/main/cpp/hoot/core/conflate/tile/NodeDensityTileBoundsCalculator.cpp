@@ -55,7 +55,8 @@ _maxNodeCountInOneTile(0),
 _minNodeCountInOneTile(LONG_MAX),
 _pixelSizeRetryReductionFactor(10),
 _maxNumTries(3),
-_maxTimePerAttempt(-1)
+_maxTimePerAttempt(-1),
+_tileCount(0)
 {
 }
 
@@ -268,6 +269,7 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
 
     _checkForTimeout();
   }
+  _tileCount = width * width;
 
   if (_maxNodeCountInOneTile == 0)
   {
