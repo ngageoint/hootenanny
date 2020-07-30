@@ -80,7 +80,14 @@ function ElementMergeserver(request, response) {
 
             request.on('end', function() {
 
-                var result = postHandler(payload);
+                var result;
+                try {
+                    result = postHandler(payload);
+                } catch (err) {
+                    var status = 400;
+                    response.writeHead(status, header);
+                    response.end(JSON.stringify({error: err}));
+                }
 
                 response.writeHead(200, header);
                 response.end(result);
