@@ -110,7 +110,8 @@ public:
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(map, rootDir + "/NOMEData.osm", true, Status::Unknown1);
     OsmMapWriterFactory::write(map, dataToReplaceUrl);
-    LOG_STATUS("data to replace size after initial write: " << map->size());
+    LOG_STATUS(
+      "Elements being replaced: " << StringUtils::formatLargeNumber(map->size()));
     LOG_STATUS(
       "Data to replace loaded in: " <<
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
@@ -120,7 +121,8 @@ public:
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(map, rootDir + "/OSMData.osm", true, Status::Unknown2);
     OsmMapWriterFactory::write(map, replacementDataUrl);
-    LOG_STATUS("replacement data size after initial write: " << map->size());
+    LOG_STATUS(
+      "Replacing elements: " << StringUtils::formatLargeNumber(map->size()));
     LOG_STATUS(
       "Replacement data loaded in: " <<
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
@@ -129,7 +131,7 @@ public:
     LOG_STATUS("Reading the data to replace out of the db...");
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(map, dataToReplaceUrl, true, Status::Unknown1);
-    LOG_STATUS("data to replace size after read: " << map->size());
+    LOG_STATUS("Elements being replaced: " << StringUtils::formatLargeNumber(map->size()));
     LOG_STATUS(
       "Data to replace read in: " <<
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
@@ -138,7 +140,7 @@ public:
     LOG_STATUS("Calculating task grid cells...");
     NodeDensityTileBoundsCalculator boundsCalc;
     boundsCalc.setPixelSize(0.001);
-    boundsCalc.setMaxNodesPerTile(10000);
+    boundsCalc.setMaxNodesPerTile(50000);
     boundsCalc.setMaxNumTries(5);
     boundsCalc.setMaxTimePerAttempt(300);
     boundsCalc.setPixelSizeRetryReductionFactor(10);
@@ -146,7 +148,9 @@ public:
     const std::vector<std::vector<geos::geom::Envelope>> taskGrid = boundsCalc.getTiles();
     const std::vector<std::vector<long>> nodeCounts = boundsCalc.getNodeCounts();
     TileBoundsWriter::writeTilesToOsm(taskGrid, nodeCounts, rootDir + "/bounds.osm");
-    LOG_STATUS("Calculated " << boundsCalc.getTileCount() << " task grid cells.");
+    LOG_STATUS(
+      "Calculated " << StringUtils::formatLargeNumber(boundsCalc.getTileCount()) <<
+      " task grid cells.");
     LOG_STATUS(
       "Task grid cells calculated in: " <<
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
@@ -174,8 +178,9 @@ public:
         const QString changesetFile = rootDir + "changeset-" + changesetId + ".osc.sql";
 
         LOG_STATUS(
-          "Deriving changeset " << boundsCtr << " / " << boundsCalc.getTileCount() << ": " <<
-          changesetId << " over bounds: " << boundsStr << "...");
+          "Deriving changeset " << StringUtils::formatLargeNumber(boundsCtr) << " / " <<
+          StringUtils::formatLargeNumber(boundsCalc.getTileCount()) << ": " << changesetId <<
+          " over bounds: " << boundsStr << "...");
         changesetCreator.create(dataToReplaceUrl, replacementDataUrl, bounds, changesetFile);
         LOG_STATUS(
           "Changeset derived in: " <<
@@ -183,8 +188,9 @@ public:
         subTaskTimer.restart();
 
         LOG_STATUS(
-          "Applying changeset: " << boundsCtr << " / " << boundsCalc.getTileCount() << ": " <<
-          changesetId << " over bounds: " << boundsStr << "...");
+          "Applying changeset: " << StringUtils::formatLargeNumber(boundsCtr) << " / " <<
+          StringUtils::formatLargeNumber(boundsCalc.getTileCount()) << ": " << changesetId <<
+          " over bounds: " << boundsStr << "...");
         changesetApplier.write(changesetFile);
         LOG_STATUS(
           "Changeset applied in: " <<
@@ -198,7 +204,7 @@ public:
     LOG_STATUS("Reading the modified data...");
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(map, dataToReplaceUrl, true, Status::Unknown1);
-    LOG_STATUS("modified data size: " << map->size());
+    LOG_STATUS("Modified data size: " << StringUtils::formatLargeNumber(map->size()));
     OsmMapWriterFactory::write(map, rootDir + "/replaced-data.osm");
     LOG_STATUS(
       "Modified data read in: " <<
