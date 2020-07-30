@@ -144,6 +144,11 @@ public:
    * @return true if the file was written successfully
    */
   bool writeErrorFile() { return _changeset.writeErrorFile(); }
+  /**
+   * @brief getLastChangesetId Get the ID of the last changeset uploaded
+   * @return ID of last changeset closed
+   */
+  long getLastChangesetId() { return _lastChangesetId; }
 
 private:
   /**
@@ -398,6 +403,8 @@ private:
   QString _secretToken;
   /** Number of changesets written to API */
   int _changesetCount;
+  /** Last changeset ID pushed for synchonization */
+  long _lastChangesetId;
   /** Mutex for changeset count */
   std::mutex _changesetCountMutex;
   /** Output requests and responses for debugging  */

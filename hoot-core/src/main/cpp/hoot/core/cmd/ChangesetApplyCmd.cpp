@@ -142,6 +142,9 @@ public:
         1.0, writer.containsFailed() ? Progress::JobState::Failed : Progress::JobState::Successful,
         "Changeset(s) applied to: " + printableUrl.left(maxFilePrintLength) + "...");
 
+      //  Output the last changeset ID in a status message
+      LOG_STATUS("Last changeset pushed ID: " << writer.getLastChangesetId());
+
       //  Write out the failed changeset if there is one
       if (writer.containsFailed())
       {
