@@ -164,7 +164,7 @@ public:
    *
    * @param map the map containing the nodes
    */
-  void calculateTiles(OsmMapPtr map);
+  void calculateTiles(const ConstOsmMapPtr& map);
 
   static QString tilesToString(const std::vector<std::vector<geos::geom::Envelope>>& tiles);
 
@@ -203,6 +203,7 @@ public:
   void setMaxNumTries(int numTries) { _maxNumTries = numTries; }
   void setMaxTimePerAttempt(int seconds) { _maxTimePerAttempt = seconds; }
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
+  void setFailWithNoSolution(bool fail) { _failWithNoSolution = fail; }
 
 private:
 
@@ -228,6 +229,8 @@ private:
   int _pixelSizeRetryReductionFactor;
   // allows for multiple calc attempts
   int _maxNumTries;
+  // TODO
+  bool _failWithNoSolution;
 
   // timeout in seconds; -1 is unlimited
   int _maxTimePerAttempt;
@@ -243,8 +246,8 @@ private:
    */
   void _calculateTiles();
 
-  void _renderImage(const std::shared_ptr<OsmMap>& map);
-  void _renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1, cv::Mat& r2);
+  void _renderImage(const ConstOsmMapPtr& map);
+  void _renderImage(const ConstOsmMapPtr& map, cv::Mat& r1, cv::Mat& r2);
   void _setImages(const cv::Mat& r1, const cv::Mat& r2);
 
   void _calculateMin();
@@ -263,6 +266,8 @@ private:
 
   long _sumPixels(const PixelBox& pb, cv::Mat& r);
   long _sumPixels(const PixelBox& pb);
+
+  void _calculateUniformSolution(const ConstOsmMapPtr& map);
 
   geos::geom::Envelope _toEnvelope(const PixelBox& pb);
 

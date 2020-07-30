@@ -55,16 +55,17 @@ _maxNodeCountInOneTile(0),
 _minNodeCountInOneTile(LONG_MAX),
 _pixelSizeRetryReductionFactor(10),
 _maxNumTries(3),
+_failWithNoSolution(false),
 _maxTimePerAttempt(-1),
 _tileCount(0)
 {
 }
 
-void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
+void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
 {  
-  if (_maxTimePerAttempt > 0)
+  if (map->getNodeCount() == 0 || _maxNodesPerTile == 0)
   {
-    _timer.restart();
+    return;
   }
 
   LOG_VARD(map->getNodeCount());
@@ -84,10 +85,19 @@ void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
     _nodeCounts.push_back(subCounts);
     _minNodeCountInOneTile = map->getNodeCount();
     _maxNodeCountInOneTile = map->getNodeCount();
+    _tileCount = 1;
   }
   else
   {  
+    if (_maxTimePerAttempt > 0)
+    {
+      _timer.restart();
+    }
+
     int tryCtr = 0;
+    LOG_VARD(_tiles.size());
+    LOG_VARD(tryCtr);
+    LOG_VARD(_maxNumTries);
     while (_tiles.empty() && tryCtr < _maxNumTries)
     {
       tryCtr++;
@@ -114,22 +124,40 @@ void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
           QString::number(_maxNumTries) + " failed.";
         if (tryCtr == _maxNumTries)
         {
-          msg += " Aborting calculation.";
-          LOG_ERROR(msg);
-          throw e;
+          //if (_failWithNoSolution)
+          //{
+            msg += " Aborting calculation.";
+            LOG_ERROR(msg);
+            throw e;
+          //}
+          //else
+          //{
+            //_calculateUniformSolution();
+          //}
         }
         else
         {
+          _tiles.clear();
           msg += " Retrying calculation...";
           LOG_STATUS(msg);
           if (_pixelSizeRetryReductionFactor != -1)
           {
             _pixelSize -= _pixelSize * (_pixelSizeRetryReductionFactor / 100.0);
           }
+          LOG_VARD(_tiles.size());
+          LOG_VARD(tryCtr);
+          LOG_VARD(_maxNumTries);
         }
       }
     }
   }
+}
+
+void NodeDensityTileBoundsCalculator::_calculateUniformSolution(const ConstOsmMapPtr& /*map*/)
+{
+  // TODO: finish
+  //int maxNodesToTotalRatio = _maxNodesPerTile / map->getNodeCount();
+  //
 }
 
 void NodeDensityTileBoundsCalculator::_calculateMin()
@@ -603,7 +631,7 @@ bool NodeDensityTileBoundsCalculator::_isDone(vector<PixelBox>& boxes)
   }
 }
 
-void NodeDensityTileBoundsCalculator::_renderImage(const std::shared_ptr<OsmMap>& map)
+void NodeDensityTileBoundsCalculator::_renderImage(const ConstOsmMapPtr& map)
 {
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
@@ -616,7 +644,7 @@ void NodeDensityTileBoundsCalculator::_renderImage(const std::shared_ptr<OsmMap>
   _exportImage(_min, "tmp/min.png");
 }
 
-void NodeDensityTileBoundsCalculator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1,
+void NodeDensityTileBoundsCalculator::_renderImage(const ConstOsmMapPtr& map, cv::Mat& r1,
                                                    cv::Mat& r2)
 {
   LOG_INFO("Rendering images...");

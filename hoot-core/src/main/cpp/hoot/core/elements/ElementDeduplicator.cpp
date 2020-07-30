@@ -81,13 +81,13 @@ void ElementDeduplicator::dedupe(OsmMapPtr map)
   }
 
   LOG_DEBUG(map->getName() << " size after de-duping: " << map->size());
-  LOG_STATUS(
+  LOG_DEBUG(
     "Removed " << nodesBefore - map->getNodeCount() << " duplicate nodes from " <<
     map->getName());
-  LOG_STATUS(
+  LOG_DEBUG(
     "Removed " << waysBefore - map->getWayCount() << " duplicate ways from " <<
     map->getName());
-  LOG_STATUS(
+  LOG_DEBUG(
     "Removed " << relationsBefore - map->getRelationCount() << " duplicate relations from " <<
     map->getName());
 }
@@ -169,22 +169,22 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
 
   LOG_DEBUG(map1->getName() << " size after de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size after de-duping: " << map2->size());
-  LOG_STATUS(
+  LOG_DEBUG(
     "Removed " << map1NodesBefore - map1->getNodeCount() << " duplicate nodes from " <<
     map1->getName());
-  LOG_STATUS(
+  LOG_DEBUG(
     "Removed " << map1WaysBefore - map1->getWayCount() << " duplicate ways from " <<
     map1->getName());
-  LOG_STATUS(
+  LOG_DEBUG(
     "Removed " << map1RelationsBefore - map1->getRelationCount() << " duplicate relations from " <<
     map1->getName());
-  LOG_STATUS(
+  LOG_DEBUG(
     "Removed " << map2NodesBefore - map2->getNodeCount() << " duplicate nodes from " <<
     map2->getName());
-  LOG_STATUS(
+  LOG_DEBUG(
     "Removed " << map2WaysBefore - map2->getWayCount() << " duplicate ways from " <<
     map2->getName());
-  LOG_STATUS(
+  LOG_DEBUG(
     "Removed " << map2RelationsBefore - map2->getRelationCount() << " duplicate relations from " <<
     map2->getName());
 }

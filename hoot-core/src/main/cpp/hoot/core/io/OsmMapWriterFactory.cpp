@@ -148,7 +148,7 @@ void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QStrin
     writer->open(url);
     // We could pass a progress in here to get more granular write status feedback.
     writer->write(map);
-    LOG_STATUS(
+    LOG_INFO(
       "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
       " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   }

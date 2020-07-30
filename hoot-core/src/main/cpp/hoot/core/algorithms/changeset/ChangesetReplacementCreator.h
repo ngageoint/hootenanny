@@ -221,6 +221,9 @@ private:
   // controls cropping
   BoundsOptions _boundsOpts;
 
+  OsmMapPtr _rawRefMap;
+  OsmMapPtr _rawSecMap;
+
   // determines if the current changeset map generation pass contains only linear features
   bool _currentChangeDerivationPassIsLinear;
 

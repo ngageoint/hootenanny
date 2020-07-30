@@ -269,6 +269,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
                                      long& nodeCount, long& wayCount)
 {
   LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
+  // TODO: This is extremely slow for large numbers of node IDs.
   std::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
   while (wayIdItr->next())
   {
@@ -385,7 +386,6 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         map, nodeIds, wayIds, additionalWayNodeIds, boundedNodeCount, boundedWayCount);
       nodeIds.unite(additionalWayNodeIds);
       LOG_VARD(nodeIds.size());
-      LOG_VARD(wayIds);
       LOG_VARD(wayIds.size());
 
       LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");

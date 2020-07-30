@@ -177,6 +177,15 @@ public:
     }
     LOG_VARD(pixelSizeAutoReductionFactor);
 
+    bool alwaysFailWithNoSolution = false;
+    if (args.contains("--alwaysFailWithNoSolution"))
+    {
+      const int optionNameIndex = args.indexOf("--alwaysFailWithNoSolution");
+      alwaysFailWithNoSolution = true;
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(pixelSizeAutoReductionFactor);
+
     int randomSeed = -1;
     if (args.contains("--random") && args.contains("--randomSeed"))
     { 
@@ -204,6 +213,7 @@ public:
     tileCalc.setMaxNumTries(maxAttempts);
     tileCalc.setMaxTimePerAttempt(maxTimePerAttempt);
     tileCalc.setPixelSizeRetryReductionFactor(pixelSizeAutoReductionFactor);
+    tileCalc.setFailWithNoSolution(alwaysFailWithNoSolution);
     tileCalc.calculateTiles(inputMap);
     const std::vector<std::vector<geos::geom::Envelope>> tiles = tileCalc.getTiles();
     const std::vector<std::vector<long>> nodeCounts = tileCalc.getNodeCounts();

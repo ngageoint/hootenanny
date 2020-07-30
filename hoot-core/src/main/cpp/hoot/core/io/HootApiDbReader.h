@@ -57,7 +57,7 @@ public:
 
   virtual void open(const QString& urlStr) override;
 
-  virtual void read(const OsmMapPtr &map) override;
+  virtual void read(const OsmMapPtr& map) override;
 
 protected:
 

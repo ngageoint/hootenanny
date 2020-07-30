@@ -657,7 +657,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& 
   sql += " node_id IN (" + QStringList(nodeIds.toList()).join(",") + ")";
   //sql += " ORDER BY way_id desc";
   _selectWayIdsByWayNodeIds->prepare(sql);
-  LOG_VARD(_selectWayIdsByWayNodeIds->lastQuery());
+  LOG_VARD(_selectWayIdsByWayNodeIds->lastQuery().right(100));
 
   if (_selectWayIdsByWayNodeIds->exec() == false)
   {
@@ -723,7 +723,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QStri
   sql += " AND id IN (" + QStringList(elementIds.toList()).join(",") + ")";
   sql += " ORDER BY id DESC";
   _selectElementsByElementIdList->prepare(sql);
-  LOG_VARD(_selectElementsByElementIdList->lastQuery());
+  LOG_VARD(_selectElementsByElementIdList->lastQuery().right(100));
 
   if (_selectElementsByElementIdList->exec() == false)
   {
@@ -752,7 +752,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& 
   sql += " way_id IN (" + QStringList(wayIds.toList()).join(",") + ")";
   //sql += " ORDER BY sequence_id";
   _selectWayNodeIdsByWayIds->prepare(sql);
-  LOG_VARD(_selectWayNodeIdsByWayIds->lastQuery());
+  LOG_VARD(_selectWayNodeIdsByWayIds->lastQuery().right(100));
 
   if (_selectWayNodeIdsByWayIds->exec() == false)
   {
@@ -792,7 +792,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QStrin
   {
     _selectRelationIdsByMemberIds->bindValue(":elementType", memberElementType.toString());
   }
-  LOG_VARD(_selectRelationIdsByMemberIds->lastQuery());
+  LOG_VARD(_selectRelationIdsByMemberIds->lastQuery().right(100));
   LOG_VARD(_selectRelationIdsByMemberIds->boundValues());
 
   if (_selectRelationIdsByMemberIds->exec() == false)
