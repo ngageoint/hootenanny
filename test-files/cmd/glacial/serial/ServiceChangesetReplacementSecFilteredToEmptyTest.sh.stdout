@@ -6,7 +6,7 @@ REF_CONVERT_OPS:  hoot::SetTagValueVisitor
 SEC_CONVERT_OPS:  hoot::SetTagValueVisitor
 replacement aoi:  29.031372,1.345701,29.036865,1.351193
 full replacement:  --full-replacement
-strict bounds: 
+bounds interpretation: 
 geometry filters: 
 tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion
 replacement filters: 
@@ -19,6 +19,9 @@ source formats:  xml
 way snap tolerance:  5.0
 existing way node tolerance:  5.0
 disable conflation: 
+disable cleaning: 
+clean ref database beforehand:  true
+extra params: 
 
 Writing the reference dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementSecFilteredToEmptyTest/input1.osm to an osm api db (contains features to be replaced)...
 

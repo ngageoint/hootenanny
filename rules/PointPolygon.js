@@ -41,9 +41,9 @@ exports.isMatchCandidate = function(map, e)
   // we find polygon neighbors to match with inside of ScriptMatchCreator. We're not getting the geometry type from 
   // exports.geometryType for the reason described above.
 
-  //hoot.trace("e: " + e.getId());
-  //hoot.trace("isPoint(map, e): " + isPoint(map, e));
-  //hoot.trace("isSpecificallyConflatable(map, e, point): " + isSpecificallyConflatable(map, e, "point"));
+  hoot.trace("e: " + e.getId());
+  hoot.trace("isPoint: " + isPoint(map, e));
+  hoot.trace("isSpecificallyConflatable: " + isSpecificallyConflatable(map, e, "point"));
 
   return isPoint(map, e) && !isSpecificallyConflatable(map, e, "point");
 };
@@ -149,7 +149,7 @@ exports.mergePair = function(map, e1, e2)
   // We always want to keep the poly and lose the point geometry.
   var keeper;
   var toReplace;
-  if (isPolygon(e1))
+  if (isPolygon(map, e1))
   {
     keeper = e1;
     toReplace = e2;

@@ -778,8 +778,11 @@ void OsmApiDbBulkInserter::_incrementAndGetLatestIdsFromDb()
   _idMappings.currentNodeId = _database.getNextId(ElementType::Node);
   _idMappings.currentWayId = _database.getNextId(ElementType::Way);
   _idMappings.currentRelationId = _database.getNextId(ElementType::Relation);
+  // By putting this here we have to have to have record ID reservation and data validation enabled
+  // in order to write changesets across subsequent write commands, otherwise the changeset ID
+  // won't get incremented. Is there any way around this via refactoring? - #4171
   _changesetData.currentChangesetId = _database.getNextId(ApiDb::getChangesetsTableName());
-  LOG_VART(_changesetData.currentChangesetId);
+  LOG_DEBUG("Creating changeset: " << _changesetData.currentChangesetId);
   LOG_VART(_idMappings.currentNodeId);
   LOG_VART(_idMappings.currentWayId);
   LOG_VART(_idMappings.currentRelationId);
@@ -957,7 +960,6 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
   setStartingNodeId(confOptions.getApidbBulkInserterStartingNodeId());
   setStartingWayId(confOptions.getApidbBulkInserterStartingWayId());
   setStartingRelationId(confOptions.getApidbBulkInserterStartingRelationId());
-  //apidb.bulk.inserter.run.validation.in.memory
   if (confOptions.getApidbBulkInserterRunValidationInMemory())
   {
     setStxxlMapMinSize(LONG_MAX);

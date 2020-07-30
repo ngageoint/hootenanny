@@ -69,6 +69,18 @@ public:
     timer.start();
     LOG_VARD(args);
 
+    // If needed for testing, can manually load separate implementations with
+    // ConfigOptions().getChangesetReplacementImplementation().
+    run(args);
+
+    LOG_STATUS(
+      "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+
+    return 0;
+  }
+
+  void run(QStringList& args)
+  {
     // process optional params
 
     bool fullReplacement = false;
@@ -145,39 +157,27 @@ public:
     }
     LOG_VARD(retainmentFilterOptions);
 
-    bool lenientBounds = true;
+    if (args.contains("--strict-bounds") && args.contains("--hybrid-bounds"))
+    {
+      throw IllegalArgumentException(
+        "Only one of '--strict-bounds' and '--hybrid-bounds' may be specified.");
+    }
+    ChangesetReplacementCreator::BoundsInterpretation boundsHandling =
+      ChangesetReplacementCreator::BoundsInterpretation::Lenient;
     if (args.contains("--strict-bounds"))
     {
-      lenientBounds = false;
+      boundsHandling = ChangesetReplacementCreator::BoundsInterpretation::Strict;
       args.removeAll("--strict-bounds");
     }
-    LOG_VARD(lenientBounds);
+    else if (args.contains("--hybrid-bounds"))
+    {
+      boundsHandling = ChangesetReplacementCreator::BoundsInterpretation::Hybrid;
+      args.removeAll("--hybrid-bounds");
+    }
 
     bool printStats = false;
     QString outputStatsFile;
-    if (args.contains("--stats"))
-    {
-      printStats = true;
-      const int statsIndex = args.indexOf("--stats");
-      // See similar note in ChangesetDeriveCmd.
-      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
-          !args[statsIndex + 1].startsWith("--"))
-      {
-        outputStatsFile = args[statsIndex + 1];
-        QFileInfo statsInfo(outputStatsFile);
-        if (!ChangesetStatsFormat::isValidFileOutputFormat(statsInfo.completeSuffix()))
-        {
-          outputStatsFile = "";
-        }
-        else
-        {
-          args.removeAll(outputStatsFile);
-        }
-      }
-      args.removeAll("--stats");
-    }
-    LOG_VARD(printStats);
-    LOG_VARD(outputStatsFile);
+    processStatsParams(args, printStats, outputStatsFile);
 
     bool enableWaySnapping = true;
     if (args.contains("--disable-way-snapping"))
@@ -255,7 +255,7 @@ public:
 
     ChangesetReplacementCreator changesetCreator(printStats, outputStatsFile, osmApiDbUrl);
     changesetCreator.setFullReplacement(fullReplacement);
-    changesetCreator.setLenientBounds(lenientBounds);
+    changesetCreator.setBoundsInterpretation(boundsHandling);
     changesetCreator.setGeometryFilters(geometryFilters);
     // chain param must be set before the filters themselves
     changesetCreator.setChainReplacementFilters(chainReplacementFilters);
@@ -269,11 +269,33 @@ public:
     changesetCreator.setCleaningEnabled(enableCleaning);
     changesetCreator.setTagOobConnectedWays(tagOobConnectedWays);
     changesetCreator.create(input1, input2, bounds, output);
+  }
 
-    LOG_STATUS(
-      "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
-
-    return 0;
+  void processStatsParams(QStringList& args, bool& printStats, QString& outputStatsFile)
+  {
+    if (args.contains("--stats"))
+    {
+      printStats = true;
+      const int statsIndex = args.indexOf("--stats");
+      // See similar note in ChangesetDeriveCmd.
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+          !args[statsIndex + 1].startsWith("--"))
+      {
+        outputStatsFile = args[statsIndex + 1];
+        QFileInfo statsInfo(outputStatsFile);
+        if (!ChangesetStatsFormat::isValidFileOutputFormat(statsInfo.completeSuffix()))
+        {
+          outputStatsFile = "";
+        }
+        else
+        {
+          args.removeAll(outputStatsFile);
+        }
+      }
+        args.removeAll("--stats");
+    }
+    LOG_VARD(printStats);
+    LOG_VARD(outputStatsFile);
   }
 
   void checkParameterCount(int count)

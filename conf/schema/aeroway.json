@@ -130,7 +130,7 @@
     {
         "geometries": [
             "node",
-            "way"
+            "area"
         ],
         "isA": "aeroway",
         "name": "aeroway=launchpad",

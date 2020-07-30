@@ -88,6 +88,7 @@ long RelationMemberUtils::getFirstWayIdFromRelation(
 bool RelationMemberUtils::isMemberOfRelation(const ConstOsmMapPtr& map, const ElementId& childId)
 {
   const std::set<ElementId> parentIds = map->getParents(childId);
+  LOG_VART(parentIds.size());
   for (std::set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
   {
     const ElementId parentId = *it;
@@ -113,6 +114,7 @@ bool RelationMemberUtils::isMemberOfRelationType(
   }
 
   const std::set<ElementId> parentIds = map->getParents(childId);
+  LOG_VART(parentIds.size());
   for (std::set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
   {
     const ElementId parentId = *it;
@@ -136,6 +138,7 @@ bool RelationMemberUtils::isMemberOfRelationInCategory(
 {
   LOG_VART(childId);
   LOG_VART(schemaCategory);
+  LOG_VART(map.get());
 
   if (schemaCategory.trimmed().isEmpty())
   {
@@ -143,6 +146,7 @@ bool RelationMemberUtils::isMemberOfRelationInCategory(
   }
 
   const std::set<ElementId> parentIds = map->getParents(childId);
+  LOG_VART(parentIds.size());
   for (std::set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
   {
     const ElementId parentId = *it;
@@ -173,6 +177,7 @@ bool RelationMemberUtils::isMemberOfRelationWithTagKey(
   }
 
   const std::set<ElementId> parentIds = map->getParents(childId);
+  LOG_VART(parentIds.size());
   for (std::set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
   {
     const ElementId parentId = *it;

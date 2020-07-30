@@ -40,52 +40,6 @@ namespace hoot
 {
 
 /**
- * Options used to control cropping at various stages of the replacement changeset workflow
- */
-struct BoundsOptions
-{
-  // Determines whether features crossing the bounds should be kept when loading reference data.
-  bool loadRefKeepEntireCrossingBounds;
-  // Determines whether only features completely inside the bounds should be kept when loading
-  // reference data.
-  bool loadRefKeepOnlyInsideBounds;
-  // Determines whether ways immediately connected to other ways being kept but completely outside
-  // of the bounds should also be kept
-  bool loadRefKeepImmediateConnectedWaysOutsideBounds;
-  // Determines whether features crossing the bounds should be kept when loading secondary data.
-  bool loadSecKeepEntireCrossingBounds;
-  // Determines whether only features completely inside the bounds should be kept when loading
-  // secondary data.
-  bool loadSecKeepOnlyInsideBounds;
-
-  // Determines whether features crossing the bounds should be kept when cookie cutting reference
-  // data.
-  bool cookieCutKeepEntireCrossingBounds;
-  // Determines whether only features completely inside the bounds should be kept when cookie
-  // cutting reference data.
-  bool cookieCutKeepOnlyInsideBounds;
-
-  // Determines whether reference features crossing the bounds should be kept when deriving a
-  // changeset.
-  bool changesetRefKeepEntireCrossingBounds;
-  // Determines whether secondary features crossing the bounds should be kept when deriving a
-  // changeset.
-  bool changesetSecKeepEntireCrossingBounds;
-  // Determines whether only reference features completely inside the bounds should be kept when
-  // deriving a changeset.
-  bool changesetRefKeepOnlyInsideBounds;
-  // Determines whether only secondary features completely inside the bounds should be kept when
-  // deriving a changeset.
-  bool changesetSecKeepOnlyInsideBounds;
-  // Determines whether deleting reference features existing either partially of completely outside
-  // of the bounds is allowed during changeset generation
-  bool changesetAllowDeletingRefOutsideBounds;
-  // the strictness of the bounds calculation used in conjunction with
-  // _changesetAllowDeletingRefOutsideBounds
-  bool inBoundsStrict;
-};
-
-/**
  * High level class for prepping data for replacement changeset generation (changesets which
  * replace features inside of a specified bounds) and then calls on the appropriate changeset file
  * writer to output a changeset file.
@@ -110,7 +64,62 @@ struct BoundsOptions
 class ChangesetReplacementCreator
 {
 
+  /**
+   * Options used to control cropping at various stages of the replacement changeset workflow
+   */
+  struct BoundsOptions
+  {
+    // Determines whether features crossing the bounds should be kept when loading reference data.
+    bool loadRefKeepEntireCrossingBounds;
+    // Determines whether only features completely inside the bounds should be kept when loading
+    // reference data.
+    bool loadRefKeepOnlyInsideBounds;
+    // Determines whether ways immediately connected to other ways being kept but completely outside
+    // of the bounds should also be kept
+    bool loadRefKeepImmediateConnectedWaysOutsideBounds;
+    // Determines whether features crossing the bounds should be kept when loading secondary data.
+    bool loadSecKeepEntireCrossingBounds;
+    // Determines whether only features completely inside the bounds should be kept when loading
+    // secondary data.
+    bool loadSecKeepOnlyInsideBounds;
+
+    // Determines whether features crossing the bounds should be kept when cookie cutting reference
+    // data.
+    bool cookieCutKeepEntireCrossingBounds;
+    // Determines whether only features completely inside the bounds should be kept when cookie
+    // cutting reference data.
+    bool cookieCutKeepOnlyInsideBounds;
+
+    // Determines whether reference features crossing the bounds should be kept when deriving a
+    // changeset.
+    bool changesetRefKeepEntireCrossingBounds;
+    // Determines whether secondary features crossing the bounds should be kept when deriving a
+    // changeset.
+    bool changesetSecKeepEntireCrossingBounds;
+    // Determines whether only reference features completely inside the bounds should be kept when
+    // deriving a changeset.
+    bool changesetRefKeepOnlyInsideBounds;
+    // Determines whether only secondary features completely inside the bounds should be kept when
+    // deriving a changeset.
+    bool changesetSecKeepOnlyInsideBounds;
+    // Determines whether deleting reference features existing either partially of completely outside
+    // of the bounds is allowed during changeset generation
+    bool changesetAllowDeletingRefOutsideBounds;
+    // the strictness of the bounds calculation used in conjunction with
+    // _changesetAllowDeletingRefOutsideBounds
+    bool inBoundsStrict;
+  };
+
 public:
+
+  // see command doc for more detail
+  // TODO: Hybrid may go away
+  enum BoundsInterpretation
+  {
+    Strict = 0, // only features completely inside or lines crossing that get cut at the boundary
+    Lenient,    // features inside and overlapping
+    Hybrid      // points inside, polys inside and overlapping, lines cut at the boundary
+  };
 
   /**
    * Constructor
@@ -140,7 +149,8 @@ public:
     const QString& output);
 
   void setFullReplacement(const bool full) { _fullReplacement = full; }
-  void setLenientBounds(const bool lenient) { _lenientBounds = lenient; }
+  void setBoundsInterpretation(const BoundsInterpretation& interpretation)
+  { _boundsInterpretation = interpretation; }
   void setGeometryFilters(const QStringList& filterClassNames);
   void setReplacementFilters(const QStringList& filterClassNames);
   void setChainReplacementFilters(const bool chain) { _chainReplacementFilters = chain; }
@@ -162,7 +172,7 @@ private:
   bool _fullReplacement;
 
   // determines how strict the handling of the bounds is during replacement
-  bool _lenientBounds;
+  BoundsInterpretation _boundsInterpretation;
 
   // A set of geometry type filters, organized by core geometry type (point, line, poly) to
   // separately filter the input datasets on.
@@ -171,7 +181,6 @@ private:
 
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
-
 
   // One or more non-geometry criteria to be combined with the geometry type filters for the
   // secondary input. Allows for further restriction of the secondary data that makes it to output.
@@ -218,7 +227,7 @@ private:
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
 
-  bool _isNetworkConflate() const;
+  QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
 
   void _validateInputs(const QString& input1, const QString& input2);
 
@@ -252,8 +261,7 @@ private:
     const QString& debugFileName);
 
   void _setGlobalOpts(const QString& boundsStr);
-  void _parseConfigOpts(
-    const bool lenientBounds, const GeometryTypeCriterion::GeometryType& geometryType);
+  void _parseConfigOpts(const GeometryTypeCriterion::GeometryType& geometryType);
 
   OsmMapPtr _loadRefMap(const QString& input);
   OsmMapPtr _loadSecMap(const QString& input);
@@ -312,7 +320,7 @@ private:
    */
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 
-  void _conflate(OsmMapPtr& map, const bool lenientBounds);
+  void _conflate(OsmMapPtr& map);
   void _removeConflateReviews(OsmMapPtr& map);
   void _clean(OsmMapPtr& map);
 

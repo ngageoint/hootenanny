@@ -463,9 +463,9 @@ function isHighway(map, e)
 /**
  * Returns true if the specified element is a polygon element.
  */
-function isPolygon(e)
+function isPolygon(map, e)
 {
-  return hoot.OsmSchema.isPolygon(e);
+  return hoot.OsmSchema.isPolygon(map, e);
 }
 
 /**

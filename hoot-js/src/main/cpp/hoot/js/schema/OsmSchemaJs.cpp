@@ -271,9 +271,11 @@ void OsmSchemaJs::isPolygon(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, PolygonCriterion().isSatisfied(e)));
+  args.GetReturnValue().Set(
+    Boolean::New(current, PolygonCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
 void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)

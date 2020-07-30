@@ -29,8 +29,6 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/Way.h>
 
 namespace hoot
@@ -38,11 +36,23 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PolygonCriterion)
 
+PolygonCriterion::PolygonCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+  // Set this to allow any on poly child member to satisfy the crit.
+  _relationCrit.setAllowMixedChildren(true);
+  _relationCrit.setOsmMap(map.get());
+}
+
+void PolygonCriterion::setOsmMap(const OsmMap* map)
+{
+  _map = map->shared_from_this();
+  _relationCrit.setOsmMap(map);
+}
+
 bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-
-  bool result = false;
 
   if (e->getElementType() == ElementType::Node)
   {
@@ -50,10 +60,14 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   else if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
-    result |= relation->getType() == MetadataTags::RelationBuilding();
-    result |= relation->getType() == MetadataTags::RelationMultiPolygon();
-    result |= relation->getType() == MetadataTags::RelationSite();
+    // We use to define poly relations using a static list of relation types. Now, we look at the
+    // member contents instead. If any member is a poly, then we call it a poly relation.
+    const bool result = _relationCrit.isSatisfied(e);
+    if (result)
+    {
+      LOG_TRACE("Relation has polygon members; crit satisified.");
+    }
+    return result;
   }
   else if (e->getElementType() == ElementType::Way)
   {
@@ -67,8 +81,7 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
     }
   }
 
-  LOG_VART(result);
-  return result;
+  return false;
 }
 
 }

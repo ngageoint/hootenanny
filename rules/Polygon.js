@@ -42,11 +42,11 @@ exports.isMatchCandidate = function(map, e)
     return false;
   }
 
-  //hoot.trace("e: " + e.getId());
-  //hoot.trace("isPolygon(e): " + isPolygon(e));
-  //hoot.trace("isSpecificallyConflatable(map, e, exports.geometryType): " + isSpecificallyConflatable(map, e, exports.geometryType));
+  hoot.trace("e: " + e.getId());
+  hoot.trace("isPolygon: " + isPolygon(map, e));
+  hoot.trace("isSpecificallyConflatable: " + isSpecificallyConflatable(map, e, exports.geometryType));
 
-  return isPolygon(e) && !isSpecificallyConflatable(map, e, exports.geometryType);
+  return isPolygon(map, e) && !isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**

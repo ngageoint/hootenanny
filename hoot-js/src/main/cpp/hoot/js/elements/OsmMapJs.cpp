@@ -319,6 +319,7 @@ void OsmMapJs::isMemberOfRelationInCategory(const FunctionCallbackInfo<Value>& a
   const bool inRelationOfSpecifiedCategory =
     RelationMemberUtils::isMemberOfRelationInCategory(
       mapJs->getConstMap(), childId, schemaCategory);
+  LOG_VART(inRelationOfSpecifiedCategory);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedCategory));
 }

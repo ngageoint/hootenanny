@@ -205,7 +205,7 @@ GeometryTypeCriterion::GeometryType geometryTypeForElement(
   }
   else if (type == ElementType::Way)
   {
-    if (PolygonCriterion().isSatisfied(element))
+    if (PolygonCriterion(map).isSatisfied(element))
     {
       return GeometryTypeCriterion::GeometryType::Polygon;
     }

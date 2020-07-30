@@ -475,8 +475,11 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
   }
 
   const set<long>& ancestors = getElementToRelationMap()->getRelationByElement(eid);
+  LOG_VART(ancestors.size());
+  LOG_VART(_map.size());
   for (set<long>::const_iterator it = ancestors.begin(); it != ancestors.end(); ++it)
   {
+    LOG_VART(*it);
     if (!_map.containsRelation(*it))
     {
       LOG_INFO("Child element: " << eid);
@@ -487,12 +490,14 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
     // the map should contain all the relations returned by the index.
     assert(_map.containsRelation(*it));
     const ConstRelationPtr& r = _map.getRelation(*it);
-    if (r->contains(eid))
+    LOG_VART(r.get())
+    if (r && r->contains(eid))
     {
       result.insert(r->getElementId());
     }
   }
 
+  LOG_VART(result);
   return result;
 }
 

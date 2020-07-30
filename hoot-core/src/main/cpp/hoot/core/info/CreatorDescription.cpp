@@ -184,7 +184,7 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
     case PoiPolygonPOI:
       return ElementCriterionPtr(new PoiPolygonPoiCriterion());
     case Polygon:
-      return ElementCriterionPtr(new /*PoiPolygonPolyCriterion()*/PolygonCriterion());
+      return ElementCriterionPtr(new PolygonCriterion(map));
     case Area:
       return ElementCriterionPtr(new NonBuildingAreaCriterion(map));
     case Railway:

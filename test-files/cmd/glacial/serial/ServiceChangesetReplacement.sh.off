@@ -11,41 +11,54 @@ set -e
 # re-created when they should have been modified.
 
 # Input Parameters (see changeset-derive-replacement command doc for more detail):
-# 1 - test name
-# 2 - ref input file path
-# 3 - sec input file path
-# 4 - replacement aoi - what section is being replaced; e.g. "-180,-90,180,90
-# 5 - crop aoi - an initial aoi to crop both datasets down to in order to save processing time; use global bounds to bypass: "-180,-90,180,90
-# 6 - full replacement (not just overlapping features); true or false
-# 7 - strict bounds (how are bounds overlapping features handled?); true or false
-# 8 - geometry filters - what types of geometries are being replaced?; delimited ElementCriterion class name list; leave empty to bypass
-# 9 - replacement filters - what types of features are we removing?; delimited ElementCriterion class name list; leave empty to bypass
+# 1  - test name
+# 2  - ref input file path
+# 3  - sec input file path
+# 4  - replacement aoi - what section is being replaced; e.g. "-71.4698,42.4866,-71.4657,42.4902"
+# 5  - crop aoi - an initial aoi to crop both datasets down to in order to save processing time; use a global bounds to bypass cropping: 
+#                 "-180,-90,180,90"
+# 6  - full replacement (not just overlapping features); true or false
+# 7  - bounds interpretation - how are bounds overlapping features handled?; "lenient", "strict", or "hybrid"   
+# 8  - geometry filters - what types of geometries are being replaced?; delimited ElementCriterion class name list; leave empty to bypass
+# 9  - replacement filters - what types of features are we removing?; delimited ElementCriterion class name list; leave empty to bypass
 # 10 - chain replacement filters together (logical AND)?; true or false
-# 11 - replacement filter options - semicolon delimited list of config opts to be applied to the replacement filters only; leave empty to bypass
+# 11 - replacement filter options - semicolon delimited list of config opts to be applied to the replacement filters only; leave empty to 
+#                                   bypass
 # 12 - retainment filters - what types of features are we keeping?; delimited ElementCriterion class name list; leave empty to bypass
 # 13 - chain retainment filters together (logical AND)?; true or false
 # 14 - retainment filter options - semicolon delimited list of config opts to be applied to the retainment filters only; leave empty to bypass
 # 15 - file formats - what types of outputs do we want to generate?; semicolon delimited list: db, xml, and/or json
 # 16 - way snap tolerance (m) - how far can we snap ways to other ways?; leave empty to specify 0.0m 
 # 17 - way snap node tolerance (m) - how far can we snap way nodes directly to other way nodes?; leave empty to specify 0.0m 
-# 18 - disable conflation; true or false
+# 18 - disable conflation; true or false; conflates by default
+# 19 - disable cleaning; true or false; cleans by default; cleaning can't be disabled if conflation is enabled
+# 20 - clean ref database before use; true or false; allows for consecutive runs against the same ref database
+# 21 - extra params; anything extra params or config options you want to pass in for a custom config; applied to all commands
 
 # TODO: 
 # - consolidate the three replacement workflows into a single function
-# - add disable way snapping option
+# - add a disable way snapping option?
+
+# PROCESS INPUTS
 
 TEST_NAME=$1
 echo "test name: " $TEST_NAME
+
+# There may be multiple source files delimited with ';'. For multiple file inputs we'll run multiple consecutive replacements in a loop.
 SOURCE_FILE_1=$2
 echo "source file 1: " $SOURCE_FILE_1
+
+# This has to come before parsing SOURCE_FILE_2.
 CROP_AOI=$5
 echo "crop aoi: " $CROP_AOI
 CROP_OPTS="-D crop.bounds=$CROP_AOI"
-if [[ "$CROP_AOI" == "-180,-90,180,90" ]]; then # if a global crop bounds was passed in, then don't crop
+if [[ "$CROP_AOI" == "-180,-90,180,90" ]]; then # If a global crop bounds was passed in, then skip cropping.
   CROP_OPTS=""
 fi
+
 SOURCE_FILE_2=$3
-# If only one source file was passed in, we'll perturb it and use the original data for the secondary and the perturbed for the ref.
+# If the second source file input parameter was not passed in, we'll perturb the first input source file and use the original data for the 
+# secondary and the perturbed for the ref.
 if [ "$SOURCE_FILE_2" == "" ]; then
   SOURCE_FILE_2=$SOURCE_FILE_1
   if [ "$CROP_OPTS" == "" ]; then
@@ -69,8 +82,10 @@ fi
 echo "source file 2: " $SOURCE_FILE_2
 echo "REF_CONVERT_OPS: " $REF_CONVERT_OPS
 echo "SEC_CONVERT_OPS: " $SEC_CONVERT_OPS
+
 REPLACEMENT_AOI=$4
 echo "replacement aoi: " $REPLACEMENT_AOI
+
 FULL_REPLACEMENT=$6
 if [ "$FULL_REPLACEMENT" == "true" ]; then
   FULL_REPLACEMENT="--full-replacement"
@@ -78,13 +93,19 @@ else
   FULL_REPLACEMENT=""
 fi
 echo "full replacement: " $FULL_REPLACEMENT
-STRICT_BOUNDS=$7
-if [ "$STRICT_BOUNDS" == "true" ]; then
-  STRICT_BOUNDS="--strict-bounds"
+
+BOUNDS_INTEPRETATION=$7
+if [ "$BOUNDS_INTEPRETATION" == "lenient" ]; then
+  BOUNDS_INTEPRETATION=""
+elif [ "$BOUNDS_INTEPRETATION" == "strict" ]; then
+  BOUNDS_INTEPRETATION="--strict-bounds"
+elif [ "$BOUNDS_INTEPRETATION" == "hybrid" ]; then
+  BOUNDS_INTEPRETATION="--hybrid-bounds"
 else
-  STRICT_BOUNDS=""
+  BOUNDS_INTEPRETATION=""
 fi
-echo "strict bounds: " $STRICT_BOUNDS
+echo "bounds interpretation: " $BOUNDS_INTEPRETATION
+
 if [ "$8" == "" ]; then
   GEOMETRY_FILTERS=""
   TAG_ELEMENT_CRITERIA="hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion"
@@ -94,12 +115,14 @@ else
 fi 
 echo "geometry filters: " $GEOMETRY_FILTERS
 echo "tag element criteria: " $TAG_ELEMENT_CRITERIA
+
 if [ "$9" == "" ]; then
   REPLACEMENT_FILTERS=""
 else
   REPLACEMENT_FILTERS=" --replacement-filters "$9
 fi
 echo "replacement filters: " $REPLACEMENT_FILTERS
+
 CHAIN_REPLACEMENT_FILTERS=${10}
 if [ "$CHAIN_REPLACEMENT_FILTERS" == "true" ]; then
   CHAIN_REPLACEMENT_FILTERS="--chain-replacement-filters"
@@ -107,18 +130,21 @@ else
   CHAIN_REPLACEMENT_FILTERS=""
 fi
 echo "chain replacement filters: " $CHAIN_REPLACEMENT_FILTERS 
+
 if [ "${11}" == "" ]; then
   REPLACEMENT_FILTER_OPTIONS=""
 else
   REPLACEMENT_FILTER_OPTIONS=" --replacement-filter-options "${11}
 fi
 echo "replacement filter options: " $REPLACEMENT_FILTER_OPTIONS
+
 if [ "${12}" == "" ]; then
   RETAINMENT_FILTERS=""
 else
   RETAINMENT_FILTERS=" --retainment-filters "${12}
 fi
 echo "retainment filters: " $REPLACEMENT_FILTERS
+
 CHAIN_RETAINMENT_FILTERS=${13}
 if [ "$CHAIN_RETAINMENT_FILTERS" == "true" ]; then
   CHAIN_RETAINMENT_FILTERS="--chain-retainment-filters"
@@ -126,26 +152,31 @@ else
   CHAIN_RETAINMENT_FILTERS=""
 fi
 echo "chain retainment filters: " $CHAIN_RETAINMENT_FILTERS 
+
 if [ "${14}" == "" ]; then
   RETAINMENT_FILTER_OPTIONS=""
 else
   RETAINMENT_FILTER_OPTIONS=" --retainment-filter-options "${14}
 fi
 echo "retainment filter options: " $RETAINMENT_FILTER_OPTIONS
+
 SOURCE_FORMATS=${15}
 echo "source formats: " $SOURCE_FORMATS 
+
 if [ "${16}" == "" ]; then
   WAY_SNAP_TOLERANCE="0.0"
 else
   WAY_SNAP_TOLERANCE=${16}
 fi
 echo "way snap tolerance: " $WAY_SNAP_TOLERANCE 
+
 if [ "${17}" == "" ]; then
   EXISTING_WAY_NODE_TOLERANCE="0.0"
 else
   EXISTING_WAY_NODE_TOLERANCE=${17}
 fi
 echo "existing way node tolerance: " $EXISTING_WAY_NODE_TOLERANCE 
+
 DISABLE_CONFLATION=${18}
 if [ "$DISABLE_CONFLATION" == "true" ]; then
   DISABLE_CONFLATION="--disable-conflation"
@@ -153,19 +184,40 @@ else
   DISABLE_CONFLATION=""
 fi
 echo "disable conflation: " $DISABLE_CONFLATION
-CUSTOM_TAG_KEY="note"
-CUSTOM_TAG_VAL="Source"
+
+DISABLE_CLEANING=${19}
+if [ "$DISABLE_CLEANING" == "true" ]; then
+  DISABLE_CLEANING="--disable-cleaning"
+else
+  DISABLE_CLEANING=""
+fi
+echo "disable cleaning: " $DISABLE_CLEANING
+
+CLEAN_REF_DATABASE_BEFOREHAND=${20}
+if [ "$CLEAN_REF_DATABASE_BEFOREHAND" == "" ]; then
+  CLEAN_REF_DATABASE_BEFOREHAND="true"
+fi
+echo "clean ref database beforehand: " $CLEAN_REF_DATABASE_BEFOREHAND
+
+EXTRA_PARAMS=${21}
+echo "extra params: " $EXTRA_PARAMS
+
+# SET UP TEST FILES
 
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
 
+# INIT REF DATABASE VARS
+
 source conf/database/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 REF_DB_INPUT=$OSM_API_DB_URL
+
+# SET UP HOOT CONFIGURATION
 
 # Had to set changeset.max.size to a large number due to the fact with certain larger datasets (debugging data only being larger than we 
 # would include in actual tests) the osm api db bulk inserter would write multiple changesets for the input data and then the sql changeset 
@@ -176,19 +228,23 @@ REF_DB_INPUT=$OSM_API_DB_URL
 # convert.bounding.box.remove.missing.elements=false ensures that we don't drop any missing elements except when writing out our debug maps.
 
 LOG_LEVEL="--warn"
-GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounding.box.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=true -D element.hash.visitor.non.metadata.ignore.keys=note -D log.class.filter= "
+GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounding.box.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=true -D element.hash.visitor.non.metadata.ignore.keys=note $EXTRA_PARAMS -D log.class.filter= "
 # Holding onto missing child element refs does not work yet with cropping, so disable it when cropping is specified...bug issue creation 
 # pending.
 if [ "$CROP_OPTS" == "" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D map.reader.add.child.refs.when.missing=true"
 fi
-DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999"
-PERTY_OPTS="-D random.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE "
+DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999 $EXTRA_PARAMS"
+PERTY_OPTS="-D random.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 $EXTRA_PARAMS -D perty.ops= "
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE $EXTRA_PARAMS "
+CUSTOM_TAG_KEY="note"
+CUSTOM_TAG_VAL="Source"
 
 # DB SOURCE WORKFLOW
 
 if [[ $SOURCE_FORMATS == *"db"* ]]; then
+
+  # SET UP PER TEST HOOT VARS
 
   HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
   SEC_DB_INPUT="$HOOT_DB_URL/$TEST_NAME-sec"
@@ -205,7 +261,9 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
     echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing to an osm api db (contains features to be replaced)..."
   fi
   echo ""
-  scripts/database/CleanAndInitializeOsmApiDb.sh
+  if [ "$CLEAN_REF_DATABASE_BEFOREHAND" == "true" ]; then
+    scripts/database/CleanAndInitializeOsmApiDb.sh
+  fi
   # Note that we're only throwing out source ids here b/c we have some ref data in the tests that happens to have negative IDs and we want 
   # them to be positive to better resemble OSM API data. Generally, you'd want reader.use.data.source.ids=true here. Same applies to the 
   # other workflows below.
@@ -226,7 +284,7 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   echo ""
   echo "Deriving a changeset between the osm api db and the hoot api db layers over: $REPLACEMENT_AOI, to file: $CHANGESET_DB that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
+  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION $DISABLE_CLEANING
 
   # CHANGESET APPLICATION
 
@@ -234,6 +292,9 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   echo "Applying the changeset: $CHANGESET_DB to the reference data in the osm api db..."
   echo ""
   hoot changeset-apply $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-apply-db.osm $CHANGESET_DB $OSM_API_DB_URL
+
+  # CHECK THE RESULTS
+
   echo ""
   echo "Reading the entire reference dataset out of the osm api db to: $OUT_DB for verification..."
   echo ""
@@ -252,6 +313,8 @@ fi
 # XML SOURCE WORKFLOW
 
 if [[ $SOURCE_FORMATS == *"xml"* ]]; then
+
+  # SET UP PER TEST HOOT VARS
 
   if [ "$PERTURBING_REF" == "true" ]; then
     REF_XML_INPUT=$OUT_DIR/ref-perturbed-original.osm
@@ -272,7 +335,9 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
     echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing it to an osm api db (contains features to be replaced)..."
   fi
   echo ""
-  scripts/database/CleanAndInitializeOsmApiDb.sh
+  if [ "$CLEAN_REF_DATABASE_BEFOREHAND" == "true" ]; then
+    scripts/database/CleanAndInitializeOsmApiDb.sh
+  fi
   hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
   # To get a test more accurate to the production environment, use this instead of the line above.
   #hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm $SOURCE_FILE_1 $REF_DB_INPUT
@@ -298,7 +363,7 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_XML that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
+  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION $DISABLE_CLEANING
 
   # CHANGESET APPLICATION
 
@@ -306,6 +371,9 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo "Applying the changeset: $CHANGESET_XML to the reference data in the osm api db..."
   echo ""
   hoot changeset-apply $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-apply-xml.osm $CHANGESET_XML $OSM_API_DB_URL
+
+  # CHECK THE RESULTS
+
   echo ""
   echo "Reading the entire reference dataset out of the osm api db to: $OUT_XML for verification..."
   echo ""
@@ -319,6 +387,8 @@ fi
 # JSON SOURCE WORKFLOW
 
 if [[ $SOURCE_FORMATS == *"json"* ]]; then
+
+  # SET UP PER TEST HOOT VARS
 
   if [ "$PERTURBING_REF" == "true" ]; then
     REF_JSON_INPUT=$OUT_DIR/ref-perturbed-original.json
@@ -339,7 +409,9 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
     echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing it to an osm api db (contains features to be replaced)..."
   fi
   echo ""
-  scripts/database/CleanAndInitializeOsmApiDb.sh
+  if [ "$CLEAN_REF_DATABASE_BEFOREHAND" == "true" ]; then
+    scripts/database/CleanAndInitializeOsmApiDb.sh
+  fi
   hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-json.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
   echo ""
   echo "Writing the reference dataset from the osm api db to a json file: $REF_JSON_INPUT (contains features to be replaced)..."
@@ -359,7 +431,7 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_JSON that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION
+  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION $DISABLE_CLEANING
 
   # CHANGESET APPLICATION
 
@@ -367,6 +439,9 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   echo "Applying the changeset: $CHANGESET_JSON to the reference data in the osm api db..."
   echo ""
   hoot changeset-apply $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-apply-json.osm $CHANGESET_JSON $OSM_API_DB_URL
+
+  # CHECK THE RESULTS
+
   echo ""
   echo "Reading the entire reference dataset out of the osm api db to: $OUT_JSON for verification..."
   echo ""

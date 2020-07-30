@@ -1113,8 +1113,8 @@ ElementPtr OsmXmlReader::readNextElement()
   }
   else
   {
-    //must be a deleted element
-    LOG_TRACE("Read empty element.");
+    // must be a deleted element
+    LOG_TRACE("Read empty element. Does your input data unnecessarily contain 'action=delete'?");
   }
   return _element;
 }
