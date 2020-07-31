@@ -412,8 +412,8 @@ void ChangesetReplacementCreator::create(
   QList<OsmMapPtr> refMaps;
   QList<OsmMapPtr> conflatedMaps;
   int passCtr = 1;
-  _rawRefMap.reset();
-  _rawSecMap.reset();
+  //_rawRefMap.reset();
+  //_rawSecMap.reset();
   for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
          refFilters.begin(); itr != refFilters.end(); ++itr)
   {
@@ -471,8 +471,8 @@ void ChangesetReplacementCreator::create(
 
     passCtr++;
   }
-  _rawRefMap.reset();
-  _rawSecMap.reset();
+  //_rawRefMap.reset();
+  //_rawSecMap.reset();
 
   LOG_VART(refMaps.size());
   LOG_VART(conflatedMaps.size());
@@ -534,12 +534,11 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // DATA LOAD AND INITIAL PREP
 
-  // load the ref dataset and crop to the specified aoi
-  if (!_rawRefMap)
-  {
-    _rawRefMap = _loadRefMap(input1); // cache b/c could be an expensive read to repeat
-  }
-  refMap.reset(new OsmMap(_rawRefMap)); // copy over to keep raw map unmodified for later use
+  // load the ref dataset and crop to the specified aoi; can't cache here b/c the map is cropped
+  // during reading differently based on the geometry type
+  // TODO: we could maybe load the full map the first time and then crop the raw map only based
+  // on geometry type each time, rather than reload it from the source
+  refMap = _loadRefMap(input1);
   MemoryUsageChecker::getInstance().check();
 
   // always remove any existing missing child tags
@@ -575,12 +574,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     refMap, refFeatureFilter, conf(),
     "ref-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
 
-  // load the sec dataset and crop to the specified aoi
-  if (!_rawSecMap)
-  {
-    _rawSecMap = _loadSecMap(input2); // cache b/c could be an expensive read to repeat
-  }
-  OsmMapPtr secMap(new OsmMap(_rawSecMap)); // copy over to keep raw map unmodified for later use
+  // load the sec dataset and crop to the specified aoi; see note for ref map load
+  OsmMapPtr secMap = _loadSecMap(input2);
   MemoryUsageChecker::getInstance().check();
 
   secMap->visitRw(missingChildTagRemover);
@@ -1762,6 +1757,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
   cropper.setRemoveMissingElements(false);
+  // TODO: should removing superfluous features be suppressed here?
   //LOG_STATUS("\t" << cropper.getInitStatusMessage());
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());

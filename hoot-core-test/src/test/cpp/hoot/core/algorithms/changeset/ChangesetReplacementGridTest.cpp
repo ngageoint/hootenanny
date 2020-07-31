@@ -82,25 +82,34 @@ public:
     _opTimer.start();
     _subTaskTimer.start();
 
-    if (!CROP_INPUT_BOUNDS.isEmpty())
+    try
     {
-      _cropInputs();
+      if (!CROP_INPUT_BOUNDS.isEmpty())
+      {
+        _cropInputs();
+      }
+
+      _initDbs();
+      _loadDataToReplaceDb();
+
+      int numTaskGridCells = 0;
+      const std::vector<std::vector<geos::geom::Envelope>> taskGrid = _calcTaskGrid(numTaskGridCells);
+
+      _replaceData(taskGrid, numTaskGridCells);
+      _getUpdatedData();
+
+      _cleanup();
+
+      LOG_STATUS(
+        "Entire task grid cell replacement operation finished in: " <<
+        StringUtils::millisecondsToDhms(_opTimer.elapsed()));
     }
-
-    _initDbs();
-    _loadDataToReplaceDb();
-
-    int numTaskGridCells = 0;
-    const std::vector<std::vector<geos::geom::Envelope>> taskGrid = _calcTaskGrid(numTaskGridCells);
-
-    _replaceData(taskGrid, numTaskGridCells);
-    _getUpdatedData();
-
-    _cleanup();
-
-    LOG_STATUS(
-      "Entire task grid cell replaced operation finished in: " <<
-      StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+    catch (const HootException& e)
+    {
+      LOG_ERROR(
+        "Entire task grid cell replacement operation failed in: " <<
+        StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
+    }
   }
 
 private:
