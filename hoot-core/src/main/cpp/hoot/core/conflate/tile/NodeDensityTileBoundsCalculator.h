@@ -267,8 +267,6 @@ private:
   long _sumPixels(const PixelBox& pb, cv::Mat& r);
   long _sumPixels(const PixelBox& pb);
 
-  void _calculateUniformSolution(const ConstOsmMapPtr& map);
-
   geos::geom::Envelope _toEnvelope(const PixelBox& pb);
 
   void _checkForTimeout();

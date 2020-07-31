@@ -259,6 +259,7 @@ private:
     for (int i = 0; i < inputs.size(); i++)
     {
       const QString input = inputs.at(i);
+      // has to be loaded with Unknown1 in order for the calculation to work
       std::shared_ptr<OsmMapReader> reader =
         OsmMapReaderFactory::createReader(input, true, Status::Unknown1);
 
@@ -275,10 +276,10 @@ private:
         std::dynamic_pointer_cast<ApiDbReader>(reader);
       if (apiDbReader)
       {
-        //the tiles calculation is only concerned with nodes, and the only readers capable of
-        //filtering down to nodes up front right now are the api db readers; more importantly,
-        //setting this to true also prevents any features from being returned outside of
-        //convert.bounding.box, if it was specified (ways partially inside the bounds, etc.)
+        // The tiles calculation is only concerned with nodes, and the only readers capable of
+        // filtering down to nodes up front right now are the api db readers. More importantly,
+        // setting this to true also prevents any features from being returned outside of
+        // convert.bounding.box, if it was specified (ways partially inside the bounds, etc.)
         apiDbReader->setReturnNodesOnly(true);
       }
 

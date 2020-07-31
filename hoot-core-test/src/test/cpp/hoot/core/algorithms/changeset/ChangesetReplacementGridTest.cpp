@@ -71,7 +71,7 @@ public:
     //const QString replacementDataUrl = ServicesDbTestUtils::getDbModifyUrl(testName).toString();
     QString replacementDataFile = "OSMData.osm";
     const QString cropInputBounds = ""/*-115.1541,36.2614,-115.1336,36.2775"*/;
-    const QString replacementBounds = "-115.3952,35.8639,-114.8036,36.5296";
+    const QString replacementBounds = "-115.3528,36.0919,-114.9817,36.3447";
 
     // config opts
     conf().set(ConfigOptions::getOsmapidbBulkInserterReserveRecordIdsBeforeWritingDataKey(), true);
@@ -152,7 +152,7 @@ public:
     OsmMapReaderFactory::read(map, rootDir + "/" + dataToReplaceFile, true, Status::Unknown1);
     OsmMapWriterFactory::write(map, dataToReplaceUrl);
     LOG_STATUS(
-      "Elements being replaced: " << StringUtils::formatLargeNumber(map->size()));
+      "Total elements in data being replaced: " << StringUtils::formatLargeNumber(map->size()));
     LOG_STATUS(
       "Data to replace loaded in: " <<
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
@@ -162,7 +162,7 @@ public:
     // data
 //    LOG_STATUS("Loading the replacement data db...");
 //    map.reset(new OsmMap());
-//    OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown2);
+//    OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown1);
 //    OsmMapWriterFactory::write(map, replacementDataUrl);
 //    LOG_STATUS(
 //      "Replacing elements: " << StringUtils::formatLargeNumber(map->size()));
@@ -181,31 +181,22 @@ public:
 
     LOG_STATUS("Reading the replacement data for task grid cell calculation...");
     map.reset(new OsmMap());
+    // changeset derive will overwrite these as needed
     conf().set(ConfigOptions::getConvertBoundingBoxKey(), replacementBounds);
-    OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown2);
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
-    OsmMapWriterFactory::writeDebugMap(map, "task-grid-calc-map");
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+    // must be unknown1 for node density to work
+    OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown1);
+    //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+    //OsmMapWriterFactory::writeDebugMap(map, "task-grid-calc-map");
+    //conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
     LOG_STATUS("Replacement elements: " << StringUtils::formatLargeNumber(map->size()));
     LOG_STATUS(
       "Replacement data read in: " <<
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
     subTaskTimer.restart();
-
-    // TODO: this is wrong
-//    LOG_STATUS("Reading the data to replace for task grid cell calculation...");
-//    map.reset(new OsmMap());
-//    conf().set(ConfigOptions::getConvertBoundingBoxKey(), replacementBounds);
-//    OsmMapReaderFactory::read(map, dataToReplaceUrl, true, Status::Unknown1);
-//    conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
-//    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
-//    OsmMapWriterFactory::writeDebugMap(map, "task-grid-calc-map");
-//    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
-//    LOG_STATUS(
-//      "Data to replace read in: " <<
-//      StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
-//    subTaskTimer.restart();
 
     LOG_STATUS("Calculating task grid cells...");
     NodeDensityTileBoundsCalculator boundsCalc;
@@ -240,6 +231,7 @@ public:
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
     subTaskTimer.restart();
 
+    // recommended C&R production config
     ChangesetReplacementCreator changesetCreator(true, "", dataToReplaceUrl);
     changesetCreator.setFullReplacement(true);
     changesetCreator.setBoundsInterpretation(
