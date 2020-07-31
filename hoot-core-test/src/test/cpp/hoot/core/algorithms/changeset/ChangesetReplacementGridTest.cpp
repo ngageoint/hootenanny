@@ -279,7 +279,7 @@ public:
           "Applying changeset: " << StringUtils::formatLargeNumber(boundsCtr) << " / " <<
           StringUtils::formatLargeNumber(boundsCalc.getTileCount()) << ": " << changesetId <<
           " over bounds: " << boundsStr << " from file: " << changesetFile << "...");
-        changesetApplier.write(changesetFile);
+        changesetApplier.write(QFile(changesetFile));
         LOG_STATUS(
           "Changeset applied in: " <<
           StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
