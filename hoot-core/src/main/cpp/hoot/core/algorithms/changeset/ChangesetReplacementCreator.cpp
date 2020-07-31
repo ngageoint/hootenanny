@@ -390,18 +390,9 @@ void ChangesetReplacementCreator::create(
 {
   // INPUT VALIDATION AND SETUP
 
-  _validateInputs(input1, input2);
+  _validateInputs(input1, input2, output);
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _setGlobalOpts(boundsStr);
-  QFile outputFile(output);
-  if (outputFile.exists())
-  {
-    if (!outputFile.remove())
-    {
-      LOG_ERROR("Unable to remove changeset output file: " << output);
-    }
-  }
-
   _printJobDescription(input1, input2, boundsStr, output);
 
   // If a retainment filter was specified, we'll AND it together with each geometry type filter to
@@ -480,6 +471,8 @@ void ChangesetReplacementCreator::create(
 
     passCtr++;
   }
+  _rawRefMap.reset();
+  _rawSecMap.reset();
 
   LOG_VART(refMaps.size());
   LOG_VART(conflatedMaps.size());
@@ -780,7 +773,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VART(conflatedMap->getElementCount());
 }
 
-void ChangesetReplacementCreator::_validateInputs(const QString& input1, const QString& input2)
+void ChangesetReplacementCreator::_validateInputs(const QString& input1, const QString& input2,
+                                                  const QString& output)
 {
   // Fail if the reader that supports either input doesn't implement Boundable.
   std::shared_ptr<Boundable> boundable =
@@ -805,6 +799,15 @@ void ChangesetReplacementCreator::_validateInputs(const QString& input1, const Q
   {
     throw IllegalArgumentException(
       "GeoJSON inputs are not supported by replacement changeset derivation.");
+  }
+
+  QFile outputFile(output);
+  if (outputFile.exists())
+  {
+    if (!outputFile.remove())
+    {
+      throw HootException("Unable to remove changeset output file: " + output);
+    }
   }
 
   LOG_VARD(_fullReplacement);

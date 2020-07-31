@@ -352,6 +352,8 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
 
 void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 {
+  // TODO: This proves very slow for AOI's with a lot of data. Need something better.
+
   long boundedNodeCount = 0;
   long boundedWayCount = 0;
   long boundedRelationCount = 0;

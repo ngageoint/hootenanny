@@ -221,6 +221,7 @@ private:
   // controls cropping
   BoundsOptions _boundsOpts;
 
+  // TODO
   OsmMapPtr _rawRefMap;
   OsmMapPtr _rawSecMap;
 
@@ -232,7 +233,7 @@ private:
 
   QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
 
-  void _validateInputs(const QString& input1, const QString& input2);
+  void _validateInputs(const QString& input1, const QString& input2, const QString& output);
 
   void _printJobDescription(
     const QString& input1, const QString& input2, const QString& bounds,
