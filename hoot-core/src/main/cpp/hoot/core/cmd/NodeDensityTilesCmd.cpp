@@ -259,7 +259,7 @@ private:
     for (int i = 0; i < inputs.size(); i++)
     {
       const QString input = inputs.at(i);
-      // has to be loaded with Unknown1 in order for the calculation to work
+      // IMPORTANT: has to be loaded as Unknown1 in order for the calculation to work
       std::shared_ptr<OsmMapReader> reader =
         OsmMapReaderFactory::createReader(input, true, Status::Unknown1);
 

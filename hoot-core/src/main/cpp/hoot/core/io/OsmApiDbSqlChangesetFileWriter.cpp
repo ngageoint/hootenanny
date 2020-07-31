@@ -380,9 +380,11 @@ void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr elem
   const long currentVersion = changeElement->getVersion();
   if (currentVersion < 1)
   {
+    // TODO: re-enable; this is not good
     throw HootException(
       "Elements being deleted in an .osc.sql changeset must always have a version greater than one: " +
       element->getElementId().toString());
+    //currentVersion = 1;
   }
   const long newVersion = currentVersion + 1;
 

@@ -307,11 +307,11 @@ QString ChangesetReplacementCreator::_boundsInterpretationToString(
   }
 }
 
-QString ChangesetReplacementCreator::_getJobDescription(
+void ChangesetReplacementCreator::_printJobDescription(
   const QString& input1, const QString& input2, const QString& bounds,
   const QString& output) const
 {
-  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax() * 2;
   QString boundsStr = "Bounds calculation is " +
     _boundsInterpretationToString(_boundsInterpretation);
   const QString replacementTypeStr = _fullReplacement ? "full" : "overlapping only";
@@ -363,6 +363,9 @@ QString ChangesetReplacementCreator::_getJobDescription(
   str += "\nBeing replaced: ..." + input1.right(maxFilePrintLength);
   str += "\nReplacing with ..." + input2.right(maxFilePrintLength);
   str += "\nOutput Changeset: ..." + output.right(maxFilePrintLength);
+  LOG_STATUS(str);
+
+  str = "";
   str += "\nBounds interpretation: " + bounds + "; " + boundsStr;
   str += "\nReplacement is: " + replacementTypeStr;
   str += "\nGeometry filters: " + geometryFiltersStr;
@@ -372,7 +375,7 @@ QString ChangesetReplacementCreator::_getJobDescription(
   str += "\nCleaning: " + cleaningStr;
   str += "\nWay snapping: " + waySnappingStr;
   str += "\nOut of bounds way handling: " + oobWayHandlingStr;
-  return str;
+  LOG_DEBUG(str);
 }
 
 void ChangesetReplacementCreator::setRetainmentFilterOptions(const QStringList& optionKvps)
@@ -399,7 +402,7 @@ void ChangesetReplacementCreator::create(
     }
   }
 
-  LOG_DEBUG(_getJobDescription(input1, input2, boundsStr, output));
+  _printJobDescription(input1, input2, boundsStr, output);
 
   // If a retainment filter was specified, we'll AND it together with each geometry type filter to
   // further restrict what reference data gets replaced in the final changeset.

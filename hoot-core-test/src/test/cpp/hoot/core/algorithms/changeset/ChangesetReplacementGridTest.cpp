@@ -68,7 +68,8 @@ public:
     OsmMapPtr map;
     const QString dataToReplaceUrl = ServicesDbTestUtils::getOsmApiDbUrl().toString();
     QString dataToReplaceFile = "NOMEData.osm";
-    //const QString replacementDataUrl = ServicesDbTestUtils::getDbModifyUrl(testName).toString();
+    const QString replacementDataUrl = ServicesDbTestUtils::getDbModifyUrl(testName).toString();
+    LOG_VART(replacementDataUrl);
     QString replacementDataFile = "OSMData.osm";
     const QString cropInputBounds = ""/*-115.1541,36.2614,-115.1336,36.2775"*/;
     const QString replacementBounds = "-115.3528,36.0919,-114.9817,36.3447";
@@ -91,6 +92,7 @@ public:
     conf().set(ConfigOptions::getChangesetMaxSizeKey(), 999999);
     conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 0.5);
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), rootDir + "/debug.osm");
 
     QElapsedTimer opTimer;
@@ -104,7 +106,7 @@ public:
       cropper.setRemoveMissingElements(false);
       cropper.setRemoveSuperflousFeatures(false);
 
-      LOG_STATUS("Cropping data to replace...");
+      LOG_STATUS("Cropping data to replace from: " << rootDir << "/" << dataToReplaceFile << "...");
       map.reset(new OsmMap());
       OsmMapReaderFactory::read(map, rootDir + "/" + dataToReplaceFile, true, Status::Unknown1);
       LOG_STATUS(
@@ -118,7 +120,8 @@ public:
         StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
       subTaskTimer.restart();
 
-      LOG_STATUS("Cropping replacement data...");
+      LOG_STATUS(
+        "Cropping replacement data from: " << rootDir << "/" << replacementDataFile << "...");
       map.reset(new OsmMap());
       OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown2);
       LOG_STATUS(
@@ -133,7 +136,7 @@ public:
       subTaskTimer.restart();
     }
 
-    LOG_STATUS("Initializing the data to replace db...");
+    LOG_STATUS("Initializing the data to replace db at: " << dataToReplaceUrl << "...");
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     ApiDb::execSqlFile(dataToReplaceUrl, "test-files/servicesdb/users.sql");
     map.reset(new OsmMap());
@@ -147,7 +150,9 @@ public:
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
     subTaskTimer.restart();
 
-    LOG_STATUS("Loading the data to replace db...");
+    LOG_STATUS(
+      "Loading the data to replace db from: " << rootDir << "/" << dataToReplaceFile << " to: " <<
+      dataToReplaceUrl << "...");
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(map, rootDir + "/" + dataToReplaceFile, true, Status::Unknown1);
     OsmMapWriterFactory::write(map, dataToReplaceUrl);
@@ -158,50 +163,52 @@ public:
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
     subTaskTimer.restart();
 
-    // TODO: Do we need the replacement data in a db at all?; the crop query is really slow for this
-    // data
-//    LOG_STATUS("Loading the replacement data db...");
-//    map.reset(new OsmMap());
-//    OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown1);
-//    OsmMapWriterFactory::write(map, replacementDataUrl);
-//    LOG_STATUS(
-//      "Replacing elements: " << StringUtils::formatLargeNumber(map->size()));
-//    LOG_STATUS(
-//      "Replacement data loaded in: " <<
-//      StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
-//    subTaskTimer.restart();
-
-//    LOG_STATUS("Reading the replacement data out of the db for task grid cell calculation...");
-//    map.reset(new OsmMap());
-//    OsmMapReaderFactory::read(map, replacementDataUrl, true, Status::Unknown2);
-//    LOG_STATUS(
-//      "Replacement data read in: " <<
-//      StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
-//    subTaskTimer.restart();
-
-    LOG_STATUS("Reading the replacement data for task grid cell calculation...");
+    LOG_STATUS(
+      "Loading the replacement data db from: " << rootDir << "/" << replacementDataFile <<
+      " to: " << replacementDataUrl << "...");
     map.reset(new OsmMap());
-    // changeset derive will overwrite these as needed
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), replacementBounds);
-    conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
-    conf().set(
-      ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
-    conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
-    // must be unknown1 for node density to work
-    OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown1);
-    //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
-    //OsmMapWriterFactory::writeDebugMap(map, "task-grid-calc-map");
-    //conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
-    LOG_STATUS("Replacement elements: " << StringUtils::formatLargeNumber(map->size()));
+    OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown2);
+    OsmMapWriterFactory::write(map, replacementDataUrl);
+    LOG_STATUS(
+      "Replacing elements: " << StringUtils::formatLargeNumber(map->size()));
+    LOG_STATUS(
+      "Replacement data loaded in: " <<
+      StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
+    subTaskTimer.restart();
+
+    LOG_STATUS(
+      "Reading the replacement data out of the db for task grid cell calculation from: " <<
+      replacementDataUrl << "...");
+    map.reset(new OsmMap());
+    // IMPORTANT: must be unknown1 for node density to work
+    OsmMapReaderFactory::read(map, replacementDataUrl, true, Status::Unknown1);
     LOG_STATUS(
       "Replacement data read in: " <<
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
     subTaskTimer.restart();
 
-    LOG_STATUS("Calculating task grid cells...");
+//    LOG_STATUS("Reading the replacement data for task grid cell calculation...");
+//    map.reset(new OsmMap());
+//    // changeset derive will overwrite these as needed
+//    conf().set(ConfigOptions::getConvertBoundingBoxKey(), replacementBounds);
+//    conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
+//    conf().set(
+//      ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
+//    conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+//    // IMPORTANT: must be unknown1 for node density to work
+//    OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown1);
+//    LOG_STATUS("Replacement elements: " << StringUtils::formatLargeNumber(map->size()));
+//    LOG_STATUS(
+//      "Replacement data read in: " <<
+//      StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
+//    subTaskTimer.restart();
+
+    const QString taskGridCellsFile = rootDir + "/bounds.osm";
+    LOG_STATUS(
+      "Calculating task grid cells for replacement data to: " << taskGridCellsFile << "...");
     NodeDensityTileBoundsCalculator boundsCalc;
     boundsCalc.setPixelSize(0.001);
-    boundsCalc.setMaxNodesPerTile(50000);
+    boundsCalc.setMaxNodesPerTile(100000);
     boundsCalc.setMaxNumTries(3);
     boundsCalc.setMaxTimePerAttempt(300);
     boundsCalc.setPixelSizeRetryReductionFactor(10);
@@ -212,7 +219,7 @@ public:
     const std::vector<std::vector<geos::geom::Envelope>> taskGrid = boundsCalc.getTiles();
     LOG_VAR(taskGrid.size());
     const std::vector<std::vector<long>> nodeCounts = boundsCalc.getNodeCounts();
-    TileBoundsWriter::writeTilesToOsm(taskGrid, nodeCounts, rootDir + "/bounds.osm");
+    TileBoundsWriter::writeTilesToOsm(taskGrid, nodeCounts, taskGridCellsFile);
     LOG_STATUS(
       "Calculated " << StringUtils::formatLargeNumber(boundsCalc.getTileCount()) <<
       " task grid cells.");
@@ -252,15 +259,15 @@ public:
         const QString changesetId = QString::number((int)tx) + "-" + QString::number((int)ty);
         const geos::geom::Envelope bounds = taskGrid[tx][ty];
         const QString boundsStr = GeometryUtils::toString(bounds);
-        const QString changesetFile = rootDir + "changeset-" + changesetId + ".osc.sql";
+        const QString changesetFile = rootDir + "/changeset-" + changesetId + ".osc.sql";
 
         // derive the difference between the replacement data and the being replaced
         LOG_STATUS(
           "Deriving changeset " << StringUtils::formatLargeNumber(boundsCtr) << " / " <<
           StringUtils::formatLargeNumber(boundsCalc.getTileCount()) << ": " << changesetId <<
-          " over bounds: " << boundsStr << "...");
+          " over bounds: " << boundsStr << " to file: " << changesetFile << "...");
         changesetCreator.create(
-          dataToReplaceUrl, /*replacementDataUrl*/rootDir + "/" + replacementDataFile, bounds,
+          dataToReplaceUrl, replacementDataUrl/*rootDir + "/" + replacementDataFile*/, bounds,
           changesetFile);
         LOG_STATUS(
           "Changeset derived in: " <<
@@ -271,7 +278,7 @@ public:
         LOG_STATUS(
           "Applying changeset: " << StringUtils::formatLargeNumber(boundsCtr) << " / " <<
           StringUtils::formatLargeNumber(boundsCalc.getTileCount()) << ": " << changesetId <<
-          " over bounds: " << boundsStr << "...");
+          " over bounds: " << boundsStr << " from file: " << changesetFile << "...");
         changesetApplier.write(changesetFile);
         LOG_STATUS(
           "Changeset applied in: " <<
@@ -282,7 +289,7 @@ public:
       }
     }
 
-    LOG_STATUS("Reading the modified data...");
+    LOG_STATUS("Reading the modified data out of: " << dataToReplaceUrl << "...");
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(map, dataToReplaceUrl, true, Status::Unknown1);
     LOG_STATUS("Modified data size: " << StringUtils::formatLargeNumber(map->size()));
@@ -292,20 +299,20 @@ public:
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
     subTaskTimer.restart();
 
-    LOG_STATUS("Cleaning up the modified db...");
+    LOG_STATUS("Cleaning up the modified db at: " << dataToReplaceUrl << "...");
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     LOG_STATUS(
       "Modified db cleaned in: " <<
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
     subTaskTimer.restart();
 
-//    LOG_STATUS("Cleaning up the replacement data db...");
-//    ServicesDbTestUtils::deleteUser(userEmail);
-//    HootApiDbWriter().deleteMap(testName);
-//    LOG_STATUS(
-//      "Replacement data cleaned in: " <<
-//      StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
-//    subTaskTimer.restart();
+    LOG_STATUS("Cleaning up the replacement data db at: " << replacementDataUrl << "...");
+    ServicesDbTestUtils::deleteUser(userEmail);
+    HootApiDbWriter().deleteMap(testName);
+    LOG_STATUS(
+      "Replacement data cleaned in: " <<
+      StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
+    subTaskTimer.restart();
 
     LOG_STATUS(
       "Entire task grid cell replaced operation finished in: " <<

@@ -68,6 +68,7 @@ void OsmApiDbSqlChangesetApplier::_initChangesetStats()
 void OsmApiDbSqlChangesetApplier::write(const QString& sql)
 {
   LOG_DEBUG("Executing changeset SQL queries against OSM API database...");
+  LOG_VARD(sql.length());
 
   _db.transaction();
 
@@ -75,11 +76,13 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
   QString elementSqlStatements = "";
 
   const QStringList sqlParts = sql.split(";");
+  LOG_VARD(sqlParts.length());
 
   if (!sqlParts[0].toUpper().startsWith("INSERT INTO CHANGESETS"))
   {
     throw HootException(
-      "The first SQL statement in a changeset SQL file must create a changeset.");
+      "The first SQL statement in a changeset SQL file must create a changeset. Found: " +
+      sqlParts[0].left(25));
   }
 
   for (int i = 0; i < sqlParts.size(); i++)

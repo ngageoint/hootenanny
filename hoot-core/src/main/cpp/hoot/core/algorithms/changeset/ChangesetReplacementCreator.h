@@ -234,7 +234,7 @@ private:
 
   void _validateInputs(const QString& input1, const QString& input2);
 
-  QString _getJobDescription(
+  void _printJobDescription(
     const QString& input1, const QString& input2, const QString& bounds,
     const QString& output) const;
 
