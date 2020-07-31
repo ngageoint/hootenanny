@@ -34,7 +34,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/StringUtils.h>
-
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 // Qt
 #include <QImage>
 #include <QPainter>
@@ -63,9 +63,9 @@ _tileCount(0)
 
 void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
 {  
-  if (map->getNodeCount() == 0 || _maxNodesPerTile == 0)
+  if (!map || map->getNodeCount() == 0 || _maxNodesPerTile == 0)
   {
-    return;
+    throw IllegalArgumentException("TODO");
   }
 
   LOG_VARD(map->getNodeCount());
@@ -101,11 +101,21 @@ void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
     while (_tiles.empty() && tryCtr < _maxNumTries)
     {
       tryCtr++;
-      LOG_STATUS(
-        "Running node density tiles calculation attempt " << tryCtr << " / " <<
-         _maxNumTries << " with pixel size: " << _pixelSize << ", max allowed nodes: " <<
-         StringUtils::formatLargeNumber(_maxNodesPerTile) << ", and total input node size: " <<
-         StringUtils::formatLargeNumber(map->getNodeCount()) << "...");
+
+      QString msg =
+        "Running node density tiles calculation attempt " + QString::number(tryCtr) + " / " +
+         QString::number(_maxNumTries) << " with pixel size: " << QString::number(_pixelSize) +
+         ", max allowed nodes: " + StringUtils::formatLargeNumber(_maxNodesPerTile) +
+         ", total input node size: " + StringUtils::formatLargeNumber(map->getNodeCount());
+      if (_maxTimePerAttempt == -1)
+      {
+        msg += ", and with no timeout...";
+      }
+      else
+      {
+        msg += ", and with a timeout of " + QString::number(_maxTimePerAttempt) + " seconds...";
+      }
+      LOG_STATUS(msg);
 
       cv::Mat r1, r2;
       _renderImage(map, r1, r2);
@@ -121,7 +131,7 @@ void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
       {
         QString msg =
           "Tile calculation attempt " + QString::number(tryCtr) + " / " +
-          QString::number(_maxNumTries) + " failed.";
+          QString::number(_maxNumTries) + " failed: " + e.getWhat();
         if (tryCtr == _maxNumTries)
         {
           //if (_failWithNoSolution)
@@ -129,11 +139,11 @@ void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
             msg += " Aborting calculation.";
             LOG_ERROR(msg);
             throw e;
-          //}
-          //else
-          //{
-            //_calculateUniformSolution();
-          //}
+//          }
+//          else
+//          {
+//            _calculateUniformSolution(map);
+//          }
         }
         else
         {
@@ -153,11 +163,25 @@ void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
   }
 }
 
-void NodeDensityTileBoundsCalculator::_calculateUniformSolution(const ConstOsmMapPtr& /*map*/)
+void NodeDensityTileBoundsCalculator::_calculateUniformSolution(const ConstOsmMapPtr& map)
 {
   // TODO: finish
-  //int maxNodesToTotalRatio = _maxNodesPerTile / map->getNodeCount();
-  //
+
+  if (!map || map->getNodeCount() == 0 || _maxNodesPerTile == 0)
+  {
+    throw IllegalArgumentException("TODO");
+  }
+
+  const int numCells = 1 / (_maxNodesPerTile / map->getNodeCount());
+  const geos::geom::Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
+  const double boundsWidth = bounds.getWidth();
+  const cellWidth = boundsWidth / numCells;
+  const double boundsLength = bounds.getLength();
+  const cellLength = boundsLength / numCells;
+
+  // starting at the upper left corner of the original bounds, draw a rectangular way with width =
+  // cellWidth and length = cellLength. move to the next cell.
+
 }
 
 void NodeDensityTileBoundsCalculator::_calculateMin()
@@ -207,8 +231,7 @@ void NodeDensityTileBoundsCalculator::_checkForTimeout()
   if (_maxTimePerAttempt > 0 && (_timer.elapsed() / 1000) > _maxTimePerAttempt)
   {
     throw TileCalcException(
-      "Calculation timed out at " + QString::number(_timer.elapsed() / 1000) +
-      " seconds out of maximum allowed " + QString::number(_maxTimePerAttempt) + " seconds.");
+      "Calculation timed out at " + QString::number(_timer.elapsed() / 1000) + " seconds.");
   }
 }
 

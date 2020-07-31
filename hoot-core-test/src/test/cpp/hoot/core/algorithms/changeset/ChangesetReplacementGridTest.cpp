@@ -71,6 +71,7 @@ public:
     //const QString replacementDataUrl = ServicesDbTestUtils::getDbModifyUrl(testName).toString();
     QString replacementDataFile = "OSMData.osm";
     const QString cropInputBounds = ""/*-115.1541,36.2614,-115.1336,36.2775"*/;
+    const QString replacementBounds = "-115.3952,35.8639,-114.8036,36.5296";
 
     // config opts
     conf().set(ConfigOptions::getOsmapidbBulkInserterReserveRecordIdsBeforeWritingDataKey(), true);
@@ -90,6 +91,7 @@ public:
     conf().set(ConfigOptions::getChangesetMaxSizeKey(), 999999);
     conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 0.5);
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), rootDir + "/debug.osm");
 
     QElapsedTimer opTimer;
     opTimer.start();
@@ -156,7 +158,8 @@ public:
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
     subTaskTimer.restart();
 
-    // TODO: Do we need the replacement data in a db at all?
+    // TODO: Do we need the replacement data in a db at all?; the crop query is really slow for this
+    // data
 //    LOG_STATUS("Loading the replacement data db...");
 //    map.reset(new OsmMap());
 //    OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown2);
@@ -176,31 +179,43 @@ public:
 //      StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
 //    subTaskTimer.restart();
 
-//    LOG_STATUS("Reading the replacement data for task grid cell calculation...");
-//    map.reset(new OsmMap());
-//    OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown2);
-//    LOG_STATUS("Replacement elements: " << StringUtils::formatLargeNumber(map->size()));
-//    LOG_STATUS(
-//      "Replacement data read in: " <<
-//      StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
-//    subTaskTimer.restart();
-    // TODO: this is wrong
-    LOG_STATUS("Reading the data to replace for task grid cell calculation...");
+    LOG_STATUS("Reading the replacement data for task grid cell calculation...");
     map.reset(new OsmMap());
-    OsmMapReaderFactory::read(map, dataToReplaceUrl, true, Status::Unknown1);
+    conf().set(ConfigOptions::getConvertBoundingBoxKey(), replacementBounds);
+    OsmMapReaderFactory::read(map, rootDir + "/" + replacementDataFile, true, Status::Unknown2);
+    conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+    OsmMapWriterFactory::writeDebugMap(map, "task-grid-calc-map");
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
+    LOG_STATUS("Replacement elements: " << StringUtils::formatLargeNumber(map->size()));
     LOG_STATUS(
-      "Data to replace read in: " <<
+      "Replacement data read in: " <<
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
     subTaskTimer.restart();
+
+    // TODO: this is wrong
+//    LOG_STATUS("Reading the data to replace for task grid cell calculation...");
+//    map.reset(new OsmMap());
+//    conf().set(ConfigOptions::getConvertBoundingBoxKey(), replacementBounds);
+//    OsmMapReaderFactory::read(map, dataToReplaceUrl, true, Status::Unknown1);
+//    conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
+//    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+//    OsmMapWriterFactory::writeDebugMap(map, "task-grid-calc-map");
+//    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
+//    LOG_STATUS(
+//      "Data to replace read in: " <<
+//      StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
+//    subTaskTimer.restart();
 
     LOG_STATUS("Calculating task grid cells...");
     NodeDensityTileBoundsCalculator boundsCalc;
     boundsCalc.setPixelSize(0.001);
-    boundsCalc.setMaxNodesPerTile(50000); // 50000
-    boundsCalc.setMaxNumTries(5);
+    boundsCalc.setMaxNodesPerTile(50000);
+    boundsCalc.setMaxNumTries(3);
     boundsCalc.setMaxTimePerAttempt(300);
     boundsCalc.setPixelSizeRetryReductionFactor(10);
     boundsCalc.setFailWithNoSolution(false);
+    boundsCalc.setSlop(0.1);
     boundsCalc.calculateTiles(map);
     map.reset();
     const std::vector<std::vector<geos::geom::Envelope>> taskGrid = boundsCalc.getTiles();
@@ -210,6 +225,16 @@ public:
     LOG_STATUS(
       "Calculated " << StringUtils::formatLargeNumber(boundsCalc.getTileCount()) <<
       " task grid cells.");
+    LOG_STATUS(
+      "Maximum node count in any one tile: " <<
+      StringUtils::formatLargeNumber(boundsCalc.getMaxNodeCountInOneTile()));
+    LOG_STATUS(
+      "Minimum node count in any one tile: " <<
+      StringUtils::formatLargeNumber(boundsCalc.getMinNodeCountInOneTile()));
+    LOG_STATUS("Pixel size used: " << boundsCalc.getPixelSize());
+    LOG_STATUS(
+      "Maximum node count per tile used: " <<
+      StringUtils::formatLargeNumber(boundsCalc.getMaxNodesPerTile()));
     LOG_STATUS(
       "Task grid cells calculated in: " <<
       StringUtils::millisecondsToDhms(subTaskTimer.elapsed()));
