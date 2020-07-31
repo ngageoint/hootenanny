@@ -100,8 +100,8 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
           throw HootException("No element SQL statements changeset.");
         }
 
-        //had problems here when trying to prepare these queries (should they be?); the changeset
-        //writing needs to be done before the element writing, hence the separate queries
+        // had problems here when trying to prepare these queries (should they be?); the changeset
+        // writing needs to be done before the element writing, hence the separate queries
         DbUtils::execNoPrepare(_db.getDB(), changesetInsertStatement);
         DbUtils::execNoPrepare(_db.getDB(), elementSqlStatements);
 
@@ -116,9 +116,9 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
     {
       elementSqlStatements += sqlStatement + ";";
 
-      //The sql changeset is made up of one or more sql statements for each changeset operation type.
-      //Each operation starts with a comment header (e.g. /* node create 1 */), which can be used
-      //to determine its type.
+      // The sql changeset is made up of one or more sql statements for each changeset operation
+      // type. Each operation starts with a comment header (e.g. /* node create 1 */), which can be
+      // used to determine its type.
       if (sqlStatement.startsWith("\n/*"))
       {
         const QStringList statementParts = sqlStatement.trimmed().split(" ");
@@ -128,11 +128,11 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
       }
       else if (sqlStatement.contains("UPDATE " + ApiDb::getChangesetsTableName()))
       {
-        //some tight coupling here to OsmChangesetSqlFileWriter
+        // some tight coupling here to OsmChangesetSqlFileWriter
         changesetStatType = "";
         _changesetDetailsStr = sqlStatement.split("SET")[1].split("WHERE")[0].trimmed();
-        //need to do some extra processing here to convert the coords in the string from ints to
-        //decimals
+        // need to do some extra processing here to convert the coords in the string from ints to
+        // decimals
         const QRegExp regex(
           "min_lat=(-*[0-9]+), max_lat=(-*[0-9]+), min_lon=(-*[0-9]+), max_lon=(-*[0-9]+)");
         const int pos = regex.indexIn(_changesetDetailsStr);
@@ -161,7 +161,7 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
     }
   }
 
-  //flush
+  // flush
   if (!changesetInsertStatement.isEmpty())
   {
     if (elementSqlStatements.trimmed().isEmpty())
@@ -185,13 +185,23 @@ void OsmApiDbSqlChangesetApplier::write(QFile& changesetSqlFile)
 {
   if (!changesetSqlFile.fileName().endsWith(".osc.sql"))
   {
-    throw HootException("Invalid file type: " + changesetSqlFile.fileName());
+    throw IllegalArgumentException("Invalid file type: " + changesetSqlFile.fileName());
   }
 
   if (changesetSqlFile.open(QIODevice::ReadOnly))
   {
-    write(changesetSqlFile.readAll());
-    changesetSqlFile.close();
+    try
+    {
+      write(changesetSqlFile.readAll());
+      changesetSqlFile.close();
+    }
+    catch (const HootException& e)
+    {
+      changesetSqlFile.close();
+      throw HootException(
+        "Error executing query from file: " + changesetSqlFile.fileName() + "; Error: " +
+        e.getWhat());
+    }
   }
   else
   {

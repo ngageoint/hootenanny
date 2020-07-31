@@ -52,8 +52,10 @@ static const QString DATA_TO_REPLACE_FILE = "NOMEData.osm";
 static const QString REPLACEMENT_DATA_URL =
   ServicesDbTestUtils::getDbModifyUrl(TEST_NAME).toString();
 static const QString REPLACEMENT_DATA_FILE = "OSMData.osm";
-static const QString CROP_INPUT_BOUNDS = ""/*-115.1541,36.2614,-115.1336,36.2775"*/;
-static const QString REPLACEMENT_BOUNDS = "-115.3528,36.0919,-114.9817,36.3447";
+//static const QString CROP_INPUT_BOUNDS = "";
+static const QString CROP_INPUT_BOUNDS = "-115.3314,36.2825,-115.2527,36.3387"; // 4 sq blocks
+//static const QString REPLACEMENT_BOUNDS = "-115.3528,36.0919,-114.9817,36.3447"; // all
+static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991"; // 4 sq blocks
 static const QString TASK_GRID_FILE = ROOT_DIR + "/bounds.osm";
 
 /*
@@ -93,7 +95,8 @@ public:
       _loadDataToReplaceDb();
 
       int numTaskGridCells = 0;
-      const std::vector<std::vector<geos::geom::Envelope>> taskGrid = _calcTaskGrid(numTaskGridCells);
+      const std::vector<std::vector<geos::geom::Envelope>> taskGrid =
+        _calcTaskGrid(numTaskGridCells);
 
       _replaceData(taskGrid, numTaskGridCells);
       _getUpdatedData();
@@ -165,33 +168,39 @@ private:
     cropper.setRemoveMissingElements(false);
     cropper.setRemoveSuperflousFeatures(false);
 
+    QString cropOutputFile = DATA_TO_REPLACE_FILE;
+    cropOutputFile = cropOutputFile.replace(".osm", "-cropped.osm");
+    _dataToReplaceFile = cropOutputFile;
     LOG_STATUS(
-      "Cropping data to replace from: " << ROOT_DIR << "/" << DATA_TO_REPLACE_FILE << "...");
+      "Cropping data to replace from: " << ROOT_DIR << "/" << DATA_TO_REPLACE_FILE << " to: " <<
+      ROOT_DIR << "/" << _dataToReplaceFile << "...");
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, ROOT_DIR + "/" + DATA_TO_REPLACE_FILE, true, Status::Unknown1);
     LOG_STATUS(
       "Data to replace pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
+    LOG_STATUS(cropper.getInitStatusMessage());
     cropper.apply(map);
-    QString cropOutputFile = DATA_TO_REPLACE_FILE;
-    cropOutputFile = cropOutputFile.replace(".osm", "-cropped.osm");
-    OsmMapWriterFactory::write(map, ROOT_DIR + "/" + cropOutputFile);
-    _dataToReplaceFile = cropOutputFile;
+    LOG_STATUS("Data to replace cropped size: " << StringUtils::formatLargeNumber(map->size()));
+    OsmMapWriterFactory::write(map, ROOT_DIR + "/" + _dataToReplaceFile);
     LOG_STATUS(
       "Data to replace cropped in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
     _subTaskTimer.restart();
 
+    cropOutputFile = REPLACEMENT_DATA_FILE;
+    cropOutputFile = cropOutputFile.replace(".osm", "-cropped.osm");
+    _replacementDataFile = cropOutputFile;
     LOG_STATUS(
-      "Cropping replacement data from: " << ROOT_DIR << "/" << REPLACEMENT_DATA_FILE << "...");
+      "Cropping replacement data from: " << ROOT_DIR << "/" << REPLACEMENT_DATA_FILE << " to: " <<
+      ROOT_DIR << "/" << _replacementDataFile << "...");
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(map, ROOT_DIR + "/" + REPLACEMENT_DATA_FILE, true, Status::Unknown2);
     LOG_STATUS(
       "Replacement data pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
+    LOG_STATUS(cropper.getInitStatusMessage());
     cropper.apply(map);
-    cropOutputFile = REPLACEMENT_DATA_FILE;
-    cropOutputFile = cropOutputFile.replace(".osm", "-cropped.osm");
-    OsmMapWriterFactory::write(map, ROOT_DIR + "/" + cropOutputFile);
-    _replacementDataFile = cropOutputFile;
+    LOG_STATUS("Replacement data cropped size: " << StringUtils::formatLargeNumber(map->size()));
+    OsmMapWriterFactory::write(map, ROOT_DIR + "/" + _replacementDataFile);
     LOG_STATUS(
       "Replacement data cropped in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
@@ -201,10 +210,10 @@ private:
   void _loadDataToReplaceDb()
   {
     LOG_STATUS(
-      "Loading the data to replace db from: " << ROOT_DIR << "/" << DATA_TO_REPLACE_FILE <<
+      "Loading the data to replace db from: " << ROOT_DIR << "/" << _dataToReplaceFile <<
       " to: " << DATA_TO_REPLACE_URL << "...");
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, ROOT_DIR + "/" + DATA_TO_REPLACE_FILE, true, Status::Unknown1);
+    OsmMapReaderFactory::read(map, ROOT_DIR + "/" + _dataToReplaceFile, true, Status::Unknown1);
     OsmMapWriterFactory::write(map, DATA_TO_REPLACE_URL);
     LOG_STATUS(
       "Total elements in data being replaced: " << StringUtils::formatLargeNumber(map->size()));
@@ -218,10 +227,10 @@ private:
   {
     // This ends up being much slower than using a file. The bounded query needs work.
 //    LOG_STATUS(
-//      "Loading the replacement data db from: " << rootDir << "/" << REPLACEMENT_DATA_FILE <<
+//      "Loading the replacement data db from: " << rootDir << "/" << _replacementDataFile <<
 //      " to: " << REPLACEMENT_DATA_URL << "...");
 //    map.reset(new OsmMap());
-//    OsmMapReaderFactory::read(map, rootDir + "/" + REPLACEMENT_DATA_FILE, true, Status::Unknown2);
+//    OsmMapReaderFactory::read(map, rootDir + "/" + _replacementDataFile, true, Status::Unknown2);
 //    OsmMapWriterFactory::write(map, REPLACEMENT_DATA_URL);
 //    LOG_STATUS(
 //      "Replacing elements: " << StringUtils::formatLargeNumber(map->size()));
@@ -256,7 +265,7 @@ private:
       ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
     conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
     // IMPORTANT: must be unknown1 for node density to work
-    OsmMapReaderFactory::read(map, ROOT_DIR + "/" + REPLACEMENT_DATA_FILE, true, Status::Unknown1);
+    OsmMapReaderFactory::read(map, ROOT_DIR + "/" + _replacementDataFile, true, Status::Unknown1);
     LOG_STATUS("Replacement elements: " << StringUtils::formatLargeNumber(map->size()));
     LOG_STATUS(
       "Replacement data read in: " <<
@@ -266,7 +275,7 @@ private:
     LOG_STATUS("Calculating task grid cells for replacement data to: " << TASK_GRID_FILE << "...");
     NodeDensityTileBoundsCalculator boundsCalc;
     boundsCalc.setPixelSize(0.001);
-    boundsCalc.setMaxNodesPerTile(100000);
+    boundsCalc.setMaxNodesPerTile(/*100000*/2000);
     boundsCalc.setMaxNumTries(3);
     boundsCalc.setMaxTimePerAttempt(300);
     boundsCalc.setPixelSizeRetryReductionFactor(10);
@@ -331,7 +340,7 @@ private:
           StringUtils::formatLargeNumber(numTiles) << ": " << changesetId << " over bounds: " <<
           boundsStr << " to file: " << changesetFile.fileName() << "...");
         changesetCreator.create(
-          DATA_TO_REPLACE_URL, /*REPLACEMENT_DATA_URL*/ROOT_DIR + "/" + REPLACEMENT_DATA_FILE,
+          DATA_TO_REPLACE_URL, /*REPLACEMENT_DATA_URL*/ROOT_DIR + "/" + _replacementDataFile,
           bounds, changesetFile.fileName());
         LOG_STATUS(
           "Changeset derived in: " <<
