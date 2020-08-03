@@ -190,11 +190,13 @@ pipeline {
         //  always runs first so halting on non-release VM should happen at the end in cleanup
         aborted {
             script {
+                buildFailed = "no"
                 notifySlack("ABORTED", "#builds_hoot")
             }
         }
         success {
             script {
+                buildFailed = "no"
                 notifySlack("SUCCESS", "#builds_hoot")
                 if (env.BRANCH_NAME.startsWith("release")) {
                     // Don't clean up this workspace.  We want to leave it up for acceptance testing
@@ -205,9 +207,6 @@ pipeline {
         failure {
             script {
                 buildFailed = "yes"
-                //TEST
-                echo "In failure buildFailed == ${buildFailed}"
-                //END TEST
                 notifySlack("FAILURE", "#builds_hoot")
                 // Copy over any UI failure screenshots and send to slack
                 sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
@@ -220,9 +219,6 @@ pipeline {
         }
         cleanup {
             script {
-                //TEST
-                echo "In cleanup buildFailed == ${buildFailed}"
-                //END TEST
                 if (!env.BRANCH_NAME.startsWith("release")) {
                     if (params.Halt_on_failure && buildFailed.equals('yes')) {
                         // Halt failed VMs so that the developer
@@ -230,8 +226,8 @@ pipeline {
                     } else {
                         // Destroy all non-release VMs since the test output files are archived
                         sh "vagrant destroy -f ${params.Box}"
+                        cleanWs()
                     }
-                    cleanWs()
                 }
             }
         }
