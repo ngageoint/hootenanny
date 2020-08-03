@@ -69,17 +69,20 @@ static const QString TASK_GRID_FILE = ROOT_DIR + "/bounds.osm";
 
 /*
  * TODO
+ *
+ * TODO: add the option to pass in a uniform grid
+ * TODO: add the option to pass in specific grid cells
  */
-class ChangesetReplacementGridTest : public HootTestFixture
+class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(ChangesetReplacementGridTest);
+  CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
   // FOR DEBUGGING ONLY
   //CPPUNIT_TEST(runGridCellTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  ChangesetReplacementGridTest() :
+  ServiceChangesetReplacementGridTest() :
   _dataToReplaceFile(DATA_TO_REPLACE_FILE),
   _replacementDataFile(REPLACEMENT_DATA_FILE)
   {
@@ -404,6 +407,8 @@ private:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ChangesetReplacementGridTest, "glacial");
+#ifdef HOOT_HAVE_SERVICES
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceChangesetReplacementGridTest, "glacial");
+#endif
 
 }
