@@ -10,6 +10,7 @@ pipeline {
         SYS_VER = 'UNKOWN'
         BUILD_VERBOSE = 'no'
         BUILD_DEBUG = 'no'
+        BUILD_FAILED = 'no'
     }
 
     triggers {
@@ -28,6 +29,7 @@ pipeline {
         booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
         booleanParam(name: 'Sonar', defaultValue: false)
+        booleanParam(name: 'Halt_on_failure', defaultValue: true)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
     }
 
@@ -201,6 +203,7 @@ pipeline {
         }
         failure {
             script {
+                env.BUILD_FAILED = 'yes'
                 notifySlack("FAILURE", "#builds_hoot")
                 // Copy over any UI failure screenshots and send to slack
                 sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
@@ -214,8 +217,13 @@ pipeline {
         cleanup {
             script {
             if (!env.BRANCH_NAME.startsWith("release")) {
-                // Destroy all non-release VMs since the test output files are archived
-                sh "vagrant destroy -f ${params.Box}"
+                if (params.Halt_on_failure && env.BUILD_FAILED.equals('yes')) {
+                    // Halt failed VMs so that the developer
+                    sh "vagrant halt ${params.Box}"
+                } else {
+                    // Destroy all non-release VMs since the test output files are archived
+                    sh "vagrant destroy -f ${params.Box}"
+                }
                 cleanWs()
             }
         }
