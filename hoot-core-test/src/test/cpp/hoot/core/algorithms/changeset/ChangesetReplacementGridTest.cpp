@@ -52,10 +52,19 @@ static const QString DATA_TO_REPLACE_FILE = "NOMEData.osm";
 static const QString REPLACEMENT_DATA_URL =
   ServicesDbTestUtils::getDbModifyUrl(TEST_NAME).toString();
 static const QString REPLACEMENT_DATA_FILE = "OSMData.osm";
+
+// all - fails on 3rd changeset
 //static const QString CROP_INPUT_BOUNDS = "";
-static const QString CROP_INPUT_BOUNDS = "-115.3314,36.2825,-115.2527,36.3387"; // 4 sq blocks
-//static const QString REPLACEMENT_BOUNDS = "-115.3528,36.0919,-114.9817,36.3447"; // all
-static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991"; // 4 sq blocks
+//static const QString REPLACEMENT_BOUNDS = "-115.3528,36.0919,-114.9817,36.3447";
+
+// 4 sq blocks - good
+//static const QString CROP_INPUT_BOUNDS = "-115.3314,36.2825,-115.2527,36.3387";
+//static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991";
+
+// 1/4 of city - fails with zero alpha shape
+static const QString CROP_INPUT_BOUNDS = "-115.3441,36.2012,-115.1942,36.3398";
+static const QString REPLACEMENT_BOUNDS = "-115.3332,36.2178,-115.1837,36.3400";
+
 static const QString TASK_GRID_FILE = ROOT_DIR + "/bounds.osm";
 
 /*
@@ -225,7 +234,7 @@ private:
 
   std::vector<std::vector<geos::geom::Envelope>> _calcTaskGrid(int& numTaskGridCells)
   {
-    // This ends up being much slower than using a file. The bounded query needs work.
+    // This ends up being much slower than using a file. The bounded query needs work. - #4180
 //    LOG_STATUS(
 //      "Loading the replacement data db from: " << rootDir << "/" << _replacementDataFile <<
 //      " to: " << REPLACEMENT_DATA_URL << "...");
@@ -275,7 +284,7 @@ private:
     LOG_STATUS("Calculating task grid cells for replacement data to: " << TASK_GRID_FILE << "...");
     NodeDensityTileBoundsCalculator boundsCalc;
     boundsCalc.setPixelSize(0.001);
-    boundsCalc.setMaxNodesPerTile(/*100000*/2000);
+    boundsCalc.setMaxNodesPerTile(/*100000*/10000);
     boundsCalc.setMaxNumTries(3);
     boundsCalc.setMaxTimePerAttempt(300);
     boundsCalc.setPixelSizeRetryReductionFactor(10);
