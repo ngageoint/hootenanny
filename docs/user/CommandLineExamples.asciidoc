@@ -433,6 +433,14 @@ See the User Guide for more details on command usage.
       input2.osm output.osm
 -----
 
+===== Preserve all values for a particular tag key during conflation:
+
+-----
+    # The value for myTagKey will consist of a semicolon delimited list of all the unique values 
+    # found when merging features together.
+    hoot conflate -D tag.merger.overwrite.accumulate.values.keys="myTagKey" input1.osm input2.osm
+-----
+
 ==== Applying Changes
 
 ===== Derive a changeset between two maps and write the result directly to an OSM API database:
