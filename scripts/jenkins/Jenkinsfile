@@ -202,20 +202,28 @@ pipeline {
             }
         }
         failure {
+            environment {
+                BUILD_FAILED = 'yes'
+            }
             script {
-                env.BUILD_FAILED = 'yes'
+                //TEST
+                echo "In failure BUILD_FAILED == ${BUILD_FAILED}"
+                //END TEST
                 notifySlack("FAILURE", "#builds_hoot")
                 // Copy over any UI failure screenshots and send to slack
                 sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
                 postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
                 // Copy over the test-output directory and add it to the artifacts
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; tar czf failed-test-output.tar.gz test-output'"
-                sh "vagrant scp ${params.Box}:~/hoot/failed-test-output.tar.gz ./test-output/"
+                sh "vagrant scp ${params.Box}:~/hoot/failed-test-output.tar.gz ./"
                 archiveArtifacts './failed-test-output.tar.gz'
             }
         }
         cleanup {
             script {
+                //TEST
+                echo "In cleanup BUILD_FAILED == ${BUILD_FAILED}"
+                //END TEST
                 if (!env.BRANCH_NAME.startsWith("release")) {
                     if (params.Halt_on_failure && env.BUILD_FAILED.equals('yes')) {
                         // Halt failed VMs so that the developer
