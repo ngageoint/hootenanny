@@ -74,7 +74,7 @@ class ChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementGridTest);
   // FOR DEBUGGING ONLY
-  CPPUNIT_TEST(runGridCellTest);
+  //CPPUNIT_TEST(runGridCellTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

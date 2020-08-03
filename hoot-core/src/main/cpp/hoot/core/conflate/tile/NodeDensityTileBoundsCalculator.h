@@ -203,7 +203,6 @@ public:
   void setMaxNumTries(int numTries) { _maxNumTries = numTries; }
   void setMaxTimePerAttempt(int seconds) { _maxTimePerAttempt = seconds; }
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
-  void setFailWithNoSolution(bool fail) { _failWithNoSolution = fail; }
 
 private:
 
@@ -229,8 +228,6 @@ private:
   int _pixelSizeRetryReductionFactor;
   // allows for multiple calc attempts
   int _maxNumTries;
-  // TODO
-  bool _failWithNoSolution;
 
   // timeout in seconds; -1 is unlimited
   int _maxTimePerAttempt;

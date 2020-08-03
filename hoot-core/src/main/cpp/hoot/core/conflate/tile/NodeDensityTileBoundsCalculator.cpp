@@ -55,7 +55,6 @@ _maxNodeCountInOneTile(0),
 _minNodeCountInOneTile(LONG_MAX),
 _pixelSizeRetryReductionFactor(10),
 _maxNumTries(3),
-_failWithNoSolution(false),
 _maxTimePerAttempt(-1),
 _tileCount(0)
 {

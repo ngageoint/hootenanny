@@ -22,9 +22,6 @@ the specified input(s), honoring a maximum node per box limit, and writes the bo
                                  as possible.
 * +--pixelSizeReductionFactor+ - Optional percentage by which +--pixelSize+ will be automatically reduced if +--maxAttempts+ is greater than 
                                  one and any calculation attempt fails. The default value is 10%.
-* +--alwaysFailWithNoSolution+ - By default, if no solution satisfying the input parameters is found the command will assume uniform node 
-                                 density and simply return a set of bounding boxes of equal size calculated by dividing the total number of nodes
-                                 by the maximum requested nodes per box. Adding this option will cause a failure instead if no solution is found.
 * +--random+                   - Optionally selects a single random tile from those calculated
 * +--randomSeed+               - Optionally seeds the random number generator for consistent tile boundary selection; valid only if +--random+ 
                                  is specified; use -1 for pseudo-random seeding; defaults to -1
