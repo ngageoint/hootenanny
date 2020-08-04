@@ -291,7 +291,6 @@ private:
     boundsCalc.setMaxNumTries(3);
     boundsCalc.setMaxTimePerAttempt(300);
     boundsCalc.setPixelSizeRetryReductionFactor(10);
-    boundsCalc.setFailWithNoSolution(false);
     boundsCalc.setSlop(0.1);
     boundsCalc.calculateTiles(map);
     map.reset();
