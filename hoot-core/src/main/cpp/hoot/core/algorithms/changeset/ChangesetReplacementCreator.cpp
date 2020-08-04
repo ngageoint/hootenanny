@@ -412,8 +412,6 @@ void ChangesetReplacementCreator::create(
   QList<OsmMapPtr> refMaps;
   QList<OsmMapPtr> conflatedMaps;
   int passCtr = 1;
-  //_rawRefMap.reset();
-  //_rawSecMap.reset();
   for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
          refFilters.begin(); itr != refFilters.end(); ++itr)
   {
@@ -471,8 +469,6 @@ void ChangesetReplacementCreator::create(
 
     passCtr++;
   }
-  //_rawRefMap.reset();
-  //_rawSecMap.reset();
 
   LOG_VART(refMaps.size());
   LOG_VART(conflatedMaps.size());

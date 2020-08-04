@@ -62,9 +62,19 @@ _tileCount(0)
 
 void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
 {  
-  if (!map || map->getNodeCount() == 0 || _maxNodesPerTile == 0)
+  if (!map)
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("Invalid map passed to node density tile calculator.");
+  }
+  else if (map->getNodeCount() == 0)
+  {
+    throw IllegalArgumentException("Empty map passed to node density tile calculator.");
+  }
+  else if (_maxNodesPerTile == 0)
+  {
+    throw IllegalArgumentException(
+      "Invalid maximum nodes per tile requirement equal to zero passed to node density tile " +
+      "calculator.");
   }
 
   // TODO: throw exception if no input data is Unknown1
