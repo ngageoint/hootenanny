@@ -1,6 +1,7 @@
 {
     "strictBounds": "--strict-bounds",
     "fullReplacement": "--full-replacement",
-    "disableWaySnapping": "--disable-way-snapping",
-    "disableConflation": "--disable-conflation"
+    "disableCleaning": "--disable-cleaning",
+    "disableConflation": "--disable-conflation",
+    "disableWaySnapping": "--disable-way-snapping"
 }
