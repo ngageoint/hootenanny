@@ -149,15 +149,18 @@ function geometryMismatch(map, e1, e2)
   hoot.trace("Processing geometry...");
 
   var sublines;
+  // Try matching with our default subline matcher, which may be more accurate, but slower for complex features.
   hoot.trace("Extracting sublines with default...");
   sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
   if (sublines && sublines == "RecursiveComplexityException")
   {
-    // Longer ways are can be very computationally expensive with the default subline matching. 
-    // Frechet subline matching is a little less accurate but much faster, so we'll switch over 
-    // to it for longer ways. Tried tweaking the configuration of MaximalSublineMatcher for 
-    // performance, but it didn't help.
+    // If receive the specfic string above from the matching routine, we know our subline matcher
+    // hit the cap on the number of recursive calls we allow for it 
+    // (see waterway.maximal.subline.max.recursive.complexity above; A little kludgy, but not sure 
+    // how to handle hoot exceptions in a js script at this point). So now we'll try a backup matcher
+    // that may be a little less accurate but much faster. Previously tried tweaking the configuration 
+    // of MaximalSublineMatcher for performance instead of using this approach, but it didn't help.
     hoot.debug("Extracting sublines with Frechet...");
     sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
   }
@@ -265,10 +268,12 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  // Snap the ways in the second input to the first input. Use the default tag
-  // merge method. Since its not possible to know the original subline matcher used during 
-  // matching, pass in both of the possible subline matchers and the same internal core 
-  // logic used to determine which one to use during matching will be used during merging.
+  // Snap the ways in the second input to the first input and use the default tag merge method. 
+
+  // Feature matching also occurs during the merging phase. Since its not possible to know the 
+  // original subline matcher used during matching, pass in both of the possible subline matchers 
+  // that could have been used and use the same internal core logic that was used during matching to 
+  // determine which one to use now.
   return snapRivers(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 
