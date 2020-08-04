@@ -42,7 +42,6 @@
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/CollectionRelationCriterion.h>
-#include <hoot/core/conflate/river/RiverSnapMerger.h>
 
 #include <hoot/js/elements/TagsJs.h>
 #include <hoot/js/JsRegistrar.h>
