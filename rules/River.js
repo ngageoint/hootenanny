@@ -30,7 +30,7 @@ var sublineMatcher = // default subline matcher
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
       "way.subline.matcher": sublineMatcherName,
-      "maximal.subline.max.recursive.complexity": hoot.get("waterway.maximal.subline.max.recursive.complexity")/*50*/ });
+      "maximal.subline.max.recursive.complexity": hoot.get("waterway.maximal.subline.max.recursive.complexity") });
 var frechetSublineMatcher = // we'll switch over to this one if the default matcher runs too slowly
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
@@ -158,7 +158,7 @@ function geometryMismatch(map, e1, e2)
     // If receive the specfic string above from the matching routine, we know our subline matcher
     // hit the cap on the number of recursive calls we allow for it 
     // (see waterway.maximal.subline.max.recursive.complexity above; A little kludgy, but not sure 
-    // how to handle hoot exceptions in a js script at this point). So now we'll try a backup matcher
+    // how to handle hoot exceptions in a js script at this point). So, now we'll try a backup matcher
     // that may be a little less accurate but much faster. Previously tried tweaking the configuration 
     // of MaximalSublineMatcher for performance instead of using this approach, but it didn't help.
     hoot.trace("Extracting sublines with Frechet...");
@@ -274,7 +274,7 @@ exports.mergeSets = function(map, pairs, replaced)
   // original subline matcher used during matching, pass in both of the possible subline matchers 
   // that could have been used and use the same internal core logic that was used during matching to 
   // determine which one to use now.
-  return snapRivers(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
+  return snapWays2(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

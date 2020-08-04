@@ -28,9 +28,18 @@ var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 var lengthScoreExtractor = new hoot.LengthScoreExtractor();
-var sublineMatcher = new hoot.MaximalSublineStringMatcher({
+var sublineMatcher =  // default subline matcher
+  new hoot.MaximalSublineStringMatcher(
+  {
     "way.matcher.max.angle": hoot.get("generic.line.matcher.max.angle"),
-    "way.subline.matcher": hoot.get("generic.line.subline.matcher")});
+    "way.subline.matcher": hoot.get("generic.line.subline.matcher"),
+    // borrowing this from rivers for the time being; TODO: make separate option for it?
+    "maximal.subline.max.recursive.complexity": hoot.get("waterway.maximal.subline.max.recursive.complexity")
+  });
+var frechetSublineMatcher = // we'll switch over to this one if the default matcher runs too slowly
+  new hoot.MaximalSublineStringMatcher(
+    { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
+      "way.subline.matcher": "hoot::FrechetSublineMatcher" }); 
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -88,14 +97,14 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  //hoot.trace("e1: " + e1.getElementId() + ", " + e1.getTags().get("name"));
-  hoot.trace("e1: " + e1);
+  hoot.trace("e1: " + e1.getElementId() + ", " + e1.getTags().get("name"));
+  //hoot.trace("e1: " + e1);
   if (e1.getTags().get("note"))
   {
     hoot.trace("e1 note: " + e1.getTags().get("note"));
   }
-  //hoot.trace("e2: " + e2.getElementId() + ", " + e2.getTags().get("name"));
-  hoot.trace("e2: " + e2);
+  hoot.trace("e2: " + e2.getElementId() + ", " + e2.getTags().get("name"));
+  //hoot.trace("e2: " + e2);
   if (e2.getTags().get("note"))
   {
     hoot.trace("e2 note: " + e2.getTags().get("note"));
@@ -109,9 +118,21 @@ exports.matchScore = function(map, e1, e2)
   {
     return result;
   }
+  hoot.trace("mostSpecificType(e1): " + mostSpecificType(e1));
+  hoot.trace("mostSpecificType(e2): " + mostSpecificType(e2));
 
-  // extract the sublines needed for matching - Note that this was taken directly from Highway.js.
-  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  // extract the sublines needed for matching - Note that some of this was taken from Highway.js and other parts 
+  // from River.js. See notes on the dual subline matcher approach in River.js.
+  var sublines;
+  hoot.trace("Extracting sublines with default...");
+  sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  hoot.trace(sublines);
+  if (sublines && sublines == "RecursiveComplexityException")
+  {
+    hoot.trace("Extracting sublines with Frechet...");
+    sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
+  }
+
   var distanceScore = -1.0;
   var weightShapeDistanceScore = -1.0;
   var lengthScore = -1.0;
@@ -121,6 +142,7 @@ exports.matchScore = function(map, e1, e2)
     var m = sublines.map;
     var m1 = sublines.match1;
     var m2 = sublines.match2;
+    hoot.trace("Scoring distance and length...");
     distanceScore = distanceScoreExtractor.extract(m, m1, m2);
     weightShapeDistanceScore = weightedShapeDistanceExtractor.extract(m, m1, m2);
     lengthScore = lengthScoreExtractor.extract(m, m1, m2);
@@ -164,8 +186,8 @@ exports.matchScore = function(map, e1, e2)
 exports.mergeSets = function(map, pairs, replaced) 
 {
   // Snap the ways in the second input to the first input. Use the default tag 
-  // merge method.
-  return snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
+  // merge method. See related notes in exports.mergeSets in River.js.
+  return snapWays2(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

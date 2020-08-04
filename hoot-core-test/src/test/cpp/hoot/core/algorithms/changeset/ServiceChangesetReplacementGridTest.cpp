@@ -68,7 +68,8 @@ static const QString REPLACEMENT_BOUNDS = "-115.3332,36.2178,-115.1837,36.3400";
 static const QString TASK_GRID_FILE = ROOT_DIR + "/bounds.osm";
 
 /*
- * TODO
+ * This is meant for manually testing cut and replace across adjacent task grid cells. Not meant to
+ * be run automatically.
  *
  * TODO: add the option to pass in a uniform grid
  * TODO: add the option to pass in specific grid cells

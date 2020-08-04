@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/highway/HighwayTagOnlyMerger.h>
-#include <hoot/core/conflate/river/RiverSnapMerger.h>
+#include <hoot/core/conflate/MultipleSublineMatcherSnapMerger.h>
 
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -112,12 +112,12 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   if (args.Length() > 5)
   {
     // This is little unusual, but we're allowing an extra subline matcher to be passed info for
-    // river conflation only and the actual one used will be determined based on the input data.
-    // See RiverSnapMerger for more info.
-    if (matchedBy != "Waterway")
+    // certain conflation types, and the actual one used will be determined based how the matcher
+    // performs against the input data. See WaySnapMerger for more info.
+    if (matchedBy != "Waterway" && matchedBy != "Line")
     {
       throw IllegalArgumentException(
-        "Only river merging allows passing in multiple subline matchers.");
+        "Only river or generic line merging allows passing in multiple subline matchers.");
     }
     sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
   }
@@ -130,10 +130,10 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
     // HighwayTagOnlyMerger inherits from HighwaySnapMerger, so this works.
     snapMerger.reset(new HighwayTagOnlyMerger(pairs, sublineMatcher));
   }
-  else if (matchedBy == "Waterway")
+  else if (matchedBy == "Waterway" || matchedBy == "Line")
   {
     // see note above about multiple subline matchers here
-    snapMerger.reset(new RiverSnapMerger(pairs, sublineMatcher, sublineMatcher2));
+    snapMerger.reset(new MultipleSublineMatcherSnapMerger(pairs, sublineMatcher, sublineMatcher2));
   }
   else
   {

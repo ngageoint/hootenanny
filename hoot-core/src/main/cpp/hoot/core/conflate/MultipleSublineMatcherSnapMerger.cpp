@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "RiverSnapMerger.h"
+#include "MultipleSublineMatcherSnapMerger.h"
 
 // hoot
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
@@ -35,14 +35,14 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(Merger, RiverSnapMerger)
+HOOT_FACTORY_REGISTER(Merger, MultipleSublineMatcherSnapMerger)
 
-RiverSnapMerger::RiverSnapMerger() :
+MultipleSublineMatcherSnapMerger::MultipleSublineMatcherSnapMerger() :
 HighwaySnapMerger()
 {
 }
 
-RiverSnapMerger::RiverSnapMerger(
+MultipleSublineMatcherSnapMerger::MultipleSublineMatcherSnapMerger(
   const std::set<std::pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher2) :
@@ -52,7 +52,8 @@ _sublineMatcher2(sublineMatcher2)
   // The subline matchers have already been initialized by the conflate script by this point.
 }
 
-WaySublineMatchString RiverSnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2)
+WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(
+  OsmMapPtr map, ElementPtr e1, ElementPtr e2)
 {
   WaySublineMatchString match;
   if (e1->getElementType() != ElementType::Node && e2->getElementType() != ElementType::Node)

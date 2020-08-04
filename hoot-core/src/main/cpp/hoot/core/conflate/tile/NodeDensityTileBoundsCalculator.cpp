@@ -73,8 +73,8 @@ void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
   else if (_maxNodesPerTile == 0)
   {
     throw IllegalArgumentException(
-      "Invalid maximum nodes per tile requirement equal to zero passed to node density tile " +
-      "calculator.");
+      QString("Invalid maximum nodes per tile requirement equal to zero passed to node density " ) +
+      QString("tile calculator."));
   }
 
   // TODO: throw exception if no input data is Unknown1

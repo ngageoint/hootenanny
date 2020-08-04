@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef RIVER_SNAP_MERGER_H
-#define RIVER_SNAP_MERGER_H
+#ifndef MULTIPLE_SUBLINE_MATCHER_SNAP_MERGER_H
+#define MULTIPLE_SUBLINE_MATCHER_SNAP_MERGER_H
 
 // Hoot
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
@@ -36,26 +36,26 @@ namespace hoot
 class WaySublineMatchString;
 
 /**
- * Merges river features
+ * Merges way features potentially using multiple subline matcher
  *
  * This class primarily exists so that we can select a subline matcher based on properties of the
  * input data for runtime performance reasons.
  */
-class RiverSnapMerger : public HighwaySnapMerger
+class MultipleSublineMatcherSnapMerger : public HighwaySnapMerger
 {
 
 public:
 
-  static std::string className() { return "hoot::RiverSnapMerger"; }
+  static std::string className() { return "hoot::MultipleSublineMatcherSnapMerger"; }
 
-  RiverSnapMerger();
-  RiverSnapMerger(
+  MultipleSublineMatcherSnapMerger();
+  MultipleSublineMatcherSnapMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher2);
-  virtual ~RiverSnapMerger() = default;
+  virtual ~MultipleSublineMatcherSnapMerger() = default;
 
-  virtual QString getDescription() const { return "Merges rivers"; }
+  virtual QString getDescription() const { return "Merges ways with one or more subline matchers"; }
 
   virtual QString getName() const { return QString::fromStdString(className()); }
 
@@ -73,8 +73,8 @@ private:
   std::shared_ptr<SublineStringMatcher> _sublineMatcher2;
 };
 
-typedef std::shared_ptr<RiverSnapMerger> RiverSnapMergerPtr;
+typedef std::shared_ptr<MultipleSublineMatcherSnapMerger> MultipleSublineMatcherSnapMergerPtr;
 
 }
 
-#endif // HIGHWAYSNAPMERGER_H
+#endif // MULTIPLE_SUBLINE_MATCHER_SNAP_MERGER_H

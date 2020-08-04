@@ -386,9 +386,9 @@ function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
 }
 
 /**
- * Merges rivers together
+ * Another approach to snapping ways, which allows for using multiple subline matchers. See notes in ?
  */
-function snapRivers(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2)
+function snapWays2(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2)
 {
   return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2);
 }
