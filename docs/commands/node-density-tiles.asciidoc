@@ -4,7 +4,7 @@
 === Description
 
 The +node-density-tiles+ command calculates a collection of bounding boxes that contain roughly equal distributions of node data from
-the specified input(s) and writes the output to a file.
+the specified input(s), honoring a maximum node per box limit, and writes the bounding box output to a file.
 
 * +input(s)+                   - One or more inputs; may be any supported input format (e.g. OSM file). Specify multiple inputs by separating 
                                  them with a semicolon.
@@ -19,7 +19,7 @@ the specified input(s) and writes the output to a file.
                                  the runtime of a calculation.
 * +--maxTimePerAttempt+        - Optional maximum time allowed, in seconds, for a calculation attempt. Defaults to no time limit (-1). The 
                                  timeout is not guaranteed to happen exactly after the specified time has elapsed and will happen as close to it 
-                                 as possible. .
+                                 as possible.
 * +--pixelSizeReductionFactor+ - Optional percentage by which +--pixelSize+ will be automatically reduced if +--maxAttempts+ is greater than 
                                  one and any calculation attempt fails. The default value is 10%.
 * +--random+                   - Optionally selects a single random tile from those calculated

@@ -442,7 +442,7 @@ void UnconnectedWaySnapper::_createFeatureIndex(const ElementCriterionPtr& featu
                                                 std::deque<ElementId>& featureIndexToEid,
                                                 const ElementType& elementType)
 {
-  LOG_INFO("Creating feature index of type: " << elementType << "...");
+  LOG_DEBUG("Creating feature index of type: " << elementType << "...");
 
   // TODO: tune these indexes? - see #3054
   std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));

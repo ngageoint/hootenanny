@@ -39,6 +39,8 @@
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace cv;
 using namespace geos::geom;
@@ -126,7 +128,7 @@ double MaximalSubline::ThresholdMatchCriteria::match(int index1, int index2) con
   return 1.0 * mns;
 }
 
-void MaximalSubline::ThresholdMatchCriteria::matchingSubline(LineSegment &a, LineSegment &b) const
+void MaximalSubline::ThresholdMatchCriteria::matchingSubline(LineSegment& a, LineSegment& b) const
 {
   BufferedLineSegmentIntersector bi;
 
@@ -160,7 +162,9 @@ void MaximalSubline::MatchCriteria::maximalNearestSubline(LineSegment& a,
 MaximalSubline::MaximalSubline(MatchCriteria* criteria, Meters minSplitSize) :
 _criteria(criteria),
 _spacing(ConfigOptions().getMaximalSublineSpacing()),
-_minSplitSize(minSplitSize)
+_minSplitSize(minSplitSize),
+_maxRecursionComplexity(-1),
+_findBestMatchesRecursionCount(0)
 {
 }
 
@@ -214,7 +218,7 @@ void MaximalSubline::_calculateSublineScores(const ConstOsmMapPtr& map, const Co
 }
 
 vector<pair<WayLocation, WayLocation>> MaximalSubline::_discretizePointPairs(
-  const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+  const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
   vector<WaySublineMatch>& rawSublineMatches)
 {
   LOG_TRACE("Discretizing point pairs...");
@@ -257,7 +261,7 @@ vector<pair<WayLocation, WayLocation>> MaximalSubline::_discretizePointPairs(
   return result;
 }
 
-vector<WaySublineMatch> MaximalSubline::_extractAllMatches(const ConstOsmMapPtr &map,
+vector<WaySublineMatch> MaximalSubline::_extractAllMatches(const ConstOsmMapPtr& map,
   const ConstWayPtr& w1, const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix)
 {
   LOG_TRACE("Extracting all matches...");
@@ -303,10 +307,11 @@ vector<WaySublineMatch> MaximalSubline::_extractAllMatches(const ConstOsmMapPtr 
   return result;
 }
 
-vector<WaySublineMatch> MaximalSubline::findAllMatches(const ConstOsmMapPtr &map,
+vector<WaySublineMatch> MaximalSubline::findAllMatches(const ConstOsmMapPtr& map,
   const ConstWayPtr& w1, const ConstWayPtr& w2, double& bestScore, bool snapIntersections)
 {
   bestScore = 0.0;
+  _findBestMatchesRecursionCount = 0;
 
   // create a sparse matrix of line segment scores
   Sparse2dMatrix scores;
@@ -385,6 +390,13 @@ vector<WaySublineMatch> MaximalSubline::_findBestMatches(const ConstOsmMapPtr &m
 double MaximalSubline::_findBestMatchesRecursive(
   vector<WaySublineMatch>& candidates, vector<bool>& keepers, size_t offset)
 {
+  _findBestMatchesRecursionCount++;
+  // kick out if we've made too many calls to this
+  if (_maxRecursionComplexity != -1 && _findBestMatchesRecursionCount > _maxRecursionComplexity)
+  {
+    throw RecursiveComplexityException();
+  }
+
   if (offset == candidates.size())
   {
     return 0.0;
@@ -433,8 +445,9 @@ double MaximalSubline::_findBestMatchesRecursive(
 
 vector<Sparse2dCellId> MaximalSubline::_findEndMatches(Sparse2dMatrix& sublines)
 {
-  vector<Sparse2dCellId> result;
+  LOG_TRACE("Finding end matches...");
 
+  vector<Sparse2dCellId> result;
   // go through all the scores
   for (Sparse2dMatrix::const_iterator it = sublines.begin(); it != sublines.end(); ++it)
   {
@@ -448,10 +461,8 @@ vector<Sparse2dCellId> MaximalSubline::_findEndMatches(Sparse2dMatrix& sublines)
       result.push_back(cid);
     }
   }
-
   return result;
 }
-
 
 double MaximalSubline::findMaximalSubline(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
   const ConstWayPtr& w2, vector<WayLocation>& wl1, vector<WayLocation>& wl2)
@@ -554,7 +565,7 @@ void MaximalSubline::_populateTotalScores(const Sparse2dMatrix& scores, Sparse2d
   bestCid.row() = -1;
   bestCid.col() = -1;
 
-  // todo this could be made more efficient by using Dijkstras or similar
+  // TODO: this could be made more efficient by using Dijkstras or similar
   do
   {
     change = false;
@@ -594,7 +605,8 @@ bool lessThan(const WaySublineMatch& ws1, const WaySublineMatch& ws2)
   return ws1.getSubline1().getStart() < ws2.getSubline1().getStart();
 }
 
-bool MaximalSubline::_checkForSortedSecondSubline(const vector<WaySublineMatch>& rawSublineMatches) const
+bool MaximalSubline::_checkForSortedSecondSubline(
+  const vector<WaySublineMatch>& rawSublineMatches) const
 {
   for (size_t i = 2; i < rawSublineMatches.size(); i++)
   {
@@ -770,55 +782,55 @@ void MaximalSubline::_calculatePointPairMatches(const double way1CircularError,
                                                 const vector<pair<WayLocation, WayLocation>>& pairs,
                                                 cv::Mat& m, vector<int>& starts, vector<int>& ends)
 {
-    LOG_TRACE("Calculating point pair matches...");
+  LOG_TRACE("Calculating point pair matches...");
 
-    // extract features on the point pairs and populate a matrix.
-    Meters acc = way1CircularError + way2CircularError;
+  // extract features on the point pairs and populate a matrix.
+  Meters acc = way1CircularError + way2CircularError;
 
-    size_t currentSubline = 0;
+  size_t currentSubline = 0;
 
-    for (size_t i = 0; i < pairs.size(); i++)
+  for (size_t i = 0; i < pairs.size(); i++)
+  {
+    WayLocation wl1 = pairs[i].first;
+    WayLocation wl2 = pairs[i].second;
+    // If the rawSublineMatches is smaller than _spacing, then it may not directly overlap with
+    // one of the point pairs. To avoid this, we create a subline that surrounds the point pair
+    // and will guarantee that each rawSublineMatches will touch at least one point pair.
+    WaySubline ws1 = WaySubline(wl1.move(-_spacing / 2.0), wl1.move(_spacing / 2.0));
+    WaySubline ws2 = WaySubline(wl2.move(-_spacing / 2.0), wl2.move(_spacing / 2.0));
+
+    if (currentSubline < rawSublineMatches.size())
     {
-      WayLocation wl1 = pairs[i].first;
-      WayLocation wl2 = pairs[i].second;
-      // If the rawSublineMatches is smaller than _spacing, then it may not directly overlap with
-      // one of the point pairs. To avoid this, we create a subline that surrounds the point pair
-      // and will guarantee that each rawSublineMatches will touch at least one point pair.
-      WaySubline ws1 = WaySubline(wl1.move(-_spacing / 2.0), wl1.move(_spacing / 2.0));
-      WaySubline ws2 = WaySubline(wl2.move(-_spacing / 2.0), wl2.move(_spacing / 2.0));
-
-      if (currentSubline < rawSublineMatches.size())
+      // figure out the first and last match for this subline.
+      if (rawSublineMatches[currentSubline].getSubline1().touches(ws1) ||
+          rawSublineMatches[currentSubline].getSubline2().touches(ws2))
       {
-        // figure out the first and last match for this subline.
-        if (rawSublineMatches[currentSubline].getSubline1().touches(ws1) ||
-            rawSublineMatches[currentSubline].getSubline2().touches(ws2))
+        starts[currentSubline] = min<int>(starts[currentSubline], i);
+        ends[currentSubline] = max<int>(ends[currentSubline], i);
+      }
+      else
+      {
+        // if this is past the current subline, advance to the right subline.
+        while (currentSubline < rawSublineMatches.size() &&
+               rawSublineMatches[currentSubline].getSubline1().getEnd() < ws1.getStart() &&
+               rawSublineMatches[currentSubline].getSubline2().getEnd() < ws2.getStart())
         {
-          starts[currentSubline] = min<int>(starts[currentSubline], i);
-          ends[currentSubline] = max<int>(ends[currentSubline], i);
-        }
-        else
-        {
-          // if this is past the current subline, advance to the right subline.
-          while (currentSubline < rawSublineMatches.size() &&
-                 rawSublineMatches[currentSubline].getSubline1().getEnd() < ws1.getStart() &&
-                 rawSublineMatches[currentSubline].getSubline2().getEnd() < ws2.getStart())
-          {
-            currentSubline++;
-          }
+          currentSubline++;
         }
       }
-
-      Meters distance = wl1.getCoordinate().distance(wl2.getCoordinate());
-      Radians angle1 = WayHeading::calculateHeading(wl1);
-      Radians angle2 = WayHeading::calculateHeading(wl2);
-      Radians angleDiff = WayHeading::deltaMagnitude(angle1, angle2);
-
-      m.at<double>(i, 0) = distance / acc;
-      m.at<double>(i, 1) = angleDiff;
     }
 
-    LOG_TRACE("starts: " << starts);
-    LOG_TRACE("ends: " << ends);
+    Meters distance = wl1.getCoordinate().distance(wl2.getCoordinate());
+    Radians angle1 = WayHeading::calculateHeading(wl1);
+    Radians angle2 = WayHeading::calculateHeading(wl2);
+    Radians angleDiff = WayHeading::deltaMagnitude(angle1, angle2);
+
+    m.at<double>(i, 0) = distance / acc;
+    m.at<double>(i, 1) = angleDiff;
+  }
+
+  LOG_TRACE("starts: " << starts);
+  LOG_TRACE("ends: " << ends);
 }
 
 vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr& map,
@@ -833,8 +845,8 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("Way matches sublines out of order. This is unusual and may give a sub-optimal "
-        "result.");
+      LOG_WARN(
+        "Way matches sublines out of order. This is unusual and may give a sub-optimal result.");
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {

@@ -46,7 +46,7 @@ class WaySublineMatch;
  * Given a set of limitations on defining whether or not two points "match", calculate an
  * approximation of the maximal line within those constraints.
  *
- * @note It may be worth investaging a probabilistic approach to this problem. Although we'll either
+ * @todo It may be worth investaging a probabilistic approach to this problem. Although we'll either
  * need a clever way to do it unsupervised, or some point matching training data to establish
  * distributions. It'll also likely increase the computational complexity.
  */
@@ -116,7 +116,6 @@ public:
 
     Meters _maxDistance;
     Radians _maxAngleDiff;
-
   };
 
   /**
@@ -162,8 +161,10 @@ public:
    *  vector will be resized as needed.
    * @return 0.0 if there are no common sublines, otherwise the score of the best subline.
    */
-  double findMaximalSubline(const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr &w2,
-    std::vector<WayLocation>& wl1, std::vector<WayLocation> &wl2);
+  double findMaximalSubline(const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+    std::vector<WayLocation>& wl1, std::vector<WayLocation>& wl2);
+
+  void setMaxRecursionComplexity(int maxRecursions) { _maxRecursionComplexity = maxRecursions; }
 
 private:
 
@@ -172,6 +173,11 @@ private:
   std::shared_ptr<MatchCriteria> _criteria;
   Meters _spacing;
   Meters _minSplitSize;
+
+  // places a limit on the number of recursive matching calls that can be made and throws an
+  // exception once that limit has been reached; only used in select places in the code
+  int _maxRecursionComplexity;
+  int _findBestMatchesRecursionCount;
 
   struct SublineScore
   {
@@ -186,30 +192,30 @@ private:
    * @param index The index of the first node in the line segment to look at.
    */
   WayLocation _calculateEndWayLocation(const ConstOsmMapPtr &map, const ConstWayPtr& a,
-    const ConstWayPtr &b, int indexA, int indexB);
+    const ConstWayPtr& b, int indexA, int indexB);
 
   /**
    * Determines the start of the way location in way a. The way location will start in the line
    * segment specified by index.
    * @param index The index of the first node in the line segment to look at.
    */
-  WayLocation _calculateStartWayLocation(const ConstOsmMapPtr &map, const ConstWayPtr& a,
-    const ConstWayPtr &b, int indexA, int indexB);
+  WayLocation _calculateStartWayLocation(const ConstOsmMapPtr& map, const ConstWayPtr& a,
+    const ConstWayPtr& b, int indexA, int indexB);
 
-  void _calculateSublineScores(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
-    const ConstWayPtr &w2, Sparse2dMatrix &scores);
+  void _calculateSublineScores(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+    const ConstWayPtr& w2, Sparse2dMatrix &scores);
 
   std::vector<std::pair<WayLocation, WayLocation>> _discretizePointPairs(const ConstOsmMapPtr &map,
     const ConstWayPtr& w1, const ConstWayPtr& w2, std::vector<WaySublineMatch> &rawSublineMatches);
 
-  std::vector<WaySublineMatch> _extractAllMatches(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
-    const ConstWayPtr &w2, Sparse2dMatrix &sublineMatrix);
+  std::vector<WaySublineMatch> _extractAllMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+    const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix);
 
-  std::vector<WaySublineMatch> _findBestMatches(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
-    const ConstWayPtr &w2, Sparse2dMatrix &sublineMatrix, double &bestScore);
+  std::vector<WaySublineMatch> _findBestMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+    const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix, double& bestScore);
 
-  double _findBestMatchesRecursive(std::vector<WaySublineMatch>& candidates, std::vector<bool>& keepers,
-    size_t offset);
+  double _findBestMatchesRecursive(std::vector<WaySublineMatch>& candidates,
+                                   std::vector<bool>& keepers, size_t offset);
 
   /**
    * Find the ends of all the subline matches.
@@ -254,7 +260,6 @@ private:
                                   const std::vector<WaySublineMatch>& rawSublineMatches,
                                   const std::vector<std::pair<WayLocation, WayLocation>>& pairs,
                                   cv::Mat& m, std::vector<int>& starts, std::vector<int>& ends);
-
 };
 
 }

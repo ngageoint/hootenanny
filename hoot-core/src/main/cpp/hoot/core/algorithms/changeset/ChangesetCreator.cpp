@@ -78,6 +78,17 @@ _numCreateChanges(0),
 _numModifyChanges(0),
 _numDeleteChanges(0)
 {
+  if (printDetailedStats)
+  {
+    QFile statsFile(statsOutputFile);
+    if (statsFile.exists())
+    {
+      if (!statsFile.remove())
+      {
+        LOG_ERROR("Unable to remove changeset statistics file: " << statsOutputFile);
+      }
+    }
+  }
 }
 
 void ChangesetCreator::create(const QString& output, const QString& input1, const QString& input2)

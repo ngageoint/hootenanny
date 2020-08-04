@@ -475,22 +475,22 @@ void HootApiDb::_flushBulkInserts()
 
   if (_nodeBulkInsert != 0)
   {
-    LOG_VARD(_nodeBulkInsert->getPendingCount());
+    LOG_VART(_nodeBulkInsert->getPendingCount());
     _nodeBulkInsert->flush();
   }
   if (_wayBulkInsert != 0)
   {
-    LOG_VARD(_wayBulkInsert->getPendingCount());
+    LOG_VART(_wayBulkInsert->getPendingCount());
     _wayBulkInsert->flush();
   }
   if (_wayNodeBulkInsert != 0)
   {
-    LOG_VARD(_wayNodeBulkInsert->getPendingCount());
+    LOG_VART(_wayNodeBulkInsert->getPendingCount());
     _wayNodeBulkInsert->flush();
   }
   if (_relationBulkInsert != 0)
   {
-    LOG_VARD(_relationBulkInsert->getPendingCount());
+    LOG_VART(_relationBulkInsert->getPendingCount());
     _relationBulkInsert->flush();
   }
 }
@@ -501,7 +501,7 @@ void HootApiDb::_flushBulkDeletes()
 
   if (_nodeBulkDelete != 0)
   {
-    LOG_VARD(_nodeBulkDelete->getPendingCount());
+    LOG_VART(_nodeBulkDelete->getPendingCount());
     _nodeBulkDelete->flush();
   }
 }

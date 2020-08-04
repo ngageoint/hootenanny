@@ -67,7 +67,7 @@ public:
 
   static void read(const std::shared_ptr<OsmMap>& map, const QString& url, bool useFileId = true,
                    Status defaultStatus = Status::Invalid);
-  //see note for createReader
+  // see note for createReader
   static void read(const std::shared_ptr<OsmMap>& map, bool useFileId, bool useFileStatus,
                    const QString& url);
 

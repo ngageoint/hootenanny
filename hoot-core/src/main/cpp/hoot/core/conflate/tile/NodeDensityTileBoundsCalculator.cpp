@@ -34,7 +34,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/StringUtils.h>
-
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 // Qt
 #include <QImage>
 #include <QPainter>
@@ -55,16 +55,29 @@ _maxNodeCountInOneTile(0),
 _minNodeCountInOneTile(LONG_MAX),
 _pixelSizeRetryReductionFactor(10),
 _maxNumTries(3),
-_maxTimePerAttempt(-1)
+_maxTimePerAttempt(-1),
+_tileCount(0)
 {
 }
 
-void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
+void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
 {  
-  if (_maxTimePerAttempt > 0)
+  if (!map)
   {
-    _timer.restart();
+    throw IllegalArgumentException("Invalid map passed to node density tile calculator.");
   }
+  else if (map->getNodeCount() == 0)
+  {
+    throw IllegalArgumentException("Empty map passed to node density tile calculator.");
+  }
+  else if (_maxNodesPerTile == 0)
+  {
+    throw IllegalArgumentException(
+      QString("Invalid maximum nodes per tile requirement equal to zero passed to node density " ) +
+      QString("tile calculator."));
+  }
+
+  // TODO: throw exception if no input data is Unknown1
 
   LOG_VARD(map->getNodeCount());
   if (map->getNodeCount() <= _maxNodesPerTile)
@@ -83,18 +96,37 @@ void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
     _nodeCounts.push_back(subCounts);
     _minNodeCountInOneTile = map->getNodeCount();
     _maxNodeCountInOneTile = map->getNodeCount();
+    _tileCount = 1;
   }
   else
   {  
+    if (_maxTimePerAttempt > 0)
+    {
+      _timer.restart();
+    }
+
     int tryCtr = 0;
+    LOG_VARD(_tiles.size());
+    LOG_VARD(tryCtr);
+    LOG_VARD(_maxNumTries);
     while (_tiles.empty() && tryCtr < _maxNumTries)
     {
       tryCtr++;
-      LOG_STATUS(
-        "Running node density tiles calculation attempt " << tryCtr << " / " <<
-         _maxNumTries << " with pixel size: " << _pixelSize << ", max allowed nodes: " <<
-         StringUtils::formatLargeNumber(_maxNodesPerTile) << ", and total input node size: " <<
-         StringUtils::formatLargeNumber(map->getNodeCount()) << "...");
+
+      QString msg =
+        "Running node density tiles calculation attempt " + QString::number(tryCtr) + " / " +
+         QString::number(_maxNumTries) + " with pixel size: " + QString::number(_pixelSize) +
+         ", max allowed nodes: " + StringUtils::formatLargeNumber(_maxNodesPerTile) +
+         ", total input node size: " + StringUtils::formatLargeNumber(map->getNodeCount());
+      if (_maxTimePerAttempt == -1)
+      {
+        msg += ", and with no timeout...";
+      }
+      else
+      {
+        msg += ", and with a timeout of " + QString::number(_maxTimePerAttempt) + " seconds...";
+      }
+      LOG_STATUS(msg);
 
       cv::Mat r1, r2;
       _renderImage(map, r1, r2);
@@ -110,7 +142,7 @@ void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
       {
         QString msg =
           "Tile calculation attempt " + QString::number(tryCtr) + " / " +
-          QString::number(_maxNumTries) + " failed.";
+          QString::number(_maxNumTries) + " failed with error: \"" + e.getWhat() + "\"";
         if (tryCtr == _maxNumTries)
         {
           msg += " Aborting calculation.";
@@ -119,12 +151,16 @@ void NodeDensityTileBoundsCalculator::calculateTiles(OsmMapPtr map)
         }
         else
         {
+          _tiles.clear();
           msg += " Retrying calculation...";
           LOG_STATUS(msg);
           if (_pixelSizeRetryReductionFactor != -1)
           {
             _pixelSize -= _pixelSize * (_pixelSizeRetryReductionFactor / 100.0);
           }
+          LOG_VARD(_tiles.size());
+          LOG_VARD(tryCtr);
+          LOG_VARD(_maxNumTries);
         }
       }
     }
@@ -178,8 +214,7 @@ void NodeDensityTileBoundsCalculator::_checkForTimeout()
   if (_maxTimePerAttempt > 0 && (_timer.elapsed() / 1000) > _maxTimePerAttempt)
   {
     throw TileCalcException(
-      "Calculation timed out at " + QString::number(_timer.elapsed() / 1000) +
-      " seconds out of maximum allowed " + QString::number(_maxTimePerAttempt) + " seconds.");
+      "Calculation timed out at " + QString::number(_timer.elapsed() / 1000) + " seconds.");
   }
 }
 
@@ -268,6 +303,7 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
 
     _checkForTimeout();
   }
+  _tileCount = width * width;
 
   if (_maxNodeCountInOneTile == 0)
   {
@@ -601,7 +637,7 @@ bool NodeDensityTileBoundsCalculator::_isDone(vector<PixelBox>& boxes)
   }
 }
 
-void NodeDensityTileBoundsCalculator::_renderImage(const std::shared_ptr<OsmMap>& map)
+void NodeDensityTileBoundsCalculator::_renderImage(const ConstOsmMapPtr& map)
 {
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
@@ -614,7 +650,7 @@ void NodeDensityTileBoundsCalculator::_renderImage(const std::shared_ptr<OsmMap>
   _exportImage(_min, "tmp/min.png");
 }
 
-void NodeDensityTileBoundsCalculator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1,
+void NodeDensityTileBoundsCalculator::_renderImage(const ConstOsmMapPtr& map, cv::Mat& r1,
                                                    cv::Mat& r2)
 {
   LOG_INFO("Rendering images...");
